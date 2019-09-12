@@ -10,7 +10,7 @@ import commonConfig from "config/common";
 import redirectionLink from "egov-ui-kit/config/smsRedirectionLinks";
 import routes from "./Routes";
 import { LoadingIndicator } from "components";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";
@@ -30,7 +30,7 @@ class App extends Component {
 
   componentDidMount = async () => {
     const { fetchLocalizationLabel, fetchCurrentLocation, fetchMDMSData } = this.props;
-    const { pathname } = window.location;
+    const { pathname, search } = window.location;
     let requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -72,8 +72,8 @@ class App extends Component {
   };
 
   handleSMSLinks = () => {
-    const { authenticated, setPreviousRoute, setRoute } = this.props;
-    const { href } = window.location;
+    const { authenticated, setPreviousRoute, setRoute, handleFieldChange } = this.props;
+    const { pathname, href } = window.location;
     if (!authenticated) {
       setRoute("/user/otp?smsLink=true");
       setPreviousRoute(redirectionLink(href));

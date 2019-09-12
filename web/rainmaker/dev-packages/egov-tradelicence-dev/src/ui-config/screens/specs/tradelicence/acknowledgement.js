@@ -12,6 +12,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import get from "lodash/get";
 import set from "lodash/set";
+import { getCurrentFinancialYear } from "../utils";
 
 const getAcknowledgementCard = (
   state,
@@ -20,14 +21,19 @@ const getAcknowledgementCard = (
   status,
   applicationNumber,
   secondNumber,
-  financialYear,
   tenant
 ) => {
-  const financialYearText = financialYear ? financialYear : "";
+  const licenseFinancialYear = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
+  );
+  const financialYearText = licenseFinancialYear
+    ? `(${licenseFinancialYear})`
+    : "";
   if (purpose === "apply" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for New Trade License (${financialYearText})`,
+        labelName: `Application for New Trade License ${financialYearText}`,
         labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE",
         dynamicArray: [financialYearText]
       }),
@@ -35,10 +41,10 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
-          // style: {
-          //   position: "absolute",
-          //   width: "95%"
-          // }
+          style: {
+            position: "absolute",
+            width: "95%"
+          }
         },
         children: {
           card: acknowledgementCard({
@@ -412,7 +418,6 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
-    const financialYear = getQueryArg(window.location.href, "FY");
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -426,7 +431,6 @@ const screenConfig = {
       status,
       applicationNumber,
       secondNumber,
-      financialYear,
       tenant
     );
     set(action, "screenConfig.components.div.children", data);

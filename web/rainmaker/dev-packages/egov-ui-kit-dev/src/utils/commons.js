@@ -1,16 +1,13 @@
-import React from "react";
 import set from "lodash/set";
 import isEmpty from "lodash/isEmpty";
 import axios from "axios";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
 import commonConfig from "config/common.js";
-import { Icon } from "components";
-import Label from "egov-ui-kit/utils/translationNode";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import get from "lodash/get";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { localStorageSet, localStorageGet, getTenantId, getUserInfo, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, localStorageSet, localStorageGet, getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 export const statusToMessageMapping = {
   rejected: "Rejected",
   closed: "Closed",
@@ -290,6 +287,7 @@ const dateDiffInDays = (a, b) => {
   var millsPerDay = 1000 * 60 * 60 * 24;
   var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
   var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
   return Math.floor((utc2 - utc1) / millsPerDay);
 };
 
@@ -599,109 +597,4 @@ export const hasTokenExpired = (status, data) => {
       return true;
   }
   return false;
-};
-
-const getEndpointfromUrl = (url, name) => {
-  let result = url.split(`${name}=`)[1];
-  return result;
-};
-
-const getTimeFormat = (epochTime) => {
-  epochTime = new Date(epochTime);
-  const Period = epochTime.getHours() < 12 ? "AM" : "PM";
-  const Format = epochTime.getHours() % 12 > 0 ? epochTime.getHours() % 12 : 12;
-  return Format.toString() + ":" + epochTime.toString().split(":")[1] + " " + Period;
-};
-
-const getEventSLA = (item) => {
-  const days = (Date.now() - item.auditDetails.lastModifiedTime) / (1000 * 60 * 60 * 24);
-  let sla;
-
-  if (item.eventType === "EVENTSONGROUND") {
-    const disp = getTimeFormat(item.eventDetails.fromDate) + " " + "-" + " " + getTimeFormat(item.eventDetails.toDate);
-    sla = (
-      // <div style={{ display: "flex" }}>
-      //   <Icon name="access-time" action="device" viewBox="0 0 24 24" style={{ height: "20px", width: "35px" }} />
-      <Label leftWrapperStyle fontSize={14} color="rgba(0, 0, 0, 0.60)" label={disp} containerStyle={{ marginBottom: 5 }} />
-      // </div>
-    );
-  } else {
-    if (days >= 60) sla = <Label label="CS_SLA_MONTH" dynamicArray={[Math.floor(days / 30)]} fontSize={12} />;
-    else if (days >= 30) sla = <Label label="CS_SLA_MONTH_ONE" dynamicArray={[Math.floor(days / 30)]} fontSize={12} />;
-    else if (days >= 14) sla = <Label label="CS_SLA_WEEK" dynamicArray={[Math.floor(days / 7)]} fontSize={12} />;
-    else if (days >= 7) sla = <Label label="CS_SLA_WEEK_ONE" dynamicArray={[Math.floor(days / 7)]} fontSize={12} />;
-    else if (days >= 2) sla = <Label label="CS_SLA_DAY" dynamicArray={[Math.floor(days)]} fontSize={12} />;
-    else if (days >= 1) sla = <Label label="CS_SLA_DAY_ONE" dynamicArray={[Math.floor(days)]} fontSize={12} />;
-    else if ((days % 1) * 24 >= 2) sla = <Label label="CS_SLA_TIME" dynamicArray={[Math.floor((days % 1) * 24)]} fontSize={12} />;
-    else if ((days % 1) * 24 >= 1) sla = <Label label="CS_SLA_TIME_ONE" dynamicArray={[Math.floor((days % 1) * 24)]} fontSize={12} />;
-    else if ((days % 1) * 24 * 60 >= 2) sla = <Label label="CS_SLA_MINUTE" dynamicArray={[Math.floor((days % 1) * 24 * 60)]} fontSize={12} />;
-    else if ((days % 1) * 24 * 60 >= 1) sla = <Label label="CS_SLA_MINUTE_ONE" dynamicArray={[Math.floor((days % 1) * 24 * 60)]} fontSize={12} />;
-    else sla = <Label label="CS_SLA_NOW" fontSize={12} />;
-  }
-
-  return sla;
-};
-
-const getEventDate = (eventDate) => {
-  const month = new Date(eventDate)
-    .toString()
-    .split(" ")[1]
-    .toUpperCase();
-  const day = new Date(eventDate).getDate();
-  return month + ":" + day;
-};
-
-export const getTransformedNotifications = (notifications) => {
-  let data = [];
-  if (notifications && notifications.length > 0) {
-    data = notifications.map((item) => ({
-      name: item.name,
-      description: item.description,
-      eventCategory: item.eventCategory,
-      address: item.eventDetails && item.eventDetails.address,
-      SLA: item.auditDetails && item.auditDetails.lastModifiedTime && getEventSLA(item),
-      buttons:
-        item.actions && item.actions.actionUrls
-          ? item.actions.actionUrls.map((actionUrls) => ({
-              label: actionUrls.code,
-              route: getEndpointfromUrl(actionUrls.actionUrl, "redirectTo"),
-            }))
-          : [],
-      eventDate: (item.eventDetails && getEventDate(item.eventDetails.fromDate)) || "",
-      type: item.eventType,
-      id: item.id,
-      tenantId: item.tenantId,
-      locationObj: item.eventDetails && { lat: item.eventDetails.latitude || 12.9199988, lng: item.eventDetails.longitude || 77.67078 },
-    }));
-  }
-  return data;
-};
-
-export const onNotificationClick = async (history) => {
-  try {
-    let queryObject = [
-      {
-        key: "tenantId",
-        value: process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity,
-      },
-    ];
-    const requestBody = {
-      RequestInfo: {
-        apiId: "org.egov.pt",
-        ver: "1.0",
-        ts: 1502890899493,
-        action: "asd",
-        did: "4354648646",
-        key: "xyz",
-        msgId: "654654",
-        requesterId: "61",
-        authToken: getAccessToken(),
-      },
-    };
-
-    await httpRequest("/egov-user-event/v1/events/lat/_update", "_update", queryObject, requestBody);
-    history.push("/notifications");
-  } catch (e) {
-    toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" }, true);
-  }
 };

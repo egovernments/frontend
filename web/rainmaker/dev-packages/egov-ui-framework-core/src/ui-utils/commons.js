@@ -1,6 +1,7 @@
 import isEmpty from "lodash/isEmpty";
 import { httpRequest, uploadFile } from "./api.js";
 import cloneDeep from "lodash/cloneDeep";
+// import store from "ui-redux/store";
 import {
   localStorageSet,
   localStorageGet,
@@ -10,9 +11,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
-import get from "lodash/get";
 import commonConfig from "config/common.js";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -475,43 +474,4 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
       return arr[i];
     }
   }
-};
-
-export const validateFields = (
-  objectJsonPath,
-  state,
-  dispatch,
-  screen = "apply"
-) => {
-  const fields = get(
-    state.screenConfiguration.screenConfig[screen],
-    objectJsonPath,
-    {}
-  );
-  let isFormValid = true;
-  for (var variable in fields) {
-    if (fields.hasOwnProperty(variable)) {
-      if (
-        fields[variable] &&
-        fields[variable].props &&
-        (fields[variable].props.disabled === undefined ||
-          !fields[variable].props.disabled) &&
-        !validate(
-          screen,
-          {
-            ...fields[variable],
-            value: get(
-              state.screenConfiguration.preparedFinalObject,
-              fields[variable].jsonPath
-            )
-          },
-          dispatch,
-          true
-        )
-      ) {
-        isFormValid = false;
-      }
-    }
-  }
-  return isFormValid;
 };

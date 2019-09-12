@@ -3,7 +3,6 @@ import MUIDataTable from "mui-datatables";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import cloneDeep from "lodash/cloneDeep";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import "./index.css";
 
 class Table extends React.Component {
@@ -13,34 +12,12 @@ class Table extends React.Component {
     customSortOrder: "asc"
   };
 
-  getMuiTheme = () =>
-    createMuiTheme({
-      overrides: {
-        MUIDataTableBodyCell: {
-          root: {
-            "&:nth-child(2)": {
-              color: "#2196F3"
-              //fontSize: 14
-            }
-          }
-        },
-        MuiTableCell: {
-          body: {
-            fontSize: 14
-          }
-        }
-      }
-    });
-
   formatData = (data, columns) => {
     return (
       data &&
       [...data].reduce((acc, curr) => {
         let dataRow = [];
-        // Object.keys(columns).forEach(column => {
-        columns.forEach(column => {
-          // Handling the case where column name is an object with options
-          column = typeof column === "object" ? get(column, "name") : column;
+        Object.keys(columns).forEach(column => {
           let columnValue = get(curr, `${column}`, "");
           if (get(columns, `${column}.format`, "")) {
             columnValue = columns[column].format(curr);
@@ -65,15 +42,10 @@ class Table extends React.Component {
   }
 
   updateTable = (data, columns) => {
-    // const updatedData = this.formatData(data, columns);
-    // Column names should be array not keys of an object!
-    // This is a quick fix, but correct this in other modules also!
-    let fixedColumns = Array.isArray(columns) ? columns : Object.keys(columns);
-    const updatedData = this.formatData(data, fixedColumns);
+    const updatedData = this.formatData(data, columns);
     this.setState({
       data: updatedData,
-      // columns: Object.keys(columns)
-      columns: fixedColumns
+      columns: Object.keys(columns)
     });
   };
 
@@ -94,18 +66,16 @@ class Table extends React.Component {
     const { data, columns } = this.state;
     const { options, title, customSortDate } = this.props;
     return (
-      <MuiThemeProvider theme={this.getMuiTheme()}>
-        <MUIDataTable
-          title={title}
-          data={data}
-          columns={columns}
-          options={{
-            ...options,
-            onColumnSortChange: (columnName, order) =>
-              this.onColumnSortChange(columnName, order)
-          }}
-        />
-      </MuiThemeProvider>
+      <MUIDataTable
+        title={title}
+        data={data}
+        columns={columns}
+        options={{
+          ...options,
+          onColumnSortChange: (columnName, order) =>
+            this.onColumnSortChange(columnName, order)
+        }}
+      />
     );
   }
 }

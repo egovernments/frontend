@@ -10,19 +10,8 @@
   line-height: 0px;
 }
 
-@media only screen and (max-width: 768px) {
-  .searchProperty {
-    padding: 0px !important;
+@media only screen and (max-width: 768px){
+  .search-property-btn{
+    margin: 10px auto;
   }
-  .search-property-btn {
-    //margin: 10px auto;
-
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
-    left: 0;
-    height: auto !important;
-    margin: 0px !important;
-    padding: 0px !important;
-  }
-}
+}  

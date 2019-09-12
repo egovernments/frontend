@@ -497,9 +497,5 @@ export const getPattern = type => {
       return /^[a-zA-z0-9\s\\/\-]$/i;
     case "ElectricityConnNo":
       return /^[0-9]{15}$/i;
-    case "eventName":
-      return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,65}$/i;
-    case "eventDescription":
-      return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,500}$/i;
   }
 };

@@ -16,7 +16,6 @@ import MDMS from "modules/common/MDMS";
 import Home from "modules/employee/Home";
 import Report from "modules/employee/reports/report";
 import EGFFinance from "modules/employee/Erp/EGF";
-import ULBInformation from "modules/employee/Notifications";
 
 import pgrRoutes from "pgr-employee/Routes/pgr-routes";
 import ptRoutes from "pt-employee/Routes/pt-routes";
@@ -70,18 +69,6 @@ const routes = [
     component: Profile,
     needsAuthentication: true,
     options: { hideFooter: true, title: "CS_HOME_HEADER_PROFILE" },
-  },
-  {
-    path: "notifications",
-    component: ULBInformation,
-    needsAuthentication: true,
-    options: {
-      hideFooter: true,
-      hideTitle: true,
-      isHomeScreen: true,
-      hideFor: "ao",
-      customFor: "csr",
-    },
   },
   {
     path: "services/*",

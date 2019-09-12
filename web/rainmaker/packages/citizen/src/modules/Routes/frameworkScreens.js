@@ -16,7 +16,8 @@ const routes = [
       title: "",
       hideFooter: true,
       hideTitle: true,
-      helpButton: window.location.pathname === "/tradelicense-citizen/home" ? true : false,
+      hideBackButton: true,
+      isHomeScreen: true,
     },
   },
 ];

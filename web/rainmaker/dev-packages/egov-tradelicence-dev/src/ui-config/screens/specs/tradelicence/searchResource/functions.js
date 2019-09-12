@@ -1,12 +1,9 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../..//ui-utils/commons";
-import {
-  convertEpochToDate,
-  convertDateToEpoch,
-  getTextToLocalMapping
-} from "../../utils/index";
+import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { textToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -17,6 +14,7 @@ export const searchApiCall = async (state, dispatch) => {
       key: "tenantId",
       value: JSON.parse(getUserInfo()).tenantId
     },
+    // { key: "limit", value: "10" },
     { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
@@ -101,16 +99,17 @@ export const searchApiCall = async (state, dispatch) => {
     const response = await getSearchResults(queryObject);
     try {
       let data = response.Licenses.map(item => ({
-        [getTextToLocalMapping("Application No")]:
+        [get(textToLocalMapping, "Application No")]:
           item.applicationNumber || "-",
-        [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
-        [getTextToLocalMapping("Trade Name")]: item.tradeName || "-",
-        [getTextToLocalMapping("Owner Name")]:
+        [get(textToLocalMapping, "License No")]: item.licenseNumber || "-",
+        [get(textToLocalMapping, "Trade Name")]: item.tradeName || "-",
+        [get(textToLocalMapping, "Owner Name")]:
           item.tradeLicenseDetail.owners[0].name || "-",
-        [getTextToLocalMapping("Application Date")]:
+        [get(textToLocalMapping, "Application Date")]:
           convertEpochToDate(item.applicationDate) || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId
+        tenantId: item.tenantId,
+        [get(textToLocalMapping, "Status")]:
+          get(textToLocalMapping, item.status) || "-"
       }));
 
       dispatch(
@@ -126,9 +125,9 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Trade License Applications"
-          )} (${response.Licenses.length})`
+          `${
+            textToLocalMapping["Search Results for Trade License Applications"]
+          } (${response.Licenses.length})`
         )
       );
       showHideTable(true, dispatch);

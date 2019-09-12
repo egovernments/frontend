@@ -36,7 +36,7 @@ const themeObject = {
         marginTop: "8px",
       },
       fullWidth: {
-        width: window.innerWidth > 768 ? "80%" : "90%",
+        width: "80% !important",
       },
     },
     MuiTableCell: {

@@ -1,25 +1,20 @@
 import get from "lodash/get";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
-  toggleSnackbar
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import {
-  validateFields,
-  getTextToLocalMapping,
-  convertEpochToDate,
-  convertDateToEpoch
-} from "../../utils";
-import {
-  getTenantId,
-  getLocalization
-} from "egov-ui-kit/utils/localStorageUtils";
+import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { textToLocalMapping } from "./searchResult";
+import { validateFields } from "../../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getLocaleLabels,
   transformById,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -131,13 +126,13 @@ export const searchApiCall = async (state, dispatch) => {
 
     try {
       let data = response.map(item => ({
-        [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
-        [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-        [getTextToLocalMapping("Service Type")]: item.serviceType || "-",
-        [getTextToLocalMapping("Date")]: convertEpochToDate(item.date) || "-",
-        [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId
+        [get(textToLocalMapping, "Receipt No.")]: item.receiptNumber || "-",
+        [get(textToLocalMapping, "Payee Name")]: item.payeeName || "-",
+        [get(textToLocalMapping, "Service Type")]: item.serviceType || "-",
+        [get(textToLocalMapping, "Date")]: convertEpochToDate(item.date) || "-",
+        [get(textToLocalMapping, "Amount[INR]")]: item.amount || "-",
+        [get(textToLocalMapping, "Status")]: item.status || "-",
+        tenantId: item.tenantId
       }));
       dispatch(
         handleField(

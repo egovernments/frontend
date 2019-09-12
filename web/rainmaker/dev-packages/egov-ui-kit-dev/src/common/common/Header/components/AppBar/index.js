@@ -3,11 +3,9 @@ import { AppBar, Icon } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import UserSettings from "../UserSettings";
 import Toolbar from "material-ui/Toolbar";
-import Badge from "@material-ui/core/Badge";
 import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
 import pbLogo from "egov-ui-kit/assets/images/pblogo.png";
 import IconButton from "material-ui/IconButton";
-import { onNotificationClick } from "egov-ui-kit/utils/commons";
 import "./index.css";
 
 const styles = {
@@ -36,13 +34,10 @@ const EgovAppBar = ({
   refreshButton,
   sortButton,
   searchButton,
-  helpButton,
-  notificationButton,
   sortDialogOpen,
   history,
   handleItemClick,
   hasLocalisation,
-  notificationsCount,
   ...rest
 }) => {
   return (
@@ -105,25 +100,7 @@ const EgovAppBar = ({
               <Icon action="action" name="search" color="#fff" />
             </IconButton>
           )}
-          {helpButton && role === "citizen" && (
-            <IconButton style={iconButtonStyle}>
-              <Icon action="action" name="help" color="#fff" />
-            </IconButton>
-          )}
         </div>
-        {notificationButton && role === "citizen" && (
-          <div className="notification-icon" onClick={(e) => onNotificationClick(history)}>
-            {notificationsCount ? (
-              <IconButton aria-label="4 pending messages">
-                <Badge badgeContent={notificationsCount} color="primary">
-                  <Icon action="social" name="notifications-none" color="#fff" />
-                </Badge>
-              </IconButton>
-            ) : (
-              <Icon action="social" name="notifications-none" color="#fff" />
-            )}
-          </div>
-        )}
       </AppBar>
     </div>
   );
@@ -132,5 +109,4 @@ const EgovAppBar = ({
 const onSearchClick = (history) => {
   history.push("search-complaint");
 };
-
 export default EgovAppBar;

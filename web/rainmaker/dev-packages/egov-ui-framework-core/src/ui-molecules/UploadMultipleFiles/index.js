@@ -4,7 +4,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { handleFileUpload } from "../../ui-utils/commons";
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
 
 const styles = theme => ({
   button: {
@@ -19,27 +18,18 @@ class UploadMultipleFiles extends Component {
   state = {
     documents: []
   };
-  componentDidMount = () => {
-    const { documents } = this.props;
-    documents && this.setState({ documents });
-  };
-
-  componentWillReceiveProps = nextProps => {
-    const { documents } = nextProps || [];
-    documents && this.setState({ documents });
-  };
 
   handleDocument = (file, fileStoreId) => {
     let { documents } = this.state;
     const { maxFiles, prepareFinalObject, jsonPath } = this.props;
 
-    if (documents && documents.length + 1 > maxFiles) {
+    if (documents.length + 1 > maxFiles) {
       alert(`Can only upload ${maxFiles} files`);
     } else {
       documents.push({
         fileName: file.name,
         fileStoreId,
-        documentType: `Document - ${documents && documents.length + 1}`
+        documentType: `Document - ${documents.length + 1}`
       });
       documents.slice(0, maxFiles);
       prepareFinalObject(jsonPath, documents);
@@ -88,15 +78,6 @@ class UploadMultipleFiles extends Component {
   }
 }
 
-const mapStateToProps = (state, ownprops) => {
-  const { jsonPath } = ownprops;
-  const documents = get(
-    state.screenConfiguration.preparedFinalObject,
-    jsonPath
-  );
-  return { documents };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     prepareFinalObject: (jsonPath, value) =>
@@ -106,7 +87,7 @@ const mapDispatchToProps = dispatch => {
 
 export default withStyles(styles)(
   connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
   )(UploadMultipleFiles)
 );

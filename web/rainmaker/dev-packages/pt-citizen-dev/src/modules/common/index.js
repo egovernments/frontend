@@ -12,7 +12,6 @@ import Screen from "egov-ui-kit/common/common/Screen";
 import ActionMenu from "egov-ui-kit/common/common/ActionMenu";
 import ActionFooter from "egov-ui-kit/common/common/ActionFooter";
 import PrivacyPolicy from "egov-ui-kit/common/common/PrivacyPolicy";
-import ModuleLandingPage from "egov-ui-kit/common/common/ModuleLandingPage";
 
 //pt common components
 import AssessmentList from "egov-ui-kit/common/propertyTax/AssessmentList";
@@ -23,7 +22,6 @@ import PropertyInformation from "egov-ui-kit/common/propertyTax/PropertyInformat
 import SearchProperty from "egov-ui-kit/common/propertyTax/SearchProperty";
 import TransformedAssessments from "egov-ui-kit/common/propertyTax/TransformedAssessments";
 import YearDialogue from "egov-ui-kit/common/propertyTax/YearDialogue";
-import SingleProperty from "egov-ui-kit/common/propertyTax/SingleProperty";
 
 //User common components
 import LanguageSelectionForm from "egov-ui-kit/common/User/components/LanguageSelectionForm";
@@ -58,7 +56,5 @@ export {
   PropertyInformation,
   SearchProperty,
   TransformedAssessments,
-  YearDialogue,
-  ModuleLandingPage,
-  SingleProperty
+  YearDialogue
 };

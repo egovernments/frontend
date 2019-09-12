@@ -37,9 +37,7 @@
 }
 
 .homepage-screen {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  padding-top: 75px !important;
+  padding: 0 !important;
 }
 
 @media only screen and (min-width: 768px) {
@@ -48,8 +46,5 @@
   }
   .home-page-cont {
     top: calc(30vh - 190px);
-  }
-  .homepage-screen {
-    padding-top: 20px !important;
   }
 }

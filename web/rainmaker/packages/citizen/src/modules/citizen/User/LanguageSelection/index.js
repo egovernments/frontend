@@ -21,7 +21,7 @@ class LanguageSelection extends Component {
   };
 
   render() {
-    const { value } = this.state;
+    const { items, value } = this.state;
     const { onLanguageSelect, onClick } = this;
     const { bannerUrl, logoUrl, languages } = this.props;
     return (

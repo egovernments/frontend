@@ -8,12 +8,8 @@ import Profile from "modules/citizen/User/Profile";
 // common screens
 
 import LandingPage from "modules/citizen/LandingPage";
-//import CitizenDashboard from "modules/citizen/CitizenDashboard";
 import HowItWorks from "modules/citizen/HowItWorks";
 import ContactUs from "modules/citizen/ContactUs";
-import MyNotifications from "modules/citizen/MyNotifications";
-import { EventDetails } from "modules/common";
-import Events from "modules/citizen/Events";
 import { ImageModalDisplay } from "modules/common";
 
 // pgr specific screens
@@ -75,10 +71,9 @@ const routes = [
     needsAuthentication: true,
     options: {
       isHomeScreen: true,
-      title: "CS_HOME_HEADER_HOME",
+      title: "COMMON_BOTTOM_NAVIGATION_HOME",
       hideTitle: true,
       redirectionUrl: "/user/login",
-      notificationButton: true,
     },
   },
   {
@@ -121,35 +116,6 @@ const routes = [
       hideFooter: true,
       hideBackButton: true,
       title: "TL_HOW_IT_WORKS",
-    },
-  },
-  {
-    path: "notifications",
-    component: MyNotifications,
-    needsAuthentication: true,
-    options: {
-      hideFooter: true,
-      title: "CS_HEADER_NOTIFICATIONS",
-      helpButton: true,
-    },
-  },
-  {
-    path: "events",
-    component: Events,
-    needsAuthentication: true,
-    options: {
-      hideFooter: true,
-      title: "CS_HEADER_EVENTS",
-      helpButton: true,
-    },
-  },
-  {
-    path: "event-details",
-    component: EventDetails,
-    needsAuthentication: true,
-    options: {
-      hideFooter: true,
-      title: "CS_EVENT_DETAILS",
     },
   },
   ...pgrRoutes,

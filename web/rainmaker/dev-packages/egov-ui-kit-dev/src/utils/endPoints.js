@@ -153,17 +153,3 @@ export const BOUNDARY = {
     ACTION: "_get",
   },
 };
-
-export const EVENTSCOUNT = {
-  GET: {
-    URL: "/egov-user-event/v1/events/notifications/_count",
-    ACTION: "_search",
-  },
-};
-
-export const NOTIFICATIONS = {
-  GET: {
-    URL: "/egov-user-event/v1/events/_search",
-    ACTION: "_search",
-  },
-};

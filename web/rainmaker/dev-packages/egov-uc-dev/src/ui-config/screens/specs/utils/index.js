@@ -10,10 +10,6 @@ import {
   getCommonCard,
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -333,46 +329,4 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
     item => item.code
   );
   return serviceCategories;
-};
-
-export const getTextToLocalMapping = label => {
-  const localisationLabels = getTransformedLocalStorgaeLabels();
-  switch (label) {
-    case "Receipt No.":
-      return getLocaleLabels(
-        "Receipt No",
-        "UC_COMMON_TABLE_COL_RECEIPT_NO",
-        localisationLabels
-      );
-    case "Payee Name":
-      return getLocaleLabels(
-        "Consumer Name",
-        "UC_COMMON_TABLE_COL_PAYEE_NAME",
-        localisationLabels
-      );
-    case "Service Type":
-      return getLocaleLabels(
-        "Service Category",
-        "UC_SERVICE_TYPE_LABEL",
-        localisationLabels
-      );
-    case "Date":
-      return getLocaleLabels(
-        "Receipt Date",
-        "UC_COMMON_TABLE_COL_DATE",
-        localisationLabels
-      );
-    case "Amount[INR]":
-      return getLocaleLabels(
-        "Amount Paid[INR]",
-        "UC_COMMON_TABLE_COL_AMOUNT",
-        localisationLabels
-      );
-    case "Status":
-      return getLocaleLabels(
-        "Status",
-        "UC_COMMON_TABLE_COL_STATUS",
-        localisationLabels
-      );
-  }
 };

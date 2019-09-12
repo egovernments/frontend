@@ -8,9 +8,4 @@ const TestMolecules = Loadable({
   loading: () => <Loading />,
 });
 
-const MapLocator = Loadable({
-  loader: () => import("./MapLocator"),
-  loading: () => <Loading />,
-});
-
-export { TestMolecules, MapLocator };
+export { TestMolecules };

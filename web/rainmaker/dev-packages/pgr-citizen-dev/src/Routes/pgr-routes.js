@@ -118,11 +118,10 @@ const routes = [
     component: PGRHome,
     needsAuthentication: true,
     options: {
-      // isHomeScreen: true,
-      title: "COMMON_BOTTOM_NAVIGATION_COMPLAINTS",
+      isHomeScreen: true,
+      title: "Home",
       hideTitle: true,
-      redirectionUrl: "/user/register",
-      helpButton: true
+      redirectionUrl: "/user/register"
     }
   },
   {

@@ -24,10 +24,6 @@ import {
   localStorageGet
 } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
-import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -2181,97 +2177,4 @@ export const fillOldLicenseData = async (state, dispatch) => {
       get(state.screenConfiguration, "screenConfig.apply", {})
     )
   );
-};
-
-export const getTextToLocalMapping = label => {
-  const localisationLabels = getTransformedLocalStorgaeLabels();
-  switch (label) {
-    case "Application No":
-      return getLocaleLabels(
-        "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
-        localisationLabels
-      );
-
-    case "License No":
-      return getLocaleLabels(
-        "License No",
-        "TL_COMMON_TABLE_COL_LIC_NO",
-        localisationLabels
-      );
-
-    case "Trade Name":
-      return getLocaleLabels(
-        "Trade Name",
-        "TL_COMMON_TABLE_COL_TRD_NAME",
-        localisationLabels
-      );
-    case "Owner Name":
-      return getLocaleLabels(
-        "Owner Name",
-        "TL_COMMON_TABLE_COL_OWN_NAME",
-        localisationLabels
-      );
-
-    case "Application Date":
-      return getLocaleLabels(
-        "Application Date",
-        "TL_COMMON_TABLE_COL_APP_DATE",
-        localisationLabels
-      );
-
-    case "Status":
-      return getLocaleLabels(
-        "Status",
-        "TL_COMMON_TABLE_COL_STATUS",
-        localisationLabels
-      );
-
-    case "INITIATED":
-      return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
-    case "APPLIED":
-      getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
-    case "PAID":
-      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
-
-    case "APPROVED":
-      return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
-    case "REJECTED":
-      return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
-    case "CANCELLED":
-      return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
-    case "PENDINGAPPROVAL ":
-      return getLocaleLabels(
-        "Pending for Approval",
-        "WF_NEWTL_PENDINGAPPROVAL",
-        localisationLabels
-      );
-    case "PENDINGPAYMENT":
-      return getLocaleLabels(
-        "Pending payment",
-        "WF_NEWTL_PENDINGPAYMENT",
-        localisationLabels
-      );
-
-    case "FIELDINSPECTION":
-      return getLocaleLabels(
-        "Pending for Field Inspection",
-        "WF_NEWTL_FIELDINSPECTION",
-        localisationLabels
-      );
-
-    case "Search Results for Trade License Applications":
-      return getLocaleLabels(
-        "",
-        "TL_HOME_SEARCH_RESULTS_TABLE_HEADING",
-        localisationLabels
-      );
-
-    case "MY_APPLICATIONS":
-      return getLocaleLabels(
-        "My Applications",
-        "TL_MY_APPLICATIONS",
-        localisationLabels
-      );
-  }
 };

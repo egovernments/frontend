@@ -2,7 +2,6 @@ import React from "react";
 import Icon from "../Icon";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Link } from "react-router-dom";
-import "./index.css";
 
 const style = { marginLeft: 10, marginTop: 2, cursor: "pointer" };
 const selStyle = { color: "#fe7a51" };
@@ -24,7 +23,7 @@ const BreadCrumbs = ({ url, history }) => {
                 }}
                 style={url.length - 1 === index ? style : { ...selStyle, ...style }}
               >
-                <Label labelClassName="breadcrum-label-style" label={item.title} />
+                <Label label={item.title} />
               </div>
             </div>
           );

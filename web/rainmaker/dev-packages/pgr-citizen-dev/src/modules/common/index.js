@@ -14,7 +14,6 @@ import Screen from "egov-ui-kit/common/common/Screen";
 import ActionMenu from "egov-ui-kit/common/common/ActionMenu";
 import ActionFooter from "egov-ui-kit/common/common/ActionFooter";
 import PrivacyPolicy from "egov-ui-kit/common/common/PrivacyPolicy";
-import ModuleLandingPage from "egov-ui-kit/common/common/ModuleLandingPage";
 
 //pgr common components
 import ComplaintSubmited from "egov-ui-kit/common/pgr/ComplaintSubmited";
@@ -72,5 +71,4 @@ export {
   ReopenAcknowledgement,
   ComplaintSubmited,
   PrivacyPolicy,
-  ModuleLandingPage
 };

@@ -12,6 +12,7 @@ import get from "lodash/get";
 import { getFinalAssessments } from "../common/TransformedAssessments";
 import { getCommaSeperatedAddress } from "egov-ui-kit/utils/commons";
 import "./index.css";
+getFinalAssessments;
 
 const secondaryTextLabelStyle = {
   letterSpacing: 0.5
@@ -237,6 +238,7 @@ const mapStateToProps = state => {
     }
     return result;
   }, []);
+
   const mergedData =
     failedPayments &&
     propertiesById &&

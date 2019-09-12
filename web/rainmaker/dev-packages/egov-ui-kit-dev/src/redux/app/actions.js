@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { LOCALATION, ACTIONMENU, MDMS, EVENTSCOUNT, NOTIFICATIONS } from "egov-ui-kit/utils/endPoints";
+import { LOCALATION, ACTIONMENU, MDMS } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getCurrentAddress } from "egov-ui-kit/utils/commons";
 import commonConfig from "config/common";
@@ -73,7 +73,6 @@ const setActionItems = (payload) => {
     payload,
   };
 };
-
 const setCurrentLocation = (currentLocation) => {
   return {
     type: actionTypes.SET_USER_CURRENT_LOCATION,
@@ -173,55 +172,6 @@ export const fetchUiCommonConstants = () => {
       dispatch(setUiCommonConstants(UiCommonConstants[0]));
     } catch (error) {
       console.log(error);
-    }
-  };
-};
-
-export const setNotificationCount = (count) => {
-  return {
-    type: actionTypes.GET_NOTIFICATION_COUNT,
-    count,
-  };
-};
-
-export const getNotificationCount = (queryObject, requestBody) => {
-  return async (dispatch, getState) => {
-    try {
-      const payload = await httpRequest(EVENTSCOUNT.GET.URL, EVENTSCOUNT.GET.ACTION, queryObject, requestBody);
-      dispatch(setNotificationCount(payload.unreadCount));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};
-
-export const setNotificationsComplete = (payload) => {
-  return {
-    type: actionTypes.GET_NOTIFICATIONS_COMPLETE,
-    payload,
-  };
-};
-
-const setNotificationsPending = () => {
-  return {
-    type: actionTypes.GET_NOTIFICATIONS_PENDING,
-  };
-};
-
-const setNotificationsError = () => {
-  return {
-    type: actionTypes.GET_NOTIFICATIONS_ERROR,
-  };
-};
-
-export const getNotifications = (queryObject, requestBody) => {
-  return async (dispatch, getState) => {
-    dispatch(setNotificationsPending());
-    try {
-      const payload = await httpRequest(NOTIFICATIONS.GET.URL, NOTIFICATIONS.GET.ACTION, queryObject, requestBody);
-      dispatch(setNotificationsComplete(payload.events));
-    } catch (error) {
-      dispatch(setNotificationsError(error.message));
     }
   };
 };

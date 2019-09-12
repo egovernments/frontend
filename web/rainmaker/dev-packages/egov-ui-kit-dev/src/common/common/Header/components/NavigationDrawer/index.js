@@ -7,7 +7,7 @@ import Divider from "@material-ui/core/Divider";
 
 // import { Icon } from "components";
 
-import LanguageSelection from "./LanguageSelection";
+// import LanguageSelection from "./LanguageSelection";
 // import menuItems from "./menuItems";
 import { ActionMenu } from "modules/common";
 import logoMseva from "egov-ui-kit/assets/images/logo_black.png";
@@ -71,7 +71,7 @@ const NavigationDrawer = ({
           listContainerStyle={{ background: "#ffffff" }}
           listItemStyle={{ borderBottom: "1px solid #e0e0e0" }}
         /> */}
-
+        {/* <LanguageSelection fetchLocalizationLabel={fetchLocalizationLabel} /> */}
         {/* <List
           onItemClick={handleItemClick}
           innerDivStyle={styles.listInnerDivStyle}
@@ -80,9 +80,8 @@ const NavigationDrawer = ({
           listContainerStyle={{ background: "#ffffff" }}
           listItemStyle={{ borderBottom: "1px solid #e0e0e0" }}
         /> */}
-        {window && window.outerWidth <= 768 && <ActionMenu role={role} />}
-        {/* <Divider light /> */}
-        <LanguageSelection fetchLocalizationLabel={fetchLocalizationLabel} />
+          {window && window.outerWidth <= 768 && <ActionMenu role={role} /> }
+        <Divider light />
         {CommonMenuItems.map((item) => {
           return (
             <div className="sideMenuItem">

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { defaultLocation } from "egov-ui-framework/ui-config/app-config";
-import { Button, Icon, MapLocation } from "egov-ui-framework/ui-atoms";
+import { MapLocation } from "../../ui-atoms-local";
+
+import { defaultLocation } from "../../ui-config/tl-app-config";
+import { Button, Icon } from "egov-ui-framework/ui-atoms";
 import isEmpty from "lodash/isEmpty";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";

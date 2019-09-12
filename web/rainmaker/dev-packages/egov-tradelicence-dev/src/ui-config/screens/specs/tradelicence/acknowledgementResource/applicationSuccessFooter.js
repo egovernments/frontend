@@ -126,18 +126,15 @@ export const applicationSuccessFooter = (
 ) => {
   //const baseURL = getBaseURL();
   const roleExists = ifUserRoleExists("CITIZEN");
-  // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
-  /* Mseva 2.0 changes */
-  const redirectionURL = roleExists ? "/" : "/inbox";
+  const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   return getCommonApplyFooter({
-
     gotoHome: {
       componentPath: "Button",
       props: {
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "290px",
+          minWidth: "200px",
           height: "48px",
           marginRight: "16px"
         }
@@ -189,7 +186,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "290px",
+          minWidth: "250px",
           height: "48px",
           marginRight: "16px"
         }
@@ -213,7 +210,6 @@ export const applicationSuccessFooter = (
         }
       }
     }
-
     // collectPaymentButton: {
     //   componentPath: "Button",
     //   props: {
@@ -267,6 +263,5 @@ export const applicationSuccessFooter = (
     //     roles: ["TL_CEMP"]
     //   }
     // }
-
   });
 };

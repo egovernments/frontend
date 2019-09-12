@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Icon = ({ action, className, name, style = {}, color, onClick, id, ...rest }) => {
+const Icon = ({ action, className, name, style = {}, color, onClick, id }) => {
   let WrappedIcon = null;
   try {
     if (action === "custom") {
@@ -9,7 +9,7 @@ const Icon = ({ action, className, name, style = {}, color, onClick, id, ...rest
     } else {
       WrappedIcon = require(`material-ui/svg-icons/${action}/${name}`).default;
     }
-    return <WrappedIcon id={id} className={className} style={{ ...style }} color={color} onClick={onClick} {...rest} />;
+    return <WrappedIcon id={id} className={className} style={{ ...style }} color={color} onClick={onClick} />;
   } catch (error) {
     console.log(`Icon with action ${action} and name ${name} not found`);
     const DefaultIcon = require(`material-ui/svg-icons/alert/error`).default;
