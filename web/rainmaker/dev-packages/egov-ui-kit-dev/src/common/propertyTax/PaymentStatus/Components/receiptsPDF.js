@@ -7,7 +7,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt, extraData) => {
   const state = store.getState();
-  if (extraData) 
+  if (extraData)
       {
         var stateCopy = JSON.parse(JSON.stringify(state));
         if (stateCopy.app)
@@ -467,19 +467,31 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
     default:
   }
   if (data) {
-    if (window.appOverrides.validateForm)
+    if (window.appOverrides && window.appOverrides.validateForm)
       {
         window.appOverrides.validateForm("PTReceipt", {pdf: data, details: details, role:role, extraData: extraData})
       }
 
     var receiptPDF = pdfMake.createPdf(data)
     var doNotDownloadReceipt = false;
-    if (window.appOverrides.submitForm) {
-      doNotDownloadReceipt = window.appOverrides.submitForm("PTReceipt", {pdf: receiptPDF});
+    if (window.appOverrides && window.appOverrides.submitForm) {
+      doNotDownloadReceipt = window.appOverrides.submitForm("PTReceipt", { pdf: receiptPDF });
     }
 
     if (doNotDownloadReceipt !== true)
-        receiptPDF.download(`${details.ReceiptNo}.pdf`);
+    {
+      receiptPDF.getBase64(data => {
+        const linkSource = "data:application/pdf;base64," + data;
+        const downloadLink = document.createElement("a");
+        const fileName = `${details.ReceiptNo}.pdf`;
+
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+        console.log("data:application/pdf;base64," + data);
+      // receiptPDF.download(`${details.ReceiptNo}.pdf`);
+      });
+    }
   }
 };
 
