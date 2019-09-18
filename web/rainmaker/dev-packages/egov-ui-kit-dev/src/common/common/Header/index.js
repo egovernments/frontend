@@ -159,6 +159,7 @@ class Header extends Component {
       activeRoutePath,
       hasLocalisation,
       notificationsCount,
+      digitLogoUrl
     } = this.props;
     return (
       <div>
@@ -184,6 +185,7 @@ class Header extends Component {
           activeRoutePath={activeRoutePath}
           hasLocalisation={hasLocalisation}
           notificationsCount={notificationsCount}
+          digitLogoUrl={digitLogoUrl}
         />
         <NavigationDrawer
           handleItemClick={_handleItemClick}
@@ -221,6 +223,7 @@ const mapStateToProps = (state, ownProps) => {
   const cities = state.common.cities || [];
   const notificationsCount = get(state.app, "notificationsCount");
   const { role } = ownProps;
+  const { digitLogoUrl } = (state.common.stateInfoById && state.common.stateInfoById.length > 0 && state.common.stateInfoById[0]) || false;
   const tenantId = role && role.toLowerCase() === "citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   const userTenant = cities.filter((item) => item.code === tenantId);
   const ulbGrade = userTenant && get(userTenant[0], "city.ulbGrade");
@@ -228,7 +231,7 @@ const mapStateToProps = (state, ownProps) => {
   const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
   const screenKey = window.location.pathname.split("/").pop();
   const headerTitle = get(state.screenConfiguration.screenConfig, `${screenKey}.components.div.children.header.children.key.props.labelKey`);
-  return { cities, defaultTitle, name, headerTitle, notificationsCount };
+  return { cities, defaultTitle, name, headerTitle, notificationsCount, digitLogoUrl };
 };
 
 const mapDispatchToProps = (dispatch) => {

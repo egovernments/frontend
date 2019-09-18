@@ -43,6 +43,7 @@ const EgovAppBar = ({
   handleItemClick,
   hasLocalisation,
   notificationsCount,
+  digitLogoUrl,
   ...rest
 }) => {
   return (
@@ -87,7 +88,8 @@ const EgovAppBar = ({
         </Toolbar>
 
         <div className="appbar-right-logo">
-          <img src={digitLogo} />
+          {console.log(digitLogoUrl)}
+          <img src={digitLogoUrl ? digitLogoUrl : digitLogo} />
         </div>
         <div className="icon-button">
           {refreshButton && (
