@@ -3,7 +3,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import store from "../../../../ui-redux/store";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, openPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons";
 import {
   loadReceiptData,
   loadUlbLogo,
@@ -1046,9 +1046,22 @@ export const generateReciept = async rowData => {
     receipt_data =
       !isEmpty(finalTransformedData) && getReceiptData(finalTransformedData);
   }
-  receipt_data &&
-    !isEmpty(transformedData) &&
-    pdfMake.createPdf(receipt_data).open();
+  if (receipt_data && !isEmpty(transformedData))
+  {
+    let pdfData;
+    if (window.appOverrides && window.appOverrides.validateForm)
+    {
+      window.appOverrides.validateForm("UCEmployeeReceipt", {
+        receipt_data: receipt_data,
+        transformedData: transformedData
+      })
+    }
+
+    pdfData = pdfMake.createPdf(receipt_data)
+
+    openPDFFileUsingBase64(pdfData, `${transformedData.receiptNumber}.pdf`)
+  }
+    
 };
 
 //Generates PDF for Citizen Reciept
@@ -1094,7 +1107,22 @@ export const generateCitizenReciept = async rowData => {
   citizenReceipt_data =
     !isEmpty(finalTransformedData) &&
     getCitizenReceipetData(finalTransformedData);
-  citizenReceipt_data &&
-    !isEmpty(transformedData) &&
-    pdfMake.createPdf(citizenReceipt_data).open();
-};
+
+    if (citizenReceipt_data && !isEmpty(transformedData))
+    {
+      let pdfDataCitizen;
+      if (window.appOverrides && window.appOverrides.validateForm)
+      {
+        window.appOverrides.validateForm("UCCitizenReceipt", {
+          receipt_data: citizenReceipt_data,
+          transformedData: transformedData
+        })
+      }
+  
+      pdfDataCitizen = pdfMake.createPdf(citizenReceipt_data)
+  
+      openPDFFileUsingBase64(pdfDataCitizen, `${transformedData.receiptNumber}.pdf`)
+    }
+  
+
+  };

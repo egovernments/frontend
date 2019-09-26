@@ -92,12 +92,18 @@ const getAcknowledgementCard = (
 
 const getSearchData = async (dispatch, queryObj) => {
   const response = await getSearchResults(queryObj);
-  response &&
+  if (response &&
     response.Receipt &&
-    response.Receipt.length > 0 &&
-    dispatch(
-      prepareFinalObject("receiptSearchResponse.Receipt", response.Receipt)
-    );
+    response.Receipt.length > 0)
+    {
+      dispatch(
+        prepareFinalObject("receiptSearchResponse.Receipt", response.Receipt)
+      );
+      if (window.appOverrides && window.appOverrides.validateForm)
+       {
+        window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Receipt})
+       }
+    }
 };
 
 const screenConfig = {
