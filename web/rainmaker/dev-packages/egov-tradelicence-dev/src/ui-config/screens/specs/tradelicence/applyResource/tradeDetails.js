@@ -518,20 +518,7 @@ const accessoriesCard = {
       },
       accessoriesCardContainer: getCommonContainer({
         accessoriesName: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "AutosuggestContainer",
-          jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
-          required: true,
-          gridDefination: {
-            xs: 12,
-            sm: 4
-          },
-          props: {
-            style: {
-              width: "100%",
-              cursor: "pointer"
-            },
+          ...getSelectField({
             label: {
               labelName: "Accessories",
               labelKey: "TL_NEW_TRADE_DETAILS_ACC_LABEL"
@@ -540,139 +527,126 @@ const accessoriesCard = {
               labelName: "Select Accessories",
               labelKey: "TL_NEW_TRADE_DETAILS_ACC_PLACEHOLDER"
             },
-            jsonPath:
-              "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
-            sourceJsonPath:
-              "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
-            setDataInField: true,
-            labelsFromLocalisation: true,
             localePrefix: {
               moduleName: "TRADELICENSE",
               masterName: "ACCESSORIESCATEGORY"
             },
-            fullwidth: true,
-            required: true,
-            inputLabelProps: {
-              shrink: true
+            jsonPath:
+              "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
+            sourceJsonPath:
+              "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
+            gridDefination: {
+              xs: 12,
+              sm: 4
             }
-          },
+          }),
           beforeFieldChange: (action, state, dispatch) => {
-          try {
-            let accessories = get(
-              state.screenConfiguration.preparedFinalObject,
-              `applyScreenMdmsData.TradeLicense.AccessoriesCategory`,
-              []
-            );
-            let currentObject = filter(accessories, {
-              code: action.value
-            });
-            const currentUOMField = get(
-              state.screenConfiguration.screenConfig.apply,
-              action.componentJsonpath,
-              []
-            );
-            var jsonArr = currentUOMField.jsonPath.split(".");
-            jsonArr.pop();
+            try {
+              let accessories = get(
+                state.screenConfiguration.preparedFinalObject,
+                `applyScreenMdmsData.TradeLicense.AccessoriesCategory`,
+                []
+              );
+              let currentObject = filter(accessories, {
+                code: action.value
+              });
+              const currentUOMField = get(
+                state.screenConfiguration.screenConfig.apply,
+                action.componentJsonpath,
+                []
+              );
+              var jsonArr = currentUOMField.jsonPath.split(".");
+              jsonArr.pop();
 
-            let currentUOMValueFieldPath = action.componentJsonpath.split(
-              "."
-            );
-            currentUOMValueFieldPath.pop();
-            currentUOMValueFieldPath = currentUOMValueFieldPath.join(".");
-            if (currentObject[0].uom) {
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesUOM`,
-                  "props.value",
-                  currentObject[0].uom
-                )
+              let currentUOMValueFieldPath = action.componentJsonpath.split(
+                "."
               );
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesUOMValue`,
-                  "props.disabled",
-                  false
-                )
-              );
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesUOMValue`,
-                  "required",
-                  true
-                )
-              );
-            } else {
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesUOMValue`,
-                  "required",
-                  false
-                )
-              );
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesUOM`,
-                  "props.value",
-                  ""
-                )
-              );
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesUOMValue`,
-                  "props.value",
-                  ""
-                )
-              );
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesUOMValue`,
-                  "props.disabled",
-                  true
-                )
-              );
-              dispatch(pFO(`${jsonArr.join(".")}.uom`, null));
-              dispatch(pFO(`${jsonArr.join(".")}.uomValue`, null));
+              currentUOMValueFieldPath.pop();
+              currentUOMValueFieldPath = currentUOMValueFieldPath.join(".");
+              if (currentObject[0].uom) {
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesUOM`,
+                    "props.value",
+                    currentObject[0].uom
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesUOMValue`,
+                    "props.disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesUOMValue`,
+                    "required",
+                    true
+                  )
+                );
+              } else {
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesUOMValue`,
+                    "required",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesUOM`,
+                    "props.value",
+                    ""
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesUOMValue`,
+                    "props.value",
+                    ""
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesUOMValue`,
+                    "props.disabled",
+                    true
+                  )
+                );
+                dispatch(pFO(`${jsonArr.join(".")}.uom`, null));
+                dispatch(pFO(`${jsonArr.join(".")}.uomValue`, null));
+              }
+              if (action.value) {
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesCount`,
+                    "props.disabled",
+                    false
+                  )
+                );
+              } else {
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesCount`,
+                    "props.disabled",
+                    true
+                  )
+                );
+              }
+            } catch (e) {
+              console.log(e);
             }
-            if (action.value) {
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesCount`,
-                  "props.disabled",
-                  false
-                )
-              );
-
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesCount`,
-                  "props.value",
-                  1
-                )
-              );
-
-            } else {
-              dispatch(
-                handleField(
-                  "apply",
-                  `${currentUOMValueFieldPath}.accessoriesCount`,
-                  "props.disabled",
-                  true
-                )
-              );
-            }
-          } catch (e) {
-            console.log(e);
           }
-        }
         },
         accessoriesUOM: getTextField({
           label: {
