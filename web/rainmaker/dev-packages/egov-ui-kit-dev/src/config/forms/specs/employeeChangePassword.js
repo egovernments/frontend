@@ -10,7 +10,7 @@ const formConfig = {
       errorMessage: "CORE_CHANGEPASSWORD_EXISTINGPASSWORD_INVALIDMSG",
       hintText: "CORE_CHANGEPASSWORD_EXISTINGPASSWORD_PLACEHOLDER",
       // pattern: "^([a-zA-Z0-9@])+$",
-      pattern: /^[a-zA-Z0-9@#$%/]{8,15}$/i,
+      pattern: "^[a-zA-Z0-9@#$%]{8,15}$",
       value: "",
     },
     newpassword: {
@@ -22,7 +22,8 @@ const formConfig = {
       errorMessage: "CORE_LOGIN_PASSWORD_ERRORMSG",
       hintText: "CORE_LOGIN_NEW_PASSWORD_PLACEHOLDER",
       // pattern: "^([a-zA-Z0-9@])+$",
-      pattern: /^[a-zA-Z0-9@#$%/]{8,15}$/i,
+      pattern: "^[a-zA-Z0-9@#$%]{8,15}$",
+
       value: "",
     },
     confirmnewpassword: {
@@ -34,7 +35,7 @@ const formConfig = {
       errorMessage: "CORE_LOGIN_PASSWORD_ERRORMSG",
       hintText: "CORE_LOGIN_CONNFIRM_NEW_PASSWORD_PLACEHOLDER",
       // pattern: "^([a-zA-Z0-9@])+$",
-      pattern: /^[a-zA-Z0-9@#$%/]{8,15}$/i,
+      pattern: "^[a-zA-Z0-9@#$%]{8,15}$",
       value: "",
     },
   },

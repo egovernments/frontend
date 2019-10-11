@@ -20,7 +20,8 @@ const formConfig = {
       errorMessage: "CORE_LOGIN_PASSWORD_ERRORMSG",
       hintText: "CORE_LOGIN_PASSWORD_PLACEHOLDER",
       // pattern: "^([a-zA-Z0-9@])+$",
-      pattern: /^[a-zA-Z0-9@#$%/]{8,15}$/i,
+      pattern: "^[a-zA-Z0-9@#$%]{8,15}$",
+
       value: "",
     },
   },
