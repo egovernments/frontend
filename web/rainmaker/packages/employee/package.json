@@ -2,7 +2,7 @@
   "name": "rainmaker-employee",
   "version": "0.0.2",
   "private": true,
-  "homepage": "https://bihar-uat.egovernments.org/employee/employee/",
+  "homepage": "https://bihar-uat.egovernments.org/employee/",
   "proxy": "https://bihar-uat.egovernments.org/",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
