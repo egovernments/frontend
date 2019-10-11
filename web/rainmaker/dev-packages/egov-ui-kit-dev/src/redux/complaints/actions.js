@@ -88,7 +88,7 @@ const complaintFetchPending = () => {
   };
 };
 
-const complaintFetchComplete = (payload, overWrite) => {
+export const complaintFetchComplete = (payload, overWrite) => {
   return {
     type: actionTypes.COMPLAINTS_FETCH_COMPLETE,
     payload,

@@ -40,7 +40,7 @@ const complaintsReducer = (state = intialState, action) => {
         errorMessage: "",
       };
     case actionTypes.COMPLAINTS_FETCH_COMPLETE:
-      let complaintsById = transformById(mergeServiceWithActions(action.payload), "serviceRequestId");
+      let complaintsById = isEmpty(action.payload) ? {} : transformById(mergeServiceWithActions(action.payload), "serviceRequestId");
       return {
         ...state,
         loading: false,

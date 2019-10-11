@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Card, TextField, Button } from "components";
-import { fetchComplaints } from "egov-ui-kit/redux/complaints/actions";
+import {
+  fetchComplaints,
+  complaintFetchComplete
+} from "egov-ui-kit/redux/complaints/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Complaints, Screen } from "modules/common";
 import {
@@ -46,8 +49,9 @@ class SearchScreen extends Component {
   };
 
   componentDidMount = async () => {
-    // let { fetchComplaints } = this.props;
+    const { complaintFetchComplete } = this.props;
     // fetchComplaints([{ key: "status", value: "assigned,open,reassignrequested,closed,rejected,resolved" }], true, true);
+    complaintFetchComplete([], true);
     this.setState({
       noComplaintMessage: ""
     });
@@ -109,7 +113,18 @@ class SearchScreen extends Component {
         );
       }
     } else if (mobileNo) {
-      fetchComplaints(queryObj, true, true);
+      if (mobileNo.length === 10) {
+        fetchComplaints(queryObj, true, true);
+      } else {
+        toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "Please enter valid mobile number",
+            labelKey: `ERR_MOBILE_NUMBER_CHARACTERS`
+          },
+          true
+        );
+      }
     }
     // if (complaintNo || mobileNo) {
     //   fetchComplaints(queryObj, true, true);
@@ -321,7 +336,9 @@ const mapDispatchToProps = dispatch => {
     fetchComplaints: (criteria, hasUsers, overWrite) =>
       dispatch(fetchComplaints(criteria, hasUsers, overWrite)),
     toggleSnackbarAndSetText: (open, message, error) =>
-      dispatch(toggleSnackbarAndSetText(open, message, error))
+      dispatch(toggleSnackbarAndSetText(open, message, error)),
+    complaintFetchComplete: (payload, overWrite) =>
+      dispatch(complaintFetchComplete(payload, overWrite))
   };
 };
 
