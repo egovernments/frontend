@@ -25,19 +25,7 @@ class Header extends Component {
   };
 
   componentDidMount = () => {
-    const { role, updateActiveRoute, userInfo } = this.props;
-    const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
-
-    if (role && role.toLowerCase() !== "citizen") {
-      // const menupath = localStorageGet("menuPath");
-      const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
-      // updateActiveRoute(menupath);
-      this.setState({ ulbLogo });
-    }
-    if (tenantId) {
-      const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
-      this.setState({ ulbLogo });
-    }
+    const { updateActiveRoute } = this.props;
     const menupath = localStorageGet("menuPath");
     const menuName = localStorageGet("menuName");
     updateActiveRoute(menupath, menuName);
@@ -159,7 +147,8 @@ class Header extends Component {
       activeRoutePath,
       hasLocalisation,
       notificationsCount,
-      digitLogoUrl
+      digitLogoUrl,
+      ulbLogo,
     } = this.props;
     return (
       <div>
@@ -170,7 +159,7 @@ class Header extends Component {
           defaultTitle={defaultTitle}
           titleAddon={titleAddon}
           role={role}
-          ulbLogo={this.state.ulbLogo}
+          ulbLogo={ulbLogo}
           {...appBarProps}
           fetchLocalizationLabel={fetchLocalizationLabel}
           userInfo={userInfo}
@@ -228,10 +217,11 @@ const mapStateToProps = (state, ownProps) => {
   const userTenant = cities.filter((item) => item.code === tenantId);
   const ulbGrade = userTenant && get(userTenant[0], "city.ulbGrade");
   const name = userTenant && get(userTenant[0], "code");
+  const ulbLogo = userTenant && get(userTenant[0], "logoId");
   const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
   const screenKey = window.location.pathname.split("/").pop();
   const headerTitle = get(state.screenConfiguration.screenConfig, `${screenKey}.components.div.children.header.children.key.props.labelKey`);
-  return { cities, defaultTitle, name, headerTitle, notificationsCount, digitLogoUrl };
+  return { cities, defaultTitle, name, headerTitle, notificationsCount, digitLogoUrl, ulbLogo };
 };
 
 const mapDispatchToProps = (dispatch) => {
