@@ -230,7 +230,7 @@ export const demandDraftDetails = getCommonContainer({
       labelName: "Enter bank IFSC",
       labelKey: "TL_PAYMENT_IFSC_CODE_PLACEHOLDER"
     },
-    required: true,
+    required: false,
     jsonPath: "ReceiptTemp[0].instrument.ifscCode",
     iconObj: {
       iconName: "search",
@@ -253,9 +253,9 @@ export const demandDraftDetails = getCommonContainer({
       labelName: "Enter bank name",
       labelKey: "TL_PAYMENT_BANK_NAME_PLACEHOLDER"
     },
-    required: true,
+    required: false,
     props: {
-      disabled: true
+      disabled: false
     },
     jsonPath: "ReceiptTemp[0].instrument.bank.name"
   }),
@@ -268,9 +268,9 @@ export const demandDraftDetails = getCommonContainer({
       labelName: "Enter bank branch",
       labelKey: "TL_PAYMENT_BANK_BRANCH_PLACEHOLDER"
     },
-    required: true,
+    required: false,
     props: {
-      disabled: true
+      disabled: false
     },
     jsonPath: "ReceiptTemp[0].instrument.branchName"
   })
