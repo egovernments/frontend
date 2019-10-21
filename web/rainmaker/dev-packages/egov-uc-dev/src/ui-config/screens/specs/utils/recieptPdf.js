@@ -201,16 +201,27 @@ const getCitizenReceipetData = transformedData => {
                 text: transformedData.paymentMode,
                 border: [false, true, true, true]
               }
-              // {
-              //   text: "Amount Due",
-              //   border: [true, true, false, true],
-              //   style: "receipt-table-key"
-              // },
-              // {
-              //   text: transformedData.amountDue,
-              //   border: [false, true, true, true]
-              // }
             ],
+            [
+              {
+               text: "Cheque/DD Number",
+               border: [true, true, false, true],
+               style: "receipt-table-key"
+             },
+             {
+               text: transformedData.chequeDDnumber,
+               border: [false, true, true, true]
+             },
+             {
+                text: "Cheque/DD Date",
+                border: [true, true, false, true],
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.chequeDDdate,
+                border: [false, true, true, true]
+              }
+          ],
             [
               {
                 text: "G8 Receipt No.",
@@ -242,18 +253,27 @@ const getCitizenReceipetData = transformedData => {
                 border: [false, true, true, true]
               },
               {
-                text: "Comments",
+                text: "Paid by",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.comments,
+                text: transformedData.consumerName,
                 border: [false, true, true, true]
               }
             ]
           ]
+
         },
         layout: {}
+      },
+      {
+        text: "",
+        style: "pt-reciept-citizen-subheader"
+      },
+       {
+         text:"Comments: "+transformedData.comments,
+         style: "pt-reciept-citizen-subheader"
       },
       {
         text: "",
@@ -545,15 +565,26 @@ const getReceiptData = transformedData => {
                 text: transformedData.paymentMode,
                 border: [false, true, true, true]
               }
-              // {
-              //   text: "Amount Due",
-              //   border: [true, true, false, true],
-              //   style: "receipt-table-key"
-              // },
-              // {
-              //   text: transformedData.amountDue,
-              //   border: [false, true, true, true]
-              // }
+            ],
+            [
+              {
+                 text: "Cheque/DD Number",
+                 border: [true, true, false, true],
+                 style: "receipt-table-key"
+               },
+               {
+                 text: transformedData.chequeDDnumber,
+                 border: [false, true, true, true]
+               },
+               {
+                  text: "Cheque/DD Date",
+                  border: [true, true, false, true],
+                  style: "receipt-table-key"
+                },
+                {
+                  text: transformedData.chequeDDdate,
+                  border: [false, true, true, true]
+                }
             ],
             [
               {
@@ -586,19 +617,25 @@ const getReceiptData = transformedData => {
                 border: [false, true, true, true]
               },
               {
-                text: "Comments",
+                text: "Paid by",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.comments,
+                text: transformedData.consumerName,
                 border: [false, true, true, true]
               }
             ]
           ]
+
         },
         layout: {}
       },
+     {
+            text:"Comments: "+transformedData.comments,
+            style: "pt-reciept-citizen-subheader"
+     }
+       ,
       {
         text: "",
         style: "pt-reciept-citizen-subheader"
@@ -815,15 +852,26 @@ const getReceiptData = transformedData => {
                 text: transformedData.paymentMode,
                 border: [false, true, true, true]
               }
-              // {
-              //   text: "Amount Due",
-              //   border: [true, true, false, true],
-              //   style: "receipt-table-key"
-              // },
-              // {
-              //   text: transformedData.amountDue,
-              //   border: [false, true, true, true]
-              // }
+            ],
+             [
+                {
+                 text: "Cheque/DD Number",
+                 border: [true, true, false, true],
+                 style: "receipt-table-key"
+               },
+               {
+                 text: transformedData.chequeDDnumber,
+                 border: [false, true, true, true]
+               },
+               {
+                  text: "Cheque/DD Date",
+                  border: [true, true, false, true],
+                  style: "receipt-table-key"
+                },
+                {
+                  text: transformedData.chequeDDdate,
+                  border: [false, true, true, true]
+                }
             ],
             [
               {
@@ -856,19 +904,24 @@ const getReceiptData = transformedData => {
                 border: [false, true, true, true]
               },
               {
-                text: "Comments",
+                text: "Paid by",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.comments,
+                text: transformedData.consumerName,
                 border: [false, true, true, true]
               }
             ]
           ]
+
         },
         layout: {}
       },
+        {
+          text:"Comments: "+transformedData.comments,
+          style: "pt-reciept-citizen-subheader"
+        },
       {
         text: "",
         style: "pt-reciept-citizen-subheader"
@@ -1013,8 +1066,7 @@ export const generateReciept = async rowData => {
   } else {
     const data = allReceipts.Receipt.find(
       item =>
-        get(item, "Bill[0].billDetails[0].receiptNumber", "") ===
-        rowData["Receipt No"]
+        get(item, "Bill[0].billDetails[0].receiptNumber", "") === rowData["Receipt No"]
     );
     if (isEmpty(data)) {
       return;
@@ -1061,7 +1113,7 @@ export const generateReciept = async rowData => {
 
     openPDFFileUsingBase64(pdfData, `${transformedData.receiptNumber}.pdf`)
   }
-    
+   
 };
 
 //Generates PDF for Citizen Reciept
@@ -1074,9 +1126,7 @@ export const generateCitizenReciept = async rowData => {
   );
   let citizenReceipt_data = {};
   const data = allReceipts.Receipt.find(
-    item =>
-      get(item, "Bill[0].billDetails[0].receiptNumber", "") ===
-      rowData["Receipt No"]
+    item => get(item, "Bill[0].billDetails[0].receiptNumber", "") === rowData["Receipt No"]
   );
   if (isEmpty(data)) {
     return;
@@ -1107,8 +1157,7 @@ export const generateCitizenReciept = async rowData => {
   citizenReceipt_data =
     !isEmpty(finalTransformedData) &&
     getCitizenReceipetData(finalTransformedData);
-
-    if (citizenReceipt_data && !isEmpty(transformedData))
+  if (citizenReceipt_data && !isEmpty(transformedData))
     {
       let pdfDataCitizen;
       if (window.appOverrides && window.appOverrides.validateForm)
@@ -1124,5 +1173,4 @@ export const generateCitizenReciept = async rowData => {
       openPDFFileUsingBase64(pdfDataCitizen, `${transformedData.receiptNumber}.pdf`)
     }
   
-
   };
