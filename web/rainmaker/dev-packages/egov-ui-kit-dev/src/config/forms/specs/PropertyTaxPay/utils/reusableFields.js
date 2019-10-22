@@ -137,7 +137,7 @@ export const builtArea = {
     required: true,
     hideField: false,
     numcols: 4,
-    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    pattern: /^([0-9]\d{0,7})(\.\d+)?$/,
   },
 };
 
@@ -158,7 +158,7 @@ export const superArea = {
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       dispatch(prepareFormData("Properties[0].propertyDetails[0].units[0].unitArea", field.value));
     },
-    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    pattern: /^([0-9]\d{0,7})(\.\d+)?$/,
     errorMessage: "PT_SUPER_AREA_ERROR_MESSAGE",
   },
 };
