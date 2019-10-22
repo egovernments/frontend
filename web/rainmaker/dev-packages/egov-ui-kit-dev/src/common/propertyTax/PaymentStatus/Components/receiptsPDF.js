@@ -404,6 +404,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
               { text: "This is a computer generated document, hence requires no signature.", margin: [0, 0, 0, 5] },
               { text: "Assessment & Payment is subject to verification/Scrutiny by competitive authority.", margin: [0, 0, 0, 5] },
               { text: "Please deposit property tax dues for earlier years also. Ignore, if already paid.", margin: [0, 0, 0, 5] },
+              { text: "Citizen for Online Payments please refer to the link http://lgpunjab.gov.in/cms/pay-property-tax.php", margin: [0, 0, 0, 5] },
             ],
             alignment: "left",
             style: "receipt-footer",
