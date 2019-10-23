@@ -27,7 +27,7 @@ export const plotSize = {
     errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     required: true,
     fullWidth: true,
-    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    pattern: /^([0-9]\d{0,7})(\.\d+)?$/,
     numcols: 6,
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
