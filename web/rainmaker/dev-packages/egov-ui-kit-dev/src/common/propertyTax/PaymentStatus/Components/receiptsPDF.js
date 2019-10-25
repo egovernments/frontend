@@ -191,7 +191,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
                     stack: [
                       { text: header.header || "", style: "receipt-logo-header" },
                       {
-                        text: `${header.subheader} ${isEmployeeReceipt ? `(Employee Copy)` : `(Citizen Copy)`} ` || "",
+                        text: `${header.subheader} ${isEmployeeReceipt ? `` : ``} ` || "",
                         style: "receipt-logo-sub-header",
                       },
                     ],
@@ -395,8 +395,9 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
             },
             layout: tableborder,
           },
-          { text: "Commissioner/EO", alignment: "right", color: "#484848", fontSize: 12, bold: true, margin: [0, 30, 0, 30] },
-          { text: "Note:", alignment: "left", style: "receipt-footer" },
+          { text: "Assessee Signature", alignment: "left", color: "#484848", fontSize: 12, bold: true, margin: [0, 35, 0, -12] },
+          { text: "Commissioner/EO", alignment: "right", color: "#484848", fontSize: 12, bold: true, margin: [0, 0, 0, 10] },
+          { text: "Note:", alignment: "left", style: "receipt-footer",margin: [0, -10, 0, 0] },
           {
             ol: [
               { text: "Payment received by cheque/demand draft shall be subject to realization.", margin: [0, 0, 0, 5] },
@@ -404,7 +405,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
               { text: "This is a computer generated document, hence requires no signature.", margin: [0, 0, 0, 5] },
               { text: "Assessment & Payment is subject to verification/Scrutiny by competitive authority.", margin: [0, 0, 0, 5] },
               { text: "Please deposit property tax dues for earlier years also. Ignore, if already paid.", margin: [0, 0, 0, 5] },
-              { text: "Citizen for Online Payments please refer to the link http://lgpunjab.gov.in/cms/pay-property-tax.php", margin: [0, 0, 0, 5] },
+              { text: "Pay property tax on this link http://lgpunjab.gov.in/cms/pay-property-tax.php", margin: [0, 0, 0, 5] },
             ],
             alignment: "left",
             style: "receipt-footer",
