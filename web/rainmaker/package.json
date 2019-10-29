@@ -30,7 +30,7 @@
     "pt-employee": "babel dev-packages/pt-employee-dev/src --out-dir packages/lib/pt-employee --copy-files",
     "build-css-employee": "run-p build-css-egov-pgr-employee build-css-egov-pt-employee",
     "build-css-citizen": "run-p  build-css-pgr-citizen build-css-egov-pt-citizen",
-    "build-css-common": "run-p build-css-egov-ui-kit build-css-egov-ui-framework-core build-css-egov-workflow build-css-egov-tradelicence build-css-egov-uc  build-css-egov-boilerplate",
+    "build-css-common": "run-p build-css-egov-ui-kit build-css-egov-ui-framework-core build-css-egov-workflow build-css-egov-tradelicence build-css-egov-uc build-css-egov-boilerplate",
     "build-css-egov-ui-kit": "node-sass-chokidar dev-packages/egov-ui-kit-dev/src -o dev-packages/egov-ui-kit-dev/src",
     "build-css-pgr-citizen": "node-sass-chokidar dev-packages/pgr-citizen-dev/src -o dev-packages/pgr-citizen-dev/src",
     "build-css-egov-ui-framework-core": "node-sass-chokidar dev-packages/egov-ui-framework-core/src -o dev-packages/egov-ui-framework-core/src",
