@@ -4,8 +4,8 @@ import {
   getCommonCard,
   getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { footer } from "../tradelicence/payResource/footer";
-import estimateDetails from "../tradelicence/payResource/estimate-details";
+import { footer } from "../wns/payResource/footer";
+import estimateDetails from "../wns/payResource/estimate-details";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage

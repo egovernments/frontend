@@ -7,8 +7,8 @@ import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon"
 import "../utils/index.css";
 const header = getCommonHeader(
   {
-    labelName: "Trade License",
-    labelKey: "TL_COMMON_TL"
+    labelName: "Water & Sewerage",
+    labelKey: "Water & Sewerage"
   },
   {
     classes: {
@@ -20,8 +20,8 @@ const header = getCommonHeader(
 const cardItems = [
   {
     label: {
-      labelKey: "TL_APPLY_TRADELICENSE",
-      labelName: "Apply for Trade License"
+      labelKey: "Pay Water & Sewerage Bill",
+      labelName: "Pay Water & Sewerage Bill"
     },
     icon: <TradeLicenseIcon />,
     route: {
@@ -31,8 +31,8 @@ const cardItems = [
   },
   {
     label: {
-      labelKey: "TL_MY_APPLICATIONS",
-      labelName: "My Applications"
+      labelKey: "My Connections",
+      labelName: "My Connections"
     },
     icon: <FormIcon />,
     route: "my-applications"
@@ -50,9 +50,9 @@ const tradeLicenseSearchAndResult = {
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
-      // props: {
-      //   className: "common-div-css"
-      // },
+      props: {
+        className: "common-div-css"
+      },
       children: {
         header: header,
         applyCard: {
@@ -66,13 +66,13 @@ const tradeLicenseSearchAndResult = {
         listCard1: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
-          componentPath: "PastPayments"
+          componentPath: "HowItWorks"
         },
-         listCard1: {
+        listCard2: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
           componentPath: "HowItWorks"
-        },
+        }
       }
     },
     // div: {

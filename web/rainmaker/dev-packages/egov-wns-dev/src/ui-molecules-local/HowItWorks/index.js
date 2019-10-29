@@ -25,8 +25,8 @@ class HowItWorks extends React.Component {
             <ListItemText
               primary={
                 <LabelContainer
-                  labelKey="COMMON_HOW_IT_WORKS"
-                  labelName="How it works?"
+                  labelKey="How it works?S"
+                  labelName="How it works?S"
                   style={{
                     fontSize: 14,
                     color: "rgba(0, 0, 0, 0.8700000047683716)"

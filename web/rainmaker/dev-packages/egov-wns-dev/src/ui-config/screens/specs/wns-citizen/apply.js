@@ -7,7 +7,7 @@ import {
   getBoundaryData
 } from "../../../../ui-utils/commons";
 import get from "lodash/get";
-import { footer } from "../tradelicence/applyResource/footer";
+import { footer } from "../wns/applyResource/footer";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   header,
@@ -17,7 +17,7 @@ import {
   formwizardFourthStep,
   stepper,
   getMdmsData
-} from "../tradelicence/apply";
+} from "../wns/apply";
 import { getAllDataFromBillingSlab } from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -132,7 +132,7 @@ const screenConfig = {
     },
     breakUpDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-wns",
       componentPath: "ViewBreakupContainer",
       props: {
         open: false,
