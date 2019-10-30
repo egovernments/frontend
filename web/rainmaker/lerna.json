@@ -8,6 +8,7 @@
     "dev-packages/pt-employee-dev",
     "dev-packages/egov-workflow-dev",
     "dev-packages/egov-tradelicence-dev",
+    "dev-packages/egov-wns-dev",
     "dev-packages/egov-hrms-dev",
     "dev-packages/egov-uc-dev",
     "dev-packages/egov-boilerplate-dev",
