@@ -25,7 +25,7 @@ class PastPayments extends React.Component {
             <ListItemText
               primary={
                 <LabelContainer
-                  labelKey="COMMON_HOW_IT_WORKS"
+                  labelKey="Past Payments"
                   labelName="Past Payments"
                   style={{
                     fontSize: 14,

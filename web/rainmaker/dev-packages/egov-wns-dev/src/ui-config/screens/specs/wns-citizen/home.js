@@ -66,7 +66,7 @@ const tradeLicenseSearchAndResult = {
         listCard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
-          componentPath: "HowItWorks"
+          componentPath: "PastPayments"
         },
           listCard2: {
           uiFramework: "custom-molecules-local",

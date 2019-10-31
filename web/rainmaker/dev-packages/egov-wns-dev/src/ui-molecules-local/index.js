@@ -52,6 +52,17 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const PastPayments = Loadable({
+  loader: () => import("./PastPayments"),
+  loading: () => <Loading />
+});
+
+const DividerWithLabel = Loadable({
+  loader: () => import("./DividerWithLabel"),
+  loading: () => <Loading />
+});
+
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -61,5 +72,7 @@ export {
   DocumentList,
   MapLocator,
   FeesEstimateCard,
-  HowItWorks
+  HowItWorks,
+  PastPayments,
+  DividerWithLabel
 };

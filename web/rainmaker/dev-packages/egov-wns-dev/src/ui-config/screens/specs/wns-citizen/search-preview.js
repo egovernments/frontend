@@ -32,6 +32,7 @@ import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import {footer} from "./applyResource/footer";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -170,10 +171,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     // const status = getTransformedStatus(
     //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
     // );
-    const status = get(
-      state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].status"
-    );
+    // const status = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.Licenses[0].status"
+    // );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
@@ -447,8 +448,8 @@ const screenConfig = {
           moduleName: "egov-workflow",
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
         },
-        tradeReviewDetails
-        //footer
+        tradeReviewDetails,
+        footer
       }
     },
     breakUpDialog: {
