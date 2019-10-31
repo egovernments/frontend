@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { transformById } from "egov-ui-kit/utils/commons";
+import { transformById, getTotalAmountDue } from "egov-ui-kit/utils/commons";
 
 const initialState = {
   loading: false,
@@ -179,6 +179,7 @@ const propertyReducer = (state = initialState, action) => {
       };
     case actionTypes.SINGLE_ASSESSMENT_STATUS_COMPLETE:
       const singleAssessmentByStatus =action.payload[0];
+
       const receiptsByYr=action.payload[1];
       return {
         ...state,
@@ -187,6 +188,30 @@ const propertyReducer = (state = initialState, action) => {
         errorMessage: "",
         singleAssessmentByStatus,
         receiptsByYr
+      };
+    case actionTypes.PROPERTY_FETCH_BILL_PENDING:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+          errorMessage: "",
+        };
+    case actionTypes.PROPERTY_FETCH_BILL_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+        totalBillAmountDue: ""
+      };
+    case actionTypes.PROPERTY_FETCH_BILL_COMPLETE:
+      const totalBillAmountDue = getTotalAmountDue(action.payload);
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        errorMessage: "",
+        totalBillAmountDue,
       };
     case actionTypes.RESET_PROPERTY_STATE:
       return initialState;

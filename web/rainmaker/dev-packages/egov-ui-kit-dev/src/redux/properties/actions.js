@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
@@ -16,6 +16,26 @@ const reset_property_reset = () => {
 const propertyFetchPending = () => {
   return {
     type: actionTypes.PROPERTY_FETCH_PENDING,
+  };
+};
+
+const fetchBillPending = () => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_BILL_PENDING,
+  };
+};
+
+const fetchBillComplete = (payload) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_BILL_COMPLETE,
+    payload,
+  };
+};
+
+const fetchBillError = (error) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_BILL_ERROR,
+    error,
   };
 };
 
@@ -488,3 +508,17 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
     }
   };
 };
+
+export const fetchTotalBillAmount = (fetchBillQueryObject) => {
+  return async (dispatch) => {
+    if (fetchBillQueryObject) {
+      dispatch(fetchBillPending());
+      try {
+        const payloadProperty = await httpRequest(FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, fetchBillQueryObject);
+        dispatch(fetchBillComplete(payloadProperty));
+      } catch (error) {
+        dispatch(fetchBillError(error.message));
+      }
+    }
+  }
+}

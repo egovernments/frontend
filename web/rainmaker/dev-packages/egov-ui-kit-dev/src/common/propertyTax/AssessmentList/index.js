@@ -177,6 +177,7 @@ const AssessmentList = ({properties,
   onNewPropertyButtonClick,
   hoverColor,
   generalMDMSDataById,
+  totalBillAmountDue
 }) => {
   return items.length == 0 ? (
     <BlankAssessment
@@ -206,6 +207,7 @@ const AssessmentList = ({properties,
         listItemStyle={listItemStyle}
         hoverColor={hoverColor}
         generalMDMSDataById={generalMDMSDataById}
+        totalBillAmountDue={totalBillAmountDue}
       />)
    
 
