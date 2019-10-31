@@ -10,12 +10,12 @@ import KeyboardRightIcon from "@material-ui/icons/KeyboardArrowRight";
 
 const styles = theme => ({
   root: {
-    margin: "2px 8px",
-    backgroundColor: theme.palette.background.paper
+    margin: "16px 8px 0px 8px",
+    backgroundColor: theme.palette.background.paper,
   }
 });
 
-class HowItWorks extends React.Component {
+class PastPayments extends React.Component {
   render() {
     const { classes } = this.props;
     return (
@@ -25,8 +25,8 @@ class HowItWorks extends React.Component {
             <ListItemText
               primary={
                 <LabelContainer
-                  labelKey="COMMON_HOW_IT_WORKS"
-                  labelName="How it works?"
+                  labelKey="Past Payments"
+                  labelName="Past Payments"
                   style={{
                     fontSize: 14,
                     color: "rgba(0, 0, 0, 0.8700000047683716)"
@@ -46,4 +46,4 @@ class HowItWorks extends React.Component {
   }
 }
 
-export default withStyles(styles)(HowItWorks);
+export default withStyles(styles)(PastPayments);
