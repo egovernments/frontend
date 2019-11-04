@@ -63,12 +63,12 @@ const tradeLicenseSearchAndResult = {
             history: {}
           }
         },
-        listCard1: {
+        listCard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
-          componentPath: "HowItWorks"
+          componentPath: "PastPayments"
         },
-        listCard2: {
+          listCard2: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
           componentPath: "HowItWorks"

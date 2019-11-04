@@ -1,23 +1,21 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../..//ui-utils/commons";
-import {
-  convertEpochToDate,
-  convertDateToEpoch,
-  getTextToLocalMapping
-} from "../../utils/index";
+import { getSearchResults } from "../../../../../ui-utils/commons";
+import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { textToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
     {
       key: "tenantId",
-      value: JSON.parse(getUserInfo()).tenantId
-    },
-    { key: "offset", value: "0" }
+      value: getTenantId()
+    }
+    // { key: "limit", value: "10" },
+    // { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -25,14 +23,14 @@ export const searchApiCall = async (state, dispatch) => {
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
     state,
     dispatch,
     "search"
@@ -43,10 +41,10 @@ export const searchApiCall = async (state, dispatch) => {
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill valid fields to start search",
-          labelKey: "ERR_FILL_VALID_FIELDS"
+          labelName: "Please fill valid fields to search",
+          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
         },
-        "warning"
+        "error"
       )
     );
   } else if (
@@ -58,7 +56,7 @@ export const searchApiCall = async (state, dispatch) => {
         true,
         {
           labelName: "Please fill at least one field to start search",
-          labelKey: "ERR_FILL_ONE_FIELDS"
+          labelKey: "NOC_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
         },
         "warning"
       )
@@ -77,6 +75,7 @@ export const searchApiCall = async (state, dispatch) => {
       )
     );
   } else {
+    //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
@@ -92,26 +91,38 @@ export const searchApiCall = async (state, dispatch) => {
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
           });
-        } else {
+        }
+        // else if (key === "status") {
+        //   queryObject.push({
+        //     key: "action",
+        //     value: searchScreenObject[key].trim()
+        //   });
+        // }
+        else {
           queryObject.push({ key: key, value: searchScreenObject[key].trim() });
         }
       }
     }
-
-    const response = await getSearchResults(queryObject);
     try {
-      let data = response.Licenses.map(item => ({
-        [getTextToLocalMapping("Application No")]:
-          item.applicationNumber || "-",
-        [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
-        [getTextToLocalMapping("Trade Name")]: item.tradeName || "-",
-        [getTextToLocalMapping("Owner Name")]:
-          item.tradeLicenseDetail.owners[0].name || "-",
-        [getTextToLocalMapping("Application Date")]:
-          convertEpochToDate(item.applicationDate) || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId
-      }));
+      const response = await getSearchResults(queryObject);
+      // const response = searchSampleResponse();
+      let data =
+        response &&
+        get(response, "FireNOCs", []).map(item => ({
+          [get(textToLocalMapping, "Application No")]:
+            item.fireNOCDetails.applicationNumber || "-",
+          [get(textToLocalMapping, "NOC No")]: item.fireNOCNumber || "-",
+          [get(textToLocalMapping, "NOC Type")]:
+            item.fireNOCDetails.fireNOCType || "-",
+          [get(textToLocalMapping, "Owner Name")]:
+            get(item, "fireNOCDetails.applicantDetails.owners[0].name") || "-",
+          [get(textToLocalMapping, "Application Date")]:
+            convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
+            "-",
+          tenantId: item.tenantId,
+          [get(textToLocalMapping, "Status")]:
+            get(textToLocalMapping, item.fireNOCDetails.status) || "-"
+        }));
 
       dispatch(
         handleField(
@@ -126,14 +137,22 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Trade License Applications"
-          )} (${response.Licenses.length})`
+          `${textToLocalMapping["Search Results for Fire-NOC Applications"]}(${
+            response.FireNOCs.length
+          })`
         )
       );
+      //showHideProgress(false, dispatch);
       showHideTable(true, dispatch);
     } catch (error) {
-      dispatch(toggleSnackbar(true, error.message, "error"));
+      //showHideProgress(false, dispatch);
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+          "error"
+        )
+      );
       console.log(error);
     }
   }

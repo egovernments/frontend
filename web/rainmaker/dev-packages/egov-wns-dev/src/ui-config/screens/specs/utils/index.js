@@ -1,7 +1,9 @@
 import {
   getLabel,
   getTextField,
-  getCommonSubHeader
+  getCommonSubHeader,
+  getCommonCard,
+  getCommonCaption,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
@@ -28,7 +30,6 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
-
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -2193,6 +2194,136 @@ export const fillOldLicenseData = async (state, dispatch) => {
     )
   );
 };
+
+export const resetFields = (state, dispatch) => {
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.NOCNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.fromDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.toDate",
+      "props.value",
+      ""
+    )
+  );
+};
+
+export const getCommonGrayCard = children => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    children: {
+      body: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          ch1: getCommonCard(children, {
+            style: {
+              backgroundColor: "rgb(242, 242, 242)",
+              boxShadow: "none",
+              borderRadius: 0,
+              overflow: "visible"
+            }
+          })
+        },
+        gridDefination: {
+          xs: 12
+        }
+      }
+    },
+    gridDefination: {
+      xs: 12
+    }
+  };
+};
+
+export const getLabelOnlyValue = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 4
+    },
+    props: {
+      style: {
+        marginBottom: "16px"
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+export const getRequiredDocData = async (action, state, dispatch) => {
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? "pb.amritsar" : getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "FireNoc",
+          masterDetails: [{ name: "Documents" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
