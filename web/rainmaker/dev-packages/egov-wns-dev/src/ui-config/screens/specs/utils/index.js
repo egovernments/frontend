@@ -44,7 +44,7 @@ export const getCommonApplyFooter = children => {
 export const getAsteric = () => {
   return {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-wns",
     componentPath: "Asteric"
   };
 };
@@ -73,7 +73,7 @@ export const getTooltip = (children, toolTipProps) => {
 export const getCheckbox = (content, jsonPath, props = {}) => {
   return {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-wns",
     componentPath: "CheckboxContainer",
     props: {
       content,
@@ -176,8 +176,19 @@ export const getRadioGroupWithLabel = (
 export const getApplicationNoContainer = number => {
   return {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
+    props: {
+      number
+    }
+  };
+};
+
+export const getConsumerNoContainer = number => {
+  return {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ConsumerNoContainer",
     props: {
       number
     }
@@ -400,7 +411,7 @@ export const getFeesEstimateCard = props => {
   const { sourceJsonPath, ...rest } = props;
   return {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-wns",
     componentPath: "EstimateCardContainer",
     props: {
       sourceJsonPath,
@@ -586,7 +597,7 @@ export const getReceiptData = async queryObject => {
 export const getAutoSelector = textScheama => {
   return {
     uiFramework: "custom-molecules-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-wns",
     componentPath: "AutoSelector",
     gridDefination: {
       xs: 6,
@@ -601,7 +612,7 @@ export const getAutoSelector = textScheama => {
 export const getMapLocator = textSchema => {
   return {
     uiFramework: "custom-molecules-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-wns",
     componentPath: "MapLocator",
     props: {}
   };
@@ -1347,9 +1358,9 @@ export const getFinancialYearDates = (format, et) => {
 
 export const getBaseURL = () => {
   if (process.env.REACT_APP_NAME !== "Citizen") {
-    return "/tradelicence";
+    return "/wns";
   } else {
-    return "/tradelicense-citizen";
+    return "/wns-citizen";
   }
 };
 
