@@ -19,20 +19,17 @@ import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton
 } from "../utils";
 
-import { footerReview } from "./applyResource/footer";
+import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
-  getFeesEstimateCard,
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
-import { getReviewTrade } from "./applyResource/review-trade";
-import { getReviewOwner } from "./applyResource/review-owner";
-import { getReviewDocuments } from "./applyResource/review-documents";
+import { getServiceDetails } from "./connectionDetailsResource/service-details";
+import { getPropertyDetails } from "./connectionDetailsResource/property-details";
+import { getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import {footer} from "./applyResource/footer";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -116,9 +113,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   set(payload, "Licenses[0].headerSideText", headerSideText);
 
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-    "."
-  )[0] === "INDIVIDUAL"
+    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
@@ -312,11 +309,11 @@ const headerrow = getCommonContainer({
   }
 });
 
-const reviewTradeDetails = getReviewTrade(false);
+const serviceDetails = getServiceDetails(false);
 
-const reviewOwnerDetails = getReviewOwner(false);
+const propertyDetails = getPropertyDetails(false);
 
-const reviewDocumentDetails = getReviewDocuments(false);
+const ownerDetails = getOwnerDetails(false);
 
 
 const setActionItems = (action, object) => {
@@ -341,9 +338,9 @@ const setActionItems = (action, object) => {
 };
 
 export const tradeReviewDetails = getCommonCard({
-  reviewTradeDetails,
-  reviewOwnerDetails,
-  reviewDocumentDetails
+  serviceDetails,
+  propertyDetails,
+  ownerDetails
 });
 
 const screenConfig = {
@@ -410,35 +407,35 @@ const screenConfig = {
                 process.env.REACT_APP_NAME === "Employee"
                   ? {}
                   : {
-                      word1: {
-                        ...getCommonTitle(
-                          {
-                            jsonPath: "Licenses[0].headerSideText.word1"
-                          },
-                          {
-                            style: {
-                              marginRight: "10px",
-                              color: "rgba(0, 0, 0, 0.6000000238418579)"
-                            }
+                    word1: {
+                      ...getCommonTitle(
+                        {
+                          jsonPath: "Licenses[0].headerSideText.word1"
+                        },
+                        {
+                          style: {
+                            marginRight: "10px",
+                            color: "rgba(0, 0, 0, 0.6000000238418579)"
                           }
-                        )
-                      },
-                      word2: {
-                        ...getCommonTitle({
-                          jsonPath: "Licenses[0].headerSideText.word2"
-                        })
-                      },
-                      cancelledLabel: {
-                        ...getCommonHeader(
-                          {
-                            labelName: "Cancelled",
-                            labelKey: "TL_COMMON_STATUS_CANC"
-                          },
-                          { variant: "body1", style: { color: "#E54D42" } }
-                        ),
-                        visible: false
-                      }
+                        }
+                      )
+                    },
+                    word2: {
+                      ...getCommonTitle({
+                        jsonPath: "Licenses[0].headerSideText.word2"
+                      })
+                    },
+                    cancelledLabel: {
+                      ...getCommonHeader(
+                        {
+                          labelName: "Cancelled",
+                          labelKey: "TL_COMMON_STATUS_CANC"
+                        },
+                        { variant: "body1", style: { color: "#E54D42" } }
+                      ),
+                      visible: false
                     }
+                  }
             }
           }
         },
@@ -449,7 +446,7 @@ const screenConfig = {
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
         },
         tradeReviewDetails,
-        footer
+        connectionDetailsFooter
       }
     },
     breakUpDialog: {
