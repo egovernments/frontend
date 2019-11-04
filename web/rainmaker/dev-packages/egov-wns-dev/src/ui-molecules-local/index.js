@@ -52,6 +52,11 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const MyConnections = Loadable({
+  loader: () => import("./MyConnections"),
+  loading: () => <Loading />
+});
+
 const PastPayments = Loadable({
   loader: () => import("./PastPayments"),
   loading: () => <Loading />
@@ -74,5 +79,6 @@ export {
   FeesEstimateCard,
   HowItWorks,
   PastPayments,
-  DividerWithLabel
+  DividerWithLabel,
+  MyConnections
 };

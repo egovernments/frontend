@@ -1,7 +1,7 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { fetchData } from "./citizenSearchResource/citizenFunctions";
-import { cityPicker } from "./citypicker";
+// import { cityPicker } from "./citypicker";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import "../utils/index.css";
@@ -26,7 +26,7 @@ const cardItems = [
     icon: <TradeLicenseIcon />,
     route: {
       screenKey: "home",
-      jsonPath: "components.cityPickerDialog"
+      jsonPath: ""
     }
   },
   {
@@ -35,7 +35,7 @@ const cardItems = [
       labelName: "My Connections"
     },
     icon: <FormIcon />,
-    route: "my-applications"
+    route: "my-connections"
   }
 ];
 
@@ -51,7 +51,7 @@ const tradeLicenseSearchAndResult = {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        className: "common-div-css"
+        // className: "common-div-css"
       },
       children: {
         header: header,
@@ -150,27 +150,27 @@ const tradeLicenseSearchAndResult = {
     //     }
     //   }
     // },
-    cityPickerDialog: {
-      componentPath: "Dialog",
-      props: {
-        open: false,
-        maxWidth: "md"
-      },
-      children: {
-        dialogContent: {
-          componentPath: "DialogContent",
-          props: {
-            classes: {
-              root: "city-picker-dialog-style"
-            }
-            // style: { minHeight: "180px", minWidth: "365px" }
-          },
-          children: {
-            popup: cityPicker
-          }
-        }
-      }
-    }
+    // cityPickerDialog: {
+    //   componentPath: "Dialog",
+    //   props: {
+    //     open: false,
+    //     maxWidth: "md"
+    //   },
+    //   children: {
+    //     dialogContent: {
+    //       componentPath: "DialogContent",
+    //       props: {
+    //         classes: {
+    //           root: "city-picker-dialog-style"
+    //         }
+    //         // style: { minHeight: "180px", minWidth: "365px" }
+    //       },
+    //       children: {
+    //         popup: cityPicker
+    //       }
+    //     }
+    //   }
+    // }
   }
 };
 

@@ -23,20 +23,17 @@ import {
   getDialogButton
 } from "../utils";
 
-import { footerReview } from "./applyResource/footer";
+import { footerReview } from "./viewBillResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
-import { getReviewTrade } from "./applyResource/review-trade";
-import { getReviewOwner } from "./applyResource/review-owner";
-import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import { getProperty } from "./applyResource/propertyDetails";
-import { getOwner } from "./applyResource/ownerDetails";
-import { getService } from "./applyResource/serviceDetails";
-import { viewBillFooter } from "./applyResource/viewBillFooter";
+import { getProperty } from "./viewBillResource/propertyDetails";
+import { getOwner } from "./viewBillResource/ownerDetails";
+import { getService } from "./viewBillResource/serviceDetails";
+import { viewBillFooter } from "./viewBillResource/viewBillFooter";
 
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -334,12 +331,6 @@ const estimate = getCommonGrayCard({
     sourceJsonPath: "LicensesTemp[0].estimateCardData"
   }),
 });
-
-const reviewTradeDetails = getReviewTrade(false);
-
-const reviewOwnerDetails = getReviewOwner(false);
-
-const reviewDocumentDetails = getReviewDocuments(false, false);
 
 const propertyDetails = getProperty(false);
 const ownerDetails = getOwner(false);

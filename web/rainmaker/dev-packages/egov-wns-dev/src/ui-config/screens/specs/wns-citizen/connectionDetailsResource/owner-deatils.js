@@ -5,7 +5,7 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { changeStep } from "./footer";
+import { changeStep } from "../viewBillResource/footer";
 
 const ownerDetails = getCommonContainer({
   reviewApplicationType: getLabelWithValue(
@@ -85,7 +85,7 @@ const ownerDetails = getCommonContainer({
   )
 })
 
-export const getReviewDocuments = (isEditable = true) => {
+export const getOwnerDetails = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",

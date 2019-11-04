@@ -5,9 +5,9 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { changeStep } from "./footer";
+import { changeStep } from "../viewBillResource/footer";
 
-export const getReviewTrade = (isEditable = true) => {
+export const getServiceDetails = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",
