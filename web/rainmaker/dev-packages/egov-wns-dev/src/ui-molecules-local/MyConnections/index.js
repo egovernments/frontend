@@ -60,7 +60,7 @@ class MyConnections extends React.Component {
                 />
               </Grid>
               <Grid item xs={3}>
-                <Link to="wns-citizen/home">
+                <Link to="connection-details">
                   <Label
                     labelName="WS-2018-PB-242565"
                     fontSize={14}
@@ -117,7 +117,7 @@ class MyConnections extends React.Component {
                 />
               </Grid>
             </Grid>
-            <Link to="/home">
+            <Link to="viewBill">
               <div >
                 <Label
                   labelName="Pay Now"
