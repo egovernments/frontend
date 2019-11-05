@@ -54,10 +54,10 @@ const AutoSuggest = Loadable({
 });
 
 
-const ConsumerNoContainer = Loadable({
-  loader: () => import("./ConsumerNo"),
-  loading: () => <Loading />
-});
+// const ConsumerNoContainer = Loadable({
+//   loader: () => import("./ConsumerNo"),
+//   loading: () => <Loading />
+// });
 
 export {
   TestAtoms,

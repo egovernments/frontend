@@ -21,7 +21,7 @@ export const getProperty = () => {
                     },
                     ...getCommonSubHeader({
                         labelName: "Property Details",
-                        labelKey: "Property Details" //TL_COMMON_OWN_DETAILS
+                        labelKey: "WS_COMMON_PROP_DETAIL" //TL_COMMON_OWN_DETAILS
                     })
                 },
 
@@ -32,7 +32,7 @@ export const getProperty = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "City",
-                        labelKey: "City"
+                        labelKey: "WS_PROP_DETAIL_CITY"
                     }
                     // {
                     //     jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
@@ -50,7 +50,7 @@ export const getProperty = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Door / House No",
-                        labelKey: "Door / House No"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
+                        labelKey: "WS_PROP_DETAIL_DHNO"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
                     },
                 )
             },
@@ -58,7 +58,7 @@ export const getProperty = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Building / Company Name",
-                        labelKey: "Building / Company Name"
+                        labelKey: "WS_PROP_DETAIL_BUILD_COMP_NAME"
                     })
             },
 
@@ -66,7 +66,7 @@ export const getProperty = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Street Name",
-                        labelKey: "Street Name"
+                        labelKey: "WS_PROP_DETAIL_STREET_NAME"
                     },
                 )
             },
@@ -74,7 +74,7 @@ export const getProperty = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Mohalla",
-                        labelKey: "Mohalla"
+                        labelKey: "WS_PROP_DETAIL_MOHALLA"
                     },
                 )
             },
@@ -82,7 +82,7 @@ export const getProperty = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Pincode",
-                        labelKey: "Pincode"
+                        labelKey: "WS_PROP_DETAIL_PINCODE"
                     },
                 )
             }

@@ -319,7 +319,7 @@ const estimate = getCommonGrayCard({
   header: getCommonSubHeader(
     {
       labelName: "Bill Details",
-      labelKey: "Bill Details" //TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER
+      labelKey: "WS_VIEWBILL_DETAILS_HEADER" //TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER
     },
     {
       style: {

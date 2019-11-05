@@ -24,10 +24,7 @@ const cardItems = [
       labelName: "Pay Water & Sewerage Bill"
     },
     icon: <TradeLicenseIcon />,
-    route: {
-      screenKey: "home",
-      jsonPath: ""
-    }
+    route: "viewBill"
   },
   {
     label: {

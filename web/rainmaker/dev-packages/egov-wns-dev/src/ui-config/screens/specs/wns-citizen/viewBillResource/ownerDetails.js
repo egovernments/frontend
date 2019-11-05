@@ -21,7 +21,7 @@ export const getOwner = () => {
                     },
                     ...getCommonSubHeader({
                         labelName: "Owner Details",
-                        labelKey: "Owner Details" //TL_COMMON_OWN_DETAILS
+                        labelKey: "WS_COMMON_OWN_DETAIL" //TL_COMMON_OWN_DETAILS
                     })
                 },
 
@@ -32,7 +32,7 @@ export const getOwner = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Name",
-                        labelKey: "Name"
+                        labelKey: "WS_OWN_DETAIL_NAME"
                     }
                 )
             },
@@ -40,7 +40,7 @@ export const getOwner = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "CorrespondenceAddress",
-                        labelKey: "CorrespondenceAddress"
+                        labelKey: "WS_OWN_DETAIL_CROSADD"
                     })
             },
 
