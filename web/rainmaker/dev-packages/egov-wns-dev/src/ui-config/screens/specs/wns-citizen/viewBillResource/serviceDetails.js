@@ -23,7 +23,7 @@ export const getService = () => {
                     ...getCommonSubHeader(
                         {
                             labelName: "Service Details",
-                            labelKey: "Service Details" // TL_NEW_TRADE_DETAILS_HEADER_ACC
+                            labelKey: "WS_COMMON_SERV_DETAIL" // TL_NEW_TRADE_DETAILS_HEADER_ACC
                         },
                         {
                             style: {
@@ -39,7 +39,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Service Type",
-                        labelKey: "Service Type"
+                        labelKey: "WS_SERV_DETAIL_SERV_TYPE"
                     }
                 )
             },
@@ -47,7 +47,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Property Usage Type",
-                        labelKey: "Property Usage Type"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
+                        labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
                     },
                 )
             },
@@ -55,7 +55,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Connection Type",
-                        labelKey: "Connection Type"
+                        labelKey: "WS_SERV_DETAIL_CONN_TYPE"
                     })
             },
 
@@ -63,7 +63,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Meter ID",
-                        labelKey: "Meter ID"
+                        labelKey: "WS_SERV_DETAIL_METER_ID"
                     },
                 )
             },
@@ -71,7 +71,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Current Meter Reading",
-                        labelKey: "Current Meter Reading"
+                        labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
                     },
                 )
             },
@@ -79,7 +79,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Meter Reading Status",
-                        labelKey: "Meter Reading Status"
+                        labelKey: "WS_SERV_DETAIL_METER_STAT"
                     },
                 )
             },
@@ -87,7 +87,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Last Meter Reading",
-                        labelKey: "Last Meter Reading"
+                        labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
                     },
                 )
             },
@@ -95,7 +95,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Meter Status",
-                        labelKey: "Meter Status"
+                        labelKey: "WS_SERV_DETAIL_METER_STAT"
                     },
                 )
             },
@@ -103,7 +103,7 @@ export const getService = () => {
                 ...getLabelWithValue(
                     {
                         labelName: "Consumption",
-                        labelKey: "Consumption"
+                        labelKey: "WS_SERV_DETAIL_CONSUMP"
                     },
                 )
             }
