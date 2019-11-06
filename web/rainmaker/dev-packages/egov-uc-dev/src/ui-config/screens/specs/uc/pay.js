@@ -29,7 +29,10 @@ const screenConfig = {
       false
     );
     if(hasReceipt){
+      dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", []));
       dispatch(prepareFinalObject("ReceiptTemp", []));
+      dispatch(prepareFinalObject("BillingService.businessService", []));
+      dispatch(prepareFinalObject("BillingService.consumerCode", []));
       dispatch(prepareFinalObject("Demands", [{hasReceipt:true}]));
       }
     const tenantId = getQueryArg(window.location.href, "tenantId");
