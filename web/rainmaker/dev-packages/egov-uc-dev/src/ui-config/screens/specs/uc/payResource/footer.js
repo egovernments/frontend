@@ -266,6 +266,7 @@ const callBackForPay = async (state, dispatch) => {
       );
       console.log(receiptNumber, response);
       dispatch(prepareFinalObject("receiptSearchResponse", response));
+      dispatch(prepareFinalObject("Demands[0].hasReceipt", true));
       // moveToSuccess(href, dispatch, receiptNumber);
       dispatch(
         setRoute(

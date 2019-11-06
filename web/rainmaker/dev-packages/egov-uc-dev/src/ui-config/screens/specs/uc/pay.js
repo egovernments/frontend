@@ -23,6 +23,15 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "pay",
   beforeInitScreen: (action, state, dispatch) => {
+    const hasReceipt = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Demands[0].hasReceipt",
+      false
+    );
+    if(hasReceipt){
+      dispatch(prepareFinalObject("ReceiptTemp", []));
+      dispatch(prepareFinalObject("Demands", [{hasReceipt:true}]));
+      }
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const amount = get(
       state.screenConfiguration,

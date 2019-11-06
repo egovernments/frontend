@@ -111,6 +111,14 @@ const newCollection = {
   uiFramework: "material-ui",
   name: "newCollection",
   beforeInitScreen: (action, state, dispatch) => {
+    const hasReceipt = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Demands[0].hasReceipt",
+      false
+    );
+    if(hasReceipt){
+    dispatch(prepareFinalObject("Demands", [{hasReceipt:false}]));
+    }
     const demandId = get(
       state.screenConfiguration.preparedFinalObject,
       "Demands[0].id",
