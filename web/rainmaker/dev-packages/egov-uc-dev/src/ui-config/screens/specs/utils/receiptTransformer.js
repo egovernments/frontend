@@ -148,7 +148,7 @@ export const loadReceiptData = async response => {
       get(response, "Bill[0].billDetails[0].toPeriod")
     );
     data.taxPeriod = `${fromDate} - ${toDate}`;
-    data.consumerName = get(response, "Bill[0].payerName");
+    data.consumerName = get(response, "Bill[0].paidBy");
     data.mobileNumber = get(response, "Bill[0].mobileNumber");
 
     const serviceCatLabel = getTransformedLocale(
