@@ -1,4 +1,6 @@
 import React from "react";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { connect } from "react-redux";
 import TaskStatusContainer from "../TaskStatusContainer";
 import { Footer } from "../../ui-molecules-local";
@@ -11,7 +13,6 @@ import {
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -100,7 +101,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   tlUpdate = async label => {
-    let { Licenses, toggleSnackbar, preparedFinalObject } = this.props;
+    let { Licenses, toggleSnackbar, preparedFinalObject ,toggleSpinner} = this.props;
     if (getQueryArg(window.location.href, "edited")) {
       const removedDocs = get(
         preparedFinalObject,
@@ -138,6 +139,7 @@ class WorkFlowContainer extends React.Component {
       "applicationNumber"
     );
     try {
+      toggleSpinner();
       const payload = await httpRequest(
         "post",
         "/tl-services/v1/_update",
@@ -157,12 +159,15 @@ class WorkFlowContainer extends React.Component {
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
       }
+      toggleSpinner();
     } catch (e) {
+      toggleSpinner();
       toggleSnackbar(
         true,
         { labelName: "TL update error!", labelKey: "ERR_TL_UPDATE_ERROR" },
         "error"
       );
+    
     }
   };
 
@@ -407,7 +412,9 @@ const mapDispacthToProps = dispatch => {
     prepareFinalObject: (path, value) =>
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
-      dispatch(toggleSnackbar(open, message, variant))
+      dispatch(toggleSnackbar(open, message, variant)),
+    toggleSpinner:()=>
+      dispatch(toggleSpinner())
   };
 };
 

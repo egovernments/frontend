@@ -18,6 +18,7 @@ import {
   updateDropDowns,
   ifUserRoleExists
 } from "../ui-config/screens/specs/utils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
 import get from "lodash/get";
@@ -34,6 +35,7 @@ import {
 
 export const updateTradeDetails = async requestBody => {
   try {
+    dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
       "/tl-services/v1/_update",
@@ -41,8 +43,10 @@ export const updateTradeDetails = async requestBody => {
       [],
       requestBody
     );
+    dispatch(toggleSpinner());
     return payload;
   } catch (error) {
+    dispatch(toggleSpinner());
     store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };
@@ -427,10 +431,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // }
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
+      dispatch(toggleSpinner());
       !isEditFlow &&
         (await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         }));
+      dispatch(toggleSpinner());
       let searchQueryObject = [
         { key: "tenantId", value: queryObject[0].tenantId },
         { key: "applicationNumber", value: queryObject[0].applicationNumber }
