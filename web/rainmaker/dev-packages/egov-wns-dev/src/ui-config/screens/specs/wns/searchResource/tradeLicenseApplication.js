@@ -149,21 +149,48 @@ export const tradeLicenseApplication = getCommonCard({
           sm: 4
         }
       },
+      resetButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        props: {
+          variant: "outlined",
+          style: {
+            color: "black",
+            borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderRadius: "2px",
+            height: "48px",
+            margin: "8px",
+            float: "left"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Reset",
+            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_RESET"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: searchApiCall
+        }
+      },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 6
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "80%",
-            height: "48px"
+            height: "48px",
+            margin: "8px",
           }
         },
         children: {
