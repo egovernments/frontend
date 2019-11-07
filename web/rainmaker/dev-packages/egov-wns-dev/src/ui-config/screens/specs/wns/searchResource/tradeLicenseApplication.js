@@ -146,14 +146,14 @@ export const tradeLicenseApplication = getCommonCard({
         componentPath: "Div",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 2
         }
       },
       resetButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4
         },
         props: {
           variant: "outlined",
@@ -161,9 +161,9 @@ export const tradeLicenseApplication = getCommonCard({
             color: "black",
             borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
+            width: "95%",
             height: "48px",
-            margin: "8px",
-            float: "left"
+            margin: "8px"
           }
         },
         children: {
@@ -181,7 +181,7 @@ export const tradeLicenseApplication = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4
         },
         props: {
           variant: "contained",
@@ -189,8 +189,9 @@ export const tradeLicenseApplication = getCommonCard({
             color: "white",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
+            width: "95%",
             height: "48px",
-            margin: "8px",
+            margin: "8px"
           }
         },
         children: {
@@ -209,7 +210,7 @@ export const tradeLicenseApplication = getCommonCard({
         componentPath: "Div",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 2
         }
       }
     })
