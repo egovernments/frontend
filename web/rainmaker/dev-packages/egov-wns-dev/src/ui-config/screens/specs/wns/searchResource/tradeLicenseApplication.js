@@ -13,7 +13,7 @@ import { searchApiCall } from "./functions";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
-    labelName: "Search Trade License Application",
+    labelName: "Search Water & Sewerage Connections",
     labelKey: "TL_HOME_SEARCH_RESULTS_HEADING"
   }),
   subParagraph: getCommonParagraph({
@@ -21,32 +21,30 @@ export const tradeLicenseApplication = getCommonCard({
     labelKey: "TL_HOME_SEARCH_RESULTS_DESC"
   }),
   appTradeAndMobNumContainer: getCommonContainer({
-    applicationNo: getTextField({
+    ulb: getSelectField({
       label: {
-        labelName: "Application No.",
+        labelName: "ULB",
         labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
       },
       placeholder: {
-        labelName: "Enter Application No.",
+        labelName: "Select ULB",
         labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_APPLICATION_NO",
-      jsonPath: "searchScreen.applicationNumber"
+      required: true,
+      errorMessage: "ERR_INVALID_ULB",
+      jsonPath: "searchScreen.ulb"
     }),
-
-    tradeLicenseNo: getTextField({
+    boundaryType: getSelectField({
       label: {
-        labelName: "Trade License No.",
+        labelName: "Boundary Type",
         labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
       },
       placeholder: {
-        labelName: "Enter Trade License No.",
+        labelName: "Select Boundary Type",
         labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
       },
       gridDefination: {
@@ -54,86 +52,93 @@ export const tradeLicenseApplication = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.licenseNumber"
+      jsonPath: "searchScreen.boundaryType"
     }),
-    ownerMobNo: getTextField({
+    boundaryValue: getSelectField({
       label: {
-        labelName: "Owner Mobile No.",
+        labelName: "Boundary Value",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Boundary Value",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      jsonPath: "searchScreen.boundaryValue"
+    }),
+    billingYear: getSelectField({
+      label: {
+        labelName: "Billing Year",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Billing Year",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: true,
+      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      jsonPath: "searchScreen.billingYear"
+    }),
+    billingPeriod: getSelectField({
+      label: {
+        labelName: "Billing Period",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Billing Period",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: true,
+      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      jsonPath: "searchScreen.billingPeriod"
+    }),
+    billingPeriodValue: getSelectField({
+      label: {
+        labelName: "Billing Period Value",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Billing Period Value",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: true,
+      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      jsonPath: "searchScreen.billingPeriodValue"
+    }),
+    counsumerNo: getTextField({
+      label: {
+        labelName: "Consumer No.",
         labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
       },
       placeholder: {
-        labelName: "Enter your mobile No.",
+        labelName: "Enter Consumer No.",
         labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      iconObj: {
-        label: "+91 |",
-        position: "start"
-      },
       required: false,
-      pattern: getPattern("MobileNo"),
-      jsonPath: "searchScreen.mobileNumber",
+      jsonPath: "searchScreen.consumerNo",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
-    })
-  }),
-  appStatusAndToFromDateContainer: getCommonContainer({
-    applicationNo: getSelectField({
-      label: {
-        labelName: "Application status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
-      },
-      required: false,
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "NEWTL"
-      },
-      jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-
-    fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
-      placeholder: {
-        labelName: "Select From Date",
-        labelKey: "TL_FROM_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.fromDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE",
-      required: false
-    }),
-
-    toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
-      placeholder: {
-        labelName: "Select to Date",
-        labelKey: "TL_COMMON_TO_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.toDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE",
-      required: false
     })
   }),
 
@@ -146,14 +151,14 @@ export const tradeLicenseApplication = getCommonCard({
         componentPath: "Div",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 2
         }
       },
       resetButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4
         },
         props: {
           variant: "outlined",
@@ -161,9 +166,9 @@ export const tradeLicenseApplication = getCommonCard({
             color: "black",
             borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
+            width: "95%",
             height: "48px",
-            margin: "8px",
-            float: "left"
+            margin: "8px"
           }
         },
         children: {
@@ -181,7 +186,7 @@ export const tradeLicenseApplication = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4
         },
         props: {
           variant: "contained",
@@ -189,8 +194,9 @@ export const tradeLicenseApplication = getCommonCard({
             color: "white",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
+            width: "95%",
             height: "48px",
-            margin: "8px",
+            margin: "8px"
           }
         },
         children: {
@@ -209,7 +215,7 @@ export const tradeLicenseApplication = getCommonCard({
         componentPath: "Div",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 2
         }
       }
     })
