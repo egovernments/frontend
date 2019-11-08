@@ -296,15 +296,14 @@ const setStatusBasedValue = status => {
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Water Bill (Q3-2018-19)",
-    labelKey: "Water Bill (Q3-2018-19)"
+    labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
-    componentPath: "ApplicationNoContainer",
+    componentPath: "ConsumerNoContainer",
     props: {
-      number: applicationNumber
+      number: "WS-2018-PB-246464"
     }
   }
 });

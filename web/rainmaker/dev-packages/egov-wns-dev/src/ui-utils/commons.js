@@ -48,6 +48,8 @@ export const updateTradeDetails = async requestBody => {
 };
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
+  alert(1);
+  console.log(label, labelKey)
   if (labelKey) {
     let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
     if (!translatedLabel || labelKey === translatedLabel) {
@@ -140,8 +142,8 @@ export const updatePFOforSearchResults = async (
   const payload = !isPreviouslyEdited
     ? await getSearchResults(queryObject)
     : {
-        Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
-      };
+      Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
+    };
   getQueryArg(window.location.href, "action") === "edit" &&
     (await setDocsForEditFlow(state, dispatch));
   if (payload) {
@@ -196,9 +198,9 @@ export const getBoundaryData = async (
     const tenantId =
       process.env.REACT_APP_NAME === "Employee"
         ? get(
-            state.screenConfiguration.preparedFinalObject,
-            "Licenses[0].tradeLicenseDetail.address.city"
-          )
+          state.screenConfiguration.preparedFinalObject,
+          "Licenses[0].tradeLicenseDetail.address.city"
+        )
         : getQueryArg(window.location.href, "tenantId");
 
     const mohallaData =
@@ -211,8 +213,8 @@ export const getBoundaryData = async (
           name: `${tenantId
             .toUpperCase()
             .replace(/[.]/g, "_")}_REVENUE_${item.code
-            .toUpperCase()
-            .replace(/[._:-\s\/]/g, "_")}`
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}`
         });
         return result;
       }, []);

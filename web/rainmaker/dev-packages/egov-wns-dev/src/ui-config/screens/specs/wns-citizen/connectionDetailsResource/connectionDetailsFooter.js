@@ -15,8 +15,7 @@ export const connectionDetailsFooter = getCommonApplyFooter({
     },
     children: {
       downloadButton: getLabel({
-        labelName: "DOWNLOAD BILL",
-        labelKey: "DOWNLOAD BILL"
+        labelKey: "WS_COMMON_DOWNLOAD_BILL"
       })
     },
     onClickDefination: {
@@ -37,8 +36,7 @@ export const connectionDetailsFooter = getCommonApplyFooter({
     },
     children: {
       previousButtonLabel: getLabel({
-        labelName: "PAY",
-        labelKey: "PAY"
+        labelKey: "WS_COMMON_PAY"
       })
     },
     onClickDefination: {

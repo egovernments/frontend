@@ -24,19 +24,16 @@ const getHeader = label => {
 };
 
 const properyDetailsHeader = getHeader({
-  labelName: "Propery Details",
-  labelKey: "Propery Details"
+  labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
 });
 const propertyLocationDetailsHeader = getHeader({
-  labelName: "Property Location Details",
-  labelKey: "Property Location Details"
+  labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
 });
 
 const propertyDetails = getCommonContainer({
   reviewApplicationType: getLabelWithValue(
     {
-      labelName: "Property Type",
-      labelKey: "Property Type"
+      labelKey: "WS_PROPERTY_TYPE_LABEL"
     },
     {
       jsonPath:
@@ -49,8 +46,7 @@ const propertyDetails = getCommonContainer({
   ),
   reviewOldLicenseNo: getLabelWithValue(
     {
-      labelName: "Property Usage Type",
-      labelKey: "Property Usage Type"
+      labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
     },
     { jsonPath: "Licenses[0].oldLicenseNumber" }
   ),
@@ -72,8 +68,7 @@ const propertyDetails = getCommonContainer({
 const propertyLocationDetails = getCommonContainer({
   reviewApplicationType: getLabelWithValue(
     {
-      labelName: "Property ID",
-      labelKey: "Property ID"
+      labelKey: "WS_PROPERTY_ID_LABEL"
     },
     {
       jsonPath:
@@ -86,15 +81,13 @@ const propertyLocationDetails = getCommonContainer({
   ),
   reviewOldLicenseNo: getLabelWithValue(
     {
-      labelName: "City",
-      labelKey: "City"
+      labelKey: "WS_PROP_DETAIL_CITY"
     },
     { jsonPath: "Licenses[0].oldLicenseNumber" }
   ),
   reviewLicenceType: getLabelWithValue(
     {
-      labelName: "Door/House NO.",
-      labelKey: "Door/House NO."
+      labelKey: "WS_PROP_DETAIL_DHNO"
     },
     {
       jsonPath: "Licenses[0].licenseType",
@@ -106,15 +99,13 @@ const propertyLocationDetails = getCommonContainer({
   ),
   reviewTradeName: getLabelWithValue(
     {
-      labelName: "Building/Company Name",
-      labelKey: "Building/Company Name"
+      labelKey: "WS_PROP_DETAIL_BUILD_COMP_NAME"
     },
     { jsonPath: "Licenses[0].tradeName" }
   ),
   reviewPipe: getLabelWithValue(
     {
-      labelName: "Street Name",
-      labelKey: "Street Name"
+      labelKey: "WS_PROP_DETAIL_STREET_NAME"
     },
     {
       jsonPath: "Licenses[0].pipe",
@@ -122,8 +113,7 @@ const propertyLocationDetails = getCommonContainer({
   ),
   reviewCommencementDate: getLabelWithValue(
     {
-      labelName: "Locality/Mohalla",
-      labelKey: "Locality/Mohalla"
+      labelKey: "WS_PROP_DETAIL_MOHALLA"
     },
     {
       jsonPath: "Licenses[0].commencementDate",
@@ -131,8 +121,7 @@ const propertyLocationDetails = getCommonContainer({
   ),
   reviewGSTNo: getLabelWithValue(
     {
-      labelName: "Pincode",
-      labelKey: "Pincode"
+      labelKey: "WS_PROP_DETAIL_PINCODE"
     },
     {
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
@@ -140,8 +129,7 @@ const propertyLocationDetails = getCommonContainer({
   ),
   reviewOperationalArea: getLabelWithValue(
     {
-      labelName: "Location on Map",
-      labelKey: "Location on Map"
+      labelKey: "WS_PROP_DETAIL_MAP_LOC"
     },
     { jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea" }
   )
@@ -162,8 +150,7 @@ export const getPropertyDetails = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Property Details",
-            labelKey: "Property Details"
+            labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
           })
         },
         editSection: {

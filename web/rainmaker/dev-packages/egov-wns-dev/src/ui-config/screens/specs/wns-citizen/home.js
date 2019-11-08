@@ -7,8 +7,7 @@ import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon"
 import "../utils/index.css";
 const header = getCommonHeader(
   {
-    labelName: "Water & Sewerage",
-    labelKey: "Water & Sewerage"
+    labelKey: "WS_COMMON_HEADER"
   },
   {
     classes: {
@@ -28,8 +27,7 @@ const cardItems = [
   },
   {
     label: {
-      labelKey: "My Connections",
-      labelName: "My Connections"
+      labelKey: "WS_MYCONNECTIONS_HEADER",
     },
     icon: <FormIcon />,
     route: "my-connections"
@@ -65,7 +63,7 @@ const tradeLicenseSearchAndResult = {
           moduleName: "egov-wns",
           componentPath: "PastPayments"
         },
-          listCard2: {
+        listCard2: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
           componentPath: "HowItWorks"

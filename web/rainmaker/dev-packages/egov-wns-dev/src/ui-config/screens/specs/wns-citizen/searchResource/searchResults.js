@@ -20,7 +20,7 @@ const getLocalTextFromCode = localCode => {
 export const textToLocalMapping = {
   "Application No": getLocaleLabels(
     "Application No",
-    "NOC_COMMON_TABLE_COL_APP_NO_LABEL",
+    "WS_MYCONNECTIONS_APPLICATION_NO",
     getTransformedLocalStorgaeLabels()
   ),
   "NOC No": getLocaleLabels(
