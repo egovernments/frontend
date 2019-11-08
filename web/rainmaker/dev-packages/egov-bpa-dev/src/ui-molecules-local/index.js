@@ -7,7 +7,11 @@ const TestMolecules = Loadable({
   loader: () => import("./TestMolecules"),
   loading: () => <Loading />
 });
-
+const CustomTab = Loadable({
+  loader: () => import("./CustomTab"),
+  loading: () => <Loading />
+});
 export {
-  TestMolecules
+  TestMolecules,
+  CustomTab
 };
