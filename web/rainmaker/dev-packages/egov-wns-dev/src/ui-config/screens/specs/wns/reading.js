@@ -9,9 +9,10 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { progressStatus } from "./searchResource/progressStatus";
-import { searchResults } from "./searchResource/searchResults";
+import { searchResults } from "./meterReading/searchResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
+import { footer } from "./meterReading/footer";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -79,7 +80,8 @@ const tradeLicenseSearchAndResult = {
         pendingApprovals,
         tradeLicenseApplication,
         breakAfterSearch: getBreak(),
-        searchResults
+        searchResults,
+        footer
       }
     }
   }
