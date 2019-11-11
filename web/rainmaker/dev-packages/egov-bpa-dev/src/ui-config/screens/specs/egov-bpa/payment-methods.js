@@ -116,6 +116,7 @@ export const payeeDetails = getCommonContainer({
   })
 });
 
+
 export const chequeDetails = getCommonContainer({
   chequeNo: getTextField({
     label: {
@@ -336,3 +337,117 @@ export const card = getCommonContainer({
 export const cash = getCommonContainer({
   payeeDetails
 });
+
+export const basicDetails = getCommonContainer({
+  paidBy: getSelectField({
+    label: {
+      labelName: "Paid By",
+      labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
+    },
+    placeholder: {
+      labelName: "Paid By",
+      labelKey: "NOC_PAYMENT_PAID_BY_PLACEHOLDER"
+    },
+    data: [
+      {
+        code: "Owner"
+      },
+      {
+        code: "Others"
+      }
+    ],
+    jsonPath: "ReceiptTemp[0].Bill[0].payer",
+    required: true
+  }),
+  payerName: getTextField({
+    label: {
+      labelName: "Payer Name",
+      labelKey: "NOC_PAYMENT_PAYER_NAME_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Payer Name",
+      labelKey: "NOC_PAYMENT_PAYER_NAME_PLACEHOLDER"
+    },
+    jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
+    required: true
+  }),
+  payerMobileNo: getTextField({
+    label: {
+      labelName: "Payer Mobile No.",
+      labelKey: "NOC_PAYMENT_PAYER_MOB_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Payer Mobile No.",
+      labelKey: "NOC_PAYMENT_PAYER_MOB_PLACEHOLDER"
+    },
+    jsonPath: "ReceiptTemp[0].Bill[0].payerMobileNumber",
+    pattern: getPattern("MobileNo"),
+    errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    iconObj: {
+      position: "start",
+      label: "+91 |"
+    },
+    required: true
+  })
+});
+export const bpaDetails = getCommonContainer({
+  paidBy: getSelectField({
+    label: {
+      labelName: "Paid By",
+      labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
+    },
+    placeholder: {
+      labelName: "Paid By",
+      labelKey: "NOC_PAYMENT_PAID_BY_PLACEHOLDER"
+    },
+    data: [
+      {
+        code: "Owner"
+      },
+      {
+        code: "Others"
+      }
+    ],
+    jsonPath: "ReceiptTemp[0].Bill[0].payer",
+    required: true
+  }),
+  payerName: getTextField({
+    label: {
+      labelName: "Payer Name",
+      labelKey: "NOC_PAYMENT_PAYER_NAME_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Payer Name",
+      labelKey: "NOC_PAYMENT_PAYER_NAME_PLACEHOLDER"
+    },
+    jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
+    required: true
+  }),
+  payerMobileNo: getTextField({
+    label: {
+      labelName: "Payer Mobile No.",
+      labelKey: "NOC_PAYMENT_PAYER_MOB_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Payer Mobile No.",
+      labelKey: "NOC_PAYMENT_PAYER_MOB_PLACEHOLDER"
+    },
+    jsonPath: "ReceiptTemp[0].Bill[0].payerMobileNumber",
+    pattern: getPattern("MobileNo"),
+    errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    iconObj: {
+      position: "start",
+      label: "+91 |"
+    },
+    required: true
+  })
+});
+
+export const appDetails = {
+  basicDetails: getCommonContainer({
+    basicDetails
+  }),
+  bpaDetails: getCommonContainer({
+    bpaDetails
+  })
+} 

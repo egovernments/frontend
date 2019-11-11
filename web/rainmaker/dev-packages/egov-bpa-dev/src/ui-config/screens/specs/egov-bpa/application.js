@@ -9,13 +9,13 @@ import {
     getCommonContainer,
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { cash, demandDraft, cheque } from "./payment-methods";
+  import { appDetails, demandDraft, cheque } from "./payment-methods";
 
   const application = {
     uiFramework: "material-ui",
     name: "mihyRegisterScreen",
     components: {
-        mihyRegisterCard: getCommonGrayCard({
+        basicDetails: getCommonGrayCard({
           tabSection: {
               uiFramework: "custom-containers-local",
               moduleName: "egov-bpa",
@@ -29,7 +29,7 @@ import {
                     {
                         tabButton: {labelName: "APPLICATION DETAILS"},
                         tabIcon: "APPLICATION DETAILS",
-                        tabContent: { cash }
+                        tabContent: { appDetails }
                       },
                       {
                         tabButton: {labelName: "DOCUMENT DETAIL"},
@@ -45,10 +45,10 @@ import {
               },
               type: "array"
             }
-          },
-          
-        )
-      }
+        
+        }),
+        
+    }
   };
   
   export default application;
