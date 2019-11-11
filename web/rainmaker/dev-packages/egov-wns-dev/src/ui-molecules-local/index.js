@@ -62,6 +62,11 @@ const PastPayments = Loadable({
   loading: () => <Loading />
 });
 
+const PastPaymentsDetails = Loadable({
+  loader: () => import("./PastPaymentsDetails"),
+  loading: () => <Loading />
+});
+
 const DividerWithLabel = Loadable({
   loader: () => import("./DividerWithLabel"),
   loading: () => <Loading />
@@ -80,5 +85,6 @@ export {
   HowItWorks,
   PastPayments,
   DividerWithLabel,
-  MyConnections
+  MyConnections,
+  PastPaymentsDetails
 };
