@@ -18,29 +18,34 @@ const getLocalTextFromCode = localCode => {
 };
 
 export const textToLocalMapping = {
+  "Service": getLocaleLabels(
+    "Service",
+    "WS_COMMON_TABLE_COL_SERVICE_LABEL",
+    getTransformedLocalStorgaeLabels()
+  ),
   "Application No": getLocaleLabels(
     "Application No",
-    "WS_MYCONNECTIONS_APPLICATION_NO",
+    "WS_COMMON_TABLE_COL_APP_NO_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
-  "NOC No": getLocaleLabels(
-    "NOC No",
-    "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC Type": getLocaleLabels(
-    "NOC Type",
-    "NOC_TYPE_LABEL",
+  "Consumer No": getLocaleLabels(
+    "Consumer No",
+    "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   "Owner Name": getLocaleLabels(
     "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+    "WS_COMMON_TABLE_COL_OWN_NAME_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
-  "Application Date": getLocaleLabels(
-    "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+  "Address": getLocaleLabels(
+    "Address",
+    "WS_COMMON_TABLE_COL_ADDRESS",
+    getTransformedLocalStorgaeLabels()
+  ),
+  "Due": getLocaleLabels(
+    "Due",
+    "WS_COMMON_TABLE_COL_DUE_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   Status: getLocaleLabels(
@@ -93,9 +98,9 @@ export const textToLocalMapping = {
     "WF_FIRENOC_FIELDINSPECTION",
     getTransformedLocalStorgaeLabels()
   ),
-  "Search Results for Fire-NOC Applications": getLocaleLabels(
-    "Search Results for Fire-NOC Applications",
-    "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
+  "Search Results for Water & Sewerage Connections": getLocaleLabels(
+    "Search Results for Water & Sewerage Connections",
+    "WS_HOME_SEARCH_RESULTS_TABLE_HEADING",
     getTransformedLocalStorgaeLabels()
   )
 };
@@ -108,6 +113,7 @@ export const searchResults = {
   props: {
     // data: [],
     columns: {
+      [get(textToLocalMapping, "Service")]: {},
       [get(textToLocalMapping, "Application No")]: {
         format: rowData => {
           return (
@@ -123,13 +129,13 @@ export const searchResults = {
           );
         }
       },
-      [get(textToLocalMapping, "NOC No")]: {},
-      [get(textToLocalMapping, "NOC Type")]: {},
+      [get(textToLocalMapping, "Consumer No")]: {},
       [get(textToLocalMapping, "Owner Name")]: {},
-      [get(textToLocalMapping, "Application Date")]: {},
-      [get(textToLocalMapping, "Status")]: {}
+      [get(textToLocalMapping, "Address")]: {},
+      [get(textToLocalMapping, "Due")]: {},
+      // [get(textToLocalMapping, "Status")]: {}
     },
-    title: get(textToLocalMapping, "Search Results for Fire-NOC Applications"),
+    title: get(textToLocalMapping, "Search Results for Water & Sewerage Connections"),
     options: {
       filter: false,
       download: false,
@@ -170,12 +176,12 @@ const onRowClick = rowData => {
     case get(textToLocalMapping, "DOCUMENTVERIFY"):
       return `${appendUrl}/fire-noc/search-preview?applicationNumber=${
         rowData[get(textToLocalMapping, "Application No")]
-      }&tenantId=${rowData["tenantId"]}`;
+        }&tenantId=${rowData["tenantId"]}`;
 
     case get(textToLocalMapping, "INITIATED"):
       return `${appendUrl}/fire-noc/apply?applicationNumber=${
         rowData[get(textToLocalMapping, "Application No")]
-      }&tenantId=${rowData.tenantId}`;
+        }&tenantId=${rowData.tenantId}`;
 
     default:
       return `${appendUrl}/fire-noc/search`;

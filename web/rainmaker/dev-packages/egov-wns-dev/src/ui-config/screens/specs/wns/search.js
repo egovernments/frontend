@@ -24,8 +24,7 @@ const pageResetAndChange = (state, dispatch) => {
 };
 
 const header = getCommonHeader({
-  labelName: "Trade License",
-  labelKey: "TL_COMMON_TL"
+  labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
 const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",

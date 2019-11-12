@@ -940,14 +940,14 @@ export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
-          documentsArr.push({
-            name: item,
-            required: true,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-            statement: getStatementForDocType(item)
-          });
-          return documentsArr;
-        }, [])
+        documentsArr.push({
+          name: item,
+          required: true,
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          statement: getStatementForDocType(item)
+        });
+        return documentsArr;
+      }, [])
       : [];
   return documentsArr;
 };
@@ -959,10 +959,10 @@ const getTaxValue = item => {
     ? item.amount
       ? item.amount
       : item.debitAmount
-      ? -Math.abs(item.debitAmount)
-      : item.crAmountToBePaid
-      ? item.crAmountToBePaid
-      : 0
+        ? -Math.abs(item.debitAmount)
+        : item.crAmountToBePaid
+          ? item.crAmountToBePaid
+          : 0
     : 0;
 };
 
@@ -1006,15 +1006,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.accountDescription.split("-")[0],
               LicenseData
             ) && {
-              value: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              ),
-              key: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              )
-            }
+                value: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                ),
+                key: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                )
+              }
           });
       } else {
         item.taxHeadCode &&
@@ -1217,7 +1217,7 @@ export const createEstimateData = async (
     ? isPAID
       ? getEstimateData(payload.Receipt[0].Bill, isPAID, LicenseData)
       : payload.billResponse &&
-        getEstimateData(payload.billResponse.Bill, false, LicenseData)
+      getEstimateData(payload.billResponse.Bill, false, LicenseData)
     : [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
@@ -1602,7 +1602,7 @@ export const updateDropDowns = async (
           "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
           get(
             state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
-              "common-masters"
+            "common-masters"
             ],
             `StructureType.${structType.split(".")[0]}`,
             []
@@ -2154,8 +2154,8 @@ export const applyForm = (state, dispatch) => {
       process.env.NODE_ENV === "production"
         ? `/citizen/tradelicense-citizen/apply?tenantId=${tenantId}`
         : process.env.REACT_APP_SELF_RUNNING === true
-        ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
-        : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+          ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+          : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
   }
 };
 
@@ -2331,41 +2331,35 @@ export const getTextToLocalMapping = label => {
     case "Application No":
       return getLocaleLabels(
         "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
+        "WS_COMMON_TABLE_COL_APP_NO_LABEL",
         localisationLabels
       );
 
-    case "License No":
+    case "Consumer No":
       return getLocaleLabels(
-        "License No",
-        "TL_COMMON_TABLE_COL_LIC_NO",
+        "Consumer No",
+        "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
         localisationLabels
       );
 
-    case "Trade Name":
-      return getLocaleLabels(
-        "Trade Name",
-        "TL_COMMON_TABLE_COL_TRD_NAME",
-        localisationLabels
-      );
-    case "Owner Name":
+   case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
-        "TL_COMMON_TABLE_COL_OWN_NAME",
-        localisationLabels
-      );
-
-    case "Application Date":
-      return getLocaleLabels(
-        "Application Date",
-        "TL_COMMON_TABLE_COL_APP_DATE",
+        "WS_COMMON_TABLE_COL_OWN_NAME_LABEL",
         localisationLabels
       );
 
     case "Status":
       return getLocaleLabels(
         "Status",
-        "TL_COMMON_TABLE_COL_STATUS",
+        "WS_COMMON_TABLE_COL_STATUS_LABEL",
+        localisationLabels
+      );
+
+    case "Due":
+      return getLocaleLabels(
+        "Due",
+        "WS_COMMON_TABLE_COL_DUE_LABEL",
         localisationLabels
       );
 
@@ -2402,10 +2396,10 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-    case "Search Results for Trade License Applications":
+    case "Search Results for Water & Sewerage Connections":
       return getLocaleLabels(
         "",
-        "TL_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        "WS_HOME_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
 
