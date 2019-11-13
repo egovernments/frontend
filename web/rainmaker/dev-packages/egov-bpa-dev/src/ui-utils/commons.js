@@ -254,16 +254,16 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 
     let response;
     if (method === "CREATE") {
-      response = await httpRequest(
-        "post",
-        "/firenoc-services/v1/_create",
-        "",
-        [],
-        { FireNOCs: payload }
-      );
-      response = furnishNocResponse(response);
-      dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
-      setApplicationNumberBox(state, dispatch);
+      // response = await httpRequest(
+      //   "post",
+      //   "/firenoc-services/v1/_create",
+      //   "",
+      //   [],
+      //   { FireNOCs: payload }
+      // );
+      // response = furnishNocResponse(response);
+      // dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+      // setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",

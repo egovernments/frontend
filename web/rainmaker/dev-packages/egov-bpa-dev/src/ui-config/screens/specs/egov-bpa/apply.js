@@ -5,6 +5,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
+import { basicDetails } from "./applyResource/basicDetails";
 import { 
   buildingPlanScrutinyDetails, 
   blockWiseOccupancyAndUsageDetails,
@@ -16,7 +17,6 @@ import {
 // import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import { documentDetails } from "./applyResource/documentDetails";
-import {employeeDetails} from './application';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -94,7 +94,7 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    employeeDetails
+    basicDetails
   }
 };
 
@@ -127,6 +127,30 @@ export const formwizardThirdStep = {
 };
 
 export const formwizardFourthStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form4"
+  },
+  children: {
+    applicantDetails
+  },
+  visible: false
+};
+
+export const formwizardFifthStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form4"
+  },
+  children: {
+    documentDetails
+  },
+  visible: false
+};
+
+export const formwizardSixthStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: {
@@ -378,7 +402,9 @@ const screenConfig = {
         "formwizardFirstStep",
         "formwizardSecondStep",
         "formwizardThirdStep",
-        "formwizardFourthStep"
+        "formwizardFourthStep",
+        "formwizardFifthStep",
+        "formwizardSixthStep"
       ];
       for (let i = 0; i < 4; i++) {
         set(
@@ -515,6 +541,8 @@ const screenConfig = {
         formwizardSecondStep,
         formwizardThirdStep,
         formwizardFourthStep,
+        formwizardFifthStep,
+        formwizardSixthStep,
         footer
       }
     }

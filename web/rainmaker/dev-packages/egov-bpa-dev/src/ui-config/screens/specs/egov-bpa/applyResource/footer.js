@@ -26,7 +26,7 @@ import {
     );
     const appendUrl =
       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    const reviewUrl = `${appendUrl}/fire-noc/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    const reviewUrl = `${appendUrl}` //fire-noc/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
     dispatch(setRoute(reviewUrl));
   };
   const moveToReview = (state, dispatch) => {
@@ -84,39 +84,39 @@ import {
     }
   };
   
-  const getMdmsData = async (state, dispatch) => {
-    let tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-    );
-    let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: tenantId,
-        moduleDetails: [
-          { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
-        ]
-      }
-    };
-    try {
-      let payload = await httpRequest(
-        "post",
-        "/egov-mdms-service/v1/_search",
-        "_search",
-        [],
-        mdmsBody
-      );
+  // const getMdmsData = async (state, dispatch) => {
+  //   let tenantId = get(
+  //     state.screenConfiguration.preparedFinalObject,
+  //     "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+  //   );
+  //   let mdmsBody = {
+  //     MdmsCriteria: {
+  //       tenantId: tenantId,
+  //       moduleDetails: [
+  //         { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+  //       ]
+  //     }
+  //   };
+  //   try {
+  //     let payload = await httpRequest(
+  //       "post",
+  //       "/egov-mdms-service/v1/_search",
+  //       "_search",
+  //       [],
+  //       mdmsBody
+  //     );
   
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.FireNoc.Documents",
-          payload.MdmsRes.FireNoc.Documents
-        )
-      );
-      prepareDocumentsUploadData(state, dispatch);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //     dispatch(
+  //       prepareFinalObject(
+  //         "applyScreenMdmsData.FireNoc.Documents",
+  //         payload.MdmsRes.FireNoc.Documents
+  //       )
+  //     );
+  //     prepareDocumentsUploadData(state, dispatch);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   
   const callBackForNext = async (state, dispatch) => {
     let activeStep = get(
@@ -250,19 +250,155 @@ import {
         hasFieldToaster = true;
       }
     }
-  
+
     if (activeStep === 3) {
+      let isApplicantTypeCardValid = validateFields(
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
+        state,
+        dispatch
+      );
+      let isSingleApplicantCardValid = validateFields(
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
+        state,
+        dispatch
+      );
+      let isInstitutionCardValid = validateFields(
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.applicantCard.children",
+        state,
+        dispatch
+      );
+  
+      // Multiple applicants cards validations
+      let multipleApplicantCardPath =
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items";
+      // "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[0].item0.children.cardContent.children.applicantCard"
+      let multipleApplicantCardItems = get(
+        state.screenConfiguration.screenConfig.apply,
+        multipleApplicantCardPath,
+        []
+      );
+      let isMultipleApplicantCardValid = true;
+      for (var j = 0; j < multipleApplicantCardItems.length; j++) {
+        if (
+          (multipleApplicantCardItems[j].isDeleted === undefined ||
+            multipleApplicantCardItems[j].isDeleted !== false) &&
+          !validateFields(
+            `${multipleApplicantCardPath}[${j}].item${j}.children.cardContent.children.applicantCard.children`,
+            state,
+            dispatch,
+            "apply"
+          )
+        )
+          isMultipleApplicantCardValid = false;
+      }
+  
+      let selectedApplicantType = get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        "SINGLE"
+      );
+      if (selectedApplicantType.includes("INSTITUTIONAL")) {
+        isSingleApplicantCardValid = true;
+        isMultipleApplicantCardValid = true;
+      } else if (selectedApplicantType.includes("MULTIPLEOWNERS")) {
+        isSingleApplicantCardValid = true;
+        isInstitutionCardValid = true;
+      } else {
+        isMultipleApplicantCardValid = true;
+        isInstitutionCardValid = true;
+      }
+  
+      if (
+        !isApplicantTypeCardValid ||
+        !isSingleApplicantCardValid ||
+        !isInstitutionCardValid ||
+        !isMultipleApplicantCardValid
+      ) {
+        isFormValid = false;
+        hasFieldToaster = true;
+      }
+    }
+
+    if (activeStep === 4) {
+      let isApplicantTypeCardValid = validateFields(
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
+        state,
+        dispatch
+      );
+      let isSingleApplicantCardValid = validateFields(
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
+        state,
+        dispatch
+      );
+      let isInstitutionCardValid = validateFields(
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.applicantCard.children",
+        state,
+        dispatch
+      );
+  
+      // Multiple applicants cards validations
+      let multipleApplicantCardPath =
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items";
+      // "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[0].item0.children.cardContent.children.applicantCard"
+      let multipleApplicantCardItems = get(
+        state.screenConfiguration.screenConfig.apply,
+        multipleApplicantCardPath,
+        []
+      );
+      let isMultipleApplicantCardValid = true;
+      for (var j = 0; j < multipleApplicantCardItems.length; j++) {
+        if (
+          (multipleApplicantCardItems[j].isDeleted === undefined ||
+            multipleApplicantCardItems[j].isDeleted !== false) &&
+          !validateFields(
+            `${multipleApplicantCardPath}[${j}].item${j}.children.cardContent.children.applicantCard.children`,
+            state,
+            dispatch,
+            "apply"
+          )
+        )
+          isMultipleApplicantCardValid = false;
+      }
+  
+      let selectedApplicantType = get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        "SINGLE"
+      );
+      if (selectedApplicantType.includes("INSTITUTIONAL")) {
+        isSingleApplicantCardValid = true;
+        isMultipleApplicantCardValid = true;
+      } else if (selectedApplicantType.includes("MULTIPLEOWNERS")) {
+        isSingleApplicantCardValid = true;
+        isInstitutionCardValid = true;
+      } else {
+        isMultipleApplicantCardValid = true;
+        isInstitutionCardValid = true;
+      }
+  
+      if (
+        !isApplicantTypeCardValid ||
+        !isSingleApplicantCardValid ||
+        !isInstitutionCardValid ||
+        !isMultipleApplicantCardValid
+      ) {
+        isFormValid = false;
+        hasFieldToaster = true;
+      }
+    }
+  
+    if (activeStep === 5) {
       moveToReview(state, dispatch);
     }
   
-    if (activeStep !== 3) {
+    if (activeStep !== 5) {
       if (isFormValid) {
         let responseStatus = "success";
         if (activeStep === 1) {
           prepareDocumentsUploadData(state, dispatch);
         }
         if (activeStep === 2) {
-          getMdmsData(state, dispatch);
+          // getMdmsData(state, dispatch);
           let response = await createUpdateNocApplication(
             state,
             dispatch,
@@ -324,8 +460,8 @@ import {
     }
   
     const isPreviousButtonVisible = activeStep > 0 ? true : false;
-    const isNextButtonVisible = activeStep < 4 ? true : false;
-    const isPayButtonVisible = activeStep === 4 ? true : false;
+    const isNextButtonVisible = activeStep < 5 ? true : false;
+    const isPayButtonVisible = activeStep === 5 ? true : false;
     const actionDefination = [
       {
         path: "components.div.children.stepper.props",
@@ -461,7 +597,7 @@ import {
       },
       onClickDefination: {
         action: "condition",
-        // callBack: callBackForPrevious
+        callBack: callBackForPrevious
       },
       visible: false
     },
