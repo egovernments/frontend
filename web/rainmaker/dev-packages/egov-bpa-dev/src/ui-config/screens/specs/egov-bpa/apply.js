@@ -94,7 +94,7 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    documentDetails
+    employeeDetails
   }
 };
 
