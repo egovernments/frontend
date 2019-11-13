@@ -52,6 +52,12 @@ const ConsumerNoContainer = Loadable({
   loader: () => import("./ConsumerNo"),
   loading: () => <Loading />
 });
+
+const BreadCrumbs = Loadable({
+  loader: () => import("./BreadCrumbs"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   ApplicationNoContainer,
@@ -62,5 +68,6 @@ export {
   MenuButton,
   FormIcon,
   TradeLicenseIcon,
-  ConsumerNoContainer
+  ConsumerNoContainer,
+  BreadCrumbs
 };
