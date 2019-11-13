@@ -3,7 +3,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 
 const header = getCommonHeader(
   {
-    labelKey: "WS_COMMON_HEADER"
+    labelKey: "WS_MYCONNECTIONS_HEADER"
   },
   {
     classes: {
@@ -23,6 +23,9 @@ const screenConfig = {
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
+      props: {
+        className: "common-div-css"
+      },
       children: {
         header: header,
         applicationsCard: {

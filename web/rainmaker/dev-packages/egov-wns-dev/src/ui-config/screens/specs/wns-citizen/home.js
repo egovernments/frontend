@@ -46,7 +46,7 @@ const tradeLicenseSearchAndResult = {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        // className: "common-div-css"
+        className: "common-div-css"
       },
       children: {
         header: header,
@@ -61,12 +61,16 @@ const tradeLicenseSearchAndResult = {
         listCard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
-          componentPath: "PastPayments"
+          componentPath: "PastPayments",
+          props: {
+            route: "my-connections"
+          }
+
         },
         listCard2: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
-          componentPath: "HowItWorks"
+          componentPath: "HowItWorks",
         }
       }
     },
