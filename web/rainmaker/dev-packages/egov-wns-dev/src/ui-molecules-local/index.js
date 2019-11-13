@@ -57,8 +57,18 @@ const MyConnections = Loadable({
   loading: () => <Loading />
 });
 
+const MeterReading = Loadable({
+  loader: () => import("./MeterReading"),
+  loading: () => <Loading />
+});
+
 const PastPayments = Loadable({
   loader: () => import("./PastPayments"),
+  loading: () => <Loading />
+});
+
+const PastPaymentsDetails = Loadable({
+  loader: () => import("./PastPaymentsDetails"),
   loading: () => <Loading />
 });
 
@@ -80,5 +90,7 @@ export {
   HowItWorks,
   PastPayments,
   DividerWithLabel,
-  MyConnections
+  MyConnections,
+  PastPaymentsDetails,
+  MeterReading
 };
