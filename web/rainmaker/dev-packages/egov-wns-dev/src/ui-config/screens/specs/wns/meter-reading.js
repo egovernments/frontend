@@ -1,17 +1,24 @@
 import { fetchData } from "./meterReading/functions";
-import { getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader, getLabel,getCommonContainer} from "egov-ui-framework/ui-config/screens/specs/utils";
 
-const header = getCommonHeader(
-  {
-    labelName: "My Connections",
-    labelKey: "My Connections"
+
+const header = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_CONSUMPTION_DETAILS_HEADER"
+  }),
+  applicationNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ConsumerNoContainer",
+    props: {
+      number: "WS-2018-PB-246464"
+    }
   },
-  {
     classes: {
       root: "common-header-cont"
     }
-  }
-);
+  
+});
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -61,7 +68,7 @@ const screenConfig = {
             },
             buttonLabel: getLabel({
               labelName: "ADD METER READING",
-              labelKey: "ADD METER READING"
+              labelKey: "WS_CONSUMPTION_DETAILS_BUTTON_METER_READING"
             })
           },
         },
