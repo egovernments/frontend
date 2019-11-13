@@ -6,17 +6,20 @@ import {
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
-import { 
-  buildingPlanScrutinyDetails, 
-  blockWiseOccupancyAndUsageDetails,
-  boundaryDetails,
-  detailsofplot,
-  demolitiondetails
- } from "./applyResource/scrutinyDetails";
+import {
+  buildingPlanScrutinyDetails,
+  blockWiseOccupancyAndUsageDetails
+} from "./applyResource/scrutinyDetails";
 // import { propertyDetails } from "./applyResource/propertyDetails";
 // import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
+import {
+  boundaryDetails,
+  detailsofplot,
+  demolitiondetails
+} from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
+import { statusOfNocDetails } from "./applyResource/updateNocDetails";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -106,10 +109,7 @@ export const formwizardSecondStep = {
   },
   children: {
     buildingPlanScrutinyDetails,
-    blockWiseOccupancyAndUsageDetails,
-    boundaryDetails,
-    detailsofplot,
-    demolitiondetails
+    blockWiseOccupancyAndUsageDetails
   },
   visible: false
 };
@@ -133,7 +133,9 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    applicantDetails
+    boundaryDetails,
+    detailsofplot,
+    demolitiondetails
   },
   visible: false
 };
@@ -157,7 +159,7 @@ export const formwizardSixthStep = {
     id: "apply_form4"
   },
   children: {
-    documentDetails
+    statusOfNocDetails
   },
   visible: false
 };
@@ -283,7 +285,7 @@ export const prepareEditFlow = async (
     // Set no of buildings radiobutton and eventually the cards
     let noOfBuildings =
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
-      "MULTIPLE"
+        "MULTIPLE"
         ? "MULTIPLE"
         : "SINGLE";
     dispatch(
