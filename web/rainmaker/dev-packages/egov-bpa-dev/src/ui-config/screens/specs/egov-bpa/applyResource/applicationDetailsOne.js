@@ -44,7 +44,7 @@ const commonApplicantInformation = () => {
                     labelName: "Enter Name",
                     labelKey: "NOC_ENTER_APPLICANT_NAME_PLACEHOLDER"
                 },
-                // required: true,
+                required: true,
                 pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
                 jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
@@ -68,7 +68,7 @@ const commonApplicantInformation = () => {
                     labelName: "Enter Correspondence Address",
                     labelKey: "NOC_ENTER_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
                 },
-                // required: true,
+                required: true,
                 pattern: getPattern("Address"),
                 errorMessage: "Invalid Address",
                 jsonPath:
@@ -88,7 +88,7 @@ const commonApplicantInformation = () => {
                   labelName: "Enter Mobile No.",
                   labelKey: "NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
                 },
-                // required: true,
+                required: true,
                 title: {
                   value: "Please search profile linked to the mobile no.",
                   key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
@@ -258,7 +258,7 @@ const institutionInformation = () => {
                 },
                 pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
-                // required: true,
+                required: true,
                 jsonPath:
                     "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName",
                 gridDefination: {
@@ -276,7 +276,7 @@ const institutionInformation = () => {
                     labelName: "Enter Official Telephone No.",
                     labelKey: "NOC_ENTER_TELEPHONE_NUMBER_PLACEHOLDER"
                 },
-                // required: true,
+                required: true,
                 pattern: getPattern("MobileNo"),
                 errorMessage: "Invalid Number",
                 jsonPath:
@@ -296,7 +296,7 @@ const institutionInformation = () => {
                     labelName: "Enter Name of Authorized Person",
                     labelKey: "NOC_ENTER_AUTHORIZED_PERSON_PLACEHOLDER"
                 },
-                // required: true,
+                required: true,
                 pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
                 jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
@@ -315,7 +315,7 @@ const institutionInformation = () => {
                     labelName: "Enter designation of Institution",
                     labelKey: "NOC_ENTER_INSTITUTION_DESIGNATION_PLACEHOLDER"
                 },
-                // required: true,
+                required: true,
                 pattern: getPattern("Name"),
                 errorMessage: "Invalid Designation Name",
                 jsonPath:
@@ -335,7 +335,7 @@ const institutionInformation = () => {
                     labelName: "Enter Mobile No. of Authorized Person",
                     labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_PLACEHOLDER"
                 },
-                // required: true,
+                required: true,
                 pattern: getPattern("MobileNo"),
                 errorMessage: "Invalid MobileNo.",
 
@@ -358,7 +358,7 @@ const institutionInformation = () => {
                 },
                 pattern: getPattern("Email"),
                 errorMessage: "Invalid Email",
-                // required: true,
+                required: true,
                 jsonPath:
                     "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId",
                 gridDefination: {
@@ -376,7 +376,7 @@ const institutionInformation = () => {
                     labelName: "Enter Official Correspondence Address ",
                     labelKey: "NOC_ENTER_OFFICIAL_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
                 },
-                // required: true,
+                required: true,
                 pattern: getPattern("Address"),
                 errorMessage: "Invalid Address",
                 jsonPath:
@@ -391,7 +391,7 @@ const institutionInformation = () => {
     });
 };
 
-export const applicantDetails = getCommonCard({
+export const applicantDetail = getCommonCard({
     header: getCommonTitle(
         {
             labelName: "Applicant Details",
@@ -433,7 +433,7 @@ export const applicantDetails = getCommonCard({
                     //     code: "Institutional-Private"
                     //   }
                     // ],
-                    // required: true,
+                    required: true,
                     sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
                     gridDefination: {
                         xs: 12,
@@ -482,7 +482,7 @@ export const applicantDetails = getCommonCard({
                     //     display: "none"
                     //   }
                     // },
-                    // required: true,
+                    required: true,
                     gridDefination: {
                         xs: 12,
                         sm: 12,

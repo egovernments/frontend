@@ -5,11 +5,18 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
-import { nocDetails } from "./applyResource/nocDetails";
-import { propertyDetails } from "./applyResource/propertyDetails";
-import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
+import { 
+  buildingPlanScrutinyDetails, 
+  blockWiseOccupancyAndUsageDetails,
+  boundaryDetails,
+  detailsofplot,
+  demolitiondetails
+ } from "./applyResource/scrutinyDetails";
+// import { propertyDetails } from "./applyResource/propertyDetails";
+// import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import { documentDetails } from "./applyResource/documentDetails";
+import {employeeDetails} from './application';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -32,39 +39,41 @@ import {
 } from "../../../../ui-utils/commons";
 
 export const stepsData = [
-  { labelName: "NOC Details", labelKey: "NOC_COMMON_NOC_DETAILS" },
-  { labelName: "Property Details", labelKey: "NOC_COMMON_PROPERTY_DETAILS" },
-  { labelName: "Applicant Details", labelKey: "NOC_COMMON_APPLICANT_DETAILS" },
-  { labelName: "Documents", labelKey: "NOC_COMMON_DOCUMENTS" }
+  { labelName: "Basic Details", labelKey: "" },
+  { labelName: "Scrutiny Details", labelKey: "" },
+  { labelName: "Applicant Details", labelKey: "" },
+  { labelName: "Boundary Details", labelKey: "" },
+  { labelName: "Document Details", labelKey: "" },
+  { labelName: "Update NOC Details", labelKey: "" }
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
 
-const applicationNumberContainer = () => {
-  const applicationNumber = getQueryArg(
-    window.location.href,
-    "applicationNumber"
-  );
-  if (applicationNumber)
-    return {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-noc",
-      componentPath: "ApplicationNoContainer",
-      props: {
-        number: `${applicationNumber}`,
-        visibility: "hidden"
-      },
-      visible: true
-    };
-  else return {};
-};
+// const applicationNumberContainer = () => {
+//   const applicationNumber = getQueryArg(
+//     window.location.href,
+//     "applicationNumber"
+//   );
+//   if (applicationNumber)
+//     return {
+//       uiFramework: "custom-atoms-local",
+//       moduleName: "egov-noc",
+//       componentPath: "ApplicationNoContainer",
+//       props: {
+//         number: `${applicationNumber}`,
+//         visibility: "hidden"
+//       },
+//       visible: true
+//     };
+//   else return {};
+// };
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "NOC_COMMON_APPLY_NOC"
+    labelName: `Apply for building permit (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+    labelKey: ""
   }),
   //applicationNumber: applicationNumberContainer()
   applicationNumber: {
@@ -85,7 +94,7 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    nocDetails
+    documentDetails
   }
 };
 
@@ -96,8 +105,11 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    propertyDetails,
-    propertyLocationDetails
+    buildingPlanScrutinyDetails,
+    blockWiseOccupancyAndUsageDetails,
+    boundaryDetails,
+    detailsofplot,
+    demolitiondetails
   },
   visible: false
 };

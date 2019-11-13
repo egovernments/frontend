@@ -11,7 +11,21 @@ const CustomTab = Loadable({
   loader: () => import("./CustomTab"),
   loading: () => <Loading />
 });
+
+const DocumentList = Loadable({
+  loader: () => import("./DocumentList"),
+  loading: () => <Loading />
+});
+
+const UploadSingleFile = Loadable({
+  loader: () => import("./UploadSingleFile"),
+  loading: () => <Loading />
+});
+
+
 export {
   TestMolecules,
-  CustomTab
+  CustomTab,
+  DocumentList,
+  UploadSingleFile
 };

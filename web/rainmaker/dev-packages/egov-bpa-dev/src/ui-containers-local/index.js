@@ -14,8 +14,13 @@ const TestContainer = Loadable({
   loader: () => import("./TestContainer"),
   loading: () => <Loading />
 });
+const DocumentListContainer = Loadable({
+  loader: () => import("./DocumentListContainer"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
-  TestContainer
+  TestContainer,
+  DocumentListContainer
 };

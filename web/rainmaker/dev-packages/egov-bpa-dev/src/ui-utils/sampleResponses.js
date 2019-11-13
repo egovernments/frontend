@@ -721,7 +721,7 @@ export const sampleSingleSearch = () => {
 export const sampleDocUpload = () => {
   return {
     "0": {
-      documentType: "OWNER",
+      documentType: "Vamshi",
       documentCode: "OWNER.IDENTITYPROOF",
       documents: [
         {
@@ -734,7 +734,7 @@ export const sampleDocUpload = () => {
       }
     },
     "1": {
-      documentType: "OWNER",
+      documentType: "Vamshi",
       documentCode: "OWNER.ADDRESSPROOF"
     },
     "2": {
