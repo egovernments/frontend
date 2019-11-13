@@ -80,8 +80,7 @@ export const footer = {
       },
       children: {
         applyButtonLabel: getLabel({
-          labelName: "Apply",
-          labelKey: "NOC_COMMON_BUTTON_APPLY"
+          labelKey: "WS_COMMON_BUTTON_APPLY"
         })
       },
       visible: true,

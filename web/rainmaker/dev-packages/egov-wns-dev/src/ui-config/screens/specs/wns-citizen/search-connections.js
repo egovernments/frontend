@@ -27,8 +27,7 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const header = getCommonHeader({
-  labelName: "Water & Sewerage",
-  labelKey: "Water & Sewerage"
+  labelKey: "WS_COMMON_HEADER"
 });
 
 const pageResetAndChange = (state, dispatch) => {

@@ -22,8 +22,7 @@ export const getServiceDetails = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Service Details",
-            labelKey: "Service Details"
+            labelKey: "WS_COMMON_SERV_DETAIL"
           })
         },
         editSection: {
@@ -62,8 +61,7 @@ export const getServiceDetails = (isEditable = true) => {
     viewOne: getCommonContainer({
       reviewApplicationType: getLabelWithValue(
         {
-          labelName: "Service Type",
-          labelKey: "Service Type"
+          labelKey: "WS_SERV_DETAIL_SERV_TYPE"
         },
         {
           jsonPath:
@@ -76,15 +74,13 @@ export const getServiceDetails = (isEditable = true) => {
       ),
       reviewOldLicenseNo: getLabelWithValue(
         {
-          labelName: "Connection Category",
-          labelKey: "Connection Category"
+          labelKey: "WS_SERV_DETAIL_CONN_CATEGORY"
         },
         { jsonPath: "Licenses[0].oldLicenseNumber" }
       ),
       reviewLicenceType: getLabelWithValue(
         {
-          labelName: "Connection Type",
-          labelKey: "Connection Type"
+          labelKey: "WS_SERV_DETAIL_CONN_TYPE"
         },
         {
           jsonPath: "Licenses[0].licenseType",
@@ -96,15 +92,13 @@ export const getServiceDetails = (isEditable = true) => {
       ),
       reviewTradeName: getLabelWithValue(
         {
-          labelName: "Meter Id",
-          labelKey: "Meter Id"
+          labelKey: "WS_SERV_DETAIL_METER_ID"
         },
         { jsonPath: "Licenses[0].tradeName" }
       ),
       reviewPipe: getLabelWithValue(
         {
-          labelName: "Pipe Size (in mm)",
-          labelKey: "Pipe Size (in mm)"
+          labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
         },
         {
           jsonPath: "Licenses[0].pipe",
@@ -112,8 +106,7 @@ export const getServiceDetails = (isEditable = true) => {
       ),
       reviewCommencementDate: getLabelWithValue(
         {
-          labelName: "Connection Execution Date",
-          labelKey: "Connection Execution Date"
+          labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE"
         },
         {
           jsonPath: "Licenses[0].commencementDate",
@@ -121,8 +114,7 @@ export const getServiceDetails = (isEditable = true) => {
       ),
       reviewGSTNo: getLabelWithValue(
         {
-          labelName: "Rainwater harvesting Facility",
-          labelKey: "Rainwater harvesting Facility"
+          labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC"
         },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
@@ -130,15 +122,13 @@ export const getServiceDetails = (isEditable = true) => {
       ),
       reviewOperationalArea: getLabelWithValue(
         {
-          labelName: "Water Source",
-          labelKey: "Water Source"
+          labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
         },
         { jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea" }
       ),
       reviewNoOfEmployee: getLabelWithValue(
         {
-          labelName: "Water Sub Source",
-          labelKey: "Water Sub Source"
+          labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
         },
         { jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees" }
       )

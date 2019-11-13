@@ -10,8 +10,7 @@ import { changeStep } from "../viewBillResource/footer";
 const ownerDetails = getCommonContainer({
   reviewApplicationType: getLabelWithValue(
     {
-      labelName: "Mobile No.",
-      labelKey: "Mobile No."
+      labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
     },
     {
       jsonPath:
@@ -24,15 +23,13 @@ const ownerDetails = getCommonContainer({
   ),
   reviewOldLicenseNo: getLabelWithValue(
     {
-      labelName: "Name",
-      labelKey: "Name"
+      labelKey: "WS_OWN_DETAIL_NAME"
     },
     { jsonPath: "Licenses[0].oldLicenseNumber" }
   ),
   reviewLicenceType: getLabelWithValue(
     {
-      labelName: "Gender",
-      labelKey: "Gender"
+      labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
     },
     {
       jsonPath: "Licenses[0].licenseType",
@@ -44,15 +41,13 @@ const ownerDetails = getCommonContainer({
   ),
   reviewTradeName: getLabelWithValue(
     {
-      labelName: "Gaurdian",
-      labelKey: "Gaurdian"
+      labelKey: "WS_OWN_DETAIL_GUARDIAN_LABEL"
     },
     { jsonPath: "Licenses[0].tradeName" }
   ),
   reviewPipe: getLabelWithValue(
     {
-      labelName: "Gaurdian Name",
-      labelKey: "Gaurdian Name"
+      labelKey: "WS_OWN_DETAIL_GUARDIAN_NAME_LABEL"
     },
     {
       jsonPath: "Licenses[0].pipe",
@@ -60,8 +55,7 @@ const ownerDetails = getCommonContainer({
   ),
   reviewCommencementDate: getLabelWithValue(
     {
-      labelName: "Owner Category",
-      labelKey: "Owner Category"
+      labelKey: "WS_OWN_DETAIL_CATEGORY_LABEL"
     },
     {
       jsonPath: "Licenses[0].commencementDate",
@@ -69,8 +63,7 @@ const ownerDetails = getCommonContainer({
   ),
   reviewGSTNo: getLabelWithValue(
     {
-      labelName: "Email",
-      labelKey: "Email"
+      labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
     },
     {
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
@@ -78,8 +71,7 @@ const ownerDetails = getCommonContainer({
   ),
   reviewOperationalArea: getLabelWithValue(
     {
-      labelName: "Correspondence Adress",
-      labelKey: "Correspondence Adress"
+      labelKey: "WS_OWN_DETAIL_CROSADD"
     },
     { jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea" }
   )
@@ -100,8 +92,7 @@ export const getOwnerDetails = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Owner Details",
-            labelKey: "Owner Details"
+            labelKey: "WS_COMMON_OWN_DETAIL"
           })
         },
         editSection: {

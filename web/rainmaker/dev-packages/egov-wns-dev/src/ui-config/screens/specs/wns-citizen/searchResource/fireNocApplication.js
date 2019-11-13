@@ -65,23 +65,19 @@ const resetFields = (state, dispatch) => {
 
 export const NOCApplication = getCommonCard({
   subHeader: getCommonTitle({
-    labelName: "Search Water & Sewerage Connection",
-    labelKey: "Search Water & Sewerage Connection"
+    labelKey: "WS_SEARCH_CONNECTION_HEADER"
   }),
   subParagraph: getCommonParagraph({
-    labelName: "Provide at least one parameter to search for an application",
-    labelKey: "NOC_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
   }),
 
   appNOCAndMobNumContainer: getCommonContainer({
     city: getSelectField({
       label: {
-        labelName: "City",
-        labelKey: "City"
+        labelKey: "WS_PROP_DETAIL_CITY"
       },
       placeholder: {
-        labelName: "Select City",
-        labelKey: "Select City"
+        labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
       },
       localePrefix: {
         moduleName: "WF",
@@ -118,12 +114,10 @@ export const NOCApplication = getCommonCard({
 
     propertyid: getTextField({
       label: {
-        labelName: "Property ID",
-        labelKey: "Property ID"
+        labelKey: "WS_PROPERTY_ID_LABEL"
       },
       placeholder: {
-        labelName: "Enter Property ID",
-        labelKey: "Enter Property ID"
+        labelKey: "WS_PROPERTY_ID_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -136,12 +130,10 @@ export const NOCApplication = getCommonCard({
     }),
     ownerMobNo: getTextField({
       label: {
-        labelName: "Owner Mobile No.",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
       },
       placeholder: {
-        labelName: "Enter your mobile No.",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+        labelKey: "WS_OWN_DETAIL_MOBILE_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -158,12 +150,10 @@ export const NOCApplication = getCommonCard({
     }),
     cusomerid: getTextField({
       label: {
-        labelName: "Consumer ID",
-        labelKey: "Consumer ID"
+        labelKey: "WS_MYCONNECTIONS_CONSUMER_NO"
       },
       placeholder: {
-        labelName: "Enter Consumer ID",
-        labelKey: "Enter Consumer ID"
+        labelKey: "WS_SEARCH_CONNNECTION_CONSUMER_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -176,12 +166,10 @@ export const NOCApplication = getCommonCard({
     }),
     oldConsumerid: getTextField({
       label: {
-        labelName: "Old Consumer ID",
-        labelKey: "Old Consumer ID"
+        labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL"
       },
       placeholder: {
-        labelName: "Enter Old Consumer ID",
-        labelKey: "Enter Old Consumer ID"
+        labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -194,12 +182,10 @@ export const NOCApplication = getCommonCard({
     }),
     applicationNo: getTextField({
       label: {
-        labelName: "Application No.",
-        labelKey: "Application No."
+        labelKey: "WS_MYCONNECTIONS_APPLICATION_NO"
       },
       placeholder: {
-        labelName: "Enter Application No.",
-        labelKey: "Enter Application No."
+        labelKey: "WS_SEARCH_CONNECTIONS_APPLICATION_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -234,8 +220,7 @@ export const NOCApplication = getCommonCard({
         },
         children: {
           buttonLabel: getLabel({
-            labelName: "Reset",
-            labelKey: "NOC_HOME_SEARCH_RESET_BUTTON"
+            labelKey: "WS_SEARCH_CONNECTION_RESET_BUTTON"
           })
         },
         onClickDefination: {
@@ -263,8 +248,7 @@ export const NOCApplication = getCommonCard({
         },
         children: {
           buttonLabel: getLabel({
-            labelName: "Search",
-            labelKey: "NOC_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
           })
         },
         onClickDefination: {
