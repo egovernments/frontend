@@ -77,6 +77,10 @@ const DividerWithLabel = Loadable({
   loading: () => <Loading />
 });
 
+const MeterReadingEditable = Loadable({
+  loader: () => import("./MeterReadingEditable"),
+  loading: () => <Loading />
+})
 
 export {
   TestMolecules,
@@ -92,5 +96,6 @@ export {
   DividerWithLabel,
   MyConnections,
   PastPaymentsDetails,
-  MeterReading
+  MeterReading,
+  MeterReadingEditable
 };

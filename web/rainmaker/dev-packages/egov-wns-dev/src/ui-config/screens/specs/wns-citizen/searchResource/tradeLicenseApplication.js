@@ -13,8 +13,8 @@ import { searchApiCall } from "./functions";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
-    labelName: "Search Trade License Application",
-    labelKey: "TL_HOME_SEARCH_RESULTS_HEADING"
+    // labelName: "Search Trade License Application",
+    labelKey: "WS_SEARCH_CONNECTION_HEADER"
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
