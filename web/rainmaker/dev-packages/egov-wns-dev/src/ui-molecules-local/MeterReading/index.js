@@ -5,6 +5,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 
 
 const styles = {
@@ -37,8 +38,8 @@ class MeterReading extends React.Component {
           <div>
             <Grid container style={{ marginBottom: 12 }}>
               <Grid item xs={3}>
-                <Label
-                  labelName="Application No."
+                <LabelContainer
+                  labelKey="WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                 />
@@ -53,8 +54,8 @@ class MeterReading extends React.Component {
             </Grid>
             <Grid container style={{ marginBottom: 12 }}>
               <Grid item xs={3}>
-                <Label
-                  labelName="Consumer No."
+                <LabelContainer
+                  labelKey="WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                 />
@@ -71,8 +72,8 @@ class MeterReading extends React.Component {
             </Grid>
             <Grid container style={{ marginBottom: 12 }}>
               <Grid item xs={3}>
-                <Label
-                  labelName="Owner Name"
+                <LabelContainer
+                  labelKey="WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                 />
@@ -87,8 +88,8 @@ class MeterReading extends React.Component {
             </Grid>
             <Grid container style={{ marginBottom: 12 }}>
               <Grid item xs={3}>
-                <Label
-                  labelName="Address"
+                <LabelContainer
+                labelKey="WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                 />
@@ -103,8 +104,40 @@ class MeterReading extends React.Component {
             </Grid>
             <Grid container style={{ marginBottom: 12 }}>
               <Grid item xs={3}>
+                <LabelContainer
+                  labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"
+                  fontSize={14}
+                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                />
+              </Grid>
+              <Grid item xs={3}>
                 <Label
-                  labelName="Status"
+                  labelName="Active"
+                  fontSize={14}
+                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container style={{ marginBottom: 12 }}>
+              <Grid item xs={3}>
+                <LabelContainer
+                  labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"
+                  fontSize={14}
+                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Label
+                  labelName="Active"
+                  fontSize={14}
+                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container style={{ marginBottom: 12 }}>
+              <Grid item xs={3}>
+                <LabelContainer
+                  labelKey="WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                 />

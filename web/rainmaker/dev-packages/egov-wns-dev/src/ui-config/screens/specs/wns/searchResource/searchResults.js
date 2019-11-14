@@ -12,27 +12,11 @@ export const searchResults = {
   visible: true,
   props: {
     columns: [
+      getTextToLocalMapping("Application No"),
       getTextToLocalMapping("Consumer No"),
-      getTextToLocalMapping("License No"),
-      getTextToLocalMapping("Trade Name"),
       getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
-      {
-        name: getTextToLocalMapping("Status"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
-              }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
-          )
-        }
-      },
-
+      getTextToLocalMapping("Status"),
+      getTextToLocalMapping("Due"),
       {
         name: "tenantId",
         options: {
@@ -41,7 +25,7 @@ export const searchResults = {
       }
     ],
     title: getTextToLocalMapping(
-      "Search Results for Trade License Applications"
+      "Search Results for Water & Sewerage Connections"
     ),
     options: {
       filter: false,

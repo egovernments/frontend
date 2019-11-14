@@ -21,29 +21,26 @@ class PastPayments extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Link to="pastPayments">
-          <List component="nav">
-            <ListItem button>
-              <ListItemText
-                primary={
-                  <LabelContainer
-                    labelKey="Past Payments"
-                    labelName="Past Payments"
-                    style={{
-                      fontSize: 14,
-                      color: "rgba(0, 0, 0, 0.8700000047683716)"
-                    }}
-                  />
-                }
-              />
-              <ListItemSecondaryAction>
-                <IconButton edge="end">
-                  <KeyboardRightIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          </List>
-        </Link>
+        <List component="nav">
+          <ListItem button>
+            <ListItemText
+              primary={
+                <LabelContainer
+                  labelKey="WS_COMMON_PAST_PAYMENTS"
+                  style={{
+                    fontSize: 14,
+                    color: "rgba(0, 0, 0, 0.8700000047683716)"
+                  }}
+                />
+              }
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end">
+                <KeyboardRightIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
       </div>
     );
   }
