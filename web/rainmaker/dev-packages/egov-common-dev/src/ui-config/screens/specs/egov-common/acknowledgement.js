@@ -34,13 +34,8 @@ const getAcknowledgementCard = (
                     moduleName: "egov-common",
                     componentPath: "ApplicationNoContainer",
                     props: {
-                        number: consumerCode,
-                        label: {
-                            labelValue:"Consumer Code.:",
-                            labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
-                        }
+                        number: consumerCode
                     }
-                    
                 }
             }),
             applicationSuccessCard: {
@@ -86,11 +81,7 @@ const getAcknowledgementCard = (
                     moduleName: "egov-common",
                     componentPath: "ApplicationNoContainer",
                     props: {
-                        number: consumerCode,
-                        label: {
-                            labelValue:"Consumer Code.:",
-                            labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
-                        }
+                        number: consumerCode
                     }
                 }
             }),
