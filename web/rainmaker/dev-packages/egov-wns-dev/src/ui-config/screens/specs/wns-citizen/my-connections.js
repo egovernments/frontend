@@ -3,7 +3,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 
 const header = getCommonHeader(
   {
-    labelKey: "WS_COMMON_HEADER"
+    labelKey: "WS_MYCONNECTIONS_HEADER"
   },
   {
     classes: {

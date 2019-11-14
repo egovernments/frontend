@@ -1,6 +1,10 @@
 import { fetchData } from "./meterReading/functions";
-import { getCommonHeader, getLabel,getCommonContainer} from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import { getCommonHeader, getLabel, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  getCommonCard,
+  getCommonTitle
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+let enable = false;
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -14,10 +18,10 @@ const header = getCommonContainer({
       number: "WS-2018-PB-246464"
     }
   },
-    classes: {
-      root: "common-header-cont"
-    }
-  
+  classes: {
+    root: "common-header-cont"
+  }
+
 });
 
 const screenConfig = {
@@ -71,15 +75,48 @@ const screenConfig = {
               labelKey: "WS_CONSUMPTION_DETAILS_BUTTON_METER_READING"
             })
           },
+          onClickDefination: {
+            action: "page_change",
+            callBack: addMeterReading
+          }
+        },
+        viewOne: {
+          visible: enable,
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-wns",
+          componentPath: "MeterReadingEditable"
         },
         applicationsCard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
           componentPath: "MeterReading"
-        }
+        },
+        // demo
       }
     }
   }
 };
+
+const visiblitiy = false;
+
+export const addMeterReading = (isEditable = true) => {
+  debugger
+  // console.log(isEditable);
+  // enable = isEditable;
+  // debugger
+  // console.log('hi');
+  // console.log(state);
+  // visiblitiy = true;
+}
+export const demo = getCommonCard({
+  subHeader: getCommonTitle({
+    labelName: "Search Employee",
+    labelKey: "HR_HOME_SEARCH_RESULTS_HEADING"
+  }),
+  // subParagraph: getCommonParagraph({
+  //   labelName: "Provide at least one parameter to search for an application",
+  //   labelKey: "HR_HOME_SEARCH_RESULTS_DESC"
+  // }),
+});
 
 export default screenConfig;
