@@ -107,7 +107,7 @@ export const textToLocalMapping = {
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+  moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: true,
   props: {

@@ -26,7 +26,25 @@ export const tradeLicenseApplication = getCommonCard({
         labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_LABEL"
       },
       placeholder: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_PLACEHOLDER"
+        labelName: "Select ULB",
+        labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      // required: true,
+      errorMessage: "ERR_INVALID_ULB",
+      jsonPath: "searchScreen.ulb"
+    }),
+    boundaryType: getSelectField({
+      label: {
+        labelName: "Boundary Type",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Boundary Type",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -66,19 +84,11 @@ export const tradeLicenseApplication = getCommonCard({
         xs: 12,
         sm: 4
       },
-      iconObj: {
-        label: "+91 |",
-        position: "start"
-      },
-      required: false,
-      pattern: getPattern("MobileNo"),
-      jsonPath: "searchScreen.mobileNumber",
-      errorMessage: "ERR_INVALID_MOBILE_NUMBER"
-    })
-  }),
-
-  appStatusAndToFromDateContainer: getCommonContainer({
-    applicationStatus: getSelectField({
+      // required: true,
+      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      jsonPath: "searchScreen.billingYear"
+    }),
+    billingPeriod: getSelectField({
       label: {
         labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
       },
@@ -95,7 +105,10 @@ export const tradeLicenseApplication = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4
-      }
+      },
+      // required: true,
+      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      jsonPath: "searchScreen.billingPeriod"
     }),
 
     fromDate: getDateField({
@@ -109,9 +122,9 @@ export const tradeLicenseApplication = getCommonCard({
         xs: 12,
         sm: 4
       },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE",
-      required: false
+      // required: true,
+      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      jsonPath: "searchScreen.billingPeriodValue"
     }),
 
     toDate: getDateField({
