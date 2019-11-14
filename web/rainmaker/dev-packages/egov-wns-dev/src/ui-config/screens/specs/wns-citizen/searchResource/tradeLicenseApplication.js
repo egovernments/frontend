@@ -11,43 +11,93 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
 
+const resetFields = (state, dispatch) => {
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.NOCNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.fromDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.toDate",
+      "props.value",
+      ""
+    )
+  );
+};
+
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
-    // labelName: "Search Trade License Application",
+    labelName: "Search Water & Sewerage Connections",
     labelKey: "WS_SEARCH_CONNECTION_HEADER"
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "TL_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
   }),
   appTradeAndMobNumContainer: getCommonContainer({
-    applicationNo: getTextField({
+    city: getSelectField({
       label: {
-        labelName: "Application No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "WS_PROP_DETAIL_CITY"
       },
       placeholder: {
-        labelName: "Enter Application No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
       },
+      localePrefix: {
+        moduleName: "WF",
+        masterName: "FIRENOC"
+      },
+      jsonPath: "searchScreen.status",
+      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+      required: false,
       gridDefination: {
         xs: 12,
         sm: 4
-      },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_APPLICATION_NO",
-      jsonPath: "searchScreen.applicationNumber"
+      }
     }),
 
-    tradeLicenseNo: getTextField({
+    propertyid: getTextField({
       label: {
-        labelName: "Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+        labelKey: "WS_PROPERTY_ID_LABEL"
       },
       placeholder: {
-        labelName: "Enter Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+        labelKey: "WS_PROPERTY_ID_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -55,17 +105,15 @@ export const tradeLicenseApplication = getCommonCard({
       },
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.licenseNumber"
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
     }),
     ownerMobNo: getTextField({
       label: {
-        labelName: "Owner Mobile No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
       },
       placeholder: {
-        labelName: "Enter your mobile No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+        labelKey: "WS_OWN_DETAIL_MOBILE_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -78,111 +126,114 @@ export const tradeLicenseApplication = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       jsonPath: "searchScreen.mobileNumber",
-      errorMessage: "ERR_INVALID_MOBILE_NUMBER"
-    })
-  }),
-  appStatusAndToFromDateContainer: getCommonContainer({
-    applicationNo: getSelectField({
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
+    }),
+    cusomerid: getTextField({
       label: {
-        labelName: "Application status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+        labelKey: "WS_MYCONNECTIONS_CONSUMER_NO"
       },
       placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+        labelKey: "WS_SEARCH_CONNNECTION_CONSUMER_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
       },
       required: false,
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "NEWTL"
-      },
-      jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
     }),
-
-    fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
-      placeholder: {
-        labelName: "Select From Date",
-        labelKey: "TL_FROM_DATE_PLACEHOLDER"
+    oldConsumerid: getTextField({
+      label: {
+        labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL"
       },
-      jsonPath: "searchScreen.fromDate",
+      placeholder: {
+        labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_PLACEHOLDER"
+      },
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE",
-      required: false
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
     }),
-
-    toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
-      placeholder: {
-        labelName: "Select to Date",
-        labelKey: "TL_COMMON_TO_DATE_PLACEHOLDER"
+    applicationNo: getTextField({
+      label: {
+        labelKey: "WS_MYCONNECTIONS_APPLICATION_NO"
       },
-      jsonPath: "searchScreen.toDate",
+      placeholder: {
+        labelKey: "WS_SEARCH_CONNECTIONS_APPLICATION_NO_PLACEHOLDER"
+      },
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE",
-      required: false
-    })
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
+    }),
   }),
 
   button: getCommonContainer({
-    // firstCont: {
-
     buttonContainer: getCommonContainer({
-      firstCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
+      resetButton: {
+        componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 6
+          // align: "center"
+        },
+        props: {
+          variant: "outlined",
+          style: {
+            color: "#FE7A51",
+            borderColor: "#FE7A51",
+            width: "220px",
+            height: "48px",
+            margin: "8px",
+            float: "right"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelKey: "WS_SEARCH_CONNECTION_RESET_BUTTON"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetFields
         }
       },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 6
+          // align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-
+            margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "80%",
+            width: "220px",
             height: "48px"
           }
         },
         children: {
           buttonLabel: getLabel({
-            labelName: "Search",
-            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
           })
         },
         onClickDefination: {
           action: "condition",
           callBack: searchApiCall
-        }
-      },
-      lastCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
         }
       }
     })
