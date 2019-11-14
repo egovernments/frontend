@@ -110,19 +110,8 @@ class Footer extends React.Component {
         id="custom-atoms-footer"
         style={{ textAlign: "right" }}
       >
-        <Container>
-          <Item xs={12} sm={4} style={{ paddingLeft: "20px" }}>
-            <Container>
-              <Item xs={12} sm={6}>
-                <MenuButton data={getDownloadData()} />
-              </Item>
-
-              <Item xs={12} sm={6}>
-                <MenuButton data={getPrintData()} />
-              </Item>
-            </Container>
-          </Item>
-          <Item xs={12} sm={8}>
+        <Container >
+          <Item xs={12} sm={12} className="abcd">
             {contractData &&
               contractData.map(item => {
                 const { buttonLabel, moduleName } = item;
@@ -130,11 +119,14 @@ class Footer extends React.Component {
                   <Button
                     color={color}
                     variant={variant}
+                    className="abc1"
                     onClick={() => this.openActionDialog(item)}
                     style={{
-                      minWidth: "200px",
+                   //   minWidth: "200px",
                       height: "48px",
-                      marginRight: "45px"
+                      marginRight: "45px",
+                      borderRadius:"inherit",
+                      display: buttonLabel === "REFER" ? "none" : "initial"
                     }}
                   >
                     <LabelContainer
