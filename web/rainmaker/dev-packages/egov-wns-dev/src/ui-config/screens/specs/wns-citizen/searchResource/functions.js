@@ -104,8 +104,8 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     try {
-      const response = await getSearchResults(queryObject);
-      // const response = searchSampleResponse();
+      // const response = await getSearchResults(queryObject);
+      const response = { 'FireNOCs': [{ "tenantId": "123", "fireNOCDetails": { "applicationNumber": "12345", "fireNOCNumber": '13', "fireNOCType": "sab", "Owner Name": "sab", "applicationDate": "sab", "status": "sab" } }] }
       let data =
         response &&
         get(response, "FireNOCs", []).map(item => ({
@@ -123,7 +123,6 @@ export const searchApiCall = async (state, dispatch) => {
           [get(textToLocalMapping, "Status")]:
             get(textToLocalMapping, item.fireNOCDetails.status) || "-"
         }));
-
       dispatch(
         handleField(
           "search",
@@ -137,9 +136,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResults",
           "props.title",
-          `${textToLocalMapping["Search Results for Fire-NOC Applications"]}(${
-            response.FireNOCs.length
-          })`
+          `${textToLocalMapping["Search Results for Fire-NOC Applications"]}(${response.FireNOCs.length})`
         )
       );
       //showHideProgress(false, dispatch);
