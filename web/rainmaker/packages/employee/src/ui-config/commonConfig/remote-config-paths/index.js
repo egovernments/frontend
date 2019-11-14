@@ -23,8 +23,6 @@ const remoteConfigPath = (path, screenKey) => {
       break;
     case "egov-boilerplate":
       config = require(`egov-boilerplate/ui-config/screens/specs/${path}/${screenKey}`).default;
-    case "abg":
-      config = require(`egov-abg/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;
