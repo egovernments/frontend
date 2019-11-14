@@ -1961,7 +1961,7 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
           tradeType.licenseType = item.licenseType;
           tradeType.rate = item.rate;
           !isUndefined(item.rate) &&
-            item.rate !== null && item.rate > 0 &&
+            item.rate !== null &&
             acc.tradeTypeData.push(tradeType);
         }
         return acc;
