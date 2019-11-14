@@ -3,6 +3,10 @@ import { Button } from "components";
 import "./index.css";
 import Label from "egov-ui-kit/utils/translationNode";
 
+const labelContainerStyle = {
+  marginTop: "-2px"
+}
+
 const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleRadioButton, history, resetFormWizard, urlToAppend }) => {
   const fields = form.fields || {};
   return (
