@@ -29,7 +29,10 @@ const header = getCommonContainer({
         componentPath: "ApplicationNoContainer",
         props: {
             number: getQueryArg(window.location.href, "consumerCode"),
-            label: "Consumer Code.:"
+            label: {
+                labelValue:"Consumer Code.:",
+                labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
+            }
         }
     }
 });
@@ -126,7 +129,7 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
         dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
     }
 
-    
+
 
     //Initially select instrument type as Cash
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
