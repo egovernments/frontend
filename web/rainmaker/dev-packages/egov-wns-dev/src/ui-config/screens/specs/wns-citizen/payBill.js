@@ -5,7 +5,7 @@ import set from "lodash/set";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { payFooter } from "./payResource/payFooter"
 const getAcknowledgementCard = (
     state,
     dispatch,
@@ -15,7 +15,7 @@ const getAcknowledgementCard = (
     secondNumber,
     tenant
 ) => {
-    purpose = "pay"; status = "failure"; // hardcode value(to be removed in future)
+    purpose = "pay"; status = "success"; // hardcode value(to be removed in future)
     if (purpose === "pay" && status === "success") {
         return {
             header: getCommonContainer({
@@ -68,7 +68,7 @@ const getAcknowledgementCard = (
                 uiFramework: "custom-atoms",
                 componentPath: "Div"
             },
-            //   applicationSuccessFooter: acknowledgementSuccesFooter
+            payFooter
         };
     } else if (purpose === "pay" && status === "failure") {
         return {

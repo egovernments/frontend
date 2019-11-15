@@ -52,8 +52,7 @@ const propertyDetails = getCommonContainer({
   ),
   reviewLicenceType: getLabelWithValue(
     {
-      labelName: "Plot Size (in sq meters)",
-      labelKey: "Plot Size (in sq meters)"
+      labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
     },
     {
       jsonPath: "Licenses[0].licenseType",
