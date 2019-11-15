@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import SelectField from "material-ui/SelectField";
 import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';
+import Button from '@material-ui/core/Button';
 
 const styles = {
     card: {
@@ -37,40 +38,32 @@ class MeterReading extends React.Component {
             <Card className={classes.card}>
                 <CardContent>
                     <div>
-                        <Grid container style={{ marginBottom: 12 }}>
-                            <Grid item xs={3}>
+                        <Grid container >
+                            <Grid item xs={12} sm={3}>
                                 <Label
                                     labelKey="WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
-                                <SelectField
-                                    autoWidth={true}
-                                    className="pt-action-dropDown"
-                                    hintText={<Label label="PT_SELECT_ACTION" />}
-                                    underlineStyle={styles.underlineStyle}
-                                    iconStyle={styles.iconStyle}
-                                    style={styles.customWidth}
-                                    hintStyle={styles.hintStyle}
-                                    onChange={(event, key, payload) =>
-                                        onSelectFieldChange(event, key, payload, history, item)
-                                    }
-                                ></SelectField>
+                            <Grid item xs={12} sm={3}>
+                                <Label
+                                    labelName="WS-2018-PB-242565"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                                />
                             </Grid>
                         </Grid>
-                        <Grid container style={{ marginBottom: 12 }}>
-                            <Grid item xs={3}>
+                        <Grid container >
+                            <Grid item xs={12} sm={3} style={{ paddingTop: '20px' }}>
                                 <Label
                                     labelName="Meter Status"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={3}>
                                 <SelectField
-                                    autoWidth={true}
                                     className="pt-action-dropDown"
                                     hintText={<Label label="PT_SELECT_ACTION" />}
                                     underlineStyle={styles.underlineStyle}
@@ -83,15 +76,31 @@ class MeterReading extends React.Component {
                                 ></SelectField>
                             </Grid>
                         </Grid>
-                        <Grid container style={{ marginBottom: 12 }}>
-                            <Grid item xs={3}>
+                        <Grid container >
+                            <Grid item xs={12} sm={3}>
                                 <Label
-                                    labelName="WS_SERV_DETAIL_LAST_METER_READ"
+                                    labelKey="WS_SERV_DETAIL_LAST_METER_READ"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={3}>
+                                <Label
+                                    labelName="75"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container >
+                            <Grid item xs={12} sm={3} style={{ paddingTop: '20px' }}>
+                                <Label
+                                    labelKey="WS_SERV_DETAIL_LAST_METER_READ"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
                                 <TextField
                                     id="order"
                                     label="Order No."
@@ -103,16 +112,16 @@ class MeterReading extends React.Component {
                                 />
                             </Grid>
                         </Grid>
-                        <Grid container style={{ marginBottom: 12 }}>
-                            <Grid item xs={3}>
+                        <Grid container >
+                            <Grid item xs={12} sm={3} style={{ paddingTop: '20px' }}>
                                 <Label
                                     labelName="Address"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
-                                {/* <Col xs={12} md={6}> */}
+                            <Grid item xs={12} sm={3}>
+                                {/* <Col xs={12} sm={3} md={6}> */}
                                 <DatePicker
                                     hintText="From Date"
                                     floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
@@ -135,20 +144,29 @@ class MeterReading extends React.Component {
                                 </div> */}
                             </Grid>
                         </Grid>
-                        <Grid container style={{ marginBottom: 12 }}>
-                            <Grid item xs={3}>
+                        <Grid container >
+                            <Grid item xs={12} sm={3} style={{ paddingTop: '20px' }}>
                                 <Label
-                                    labelName="Status"
+                                    labelName="Consumption"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={3} style={{ paddingTop: '20px' }}>
                                 <Label
-                                    labelName="Active"
+                                    labelName="25"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                                 />
+                            </Grid>
+                        </Grid>
+                        <Grid container >
+                            <Grid item xs={12} sm={3}>
+                            </Grid>
+                            <Grid item xs={12} sm={3} style={{ paddingTop: '20px' }}>
+                                <Button variant="outlined" style={{ width: "50%" }} color="primary" className={classes.button}>
+                                    Save
+                                </Button>
                             </Grid>
                         </Grid>
                     </div>

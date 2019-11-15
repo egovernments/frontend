@@ -38,7 +38,7 @@ export const searchApiCall = async (state, dispatch) => {
     "search"
   );
 
-  // if ((isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
+  // if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
   //   dispatch(
   //     toggleSnackbar(
   //       true,

@@ -7,7 +7,7 @@ import {
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+  moduleName: "egov-wns",
   componentPath: "Table",
   visible: true,
   props: {
