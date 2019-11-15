@@ -9,13 +9,13 @@ export const pendingApprovals = {
     breakPending: getBreak(),
     pendingApprovals: {
       uiFramework: "custom-molecules-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-tradelicence",
       componentPath: "Table",
       props: {
         data: [
           {
             "Application No": 1234,
-            "Building Name": "Matchbox Plant",
+            "Trade Name": "Matchbox Plant",
             "Owner Name": "Satinder Singh",
             "Locality/Mohalla": "Gurudwara Mohalla",
             "Payment Date": "12/08/2018",
@@ -23,7 +23,7 @@ export const pendingApprovals = {
           },
           {
             "Application No": 1234,
-            "Building Name": "Matchbox Plant",
+            "Trade Name": "Matchbox Plant",
             "Owner Name": "Satinder Singh",
             "Locality/Mohalla": "Railway Colony",
             "Payment Date": "12/08/2018",
@@ -31,7 +31,7 @@ export const pendingApprovals = {
           },
           {
             "Application No": 1234,
-            "Building Name": "Matchbox Plant",
+            "Trade Name": "Matchbox Plant",
             "Owner Name": "Satinder Singh",
             "Locality/Mohalla": "Gurudwara Mohalla",
             "Payment Date": "12/08/2018",
@@ -39,7 +39,7 @@ export const pendingApprovals = {
           },
           {
             "Application No": 1234,
-            "Building Name": "Matchbox Plant",
+            "Trade Name": "Matchbox Plant",
             "Owner Name": "Satinder Singh",
             "Locality/Mohalla": "Assi Mohalla",
             "Payment Date": "12/08/2018",
@@ -48,7 +48,7 @@ export const pendingApprovals = {
         ],
         columns: {
           "Application No": {},
-          "Building Name": {},
+          "Trade Name": {},
           "Owner Name": {},
           "Locality/Mohalla": {},
           "Payment Date": {},
