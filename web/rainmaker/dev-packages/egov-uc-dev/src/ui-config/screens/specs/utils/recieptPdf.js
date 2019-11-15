@@ -258,7 +258,7 @@ const getCitizenReceipetData = transformedData => {
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.consumerName,
+                text: transformedData.paidBy,
                 border: [false, true, true, true]
               }
             ]
@@ -622,7 +622,7 @@ const getReceiptData = transformedData => {
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.consumerName,
+                text: transformedData.paidBy,
                 border: [false, true, true, true]
               }
             ]
@@ -909,7 +909,7 @@ const getReceiptData = transformedData => {
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.consumerName,
+                text: transformedData.paidBy,
                 border: [false, true, true, true]
               }
             ]
