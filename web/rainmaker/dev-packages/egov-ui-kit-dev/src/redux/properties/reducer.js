@@ -179,7 +179,6 @@ const propertyReducer = (state = initialState, action) => {
       };
     case actionTypes.SINGLE_ASSESSMENT_STATUS_COMPLETE:
       const singleAssessmentByStatus =action.payload[0];
-
       const receiptsByYr=action.payload[1];
       return {
         ...state,
@@ -231,7 +230,7 @@ const propertyReducer = (state = initialState, action) => {
         Payments: []
       };
     case actionTypes.PROPERTY_FETCH_RECEIPT_COMPLETE:
-    
+
       const Payments=action.payload.Payments;
       return {
         ...state,
@@ -256,7 +255,7 @@ const propertyReducer = (state = initialState, action) => {
         Payments: []
       };
     case actionTypes.PROPERTY_DOWNLOAD_RECEIPT_COMPLETE:
-    
+
       const receipt=action.payload;
       return {
         ...state,
