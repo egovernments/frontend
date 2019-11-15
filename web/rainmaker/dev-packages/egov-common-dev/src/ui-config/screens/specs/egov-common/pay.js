@@ -131,6 +131,22 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
         dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
     }
 
+    const consumeCodeComponentPath='components.div.children.headerDiv.children.header.children.consumerCode';
+    const consumerCodeFromResponse=get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");;
+    dispatch(handleField("pay", consumeCodeComponentPath, "props.number",consumerCodeFromResponse ));
+
+    const raidButtonComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.AmountToPaidButton";
+    dispatch(handleField("pay", raidButtonComponentPath, "props.value","full_amount" ));
+
+    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "Owner"));
+    // const payerComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payer";
+    // dispatch(handleField("pay", payerComponentPath, "props.value","" ));
+    //
+    // const paidByComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.paidBy";
+    // dispatch(handleField("pay", paidByComponentPath, "props.value","" ));
+    //
+    // const numberComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payerMobileNumber";
+    // dispatch(handleField("pay", numberComponentPath, "props.value","" ));
 
 
     //Initially select instrument type as Cash
