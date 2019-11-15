@@ -38,7 +38,7 @@ import {
           jsonPath: "Employee[0].user.name"
         })
       },
-  
+
       occupancy: {
         ...getSelectField({
           label: {
@@ -74,7 +74,7 @@ import {
         ...getSelectField({
           label: {
             labelName: "Application type",
-            labelKey: "application type"
+            labelKey: "Application type"
           },
           placeholder: {
             labelName: "Select Occupancy",
@@ -171,7 +171,20 @@ import {
           }
         })
       },
-  
+
+      dummyDiv3: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props: {
+          disabled: true
+        }
+      },
+
       applicationdate: {
         ...getDateField({
           label: {

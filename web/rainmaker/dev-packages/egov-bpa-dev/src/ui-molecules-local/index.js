@@ -22,10 +22,16 @@ const UploadSingleFile = Loadable({
   loading: () => <Loading />
 });
 
+const Table = Loadable({
+  loader: () => import("./Table"),
+  loading: () => <Loading />
+})
+
 
 export {
   TestMolecules,
   CustomTab,
   DocumentList,
-  UploadSingleFile
+  UploadSingleFile,
+  Table
 };

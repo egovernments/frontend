@@ -183,6 +183,20 @@ export const detailsofplot = getCommonCard({
                 jsonPath: "Employee[0].user.name"
             })
         },
+
+        dummyDiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
+            props: {
+              disabled: true
+            }
+          },
+
         address1: {
             ...getTextField({
                 label: {
@@ -318,6 +332,20 @@ export const detailsofplot = getCommonCard({
                 jsonPath: "Employee[0].user.name"
             })
         },
+
+        dummyDiv1: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
+            props: {
+              disabled: true
+            }
+          },
+
         charitableTrustBuilding: {
             ...getCheckBoxwithLabel(
                 {
