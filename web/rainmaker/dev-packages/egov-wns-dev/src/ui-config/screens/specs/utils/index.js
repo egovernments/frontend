@@ -2344,7 +2344,7 @@ export const getTextToLocalMapping = label => {
     case "Service":
       return getLocaleLabels(
         "Service",
-        "Service",
+        "WS_COMMON_TABLE_COL_SERVICE_LABEL",
         localisationLabels
       );
     case "Owner Name":
