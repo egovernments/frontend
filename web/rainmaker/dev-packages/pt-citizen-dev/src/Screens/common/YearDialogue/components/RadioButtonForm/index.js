@@ -37,7 +37,7 @@ const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleR
           label={label}
           fontSize="18px"
           color="#484848"
-
+          containerStyle={labelContainerStyle}
         />
       </div>
 
