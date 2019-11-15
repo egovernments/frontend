@@ -302,8 +302,10 @@ const setStatusBasedValue = status => {
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Water Bill(Q3-2018-19)",
-    labelKey: "Water Bill(Q3-2018-19)"
+    labelKey: "WS_COMMON_WATER_BILL_HEADER"
+  }),
+  headerDynamicVal: getCommonHeader({
+    labelName: `(Q3-2018-19)`,
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -318,7 +320,6 @@ const headerrow = getCommonContainer({
 const estimate = getCommonGrayCard({
   header: getCommonSubHeader(
     {
-      labelName: "Bill Details",
       labelKey: "WS_VIEWBILL_DETAILS_HEADER" //TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER
     },
     {

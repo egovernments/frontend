@@ -71,8 +71,8 @@ function FeesEstimateCard(props) {
               let tooltip = fee.info ? (
                 <Tooltip val={fee.info} icon={"info_circle"} />
               ) : (
-                ""
-              );
+                  ""
+                );
               let textLeft = fee.name ? (
                 <Grid container xs={8}>
                   <LabelContainer
@@ -83,8 +83,8 @@ function FeesEstimateCard(props) {
                   {tooltip}
                 </Grid>
               ) : (
-                <Grid xs={8} />
-              );
+                  <Grid xs={8} />
+                );
               let textRight = fee.value ? (
                 <Grid xs={4} align="right">
                   <LabelContainer
@@ -94,14 +94,14 @@ function FeesEstimateCard(props) {
                   />
                 </Grid>
               ) : (
-                <Grid xs={4} align="right">
-                  <LabelContainer
-                    labelName={0}
-                    labelKey={0}
-                    style={styles.taxStyles}
-                  />
-                </Grid>
-              );
+                  <Grid xs={4} align="right">
+                    <LabelContainer
+                      labelName={0}
+                      labelKey={0}
+                      style={styles.taxStyles}
+                    />
+                  </Grid>
+                );
               return (
                 <Grid key={key} container>
                   {textLeft}
@@ -115,8 +115,7 @@ function FeesEstimateCard(props) {
             <Grid item xs={6}>
               <Typography variant="body2">
                 <LabelContainer
-                  labelName="Total Amount"
-                  labelKey="TL_COMMON_TOTAL_AMT"
+                  labelKey="WS_COMMON_TOTAL_AMT"
                 />
               </Typography>
             </Grid>
@@ -140,7 +139,7 @@ function FeesEstimateCard(props) {
         >
           <LabelContainer
             labelName="Total Amount"
-            labelKey="TL_COMMON_TOTAL_AMT"
+            labelKey="WS_COMMON_TOTAL_AMT"
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">

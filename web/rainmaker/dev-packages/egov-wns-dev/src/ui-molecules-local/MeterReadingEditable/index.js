@@ -7,8 +7,9 @@ import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import SelectField from "material-ui/SelectField";
 import DatePicker from 'material-ui/DatePicker';
-import TextField from 'material-ui/TextField';
-
+import TextField from "@material-ui/core/TextField";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import ListItem from '@material-ui/core/ListItem';
 const styles = {
     card: {
         marginLeft: 8,
@@ -39,40 +40,34 @@ class MeterReading extends React.Component {
                     <div>
                         <Grid container style={{ marginBottom: 12 }}>
                             <Grid item xs={3}>
-                                <Label
+                                <LabelContainer
                                     labelKey="WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
                             <Grid item xs={3}>
-                                <SelectField
-                                    autoWidth={true}
-                                    className="pt-action-dropDown"
-                                    hintText={<Label label="PT_SELECT_ACTION" />}
-                                    underlineStyle={styles.underlineStyle}
-                                    iconStyle={styles.iconStyle}
-                                    style={styles.customWidth}
-                                    hintStyle={styles.hintStyle}
-                                    onChange={(event, key, payload) =>
-                                        onSelectFieldChange(event, key, payload, history, item)
-                                    }
-                                ></SelectField>
+                                <Label
+                                    labelName="Q4-2018-19"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                                />
                             </Grid>
                         </Grid>
                         <Grid container style={{ marginBottom: 12 }}>
                             <Grid item xs={3}>
-                                <Label
-                                    labelName="Meter Status"
+                                <LabelContainer
+                                    labelKey="WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
                             <Grid item xs={3}>
-                                <SelectField
+                                <ListItem
                                     autoWidth={true}
-                                    className="pt-action-dropDown"
-                                    hintText={<Label label="PT_SELECT_ACTION" />}
+                                    // className="pt-action-dropDown"
+                                    placeholder="WS_SELECT_METER_STATUS_PLACEHOLDER"
+                                    // hintText={<Label label="PT_SELECT_ACTION" />}
                                     underlineStyle={styles.underlineStyle}
                                     iconStyle={styles.iconStyle}
                                     style={styles.customWidth}
@@ -80,77 +75,84 @@ class MeterReading extends React.Component {
                                     onChange={(event, key, payload) =>
                                         onSelectFieldChange(event, key, payload, history, item)
                                     }
-                                ></SelectField>
+                                ></ListItem>
                             </Grid>
                         </Grid>
                         <Grid container style={{ marginBottom: 12 }}>
                             <Grid item xs={3}>
+                                <LabelContainer
+                                    labelKey="WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
                                 <Label
-                                    labelName="WS_SERV_DETAIL_LAST_METER_READ"
+                                    labelName="75"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container style={{ marginBottom: 12 }}>
+                            <Grid item xs={3}>
+                                <LabelContainer
+                                    labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
                             <Grid item xs={3}>
                                 <TextField
-                                    id="order"
-                                    label="Order No."
-                                    placeholder="Enter Remarks"
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
+                                    placeholder="WS_CONSUMPTION_DETAILS_CURRENT_READING_PLACEHOLDER"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                                 />
                             </Grid>
                         </Grid>
                         <Grid container style={{ marginBottom: 12 }}>
                             <Grid item xs={3}>
-                                <Label
-                                    labelName="Address"
+                                <LabelContainer
+                                    labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                 />
                             </Grid>
                             <Grid item xs={3}>
-                                {/* <Col xs={12} md={6}> */}
                                 <DatePicker
-                                    hintText="From Date"
-                                    floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
-                                    underlineStyle={styles.underlineStyle}
-                                    underlineFocusStyle={styles.underlineFocusStyle}
-                                    style={styles.topGap}
-                                />
-                                {/* </Col> */}
-                                {/* <DatePicker
-                                    onChange={(first, object) => {
-                                        let e = { target: { value: object } };
-                                        handleFieldChange("receiptDate", e.target.value);
-                                    }}
-                                    formatDate={(date) => changeDateToFormat(date)}
-                                    textFieldStyle={{ cursor: "pointer" }}
-                                    {...fields.receiptDate}
-                                /> */}
-                                {/* <div className="datepicker-icon" onClick={(e) => e.preventDefault}>
-                                    <Icon action="action" name="date-range" />
-                                </div> */}
-                            </Grid>
-                        </Grid>
-                        <Grid container style={{ marginBottom: 12 }}>
-                            <Grid item xs={3}>
-                                <Label
-                                    labelName="Status"
-                                    fontSize={14}
-                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                                />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Label
                                     labelName="Active"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                                 />
                             </Grid>
                         </Grid>
+                        <Grid container style={{ marginBottom: 12 }}>
+                            <Grid item xs={3}>
+                                <LabelContainer
+                                    labelKey="WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Label
+                                    labelName="25"
+                                    fontSize={14}
+                                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                                />
+                            </Grid>
+                        </Grid>
+                        {/* <Button labelKey="WS_COMMON_BUTTON_SAVE"
+                            variant="outlined"
+                            style={{
+                                backgroundColor: "#FFFFFF",
+                                border: "1px solid rgba(5, 5, 5, 0.11999999731779099)",
+                                minWidth: 300,
+                                justifyContent: "space-between"
+                            }}
+                        >
+
+                        </Button> */}
                     </div>
                 </CardContent>
             </Card>

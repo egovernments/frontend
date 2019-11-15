@@ -3,8 +3,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 
 const header = getCommonHeader(
   {
-    labelName: "Completed Assesments",
-    labelKey: "Completed Assesments"
+    labelKey: "WS_COMMON_PAST_PAYMENTS"
   },
   {
     classes: {
