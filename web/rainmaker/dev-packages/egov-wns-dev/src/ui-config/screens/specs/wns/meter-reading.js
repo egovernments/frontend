@@ -4,6 +4,9 @@ import {
   getCommonCard,
   getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { meterReadingEditable } from "./meterReading/meterReadingEditable";
+
 let enable = false;
 
 const header = getCommonContainer({
@@ -76,12 +79,11 @@ const screenConfig = {
             })
           },
           onClickDefination: {
-            action: "page_change",
-            callBack: addMeterReading
+            action: "condition",
           }
         },
         viewOne: {
-          visible: enable,
+          // visible: enable,
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
           componentPath: "MeterReadingEditable"
@@ -91,32 +93,25 @@ const screenConfig = {
           moduleName: "egov-wns",
           componentPath: "MeterReading"
         },
-        // demo
-      }
+        // meterReadingEditable,
+      },
     }
   }
 };
 
-const visiblitiy = false;
-
-export const addMeterReading = (isEditable = true) => {
-  debugger
-  // console.log(isEditable);
-  // enable = isEditable;
+const addMeterReading = () => {
+  console.log(2);
+  // enable = true;
   // debugger
   // console.log('hi');
   // console.log(state);
   // visiblitiy = true;
 }
-export const demo = getCommonCard({
+const demo = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Employee",
     labelKey: "HR_HOME_SEARCH_RESULTS_HEADING"
   }),
-  // subParagraph: getCommonParagraph({
-  //   labelName: "Provide at least one parameter to search for an application",
-  //   labelKey: "HR_HOME_SEARCH_RESULTS_DESC"
-  // }),
 });
 
 export default screenConfig;

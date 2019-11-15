@@ -13,11 +13,9 @@ import { searchApiCall } from "./functions";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
-    labelName: "Search Water & Sewerage Connections",
     labelKey: "WS_SEARCH_CONNECTION_HEADER"
   }),
   subParagraph: getCommonParagraph({
-    labelName: "Provide at least one parameter to search for an application",
     labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
   }),
   appTradeAndMobNumContainer: getCommonContainer({
