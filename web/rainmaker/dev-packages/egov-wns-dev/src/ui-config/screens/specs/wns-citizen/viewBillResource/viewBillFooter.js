@@ -15,8 +15,7 @@ export const viewBillFooter = getCommonApplyFooter({
     },
     children: {
       downloadButton: getLabel({
-        labelName: "DOWNLOAD BILL",
-        labelKey: "DOWNLOAD BILL"
+        labelKey: "WS_COMMON_DOWNLOAD_BILL"
       })
     },
     onClickDefination: {
@@ -36,9 +35,8 @@ export const viewBillFooter = getCommonApplyFooter({
       }
     },
     children: {
-      previousButtonLabel: getLabel({
-        labelName: "PAY",
-        labelKey: "PAY"
+      payButtonLabel: getLabel({
+        labelKey: "WS_COMMON_PAY"
       })
     },
     onClickDefination: {

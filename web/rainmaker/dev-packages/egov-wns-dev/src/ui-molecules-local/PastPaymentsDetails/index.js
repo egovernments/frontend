@@ -63,14 +63,14 @@ class IncompleteAssessments extends Component {
     const { urls, history, loading, sortedProperties } = this.props;
     return (
       <Screen loading={loading} className="screen-with-bredcrumb">
-        <BreadCrumbs url={urls} history="Completed Assements" />
+        <BreadCrumbs url={urls} history="" />
         {sortedProperties && (
           <AssessmentList
             onItemClick={this.onListItemClick}
             history={history}
             items={sortedProperties}
             innerDivStyle={innerDivStyle}
-            noAssessmentMessage="PT_NO_ASSESSMENT_MESSAGE2"
+            noAssessmentMessage="WS_NO_PAST_PAYMENTS_MESSAGE"
             button={false}
           />
         )}

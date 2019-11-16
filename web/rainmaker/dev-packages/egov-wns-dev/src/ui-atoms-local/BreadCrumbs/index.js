@@ -15,7 +15,7 @@ const BreadCrumbs = ({ url, history }) => {
       <div className="rainmaker-displayInline">
         <div style={style}> ❯ </div>
         <div>
-          <Label labelClassName="breadcrum-label-style" label="Completed Assements" />
+          <Label labelClassName="breadcrum-label-style" label="WS_COMMON_PAST_PAYMENTS" />
         </div>
       </div>
     </div>

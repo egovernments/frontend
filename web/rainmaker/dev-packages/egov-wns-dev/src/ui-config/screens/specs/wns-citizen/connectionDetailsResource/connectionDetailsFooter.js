@@ -35,8 +35,8 @@ export const connectionDetailsFooter = getCommonApplyFooter({
       }
     },
     children: {
-      previousButtonLabel: getLabel({
-        labelKey: "WS_COMMON_PAY"
+      printButton: getLabel({
+        labelKey: "WS_COMMON_BUTTON_PRINT"
       })
     },
     onClickDefination: {

@@ -2327,6 +2327,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
+  console.log(1, localisationLabels);
   switch (label) {
     case "Application No":
       return getLocaleLabels(
@@ -2344,7 +2345,7 @@ export const getTextToLocalMapping = label => {
     case "Service":
       return getLocaleLabels(
         "Service",
-        "Service",
+        "WS_COMMON_TABLE_COL_SERVICE_LABEL",
         localisationLabels
       );
     case "Owner Name":
@@ -2368,51 +2369,51 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-    case "INITIATED":
-      return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
-    case "APPLIED":
-      getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
-    case "PAID":
-      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+    // case "INITIATED":
+    //   return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
+    // case "APPLIED":
+    //   getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
+    // case "PAID":
+    //   getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
 
-    case "APPROVED":
-      return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
-    case "REJECTED":
-      return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
-    case "CANCELLED":
-      return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
-    case "PENDINGAPPROVAL ":
-      return getLocaleLabels(
-        "Pending for Approval",
-        "WF_NEWTL_PENDINGAPPROVAL",
-        localisationLabels
-      );
-    case "PENDINGPAYMENT":
-      return getLocaleLabels(
-        "Pending payment",
-        "WF_NEWTL_PENDINGPAYMENT",
-        localisationLabels
-      );
+    // case "APPROVED":
+    //   return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
+    // case "REJECTED":
+    //   return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
+    // case "CANCELLED":
+    //   return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
+    // case "PENDINGAPPROVAL ":
+    //   return getLocaleLabels(
+    //     "Pending for Approval",
+    //     "WF_NEWTL_PENDINGAPPROVAL",
+    //     localisationLabels
+    //   );
+    // case "PENDINGPAYMENT":
+    //   return getLocaleLabels(
+    //     "Pending payment",
+    //     "WF_NEWTL_PENDINGPAYMENT",
+    //     localisationLabels
+    //   );
 
-    case "FIELDINSPECTION":
-      return getLocaleLabels(
-        "Pending for Field Inspection",
-        "WF_NEWTL_FIELDINSPECTION",
-        localisationLabels
-      );
+    // case "FIELDINSPECTION":
+    //   return getLocaleLabels(
+    //     "Pending for Field Inspection",
+    //     "WF_NEWTL_FIELDINSPECTION",
+    //     localisationLabels
+    //   );
 
     case "Search Results for Water & Sewerage Connections":
       return getLocaleLabels(
-        "",
+        "Search Results for Water & Sewerage Connections",
         "WS_HOME_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
 
-    case "MY_APPLICATIONS":
-      return getLocaleLabels(
-        "My Applications",
-        "TL_MY_APPLICATIONS",
-        localisationLabels
-      );
+    // case "MY_APPLICATIONS":
+    //   return getLocaleLabels(
+    //     "My Applications",
+    //     "TL_MY_APPLICATIONS",
+    //     localisationLabels
+    //   );
   }
 };

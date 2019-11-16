@@ -20,7 +20,6 @@ export const getProperty = () => {
                         sm: 10
                     },
                     ...getCommonSubHeader({
-                        labelName: "Property Details",
                         labelKey: "WS_COMMON_PROP_DETAIL" //TL_COMMON_OWN_DETAILS
                     })
                 },
@@ -31,7 +30,6 @@ export const getProperty = () => {
             propertyCity: {
                 ...getLabelWithValue(
                     {
-                        labelName: "City",
                         labelKey: "WS_PROP_DETAIL_CITY"
                     }
                     // {
@@ -49,15 +47,13 @@ export const getProperty = () => {
             propertyDoorNo: {
                 ...getLabelWithValue(
                     {
-                        labelName: "Door / House No",
-                        labelKey: "WS_PROP_DETAIL_DHNO"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
+                        labelKey: "WS_PROP_DETAIL_DHNO"
                     },
                 )
             },
             propertyBuilding: {
                 ...getLabelWithValue(
                     {
-                        labelName: "Building / Company Name",
                         labelKey: "WS_PROP_DETAIL_BUILD_COMP_NAME"
                     })
             },
@@ -65,7 +61,6 @@ export const getProperty = () => {
             propertyStreet: {
                 ...getLabelWithValue(
                     {
-                        labelName: "Street Name",
                         labelKey: "WS_PROP_DETAIL_STREET_NAME"
                     },
                 )
@@ -73,7 +68,6 @@ export const getProperty = () => {
             propertyMohalla: {
                 ...getLabelWithValue(
                     {
-                        labelName: "Mohalla",
                         labelKey: "WS_PROP_DETAIL_MOHALLA"
                     },
                 )
@@ -81,7 +75,6 @@ export const getProperty = () => {
             propertyPincode: {
                 ...getLabelWithValue(
                     {
-                        labelName: "Pincode",
                         labelKey: "WS_PROP_DETAIL_PINCODE"
                     },
                 )
