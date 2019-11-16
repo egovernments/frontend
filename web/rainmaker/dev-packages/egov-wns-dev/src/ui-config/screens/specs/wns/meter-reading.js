@@ -7,8 +7,19 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { meterReadingEditable } from "./meterReading/meterReadingEditable";
 
-let enable = false;
-
+const addMeterReading = (state, dispatch) => {
+  showHideCard(true, dispatch)
+};
+const showHideCard = (booleanHideOrShow, dispatch) => {
+  dispatch(
+    handleField(
+      "meter-reading",
+      "components.div.children.viewOne",
+      "visible",
+      booleanHideOrShow
+    )
+  );
+}
 const header = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_CONSUMPTION_DETAILS_HEADER"
@@ -29,7 +40,7 @@ const header = getCommonContainer({
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "my-connections",
+  name: "meter-reading",
   beforeInitScreen: (action, state, dispatch) => {
     fetchData(action, state, dispatch);
     return action;
@@ -40,7 +51,7 @@ const screenConfig = {
       componentPath: "Form",
       props: {
         className: "common-div-css",
-        id: "search"
+        id: "meter-reading"
       },
       children: {
         header: header,
@@ -80,10 +91,11 @@ const screenConfig = {
           },
           onClickDefination: {
             action: "condition",
+            callBack: addMeterReading
           }
         },
         viewOne: {
-          // visible: enable,
+          visible: false,
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
           componentPath: "MeterReadingEditable"
@@ -99,14 +111,7 @@ const screenConfig = {
   }
 };
 
-const addMeterReading = () => {
-  console.log(2);
-  // enable = true;
-  // debugger
-  // console.log('hi');
-  // console.log(state);
-  // visiblitiy = true;
-}
+
 const demo = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Employee",
