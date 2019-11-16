@@ -21,6 +21,7 @@ const header = getCommonContainer({
       number: "WS-2018-PB-246464"
     }
   },
+
   classes: {
     root: "common-header-cont"
   }
@@ -76,14 +77,15 @@ const screenConfig = {
             buttonLabel: getLabel({
               labelName: "ADD METER READING",
               labelKey: "WS_CONSUMPTION_DETAILS_BUTTON_METER_READING"
-            })
+            }),
+            // onClickDefination: {
+            //   action: "condition",
+            //   callBack: addMeterReading
+            // }
           },
-          onClickDefination: {
-            action: "condition",
-          }
         },
         viewOne: {
-          // visible: enable,
+          visible: true,
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
           componentPath: "MeterReadingEditable"
@@ -99,13 +101,15 @@ const screenConfig = {
   }
 };
 
-const addMeterReading = () => {
-  console.log(2);
-  // enable = true;
-  // debugger
-  // console.log('hi');
-  // console.log(state);
-  // visiblitiy = true;
+const addMeterReading = (booleanHideOrShow = true, dispatch) => {
+  dispatch(
+    handleField(
+      "meter-reading",
+      "components.div.children.viewOne",
+      "visible",
+      booleanHideOrShow
+    )
+  );
 }
 const demo = getCommonCard({
   subHeader: getCommonTitle({
