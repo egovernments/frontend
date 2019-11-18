@@ -13,21 +13,24 @@ import { searchApiCall } from "./functions";
 
 export const meterReadingEditable = getCommonCard({
     appTradeAndMobNumContainer: getCommonContainer({
-        consumerNo: getLabel({
+        city: getSelectField({
             label: {
-                labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_LABEL"
+                labelKey: "WS_PROP_DETAIL_CITY"
             },
             placeholder: {
-                labelName: "Select ULB",
-                labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+                labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
             },
+            localePrefix: {
+                moduleName: "WF",
+                masterName: "FIRENOC"
+            },
+            jsonPath: "searchScreen.status",
+            sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+            required: false,
             gridDefination: {
-                xs: 3,
-                // sm: 4
-            },
-            // required: true,
-            errorMessage: "ERR_INVALID_ULB",
-            jsonPath: "searchScreen.ulb"
+                xs: 12,
+                sm: 4
+            }
         }),
         boundaryType: getSelectField({
             label: {
@@ -39,8 +42,8 @@ export const meterReadingEditable = getCommonCard({
                 labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
             },
             gridDefination: {
-                xs: 3,
-                // sm: 4
+                xs: 12,
+                sm: 4
             },
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
@@ -55,8 +58,8 @@ export const meterReadingEditable = getCommonCard({
                 labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
             },
             gridDefination: {
-                xs: 3,
-                // sm: 4
+                xs: 12,
+                sm: 4
             },
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
@@ -72,7 +75,7 @@ export const meterReadingEditable = getCommonCard({
                 labelKey: "WS_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
             },
             gridDefination: {
-                xs: 3,
+                xs: 12,
                 sm: 4
             },
             // required: true,
@@ -155,14 +158,14 @@ export const meterReadingEditable = getCommonCard({
                 },
                 props: {
                     variant: "outlined",
-                    // style: {
-                    //     color: "white",
+                    style: {
+                        color: "white",
 
-                    //     backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
-                    //     borderRadius: "2px",
-                    //     width: "80%",
-                    //     height: "48px"
-                    // }
+                        backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+                        borderRadius: "2px",
+                        width: "80%",
+                        height: "48px"
+                    }
                 },
                 children: {
                     buttonLabel: getLabel({
