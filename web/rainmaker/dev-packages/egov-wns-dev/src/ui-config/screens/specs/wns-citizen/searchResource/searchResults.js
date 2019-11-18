@@ -4,20 +4,52 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
+import { Link } from "react-router-dom"
 
 export const searchResults = {
   uiFramework: "custom-molecules",
   // moduleName: "egov-tradelicence",
   componentPath: "Table",
-  visible: true,
+  visible: false,
   props: {
     columns: [
       getTextToLocalMapping("Service"),
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("Consumer No"),
+      {
+        name: getTextToLocalMapping("Application No"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <Link to="home">
+              {value}
+            </Link>
+          )
+        }
+      },
+      {
+        name: getTextToLocalMapping("Consumer No"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <Link to="home">
+              {value}
+            </Link>
+          )
+        }
+      },
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Status"),
       getTextToLocalMapping("Due"),
+      {
+        name: getTextToLocalMapping(" "),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <Link to="home" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+              Pay now
+            </Link>
+          )
+        }
+      },
       {
         name: "tenantId",
         options: {

@@ -32,6 +32,7 @@ const header = getCommonContainer({
       number: "WS-2018-PB-246464"
     }
   },
+
   classes: {
     root: "common-header-cont"
   }
@@ -87,7 +88,11 @@ const screenConfig = {
             buttonLabel: getLabel({
               labelName: "ADD METER READING",
               labelKey: "WS_CONSUMPTION_DETAILS_BUTTON_METER_READING"
-            })
+            }),
+            // onClickDefination: {
+            //   action: "condition",
+            //   callBack: addMeterReading
+            // }
           },
           onClickDefination: {
             action: "condition",
@@ -110,7 +115,6 @@ const screenConfig = {
     }
   }
 };
-
 
 const demo = getCommonCard({
   subHeader: getCommonTitle({
