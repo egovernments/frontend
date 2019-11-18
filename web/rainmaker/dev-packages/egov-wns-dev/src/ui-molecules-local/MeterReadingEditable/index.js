@@ -104,9 +104,9 @@ class MeterReading extends React.Component {
                             </Grid>
                             <Grid item xs={12} sm={3}>
                                 <TextField
-                                 hintText={<LabelContainer labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_PLACEHOLDER" />}
-                                 style={styles.customWidth}
-                                 hintStyle={styles.hintStyle}
+                                    hintText={<LabelContainer labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_PLACEHOLDER" />}
+                                    style={styles.customWidth}
+                                    hintStyle={styles.hintStyle}
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
 
@@ -124,27 +124,14 @@ class MeterReading extends React.Component {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={3}>
-                                {/* <Col xs={12} sm={3} md={6}> */}
-                                <DatePicker
-                                    hintText={<LabelContainer labelKey="WS_CONSUMPTION_DETAILS_ENTER_DATE_PLACEHOLDER" />}
-                                    floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
-                                    underlineStyle={styles.underlineStyle}
-                                    underlineFocusStyle={styles.underlineFocusStyle}
-                                    style={styles.topGap}
-                                />
-                                {/* </Col> */}
-                                {/* <DatePicker
-                                    onChange={(first, object) => {
-                                        let e = { target: { value: object } };
-                                        handleFieldChange("receiptDate", e.target.value);
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
                                     }}
-                                    formatDate={(date) => changeDateToFormat(date)}
-                                    textFieldStyle={{ cursor: "pointer" }}
-                                    {...fields.receiptDate}
-                                /> */}
-                                {/* <div className="datepicker-icon" onClick={(e) => e.preventDefault}>
-                                    <Icon action="action" name="date-range" />
-                                </div> */}
+                                />
                             </Grid>
                         </Grid>
                         <Grid container >
@@ -171,7 +158,7 @@ class MeterReading extends React.Component {
                                     <LabelContainer
                                         labelKey="WS_COMMON_BUTTON_SAVE"
                                         fontSize={14}
-                                        style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                                    // style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                                     />
                                 </Button>
                             </Grid>
