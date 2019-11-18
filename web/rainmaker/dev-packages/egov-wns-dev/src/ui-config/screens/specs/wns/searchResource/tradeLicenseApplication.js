@@ -25,7 +25,7 @@ export const tradeLicenseApplication = getCommonCard({
       },
       placeholder: {
         labelName: "Select ULB",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -34,24 +34,6 @@ export const tradeLicenseApplication = getCommonCard({
       // required: true,
       errorMessage: "ERR_INVALID_ULB",
       jsonPath: "searchScreen.ulb"
-    }),
-    boundaryType: getSelectField({
-      label: {
-        labelName: "Boundary Type",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Boundary Type",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.licenseNumber"
     }),
 
     applicationNo: getTextField({
