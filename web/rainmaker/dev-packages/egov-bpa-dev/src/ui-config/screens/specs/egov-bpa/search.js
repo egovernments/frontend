@@ -21,6 +21,7 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -36,6 +37,13 @@ const pageResetAndChange = (state, dispatch) => {
     prepareFinalObject("BPA's", [{ "bpaDetails.bpaType": "NEW" }])
   );
   // dispatch(setRoute("/tradelicence/apply"));
+};
+
+const startApplyFlow = (state, dispatch) => {
+  dispatch(prepareFinalObject("BPAs", []));
+  const applyUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/apply` : `/egov-bpa/apply`;
+  dispatch(setRoute(applyUrl));
 };
 
 const NOCSearchAndResult = {
@@ -143,6 +151,7 @@ const NOCSearchAndResult = {
                 callBack: (state, dispatch) => {
                   pageResetAndChange(state, dispatch);
                   showHideAdhocPopup(state, dispatch, "search");
+                  startApplyFlow(state, dispatch);
                 }
               },
               // roleDefination: {
