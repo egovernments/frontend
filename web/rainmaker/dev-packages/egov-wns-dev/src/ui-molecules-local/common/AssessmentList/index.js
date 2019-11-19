@@ -5,6 +5,7 @@ import PTList from "./components/PTList";
 import BlankAssessment from "../BlankAssessment";
 import DropDown from "./components/DropDown";
 import "./index.css";
+import { Link } from "react-router-dom"
 
 const getItemStatus = (item, history) => {
   let status = item.status;
@@ -18,11 +19,14 @@ const getItemStatus = (item, history) => {
     case "Paid":
       return (
         <div>
-          <div className="assessment-displayInline" style={item.date ? { marginTop: 8 } : { marginTop: "0px" }}>
+          {/* <div className="assessment-displayInline" style={item.date ? { marginTop: 8 } : { marginTop: "0px" }}>
             <Label label={item.status} labelStyle={{ marginLeft: 10 }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div style={{ height: "30px", marginTop: "8px" }}>{history && <DropDown history={history} item={item} />}</div>
+          <div className="assessment-displayInline" style={item.date ? { marginTop: 8 } : { marginTop: "0px" }}>
+            <Label label={item.status} labelStyle={{ marginLeft: 10 }} color={"#22b25f"} />
+            <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
+          </div> */}
         </div>
       );
       break;
@@ -47,9 +51,16 @@ const getItemStatus = (item, history) => {
       break;
     case "Saved Draft":
       return (
-        <div className="assessment-displayInline" style={{ marginTop: "10px" }} >
-          <Label label="paid" labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
-          <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
+        <div>
+          <div className="assessment-displayInline" style={{ marginTop: "10px" }} >
+            <Label label="paid" labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
+            <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
+          </div>
+          <div className="assessment-displayInline" style={{ paddingTop: "10px" }}>
+            <Link to="home" style={{ color: '#fe7a51' }}>
+              DOWNLOAD RECEIPT
+            </Link>
+          </div>
         </div>
       );
       break;
@@ -60,10 +71,10 @@ const getItemStatus = (item, history) => {
             label={<Label buttonLabel={true} label="PT_PAYMENT_ASSESS_AND_PAY" fontSize="12px" />}
             primary={true}
             onClick={(e) => {
-              
+
               history.push(
                 `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.assessmentNo}&isReassesment=true&propertyId=${
-                  item.propertyId
+                item.propertyId
                 }&tenantId=${item.tenantId}`
               );
             }}
@@ -92,8 +103,8 @@ const getRightIconItems = (item, history) => {
       </div>
     </div>
   ) : (
-    item.rightIcon
-  );
+      item.rightIcon
+    );
 };
 
 const getListItems = (items, history) => {
@@ -108,8 +119,8 @@ const getListItems = (items, history) => {
             (typeof item.secondaryText === "object" ? (
               item.secondaryText
             ) : (
-              <Label label={item.secondaryText} fontSize="14px" color="#484848" containerStyle={{ marginTop: "15px" }} />
-            )),
+                <Label label={item.secondaryText} fontSize="14px" color="#484848" containerStyle={{ marginTop: "15px" }} />
+              )),
           route: item.route && item.route,
           leftIcon: item.leftIcon,
           rightIcon: getRightIconItems(item, history),
@@ -126,8 +137,8 @@ const getListItems = (items, history) => {
                     <Label label={nestedItem.primaryText} fontSize="14px" color="#484848" containerStyle={{ marginLeft: "8px" }} />
                   </div>
                 ) : (
-                  nestedItem.primaryText
-                ),
+                    nestedItem.primaryText
+                  ),
                 secondaryText: nestedItem.secondaryText,
                 route: nestedItem.route,
                 rightIcon: getRightIconItems(nestedItem, history),
@@ -162,15 +173,15 @@ const AssessmentList = ({
       history={history}
     />
   ) : (
-    <PTList
-      items={getListItems(items, history)}
-      history={history}
-      onItemClick={onItemClick}
-      innerDivStyle={innerDivStyle}
-      listItemStyle={listItemStyle}
-      hoverColor={hoverColor}
-    />
-  );
+      <PTList
+        items={getListItems(items, history)}
+        history={history}
+        onItemClick={onItemClick}
+        innerDivStyle={innerDivStyle}
+        listItemStyle={listItemStyle}
+        hoverColor={hoverColor}
+      />
+    );
 };
 
 export default AssessmentList;

@@ -44,7 +44,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+            <Link to="viewBill" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
               Pay now
             </Link>
           )
@@ -67,9 +67,9 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
-      }
+      // onRowClick: (row, index) => {
+      //   onRowClick(row);
+      // }
     },
     customSortColumn: {
       column: "Application Date",
