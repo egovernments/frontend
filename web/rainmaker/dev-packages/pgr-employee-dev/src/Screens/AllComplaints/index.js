@@ -45,9 +45,9 @@ class AllComplaints extends Component {
     let rawRole =
       userInfo && userInfo.roles && userInfo.roles[0].code.toUpperCase();
     //const numberOfComplaints = role === "employee" ? numEmpComplaint : role === "csr" ? numCSRComplaint : 0;
-    if (rawRole === "PGR-ADMIN") {
-      this.props.history.push("/report/rainmaker-pgr/DepartmentWiseReport");
-    } else {
+    // if (rawRole === "PGR-ADMIN") {
+    //   this.props.history.push("/report/rainmaker-pgr/DepartmentWiseReport");
+    // } else {
       let { fetchComplaints } = this.props;
 
       let complaintCountRequest = [
@@ -139,7 +139,7 @@ class AllComplaints extends Component {
           true
         );
       }
-    }
+    
     let inputType = document.getElementsByTagName("input");
     for (let input in inputType) {
       if (inputType[input].type === "number") {
