@@ -212,7 +212,7 @@ const mapStateToProps = state => {
             </div>
             <div style={{ height: "auto" }}>
               <Label
-                label={"Consumer No. : PB-WS-CN-2019-23"}
+                label={"Consumer No : PB-WS-CN-2019-23"}
                 labelStyle={secondaryTextLabelStyle}
                 fontSize="14px"
                 containerStyle={secondaryTextContainer}
@@ -221,7 +221,16 @@ const mapStateToProps = state => {
             </div>
             <div style={{ height: "auto" }}>
               <Label
-                label={"Owner Name" + ":" + "Satinder Pal"}
+                label={"Owner Name : Satinder Pal"}
+                labelStyle={secondaryTextLabelStyle}
+                fontSize="14px"
+                containerStyle={secondaryTextContainer}
+                color="#484848"
+              />
+            </div>
+            <div style={{ height: "auto" }}>
+              <Label
+                label={"Amount paid : 277"}
                 labelStyle={secondaryTextLabelStyle}
                 fontSize="14px"
                 containerStyle={secondaryTextContainer}
