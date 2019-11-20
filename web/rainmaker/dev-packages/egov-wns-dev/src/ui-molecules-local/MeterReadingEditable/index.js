@@ -48,8 +48,9 @@ class MeterReading extends React.Component {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={3}>
+                        
                                 <Label
-                                    labelName="WS-2018-PB-242565"
+                                    labelName="Q4-2018-19"
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                                 />

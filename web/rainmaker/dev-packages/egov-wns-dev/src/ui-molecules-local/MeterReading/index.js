@@ -46,7 +46,7 @@ class MeterReading extends React.Component {
               </Grid>
               <Grid item xs={3}>
                 <Label
-                  labelName="WS-2018-PB-242565"
+                  labelName="Q3-2018-19"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                 />
@@ -94,7 +94,7 @@ class MeterReading extends React.Component {
               </Grid>
               <Grid item xs={3}>
                 <Label
-                  labelName="06-10-2019"
+                  labelName="12/12/2018"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                 />
@@ -126,7 +126,7 @@ class MeterReading extends React.Component {
               </Grid>
               <Grid item xs={3}>
                 <Label
-                  labelName="06-11-2019"
+                  labelName="12/12/2018"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                 />

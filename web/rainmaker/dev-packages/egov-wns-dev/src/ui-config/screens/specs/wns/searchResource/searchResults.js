@@ -14,6 +14,18 @@ export const searchResults = {
   props: {
     columns: [
       {
+        name:getTextToLocalMapping("Service"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: 'black'}}>
+              {value}
+            </span>
+          )
+        }
+      },
+      
+      {
         name: getTextToLocalMapping("Application No"),
         options: {
           filter: false,
@@ -94,6 +106,7 @@ const onRowClick = rowData => {
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
         }`;
+        
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
