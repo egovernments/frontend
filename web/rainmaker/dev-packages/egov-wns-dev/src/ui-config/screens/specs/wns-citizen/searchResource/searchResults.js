@@ -13,15 +13,14 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Service"),
       {
-        name: getTextToLocalMapping("Application No"),
+        name: getTextToLocalMapping("Service"),
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home">
+            <span style={{ color: 'black' }}>
               {value}
-            </Link>
+            </span>
           )
         }
       },
@@ -30,7 +29,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home">
+            <Link to="connection-details">
               {value}
             </Link>
           )
