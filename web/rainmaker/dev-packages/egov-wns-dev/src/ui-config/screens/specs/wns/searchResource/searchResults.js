@@ -14,6 +14,18 @@ export const searchResults = {
   props: {
     columns: [
       {
+        name:getTextToLocalMapping("Service"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: 'black'}}>
+              {value}
+            </span>
+          )
+        }
+      },
+      
+      {
         name: getTextToLocalMapping("Application No"),
         options: {
           filter: false,
@@ -66,9 +78,9 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
-      }
+      // onRowClick: (row, index) => {
+      //   onRowClick(row);
+      // }
     },
     customSortColumn: {
       column: "Application Date",
@@ -94,6 +106,7 @@ const onRowClick = rowData => {
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
         }`;
+        
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
