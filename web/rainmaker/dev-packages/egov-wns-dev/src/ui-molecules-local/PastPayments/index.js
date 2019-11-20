@@ -17,11 +17,16 @@ const styles = theme => ({
 });
 
 class PastPayments extends React.Component {
+
+  clickHandler = () => {
+    window.location.href = "pastPayments"
+  }
+
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <List component="nav">
+        <List component="nav" onClick={this.clickHandler}>
           <ListItem button>
             <ListItemText
               primary={
