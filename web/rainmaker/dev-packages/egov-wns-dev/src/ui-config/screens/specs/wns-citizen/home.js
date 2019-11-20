@@ -1,10 +1,10 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { fetchData } from "./citizenSearchResource/citizenFunctions";
-// import { cityPicker } from "./citypicker";
-import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
-import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import "../utils/index.css";
+import PayWnsBillIcon from "../../../../ui-atoms-local/Icons/PayWnsBillIcon/index";
+import MyConnectionsIcon from "../../../../ui-atoms-local/Icons/MyConnectionsIcon/index";
+
 const header = getCommonHeader(
   {
     labelKey: "WS_COMMON_HEADER"
@@ -21,14 +21,14 @@ const cardItems = [
     label: {
       labelKey: "WS_COMMON_PAY_WS_BILL_HEADER",
     },
-    icon: <TradeLicenseIcon />,
+    icon: <PayWnsBillIcon />,
     route: "viewBill"
   },
   {
     label: {
       labelKey: "WS_MYCONNECTIONS_HEADER",
     },
-    icon: <FormIcon />,
+    icon: <MyConnectionsIcon />,
     route: "my-connections"
   }
 ];
