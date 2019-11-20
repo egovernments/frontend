@@ -54,7 +54,7 @@ const getMessageFromLocalization = code => {
   return messageObject ? messageObject.message : code;
 };
 
-export const loadUlbLogo = tenantid => {
+export const loadUlbLogo = logoUrl => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
   img.onload = function() {
@@ -66,7 +66,7 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = logourl;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -339,6 +339,8 @@ export const loadMdmsData = async tenantid => {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
       return item.code == tenantid;
     });
+    /** Logo loaded and stored in local storage in base64 */
+    loadUlbLogo(get(ulbData, "logoId", "NA"));
     /** START Corporation name generation logic */
     const ulbGrade = get(ulbData, "city.ulbGrade", "NA")
       ? getUlbGradeLabel(get(ulbData, "city.ulbGrade", "NA"))
@@ -378,8 +380,6 @@ export const loadUserNameData = async uuid => {
 
 /** Data used for creation of receipt is generated and stored in local storage here */
 export const loadReceiptGenerationData = (applicationNumber, tenant) => {
-  /** Logo loaded and stored in local storage in base64 */
-  loadUlbLogo(tenant);
   loadApplicationData(applicationNumber, tenant); //PB-TL-2018-09-27-000004
   loadReceiptData(applicationNumber, tenant); //PT-107-001330:AS-2018-08-29-001426     //PT consumerCode
   loadMdmsData(tenant);
