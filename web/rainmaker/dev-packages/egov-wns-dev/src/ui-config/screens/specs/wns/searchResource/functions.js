@@ -99,9 +99,11 @@ export const searchApiCall = async (state, dispatch) => {
   //   }
 
   // const response = await getSearchResults(queryObject);
-  const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200" }] }
+  const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
   try {
     let data = response.Licenses.map(item => ({
+      [getTextToLocalMapping("Service")]:
+        item.Service || "-",
       [getTextToLocalMapping("Application No")]:
         item.applicationNumber || "-",
       [getTextToLocalMapping("Consumer No")]: item.consumerNumber || "-",
