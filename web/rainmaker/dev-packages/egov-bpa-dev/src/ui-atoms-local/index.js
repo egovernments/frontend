@@ -7,7 +7,12 @@ const TestAtoms = Loadable({
   loader: () => import("./TestAtoms"),
   loading: () => <Loading />
 });
+const AutoSuggest =  Loadable({
+  loader: () => import("./AutoSuggest"),
+  loading: () => <Loading />
+});
 
 export {
-  TestAtoms
+  TestAtoms,
+  AutoSuggest
 };

@@ -84,39 +84,39 @@ const moveToReview = (state, dispatch) => {
   }
 };
 
-// const getMdmsData = async (state, dispatch) => {
-//   let tenantId = get(
-//     state.screenConfiguration.preparedFinalObject,
-//     "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-//   );
-//   let mdmsBody = {
-//     MdmsCriteria: {
-//       tenantId: tenantId,
-//       moduleDetails: [
-//         { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
-//       ]
-//     }
-//   };
-//   try {
-//     let payload = await httpRequest(
-//       "post",
-//       "/egov-mdms-service/v1/_search",
-//       "_search",
-//       [],
-//       mdmsBody
-//     );
+const getMdmsData = async (state, dispatch) => {
+  let tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+  );
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+      ]
+    }
+  };
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
 
-//     dispatch(
-//       prepareFinalObject(
-//         "applyScreenMdmsData.FireNoc.Documents",
-//         payload.MdmsRes.FireNoc.Documents
-//       )
-//     );
-//     prepareDocumentsUploadData(state, dispatch);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.FireNoc.Documents",
+        payload.MdmsRes.FireNoc.Documents
+      )
+    );
+    prepareDocumentsUploadData(state, dispatch);
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const callBackForNext = async (state, dispatch) => {
   let activeStep = get(

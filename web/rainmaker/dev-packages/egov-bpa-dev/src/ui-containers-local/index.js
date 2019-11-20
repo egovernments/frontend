@@ -19,8 +19,14 @@ const DocumentListContainer = Loadable({
   loading: () => <Loading />
 });
 
+const AutosuggestContainer = Loadable({
+  loader: () => import("./AutosuggestContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   TestContainer,
-  DocumentListContainer
+  DocumentListContainer,
+  AutosuggestContainer
 };

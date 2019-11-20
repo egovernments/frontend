@@ -16,7 +16,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAServiceSubServiceRiskContainer.children.serviceType",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.applicationType",
       "props.value",
       ""
     )
@@ -24,7 +24,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAServiceSubServiceRiskContainer.children.serviceSubType",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.serviceType",
       "props.value",
       ""
     )
@@ -32,7 +32,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAServiceSubServiceRiskContainer.children.riskType",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.riskType",
       "props.value",
       ""
     )
@@ -40,7 +40,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appStatusToFromDateAndJurisdictionContainer.children.applicationStatus",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.applicationStatus",
       "props.value",
       ""
     )
@@ -48,7 +48,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appStatusToFromDateAndJurisdictionContainer.children.fromDate",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.fromDate",
       "props.value",
       ""
     )
@@ -56,7 +56,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appStatusToFromDateAndJurisdictionContainer.children.toDate",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.toDate",
       "props.value",
       ""
     )
@@ -64,12 +64,29 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appStatusToFromDateAndJurisdictionContainer.children.Jurisdiction",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.bpaNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.tenantID",
       "props.value",
       ""
     )
   );
 };
+
 
 export const BPAApplication = getCommonCard({
   subHeader: getCommonTitle({
@@ -78,23 +95,23 @@ export const BPAApplication = getCommonCard({
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "NOC_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "Provide at least one parameter to search for an application"
   }),
-  appBPAServiceSubServiceRiskContainer: getCommonContainer({
+  appBPAHomeSearchResultsContainer: getCommonContainer({
 
-    serviceType: getSelectField({
+    applicationType: getSelectField({
       label: {
-        labelName: "Service Type",
-        labelKey: "Service Type"
+        labelName: "Application Type",
+        labelKey: "Application Type"
       },
       placeholder: {
-        labelName: "Select Service Type",
-        labelKey: "Service Type"
+        labelName: "Select Application Type",
+        labelKey: "Select Application Type"
       },
 
       localePrefix: {
         moduleName: "WF",
-        masterName: "FIRENOC"
+        masterName: "BPA"
       },
       jsonPath: "searchScreen.serviceType",
       sourceJsonPath: "applyScreenMdmsData.searchScreen.serviceType",
@@ -125,14 +142,14 @@ export const BPAApplication = getCommonCard({
       ]
     }),
 
-    serviceSubType: getSelectField({
+    serviceType: getSelectField({
       label: {
-        labelName: "Service Sub type",
-        labelKey: "Service Sub type"
+        labelName: "Service type",
+        labelKey: "Service type"
       },
       placeholder: {
-        labelName: "Select Service Sub type",
-        labelKey: "Service Sub type"
+        labelName: "Select Service type",
+        labelKey: "Select Service type"
       },
 
       localePrefix: {
@@ -176,7 +193,7 @@ export const BPAApplication = getCommonCard({
       },
       placeholder: {
         labelName: "Select Risk Type",
-        labelKey: "Risk Type"
+        labelKey: "Select Risk Type"
       },
 
       localePrefix: {
@@ -210,18 +227,16 @@ export const BPAApplication = getCommonCard({
           code: "CANCELLED"
         }
       ]
-    })
+    }),
 
-  }),
-  appStatusToFromDateAndJurisdictionContainer: getCommonContainer({
     applicationStatus: getSelectField({
       label: {
         labelName: "Application status",
-        labelKey: "NOC_APPLICATION_NOC_LABEL"
+        labelKey: "Application status"
       },
       placeholder: {
         labelName: "Select Application Status",
-        labelKey: "NOC_APPLICATION_PLACEHOLDER"
+        labelKey: "Select Application Status"
       },
 
       localePrefix: {
@@ -230,61 +245,6 @@ export const BPAApplication = getCommonCard({
       },
       jsonPath: "searchScreen.status",
       sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-      required: false,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-
-    fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "NOC_FROM_DATE_LABEL" },
-      placeholder: {
-        labelName: "From Date",
-        labelKey: "NOC_FROM_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.fromDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: false
-    }),
-
-    toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
-      placeholder: {
-        labelName: "To Date",
-        labelKey: "NOC_TO_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.toDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: false
-    }),
-
-    Jurisdiction: getSelectField({
-      label: {
-        labelName: "Jurisdiction",
-        labelKey: "Jurisdiction"
-      },
-      placeholder: {
-        labelName: "Select Jurisdiction",
-        labelKey: "Jurisdiction"
-      },
-
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "BPA"
-      },
-      jsonPath: "searchScreen.Jurisdiction",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.Jurisdiction",
       required: false,
       gridDefination: {
         xs: 12,
@@ -312,7 +272,100 @@ export const BPAApplication = getCommonCard({
       ]
     }),
 
+    fromDate: getDateField({
+      label: { labelName: "From Date", labelKey: "BPA_FROM_DATE_LABEL" },
+      placeholder: {
+        labelName: "From Date",
+        labelKey: "BPA_FROM_DATE_PLACEHOLDER"
+      },
+      jsonPath: "searchScreen.fromDate",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      pattern: getPattern("Date"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      required: false
+    }),
+
+    toDate: getDateField({
+      label: { labelName: "To Date", labelKey: "BPA_TO_DATE_LABEL" },
+      placeholder: {
+        labelName: "To Date",
+        labelKey: "BPA_TO_DATE_PLACEHOLDER"
+      },
+      jsonPath: "searchScreen.toDate",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      pattern: getPattern("Date"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      required: false
+    }),
+
+    bpaNo: getTextField({
+      label: {
+        labelName: "Application number",
+        labelKey: "Application number"
+      },
+      placeholder: {
+        labelName: "Enter Application number",
+        labelKey: "Enter Application number"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
+    }),
+    
+    ownerMobNo: getTextField({
+      label: {
+        labelName: "Mobile Number",
+        labelKey: "Mobile Number"
+      },
+      placeholder: {
+        labelName: "Enter your mobile No.",
+        labelKey: "Enter your mobile No"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      iconObj: {
+        label: "+91 |",
+        position: "start"
+      },
+      required: false,
+      pattern: getPattern("MobileNo"),
+      jsonPath: "searchScreen.mobileNumber",
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
+    }),
+
+    tenantID: getTextField({
+      label: {
+        labelName: "Tenant ID",
+        labelKey: "Tenant ID"
+      },
+      placeholder: {
+        labelName: "Enter Tenant ID",
+        labelKey: "Enter Tenant ID"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: true,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
+    }),
+
   }),
+
 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({

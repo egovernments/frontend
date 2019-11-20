@@ -8,7 +8,8 @@ import { footer } from "./applyResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
 import {
   buildingPlanScrutinyDetails,
-  blockWiseOccupancyAndUsageDetails
+  blockWiseOccupancyAndUsageDetails,
+  demolitiondetails
 } from "./applyResource/scrutinyDetails";
 // import { propertyDetails } from "./applyResource/propertyDetails";
 // import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
@@ -16,7 +17,7 @@ import { applicantDetails } from "./applyResource/applicantDetails";
 import {
   boundaryDetails,
   detailsofplot,
-  demolitiondetails
+  proposedBuildingDetails
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
@@ -44,10 +45,10 @@ import {
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "" },
   { labelName: "Scrutiny Details", labelKey: "" },
-  { labelName: "Applicant Details", labelKey: "" },
-  { labelName: "Boundary Details", labelKey: "" },
+  { labelName: "Owner Info", labelKey: "" },
+  { labelName: "Plot & Boundary Info", labelKey: "" },
   { labelName: "Document Details", labelKey: "" },
-  { labelName: "Update NOC Details", labelKey: "" }
+  { labelName: "NOC Details", labelKey: "" }
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
@@ -109,7 +110,8 @@ export const formwizardSecondStep = {
   },
   children: {
     buildingPlanScrutinyDetails,
-    blockWiseOccupancyAndUsageDetails
+    blockWiseOccupancyAndUsageDetails,
+    demolitiondetails
   },
   visible: false
 };
@@ -135,7 +137,7 @@ export const formwizardFourthStep = {
   children: {
     boundaryDetails,
     detailsofplot,
-    demolitiondetails
+    proposedBuildingDetails
   },
   visible: false
 };
