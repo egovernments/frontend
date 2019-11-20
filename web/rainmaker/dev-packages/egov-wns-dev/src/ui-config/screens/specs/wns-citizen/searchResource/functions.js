@@ -103,8 +103,6 @@ export const searchApiCall = async (state, dispatch) => {
 
       [getTextToLocalMapping("Service")]:
         item.Service || "-",
-      [getTextToLocalMapping("Application No")]:
-        item.applicationNumber || "-",
       [getTextToLocalMapping("Consumer No")]: item.consumerNumber || "-",
       [getTextToLocalMapping("Owner Name")]:
         item.ownerName || "-",

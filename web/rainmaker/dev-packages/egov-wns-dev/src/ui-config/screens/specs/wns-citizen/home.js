@@ -22,7 +22,7 @@ const cardItems = [
       labelKey: "WS_COMMON_PAY_WS_BILL_HEADER",
     },
     icon: <PayWnsBillIcon />,
-    route: "viewBill"
+    route: "search"
   },
   {
     label: {

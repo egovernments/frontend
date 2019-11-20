@@ -13,15 +13,14 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Service"),
       {
-        name: getTextToLocalMapping("Application No"),
+        name: getTextToLocalMapping("Service"),
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home">
+            <span style={{ color: 'black' }}>
               {value}
-            </Link>
+            </span>
           )
         }
       },
@@ -30,7 +29,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home">
+            <Link to="connection-details">
               {value}
             </Link>
           )
@@ -44,7 +43,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+            <Link to="viewBill" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
               Pay now
             </Link>
           )
@@ -67,9 +66,9 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
-      }
+      // onRowClick: (row, index) => {
+      //   onRowClick(row);
+      // }
     },
     customSortColumn: {
       column: "Application Date",

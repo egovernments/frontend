@@ -55,7 +55,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+            <Link to="" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
               Pay now
             </Link>
           )

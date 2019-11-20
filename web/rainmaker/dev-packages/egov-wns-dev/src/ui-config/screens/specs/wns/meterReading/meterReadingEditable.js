@@ -62,7 +62,7 @@ export const meterReadingEditable = getCommonCard({
                 sm: 4
             },
             required: false,
-            pattern: /^[a-zA-Z0-9-]*$/i,
+            pattern: /^[0-9]*$/i,
             // errorMessage: "ERR_INVALID_CONSUMER_NO",
             // jsonPath: "searchScreen.applicationNumber"
         }),

@@ -61,14 +61,11 @@ class MeterReading extends React.Component {
                 />
               </Grid>
               <Grid item xs={3}>
-              <Label
+                  <Label
                     labelName="Working"
                     fontSize={14}
                     style={{ fontSize: 14 }}
                   />
-                {/* <Link to="connection-details"> */}
-                
-                {/* </Link> */}
               </Grid>
             </Grid>
             <Grid container style={{ marginBottom: 12 }}>

@@ -377,28 +377,28 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "view-bill",
   beforeInitScreen: (action, state, dispatch) => {
-    const status = getQueryArg(window.location.href, "status");
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    // const status = getQueryArg(window.location.href, "status");
+    // const tenantId = getQueryArg(window.location.href, "tenantId");
+    // applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
-    set(
-      action.screenConfig,
-      "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
-      applicationNumber
-    );
-    if (status !== "pending_payment") {
-      set(
-        action.screenConfig,
-        "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
-        false
-      );
-    }
+  //   set(
+  //     action.screenConfig,
+  //     "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
+  //     applicationNumber
+  //   );
+  //   if (status !== "pending_payment") {
+  //     set(
+  //       action.screenConfig,
+  //       "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
+  //       false
+  //     );
+  //   }
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessService", value: "newTL" }
     ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    beforeInitFn(action, state, dispatch, applicationNumber);
+  // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  // beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
 
