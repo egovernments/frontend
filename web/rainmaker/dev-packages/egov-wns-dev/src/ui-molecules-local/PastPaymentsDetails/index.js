@@ -210,10 +210,9 @@ const mapStateToProps = state => {
                 color="#484848"
               />
             </div>
-
             <div style={{ height: "auto" }}>
               <Label
-                label={getCommaSeperatedAddress(address, cities)}
+                label={"Consumer No. : PB-WS-CN-2019-23"}
                 labelStyle={secondaryTextLabelStyle}
                 fontSize="14px"
                 containerStyle={secondaryTextContainer}
@@ -222,7 +221,16 @@ const mapStateToProps = state => {
             </div>
             <div style={{ height: "auto" }}>
               <Label
-                label="Assesment No : AS-2019-11-17864"
+                label={"Owner Name" + ":" + "Satinder Pal"}
+                labelStyle={secondaryTextLabelStyle}
+                fontSize="14px"
+                containerStyle={secondaryTextContainer}
+                color="#484848"
+              />
+            </div>
+            <div style={{ height: "auto" }}>
+              <Label
+                label={getCommaSeperatedAddress(address, cities)}
                 labelStyle={secondaryTextLabelStyle}
                 fontSize="14px"
                 containerStyle={secondaryTextContainer}
