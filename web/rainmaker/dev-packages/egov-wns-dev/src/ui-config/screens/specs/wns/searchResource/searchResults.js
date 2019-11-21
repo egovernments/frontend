@@ -25,17 +25,17 @@ export const searchResults = {
         }
       },
       
-      {
-        name: getTextToLocalMapping("Application No"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <Link to="connection-details">
-              {value}
-            </Link>
-          )
-        }
-      },
+      // {
+      //   name: getTextToLocalMapping("Application No"),
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: value => (
+      //       <Link to="connection-details">
+      //         {value}
+      //       </Link>
+      //     )
+      //   }
+      // },
       {
         name: getTextToLocalMapping("Consumer No"),
         options: {

@@ -11,6 +11,57 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
 
+const resetFields = (state, dispatch) => {
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.NOCNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.fromDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.toDate",
+      "props.value",
+      ""
+    )
+  );
+};
+
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelKey: "WS_SEARCH_CONNECTION_HEADER"
@@ -36,22 +87,22 @@ export const tradeLicenseApplication = getCommonCard({
       jsonPath: "searchScreen.ulb"
     }),
 
-    applicationNo: getTextField({
-      label: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-      },
-      placeholder: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      // errorMessage: "ERR_INVALID_CONSUMER_NO",
-      // jsonPath: "searchScreen.applicationNumber"
-    }),
+    // applicationNo: getTextField({
+    //   label: {
+    //     labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+    //   },
+    //   placeholder: {
+    //     labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   },
+    //   required: false,
+    //   pattern: /^[a-zA-Z0-9-]*$/i,
+    //   // errorMessage: "ERR_INVALID_CONSUMER_NO",
+    //   // jsonPath: "searchScreen.applicationNumber"
+    // }),
 
     ownerMobNo: getTextField({
       label: {
@@ -125,37 +176,62 @@ export const tradeLicenseApplication = getCommonCard({
   }),
 
   button: getCommonContainer({
-    // firstCont: {
-
     buttonContainer: getCommonContainer({
-      firstCont: {
+      mihyEmptyRow: {
         uiFramework: "custom-atoms",
-        componentPath: "Div",
+        componentPath: "Item",
+        props: {
+          sm: 2
+        }
+      },
+      resetButton: {
+        componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 4,
+          align: "center"
+        },
+        props: {
+          variant: "outlined",
+          style: {
+            color: "#FE7A51",
+            borderColor: "#FE7A51",
+            width: "70%",
+            height: "48px",
+            margin: "8px",
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelKey: "WS_SEARCH_CONNECTION_RESET_BUTTON"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetFields
         }
       },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 4,
+          align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-
+            margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "80%",
+            width: "70%",
             height: "48px"
           }
         },
         children: {
           buttonLabel: getLabel({
-            labelKey: "WS_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
           })
         },
         onClickDefination: {
@@ -163,14 +239,13 @@ export const tradeLicenseApplication = getCommonCard({
           callBack: searchApiCall
         }
       },
-      lastCont: {
+      mihyEmptyRow: {
         uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
+        componentPath: "Item",
+        props: {
+          sm: 2
         }
-      }
+      },
     })
   })
 });
