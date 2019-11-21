@@ -6,6 +6,7 @@ import BlankAssessment from "../BlankAssessment";
 import DropDown from "./components/DropDown";
 import "./index.css";
 import { Link } from "react-router-dom"
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 
 const getItemStatus = (item, history) => {
   let status = item.status;
@@ -56,9 +57,9 @@ const getItemStatus = (item, history) => {
             <Label label="paid" labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div className="assessment-displayInline" style={{ paddingTop: "10px" }}>
+          <div className="assessment-displayInline" style={{ paddingTop: "10px", color: '#fe7a51' }}>
             <Link to="home" style={{ color: '#fe7a51' }}>
-              DOWNLOAD RECEIPT
+              <Label label="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" style={{ color: '#fe7a51!important' }} />
             </Link>
           </div>
         </div>
@@ -98,6 +99,7 @@ const getRightIconItems = (item, history) => {
       style={{ width: "auto", top: "0px", bottom: "0px", height: "inherit", margin: "auto", alignItems: "center", display: "flex", right: 0 }}
     >
       <div>
+        <div style={{ marginBottom: '5px' }}><LabelContainer labelKey="WS_PAST_PAYMENTS_AMOUNT_PAID_LABEL" style={{ color: "#484848" }} />:<div style={{ color: "#484848",display:'inline-block' }}>{`INR 277`}</div></div>
         {item.date && <Label label={item.date} containerStyle={{ marginRight: 5 }} labelStyle={{ textAlign: "right" }} color="#484848" />}
         {getItemStatus(item, history)}
       </div>

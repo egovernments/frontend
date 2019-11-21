@@ -38,13 +38,13 @@ const MenuButton = Loadable({
   loading: () => <Loading />
 });
 
-const FormIcon = Loadable({
-  loader: () => import("./Icons/FormIcon"),
+const MyConnectionsIcon = Loadable({
+  loader: () => import("./Icons/MyConnectionsIcon"),
   loading: () => <Loading />
 });
 
-const TradeLicenseIcon = Loadable({
-  loader: () => import("./Icons/TradeLicenseIcon"),
+const PayWnsBillIcon = Loadable({
+  loader: () => import("./Icons/PayWnsBillIcon"),
   loading: () => <Loading />
 });
 
@@ -66,8 +66,8 @@ export {
   AutoSuggest,
   Asteric,
   MenuButton,
-  FormIcon,
-  TradeLicenseIcon,
+  MyConnectionsIcon,
+  PayWnsBillIcon,
   ConsumerNoContainer,
   BreadCrumbs
 };

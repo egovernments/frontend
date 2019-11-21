@@ -18,7 +18,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <span style={{ color: 'black'}}>
+            <span style={{ color: '#000000'}}>
               {value}
             </span>
           )
@@ -30,7 +30,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home">
+            <Link to="connection-details">
               {value}
             </Link>
           )
@@ -41,7 +41,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="home">
+            <Link to="connection-details">
               {value}
             </Link>
           )
@@ -55,7 +55,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+            <Link to="viewBill" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
               Pay now
             </Link>
           )
