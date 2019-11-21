@@ -33,7 +33,7 @@ const nocDetails = getCommonCard({
             labelKey: "HR_NAME_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Name") || null,
+          // pattern: getPattern("Name") || null,
           jsonPath: "Employee[0].user.name"
         })
       },
@@ -53,7 +53,7 @@ const nocDetails = getCommonCard({
           },
           infoIcon: "info_circle",
           required: true,
-          pattern: getPattern("MobileNo"),
+          // pattern: getPattern("MobileNo"),
           jsonPath: "Employee[0].user.mobileNumber"
         })
       },
@@ -68,7 +68,7 @@ const nocDetails = getCommonCard({
             labelKey: "HR_FATHER_HUSBAND_NAME_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Name") || null,
+          // pattern: getPattern("Name") || null,
           jsonPath: "Employee[0].user.fatherOrHusbandName"
         })
       },
@@ -109,7 +109,7 @@ const nocDetails = getCommonCard({
             labelKey: "HR_BIRTH_DATE_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Date"),
+          // pattern: getPattern("Date"),
           jsonPath: "Employee[0].user.dob",
           props: {
             inputProps: {
@@ -128,7 +128,7 @@ const nocDetails = getCommonCard({
             labelName: "Enter Email",
             labelKey: "HR_EMAIL_PLACEHOLDER"
           },
-          pattern: getPattern("Email"),
+          // pattern: getPattern("Email"),
           jsonPath: "Employee[0].user.emailId"
         })
       },
@@ -143,7 +143,7 @@ const nocDetails = getCommonCard({
             labelKey: "HR_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Address"),
+          // pattern: getPattern("Address"),
           jsonPath: "Employee[0].user.correspondenceAddress"
         })
       }
@@ -188,7 +188,7 @@ const nocDetails = getCommonCard({
               labelName: "Enter Date of Appointment",
               labelKey: "HR_APPOINTMENT_DATE_PLACEHOLDER"
             },
-            pattern: getPattern("Date"),
+            // pattern: getPattern("Date"),
             jsonPath: "Employee[0].dateOfAppointment"
           })
         },

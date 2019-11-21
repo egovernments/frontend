@@ -283,7 +283,7 @@ export const BPAApplication = getCommonCard({
         xs: 12,
         sm: 4
       },
-      pattern: getPattern("Date"),
+      // pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false
     }),
@@ -299,7 +299,7 @@ export const BPAApplication = getCommonCard({
         xs: 12,
         sm: 4
       },
-      pattern: getPattern("Date"),
+      // pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false
     }),
@@ -341,7 +341,7 @@ export const BPAApplication = getCommonCard({
         position: "start"
       },
       required: false,
-      pattern: getPattern("MobileNo"),
+      // pattern: getPattern("MobileNo"),
       jsonPath: "searchScreen.mobileNumber",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
     }),

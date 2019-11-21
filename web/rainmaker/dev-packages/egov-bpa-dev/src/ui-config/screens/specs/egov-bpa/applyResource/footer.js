@@ -26,7 +26,7 @@ const setReviewPageRoute = (state, dispatch) => {
   );
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}` //fire-noc/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/egov-bpa/summary` //?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -79,9 +79,9 @@ const moveToReview = (state, dispatch) => {
     }
   }
 
-  if (validateDocumentField) {
-    setReviewPageRoute(state, dispatch);
-  }
+  // if (validateDocumentField) {
+  setReviewPageRoute(state, dispatch);
+  // }
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -689,7 +689,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      // callBack: callBackForNext
+      callBack: callBackForNext
     },
     visible: false
   }

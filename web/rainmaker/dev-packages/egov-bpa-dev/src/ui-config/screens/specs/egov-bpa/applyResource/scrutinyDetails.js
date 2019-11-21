@@ -36,7 +36,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
                     labelKey: "Building permit application Number"
                 },
                 required: true,
-                jsonPath: "Employee[0].user.name"
+                jsonPath: "BPAs[0].BPADetails.planscrutinydetails.appnum"
             })
         },
         uploadedfile: {
@@ -50,8 +50,8 @@ export const buildingPlanScrutinyDetails = getCommonCard({
                     labelKey: "Uploaded Diagram"
                 },
                 required: true,
-                pattern: getPattern("Name") || null,
-                jsonPath: "Employee[0].user.fatherOrHusbandName"
+                // pattern: getPattern("Name") || null,
+                jsonPath: "BPAs[0].BPADetails.planscrutinydetails.diagram"
             })
         },
         scrutinyreport: {
@@ -65,8 +65,8 @@ export const buildingPlanScrutinyDetails = getCommonCard({
                     labelKey: "Scrutiny Report"
                 },
                 required: true,
-                pattern: getPattern("Name") || null,
-                jsonPath: "Employee[0].user.fatherOrHusbandName"
+                // pattern: getPattern("Name") || null,
+                jsonPath: "BPAs[0].BPADetails.planscrutinydetails.report"
             })
         }
     })
@@ -113,7 +113,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
                         labelName: "Select Occupancy",
                         labelKey: "Occupancy"
                     },
-                    jsonPath: "Employee[0].user.roles",
+                    jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.appnum",
                     sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
                     labelsFromLocalisation: false,
                     suggestions: [],
@@ -151,15 +151,15 @@ export const demolitiondetails = getCommonCard({
         demolitionArea: {
             ...getTextField({
                 label: {
-                    labelName: "Demolition Area(m2)",
-                    labelKey: "Demolition Area(m2)"
+                    labelName: "Demolition Area",
+                    labelKey: "Demolition Area"
                 },
                 placeholder: {
-                    labelName: "Enter Employee Name",
-                    labelKey: "HR_NAME_PLACEHOLDER"
+                    labelName: "Enter Demolition Area",
+                    labelKey: "Enter Demolition Area"
                 },
-                pattern: getPattern("Name") || null,
-                jsonPath: "Employee[0].user.name"
+                // pattern: getPattern("Name") || null,
+                jsonPath: "BPAs[0].BPADetails.demolitiondetails.area"
             })
         }
     })
@@ -205,7 +205,7 @@ export const demolitiondetails = getCommonCard({
 //               labelName: "Enter Date of Appointment",
 //               labelKey: "HR_APPOINTMENT_DATE_PLACEHOLDER"
 //             },
-//             pattern: getPattern("Date"),
+//             // pattern: getPattern("Date"),
 //             jsonPath: "Employee[0].dateOfAppointment"
 //           })
 //         },

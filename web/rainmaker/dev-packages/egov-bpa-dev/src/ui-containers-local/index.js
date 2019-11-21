@@ -19,8 +19,18 @@ const DocumentListContainer = Loadable({
   loading: () => <Loading />
 });
 
+const NocListContainer = Loadable({
+  loader: () => import("./NocListContainer"),
+  loading: () => <Loading />
+});
+
 const AutosuggestContainer = Loadable({
   loader: () => import("./AutosuggestContainer"),
+  loading: () => <Loading />
+});
+
+const DownloadFileContainer = Loadable({
+  loader: () => import("./DownloadFileContainer"),
   loading: () => <Loading />
 });
 
@@ -28,5 +38,7 @@ export {
   CustomTabContainer,
   TestContainer,
   DocumentListContainer,
-  AutosuggestContainer
+  NocListContainer,
+  AutosuggestContainer,
+  DownloadFileContainer
 };

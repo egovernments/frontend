@@ -17,6 +17,11 @@ const DocumentList = Loadable({
   loading: () => <Loading />
 });
 
+const NocList = Loadable({
+  loader: () => import("./NocList"),
+  loading: () => <Loading />
+});
+
 const UploadSingleFile = Loadable({
   loader: () => import("./UploadSingleFile"),
   loading: () => <Loading />
@@ -32,6 +37,7 @@ export {
   TestMolecules,
   CustomTab,
   DocumentList,
+  NocList,
   UploadSingleFile,
   Table
 };

@@ -45,7 +45,7 @@ const commonApplicantInformation = () => {
                     labelKey: "Enter Owner Name"
                 },
                 required: true,
-                pattern: getPattern("Name"),
+                // // pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
                 jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
                 // props: {
@@ -69,7 +69,7 @@ const commonApplicantInformation = () => {
                     labelKey: "Enter Owners Communication Address"
                 },
                 required: true,
-                pattern: getPattern("Address"),
+                // // pattern: getPattern("Address"),
                 errorMessage: "Invalid Address",
                 jsonPath:
                     "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",
@@ -94,7 +94,7 @@ const commonApplicantInformation = () => {
                     key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
                 },
                 infoIcon: "info_circle",
-                pattern: getPattern("MobileNo"),
+                // // pattern: getPattern("MobileNo"),
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 jsonPath:
                     "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
@@ -129,7 +129,7 @@ const commonApplicantInformation = () => {
                     labelName: "Enter eMail ID",
                     labelKey: "eMail ID"
                 },
-                pattern: getPattern("Email"),
+                // // pattern: getPattern("Email"),
                 errorMessage: "Invalid Email",
                 jsonPath:
                     "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId",
@@ -201,7 +201,7 @@ const institutionInformation = () => {
                     labelName: "Enter Name of Institution",
                     labelKey: "NOC_ENTER_INSTITUTION_PLACEHOLDER"
                 },
-                pattern: getPattern("Name"),
+                // // pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
                 // required: true,
                 jsonPath:
@@ -222,7 +222,7 @@ const institutionInformation = () => {
                     labelKey: "NOC_ENTER_TELEPHONE_NUMBER_PLACEHOLDER"
                 },
                 // required: true,
-                pattern: getPattern("MobileNo"),
+                // pattern: getPattern("MobileNo"),
                 errorMessage: "Invalid Number",
                 jsonPath:
                     "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber",
@@ -242,7 +242,7 @@ const institutionInformation = () => {
                     labelKey: "NOC_ENTER_AUTHORIZED_PERSON_PLACEHOLDER"
                 },
                 // required: true,
-                pattern: getPattern("Name"),
+                // pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
                 jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
                 gridDefination: {
@@ -261,7 +261,7 @@ const institutionInformation = () => {
                     labelKey: "NOC_ENTER_INSTITUTION_DESIGNATION_PLACEHOLDER"
                 },
                 // required: true,
-                pattern: getPattern("Name"),
+                // pattern: getPattern("Name"),
                 errorMessage: "Invalid Designation Name",
                 jsonPath:
                     "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation",
@@ -281,7 +281,7 @@ const institutionInformation = () => {
                     labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_PLACEHOLDER"
                 },
                 // required: true,
-                pattern: getPattern("MobileNo"),
+                // pattern: getPattern("MobileNo"),
                 errorMessage: "Invalid MobileNo.",
 
                 jsonPath:
@@ -301,7 +301,7 @@ const institutionInformation = () => {
                     labelName: "Enter Email of Authorized Person",
                     labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_PLACEHOLDER"
                 },
-                pattern: getPattern("Email"),
+                // pattern: getPattern("Email"),
                 errorMessage: "Invalid Email",
                 // required: true,
                 jsonPath:
@@ -322,7 +322,7 @@ const institutionInformation = () => {
                     labelKey: "NOC_ENTER_OFFICIAL_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
                 },
                 // required: true,
-                pattern: getPattern("Address"),
+                // pattern: getPattern("Address"),
                 errorMessage: "Invalid Address",
                 jsonPath:
                     "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",

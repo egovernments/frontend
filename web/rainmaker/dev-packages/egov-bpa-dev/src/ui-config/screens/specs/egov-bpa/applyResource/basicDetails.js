@@ -9,7 +9,8 @@ import {
   getCheckBoxwithLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import { getTodaysDateInYMD } from "../utils";
-
+import { mockJosnRoles } from "../mockJson";
+console.log(mockJosnRoles, "details of roles");
 export const basicDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -34,8 +35,8 @@ export const basicDetails = getCommonCard({
           labelName: "Enter Scrutiny Number",
           labelKey: "Enter Scrutiny Number"
         },
-        // pattern: getPattern("Name") || null,
-        jsonPath: "Employee[0].user.name"
+        // pattern: '^[a-zA-Z0-9]*$',
+        jsonPath: "BPAs[0].BPADetails.basicdetails.scrutinynumber"
       })
     },
     occupancy: {
@@ -54,8 +55,9 @@ export const basicDetails = getCommonCard({
           labelName: "Select Occupancy",
           labelKey: "Occupancy"
         },
-        jsonPath: "Employee[0].user.roles",
-        sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
+        jsonPath: "BPAs[0].BPADetails.basicdetails.occupancy",
+        // sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
+        // sourceJsonPath: mockJosnRoles,
         labelsFromLocalisation: false,
         suggestions: [],
         fullwidth: true,
@@ -65,7 +67,19 @@ export const basicDetails = getCommonCard({
         },
         isMulti: true,
         labelName: "name",
-        valueName: "code"
+        valueName: "code",
+        disabled: true,
+        // value :[
+        //   {
+        //     value: "Occupancy Type 1",
+        //     label: "Occupany Type 1"
+        //   },
+        //   {
+        //     value: "Occupancy Type 2",
+        //     label: "Occupancy Type 2"
+        //   }
+        // ],
+        data:mockJosnRoles
       },
       gridDefination: {
         xs: 12,
@@ -83,17 +97,17 @@ export const basicDetails = getCommonCard({
           labelKey: "Occupancy"
         },
         required: true,
-        jsonPath: "Employee[0].user.gender",
+        jsonPath: "BPAs[0].BPADetails.basicdetails.apptype",
         props: {
           className: "hr-generic-selectfield",
           data: [
             {
-              value: "MALE",
-              label: "COMMON_GENDER_MALE"
+              value: "App Type 1",
+              label: "App Type 1"
             },
             {
-              value: "FEMALE",
-              label: "COMMON_GENDER_FEMALE"
+              value: "App Type 2",
+              label: "App Type 2"
             }
           ],
           optionValue: "value",
@@ -117,17 +131,17 @@ export const basicDetails = getCommonCard({
           labelKey: "Sub service type"
         },
         required: true,
-        jsonPath: "Employee[0].user.gender",
+        jsonPath: "BPAs[0].BPADetails.basicdetails.servicetype",
         props: {
           className: "hr-generic-selectfield",
           data: [
             {
-              value: "MALE",
-              label: "COMMON_GENDER_MALE"
+              value: "service type 1",
+              label: "service type 1"
             },
             {
-              value: "FEMALE",
-              label: "COMMON_GENDER_FEMALE"
+              value: "service type 2",
+              label: "service type 2"
             }
           ],
           optionValue: "value",
@@ -142,8 +156,8 @@ export const basicDetails = getCommonCard({
           labelKey: "Application Date"
         },
         required: true,
-        pattern: getPattern("Date"),
-        jsonPath: "Employee[0].user.dob",
+        // pattern: getPattern("Date"),
+        jsonPath: "BPAs[0].BPADetails.basicdetails.appdate",
         props: {
           inputProps: {
             // max: getTodaysDateInYMD()
@@ -161,7 +175,7 @@ export const basicDetails = getCommonCard({
         //   labelName: "Enter Corrospondence Address",
         //   labelKey: "HR_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         // },
-        jsonPath: "Employee[0].user.correspondenceAddress"
+        jsonPath: "BPAs[0].BPADetails.basicdetails.appfee"
       })
     },
     remarks: {
@@ -174,7 +188,7 @@ export const basicDetails = getCommonCard({
         //   labelName: "Enter Corrospondence Address",
         //   labelKey: "HR_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         // },
-        jsonPath: "Employee[0].user.correspondenceAddress"
+        jsonPath: "BPAs[0].BPADetails.basicdetails.remarks"
       })
     }
   })
@@ -204,7 +218,7 @@ export const professionalDetails = getCommonCard(
             labelName: "Enter Employee ID",
             labelKey: "HR_EMPLOYEE_ID_PLACEHOLDER"
           },
-          pattern: /^[a-zA-Z0-9-_]*$/i,
+          // pattern: /^[a-zA-Z0-9-_]*$/i,
           jsonPath: "Employee[0].code"
         })
       },
@@ -218,7 +232,7 @@ export const professionalDetails = getCommonCard(
             labelName: "Enter Date of Appointment",
             labelKey: "HR_APPOINTMENT_DATE_PLACEHOLDER"
           },
-          pattern: getPattern("Date"),
+          // // pattern: getPattern("Date"),
           jsonPath: "Employee[0].dateOfAppointment"
         })
       },

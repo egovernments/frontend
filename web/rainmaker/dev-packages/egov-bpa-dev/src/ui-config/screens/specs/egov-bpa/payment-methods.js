@@ -106,7 +106,7 @@ export const payeeDetails = getCommonContainer({
       labelKey: "NOC_PAYMENT_PAYER_MOB_PLACEHOLDER"
     },
     jsonPath: "ReceiptTemp[0].Bill[0].payerMobileNumber",
-    pattern: getPattern("MobileNo"),
+    // pattern: getPattern("MobileNo"),
     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     iconObj: {
       position: "start",
@@ -381,7 +381,7 @@ export const basicDetails = getCommonContainer({
       labelKey: "NOC_PAYMENT_PAYER_MOB_PLACEHOLDER"
     },
     jsonPath: "ReceiptTemp[0].Bill[0].payerMobileNumber",
-    pattern: getPattern("MobileNo"),
+    // pattern: getPattern("MobileNo"),
     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     iconObj: {
       position: "start",
@@ -433,7 +433,7 @@ export const bpaDetails = getCommonContainer({
       labelKey: "NOC_PAYMENT_PAYER_MOB_PLACEHOLDER"
     },
     jsonPath: "ReceiptTemp[0].Bill[0].payerMobileNumber",
-    pattern: getPattern("MobileNo"),
+    // pattern: getPattern("MobileNo"),
     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     iconObj: {
       position: "start",

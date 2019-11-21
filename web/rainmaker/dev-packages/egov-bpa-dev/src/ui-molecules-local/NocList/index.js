@@ -119,17 +119,101 @@ const requiredIcon = (
   <sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
 );
 
-class DocumentList extends Component {
+class NocList extends Component {
   state = {
     uploadedDocIndex: 0
   };
 
   componentDidMount = () => {
     const {
-      documentsList,
+      documentsList1,
       documentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
+    const documentsList = [
+      {
+        "code": "Building plan scrutiny Douments",
+        "title": "OWNER",
+        "cards": [
+          {
+            "name": "Floor plans, Elevations, Sections",
+            "code": "OWNER.IDENTITYPROOF",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true,
+            },
+            // "dropdown11": {
+            //   "label": "nature of noc",
+            //   "required": true,
+            // }
+          },
+          {
+            "name": "Service Plan",
+            "code": "Service Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Site Plan",
+            "code": "Site Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Building Plan",
+            "code": "Building Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Details Plan",
+            "code": "Details Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "other Details",
+            "code": "other Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Parking plan",
+            "code": "Parking plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Roof plan",
+            "code": "Roof plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          }
+        ]
+      }
+    ];
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -226,7 +310,7 @@ class DocumentList extends Component {
       ...documentsUploadRedux,
       [key]: {
         ...documentsUploadRedux[key],
-        dropdown: { value: event.target.value }
+        dropdown: { value: event.target.value },
       }
     });
   };
@@ -253,7 +337,7 @@ class DocumentList extends Component {
           item={true}
           xs={10}
           sm={5}
-          md={4}
+          md={3}
           align="left"
           className={classes.descriptionDiv}
         >
@@ -263,21 +347,37 @@ class DocumentList extends Component {
           />
           {card.required && requiredIcon}
         </Grid>
-        <Grid item={true} xs={12} sm={6} md={4}>
+        <Grid item={true} xs={12} sm={6} md={3}>
           {card.dropdown && (
             <TextFieldContainer
-              select={true}
+              select={false}
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
-              data={card.dropdown.menu}
+              // data={card.dropdown.menu}
               optionValue="code"
               optionLabel="label"
               required={true}
-              onChange={event => this.handleChange(key, event)}
+              // onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
             />
           )}
         </Grid>
+        {card.dropdown1 && (
+          <Grid item={true} xs={12} sm={6} md={2}>
+            <TextFieldContainer
+              select={false}
+              label={{ labelKey: getTransformedLocale(card.dropdown1.label) }}
+              placeholder={{ labelKey: card.dropdown1.label }}
+              // data={card.dropdown.menu}
+              optionValue="code"
+              optionLabel="label"
+              required={true}
+              // onChange={event => this.handleChange(key, event)}
+              jsonPath={jsonPath}
+            />
+          </Grid>
+        )}
+
         <Grid
           item={true}
           xs={12}
@@ -311,87 +411,81 @@ class DocumentList extends Component {
   render() {
     const { classes, documentsList1 } = this.props;
     let index = 0;
-    console.log('documents list ', documentsList);
     const documentsList = [
       {
-        "code": "Building Plan Scrutiny Documents",
-        "title": "Building Plan Scrutiny Documents",
+        // "code": "Status of Noc from the follwing departments",
+        "title": "",
         "cards": [
           {
-            "name": "Floor plans",
-            "code": "Floor plans",
+            "name": "Environment clearence",
+            "code": "Environment clearence",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
               "required": true,
             }
           },
           {
-            "name": "Service Plan",
-            "code": "Service Plan",
+            "name": "Noc from airport authority",
+            "code": "Noc from airport authority",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
+              "required": true,
             }
           },
           {
-            "name": "Site Plan",
-            "code": "Site Plan",
+            "name": "Noc from fire authority",
+            "code": "Noc from fire authority",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
+              "required": true,
             }
           },
           {
-            "name": "Building Plan",
-            "code": "Building Plan",
+            "name": "Noc from heritage",
+            "code": "Noc from heritage",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
+              "required": true,
             }
           },
           {
-            "name": "Details Plan",
-            "code": "Details Plan",
+            "name": "Noc from irrigation",
+            "code": "Noc from irrigation",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "other Details",
-            "code": "other Plan",
-            "required": true,
-            "dropdown": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Parking plan",
-            "code": "Parking plan",
-            "required": true,
-            "dropdown": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Roof plan",
-            "code": "Roof plan",
-            "required": true,
-            "dropdown": {
-              "label": "Remarks",
-              "required": true
+              "required": true,
             }
           }
+        
         ]
       }
     ];
+    console.log('documents list ', JSON.stringify(documentsList));
     return (
       <div>
         {documentsList &&
@@ -433,7 +527,7 @@ class DocumentList extends Component {
   }
 }
 
-DocumentList.propTypes = {
+NocList.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
@@ -459,5 +553,5 @@ export default withStyles(themeStyles)(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(DocumentList)
+  )(NocList)
 );
