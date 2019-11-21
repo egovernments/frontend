@@ -11,6 +11,7 @@ import orderby from "lodash/orderBy";
 import get from "lodash/get";
 import { getFinalAssessments } from "../common/TransformedAssessments";
 import { getCommaSeperatedAddress } from "egov-ui-kit/utils/commons";
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import "./index.css";
 
 const secondaryTextLabelStyle = {
@@ -194,43 +195,34 @@ const mapStateToProps = state => {
       result.push({
         primaryText: (
           <div className="incomplete-assesment-info">
-            <Label
-              label="INR 277"
-              fontSize="16px"
-              color="#484848"
-              labelStyle={primaryTextLabelStyle}
-              bold={true}
-            />
-            <div style={{ height: "auto" }}>
-              <Label
-                label={financialYear}
+            <div style={{ height: "auto", color: "#484848", marginBottom: '5px' }}>
+              <LabelContainer
+                labelKey="WS_PAST_PAYMENTS_BILL_AMOUNT_LABEL"
+                fontSize="16px"
+                labelStyle={primaryTextLabelStyle}
+                bold={true}
+              />: <div style={{ display: 'inline-block', color: '#484848', fontWeight: '500' }} >{'INR 277'}</div>
+            </div>
+            <div style={{ height: "auto", color: "#484848", marginBottom: '5px' }}>
+              <LabelContainer
+                label={'Jan-2019'}
+                labelStyle={secondaryTextLabelStyle}
+                fontSize="14px"
+                containerStyle={secondaryTextContainer}
+              />
+            </div>
+            <div style={{ height: "auto", color: "#484848" }}>
+              <LabelContainer
+                labelKey="WS_COMMON_CONSUMER_NO_LABEL"
                 labelStyle={secondaryTextLabelStyle}
                 fontSize="14px"
                 containerStyle={secondaryTextContainer}
                 color="#484848"
-              />
+              />: {'PB-WS-CN-2019-23'}
             </div>
             <div style={{ height: "auto" }}>
               <Label
-                label={"Consumer No : PB-WS-CN-2019-23"}
-                labelStyle={secondaryTextLabelStyle}
-                fontSize="14px"
-                containerStyle={secondaryTextContainer}
-                color="#484848"
-              />
-            </div>
-            <div style={{ height: "auto" }}>
-              <Label
-                label={"Owner Name : Satinder Pal"}
-                labelStyle={secondaryTextLabelStyle}
-                fontSize="14px"
-                containerStyle={secondaryTextContainer}
-                color="#484848"
-              />
-            </div>
-            <div style={{ height: "auto" }}>
-              <Label
-                label={"Amount paid : 277"}
+                label={"Satinder Pal"}
                 labelStyle={secondaryTextLabelStyle}
                 fontSize="14px"
                 containerStyle={secondaryTextContainer}
