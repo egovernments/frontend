@@ -32,139 +32,274 @@ class MyConnections extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Card className={classes.card}>
-        <CardContent>
-          <div>
-            <Grid container style={{ marginBottom: 12 }}>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelKey="WS_MYCONNECTIONS_SERVICE"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                />
+      <div>
+        <Card className={classes.card}>
+          <CardContent>
+            <div>
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_SERVICE"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelName="Water"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelName="Water and Sewerage"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                />
-              </Grid>
-            </Grid>
-            <Grid container style={{ marginBottom: 12 }}>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelKey="WS_MYCONNECTIONS_APPLICATION_NO"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelName="WS-2018-PB-242565"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                />
-              </Grid>
-            </Grid>
-            <Grid container style={{ marginBottom: 12 }}>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelKey="WS_MYCONNECTIONS_CONSUMER_NO"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Link to="connection-details">
-                  <Label
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_APPLICATION_NO"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <LabelContainer
                     labelName="WS-2018-PB-242565"
                     fontSize={14}
-                    style={{ fontSize: 14 }}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                   />
-                </Link>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container style={{ marginBottom: 12 }}>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelKey="WS_MYCONNECTIONS_STATUS"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                />
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_CONSUMER_NO"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Link to="connection-details">
+                    <Label
+                      labelName="WS-2018-PB-642665"
+                      fontSize={14}
+                      style={{ fontSize: 14 }}
+                    />
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <Label
-                  labelName="Active"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                />
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_STATUS"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Label
+                    labelName="Active"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container style={{ marginBottom: 12 }}>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelKey="WS_MYCONNECTIONS_OWNER_NAME"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                />
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_OWNER_NAME"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelName="Satinder pal"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelName="Satinder pal"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                />
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTION_ADDRESS"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Label
+                    labelName="707/B, Railway Colony, Amrister,Punjab"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container style={{ marginBottom: 12 }}>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelKey="WS_MYCONNECTION_ADDRESS"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                />
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_DUE"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Label
+                    labelName="25"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <Label
-                  labelName="707/B, Railway Colony, Amrister,Punjab"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                />
+              <Link to="viewBill">
+                <div >
+                  <LabelContainer
+                    labelKey="CS_COMMON_PAY"
+                    textTransform={"uppercase"}
+                    style={{
+                      color: "#fe7a51",
+                      fontSize: 14,
+                      textTransform: "uppercase"
+                    }}
+                  />
+                </div>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className={classes.card}>
+          <CardContent>
+            <div>
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_SERVICE"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelName="Sewerage"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container style={{ marginBottom: 12 }}>
-              <Grid item xs={3}>
-                <LabelContainer
-                  labelKey="WS_MYCONNECTIONS_DUE"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                />
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_APPLICATION_NO"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelName="SW-2018-PB-242565"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <Label
-                  labelName="0"
-                  fontSize={14}
-                  style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                />
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_CONSUMER_NO"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Link to="connection-details">
+                    <Label
+                      labelName="SW-2018-PB-642665"
+                      fontSize={14}
+                      style={{ fontSize: 14 }}
+                    />
+                  </Link>
+                </Grid>
               </Grid>
-            </Grid>
-            <Link to="viewBill">
-              <div >
-                <LabelContainer
-                  labelKey="CS_COMMON_PAY"
-                  textTransform={"uppercase"}
-                  style={{
-                    color: "#fe7a51",
-                    fontSize: 14,
-                    textTransform: "uppercase"
-                  }}
-                />
-              </div>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_STATUS"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Label
+                    labelName="Active"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_OWNER_NAME"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelName="Satinder pal"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTION_ADDRESS"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Label
+                    labelName="707/B, Railway Colony, Amrister,Punjab"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginBottom: 12 }}>
+                <Grid item xs={3}>
+                  <LabelContainer
+                    labelKey="WS_MYCONNECTIONS_DUE"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Label
+                    labelName="37"
+                    fontSize={14}
+                    style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                  />
+                </Grid>
+              </Grid>
+              <Link to="viewBill">
+                <div >
+                  <LabelContainer
+                    labelKey="CS_COMMON_PAY"
+                    textTransform={"uppercase"}
+                    style={{
+                      color: "#fe7a51",
+                      fontSize: 14,
+                      textTransform: "uppercase"
+                    }}
+                  />
+                </div>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 }
