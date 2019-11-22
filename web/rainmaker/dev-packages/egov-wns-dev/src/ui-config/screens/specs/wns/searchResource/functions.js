@@ -104,8 +104,8 @@ export const searchApiCall = async (state, dispatch) => {
     let data = response.Licenses.map(item => ({
       [getTextToLocalMapping("Service")]:
         item.Service || "-",
-      [getTextToLocalMapping("Application No")]:
-        item.applicationNumber || "-",
+      // [getTextToLocalMapping("Application No")]:
+      //   item.applicationNumber || "-",
       [getTextToLocalMapping("Consumer No")]: item.consumerNumber || "-",
       [getTextToLocalMapping("Owner Name")]:
         item.ownerName || "-",

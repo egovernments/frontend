@@ -131,7 +131,34 @@ export const getServiceDetails = (isEditable = true) => {
           labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
         },
         { jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees" }
-      )
+      ),
+      editSection: {
+        componentPath: "Button",
+        props: {
+          color: "primary",
+          style: {
+            margin: "-16px"
+          }
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          align: "left"
+        },
+        visible: true,
+        children: {
+          buttonLabel: getLabel({
+            labelName: "View Consumption Details",
+            labelKey: "View Consumption Details"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            
+          }
+        }
+      },
     })
   });
 };
