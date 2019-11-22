@@ -59,7 +59,7 @@ const getItemStatus = (item, history) => {
           </div>
           <div className="assessment-displayInline" style={{ paddingTop: "10px", color: '#fe7a51' }}>
             <Link to="home" style={{ color: '#fe7a51' }}>
-              <Label label="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" style={{ color: '#fe7a51!important' }} />
+              <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT"/>
             </Link>
           </div>
         </div>
