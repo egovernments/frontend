@@ -132,8 +132,8 @@ class NocList extends Component {
     } = this.props;
     const documentsList = [
       {
-        // "code": "Status of Noc from the follwing departments",
-        "title": "",
+        "code": "Status of NOC from the following department",
+        "title": "Status of NOC from the following department",
         "cards": [
           {
             "name": "Environment clearence",
@@ -403,8 +403,8 @@ class NocList extends Component {
     let index = 0;
     const documentsList = [
       {
-        // "code": "Status of Noc from the follwing departments",
-        "title": "",
+        "code": "Status of NOC from the following department",
+        "title": "Status of NOC from the following department",
         "cards": [
           {
             "name": "Environment clearence",

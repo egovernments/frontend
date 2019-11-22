@@ -232,70 +232,70 @@ export const detailsofplot = getCommonCard({
     })
 });
 
-export const proposedBuildingDetails = {
+export const proposedBuildingDetails1 = {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     visible: false,
     children: {
-      breakPending: getBreak(),
-      pendingApprovals: {
-        uiFramework: "custom-molecules-local",
-        moduleName: "egov-noc",
-        componentPath: "Table",
-        props: {
-          data: [
-            {
-              "Application No": 1234,
-              "Building Name": "Matchbox Plant",
-              "Owner Name": "Satinder Singh",
-              "Locality/Mohalla": "Gurudwara Mohalla",
-              "Payment Date": "12/08/2018",
-              "Days Elapsed": "2 Days"
-            },
-            {
-              "Application No": 1234,
-              "Building Name": "Matchbox Plant",
-              "Owner Name": "Satinder Singh",
-              "Locality/Mohalla": "Railway Colony",
-              "Payment Date": "12/08/2018",
-              "Days Elapsed": "10 Days"
-            },
-            {
-              "Application No": 1234,
-              "Building Name": "Matchbox Plant",
-              "Owner Name": "Satinder Singh",
-              "Locality/Mohalla": "Gurudwara Mohalla",
-              "Payment Date": "12/08/2018",
-              "Days Elapsed": "2 Days"
-            },
-            {
-              "Application No": 1234,
-              "Building Name": "Matchbox Plant",
-              "Owner Name": "Satinder Singh",
-              "Locality/Mohalla": "Assi Mohalla",
-              "Payment Date": "12/08/2018",
-              "Days Elapsed": "2 Days"
+        breakPending: getBreak(),
+        pendingApprovals: {
+            uiFramework: "custom-molecules-local",
+            moduleName: "egov-noc",
+            componentPath: "Table",
+            props: {
+                data: [
+                    {
+                        "Application No": 1234,
+                        "Building Name": "Matchbox Plant",
+                        "Owner Name": "Satinder Singh",
+                        "Locality/Mohalla": "Gurudwara Mohalla",
+                        "Payment Date": "12/08/2018",
+                        "Days Elapsed": "2 Days"
+                    },
+                    {
+                        "Application No": 1234,
+                        "Building Name": "Matchbox Plant",
+                        "Owner Name": "Satinder Singh",
+                        "Locality/Mohalla": "Railway Colony",
+                        "Payment Date": "12/08/2018",
+                        "Days Elapsed": "10 Days"
+                    },
+                    {
+                        "Application No": 1234,
+                        "Building Name": "Matchbox Plant",
+                        "Owner Name": "Satinder Singh",
+                        "Locality/Mohalla": "Gurudwara Mohalla",
+                        "Payment Date": "12/08/2018",
+                        "Days Elapsed": "2 Days"
+                    },
+                    {
+                        "Application No": 1234,
+                        "Building Name": "Matchbox Plant",
+                        "Owner Name": "Satinder Singh",
+                        "Locality/Mohalla": "Assi Mohalla",
+                        "Payment Date": "12/08/2018",
+                        "Days Elapsed": "2 Days"
+                    }
+                ],
+                columns: {
+                    "Application No": "vamshi",
+                    "Building Name": {},
+                    "Owner Name": {},
+                    "Locality/Mohalla": {},
+                    "Payment Date": {}
+                },
+                title: "Pending for your Approval (4)",
+                options: {
+                    filterType: "dropdown",
+                    responsive: "stacked",
+                    selectableRows: false
+                }
             }
-          ],
-          columns: {
-            "Application No": "vamshi",
-            "Building Name": {},
-            "Owner Name": {},
-            "Locality/Mohalla": {},
-            "Payment Date": {}
-          },
-          title: "Pending for your Approval (4)",
-          options: {
-            filterType: "dropdown",
-            responsive: "stacked",
-            selectableRows: false
-          }
         }
-      }
     }
-  };
+};
 
-export const proposedBuildingDetails1 = getCommonGrayCard({
+export const proposedBuildingDetails = getCommonGrayCard({
     header: {
         uiFramework: "custom-atoms",
         componentPath: "Container",
@@ -340,24 +340,24 @@ export const proposedBuildingDetails1 = getCommonGrayCard({
                 buildupAndCarpetContainer: getCommonContainer({
                     floordescription: getLabelWithValue(
                         {
-                            labelName: "Scrutiny Number",
-                            labelKey: "Scrutiny Number"
+                            labelName: "Floor description",
+                            labelKey: "Floor description"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.basicdetails.scrutinynumber",
+                            jsonPath: "BPAs[0].BPADetails.proposedBuildingDetails.floordesription",
                             callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+                                return 1 //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
                             }
                         }
                     ),
                     level: getLabelWithValue(
                         {
-                            labelName: "occupancy",
-                            labelKey: "occupancy"
+                            labelName: "Level",
+                            labelKey: "Level"
                         },
                         {
                             jsonPath:
-                                "BPAs[0].BPADetails.basicdetails.occupancy",
+                                "BPAs[0].BPADetails.proposedBuildingDetails.level",
                             callBack: value => {
                                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
                             }
@@ -365,41 +365,41 @@ export const proposedBuildingDetails1 = getCommonGrayCard({
                     ),
                     occupancy: getLabelWithValue(
                         {
-                            labelName: "Application Type",
-                            labelKey: "Application Type"
+                            labelName: "Occupancy",
+                            labelKey: "Occupancy"
                         },
                         {
                             jsonPath:
-                                "BPAs[0].BPADetails.basicdetails.apptype"
+                                "BPAs[0].BPADetails.basicdetails.occupancy"
                         }
                     ),
                     builduparea: getLabelWithValue(
                         {
-                            labelName: "Service Type",
-                            labelKey: "Service Type"
+                            labelName: "Build Area",
+                            labelKey: "Build Area"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.basicdetails.servicetype"
+                            jsonPath: "BPAs[0].BPADetails.basicdetails.buildarea"
                         }
                     ),
                     floorarea: getLabelWithValue(
                         {
-                            labelName: "Application Date",
-                            labelKey: "Application Date"
+                            labelName: "Floor Area",
+                            labelKey: "Floor Area"
                         },
                         {
                             jsonPath:
-                                "BPAs[0].BPADetails.basicdetails.appdate"
+                                "BPAs[0].BPADetails.basicdetails.fllorarea"
                         }
                     ),
                     carpetarea: getLabelWithValue(
                         {
-                            labelName: "Application Fee",
-                            labelKey: "Application Fee"
+                            labelName: "Carpet Area",
+                            labelKey: "Carpet Area"
                         },
                         {
                             jsonPath:
-                                "BPAs[0].BPADetails.basicdetails.appfee"
+                                "BPAs[0].BPADetails.basicdetails.carpetarea"
                         }
                     )
                 }

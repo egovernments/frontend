@@ -156,13 +156,13 @@ export const basicDetails = getCommonCard({
           labelKey: "Application Date"
         },
         required: true,
-        defaultValue : getTodaysDateInYMD(),
         // pattern: getPattern("Date"),
         jsonPath: "BPAs[0].BPADetails.basicdetails.appdate",
         props: {
           inputProps: {
             max: getTodaysDateInYMD()
-          }
+          },
+          defaultValue : getTodaysDateInYMD()
         }
       })
     },
@@ -176,7 +176,11 @@ export const basicDetails = getCommonCard({
         //   labelName: "Enter Corrospondence Address",
         //   labelKey: "HR_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         // },
-        jsonPath: "BPAs[0].BPADetails.basicdetails.appfee"
+        jsonPath: "BPAs[0].BPADetails.basicdetails.appfee",
+        props : {
+          defaultValue : 100,
+          disabled : true
+        }
       })
     },
     remarks: {
