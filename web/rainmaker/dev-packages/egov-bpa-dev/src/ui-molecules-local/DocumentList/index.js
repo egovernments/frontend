@@ -126,10 +126,90 @@ class DocumentList extends Component {
 
   componentDidMount = () => {
     const {
-      documentsList,
-      documentsUploadRedux = {},
+      documentsList1,
+      documentsUploadRedux1 = {},
       prepareFinalObject
     } = this.props;
+    const documentsList = [
+      {
+        "code": "Building Plan Scrutiny Documents",
+        "title": "Building Plan Scrutiny Documents",
+        "cards": [
+          {
+            "name": "Floor plans",
+            "code": "Floor plans",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true,
+            }
+          },
+          {
+            "name": "Service Plan",
+            "code": "Service Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Site Plan",
+            "code": "Site Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Building Plan",
+            "code": "Building Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Details Plan",
+            "code": "Details Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "other Details",
+            "code": "other Plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Parking plan",
+            "code": "Parking plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          },
+          {
+            "name": "Roof plan",
+            "code": "Roof plan",
+            "required": true,
+            "dropdown": {
+              "label": "Remarks",
+              "required": true
+            }
+          }
+        ]
+      }
+    ];
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -137,15 +217,15 @@ class DocumentList extends Component {
           if (card.subCards) {
             card.subCards.forEach(subCard => {
               let oldDocType = get(
-                documentsUploadRedux,
+                documentsUploadRedux1,
                 `[${index}].documentType`
               );
               let oldDocCode = get(
-                documentsUploadRedux,
+                documentsUploadRedux1,
                 `[${index}].documentCode`
               );
               let oldDocSubCode = get(
-                documentsUploadRedux,
+                documentsUploadRedux1,
                 `[${index}].documentSubCode`
               );
               if (
@@ -153,7 +233,7 @@ class DocumentList extends Component {
                 oldDocCode != card.name ||
                 oldDocSubCode != subCard.name
               ) {
-                documentsUploadRedux[index] = {
+                documentsUploadRedux1[index] = {
                   documentType: docType.code,
                   documentCode: card.name,
                   documentSubCode: subCard.name
@@ -163,15 +243,15 @@ class DocumentList extends Component {
             });
           } else {
             let oldDocType = get(
-              documentsUploadRedux,
+              documentsUploadRedux1,
               `[${index}].documentType`
             );
             let oldDocCode = get(
-              documentsUploadRedux,
+              documentsUploadRedux1,
               `[${index}].documentCode`
             );
             if (oldDocType != docType.code || oldDocCode != card.name) {
-              documentsUploadRedux[index] = {
+              documentsUploadRedux1[index] = {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
@@ -184,7 +264,7 @@ class DocumentList extends Component {
           }
         });
     });
-    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    prepareFinalObject("documentsUploadRedux1", documentsUploadRedux1);
   };
 
   onUploadClick = uploadedDocIndex => {
@@ -193,13 +273,13 @@ class DocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentsUploadRedux } = this.props;
+    const { prepareFinalObject, documentsUploadRedux1 } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    prepareFinalObject("documentsUploadRedux", {
-      ...documentsUploadRedux,
+    prepareFinalObject("documentsUploadRedux1", {
+      ...documentsUploadRedux1,
       [uploadedDocIndex]: {
-        ...documentsUploadRedux[uploadedDocIndex],
+        ...documentsUploadRedux1[uploadedDocIndex],
         documents: [
           {
             fileName: file.name,
@@ -214,30 +294,31 @@ class DocumentList extends Component {
   removeDocument = remDocIndex => {
     const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `documentsUploadRedux.${remDocIndex}.documents`,
+      `documentsUploadRedux1.${remDocIndex}.documents`,
       undefined
     );
     this.forceUpdate();
   };
 
   handleChange = (key, event) => {
-    const { documentsUploadRedux, prepareFinalObject } = this.props;
-    prepareFinalObject(`documentsUploadRedux`, {
-      ...documentsUploadRedux,
+    const { documentsUploadRedux1, prepareFinalObject } = this.props;
+    console.log(this.props, "Document List Props");
+    prepareFinalObject(`documentsUploadRedux1`, {
+      ...documentsUploadRedux1,
       [key]: {
-        ...documentsUploadRedux[key],
+        ...documentsUploadRedux1[key],
         dropdown: { value: event.target.value }
       }
     });
   };
 
   getUploadCard = (card, key) => {
-    const { classes, documentsUploadRedux } = this.props;
-    let jsonPath = `documentsUploadRedux[${key}].dropdown.value`;
+    const { classes, documentsUploadRedux1 } = this.props;
+    let jsonPath = `documentsUploadRedux1[${key}].dropdown.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {documentsUploadRedux[key] && documentsUploadRedux[key].documents ? (
+          {documentsUploadRedux1[key] && documentsUploadRedux1[key].documents ? (
             <div className={classes.documentSuccess}>
               <Icon>
                 <i class="material-icons">done</i>
@@ -266,7 +347,7 @@ class DocumentList extends Component {
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropdown && (
             <TextFieldContainer
-              select={true}
+              select={false}
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
               data={card.dropdown.menu}
@@ -291,13 +372,13 @@ class DocumentList extends Component {
               handleFileUpload(e, this.handleDocument, this.props)
             }
             uploaded={
-              documentsUploadRedux[key] && documentsUploadRedux[key].documents
+              documentsUploadRedux1[key] && documentsUploadRedux1[key].documents
                 ? true
                 : false
             }
             removeDocument={() => this.removeDocument(key)}
             documents={
-              documentsUploadRedux[key] && documentsUploadRedux[key].documents
+              documentsUploadRedux1[key] && documentsUploadRedux1[key].documents
             }
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
@@ -440,12 +521,12 @@ DocumentList.propTypes = {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { moduleName } = screenConfiguration;
-  const documentsUploadRedux = get(
+  const documentsUploadRedux1 = get(
     screenConfiguration.preparedFinalObject,
-    "documentsUploadRedux",
+    "documentsUploadRedux1",
     {}
   );
-  return { documentsUploadRedux, moduleName };
+  return { documentsUploadRedux1, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

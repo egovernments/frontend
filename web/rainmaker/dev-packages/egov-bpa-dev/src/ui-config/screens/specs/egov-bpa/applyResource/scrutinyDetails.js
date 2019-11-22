@@ -114,7 +114,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
                         labelKey: "Occupancy"
                     },
                     jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.appnum",
-                    sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
+                    // sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
                     labelsFromLocalisation: false,
                     suggestions: [],
                     fullwidth: true,
@@ -124,7 +124,21 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
                     },
                     isMulti: true,
                     labelName: "name",
-                    valueName: "code"
+                    valueName: "code",
+                    data: [
+
+                        {
+                            code: "Ground Floor",
+                            name: "Ground Floor"
+                        },
+                        {
+                            code: "First Floor",
+                            name: "First User"
+                        },
+                        {
+                            code: "Second Floor",
+                            name: "Second Floor"
+                        }]
                 },
                 gridDefination: {
                     xs: 12,

@@ -93,8 +93,8 @@ export const basicDetails = getCommonCard({
           labelKey: "Application type"
         },
         placeholder: {
-          labelName: "Select Occupancy",
-          labelKey: "Occupancy"
+          labelName: "Select Application type",
+          labelKey: "Select Application type"
         },
         required: true,
         jsonPath: "BPAs[0].BPADetails.basicdetails.apptype",

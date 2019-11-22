@@ -41,8 +41,8 @@ export const boundaryDetails = getCommonCard({
                     labelKey: "Circle"
                 },
                 placeholder: {
-                    labelName: "Select",
-                    labelKey: "Select"
+                    labelName: "Select Circle",
+                    labelKey: "Select Circle"
                 },
                 required: true,
                 jsonPath: "BPAs[0].BPADetails.boundarydetails.circle",
@@ -70,8 +70,8 @@ export const boundaryDetails = getCommonCard({
                     labelKey: "Revenue Ward"
                 },
                 placeholder: {
-                    labelName: "Select",
-                    labelKey: "Select"
+                    labelName: "Select Revenue Ward",
+                    labelKey: "Select Revenue Ward"
                 },
                 required: true,
                 jsonPath: "BPAs[0].BPADetails.boundarydetails.revenueward",
@@ -115,8 +115,8 @@ export const detailsofplot = getCommonCard({
                     labelKey: "Plot Area"
                 },
                 placeholder: {
-                    labelName: "Select",
-                    labelKey: "Select"
+                    labelName: "Enter Plot Area",
+                    labelKey: "Enter Plot Area"
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
@@ -129,6 +129,10 @@ export const detailsofplot = getCommonCard({
                     labelName: "Khata No.",
                     labelKey: "Khata No."
                 },
+                placeholder: {
+                    labelName: "Enter Khata No.",
+                    labelKey: "Enter Khata No."
+                },
                 required: true,
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "BPAs[0].BPADetails.plotdetails.kathanumber"
@@ -139,6 +143,10 @@ export const detailsofplot = getCommonCard({
                 label: {
                     labelName: "Holding No.",
                     labelKey: "Holding No."
+                },
+                placeholder: {
+                    labelName: "Enter Holding No.",
+                    labelKey: "Enter Holding No."
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
@@ -151,6 +159,10 @@ export const detailsofplot = getCommonCard({
                     labelName: "Plot No(MSP)",
                     labelKey: "Plot No(MSP)"
                 },
+                placeholder: {
+                    labelName: "Enter Plot No(MSP)",
+                    labelKey: "Enter Plot No(MSP)"
+                },
                 required: true,
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "BPAs[0].BPADetails.plotdetails.plotnumber"
@@ -160,7 +172,7 @@ export const detailsofplot = getCommonCard({
             ...getTextField({
                 label: {
                     labelName: "City/Town",
-                    labelKey: "HR_NAME_LABEL"
+                    labelKey: "City/Town"
                 },
                 placeholder: {
                     labelName: "Enter city/town Name",
@@ -177,6 +189,10 @@ export const detailsofplot = getCommonCard({
                     labelName: "Land Registration Details",
                     labelKey: "Land Registration Details"
                 },
+                placeholder: {
+                    labelName: "Enter Land Registration Details",
+                    labelKey: "Enter Land Registration Details"
+                },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails"
             })
@@ -186,6 +202,10 @@ export const detailsofplot = getCommonCard({
                 label: {
                     labelName: "Whether Government or Quasi Government",
                     labelKey: "Whether Government or Quasi Government"
+                },
+                placeholder: {
+                    labelName: "Select Government",
+                    labelKey: "Select Government"
                 },
                 jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi",
                 props: {
@@ -212,7 +232,70 @@ export const detailsofplot = getCommonCard({
     })
 });
 
-export const proposedBuildingDetails = getCommonGrayCard({
+export const proposedBuildingDetails = {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    visible: false,
+    children: {
+      breakPending: getBreak(),
+      pendingApprovals: {
+        uiFramework: "custom-molecules-local",
+        moduleName: "egov-noc",
+        componentPath: "Table",
+        props: {
+          data: [
+            {
+              "Application No": 1234,
+              "Building Name": "Matchbox Plant",
+              "Owner Name": "Satinder Singh",
+              "Locality/Mohalla": "Gurudwara Mohalla",
+              "Payment Date": "12/08/2018",
+              "Days Elapsed": "2 Days"
+            },
+            {
+              "Application No": 1234,
+              "Building Name": "Matchbox Plant",
+              "Owner Name": "Satinder Singh",
+              "Locality/Mohalla": "Railway Colony",
+              "Payment Date": "12/08/2018",
+              "Days Elapsed": "10 Days"
+            },
+            {
+              "Application No": 1234,
+              "Building Name": "Matchbox Plant",
+              "Owner Name": "Satinder Singh",
+              "Locality/Mohalla": "Gurudwara Mohalla",
+              "Payment Date": "12/08/2018",
+              "Days Elapsed": "2 Days"
+            },
+            {
+              "Application No": 1234,
+              "Building Name": "Matchbox Plant",
+              "Owner Name": "Satinder Singh",
+              "Locality/Mohalla": "Assi Mohalla",
+              "Payment Date": "12/08/2018",
+              "Days Elapsed": "2 Days"
+            }
+          ],
+          columns: {
+            "Application No": "vamshi",
+            "Building Name": {},
+            "Owner Name": {},
+            "Locality/Mohalla": {},
+            "Payment Date": {}
+          },
+          title: "Pending for your Approval (4)",
+          options: {
+            filterType: "dropdown",
+            responsive: "stacked",
+            selectableRows: false
+          }
+        }
+      }
+    }
+  };
+
+export const proposedBuildingDetails1 = getCommonGrayCard({
     header: {
         uiFramework: "custom-atoms",
         componentPath: "Container",

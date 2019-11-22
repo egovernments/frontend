@@ -22,7 +22,7 @@ export const nocSummary = getCommonGrayCard({
         },
         ...getCommonSubHeader({
           labelName: "NOC Details",
-          labelKey: "NOC_NOC_DETAILS_HEADER"
+          labelKey: "NOC Details"
         })
       },
       editSection: {
@@ -54,36 +54,19 @@ export const nocSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
+            gotoApplyWithStep(state, dispatch, 5);
           }
         }
       }
     }
   },
-  body: getCommonContainer({
-    nocType: getLabelWithValue(
-      {
-        labelName: "NOC Type",
-        labelKey: "NOC_TYPE_LABEL"
-      },
-      {
-        jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType"
-        // callBack: value => {
-        //   return value.split(".")[0];
-        // }
-      }
-    ),
-    fireNocNumber: getLabelWithValue(
-      {
-        labelName: "Provisional fire NoC number",
-        labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
-      },
-      {
-        jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
-      }
-    )
-  })
+  body: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "DownloadFileContainer",
+    props: {
+      sourceJsonPath: "documentsPreview",
+      className: "noc-review-documents"
+    }
+  }
 });

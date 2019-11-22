@@ -21,7 +21,7 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { footer } from "./summaryResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
-// import { nocSummary } from "./summaryResource/nocSummary";
+import { nocSummary } from "./summaryResource/nocSummary";
 // import { propertySummary } from "./summaryResource/propertySummary";
 // import { generateBill } from "../utils/index";
 
@@ -150,8 +150,8 @@ const screenConfig = {
           scrutinySummary : scrutinySummary,
           applicantSummary: applicantSummary,
           plotAndBoundaryInfoSummary : plotAndBoundaryInfoSummary,
-          documentsSummary: documentsSummary          
-          // nocSummary: nocSummary,
+          documentsSummary: documentsSummary,          
+          nocSummary: nocSummary,
           // propertySummary: propertySummary,
           
           // institutionSummary: institutionSummary,
