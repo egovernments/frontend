@@ -148,15 +148,12 @@ export const getServiceDetails = (isEditable = true) => {
         visible: true,
         children: {
           buttonLabel: getLabel({
-            labelName: "View Consumption Details",
-            labelKey: "View Consumption Details"
+            labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL"
           })
         },
         onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            
-          }
+          action: "page_change",
+          path: `/wns/meter-reading`
         }
       },
     })

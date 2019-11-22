@@ -15,7 +15,7 @@ export const connectionDetailsFooter = getCommonApplyFooter({
     },
     children: {
       downloadButton: getLabel({
-        labelKey: "WS_COMMON_DOWNLOAD_BILL"
+        labelKey: "WS_COMMON_BUTTON_DOWNLOAD"
       })
     },
     onClickDefination: {
