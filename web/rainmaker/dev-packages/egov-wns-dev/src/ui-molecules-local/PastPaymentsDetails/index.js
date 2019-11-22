@@ -231,7 +231,7 @@ const mapStateToProps = state => {
             </div>
             <div style={{ height: "auto" }}>
               <Label
-                label={getCommaSeperatedAddress(address, cities)}
+                label={"707/B, Railway Colony, Amrister,Punjab"}
                 labelStyle={secondaryTextLabelStyle}
                 fontSize="14px"
                 containerStyle={secondaryTextContainer}
