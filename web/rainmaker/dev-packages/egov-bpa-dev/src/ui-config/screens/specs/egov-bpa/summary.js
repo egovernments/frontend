@@ -32,11 +32,39 @@ const header = getCommonContainer({
   })
 });
 
-const prepareDocumentsView = async (state, dispatch) => {
+const prepareDocumentsDetailsView = async (state, dispatch) => {
   let documentsPreview = [];
   let reduxDocuments = get(
     state,
-    "screenConfiguration.preparedFinalObject.documentsUploadRedux",
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    {}
+  );
+  jp.query(reduxDocuments, "$.*").forEach(doc => {
+    if (doc.documentDetails && doc.documentDetails.length > 0) {
+      documentsPreview.push({
+        title: getTransformedLocale(doc.documentCode),
+        name: doc.documentDetails[0].fileName,
+        fileStoreId: doc.documentDetails[0].fileStoreId,
+        linkText: "View"
+      });
+    }
+  });
+  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : [];
+  documentsPreview = documentsPreview.map(doc => {
+    doc["link"] = fileUrls[doc.fileStoreId];
+    return doc;
+  });
+  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+};
+
+
+const prepareNocDocumentsView = async (state, dispatch) => {
+  let documentsPreview = [];
+  let reduxDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux",
     {}
   );
   jp.query(reduxDocuments, "$.*").forEach(doc => {
@@ -56,7 +84,7 @@ const prepareDocumentsView = async (state, dispatch) => {
     doc["link"] = fileUrls[doc.fileStoreId];
     return doc;
   });
-  dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+  dispatch(prepareFinalObject("nocDocumentsPreview", documentsPreview));
 };
 
 const screenConfig = {
@@ -120,7 +148,8 @@ const screenConfig = {
     //   );
     // }
     // generateBill(dispatch, applicationNumber, tenantId);
-    prepareDocumentsView(state, dispatch);
+    prepareNocDocumentsView(state, dispatch);
+    prepareDocumentsDetailsView(state, dispatch);
     return action;
   },
   components: {

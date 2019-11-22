@@ -127,7 +127,7 @@ class DocumentList extends Component {
   componentDidMount = () => {
     const {
       documentsList1,
-      documentsUploadRedux1 = {},
+      documentDetailsUploadRedux = {},
       prepareFinalObject
     } = this.props;
     const documentsList = [
@@ -217,15 +217,15 @@ class DocumentList extends Component {
           if (card.subCards) {
             card.subCards.forEach(subCard => {
               let oldDocType = get(
-                documentsUploadRedux1,
+                documentDetailsUploadRedux,
                 `[${index}].documentType`
               );
               let oldDocCode = get(
-                documentsUploadRedux1,
+                documentDetailsUploadRedux,
                 `[${index}].documentCode`
               );
               let oldDocSubCode = get(
-                documentsUploadRedux1,
+                documentDetailsUploadRedux,
                 `[${index}].documentSubCode`
               );
               if (
@@ -233,7 +233,7 @@ class DocumentList extends Component {
                 oldDocCode != card.name ||
                 oldDocSubCode != subCard.name
               ) {
-                documentsUploadRedux1[index] = {
+                documentDetailsUploadRedux[index] = {
                   documentType: docType.code,
                   documentCode: card.name,
                   documentSubCode: subCard.name
@@ -243,15 +243,15 @@ class DocumentList extends Component {
             });
           } else {
             let oldDocType = get(
-              documentsUploadRedux1,
+              documentDetailsUploadRedux,
               `[${index}].documentType`
             );
             let oldDocCode = get(
-              documentsUploadRedux1,
+              documentDetailsUploadRedux,
               `[${index}].documentCode`
             );
             if (oldDocType != docType.code || oldDocCode != card.name) {
-              documentsUploadRedux1[index] = {
+              documentDetailsUploadRedux[index] = {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
@@ -264,7 +264,7 @@ class DocumentList extends Component {
           }
         });
     });
-    prepareFinalObject("documentsUploadRedux1", documentsUploadRedux1);
+    prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
   };
 
   onUploadClick = uploadedDocIndex => {
@@ -273,14 +273,14 @@ class DocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentsUploadRedux1 } = this.props;
+    const { prepareFinalObject, documentDetailsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    prepareFinalObject("documentsUploadRedux1", {
-      ...documentsUploadRedux1,
+    prepareFinalObject("documentDetailsUploadRedux", {
+      ...documentDetailsUploadRedux,
       [uploadedDocIndex]: {
-        ...documentsUploadRedux1[uploadedDocIndex],
-        documents: [
+        ...documentDetailsUploadRedux[uploadedDocIndex],
+        documentDetails: [
           {
             fileName: file.name,
             fileStoreId,
@@ -294,31 +294,31 @@ class DocumentList extends Component {
   removeDocument = remDocIndex => {
     const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `documentsUploadRedux1.${remDocIndex}.documents`,
+      `documentDetailsUploadRedux.${remDocIndex}.documentDetails`,
       undefined
     );
     this.forceUpdate();
   };
 
   handleChange = (key, event) => {
-    const { documentsUploadRedux1, prepareFinalObject } = this.props;
+    const { documentDetailsUploadRedux, prepareFinalObject } = this.props;
     console.log(this.props, "Document List Props");
-    prepareFinalObject(`documentsUploadRedux1`, {
-      ...documentsUploadRedux1,
+    prepareFinalObject(`documentDetailsUploadRedux`, {
+      ...documentDetailsUploadRedux,
       [key]: {
-        ...documentsUploadRedux1[key],
+        ...documentDetailsUploadRedux[key],
         dropdown: { value: event.target.value }
       }
     });
   };
 
   getUploadCard = (card, key) => {
-    const { classes, documentsUploadRedux1 } = this.props;
-    let jsonPath = `documentsUploadRedux1[${key}].dropdown.value`;
+    const { classes, documentDetailsUploadRedux } = this.props;
+    let jsonPath = `documentDetailsUploadRedux[${key}].dropdown.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {documentsUploadRedux1[key] && documentsUploadRedux1[key].documents ? (
+          {documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documentDetails ? (
             <div className={classes.documentSuccess}>
               <Icon>
                 <i class="material-icons">done</i>
@@ -372,13 +372,13 @@ class DocumentList extends Component {
               handleFileUpload(e, this.handleDocument, this.props)
             }
             uploaded={
-              documentsUploadRedux1[key] && documentsUploadRedux1[key].documents
+              documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documentDetails
                 ? true
                 : false
             }
             removeDocument={() => this.removeDocument(key)}
             documents={
-              documentsUploadRedux1[key] && documentsUploadRedux1[key].documents
+              documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documentDetails
             }
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
@@ -521,12 +521,12 @@ DocumentList.propTypes = {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { moduleName } = screenConfiguration;
-  const documentsUploadRedux1 = get(
+  const documentDetailsUploadRedux = get(
     screenConfiguration.preparedFinalObject,
-    "documentsUploadRedux1",
+    "documentDetailsUploadRedux",
     {}
   );
-  return { documentsUploadRedux1, moduleName };
+  return { documentDetailsUploadRedux, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

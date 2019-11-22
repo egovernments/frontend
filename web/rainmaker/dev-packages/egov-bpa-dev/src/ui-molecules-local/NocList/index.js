@@ -127,90 +127,80 @@ class NocList extends Component {
   componentDidMount = () => {
     const {
       documentsList1,
-      documentsUploadRedux = {},
+      nocDocumentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
     const documentsList = [
       {
-        "code": "Building plan scrutiny Douments",
-        "title": "OWNER",
+        // "code": "Status of Noc from the follwing departments",
+        "title": "",
         "cards": [
           {
-            "name": "Floor plans, Elevations, Sections",
-            "code": "OWNER.IDENTITYPROOF",
+            "name": "Environment clearence",
+            "code": "Environment clearence",
             "required": true,
             "dropdown": {
-              "label": "Remarks",
+              "label": "Nature of NOC Request",
               "required": true,
             },
-            // "dropdown11": {
-            //   "label": "nature of noc",
-            //   "required": true,
-            // }
-          },
-          {
-            "name": "Service Plan",
-            "code": "Service Plan",
-            "required": true,
-            "dropdown": {
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
+              "required": true,
             }
           },
           {
-            "name": "Site Plan",
-            "code": "Site Plan",
+            "name": "Noc from airport authority",
+            "code": "Noc from airport authority",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
+              "required": true,
             }
           },
           {
-            "name": "Building Plan",
-            "code": "Building Plan",
+            "name": "Noc from fire authority",
+            "code": "Noc from fire authority",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
+              "required": true,
             }
           },
           {
-            "name": "Details Plan",
-            "code": "Details Plan",
+            "name": "Noc from heritage",
+            "code": "Noc from heritage",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
+              "required": true,
             }
           },
           {
-            "name": "other Details",
-            "code": "other Plan",
+            "name": "Noc from irrigation",
+            "code": "Noc from irrigation",
             "required": true,
             "dropdown": {
+              "label": "Nature of NOC Request",
+              "required": true,
+            },
+            "dropdown1": {
               "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Parking plan",
-            "code": "Parking plan",
-            "required": true,
-            "dropdown": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Roof plan",
-            "code": "Roof plan",
-            "required": true,
-            "dropdown": {
-              "label": "Remarks",
-              "required": true
+              "required": true,
             }
           }
+        
         ]
       }
     ];
@@ -221,15 +211,15 @@ class NocList extends Component {
           if (card.subCards) {
             card.subCards.forEach(subCard => {
               let oldDocType = get(
-                documentsUploadRedux,
+                nocDocumentsUploadRedux,
                 `[${index}].documentType`
               );
               let oldDocCode = get(
-                documentsUploadRedux,
+                nocDocumentsUploadRedux,
                 `[${index}].documentCode`
               );
               let oldDocSubCode = get(
-                documentsUploadRedux,
+                nocDocumentsUploadRedux,
                 `[${index}].documentSubCode`
               );
               if (
@@ -237,7 +227,7 @@ class NocList extends Component {
                 oldDocCode != card.name ||
                 oldDocSubCode != subCard.name
               ) {
-                documentsUploadRedux[index] = {
+                nocDocumentsUploadRedux[index] = {
                   documentType: docType.code,
                   documentCode: card.name,
                   documentSubCode: subCard.name
@@ -247,15 +237,15 @@ class NocList extends Component {
             });
           } else {
             let oldDocType = get(
-              documentsUploadRedux,
+              nocDocumentsUploadRedux,
               `[${index}].documentType`
             );
             let oldDocCode = get(
-              documentsUploadRedux,
+              nocDocumentsUploadRedux,
               `[${index}].documentCode`
             );
             if (oldDocType != docType.code || oldDocCode != card.name) {
-              documentsUploadRedux[index] = {
+              nocDocumentsUploadRedux[index] = {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
@@ -268,7 +258,7 @@ class NocList extends Component {
           }
         });
     });
-    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    prepareFinalObject("nocDocumentsUploadRedux", nocDocumentsUploadRedux);
   };
 
   onUploadClick = uploadedDocIndex => {
@@ -277,13 +267,13 @@ class NocList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentsUploadRedux } = this.props;
+    const { prepareFinalObject, nocDocumentsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    prepareFinalObject("documentsUploadRedux", {
-      ...documentsUploadRedux,
+    prepareFinalObject("nocDocumentsUploadRedux", {
+      ...nocDocumentsUploadRedux,
       [uploadedDocIndex]: {
-        ...documentsUploadRedux[uploadedDocIndex],
+        ...nocDocumentsUploadRedux[uploadedDocIndex],
         documents: [
           {
             fileName: file.name,
@@ -298,30 +288,30 @@ class NocList extends Component {
   removeDocument = remDocIndex => {
     const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `documentsUploadRedux.${remDocIndex}.documents`,
+      `nocDocumentsUploadRedux.${remDocIndex}.documents`,
       undefined
     );
     this.forceUpdate();
   };
 
   handleChange = (key, event) => {
-    const { documentsUploadRedux, prepareFinalObject } = this.props;
-    prepareFinalObject(`documentsUploadRedux`, {
-      ...documentsUploadRedux,
+    const { nocDocumentsUploadRedux, prepareFinalObject } = this.props;
+    prepareFinalObject(`nocDocumentsUploadRedux`, {
+      ...nocDocumentsUploadRedux,
       [key]: {
-        ...documentsUploadRedux[key],
+        ...nocDocumentsUploadRedux[key],
         dropdown: { value: event.target.value },
       }
     });
   };
 
   getUploadCard = (card, key) => {
-    const { classes, documentsUploadRedux } = this.props;
-    let jsonPath = `documentsUploadRedux[${key}].dropdown.value`;
+    const { classes, nocDocumentsUploadRedux } = this.props;
+    let jsonPath = `nocDocumentsUploadRedux[${key}].dropdown.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {documentsUploadRedux[key] && documentsUploadRedux[key].documents ? (
+          {nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents ? (
             <div className={classes.documentSuccess}>
               <Icon>
                 <i class="material-icons">done</i>
@@ -391,13 +381,13 @@ class NocList extends Component {
               handleFileUpload(e, this.handleDocument, this.props)
             }
             uploaded={
-              documentsUploadRedux[key] && documentsUploadRedux[key].documents
+              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents
                 ? true
                 : false
             }
             removeDocument={() => this.removeDocument(key)}
             documents={
-              documentsUploadRedux[key] && documentsUploadRedux[key].documents
+              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents
             }
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
@@ -534,12 +524,12 @@ NocList.propTypes = {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { moduleName } = screenConfiguration;
-  const documentsUploadRedux = get(
+  const nocDocumentsUploadRedux = get(
     screenConfiguration.preparedFinalObject,
-    "documentsUploadRedux",
+    "nocDocumentsUploadRedux",
     {}
   );
-  return { documentsUploadRedux, moduleName };
+  return { nocDocumentsUploadRedux, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

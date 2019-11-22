@@ -367,62 +367,62 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 
-export const prepareDocumentsUploadRedux = (state, dispatch) => {
-  const {
-    documentsList,
-    documentsUploadRedux = {},
-    prepareFinalObject
-  } = this.props;
-  let index = 0;
-  documentsList.forEach(docType => {
-    docType.cards &&
-      docType.cards.forEach(card => {
-        if (card.subCards) {
-          card.subCards.forEach(subCard => {
-            let oldDocType = get(
-              documentsUploadRedux,
-              `[${index}].documentType`
-            );
-            let oldDocCode = get(
-              documentsUploadRedux,
-              `[${index}].documentCode`
-            );
-            let oldDocSubCode = get(
-              documentsUploadRedux,
-              `[${index}].documentSubCode`
-            );
-            if (
-              oldDocType != docType.code ||
-              oldDocCode != card.name ||
-              oldDocSubCode != subCard.name
-            ) {
-              documentsUploadRedux[index] = {
-                documentType: docType.code,
-                documentCode: card.name,
-                documentSubCode: subCard.name
-              };
-            }
-            index++;
-          });
-        } else {
-          let oldDocType = get(documentsUploadRedux, `[${index}].documentType`);
-          let oldDocCode = get(documentsUploadRedux, `[${index}].documentCode`);
-          if (oldDocType != docType.code || oldDocCode != card.name) {
-            documentsUploadRedux[index] = {
-              documentType: docType.code,
-              documentCode: card.name,
-              isDocumentRequired: card.required,
-              isDocumentTypeRequired: card.dropdown
-                ? card.dropdown.required
-                : false
-            };
-          }
-        }
-        index++;
-      });
-  });
-  prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
-};
+// export const prepareDocumentsUploadRedux = (state, dispatch) => {
+//   const {
+//     documentsList,
+//     documentsUploadRedux = {},
+//     prepareFinalObject
+//   } = this.props;
+//   let index = 0;
+//   documentsList.forEach(docType => {
+//     docType.cards &&
+//       docType.cards.forEach(card => {
+//         if (card.subCards) {
+//           card.subCards.forEach(subCard => {
+//             let oldDocType = get(
+//               documentsUploadRedux,
+//               `[${index}].documentType`
+//             );
+//             let oldDocCode = get(
+//               documentsUploadRedux,
+//               `[${index}].documentCode`
+//             );
+//             let oldDocSubCode = get(
+//               documentsUploadRedux,
+//               `[${index}].documentSubCode`
+//             );
+//             if (
+//               oldDocType != docType.code ||
+//               oldDocCode != card.name ||
+//               oldDocSubCode != subCard.name
+//             ) {
+//               documentsUploadRedux[index] = {
+//                 documentType: docType.code,
+//                 documentCode: card.name,
+//                 documentSubCode: subCard.name
+//               };
+//             }
+//             index++;
+//           });
+//         } else {
+//           let oldDocType = get(documentsUploadRedux, `[${index}].documentType`);
+//           let oldDocCode = get(documentsUploadRedux, `[${index}].documentCode`);
+//           if (oldDocType != docType.code || oldDocCode != card.name) {
+//             documentsUploadRedux[index] = {
+//               documentType: docType.code,
+//               documentCode: card.name,
+//               isDocumentRequired: card.required,
+//               isDocumentTypeRequired: card.dropdown
+//                 ? card.dropdown.required
+//                 : false
+//             };
+//           }
+//         }
+//         index++;
+//       });
+//   });
+//   prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+// };
 
 export const furnishNocResponse = response => {
   // Handle applicant ownership dependent dropdowns

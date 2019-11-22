@@ -30,9 +30,8 @@ const setReviewPageRoute = (state, dispatch) => {
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
-  console.log(state , "Movetoreview");
   const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+    get(state.screenConfiguration.preparedFinalObject, "nocDocumentsUploadRedux")
   );
 
   let validateDocumentField = false;
@@ -322,7 +321,7 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep === 4) {
     const documentsFormat = Object.values(
-      get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux1")
+      get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
     );
 
     let validateDocumentField = false;
@@ -334,7 +333,7 @@ const callBackForNext = async (state, dispatch) => {
         "isDocumentTypeRequired"
       );
 
-      let documents = get(documentsFormat[i], "documents");
+      let documents = get(documentsFormat[i], "documentDetails");
       if (isDocumentRequired) {
         if (documents && documents.length > 0) {
           if (isDocumentTypeRequired) {
@@ -369,71 +368,6 @@ const callBackForNext = async (state, dispatch) => {
         validateDocumentField = true;
       }
     }
-    // let isApplicantTypeCardValid = validateFields(
-    //   "components.div.children.formwizardFifthStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
-    //   state,
-    //   dispatch
-    // );
-    // let isSingleApplicantCardValid = validateFields(
-    //   "components.div.children.formwizardFifthStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
-    //   state,
-    //   dispatch
-    // );
-    // let isInstitutionCardValid = validateFields(
-    //   "components.div.children.formwizardFifthStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.applicantCard.children",
-    //   state,
-    //   dispatch
-    // );
-
-    // // Multiple applicants cards validations
-    // let multipleApplicantCardPath =
-    //   "components.div.children.formwizardFifthStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items";
-    // // "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[0].item0.children.cardContent.children.applicantCard"
-    // let multipleApplicantCardItems = get(
-    //   state.screenConfiguration.screenConfig.apply,
-    //   multipleApplicantCardPath,
-    //   []
-    // );
-    // let isMultipleApplicantCardValid = true;
-    // for (var j = 0; j < multipleApplicantCardItems.length; j++) {
-    //   if (
-    //     (multipleApplicantCardItems[j].isDeleted === undefined ||
-    //       multipleApplicantCardItems[j].isDeleted !== false) &&
-    //     !validateFields(
-    //       `${multipleApplicantCardPath}[${j}].item${j}.children.cardContent.children.applicantCard.children`,
-    //       state,
-    //       dispatch,
-    //       "apply"
-    //     )
-    //   )
-    //     isMultipleApplicantCardValid = false;
-    // }
-
-    // let selectedApplicantType = get(
-    //   state,
-    //   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //   "SINGLE"
-    // );
-    // if (selectedApplicantType.includes("INSTITUTIONAL")) {
-    //   isSingleApplicantCardValid = true;
-    //   isMultipleApplicantCardValid = true;
-    // } else if (selectedApplicantType.includes("MULTIPLEOWNERS")) {
-    //   isSingleApplicantCardValid = true;
-    //   isInstitutionCardValid = true;
-    // } else {
-    //   isMultipleApplicantCardValid = true;
-    //   isInstitutionCardValid = true;
-    // }
-
-    // if (
-    //   !isApplicantTypeCardValid ||
-    //   !isSingleApplicantCardValid ||
-    //   !isInstitutionCardValid ||
-    //   !isMultipleApplicantCardValid
-    // ) {
-    //   isFormValid = false;
-    //   hasFieldToaster = true;
-    // }
   }
 
   if (activeStep === 5) {

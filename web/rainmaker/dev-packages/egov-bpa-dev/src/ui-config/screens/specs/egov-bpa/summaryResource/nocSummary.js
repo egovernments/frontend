@@ -65,7 +65,7 @@ export const nocSummary = getCommonGrayCard({
     moduleName: "egov-bpa",
     componentPath: "DownloadFileContainer",
     props: {
-      sourceJsonPath: "documentsPreview",
+      sourceJsonPath: "nocDocumentsPreview",
       className: "noc-review-documents"
     }
   }
