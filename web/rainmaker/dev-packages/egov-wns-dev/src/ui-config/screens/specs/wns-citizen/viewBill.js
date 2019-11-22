@@ -363,11 +363,11 @@ const setActionItems = (action, object) => {
 
 export const tradeReviewDetails = getCommonCard({
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
+  // viewBreakupButton: getDialogButton(
+  //   "VIEW BREAKUP",
+  //   "TL_PAYMENT_VIEW_BREAKUP",
+  //   "search-preview"
+  // ),
   serviceDetails,
   propertyDetails,
   ownerDetails
