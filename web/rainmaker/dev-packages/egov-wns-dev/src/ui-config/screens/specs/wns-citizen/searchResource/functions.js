@@ -102,12 +102,12 @@ export const searchApiCall = async (state, dispatch) => {
     let data = response[0].WaterConnection.map(item => ({
 
       [getTextToLocalMapping("Service")]:
-        item.connectionType || "-",
+        item.propertyType || "WATER", //will be modified later
       [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
       [getTextToLocalMapping("Owner Name")]:
         item.connectionType || "-",
       [getTextToLocalMapping("Status")]: item.status || "-",
-      [getTextToLocalMapping("Due")]: item.meterId || "-",
+      [getTextToLocalMapping("Due")]: item.id || "-",
       ["tenantId"]: item.property.tenantId
     }));
 
