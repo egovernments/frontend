@@ -1,4 +1,5 @@
 import React from "react";
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 
 const styles = {
   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -14,7 +15,7 @@ const styles = {
 
 function ConsumerNoContainer(props) {
   const { number } = props;
-  return <div style={styles}>Consumer No. - WS-2018-PB-246464</div>;
+  return <div style={styles}><LabelContainer labelKey="WS_COMMON_CONSUMER_NO_LABEL" />: {'- WS-2018-PB-246464'} </div>;
 }
 
 export default ConsumerNoContainer;

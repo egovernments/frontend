@@ -47,14 +47,14 @@ export const getProperty = () => {
             propertyDoorNo: {
                 ...getLabelWithValue(
                     {
-                        labelKey: "WS_PROP_DETAIL_DHNO"
+                        labelKey: "WS_PROP_DETAIL_PHNO_LABEL"
                     },
                 )
             },
             propertyBuilding: {
                 ...getLabelWithValue(
                     {
-                        labelKey: "WS_PROP_DETAIL_BUILD_COMP_NAME"
+                        labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
                     })
             },
 
@@ -68,7 +68,7 @@ export const getProperty = () => {
             propertyMohalla: {
                 ...getLabelWithValue(
                     {
-                        labelKey: "WS_PROP_DETAIL_MOHALLA"
+                        labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
                     },
                 )
             },

@@ -1,11 +1,12 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
+import { Card, CardHeader, CardText } from "material-ui/Card";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { Tooltip } from "egov-ui-framework/ui-molecules";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import Label from "egov-ui-kit/utils/translationNode";
 
 const styles = {
   card: {
@@ -16,8 +17,9 @@ const styles = {
   whiteCard: {
     padding: 18,
     marginTop: 24,
-    boxShadow: "none",
-    borderRadius: 0
+    // boxShadow: "none",
+    borderRadius: 0,
+    backgroundColor: "#ffffff"
   },
   whiteCardText: {
     padding: 8,
@@ -58,11 +60,31 @@ function totalAmount(arr) {
 }
 
 function FeesEstimateCard(props) {
-  const { classes, estimate } = props;
+  const { classes, estimate, optionSelected = "Partial_Amount" } = props;
+  // const { taxHeadEstimates, totalAmount } = estimationDetails[0] || {};
+  // const { intrest, penalty, rebate } = importantDates;
+
   const total = totalAmount(estimate.fees);
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
+  console.log(1, estimate);
+  console.log(2, estimate.extra);
   return (
     <Grid container>
+      <Grid xs={12} sm={12}>
+        <Typography
+          variant="body2"
+          align="right"
+          className="tl-total-amount-text"
+        >
+          <LabelContainer
+            labelName="Total Amount"
+            labelKey="WS_COMMON_TOTAL_AMT"
+          />
+        </Typography>
+        <Typography className={totalHeadClassName} align="right">
+          Rs {5500}
+        </Typography>
+      </Grid>
       <Grid xs={12} sm={7}>
         {/* <Typography variant="subheading">{estimate.header}</Typography> */}
         <div style={{ marginTop: 48, maxWidth: 600 }}>
@@ -132,7 +154,7 @@ function FeesEstimateCard(props) {
         </div>
       </Grid>
       <Grid xs={12} sm={5}>
-        <Typography
+        {/* <Typography
           variant="body2"
           align="right"
           className="tl-total-amount-text"
@@ -143,43 +165,63 @@ function FeesEstimateCard(props) {
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">
-          Rs {total}
-        </Typography>
-        {estimate.extra && estimate.extra.length !== 0 ? (
-          <Card className={classes.whiteCard}>
-            {estimate.extra.map((item, key) => {
-              let textLeft, textRight;
-              let colLeft = item.textRight ? 6 : 12;
-              let colRight = item.textLeft ? 6 : 12;
-              if (item.textLeft) {
-                textLeft = (
-                  <Grid xs={colLeft}>
-                    <Typography>{item.textLeft}</Typography>
-                  </Grid>
-                );
-              } else {
-                textLeft = <Grid xs={colLeft} />;
-              }
-              if (item.textRight) {
-                textRight = (
-                  <Grid xs={colRight}>
-                    <Typography>{item.textRight}</Typography>
-                  </Grid>
-                );
-              } else {
-                textRight = <Grid xs={colRight} />;
-              }
-              return (
-                <Grid container>
-                  {textLeft}
-                  {textRight}
-                </Grid>
-              );
-            })}
-          </Card>
-        ) : null}
+          Rs {5500}
+        </Typography> */}
+        {/* {estimate.extra && estimate.extra.length !== 0 ? ( */}
+        {/* <Card className={classes.whiteCard}> */}
+        {/* {estimate.extra.map((item, key) => {
+            let textLeft, textRight;
+            let colLeft = item.textRight ? 6 : 12;
+            let colRight = item.textLeft ? 6 : 12;
+            if (!item.textLeft) { */}
+        {/* // textLeft = (
+            //   <Grid xs={colLeft}>
+            //     <Typography>Due Date</Typography>
+            //   </Grid>
+            // );
+            // } else { */}
+        {/* //   textLeft = <Grid xs={colLeft} />;
+            // }
+            // if (item.textRight) { */}
+        {/* // textRight = (
+            //   <Grid xs={colRight}>
+            //     <Typography>01/01/2019</Typography>
+            //   </Grid>
+            // );
+            // } else { */}
+        {/* //   textRight = <Grid xs={colRight} />;
+            // }
+          //   return (
+          //     <Grid container>
+          //       <Grid xs={6}>
+          //         <Typography>Due Date</Typography>
+          //       </Grid>
+          //       <Grid xs={6}>
+          //         <Typography>01/01/2019</Typography>
+          //       </Grid>
+          //     </Grid>
+          //   );
+          // })} */}
+
+        <Card className={classes.whiteCard} style={{ backgroundColor: '#fff', boxShadow: "none" }}>
+          <Grid container>
+            <Grid xs={12} style={{ marginBottom: 16, fontSize: '16px', fontWeight: 500 }}>
+              <LabelContainer
+                labelKey="WS_VIEW_BILL_IMP_DATE_HEADER"
+              />
+            </Grid>
+            <Grid xs={6}>
+              <Typography><LabelContainer labelKey="WS_VIEW_BILL_DUE_DATE_LABEL"></LabelContainer></Typography>
+            </Grid>
+            <Grid xs={6} align="right">
+              <Typography>01/01/2019</Typography>
+            </Grid>
+          </Grid>
+        </Card>
+        {/* // ) : null} */}
       </Grid>
-    </Grid>
+
+    </Grid >
   );
 }
 
