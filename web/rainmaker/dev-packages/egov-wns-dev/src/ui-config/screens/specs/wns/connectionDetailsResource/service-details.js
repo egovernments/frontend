@@ -132,7 +132,7 @@ export const getServiceDetails = (isEditable = true) => {
         },
         { jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees" }
       ),
-      viewConsumption: {
+      editSection: {
         componentPath: "Button",
         props: {
           color: "primary",
