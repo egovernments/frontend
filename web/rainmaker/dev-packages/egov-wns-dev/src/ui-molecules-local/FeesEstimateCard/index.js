@@ -203,9 +203,9 @@ function FeesEstimateCard(props) {
           //   );
           // })} */}
 
-        <Card className={classes.whiteCard} style={{ backgroundColor: '#fff' }}>
+        <Card className={classes.whiteCard} style={{ backgroundColor: '#fff', boxShadow: "none" }}>
           <Grid container>
-            <Grid xs={12} style={{ marginBottom: 16, fontSize: '16px', fontWeight: 500, boxShadow: "none", }}>
+            <Grid xs={12} style={{ marginBottom: 16, fontSize: '16px', fontWeight: 500 }}>
               <LabelContainer
                 labelKey="WS_VIEW_BILL_IMP_DATE_HEADER"
               />
