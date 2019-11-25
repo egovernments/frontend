@@ -2368,6 +2368,12 @@ export const getTextToLocalMapping = label => {
         "WS_COMMON_TABLE_COL_DUE_LABEL",
         localisationLabels
       );
+    case "Address":
+      return getLocaleLabels(
+        "Address",
+        "Address",
+        localisationLabels
+      );
 
     // case "INITIATED":
     //   return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);

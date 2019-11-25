@@ -48,6 +48,7 @@ export const searchResults = {
         }
       },
       getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Address"),
       getTextToLocalMapping("Status"),
       getTextToLocalMapping("Due"),
       {
