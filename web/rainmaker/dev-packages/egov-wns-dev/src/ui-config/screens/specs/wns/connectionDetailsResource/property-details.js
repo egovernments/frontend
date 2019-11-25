@@ -23,12 +23,12 @@ const getHeader = label => {
   };
 };
 
-const properyDetailsHeader = getHeader({
-  labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
-});
-const propertyLocationDetailsHeader = getHeader({
-  labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
-});
+// const properyDetailsHeader = getHeader({
+//   labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
+// });
+// const propertyLocationDetailsHeader = getHeader({
+//   labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
+// });
 
 const propertyDetails = getCommonContainer({
   reviewApplicationType: getLabelWithValue(
@@ -86,7 +86,7 @@ const propertyLocationDetails = getCommonContainer({
   ),
   reviewLicenceType: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_DHNO"
+      labelKey: "WS_PROP_DETAIL_PH_SURVEYNO_LABEL"
     },
     {
       jsonPath: "Licenses[0].licenseType",
@@ -98,7 +98,7 @@ const propertyLocationDetails = getCommonContainer({
   ),
   reviewTradeName: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_BUILD_COMP_NAME"
+      labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
     },
     { jsonPath: "Licenses[0].tradeName" }
   ),
@@ -112,7 +112,7 @@ const propertyLocationDetails = getCommonContainer({
   ),
   reviewCommencementDate: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_MOHALLA"
+      labelKey: "WS_PROP_DETAIL_LOCALITY_LABEL"
     },
     {
       jsonPath: "Licenses[0].commencementDate",
@@ -185,10 +185,13 @@ export const getPropertyDetails = (isEditable = true) => {
         }
       }
     },
-    viewOne: properyDetailsHeader,
-    viewTwo: propertyDetails,
-    viewThree: propertyLocationDetailsHeader,
-    viewFour: propertyLocationDetails
+    viewOne: propertyDetails,
+    viewTwo: propertyLocationDetails
+
+    // viewOne: properyDetailsHeader,
+    // viewTwo: propertyDetails,
+    // viewThree: propertyLocationDetailsHeader,
+    // viewFour: propertyLocationDetails
   });
 };
 

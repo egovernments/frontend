@@ -16,21 +16,14 @@ export const searchResults = {
                 name: getTextToLocalMapping("Service"),
                 options: {
                     filter: false,
-                    customBodyRender: value => ( <
-                        span style = {
-                            { color: 'black' }
-                        } > { value } <
-                        /span>
-                    )
+                    customBodyRender: value => ( <span style = {{ color: 'black' }} > { value } </span> )
                 }
             },
             {
                 name: getTextToLocalMapping("Consumer No"),
                 options: {
                     filter: false,
-                    customBodyRender: value => ( <
-                        Link to = "/wns/connection-details" > { value } <
-                        /Link>
+                    customBodyRender: value => ( <Link to = "/wns/connection-details" > { value } </Link>
                     )
                 }
             },
@@ -41,13 +34,7 @@ export const searchResults = {
                 name: getTextToLocalMapping(" "),
                 options: {
                     filter: false,
-                    customBodyRender: value => ( <
-                        Link to = "/wns/viewBill"
-                        style = {
-                            { color: '#fe7a51', textTransform: 'uppercase' }
-                        } >
-                        Pay now <
-                        /Link>
+                    customBodyRender: value => ( <Link to = "/wns/viewBill" style = {{ color: '#fe7a51', textTransform: 'uppercase' }} >Pay now </Link>
                     )
                 }
             },
