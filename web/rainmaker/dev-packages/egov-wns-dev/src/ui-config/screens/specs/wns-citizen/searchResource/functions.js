@@ -38,12 +38,13 @@ export const searchApiCall = async (state, dispatch) => {
     "search"
   );
 
-  // if ((isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
+  // if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
   //   dispatch(
   //     toggleSnackbar(
   //       true,
   //       {
-  //         //         labelKey: "ERR_WS_FILL_MANDATORY_FIELDS"
+  //         labelName: "Please fill valid fields to start search",
+  //         labelKey: "ERR_FILL_VALID_FIELDS"
   //       },
   //       "warning"
   //     )
@@ -56,7 +57,8 @@ export const searchApiCall = async (state, dispatch) => {
   //     toggleSnackbar(
   //       true,
   //       {
-  //         //         labelKey: "ERR_WS_FILL_VALID_FIELDS"
+  //         labelName: "Please fill at least one field to start search",
+  //         labelKey: "ERR_FILL_ONE_FIELDS"
   //       },
   //       "warning"
   //     )
@@ -97,7 +99,7 @@ export const searchApiCall = async (state, dispatch) => {
   //   }
 
   const response = await getSearchResults(queryObject);
-  // const response = { 'WaterConnection': [{ "Service": "WATER", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200", "tenantId": "123" }] }
+  // const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
   try {
     let data = response[0].WaterConnection.map(item => ({
 
@@ -105,9 +107,10 @@ export const searchApiCall = async (state, dispatch) => {
         item.propertyType || "WATER", //will be modified later
       [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
       [getTextToLocalMapping("Owner Name")]:
-        item.connectionType || "-",
+        item.property.owners !== undefined ? item.property.owners[0].name : "-" || "-",
       [getTextToLocalMapping("Status")]: item.status || "-",
       [getTextToLocalMapping("Due")]: item.id || "-",
+      [getTextToLocalMapping("Address")]: item.property.address || "-",
       ["tenantId"]: item.property.tenantId
     }));
 
