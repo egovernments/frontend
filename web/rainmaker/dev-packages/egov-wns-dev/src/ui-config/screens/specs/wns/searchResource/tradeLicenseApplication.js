@@ -10,12 +10,13 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.applicationNo",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.consumerNo",
       "props.value",
       ""
     )
@@ -23,7 +24,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.NOCNo",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.ownerMobNo",
       "props.value",
       ""
     )
@@ -31,7 +32,23 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.ownerMobNo",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.billingPeriod",
+      "props.value",
+      ""
+    )
+  );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.applicationNo",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.fromDate",
       "props.value",
       ""
     )
@@ -39,23 +56,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.applicationNo",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.fromDate",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.toDate",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.toDate",
       "props.value",
       ""
     )
@@ -82,8 +83,9 @@ export const tradeLicenseApplication = getCommonCard({
         xs: 12,
         sm: 4
       },
-      // required: true,
-      errorMessage: "ERR_INVALID_ULB",
+      required: false,
+      pattern: getPattern("consumerNo"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.ulb"
     }),
 
@@ -115,8 +117,13 @@ export const tradeLicenseApplication = getCommonCard({
         xs: 12,
         sm: 4
       },
-      // required: true,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      iconObj: {
+        label: "+91 |",
+        position: "start"
+      },
+      required: false,
+      pattern: getPattern("MobileNo"),
+      errorMessage: "ERR_INVALID_MOBILE_NO",
       jsonPath: "searchScreen.billingYear"
     }),
     billingPeriod: getSelectField({
@@ -138,7 +145,7 @@ export const tradeLicenseApplication = getCommonCard({
         sm: 4
       },
       // required: true,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      errorMessage: "ERR_INVALID_BILLING_PERIOD",
       jsonPath: "searchScreen.billingPeriod"
     }),
 
@@ -154,7 +161,8 @@ export const tradeLicenseApplication = getCommonCard({
         sm: 4
       },
       // required: true,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+      pattern: getPattern("Date"),
+      errorMessage: "ERR_INVALID_DATE",
       jsonPath: "searchScreen.billingPeriodValue"
     }),
 

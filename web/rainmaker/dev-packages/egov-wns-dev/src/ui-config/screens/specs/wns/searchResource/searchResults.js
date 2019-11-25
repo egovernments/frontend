@@ -14,17 +14,17 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name:getTextToLocalMapping("Service"),
+        name: getTextToLocalMapping("Service"),
         options: {
           filter: false,
           customBodyRender: value => (
-            <span style={{ color: '#000000'}}>
+            <span style={{ color: '#000000' }}>
               {value}
             </span>
           )
         }
       },
-      
+
       // {
       //   name: getTextToLocalMapping("Application No"),
       //   options: {
@@ -41,7 +41,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <Link to="connection-details">
+            <Link onClick={() => onRowClick(value)} to="">
               {value}
             </Link>
           )
@@ -78,10 +78,7 @@ export const searchResults = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Application Date",
@@ -102,17 +99,17 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
+  console.log('rowData')
+  console.log(rowData)
   switch (rowData[5]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
         }`;
-        
+
       break;
     default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-        }&tenantId=${rowData[6]}`;
+      window.location.href = `connection-details?connectionNo=${rowData[0]}&tenantId=${rowData[6]}`;
       break;
   }
 };
