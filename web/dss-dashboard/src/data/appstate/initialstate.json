@@ -1,0 +1,884 @@
+{
+    "apistatus": {
+        "progress": false,
+        "error": false,
+        "message": null
+    },
+    "firstReducer": {
+        "dashboardConfigData": [],
+        "name": "",
+        "isLoaded": false
+    },
+    "globalFilter": [{
+            "label": "DateRange",
+            "type": "dropdown",
+            "values": [
+                "FY 17-18",
+                "FY 18-19",
+                "FY 19-20"
+            ]
+        },
+        {
+            "label": "District",
+            "type": "dropdown",
+            "values": ["Gurdaspur", "Fazilka", "Ludhiana", "Moga", "Kapurthala", "Sangrur", "Bathinda", "Hoshiarpur", "Tarn Taran", "Ferozepur", "Amritsar", "Jalandhar", "Muktsar", "kapurthala", "Fatehgarh Sahib", "Barnala", "Patiala", "Mohali", "Ropar", "Faridkot", "Roopnagar", "Nawanshar", "Pathankot", "Mansa", "Punjab"],
+            "master": [{ "Fazilka": "6", "Jalandhar": "10", "Sangrur": "21", "Amritsar": "1", "Jalandhar": "10", "Sangrur": "21", "Fatehgarh Sahib": "5", "Amritsar": "1", "Ropar": "140001", "Fazilka": "6", "Moga": "14", "Moga": "14", "Nawanshar": "17", "Bathinda": "3", "Nawanshar": "17", "Mohali": "15", "Mansa": "13", "Muktsar": "16", "Barnala": "2", "Fatehgarh Sahib": "5", "Gurdaspur": "8", "Bathinda": "3", "kapurthala": "11", "Barnala": "2", "Patiala": "19", "Bathinda": "3", "Bathinda": "3", "Sangrur": "21", "Mansa": "13", "Tarn Taran": "22", "Jalandhar": "10", "Bathinda": "3", "Kapurthala": "11", "Jalandhar": "10", "Mansa": "13", "Mansa": "13", "Roopnagar": "20", "Bathinda": "3", "Sangrur": "21", "Hoshiarpur": "9", "Gurdaspur": "8", "Mohali": "15", "Barnala": "2", "Moga": "14", "Gurdaspur": "8", "Kapurthala": "11", "Sangrur": "21", "Gurdaspur": "8", "Sangrur": "21", "Ludhiana": "12", "Faridkot": "4", "Gurdaspur": "8", "Moga": "14", "Fazilka": "6", "Ferozepur": "7", "Hoshiarpur": "9", "Hoshiarpur": "9", "Patiala": "19", "Patiala": "19", "Muktsar": "16", "Bathinda": "3", "Jalandhar": "10", "Gurdaspur": "8", "Ferozepur": "7", "Barnala": "2", "Hoshiarpur": "9", "Hoshiarpur": "9", "Ludhiana": "12", "Faridkot": "4", "Fazilka": "6", "Jalandhar": "10", "Amritsar": "1", "Mansa": "13", "Kapurthala": "11", "Jalandhar": "10", "Fatehgarh Sahib": "5", "Sangrur": "21", "Ludhiana": "12", "Mohali": "15", "Tarn Taran": "22", "Roopnagar": "20", "Bathinda": "3", "Bathinda": "3", "Moga": "14", "Faridkot": "4", "Bathinda": "3", "Mohali": "15", "Mohali": "15", "Sangrur": "21", "Bathinda": "3", "Jalandhar": "10", "Sangrur": "21", "Ludhiana": "12", "Ludhiana": "12", "Hoshiarpur": "9", "Amritsar": "1", "Ferozepur": "7", "Sangrur": "21", "Ferozepur": "7", "Ludhiana": "12", "Muktsar": "16", "Bathinda": "3", "Ferozepur": "7", "Fatehgarh Sahib": "5", "Bathinda": "3", "Mansa": "13", "Bathinda": "3", "Jalandhar": "10", "Bathinda": "3", "Moga": "14", "Mohali": "15", "Sangrur": "21", "Roopnagar": "20", "Ferozepur": "7", "Hoshiarpur": "9", "Muktsar": "16", "Ludhiana": "12", "Patiala": "19", "Kapurthala": "11", "Jalandhar": "10", "Roopnagar": "20", "Amritsar": "1", "Bathinda": "3", "Nawanshar": "17", "Mohali": "15", "Moga": "14", "Jalandhar": "10", "Pathankot": "18", "Patiala": "19", "Patiala": "19", "Tarn Taran": "22", "Ludhiana": "12", "Jalandhar": "10", "Jalandhar": "10", "Punjab": "0", "Gurdaspur": "8", "Nawanshar": "17", "Ludhiana": "12", "Amritsar": "1", "Patiala": "19", "Bathinda": "3", "Amritsar": "1", "Bathinda": "3", "Bathinda": "3", "Amritsar": "1", "Roopnagar": "20", "Ludhiana": "12", "Patiala": "19", "Ludhiana": "12", "Patiala": "19", "Bathinda": "3", "Sangrur": "21", "Mansa": "13", "Jalandhar": "10", "Hoshiarpur": "9", "Fatehgarh Sahib": "5", "Gurdaspur": "8", "Pathankot": "18", "Kapurthala": "11", "Sangrur": "21", "Ferozepur": "7", "Bathinda": "3", "Hoshiarpur": "9", "Barnala": "2", "Tarn Taran": "22", "Jalandhar": "10", "Hoshiarpur": "9", "Ferozepur": "7", "Mohali": "15" }]
+        },
+        {
+            "label": "ULBS",
+            "type": "dropdown",
+            "values": ["Boha", "Gurdaspur", "Derabassi", "Shahkot", "Fazilka", "Rajpura", "Batala", "Majitha", "Bilga", "Raikot", "Tapa", "Jandialaguru", "Badhnikalan", "Hoshiarpur", "Nadala", "Dinanagar", "Morinda", "Maluka", "Ghagga", "Budhlada", "Tarntaran", "Phillaur", "Hariana", "Rahon", "Baghapurana", "Jalandhar", "Sultanpurlodhi", "Handiaya", "Patti", "Arniwala", "Mahilpur", "Ahmedgarh", "Bassipathana", "Ramdass", "Kartarpur", "Patiala", "Bhadaur", "Fatehgarhpanjtoor", "Phagwara", "Faridkot", "Lehramohabbat", "Goniana", "Bhulath", "Mansa", "Nathana", "Chaunke", "Dirba", "Makhu", "Rampura", "Shamchurasi", "Sahnewal", "Samrala", "Bhikhiwind", "Dharamkot", "Ludhiana", "Quadian", "Jaitu", "Kapurthala", "Sangrur", "Machhiwara", "Nurmahal", "Sujanpur", "Doraha", "Maur", "Dhanaula", "Bhikhi", "Rayya", "Bhogpur", "Lohiankhas", "Banga", "Srihargobindpur", "Jagraon", "Zira", "Joga", "Kotshamir", "Bariwala", "Garhdiwala", "Abohar", "Bhawanigarh", "Mukerian", "Raman", "Kotfatta", "Nawanshahr", "Balianwali", "Nangal", "Kurali", "Nihalsinghwala", "Patran", "Goraya", "Rajasansi", "Sardulgarh", "Sirhind", "Mamdot", "Derababananak", "Garhshankar", "Zirakpur", "Bhadson", "Mudki", "Bathinda", "Nakodar", "Khanna", "Mallanwala", "Rampuraphul", "Muktsar", "Maloud", "Nabha", "Mandigobindgarh", "Mohali", "Khemkaran", "Sangatmandi", "Sunam", "Dasuya", "Kotissekhan", "Begowal", "Mandikalan", "Malout", "Gidderbaha", "Punjab", "Khamano", "Fatehgarhchurian", "Mehraj", "Banur", "Cheema", "Lalru", "Longowal", "Talwandibhai", "Amargarh", "Khanauri", "Sanaur", "Urmartanda", "Moga", "Talwandisabo", "Ajnala", "Payal", "Amloh", "Bhairoopa", "Malerkotla", "Bareta", "Kharar", "Narotjaimailsingh", "Ferozepur", "Bhagtabhai", "Ghanaur", "Amritsar", "Dhilwan", "Kothaguru", "Mehatpur", "Guruharsahai", "Mullanpur", "Samana", "Adampur", "Alawalpur", "Barnala", "Kiratpur Sahib", "Balachaur", "Kotkapura", "Talwara", "Dhuri", "Ropar", "Nayagaon", "Jalalabad", "Moonak", "Testing", "Chamkaursahib", "Bhuchomandi", "Dhariwal", "Lehragaga", "Pathankot", "Anandpursahib"]
+        },
+        {
+            "label": "Departments",
+            "type": "dropdown",
+            "values": [
+                "Property Tax",
+                "Trade licence",
+                "PGR"
+            ]
+        },
+        {
+            "label": "Denomination",
+            "type": "switch",
+            "values": [
+                "Cr",
+                "Lac",
+                "Unit"
+            ]
+        }
+    ],
+    "GFilterData": {
+        "Denomination": "Lac",
+        "ULBS": [],
+        "District": [],
+        "Departments": "",
+        "duration": {
+            "title": "FY 19-20",
+            "value": {}
+        }
+    },
+    "DemandAndCollectionData": [{
+            "headerName": "SNO-1",
+            "headerValue": 1,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 343.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 2.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 6.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "1",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.goraya",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-2",
+            "headerValue": 2,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 944.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 2.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 2.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "2",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.sirhind",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-3",
+            "headerValue": 3,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 863.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 4.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "3",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.abohar",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-4",
+            "headerValue": 4,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 956.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "4",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.derabassi",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-5",
+            "headerValue": 5,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 407.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "5",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.doraha",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-6",
+            "headerValue": 6,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "6",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.ferozepur",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-7",
+            "headerValue": 7,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 22087.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "7",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.hoshiarpur",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 1079.6000003814697,
+                    "symbol": "amount"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-8",
+            "headerValue": 8,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 396.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "8",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.mansa",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-9",
+            "headerValue": 9,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 592.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 6.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "9",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.nurmahal",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-10",
+            "headerValue": 10,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 604.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 7.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "10",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.zirakpur",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-11",
+            "headerValue": 11,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 16790.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "11",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.amritsar",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-12",
+            "headerValue": 12,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 5580.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "12",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.bathinda",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-13",
+            "headerValue": 13,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 16885.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "13",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.jalandhar",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-14",
+            "headerValue": 14,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 33323.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "14",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.ludhiana",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-15",
+            "headerValue": 15,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 1355.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "15",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.moga",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-16",
+            "headerValue": 16,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 5100.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "16",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.mohali",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-17",
+            "headerValue": 17,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 1972.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "17",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.pathankot",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-18",
+            "headerValue": 18,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 7360.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "18",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.patiala",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-19",
+            "headerValue": 19,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 823.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "19",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.phagwara",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        }
+    ]
+}
