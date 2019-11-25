@@ -10,7 +10,6 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
-
 const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
@@ -61,7 +60,6 @@ const resetFields = (state, dispatch) => {
     )
   );
 };
-
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelKey: "WS_SEARCH_CONNECTION_HEADER"
@@ -70,135 +68,128 @@ export const tradeLicenseApplication = getCommonCard({
     labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
   }),
   appTradeAndMobNumContainer: getCommonContainer({
-    consumerNo: getTextField({
+    city: getSelectField({
       label: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_LABEL"
+        labelKey: "WS_PROP_DETAIL_CITY"
       },
       placeholder: {
-        labelName: "Select ULB",
-        labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_PLACEHOLDER"
+        labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
       },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      // required: true,
-      errorMessage: "ERR_INVALID_ULB",
-      jsonPath: "searchScreen.ulb"
-    }),
-
-    // applicationNo: getTextField({
-    //   label: {
-    //     labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-    //   },
-    //   placeholder: {
-    //     labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
-    //   },
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 4
-    //   },
-    //   required: false,
-    //   pattern: /^[a-zA-Z0-9-]*$/i,
-    //   // errorMessage: "ERR_INVALID_CONSUMER_NO",
-    //   // jsonPath: "searchScreen.applicationNumber"
-    // }),
-
-    ownerMobNo: getTextField({
-      label: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
-      },
-      placeholder: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      // required: true,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.billingYear"
-    }),
-    billingPeriod: getSelectField({
-      label: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-      },
-      placeholder: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
-      },
-      required: false,
       localePrefix: {
         moduleName: "WF",
-        masterName: "NEWTL"
+        masterName: "FIRENOC"
       },
       jsonPath: "searchScreen.status",
       sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+      required: false,
       gridDefination: {
         xs: 12,
         sm: 4
-      },
-      // required: true,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.billingPeriod"
+      }
     }),
-
-    fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "WS_COMMON_FROM_DATE_LABEL" },
-      placeholder: {
-        labelName: "Select From Date",
-        labelKey: "WS_FROM_DATE_PLACEHOLDER"
+    propertyid: getTextField({
+      label: {
+        labelKey: "WS_PROPERTY_ID_LABEL"
       },
-      jsonPath: "searchScreen.fromDate",
+      placeholder: {
+        labelKey: "WS_PROPERTY_ID_PLACEHOLDER"
+      },
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      // required: true,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.billingPeriodValue"
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
     }),
-
-    toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "WS_COMMON_TO_DATE_LABEL" },
-      placeholder: {
-        labelName: "Select to Date",
-        labelKey: "WS_COMMON_TO_DATE_PLACEHOLDER"
+    ownerMobNo: getTextField({
+      label: {
+        labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
       },
-      jsonPath: "searchScreen.toDate",
+      placeholder: {
+        labelKey: "WS_OWN_DETAIL_MOBILE_NO_PLACEHOLDER"
+      },
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE",
-      required: false
-    })
+      iconObj: {
+        label: "+91 |",
+        position: "start"
+      },
+      required: false,
+      pattern: getPattern("MobileNo"),
+      jsonPath: "searchScreen.mobileNumber",
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
+    }),
+    cusomerid: getTextField({
+      label: {
+        labelKey: "WS_MYCONNECTIONS_CONSUMER_NO"
+      },
+      placeholder: {
+        labelKey: "WS_SEARCH_CONNNECTION_CONSUMER_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
+    }),
+    oldConsumerid: getTextField({
+      label: {
+        labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL"
+      },
+      placeholder: {
+        labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.fireNOCNumber"
+    }),
+  //   applicationNo: getTextField({
+  //     label: {
+  //       labelKey: "WS_MYCONNECTIONS_APPLICATION_NO"
+  //     },
+  //     placeholder: {
+  //       labelKey: "WS_SEARCH_CONNECTIONS_APPLICATION_NO_PLACEHOLDER"
+  //     },
+  //     gridDefination: {
+  //       xs: 12,
+  //       sm: 4
+  //     },
+  //     required: false,
+  //     pattern: /^[a-zA-Z0-9-]*$/i,
+  //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+  //     jsonPath: "searchScreen.fireNOCNumber"
+  //   }),
   }),
-
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
-      mihyEmptyRow: {
-        uiFramework: "custom-atoms",
-        componentPath: "Item",
-        props: {
-          sm: 2
-        }
-      },
       resetButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4,
-          align: "center"
+          sm: 6
+          // align: "center"
         },
         props: {
           variant: "outlined",
           style: {
             color: "#FE7A51",
             borderColor: "#FE7A51",
-            width: "70%",
+            width: "220px",
             height: "48px",
             margin: "8px",
+            float: "right"
           }
         },
         children: {
@@ -215,8 +206,8 @@ export const tradeLicenseApplication = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4,
-          align: "center"
+          sm: 6
+          // align: "center"
         },
         props: {
           variant: "contained",
@@ -225,7 +216,7 @@ export const tradeLicenseApplication = getCommonCard({
             margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "70%",
+            width: "220px",
             height: "48px"
           }
         },
@@ -238,14 +229,7 @@ export const tradeLicenseApplication = getCommonCard({
           action: "condition",
           callBack: searchApiCall
         }
-      },
-      mihyEmptyRow: {
-        uiFramework: "custom-atoms",
-        componentPath: "Item",
-        props: {
-          sm: 2
-        }
-      },
+      }
     })
   })
 });

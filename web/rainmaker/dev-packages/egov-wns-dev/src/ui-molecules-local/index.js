@@ -82,10 +82,10 @@ const MeterReadingEditable = Loadable({
   loading: () => <Loading />
 })
 
-const PropertyTaxDetails = Loadable({
-  loader: () => import("./PropertyTaxDetails"),
-  loading: () => <Loading />
-})
+// const PropertyTaxDetails = Loadable({
+//   loader: () => import("./PropertyTaxDetails"),
+//   loading: () => <Loading />
+// })
 
 export {
   TestMolecules,
@@ -103,5 +103,5 @@ export {
   PastPaymentsDetails,
   MeterReading,
   MeterReadingEditable,
-  PropertyTaxDetails
+  // PropertyTaxDetails
 };

@@ -77,7 +77,7 @@ class MyConnections extends React.Component {
                   />
                 </Grid>
                 <Grid item xs={3}>
-                  <Link to="connection-details">
+                  <Link to="/wns/connection-details">
                     <Label
                       labelName="WS-2018-PB-642665"
                       fontSize={14}
@@ -150,7 +150,7 @@ class MyConnections extends React.Component {
                   />
                 </Grid>
               </Grid>
-              <Link to="viewBill">
+              <Link to="/wns/viewBill">
                 <div >
                   <LabelContainer
                     labelKey="CS_COMMON_PAY"
@@ -210,7 +210,7 @@ class MyConnections extends React.Component {
                   />
                 </Grid>
                 <Grid item xs={3}>
-                  <Link to="connection-details">
+                  <Link to="/wns/connection-details">
                     <Label
                       labelName="SW-2018-PB-642665"
                       fontSize={14}
@@ -283,7 +283,7 @@ class MyConnections extends React.Component {
                   />
                 </Grid>
               </Grid>
-              <Link to="viewBill">
+              <Link to="/wns/viewBill">
                 <div >
                   <LabelContainer
                     labelKey="CS_COMMON_PAY"
