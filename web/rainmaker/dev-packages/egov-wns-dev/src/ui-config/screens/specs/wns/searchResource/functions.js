@@ -107,9 +107,10 @@ export const searchApiCall = async (state, dispatch) => {
         item.propertyType || "WATER", //will be modified later
       [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
       [getTextToLocalMapping("Owner Name")]:
-        item.connectionType || "-",
+        item.property.owners !== undefined ? item.property.owners[0].name : "-" || "-",
       [getTextToLocalMapping("Status")]: item.status || "-",
       [getTextToLocalMapping("Due")]: item.id || "-",
+      [getTextToLocalMapping("Address")]: item.property.address || "-",
       ["tenantId"]: item.property.tenantId
     }));
 
