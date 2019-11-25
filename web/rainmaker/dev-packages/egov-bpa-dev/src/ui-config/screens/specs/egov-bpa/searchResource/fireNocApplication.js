@@ -273,7 +273,7 @@ export const BPAApplication = getCommonCard({
     }),
 
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "BPA_FROM_DATE_LABEL" },
+      label: { labelName: "From Date", labelKey: "From Date" },
       placeholder: {
         labelName: "From Date",
         labelKey: "BPA_FROM_DATE_PLACEHOLDER"
@@ -289,7 +289,7 @@ export const BPAApplication = getCommonCard({
     }),
 
     toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "BPA_TO_DATE_LABEL" },
+      label: { labelName: "To Date", labelKey: "To Date" },
       placeholder: {
         labelName: "To Date",
         labelKey: "BPA_TO_DATE_PLACEHOLDER"

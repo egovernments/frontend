@@ -56,8 +56,7 @@ export const basicDetails = getCommonCard({
           labelKey: "Occupancy"
         },
         jsonPath: "BPAs[0].BPADetails.basicdetails.occupancy",
-        // sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
-        // sourceJsonPath: mockJosnRoles,
+        sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
         labelsFromLocalisation: false,
         suggestions: [],
         fullwidth: true,
@@ -68,18 +67,19 @@ export const basicDetails = getCommonCard({
         isMulti: true,
         labelName: "name",
         valueName: "code",
-        disabled: true,
-        // value :[
-        //   {
-        //     value: "Occupancy Type 1",
-        //     label: "Occupany Type 1"
-        //   },
-        //   {
-        //     value: "Occupancy Type 2",
-        //     label: "Occupancy Type 2"
-        //   }
-        // ],
-        data:mockJosnRoles
+        value :[
+          {
+            value: "Occupancy Type 1",
+            label: "Occupany Type 1"
+          },
+          {
+            value: "Occupancy Type 2",
+            label: "Occupancy Type 2"
+          }
+        ],
+        data: mockJosnRoles,
+        // error: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        disable : true
       },
       gridDefination: {
         xs: 12,
@@ -123,12 +123,12 @@ export const basicDetails = getCommonCard({
     servicetype: {
       ...getSelectField({
         label: {
-          labelName: "Sub service type",
-          labelKey: "Sub service type"
+          labelName: "Service type",
+          labelKey: "Service type"
         },
         placeholder: {
-          labelName: "Select Sub service type",
-          labelKey: "Sub service type"
+          labelName: "Select service type",
+          labelKey: "Service type"
         },
         required: true,
         jsonPath: "BPAs[0].BPADetails.basicdetails.servicetype",
@@ -158,11 +158,12 @@ export const basicDetails = getCommonCard({
         required: true,
         // pattern: getPattern("Date"),
         jsonPath: "BPAs[0].BPADetails.basicdetails.appdate",
+        value: getTodaysDateInYMD(),
         props: {
           inputProps: {
             max: getTodaysDateInYMD()
           },
-          defaultValue : getTodaysDateInYMD()
+          // defaultValue : getTodaysDateInYMD()
         }
       })
     },
@@ -177,9 +178,13 @@ export const basicDetails = getCommonCard({
         //   labelKey: "HR_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         // },
         jsonPath: "BPAs[0].BPADetails.basicdetails.appfee",
-        props : {
-          defaultValue : 100,
-          disabled : true
+        value: 1000,
+        props: {
+          value: 100,
+          disabled: true,
+          // InputProps : {
+          //   readOnly: true,
+          // },
         }
       })
     },
@@ -194,9 +199,9 @@ export const basicDetails = getCommonCard({
           labelKey: "Enter Remarks Here"
         },
         jsonPath: "BPAs[0].BPADetails.basicdetails.remarks",
-        props : {
-          multiline : true,
-          rows : "4"
+        props: {
+          multiline: true,
+          rows: "4"
         }
       })
     }

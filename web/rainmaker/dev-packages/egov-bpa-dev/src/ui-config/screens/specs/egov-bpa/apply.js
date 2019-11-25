@@ -9,15 +9,15 @@ import { basicDetails } from "./applyResource/basicDetails";
 import {
   buildingPlanScrutinyDetails,
   blockWiseOccupancyAndUsageDetails,
-  demolitiondetails
+  demolitiondetails,
+  proposedBuildingDetails
 } from "./applyResource/scrutinyDetails";
 // import { propertyDetails } from "./applyResource/propertyDetails";
 // import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import {
   boundaryDetails,
-  detailsofplot,
-  proposedBuildingDetails
+  detailsofplot
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
@@ -111,7 +111,8 @@ export const formwizardSecondStep = {
   children: {
     buildingPlanScrutinyDetails,
     blockWiseOccupancyAndUsageDetails,
-    demolitiondetails
+    demolitiondetails,
+    proposedBuildingDetails
   },
   visible: false
 };
@@ -136,8 +137,7 @@ export const formwizardFourthStep = {
   },
   children: {
     boundaryDetails,
-    detailsofplot,
-    proposedBuildingDetails
+    detailsofplot
   },
   visible: false
 };

@@ -8,7 +8,8 @@ import {
     getSelectField,
     getTextField,
     getDateField,
-    getPattern
+    getPattern,
+    getCheckBoxwithLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getDetailsForOwner } from "../../utils";
@@ -34,7 +35,7 @@ const commonApplicantInformation = () => {
                 }
             }
         ),
-        applicantCard1: getCommonContainer({
+        applicantCard: getCommonContainer({
             applicantName: getTextField({
                 label: {
                     labelName: "Owner Name",
@@ -47,7 +48,7 @@ const commonApplicantInformation = () => {
                 required: true,
                 // // pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
-                jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
+                jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].name",
                 // props: {
                 //   style: {
                 //     maxWidth: "400px"
@@ -72,7 +73,7 @@ const commonApplicantInformation = () => {
                 // // pattern: getPattern("Address"),
                 errorMessage: "Invalid Address",
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",
+                    "BPAs[0].BPADetails.applicantDetails.owners[0].correspondenceAddress",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -97,7 +98,7 @@ const commonApplicantInformation = () => {
                 // // pattern: getPattern("MobileNo"),
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
+                    "BPAs[0].BPADetails.applicantDetails.owners[0].mobileNumber",
                 iconObj: {
                     iconName: "search",
                     position: "end",
@@ -132,7 +133,7 @@ const commonApplicantInformation = () => {
                 // // pattern: getPattern("Email"),
                 errorMessage: "Invalid Email",
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId",
+                    "BPAs[0].BPADetails.applicantDetails.owners[0].emailId",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -173,7 +174,22 @@ const commonApplicantInformation = () => {
                     // required: true
                 },
                 type: "array"
-            }
+            },
+            // primaryOwner: {
+            //     ...getCheckBoxwithLabel(
+            //         {
+            //             labelName: "Is Primary Owner ?",
+            //             labelKey: "Is Primary Owner ?"
+            //         },
+            //         {
+            //             style: {
+            //                 //marginBottom: 18
+            //             },
+            //             props: {
+            //                 labelPlacement: "start"
+            //             }
+            //         }),
+            // },
         })
     });
 };
@@ -201,11 +217,11 @@ const institutionInformation = () => {
                     labelName: "Enter Name of Institution",
                     labelKey: "NOC_ENTER_INSTITUTION_PLACEHOLDER"
                 },
-                // // pattern: getPattern("Name"),
+                pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
-                // required: true,
+                required: true,
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName",
+                    "BPAs[0].BPADetails.applicantDetails.additionalDetail.institutionName",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -221,11 +237,11 @@ const institutionInformation = () => {
                     labelName: "Enter Official Telephone No.",
                     labelKey: "NOC_ENTER_TELEPHONE_NUMBER_PLACEHOLDER"
                 },
-                // required: true,
-                // pattern: getPattern("MobileNo"),
+                required: true,
+                pattern: getPattern("MobileNo"),
                 errorMessage: "Invalid Number",
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber",
+                    "BPAs[0].BPADetails.applicantDetails.additionalDetail.telephoneNumber",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -241,10 +257,10 @@ const institutionInformation = () => {
                     labelName: "Enter Name of Authorized Person",
                     labelKey: "NOC_ENTER_AUTHORIZED_PERSON_PLACEHOLDER"
                 },
-                // required: true,
-                // pattern: getPattern("Name"),
+                required: true,
+                pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
-                jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
+                jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].name",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -260,11 +276,11 @@ const institutionInformation = () => {
                     labelName: "Enter designation of Institution",
                     labelKey: "NOC_ENTER_INSTITUTION_DESIGNATION_PLACEHOLDER"
                 },
-                // required: true,
-                // pattern: getPattern("Name"),
+                required: true,
+                pattern: getPattern("Name"),
                 errorMessage: "Invalid Designation Name",
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation",
+                    "BPAs[0].BPADetails.applicantDetails.additionalDetail.institutionDesignation",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -280,12 +296,12 @@ const institutionInformation = () => {
                     labelName: "Enter Mobile No. of Authorized Person",
                     labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_PLACEHOLDER"
                 },
-                // required: true,
-                // pattern: getPattern("MobileNo"),
+                required: true,
+                pattern: getPattern("MobileNo"),
                 errorMessage: "Invalid MobileNo.",
 
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
+                    "BPAs[0].BPADetails.applicantDetails.owners[0].mobileNumber",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -301,11 +317,11 @@ const institutionInformation = () => {
                     labelName: "Enter Email of Authorized Person",
                     labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_PLACEHOLDER"
                 },
-                // pattern: getPattern("Email"),
+                pattern: getPattern("Email"),
                 errorMessage: "Invalid Email",
-                // required: true,
+                required: true,
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId",
+                    "BPAs[0].BPADetails.applicantDetails.owners[0].emailId",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -321,11 +337,11 @@ const institutionInformation = () => {
                     labelName: "Enter Official Correspondence Address ",
                     labelKey: "NOC_ENTER_OFFICIAL_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
                 },
-                // required: true,
-                // pattern: getPattern("Address"),
+                required: true,
+                pattern: getPattern("Address"),
                 errorMessage: "Invalid Address",
                 jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",
+                    "BPAs[0].BPADetails.applicantDetails.owners[0].correspondenceAddress",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -348,7 +364,7 @@ export const applicantDetails = getCommonCard({
             }
         }
     ),
-    // break: getBreak(),
+    break: getBreak(),
     applicantTypeContainer: getCommonContainer({
         applicantTypeSelection: getCommonContainer({
             applicantType: {
@@ -358,11 +374,11 @@ export const applicantDetails = getCommonCard({
                         labelKey: "Owner Type"
                     },
                     placeholder: {
-                        labelName: "Select Owner Type",
-                        labelKey: "Owner Type"
+                        labelName: "Select Applicant Type",
+                        labelKey: "NOC_APPLICANT_TYPE_PLACEHOLDER"
                     },
                     jsonPath:
-                        "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
+                        "BPAs[0].BPADetails.applicantDetails.ownerShipMajorType",
                     localePrefix: {
                         moduleName: "common-masters",
                         masterName: "OwnerShipCategory"
@@ -378,7 +394,7 @@ export const applicantDetails = getCommonCard({
                     //     code: "Institutional-Private"
                     //   }
                     // ],
-                    // required: true,
+                    required: true,
                     sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
                     gridDefination: {
                         xs: 12,
@@ -412,7 +428,7 @@ export const applicantDetails = getCommonCard({
                         labelName: "Select Owner - Subtype",
                         labelKey: "Select Owner - Subtype"
                     },
-                    jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+                    jsonPath: "BPAs[0].BPADetails.applicantDetails.ownerShipType",
                     localePrefix: {
                         moduleName: "common-masters",
                         masterName: "OwnerShipCategory"
@@ -427,7 +443,7 @@ export const applicantDetails = getCommonCard({
                     //     display: "none"
                     //   }
                     // },
-                    // required: true,
+                    required: true,
                     gridDefination: {
                         xs: 12,
                         sm: 12,
@@ -441,8 +457,8 @@ export const applicantDetails = getCommonCard({
                         "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer";
                     let institutionContainerJsonPath =
                         "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
-                    let applicantSubtypeJsonPath =
-                        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType";
+                    // let applicantSubtypeJsonPath =
+                    //   "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType";
                     if (action.value.includes("SINGLEOWNER")) {
                         showComponent(dispatch, singleApplicantContainerJsonPath, true);
                         showComponent(dispatch, multipleApplicantContainerJsonPath, false);
@@ -485,11 +501,11 @@ export const applicantDetails = getCommonCard({
                         scheama: commonApplicantInformation(),
                         items: [],
                         addItemLabel: {
-                            labelName: "Add Applicant",
-                            labelKey: "NOC_ADD_APPLICANT_LABEL"
+                            labelName: "Add Owner",
+                            labelKey: "Add Owner"
                         },
                         sourceJsonPath:
-                            "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+                            "BPAs[0].BPADetails.applicantDetails.owners",
                         prefixSourceJsonPath:
                             "children.cardContent.children.applicantCard.children"
                     },
