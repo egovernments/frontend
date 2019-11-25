@@ -402,40 +402,47 @@ const screenConfig = {
                 sm: 4,
                 align: "right"
               },
-              children: 
-                process.env.REACT_APP_NAME === "Employee"
-                  ? {} 
-                  : {
-                    word1: {
-                      ...getCommonTitle(
-                        {
-                          labelKey: "WS_CONNECTION_DETAILS_STATUS_HEADER"
-                        },
-                        {
-                          style: {
-                            marginRight: "10px",
-                            color: "rgba(0, 0, 0, 0.6000000238418579)"
-                          }
-                        }
-                      )
+              children: {
+                // process.env.REACT_APP_NAME === "Employee"
+                //   ? {} 
+                //   : {
+                word1: {
+                  ...getCommonTitle(
+                    {
+                      labelKey: "WS_CONNECTION_DETAILS_STATUS_HEADER"
                     },
-                    word2: {
-                      ...getCommonTitle({
-                        labelName: "Active",
-                        // jsonPath: "Licenses[0].headerSideText.word2"
-                      })
-                    },
-                    // cancelledLabel: {
-                    //   ...getCommonHeader(
-                    //     {
-                    //       labelName: "Cancelled",
-                    //       labelKey: "TL_COMMON_STATUS_CANC"
-                    //     },
-                    //     { variant: "body1", style: { color: "#E54D42" } }
-                    //   ),
-                    //   visible: false
-                    // }
+                    {
+                      style: {
+                        marginRight: "10px",
+                        // color: "rgba(0, 0, 0, 0.6000000238418579)"
+                      }
+                    }
+                  )
+                },
+                word2: {
+                  ...getCommonTitle({
+                    labelName: "Active",
+                    // jsonPath: "Licenses[0].headerSideText.word2"
                   }
+                    ,
+                    {
+                      style: {
+                        marginRight: "10px",
+                        color: "rgba(0, 0, 0, 0.6000000238418579)"
+                      }
+                    })
+                },
+                // cancelledLabel: {
+                //   ...getCommonHeader(
+                //     {
+                //       labelName: "Cancelled",
+                //       labelKey: "TL_COMMON_STATUS_CANC"
+                //     },
+                //     { variant: "body1", style: { color: "#E54D42" } }
+                //   ),
+                //   visible: false
+                // }
+              }
             }
           }
         },
