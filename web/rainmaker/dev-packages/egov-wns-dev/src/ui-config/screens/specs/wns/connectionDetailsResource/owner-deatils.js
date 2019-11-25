@@ -8,6 +8,12 @@ import {
 import { changeStep } from "../viewBillResource/footer";
 
 const ownerDetails = getCommonContainer({
+  reviewOldLicenseNo: getLabelWithValue(
+    {
+      labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
+    },
+    { jsonPath: "Licenses[0].oldLicenseNumber" }
+  ),
   reviewApplicationType: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
@@ -20,12 +26,6 @@ const ownerDetails = getCommonContainer({
         masterName: "ApplicationType"
       }
     }
-  ),
-  reviewOldLicenseNo: getLabelWithValue(
-    {
-      labelKey: "WS_OWN_DETAIL_NAME"
-    },
-    { jsonPath: "Licenses[0].oldLicenseNumber" }
   ),
   reviewLicenceType: getLabelWithValue(
     {
