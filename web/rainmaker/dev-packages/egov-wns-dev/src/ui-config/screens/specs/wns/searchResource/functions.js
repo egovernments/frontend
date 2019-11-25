@@ -98,20 +98,19 @@ export const searchApiCall = async (state, dispatch) => {
   //     }
   //   }
 
-  // const response = await getSearchResults(queryObject);
-  const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
+  const response = await getSearchResults(queryObject);
+  // const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
   try {
-    let data = response.Licenses.map(item => ({
+    let data = response[0].WaterConnection.map(item => ({
+
       [getTextToLocalMapping("Service")]:
-        item.Service || "-",
-      // [getTextToLocalMapping("Application No")]:
-      //   item.applicationNumber || "-",
-      [getTextToLocalMapping("Consumer No")]: item.consumerNumber || "-",
+        item.propertyType || "WATER", //will be modified later
+      [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
       [getTextToLocalMapping("Owner Name")]:
-        item.ownerName || "-",
+        item.connectionType || "-",
       [getTextToLocalMapping("Status")]: item.status || "-",
-      [getTextToLocalMapping("Due")]: item.due || "-",
-      ["tenantId"]: item.tenantId
+      [getTextToLocalMapping("Due")]: item.id || "-",
+      ["tenantId"]: item.property.tenantId
     }));
 
     dispatch(
@@ -129,7 +128,7 @@ export const searchApiCall = async (state, dispatch) => {
         "props.title",
         `${getTextToLocalMapping(
           "Search Results for Water & Sewerage Connections"
-        )} (${response.Licenses.length})`
+        )} (${response[0].WaterConnection.length})`
       )
     );
     showHideTable(true, dispatch);
