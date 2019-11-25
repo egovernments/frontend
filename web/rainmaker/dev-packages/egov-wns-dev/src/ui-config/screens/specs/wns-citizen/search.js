@@ -1,9 +1,9 @@
 import {
-  getCommonHeader,
-  getLabel,
-  getBreak
+    getCommonHeader,
+    getLabel,
+    getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
+import { citizenApplication } from "./searchResource/citizenApplication";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
@@ -18,70 +18,70 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-  dispatch(prepareFinalObject("LicensesTemp", []));
-  dispatch(setRoute("/tradelicence/apply"));
+    dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+    dispatch(prepareFinalObject("LicensesTemp", []));
+    dispatch(setRoute("/tradelicence/apply"));
 };
 
 const header = getCommonHeader({
-  labelKey: "WS_SEARCH_CONNECTION_HEADER"
+    labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
 const tradeLicenseSearchAndResult = {
-  uiFramework: "material-ui",
-  name: "search",
-  beforeInitScreen: (action, state, dispatch) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: "NewTL" });
-    const { states } = data || [];
+    uiFramework: "material-ui",
+    name: "search",
+    beforeInitScreen: (action, state, dispatch) => {
+        const businessServiceData = JSON.parse(
+            localStorageGet("businessServiceData")
+        );
+        const data = find(businessServiceData, { businessService: "NewTL" });
+        const { states } = data || [];
 
-    if (states && states.length > 0) {
-      const status = states.map((item, index) => {
-        return {
-          code: item.state
-        };
-      });
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.searchScreen.status",
-          status.filter(item => item.code != null)
-        )
-      );
-    }
+        if (states && states.length > 0) {
+            const status = states.map((item, index) => {
+                return {
+                    code: item.state
+                };
+            });
+            dispatch(
+                prepareFinalObject(
+                    "applyScreenMdmsData.searchScreen.status",
+                    status.filter(item => item.code != null)
+                )
+            );
+        }
 
-    return action;
-  },
-  components: {
-    div: {
-      uiFramework: "custom-atoms",
-      componentPath: "Form",
-      props: {
-        className: "common-div-css",
-        id: "search"
-      },
-      children: {
-        headerDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
+        return action;
+    },
+    components: {
+        div: {
+            uiFramework: "custom-atoms",
+            componentPath: "Form",
+            props: {
+                className: "common-div-css",
+                id: "search"
+            },
+            children: {
+                headerDiv: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Container",
 
-          children: {
-            header: {
-              gridDefination: {
-                xs: 12,
-                sm: 6
-              },
-              ...header
+                    children: {
+                        header: {
+                            gridDefination: {
+                                xs: 12,
+                                sm: 6
+                            },
+                            ...header
+                        }
+                    },
+                },
+                pendingApprovals,
+                citizenApplication,
+                breakAfterSearch: getBreak(),
+                searchResults
             }
-          },
-        },
-        pendingApprovals,
-        tradeLicenseApplication,
-        breakAfterSearch: getBreak(),
-        searchResults
-      }
+        }
     }
-  }
 };
 
 export default tradeLicenseSearchAndResult;
