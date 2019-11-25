@@ -82,6 +82,11 @@ const MeterReadingEditable = Loadable({
   loading: () => <Loading />
 })
 
+const PropertyTaxDetails = Loadable({
+  loader: () => import("./PropertyTaxDetails"),
+  loading: () => <Loading />
+})
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -97,5 +102,6 @@ export {
   MyConnections,
   PastPaymentsDetails,
   MeterReading,
-  MeterReadingEditable
+  MeterReadingEditable,
+  PropertyTaxDetails
 };

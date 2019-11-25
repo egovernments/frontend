@@ -34,7 +34,11 @@ const styles = {
 class MeterReading extends React.Component {
     render() {
         const { classes } = this.props;
-        console.log(this.props)
+        function setTwoNumberDecimal(event) {
+            return parseFloat(event).toFixed(2);
+            
+        }
+        
         return (
             <Card className={classes.card}>
                 <CardContent>
@@ -67,7 +71,7 @@ class MeterReading extends React.Component {
                             <Grid item xs={12} sm={3}>
                                 <SelectField
                                     className="pt-action-dropDown"
-                                    hintText={<LabelContainer labelKey="WS_CONSUMPTION_DETAILS_METER_STATUS_PLACEHOLDER" />}
+                                    hintText="Working"
                                     underlineStyle={styles.underlineStyle}
                                     iconStyle={styles.iconStyle}
                                     style={styles.customWidth}
@@ -105,12 +109,12 @@ class MeterReading extends React.Component {
                             </Grid>
                             <Grid item xs={12} sm={3}>
                                 <TextField
-                                    hintText={<LabelContainer labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_PLACEHOLDER" />}
+                                    onChange={(e)=>console.log(setTwoNumberDecimal(e.target.value))}
                                     style={styles.customWidth}
                                     hintStyle={styles.hintStyle}
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-
+                                
                                 />
 
                             </Grid>
@@ -145,7 +149,7 @@ class MeterReading extends React.Component {
                             </Grid>
                             <Grid item xs={12} sm={3} style={{ paddingTop: '20px' }}>
                                 <Label
-                                    labelName="25"
+                                    labelName=" "
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                                 />

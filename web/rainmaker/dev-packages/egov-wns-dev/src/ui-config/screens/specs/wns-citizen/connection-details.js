@@ -287,7 +287,7 @@ const setStatusBasedValue = status => {
 
     default:
       return {
-        titleText: "",
+        titleText: "Active",
         titleVisibility: false,
         roleDefination: {}
       };
@@ -402,14 +402,14 @@ const screenConfig = {
                 sm: 4,
                 align: "right"
               },
-              children:
+              children: 
                 process.env.REACT_APP_NAME === "Employee"
-                  ? {}
+                  ? {} 
                   : {
                     word1: {
                       ...getCommonTitle(
                         {
-                          jsonPath: "Licenses[0].headerSideText.word1"
+                          labelKey: "WS_CONNECTION_DETAILS_STATUS_HEADER"
                         },
                         {
                           style: {
@@ -421,19 +421,20 @@ const screenConfig = {
                     },
                     word2: {
                       ...getCommonTitle({
-                        jsonPath: "Licenses[0].headerSideText.word2"
+                        labelName: "Active",
+                        // jsonPath: "Licenses[0].headerSideText.word2"
                       })
                     },
-                    cancelledLabel: {
-                      ...getCommonHeader(
-                        {
-                          labelName: "Cancelled",
-                          labelKey: "TL_COMMON_STATUS_CANC"
-                        },
-                        { variant: "body1", style: { color: "#E54D42" } }
-                      ),
-                      visible: false
-                    }
+                    // cancelledLabel: {
+                    //   ...getCommonHeader(
+                    //     {
+                    //       labelName: "Cancelled",
+                    //       labelKey: "TL_COMMON_STATUS_CANC"
+                    //     },
+                    //     { variant: "body1", style: { color: "#E54D42" } }
+                    //   ),
+                    //   visible: false
+                    // }
                   }
             }
           }

@@ -3,8 +3,7 @@ import {
   getCommonCard,
   getCommonTitle,
   getCommonGrayCard,
-  getCommonContainer,
-  getCommonSubHeader
+  getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -20,21 +19,17 @@ import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton
 } from "../utils";
 
-import { footerReview } from "./viewBillResource/footer";
+import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
-  getFeesEstimateCard,
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
+import { getServiceDetails } from "./connectionDetailsResource/service-details";
+import { getPropertyDetails } from "./connectionDetailsResource/property-details";
+import { getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import { getProperty } from "./viewBillResource/propertyDetails";
-import { getOwner } from "./viewBillResource/ownerDetails";
-import { getService } from "./viewBillResource/serviceDetails";
-import { viewBillFooter } from "./viewBillResource/viewBillFooter";
-
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -173,10 +168,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     // const status = getTransformedStatus(
     //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
     // );
-    const status = get(
-      state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].status"
-    );
+    // const status = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.Licenses[0].status"
+    // );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
@@ -244,7 +239,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   }
 };
 
-let titleText = "";
 
 const setStatusBasedValue = status => {
   switch (status) {
@@ -302,10 +296,7 @@ const setStatusBasedValue = status => {
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelKey: "WS_COMMON_WATER_BILL_HEADER"
-  }),
-  headerDynamicVal: getCommonHeader({
-    labelName: `(Q3-2018-19)`,
+    labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -317,28 +308,12 @@ const headerrow = getCommonContainer({
   }
 });
 
-const estimate = getCommonGrayCard({
-  header: getCommonSubHeader(
-    {
-      labelKey: "WS_VIEWBILL_DETAILS_HEADER" //TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER
-    },
-    {
-      style: {
-        marginBottom: 18
-      }
-    },
-  ),
-  estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "LicensesTemp[0].estimateCardData"
-  }),
-});
+const serviceDetails = getServiceDetails(false);
 
-const propertyDetails = getProperty(false);
-const ownerDetails = getOwner(false);
-const serviceDetails = getService();
+const propertyDetails = getPropertyDetails(false);
 
-// let approvalDetails = getApprovalDetails(status);
-let title = getCommonTitle({ labelName: titleText });
+const ownerDetails = getOwnerDetails(false);
+
 
 const setActionItems = (action, object) => {
   set(
@@ -362,7 +337,6 @@ const setActionItems = (action, object) => {
 };
 
 export const tradeReviewDetails = getCommonCard({
-  estimate,
   serviceDetails,
   propertyDetails,
   ownerDetails
@@ -370,30 +344,30 @@ export const tradeReviewDetails = getCommonCard({
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "view-bill",
+  name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    // const status = getQueryArg(window.location.href, "status");
-    // const tenantId = getQueryArg(window.location.href, "tenantId");
-    // applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const status = getQueryArg(window.location.href, "status");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
-    //     applicationNumber
-    //   );
-    //   if (status !== "pending_payment") {
-    //     set(
-    //       action.screenConfig,
-    //       "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
-    //       false
-    //     );
-    //   }
+    set(
+      action.screenConfig,
+      "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
+      applicationNumber
+    );
+    if (status !== "pending_payment") {
+      set(
+        action.screenConfig,
+        "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
+        false
+      );
+    }
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessService", value: "newTL" }
     ];
-    // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    // beforeInitFn(action, state, dispatch, applicationNumber);
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
 
@@ -416,6 +390,55 @@ const screenConfig = {
               },
               ...headerrow
             },
+            helpSection: {
+              uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end", display: "block" }
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                align: "right"
+              },
+              children:
+              // process.env.REACT_APP_NAME === "Employee"
+              //   ? {}
+              // : {
+              {
+                word1: {
+                  ...getCommonTitle(
+                    {
+                      labelKey: "WS_CONNECTION_DETAILS_STATUS_HEADER"
+                      // jsonPath: "Licenses[0].headerSideText.word1"
+                    },
+                    {
+                      style: {
+                        marginRight: "10px",
+                        color: "rgba(0, 0, 0, 0.6000000238418579)"
+                      }
+                    }
+                  )
+                },
+                word2: {
+                  ...getCommonTitle({
+                    labelName: "Active",
+                    // jsonPath: "Licenses[0].headerSideText.word2"
+                  })
+                },
+                cancelledLabel: {
+                  ...getCommonHeader(
+                    {
+                      labelName: "Cancelled",
+                      labelKey: "TL_COMMON_STATUS_CANC"
+                    },
+                    { variant: "body1", style: { color: "#E54D42" } }
+                  ),
+                  visible: false
+                }
+              }
+            }
           }
         },
         taskStatus: {
@@ -425,12 +448,12 @@ const screenConfig = {
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
         },
         tradeReviewDetails,
-        viewBillFooter
+        connectionDetailsFooter
       }
     },
     breakUpDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-wns",
       componentPath: "ViewBreakupContainer",
       props: {
         open: false,

@@ -67,7 +67,7 @@ class IncompleteAssessments extends Component {
         <BreadCrumbs url={urls} history="" />
         {sortedProperties && (
           <AssessmentList
-            onItemClick={this.onListItemClick}
+            // onItemClick={this.onListItemClick}
             history={history}
             items={sortedProperties}
             innerDivStyle={innerDivStyle}
