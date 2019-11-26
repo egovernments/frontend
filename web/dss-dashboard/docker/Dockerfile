@@ -5,6 +5,7 @@ WORKDIR /app
 ENV NODE_OPTIONS "--max-old-space-size=1792"
 ENV NPM_CONFIG_PREFIX=/tmp/.npm-global
 ENV PATH=$PATH:/tmp/.npm-global/bin
+ENV HOME=/tmp
 
 # copy the project files
 COPY ${WORK_DIR} .
