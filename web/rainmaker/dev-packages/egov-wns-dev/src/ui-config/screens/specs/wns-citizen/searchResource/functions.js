@@ -25,14 +25,14 @@ export const searchApiCall = async (state, dispatch) => {
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    "components.div.children.citizenApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
     state,
     dispatch,
     "search"
@@ -43,8 +43,7 @@ export const searchApiCall = async (state, dispatch) => {
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill valid fields to start search",
-          labelKey: "ERR_FILL_VALID_FIELDS"
+          labelKey: "ERR_WS_FILL_MANDATORY_FIELDS"
         },
         "warning"
       )
@@ -57,10 +56,9 @@ export const searchApiCall = async (state, dispatch) => {
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill at least one field to start search",
-          labelKey: "ERR_FILL_ONE_FIELDS"
+          labelKey: "ERR_WS_FILL_VALID_FIELDS"
         },
-        "warning"
+        "error"
       )
     );
   } else if (
@@ -82,19 +80,7 @@ export const searchApiCall = async (state, dispatch) => {
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
-        if (key === "fromDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "daystart")
-          });
-        } else if (key === "toDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "dayend")
-          });
-        } else {
-          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
-        }
+        queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
 

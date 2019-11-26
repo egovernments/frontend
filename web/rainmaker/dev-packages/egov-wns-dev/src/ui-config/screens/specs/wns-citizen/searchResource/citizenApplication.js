@@ -15,7 +15,7 @@ const resetFields = (state, dispatch) => {
     dispatch(
         handleField(
             "search",
-            "components.div.children.citizenApplication.children.cardContent.children.appTradeAndMobNumContainer.children.city",
+            "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children.city",
             "props.value",
             ""
         )
@@ -23,7 +23,7 @@ const resetFields = (state, dispatch) => {
     dispatch(
         handleField(
             "search",
-            "components.div.children.citizenApplication.children.cardContent.children.appTradeAndMobNumContainer.children.propertyid",
+            "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children.propertyid",
             "props.value",
             ""
         )
@@ -31,7 +31,7 @@ const resetFields = (state, dispatch) => {
     dispatch(
         handleField(
             "search",
-            "components.div.children.citizenApplication.children.cardContent.children.appTradeAndMobNumContainer.children.ownerMobNo",
+            "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children.ownerMobNo",
             "props.value",
             ""
         )
@@ -39,7 +39,7 @@ const resetFields = (state, dispatch) => {
     dispatch(
         handleField(
             "search",
-            "components.div.children.citizenApplication.children.cardContent.children.appTradeAndMobNumContainer.children.consumerid",
+            "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children.consumerid",
             "props.value",
             ""
         )
@@ -47,7 +47,7 @@ const resetFields = (state, dispatch) => {
     dispatch(
         handleField(
             "search",
-            "components.div.children.citizenApplication.children.cardContent.children.appTradeAndMobNumContainer.children.oldConsumerid",
+            "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children.oldConsumerid",
             "props.value",
             ""
         )
@@ -60,7 +60,7 @@ export const citizenApplication = getCommonCard({
     subParagraph: getCommonParagraph({
         labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
     }),
-    appTradeAndMobNumContainer: getCommonContainer({
+    cityPropertyAndMobNumContainer: getCommonContainer({
         city: getSelectField({
             label: {
                 labelKey: "WS_PROP_DETAIL_CITY"
@@ -68,17 +68,17 @@ export const citizenApplication = getCommonCard({
             placeholder: {
                 labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
             },
-            localePrefix: {
-                moduleName: "WF",
-                masterName: "FIRENOC"
+            labelPrefix: {
+                moduleName: "TENANT",
+                masterName: "TENANTS"
             },
-            jsonPath: "searchScreen.city",
-            sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-            required: false,
+            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+            jsonPath: "Licenses[0].tradeLicenseDetail.address.tenantId",
+            required: true,
             gridDefination: {
                 xs: 12,
                 sm: 4
-            }
+            },
         }),
         propertyid: getTextField({
             label: {
@@ -172,7 +172,7 @@ export const citizenApplication = getCommonCard({
                 gridDefination: {
                     xs: 12,
                     sm: 6
-                        // align: "center"
+                    // align: "center"
                 },
                 props: {
                     variant: "outlined",
@@ -200,7 +200,7 @@ export const citizenApplication = getCommonCard({
                 gridDefination: {
                     xs: 12,
                     sm: 6
-                        // align: "center"
+                    // align: "center"
                 },
                 props: {
                     variant: "contained",

@@ -123,7 +123,7 @@ export const tradeLicenseApplication = getCommonCard({
       },
       required: false,
       pattern: getPattern("MobileNo"),
-      errorMessage: "ERR_INVALID_MOBILE_NO",
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.billingYear"
     }),
     billingPeriod: getSelectField({
