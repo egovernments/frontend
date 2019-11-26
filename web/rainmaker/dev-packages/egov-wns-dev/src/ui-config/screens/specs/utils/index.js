@@ -2327,7 +2327,6 @@ export const getRequiredDocData = async (action, state, dispatch) => {
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
-  console.log(1, localisationLabels);
   switch (label) {
     case "Application No":
       return getLocaleLabels(
