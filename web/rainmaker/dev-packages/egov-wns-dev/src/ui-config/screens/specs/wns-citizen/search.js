@@ -12,6 +12,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { searchResults } from "./searchResource/searchResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
+import commonConfig from "config/common.js";
+import { httpRequest } from "../../../../ui-utils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -33,23 +35,11 @@ const tradeLicenseSearchAndResult = {
         const businessServiceData = JSON.parse(
             localStorageGet("businessServiceData")
         );
+
         const data = find(businessServiceData, { businessService: "NewTL" });
         const { states } = data || [];
-
-        if (states && states.length > 0) {
-            const status = states.map((item, index) => {
-                return {
-                    code: item.state
-                };
-            });
-            dispatch(
-                prepareFinalObject(
-                    "applyScreenMdmsData.searchScreen.status",
-                    status.filter(item => item.code != null)
-                )
-            );
-        }
-
+        getData(action, state, dispatch).then(responseAction => {
+        });
         return action;
     },
     components: {
@@ -81,6 +71,43 @@ const tradeLicenseSearchAndResult = {
                 searchResults
             }
         }
+    }
+};
+
+export const getData = async (action, state, dispatch) => {
+    await getMdmsData(action, state, dispatch);
+};
+
+export const getMdmsData = async (action, state, dispatch) => {
+    let mdmsBody = {
+        MdmsCriteria: {
+            tenantId: commonConfig.tenantId,
+            moduleDetails: [
+                {
+                    moduleName: "tenant",
+                    masterDetails: [
+                        {
+                            name: "tenants"
+                        }
+                    ]
+                },
+            ]
+        }
+    };
+    try {
+        let payload = null;
+        payload = await httpRequest(
+            "post",
+            "/egov-mdms-service/v1/_search",
+            "_search",
+            [],
+            mdmsBody
+        );
+
+        dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+
+    } catch (e) {
+        console.log(e);
     }
 };
 
