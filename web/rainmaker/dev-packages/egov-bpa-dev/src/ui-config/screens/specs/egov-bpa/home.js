@@ -5,7 +5,6 @@ import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIco
 import { getRequiredDocData } from "../utils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { pbkdf2 } from "crypto";
 
 const header = getCommonHeader(
@@ -55,7 +54,7 @@ const tradeLicenseSearchAndResult = {
       set(
         action,
         "screenConfig.components.adhocDialog.children.popup",
-        getRequiredDocuments(documents)
+        // getRequiredDocuments(documents)
       );
     });
     return action;
@@ -81,24 +80,6 @@ const tradeLicenseSearchAndResult = {
         }
       }
     },
-    // cityPickerDialog: {
-    //   componentPath: "Dialog",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "md"
-    //   },
-    //   children: {
-    //     dialogContent: {
-    //       componentPath: "DialogContent",
-    //       props: {
-    //         style: { minHeight: "180px", minWidth: "365px" }
-    //       },
-    //       children: {
-    //         popup: cityPicker
-    //       }
-    //     }
-    //   }
-    // }
     adhocDialog: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-bpa",

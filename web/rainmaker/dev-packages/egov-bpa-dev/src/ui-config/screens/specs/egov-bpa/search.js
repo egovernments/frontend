@@ -20,7 +20,6 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -84,7 +83,7 @@ const NOCSearchAndResult = {
       set(
         action,
         "screenConfig.components.adhocDialog.children.popup",
-        getRequiredDocuments(documents)
+        // getRequiredDocuments(documents)
       );
     });
     return action;

@@ -7,9 +7,7 @@ import {
     getCommonTitle,
     getSelectField,
     getTextField,
-    getDateField,
-    getPattern,
-    getCheckBoxwithLabel
+    getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getDetailsForOwner } from "../../utils";
@@ -46,14 +44,9 @@ const commonApplicantInformation = () => {
                     labelKey: "Enter Owner Name"
                 },
                 required: true,
-                // // pattern: getPattern("Name"),
+                pattern: getPattern("Name"),
                 errorMessage: "Invalid Name",
                 jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].name",
-                // props: {
-                //   style: {
-                //     maxWidth: "400px"
-                //   }
-                // },
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -70,10 +63,9 @@ const commonApplicantInformation = () => {
                     labelKey: "Enter Owners Communication Address"
                 },
                 required: true,
-                // // pattern: getPattern("Address"),
+                pattern: getPattern("Address"),
                 errorMessage: "Invalid Address",
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.owners[0].correspondenceAddress",
+                jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].correspondenceAddress",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -95,10 +87,9 @@ const commonApplicantInformation = () => {
                     key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
                 },
                 infoIcon: "info_circle",
-                // // pattern: getPattern("MobileNo"),
+                pattern: getPattern("MobileNo"),
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.owners[0].mobileNumber",
+                jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].mobileNumber",
                 iconObj: {
                     iconName: "search",
                     position: "end",
@@ -130,10 +121,9 @@ const commonApplicantInformation = () => {
                     labelName: "Enter eMail ID",
                     labelKey: "eMail ID"
                 },
-                // // pattern: getPattern("Email"),
+                pattern: getPattern("Email"),
                 errorMessage: "Invalid Email",
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.owners[0].emailId",
+                jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].emailId",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -148,8 +138,7 @@ const commonApplicantInformation = () => {
                     sm: 12,
                     md: 6
                 },
-                jsonPath:
-                    "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender",
+                jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].gender",
                 props: {
                     label: { name: "Gender", key: "NOC_GENDER_LABEL" },
                     buttons: [
@@ -169,185 +158,22 @@ const commonApplicantInformation = () => {
                             value: "TRANSGENDER"
                         }
                     ],
-                    jsonPath:
-                        "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
-                    // required: true
+                    jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].gender"
                 },
                 type: "array"
             },
-            // primaryOwner: {
-            //     ...getCheckBoxwithLabel(
-            //         {
-            //             labelName: "Is Primary Owner ?",
-            //             labelKey: "Is Primary Owner ?"
-            //         },
-            //         {
-            //             style: {
-            //                 //marginBottom: 18
-            //             },
-            //             props: {
-            //                 labelPlacement: "start"
-            //             }
-            //         }),
-            // },
-        })
-    });
-};
-
-const institutionInformation = () => {
-    return getCommonGrayCard({
-        header: getCommonSubHeader(
-            {
-                labelName: "Applicant Information",
-                labelKey: "NOC_APPLICANT_INFORMATION_SUBHEADER"
+            primaryOwner: {
+                uiFramework: "custom-containers-local",
+                componentPath: "CheckboxContainer",
+                jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].primaryOwner",
+                props: {
+                    // style: {
+                    //     display: 'none'
+                    // },
+                    content: 'Is Primary Owner ?'
+                },
+                type: "array"
             },
-            {
-                style: {
-                    marginBottom: 18
-                }
-            }
-        ),
-        applicantCard: getCommonContainer({
-            institutionName: getTextField({
-                label: {
-                    labelName: "Name of Institution",
-                    labelKey: "NOC_INSTITUTION_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter Name of Institution",
-                    labelKey: "NOC_ENTER_INSTITUTION_PLACEHOLDER"
-                },
-                pattern: getPattern("Name"),
-                errorMessage: "Invalid Name",
-                required: true,
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.additionalDetail.institutionName",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                }
-            }),
-            telephoneNumber: getTextField({
-                label: {
-                    labelName: "Official Telephone No.",
-                    labelKey: "NOC_TELEPHONE_NUMBER_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter Official Telephone No.",
-                    labelKey: "NOC_ENTER_TELEPHONE_NUMBER_PLACEHOLDER"
-                },
-                required: true,
-                pattern: getPattern("MobileNo"),
-                errorMessage: "Invalid Number",
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.additionalDetail.telephoneNumber",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                }
-            }),
-            authorisedPerson: getTextField({
-                label: {
-                    labelName: "Name of Authorized Person",
-                    labelKey: "NOC_AUTHORIZED_PERSON_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter Name of Authorized Person",
-                    labelKey: "NOC_ENTER_AUTHORIZED_PERSON_PLACEHOLDER"
-                },
-                required: true,
-                pattern: getPattern("Name"),
-                errorMessage: "Invalid Name",
-                jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].name",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                }
-            }),
-            designation: getTextField({
-                label: {
-                    labelName: "Designation in Institution",
-                    labelKey: "NOC_INSTITUTION_DESIGNATION_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter designation of Institution",
-                    labelKey: "NOC_ENTER_INSTITUTION_DESIGNATION_PLACEHOLDER"
-                },
-                required: true,
-                pattern: getPattern("Name"),
-                errorMessage: "Invalid Designation Name",
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.additionalDetail.institutionDesignation",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                }
-            }),
-            authorizedPersonMobile: getTextField({
-                label: {
-                    labelName: "Mobile No. of Authorized Person",
-                    labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter Mobile No. of Authorized Person",
-                    labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_PLACEHOLDER"
-                },
-                required: true,
-                pattern: getPattern("MobileNo"),
-                errorMessage: "Invalid MobileNo.",
-
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.owners[0].mobileNumber",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                }
-            }),
-            authorizedPersonEmail: getTextField({
-                label: {
-                    labelName: "Email of Authorized Person",
-                    labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter Email of Authorized Person",
-                    labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_PLACEHOLDER"
-                },
-                pattern: getPattern("Email"),
-                errorMessage: "Invalid Email",
-                required: true,
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.owners[0].emailId",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                }
-            }),
-            officialCorrespondenceAddress: getTextField({
-                label: {
-                    labelName: "Official Correspondence Address",
-                    labelKey: "NOC_OFFICIAL_CORRESPONDENCE_ADDRESS_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter Official Correspondence Address ",
-                    labelKey: "NOC_ENTER_OFFICIAL_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
-                },
-                required: true,
-                pattern: getPattern("Address"),
-                errorMessage: "Invalid Address",
-                jsonPath:
-                    "BPAs[0].BPADetails.applicantDetails.owners[0].correspondenceAddress",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                }
-            })
         })
     });
 };
@@ -377,23 +203,11 @@ export const applicantDetails = getCommonCard({
                         labelName: "Select Applicant Type",
                         labelKey: "NOC_APPLICANT_TYPE_PLACEHOLDER"
                     },
-                    jsonPath:
-                        "BPAs[0].BPADetails.applicantDetails.ownerShipMajorType",
+                    jsonPath: "BPAs[0].BPADetails.applicantDetails.ownerShipMajorType",
                     localePrefix: {
                         moduleName: "common-masters",
                         masterName: "OwnerShipCategory"
                     },
-                    // data: [
-                    //   {
-                    //     code: "Individual"
-                    //   },
-                    //   {
-                    //     code: "Multiple"
-                    //   },
-                    //   {
-                    //     code: "Institutional-Private"
-                    //   }
-                    // ],
                     required: true,
                     sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
                     gridDefination: {
@@ -433,16 +247,6 @@ export const applicantDetails = getCommonCard({
                         moduleName: "common-masters",
                         masterName: "OwnerShipCategory"
                     },
-                    // data: [
-                    //   {
-                    //     code: "Private Company"
-                    //   }
-                    // ],
-                    // props: {
-                    //   style: {
-                    //     display: "none"
-                    //   }
-                    // },
                     required: true,
                     gridDefination: {
                         xs: 12,
@@ -455,25 +259,21 @@ export const applicantDetails = getCommonCard({
                         "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer";
                     let multipleApplicantContainerJsonPath =
                         "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer";
-                    let institutionContainerJsonPath =
-                        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
-                    // let applicantSubtypeJsonPath =
-                    //   "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType";
+                    let primaryOwnerJsonPath =
+                        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.primaryOwner";
+
                     if (action.value.includes("SINGLEOWNER")) {
                         showComponent(dispatch, singleApplicantContainerJsonPath, true);
                         showComponent(dispatch, multipleApplicantContainerJsonPath, false);
-                        showComponent(dispatch, institutionContainerJsonPath, false);
-                        // showComponent(dispatch, applicantSubtypeJsonPath, false);
+                        showComponent(dispatch, primaryOwnerJsonPath, false);
+
                     } else if (action.value.includes("MULTIPLEOWNERS")) {
                         showComponent(dispatch, singleApplicantContainerJsonPath, false);
                         showComponent(dispatch, multipleApplicantContainerJsonPath, true);
-                        showComponent(dispatch, institutionContainerJsonPath, false);
-                        // showComponent(dispatch, applicantSubtypeJsonPath, false);
-                    } else if (action.value.includes("INSTITUTIONAL")) {
+                        showComponent(dispatch, primaryOwnerJsonPath, true);
+                    } else {
                         showComponent(dispatch, singleApplicantContainerJsonPath, false);
                         showComponent(dispatch, multipleApplicantContainerJsonPath, false);
-                        showComponent(dispatch, institutionContainerJsonPath, true);
-                        // showComponent(dispatch, applicantSubtypeJsonPath, true);
                     }
                 }
             }
@@ -504,25 +304,11 @@ export const applicantDetails = getCommonCard({
                             labelName: "Add Owner",
                             labelKey: "Add Owner"
                         },
-                        sourceJsonPath:
-                            "BPAs[0].BPADetails.applicantDetails.owners",
-                        prefixSourceJsonPath:
-                            "children.cardContent.children.applicantCard.children"
+                        sourceJsonPath: "BPAs[0].BPADetails.applicantDetails.owners",
+                        prefixSourceJsonPath: "children.cardContent.children.applicantCard.children"
                     },
                     type: "array"
                 }
-            }
-        },
-        institutionContainer: {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            props: {
-                style: {
-                    display: "none"
-                }
-            },
-            children: {
-                institutionInfo: institutionInformation()
             }
         }
     })

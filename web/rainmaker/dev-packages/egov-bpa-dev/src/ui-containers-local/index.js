@@ -34,11 +34,17 @@ const DownloadFileContainer = Loadable({
   loading: () => <Loading />
 });
 
+const CheckboxContainer = Loadable({
+  loader: () => import("./CheckboxContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   TestContainer,
   DocumentListContainer,
   NocListContainer,
   AutosuggestContainer,
-  DownloadFileContainer
+  DownloadFileContainer,
+  CheckboxContainer
 };

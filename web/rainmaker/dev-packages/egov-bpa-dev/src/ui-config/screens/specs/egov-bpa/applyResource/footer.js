@@ -128,7 +128,7 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  if (activeStep === 0) {
+  if (activeStep === 10) {
     let isBasicDetailsCardValid = validateFields(
       "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children",
       state,
@@ -143,7 +143,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 1) {
+  if (activeStep === 11) {
     let isBuildingPlanScrutinyDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.buildingPlanScrutinyDetails.children.cardContent.children.buildingPlanScrutinyDetailsContainer.children",
       state,
