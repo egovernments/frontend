@@ -80,8 +80,7 @@ function FeesEstimateCard(props) {
 
     const total = totalAmount(estimate.fees);
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
-    console.log(1, estimate);
-    console.log(2, estimate.extra);
+   
     return ( <
         Grid container >
         <
