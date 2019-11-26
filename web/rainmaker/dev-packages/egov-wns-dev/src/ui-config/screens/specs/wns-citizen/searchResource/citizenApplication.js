@@ -60,7 +60,7 @@ export const citizenApplication = getCommonCard({
     subParagraph: getCommonParagraph({
         labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
     }),
-    appTradeAndMobNumContainer: getCommonContainer({
+    cityPropertyAndMobNumContainer: getCommonContainer({
         city: getSelectField({
             label: {
                 labelKey: "WS_PROP_DETAIL_CITY"
@@ -74,7 +74,7 @@ export const citizenApplication = getCommonCard({
             },
             jsonPath: "searchScreen.city",
             sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-            required: false,
+            required: true,
             gridDefination: {
                 xs: 12,
                 sm: 4

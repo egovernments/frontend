@@ -25,120 +25,106 @@ export const searchApiCall = async (state, dispatch) => {
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    "components.div.children.citizenApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
     state,
     dispatch,
     "search"
   );
 
-  // if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
-  //   dispatch(
-  //     toggleSnackbar(
-  //       true,
-  //       {
-  //         labelName: "Please fill valid fields to start search",
-  //         labelKey: "ERR_FILL_VALID_FIELDS"
-  //       },
-  //       "warning"
-  //     )
-  //   );
-  // } else if (
-  //   Object.keys(searchScreenObject).length == 0 ||
-  //   Object.values(searchScreenObject).every(x => x === "")
-  // ) {
-  //   dispatch(
-  //     toggleSnackbar(
-  //       true,
-  //       {
-  //         labelName: "Please fill at least one field to start search",
-  //         labelKey: "ERR_FILL_ONE_FIELDS"
-  //       },
-  //       "warning"
-  //     )
-  //   );
-  // } else if (
-  //   (searchScreenObject["fromDate"] === undefined ||
-  //     searchScreenObject["fromDate"].length === 0) &&
-  //   searchScreenObject["toDate"] !== undefined &&
-  //   searchScreenObject["toDate"].length !== 0
-  // ) {
-  //   dispatch(
-  //     toggleSnackbar(
-  //       true,
-  //       { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
-  //       "warning"
-  //     )
-  //   );
-  // } else {
-  //   for (var key in searchScreenObject) {
-  //     if (
-  //       searchScreenObject.hasOwnProperty(key) &&
-  //       searchScreenObject[key].trim() !== ""
-  //     ) {
-  //       if (key === "fromDate") {
-  //         queryObject.push({
-  //           key: key,
-  //           value: convertDateToEpoch(searchScreenObject[key], "daystart")
-  //         });
-  //       } else if (key === "toDate") {
-  //         queryObject.push({
-  //           key: key,
-  //           value: convertDateToEpoch(searchScreenObject[key], "dayend")
-  //         });
-  //       } else {
-  //         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
-  //       }
-  //     }
-  //   }
-
-  const response = await getSearchResults(queryObject);
-  // const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
-  try {
-    let data = response[0].WaterConnection.map(item => ({
-
-      [getTextToLocalMapping("Service")]:
-        item.propertyType || "WATER", //will be modified later
-      [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
-      [getTextToLocalMapping("Owner Name")]:
-        item.property.owners !== undefined ? item.property.owners[0].name : "-" || "-",
-      [getTextToLocalMapping("Status")]: item.status || "-",
-      [getTextToLocalMapping("Due")]: item.id || "-",
-      [getTextToLocalMapping("Address")]: item.property.address || "-",
-      ["tenantId"]: item.property.tenantId
-    }));
-
+  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
     dispatch(
-      handleField(
-        "search",
-        "components.div.children.searchResults",
-        "props.data",
-        data
+      toggleSnackbar(
+        true,
+        {
+          labelKey: "ERR_WS_FILL_MANDATORY_FIELDS"
+        },
+        "warning"
       )
     );
+  } else if (
+    Object.keys(searchScreenObject).length == 0 ||
+    Object.values(searchScreenObject).every(x => x === "")
+  ) {
     dispatch(
-      handleField(
-        "search",
-        "components.div.children.searchResults",
-        "props.title",
-        `${getTextToLocalMapping(
-          "Search Results for Water & Sewerage Connections"
-        )} (${response[0].WaterConnection.length})`
+      toggleSnackbar(
+        true,
+        {
+          labelKey: "ERR_WS_FILL_VALID_FIELDS"
+        },
+        "error"
       )
     );
-    showHideTable(true, dispatch);
-  } catch (error) {
-    dispatch(toggleSnackbar(true, error.message, "error"));
-    console.log(error);
+  } else if (
+    (searchScreenObject["fromDate"] === undefined ||
+      searchScreenObject["fromDate"].length === 0) &&
+    searchScreenObject["toDate"] !== undefined &&
+    searchScreenObject["toDate"].length !== 0
+  ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
+        "warning"
+      )
+    );
+  } else {
+    for (var key in searchScreenObject) {
+      if (
+        searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject[key].trim() !== ""
+      ) {
+        queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+      }
+    }
+
+    const response = await getSearchResults(queryObject);
+    // const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
+    try {
+      let data = response[0].WaterConnection.map(item => ({
+
+        [getTextToLocalMapping("Service")]:
+          item.propertyType || "WATER", //will be modified later
+        [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
+        [getTextToLocalMapping("Owner Name")]:
+          item.property.owners !== undefined ? item.property.owners[0].name : "-" || "-",
+        [getTextToLocalMapping("Status")]: item.status || "-",
+        [getTextToLocalMapping("Due")]: item.id || "-",
+        [getTextToLocalMapping("Address")]: item.property.address || "-",
+        ["tenantId"]: item.property.tenantId
+      }));
+
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.data",
+          data
+        )
+      );
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.title",
+          `${getTextToLocalMapping(
+            "Search Results for Water & Sewerage Connections"
+          )} (${response[0].WaterConnection.length})`
+        )
+      );
+      showHideTable(true, dispatch);
+    } catch (error) {
+      dispatch(toggleSnackbar(true, error.message, "error"));
+      console.log(error);
+    }
   }
-}
-// };
+};
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
