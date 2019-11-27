@@ -81,7 +81,7 @@ export const getSearchResults = async queryObject => {
 };
 
 export const getConsumptionDetails = async queryObject => {
-    console.log('queryObject' + queryObject);
+    // console.log('queryObject' + queryObject);
     try {
         const response = await httpRequest(
             "post",
