@@ -181,79 +181,91 @@ export const demolitiondetails = getCommonCard({
   })
 });
 
-export const proposedBuildingDetails = {
-  uiFramework: "custom-atoms",
-  componentPath: "Div",
-  visible: true,
-  children:  {
-    breakPending: getBreak(),
-    proposedBuildingDetailsContainer: {
-      uiFramework: "custom-molecules-local",
-      moduleName: "egov-noc",
-      componentPath: "Table",
-      props: {
-        data: [
-          {
-            "Floor Description": "Ground Floor",
-            "Level": 0,
-            "Occupancy/Sub Occupancy": "Individual residential",
-            "Buildup Area": 52.22,
-            "Floor Area": 51,
-            "Carpet Area": 49
-          },
-          {
-            "Floor Description": "First Floor",
-            "Level": 0,
-            "Occupancy/Sub Occupancy": "Individual residential",
-            "Buildup Area": 52.22,
-            "Floor Area": 51,
-            "Carpet Area": 49
-          },
-          {
-            "Floor Description": "Second Floor",
-            "Level": 0,
-            "Occupancy/Sub Occupancy": "Individual residential",
-            "Buildup Area": 52.22,
-            "Floor Area": 51,
-            "Carpet Area": 49
-          },
-          {
-            "Floor Description": "Third Floor",
-            "Level": 0,
-            "Occupancy/Sub Occupancy": "Individual residential",
-            "Buildup Area": 52.22,
-            "Floor Area": 51,
-            "Carpet Area": 49
-          }
-        ],
-        columns: {
-          "Floor Description": {},
-          "Level": {},
-          "Occupancy/Sub Occupancy": {},
-          "Buildup Area": {},
-          "Floor Area": {},
-          "Carpet Area": {}
-        },
-        title: "Proposed Building Details",
-        options: {
-          filterType: "dropdown",
-          responsive: "stacked",
-          selectableRows: false,
-          pagination: false,
-          selectableRowsHeader: false,
-          sortFilterList: false,
-          sort: false,
-          filter:false,
-          search:false,
-          print: false,
-          download: false,
-          viewColumns : false
-        }
-      }
+export const proposedBuildingDetails = getCommonCard({
+  header: getCommonTitle(
+    {
+      labelName: "Proposed Building Details",
+      labelKey: "Proposed Building Details"
     },
-    breakP: getBreak(),
-    breakq: getBreak(),
-    totalBuildUpAreaDetailsContainer: getCommonContainer({
+    {
+      style: {
+        marginBottom: 18
+      }
+    }
+  ),
+  proposedContainer: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    visible: true,
+    children: {
+      breakPending: getBreak(),
+      proposedBuildingDetailsContainer: {
+        uiFramework: "custom-molecules-local",
+        moduleName: "egov-noc",
+        componentPath: "Table",
+        props: {
+          data: [
+            {
+              "Floor Description": "Ground Floor",
+              Level: 0,
+              "Occupancy/Sub Occupancy": "Individual residential",
+              "Buildup Area": 52.22,
+              "Floor Area": 51,
+              "Carpet Area": 49
+            },
+            {
+              "Floor Description": "First Floor",
+              Level: 0,
+              "Occupancy/Sub Occupancy": "Individual residential",
+              "Buildup Area": 52.22,
+              "Floor Area": 51,
+              "Carpet Area": 49
+            },
+            {
+              "Floor Description": "Second Floor",
+              Level: 0,
+              "Occupancy/Sub Occupancy": "Individual residential",
+              "Buildup Area": 52.22,
+              "Floor Area": 51,
+              "Carpet Area": 49
+            },
+            {
+              "Floor Description": "Third Floor",
+              Level: 0,
+              "Occupancy/Sub Occupancy": "Individual residential",
+              "Buildup Area": 52.22,
+              "Floor Area": 51,
+              "Carpet Area": 49
+            }
+          ],
+          columns: {
+            "Floor Description": {},
+            Level: {},
+            "Occupancy/Sub Occupancy": {},
+            "Buildup Area": {},
+            "Floor Area": {},
+            "Carpet Area": {}
+          },
+          title: "Builtup and Carpet Area Details",
+          options: {
+            filterType: "dropdown",
+            responsive: "stacked",
+            selectableRows: false,
+            pagination: false,
+            selectableRowsHeader: false,
+            sortFilterList: false,
+            sort: false,
+            filter: false,
+            search: false,
+            print: false,
+            download: false,
+            viewColumns: false
+          }
+        }
+      },
+      breakP: getBreak(),
+      breakq: getBreak(),
+      totalBuildUpAreaDetailsContainer: getCommonContainer({
         totalBuildupArea: {
           ...getTextField({
             label: {
@@ -265,7 +277,8 @@ export const proposedBuildingDetails = {
               labelKey: "Total Buildup Area (sq.mtrs)"
             },
             required: true,
-            jsonPath: "BPAs[0].BPADetails.totalbuildupareadetails.totalbuilduparea"
+            jsonPath:
+              "BPAs[0].BPADetails.totalbuildupareadetails.totalbuilduparea"
           })
         },
         numOfFloors: {
@@ -300,8 +313,9 @@ export const proposedBuildingDetails = {
           })
         }
       })
+    }
   }
-};
+});
 
 export const proposedBuildingDetails1 = getCommonGrayCard({
   header: {
