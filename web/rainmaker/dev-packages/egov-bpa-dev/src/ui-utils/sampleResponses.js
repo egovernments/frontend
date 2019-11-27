@@ -721,7 +721,7 @@ export const sampleSingleSearch = () => {
 export const sampleDocUpload = () => {
   return {
     "0": {
-      documentType: "Vamshi",
+      documentType: "OWNER",
       documentCode: "OWNER.IDENTITYPROOF",
       documents: [
         {
@@ -731,10 +731,13 @@ export const sampleDocUpload = () => {
       ],
       dropdown: {
         value: "OWNER.IDENTITYPROOF.AADHAAR"
+      },
+      dropdown1: {
+        value: "OWNER.IDENTITYPROOF.AADHAAR"
       }
     },
     "1": {
-      documentType: "Vamshi",
+      documentType: "OWNER",
       documentCode: "OWNER.ADDRESSPROOF"
     },
     "2": {

@@ -27,8 +27,8 @@ export const basicDetails = getCommonCard({
     scrutinynumber: {
       ...getTextField({
         label: {
-          labelName: "Building Plan Scrutiny Number",
-          labelKey: "Building Plan Scrutiny Number"
+          labelName: "Building plan scrutiny number",
+          labelKey: "Building plan scrutiny number"
         },
         placeholder: {
           labelName: "Enter Scrutiny Number",
@@ -162,7 +162,7 @@ export const basicDetails = getCommonCard({
           inputProps: {
             max: getTodaysDateInYMD()
           },
-          // defaultValue : getTodaysDateInYMD()
+          defaultValue : getTodaysDateInYMD()
         }
       })
     },

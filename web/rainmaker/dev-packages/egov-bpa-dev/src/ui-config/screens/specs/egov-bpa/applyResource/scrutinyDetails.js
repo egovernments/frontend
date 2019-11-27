@@ -99,7 +99,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
       }
     ),
     blockWiseContainer: getCommonContainer({
-      buildingplanscrutinyapplicationnumber: {
+      residential: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "AutosuggestContainer",
@@ -115,7 +115,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             labelName: "Select Occupancy",
             labelKey: "Occupancy"
           },
-          jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.appnum",
+          jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
           // sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
           labelsFromLocalisation: false,
           suggestions: [],
@@ -134,7 +134,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             },
             {
               code: "First Floor",
-              name: "First User"
+              name: "First Floor"
             },
             {
               code: "Second Floor",
@@ -315,169 +315,4 @@ export const proposedBuildingDetails = getCommonCard({
       })
     }
   }
-});
-
-export const proposedBuildingDetails1 = getCommonGrayCard({
-  header: {
-    uiFramework: "custom-atoms",
-    componentPath: "Container",
-    props: {
-      style: { marginBottom: "10px" }
-    },
-    children: {
-      header: {
-        gridDefination: {
-          xs: 8
-        },
-        ...getCommonSubHeader({
-          labelName: "Proposed Building Details",
-          labelKey: "Proposed Building Details"
-        })
-      }
-    }
-  },
-  cardOne: {
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
-    props: {
-      className: "applicant-summary",
-      scheama: getCommonGrayCard({
-        header: {
-          gridDefination: {
-            xs: 8
-          },
-          ...getCommonSubHeader({
-            labelName: "Buildup and Carpet Area Details",
-            labelKey: "Buildup and Carpet Area Details"
-          }),
-          props: {
-            style: {
-              marginBottom: "10px",
-              // fontWeight : "bold",
-              fontSize: "20px",
-              color: "black"
-            }
-          }
-        },
-        buildupAndCarpetContainer: getCommonContainer({
-          floordescription: getLabelWithValue(
-            {
-              labelName: "Floor description",
-              labelKey: "Floor description"
-            },
-            {
-              jsonPath:
-                "BPAs[0].BPADetails.proposedBuildingDetails.floordesription",
-              callBack: value => {
-                return 1; //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-              }
-            }
-          ),
-          level: getLabelWithValue(
-            {
-              labelName: "Level",
-              labelKey: "Level"
-            },
-            {
-              jsonPath: "BPAs[0].BPADetails.proposedBuildingDetails.level",
-              callBack: value => {
-                return value; //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-              }
-            }
-          ),
-          occupancy: getLabelWithValue(
-            {
-              labelName: "Occupancy",
-              labelKey: "Occupancy"
-            },
-            {
-              jsonPath: "BPAs[0].BPADetails.basicdetails.occupancy"
-            }
-          ),
-          builduparea: getLabelWithValue(
-            {
-              labelName: "Build Area",
-              labelKey: "Build Area"
-            },
-            {
-              jsonPath: "BPAs[0].BPADetails.basicdetails.buildarea"
-            }
-          ),
-          floorarea: getLabelWithValue(
-            {
-              labelName: "Floor Area",
-              labelKey: "Floor Area"
-            },
-            {
-              jsonPath: "BPAs[0].BPADetails.basicdetails.fllorarea"
-            }
-          ),
-          carpetarea: getLabelWithValue(
-            {
-              labelName: "Carpet Area",
-              labelKey: "Carpet Area"
-            },
-            {
-              jsonPath: "BPAs[0].BPADetails.basicdetails.carpetarea"
-            }
-          )
-        })
-      }),
-      items: [],
-      hasAddItem: false,
-      isReviewPage: true,
-      sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
-      prefixSourceJsonPath:
-        "children.cardContent.children.basicDetailsContainer.children",
-      afterPrefixJsonPath: "children.value.children.key"
-    },
-    type: "array"
-  },
-  totalBuildUpAreaDetailsContainer: getCommonContainer({
-    totalBuildupArea: {
-      ...getTextField({
-        label: {
-          labelName: "Total Buildup Area (sq.mtrs)",
-          labelKey: "Total Buildup Area (sq.mtrs)"
-        },
-        placeholder: {
-          labelName: "Total Buildup Area (sq.mtrs)",
-          labelKey: "Total Buildup Area (sq.mtrs)"
-        },
-        required: true,
-        jsonPath: "BPAs[0].BPADetails.totalbuildupareadetails.totalbuilduparea"
-      })
-    },
-    numOfFloors: {
-      ...getTextField({
-        label: {
-          labelName: "Number Of Floors",
-          labelKey: "Number Of Floors"
-        },
-        placeholder: {
-          labelName: "Number Of Floors",
-          labelKey: "Number Of Floors"
-        },
-        required: true,
-        // pattern: getPattern("Date"),
-        jsonPath: "BPAs[0].BPADetails.totalbuildupareadetails.numoffloors"
-      })
-    },
-    highFromGroundLevel: {
-      ...getTextField({
-        label: {
-          labelName: "High From Ground Level From Mumty (In Mtrs)",
-          labelKey: "High From Ground Level From Mumty (In Mtrs)"
-        },
-        placeholder: {
-          labelName: "High From Ground Level From Mumty (In Mtrs)",
-          labelKey: "High From Ground Level From Mumty (In Mtrs)"
-        },
-        required: true,
-        // pattern: getPattern("Name") || null,
-        jsonPath:
-          "BPAs[0].BPADetails.totalbuildupareadetails.highfromgroundlevel"
-      })
-    }
-  })
 });

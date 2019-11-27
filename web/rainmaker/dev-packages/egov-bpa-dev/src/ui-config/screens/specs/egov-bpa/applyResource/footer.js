@@ -47,7 +47,9 @@ const moveToReview = (state, dispatch) => {
     if (isDocumentRequired) {
       if (documents && documents.length > 0) {
         if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "dropdown.value")) {
+          if (get(documentsFormat[i], "natureOfNoc.value")) {
+            validateDocumentField = true;
+          }else if (get(documentsFormat[i], "remarks.value")) {
             validateDocumentField = true;
           } else {
             dispatch(
@@ -79,9 +81,9 @@ const moveToReview = (state, dispatch) => {
     }
   }
 
-  if (validateDocumentField) {
+  // if (validateDocumentField) {
     setReviewPageRoute(state, dispatch);
-  }
+  // }
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -176,7 +178,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 2) {
+  if (activeStep === 21) {
     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
@@ -244,7 +246,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 3) {
+  if (activeStep === 31) {
     let isBoundaryDetailsCardValid = validateFields(
       "components.div.children.formwizardFourthStep.children.boundaryDetails.children.cardContent.children.boundaryDetailsConatiner.children",
       state,
@@ -265,7 +267,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 4) {
+  if (activeStep === 41) {
     const documentsFormat = Object.values(
       get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
     );
@@ -283,7 +285,7 @@ const callBackForNext = async (state, dispatch) => {
       if (isDocumentRequired) {
         if (documents && documents.length > 0) {
           if (isDocumentTypeRequired) {
-            if (get(documentsFormat[i], "dropdown.value")) {
+            if (get(documentsFormat[i], "remarks.value")) {
               validateDocumentField = true;
             } else {
               dispatch(

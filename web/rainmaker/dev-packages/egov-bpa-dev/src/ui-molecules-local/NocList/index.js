@@ -139,12 +139,14 @@ class NocList extends Component {
             "name": "Environment clearence",
             "code": "Environment clearence",
             "required": true,
-            "dropdown": {
+            "natureOfNoc": {
               "label": "Nature of NOC Request",
+              "jsonPath" : 'bpa.natureOfNoc',
               "required": true,
             },
-            "dropdown1": {
+            "remarks": {
               "label": "Remarks",
+              "jsonPath" : 'bpa.remarks',
               "required": true,
             }
           },
@@ -152,55 +154,15 @@ class NocList extends Component {
             "name": "Noc from airport authority",
             "code": "Noc from airport authority",
             "required": true,
-            "dropdown": {
+            "natureOfNoc": {
               "label": "Nature of NOC Request",
               "required": true,
             },
-            "dropdown1": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Noc from fire authority",
-            "code": "Noc from fire authority",
-            "required": true,
-            "dropdown": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "dropdown1": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Noc from heritage",
-            "code": "Noc from heritage",
-            "required": true,
-            "dropdown": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "dropdown1": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Noc from irrigation",
-            "code": "Noc from irrigation",
-            "required": true,
-            "dropdown": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "dropdown1": {
+            "remarks": {
               "label": "Remarks",
               "required": true,
             }
           }
-        
         ]
       }
     ];
@@ -249,8 +211,8 @@ class NocList extends Component {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
-                isDocumentTypeRequired: card.dropdown
-                  ? card.dropdown.required
+                isDocumentTypeRequired: card.natureOfNoc
+                  ? card.natureOfNoc.required
                   : false
               };
             }
@@ -294,20 +256,32 @@ class NocList extends Component {
     this.forceUpdate();
   };
 
-  handleChange = (key, event) => {
+  handleNatureOfNocChange = (key, event) => {
     const { nocDocumentsUploadRedux, prepareFinalObject } = this.props;
     prepareFinalObject(`nocDocumentsUploadRedux`, {
       ...nocDocumentsUploadRedux,
       [key]: {
         ...nocDocumentsUploadRedux[key],
-        dropdown: { value: event.target.value },
+        natureOfNoc: { value: event.target.value },
+      }
+    });
+  };
+
+  handleRemarksChange = (key, event) => {
+    const { nocDocumentsUploadRedux, prepareFinalObject } = this.props;
+    prepareFinalObject(`nocDocumentsUploadRedux`, {
+      ...nocDocumentsUploadRedux,
+      [key]: {
+        ...nocDocumentsUploadRedux[key],
+        remarks: { value: event.target.value },
       }
     });
   };
 
   getUploadCard = (card, key) => {
     const { classes, nocDocumentsUploadRedux } = this.props;
-    let jsonPath = `nocDocumentsUploadRedux[${key}].dropdown.value`;
+    let jsonPath = `nocDocumentsUploadRedux[${key}].natureOfNoc.value`;
+    let jsonPath1 = `nocDocumentsUploadRedux[${key}].remarks.value`
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
@@ -338,32 +312,32 @@ class NocList extends Component {
           {card.required && requiredIcon}
         </Grid>
         <Grid item={true} xs={12} sm={6} md={3}>
-          {card.dropdown && (
+          {card.natureOfNoc && (
             <TextFieldContainer
               select={false}
-              label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
-              placeholder={{ labelKey: card.dropdown.label }}
-              // data={card.dropdown.menu}
+              label={{ labelKey: getTransformedLocale(card.natureOfNoc.label) }}
+              placeholder={{ labelKey: card.natureOfNoc.label }}
+              data={card.natureOfNoc.menu}
               optionValue="code"
               optionLabel="label"
               required={true}
-              // onChange={event => this.handleChange(key, event)}
+              onChange={event => this.handleNatureOfNocChange(key, event)}
               jsonPath={jsonPath}
             />
           )}
         </Grid>
-        {card.dropdown1 && (
+        {card.remarks && (
           <Grid item={true} xs={12} sm={6} md={2}>
             <TextFieldContainer
               select={false}
-              label={{ labelKey: getTransformedLocale(card.dropdown1.label) }}
-              placeholder={{ labelKey: card.dropdown1.label }}
-              // data={card.dropdown.menu}
+              label={{ labelKey: getTransformedLocale(card.remarks.label) }}
+              placeholder={{ labelKey: card.remarks.label }}
+              data={card.remarks.menu}
               optionValue="code"
               optionLabel="label"
               required={true}
-              // onChange={event => this.handleChange(key, event)}
-              jsonPath={jsonPath}
+              onChange={event => this.handleRemarksChange(key, event)}
+              jsonPath={jsonPath1}
             />
           </Grid>
         )}
@@ -410,11 +384,11 @@ class NocList extends Component {
             "name": "Environment clearence",
             "code": "Environment clearence",
             "required": true,
-            "dropdown": {
+            "natureOfNoc": {
               "label": "Nature of NOC Request",
               "required": true,
             },
-            "dropdown1": {
+            "remarks": {
               "label": "Remarks",
               "required": true,
             }
@@ -423,55 +397,15 @@ class NocList extends Component {
             "name": "Noc from airport authority",
             "code": "Noc from airport authority",
             "required": true,
-            "dropdown": {
+            "natureOfNoc": {
               "label": "Nature of NOC Request",
               "required": true,
             },
-            "dropdown1": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Noc from fire authority",
-            "code": "Noc from fire authority",
-            "required": true,
-            "dropdown": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "dropdown1": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Noc from heritage",
-            "code": "Noc from heritage",
-            "required": true,
-            "dropdown": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "dropdown1": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Noc from irrigation",
-            "code": "Noc from irrigation",
-            "required": true,
-            "dropdown": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "dropdown1": {
+            "remarks": {
               "label": "Remarks",
               "required": true,
             }
           }
-        
         ]
       }
     ];

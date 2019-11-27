@@ -10,6 +10,21 @@ import {
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
+const getHeader = label => {
+    return {
+      uiFramework: "custom-molecules-local",
+      moduleName: "egov-bpa",
+      componentPath: "DividerWithLabel",
+      props: {
+        className: "hr-generic-divider-label",
+        labelProps: {},
+        dividerProps: {},
+        label
+      },
+      type: "array"
+    };
+  };
+
 export const scrutinySummary = getCommonGrayCard({
     header: {
         uiFramework: "custom-atoms",
@@ -62,29 +77,17 @@ export const scrutinySummary = getCommonGrayCard({
             }
         }
     },
+    buildingPlanScrutinyApplicationDetails: getHeader({
+        labelName: "Building Plan Scrutiny Application Details",
+        labelKey: "Building Plan Scrutiny Application Details"
+    }),
+    break1: getBreak(),
     cardOne: {
         uiFramework: "custom-containers",
         componentPath: "MultiItem",
         props: {
             className: "applicant-summary",
             scheama: getCommonGrayCard({
-                header: {
-                    gridDefination: {
-                        xs: 8
-                    },
-                    ...getCommonSubHeader({
-                        labelName: "Building Plan Scrutiny Application Details",
-                        labelKey: "Building Plan Scrutiny Application Details"
-                    }),
-                    props: {
-                        style: {
-                            marginBottom: "10px",
-                            // fontWeight : "bold",
-                            fontSize: "20px",
-                            color: 'black'
-                        }
-                    },
-                },
                 buildingPlanScrutinyDetailsContainer: getCommonContainer({
                     buildingplanscrutinyapplicationnumber: getLabelWithValue(
                         {
@@ -130,29 +133,17 @@ export const scrutinySummary = getCommonGrayCard({
         },
         type: "array"
     },
+    BlockWiseOccupancyAndUsageDetails: getHeader({
+        labelName: "Block wise occupancy/sub occupancy and usage details",
+        labelKey: "Block wise occupancy/sub occupancy and usage details"
+    }),
+    break1: getBreak(),
     cardTwo: {
         uiFramework: "custom-containers",
         componentPath: "MultiItem",
         props: {
             className: "applicant-summary",
             scheama: getCommonGrayCard({
-                header: {
-                    gridDefination: {
-                        xs: 8
-                    },
-                    ...getCommonSubHeader({
-                        labelName: "Block wise occupancy/sub occupancy and usage details",
-                        labelKey: "Block wise occupancy/sub occupancy and usage details"
-                    }),
-                    props: {
-                        style: {
-                            marginBottom: "10px",
-                            // fontWeight : "bold",
-                            fontSize: "20px",
-                            color: 'black'
-                        }
-                    },
-                },
                 blockWiseOccupancyAndUsageDetailscontainer: getCommonContainer({
 
                     buildingplanscrutinyapplicationnumber: getLabelWithValue(
@@ -179,29 +170,17 @@ export const scrutinySummary = getCommonGrayCard({
         },
         type: "array"
     },
+    DemolitionDetails: getHeader({
+        labelName: "Demolition Details",
+        labelKey: "Demolition Details"
+    }),
+    break1: getBreak(),
     cardThree: {
         uiFramework: "custom-containers",
         componentPath: "MultiItem",
         props: {
             className: "applicant-summary",
             scheama: getCommonGrayCard({
-                header: {
-                    gridDefination: {
-                        xs: 8
-                    },
-                    ...getCommonSubHeader({
-                        labelName: "Demolition Details",
-                        labelKey: "Demolition Details"
-                    }),
-                    props: {
-                        style: {
-                            marginBottom: "10px",
-                            // fontWeight : "bold",
-                            fontSize: "20px",
-                            color: 'black'
-                        }
-                    },
-                },
                 demolitionDetailsContainer: getCommonContainer({
                     demolitionArea: getLabelWithValue(
                         {

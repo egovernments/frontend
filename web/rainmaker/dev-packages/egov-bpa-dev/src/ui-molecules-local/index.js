@@ -30,7 +30,13 @@ const UploadSingleFile = Loadable({
 const Table = Loadable({
   loader: () => import("./Table"),
   loading: () => <Loading />
-})
+});
+
+const DividerWithLabel = Loadable({
+  loader: () => import("./DividerWithLabel"),
+  loading: () => <Loading />
+});
+
 
 
 export {
@@ -39,5 +45,6 @@ export {
   DocumentList,
   NocList,
   UploadSingleFile,
-  Table
+  Table,
+  DividerWithLabel
 };

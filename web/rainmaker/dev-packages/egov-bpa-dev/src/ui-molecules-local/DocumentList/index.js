@@ -139,7 +139,7 @@ class DocumentList extends Component {
             "name": "Floor plans",
             "code": "Floor plans",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true,
             }
@@ -148,7 +148,7 @@ class DocumentList extends Component {
             "name": "Service Plan",
             "code": "Service Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -157,7 +157,7 @@ class DocumentList extends Component {
             "name": "Site Plan",
             "code": "Site Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -166,7 +166,7 @@ class DocumentList extends Component {
             "name": "Building Plan",
             "code": "Building Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -175,7 +175,7 @@ class DocumentList extends Component {
             "name": "Details Plan",
             "code": "Details Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -184,7 +184,7 @@ class DocumentList extends Component {
             "name": "other Details",
             "code": "other Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -193,7 +193,7 @@ class DocumentList extends Component {
             "name": "Parking plan",
             "code": "Parking plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -202,7 +202,7 @@ class DocumentList extends Component {
             "name": "Roof plan",
             "code": "Roof plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -255,8 +255,8 @@ class DocumentList extends Component {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
-                isDocumentTypeRequired: card.dropdown
-                  ? card.dropdown.required
+                isDocumentTypeRequired: card.remarks
+                  ? card.remarks.required
                   : false
               };
             }
@@ -307,14 +307,14 @@ class DocumentList extends Component {
       ...documentDetailsUploadRedux,
       [key]: {
         ...documentDetailsUploadRedux[key],
-        dropdown: { value: event.target.value }
+        remarks: { value: event.target.value }
       }
     });
   };
 
   getUploadCard = (card, key) => {
     const { classes, documentDetailsUploadRedux } = this.props;
-    let jsonPath = `documentDetailsUploadRedux[${key}].dropdown.value`;
+    let jsonPath = `documentDetailsUploadRedux[${key}].remarks.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
@@ -345,12 +345,12 @@ class DocumentList extends Component {
           {card.required && requiredIcon}
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
-          {card.dropdown && (
+          {card.remarks && (
             <TextFieldContainer
               select={false}
-              label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
-              placeholder={{ labelKey: card.dropdown.label }}
-              data={card.dropdown.menu}
+              label={{ labelKey: getTransformedLocale(card.remarks.label) }}
+              placeholder={{ labelKey: card.remarks.label }}
+              data={card.remarks.menu}
               optionValue="code"
               optionLabel="label"
               required={true}
@@ -402,7 +402,7 @@ class DocumentList extends Component {
             "name": "Floor plans",
             "code": "Floor plans",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true,
             }
@@ -411,7 +411,7 @@ class DocumentList extends Component {
             "name": "Service Plan",
             "code": "Service Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -420,7 +420,7 @@ class DocumentList extends Component {
             "name": "Site Plan",
             "code": "Site Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -429,7 +429,7 @@ class DocumentList extends Component {
             "name": "Building Plan",
             "code": "Building Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -438,7 +438,7 @@ class DocumentList extends Component {
             "name": "Details Plan",
             "code": "Details Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -447,7 +447,7 @@ class DocumentList extends Component {
             "name": "other Details",
             "code": "other Plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -456,7 +456,7 @@ class DocumentList extends Component {
             "name": "Parking plan",
             "code": "Parking plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }
@@ -465,7 +465,7 @@ class DocumentList extends Component {
             "name": "Roof plan",
             "code": "Roof plan",
             "required": true,
-            "dropdown": {
+            "remarks": {
               "label": "Remarks",
               "required": true
             }

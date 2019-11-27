@@ -10,6 +10,21 @@ import {
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
+const getHeader = label => {
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-bpa",
+    componentPath: "DividerWithLabel",
+    props: {
+      className: "hr-generic-divider-label",
+      labelProps: {},
+      dividerProps: {},
+      label
+    },
+    type: "array"
+  };
+};
+  
 export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
     header: {
         uiFramework: "custom-atoms",
@@ -62,29 +77,17 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
             }
         }
     },
+    boundaryDetails: getHeader({
+        labelName: "Boundary Details",
+        labelKey: "Boundary Details"
+    }),
+    break1: getBreak(),
     cardOne: {
         uiFramework: "custom-containers",
         componentPath: "MultiItem",
         props: {
             className: "applicant-summary",
             scheama: getCommonGrayCard({
-                header: {
-                    gridDefination: {
-                        xs: 8
-                    },
-                    ...getCommonSubHeader({
-                        labelName: "Boundary Details",
-                        labelKey: "Boundary Details"
-                    }),
-                    props: {
-                        style: {
-                            marginBottom: "10px",
-                            // fontWeight : "bold",
-                            fontSize: "20px",
-                            color: 'black'
-                        }
-                    },
-                },
                 boundaryDetailsConatiner: getCommonContainer({
                     circle: getLabelWithValue(
                         {
@@ -120,29 +123,17 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
         },
         type: "array"
     },
+    DetailsOfPlot: getHeader({
+        labelName: "Details Of Plot",
+        labelKey: "Details Of Plot"
+    }),
+    break1: getBreak(),
     cardTwo: {
         uiFramework: "custom-containers",
         componentPath: "MultiItem",
         props: {
             className: "applicant-summary",
             scheama: getCommonGrayCard({
-                header: {
-                    gridDefination: {
-                        xs: 8
-                    },
-                    ...getCommonSubHeader({
-                        labelName: "Details Of Plot",
-                        labelKey: "Details Of Plot"
-                    }),
-                    props: {
-                        style: {
-                            marginBottom: "10px",
-                            // fontWeight : "bold",
-                            fontSize: "20px",
-                            color: 'black'
-                        }
-                    },
-                },
                 detailsOfPlotContainer: getCommonContainer({
 
                     plotArea: getLabelWithValue(
