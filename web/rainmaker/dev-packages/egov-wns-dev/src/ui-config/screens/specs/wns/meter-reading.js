@@ -45,8 +45,8 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "meter-reading",
     beforeInitScreen: (action, state, dispatch) => {
-      fetchData(action, state, dispatch);
-      return action;
+        fetchData(action, state, dispatch);
+        return action;
     },
     components: {
         div: {
@@ -98,12 +98,10 @@ const screenConfig = {
                     }
                 },
                 viewOne: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Form",
-                    children: {
-                        meterReadingEditable
-                    },
                     visible: false,
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
+                    componentPath: "MeterReadingEditable"
                 },
                 applicationsCard: {
                     uiFramework: "custom-molecules-local",
