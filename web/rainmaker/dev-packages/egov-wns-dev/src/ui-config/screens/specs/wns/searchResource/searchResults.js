@@ -41,7 +41,9 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, data) => (
-            <Link to={{ pathname: '/wns/connection-details', state: { connectionNo: value, data: data } }} />
+            <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`}>
+              {value}
+            </Link>
           )
         }
       },
@@ -93,21 +95,5 @@ export const searchResults = {
         return { data: finalData, currentOrder: !order ? "asc" : "desc" };
       }
     }
-  }
-};
-
-const onRowClick = rowData => {
-  console.log('rowData')
-  console.log(rowData)
-  switch (rowData[5]) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
-        }`;
-
-      break;
-    default:
-      window.location.href = `connection-details?connectionNo=${rowData[0]}&tenantId=${rowData[6]}`;
-      break;
   }
 };
