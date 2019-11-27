@@ -32,6 +32,8 @@ class MeterReading extends React.Component {
   render() {
     const { classes } = this.props;
     console.log(this.props)
+    const { searchResults, onActionClick, classes } = this.props;
+    console.log(1, props);
     return (
       <Card className={classes.card}>
         <CardContent>
@@ -61,11 +63,11 @@ class MeterReading extends React.Component {
                 />
               </Grid>
               <Grid item xs={3}>
-                  <Label
-                    labelName="Working"
-                    fontSize={14}
-                    style={{ fontSize: 14 }}
-                  />
+                <Label
+                  labelName="Working"
+                  fontSize={14}
+                  style={{ fontSize: 14 }}
+                />
               </Grid>
             </Grid>
             <Grid container style={{ marginBottom: 12 }}>
@@ -87,7 +89,7 @@ class MeterReading extends React.Component {
             <Grid container style={{ marginBottom: 12 }}>
               <Grid item xs={3}>
                 <LabelContainer
-                labelKey="WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"
+                  labelKey="WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"
                   fontSize={14}
                   style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                 />
