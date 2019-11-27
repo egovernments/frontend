@@ -38,6 +38,7 @@ class MeterReading extends React.Component {
       <div>
         {consumptionDetails && consumptionDetails.length > 0 ? (
           consumptionDetails.map(item => {
+            
             return (
               <Card className={classes.card}>
                 <CardContent>
@@ -100,7 +101,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item xs={3}>
                         <Label
-                          labelName={item.lastReadingDate}
+                          labelName={new Date(item.lastReadingDate).toLocaleDateString()}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -116,7 +117,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item xs={3}>
                         <Label
-                          labelName={item.currentReading}
+                          labelName={ item.currentReading}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -132,7 +133,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item xs={3}>
                         <Label
-                          labelName={item.currentReadingDate.toLocaleDateString()}
+                          labelName={new Date(item.currentReadingDate).toLocaleDateString()}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -148,7 +149,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item xs={3}>
                         <Label
-                          labelName={item.currentReading - item.lastReading}
+                          labelName={item.currentReading-item.lastReading}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
