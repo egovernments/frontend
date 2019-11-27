@@ -62,27 +62,6 @@ export const getService = () => {
                     },
                 )
             },
-            currentMeter: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
-                    },
-                )
-            },
-            meterReadingStatus: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_METER_STAT"
-                    },
-                )
-            },
-            lastMeterReading: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
-                    },
-                )
-            },
             meterStatus: {
                 ...getLabelWithValue(
                     {
@@ -90,10 +69,31 @@ export const getService = () => {
                     },
                 )
             },
+             meterReadingDate: {
+                ...getLabelWithValue(
+                    {
+                        labelKey: "WS_SERV_DETAIL_METER_READ_DATE_LABEL"
+                    },
+                )
+            },
             consumption: {
                 ...getLabelWithValue(
                     {
                         labelKey: "WS_SERV_DETAIL_CONSUMP"
+                    },
+                )
+            },
+             currentMeterReading: {
+                ...getLabelWithValue(
+                    {
+                        labelKey: "WS_SERV_DETAIL_CUR_METER_READ"
+                    },
+                )
+            },
+             lastMeterReading: {
+                ...getLabelWithValue(
+                    {
+                        labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
                     },
                 )
             }

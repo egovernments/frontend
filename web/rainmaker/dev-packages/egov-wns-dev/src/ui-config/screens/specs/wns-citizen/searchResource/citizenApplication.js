@@ -73,7 +73,7 @@ export const citizenApplication = getCommonCard({
                 masterName: "TENANTS"
             },
             sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-            jsonPath: "Licenses[0].tradeLicenseDetail.address.tenantId",
+            jsonPath: "Licenses[0].tradeLicenseDetail.address.tenantId",//db sake
             required: true,
             gridDefination: {
                 xs: 12,
