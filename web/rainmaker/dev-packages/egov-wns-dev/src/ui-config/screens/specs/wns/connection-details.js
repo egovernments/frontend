@@ -36,69 +36,69 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 let headerSideText = { word1: "", word2: "" };
 
-// const setDocuments = async (
-//   payload,
-//   sourceJsonPath,
-//   destJsonPath,
-//   dispatch
-// ) => {
-//   const uploadedDocData = get(payload, sourceJsonPath);
+const setDocuments = async (
+  payload,
+  sourceJsonPath,
+  destJsonPath,
+  dispatch
+) => {
+  const uploadedDocData = get(payload, sourceJsonPath);
 
-//   const fileStoreIds =
-//     uploadedDocData &&
-//     uploadedDocData
-//       .map(item => {
-//         return item.fileStoreId;
-//       })
-//       .join(",");
-//   const fileUrlPayload =
-//     fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-//   const reviewDocData =
-//     uploadedDocData &&
-//     uploadedDocData.map((item, index) => {
-//       return {
-//         title: `TL_${item.documentType}` || "",
-//         link:
-//           (fileUrlPayload &&
-//             fileUrlPayload[item.fileStoreId] &&
-//             fileUrlPayload[item.fileStoreId].split(",")[0]) ||
-//           "",
-//         linkText: "View",
-//         name:
-//           (fileUrlPayload &&
-//             fileUrlPayload[item.fileStoreId] &&
-//             decodeURIComponent(
-//               fileUrlPayload[item.fileStoreId]
-//                 .split(",")[0]
-//                 .split("?")[0]
-//                 .split("/")
-//                 .pop()
-//                 .slice(13)
-//             )) ||
-//           `Document - ${index + 1}`
-//       };
-//     });
-//   reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
-// };
+  const fileStoreIds =
+    uploadedDocData &&
+    uploadedDocData
+      .map(item => {
+        return item.fileStoreId;
+      })
+      .join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  const reviewDocData =
+    uploadedDocData &&
+    uploadedDocData.map((item, index) => {
+      return {
+        title: `TL_${item.documentType}` || "",
+        link:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            fileUrlPayload[item.fileStoreId].split(",")[0]) ||
+          "",
+        linkText: "View",
+        name:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            decodeURIComponent(
+              fileUrlPayload[item.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`
+      };
+    });
+  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
+};
 
-// const getTradeTypeSubtypeDetails = payload => {
-//   const tradeUnitsFromApi = get(
-//     payload,
-//     "Licenses[0].tradeLicenseDetail.tradeUnits",
-//     []
-//   );
-//   const tradeUnitDetails = [];
-//   tradeUnitsFromApi.forEach(tradeUnit => {
-//     const { tradeType } = tradeUnit;
-//     const tradeDetails = tradeType.split(".");
-//     tradeUnitDetails.push({
-//       trade: get(tradeDetails, "[0]", ""),
-//       tradeType: get(tradeDetails, "[1]", ""),
-//       tradeSubType: get(tradeDetails, "[2]", "")
-//     });
-//   });
-//   return tradeUnitDetails;
-// };
+const getTradeTypeSubtypeDetails = payload => {
+  const tradeUnitsFromApi = get(
+    payload,
+    "WaterConnection[0].tradeLicenseDetail.tradeUnits",
+    []
+  );
+  const tradeUnitDetails = [];
+  tradeUnitsFromApi.forEach(tradeUnit => {
+    const { tradeType } = tradeUnit;
+    const tradeDetails = tradeType.split(".");
+    tradeUnitDetails.push({
+      trade: get(tradeDetails, "[0]", ""),
+      tradeType: get(tradeDetails, "[1]", ""),
+      tradeSubType: get(tradeDetails, "[2]", "")
+    });
+  });
+  return tradeUnitDetails;
+};
 
 const searchResults = async (action, state, dispatch, connectionNumber) => {
   let queryObject = [
@@ -109,45 +109,43 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   console.log('payload')
   console.log(payload)
   headerSideText = getHeaderSideText(
-    get(payload, "Licenses[0].status"),
-    get(payload, "Licenses[0].licenseNumber")
+    get(payload, "WaterConnection[0].status"),
+    get(payload, "WaterConnection[0].licenseNumber")
   );
-  set(payload, "Licenses[0].headerSideText", headerSideText);
+  set(payload, "WaterConnection[0].headerSideText", headerSideText);
 
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+  get(payload, "WaterConnection[0].property.owners") &&
+    get(payload, "WaterConnection[0].property.owners.length" > 0)
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
-  if (get(payload, "Licenses[0].licenseType")) {
+  if (get(payload, "WaterConnection[0].licenseType")) {
     setValidToFromVisibilityForSV(
       action,
-      get(payload, "Licenses[0].licenseType")
+      get(payload, "WaterConnection[0].licenseType")
     );
   }
 
   await setDocuments(
     payload,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
-    "LicensesTemp[0].reviewDocData",
+    "WaterConnection[0].tradeLicenseDetail.applicationDocuments",
+    "WaterConnectionTemp[0].reviewDocData",
     dispatch
   );
-  let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
-  payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+  let sts = getTransformedStatus(get(payload, "WaterConnection[0].status"));
+  payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
   payload &&
     dispatch(
       prepareFinalObject(
-        "LicensesTemp[0].tradeDetailsResponse",
+        "WaterConnectionTemp[0].tradeDetailsResponse",
         getTradeTypeSubtypeDetails(payload)
       )
     );
-  const LicenseData = payload.Licenses[0];
+  const LicenseData = payload.WaterConnection[0];
   const fetchFromReceipt = sts !== "pending_payment";
   createEstimateData(
     LicenseData,
-    "LicensesTemp[0].estimateCardData",
+    "WaterConnectionTemp[0].estimateCardData",
     dispatch,
     {},
     fetchFromReceipt
@@ -155,7 +153,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   //Fetch Bill and populate estimate card
   // const code = get(
   //   payload,
-  //   "Licenses[0].tradeLicenseDetail.address.locality.code"
+  //   "WaterConnection[0].tradeLicenseDetail.address.locality.code"
   // );
   // const queryObj = [{ key: "tenantId", value: tenantId }];
   // // getBoundaryData(action, state, dispatch, queryObj, code);
@@ -168,11 +166,11 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
       (await searchResults(action, state, dispatch, connectionNumber));
 
     // const status = getTransformedStatus(
-    //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
+    //   get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].status")
     // );
     // const status = get(
     //   state,
-    //   "screenConfiguration.preparedFinalObject.Licenses[0].status"
+    //   "screenConfiguration.preparedFinalObject.WaterConnection[0].status"
     // );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
@@ -192,11 +190,11 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
         true
       );
 
-      if (get(data, "Licenses[0].tradeLicenseDetail.verificationDocuments")) {
+      if (get(data, "WaterConnection[0].tradeLicenseDetail.verificationDocuments")) {
         await setDocuments(
           data,
-          "Licenses[0].tradeLicenseDetail.verificationDocuments",
-          "LicensesTemp[0].verifyDocData",
+          "WaterConnection[0].tradeLicenseDetail.verificationDocuments",
+          "WaterConnectionTemp[0].verifyDocData",
           dispatch
         );
       } else {
@@ -424,7 +422,7 @@ const screenConfig = {
                 word2: {
                   ...getCommonTitle({
                     labelName: "Active",
-                    // jsonPath: "Licenses[0].headerSideText.word2"
+                    // jsonPath: "WaterConnection[0].headerSideText.word2"
                   }
                     ,
                     {

@@ -8,72 +8,64 @@ import {
 import { changeStep } from "../viewBillResource/footer";
 
 const ownerDetails = getCommonContainer({
-  reviewOldLicenseNo: getLabelWithValue(
+  ownerName: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
     },
-    { jsonPath: "Licenses[0].oldLicenseNumber" }
+    { jsonPath: "WaterConnection[0].property.owners[0].name" }
   ),
-  reviewApplicationType: getLabelWithValue(
+  ownerMobileNumber: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
     },
     {
       jsonPath:
-        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-      localePrefix: {
-        moduleName: "TradeLicense",
-        masterName: "ApplicationType"
-      }
+        "WaterConnection[0].property.owners[0].mobileNumber"
     }
   ),
-  reviewLicenceType: getLabelWithValue(
+  gender: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
     },
     {
-      jsonPath: "Licenses[0].licenseType",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "LICENSETYPE"
-      }
+      jsonPath: "WaterConnection[0].property.owners[0].gender"
     }
   ),
-  reviewTradeName: getLabelWithValue(
+  guardian: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_GUARDIAN_LABEL"
     },
-    { jsonPath: "Licenses[0].tradeName" }
+    { jsonPath: "WaterConnection[0].property.owners[0].guardian" }
   ),
-  reviewPipe: getLabelWithValue(
+  guardianName: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_GUARDIAN_NAME_LABEL"
     },
     {
-      jsonPath: "Licenses[0].pipe",
+      jsonPath: "WaterConnection[0].property.owners[0].fatherOrHusbandName",
     }
   ),
-  reviewCommencementDate: getLabelWithValue(
+  ownerCategory: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_CATEGORY_LABEL"
     },
     {
-      jsonPath: "Licenses[0].commencementDate",
+      jsonPath: "WaterConnection[0].property.owners[0].ownerType",
     }
   ),
-  reviewGSTNo: getLabelWithValue(
+  email: getLabelWithValue(
     {
       labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
     },
     {
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
+      jsonPath: "WaterConnection[0].property.owners[0].email"
     }
   ),
-  reviewOperationalArea: getLabelWithValue(
+  correspondenceAddress: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_CROSADD"
     },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea" }
+    { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress" }
   )
 })
 

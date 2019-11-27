@@ -14,17 +14,17 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name:getTextToLocalMapping("Service"),
+        name: getTextToLocalMapping("Service"),
         options: {
           filter: false,
           customBodyRender: value => (
-            <span style={{ color: '#000000'}}>
+            <span style={{ color: '#000000' }}>
               {value}
             </span>
           )
         }
       },
-      
+
       // {
       //   name: getTextToLocalMapping("Application No"),
       //   options: {
@@ -40,8 +40,8 @@ export const searchResults = {
         name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
-          customBodyRender: value => (
-            <Link to="/wns/connection-details">
+          customBodyRender: (value, data) => (
+            <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`}>
               {value}
             </Link>
           )
@@ -107,7 +107,7 @@ const onRowClick = rowData => {
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
         }`;
-        
+
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${

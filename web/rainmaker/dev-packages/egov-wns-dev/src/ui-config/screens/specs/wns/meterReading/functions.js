@@ -12,6 +12,12 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../ui-utils";
+import {
+  getQueryArg,
+} from "egov-ui-framework/ui-utils/commons";
+
+const tenantId = getQueryArg(window.location.href, "tenantId");
+let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -175,7 +181,11 @@ const getMdmsData = async () => {
   }
 };
 export const fetchData = async (action, state, dispatch) => {
-  const response = await getConsumptionDetails();
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "connectionNumber", value: connectionNumber }
+  ];
+  const response = await getConsumptionDetails(queryObject);
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =
     mdmsRes &&

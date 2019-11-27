@@ -81,11 +81,12 @@ export const getSearchResults = async queryObject => {
 };
 
 export const getConsumptionDetails = async queryObject => {
-    // console.log('queryObject' + queryObject);
+    console.log('queryObject' + queryObject);
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8083/meterConnection/_search?connectionNos=WS-CON-001",
+            // "http://172.17.25.34:8083/meterConnection/_search?connectionNos=WERTY123456789",
+            "http://172.17.25.34:8083/meterConnection/_search",
             "",
             queryObject
         );
