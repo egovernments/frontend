@@ -64,8 +64,8 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 export const getSearchResults = async queryObject => {
     try {
         const response = await httpRequest(
-            "get",
-            "https://jsonbox.io/box_1684cdd2cab49b7b206b",
+            "post",
+            "http://172.17.25.34:8090/wc/_search",
             "",
             queryObject
         );

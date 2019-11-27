@@ -17,7 +17,7 @@ export const searchApiCall = async (state, dispatch) => {
       key: "tenantId",
       value: JSON.parse(getUserInfo()).tenantId
     },
-    { key: "offset", value: "0" }
+    // { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -32,7 +32,7 @@ export const searchApiCall = async (state, dispatch) => {
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.citizenApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
     state,
     dispatch,
     "search"
@@ -56,22 +56,9 @@ export const searchApiCall = async (state, dispatch) => {
       toggleSnackbar(
         true,
         {
-          labelKey: "ERR_WS_FILL_VALID_FIELDS"
+          labelKey: "ERR_WS_FILL_MANDATORY_FIELDS"
         },
         "error"
-      )
-    );
-  } else if (
-    (searchScreenObject["fromDate"] === undefined ||
-      searchScreenObject["fromDate"].length === 0) &&
-    searchScreenObject["toDate"] !== undefined &&
-    searchScreenObject["toDate"].length !== 0
-  ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
-        "warning"
       )
     );
   } else {
@@ -83,21 +70,20 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-
     const response = await getSearchResults(queryObject);
     // const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
     try {
-      let data = response[0].WaterConnection.map(item => ({
+      let data = response.WaterConnection.map(item => ({
 
         [getTextToLocalMapping("Service")]:
           item.propertyType || "WATER", //will be modified later
         [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
         [getTextToLocalMapping("Owner Name")]:
-          item.property.owners !== undefined ? item.property.owners[0].name : "-" || "-",
+          (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : "-" || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
         [getTextToLocalMapping("Due")]: item.id || "-",
-        [getTextToLocalMapping("Address")]: item.property.address || "-",
-        ["tenantId"]: item.property.tenantId
+        [getTextToLocalMapping("Address")]: item.property.street || "-",
+        ["tenantId"]: JSON.parse(getUserInfo()).tenantId
       }));
 
       dispatch(
@@ -115,7 +101,7 @@ export const searchApiCall = async (state, dispatch) => {
           "props.title",
           `${getTextToLocalMapping(
             "Search Results for Water & Sewerage Connections"
-          )} (${response[0].WaterConnection.length})`
+          )} (${response.WaterConnection.length})`
         )
       );
       showHideTable(true, dispatch);

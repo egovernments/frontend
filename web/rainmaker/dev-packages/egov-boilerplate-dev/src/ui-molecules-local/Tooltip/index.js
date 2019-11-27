@@ -7,6 +7,8 @@ import { transformById } from "../../ui-config/screens/specs/utils";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
+console.log('localizationLabels')
+console.log(localizationLabels)
 
 function SimpleTooltips(props) {
   const { val, ...rest } = props;
