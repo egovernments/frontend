@@ -130,7 +130,7 @@ export const citizenApplication = getCommonCard({
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "searchScreen.consumerId"
+            jsonPath: "searchScreen.connectionNumber"
         }),
         oldConsumerid: getTextField({
             label: {
@@ -146,7 +146,7 @@ export const citizenApplication = getCommonCard({
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "searchScreen.oldConsumerId"
+            jsonPath: "searchScreen.oldConnectionNumber"
         }),
         //   applicationNo: getTextField({
         //     label: {

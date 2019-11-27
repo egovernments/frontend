@@ -59,78 +59,69 @@ export const getServiceDetails = (isEditable = true) => {
       }
     },
     viewOne: getCommonContainer({
-      reviewApplicationType: getLabelWithValue(
+      serviceType: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_SERV_TYPE"
         },
         {
-          jsonPath:
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-          localePrefix: {
-            moduleName: "TradeLicense",
-            masterName: "ApplicationType"
-          }
+          jsonPath: "WaterConnection[0].service"
         }
       ),
-      reviewOldLicenseNo: getLabelWithValue(
+      connectionCategory: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_CONN_CATEGORY"
         },
-        { jsonPath: "Licenses[0].oldLicenseNumber" }
+        { jsonPath: "WaterConnection[0].connectionCategory" }
       ),
-      reviewLicenceType: getLabelWithValue(
+      connectionType: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_CONN_TYPE"
         },
         {
-          jsonPath: "Licenses[0].licenseType",
-          localePrefix: {
-            moduleName: "TRADELICENSE",
-            masterName: "LICENSETYPE"
-          }
+          jsonPath: "WaterConnection[0].connectionType",
         }
       ),
-      reviewTradeName: getLabelWithValue(
+      meterID: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_METER_ID"
         },
-        { jsonPath: "Licenses[0].tradeName" }
+        { jsonPath: "WaterConnection[0].meterId" }
       ),
-      reviewPipe: getLabelWithValue(
+      pipeSize: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
         },
         {
-          jsonPath: "Licenses[0].pipe",
+          jsonPath: "WaterConnection[0].pipeSize",
         }
       ),
-      reviewCommencementDate: getLabelWithValue(
+      connectionExecutionDate: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE"
         },
         {
-          jsonPath: "Licenses[0].commencementDate",
+          jsonPath: "WaterConnection[0].connectionExecutionDate",
         }
       ),
-      reviewGSTNo: getLabelWithValue(
+      rainwaterHarvestingFacility: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC"
         },
         {
-          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
+          jsonPath: "WaterConnection[0].rainWaterHarvesting"
         }
       ),
-      reviewOperationalArea: getLabelWithValue(
+      waterSource: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
         },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea" }
+        { jsonPath: "WaterConnection[0].waterSource" }
       ),
-      reviewNoOfEmployee: getLabelWithValue(
+      waterSubSource: getLabelWithValue(
         {
           labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
         },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees" }
+        { jsonPath: "WaterConnection[0].waterSubSource" }
       ),
       editSection: {
         componentPath: "Button",
