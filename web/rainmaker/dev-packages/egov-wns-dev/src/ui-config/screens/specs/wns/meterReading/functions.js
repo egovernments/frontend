@@ -158,8 +158,7 @@ const getMdmsData = async () => {
         {
           moduleName: "tenant",
           masterDetails: [{ name: "citymodule" }]
-        }
-      ]
+        }]
     }
   };
   try {
@@ -192,8 +191,6 @@ export const fetchData = async (action, state, dispatch) => {
   // );
   try {
     /*Mseva 2.0 */
-    console.log(1, response)
-    console.log(2, response.meterReadings)
     if (response && response.meterReadings && response.meterReadings.length > 0) {
       dispatch(prepareFinalObject("consumptionDetails", response.meterReadings));
       dispatch(

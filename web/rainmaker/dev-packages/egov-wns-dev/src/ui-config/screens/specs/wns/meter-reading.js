@@ -114,11 +114,4 @@ const screenConfig = {
     }
 };
 
-const demo = getCommonCard({
-    subHeader: getCommonTitle({
-        labelName: "Search Employee",
-        labelKey: "HR_HOME_SEARCH_RESULTS_HEADING"
-    }),
-});
-
 export default screenConfig;
