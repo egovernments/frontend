@@ -80,7 +80,27 @@ export const getSearchResults = async queryObject => {
     }
 };
 
-const setDocsForEditFlow = async(state, dispatch) => {
+export const getConsumptionDetails = async queryObject => {
+    console.log('queryObject' + queryObject);
+    try {
+        const response = await httpRequest(
+            "post",
+            "http://172.17.25.34:8083/meterConnection/_search?connectionNos=WERTY123456789",
+            "",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
+const setDocsForEditFlow = async (state, dispatch) => {
     const applicationDocuments = get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.applicationDocuments", []
@@ -99,11 +119,11 @@ const setDocsForEditFlow = async(state, dispatch) => {
                         fileUrlPayload[item.fileStoreId] &&
                         decodeURIComponent(
                             fileUrlPayload[item.fileStoreId]
-                            .split(",")[0]
-                            .split("?")[0]
-                            .split("/")
-                            .pop()
-                            .slice(13)
+                                .split(",")[0]
+                                .split("?")[0]
+                                .split("/")
+                                .pop()
+                                .slice(13)
                         )) ||
                     `Document - ${index + 1}`,
                 fileStoreId: item.fileStoreId,
@@ -118,7 +138,7 @@ const setDocsForEditFlow = async(state, dispatch) => {
     );
 };
 
-export const updatePFOforSearchResults = async(
+export const updatePFOforSearchResults = async (
     action,
     state,
     dispatch,
@@ -127,10 +147,10 @@ export const updatePFOforSearchResults = async(
     tenantId
 ) => {
     let queryObject = [{
-            key: "tenantId",
-            value: tenantId ? tenantId : getTenantId()
-        },
-        { key: "applicationNumber", value: queryValue }
+        key: "tenantId",
+        value: tenantId ? tenantId : getTenantId()
+    },
+    { key: "applicationNumber", value: queryValue }
     ];
     const isPreviouslyEdited = getQueryArg(window.location.href, "edited");
     const payload = !isPreviouslyEdited ?
@@ -173,7 +193,7 @@ export const updatePFOforSearchResults = async(
     createOwnersBackup(dispatch, payload);
 };
 
-export const getBoundaryData = async(
+export const getBoundaryData = async (
     action,
     state,
     dispatch,
@@ -190,11 +210,11 @@ export const getBoundaryData = async(
         );
         const tenantId =
             process.env.REACT_APP_NAME === "Employee" ?
-            get(
-                state.screenConfiguration.preparedFinalObject,
-                "Licenses[0].tradeLicenseDetail.address.city"
-            ) :
-            getQueryArg(window.location.href, "tenantId");
+                get(
+                    state.screenConfiguration.preparedFinalObject,
+                    "Licenses[0].tradeLicenseDetail.address.city"
+                ) :
+                getQueryArg(window.location.href, "tenantId");
 
         const mohallaData =
             payload &&
@@ -204,10 +224,10 @@ export const getBoundaryData = async(
                 result.push({
                     ...item,
                     name: `${tenantId
-            .toUpperCase()
-            .replace(/[.]/g, "_")}_REVENUE_${item.code
-              .toUpperCase()
-              .replace(/[._:-\s\/]/g, "_")}`
+                        .toUpperCase()
+                        .replace(/[.]/g, "_")}_REVENUE_${item.code
+                            .toUpperCase()
+                            .replace(/[._:-\s\/]/g, "_")}`
                 });
                 return result;
             }, []);
@@ -311,7 +331,7 @@ const getMultipleOwners = owners => {
     return mergedOwners;
 };
 
-export const applyTradeLicense = async(state, dispatch, activeIndex) => {
+export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     try {
         let queryObject = JSON.parse(
             JSON.stringify(
@@ -490,13 +510,13 @@ const convertOwnerDobToEpoch = owners => {
     let updatedOwners =
         owners &&
         owners
-        .map(owner => {
-            return {
-                ...owner,
-                dob: owner && owner !== null && convertDateToEpoch(owner.dob, "dayend")
-            };
-        })
-        .filter(item => item && item !== null);
+            .map(owner => {
+                return {
+                    ...owner,
+                    dob: owner && owner !== null && convertDateToEpoch(owner.dob, "dayend")
+                };
+            })
+            .filter(item => item && item !== null);
     return updatedOwners;
 };
 
