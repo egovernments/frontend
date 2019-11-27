@@ -31,107 +31,91 @@ const getHeader = label => {
 // });
 
 const propertyDetails = getCommonContainer({
-  reviewApplicationType: getLabelWithValue(
+  propertyType: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_TYPE_LABEL"
     },
     {
       jsonPath:
-        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-      localePrefix: {
-        moduleName: "TradeLicense",
-        masterName: "ApplicationType"
-      }
+        "WaterConnection[0].property.propertyType"
     }
   ),
-  reviewOldLicenseNo: getLabelWithValue(
+  propertyUsageType: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
     },
-    { jsonPath: "Licenses[0].oldLicenseNumber" }
+    { jsonPath: "WaterConnection[0].property.propertyUsageType" }
   ),
-  reviewLicenceType: getLabelWithValue(
+  plotSize: getLabelWithValue(
     {
       labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
     },
     {
-      jsonPath: "Licenses[0].licenseType",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "LICENSETYPE"
-      }
+      jsonPath: "WaterConnection[0].property.plotSize"
     }
   )
 })
 
 const propertyLocationDetails = getCommonContainer({
-  reviewApplicationType: getLabelWithValue(
+  propertyId: getLabelWithValue(
+    {
+      labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
+    },
+    { jsonPath: "WaterConnection[0].property.propertyId" }
+  ),
+  city: getLabelWithValue(
+    {
+      labelKey: "WS_PROP_DETAIL_STREET_NAME"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.address.city",
+    }
+  ),
+  plotOrHouseOrSurveyNo: getLabelWithValue(
+    {
+      labelKey: "WS_PROP_DETAIL_LOCALITY_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.address.plotNo",
+    }
+  ),
+  buildingOrColonyName: getLabelWithValue(
+    {
+      labelKey: "WS_PROP_DETAIL_PINCODE"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.address.buildingName"
+    }
+  ),
+  streetName: getLabelWithValue(
+    {
+      labelKey: "WS_PROP_DETAIL_MAP_LOC"
+    },
+    { jsonPath: "WaterConnection[0].property.address.street" }
+  ),
+  locality: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_ID_LABEL"
     },
     {
       jsonPath:
-        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-      localePrefix: {
-        moduleName: "TradeLicense",
-        masterName: "ApplicationType"
-      }
+        "WaterConnection[0].property.address.locality",
     }
   ),
-  reviewOldLicenseNo: getLabelWithValue(
+  pincode: getLabelWithValue(
     {
       labelKey: "WS_PROP_DETAIL_CITY"
     },
-    { jsonPath: "Licenses[0].oldLicenseNumber" }
+    { jsonPath: "WaterConnection[0].property.address.pincode" }
   ),
-  reviewLicenceType: getLabelWithValue(
+  locationOnMap: getLabelWithValue(
     {
       labelKey: "WS_PROP_DETAIL_PH_SURVEYNO_LABEL"
     },
     {
-      jsonPath: "Licenses[0].licenseType",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "LICENSETYPE"
-      }
+      jsonPath: "WaterConnection[0].property.address.geoLocation"
     }
   ),
-  reviewTradeName: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeName" }
-  ),
-  reviewPipe: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_STREET_NAME"
-    },
-    {
-      jsonPath: "Licenses[0].pipe",
-    }
-  ),
-  reviewCommencementDate: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_LOCALITY_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].commencementDate",
-    }
-  ),
-  reviewGSTNo: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_PINCODE"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
-    }
-  ),
-  reviewOperationalArea: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_MAP_LOC"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea" }
-  )
 })
 
 export const getPropertyDetails = (isEditable = true) => {

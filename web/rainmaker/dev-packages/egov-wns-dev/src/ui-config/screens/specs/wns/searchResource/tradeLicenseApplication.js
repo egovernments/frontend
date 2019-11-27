@@ -126,61 +126,61 @@ export const tradeLicenseApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.billingYear"
     }),
-    applicationstatus: getSelectField({
-      label: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-      },
-      placeholder: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
-      },
-      required: false,
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "NEWTL"
-      },
-      jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      // required: true,
-      errorMessage: "ERR_INVALID_BILLING_PERIOD",
-      jsonPath: "searchScreen.status"
-    }),
+    // applicationstatus: getSelectField({
+    //   label: {
+    //     labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+    //   },
+    //   placeholder: {
+    //     labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+    //   },
+    //   required: false,
+    //   localePrefix: {
+    //     moduleName: "WF",
+    //     masterName: "NEWTL"
+    //   },
+    //   jsonPath: "searchScreen.status",
+    //   sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   },
+    //   // required: true,
+    //   errorMessage: "ERR_INVALID_BILLING_PERIOD",
+    //   jsonPath: "searchScreen.status"
+    // }),
 
-    fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "WS_COMMON_FROM_DATE_LABEL" },
-      placeholder: {
-        labelName: "Select From Date",
-        labelKey: "WS_FROM_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.fromDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      // required: true,
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE",
-      jsonPath: "searchScreen.billingPeriodValue"
-    }),
+    // fromDate: getDateField({
+    //   label: { labelName: "From Date", labelKey: "WS_COMMON_FROM_DATE_LABEL" },
+    //   placeholder: {
+    //     labelName: "Select From Date",
+    //     labelKey: "WS_FROM_DATE_PLACEHOLDER"
+    //   },
+    //   jsonPath: "searchScreen.fromDate",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   },
+    //   // required: true,
+    //   pattern: getPattern("Date"),
+    //   errorMessage: "ERR_INVALID_DATE",
+    //   jsonPath: "searchScreen.billingPeriodValue"
+    // }),
 
-    toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "WS_COMMON_TO_DATE_LABEL" },
-      placeholder: {
-        labelName: "Select to Date",
-        labelKey: "WS_COMMON_TO_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.toDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE",
-      required: false
-    })
+    // toDate: getDateField({
+    //   label: { labelName: "To Date", labelKey: "WS_COMMON_TO_DATE_LABEL" },
+    //   placeholder: {
+    //     labelName: "Select to Date",
+    //     labelKey: "WS_COMMON_TO_DATE_PLACEHOLDER"
+    //   },
+    //   jsonPath: "searchScreen.toDate",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   },
+    //   pattern: getPattern("Date"),
+    //   errorMessage: "ERR_INVALID_DATE",
+    //   required: false
+    // })
   }),
 
   button: getCommonContainer({
