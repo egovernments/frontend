@@ -35,15 +35,13 @@ export const searchResults = {
       //       </Link>
       //     )
       //   }
-      // },
+      // },+
       {
         name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
-          customBodyRender: value => (
-            <Link onClick={() => onRowClick(value)} to="">
-              {value}
-            </Link>
+          customBodyRender: (value, data) => (
+            <Link to={{ pathname: '/wns/connection-details', state: { connectionNo: value, data: data } }} />
           )
         }
       },

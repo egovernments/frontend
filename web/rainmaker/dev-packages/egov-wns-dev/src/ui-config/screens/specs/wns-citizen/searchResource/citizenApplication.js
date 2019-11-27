@@ -39,7 +39,7 @@ const resetFields = (state, dispatch) => {
     dispatch(
         handleField(
             "search",
-            "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children.consumerid",
+            "components.div.children.citizenApplication.children.cardContent.children.appTradeAndMobNumContainer.children.connectionNumber;",
             "props.value",
             ""
         )
@@ -47,7 +47,7 @@ const resetFields = (state, dispatch) => {
     dispatch(
         handleField(
             "search",
-            "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children.oldConsumerid",
+            "components.div.children.citizenApplication.children.cardContent.children.appTradeAndMobNumContainer.children.oldConnectionNumber",
             "props.value",
             ""
         )
@@ -116,7 +116,7 @@ export const citizenApplication = getCommonCard({
             jsonPath: "searchScreen.mobileNumber",
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
         }),
-        consumerid: getTextField({
+        connectionNumber: getTextField({
             label: {
                 labelKey: "WS_MYCONNECTIONS_CONSUMER_NO"
             },
@@ -130,9 +130,9 @@ export const citizenApplication = getCommonCard({
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "searchScreen.consumerId"
+            jsonPath: "searchScreen.connectionNumber"
         }),
-        oldConsumerid: getTextField({
+        oldConnectionNumber: getTextField({
             label: {
                 labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL"
             },
@@ -146,7 +146,7 @@ export const citizenApplication = getCommonCard({
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "searchScreen.oldConsumerId"
+            jsonPath: "searchScreen.oldConnectionNumber"
         }),
         //   applicationNo: getTextField({
         //     label: {

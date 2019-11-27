@@ -32,7 +32,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.billingPeriod",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.applicationstatus",
       "props.value",
       ""
     )
@@ -126,7 +126,7 @@ export const tradeLicenseApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.billingYear"
     }),
-    billingPeriod: getSelectField({
+    applicationstatus: getSelectField({
       label: {
         labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
       },
@@ -146,7 +146,7 @@ export const tradeLicenseApplication = getCommonCard({
       },
       // required: true,
       errorMessage: "ERR_INVALID_BILLING_PERIOD",
-      jsonPath: "searchScreen.billingPeriod"
+      jsonPath: "searchScreen.status"
     }),
 
     fromDate: getDateField({
