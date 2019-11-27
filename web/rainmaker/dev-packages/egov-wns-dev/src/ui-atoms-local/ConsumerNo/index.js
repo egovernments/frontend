@@ -15,7 +15,7 @@ const styles = {
 
 function ConsumerNoContainer(props) {
   const { number } = props;
-  return <div style={styles}><LabelContainer labelKey="WS_COMMON_CONSUMER_NO_LABEL" />: {'- WS-2018-PB-246464'} </div>;
+  return <div style={styles}><LabelContainer labelKey="WS_COMMON_CONSUMER_NO_LABEL" />: {number} </div>;
 }
 
 export default ConsumerNoContainer;

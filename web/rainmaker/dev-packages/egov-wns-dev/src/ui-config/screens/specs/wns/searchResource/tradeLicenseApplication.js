@@ -86,7 +86,7 @@ export const tradeLicenseApplication = getCommonCard({
       required: false,
       pattern: getPattern("consumerNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.ulb"
+      jsonPath: "searchScreen.connectionNumber"
     }),
 
     // applicationNo: getTextField({
