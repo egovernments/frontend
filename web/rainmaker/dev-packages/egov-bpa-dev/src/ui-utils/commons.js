@@ -14,6 +14,8 @@ import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 
+import { mockJson } from './seacrMockJson';
+
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
   let modifiedArray = originalArray.filter(element => {
@@ -52,14 +54,15 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 export const getSearchResults = async (queryObject, dispatch) => {
   try {
     store.dispatch(toggleSpinner());
-    const response = await httpRequest(
-      "post",
-      "/firenoc-services/v1/_search",
-      "",
-      queryObject
-    );
+    const response = "";
+    //  await httpRequest(
+      // "post",
+      // "/firenoc-services/v1/_search",
+      // "",
+      // queryObject
+    // );
     store.dispatch(toggleSpinner());
-    return response;
+    return mockJson;
   } catch (error) {
     store.dispatch(
       toggleSnackbar(

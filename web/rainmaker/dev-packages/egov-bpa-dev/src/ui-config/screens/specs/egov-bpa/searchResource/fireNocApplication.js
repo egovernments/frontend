@@ -346,23 +346,23 @@ export const BPAApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
     }),
 
-    tenantID: getTextField({
-      label: {
-        labelName: "Tenant ID",
-        labelKey: "Tenant ID"
-      },
-      placeholder: {
-        labelName: "Enter Tenant ID",
-        labelKey: "Enter Tenant ID"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: true,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.fireNOCNumber"
-    }),
+    // tenantID: getTextField({
+    //   label: {
+    //     labelName: "Tenant ID",
+    //     labelKey: "Tenant ID"
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Tenant ID",
+    //     labelKey: "Enter Tenant ID"
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   },
+    //   required: true,
+    //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //   jsonPath: "searchScreen.fireNOCNumber"
+    // }),
 
   }),
 
