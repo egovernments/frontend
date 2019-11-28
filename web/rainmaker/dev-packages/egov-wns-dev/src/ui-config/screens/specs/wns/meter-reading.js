@@ -4,6 +4,10 @@ import {
     getCommonCard,
     getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+    
+    getQueryArg
+  } from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { meterReadingEditable } from "./meterReading/meterReadingEditable";
 
@@ -11,7 +15,8 @@ const addMeterReading = (state, dispatch) => {
     showHideCard(true, dispatch)
 };
 
-
+const queryValueAN = getQueryArg(window.location.href, "connectionNumber");
+console.log('123',queryValueAN)
 const showHideCard = (booleanHideOrShow, dispatch) => {
     dispatch(
         handleField(
@@ -31,7 +36,7 @@ const header = getCommonContainer({
         moduleName: "egov-wns",
         componentPath: "ConsumerNoContainer",
         props: {
-            number: "WS-2018-PB-246464"
+            number: queryValueAN
         }
     },
 
