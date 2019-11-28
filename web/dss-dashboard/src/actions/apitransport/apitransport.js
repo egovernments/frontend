@@ -1,7 +1,7 @@
 import axios from 'axios'
 import C from '../constants'
 
-export default function dispatchAPI(api,page) {
+export default function dispatchAPI(api, page) {
     if (api.method === 'POST' || api.method === 'post') {
         return dispatch => {
             dispatch(apiStatusAsync(true, false, ''))
@@ -45,7 +45,8 @@ export default function dispatchAPI(api,page) {
 function dispatchAPIAsync(api) {
     return {
         type: api.type,
-        payload: api.getPayload()
+        payload: api.getPayload(),
+        chartKey: api.getChartKey()
     }
 }
 

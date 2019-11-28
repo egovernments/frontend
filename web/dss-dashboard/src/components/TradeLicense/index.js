@@ -26,8 +26,8 @@ import ChartsAPI from '../../actions/charts/chartsAPI';
 import getFilterObj from '../../actions/getFilterObj';
 
 
-let page = 'propertyTax';
-class PropertyTax extends Component {
+let page = 'tradeLicense';
+class TradeLicense extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,7 +56,7 @@ class PropertyTax extends Component {
   }
   callAll() {
     let { chartsData } = this.props;
-    let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, page);
+    let filters = getFilterObj(this.props.GFilterData,this.props.globalFilterData,page);
     _.each(chartsData, (k, v) => {
       let code = v;
       if (code) {
@@ -109,7 +109,7 @@ class PropertyTax extends Component {
     return (<div className={classes.dashboard}>
       <div className={classes.actions}>
         <span style={{ fontSize: '20px', flex: 1, textAlign: 'left' }}>
-          <span style={{ fontFamily: 'Roboto' }}>Property Tax</span>
+          <span  style={{ fontFamily: 'Roboto' }}>Trade License</span>
         </span>
 
         {isMobile && <div className={[classes.desktop, classes.posit].join(' ')}>
@@ -124,10 +124,10 @@ class PropertyTax extends Component {
         </div>}
 
         {!isMobile && <div className={classes.acbtn}>
-        <CustomizedMenus key="download" fileName={`SURE ${page}`} />
-          <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />          
-        </div>
-        }
+          <CustomizedMenus key="download" fileName={`SURE ${page}`} />
+          <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />
+
+        </div>}
 
       </div>
       <div className={classes.mobile} style={{paddingRight: '10px'}}>
@@ -184,4 +184,4 @@ const mapDispatchToProps = dispatch => {
     updateFilterData: updateGlobalFilterData
   }, dispatch)
 }
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PropertyTax)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(TradeLicense)));

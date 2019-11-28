@@ -26,7 +26,7 @@ import FilterTable from '../Dashboard/download/filterTable';
 import { downloadAsImage, printDocument } from '../../utils/block';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
-import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare} from '../../utils/Share'
+import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../utils/Share'
 
 const pdf = new jsPDF("p", "mm", "a1");
 pdf.scaleFactor = 3;
@@ -60,9 +60,6 @@ const StyledMenuItem = withStyles(theme => ({
             },
         },
     },
-    // CloseButton: {
-    //     display: 'flex'
-    // }
 }))(MenuItem);
 
 export function CustomizedMenus(props) {
@@ -85,7 +82,7 @@ export function CustomizedMenus(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    
+
     const downloadImage = () => {
         downloadAsImage('dashboard').then(function (success) {
             setAnchorEl(null);
@@ -119,7 +116,45 @@ export function CustomizedMenus(props) {
             setAnchorEl(null);
         })
     }
- 
+
+    const shareWhatsAppPDF = () => {
+        const pdf1 = new jsPDF("p", "mm", "a1");
+        pdf1.scaleFactor = 3;
+
+        printDocument(pdf1, renderTable()).then(function (pdfO) {
+            let element = document.getElementById("printFtable")
+            element.parentNode.removeChild(element);
+            setAnchorEl(null);
+            // pdfO.save();
+
+            try {
+             handleWhatsAppPdfShare(pdfO)
+            } catch{ }
+        }).catch(function (error) {
+            console.log(error);
+            setAnchorEl(null);
+        })
+    }
+
+    const shareEmailPDF = () => {
+        const pdf1 = new jsPDF("p", "mm", "a1");
+        pdf1.scaleFactor = 3;
+
+        printDocument(pdf1, renderTable()).then(function (pdfO) {
+            let element = document.getElementById("printFtable")
+            element.parentNode.removeChild(element);
+            setAnchorEl(null);
+            // pdfO.save();
+
+            try {
+             handlePdfShareEmail(pdfO)
+            } catch{ }
+        }).catch(function (error) {
+            console.log(error);
+            setAnchorEl(null);
+        })
+    }
+
     return (
         <div style={{ paddingLeft: '10px' }}>
             <Button style={{ borderRadius: '2px', backgroundColor: props.bgColor, color: props.color }}
@@ -184,7 +219,7 @@ export function CustomizedMenus(props) {
                 <Collapse in={shareOpen} timeout="auto" unmountOnExit>
                     <Divider />
                     <List component="div" disablePadding>
-                    <StyledMenuItem button onClick={handlePdfShareEmail}>
+                        <StyledMenuItem button onClick={shareEmailPDF}>
                             <ListItemIcon>
                                 <DraftsIcon />
                             </ListItemIcon>
@@ -196,7 +231,7 @@ export function CustomizedMenus(props) {
                             </ListItemIcon>
                             <ListItemText primary="Image" />
                         </StyledMenuItem>
-                        <StyledMenuItem button onClick={handleWhatsAppPdfShare}>
+                        <StyledMenuItem button onClick={shareWhatsAppPDF}>
                             <ListItemIcon>
                                 <WhatsappIcon />
                             </ListItemIcon>
@@ -208,7 +243,7 @@ export function CustomizedMenus(props) {
                             </ListItemIcon>
                             <ListItemText primary="Image" />
                         </StyledMenuItem>
-                      
+
                     </List>
                 </Collapse>
             </StyledMenu>

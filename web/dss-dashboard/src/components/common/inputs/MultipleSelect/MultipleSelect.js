@@ -55,10 +55,10 @@ class MultipleSelects extends Component {
 
   }
   render() {
-    const { classes, item, logo, target, defaultValue } = this.props;
+    const { classes, logo, target } = this.props;
     let pls = "All " + target;
     let svgicon;
-    if (logo === "District") {
+    if (logo === "DDR") {
       svgicon = districts_icon;
     } else if (logo === "ULBS") {
       svgicon = ulbs_icon;
@@ -95,7 +95,7 @@ class MultipleSelects extends Component {
 
                 </React.Fragment>
               )}
-              style={{ width: 200 }}
+              style={{ minWidth: 134 }}
               // renderTags={params => {
               //   return (
               //     <div>{params && params.length > 0 ? params.length + 'Selected' : 'All' + target}</div>
@@ -110,7 +110,7 @@ class MultipleSelects extends Component {
                     inputProps={{
                       // disableUnderline: true,
                       ...params.inputProps,
-                      
+
                       autoComplete: 'disabled', // disable autocomplete and autofill
                       classes: {
                         root: classes.bootstrapRoot,

@@ -8,7 +8,8 @@ const styles = theme => ({
         flex: 1,
         '& div': {
             color: variables.black,
-            // flex: 1,
+            margin: '0 3px 0 0',
+            flex: 1,
             // '& div:before': '',
             // '& svg': {
             //   color: variables.black,
@@ -23,7 +24,7 @@ const styles = theme => ({
     formControl: {
         margin: '0',
         minWidth: 120,
-        'flex-grow': 1,
+        // 'flex-grow': 1,
         '& label': {
             color: variables.black
         },

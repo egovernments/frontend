@@ -5,13 +5,13 @@ const PerformanceChartStyles = theme => ({
         flexDirection: 'column',
         textAlign: 'left',
         margin: '10px 0px'
-      },
-      progess: {
+    },
+    progess: {
         margin: '5px 0px',
         height: '5px',
         borderRadius: '2.5px'
-      },
-      topLabel: {
+    },
+    topLabel: {
         fontFamily: 'Roboto',
         fontSize: '12px',
         fontWeight: '500',
@@ -20,8 +20,8 @@ const PerformanceChartStyles = theme => ({
         lineHeight: 'normal',
         letterSpacing: 'normal',
         color: '#000000'
-      },
-      bottomLabel: {
+    },
+    bottomLabel: {
         fontFamily: 'Roboto',
         fontSize: '10px',
         fontStretch: 'normal',
@@ -29,14 +29,30 @@ const PerformanceChartStyles = theme => ({
         lineHeight: 'normal',
         letterSpacing: 'normal',
         color: '#000000'
-      },
-      lightTooltip: {
+    },
+    lightTooltip: {
         background: variables.white,
         color: variables.black,
         boxShadow: theme.shadows[1],
         fontSize: 11,
         fontFamily: variables.SecondaryFont
-      }
+    },
+    progess: {
+        height: 5,
+        margin: '5px 0px',
+        borderRadius: 2.5,
+        // display: '-webkit-box',
+        // display: -ms-flexbox,
+        display: 'flex',
+        // height: 1rem,
+        overflow: 'hidden',
+        fontSize: '.75rem',
+        background: '#e9ecef',
+        // borderRadius: '.25rem',
+    },
+    progressLine: {
+        height: 5
+    }
 
 });
 

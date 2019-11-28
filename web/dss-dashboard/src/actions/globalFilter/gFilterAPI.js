@@ -27,7 +27,9 @@ export default class GlobalFIlterAPI extends API {
     getPayload() {
         return this.globalFilter;
     }
-
+    getChartKey() {
+        return null;
+    }
     getBody() {
         return {}
     }

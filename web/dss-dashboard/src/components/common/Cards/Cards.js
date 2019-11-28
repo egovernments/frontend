@@ -45,7 +45,9 @@ class Cards extends Component {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
-
+  componentWillReceiveProps(nextProps) {
+    // console.log("Card=>>>>>",nextProps.GFilterData,this.props.GFilterData);
+  }
   downloadAsImage = () => {
     let div = document.getElementById('card' + this.props.id);
     // this.props.APITransport(true)
@@ -63,7 +65,7 @@ class Cards extends Component {
   }
   renderMenues() {
     const { classes, title } = this.props;
-    return (<div className={[classes.actionMenues,classes.fullw].join(' ')}>
+    return (<div className={[classes.actionMenues, classes.fullw].join(' ')}>
       <ActionButtons text={title} handleClick={this.handleClick} buttonType="info" target="info"></ActionButtons>
       {/* <Button 
         aria-controls="customized-menu"
@@ -85,7 +87,7 @@ class Cards extends Component {
           <ListItemIcon className={classes.itemIcon}>
             <ImageIcon />
           </ListItemIcon>
-          <ListItemText style={{marginTop: '0px',marginBottom: '0px'}} primary="Download image" />
+          <ListItemText style={{ marginTop: '0px', marginBottom: '0px' }} primary="Download image" />
         </MenuItem>
 
       </Menu>
@@ -93,17 +95,20 @@ class Cards extends Component {
   }
 
   render() {
-    const { classes, needInfo, id,title  } = this.props;
+    let { strings } = this.props;
+    const { classes, needInfo, id, title, fullW } = this.props;
+    let newClass = fullW ? classes.full : classes.redused;
     return (
-      <Card id={'card' + id} style={this.props.cardStyle || cardStyle} classes={{ root: classes.root }} >
+      // this.props.cardStyle || cardStyle
+      <Card id={'card' + id} style={this.props.cardStyle || cardStyle} classes={{ root: newClass }} >
         <div className={classes.headRoot}>
-       {title && <CardHeader  classes={{ title: classes.title, root: classes.cardheader }} title={title + ' (In '+ this.props.GFilterData['Denomination']+ ')'} onClick={(event) => this.clickEvent(event)}>
-        </CardHeader>}
-        {/* <div className={classes.fullw}></div> */}
-        {needInfo && this.renderMenues()}
+          {title && <CardHeader classes={{ title: classes.title, root: classes.cardheader }} title={(strings[title] || title) + ' (In ' + this.props.GFilterData['Denomination'] + ')'} onClick={(event) => this.clickEvent(event)}>
+          </CardHeader>}
+          {/* <div className={classes.fullw}></div> */}
+          {needInfo && this.renderMenues()}
         </div>
         <CardContent classes={{ root: classes.cardContent }}>
-          <Typography component="div">
+          <Typography component="div"> 
             {this.props.children}
           </Typography>
         </CardContent>
@@ -121,13 +126,14 @@ Cards.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-	return {
-		GFilterData: state.GFilterData
-	}
+  return {
+    GFilterData: state.GFilterData,
+    strings: state.lang
+  }
 }
 const mapDispatchToProps = dispatch => {
-	return bindActionCreators({
-	}, dispatch)
+  return bindActionCreators({
+  }, dispatch)
 }
 
 export default withRouter(withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(Cards)));

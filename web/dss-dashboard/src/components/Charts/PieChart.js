@@ -3,8 +3,23 @@ import { Pie } from 'react-chartjs-2';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import NFormatterFun from '../common/numberFormaterFun';
+import _ from 'lodash';
+import { withStyles } from '@material-ui/core/styles';
+import style from './styles';
 
 const options = {
+	responsive: true,
+	options: {
+		responsive: true,
+		maintainAspectRatio: false,
+		scales: {
+			yAxes: [{
+				ticks: {
+					beginAtZero: true
+				}
+			}]
+		}
+	},
 	legend: {
 		display: true,
 		position: 'bottom',
@@ -15,13 +30,15 @@ const options = {
 	tooltips: {
 		callbacks: {
 			label: function (tooltipItem, data) {
+				console.log(data)
 				var dataset = data.datasets[tooltipItem.datasetIndex];
 				var meta = dataset._meta[Object.keys(dataset._meta)[0]];
 				var total = meta.total;
 				var currentValue = dataset.data[tooltipItem.index];
 				var percentage = parseFloat((currentValue / total * 100).toFixed(1));
-				if (dataset.dataSymbol[tooltipItem.index][0] == 'number' || dataset.dataSymbol[tooltipItem.index][1] == 'Unit')
-					currentValue = NFormatterFun(currentValue, dataset.dataSymbol[tooltipItem.index][0], dataset.dataSymbol[tooltipItem.index][1], true)
+				// if (dataset.dataSymbol[tooltipItem.index][0] == 'number' || dataset.dataSymbol[tooltipItem.index][1] == 'Unit') {
+				currentValue = NFormatterFun(currentValue, dataset.dataSymbol[tooltipItem.index][0], dataset.dataSymbol[tooltipItem.index][1], true)
+				// }
 				return currentValue + ' (' + percentage + '%)';
 			},
 			title: function (tooltipItem, data) {
@@ -39,10 +56,7 @@ class PieChart extends React.Component {
 			data: null
 		}
 	}
-
-	componentDidMount() {
-		// transformation
-		var chartData = this.props.chartData;
+	getData(chartData) {
 		var tempData = {
 			labels: [],
 			datasets: []
@@ -53,30 +67,28 @@ class PieChart extends React.Component {
 			data: [],
 			dataSymbol: []
 		};
-		for (var key in chartData) {
-			if (key == 'data' && chartData[key] && chartData[key][0]) {
-				var plots = chartData[key][0]['plots'];
-				for (var i = 0; i < plots.length; i++) {
-					tempData.labels.push(plots[i]['name']);
-					tempdataSet.data.push(NFormatterFun(plots[i]['value'], plots[i]['symbol'], this.props.GFilterData['Denomination']));
-					tempdataSet.dataSymbol.push([plots[i]['symbol'], this.props.GFilterData['Denomination']]);
-				}
+
+		_.map(chartData, function (k, v) {
+			var plots = k['plots'];
+			for (var i = 0; i < plots.length; i++) {
+				tempData.labels.push(plots[i]['name']);
+				// tempdataSet.data.push(NFormatterFun(plots[i]['value'], plots[i]['symbol'], this.props.GFilterData['Denomination']));
+				tempdataSet.data.push(plots[i]['value'])
+				tempdataSet.dataSymbol.push([plots[i]['symbol'], this.props.GFilterData['Denomination']]);
 			}
-		}
+		}.bind(this))
 		tempData.datasets.push(tempdataSet);
-		this.setState({ data: tempData })
+		return tempData;
 	}
+
 	render() {
-		if (this.state.data) {
+		let { chartData, classes } = this.props;
+ 		let _data = this.getData(chartData)
+		if (_data) {
 			return (
-				<div>
-					{/* <ul className="list list-inline">
-					
-						<li style={{ textAlign: 'left' }}>{this.props.label} 
-						{ this.props.section !="Service" && <i>(In {this.props.GFilterData['Denomination']}) </i>}</li>
-						</ul> */}
+				<div className={classes.piChart}>
 					<Pie
-						data={this.state.data}
+						data={_data}
 						height={165}
 						options={options}
 					/>
@@ -89,11 +101,12 @@ class PieChart extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		GFilterData: state.GFilterData
+		GFilterData: state.GFilterData,
+
 	}
 }
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators({
 	}, dispatch)
 }
-export default connect(mapStateToProps, mapDispatchToProps)(PieChart);
+export default withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(PieChart));

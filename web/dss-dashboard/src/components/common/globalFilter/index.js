@@ -28,7 +28,7 @@ class GlobalFilter extends Component {
             value: 'FY 19-20', //fOR date range
             filterData: this.props.GFilterData,
             title: '',
-            dept: "All Departments",
+            dept: "All Services",
             clear: false
         }
         this.handleChanges = this.handleChanges.bind(this);
@@ -55,70 +55,43 @@ class GlobalFilter extends Component {
             //      newFilterData[target] = this.getDateFilter(value);
             // }
 
-            if (target == 'Departments') {
+            if (target == 'Services') {
                 newFilterData[target] = this.getdepartFilter(value);
             }
             if (target !== 'duration') {
                 this.setState({ [`${target}IsOpen`]: !open, filterData: newFilterData });
             } else {
                 if (newFilterData.duration.title === 'CUSTOM') {
-                    newFilterData.duration.title =  moment.unix(_.get(newFilterData, 'duration.value.startDate')).format("DD/MM/YY")
-                    
-                        + '-' +moment.unix(_.get(newFilterData, 'duration.value.endDate')).format("DD/MM/YY");
+                    newFilterData.duration.title = moment.unix(_.get(newFilterData, 'duration.value.startDate')).format("DD/MM/YY")
+
+                        + '-' + moment.unix(_.get(newFilterData, 'duration.value.endDate')).format("DD/MM/YY");
                 }
                 this.setState({ open: open, filterData: newFilterData });
             }
 
-
-            /* Added by sathish for tempFix */
-            /* Started */
-            // if (value && value[0] && target == 'ULBS') {
-            //     for (var i = 0; i < value.length; i++) {
-            //         tempValue[i] = 'pb.' + value[i].toLowerCase();
-            //     }
-            //     newFilterData[target] = tempValue;
-            // }
-
-            // if (target == 'District') {
-            //     for (var i = 0; i < value.length; i++) {
-            //         tempValue[i] = this.props.globalFilterData[1]['master'][0][value[i]];
-            //     }
-            //     newFilterData[target] = tempValue;
-            // }
-            /* Ended */
             console.log([`${target}IsOpen`], !open, [target], value);
-            // if (target != 'Denomination') {
             if (typeof this.props.applyFilters === 'function') {
                 this.props.applyFilters(newFilterData);
             }
-            // }
-
-            if (target === 'Departments') {
+            if (target === 'Services') {
                 this.setState({
                     dept: value
                 })
             }
-            // if (target == 'duration' && typeof newFilterData.duration != 'undefined') {
-            //     this.setState({
-            //         title: tempValue
-            //     })
-            // }
+
         }
     }
 
     clearFilter(value, target) {
         this.setState({
             title: 'FY 19-20',
-            dept: "All Departments",
+            dept: "All Services",
             clear: true,
             value: 'FY 19-20',
             filterData: {
                 'Denomination': 'Lac'
             }
-        }, this.props.updateFilterData(this.state.filterData));
-        // this.props.applyFilters({
-        //     'Denomination': 'Unit'
-        // })
+        }, this.props.applyFilters(this.state.filterData));
     }
 
     openPicker() {
@@ -136,18 +109,6 @@ class GlobalFilter extends Component {
         }
     }
 
-    // handleApplyFilter(newValue) {
-    //     this.setState({ open: false, value: newValue, title: newValue })
-
-    //     this.props.applyFilters(this.state.filterData);
-
-    //     if (newValue) {
-    //         this.setState({
-    //             value: newValue
-    //         });
-    //     }
-    // }
-
     renderDateRange(label, data) {
         let { classes } = this.props;
         return (
@@ -157,7 +118,10 @@ class GlobalFilter extends Component {
                     disableUnderline={true}
                     id="adornment-amount"
                     value={(_.get(this.state, "filterData.duration.title") || this.state.value)}
-                    style={{ width: "225px", color: '#000000' }}
+                    style={{
+                        color: '#000000', width: 'auto',
+                        margin: '0 10px 0 0'
+                    }}
                     // onChange={handleChange('amount')}
                     startAdornment={<InputAdornment position="start">
                         <SVG src={icondepartment} className={classes.CloseButton}>
@@ -226,7 +190,9 @@ class GlobalFilter extends Component {
             clear: false
         })
     }
-
+    applyFilter() {
+        this.props.applyFiltersLive(this.state.filterData);
+    }
     renderComponents(object) {
         let type = object.type;
         let label = object.label;
@@ -235,11 +201,11 @@ class GlobalFilter extends Component {
                 switch (label) {
                     case "ULBS":
                         return this.renderMultiselect(object.label, this.handleChanges, this.state.Ulbs, object.values)
-                    case "District":
-                        return this.renderMultiselect(object.label, this.handleChanges, this.state.districts, object.values)
-                    case "Departments":
+                    case "DDR":
+                        return this.renderMultiselect(object.label, this.handleChanges, this.state.ddrs, object.values)
+                    case "Services":
                         return this.renderSimpleSelect(object.label, object.values, this.handleChanges)
-                    case "DateRange":
+                    case "Date Range":
                         return this.renderDateRange(object.label, object.values);
                 }
                 break;
@@ -252,10 +218,10 @@ class GlobalFilter extends Component {
     render() {
         let { classes, globalFilterData } = this.props;
         return (
-            <Cards key="gf" >
+            <Cards key="gf" fullW={true}>
                 <div className={classes.mainFilter}>
                     {globalFilterData.map(ro => {
-                        if (this.props.hideDepart && ro.label == "Departments") {
+                        if (this.props.hideDepart && ro.label == "Services") {
                             return (<div key={ro.label} className={classes.filterS}></div>);
 
                         }
@@ -267,11 +233,13 @@ class GlobalFilter extends Component {
                         );
                     })
                     }
-                    <div className={`${classes.filterS} ${classes.fullWidth}`}>
+                    {/* <div className={`${classes.filterS} ${classes.fullWidth}`}>
 
-                    </div>
-                    <div className={classes.filterS}>
+                    </div> */}
+
+                    <div className={classes.actions}>
                         <ActionButtons buttonType="default" text="CLEAR ALL" disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                        <ActionButtons buttonType="default" text="APPLY" clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
                     </div>
                 </div>
 

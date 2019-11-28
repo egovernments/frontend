@@ -9,7 +9,19 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto{
+.col-lg-1,
+.col-lg-10,
+.col-lg-11,
+.col-lg-12,
+.col-lg-2,
+.col-lg-3,
+.col-lg-4,
+.col-lg-5,
+.col-lg-6,
+.col-lg-7,
+.col-lg-8,
+.col-lg-9,
+.col-lg-auto {
     padding-right: 10px !important;
     padding-left: 10px !important;
 }
@@ -219,7 +231,7 @@ h6 span {
 
 .tableHeading {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     flex: 1 1;
 }
 
@@ -345,15 +357,19 @@ h6 span {
 }
 
 .tableFilterChipWrap {
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
+    text-align: left;
+    display: flex;
 }
 
 .tableFilterChipWrap .chipWrap {
     margin: 0px 20px;
+    display: flex;
 }
 
 .tableFilterChipWrap .filLabel {
-    margin-left: 20px;
+    margin-left: 10px;
+    padding-top: 5px;
 }
 
 .fa-info-circle {
@@ -385,7 +401,8 @@ canvas {
     margin: 0px 8px !important;
 }
 
-.pb-2, .py-2{
+.pb-2,
+.py-2 {
     /* padding: 0px 5px !important; */
 }
 
@@ -393,40 +410,60 @@ canvas {
     background-color: transparent
 }
 
-button:focus{
+button:focus {
     outline-color: initial !important;
 }
 
-.tableChart .MuiPaper-elevation1{
+.tableChart .MuiPaper-elevation1 {
     box-shadow: none !important;
 }
 
-
-
-
-
-
-@media (min-width:320px)  { 
-    /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */ 
-    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto{
-        margin-bottom: 20px ;
+@media (min-width:320px) {
+    /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+    .col-lg-1,
+    .col-lg-10,
+    .col-lg-11,
+    .col-lg-12,
+    .col-lg-2,
+    .col-lg-3,
+    .col-lg-4,
+    .col-lg-5,
+    .col-lg-6,
+    .col-lg-7,
+    .col-lg-8,
+    .col-lg-9,
+    .col-lg-auto {
+        margin-bottom: 20px;
     }
-    .navbar-nav{
-        display: none ;
+    .navbar-nav {
+        display: none;
     }
-    .rowList{
+    .rowList {
         padding-top: 0px;
     }
 }
-@media (min-width:480px)  { 
-    /* smartphones, Android phones, landscape iPhone */ 
-    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto{
-        margin-bottom: 20px ;
+
+@media (min-width:480px) {
+    /* smartphones, Android phones, landscape iPhone */
+    .col-lg-1,
+    .col-lg-10,
+    .col-lg-11,
+    .col-lg-12,
+    .col-lg-2,
+    .col-lg-3,
+    .col-lg-4,
+    .col-lg-5,
+    .col-lg-6,
+    .col-lg-7,
+    .col-lg-8,
+    .col-lg-9,
+    .col-lg-auto {
+        margin-bottom: 20px;
     }
-    .navbar-nav{
-        display: none ;
+    .navbar-nav {
+        display: none;
     }
-    .rowList{
+    .rowList {
         padding-top: 0px;
     }
 }
@@ -434,31 +471,31 @@ button:focus{
 @media (max-width: 1293px) {
     .tableHeading {
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         flex: 1
-
     }
 }
+
 @media (max-width: 1024px) {
     .tableHeading {
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         flex: 1
-            }
+    }
 }
+
 @media (max-width: 768px) {
     .tableHeading {
         display: flex;
-        flex-direction: column;
+        flex-direction: row-reverse;
         flex: 1
-
     }
 }
 
 @media (max-width: 375px) {
     .tableHeading {
         display: flex;
-        flex-direction: column;
+        flex-direction: row-reverse;
         flex: 1
     }
 }

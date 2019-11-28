@@ -35,7 +35,10 @@ const styles = theme => ({
         maxWidth: '250px'
     },
     list: {
-        display: 'flex'
+        // display: 'flex',
+        '& div': {
+            flex: 1
+        }
     },
     formControl: {
         minWidth: 'auto'

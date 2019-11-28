@@ -18,7 +18,7 @@ class SideBar extends Component {
         <div className="sidebar-sticky">
           <ul className="nav flex-column" style={{ paddingTop: '4px' }}>
             <li className="nav-item">
-              <NavLink exact className="nav-link" activeClassName="nav-link active" to="/dashboard/">
+              <NavLink exact className="nav-link" activeClassName="nav-link active" to="/">
                 <span data-feather="file-text"></span>
                 My Dashboard
               </NavLink>
@@ -52,32 +52,32 @@ class SideBar extends Component {
           </h6>
           <ul className="nav flex-column mb-2 text-justify">
             <li className="nav-item">
-              <NavLink exact className="nav-link" activeClassName="nav-link active" to="/dashboard/propertytax">
+              <NavLink exact className="nav-link" activeClassName="nav-link active" to="/propertytax">
                 <span data-feather="file-text">
-                    <i className="fa fa-home fa-menu"></i>
-                    Property Tax
+                  <i className="fa fa-home fa-menu"></i>
+                  Property Tax
                 </span>
               </NavLink>
             </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  <i className="fa fa-suitcase fa-menu" aria-hidden="true"></i>Trade License
+            <li className="nav-item">
+              <NavLink exact className="nav-link" activeClassName="nav-link active" to="/tradeLicense">
+                <span data-feather="file-text"></span>
+                <i className="fa fa-suitcase fa-menu" aria-hidden="true"></i>Trade License
+               </NavLink>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                <i className="fa fa-tint fa-menu" aria-hidden="true"></i>Water Sewerage
                        </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  <i className="fa fa-tint fa-menu" aria-hidden="true"></i>Water Sewerage
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                <i className="fa fa-arrows-alt fa-menu" aria-hidden="true"></i>PGR
                        </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  <i className="fa fa-arrows-alt fa-menu" aria-hidden="true"></i>PGR
-                       </a>
-              </li>
-{/* 
+            </li>
+            {/* 
             {isLoaded &&
               dashboardConfigData.map((page, i) =>
                 <li className="nav-item" key={i}>

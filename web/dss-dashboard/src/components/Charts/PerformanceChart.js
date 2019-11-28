@@ -1,50 +1,13 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import axios from 'axios';
 import NFormatter from '../common/numberFormater';
+import _ from 'lodash';
 import style from './PerformanceChartStyle';
 import getChartOptions from '../../actions/getChartOptions';
-
-// const style = {
-//   maincls: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     textAlign: 'left',
-//     margin: '10px 0px'
-//   },
-//   progess: {
-//     margin: '5px 0px',
-//     height: '5px',
-//     borderRadius: '2.5px'
-//   },
-//   topLabel: {
-//     fontFamily: 'Roboto',
-//     fontSize: '12px',
-//     fontWeight: '500',
-//     fontStretch: 'normal',
-//     fontStyle: 'normal',
-//     lineHeight: 'normal',
-//     letterSpacing: 'normal',
-//     color: '#000000'
-//   },
-//   bottomLabel: {
-//     fontFamily: 'Roboto',
-//     fontSize: '10px',
-//     fontStretch: 'normal',
-//     fontStyle: 'normal',
-//     lineHeight: 'normal',
-//     letterSpacing: 'normal',
-//     color: '#000000'
-//   },
-//   lightTooltip: {
-//     background: variables.white,
-//     color: variables.black,
-//     // boxShadow: theme.shadows[1],
-//     fontSize: 11,
-//     fontFamily: variables.SecondaryFont
-//   }
-// }
-
+import ChartsAPI from '../../actions/charts/chartsAPI'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import APITransport from '../../actions/apitransport/apitransport';
 
 class PerformanceChart extends React.Component {
   constructor(props) {
@@ -54,50 +17,43 @@ class PerformanceChart extends React.Component {
   formatPlotValue(value, type) {
     return <NFormatter value={value} nType={type} />
   }
+
+  callAPI() {
+    let code = this.props.chartData[0]['id'] ? this.props.chartData[0]['id'] : "";
+    let requestBody = getChartOptions(code, {});
+
+    let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
+    this.props.APITransport(chartsAPI);
+  }
+
   componentDidMount() {
-    let filters = {};
-    this.callRequest(this.props, filters);
+    // let filters = {};
+    // this.callRequest(this.props, filters);
+    this.callAPI();
   }
 
-  callRequest(props, filters) {    
-    let code = props.chartData[0]['id'] ? props.chartData[0]['id']: "";
-    let label = props.chartData[0]['name'];    
-    if (code) {
-      let temp, tempdata;
-      let getAxiosOptions = getChartOptions(code,filters);
-      axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
-        .then(response => {
-
-          temp = response.data['responseData']['data'];
-          tempdata = {
-            label: label,
-            dataset: []
-          };
-          temp.map((d, i) => {
-            if (i < 3) {
-              let plot = d.plots[0];
-              tempdata.dataset.push({
-                "label": d.headerName + " " + d.headerValue + " : " + plot.name,
-                "value": plot.value,
-                "label2": plot.label + ": ",
-                "color": (plot.value > 50) ? "#259b24" : "#e54d42"
-              });
-            }
-          })
-          this.setState({ data: tempdata })
-        })
-        .catch(error => {
-          console.log(error)
-        });
-    }
-  }
   componentWillReceiveProps(nextProps) {
-    let filters = {};
-    this.callRequest(nextProps, nextProps.filters);
+    // let filters = {};
+    // this.callRequest(nextProps, nextProps.filters);
   }
-  render() { 
+  render() {
+    let { strings } = this.props;
+
     const { classes } = this.props;
-    if (this.state.data) {
+    let codekey = _.chain(this.props).get('chartData').first().get("id").value();
+    let data = _.chain(this.props).get("chartsGData").get(codekey).get('data').map((d, i) => {
+      if (i < 3) {
+        let plot = d.plots[0];
+        return {
+          "label": d.headerName + " " + d.headerValue + " : " + plot.name,
+          "value": plot.value,
+          "label2": (strings['plot.label'] || plot.label) + ": ",
+          "color": (plot.value > 50) ? "#259b24" : "#e54d42"
+        }
+      }
+    }).compact().value() || [];
+
+    if (data) {
       return (<div>
         {/* <ul className="list-inline" style={{ paddingBottom: '15px' }}>
           <li className="pull-left">
@@ -110,11 +66,12 @@ class PerformanceChart extends React.Component {
           </Tooltip> */}
         {/* </ul> */}
 
-        {this.state.data.dataset.map((d, i) =>
+
+        {data.map((d, i) =>
           <div className={classes.maincls} key={i}>
             <span className={classes.topLabel}>{d.label}</span>
-            <div className={classes.progess + " progress"} >
-              <div className="progress-bar" role="progressbar" style={{ width: d.value + '%', backgroundColor: d.color }} aria-valuenow={d[1]} aria-valuemin={0} aria-valuemax={100} />
+            <div className={classes.progess} >
+              <div className={classes.progressLine} role="progressbar" style={{ width: d.value + '%', backgroundColor: d.color }} aria-valuenow={d[1]} aria-valuemin={0} aria-valuemax={100} />
             </div>
             <span className={classes.bottomLabel + " label"}>{d.label2}
               <NFormatter value={d.value} nType={'percentage'} />
@@ -127,5 +84,19 @@ class PerformanceChart extends React.Component {
     return <div>Loading...</div>
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    dashboardConfigData: state.firstReducer.dashboardConfigData,
+    GFilterData: state.GFilterData,
+    chartsGData: state.chartsData,
+    strings: state.lang
 
-export default withStyles(style)(PerformanceChart);
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    APITransport: APITransport,
+    // updateFilterData: updateGlobalFilterData
+  }, dispatch)
+}
+export default withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(PerformanceChart));

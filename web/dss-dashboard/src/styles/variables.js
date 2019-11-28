@@ -99,6 +99,7 @@ const variables = {
     fs_24: 24,
     fs_28: 28,
     fs_30: 30,
+    fs_32: 32,
     fs_45: 45,
 
 

@@ -34,7 +34,7 @@ export default function NFormatter(props) {
                             let value = Rformatter.format((props.value).toFixed(2) || 0).replace('₹ ', '');
                             var right = value.substring(value.length - 12, value.length);
                             var left = value.substring(0, value.length - 12).replace(',', '');
-                            let newVal = '₹ ' + left + ',' + right;
+                            let newVal = '₹ ' + (left ? (left + ',') : '') + right;
                             return newVal.replace(",,", ',');
                         }
                     default:

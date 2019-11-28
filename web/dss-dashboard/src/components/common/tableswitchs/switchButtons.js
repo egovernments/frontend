@@ -9,14 +9,9 @@ class SwitchButton extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            value: ''
+            value: 'Boundary'
         }
     }
-
-    // handleFormat = (event, newFormats) => {
-    //     // setFormats(newFormats);
-    // };
-
     handleAlignment = (event, newValue) => {
         this.setState({
             value: newValue
@@ -24,11 +19,6 @@ class SwitchButton extends Component {
         this.props.clickFromTab(newValue);
     };
 
-    componentDidMount() {
-        this.setState({
-            value: "boundary"
-        })
-    }
     render() {
         let { classes, chartParent } = this.props;
         let switchLabel = ["Boundary", "Usage"];
@@ -36,11 +26,12 @@ class SwitchButton extends Component {
             <ToggleButtonGroup
                 value={this.state.value}
                 exclusive
+                defaultChecked={true}
                 onChange={this.handleAlignment}
                 aria-label="text alignment"
             >
                 {chartParent.map((d, i) =>
-                    <ToggleButton className={classes.toggleButton} value={d.id} aria-label="left aligned" >{switchLabel[i]}</ToggleButton>
+                    <ToggleButton key={i} checked={this.state.value === switchLabel[i]} className={classes.toggleButton} value={d.id} aria-label="left aligned" >{switchLabel[i]}</ToggleButton>
                 )}
             </ToggleButtonGroup>
         );

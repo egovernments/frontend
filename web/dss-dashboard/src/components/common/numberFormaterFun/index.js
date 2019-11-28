@@ -1,4 +1,5 @@
 export default function NFormatterTest(value, type, symbol, commaSeparated = false) {
+
     var SI_SYMBOL = ["Unit", "Lac", "Cr"];
     const Rformatter = new Intl.NumberFormat('en-IN', {
         // maximumFractionDigits:0,
@@ -11,6 +12,7 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
         case "amount":
         case "Amount":
             switch (symbol) {
+
                 case SI_SYMBOL[1]:
                     return `${Rformatter.format((value / 100000).toFixed(2) || 0)} `
 
@@ -18,18 +20,27 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
                     return `${Rformatter.format((value / 10000000).toFixed(2) || 0)} `
 
                 case SI_SYMBOL[0]:
-                    if (value.length <= 8 || commaSeparated) {
-                        return Rformatter.format(value || 0)
+                    if (value <= 9999999) {
+                        return `${Rformatter.format(value || 0)}`
                     } else {
-                        let val = Rformatter.format((value / 10000000).toFixed(2) || 0).replace('₹ ', '');
-                        var right = val.substring(val.length - 12, val.length);
-                        var left = val.substring(0, val.length - 12).replace(',', '');
-                        let newVal = right + '' + left
-                        return newVal;
+                        if (!commaSeparated) {
+                            return value;
+                            // let nvalue = Rformatter.format((value).toFixed(2) || 0).replace('₹ ', '');
+                            // var right = nvalue.substring(nvalue.length - 12, nvalue.length);
+                            // var left = nvalue.substring(0, nvalue.length - 12).replace(',', '');
+                            // let newVal = (left ? (left + ',') : '') + right;
+                            // return parseFloat(newVal.replace(",,", ',').replace(',', ''));
+                        } else {
+                            let nvalue = Rformatter.format((value).toFixed(2) || 0).replace('₹ ', '');
+                            var right = nvalue.substring(nvalue.length - 12, nvalue.length);
+                            var left = nvalue.substring(0, nvalue.length - 12).replace(',', '');
+                            let newVal = (left ? (left + ',') : '') + right;
+                            return newVal.replace(",,", ',');
+                        }
                     }
 
                 default:
-                    return 0; // `${Rformatter.format(value || 0)}`;
+                    return `${Rformatter.format(value || 0)}`
             }
         case "number":
         case "Number":

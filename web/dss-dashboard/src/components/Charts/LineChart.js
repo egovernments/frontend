@@ -3,9 +3,22 @@ import { Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import NFormatterFun from '../common/numberFormaterFun';
+import { withStyles } from '@material-ui/core/styles';
+import style from './styles';
 
 const options = {
   responsive: true,
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  },
   legend: {
     display: true,
     position: 'bottom',
@@ -16,23 +29,20 @@ const options = {
 };
 
 class LineChart extends React.Component {
+
   constructor(props) {
     super(props);
-    this.state = {
-      data: null
-    }
   }
-
-  componentDidMount() {
-    let temp, tempdata;
-    temp = this.props.chartData.data;
-    tempdata = {
+  
+  manupulateData(chartData) {
+    // let temp, tempdata;
+    // temp = this.props.chartData;
+    var tempdata = {
       labels: [],
       datasets: []
     };
-    let color = ["#99d4fa", "#179cf4", "#179cf4", "#1d9cf4", "#1sacq4", "#1gvcf4"];
-
-    temp.map((d, i) => {
+    let color = ["#99d4fa", "#179cf4", "#179cf4", "#1d9cf4", "#1sacq4", "#1gvcf4"]; 
+    chartData.map((d, i) => {
       let tempObj = {
         label: "",
         borderColor: color[i],
@@ -40,29 +50,30 @@ class LineChart extends React.Component {
         fill: false
       }
       let tempdataArr = [];
-      let tempdatalabel = [];
-      tempObj.label = d.headerName + " : " + NFormatterFun(d.headerValue, d.headerSymbol, this.props.GFilterData['Denomination']);
+      let tempdatalabel = [],tempVal='';
+      let val = NFormatterFun(d.headerValue, d.headerSymbol, this.props.GFilterData['Denomination'])
+      tempObj.label = d.headerName + " : " + val;
       d.plots.map((d1, i) => {
-        tempdataArr.push(NFormatterFun(d1.value, d1.symbol, this.props.GFilterData['Denomination']));
+        tempVal = NFormatterFun(d1.value, d1.symbol, this.props.GFilterData['Denomination']);
+        tempVal = (typeof tempVal == 'string')?parseFloat(tempVal.replace(/,/g, '')):tempVal;
+        tempdataArr.push(tempVal);
         tempdatalabel.push(d1.name);
       })
       tempObj.data = tempdataArr;
       tempdata.labels = tempdatalabel;
       tempdata.datasets.push(tempObj);
     })
-
-    this.setState({ data: tempdata })
+    return tempdata;
   }
-  render() {
-    if (this.state.data) {
+
+  render() { 
+    let { chartData,classes } = this.props;
+    let data = this.manupulateData(chartData);
+    if (data) {
       return (
-        <div>
-          {/* <ul className="list list-inline">
-                <li style={{textAlign:'left'}}>{this.props.label} 
-                { this.props.section !="Service" && <i>(In {this.props.GFilterData['Denomination']}) </i>}</li>
-            </ul> */}
+        <div className={classes.lineChart}>
           <Line
-            data={this.state.data}
+            data={data}
             options={options}
             height={175}
           />
@@ -75,11 +86,13 @@ class LineChart extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    GFilterData: state.GFilterData
+    GFilterData: state.GFilterData,
+    chartsGData: state.chartsData
+
   }
 }
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
   }, dispatch)
 }
-export default connect(mapStateToProps, mapDispatchToProps)(LineChart);
+export default  withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(LineChart));

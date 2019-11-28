@@ -25,7 +25,7 @@ class EnhancedTable extends React.Component {
       selected: this.props.selected || [],
       data: this.props.data,
       columnData: this.props.columnData,
-      page:0,
+      page: 0,
       rowsPerPage: 10,
       showExpand: -1,
       fieldTableData: {},
@@ -68,7 +68,7 @@ class EnhancedTable extends React.Component {
     const { tableType } = this.props
     const { tableData } = this.state
     var selectedRows = []
-   
+
   }
 
   handleClick = (event, id) => {
@@ -134,17 +134,17 @@ class EnhancedTable extends React.Component {
       >
         {_.keys(n).map(d => {
           return (
-            <TableCell key={d} 
+            <TableCell key={d}
               align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false)
                 && d !== 'Sno')
                 ? 'right' : 'left'}
-              
+
               component='td' scope='row' data-title={`${n}: `}>
               {
-              d === 'Boundary'? <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d]}</span>: n[d]
+                d === 'Boundary' ? <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d]}</span> : n[d]
 
               }
-              
+
             </TableCell>)
         })}
       </TableRow>
@@ -159,7 +159,6 @@ class EnhancedTable extends React.Component {
 
   handleChangePage = (event, page) => {
     this.setState({ page });
-    // console.log(event);
     // const { order, orderBy, rowsPerPage, page } = this.state
     // this.setState(
     //   { page: page + 1 }, () => {
@@ -170,8 +169,7 @@ class EnhancedTable extends React.Component {
   }
 
   handleChangeRowsPerPage = event => {
-    console.log(event);
-    this.setState({ rowsPerPage: event.target.value, page:0 });
+    this.setState({ rowsPerPage: event.target.value, page: 0 });
     // const { order, orderBy, page } = this.state
     // let rowsPerPage = event.target.value
     // // console.log(rowsPerPage, order, orderBy, page)
@@ -182,7 +180,7 @@ class EnhancedTable extends React.Component {
     //   }
     // })
   }
-  TablePaginationActions(props) { 
+  TablePaginationActions(props) {
   }
 
   render() {
@@ -225,7 +223,7 @@ class EnhancedTable extends React.Component {
                 tableType={tableType}
                 needCheckBox={needCheckBox}
                 needHash={needHash}
-              /> 
+              />
               {tableData && tableData.length > 0 ? (
                 <TableBody className={classes.fontStyle}>
                   {_.orderBy(tableData, item => (_.get(item, orderBy) || '').toString().toLowerCase(), [order])
@@ -266,7 +264,7 @@ class EnhancedTable extends React.Component {
             labelRowsPerPage={"Rows"}
             onChangePage={this.handleChangePage}
             onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            rowsPerPageOptions={[5,10,25,50]}
+            rowsPerPageOptions={[5, 10, 25, 50]}
           // ActionsComponent={this.TablePaginationActions}
           />
 

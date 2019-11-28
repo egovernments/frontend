@@ -50,7 +50,7 @@ class SimpleSelect extends Component {
                     // fullWidth
                     // defaultValue={value || selected}
                     classes={
-                        { root: classes.ddl }
+                        { root: classes.ddl}
                     }
                 >
 

@@ -1,69 +1,122 @@
 import React from 'react';
-import axios from 'axios';
 import LineChart from './LineChart';
 import BarChart from './BarChart';
 import PieChart from './PieChart';
 import TableChart from './TableChart';
-import CONFIGS from '../../config/configs';
+import _ from 'lodash';
 import getChartOptions from '../../actions/getChartOptions';
+import ChartsAPI from '../../actions/charts/chartsAPI'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import APITransport from '../../actions/apitransport/apitransport';
 
-export default class ChartType extends React.Component {
+class ChartType extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { data: null }
+        this.state = { data: null,unit: this.props.GFilterData['Denomination']}
     }
+
     componentDidMount() {
-        let filters = this.props.filters ? this.props.filters : {};
-        this.getRequest(this.props, filters);
+        this.callAPI();
     }
+
     componentWillReceiveProps(nextProps) {
-        this.getRequest(this.props, nextProps.filters, nextProps);
+        this.setState({
+            unit:this.props.GFilterData['Denomination']
+        })
+        // this.getRequest(this.props, nextProps.filters, nextProps);
     }
 
-    getRequest(props, filters, nextProps) {
-        let url = props.chartData[0]['id'] ? CONFIGS.BASE_URL + "/dashboard/getChartV2" : "";
-        if (url) {
-            let modulelevel = (nextProps && nextProps.modulelevel) ? nextProps.modulelevel : ""
-            this.getRequest1(url, props.chartData[0]['id'], filters, modulelevel)
-        }
+    callAPI() {
+        let code = this.props.chartData[0]['id'] || "";
+        let requestBody = getChartOptions(code, this.props.filters || {});
+
+        let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
+        this.props.APITransport(chartsAPI);
     }
-    getChartData(chartType, url) {
-        this.props.chartData[0].map((d, i) =>
-            this.props.getChartData(chartType, url)
-        )
-    }
-    getRequest1(url, code, filters, moduleLevel) {
-        let getAxiosOptions = getChartOptions(code,filters);        
-        axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
-            .then(response => {
-                this.setState({ data: response.data })
-            })
-            .catch(error => {
-                console.log(error.response)
-            });
-    }
+    // getData(chartData) {
+	// 	var tempData = {
+	// 		labels: [],
+	// 		datasets: []
+	// 	};
+	// 	var tempdataSet = {
+	// 		label: "",
+	// 		backgroundColor: ["#35a2eb", "#f19c56", "#4c76c7", "#ff6384",],
+	// 		data: [],
+	// 		dataSymbol: []
+	// 	};
+
+	// 	_.map(chartData, function (k, v) {
+	// 		var plots = k['plots'];
+	// 		for (var i = 0; i < plots.length; i++) {
+	// 			tempData.labels.push(plots[i]['name']);
+	// 			tempdataSet.data.push(NFormatterFun(plots[i]['value'], plots[i]['symbol'], this.props.GFilterData['Denomination']));
+	// 			tempdataSet.dataSymbol.push([plots[i]['symbol'], this.props.GFilterData['Denomination']]);
+	// 		}
+	// 	}.bind(this))
+	// 	tempData.datasets.push(tempdataSet);
+	// 	return tempData;
+	// }
     render() {
-        if (this.state.data) {
-            var chartData = this.state.data.responseData;
-            this.state.data = null;
-            switch (this.props.chartData[0]["chartType"].toUpperCase()) {
-
+        let chartKey = _.chain(this.props).get('chartData').first().get('id').value();
+        let chartType = _.chain(this.props).get('chartData').first().get('chartType').toUpper().value();
+        let data = _.chain(this.props).get('chartsGData').get(chartKey).get('data').value();
+ 
+        if (data) {
+            // var chartData = this.state.data.responseData;
+            // this.state.data = null;
+            switch (chartType) {
                 case 'PIE':
-                    return <PieChart chartData={chartData} label={this.props.label} dimensions={this.props.dimensions} section={this.props.section} />
+                    
+                    return <PieChart chartData={data}
+                        label={this.props.label}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
+                    />
                 case 'LINE':
-                    return <LineChart chartData={chartData} label={this.props.label} dimensions={this.props.dimensions} section={this.props.section} />
+                    return <LineChart chartData={data}
+                        label={this.props.label}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
+                    />
                 case 'BAR':
-                    return <BarChart chartData={chartData} label={this.props.label} dimensions={this.props.dimensions} section={this.props.section} />
+                    return <BarChart chartData={data}
+                        label={this.props.label}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
+                    />
                 case 'TABLE':
-                    return <TableChart chartData={chartData} chartParent={this.props.chartData} dimensions={this.props.dimensions} section={this.props.section} />
+                    return <TableChart chartData={data}
+                        chartKey = {chartKey}
+                        chartParent={this.props.chartData}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
+                    />
                 default:
                     return false;
             }
         }
-        return <div>Loading...</div>
+        return <div > Loading... </div>
     }
 }
-
-
-
-
+const mapStateToProps = (state) => {
+    return {
+        dashboardConfigData: state.firstReducer.dashboardConfigData,
+        GFilterData: state.GFilterData,
+        chartsGData: state.chartsData
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        APITransport: APITransport,
+        // updateFilterData: updateGlobalFilterData
+    }, dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ChartType);

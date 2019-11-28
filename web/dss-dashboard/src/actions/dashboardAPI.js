@@ -27,7 +27,9 @@ export default class DashboardAPI extends API {
     getPayload() {
         return this.dashboardConfigData;
     }
-
+    getChartKey() {
+        return null;
+    }
     getBody() {
         return {}
     }

@@ -10,14 +10,13 @@ const styles = theme => ({
     filterS: {
         // margin: 0 10px 0 10px; */
         display: 'flex',
+        flex: 1,
         /* flex: 0; */
-        margin: '0 0 0 2.1%',
+        margin: '5px 0 0 0',
         // width: '190px',
         flexDirection: 'column'
     },
     filterHead: {
-        width: "55px",
-        height: "13px",
         fontFamily: 'Roboto',
         fontSize: '12px',
         fontWeight: 'normal',
@@ -26,6 +25,11 @@ const styles = theme => ({
         lineHeight: 'normal',
         letterSpacing: 'normal',
         color: '#96989a',
+    },
+    actions: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row-reverse'
     },
     fullWidth: {
         flex: 1

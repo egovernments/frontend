@@ -10,6 +10,11 @@ import share from '../../../images/share.svg';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare} from '../../../utils/Share';
+import jsPDF from 'jspdf'
+import { printDocument } from '../../../utils/block';
+import { renderToString, } from 'react-dom/server'
+import FilterTable from '../download/filterTable';
+import { connect } from 'react-redux';
 
 const StyledMenu = withStyles({
     paper: {
@@ -40,15 +45,12 @@ const StyledMenuItem = withStyles(theme => ({
             },
         },
     },
-    // CloseButton: {
-    //     // display: 'flex'
-    // }
 }))(MenuItem);
 
-export default function CustomizedShare(props) {
+export function CustomizedShare(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [anchorEl_email, setAnchorEl_email] = React.useState(null);
-    const [anchorEl_pdf, setAnchorEl_pdf] = React.useState(null);
+    // const [anchorEl_email, setAnchorEl_email] = React.useState(null);
+    // const [anchorEl_pdf, setAnchorEl_pdf] = React.useState(null);
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
@@ -57,12 +59,44 @@ export default function CustomizedShare(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    // const handleClick_pdf = event => {
-    //     setAnchorEl_pdf(event.currentTarget);
-    // };
-    // const handleClose_pdf = () => {
-    //     setAnchorEl_pdf(null);
-    // };
+
+    const renderTable = () => {
+        return renderToString(<FilterTable data={props.GFilterData} name="Dashboard" />)
+    }
+
+    const shareWhatsAppPDF = () => {
+        const pdf1 = new jsPDF("p", "mm", "a1");
+        pdf1.scaleFactor = 3;
+
+        printDocument(pdf1, renderTable()).then(function (pdfO) {
+            let element = document.getElementById("printFtable")
+            element.parentNode.removeChild(element);
+            setAnchorEl(null);
+            try {
+             handleWhatsAppPdfShare(pdfO)
+            } catch{ }
+        }).catch(function (error) {
+            console.log(error);
+            setAnchorEl(null);
+        })
+    }
+
+    const shareEmailPDF = () => {
+        const pdf1 = new jsPDF("p", "mm", "a1");
+        pdf1.scaleFactor = 3;
+
+        printDocument(pdf1, renderTable()).then(function (pdfO) {
+            let element = document.getElementById("printFtable")
+            element.parentNode.removeChild(element);
+            setAnchorEl(null);
+            try {
+                handlePdfShareEmail(pdfO)
+            } catch{ }
+        }).catch(function (error) {
+            console.log(error);
+            setAnchorEl(null);
+        })
+    }
 
     const renderSharePDFMenue = (menue) => {
         return (
@@ -86,7 +120,7 @@ export default function CustomizedShare(props) {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
-                    <StyledMenuItem onClick={handlePdfShareEmail}>
+                    <StyledMenuItem onClick={shareEmailPDF}>
                         <ListItemIcon>
                             <DraftsIcon fontSize="small" />
                         </ListItemIcon>
@@ -98,7 +132,7 @@ export default function CustomizedShare(props) {
                         </ListItemIcon>
                         <ListItemText primary="Image" />
                     </StyledMenuItem>
-                    <StyledMenuItem onClick={handleWhatsAppPdfShare}>
+                    <StyledMenuItem onClick={shareWhatsAppPDF}>
                         <ListItemIcon>
                             <WhatsappIcon fontSize="small" />
                         </ListItemIcon>
@@ -147,3 +181,11 @@ export default function CustomizedShare(props) {
         </div >
     );
 }
+
+const mapStateToProps = state => ({
+    GFilterData: state.GFilterData,
+});
+
+export default connect(
+    mapStateToProps,
+)(CustomizedShare);

@@ -1,5 +1,9 @@
 const styles = theme => ({
-    root: {},
+    dashboard: {
+        display: 'flex',
+        flexDirection: 'column',
+        flex: '1 auto'
+    },
     elemClass: {
         display: 'flex',
         flex: 1
@@ -16,27 +20,38 @@ const styles = theme => ({
         letterSpacing: 'normal',
         color: '#000000'
     },
-    posit:{
-        display:'flex',
-        flex: 1,
-        flexDirection:'row-reverse'
+    btn1: { borderRadius: '2px', height: 'fit-content', backgroundColor: "#fe7a51", color: "white" },
+    actions: {
+        display: 'flex',
+        margin: '0 0 10px 0',
+        paddingLeft: '5px',
+        paddingRight: '5px',
     },
-    '@media (max-width: 2560px)': {
-        mobile: {
-            display: 'none',
-        },desktop: {
-            display: 'flex',
-            // flexDirection: 'row',
+    posit: {
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'flex-end'
+    },
+    acbtn: {
+        display: 'flex'
+    },
+    '@media (max-width: 768px)': {
+        actions: {
+            flexDirection: 'column'
+        },
+        posit: {
+            // display: 'flex',
+            flexDirection: 'row-reverse',
         }
     },
-    '@media (min-width: 768px)': {
-       
+    '@media (max-width: 768px)': {
 
-        desktop: {
-            display: 'none',
-        },mobile: {
-            display: 'flex',
-            flexDirection: 'row',
+
+        actions: {
+            flexDirection: 'column'
+        },
+        posit: {
+            flexDirection: 'row-reverse'
         }
     },
 });

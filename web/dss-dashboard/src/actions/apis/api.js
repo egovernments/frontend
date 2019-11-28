@@ -34,4 +34,12 @@ export default class API {
             this.domain = res.domain;
         }
     }
+    processResponseCharts(res) {
+        // if (res && res.code && res.message && res.domain) {
+        if (res) {
+            this.code = res.statusInfo.statusCode;
+            this.message = res.statusInfo.statusMessage;
+            this.domain = res.domain;
+        }
+    }
 }

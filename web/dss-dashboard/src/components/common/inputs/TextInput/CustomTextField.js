@@ -174,7 +174,6 @@ class CustomTextField extends React.Component {
 
   render() {
     const { classes, label, isRequired, type, disabled, maxLength, minLength, needLabel } = this.props
-    // console.log(this.state.defaltValue)
     const name = _.uniqueId('input-')
     return (
       <div className={classes.container}>

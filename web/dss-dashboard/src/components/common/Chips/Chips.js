@@ -1,14 +1,10 @@
 import React from 'react';
-//import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
-import FaceIcon from '@material-ui/icons/Face';
-import DoneIcon from '@material-ui/icons/Done';
 
 const useStyles = {
   root: {
-    // className:'ward',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
@@ -19,7 +15,6 @@ const useStyles = {
   },
 };
 
-//const classes = useStyles();
 class Chips extends React.Component{
 
   constructor(props){
@@ -28,9 +23,12 @@ class Chips extends React.Component{
         data:null
       }
   }
+  handleClick = () => {
+    this.props.handleClick(this.props.visualcode);
+  }
 
   render(){
-   let { val, handleClick, classes }=this.props;
+   let { val, classes }=this.props;
     return (
       <div >      
         <Chip
@@ -41,7 +39,7 @@ class Chips extends React.Component{
           label={val.label}
           // color="ward"
           clickable
-          onDelete={handleClick}
+          onDelete={this.handleClick}
         />  
       </div>
     );

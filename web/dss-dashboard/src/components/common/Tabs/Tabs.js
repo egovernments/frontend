@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import styles from './TabsStyle';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { connect } from 'react-redux';
 
 class CustomTabs extends React.Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class CustomTabs extends React.Component {
         this.props.handleChange();
     }
     renderTab(needActionAuth) {
-        let { myTabs , classes} = this.props;
+        let { myTabs ,strings, classes} = this.props;
         return (<Tabs
             value={this.props.value}
             onChange={this.props.handleChange}
@@ -56,8 +57,9 @@ class CustomTabs extends React.Component {
                     <Tab
                         // disableRipple
                         value={tab.name}
-                        label={tab.name}
+                        label={strings[tab.lbl]}
                         key={tab.key}
+                    
                     />
                 )
                 // } else {
@@ -70,7 +72,7 @@ class CustomTabs extends React.Component {
     }
 
     rederSwitch() {
-        const { tabType } = this.props;
+        // const { tabType } = this.props;
         // switch (tabType) {
         //     case "SimpleTab":
         return this.renderTab(true)
@@ -85,4 +87,11 @@ class CustomTabs extends React.Component {
     }
 }
 
-export default withStyles(styles)(CustomTabs);
+const mapStateToProps = (state) => {
+    return {
+      strings: state.lang
+  
+    }
+  }
+
+export default withStyles(styles)(connect(mapStateToProps)(CustomTabs));
