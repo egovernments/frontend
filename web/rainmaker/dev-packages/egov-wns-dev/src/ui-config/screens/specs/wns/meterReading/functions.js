@@ -187,7 +187,6 @@ export const fetchData = async (action, state, dispatch) => {
     { key: "connectionNumber", value: connectionNumber }
   ];
   const response = await getConsumptionDetails(queryObject);
-  const response = await getSearchResults();
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =
     mdmsRes &&
