@@ -46,6 +46,7 @@ const formConfig = {
         { label: <Label label="PT_REBATE_OPTION1" />, value: "Advanced paid by citizen earlier" },
         { label: <Label label="PT_REBATE_OPTION2" />, value: "Rebate provided by commissioner/EO" },
         { label: <Label label="PT_REBATE_OPTION3" />, value: "Additional amount charged from the citizen" },
+        { label: <Label label="PT_REBATE_OPTION4" />, value: "ONE TIME SETTLEMENT (2019)" },
         { label: <Label label="PROPERTYTAX_BILLING_SLAB_OTHERS" />, value: "Others" },
       ],
       required: false,
