@@ -67,6 +67,10 @@ const formConfig = {
           value: "Additional amount charged from the citizen"
         },
         {
+          label: <Label label="PT_REBATE_OPTION4" />,
+          value: "ONE TIME SETTLEMENT (2019)"
+        },
+        {
           label: <Label label="PROPERTYTAX_BILLING_SLAB_OTHERS" />,
           value: "Others"
         }
