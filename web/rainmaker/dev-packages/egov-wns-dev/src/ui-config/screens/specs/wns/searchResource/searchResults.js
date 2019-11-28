@@ -40,13 +40,16 @@ export const searchResults = {
         name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
-          customBodyRender: (value, data) => (
-            <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`}>
-              {value}
-            </Link>
-          )
+          customBodyRender: (value, data) => {
+            return (
+              <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`}>
+                {value}
+              </Link>
+            )
+          }
         }
       },
+      // &connectionType=${data.rowData[8]}
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Address"),
       getTextToLocalMapping("Status"),
@@ -64,6 +67,12 @@ export const searchResults = {
       },
       {
         name: "tenantId",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "connectionType",
         options: {
           display: false
         }

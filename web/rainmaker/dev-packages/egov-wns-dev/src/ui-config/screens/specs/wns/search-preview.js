@@ -381,11 +381,11 @@ const screenConfig = {
         false
       );
     }
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    // const queryObject = [
+    //   { key: "tenantId", value: tenantId },
+    //   { key: "businessService", value: "newTL" }
+    // ];
+    // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },

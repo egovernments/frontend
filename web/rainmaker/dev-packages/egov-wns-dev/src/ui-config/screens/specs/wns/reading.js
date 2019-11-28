@@ -35,7 +35,7 @@ const tradeLicenseSearchAndResult = {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    // const data = find(businessServiceData, { businessService: "NewTL" });
     const { states } = data || [];
 
     if (states && states.length > 0) {

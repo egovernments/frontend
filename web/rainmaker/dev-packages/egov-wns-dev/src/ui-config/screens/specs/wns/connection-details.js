@@ -34,6 +34,7 @@ import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+let connectionType = getQueryArg(window.location.href, "connectionType");
 let headerSideText = { word1: "", word2: "" };
 
 const setDocuments = async (
@@ -106,8 +107,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     { key: "connectionNumber", value: connectionNumber }
   ];
   let payload = await getSearchResults(queryObject);
-  console.log('payload')
-  console.log(payload)
+  payload.WaterConnection[0].service = "WATER"
   headerSideText = getHeaderSideText(
     get(payload, "WaterConnection[0].status"),
     get(payload, "WaterConnection[0].licenseNumber")
@@ -174,9 +174,15 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
     // );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
-
+    let displayButton = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
     const obj = setStatusBasedValue(status);
-
+    if (displayButton !== "Metered") {
+        set(
+          action.screenConfig,
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.viewOne.editSection.visible",
+          false
+        );
+      }
     // Get approval details based on status and set it in screenconfig
 
     if (
@@ -234,8 +240,8 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
         true
       );
 
-    setActionItems(action, obj);
-    loadReceiptGenerationData(connectionNumber, tenantId);
+    // setActionItems(action, obj);
+    // loadReceiptGenerationData(connectionNumber, tenantId);
   }
 };
 

@@ -349,10 +349,10 @@ export const applyTradeLicense = async(state, dispatch, activeIndex) => {
             ""
         );
         const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
-        const BSqueryObject = [
-            { key: "tenantId", value: tenantId },
-            { key: "businessService", value: "newTL" }
-        ];
+        // const BSqueryObject = [
+        //     { key: "tenantId", value: tenantId },
+        //     { key: "businessService", value: "newTL" }
+        // ];
         if (process.env.REACT_APP_NAME === "Citizen") {
             let currentFinancialYr = getCurrentFinancialYear();
             //Changing the format of FY
@@ -360,7 +360,7 @@ export const applyTradeLicense = async(state, dispatch, activeIndex) => {
             fY1 = fY1.substring(2, 4);
             currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
             set(queryObject[0], "financialYear", currentFinancialYr);
-            setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
+            // setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
         }
 
         set(queryObject[0], "tenantId", tenantId);

@@ -59,13 +59,13 @@ const propertyDetails = getCommonContainer({
 const propertyLocationDetails = getCommonContainer({
   propertyId: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
+      labelKey: "WS_PROPERTY_ID_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.propertyId" }
+    { jsonPath: "WaterConnection[0].property.id" }
   ),
   city: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_STREET_NAME"
+      labelKey: "WS_PROP_DETAIL_CITY"
     },
     {
       jsonPath: "WaterConnection[0].property.address.city",
@@ -73,7 +73,7 @@ const propertyLocationDetails = getCommonContainer({
   ),
   plotOrHouseOrSurveyNo: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_LOCALITY_LABEL"
+      labelKey: "WS_PROP_DETAIL_PH_SURVEYNO_LABEL"
     },
     {
       jsonPath: "WaterConnection[0].property.address.plotNo",
@@ -81,7 +81,7 @@ const propertyLocationDetails = getCommonContainer({
   ),
   buildingOrColonyName: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_PINCODE"
+      labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
     },
     {
       jsonPath: "WaterConnection[0].property.address.buildingName"
@@ -89,13 +89,13 @@ const propertyLocationDetails = getCommonContainer({
   ),
   streetName: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_MAP_LOC"
+      labelKey: "WS_PROP_DETAIL_STREET_NAME"
     },
     { jsonPath: "WaterConnection[0].property.address.street" }
   ),
   locality: getLabelWithValue(
     {
-      labelKey: "WS_PROPERTY_ID_LABEL"
+      labelKey: "WS_PROP_DETAIL_LOCALITY_LABEL"
     },
     {
       jsonPath:
@@ -104,16 +104,16 @@ const propertyLocationDetails = getCommonContainer({
   ),
   pincode: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_CITY"
+      labelKey: "WS_PROP_DETAIL_PINCODE"
     },
     { jsonPath: "WaterConnection[0].property.address.pincode" }
   ),
   locationOnMap: getLabelWithValue(
     {
-      labelKey: "WS_PROP_DETAIL_PH_SURVEYNO_LABEL"
+      labelKey: "WS_PROP_DETAIL_MAP_LOC"
     },
     {
-      jsonPath: "WaterConnection[0].property.address.geoLocation"
+      jsonPath: "WaterConnection[0].property.address.geoLocation.additionalDetails"
     }
   ),
 })

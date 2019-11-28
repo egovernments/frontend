@@ -71,19 +71,20 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     const response = await getSearchResults(queryObject);
+    response.WaterConnection[0].service = "WATER"
     // const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
     try {
       let data = response.WaterConnection.map(item => ({
 
         [getTextToLocalMapping("Service")]:
-          item.propertyType || "WATER", //will be modified later
+          item.service || "-", //will be modified later
         [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
         [getTextToLocalMapping("Owner Name")]:
           (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : "-" || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
-        [getTextToLocalMapping("Due")]: item.id || "-",
-        [getTextToLocalMapping("Address")]: item.property.street || "-",
-        ["tenantId"]: JSON.parse(getUserInfo()).tenantId
+        [getTextToLocalMapping("Due")]: item.due !== undefined ? item.due !== undefined : "-" || "-",
+        [getTextToLocalMapping("Address")]: item.property.address.street || "-",
+        ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
       }));
 
       dispatch(

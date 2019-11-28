@@ -110,6 +110,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Due")]: item.due !== undefined ? item.due !== undefined : "-" || "-",
         [getTextToLocalMapping("Address")]: item.property.address.street || "-",
         ["tenantId"]: JSON.parse(getUserInfo()).tenantId
+        // [getTextToLocalMapping("Connection Type")]: item.connectionType || "-",
       }));
 
       dispatch(

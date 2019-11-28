@@ -2370,9 +2370,14 @@ export const getTextToLocalMapping = label => {
     case "Address":
       return getLocaleLabels(
         "Address",
-        "Address",
+        "WS_COMMON_TABLE_COL_ADDRESS_LABEL",
         localisationLabels
       );
+    // case "Connection Type":
+    //   return getLocaleLabels(
+    //     "Connection Type",
+    //     "Connection Type"
+    //   )
 
     // case "INITIATED":
     //   return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
