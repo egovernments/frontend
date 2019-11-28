@@ -7,6 +7,13 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "../viewBillResource/footer";
 
+const gotoCreatePage = (state, dispatch) => {
+  const createUrl = `/wns/meter-reading`
+
+  dispatch(setRoute(createUrl));
+};
+
+
 export const getServiceDetails = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -144,7 +151,10 @@ export const getServiceDetails = (isEditable = true) => {
         },
         onClickDefination: {
           action: "page_change",
-          path: `/wns/meter-reading`
+          // path: `/wns/meter-reading`
+          path: `/wns/meter-reading/pay?connectionNos=${connectionNumber}&tenantId=${tenant}`
+          // action: "condition",
+          // callBack: ""
         }
       },
     })

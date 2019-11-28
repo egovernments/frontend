@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
+import connect from "react-redux";
 import Label from "../../ui-containers-local/LabelContainer";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
