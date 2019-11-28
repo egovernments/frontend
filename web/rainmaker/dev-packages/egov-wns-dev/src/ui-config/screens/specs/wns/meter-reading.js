@@ -49,10 +49,10 @@ const header = getCommonContainer({
 const screenConfig = {
     uiFramework: "material-ui",
     name: "meter-reading",
-    beforeInitScreen: (action, state, dispatch) => {
-        fetchData(action, state, dispatch);
-        return action;
-    },
+    // beforeInitScreen: (action, state, dispatch) => {
+    //   fetchData(action, state, dispatch);
+    //   return action;
+    // },
     components: {
         div: {
             uiFramework: "custom-atoms",
@@ -118,5 +118,12 @@ const screenConfig = {
         }
     }
 };
+
+const demo = getCommonCard({
+    subHeader: getCommonTitle({
+        labelName: "Search Employee",
+        labelKey: "HR_HOME_SEARCH_RESULTS_HEADING"
+    }),
+});
 
 export default screenConfig;

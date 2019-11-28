@@ -1,6 +1,6 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getConsumptionDetails } from "../../../../..//ui-utils/commons";
+import { getSearchResults } from "../../../../..//ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
@@ -11,7 +11,6 @@ import { validateFields } from "../../utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../../ui-utils";
 import {
   getQueryArg,
 } from "egov-ui-framework/ui-utils/commons";
@@ -107,43 +106,44 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
 
-    // const response = await getConsumptionDetails(queryObject);
-    // try {
-    //   let data = response.meterReadings.map(item => ({
-    //     [getTextToLocalMapping("Billing Period")]: item.billingPeriod || "-",
-    //     [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
-    //     [getTextToLocalMapping("Trade Name")]: item.tradeName || "-",
-    //     [getTextToLocalMapping("Owner Name")]:
-    //       item.tradeLicenseDetail.owners[0].name || "-",
-    //     [getTextToLocalMapping("Application Date")]:
-    //       convertEpochToDate(item.applicationDate) || "-",
-    //     [getTextToLocalMapping("Status")]: item.status || "-",
-    //     ["tenantId"]: item.tenantId
-    //   }));
+    const response = await getSearchResults(queryObject);
+    try {
+      let data = response.Licenses.map(item => ({
+        [getTextToLocalMapping("Application No")]:
+          item.applicationNumber || "-",
+        [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
+        [getTextToLocalMapping("Trade Name")]: item.tradeName || "-",
+        [getTextToLocalMapping("Owner Name")]:
+          item.tradeLicenseDetail.owners[0].name || "-",
+        [getTextToLocalMapping("Application Date")]:
+          convertEpochToDate(item.applicationDate) || "-",
+        [getTextToLocalMapping("Status")]: item.status || "-",
+        ["tenantId"]: item.tenantId
+      }));
 
-    //   dispatch(
-    //     handleField(
-    //       "search",
-    //       "components.div.children.searchResults",
-    //       "props.data",
-    //       data
-    //     )
-    //   );
-    //   dispatch(
-    //     handleField(
-    //       "search",
-    //       "components.div.children.searchResults",
-    //       "props.title",
-    //       `${getTextToLocalMapping(
-    //         "Search Results for Trade License Applications"
-    //       )} (${response.Licenses.length})`
-    //     )
-    //   );
-    //   showHideTable(true, dispatch);
-    // } catch (error) {
-    //   dispatch(toggleSnackbar(true, error.message, "error"));
-    //   console.log(error);
-    // }
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.data",
+          data
+        )
+      );
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.title",
+          `${getTextToLocalMapping(
+            "Search Results for Trade License Applications"
+          )} (${response.Licenses.length})`
+        )
+      );
+      showHideTable(true, dispatch);
+    } catch (error) {
+      dispatch(toggleSnackbar(true, error.message, "error"));
+      console.log(error);
+    }
   }
 };
 const showHideTable = (booleanHideOrShow, dispatch) => {
@@ -164,7 +164,8 @@ const getMdmsData = async () => {
         {
           moduleName: "tenant",
           masterDetails: [{ name: "citymodule" }]
-        }]
+        }
+      ]
     }
   };
   try {
@@ -186,6 +187,7 @@ export const fetchData = async (action, state, dispatch) => {
     { key: "connectionNumber", value: connectionNumber }
   ];
   const response = await getConsumptionDetails(queryObject);
+  const response = await getSearchResults();
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =
     mdmsRes &&
@@ -193,18 +195,44 @@ export const fetchData = async (action, state, dispatch) => {
     mdmsRes.MdmsRes.tenant.citymodule.find(item => {
       if (item.code === "TL") return true;
     });
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.common-masters.citiesByModule.TL",
-  //     tenants
-  //   )
-  // );
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      tenants
+    )
+  );
   try {
+    /*Mseva 1.0 */
+    // let data =
+    //   response &&
+    //   response.Licenses.map(item => ({
+    //     [get(textToLocalMapping, "Application No")]:
+    //       item.applicationNumber || "-",
+    //     [get(textToLocalMapping, "License No")]: item.licenseNumber || "-",
+    //     [get(textToLocalMapping, "Trade Name")]: item.tradeName || "-",
+    //     [get(textToLocalMapping, "Owner Name")]:
+    //       item.tradeLicenseDetail.owners[0].name || "-",
+    //     [get(textToLocalMapping, "Application Date")]:
+    //       convertEpochToDate(item.applicationDate) || "-",
+    //     tenantId: item.tenantId,
+    //     [get(textToLocalMapping, "Status")]:
+    //       get(textToLocalMapping, item.status) || "-"
+    //   }));
+
+    // dispatch(
+    //   handleField(
+    //     "home",
+    //     "components.div.children.applyCard.children.searchResults",
+    //     "props.data",
+    //     data
+    //   )
+    // );
     /*Mseva 2.0 */
-    if (response && response.meterReadings && response.meterReadings.length > 0) {
-      dispatch(prepareFinalObject("consumptionDetails", response.meterReadings));
+
+    if (response && response.Licenses && response.Licenses.length > 0) {
+      dispatch(prepareFinalObject("searchResults", response.Licenses));
       dispatch(
-        prepareFinalObject("consumptionDetailsCount", response.meterReadings.length)
+        prepareFinalObject("myApplicationsCount", response.Licenses.length)
       );
     }
   } catch (error) {
