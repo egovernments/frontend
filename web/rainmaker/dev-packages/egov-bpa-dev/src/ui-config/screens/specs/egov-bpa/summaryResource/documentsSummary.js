@@ -62,7 +62,7 @@ export const documentsSummary = getCommonGrayCard({
   },
   body: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-bpa",
     componentPath: "DownloadFileContainer",
     props: {
       sourceJsonPath: "documentDetailsPreview",

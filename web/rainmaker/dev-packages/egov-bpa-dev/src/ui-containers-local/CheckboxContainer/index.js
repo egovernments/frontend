@@ -20,11 +20,12 @@ const styles = {
 
 class CheckboxLabels extends React.Component {
   state = {
-    checkedG: true
+    checkedG: false
   };
 
   handleChange = name => event => {
     const { jsonPath, approveCheck } = this.props;
+    console.log(this.props);
     this.setState({ [name]: event.target.checked }, () =>
       approveCheck(jsonPath, this.state.checkedG)
     );
@@ -57,6 +58,7 @@ class CheckboxLabels extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
+  console.log(state);
   const { screenConfiguration } = state;
   const { jsonPath } = ownprops;
   const { preparedFinalObject } = screenConfiguration;

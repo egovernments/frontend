@@ -125,91 +125,12 @@ class DocumentList extends Component {
   };
 
   componentDidMount = () => {
+    console.log(this.props)
     const {
-      documentsList1,
+      documentsList,
       documentDetailsUploadRedux = {},
       prepareFinalObject
     } = this.props;
-    const documentsList = [
-      {
-        "code": "Building Plan Scrutiny Documents",
-        "title": "Building Plan Scrutiny Documents",
-        "cards": [
-          {
-            "name": "Floor plans",
-            "code": "Floor plans",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Service Plan",
-            "code": "Service Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Site Plan",
-            "code": "Site Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Building Plan",
-            "code": "Building Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Details Plan",
-            "code": "Details Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "other Details",
-            "code": "other Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Parking plan",
-            "code": "Parking plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Roof plan",
-            "code": "Roof plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          }
-        ]
-      }
-    ];
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -280,7 +201,7 @@ class DocumentList extends Component {
       ...documentDetailsUploadRedux,
       [uploadedDocIndex]: {
         ...documentDetailsUploadRedux[uploadedDocIndex],
-        documentDetails: [
+        documents: [
           {
             fileName: file.name,
             fileStoreId,
@@ -294,7 +215,7 @@ class DocumentList extends Component {
   removeDocument = remDocIndex => {
     const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `documentDetailsUploadRedux.${remDocIndex}.documentDetails`,
+      `documentDetailsUploadRedux.${remDocIndex}.documents`,
       undefined
     );
     this.forceUpdate();
@@ -302,7 +223,6 @@ class DocumentList extends Component {
 
   handleChange = (key, event) => {
     const { documentDetailsUploadRedux, prepareFinalObject } = this.props;
-    console.log(this.props, "Document List Props");
     prepareFinalObject(`documentDetailsUploadRedux`, {
       ...documentDetailsUploadRedux,
       [key]: {
@@ -318,17 +238,17 @@ class DocumentList extends Component {
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documentDetails ? (
+          {documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents ? (
             <div className={classes.documentSuccess}>
               <Icon>
                 <i class="material-icons">done</i>
               </Icon>
             </div>
           ) : (
-              <div className={classes.documentIcon}>
-                <span>{key + 1}</span>
-              </div>
-            )}
+            <div className={classes.documentIcon}>
+              <span>{key + 1}</span>
+            </div>
+          )}
         </Grid>
         <Grid
           item={true}
@@ -372,13 +292,13 @@ class DocumentList extends Component {
               handleFileUpload(e, this.handleDocument, this.props)
             }
             uploaded={
-              documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documentDetails
+              documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
                 ? true
                 : false
             }
             removeDocument={() => this.removeDocument(key)}
             documents={
-              documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documentDetails
+              documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
             }
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
@@ -390,89 +310,8 @@ class DocumentList extends Component {
   };
 
   render() {
-    const { classes, documentsList1 } = this.props;
+    const { classes, documentsList } = this.props;
     let index = 0;
-    console.log('documents list ', documentsList);
-    const documentsList = [
-      {
-        "code": "Building Plan Scrutiny Documents",
-        "title": "Building Plan Scrutiny Documents",
-        "cards": [
-          {
-            "name": "Floor plans",
-            "code": "Floor plans",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Service Plan",
-            "code": "Service Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Site Plan",
-            "code": "Site Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Building Plan",
-            "code": "Building Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Details Plan",
-            "code": "Details Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "other Details",
-            "code": "other Plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Parking plan",
-            "code": "Parking plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          },
-          {
-            "name": "Roof plan",
-            "code": "Roof plan",
-            "required": true,
-            "remarks": {
-              "label": "Remarks",
-              "required": true
-            }
-          }
-        ]
-      }
-    ];
     return (
       <div>
         {documentsList &&

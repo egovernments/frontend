@@ -299,7 +299,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 export const prepareDocumentsUploadData = (state, dispatch) => {
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.Documents",
     []
   );
   documents = documents.filter(item => {
@@ -347,17 +347,17 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
       card["name"] = doc.code;
       card["code"] = doc.code;
       card["required"] = doc.required ? true : false;
-      if (doc.hasDropdown && doc.dropdownData) {
-        let dropdown = {};
-        dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
-        dropdown.required = true;
-        dropdown.menu = doc.dropdownData.filter(item => {
+      if (doc.hasDropdown && doc.remarks) {
+        let remarks = {};
+        remarks.label = "Remarks";
+        remarks.required = true;
+        remarks.menu = doc.remarks.filter(item => {
           return item.active;
         });
-        dropdown.menu = dropdown.menu.map(item => {
+        remarks.menu = remarks.menu.map(item => {
           return { code: item.code, label: getTransformedLocale(item.code) };
         });
-        card["dropdown"] = dropdown;
+        card["remarks"] = remarks;
       }
       tempDoc[doc.documentType].cards.push(card);
     }
@@ -368,6 +368,92 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   });
 
   dispatch(prepareFinalObject("documentsContract", documentsContract));
+};
+
+export const prepareNOCUploadData = (state, dispatch) => {
+  let documents = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.NOC",
+    []
+  );
+  documents = documents.filter(item => {
+    return item.active;
+  });
+  let documentsContract = [];
+  let tempDoc = {};
+  documents.forEach(doc => {
+    let card = {};
+    card["code"] = doc.documentType;
+    card["title"] = doc.documentType;
+    card["cards"] = [];
+    tempDoc[doc.documentType] = card;
+  });
+
+  documents.forEach(doc => {
+    // Handle the case for multiple muildings
+    if (
+      doc.code === "BUILDING.BUILDING_PLAN" &&
+      doc.hasMultipleRows &&
+      doc.options
+    ) {
+      let buildingsData = get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
+        []
+      );
+
+      buildingsData.forEach(building => {
+        let card = {};
+        card["name"] = building.name;
+        card["code"] = doc.code;
+        card["hasSubCards"] = true;
+        card["subCards"] = [];
+        doc.options.forEach(subDoc => {
+          let subCard = {};
+          subCard["name"] = subDoc.code;
+          subCard["required"] = subDoc.required ? true : false;
+          card.subCards.push(subCard);
+        });
+        tempDoc[doc.documentType].cards.push(card);
+      });
+    } else {
+      let card = {};
+      card["name"] = doc.code;
+      card["code"] = doc.code;
+      card["required"] = doc.required ? true : false;
+      if (doc.hasDropdown && doc.natureOfNoc) {
+        let natureOfNoc = {};
+        natureOfNoc.label = "Nature Of Noc";
+        natureOfNoc.required = true;
+        natureOfNoc.menu = doc.natureOfNoc.filter(item => {
+          return item.active;
+        });
+        natureOfNoc.menu = natureOfNoc.menu.map(item => {
+          return { code: item.code, label: getTransformedLocale(item.code) };
+        });
+        card["natureOfNoc"] = natureOfNoc;
+      }
+      if (doc.hasDropdown && doc.remarks) {
+        let remarks = {};
+        remarks.label = "Remarks";
+        remarks.required = true;
+        remarks.menu = doc.remarks.filter(item => {
+          return item.active;
+        });
+        remarks.menu = remarks.menu.map(item => {
+          return { code: item.code, label: getTransformedLocale(item.code) };
+        });
+        card["remarks"] = remarks;
+      }
+      tempDoc[doc.documentType].cards.push(card);
+    }
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+
+  dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
 };
 
 // export const prepareDocumentsUploadRedux = (state, dispatch) => {

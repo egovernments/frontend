@@ -14,6 +14,7 @@ import {
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { mdmsMockJson } from '../mdmsMock';
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
@@ -95,23 +96,24 @@ const getMdmsData = async (state, dispatch) => {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "BPA", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
   try {
-    let payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
+    let payload = mdmsMockJson;
+    // await httpRequest(
+      // "post",
+      // "/egov-mdms-service/v1/_search",
+      // "_search",
+      // [],
+      // mdmsBody
+    // );
 
     dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.FireNoc.Documents
+        "applyScreenMdmsData.BPA.Documents",
+        payload.MdmsRes.BPA.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -329,11 +331,11 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep !== 5) {
     if (isFormValid) {
       let responseStatus = "success";
-      if (activeStep === 1) {
+      if (activeStep === 4) {
         prepareDocumentsUploadData(state, dispatch);
       }
       if (activeStep === 2) {
-        // getMdmsData(state, dispatch);
+        getMdmsData(state, dispatch);
         let response = await createUpdateNocApplication(
           state,
           dispatch,

@@ -7,7 +7,6 @@ import "./index.scss";
 class DownloadFileContainer extends Component {
   render() {
     const { data, documentData, ...rest } = this.props;
-    console.log(this.props, "Downloadfilecontainer");
     return (
       <MultiDownloadCard data={data} documentData={documentData} {...rest} />
     );
@@ -15,6 +14,7 @@ class DownloadFileContainer extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  console.log(ownProps);
   const { screenConfiguration } = state;
   const data = ownProps.data
     ? ownProps.data

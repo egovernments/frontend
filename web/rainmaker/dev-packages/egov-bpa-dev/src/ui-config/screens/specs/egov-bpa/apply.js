@@ -39,8 +39,12 @@ import {
   prepareDocumentsUploadData,
   getSearchResults,
   furnishNocResponse,
-  setApplicationNumberBox
+  setApplicationNumberBox,
+  prepareNOCUploadData
 } from "../../../../ui-utils/commons";
+
+//mdms mock json data
+import { mdmsMockJson } from './mdmsMock';
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "" },
@@ -200,19 +204,20 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         },
-        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "BPA", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
   try {
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
+    // let payload = null;
+    // payload = await httpRequest(
+    //   "post",
+    //   "/egov-mdms-service/v1/_search",
+    //   "_search",
+    //   [],
+    //   mdmsBody
+    // );
+    let payload = mdmsMockJson;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -332,7 +337,7 @@ const screenConfig = {
     const step = getQueryArg(window.location.href, "step");
 
     //Set Module Name
-    set(state, "screenConfiguration.moduleName", "fire-noc");
+    set(state, "screenConfiguration.moduleName", "bpa");
 
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
@@ -366,6 +371,7 @@ const screenConfig = {
 
       // Set Documents Data (TEMP)
       prepareDocumentsUploadData(state, dispatch);
+      prepareNOCUploadData(state, dispatch);
     });
 
     // Search in case of EDIT flow

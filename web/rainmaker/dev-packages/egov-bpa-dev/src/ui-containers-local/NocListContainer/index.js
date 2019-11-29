@@ -24,7 +24,7 @@ class NocListContainer extends Component {
 const mapStateToProps = state => {
   let documentsList = get(
     state,
-    "screenConfiguration.preparedFinalObject.documentsContract",
+    "screenConfiguration.preparedFinalObject.nocDocumentsContract",
     []
   );
   return { documentsList };

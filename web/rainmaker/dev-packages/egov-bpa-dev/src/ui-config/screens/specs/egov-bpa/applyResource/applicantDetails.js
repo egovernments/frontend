@@ -170,7 +170,8 @@ const commonApplicantInformation = () => {
                     // style: {
                     //     display: 'none'
                     // },
-                    content: 'Is Primary Owner ?'
+                    content: 'Is Primary Owner ?',
+                    jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].primaryOwner",
                 },
                 type: "array"
             },

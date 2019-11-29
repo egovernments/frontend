@@ -126,46 +126,10 @@ class NocList extends Component {
 
   componentDidMount = () => {
     const {
-      documentsList1,
+      documentsList,
       nocDocumentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
-    const documentsList = [
-      {
-        "code": "Status of NOC from the following department",
-        "title": "Status of NOC from the following department",
-        "cards": [
-          {
-            "name": "Environment clearence",
-            "code": "Environment clearence",
-            "required": true,
-            "natureOfNoc": {
-              "label": "Nature of NOC Request",
-              "jsonPath" : 'bpa.natureOfNoc',
-              "required": true,
-            },
-            "remarks": {
-              "label": "Remarks",
-              "jsonPath" : 'bpa.remarks',
-              "required": true,
-            }
-          },
-          {
-            "name": "Noc from airport authority",
-            "code": "Noc from airport authority",
-            "required": true,
-            "natureOfNoc": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "remarks": {
-              "label": "Remarks",
-              "required": true,
-            }
-          }
-        ]
-      }
-    ];
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -373,43 +337,8 @@ class NocList extends Component {
   };
 
   render() {
-    const { classes, documentsList1 } = this.props;
+    const { classes, documentsList } = this.props;
     let index = 0;
-    const documentsList = [
-      {
-        "code": "Status of NOC from the following department",
-        "title": "Status of NOC from the following department",
-        "cards": [
-          {
-            "name": "Environment clearence",
-            "code": "Environment clearence",
-            "required": true,
-            "natureOfNoc": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "remarks": {
-              "label": "Remarks",
-              "required": true,
-            }
-          },
-          {
-            "name": "Noc from airport authority",
-            "code": "Noc from airport authority",
-            "required": true,
-            "natureOfNoc": {
-              "label": "Nature of NOC Request",
-              "required": true,
-            },
-            "remarks": {
-              "label": "Remarks",
-              "required": true,
-            }
-          }
-        ]
-      }
-    ];
-    console.log('documents list ', JSON.stringify(documentsList));
     return (
       <div>
         {documentsList &&

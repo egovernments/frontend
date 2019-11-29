@@ -19,6 +19,7 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
+import { mdmsMockJson } from '../egov-bpa/mdmsMock';
 
 export const getCommonApplyFooter = children => {
   return {
@@ -675,7 +676,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       tenantId: tenantId,
       moduleDetails: [
         {
-          moduleName: "FireNoc",
+          moduleName: "BPA",
           masterDetails: [{ name: "Documents" }]
         }
       ]
@@ -683,13 +684,15 @@ export const getRequiredDocData = async (action, state, dispatch) => {
   };
   try {
     let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
+    payload = mdmsMockJson;
+    console.log(mdmsMockJson);
+    // payload = await httpRequest(
+    //   "post",
+    //   "/egov-mdms-service/v1/_search",
+    //   "_search",
+    //   [],
+    //   mdmsBody
+    // );
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
