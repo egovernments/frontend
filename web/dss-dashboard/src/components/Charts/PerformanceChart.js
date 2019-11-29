@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Dialogs from '../common/Dialogs/Dialogs';
 import APITransport from '../../actions/apitransport/apitransport';
+import ActionButtons from '../common/inputs/ActionButtons';
 
 class PerformanceChart extends React.Component {
   constructor(props) {
@@ -32,7 +33,22 @@ class PerformanceChart extends React.Component {
     // this.callRequest(this.props, filters);
     this.callAPI();
   }
+  handleClick() {
+    this.setState({
+      IsOpen: true
+    })
+  }
+  renderPopup() {
+    return (<div>
+      <ActionButtons buttonType={"default"} text={"Acknowledge"} handleClick={this.handleClick.bind(this)} />
 
+      <Dialogs IsOpen={this.state.IsOpen} title={"Breach"}>
+        <div>
+
+        </div>
+      </Dialogs>
+    </div>)
+  }
   componentWillReceiveProps(nextProps) {
     // let filters = {};
     // this.callRequest(nextProps, nextProps.filters);
@@ -44,8 +60,9 @@ class PerformanceChart extends React.Component {
     let codekey = _.chain(this.props).get('chartData').first().get("id").value();
     let data = _.chain(this.props).get("chartsGData").get(codekey).get('data').map((d, i) => {
       let plot = d.plots[0];
+      let label = _.chain(plot.name).split('.').join("_").toUpper().value();
       return {
-        "label": d.headerName + " " + d.headerValue + " : " + plot.name,
+        "label": d.headerName + " " + d.headerValue + " : " + (strings["TENANT_TENANTS_" + label] || label),
         "value": plot.value,
         "label2": (strings[plot.label] || plot.label) + ": ",
         "color": (plot.value > 50) ? "#259b24" : "#e54d42"
@@ -55,7 +72,7 @@ class PerformanceChart extends React.Component {
     if (data) {
       return (<div>
         {data.map((d, i) => {
-          if (i < 3) {
+          if (i < 2) {
             return (<div className={classes.maincls} key={i}>
               <span className={classes.topLabel}>{d.label}</span>
               <div className={classes.progess} >
@@ -68,11 +85,7 @@ class PerformanceChart extends React.Component {
           }
         }
         )}
-        <Dialogs IsOpen={this.state.IsOpen} title={"Breach"}>
-          <div>
-
-          </div>
-        </Dialogs>
+        {this.renderPopup()}
       </div>
       )
     }

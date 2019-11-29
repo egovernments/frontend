@@ -136,10 +136,10 @@ class EnhancedTable extends React.Component {
           return (
             <TableCell key={d}
               align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false)
-                && d !== 'Sno')
+                && d !== 'Sl no')
                 ? 'right' : 'left'}
 
-              component='td' scope='row' data-title={`${n}: `}>
+              component='td' scope='row' data-title={`${n[d]}: `}>
               {
                 d === 'Boundary' ? <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d]}</span> : n[d]
 

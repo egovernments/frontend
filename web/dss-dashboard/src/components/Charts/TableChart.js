@@ -21,46 +21,46 @@ class TableChart extends Component {
       filter: false,
       filterValue: {},
       data: null,
-      drillCode:null,
-      visualcode:null,
-      tabFilterKey:null
+      drillCode: null,
+      visualcode: null,
+      tabFilterKey: null
     }
   }
 
-  componentDidMount() {    
+  componentDidMount() {
   }
   componentWillReceiveProps(nextProps) {
-		// console.log("TableChart", nextProps, this.props);
-	}
-  getRequest(calledFrom, visualcode, filters, moduleLevel, dataChips) {    
+    // console.log("TableChart", nextProps, this.props);
+  }
+  getRequest(calledFrom, visualcode, filters, moduleLevel, dataChips) {
     let getAxiosOptions = getChartOptions(visualcode, filters);
-     axios.post(getAxiosOptions.url,getAxiosOptions.dataoption,getAxiosOptions.options)
-       .then(response => { 
-            let tempState = {};               
-            let tempData = response.data.responseData;
-            let drillCode = response.data.responseData['drillDownChartId'];
-            let visualcode = response.data.responseData['visualizationCode'];
-             if(dataChips){
-              tempData['filter'] = dataChips['filter'];
-              tempData['tt'] = dataChips['tt'];
-                 
-              tempState.data = tempData; 
-              tempState.filter = dataChips['filter']; 
-              tempState.filterValue = dataChips['tt']; 
-              tempState.drillCode = drillCode;
-              if(drillCode !='none' || calledFrom == 'clickFromTab')
-                  tempState.visualcode = visualcode;
-            }else{
-              tempState.data = tempData; 
-              tempState.drillCode = drillCode;
-              if(drillCode !='none' || calledFrom == 'clickFromTab')
-                tempState.visualcode = visualcode;              
-            }
-            this.setState(tempState);
-         })
-       .catch(error => {
-         console.log(error.response)
-     });
+    axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
+      .then(response => {
+        let tempState = {};
+        let tempData = response.data.responseData;
+        let drillCode = response.data.responseData['drillDownChartId'];
+        let visualcode = response.data.responseData['visualizationCode'];
+        if (dataChips) {
+          tempData['filter'] = dataChips['filter'];
+          tempData['tt'] = dataChips['tt'];
+
+          tempState.data = tempData;
+          tempState.filter = dataChips['filter'];
+          tempState.filterValue = dataChips['tt'];
+          tempState.drillCode = drillCode;
+          if (drillCode != 'none' || calledFrom == 'clickFromTab')
+            tempState.visualcode = visualcode;
+        } else {
+          tempState.data = tempData;
+          tempState.drillCode = drillCode;
+          if (drillCode != 'none' || calledFrom == 'clickFromTab')
+            tempState.visualcode = visualcode;
+        }
+        this.setState(tempState);
+      })
+      .catch(error => {
+        console.log(error.response)
+      });
   }
 
   handleChipClick = (visualcode) => {
@@ -70,7 +70,7 @@ class TableChart extends Component {
     }
     this.getRequest("handleChipClick", visualcode, {}, 'PT', dataChips)
   }
-  applyFilter = (visualcode,drillCode,rowData, event) => {
+  applyFilter = (visualcode, drillCode, rowData, event) => {
     let dataChips = {
       filter: true,
       tt:
@@ -79,16 +79,16 @@ class TableChart extends Component {
         'label': rowData.Boundary,
         'type': 'ULBS',
         'color': 'orange',
-        tenantId: [rowData.Boundary]
+        tenantId:  [_.toLower('pb.'+ rowData.Boundary)]
       },
       visualcode: visualcode
     };
-    this.getRequest("applyFilter", drillCode, { tenantId: [rowData.Boundary] }, 'PT', dataChips)  
+    this.getRequest("applyFilter", drillCode, { tenantId:  dataChips.tt.tenantId }, 'PT', dataChips)
   }
   clickFromTab = (visualcode) => {
     let tenantId = {};
-    if(this.state.filter){
-       tenantId = { tenantId: this.state.filterValue.tenantId } 
+    if (this.state.filter) {
+      tenantId = { tenantId: this.state.filterValue.tenantId }
     }
 
     this.getRequest("clickFromTab", visualcode, tenantId, 'PT', "")
@@ -96,17 +96,17 @@ class TableChart extends Component {
 
   render() {
     // console.log(this.props.chartData)
-    let { classes, chartData,chartKey,chartsData } = this.props;
-    let drillCode,visualcode,tabFilterKey;
+    let { classes, chartData, chartKey, chartsData, strings } = this.props;
+    let drillCode, visualcode, tabFilterKey;
     if (this.props && chartData) {
-      if(this.state.data){
+      if (this.state.data) {
         chartData = this.state.data.data;
         drillCode = this.state.drillCode;
-        visualcode = this.state.visualcode;        
+        visualcode = this.state.visualcode;
       }
-      drillCode = drillCode?drillCode:chartsData[this.props.chartKey]['drillDownChartId'];
-      visualcode = visualcode?visualcode:chartsData[this.props.chartKey]['visualizationCode'];
-      
+      drillCode = drillCode ? drillCode : chartsData[this.props.chartKey]['drillDownChartId'];
+      visualcode = visualcode ? visualcode : chartsData[this.props.chartKey]['visualizationCode'];
+
       let columnData = _.chain(chartData).first().get("plots").map((k, v) => {
         let yes = v < 1;
         return { id: k.name, numeric: k.symbol, stickyHeader: yes, disablePadding: false, label: k.name }
@@ -116,7 +116,18 @@ class TableChart extends Component {
       let newData = _.chain(chartData).map((rowData) => {
         return _.defaults(..._.map(rowData.plots, a => {
           if (a.symbol.toUpperCase() === 'TEXT') {
-            return { [a.name]: a.label }
+
+            let label = _.chain(a.label).split('.').join("_").toUpper().value();
+            let text = null; 
+            try {
+              text = strings["TENANT_TENANTS_" + label]
+            } catch{
+              text = a.label;
+            }
+            if (!text) {
+              text = a.label;
+            }
+            return { [a.name]: text }
           } else {
             return { [a.name]: NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], true) }
           }
@@ -141,7 +152,7 @@ class TableChart extends Component {
                 Filters Applied
                         </div>
               <div className="chipWrap">
-                <Chips val={this.state.filterValue} visualcode ={visualcode} handleClick={this.handleChipClick} />
+                <Chips val={this.state.filterValue} visualcode={visualcode} handleClick={this.handleChipClick} />
               </div>
             </div>
           }
@@ -152,7 +163,7 @@ class TableChart extends Component {
               columnData={columnData}
               // callAPI={this.filterPageAPI.bind(this)}
               tableType='CENTERS_TABLE'
-              cellClick={this.applyFilter.bind(this,visualcode,drillCode)}
+              cellClick={this.applyFilter.bind(this, visualcode, drillCode)}
               //  orderBy={'Sno'}
               // needCheckBox={false}
               // needHash={false}
@@ -176,7 +187,8 @@ const mapStateToProps = (state) => {
   return {
     dncData: state.DemandAndCollectionData,
     GFilterData: state.GFilterData,
-    chartsData: state.chartsData
+    chartsData: state.chartsData,
+    strings: state.lang
   }
 }
 const mapDispatchToProps = dispatch => {
