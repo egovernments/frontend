@@ -94,7 +94,7 @@ export function CustomizedMenus(props) {
     }
 
     const renderTable = () => {
-        return renderToString(<FilterTable data={props.GFilterData} name="Dashboard" />)
+        return renderToString(<FilterTable data={props.GFilterData} name= {props.fileHeader || "Dashboard"} />)
     }
 
     const downloadPDF = () => {

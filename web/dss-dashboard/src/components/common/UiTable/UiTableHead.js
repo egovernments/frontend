@@ -12,7 +12,7 @@ class UiTableHead extends Component {
   };
 
   render() {
-    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, columnData, needHash, needCheckBox } = this.props;
+    const { classes, onSelectAllClick,Globfilter, order, orderBy, numSelected, rowCount, columnData, needHash, needCheckBox } = this.props;
     return (
       <TableHead className={classes.root}>
         <TableRow>
@@ -45,7 +45,7 @@ class UiTableHead extends Component {
               <TableCell
                 key={column.id}
                 // stickyHeader={column.stickyHeader}
-                align={column.numeric ? 'left' : 'left'}
+                align={(column.numeric ==='amount' || column.numeric ==='number')  ? 'left' : 'left'}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
                 style={{ width: this.props.width ? this.props.width : 'auto' }}
@@ -56,7 +56,7 @@ class UiTableHead extends Component {
                   direction={order}
                   onClick={this.createSortHandler(column.id)}
                 >
-                  {column.label}
+                  {column.label + (column.numeric === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')} 
                 </TableSortLabel>
               </TableCell>
             );

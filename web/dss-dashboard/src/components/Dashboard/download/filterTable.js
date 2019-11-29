@@ -28,7 +28,11 @@ export default function FilterTable(props) {
 
     return (
         <div style={{ minWidth: 400 }}>
-            <h6 id='filter'>{props.name}</h6>
+            <div style={{textAlign:'center',fontSize:'25px',fontFamily:'Roboto'}}>
+                <h4 id='filter'>
+                {props.name}
+                </h4>
+            </div>
             <table style={{ display: "flex" }}>
                 <tbody>
                     <tr>{renderTableHeader()}</tr>

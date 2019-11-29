@@ -30,7 +30,7 @@ class TableChart extends Component {
   componentDidMount() {    
   }
   componentWillReceiveProps(nextProps) {
-		console.log("TableChart", nextProps, this.props);
+		// console.log("TableChart", nextProps, this.props);
 	}
   getRequest(calledFrom, visualcode, filters, moduleLevel, dataChips) {    
     let getAxiosOptions = getChartOptions(visualcode, filters);
@@ -95,7 +95,7 @@ class TableChart extends Component {
   }
 
   render() {
-    console.log(this.props.chartData)
+    // console.log(this.props.chartData)
     let { classes, chartData,chartKey,chartsData } = this.props;
     let drillCode,visualcode,tabFilterKey;
     if (this.props && chartData) {
@@ -109,7 +109,7 @@ class TableChart extends Component {
       
       let columnData = _.chain(chartData).first().get("plots").map((k, v) => {
         let yes = v < 1;
-        return { id: k.name, numeric: (k.symbol === "number" || k.symbol === "amount"), stickyHeader: yes, disablePadding: false, label: k.name }
+        return { id: k.name, numeric: k.symbol, stickyHeader: yes, disablePadding: false, label: k.name }
 
 
       }).value();
@@ -123,7 +123,7 @@ class TableChart extends Component {
         }));
 
       }).value();
-      console.log("clickFromTab", this.props.chartParent);
+      // console.log("clickFromTab", this.props.chartParent);
 
       return (
         <div class={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' }}>
@@ -156,6 +156,7 @@ class TableChart extends Component {
               //  orderBy={'Sno'}
               // needCheckBox={false}
               // needHash={false}
+              Gfilter={this.props.GFilterData}
               needSearch
               needExport
               excelName={"Demand & Collection Index"}

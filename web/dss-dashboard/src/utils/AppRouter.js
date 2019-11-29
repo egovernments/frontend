@@ -21,13 +21,13 @@ class AppRouter extends Component {
             // return <PartnerLayout {...props} subdomain={subdomain[0]}/>; return <AppLayout {...props}/>; }}/> 
             // </BrowserRouter>
             <Switch>
-                <Route exact path="/dashboard/" component={Dashboard} />
+                <Route exact path="/" component={Dashboard} />
                 {/* <Route path="/login" component={Login} />
                 <Route path="/forgot" component={Forgot} />
                 <Route exact={true} path="/resetPassword/:id" component={ResetPassword} /> */}
-                <Route exact path="/dashboard/dashboard/" component={Dashboard} />
-                <Route exact path="/dashboard/propertytax/" component={PropertyTax} />
-                <Route exact path="/dashboard/tradeLicense/" component={TradeLicense} />
+                <Route exact path="/dashboard/" component={Dashboard} />
+                <Route exact path="/propertytax/" component={PropertyTax} />
+                <Route exact path="/tradeLicense/" component={TradeLicense} />
                 {/* <Route exact path="/dashboard">
                   <Dashboard isLoaded={this.props.isLoaded} /></Route> */}
 

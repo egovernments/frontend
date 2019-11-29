@@ -222,7 +222,7 @@ class GlobalFilter extends Component {
                 <div className={classes.mainFilter}>
                     {globalFilterData.map(ro => {
                         if (this.props.hideDepart && ro.label == "Services") {
-                            return (<div key={ro.label} className={classes.filterS}></div>);
+                            return (<div></div>);
 
                         }
                         return (

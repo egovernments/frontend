@@ -9,12 +9,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import share from '../../../images/share.svg';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
-import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare} from '../../../utils/Share';
+import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../../utils/Share';
 import jsPDF from 'jspdf'
 import { printDocument } from '../../../utils/block';
 import { renderToString, } from 'react-dom/server'
 import FilterTable from '../download/filterTable';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { APIStatus } from '../../../actions/apiStatus'
 
 const StyledMenu = withStyles({
     paper: {
@@ -65,6 +67,7 @@ export function CustomizedShare(props) {
     }
 
     const shareWhatsAppPDF = () => {
+        props.APITrans(true);
         const pdf1 = new jsPDF("p", "mm", "a1");
         pdf1.scaleFactor = 3;
 
@@ -73,7 +76,8 @@ export function CustomizedShare(props) {
             element.parentNode.removeChild(element);
             setAnchorEl(null);
             try {
-             handleWhatsAppPdfShare(pdfO)
+                props.APITrans(false);
+                handleWhatsAppPdfShare(pdfO)
             } catch{ }
         }).catch(function (error) {
             console.log(error);
@@ -82,6 +86,7 @@ export function CustomizedShare(props) {
     }
 
     const shareEmailPDF = () => {
+        props.APITrans(true);
         const pdf1 = new jsPDF("p", "mm", "a1");
         pdf1.scaleFactor = 3;
 
@@ -90,6 +95,7 @@ export function CustomizedShare(props) {
             element.parentNode.removeChild(element);
             setAnchorEl(null);
             try {
+                props.APITrans(false);
                 handlePdfShareEmail(pdfO)
             } catch{ }
         }).catch(function (error) {
@@ -109,7 +115,7 @@ export function CustomizedShare(props) {
                     onClick={handleClick}
                 >
                     <SVG style={{ marginRight: '10px' }}>
-                    {/* className={StyledMenuItem.CloseButton} */}
+                        {/* className={StyledMenuItem.CloseButton} */}
                     </SVG>
                     Share
                 </Button>
@@ -160,7 +166,7 @@ export function CustomizedShare(props) {
                 onClick={handleClick}
             >
                 <SVG src={share} style={{ marginRight: '10px' }} >
-                {/* className={StyledMenuItem.CloseButton} */}
+                    {/* className={StyledMenuItem.CloseButton} */}
                 </SVG>
                 <div style={{ fontFamily: 'Roboto', fontSize: '12px', fontWeight: '500', fontStretch: 'normal', fontStyle: 'normal', linHeight: 'normal', letterSpacing: 'normal', color: '#5b5b5b' }}>Share</div>
             </Button>
@@ -186,6 +192,13 @@ const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
 });
 
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        APITrans: APIStatus,
+    }, dispatch)
+}
+
 export default connect(
     mapStateToProps,
+    mapDispatchToProps
 )(CustomizedShare);

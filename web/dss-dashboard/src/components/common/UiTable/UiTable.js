@@ -184,7 +184,7 @@ class EnhancedTable extends React.Component {
   }
 
   render() {
-    const { data, columnData, classes, tableType, needCheckBox, needHash, needSearch, needExport, excelName } = this.props
+    const { data, columnData,Gfilter, classes, tableType, needCheckBox, needHash, needSearch, needExport, excelName } = this.props
     // const { tableData, order, orderBy, selected } = this.state
 
     // const { data, columnData, totalCount, classes, tableType, needCheckBox, needHash, needSearch } = this.props;
@@ -217,6 +217,7 @@ class EnhancedTable extends React.Component {
                 order={order}
                 stickyHeader={true}
                 orderBy={orderBy}
+                Globfilter={Gfilter}
                 onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
                 rowCount={tableData.length}

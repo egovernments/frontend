@@ -25,7 +25,6 @@ import getChartOptions from '../../actions/getChartOptions';
 import ChartsAPI from '../../actions/charts/chartsAPI';
 import getFilterObj from '../../actions/getFilterObj';
 
-
 let page = 'tradeLicense';
 class TradeLicense extends Component {
   constructor(props) {
@@ -72,7 +71,7 @@ class TradeLicense extends Component {
   }
 
   applyFiltersLive(filter) {
-    console.log(filter);
+    // console.log(filter);
     this.setState({
       filter: filter
     }, this.callAll())
@@ -88,7 +87,7 @@ class TradeLicense extends Component {
 
   }
   tabChanged(value, v) {
-    console.log(value, v)
+    // console.log(value, v)
     this.setState({
       selectedTab: v
     });
@@ -119,12 +118,12 @@ class TradeLicense extends Component {
           >
             <FilterIcon></FilterIcon>
           </Button>
-          <Menu type="download" bgColor="white" color="black"></Menu>
+          <Menu type="download" bgColor="white" color="black" fileHeader="Trade License Dashboard"></Menu>
 
         </div>}
 
         {!isMobile && <div className={classes.acbtn}>
-          <CustomizedMenus key="download" fileName={`SURE ${page}`} />
+          <CustomizedMenus key="download" fileName={`SURE ${page}`} fileHeader="Trade License Dashboard" />
           <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />
 
         </div>}

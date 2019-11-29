@@ -30,7 +30,7 @@ const options = {
 	tooltips: {
 		callbacks: {
 			label: function (tooltipItem, data) {
-				console.log(data)
+				// console.log(data)
 				var dataset = data.datasets[tooltipItem.datasetIndex];
 				var meta = dataset._meta[Object.keys(dataset._meta)[0]];
 				var total = meta.total;

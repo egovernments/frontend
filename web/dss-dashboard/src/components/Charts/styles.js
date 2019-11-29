@@ -46,40 +46,6 @@ const styles = theme => ({
     lineChart: {
         display: 'flex'
     },
-    // '@media (max-width: 1080px)': {
-    //     tableChart: {
-    //         maxWidth: '1000px'
-    //     },
-    // },
-    // '@media (max-width: 1024px)': {
-    //     tableChart: {
-    //         maxWidth: '1024px'
-    //     },
-    // },
-    // '@media (max-width: 768px)': {
-    //     tableChart: {
-    //         maxWidth: '750px'
-    //     },
-    // },
-    // '@media (max-width: 414px)': {
-    //     tableChart: {
-    //         maxWidth: '335px'
-    //     },
-    // },
-    // '@media (max-width: 375px)': {
-    //     tableChart: {
-    //         maxWidth: '337px'
-    //     },
-    // },
-    // '@media (max-width: 360px)': {
-    //     tableChart: {
-    //         maxWidth: '320px'
-    //     },
-    // },
-    // '@media (max-width: 320px)': {
-    //     tableChart: {
-    //         maxWidth: '280px'
-    //     },
-    // }
+
 });
 export default styles;

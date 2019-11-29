@@ -10,7 +10,7 @@ import {
 export const downloadAsImage = (name) => {
     // props.APITrans(true)
     return new Promise((resolve, reject) => {
-        console.log("isMobile", isMobile)
+        // console.log("isMobile", isMobile)
         if (isMobile) {
             // return html2canvas(document.getElementById('divToPrint'), {
             //     allowTaint: true,
@@ -90,7 +90,7 @@ const addPages = (pdf, elem, idx, length) => {
                 .then(function(dataUrl) {
                     if (idx < length) {
                         if (idx == 0) {
-                                // pdf.addPage();
+                            // pdf.addPage();
                             pdf.addImage(dataUrl, 'JPG', 100, 10);
                         } else {
                             // pdf.addPage();
@@ -101,7 +101,7 @@ const addPages = (pdf, elem, idx, length) => {
                     } else {
                         // pdf.addPage();
                         pdf.addImage(dataUrl, 100, 70);
-                        console.log("Reached last page, completing");
+                        // console.log("Reached last page, completing");
                         return setTimeout(resolve, 100, "Timeout adding page #" + idx);
                     }
                 }.bind(this))
@@ -110,7 +110,7 @@ const addPages = (pdf, elem, idx, length) => {
                 .then(function(dataUrl) {
                     if (idx < length) {
                         if (idx == 0) {
-                                // pdf.addPage();
+                            // pdf.addPage();
                             pdf.addImage(dataUrl, 'JPG', 100, 10);
                         } else {
                             // pdf.addPage();
@@ -121,7 +121,7 @@ const addPages = (pdf, elem, idx, length) => {
                     } else {
                         // pdf.addPage();
                         pdf.addImage(dataUrl, 100, 70);
-                        console.log("Reached last page, completing");
+                        // console.log("Reached last page, completing");
                         return setTimeout(resolve, 100, "Timeout adding page #" + idx);
                     }
                 }.bind(this))
@@ -130,7 +130,7 @@ const addPages = (pdf, elem, idx, length) => {
     })
 }
 export const printDocument = (pdf, table) => {
-    console.log("printDocument called");
+    // console.log("printDocument called");
     return new Promise(function(resolve, reject) {
         getFilters(table).then(function(params) {
             let compon = document.getElementById("printFtable")
@@ -147,7 +147,7 @@ export const printDocument = (pdf, table) => {
                 promiseObj.push(addPages(pdf, elem, idx, elems.length))
             })
             Promise.all(promiseObj).then(function(response) {
-                console.log("PDF updated");
+                // console.log("PDF updated");
                 resolve(pdf);
 
             }.bind(this)).catch(function(error) {

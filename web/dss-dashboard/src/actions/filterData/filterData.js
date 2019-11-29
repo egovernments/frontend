@@ -1,31 +1,31 @@
 /**
  * Dashboard API
  */
-import API from '../apis/api';
-import C from '../constants';
+import API from './apis/api';
+import C from './constants';
 
-export default class DashboardAPI extends API {
+export default class FIlterAPI extends API {
 
     constructor(timeout = 2000, auth = true, queryParams = null) {
         super('GET', timeout, auth);
-        this.type = C.DEMAND_AND_COLLECTION;
+        this.type = C.RECEIVE_DASHBOARD_CONFIG_DATA;
         this.queryParams = queryParams;
-        this.DemandAndCollectionData = []
+        this.dashboardConfigData = []
     }
 
     toString() {}
 
     processResponse(res) {
         super.processResponse(res);
-        if (res && res[0] && res[0]["responseData"]) {
-            this.DemandAndCollectionData = res[0]["responseData"];
+        if (res && res && res["responseData"]) {
+            this.dashboardConfigData = res["responseData"];
             return true
         }
         return false
     }
 
     getPayload() {
-        return this.DemandAndCollectionData;
+        return this.dashboardConfigData;
     }
     getChartKey() {
         return null;
@@ -34,15 +34,15 @@ export default class DashboardAPI extends API {
         return {}
     }
 
-    apiEndPoint() {
-        return `${super.apiEndPoint()}/ch_17_50b45a596a96780b3751`
+    apiEndPoint(page) {
+        return `${super.apiEndPoint()}/v1/_get?masterName=tenants&moduleName=tenant&tenantId=pb`
     }
 
     getHeaders() {
         return {
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                // 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         }
     }

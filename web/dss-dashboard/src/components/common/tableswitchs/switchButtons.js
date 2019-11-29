@@ -31,7 +31,7 @@ class SwitchButton extends Component {
                 aria-label="text alignment"
             >
                 {chartParent.map((d, i) =>
-                    <ToggleButton key={i} checked={this.state.value === switchLabel[i]} className={classes.toggleButton} value={d.id} aria-label="left aligned" >{switchLabel[i]}</ToggleButton>
+                    <ToggleButton key={i} checked={this.state.value === d.id} className={classes.toggleButton} value={d.id} aria-label="left aligned" >{switchLabel[i]}</ToggleButton>
                 )}
             </ToggleButtonGroup>
         );

@@ -7,12 +7,13 @@ import getChartOptions from '../../actions/getChartOptions';
 import ChartsAPI from '../../actions/charts/chartsAPI'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Dialogs from '../common/Dialogs/Dialogs';
 import APITransport from '../../actions/apitransport/apitransport';
 
 class PerformanceChart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: null }
+    this.state = { data: null, IsOpen: false }
   }
   formatPlotValue(value, type) {
     return <NFormatter value={value} nType={type} />
@@ -55,18 +56,6 @@ class PerformanceChart extends React.Component {
 
     if (data) {
       return (<div>
-        {/* <ul className="list-inline" style={{ paddingBottom: '15px' }}>
-          <li className="pull-left">
-            {this.state.data.label}
-
-          </li> */}
-        {/* <Tooltip title={this.state.data.label} style={{color:'blue',backgroundColor:'white'}}>
-
-            <li className="pull-right"><span className="pull-right"><i className="fa fa-info-circle"></i></span></li>
-          </Tooltip> */}
-        {/* </ul> */}
-
-
         {data.map((d, i) =>
           <div className={classes.maincls} key={i}>
             <span className={classes.topLabel}>{d.label}</span>
@@ -78,6 +67,11 @@ class PerformanceChart extends React.Component {
             </span>
           </div>
         )}
+        <Dialogs IsOpen={this.state.IsOpen} title={"Breach"}>
+          <div>
+
+          </div>
+        </Dialogs>
       </div>
       )
     }

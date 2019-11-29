@@ -12,7 +12,7 @@ class ChartRow extends Component {
 	render() {
 		let { strings } = this.props;
 		let { classes, rowData, displayName, filters, page,Gfilter } = this.props;
-		console.log(rowData.name)
+		// console.log(rowData.name)
 		return (
 			<div className="container-fluid" style={{ padding: '0px', margin: '0px' }}>
 				{

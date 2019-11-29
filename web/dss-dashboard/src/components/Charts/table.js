@@ -12,7 +12,7 @@ export default class Tables extends React.Component{
       super(props);  
     }
     componentDidMount() {
-      console.log(this.props.tableData);
+      // console.log(this.props.tableData);
     }
     click(){
       this.props.callBack(1);

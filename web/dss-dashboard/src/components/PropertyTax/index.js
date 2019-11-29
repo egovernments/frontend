@@ -72,7 +72,7 @@ class PropertyTax extends Component {
   }
 
   applyFiltersLive(filter) {
-    console.log(filter);
+    // console.log(filter);
     this.setState({
       filter: filter
     }, this.callAll())
@@ -88,7 +88,7 @@ class PropertyTax extends Component {
 
   }
   tabChanged(value, v) {
-    console.log(value, v)
+    // console.log(value, v)
     this.setState({
       selectedTab: v
     });
@@ -119,12 +119,12 @@ class PropertyTax extends Component {
           >
             <FilterIcon></FilterIcon>
           </Button>
-          <Menu type="download" bgColor="white" color="black"></Menu>
+          <Menu type="download" bgColor="white" color="black" fileHeader="Property Tax"></Menu>
 
         </div>}
 
         {!isMobile && <div className={classes.acbtn}>
-        <CustomizedMenus key="download" fileName={`SURE ${page}`} />
+        <CustomizedMenus key="download" fileName={`SURE ${page}`} fileHeader="Property Tax"/>
           <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />          
         </div>
         }

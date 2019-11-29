@@ -72,7 +72,9 @@ export function CustomizedMenus(props) {
 
 
     const downloadImage = () => {
+        props.APITrans(true)
         downloadAsImage(props.fileName || 'dashboard').then(function (success) {
+            props.APITrans(false);
             setAnchorEl(null);
         }.bind(this)).catch(function (err) {
             console.log(err);
@@ -81,10 +83,11 @@ export function CustomizedMenus(props) {
 
     }
     const renderTable = () => {
-        return renderToString(<FilterTable data={props.GFilterData} name="Dashboard" />)
+        return renderToString(<FilterTable data={props.GFilterData} name= {props.fileHeader || "Dashboard"} />)
     }
 
     const downloadPDF = () => {
+        props.APITrans(true);
         printDocument(pdf, renderTable()).then(function (pdfO) {
             let element = document.getElementById("printFtable")
             element.parentNode.removeChild(element);
@@ -96,15 +99,16 @@ export function CustomizedMenus(props) {
                 pdf.deletePage(2)
                 pdf.deletePage(1)
                 pdf.addPage();
+            props.APITrans(false);
+
             } catch{ }
-            // props.APITrans(false);
         }).catch(function (error) {
             console.log(error);
             setAnchorEl(null);
         })
 
     }
-    console.log(props)
+    // console.log(props)
     return (
         <div>
             <Button style={{ borderRadius: '2px', border: 'solid 1px #5b5b5b', backgroundColor: "rgba(255, 255, 255, 0)", height: '32px' }}

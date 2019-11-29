@@ -130,15 +130,15 @@ class Dashboard extends Component {
 
   }
   applyFiltersLive(filter) {
-    console.log(filter);
+    // console.log(filter);
     this.setState({
       filter: filter
     }, this.callAll())
   }
 
   handleFilters() {
-    debugger;
-    console.log(this.state.isFilterOpen, !isMobile);
+    // debugger;
+    // console.log(this.state.isFilterOpen, !isMobile);
 
     // let fil = this.state.isFilterOpen
     this.setState({
@@ -158,7 +158,7 @@ class Dashboard extends Component {
           </span>
           {isMobile && <div className={[classes.desktop, classes.posit].join(' ')}>
 
-            <Menu type="download" bgColor="white" color="black"></Menu>
+            <Menu type="download" bgColor="white" color="black" fileHeader="SURE Dashboard"></Menu>
             <Button className={classes.btn1}
               onClick={this.handleFilters.bind(this)}
             >
@@ -167,7 +167,7 @@ class Dashboard extends Component {
           </div>}
 
           {!isMobile && <div className={classes.acbtn}>
-            <CustomizedMenus key="download" fileName={"SURE Dashboard"} />
+            <CustomizedMenus key="download" fileName={"SURE Dashboard"} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard"/>
             <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />
           </div>}
 

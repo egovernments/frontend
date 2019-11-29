@@ -225,7 +225,7 @@ class CustomCalendar extends React.Component {
                 selectedDay: d
             },
             () => {
-                console.log("SELECTED DAY: ", this.state.selectedDay);
+                // console.log("SELECTED DAY: ", this.state.selectedDay);
                 let dateObject = moment(Object.assign({}, this.state.dateObject));
                 dateObject.subtract(dateObject.get("date"),'day')
                 dateObject.add(this.state.selectedDay,'day')

@@ -1,12 +1,13 @@
 import React from 'react';
-import './App.css'; 
+import './App.css';
 import { connect } from 'react-redux';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { changeTheName } from '../src/actions/firstAction';
-import { bindActionCreators } from 'redux'; 
-import { updateLanguage } from './actions/languageChange'; 
+import { bindActionCreators } from 'redux';
+import { updateLanguage } from './actions/languageChange';
 import variables from './styles/variables';
 import Layout from './utils/Layout';
+import _ from 'lodash';
 
 const theme = createMuiTheme({
 
@@ -76,68 +77,73 @@ const theme = createMuiTheme({
 });
 
 
-let dataL = {
-  "en": {
-    "DSS_TOTAL_COLLECTION": "Total Collection",
-    "DSS_TARGET_COLLECTION": "Target Collection",
-    "DSS_TARGET_ACHIEVED": "Target Achievement",
-    "DSS_TOTAL_CUMULATIVE_COLLECTION": "Total Cumulative Collection",
-    "DSS_TOP_PERFORMING_ULBS": "Top Performing ULBs",
-    "DSS_BOTTOM_PERFORMING_ULBS": "Bottom Performing ULBs",
-    "DSS_TOTAL_CUMULATIVE_COLLECTION:_DEPARTMENT_WISE": "Total Cumulative Collection: Service Wise",
-    "DSS_TOTAL_APPLICATION": "Total Applicationn",
-    "DSS_CLOSED_APPLICATION": "Closed Application",
-    "DSS_SLA_ACHIEVED": "SLA Achieved",
-    "DSS_CITIZEN_REGISTERED": "Citizen Registered",
-    "DSS_TOTAL_APPLICATION_&_CLOSED_APPLICATION": "Total Application & Closed Application",
-    "DSS_TOTAL_APPLICATIONS:_DEPARTMENT_WISE": "Total Applications: Service Wise",
-    "DSS_PT_TOP_3_PERFORMING_ULBS": "Top 3 Performing ULBs",
-    "DSS_PT_BOTTOM_3_PERFORMING_ULBS": "Bottom 3 Performing ULBs",
-    "DSS_PT_COLLECTION_BY_USAGE_TYPE": "Collection by Usage type",
-    "DSS_PT_DEMAND_&_COLLECTION_INDEX": "Demand & Collection Index",
-    "DSS_PT_TOTAL_PROPERTIES_ASSESSED": "Total Properties Assessed",
-    "DSS_PT_TOTAL_ASSESSMENTS": "Total Assessments",
-    "DSS_PT_TOTAL_ACTIVE_ULBS": "Total Active ULBs",
-    "DSS_PT_TOTAL_ACTIVE_ULBS": "Total Active ULBs",
-    "DSS_PT_PROPERTIES_BY_USAGE_TYPE": "Properties by Usage type",
-    "DSS_PT_CUMULATIVE_PROPERTIES_ASSESSED": "Total Cumulative Properties Assessed",
-    "DSS_PT_DEMAND_COLLECTION_BOUNDARY": "Boundary",
-    "DSS_PT_DEMAND_COLLECTION_USAGETYPE": "Usage Type",
-    "DSS_PT_DEMAND_COLLECTION": "Demand & Collection Index",
-    "DSS_TL_LICENSE_ISSUED": "Total License Issued",
-    "DSS_TL_CUMULATIVE_LICENSE_ISSUED": "Total Cumulative License Issued",
-    "DSS_TL_LICENSE_BY_TYPE": "License by Type",
-    "DSS_TL_LICENSE_BY_STATUS": "Trade License by Status",
-    "DSS_COMPLETION_RATE":"Completion Rate",
-    "DSS_REVENUE": "Revenue",
-    "DSS_SERVICE": "Service"
-  }
-}
+// let dataL = {
+//   "en": {
+//     "DSS_TOTAL_COLLECTION": "Total Collection",
+//     "DSS_TARGET_COLLECTION": "Target Collection",
+//     "DSS_TARGET_ACHIEVED": "Target Achievement",
+//     "DSS_TOTAL_CUMULATIVE_COLLECTION": "Total Cumulative Collection",
+//     "DSS_TOP_PERFORMING_ULBS": "Top 3 Performing ULBs",
+//     "DSS_BOTTOM_PERFORMING_ULBS": "Bottom 3 Performing ULBs",
+//     "DSS_TOTAL_CUMULATIVE_COLLECTION:_DEPARTMENT_WISE": "Total Cumulative Collection: Service Wise",
+//     "DSS_TOTAL_APPLICATION": "Total Applications",
+//     "DSS_CLOSED_APPLICATION": "Closed Applications",
+//     "DSS_SLA_ACHIEVED": "SLA Achievement",
+//     "DSS_CITIZEN_REGISTERED": "Citizen Registered",
+//     "DSS_TOTAL_APPLICATION_&_CLOSED_APPLICATION": "Total Applications & Closed Applications",
+//     "DSS_TOTAL_APPLICATIONS:_DEPARTMENT_WISE": "Total Applications: Service Wise",
+//     "DSS_PT_TOP_3_PERFORMING_ULBS": "Top 3 Performing ULBs",
+//     "DSS_PT_BOTTOM_3_PERFORMING_ULBS": "Bottom 3 Performing ULBs",
+//     "DSS_PT_COLLECTION_BY_USAGE_TYPE": "Collection by Usage type",
+//     "DSS_PT_DEMAND_&_COLLECTION_INDEX": "Key Performance Indicator",
+//     "DSS_PT_TOTAL_PROPERTIES_ASSESSED": "Total Properties Assessed",
+//     "DSS_PT_TOTAL_ASSESSMENTS": "Total Assessments",
+//     "DSS_PT_TOTAL_ACTIVE_ULBS": "Total Active ULBs",
+//     "DSS_PT_TOTAL_ACTIVE_ULBS": "Total Active ULBs",
+//     "DSS_PT_PROPERTIES_BY_USAGE_TYPE": "Properties by Usage Type",
+//     "DSS_PT_CUMULATIVE_PROPERTIES_ASSESSED": "Total Cumulative Properties Assessed",
+//     "DSS_PT_DEMAND_COLLECTION_BOUNDARY": "Boundary",
+//     "DSS_PT_DEMAND_COLLECTION_USAGETYPE": "Usage Type",
+//     "DSS_PT_DEMAND_COLLECTION": "Key Performance Indicator",
+//     "DSS_TL_LICENSE_ISSUED": "Total License Issued",
+//     "DSS_TL_CUMULATIVE_LICENSE_ISSUED": "Total Cumulative License Issued",
+//     "DSS_TL_LICENSE_BY_TYPE": "License by Type",
+//     "DSS_TL_LICENSE_BY_STATUS": "Trade License by Status",
+//     "DSS_COMPLETION_RATE":"Completion Rate",
+//     "DSS_REVENUE": "Revenue",
+//     "DSS_SERVICE": "Service"
+//   }
+// }
 
 let strings;
 class App extends React.Component {
   constructor(props) {
     super(props);
-    localStorage.setItem("lang", JSON.stringify(dataL));
+    // localStorage.setItem("lang", JSON.stringify(dataL));
     this.changeTheName = this.changeTheName.bind(this);
     this.state = {
       language: 'en'
     }
-    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+    // this.handleLanguageChange = this.handleLanguageChange.bind(this);
 
     // this.props.loadDashboardConfigData(); removed by Amit 24-10
   }
-  handleLanguageChange(e) {
-    let { strings } = this.props;
-    e.preventDefault();
-    let lang = e.target.value;
-    this.setState(prevState => ({
-      language: lang
-    }), strings.setLanguage(lang))
-  }
+  // handleLanguageChange(e) {
+  //   let { strings } = this.props;
+  //   e.preventDefault();
+  //   let lang = e.target.value;
+  //   this.setState(prevState => ({
+  //     language: lang
+  //   }), strings.setLanguage(lang))
+  // }
+
   componentWillMount() {
-    let data = JSON.parse(localStorage.getItem("lang"));
-    this.props.updateLanguage(data);
+    let language = localStorage.getItem("Employee.locale");
+    let data =  _.chain(JSON.parse(localStorage.getItem(`localization_${language}`))).map(i=>{return{ [i.code]: i.message  }}).value();
+    let dataL = {
+      'en': data
+    }
+    this.props.updateLanguage(dataL);
   }
 
   componentDidMount() {

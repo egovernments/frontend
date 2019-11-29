@@ -29,7 +29,7 @@ export default class BarChart extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log("TableChart", nextProps, this.props);
+		// console.log("TableChart", nextProps, this.props);
 	}
 	getAcronym(value) {
 		var matches = value.match(/\b(\w)/g); // ['J','S','O','N']
