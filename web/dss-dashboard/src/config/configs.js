@@ -9,7 +9,7 @@ const configs = {
     // 'BASE_URL': 'https://451nbwpifa.execute-api.ap-south-1.amazonaws.com/stage1',
     'DEV_URL': "http://localhost:3000/url",
     'DEMO_API_URL': "http://13.65.38.0:8082",
-    'BASE_URL': 'http://13.65.38.0:8082',
+    'BASE_URL': '/dashboard-analytics',
     'UPLOAD_URL': '',
     'POWERED_BY': 'Tarento',
     // "APP_LOGO": logo,
