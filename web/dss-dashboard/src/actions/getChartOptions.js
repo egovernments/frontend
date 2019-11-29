@@ -12,7 +12,8 @@ export default function getChartOptions(code, filters) {
         const options = {
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'auth-token': '7c77794f-1de0-43b4-b9ab-6f5e49391095'
             }
         };
         let dataoption = {

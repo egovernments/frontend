@@ -201,7 +201,7 @@ class GlobalFilter extends Component {
                 switch (label) {
                     case "ULBS":
                         return this.renderMultiselect(object.label, this.handleChanges, this.state.Ulbs, object.values)
-                    case "DDR":
+                    case "DDRs":
                         return this.renderMultiselect(object.label, this.handleChanges, this.state.ddrs, object.values)
                     case "Services":
                         return this.renderSimpleSelect(object.label, object.values, this.handleChanges)

@@ -58,7 +58,7 @@ class MultipleSelects extends Component {
     const { classes, logo, target } = this.props;
     let pls = "All " + target;
     let svgicon;
-    if (logo === "DDR") {
+    if (logo === "DDRs") {
       svgicon = districts_icon;
     } else if (logo === "ULBS") {
       svgicon = ulbs_icon;

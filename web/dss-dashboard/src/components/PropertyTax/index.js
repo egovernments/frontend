@@ -108,7 +108,7 @@ class PropertyTax extends Component {
 
     return (<div className={classes.dashboard}>
       <div className={classes.actions}>
-        <span style={{ fontSize: '20px', flex: 1, textAlign: 'left' }}>
+        <span style={{ fontSize: '20px', flex: 1, textAlign: 'left', margin:'auto' }}>
           <span style={{ fontFamily: 'Roboto' }}>Property Tax</span>
         </span>
 

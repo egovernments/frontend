@@ -47,7 +47,7 @@ class PerformanceChart extends React.Component {
         return {
           "label": d.headerName + " " + d.headerValue + " : " + plot.name,
           "value": plot.value,
-          "label2": (strings['plot.label'] || plot.label) + ": ",
+          "label2": (strings[plot.label] || plot.label) + ": ",
           "color": (plot.value > 50) ? "#259b24" : "#e54d42"
         }
       }

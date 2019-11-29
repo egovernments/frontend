@@ -41,7 +41,7 @@ class ActionButton extends React.Component {
     renderInfoButton() {
         const { classes, text } = this.props;
         return (
-            <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
+            <Tooltip title= "Download" classes={{ tooltip: classes.lightTooltip }}>
                 <div>
                     <Button className={classes.cancelButton} onClick={this.handleClick.bind(this)}>
                         <MoreVertIcon    className={classes.Actionmenus}> {text} </MoreVertIcon >

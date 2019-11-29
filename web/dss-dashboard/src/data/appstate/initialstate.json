@@ -19,7 +19,7 @@
             ]
         },
         {
-            "label": "DDR",
+            "label": "DDRs",
             "type": "dropdown",
             "values": ["Jalandhar-MC",
                         "Phagwara-MC",
@@ -232,7 +232,7 @@
     "GFilterData": {
         "Denomination": "Lac",
         "ULBS": [],
-        "DDR": [],
+        "DDRs": [],
         "Services": "",
         "duration": {
             "title": "FY 19-20",

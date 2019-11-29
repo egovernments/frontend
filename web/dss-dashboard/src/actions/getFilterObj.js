@@ -5,8 +5,8 @@ export default function getFilterObj(GFilterData, globalFilterData,page ) {
 
     /* Filter Customization */
     let tempValue = [], filters = {};
-    if (newGFilterData && newGFilterData['DDR'] && newGFilterData['DDR'].length > 0) {
-        let tvalue = newGFilterData['DDR'];
+    if (newGFilterData && newGFilterData['DDRs'] && newGFilterData['DDRs'].length > 0) {
+        let tvalue = newGFilterData['DDRs'];
         let tempDDR = []
         for (var i = 0; i < tvalue.length; i++) {
             tempDDR = globalFilterData[1]['master'][tvalue[i]];

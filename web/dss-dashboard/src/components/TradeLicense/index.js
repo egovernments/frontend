@@ -108,8 +108,8 @@ class TradeLicense extends Component {
 
     return (<div className={classes.dashboard}>
       <div className={classes.actions}>
-        <span style={{ fontSize: '20px', flex: 1, textAlign: 'left' }}>
-          <span  style={{ fontFamily: 'Roboto' }}>Trade License</span>
+        <span style={{ fontSize: '20px', flex: 1, textAlign: 'left', margin:'auto' }}>
+          <span  style={{ fontFamily: 'Roboto' }}>Trade License Dashboard</span>
         </span>
 
         {isMobile && <div className={[classes.desktop, classes.posit].join(' ')}>

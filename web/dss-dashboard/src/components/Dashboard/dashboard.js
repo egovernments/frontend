@@ -152,7 +152,7 @@ class Dashboard extends Component {
     return (
       <div id="divToShare" className={classes.dashboard}>
         <div className={classes.actions}>
-          <span style={{ fontSize: '20px', flex: 1, textAlign: 'left' }}>
+          <span style={{ fontSize: '20px', flex: 1, textAlign: 'left', margin:'auto' }}>
             <span style={{ fontFamily: 'Roboto'}}>State Wide Urban Real-Time Executive (SURE) Dashboard
           </span>
           </span>

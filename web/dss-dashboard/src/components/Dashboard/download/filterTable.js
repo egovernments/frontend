@@ -8,7 +8,7 @@ export default function FilterTable(props) {
     const renderTableHeader = () => {
 
         // let header = Object.keys(state.filter)
-        return ["Filter Name", "Filter Value"].map((key, index) => {
+        return ["Filters Applied", "Filter Values"].map((key, index) => {
             return <th style={{ border: '1px solid' }} key={index}><span style={{ padding: 10 }}>{key.toUpperCase()}</span></th>
         })
     }
