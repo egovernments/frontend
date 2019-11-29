@@ -63,7 +63,7 @@ const styles = theme => ({
             // fontSize: variables.fs_16,
             border: 'solid 1px #e6e6e6',
             fontFamily: 'Roboto',
-            backgroundColor: variables.whiteColor,
+            // backgroundColor: variables.whiteColor,
             fontSize: variables.fs_12,
             '& span': {
                 color: variables.black,
@@ -84,6 +84,7 @@ const styles = theme => ({
             position: 'sticky',
             zIndex: 1,
             left: -1,
+            border: '1px solid'
         },
         '& th': {
             padding: '0px 0px 0px 0px',

@@ -174,7 +174,8 @@ const mapStateToProps = (state) => {
   return {
     dashboardConfigData: state.firstReducer.dashboardConfigData,
     globalFilterData: state.globalFilter,
-    GFilterData: state.GFilterData
+    GFilterData: state.GFilterData,
+    chartsData: state.chartsData
   }
 }
 const mapDispatchToProps = dispatch => {

@@ -9,7 +9,7 @@ class SwitchButton extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            value: 'Boundary'
+            value: 'demandCollectionIndexBoundaryRevenue'
         }
     }
     handleAlignment = (event, newValue) => {

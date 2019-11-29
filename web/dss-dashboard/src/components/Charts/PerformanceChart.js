@@ -43,29 +43,30 @@ class PerformanceChart extends React.Component {
     const { classes } = this.props;
     let codekey = _.chain(this.props).get('chartData').first().get("id").value();
     let data = _.chain(this.props).get("chartsGData").get(codekey).get('data').map((d, i) => {
-      if (i < 3) {
-        let plot = d.plots[0];
-        return {
-          "label": d.headerName + " " + d.headerValue + " : " + plot.name,
-          "value": plot.value,
-          "label2": (strings[plot.label] || plot.label) + ": ",
-          "color": (plot.value > 50) ? "#259b24" : "#e54d42"
-        }
+      let plot = d.plots[0];
+      return {
+        "label": d.headerName + " " + d.headerValue + " : " + plot.name,
+        "value": plot.value,
+        "label2": (strings[plot.label] || plot.label) + ": ",
+        "color": (plot.value > 50) ? "#259b24" : "#e54d42"
       }
     }).compact().value() || [];
 
     if (data) {
       return (<div>
-        {data.map((d, i) =>
-          <div className={classes.maincls} key={i}>
-            <span className={classes.topLabel}>{d.label}</span>
-            <div className={classes.progess} >
-              <div className={classes.progressLine} role="progressbar" style={{ width: d.value + '%', backgroundColor: d.color }} aria-valuenow={d[1]} aria-valuemin={0} aria-valuemax={100} />
-            </div>
-            <span className={classes.bottomLabel + " label"}>{d.label2}
-              <NFormatter value={d.value} nType={'percentage'} />
-            </span>
-          </div>
+        {data.map((d, i) => {
+          if (i < 3) {
+            return (<div className={classes.maincls} key={i}>
+              <span className={classes.topLabel}>{d.label}</span>
+              <div className={classes.progess} >
+                <div className={classes.progressLine} role="progressbar" style={{ width: d.value + '%', backgroundColor: d.color }} aria-valuenow={d[1]} aria-valuemin={0} aria-valuemax={100} />
+              </div>
+              <span className={classes.bottomLabel + " label"}>{d.label2}
+                <NFormatter value={d.value} nType={'percentage'} />
+              </span>
+            </div>)
+          }
+        }
         )}
         <Dialogs IsOpen={this.state.IsOpen} title={"Breach"}>
           <div>

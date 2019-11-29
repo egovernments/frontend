@@ -109,7 +109,7 @@ class PropertyTax extends Component {
     return (<div className={classes.dashboard}>
       <div className={classes.actions}>
         <span style={{ fontSize: '20px', flex: 1, textAlign: 'left', margin:'auto' }}>
-          <span style={{ fontFamily: 'Roboto' }}>Property Tax</span>
+          <span style={{ fontFamily: 'Roboto' }}>Property Tax Dashboard</span>
         </span>
 
         {isMobile && <div className={[classes.desktop, classes.posit].join(' ')}>
@@ -119,12 +119,12 @@ class PropertyTax extends Component {
           >
             <FilterIcon></FilterIcon>
           </Button>
-          <Menu type="download" bgColor="white" color="black" fileHeader="Property Tax"></Menu>
+          <Menu type="download" bgColor="white" color="black" fileHeader="Property Tax Dashboard"></Menu>
 
         </div>}
 
         {!isMobile && <div className={classes.acbtn}>
-        <CustomizedMenus key="download" fileName={`SURE ${page}`} fileHeader="Property Tax"/>
+        <CustomizedMenus key="download" fileName={`SURE ${page}`} fileHeader="Property Tax Dashboard"/>
           <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />          
         </div>
         }
@@ -175,7 +175,8 @@ const mapStateToProps = (state) => {
   return {
     dashboardConfigData: state.firstReducer.dashboardConfigData,
     globalFilterData: state.globalFilter,
-    GFilterData: state.GFilterData
+    GFilterData: state.GFilterData,
+    chartsData: state.chartsData
   }
 }
 const mapDispatchToProps = dispatch => {
