@@ -20,7 +20,7 @@ const styles = {
 class MyConnections extends React.Component {
 
   onCardClick = item => {
-    return `/wns/viewBill?consumerNumber=${item.connectionNo}&tenantId=${item.property.tenantId}`;
+    return `/wns/viewBill?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}`;
   };
 
   render() {
@@ -75,7 +75,7 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item xs={3}>
-                          <Link to={`/wns/connection-details?consumerNumber=${item.connectionNo}&tenantId=${item.property.tenantId}`}>
+                          <Link to={`/wns/connection-details?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}`}>
                             <Label
                               labelName={item.connectionNo}
                               fontSize={14}
