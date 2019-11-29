@@ -34,7 +34,6 @@ import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
-let connectionType = getQueryArg(window.location.href, "connectionType");
 let headerSideText = { word1: "", word2: "" };
 
 const setDocuments = async (
@@ -174,15 +173,7 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
     // );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
-    let displayButton = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
     const obj = setStatusBasedValue(status);
-    if (displayButton !== "Metered") {
-        set(
-          action.screenConfig,
-          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.viewOne.editSection.visible",
-          false
-        );
-      }
     // Get approval details based on status and set it in screenconfig
 
     if (
@@ -355,6 +346,15 @@ const screenConfig = {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+
+    let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
+    if (connectionType === "Non-metered") {
+      set(
+        action.screenConfig,
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.viewOne.editSection.visible",
+        false
+      );
+    }
     //To set the application no. at the  top
     set(
       action.screenConfig,

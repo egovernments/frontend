@@ -82,7 +82,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Owner Name")]:
           (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : "-" || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
-        [getTextToLocalMapping("Due")]: item.due !== undefined ? item.due !== undefined : "-" || "-",
+        [getTextToLocalMapping("Due")]: (item.due !== undefined && item.due !== null) ? item.due : 0,
         [getTextToLocalMapping("Address")]: item.property.address.street || "-",
         ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
       }));

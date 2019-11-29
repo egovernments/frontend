@@ -36,17 +36,7 @@ export const searchResults = {
       //     )
       //   }
       // },
-      {
-        name: getTextToLocalMapping("Consumer No"),
-        options: {
-          filter: false,
-          customBodyRender: (value, data) => (
-            <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`}>
-              {value}
-            </Link>
-          )
-        }
-      },
+      getTextToLocalMapping("Consumer No"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Address"),
       getTextToLocalMapping("Status"),
@@ -55,8 +45,8 @@ export const searchResults = {
         name: getTextToLocalMapping(" "),
         options: {
           filter: false,
-          customBodyRender: value => (
-            <Link to="/wns/viewBill" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+          customBodyRender: (value, data) => (
+            <Link to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
               Pay now
             </Link>
           )
