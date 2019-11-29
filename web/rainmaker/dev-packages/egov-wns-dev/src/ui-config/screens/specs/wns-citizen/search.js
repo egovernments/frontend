@@ -16,14 +16,7 @@ import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../ui-utils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
-let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
-
-const pageResetAndChange = (state, dispatch) => {
-    dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-    dispatch(prepareFinalObject("LicensesTemp", []));
-    dispatch(setRoute("/tradelicence/apply"));
-};
+let enableButton = hasButton && hasButton === "false" ? false : true;
 
 const header = getCommonHeader({
     labelKey: "WS_SEARCH_CONNECTION_HEADER"

@@ -5,7 +5,13 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  getQueryArg
+} from "egov-ui-framework/ui-utils/commons";
 import { changeStep } from "../viewBillResource/footer";
+import {
+  getUserInfo
+} from "egov-ui-kit/utils/localStorageUtils";
 
 const gotoCreatePage = (state, dispatch) => {
   const createUrl = `/wns/meter-reading`
@@ -15,6 +21,8 @@ const gotoCreatePage = (state, dispatch) => {
 
 
 export const getServiceDetails = (isEditable = true) => {
+const tenantId = JSON.parse(getUserInfo()).tenantId
+const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -143,7 +151,7 @@ export const getServiceDetails = (isEditable = true) => {
           sm: 12,
           align: "left"
         },
-        visible: true,
+        visible: isEditable,
         children: {
           buttonLabel: getLabel({
             labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL"
@@ -152,7 +160,7 @@ export const getServiceDetails = (isEditable = true) => {
         onClickDefination: {
           action: "page_change",
           // path: `/wns/meter-reading`
-          path: `/wns/meter-reading/pay?connectionNos=${connectionNumber}&tenantId=${tenant}`
+          path: `/wns/meter-reading/pay?connectionNos=${connectionNumber}&tenantId=${tenantId}`
           // action: "condition",
           // callBack: ""
         }
