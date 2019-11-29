@@ -72,7 +72,7 @@ class PerformanceChart extends React.Component {
     if (data) {
       return (<div>
         {data.map((d, i) => {
-          if (i < 2) {
+          if (i < 3) {
             return (<div className={classes.maincls} key={i}>
               <span className={classes.topLabel}>{d.label}</span>
               <div className={classes.progess} >
