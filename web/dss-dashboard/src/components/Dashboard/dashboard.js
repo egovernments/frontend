@@ -152,8 +152,8 @@ class Dashboard extends Component {
     return (
       <div id="divToShare" className={classes.dashboard}>
         <div className={classes.actions}>
-          <span style={{ fontSize: '20px', flex: 1, textAlign: 'left', margin:'auto' }}>
-            <span style={{ fontFamily: 'Roboto'}}>State Wide Urban Real-Time Executive (SURE) Dashboard
+          <span style={{ fontSize: '20px', flex: 1, textAlign: 'left', margin: 'auto' }}>
+            <span style={{ fontFamily: 'Roboto' }}>State Wide Urban Real-Time Executive (SURE) Dashboard
           </span>
           </span>
           {isMobile && <div className={[classes.desktop, classes.posit].join(' ')}>
@@ -167,28 +167,29 @@ class Dashboard extends Component {
           </div>}
 
           {!isMobile && <div className={classes.acbtn}>
-            <CustomizedMenus key="download" fileName={"SURE Dashboard"} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard"/>
+            <CustomizedMenus key="download" fileName={"SURE Dashboard"} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard" />
             <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />
           </div>}
 
         </div>
-        <div className={classes.mobile} style={{paddingRight: '10px'}}>
-          {/* <div className="elemClass"> */}
-          {(this.state.isFilterOpen || !isMobile) &&
-            <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={false} applyFiltersLive={this.applyFiltersLive.bind(this)} />
-          }
-        </div>
+        <div id="divToPrint">
+          <div className={classes.mobile} style={{ paddingRight: '10px' }}>
+            {/* <div className="elemClass"> */}
+            {(this.state.isFilterOpen || !isMobile) &&
+              <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={false} applyFiltersLive={this.applyFiltersLive.bind(this)} />
+            }
+          </div>
 
-        {/* {this.state.isFilterOpen &&
+          {/* {this.state.isFilterOpen &&
           <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={false} applyFiltersLive={this.applyFiltersLive.bind(this)} />
         } */}
 
-        <div id="divToPrint" className="elemClass">
-          {dashboardConfigData.map((page, i) =>
-            <PageLayout key={i} chartRowData={page.visualizations} headingTitle="Revenue" GFilterData={GFilterData} displayName={displayName} page={page} />
-
-          )
-          }
+          <div className="elemClass">
+            {dashboardConfigData.map((page, i) =>
+              <PageLayout key={i} chartRowData={page.visualizations} headingTitle="Revenue" GFilterData={GFilterData} displayName={displayName} page={page} />
+            )
+            }
+          </div>
         </div>
         {/* </div> */}
       </div>

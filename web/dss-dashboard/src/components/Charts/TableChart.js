@@ -34,6 +34,7 @@ class TableChart extends Component {
   }
   getRequest(calledFrom, visualcode, filters, moduleLevel, dataChips) {
     let getAxiosOptions = getChartOptions(visualcode, filters);
+    if(getAxiosOptions && getAxiosOptions.url){
     axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
       .then(response => {
         let tempState = {};
@@ -61,6 +62,7 @@ class TableChart extends Component {
       .catch(error => {
         console.log(error.response)
       });
+    }
   }
 
   handleChipClick = (visualcode) => {

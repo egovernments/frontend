@@ -55,7 +55,7 @@ class TradeLicense extends Component {
   }
   callAll() {
     let { chartsData } = this.props;
-    let filters = getFilterObj(this.props.GFilterData,this.props.globalFilterData,page);
+    let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, page);
     _.each(chartsData, (k, v) => {
       let code = v;
       if (code) {
@@ -107,18 +107,18 @@ class TradeLicense extends Component {
 
     return (<div className={classes.dashboard}>
       <div className={classes.actions}>
-        <span style={{ fontSize: '20px', flex: 1, textAlign: 'left', margin:'auto' }}>
-          <span  style={{ fontFamily: 'Roboto' }}>Trade License Dashboard</span>
+        <span style={{ fontSize: '20px', flex: 1, textAlign: 'left' }}>
+          <span style={{ fontFamily: 'Roboto' }}>Trade License Dashboard</span>
         </span>
 
         {isMobile && <div className={[classes.desktop, classes.posit].join(' ')}>
-
+         
+          <Menu type="download" bgColor="white" color="black" fileHeader="Trade License Dashboard"></Menu>
           <Button className={classes.btn1}
             onClick={this.handleFilters.bind(this)}
           >
             <FilterIcon></FilterIcon>
           </Button>
-          <Menu type="download" bgColor="white" color="black" fileHeader="Trade License Dashboard"></Menu>
 
         </div>}
 
@@ -129,7 +129,7 @@ class TradeLicense extends Component {
         </div>}
 
       </div>
-      <div className={classes.mobile} style={{paddingRight: '10px'}}>
+      <div className={classes.mobile} style={{ paddingRight: '10px' }}>
         {(this.state.isFilterOpen || !isMobile) &&
           <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={true} applyFiltersLive={this.applyFiltersLive.bind(this)} />
         }

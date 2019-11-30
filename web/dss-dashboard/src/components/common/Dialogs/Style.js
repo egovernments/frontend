@@ -1,10 +1,10 @@
 import variables from '../../../styles/variables';
 const styles = theme => ({
     rootDialogue: {
-        // maxWidth: '100%'
+        maxWidth: '100%'
     },
     innerContainer: {
-        background: variables.white,
+        background: '#F4F8FB',
         color: variables.black,
         maxWidth: '100%'
     },
@@ -14,7 +14,16 @@ const styles = theme => ({
         padding: '30px 0px 18px 23px',
         margin: 0,
     },
-
+    heading: {
+        display: 'flex',
+        flexDerection: 'row',
+        cursor: 'pointer',
+        padding: ' 20px 50% 20px 23px',
+        // marginRight: '70vw'
+    },
+    '@media (max-width: 768px)': {
+        marginRight: 0
+    }
 });
 
 export default styles;

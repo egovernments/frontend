@@ -18,30 +18,29 @@ const styles = theme => ({
     posit: {
         display: 'flex',
         flex: 1,
-        justifyContent: 'flex-end'
+        justifyContent: 'end',
     },
     acbtn: {
         display: 'flex'
     },
     '@media (max-width: 2560px)': {
-        // mobile: {
-        //     display: 'none',
-        // },
-        // desktop: {
-        //     display: 'flex',
-        //     flexDirection: 'row',
-        // }
+        actions: {
+            flexDirection: 'row'
+        },
+        posit: {
+            // display: 'flex',
+            flexDirection: 'row-reverse',
+            marginTop: '3px'
+        }
     },
-    '@media (min-width: 768px)': {
-
-
-        // desktop: {
-        //     display: 'none',
-        // },
-        // mobile: {
-        //     display: 'flex',
-        //     flexDirection: 'row',
-        // }
+    '@media (max-width: 768px)': {
+        actions: {
+            flexDirection: 'column'
+        },
+        posit: {
+            flexDirection: 'row-reverse',
+            marginTop: '3px'
+        }
     },
 });
 export default styles;

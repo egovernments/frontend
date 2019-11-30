@@ -68,7 +68,7 @@ class ActionButton extends React.Component {
         return (
             <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
                 <div>
-                    <Button disabled={disabled} className={`${classes.actionButton} ${clas}`} onClick={this.handleClick.bind(this)}>
+                    <Button disabled={disabled} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)}>
                         {text}
                     </Button>
                 </div>

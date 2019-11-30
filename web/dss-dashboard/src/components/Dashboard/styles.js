@@ -30,7 +30,7 @@ const styles = theme => ({
     posit: {
         display: 'flex',
         flex: 1,
-        justifyContent: 'flex-end'
+        justifyContent: 'end'
     },
     acbtn: {
         display: 'flex'
@@ -42,6 +42,7 @@ const styles = theme => ({
         posit: {
             // display: 'flex',
             flexDirection: 'row-reverse',
+            marginTop: '3px'
         }
     },
     '@media (max-width: 768px)': {
@@ -51,7 +52,8 @@ const styles = theme => ({
             flexDirection: 'column'
         },
         posit: {
-            flexDirection: 'row-reverse'
+            flexDirection: 'row-reverse',
+            marginTop: '3px'
         }
     },
 });

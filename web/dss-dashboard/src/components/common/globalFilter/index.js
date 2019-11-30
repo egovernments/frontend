@@ -83,15 +83,20 @@ class GlobalFilter extends Component {
     }
 
     clearFilter(value, target) {
-        this.setState({
-            title: 'FY 19-20',
-            dept: "All Services",
-            clear: true,
-            value: 'FY 19-20',
-            filterData: {
-                'Denomination': 'Lac'
-            }
-        }, this.props.applyFilters(this.state.filterData));
+        /**
+         * this is for quick fix as we reloded
+         * 
+         */
+        // this.setState({
+        //     title: 'FY 19-20',
+        //     dept: "All Services",
+        //     clear: true,
+        //     value: 'FY 19-20',
+        //     filterData: {
+        //         'Denomination': 'Lac'
+        //     }
+        // }, this.props.applyFilters(this.state.filterData));
+        window.location.reload();
     }
 
     openPicker() {

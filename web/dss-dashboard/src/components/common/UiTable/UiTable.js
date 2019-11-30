@@ -110,6 +110,9 @@ class EnhancedTable extends React.Component {
     const { tableType } = this.props
     if (tableType === 'CENTERS_TABLE') {
       return this.renderCenterTable(n, idx)
+    } else if (tableType === 'ULB') {
+      return this.renderALLULBTable(n, idx)
+
     }
   }
   cellClick(row, event) {
@@ -117,7 +120,38 @@ class EnhancedTable extends React.Component {
       this.props.cellClick(row);
     }
   }
+  renderALLULBTable(n, idx) {
+    const { classes, columnData } = this.props
+    const isSelected = this.isSelected(n.Email)
+    return (
+      <TableRow
+        hover
+        // onClick={event => this.handleClick(event, n.Email)}
+        role='checkbox'
+        aria-checked={isSelected}
+        tabIndex={-1}
+        key={idx}
+        selected={isSelected}
+        className={classes.tBodyStyle}
+      >
+        {_.keys(n).map(d => {
+          if (n !== 'color') {
+            return (
+              <TableCell key={d}
+                align="left"
+                component='td' scope='row' data-title={`${n[d]}: `}>
+                {d === 'status' ?
+                  <div className={classes.progess}>
+                    <div className={classes.progressLine} role="progressbar" style={{ width: n[d] + '%', backgroundColor: (n[d] > 50) ? "#259b24" : "#e54d42" }} aria-valuenow={n[d]} aria-valuemin={0} aria-valuemax={100} />
+                  </div>
+                  : n[d]
+                }
 
+              </TableCell>)
+          }})}
+      </TableRow>
+    )
+  }
   renderCenterTable(n, idx) {
     const { classes, columnData } = this.props
     const isSelected = this.isSelected(n.Email)
@@ -184,7 +218,7 @@ class EnhancedTable extends React.Component {
   }
 
   render() {
-    const { data, columnData,Gfilter, classes, tableType, needCheckBox, needHash, needSearch, needExport, excelName } = this.props
+    const { data, columnData, Gfilter, noPage, classes, tableType, needCheckBox, needHash, needSearch, needExport, excelName } = this.props
     // const { tableData, order, orderBy, selected } = this.state
 
     // const { data, columnData, totalCount, classes, tableType, needCheckBox, needHash, needSearch } = this.props;
@@ -247,7 +281,7 @@ class EnhancedTable extends React.Component {
 
 
         </div>
-        {tableData && tableData.length >= 0 && (
+        {!noPage && tableData && tableData.length >= 0 && (
           <TablePagination
             classes={{ menuItem: classes.pagination }}
             className={classes.pagination}

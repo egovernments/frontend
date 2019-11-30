@@ -25,6 +25,7 @@ class AppRouter extends Component {
                 <Route exact path="/dashboard/dashboard/" component={Dashboard} />
                 <Route exact path="/dashboard/propertytax/" component={PropertyTax} />
                 <Route exact path="/dashboard/tradeLicense/" component={TradeLicense} />
+                <Route exact path="/dashboard/pgr/" component={PGR} />
 
                 {/* <Route exact path="/dashboard">
                   <Dashboard isLoaded={this.props.isLoaded} /></Route> */}

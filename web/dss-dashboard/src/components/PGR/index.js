@@ -26,8 +26,8 @@ import ChartsAPI from '../../actions/charts/chartsAPI';
 import getFilterObj from '../../actions/getFilterObj';
 
 
-let page = 'propertyTax';
-class PropertyTax extends Component {
+let page = 'PGR';
+class PGR extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,7 +61,7 @@ class PropertyTax extends Component {
       let code = v;
       if (code) {
         let requestBody = getChartOptions(code, filters);
-        let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
+        let chartsAPI = new ChartsAPI(2000, 'PGR', code, requestBody.dataoption);
         this.props.APITransport(chartsAPI)
       }
     })
@@ -108,29 +108,29 @@ class PropertyTax extends Component {
 
     return (<div className={classes.dashboard}>
       <div className={classes.actions}>
-        <span style={{ fontSize: '20px', flex: 1, textAlign: 'left'}}>
-          <span style={{ fontFamily: 'Roboto' }}>Property Tax Dashboard</span>
+        <span style={{ fontSize: '20px', flex: 1, textAlign: 'left', margin:'auto' }}>
+          <span style={{ fontFamily: 'Roboto' }}>PGR Dashboard</span>
         </span>
 
         {isMobile && <div className={[classes.desktop, classes.posit].join(' ')}>
 
-          <Menu type="download" bgColor="white" color="black" fileHeader="Property Tax Dashboard"></Menu>
           <Button className={classes.btn1}
             onClick={this.handleFilters.bind(this)}
           >
             <FilterIcon></FilterIcon>
           </Button>
+          <Menu type="download" bgColor="white" color="black" fileHeader="PGR Dashboard"></Menu>
 
         </div>}
 
         {!isMobile && <div className={classes.acbtn}>
-          <CustomizedMenus key="download" fileName={`SURE ${page}`} fileHeader="Property Tax Dashboard" />
-          <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />
+        <CustomizedMenus key="download" fileName={`SURE ${page}`} fileHeader="PGR Dashboard"/>
+          <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />          
         </div>
         }
 
       </div>
-      <div className={classes.mobile} style={{ paddingRight: '10px' }}>
+      <div className={classes.mobile} style={{paddingRight: '10px'}}>
         {(this.state.isFilterOpen || !isMobile) &&
           <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={true} applyFiltersLive={this.applyFiltersLive.bind(this)} />
         }
@@ -185,4 +185,4 @@ const mapDispatchToProps = dispatch => {
     updateFilterData: updateGlobalFilterData
   }, dispatch)
 }
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PropertyTax)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PGR)));

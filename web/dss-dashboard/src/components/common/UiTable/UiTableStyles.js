@@ -64,10 +64,10 @@ const styles = theme => ({
             border: 'solid 1px #e6e6e6',
             fontFamily: 'Roboto',
             // backgroundColor: variables.whiteColor,
-            fontSize: variables.fs_12,
+            fontSize: variables.fs_14,
             '& span': {
                 color: variables.black,
-                fontSize: variables.fs_12,
+                fontSize: variables.fs_14,
                 fontFamily: 'Roboto',
             }
         },
@@ -82,13 +82,15 @@ const styles = theme => ({
             position: '-webkit-sticky',
             /* for Safari */
             position: 'sticky',
+            // background: 'whitesmoke',
+            backgroundColor: variables.whiteColor,
             zIndex: 1,
             left: -1,
             border: '1px solid'
         },
         '& th': {
             padding: '0px 0px 0px 0px',
-            fontSize: variables.fs_16,
+            fontSize: variables.fs_18,
             fontWeight: variables.f_600,
             color: `${variables.tableFontColor}!important`,
 
@@ -295,7 +297,26 @@ const styles = theme => ({
     alignCenter: {
         textAlign: 'center'
     },
+    progess: {
+        height: 5,
+        margin: '5px 0px',
+        borderRadius: 2.5,
+        // display: '-webkit-box',
+        // display: -ms-flexbox,
+        display: 'flex',
+        // height: 1rem,
+        overflow: 'hidden',
+        fontSize: '.75rem',
+        background: '#e9ecef',
+        // borderRadius: '.25rem',
+    },
+    progressLine: {
+        height: 5
+    },
     '@media (max-width:823px)': {
+        downloadNsearch: {
+            flexDirection: 'row'
+        },
         pagination: {
             color: variables.tableFontColor,
             '.actions': {

@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import NFormatterFun from '../common/numberFormaterFun';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
+import _ from 'lodash';
 
 const options = {
   responsive: true,
@@ -49,10 +50,12 @@ class LineChart extends React.Component {
         backgroundColor: color[i],
         fill: false
       }
+      debugger;
       let tempdataArr = [];
       let tempdatalabel = [],tempVal='';
-      let val = NFormatterFun(d.headerValue, d.headerSymbol, this.props.GFilterData['Denomination'])
-      tempObj.label = d.headerName + " : " + val;
+      let val = NFormatterFun(_.get(d,'headerValue.value'), _.get(d,'headerValue.symbol'), this.props.GFilterData['Denomination'])
+      // tempObj.label = d.headerName + " : " + val;
+      tempObj.label =   d.headerName;
       d.plots.map((d1, i) => {
         tempVal = NFormatterFun(d1.value, d1.symbol, this.props.GFilterData['Denomination']);
         tempVal = (typeof tempVal == 'string')?parseFloat(tempVal.replace(/,/g, '')):tempVal;

@@ -54,6 +54,7 @@ class MultipleSelects extends Component {
     // this.props.handleClear()
 
   }
+  
   render() {
     const { classes, logo, target } = this.props;
     let pls = "All " + target;
@@ -72,8 +73,10 @@ class MultipleSelects extends Component {
             </SVG>
             <Autocomplete
               // fullWidth
+              ref={`autocomplete`}
               multiple
               id="checkboxes-tags-demo"
+              clearOnEscape
               options={this.state.localItems}
               disableCloseOnSelect
               defaultValue={this.props.clear ? [] : this.state.name}
@@ -82,7 +85,6 @@ class MultipleSelects extends Component {
               filterSelectedOptions={true}
               classes={{ root: classes.select, option: classes.menuItem }}
               getOptionLabel={option => option}
-
               renderOption={(option, { selected }) => (
                 <React.Fragment>
                   {option}

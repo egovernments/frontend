@@ -6,7 +6,7 @@ const actionButtonStyles = theme => ({
         //margin: '0',
         //float: 'left',
         //display: 'flex',
-        color:variables.gray1,
+        color: variables.gray1,
         '& svg': {
             fill: `${variables.gray1} !important`,
             // width: 35,
@@ -290,6 +290,22 @@ const actionButtonStyles = theme => ({
         '& span': {
             color: '#3293f5 !important'
         }
+    },
+    actionButton1: {
+        // color: #FFFFFF; */
+        /* border: none; */
+        cursor: 'pointer',
+        /* display: flex, */
+        fontSize: '16px',
+        fontFamily: 'Roboto',
+        /* flex-direction: row, */
+        textTransform: 'uppercase',
+        marginTop: 20,
+        '&:hover': {
+            backgroundColor: '#FE7A51',
+            color: variables.whiteColor
+        }
+
     },
     barClass: {
         backgroundColor: '#000',

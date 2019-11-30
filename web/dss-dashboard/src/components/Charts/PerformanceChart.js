@@ -10,6 +10,8 @@ import { connect } from 'react-redux';
 import Dialogs from '../common/Dialogs/Dialogs';
 import APITransport from '../../actions/apitransport/apitransport';
 import ActionButtons from '../common/inputs/ActionButtons';
+import Cards from '../common/Cards/Cards';
+import UiTable from '../common/UiTable/UiTable';
 
 class PerformanceChart extends React.Component {
   constructor(props) {
@@ -38,16 +40,63 @@ class PerformanceChart extends React.Component {
       IsOpen: true
     })
   }
-  renderPopup() {
-    return (<div>
-      <ActionButtons buttonType={"default"} text={"Acknowledge"} handleClick={this.handleClick.bind(this)} />
+  closeDialogue() {
+    this.setState({
+      IsOpen: false
+    })
+  }
+  renderCard(data) {
+    console.log(data);
 
-      <Dialogs IsOpen={this.state.IsOpen} title={"Breach"}>
-        <div>
+    let obj = {
+      rank: "",
+      ULBs: "",
+      TargetAchieved: '',
+      status: ''
+    }
+    let columnData = [];
+    columnData.push({ id: 'rank', numeric: true, stickyHeader: false, disablePadding: false, label: 'Rank' })
+    columnData.push({ id: 'ULBs', numeric: true, stickyHeader: false, disablePadding: false, label: 'ULBs' })
+    columnData.push({ id: 'TargetAchieved', numeric: true, stickyHeader: false, disablePadding: false, label: 'Target Achieved' })
+    columnData.push({ id: 'status', numeric: true, stickyHeader: false, disablePadding: false, label: 'Status' })
+    let newData = _.chain(data).orderBy('value','desc').map((rowData, i) => {
+      return {
+        rank: (i + 1),
+        ULBs: rowData.fortable,
+        TargetAchieved: Math.floor((rowData.value || 0)) + '%',
+        status: rowData.value,
+      }
+    }).value();
 
-        </div>
-      </Dialogs>
-    </div>)
+
+    return (<Cards >
+      <UiTable
+        data={newData}
+        columnData={columnData}
+
+        tableType='ULB'
+        // cellClick={this.applyFilter.bind(this, visualcode, drillCode)}
+        noPage={false}
+        // Gfilter={this.props.GFilterData}
+        needSearch={false}
+        needExport={false}
+        excelName={""}
+
+      />
+    </Cards >)
+  }
+  renderPopup(data) {
+    const { classes } = this.props;
+    if (data.length > 3) {
+      return (<div className={classes.bottomDiv}>
+        <ActionButtons buttonType={"default"} text={"View all ulbs"} handleClick={this.handleClick.bind(this)} />
+        <Dialogs close={this.closeDialogue.bind(this)} IsOpen={this.state.IsOpen} title={"Back to MyDashboard"} needCustomTitle={true}>
+          {this.renderCard(data)}
+        </Dialogs>
+      </div>)
+    } else {
+      return null;
+    }
   }
   componentWillReceiveProps(nextProps) {
     // let filters = {};
@@ -62,6 +111,7 @@ class PerformanceChart extends React.Component {
       let plot = d.plots[0];
       let label = _.chain(plot.name).split('.').join("_").toUpper().value();
       return {
+        "fortable": (strings["TENANT_TENANTS_" + label] || label),
         "label": d.headerName + " " + d.headerValue + " : " + (strings["TENANT_TENANTS_" + label] || label),
         "value": plot.value,
         "label2": (strings[plot.label] || plot.label) + ": ",
@@ -72,7 +122,7 @@ class PerformanceChart extends React.Component {
     if (data) {
       return (<div>
         {data.map((d, i) => {
-          if (i < 3) {
+          if (i < 4) {
             return (<div className={classes.maincls} key={i}>
               <span className={classes.topLabel}>{d.label}</span>
               <div className={classes.progess} >
@@ -85,7 +135,7 @@ class PerformanceChart extends React.Component {
           }
         }
         )}
-        {this.renderPopup()}
+        {this.renderPopup(data)}
       </div>
       )
     }

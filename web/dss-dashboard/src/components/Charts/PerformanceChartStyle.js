@@ -52,6 +52,10 @@ const PerformanceChartStyles = theme => ({
     },
     progressLine: {
         height: 5
+    },
+    bottomDiv: {
+        borderTop: '1px solid #c3bebe',
+        margin: '30px 30px 0 30px'
     }
 
 });

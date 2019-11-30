@@ -360,6 +360,7 @@ h6 span {
     /* margin-bottom: 20px; */
     text-align: left;
     display: flex;
+    margin-top: 10px;
 }
 
 .tableFilterChipWrap .chipWrap {
@@ -398,7 +399,7 @@ canvas {
 }
 
 .MuiPaper-root {
-    margin: 0px 8px !important;
+    /* margin: 0px 8px !important; */
 }
 
 .pb-2,

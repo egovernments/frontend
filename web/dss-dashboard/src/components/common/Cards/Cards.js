@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import variables from '../../../styles/variables';
-import ImageIcon from '@material-ui/icons/Image';
+import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -79,15 +79,29 @@ class Cards extends Component {
       <Menu
         id="customized-menu"
         anchorEl={this.state.anchorEl}
+        // PaperProps={{
+        //   style: {
+        //     left: '100%',
+        //     // transform: 'translateX(-77%) translateY(32%)',
+        //   }
+        // }}
+        MenuListProps={{
+          style: {
+            padding: 5,
+          },
+        }}
         keepMounted
         open={Boolean(this.state.anchorEl)}
         onClose={this.handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "right" }}
+
       >
         <MenuItem onClick={this.downloadAsImage.bind(this)} className={classes.menuItem}>
           <ListItemIcon className={classes.itemIcon}>
-            <ImageIcon />
+            <CloudDownloadSharp />
           </ListItemIcon>
-          <ListItemText style={{ marginTop: '0px', marginBottom: '0px' }} primary="Download image" />
+          <ListItemText primary="Image" />
         </MenuItem>
 
       </Menu>
@@ -96,19 +110,21 @@ class Cards extends Component {
 
   render() {
     let { strings } = this.props;
-    const { classes, needInfo, id, title, fullW } = this.props;
+    const { classes, needInfo, id, title, fullW, noUnit } = this.props;
     let newClass = fullW ? classes.full : classes.redused;
+    console.log('noUnit',noUnit, title);
+    
     return (
       // this.props.cardStyle || cardStyle
-      <Card id={'card' + id} style={this.props.cardStyle || cardStyle} classes={{ root: newClass }} >
+      <Card id={'card' + id} style={this.props.cardStyle || cardStyle} classes={{ root: newClass }}>
         <div className={classes.headRoot}>
-          {title && <CardHeader classes={{ title: classes.title, root: classes.cardheader }} title={(strings[title] || title) + ' (In ' + this.props.GFilterData['Denomination'] + ')'} onClick={(event) => this.clickEvent(event)}>
+          {title && <CardHeader classes={{ title: classes.title, root: classes.cardheader }} title={(strings[title] || title) + (!noUnit ? '' : (' (In ' + this.props.GFilterData['Denomination'] + ')'))} onClick={(event) => this.clickEvent(event)}>
           </CardHeader>}
           {/* <div className={classes.fullw}></div> */}
           {needInfo && this.renderMenues()}
         </div>
         <CardContent classes={{ root: classes.cardContent }}>
-          <Typography component="div"> 
+          <Typography component="div">
             {this.props.children}
           </Typography>
         </CardContent>

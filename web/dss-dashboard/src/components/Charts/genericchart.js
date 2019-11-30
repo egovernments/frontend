@@ -36,7 +36,7 @@ class GenericChart extends React.Component {
         return (
             <div className={classes.chartRow}>
                 {chartData.vizArray.map((d, i) =>
-                    <Cards key={i} id={d.id} name={d.name} needInfo={true} title={d.name}>
+                    <Cards key={i} id={d.id} name={d.name} needInfo={true} title={d.name} noUnit={d.noUnit || false}>
                         {this.renderCharts(d, chartData)}
                     </Cards>
 
