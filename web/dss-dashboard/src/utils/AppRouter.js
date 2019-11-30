@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import PropertyTax from '../components/PropertyTax';
 import TradeLicense from '../components/TradeLicense';
 import Dashboard from '../components/Dashboard/dashboard';
+import PGR from '../components/PGR/index';
 
 class AppRouter extends Component {
     authenticateUser = () => {
