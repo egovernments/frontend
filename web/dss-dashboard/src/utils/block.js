@@ -100,7 +100,7 @@ const addPages = (pdf, elem, idx, length) => {
                         return setTimeout(resolve, 100, "Timeout adding page #" + idx);
                     } else {
                         // pdf.addPage();
-                        pdf.addImage(dataUrl, 100, 70);
+                        pdf.addImage(dataUrl, 130, 90);
                         // console.log("Reached last page, completing");
                         return setTimeout(resolve, 100, "Timeout adding page #" + idx);
                     }
@@ -120,7 +120,7 @@ const addPages = (pdf, elem, idx, length) => {
                         return setTimeout(resolve, 100, "Timeout adding page #" + idx);
                     } else {
                         // pdf.addPage();
-                        pdf.addImage(dataUrl, 100, 70);
+                        pdf.addImage(dataUrl, 100, 90);
                         // console.log("Reached last page, completing");
                         return setTimeout(resolve, 100, "Timeout adding page #" + idx);
                     }
