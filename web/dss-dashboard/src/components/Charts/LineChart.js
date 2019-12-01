@@ -50,7 +50,6 @@ class LineChart extends React.Component {
         backgroundColor: color[i],
         fill: false
       }
-      debugger;
       let tempdataArr = [];
       let tempdatalabel = [],tempVal='';
       let val = NFormatterFun(_.get(d,'headerValue.value'), _.get(d,'headerValue.symbol'), this.props.GFilterData['Denomination'])

@@ -13,11 +13,16 @@ import { withStyles } from '@material-ui/core/styles';
 import style from './style';
 import moment from 'moment';
 import _ from 'lodash';
+// import { MediaQuery } from '@material-ui/core';
+// import { useTheme } from '@material-ui/core/styles';
+
 
 const year = (new Date()).getFullYear();
 
 class DateRange extends React.Component {
   // The first commit of Material-UI
+   
+
   constructor(props) {
     super(props);
     this.state = {
@@ -35,6 +40,9 @@ class DateRange extends React.Component {
       { key: "6", value: "Custom" },
       ],
     }
+    // const theme = useTheme();
+
+    // this.fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   }
   handleCancel = () => {
     let { onClose } = this.props;
@@ -154,6 +162,7 @@ class DateRange extends React.Component {
     let cardStyle = {}
     return (
       <Dialog
+      // fullScreen={}
         disableBackdropClick
         disableEscapeKeyDown
         // invisible={true}
@@ -166,7 +175,7 @@ class DateRange extends React.Component {
         classes={{ paper: classes.root }}
         // {...other}
       >
-        <DialogTitle id="date-range" style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#000000' }}>
+        <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#000000' }}>
           {/* <h5> */}
           {this.state.title}
           {/* </h5> */}

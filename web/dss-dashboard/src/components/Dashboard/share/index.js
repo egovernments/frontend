@@ -11,12 +11,14 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../../utils/Share';
 import jsPDF from 'jspdf'
-import { printDocument } from '../../../utils/block';
+import { downloadAsImage, printDocument } from '../../../utils/block';
 import { renderToString, } from 'react-dom/server'
 import FilterTable from '../download/filterTable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { APIStatus } from '../../../actions/apiStatus'
+import domtoimage from 'dom-to-image';
+
 
 const StyledMenu = withStyles({
     paper: {
@@ -63,7 +65,7 @@ export function CustomizedShare(props) {
     };
 
     const renderTable = () => {
-        return renderToString(<FilterTable data={props.GFilterData} name="Dashboard" />)
+        return renderToString(<FilterTable data={props.GFilterData} name= {props.fileHeader || "Dashboard"} />)
     }
 
     const shareWhatsAppPDF = () => {
@@ -104,6 +106,51 @@ export function CustomizedShare(props) {
         })
     }
 
+    const dataURItoBlob = (dataURI) => {
+        var binary = atob(dataURI.split(',')[1]);
+        var array = [];
+        for (var i = 0; i < binary.length; i++) {
+            array.push(binary.charCodeAt(i));
+        }
+        return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
+    }
+
+    const shareEmailImage = () => {
+        props.APITrans(true);
+
+        var ts = Math.round((new Date()).getTime() / 1000);
+
+        let div = document.getElementById('divToPrint');
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+            .then(function (dataUrl) {
+                var blobData = dataURItoBlob(dataUrl);
+                blobData.name = "dss" + ts + ".jpeg"
+
+                try {
+                    props.APITrans(false);
+                    handleImageShareEmail(blobData)
+                } catch{ }
+            }.bind(this))
+    }
+
+    const shareWhatsAppImage = () => {
+        props.APITrans(true);
+
+        var ts = Math.round((new Date()).getTime() / 1000);
+
+        let div = document.getElementById('divToPrint');
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+            .then(function (dataUrl) {
+                var blobData = dataURItoBlob(dataUrl);
+                blobData.name = "dss" + ts + ".jpeg"
+
+                try {
+                    props.APITrans(false);
+                    handleWhatsAppImageShare(blobData)
+                } catch{ }
+            }.bind(this))
+    }
+
     const renderSharePDFMenue = (menue) => {
         return (
             <div >
@@ -132,7 +179,7 @@ export function CustomizedShare(props) {
                         </ListItemIcon>
                         <ListItemText primary="PDF" />
                     </StyledMenuItem>
-                    <StyledMenuItem onClick={handleImageShareEmail}>
+                    <StyledMenuItem onClick={shareEmailImage}>
                         <ListItemIcon>
                             <DraftsIcon fontSize="small" />
                         </ListItemIcon>
@@ -144,7 +191,7 @@ export function CustomizedShare(props) {
                         </ListItemIcon>
                         <ListItemText primary="PDF" />
                     </StyledMenuItem>
-                    <StyledMenuItem onClick={handleWhatsAppImageShare}>
+                    <StyledMenuItem onClick={shareWhatsAppImage}>
                         <ListItemIcon>
                             <WhatsappIcon fontSize="small" />
                         </ListItemIcon>

@@ -10,6 +10,9 @@ import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
 class ActionButton extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            buttonHovered: false
+        }
 
     }
     componentWillReceiveProps(nextProps) {
@@ -68,7 +71,7 @@ class ActionButton extends React.Component {
         return (
             <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
                 <div>
-                    <Button disabled={disabled} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)}>
+                    <Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a"}}>
                         {text}
                     </Button>
                 </div>

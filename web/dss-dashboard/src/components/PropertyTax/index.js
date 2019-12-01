@@ -125,7 +125,7 @@ class PropertyTax extends Component {
 
         {!isMobile && <div className={classes.acbtn}>
           <CustomizedMenus key="download" fileName={`SURE ${page}`} fileHeader="Property Tax Dashboard" />
-          <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />
+          <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} fileHeader="Property Tax Dashboard"/>
         </div>
         }
 

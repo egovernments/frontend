@@ -5,7 +5,7 @@ const styles = theme => ({
     "#customCalander": {
         // '& div': {
         backgroundColor: 'red'
-        // }
+            // }
     },
 
     root: {
@@ -187,7 +187,7 @@ const styles = theme => ({
     trans: {
         // '& div > div': {
         background: 'transparent'
-        // }
+            // }
     },
     '@media (max-width: 1115px)': {
         calanderDisplay: {
@@ -199,19 +199,23 @@ const styles = theme => ({
             flexDirection: 'column'
         },
 
-    }, '@media (max-width: 1000px)': {
+    },
+    '@media (max-width: 1000px)': {
         root: {
-            top: '28%',
-            left: '0px',
-            width:'96%'
-        }, calanderDisplay: {
+            top: 0,
+            left: 0,
+            width: '100vw',
+            position: 'inherit'
+        },
+        calanderDisplay: {
             display: 'flex',
             flexDirection: 'column'
         },
         fils: {
             display: 'flex',
             flexDirection: 'column'
-        },actions: {
+        },
+        actions: {
             display: 'flex',
             justifyContent: 'center',
             margin: '10px 0 107px 0'
@@ -219,4 +223,4 @@ const styles = theme => ({
     }
 })
 
-export default styles;
+export default styles

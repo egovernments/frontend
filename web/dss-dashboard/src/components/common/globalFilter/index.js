@@ -138,7 +138,7 @@ class GlobalFilter extends Component {
                 />
                 <DateRange
                     key={"DateRange"}
-                    id="customCalander"
+                    id="date-range"
                     title1={(_.get(this.state, "filterData.duration.title") || this.state.value)}
                     keepMounted
                     open={this.state.open}

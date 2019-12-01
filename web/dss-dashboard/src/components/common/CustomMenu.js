@@ -27,6 +27,7 @@ import { downloadAsImage, printDocument } from '../../utils/block';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../utils/Share'
+import domtoimage from 'dom-to-image';
 
 const pdf = new jsPDF("p", "mm", "a1");
 pdf.scaleFactor = 3;
@@ -84,7 +85,9 @@ export function CustomizedMenus(props) {
     };
 
     const downloadImage = () => {
+        props.APITrans(true)
         downloadAsImage('dashboard').then(function (success) {
+            props.APITrans(false)
             setAnchorEl(null);
         }.bind(this)).catch(function (err) {
             console.log(err);
@@ -94,10 +97,11 @@ export function CustomizedMenus(props) {
     }
 
     const renderTable = () => {
-        return renderToString(<FilterTable data={props.GFilterData} name= {props.fileHeader || "Dashboard"} />)
+        return renderToString(<FilterTable data={props.GFilterData} name={props.fileHeader || "Dashboard"} />)
     }
 
     const downloadPDF = () => {
+        props.APITrans(true)
         printDocument(pdf, renderTable()).then(function (pdfO) {
             let element = document.getElementById("printFtable")
             element.parentNode.removeChild(element);
@@ -109,6 +113,7 @@ export function CustomizedMenus(props) {
                 pdf.deletePage(2)
                 pdf.deletePage(1)
                 pdf.addPage();
+                props.APITrans(false)
             } catch{ }
             // props.APITrans(false);
         }).catch(function (error) {
@@ -118,6 +123,7 @@ export function CustomizedMenus(props) {
     }
 
     const shareWhatsAppPDF = () => {
+        props.APITrans(true);
         const pdf1 = new jsPDF("p", "mm", "a1");
         pdf1.scaleFactor = 3;
 
@@ -128,7 +134,8 @@ export function CustomizedMenus(props) {
             // pdfO.save();
 
             try {
-             handleWhatsAppPdfShare(pdfO)
+                props.APITrans(false);
+                handleWhatsAppPdfShare(pdfO)
             } catch{ }
         }).catch(function (error) {
             console.log(error);
@@ -137,6 +144,7 @@ export function CustomizedMenus(props) {
     }
 
     const shareEmailPDF = () => {
+        props.APITrans(true);
         const pdf1 = new jsPDF("p", "mm", "a1");
         pdf1.scaleFactor = 3;
 
@@ -147,12 +155,58 @@ export function CustomizedMenus(props) {
             // pdfO.save();
 
             try {
-             handlePdfShareEmail(pdfO)
+                props.APITrans(false);
+                handlePdfShareEmail(pdfO)
             } catch{ }
         }).catch(function (error) {
             console.log(error);
             setAnchorEl(null);
         })
+    }
+    const shareEmailImage = () => {
+        props.APITrans(true);
+
+        var ts = Math.round((new Date()).getTime() / 1000);
+
+        let div = document.getElementById('divToPrint');
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+            .then(function (dataUrl) {
+                var blobData = dataURItoBlob(dataUrl);
+                blobData.name = "dss" + ts + ".jpeg"
+
+                try {
+                    props.APITrans(false);
+                    handleImageShareEmail(blobData)
+                } catch{ }
+            }.bind(this))
+    }
+
+    const shareWhatsAppImage = () => {
+        props.APITrans(true);
+
+        var ts = Math.round((new Date()).getTime() / 1000);
+
+        let div = document.getElementById('divToPrint');
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+            .then(function (dataUrl) {
+                var blobData = dataURItoBlob(dataUrl);
+                blobData.name = "dss" + ts + ".jpeg"
+
+                try {
+                    props.APITrans(false);
+                    handleWhatsAppImageShare(blobData)
+                } catch{ }
+            }.bind(this))
+    }
+
+
+    const dataURItoBlob = (dataURI) => {
+        var binary = atob(dataURI.split(',')[1]);
+        var array = [];
+        for (var i = 0; i < binary.length; i++) {
+            array.push(binary.charCodeAt(i));
+        }
+        return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     }
 
     return (
@@ -225,7 +279,7 @@ export function CustomizedMenus(props) {
                             </ListItemIcon>
                             <ListItemText primary="PDF" />
                         </StyledMenuItem>
-                        <StyledMenuItem button onClick={handleImageShareEmail}>
+                        <StyledMenuItem button onClick={shareEmailImage}>
                             <ListItemIcon>
                                 <DraftsIcon />
                             </ListItemIcon>
@@ -237,7 +291,7 @@ export function CustomizedMenus(props) {
                             </ListItemIcon>
                             <ListItemText primary="PDF" />
                         </StyledMenuItem>
-                        <StyledMenuItem button onClick={handleWhatsAppImageShare}>
+                        <StyledMenuItem button onClick={shareWhatsAppImage}>
                             <ListItemIcon>
                                 <WhatsappIcon />
                             </ListItemIcon>

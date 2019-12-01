@@ -32,13 +32,15 @@ export const handlePdfShareEmail = (pdf2) => {
         }.bind(this))
 }
 
-export const handleImageShareEmail = () => {
-    var ts = Math.round((new Date()).getTime() / 1000);
+export const handleImageShareEmail = (blobData) => {
+    // var ts = Math.round((new Date()).getTime() / 1000);
 
-    let div = document.getElementById('divToPrint');
-    domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
-        .then(function (dataUrl) {
-            var blobData = dataURItoBlob(dataUrl);
+    // let div = document.getElementById('divToPrint');
+    // domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+    //     .then(function (dataUrl) {
+    //         var blobData = dataURItoBlob(dataUrl);
+    //         blobData.name = "dss" + ts + ".jpeg"
+
             const config = {
                 bucketName: 'dss-project-bucket',
                 region: 'ap-south-1',
@@ -46,7 +48,6 @@ export const handleImageShareEmail = () => {
                 secretAccessKey: 'd/h8vN+Qsg9v+Nko+bPt4Xmo33FWzsx7+MJ5PFuK',
                 ACL: "public-read"
             }
-            blobData.name = "dss" + ts + ".jpeg"
             S3
                 .uploadFile(blobData, config)
                 .then(data => {
@@ -55,16 +56,18 @@ export const handleImageShareEmail = () => {
                     fakeLink.click();
                 })
                 .catch(err => console.error(err))
-        }.bind(this))
+        // }.bind(this))
 }
 
-export const handleWhatsAppImageShare = () => {
-    var ts = Math.round((new Date()).getTime() / 1000);
+export const handleWhatsAppImageShare = (blobData) => {
+    // var ts = Math.round((new Date()).getTime() / 1000);
 
-    let div = document.getElementById('divToPrint');
-    domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
-        .then(function (dataUrl) {
-            var blobData = dataURItoBlob(dataUrl);
+    // let div = document.getElementById('divToPrint');
+    // domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+    //     .then(function (dataUrl) {
+    //         var blobData = dataURItoBlob(dataUrl);
+    // blobData.name = "dss" + ts + ".jpeg"
+
             const config = {
                 bucketName: 'dss-project-bucket',
                 region: 'ap-south-1',
@@ -72,7 +75,6 @@ export const handleWhatsAppImageShare = () => {
                 secretAccessKey: 'd/h8vN+Qsg9v+Nko+bPt4Xmo33FWzsx7+MJ5PFuK',
                 ACL: "public-read"
             }
-            blobData.name = "dss" + ts + ".jpeg"
             S3
                 .uploadFile(blobData, config)
                 .then(data => {
@@ -83,7 +85,7 @@ export const handleWhatsAppImageShare = () => {
                     fakeLink.click();
                 })
                 .catch(err => console.error(err))
-        }.bind(this))
+        // }.bind(this))
 }
 
 export const handleWhatsAppPdfShare = (pdf2) => {

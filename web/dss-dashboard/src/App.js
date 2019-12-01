@@ -111,7 +111,16 @@ let dataL = {
     "DSS_TL_LICENSE_BY_STATUS": "Trade License by Status",
     "DSS_COMPLETION_RATE": "Completion Rate",
     "DSS_REVENUE": "Revenue",
-    "DSS_SERVICE": "Service"
+    "DSS_SERVICE": "Service",
+    "DSS_PGR_TOTAL_COMPLAINTS": "Total Complaints",
+    "DSS_PGR_CLOSED_COMPLAINTS": "Closed Complaints",
+    "DSS_TOTAL_CUMULATIVE_CLOSED_COMPLAINTS": "Cumulative Closed Complaints",
+    "DSS_PGR_COMPLAINTS_BY_STATUS": "Complaint By Status",
+    "DSS_PGR_COMPLAINTS_BY_CHANNEL": "Complaint By Channel",
+    "DSS_PGR_COMPLAINTS_BY_CATEGORY": "Complaint By Category",
+    "DSS_PGR_COMPLAINTS_BY_TENANT": "Complaint By Tenant",
+    "DSS_PGR_COMPLAINTS_BY_DISTRICT": "Complaint By District",
+    "DSS_PGR_COMPLAINTS_BY_DEPARTMENT": "Complaint By Department",
   }
 }
 
@@ -142,8 +151,7 @@ class App extends React.Component {
     let data = _.chain(JSON.parse(localStorage.getItem(`localization_${language}`)))
       .map(i => { return { key: i.code, value: i.message } })
       .flatten().value();
-    debugger;
-    let newIndex= _.chain(data)
+    let newIndex = _.chain(data)
       .keyBy('key')
       .mapValues('value')
       .value();

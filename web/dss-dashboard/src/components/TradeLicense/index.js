@@ -124,7 +124,7 @@ class TradeLicense extends Component {
 
         {!isMobile && <div className={classes.acbtn}>
           <CustomizedMenus key="download" fileName={`SURE ${page}`} fileHeader="Trade License Dashboard" />
-          <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} />
+          <CustomizedShare key="share" PDFDownloads={this.share.bind(this)} fileHeader="Trade License Dashboard"/>
 
         </div>}
 
