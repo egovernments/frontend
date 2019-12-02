@@ -161,7 +161,7 @@ class MeterReading extends React.Component {
           })
         ) : (
             <div className="no-assessment-message-cont">
-              <Label
+              <LabelContainer
                 labelKey={"No results Found!"}
                 style={{ marginBottom: 10 }}
               />
