@@ -44,7 +44,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item xs={3}>
                           <LabelContainer
-                            labelName={item.applicationNo}
+                            labelName="Water"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
@@ -110,7 +110,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item xs={3}>
                           <LabelContainer
-                            labelName={item.property.owners[0].name}
+                            labelName={item.property.owners.map(owner => owner.name)}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
@@ -142,7 +142,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item xs={3}>
                           <Label
-                            labelName={item.status}
+                            labelName="0"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
