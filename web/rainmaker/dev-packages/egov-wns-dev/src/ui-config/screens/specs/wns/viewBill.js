@@ -15,7 +15,7 @@ import {
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults, fetchBill, getConsumptionDetails } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
   setMultiOwnerForSV,
@@ -29,6 +29,11 @@ import {
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
+import {
+  getTenantId,
+  getUserInfo,
+  localStorageGet
+} from "egov-ui-kit/utils/localStorageUtils";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { getProperty } from "./viewBillResource/propertyDetails";
 import { getOwner } from "./viewBillResource/ownerDetails";
@@ -36,10 +41,11 @@ import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
 
 
-const tenantId = getQueryArg(window.location.href, "tenantId");
-let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+const tenantId = JSON.parse(getUserInfo()).tenantId;
+let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 let headerSideText = { word1: "", word2: "" };
-
+let data;
+let payload;
 const setDocuments = async (
   payload,
   sourceJsonPath,
@@ -88,7 +94,7 @@ const setDocuments = async (
 const getTradeTypeSubtypeDetails = payload => {
   const tradeUnitsFromApi = get(
     payload,
-    "Licenses[0].tradeLicenseDetail.tradeUnits",
+    "WaterConnection[0].tradeLicenseDetail.tradeUnits",
     []
   );
   const tradeUnitDetails = [];
@@ -104,53 +110,67 @@ const getTradeTypeSubtypeDetails = payload => {
   return tradeUnitDetails;
 };
 
-const searchResults = async (action, state, dispatch, applicationNo) => {
-  let queryObject = [
+const searchResults = async (action, state, dispatch, consumerCode) => {
+  let queryObjectForFetchBill = [
     { key: "tenantId", value: tenantId },
-    { key: "applicationNumber", value: applicationNo }
+    { key: "consumerCode", value: consumerCode },
+    { key: "businessService", value: "WS" }
   ];
-  let payload = await getSearchResults(queryObject);
-
+  let queryObjForSearch = [
+    { key: "tenantId", value: tenantId },
+    { key: "connectionNumber", value: consumerCode }
+  ]
+  let queryObjectForConsumptionDetails = [
+    { key: "tenantId", value: tenantId },
+    { key: "connectionNos", value: consumerCode }
+  ]
+  let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails)
+  data = await fetchBill(queryObjectForFetchBill)
+  payload = await getSearchResults(queryObjForSearch);
+  let consumption = meterReadingsData.meterReadings[0].currentReading - meterReadingsData.meterReadings[0].lastReading
+  payload.WaterConnection[0].service = "WATER"
+  payload.WaterConnection[0].consumption = consumption
+  payload.WaterConnection[0].currentMeterReading = meterReadingsData.meterReadings[0].currentReading
+  payload.WaterConnection[0].lastMeterReading = meterReadingsData.meterReadings[0].lastReading
   headerSideText = getHeaderSideText(
-    get(payload, "Licenses[0].status"),
-    get(payload, "Licenses[0].licenseNumber")
+    get(payload, "WaterConnection[0].status"),
+    get(payload, "WaterConnection[0].licenseNumber")
   );
-  set(payload, "Licenses[0].headerSideText", headerSideText);
+  set(payload, "WaterConnection[0].headerSideText", headerSideText);
 
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+  get(payload, "WaterConnection[0].property.owners") &&
+    get(payload, "WaterConnection[0].property.owners").length > 0
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
-  if (get(payload, "Licenses[0].licenseType")) {
+  if (get(payload, "WaterConnection[0].licenseType")) {
     setValidToFromVisibilityForSV(
       action,
-      get(payload, "Licenses[0].licenseType")
+      get(payload, "WaterConnection[0].licenseType")
     );
   }
 
   await setDocuments(
     payload,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
-    "LicensesTemp[0].reviewDocData",
+    "WaterConnection[0].tradeLicenseDetail.applicationDocuments",
+    "WaterConnectionTemp[0].reviewDocData",
     dispatch
   );
-  let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
-  payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+  let sts = getTransformedStatus(get(payload, "WaterConnection[0].status"));
+  payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+  data && dispatch(prepareFinalObject("Bill[0]", data.Bill[0]));
   payload &&
     dispatch(
       prepareFinalObject(
-        "LicensesTemp[0].tradeDetailsResponse",
+        "WaterConnectionTemp[0].tradeDetailsResponse",
         getTradeTypeSubtypeDetails(payload)
       )
     );
-  const LicenseData = payload.Licenses[0];
+  const BillData = data.Bill[0];
   const fetchFromReceipt = sts !== "pending_payment";
   createEstimateData(
-    LicenseData,
-    "LicensesTemp[0].estimateCardData",
+    BillData,
+    "Bill[0].estimateCardData",
     dispatch,
     {},
     fetchFromReceipt
@@ -158,24 +178,24 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   //Fetch Bill and populate estimate card
   // const code = get(
   //   payload,
-  //   "Licenses[0].tradeLicenseDetail.address.locality.code"
+  //   "WaterConnection[0].tradeLicenseDetail.address.locality.code"
   // );
   // const queryObj = [{ key: "tenantId", value: tenantId }];
   // // getBoundaryData(action, state, dispatch, queryObj, code);
 };
 
-const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+const beforeInitFn = async (action, state, dispatch, consumerCode) => {
   //Search details for given application Number
-  if (applicationNumber) {
+  if (consumerCode) {
     !getQueryArg(window.location.href, "edited") &&
-      (await searchResults(action, state, dispatch, applicationNumber));
+      (await searchResults(action, state, dispatch, consumerCode));
 
     // const status = getTransformedStatus(
-    //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
+    //   get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].status")
     // );
     const status = get(
       state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].status"
+      "screenConfiguration.preparedFinalObject.WaterConnection[0].status"
     );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
@@ -191,22 +211,22 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     ) {
       set(
         action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
+        "screenConfig.components.div.children.viewBill.children.cardContent.children.approvalDetails.visible",
         true
       );
 
-      if (get(data, "Licenses[0].tradeLicenseDetail.verificationDocuments")) {
+      if (get(data, "WaterConnection[0].tradeLicenseDetail.verificationDocuments")) {
         await setDocuments(
           data,
-          "Licenses[0].tradeLicenseDetail.verificationDocuments",
-          "LicensesTemp[0].verifyDocData",
+          "WaterConnection[0].tradeLicenseDetail.verificationDocuments",
+          "WaterConnectionTemp[0].verifyDocData",
           dispatch
         );
       } else {
         dispatch(
           handleField(
             "search-preview",
-            "components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
+            "components.div.children.viewBill.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
             "visible",
             false
           )
@@ -215,7 +235,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     } else {
       set(
         action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
+        "screenConfig.components.div.children.viewBill.children.cardContent.children.approvalDetails.visible",
         false
       );
     }
@@ -225,7 +245,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       dispatch,
       status,
-      applicationNumber,
+      consumerCode,
       tenantId
     );
     process.env.REACT_APP_NAME === "Citizen"
@@ -240,7 +260,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
 
     setActionItems(action, obj);
-    loadReceiptGenerationData(applicationNumber, tenantId);
+    // loadReceiptGenerationData(consumerCode, tenantId);
   }
 };
 
@@ -307,12 +327,12 @@ const headerrow = getCommonContainer({
   headerDynamicVal: getCommonHeader({
     labelName: `(Q3-2018-19)`,
   }),
-  applicationNumber: {
+  consumerCode: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "ConsumerNoContainer",
     props: {
-      number: "WS-2018-PB-246464"
+      number: consumerCode
     }
   }
 });
@@ -329,7 +349,7 @@ const estimate = getCommonGrayCard({
     },
   ),
   estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "LicensesTemp[0].estimateCardData"
+    sourceJsonPath: "Bill[0].estimateCardData"
   }),
 });
 
@@ -343,7 +363,7 @@ let title = getCommonTitle({ labelName: titleText });
 const setActionItems = (action, object) => {
   set(
     action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title",
+    "screenConfig.components.div.children.viewBill.children.cardContent.children.title",
     getCommonTitle({
       labelName: get(object, "titleText"),
       labelKey: get(object, "titleKey")
@@ -351,17 +371,17 @@ const setActionItems = (action, object) => {
   );
   set(
     action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.visible",
+    "screenConfig.components.div.children.viewBill.children.cardContent.children.title.visible",
     get(object, "titleVisibility")
   );
   set(
     action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.roleDefination",
+    "screenConfig.components.div.children.viewBill.children.cardContent.children.title.roleDefination",
     get(object, "roleDefination")
   );
 };
 
-export const tradeReviewDetails = getCommonCard({
+export const viewBill = getCommonCard({
   estimate,
   serviceDetails,
   propertyDetails,
@@ -372,28 +392,27 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "view-bill",
   beforeInitScreen: (action, state, dispatch) => {
-    // const status = getQueryArg(window.location.href, "status");
-    // const tenantId = getQueryArg(window.location.href, "tenantId");
-    // applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-    //To set the application no. at the  top
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
-    //     applicationNumber
-    //   );
-    //   if (status !== "pending_payment") {
-    //     set(
-    //       action.screenConfig,
-    //       "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
-    //       false
-    //     );
-    //   }
-    // const queryObject = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "businessService", value: "newTL" }
-    // ];
-    // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    // beforeInitFn(action, state, dispatch, applicationNumber);
+    const tenantId = JSON.parse(getUserInfo()).tenantId;
+    consumerCode = getQueryArg(window.location.href, "connectionNumber");
+    // To set the application no. at the  top
+    set(
+      action.screenConfig,
+      "components.div.children.headerDiv.children.header1.children.consumerCode.props.number",
+      consumerCode
+    );
+    if (status !== "pending_payment") {
+      set(
+        action.screenConfig,
+        "components.div.children.viewBill.children.cardContent.children.viewBreakupButton.visible",
+        false
+      );
+    }
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessService", value: "WS" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    beforeInitFn(action, state, dispatch, consumerCode);
     return action;
   },
 
@@ -424,7 +443,7 @@ const screenConfig = {
           moduleName: "egov-workflow",
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
         },
-        tradeReviewDetails,
+        viewBill,
         viewBillFooter
       }
     },

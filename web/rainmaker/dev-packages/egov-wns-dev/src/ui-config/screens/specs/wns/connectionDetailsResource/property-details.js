@@ -91,15 +91,16 @@ const propertyLocationDetails = getCommonContainer({
     {
       labelKey: "WS_PROP_DETAIL_STREET_NAME"
     },
-    { jsonPath: "WaterConnection[0].property.address.street" }
+    {
+      jsonPath: "WaterConnection[0].property.address.street"
+    }
   ),
   locality: getLabelWithValue(
     {
       labelKey: "WS_PROP_DETAIL_LOCALITY_LABEL"
     },
     {
-      jsonPath:
-        "WaterConnection[0].property.address.locality",
+      jsonPath: "WaterConnection[0].property.address.locality",
     }
   ),
   pincode: getLabelWithValue(

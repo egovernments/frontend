@@ -105,42 +105,25 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber }
   ];
-  let payload = await getSearchResults(queryObject);
-  payload.WaterConnection[0].service = "WATER"
-  headerSideText = getHeaderSideText(
-    get(payload, "WaterConnection[0].status"),
-    get(payload, "WaterConnection[0].licenseNumber")
-  );
-  set(payload, "WaterConnection[0].headerSideText", headerSideText);
-
-  get(payload, "WaterConnection[0].property.owners") &&
-    get(payload, "WaterConnection[0].property.owners.length" > 0)
-    ? setMultiOwnerForSV(action, true)
-    : setMultiOwnerForSV(action, false);
-
-  if (get(payload, "WaterConnection[0].licenseType")) {
-    setValidToFromVisibilityForSV(
-      action,
-      get(payload, "WaterConnection[0].licenseType")
-    );
-  }
+  let payloadData = await getSearchResults(queryObject);
+  payloadData.WaterConnection[0].service = "WATER"
 
   await setDocuments(
-    payload,
+    payloadData,
     "WaterConnection[0].tradeLicenseDetail.applicationDocuments",
     "WaterConnectionTemp[0].reviewDocData",
     dispatch
   );
-  let sts = getTransformedStatus(get(payload, "WaterConnection[0].status"));
-  payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-  payload &&
+  let sts = getTransformedStatus(get(payloadData, "WaterConnection[0].status"));
+  payloadData && dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
+  payloadData &&
     dispatch(
       prepareFinalObject(
         "WaterConnectionTemp[0].tradeDetailsResponse",
-        getTradeTypeSubtypeDetails(payload)
+        getTradeTypeSubtypeDetails(payloadData)
       )
     );
-  const LicenseData = payload.WaterConnection[0];
+  const LicenseData = payloadData.WaterConnection[0];
   const fetchFromReceipt = sts !== "pending_payment";
   createEstimateData(
     LicenseData,
@@ -151,7 +134,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   );
   //Fetch Bill and populate estimate card
   // const code = get(
-  //   payload,
+  //   payloadData,
   //   "WaterConnection[0].tradeLicenseDetail.address.locality.code"
   // );
   // const queryObj = [{ key: "tenantId", value: tenantId }];
@@ -173,7 +156,6 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
     // );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
-    const obj = setStatusBasedValue(status);
     // Get approval details based on status and set it in screenconfig
 
     if (
@@ -188,27 +170,41 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
       );
 
       if (get(data, "WaterConnection[0].tradeLicenseDetail.verificationDocuments")) {
-        await setDocuments(
-          data,
-          "WaterConnection[0].tradeLicenseDetail.verificationDocuments",
-          "WaterConnectionTemp[0].verifyDocData",
-          dispatch
-        );
+        // await setDocuments(
+        //   data,
+        //   "WaterConnection[0].tradeLicenseDetail.verificationDocuments",
+        //   "WaterConnectionTemp[0].verifyDocData",
+        //   dispatch
+        // );
       } else {
-        dispatch(
-          handleField(
-            "search-preview",
-            "components.div.children.connectionDetails.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
-            "visible",
-            false
-          )
-        );
+        // dispatch(
+        //   handleField(
+        //     "search-preview",
+        //     "components.div.children.connectionDetails.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
+        //     "visible",
+        //     false
+        //   )
+        // );
       }
     } else {
+      // set(
+      //   action,
+      //   "screenConfig.components.div.children.connectionDetails.children.cardContent.children.approvalDetails.visible",
+      //   false
+      // );
+    }
+    let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
+    if (connectionType !== "Metered") {
       set(
-        action,
-        "screenConfig.components.div.children.connectionDetails.children.cardContent.children.approvalDetails.visible",
+        action.screenConfig,
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
         false
+      );
+    } else {
+      set(
+        action.screenConfig,
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
+        true
       );
     }
 
@@ -305,33 +301,33 @@ const headerrow = getCommonContainer({
   }
 });
 
-const serviceDetails = getServiceDetails(false);
+const serviceDetails = getServiceDetails();
 
 const propertyDetails = getPropertyDetails(false);
 
 const ownerDetails = getOwnerDetails(false);
 
 
-const setActionItems = (action, object) => {
-  set(
-    action,
-    "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title",
-    getCommonTitle({
-      labelName: get(object, "titleText"),
-      labelKey: get(object, "titleKey")
-    })
-  );
-  set(
-    action,
-    "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title.visible",
-    get(object, "titleVisibility")
-  );
-  set(
-    action,
-    "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title.roleDefination",
-    get(object, "roleDefination")
-  );
-};
+// const setActionItems = (action, object) => {
+//   set(
+//     action,
+//     "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title",
+//     getCommonTitle({
+//       labelName: get(object, "titleText"),
+//       labelKey: get(object, "titleKey")
+//     })
+//   );
+//   set(
+//     action,
+//     "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title.visible",
+//     get(object, "titleVisibility")
+//   );
+//   set(
+//     action,
+//     "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title.roleDefination",
+//     get(object, "roleDefination")
+//   );
+// };
 
 export const connectionDetails = getCommonCard({
   serviceDetails,
@@ -343,31 +339,21 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    const status = getQueryArg(window.location.href, "status");
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-    connectionNumber = getQueryArg(window.location.href, "connectionNumber");
-
-    let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
-    if (connectionType === "Non-metered") {
-      set(
-        action.screenConfig,
-        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.viewOne.editSection.visible",
-        false
-      );
-    }
     //To set the application no. at the  top
     set(
       action.screenConfig,
       "components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
       connectionNumber
     );
-    if (status !== "pending_payment") {
-      set(
-        action.screenConfig,
-        "components.div.children.connectionDetails.children.cardContent.children.viewBreakupButton.visible",
-        false
-      );
-    }
+    // if (status !== "pending_payment") {
+    //   set(
+    //     action.screenConfig,
+    //     "components.div.children.connectionDetails.children.cardContent.children.viewBreakupButton.visible",
+    //     false
+    //   );
+    // }
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    connectionNumber = getQueryArg(window.location.href, "connectionNumber");
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessService", value: "newTL" }
@@ -382,7 +368,8 @@ const screenConfig = {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        className: "common-div-css search-preview"
+        className: "common-div-css search-preview",
+        id: "connection-details"
       },
       children: {
         headerDiv: {

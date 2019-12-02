@@ -27,58 +27,54 @@ export const getProperty = () => {
             }
         },
         propertyCardContainer: getCommonContainer({
-            propertyCity: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_PROP_DETAIL_CITY"
-                    }
-                    // {
-                    //     jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-                    //     localePrefix: {
-                    //         moduleName: "common-masters",
-                    //         masterName: "OwnerShipCategory"
-                    //     },
-                    //     callBack: value :{
-                    //         return value.split(".")[0];
-                    //     }
-                    // }
-                )
-            },
-            propertyDoorNo: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_PROP_DETAIL_PHNO_LABEL"
-                    },
-                )
-            },
-            propertyBuilding: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
-                    })
-            },
-
-            propertyStreet: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_PROP_DETAIL_STREET_NAME"
-                    },
-                )
-            },
-            propertyMohalla: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
-                    },
-                )
-            },
-            propertyPincode: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_PROP_DETAIL_PINCODE"
-                    },
-                )
-            }
+            propertyCity: getLabelWithValue(
+                {
+                    labelKey: "WS_PROP_DETAIL_CITY"
+                },
+                {
+                    jsonPath: "WaterConnection[0].property.address.city"
+                }
+            ),
+            propertyDoorNo: getLabelWithValue(
+                {
+                    labelKey: "WS_PROP_DETAIL_PHNO_LABEL"
+                },
+                {
+                    jsonPath: "WaterConnection[0].property.address.plotNo"
+                }
+            ),
+            propertyBuilding: getLabelWithValue(
+                {
+                    labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
+                },
+                {
+                    jsonPath: "WaterConnection[0].property.address.buildingName"
+                }
+            ),
+            propertyStreet: getLabelWithValue(
+                {
+                    labelKey: "WS_PROP_DETAIL_STREET_NAME"
+                },
+                {
+                    jsonPath: "WaterConnection[0].property.address.street"
+                }
+            ),
+            propertyMohalla: getLabelWithValue(
+                {
+                    labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
+                },
+                {
+                    jsonPath: "WaterConnection[0].property.address.locality"
+                }
+            ),
+            propertyPincode: getLabelWithValue(
+                {
+                    labelKey: "WS_PROP_DETAIL_PINCODE"
+                },
+                {
+                    jsonPath: "WaterConnection[0].property.address.pincode"
+                }
+            )
         })
-    });
+    })
 };
