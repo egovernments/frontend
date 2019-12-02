@@ -1,6 +1,6 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../..//ui-utils/commons";
+import { getConsumptionDetails } from "../../../../..//ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
@@ -11,12 +11,7 @@ import { validateFields } from "../../utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getQueryArg,
-} from "egov-ui-framework/ui-utils/commons";
-
-const tenantId = getQueryArg(window.location.href, "tenantId");
-let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+import { httpRequest } from "../../../../../ui-utils";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -106,44 +101,43 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
 
-    const response = await getSearchResults(queryObject);
-    try {
-      let data = response.Licenses.map(item => ({
-        [getTextToLocalMapping("Application No")]:
-          item.applicationNumber || "-",
-        [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
-        [getTextToLocalMapping("Trade Name")]: item.tradeName || "-",
-        [getTextToLocalMapping("Owner Name")]:
-          item.tradeLicenseDetail.owners[0].name || "-",
-        [getTextToLocalMapping("Application Date")]:
-          convertEpochToDate(item.applicationDate) || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId
-      }));
+    // const response = await getConsumptionDetails(queryObject);
+    // try {
+    //   let data = response.meterReadings.map(item => ({
+    //     [getTextToLocalMapping("Billing Period")]: item.billingPeriod || "-",
+    //     [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
+    //     [getTextToLocalMapping("Trade Name")]: item.tradeName || "-",
+    //     [getTextToLocalMapping("Owner Name")]:
+    //       item.tradeLicenseDetail.owners[0].name || "-",
+    //     [getTextToLocalMapping("Application Date")]:
+    //       convertEpochToDate(item.applicationDate) || "-",
+    //     [getTextToLocalMapping("Status")]: item.status || "-",
+    //     ["tenantId"]: item.tenantId
+    //   }));
 
-      dispatch(
-        handleField(
-          "search",
-          "components.div.children.searchResults",
-          "props.data",
-          data
-        )
-      );
-      dispatch(
-        handleField(
-          "search",
-          "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Trade License Applications"
-          )} (${response.Licenses.length})`
-        )
-      );
-      showHideTable(true, dispatch);
-    } catch (error) {
-      dispatch(toggleSnackbar(true, error.message, "error"));
-      console.log(error);
-    }
+    //   dispatch(
+    //     handleField(
+    //       "search",
+    //       "components.div.children.searchResults",
+    //       "props.data",
+    //       data
+    //     )
+    //   );
+    //   dispatch(
+    //     handleField(
+    //       "search",
+    //       "components.div.children.searchResults",
+    //       "props.title",
+    //       `${getTextToLocalMapping(
+    //         "Search Results for Trade License Applications"
+    //       )} (${response.Licenses.length})`
+    //     )
+    //   );
+    //   showHideTable(true, dispatch);
+    // } catch (error) {
+    //   dispatch(toggleSnackbar(true, error.message, "error"));
+    //   console.log(error);
+    // }
   }
 };
 const showHideTable = (booleanHideOrShow, dispatch) => {
@@ -182,10 +176,6 @@ const getMdmsData = async () => {
   }
 };
 export const fetchData = async (action, state, dispatch) => {
-  let queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "connectionNumber", value: connectionNumber }
-  ];
   const response = await getConsumptionDetails(queryObject);
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =
@@ -194,44 +184,20 @@ export const fetchData = async (action, state, dispatch) => {
     mdmsRes.MdmsRes.tenant.citymodule.find(item => {
       if (item.code === "TL") return true;
     });
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.common-masters.citiesByModule.TL",
-      tenants
-    )
-  );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.common-masters.citiesByModule.TL",
+  //     tenants
+  //   )
+  // );
   try {
-    /*Mseva 1.0 */
-    // let data =
-    //   response &&
-    //   response.Licenses.map(item => ({
-    //     [get(textToLocalMapping, "Application No")]:
-    //       item.applicationNumber || "-",
-    //     [get(textToLocalMapping, "License No")]: item.licenseNumber || "-",
-    //     [get(textToLocalMapping, "Trade Name")]: item.tradeName || "-",
-    //     [get(textToLocalMapping, "Owner Name")]:
-    //       item.tradeLicenseDetail.owners[0].name || "-",
-    //     [get(textToLocalMapping, "Application Date")]:
-    //       convertEpochToDate(item.applicationDate) || "-",
-    //     tenantId: item.tenantId,
-    //     [get(textToLocalMapping, "Status")]:
-    //       get(textToLocalMapping, item.status) || "-"
-    //   }));
-
-    // dispatch(
-    //   handleField(
-    //     "home",
-    //     "components.div.children.applyCard.children.searchResults",
-    //     "props.data",
-    //     data
-    //   )
-    // );
     /*Mseva 2.0 */
-
-    if (response && response.Licenses && response.Licenses.length > 0) {
-      dispatch(prepareFinalObject("searchResults", response.Licenses));
+    console.log(1, response)
+    console.log(2, response.meterReadings)
+    if (response && response.meterReadings && response.meterReadings.length > 0) {
+      dispatch(prepareFinalObject("consumptionDetails", response.meterReadings));
       dispatch(
-        prepareFinalObject("myApplicationsCount", response.Licenses.length)
+        prepareFinalObject("consumptionDetailsCount", response.meterReadings.length)
       );
     }
   } catch (error) {

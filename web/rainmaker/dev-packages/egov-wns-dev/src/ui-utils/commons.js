@@ -80,8 +80,26 @@ export const getSearchResults = async queryObject => {
     }
 };
 
+export const fetchBill = async queryObject => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill",
+            "",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
 export const getConsumptionDetails = async queryObject => {
-    console.log('queryObject' + queryObject);
     try {
         const response = await httpRequest(
             "post",

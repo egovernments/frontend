@@ -28,22 +28,22 @@ export const getOwner = () => {
             }
         },
         ownerCardContainer: getCommonContainer({
-            ownerName: {
-                ...getLabelWithValue(
-                    {
-                        labelName: "Name",
-                        labelKey: "WS_OWN_DETAIL_NAME"
-                    }
-                )
-            },
-            CorrespondenceAddress: {
-                ...getLabelWithValue(
-                    {
-                        labelName: "CorrespondenceAddress",
-                        labelKey: "WS_OWN_DETAIL_CROSADD"
-                    })
-            },
-
-        })
-    });
+            ownerName: getLabelWithValue(
+                {
+                    labelKey: "WS_OWN_DETAIL_NAME"
+                },
+                {
+                    jsonPath: "WaterConnection[0].property.owners[0].name"
+                }
+            ),
+            correspondenceAddress: getLabelWithValue(
+                {
+                    labelKey: "WS_OWN_DETAIL_CROSADD"
+                },
+                {
+                    jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress"
+                }
+            )
+        }),
+    })
 };

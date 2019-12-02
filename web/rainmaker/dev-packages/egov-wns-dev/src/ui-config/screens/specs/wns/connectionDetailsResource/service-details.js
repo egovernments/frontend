@@ -20,9 +20,9 @@ const gotoCreatePage = (state, dispatch) => {
 };
 
 
-export const getServiceDetails = (isEditable = true) => {
-const tenantId = JSON.parse(getUserInfo()).tenantId
-const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+export const getServiceDetails = () => {
+  const tenantId = JSON.parse(getUserInfo()).tenantId
+  const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -39,37 +39,6 @@ const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
           ...getCommonSubHeader({
             labelKey: "WS_COMMON_SERV_DETAIL"
           })
-        },
-        editSection: {
-          componentPath: "Button",
-          props: {
-            color: "primary"
-          },
-          visible: isEditable,
-          gridDefination: {
-            xs: 12,
-            sm: 2,
-            align: "right"
-          },
-          children: {
-            editIcon: {
-              uiFramework: "custom-atoms",
-              componentPath: "Icon",
-              props: {
-                iconName: "edit"
-              }
-            },
-            buttonLabel: getLabel({
-              labelName: "Edit",
-              labelKey: "TL_SUMMARY_EDIT"
-            })
-          },
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 0);
-            }
-          }
         }
       }
     },
@@ -136,7 +105,9 @@ const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
         {
           labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
         },
-        { jsonPath: "WaterConnection[0].waterSubSource" }
+        {
+          jsonPath: "WaterConnection[0].waterSubSource"
+        }
       ),
       editSection: {
         componentPath: "Button",
@@ -146,12 +117,12 @@ const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
             margin: "-16px"
           }
         },
+        visible: true,
         gridDefination: {
           xs: 12,
           sm: 12,
           align: "left"
         },
-        visible: isEditable,
         children: {
           buttonLabel: getLabel({
             labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL"
@@ -160,7 +131,7 @@ const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
         onClickDefination: {
           action: "page_change",
           // path: `/wns/meter-reading`
-          path: `/wns/meter-reading/pay?connectionNos=${connectionNumber}&tenantId=${tenantId}`
+          path: `/wns/meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
           // action: "condition",
           // callBack: ""
         }

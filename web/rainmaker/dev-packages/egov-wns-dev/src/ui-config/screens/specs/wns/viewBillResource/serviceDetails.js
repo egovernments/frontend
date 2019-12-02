@@ -34,69 +34,79 @@ export const getService = () => {
             },
         },
         serviceCardContainer: getCommonContainer({
-            serviceType: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_SERV_TYPE"
-                    }
-                )
-            },
-            propertyUsage: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
-                    },
-                )
-            },
-            connectionType: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_CONN_TYPE"
-                    })
-            },
+            serviceType: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_SERV_TYPE"
+                },
+                {
+                    jsonPath: "WaterConnection[0].service"
+                }
+            ),
+            propertyUsage: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
+                },
+                {
+                    jsonPath: "WaterConnection[0].propertyUsage"
+                },
+            ),
+            connectionType: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_CONN_TYPE"
+                },
+                {
+                    jsonPath: "WaterConnection[0].connectionType"
+                }
+            ),
 
-            meterId: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_METER_ID"
-                    },
-                )
-            },
-            meterStatus: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_METER_STAT"
-                    },
-                )
-            },
-             meterReadingDate: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_METER_READ_DATE_LABEL"
-                    },
-                )
-            },
-            consumption: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_CONSUMP"
-                    },
-                )
-            },
-             currentMeterReading: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_CUR_METER_READ"
-                    },
-                )
-            },
-             lastMeterReading: {
-                ...getLabelWithValue(
-                    {
-                        labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
-                    },
-                )
-            }
+            meterId: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_METER_ID"
+                },
+                {
+                    jsonPath: "WaterConnection[0].meterId"
+                }
+            ),
+            meterStatus: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_METER_STAT"
+                },
+                {
+                    jsonPath: "WaterConnection[0].meterStatus"
+                }
+            ),
+            meterReadingDate: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_METER_READ_DATE_LABEL"
+                },
+                {
+                    jsonPath: "WaterConnection[0].meterReadingDate"
+                }
+            ),
+            consumption: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_CONSUMP"
+                },
+                {
+                    jsonPath: "WaterConnection[0].consumption"
+                }
+            ),
+            currentMeterReading: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_CUR_METER_READ"
+                },
+                {
+                    jsonPath: "WaterConnection[0].currentMeterReading"
+                }
+            ),
+            lastMeterReading: getLabelWithValue(
+                {
+                    labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
+                },
+                {
+                    jsonPath: "WaterConnection[0].lastMeterReading"
+                }
+            )
         })
 
     })
