@@ -24,7 +24,7 @@ class MyConnections extends React.Component {
   };
 
   render() {
-    const { myConnectionResults, onActionClick, classes } = this.props;
+    const { myConnectionDue, myConnectionResults, onActionClick, classes } = this.props;
     return (
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
@@ -142,7 +142,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item xs={3}>
                           <Label
-                            labelName="0"
+                            labelName={myConnectionDue}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
@@ -184,8 +184,13 @@ const mapStateToProps = state => {
     "myConnectionResults",
     []
   );
+  const myConnectionDue = get(
+    state.screenConfiguration.preparedFinalObject,
+    "myConnectionDue",
+    []
+  );
   const screenConfig = get(state.screenConfiguration, "screenConfig");
-  return { screenConfig, myConnectionResults };
+  return { screenConfig, myConnectionResults, myConnectionDue };
 };
 
 const mapDispatchToProps = dispatch => {

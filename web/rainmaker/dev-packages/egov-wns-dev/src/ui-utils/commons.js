@@ -104,7 +104,26 @@ export const getMyConnectionResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS-CON-001&tenantId=pb",
+            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS-CON-007&tenantId=pb",
+            "",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+// api call to get my connection details Due 
+export const getMyConnectionDueResults = async queryObject => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?tenantId=pb&consumerCode=WS-CON-007&businessService=WS",
             "",
             queryObject
         );
