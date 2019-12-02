@@ -98,6 +98,25 @@ export const fetchBill = async queryObject => {
         );
     }
 };
+// api call to get my connection details 
+export const getMyConnectionResults = async queryObject => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS-CON-001&tenantId=pb",
+            "",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
 
 export const getConsumptionDetails = async queryObject => {
     try {
