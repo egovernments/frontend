@@ -118,7 +118,7 @@ export const getMyConnectionResults = async queryObject => {
         );
     }
 };
-// api call to get my connection details Due 
+// api call to get my connection details Due
 export const getMyConnectionDueResults = async queryObject => {
     try {
         const response = await httpRequest(
