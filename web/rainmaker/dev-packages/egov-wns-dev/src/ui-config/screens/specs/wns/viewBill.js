@@ -23,8 +23,8 @@ import {
   getDialogButton
 } from "../utils";
 
-import { footerReview } from "./viewBillResource/footer";
-import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
+// import { footerReview } from "./viewBillResource/footer";
+// import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -167,82 +167,82 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
 
 const beforeInitFn = async (action, state, dispatch, consumerCode) => {
   //Search details for given application Number
-  if (consumerCode) {
-    !getQueryArg(window.location.href, "edited") &&
-      (await searchResults(action, state, dispatch, consumerCode));
+  // if (consumerCode) {
+  //   !getQueryArg(window.location.href, "edited") &&
+  //     (await searchResults(action, state, dispatch, consumerCode));
 
-    // const status = getTransformedStatus(
-    //   get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].status")
-    // );
-    const status = get(
-      state,
-      "screenConfiguration.preparedFinalObject.WaterConnection[0].status"
-    );
+  //   // const status = getTransformedStatus(
+  //   //   get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].status")
+  //   // );
+  //   const status = get(
+  //     state,
+  //     "screenConfiguration.preparedFinalObject.WaterConnection[0].status"
+  //   );
 
-    let data = get(state, "screenConfiguration.preparedFinalObject");
+  //   let data = get(state, "screenConfiguration.preparedFinalObject");
 
-    const obj = setStatusBasedValue(status);
+  //   const obj = setStatusBasedValue(status);
 
-    // Get approval details based on status and set it in screenconfig
+  //   // Get approval details based on status and set it in screenconfig
 
-    if (
-      status === "APPROVED" ||
-      status === "REJECTED" ||
-      status === "CANCELLED"
-    ) {
-      set(
-        action,
-        "screenConfig.components.div.children.viewBill.children.cardContent.children.approvalDetails.visible",
-        true
-      );
+  //   if (
+  //     status === "APPROVED" ||
+  //     status === "REJECTED" ||
+  //     status === "CANCELLED"
+  //   ) {
+  //     set(
+  //       action,
+  //       "screenConfig.components.div.children.viewBill.children.cardContent.children.approvalDetails.visible",
+  //       true
+  //     );
 
-      if (get(data, "WaterConnection[0].tradeLicenseDetail.verificationDocuments")) {
-        await setDocuments(
-          data,
-          "WaterConnection[0].tradeLicenseDetail.verificationDocuments",
-          "WaterConnectionTemp[0].verifyDocData",
-          dispatch
-        );
-      } else {
-        dispatch(
-          handleField(
-            "search-preview",
-            "components.div.children.viewBill.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
-            "visible",
-            false
-          )
-        );
-      }
-    } else {
-      set(
-        action,
-        "screenConfig.components.div.children.viewBill.children.cardContent.children.approvalDetails.visible",
-        false
-      );
-    }
+  //     if (get(data, "WaterConnection[0].tradeLicenseDetail.verificationDocuments")) {
+  //       await setDocuments(
+  //         data,
+  //         "WaterConnection[0].tradeLicenseDetail.verificationDocuments",
+  //         "WaterConnectionTemp[0].verifyDocData",
+  //         dispatch
+  //       );
+  //     } else {
+  //       dispatch(
+  //         handleField(
+  //           "search-preview",
+  //           "components.div.children.viewBill.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
+  //           "visible",
+  //           false
+  //         )
+  //       );
+  //     }
+  //   } else {
+  //     set(
+  //       action,
+  //       "screenConfig.components.div.children.viewBill.children.cardContent.children.approvalDetails.visible",
+  //       false
+  //     );
+  //   }
 
-    const footer = footerReview(
-      action,
-      state,
-      dispatch,
-      status,
-      consumerCode,
-      tenantId
-    );
-    process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.footer", footer)
-      : set(action, "screenConfig.components.div.children.footer", {});
+  //   const footer = footerReview(
+  //     action,
+  //     state,
+  //     dispatch,
+  //     status,
+  //     consumerCode,
+  //     tenantId
+  //   );
+  //   process.env.REACT_APP_NAME === "Citizen"
+  //     ? set(action, "screenConfig.components.div.children.footer", footer)
+  //     : set(action, "screenConfig.components.div.children.footer", {});
 
-    if (status === "cancelled")
-      set(
-        action,
-        "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
-        true
-      );
+  //   if (status === "cancelled")
+  //     set(
+  //       action,
+  //       "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
+  //       true
+  //     );
 
-    setActionItems(action, obj);
-    // loadReceiptGenerationData(consumerCode, tenantId);
-  }
+  //   setActionItems(action, obj);
+  //   // loadReceiptGenerationData(consumerCode, tenantId);
+  // }
 };
 
 let titleText = "";
@@ -305,9 +305,9 @@ let headerrow = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_COMMON_WATER_BILL_HEADER"
   }),
-  headerDynamicVal: getCommonHeader({
-    labelName: `(Q3-2018-19)`,
-  }),
+  // headerDynamicVal: getCommonHeader({
+  //   labelName: `(Q3-2018-19)`,
+  // }),
   consumerCode: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",

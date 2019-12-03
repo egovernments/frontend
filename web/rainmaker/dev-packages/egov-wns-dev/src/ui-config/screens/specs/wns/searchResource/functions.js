@@ -241,6 +241,7 @@ export const searchApiCall = async (state, dispatch) => {
     // }
     response.WaterConnection[0].service = "WATER"
     response.WaterConnection[0].due = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].totalAmount : 0
+    response.WaterConnection[0].dueDate = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].expiryDate : ""
     try {
       let data = response.WaterConnection.map(item => ({
 
@@ -252,6 +253,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Status")]: item.status || "-",
         [getTextToLocalMapping("Due")]: item.due || 0,
         [getTextToLocalMapping("Address")]: item.property.address.street || "-",
+        [getTextToLocalMapping("Due Date")]: convertEpochToDate(item.dueDate) || "-",
         ["tenantId"]: JSON.parse(getUserInfo()).tenantId
         // [getTextToLocalMapping("Connection Type")]: item.connectionType || "-",
       }));
