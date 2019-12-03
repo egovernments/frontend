@@ -75,19 +75,23 @@ export const searchApiCall = async (state, dispatch) => {
     const billData = await fetchBill(queryObjectForFetchBill)
     response.WaterConnection[0].service = "WATER"
     response.WaterConnection[0].due = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].totalAmount : 0
+    response.WaterConnection[0].dueDate = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].expiryDate : ""
     try {
-      let data = response.WaterConnection.map(item => ({
+      let data = response.WaterConnection.map(item => (
+        // console.log(22222, item),
+        {
 
-        [getTextToLocalMapping("Service")]:
-          item.service || "-", //will be modified later
-        [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
-        [getTextToLocalMapping("Owner Name")]:
-          (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : "-" || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        [getTextToLocalMapping("Due")]: item.due || 0,
-        [getTextToLocalMapping("Address")]: item.property.address.street || "-",
-        ["tenantId"]: 'pb.amritsar',
-      }));
+          [getTextToLocalMapping("Service")]:
+            item.service || "-", //will be modified later
+          [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
+          [getTextToLocalMapping("Owner Name")]:
+            (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : "-" || "-",
+          [getTextToLocalMapping("Status")]: item.status || "-",
+          [getTextToLocalMapping("Due")]: item.due || 0,
+          [getTextToLocalMapping("Address")]: item.property.address.street || "-",
+          [getTextToLocalMapping("Due Date")]: convertEpochToDate(item.dueDate) || "-",
+          ["tenantId"]: 'pb.amritsar',
+        }));
 
       dispatch(
         handleField(

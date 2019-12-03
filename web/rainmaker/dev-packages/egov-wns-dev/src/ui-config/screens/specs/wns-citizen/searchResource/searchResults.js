@@ -41,6 +41,7 @@ export const searchResults = {
       getTextToLocalMapping("Address"),
       getTextToLocalMapping("Status"),
       getTextToLocalMapping("Due"),
+      getTextToLocalMapping("Due Date"),
       {
         name: getTextToLocalMapping(" "),
         options: {
