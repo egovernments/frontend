@@ -45,7 +45,7 @@ export const getServiceDetails = () => {
     viewOne: getCommonContainer({
       serviceType: getLabelWithValue(
         {
-          labelKey: "WS_SERV_DETAIL_SERV_TYPE"
+          labelKey: "WS_SERV_DETAIL_SERV_LABEL"
         },
         {
           jsonPath: "WaterConnection[0].service"
