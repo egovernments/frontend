@@ -2364,7 +2364,7 @@ export const getTextToLocalMapping = label => {
     case "Due":
       return getLocaleLabels(
         "Due",
-        "WS_COMMON_TABLE_COL_DUE_LABEL",
+        "WS_COMMON_TABLE_COL_AMT_DUE_LABEL",
         localisationLabels
       );
     case "Address":
