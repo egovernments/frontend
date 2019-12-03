@@ -1,10 +1,10 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../..//ui-utils/commons";
+import { getSearchResults, fetchBill } from "../../../../..//ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
-  getTextToLocalMapping
+  getTextToLocalMapping,
 } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
@@ -15,9 +15,9 @@ export const searchApiCall = async (state, dispatch) => {
   let queryObject = [
     {
       key: "tenantId",
-      value: JSON.parse(getUserInfo()).tenantId
+      value: "pb.amritsar"
     },
-    // { key: "offset", value: "0" }
+    { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -71,8 +71,10 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     const response = await getSearchResults(queryObject);
+    let queryObjectForFetchBill = [{ key: "tenantId", value: 'pb.amritsar' }, { key: "consumerCode", value: response.WaterConnection[0].connectionNo }, { key: "businessService", value: "WS" }];
+    const billData = await fetchBill(queryObjectForFetchBill)
     response.WaterConnection[0].service = "WATER"
-    // const response = { 'Licenses': [{ "tenantId": "123", "applicationNumber": "PB-WS-AN-2019-23", "consumerNumber": 'PB-WS-CN-2019-23', "ownerName": "Satinder Pal", "status": "Active", "due": "4200","Service":'Water' }] }
+    response.WaterConnection[0].due = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].totalAmount : 0
     try {
       let data = response.WaterConnection.map(item => ({
 
@@ -82,9 +84,9 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Owner Name")]:
           (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : "-" || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
-        [getTextToLocalMapping("Due")]: (item.due !== undefined && item.due !== null) ? item.due : 0,
+        [getTextToLocalMapping("Due")]: item.due || 0,
         [getTextToLocalMapping("Address")]: item.property.address.street || "-",
-        ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
+        ["tenantId"]: 'pb.amritsar',
       }));
 
       dispatch(

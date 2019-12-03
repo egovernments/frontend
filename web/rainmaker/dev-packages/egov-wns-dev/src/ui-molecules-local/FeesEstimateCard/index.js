@@ -63,11 +63,11 @@ const styles = {
     }
 };
 
-function totalAmount(arr) {
-    return arr
-        .map(item => (item.value ? item.value : 0))
-        .reduce((prev, next) => prev + next, 0);
-}
+// function totalAmount(arr) {
+//     return arr
+//         .map(item => (item.value ? item.value : 0))
+//         .reduce((prev, next) => prev + next, 0);
+// }
 
 function FeesEstimateCard(props) {
     const {
@@ -75,296 +75,204 @@ function FeesEstimateCard(props) {
         estimate,
         optionSelected = "Partial_Amount"
     } = props;
-    // const { taxHeadEstimates, totalAmount } = estimationDetails[0] || {};
-    // const { intrest, penalty, rebate } = importantDates;
-
-    const total = totalAmount(estimate.fees);
+    let sortedArray = []
+    const billingPeriod = estimate.fees.length > 0 ? new Date(estimate.fees[0].fromPeriod).toLocaleString().slice(0, 8) + " - " + new Date(estimate.fees[0].toPeriod).toLocaleString().slice(0, 8) : " "
+    if (estimate.fees.length > 0) {
+        sortedArray = estimate.fees[0].billAccountDetails.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+    }
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
-   
-    return ( <
-        Grid container >
-        <
-        Grid xs = {
-            12
-        }
-        sm = {
-            12
-        } >
-        <
-        Typography variant = "body2"
-        align = "right"
-        className = "tl-total-amount-text" >
-        <
-        LabelContainer labelName = "Total Amount"
-        labelKey = "WS_COMMON_TOTAL_AMT" /
-        >
-        <
-        /Typography> <
-        Typography className = {
-            totalHeadClassName
-        }
-        align = "right" >
-        Rs {
-            5500
-        } <
-        /Typography> < /
-        Grid > <
-        Grid xs = {
-            12
-        }
-        sm = {
-            7
-        } > {
-            /* <Typography variant="subheading">{estimate.header}</Typography> */
-        } <
-        div style = {
-            {
-                marginTop: 48,
-                maxWidth: 600
-            }
-        } >
-        <
-        Grid container > {
-            estimate.fees.map((fee, key) => {
-                let tooltip = fee.info ? ( <
-                    Tooltip val = {
-                        fee.info
-                    }
-                    icon = {
-                        "info_circle"
-                    }
-                    />
-                ) : (
-                    ""
-                );
-                let textLeft = fee.name ? ( <
-                    Grid container xs = {
-                        8
-                    } >
-                    <
-                    LabelContainer labelName = {
-                        fee.name.labelName
-                    }
-                    labelKey = {
-                        fee.name.labelKey
-                    }
-                    style = {
-                        styles.taxStyles
-                    }
-                    /> { tooltip } < /
-                    Grid >
-                ) : ( <
-                    Grid xs = {
-                        8
-                    }
-                    />
-                );
-                let textRight = fee.value ? ( <
-                    Grid xs = {
-                        4
-                    }
-                    align = "right" >
-                    <
-                    LabelContainer labelName = {
-                        fee.value
-                    }
-                    labelKey = {
-                        fee.value
-                    }
-                    style = {
-                        styles.taxStyles
-                    }
-                    /> < /
-                    Grid >
-                ) : ( <
-                    Grid xs = {
-                        4
-                    }
-                    align = "right" >
-                    <
-                    LabelContainer labelName = {
-                        0
-                    }
-                    labelKey = {
-                        0
-                    }
-                    style = {
-                        styles.taxStyles
-                    }
-                    /> < /
-                    Grid >
-                );
-                return ( <
-                    Grid key = {
-                        key
-                    }
-                    container > {
-                        textLeft
-                    } {
-                        textRight
-                    } <
-                    /Grid>
-                );
-            })
-        } <
-        /Grid> <
-        Divider style = {
-            {
-                marginBottom: 16
-            }
-        }
-        /> <
-        Grid container >
-        <
-        Grid item xs = {
-            6
-        } >
-        <
-        Typography variant = "body2" >
-        <
-        LabelContainer labelKey = "WS_COMMON_TOTAL_AMT" /
-        >
-        <
-        /Typography> < /
-        Grid > <
-        Grid item xs = {
-            6
-        }
-        align = "right"
-        style = {
-            {
-                paddingRight: 0
-            }
-        }
-        className = "tl-application-table-total-value" >
-        <
-        Typography variant = "body2" > {
-            total
-        } < /Typography> < /
-        Grid > <
-        /Grid> < /
-        div > <
-        /Grid> <
-        Grid xs = {
-            12
-        }
-        sm = {
-            1
-        } > < /Grid> <
-        Grid xs = {
-            12
-        }
-        sm = {
-            4
-        } > {
-            /* <Typography
-                      variant="body2"
-                      align="right"
-                      className="tl-total-amount-text"
-                    >
-                      <LabelContainer
-                        labelName="Total Amount"
-                        labelKey="WS_COMMON_TOTAL_AMT"
-                      />
-                    </Typography>
-                    <Typography className={totalHeadClassName} align="right">
-                      Rs {5500}
-                    </Typography> */
-        } {
-            /* {estimate.extra && estimate.extra.length !== 0 ? ( */
-        } {
-            /* <Card className={classes.whiteCard}> */
-        } {
-            /* {estimate.extra.map((item, key) => {
-                        let textLeft, textRight;
-                        let colLeft = item.textRight ? 6 : 12;
-                        let colRight = item.textLeft ? 6 : 12;
-                        if (!item.textLeft) { */
-        } {
-            /* // textLeft = (
-                        //   <Grid xs={colLeft}>
-                        //     <Typography>Due Date</Typography>
-                        //   </Grid>
-                        // );
-                        // } else { */
-        } {
-            /* //   textLeft = <Grid xs={colLeft} />;
-                        // }
-                        // if (item.textRight) { */
-        } {
-            /* // textRight = (
-                        //   <Grid xs={colRight}>
-                        //     <Typography>01/01/2019</Typography>
-                        //   </Grid>
-                        // );
-                        // } else { */
-        } {
-            /* //   textRight = <Grid xs={colRight} />;
-                        // }
-                      //   return (
-                      //     <Grid container>
-                      //       <Grid xs={6}>
-                      //         <Typography>Due Date</Typography>
-                      //       </Grid>
-                      //       <Grid xs={6}>
-                      //         <Typography>01/01/2019</Typography>
-                      //       </Grid>
-                      //     </Grid>
-                      //   );
-                      // })} */
-        }
+    const totalAmount = estimate.fees.length > 0 ? estimate.fees[0].totalAmount : 0
+    const dueDate = estimate.fees.length > 0 ? estimate.fees[0].expiryDate : 0
 
-        <
-        Card className = {
-            classes.whiteCard
-        }
-        style = {
-            {
-                backgroundColor: '#fff',
-                boxShadow: "none"
-            }
-        } >
-        <
-        Grid container >
-        <
-        Grid xs = {
-            12
-        }
-        style = {
-            {
-                marginBottom: 16,
-                fontSize: '16px',
-                fontWeight: 500
-            }
-        } >
-        <
-        LabelContainer labelKey = "WS_VIEW_BILL_IMP_DATE_HEADER" /
-        >
-        <
-        /Grid> <
-        Grid xs = {
-            6
-        } >
-        <
-        Typography > < LabelContainer labelKey = "WS_VIEW_BILL_DUE_DATE_LABEL" > < /LabelContainer></Typography >
-        <
-        /Grid> <
-        Grid xs = {
-            6
-        }
-        align = "right" >
-        <
-        Typography > 01 / 01 / 2019 < /Typography> < /
-        Grid > <
-        /Grid> < /
-        Card > {
-            /* // ) : null} */
-        } <
-        /Grid>
-
-        <
-        /Grid >
-    );
+    return (
+        <Grid container >
+            <Grid xs={12} sm={12}>
+                <Typography variant="body2"
+                    align="right"
+                    className="tl-total-amount-text" >
+                    <LabelContainer labelName="Total Amount" labelKey="WS_COMMON_TOTAL_AMT" />
+                </Typography>
+                <Typography className={totalHeadClassName} align="right" >Rs {totalAmount}</Typography>
+            </Grid>
+            <Grid xs={12} sm={7}>
+                {/* <Typography variant="subheading">{estimate.header}</Typography> */}
+                <div style={{ marginTop: 48, maxWidth: 600 }}>
+                    <Grid container >
+                        <Grid item xs={6}>
+                            <Typography variant="body2" >
+                                <LabelContainer labelKey="WS_BILLING_PERIOD" />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}
+                            align="right"
+                            style={styles.taxStyles}
+                            className="tl-application-table-total-value" >
+                            <Typography variant="body2">
+                                {billingPeriod}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid container> {
+                        sortedArray.map((fee, key) => {
+                            // // let tooltip = (
+                            // //     <Tooltip val={fee.info}
+                            // //         icon={"info_circle"} />)
+                            // // // ) : (
+                            // //         ""
+                            // //     );
+                            // let textLeft = fee.taxHeadCode ? (
+                            //     <Grid container xs={8} >
+                            //         <LabelContainer labelName={fee.taxHeadCode}
+                            //             labelKey={fee.taxHeadCode}
+                            //             style={styles.taxStyles}
+                            //         />
+                            //     </Grid >
+                            // ) : (
+                            //         <Grid xs={8} />
+                            //     );
+                            // let textRight = fee.taxHeadCode ? (
+                            //     <Grid xs={4}
+                            //         align="right" >
+                            //         <LabelContainer
+                            //             labelName={fee.taxHeadCode}
+                            //             labelKey={fee.taxHeadCode}
+                            //             style={styles.taxStyles} />
+                            //     </Grid >
+                            // ) : (
+                            //         <Grid xs={4}
+                            //             align="right" >
+                            //             <LabelContainer
+                            //                 labelName={0}
+                            //                 labelKey={0}
+                            //                 style={styles.taxStyles} />
+                            //         </Grid>
+                            //     );
+                            // return (
+                            //     <Grid key={key} container>
+                            //         {textLeft}
+                            //         {textRight}
+                            //     </Grid>
+                            // );
+                            return (
+                                <Grid container >
+                                    <Grid item xs={6}>
+                                        <Typography variant="body2" >
+                                            <LabelContainer labelKey={fee.taxHeadCode} />
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6}
+                                        align="right"
+                                        style={styles.taxStyles}
+                                        className="tl-application-table-total-value" >
+                                        <Typography variant="body2">
+                                            Rs {fee.amount}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            )
+                        })
+                    }
+                    </Grid>
+                    <Divider style={{ marginBottom: 16 }} />
+                    <Grid container >
+                        <Grid item xs={6}>
+                            <Typography variant="body2" >
+                                <LabelContainer labelKey="WS_COMMON_TOTAL_AMT" />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}
+                            align="right"
+                            style={{ paddingRight: 0 }}
+                            className="tl-application-table-total-value" >
+                            <Typography variant="body2">
+                                Rs {totalAmount}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Grid>
+            <Grid xs={12}
+                sm={1} >
+            </Grid>
+            <Grid xs={12} sm={4} >
+                {
+                    /* <Typography
+                              variant="body2"
+                              align="right"
+                              className="tl-total-amount-text"
+                            >
+                              <LabelContainer
+                                labelName="Total Amount"
+                                labelKey="WS_COMMON_TOTAL_AMT"
+                              />
+                            </Typography>
+                            <Typography className={totalHeadClassName} align="right">
+                              Rs {5500}
+                            </Typography> */
+                } {
+                    /* {estimate.extra && estimate.extra.length !== 0 ? ( */
+                } {
+                    /* <Card className={classes.whiteCard}> */
+                } {
+                    /* {estimate.extra.map((item, key) => {
+                                let textLeft, textRight;
+                                let colLeft = item.textRight ? 6 : 12;
+                                let colRight = item.textLeft ? 6 : 12;
+                                if (!item.textLeft) { */
+                } {
+                    /* // textLeft = (
+                                //   <Grid xs={colLeft}>
+                                //     <Typography>Due Date</Typography>
+                                //   </Grid>
+                                // );
+                                // } else { */
+                } {
+                    /* //   textLeft = <Grid xs={colLeft} />;
+                                // }
+                                // if (item.textRight) { */
+                } {
+                    /* // textRight = (
+                                //   <Grid xs={colRight}>
+                                //     <Typography>01/01/2019</Typography>
+                                //   </Grid>
+                                // );
+                                // } else { */
+                } {
+                    /* //   textRight = <Grid xs={colRight} />;
+                                // }
+                              //   return (
+                              //     <Grid container>
+                              //       <Grid xs={6}>
+                              //         <Typography>Due Date</Typography>
+                              //       </Grid>
+                              //       <Grid xs={6}>
+                              //         <Typography>01/01/2019</Typography>
+                              //       </Grid>
+                              //     </Grid>
+                              //   );
+                              // })} */
+                }
+                <Card className={classes.whiteCard}
+                    style={{ backgroundColor: '#fff', boxShadow: "none" }} >
+                    <Grid container >
+                        <Grid xs={12}
+                            style={{ marginBottom: 16, fontSize: '16px', fontWeight: 500 }} >
+                            <LabelContainer labelKey="WS_VIEW_BILL_IMP_DATE_HEADER" />
+                        </Grid>
+                        <Grid xs={6} >
+                            <Typography> <LabelContainer labelKey="WS_VIEW_BILL_DUE_DATE_LABEL"></LabelContainer>
+                            </Typography >
+                        </Grid>
+                        <Grid xs={6}
+                            align="right" >
+                            <Typography>{new Date(dueDate).toLocaleDateString().slice(0, 10)}</Typography>
+                        </Grid>
+                    </Grid>
+                </Card >
+                {/* // ) : null} */}
+            </Grid>
+        </Grid>
+    )
 }
 
 // FeesEstimateCard.propTypes = {

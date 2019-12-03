@@ -15,7 +15,7 @@ const addMeterReading = (state, dispatch) => {
     showHideCard(true, dispatch)
 };
 
-const queryValueAN = getQueryArg(window.location.href, "connectionNumber");
+const queryValueAN = getQueryArg(window.location.href, "connectionNos");
 console.log('123',queryValueAN)
 const showHideCard = (booleanHideOrShow, dispatch) => {
     dispatch(
@@ -49,10 +49,10 @@ const header = getCommonContainer({
 const screenConfig = {
     uiFramework: "material-ui",
     name: "meter-reading",
-    // beforeInitScreen: (action, state, dispatch) => {
-    //   fetchData(action, state, dispatch);
-    //   return action;
-    // },
+    beforeInitScreen: (action, state, dispatch) => {
+      fetchData(action, state, dispatch);
+      return action;
+    },
     components: {
         div: {
             uiFramework: "custom-atoms",

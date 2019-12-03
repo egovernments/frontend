@@ -56,8 +56,8 @@ export const searchResults = {
         name: getTextToLocalMapping(" "),
         options: {
           filter: false,
-          customBodyRender: value => (
-            <Link to="viewBill" style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+          customBodyRender: (value, data) => (
+            <Link to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
               Pay now
             </Link>
           )
@@ -65,12 +65,6 @@ export const searchResults = {
       },
       {
         name: "tenantId",
-        options: {
-          display: false
-        }
-      },
-      {
-        name: "connectionType",
         options: {
           display: false
         }

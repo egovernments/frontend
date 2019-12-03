@@ -24,6 +24,7 @@ import {
 } from "../utils";
 
 import { footerReview } from "./viewBillResource/footer";
+import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -40,12 +41,10 @@ import { getOwner } from "./viewBillResource/ownerDetails";
 import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
 
-
-const tenantId = JSON.parse(getUserInfo()).tenantId;
 let consumerCode = getQueryArg(window.location.href, "connectionNumber");
+const id = getQueryArg(window.location.href, "tanentId")
+const tenantId = 'pb.amritsar'
 let headerSideText = { word1: "", word2: "" };
-let data;
-let payload;
 const setDocuments = async (
   payload,
   sourceJsonPath,
@@ -111,27 +110,17 @@ const getTradeTypeSubtypeDetails = payload => {
 };
 
 const searchResults = async (action, state, dispatch, consumerCode) => {
-  let queryObjectForFetchBill = [
-    { key: "tenantId", value: tenantId },
-    { key: "consumerCode", value: consumerCode },
-    { key: "businessService", value: "WS" }
-  ];
-  let queryObjForSearch = [
-    { key: "tenantId", value: tenantId },
-    { key: "connectionNumber", value: consumerCode }
-  ]
-  let queryObjectForConsumptionDetails = [
-    { key: "tenantId", value: tenantId },
-    { key: "connectionNos", value: consumerCode }
-  ]
+  let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: consumerCode }, { key: "businessService", value: "WS" }];
+  let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: consumerCode }]
+  let queryObjectForConsumptionDetails = [{ key: "tenantId", value: tenantId }, { key: "connectionNos", value: consumerCode }]
   let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails)
-  data = await fetchBill(queryObjectForFetchBill)
-  payload = await getSearchResults(queryObjForSearch);
-  let consumption = meterReadingsData.meterReadings[0].currentReading - meterReadingsData.meterReadings[0].lastReading
+  let data = await fetchBill(queryObjectForFetchBill)
+  let payload = await getSearchResults(queryObjForSearch);
   payload.WaterConnection[0].service = "WATER"
-  payload.WaterConnection[0].consumption = consumption
-  payload.WaterConnection[0].currentMeterReading = meterReadingsData.meterReadings[0].currentReading
-  payload.WaterConnection[0].lastMeterReading = meterReadingsData.meterReadings[0].lastReading
+  payload.WaterConnection[0].consumption = meterReadingsData.meterReadings.length > 0 ? meterReadingsData.meterReadings[0].currentReading - meterReadingsData.meterReadings[0].lastReading : 0
+  payload.WaterConnection[0].currentMeterReading = meterReadingsData.meterReadings.length > 0 ? meterReadingsData.meterReadings[0].currentReading : 0
+  payload.WaterConnection[0].lastMeterReading = meterReadingsData.meterReadings.length > 0 ? meterReadingsData.meterReadings[0].lastReading : 0
+  // let billingPeriod = new Date(data.Bill[0].billDetails[0].fromPeriod).toLocaleDateString().slice(0, 10) + " - " + new Date(data.Bill[0].billDetails[0].toPeriod).toLocaleDateString().slice(0, 10)
   headerSideText = getHeaderSideText(
     get(payload, "WaterConnection[0].status"),
     get(payload, "WaterConnection[0].licenseNumber")
@@ -157,20 +146,12 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
     dispatch
   );
   let sts = getTransformedStatus(get(payload, "WaterConnection[0].status"));
-  payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-  data && dispatch(prepareFinalObject("Bill[0]", data.Bill[0]));
-  payload &&
-    dispatch(
-      prepareFinalObject(
-        "WaterConnectionTemp[0].tradeDetailsResponse",
-        getTradeTypeSubtypeDetails(payload)
-      )
-    );
-  const BillData = data.Bill[0];
+  dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+  dispatch(prepareFinalObject("billData", data.Bill[0]));
   const fetchFromReceipt = sts !== "pending_payment";
   createEstimateData(
-    BillData,
-    "Bill[0].estimateCardData",
+    data,
+    "screenConfiguration.preparedFinalObject.billData.billDetails",
     dispatch,
     {},
     fetchFromReceipt
@@ -320,7 +301,7 @@ const setStatusBasedValue = status => {
   }
 };
 
-const headerrow = getCommonContainer({
+let headerrow = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_COMMON_WATER_BILL_HEADER"
   }),
@@ -349,7 +330,7 @@ const estimate = getCommonGrayCard({
     },
   ),
   estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "Bill[0].estimateCardData"
+    sourceJsonPath: "billData.billDetails"
   }),
 });
 
@@ -385,14 +366,13 @@ export const viewBill = getCommonCard({
   estimate,
   serviceDetails,
   propertyDetails,
-  ownerDetails
+  ownerDetails,
 });
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "view-bill",
   beforeInitScreen: (action, state, dispatch) => {
-    const tenantId = JSON.parse(getUserInfo()).tenantId;
     consumerCode = getQueryArg(window.location.href, "connectionNumber");
     // To set the application no. at the  top
     set(

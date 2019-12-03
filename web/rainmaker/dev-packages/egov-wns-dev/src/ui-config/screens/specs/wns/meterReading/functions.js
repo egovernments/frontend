@@ -12,6 +12,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../ui-utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -19,6 +20,9 @@ export const searchApiCall = async (state, dispatch) => {
     {
       key: "tenantId",
       value: JSON.parse(getUserInfo()).tenantId
+    },
+    {
+      "connectionNos": getQueryArg(window.location.href, "connectionNos")
     },
     { key: "offset", value: "0" }
   ];
@@ -176,6 +180,17 @@ const getMdmsData = async () => {
   }
 };
 export const fetchData = async (action, state, dispatch) => {
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: "pb.amritsar"
+    },
+    {
+      key: "connectionNos",
+      value: getQueryArg(window.location.href, "connectionNos")
+    },
+    { key: "offset", value: "0" }
+  ];
   const response = await getConsumptionDetails(queryObject);
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =

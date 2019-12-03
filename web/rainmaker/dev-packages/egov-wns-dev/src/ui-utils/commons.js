@@ -104,7 +104,7 @@ export const getMyConnectionResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS-CON-007&tenantId=pb",
+            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022&tenantId=pb.amritsar",
             "",
             queryObject
         );
@@ -123,7 +123,7 @@ export const getMyConnectionDueResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?tenantId=pb&consumerCode=WS-CON-007&businessService=WS",
+            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?tenantId=pb.amritsar&consumerCode=WS/107/2019-20/000022&businessService=WS",
             "",
             queryObject
         );
