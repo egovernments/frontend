@@ -140,10 +140,7 @@ const Notifications = ({ notifications = [], history }) => {
     );
   };
 
-  return notifications && notifications.length > 0 && <div>{notifications.map((notification, index) => renderUpdate(notification, index))}</div>;
-  //  : (
-  //   <div className="no-assessment-message-cont"><Label label="EMPTY_NOTIFICATIONS" /></div>
-  // );
+  return <div>{typeof notifications==='object' && notifications.map((notification, index) => renderUpdate(notification, index))}</div>;
 };
 
 export default Notifications;
