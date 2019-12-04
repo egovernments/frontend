@@ -104,10 +104,24 @@ export const getMyConnectionResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022&tenantId=pb.amritsar",
+            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022",
             "",
             queryObject
         );
+        const dueResponse = await response.WaterConnection.map(item => {
+            const data = httpRequest(
+                "post",
+                `http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?consumerCode=${item.connectionNo}&tenantId=${item.property.tenantId}&businessService=WS`,
+                "",
+                // queryObject
+            );
+
+            const resolvedData = Promise.resolve(data)
+            resolvedData.then(function (value) {
+                item.due = value.Bill[0].billDetails.length > 0 ? value.Bill[0].billDetails[0].totalAmount : 0
+            });
+            return data;
+        });
         return response;
     } catch (error) {
         store.dispatch(
@@ -118,25 +132,25 @@ export const getMyConnectionResults = async queryObject => {
         );
     }
 };
-// api call to get my connection details Due
-export const getMyConnectionDueResults = async queryObject => {
-    try {
-        const response = await httpRequest(
-            "post",
-            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?tenantId=pb.amritsar&consumerCode=WS/107/2019-20/000022&businessService=WS",
-            "",
-            queryObject
-        );
-        return response;
-    } catch (error) {
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
-};
+// // api call to get my connection details Due
+// export const getMyConnectionDueResults = async queryObject => {
+//     try {
+//         const response = await httpRequest(
+//             "post",
+//             "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?tenantId=pb.amritsar&consumerCode=WS/107/2019-20/000022&businessService=WS",
+//             "",
+//             queryObject
+//         );
+//         return response;
+//     } catch (error) {
+//         store.dispatch(
+//             toggleSnackbar(
+//                 true, { labelName: error.message, labelCode: error.message },
+//                 "error"
+//             )
+//         );
+//     }
+// };
 
 export const getConsumptionDetails = async queryObject => {
     try {
