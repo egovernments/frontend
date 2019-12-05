@@ -1,4 +1,4 @@
-import { getMyConnectionResults, getMyConnectionDueResults } from "../../../../../ui-utils/commons";
+import { getPastPaymentDetials } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
@@ -11,12 +11,11 @@ export const fetchData = async (action, state, dispatch) => {
             key: "tenantId",
             value: JSON.parse(getUserInfo()).tenantId
         }]
-    const response = await getMyConnectionResults(queryObject);
-    // const billResponse = await getMyConnectionDueResults();
-    try {
+    const response = await getPastPaymentDetials(queryObject);
+     try {
         /*Mseva 2.0 */
         if (response && response.WaterConnection && response.WaterConnection.length > 0) {
-            dispatch(prepareFinalObject("myConnectionResults", response.WaterConnection));
+            dispatch(prepareFinalObject("pastPaymentsResults", response.WaterConnection));
             dispatch(prepareFinalObject("myConnectionCount", response.WaterConnection.length));
         }
     } catch (error) {
