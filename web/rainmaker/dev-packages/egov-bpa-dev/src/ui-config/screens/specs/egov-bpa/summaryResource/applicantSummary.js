@@ -76,7 +76,7 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+                "BPAs[0].BPADetails.applicantDetails.owners[0].name"
               // callBack: value => {
               //   return value.split(".")[1];
               // }
@@ -89,7 +89,7 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+                "BPAs[0].BPADetails.applicantDetails.owners[0].correspondenceAddress"
               // callBack: value => {
               //   return value.split(".")[1];
               // }
@@ -102,7 +102,7 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+                "BPAs[0].BPADetails.applicantDetails.owners[0].mobileNumber"
               // callBack: value => {
               //   return value.split(".")[0];
               // }
@@ -115,7 +115,7 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+                "BPAs[0].BPADetails.applicantDetails.owners[0].emailId"
             }
           ),
           applicantGender: getLabelWithValue(
@@ -125,7 +125,7 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
+                "BPAs[0].BPADetails.applicantDetails.owners[0].gender"
             }
           )
         })
@@ -133,7 +133,7 @@ export const applicantSummary = getCommonGrayCard({
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+      sourceJsonPath: "BPAs[0].BPADetails.applicantDetails.owners",
       prefixSourceJsonPath:
         "children.cardContent.children.applicantContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -201,7 +201,7 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "NOC_INSTITUTION_TYPE_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        jsonPath: "BPAs[0].BPADetails.applicantDetails.ownerShipType",
         callBack: value => {
           return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
         }
@@ -214,7 +214,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName"
+          "BPAs[0].BPADetails.applicantDetails.additionalDetail.institutionName"
       }
     ),
     telephoneNumber: getLabelWithValue(
@@ -224,7 +224,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber"
+          "BPAs[0].BPADetails.applicantDetails.additionalDetail.telephoneNumber"
       }
     ),
     authorizedPersonName: getLabelWithValue(
@@ -233,7 +233,7 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "NOC_AUTHORIZED_PERSON_NAME_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+        jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].name"
       }
     ),
     designation: getLabelWithValue(
@@ -243,7 +243,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation"
+          "BPAs[0].BPADetails.applicantDetails.additionalDetail.institutionDesignation"
       }
     ),
     mobileNumber: getLabelWithValue(
@@ -253,7 +253,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+          "BPAs[0].BPADetails.applicantDetails.owners[0].mobileNumber"
       }
     ),
     authorizedEmail: getLabelWithValue(
@@ -263,7 +263,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+          "BPAs[0].BPADetails.applicantDetails.owners[0].emailId"
       }
     ),
     officialAddress: getLabelWithValue(
@@ -273,7 +273,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"
+          "BPAs[0].BPADetails.applicantDetails.owners[0].correspondenceAddress"
       }
     )
   })

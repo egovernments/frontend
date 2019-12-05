@@ -71,8 +71,8 @@ export const basicSummary = getCommonGrayCard({
         basicDetailsContainer: getCommonContainer({
           scrutinynumber: getLabelWithValue(
             {
-              labelName: "Scrutiny Number",
-              labelKey: "Scrutiny Number"
+              labelName: "Building plan scrutiny number",
+              labelKey: "Building plan scrutiny number"
             },
             {
               jsonPath: "BPAs[0].BPADetails.basicdetails.scrutinynumber",

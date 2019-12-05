@@ -119,8 +119,10 @@ export const detailsofplot = getCommonCard({
                     labelKey: "Enter Plot Area"
                 },
                 required: true,
-                // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.plotarea"
+                jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.plotArea",
+                props: {
+                    disabled: 'true'
+                  }
             })
         },
         kathaNumber: {
@@ -135,7 +137,7 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.kathanumber"
+                jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.khataNo"
             })
         },
         holdingNumber: {
@@ -165,7 +167,7 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.plotnumber"
+                jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.plotNo"
             })
         },
         cityTown: {

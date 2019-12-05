@@ -148,11 +148,11 @@ export const scrutinySummary = getCommonGrayCard({
 
                     buildingplanscrutinyapplicationnumber: getLabelWithValue(
                         {
-                            labelName: "Building permit application Number",
-                            labelKey: "Building permit application Number"
+                            labelName: "Residential",
+                            labelKey: "Residential"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.appnum",
+                            jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
                             callBack: value => {
                                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
                             }

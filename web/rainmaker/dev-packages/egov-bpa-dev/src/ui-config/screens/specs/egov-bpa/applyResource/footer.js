@@ -5,7 +5,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields } from "../../utils";
+import { getCommonApplyFooter, validateFields, getTextToLocalMapping } from "../../utils";
 // import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
@@ -13,7 +13,7 @@ import {
   createUpdateNocApplication,
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { mdmsMockJson } from '../mdmsMock';
 
 const setReviewPageRoute = (state, dispatch) => {
@@ -145,6 +145,40 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
+    const response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.floors",
+      []
+  );
+
+    let data = response.map(item => ({
+      // [getTextToLocalMapping("Application No")]:
+        "Floor Description" :
+        item.occupancies[0].floorArea || "-",
+        // [getTextToLocalMapping("Level")]:
+        "Level":
+        item.occupancies[0].deduction || "-",
+        // [getTextToLocalMapping("Occupancy/Sub Occupancy")]:
+        "Occupancy/Sub Occupancy":
+        item.occupancies[0].type || "-",
+        // [getTextToLocalMapping("Buildup Area")]:
+        "Buildup Area":
+        item.occupancies[0].builtUpArea || "-",
+        // [getTextToLocalMapping("Floor Area")]:
+        "Floor Area":
+        item.occupancies[0].floorArea || "-",
+        // [getTextToLocalMapping("Carpet Area")]:
+        "Carpet Area":
+        item.occupancies[0].carpetArea || "-"
+    }));
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
+        "props.data",
+        data
+      )
+    );
   }
 
   if (activeStep === 11) {

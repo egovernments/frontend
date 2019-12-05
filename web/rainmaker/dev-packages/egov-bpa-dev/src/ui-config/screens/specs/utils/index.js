@@ -20,6 +20,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 import { mdmsMockJson } from '../egov-bpa/mdmsMock';
+import { scrutinyDetailsMockJson } from './scrutinyDetailsMockJson';
 
 export const getCommonApplyFooter = children => {
   return {
@@ -293,7 +294,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const ownerNo = get(
       state.screenConfiguration.preparedFinalObject,
-      `FireNOCs[0].fireNOCDetails.applicantDetails.owners[${cardIndex}].mobileNumber`,
+      `BPAs[0].BPADetails.applicantDetails.owners[${cardIndex}].mobileNumber`,
       ""
     );
     if (!ownerNo.match(getPattern("MobileNo"))) {
@@ -311,13 +312,13 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
     }
     const owners = get(
       state.screenConfiguration.preparedFinalObject,
-      `FireNOCs[0].fireNOCDetails.applicantDetails.owners`,
+      `BPAs[0].BPADetails.applicantDetails.owners`,
       []
     );
     //owners from search call before modification.
     const oldOwnersArr = get(
       state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+      "BPAs[0].BPADetails.applicantDetails.owners",
       []
     );
     //Same no search on Same index
@@ -347,13 +348,13 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
         //rearrange
         dispatch(
           prepareFinalObject(
-            `FireNOCs[0].fireNOCDetails.applicantDetails.owners[${matchingOwnerIndex}].userActive`,
+            `BPAs[0].BPADetails.applicantDetails.owners[${matchingOwnerIndex}].userActive`,
             true
           )
         );
         dispatch(
           prepareFinalObject(
-            `FireNOCs[0].fireNOCDetails.applicantDetails.owners[${cardIndex}].userActive`,
+            `BPAs[0].BPADetails.applicantDetails.owners[${cardIndex}].userActive`,
             false
           )
         );
@@ -366,7 +367,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           owners.splice(cardIndex, 1);
           dispatch(
             prepareFinalObject(
-              `FireNOCs[0].fireNOCDetails.applicantDetails.owners`,
+              `BPAs[0].BPADetails.applicantDetails.owners`,
               owners
             )
           );
@@ -424,24 +425,104 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           }
           let currOwnersArr = get(
             state.screenConfiguration.preparedFinalObject,
-            "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+            "BPAs[0].BPADetails.applicantDetails.owners",
             []
           );
 
           currOwnersArr[cardIndex] = userInfo;
-          // if (oldOwnersArr.length > 0) {
-          //   currOwnersArr.push({
-          //     ...oldOwnersArr[cardIndex],
-          //     userActive: false
-          //   });
-          // }
           dispatch(
             prepareFinalObject(
-              `FireNOCs[0].fireNOCDetails.applicantDetails.owners`,
+              `BPAs[0].BPADetails.applicantDetails.owners`,
               currOwnersArr
             )
           );
         }
+      }
+    }
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "info"
+      )
+    );
+  }
+};
+
+export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
+  try {
+    const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
+    const scrutinyNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `BPAs[0].BPADetails.basicdetails.scrutinynumber`,
+      ""
+    );
+    // if (!scrutinyNo.match(getPattern("MobileNo"))) {
+    //   dispatch(
+    //     toggleSnackbar(
+    //       true,
+    //       {
+    //         labelName: "Incorrect Scrutiny Number!",
+    //         labelKey: "Incorrect Scrutiny Number!"
+    //       },
+    //       "error"
+    //     )
+    //   );
+    //   return;
+    // }
+    let payload = scrutinyDetailsMockJson;
+    payload = payload[0].body.edcrDetail;
+    console.log(payload);
+    // let payload = await httpRequest(
+    //   "post",
+    //   "/user/_search?tenantId=pb",
+    //   "_search",
+    //   [],
+    //   {
+    //     tenantId: "pb",
+    //     userName: `${scrutinyNo}`
+    //   }
+    // );
+    if (payload && payload.hasOwnProperty("length")) {
+      if (payload.length === 0) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "This mobile number is not registered!",
+              labelKey: "ERR_MOBILE_NUMBER_NOT_REGISTERED"
+            },
+            "info"
+          )
+        );
+      } else {
+        const userInfo =
+          payload &&
+          JSON.parse(JSON.stringify(payload));
+        if (userInfo && userInfo.planDetail && userInfo.planDetail.applicationDate) {
+          userInfo.planDetail.applicationDate = convertDateTimeToEpoch(userInfo.planDetail.applicationDate);
+          userInfo.lastModifiedDate = convertDateTimeToEpoch(
+            userInfo.lastModifiedDate
+          );
+          userInfo.pwdExpiryDate = convertDateTimeToEpoch(
+            userInfo.pwdExpiryDate
+          );
+        }
+        let currOwnersArr = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPAs[0].BPADetails.scrutinyDetails",
+          []
+        );
+
+        currOwnersArr = userInfo[0];
+        console.log(userInfo);
+        dispatch(
+          prepareFinalObject(
+            `BPAs[0].BPADetails.scrutinyDetails`,
+            currOwnersArr
+          )
+        );
       }
     }
   } catch (e) {

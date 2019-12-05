@@ -27,50 +27,85 @@ export const buildingPlanScrutinyDetails = getCommonCard({
     }
   ),
   buildingPlanScrutinyDetailsContainer: getCommonContainer({
-    buildingplanscrutinyapplicationnumber: {
-      ...getTextField({
-        label: {
-          labelName: "Building permit application Number",
-          labelKey: "Building permit application Number"
-        },
-        placeholder: {
-          labelName: "Building permit application Number",
-          labelKey: "Building permit application Number"
-        },
-        required: true,
-        jsonPath: "BPAs[0].BPADetails.planscrutinydetails.appnum"
-      })
-    },
-    uploadedfile: {
-      ...getTextField({
-        label: {
-          labelName: "Uploaded Diagram",
-          labelKey: "Uploaded Diagram"
-        },
-        placeholder: {
-          labelName: "Uploaded Diagram",
-          labelKey: "Uploaded Diagram"
-        },
-        required: true,
-        // pattern: getPattern("Name") || null,
-        jsonPath: "BPAs[0].BPADetails.planscrutinydetails.diagram"
-      })
-    },
-    scrutinyreport: {
-      ...getTextField({
-        label: {
-          labelName: "Scrutiny Report",
-          labelKey: "Scrutiny Report"
-        },
-        placeholder: {
-          labelName: "Scrutiny Report",
-          labelKey: "Scrutiny Report"
-        },
-        required: true,
-        // pattern: getPattern("Name") || null,
-        jsonPath: "BPAs[0].BPADetails.planscrutinydetails.report"
-      })
-    }
+
+    buildingplanscrutinyapplicationnumber: getLabelWithValue(
+      {
+        labelName: "Building permit application Number",
+        labelKey: "Building permit application Number"
+      },
+      {
+        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.edcrNumber",
+        required: true
+      }
+    ),
+
+    uploadedfile: getLabelWithValue(
+      {
+        labelName: "Uploaded Diagram",
+        labelKey: "Uploaded Diagram"
+      },
+      {
+        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.dxfFile",
+        required: true
+      },
+    ),
+
+    scrutinyreport: getLabelWithValue(
+      {
+        labelName: "Scrutiny Report",
+        labelKey: "Scrutiny Report"
+      },
+      {
+        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.updatedDxfFile",
+        required: true
+      },
+    ),
+
+
+    // buildingplanscrutinyapplicationnumber: {
+    //   ...getTextField({
+    //     label: {
+    //       labelName: "Building permit application Number",
+    //       labelKey: "Building permit application Number"
+    //     },
+    //     placeholder: {
+    //       labelName: "Building permit application Number",
+    //       labelKey: "Building permit application Number"
+    //     },
+    //     required: true,
+    //     jsonPath: "BPAs[0].BPADetails.planscrutinydetails.appnum"
+    //   })
+    // },
+    // uploadedfile: {
+    //   ...getTextField({
+    //     label: {
+    //       labelName: "Uploaded Diagram",
+    //       labelKey: "Uploaded Diagram"
+    //     },
+    //     placeholder: {
+    //       labelName: "Uploaded Diagram",
+    //       labelKey: "Uploaded Diagram"
+    //     },
+    //     required: true,
+    //     // pattern: getPattern("Name") || null,
+    //     jsonPath: "BPAs[0].BPADetails.planscrutinydetails.diagram"
+    //   })
+    // },
+    // scrutinyreport: {
+    //   ...getTextField({
+    //     label: {
+    //       labelName: "Scrutiny Report",
+    //       labelKey: "Scrutiny Report"
+    //     },
+    //     placeholder: {
+    //       labelName: "Scrutiny Report",
+    //       labelKey: "Scrutiny Report"
+    //     },
+    //     required: true,
+    //     // pattern: getPattern("Name") || null,
+    //     jsonPath: "BPAs[0].BPADetails.planscrutinydetails.report"
+    //   })
+    // }
   })
 });
 
@@ -170,12 +205,10 @@ export const demolitiondetails = getCommonCard({
           labelName: "Demolition Area",
           labelKey: "Demolition Area"
         },
-        placeholder: {
-          labelName: "Enter Demolition Area",
-          labelKey: "Enter Demolition Area"
-        },
-        // pattern: getPattern("Name") || null,
-        jsonPath: "BPAs[0].BPADetails.demolitiondetails.area"
+        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.demolitionArea",
+        props: {
+          disabled: 'true'
+        }
       })
     }
   })
@@ -201,13 +234,13 @@ export const proposedBuildingDetails = getCommonCard({
       breakPending: getBreak(),
       proposedBuildingDetailsContainer: {
         uiFramework: "custom-molecules-local",
-        moduleName: "egov-noc",
+        moduleName: "egov-bpa",
         componentPath: "Table",
         props: {
           data: [
             {
               "Floor Description": "Ground Floor",
-              Level: 0,
+              "Level": 0,
               "Occupancy/Sub Occupancy": "Individual residential",
               "Buildup Area": 52.22,
               "Floor Area": 51,
@@ -215,23 +248,7 @@ export const proposedBuildingDetails = getCommonCard({
             },
             {
               "Floor Description": "First Floor",
-              Level: 0,
-              "Occupancy/Sub Occupancy": "Individual residential",
-              "Buildup Area": 52.22,
-              "Floor Area": 51,
-              "Carpet Area": 49
-            },
-            {
-              "Floor Description": "Second Floor",
-              Level: 0,
-              "Occupancy/Sub Occupancy": "Individual residential",
-              "Buildup Area": 52.22,
-              "Floor Area": 51,
-              "Carpet Area": 49
-            },
-            {
-              "Floor Description": "Third Floor",
-              Level: 0,
+              "Level": 0,
               "Occupancy/Sub Occupancy": "Individual residential",
               "Buildup Area": 52.22,
               "Floor Area": 51,
@@ -240,7 +257,7 @@ export const proposedBuildingDetails = getCommonCard({
           ],
           columns: {
             "Floor Description": {},
-            Level: {},
+            "Level": {},
             "Occupancy/Sub Occupancy": {},
             "Buildup Area": {},
             "Floor Area": {},
@@ -278,7 +295,10 @@ export const proposedBuildingDetails = getCommonCard({
             },
             required: true,
             jsonPath:
-              "BPAs[0].BPADetails.totalbuildupareadetails.totalbuilduparea"
+              "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
+            props: {
+              disabled: 'true'
+            }
           })
         },
         numOfFloors: {
@@ -292,8 +312,10 @@ export const proposedBuildingDetails = getCommonCard({
               labelKey: "Number Of Floors"
             },
             required: true,
-            // pattern: getPattern("Date"),
-            jsonPath: "BPAs[0].BPADetails.totalbuildupareadetails.numoffloors"
+            jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.totalFloors",
+            props: {
+              disabled: 'true'
+            }
           })
         },
         highFromGroundLevel: {
@@ -307,9 +329,11 @@ export const proposedBuildingDetails = getCommonCard({
               labelKey: "High From Ground Level From Mumty (In Mtrs)"
             },
             required: true,
-            // pattern: getPattern("Name") || null,
             jsonPath:
-              "BPAs[0].BPADetails.totalbuildupareadetails.highfromgroundlevel"
+              "BPAs[0].BPADetails.scrutinyDetails.planDetail.distancesFromMonument",
+            props: {
+              disabled: 'true'
+            }
           })
         }
       })

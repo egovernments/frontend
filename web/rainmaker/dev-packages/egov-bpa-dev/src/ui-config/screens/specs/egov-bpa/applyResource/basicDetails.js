@@ -10,6 +10,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTodaysDateInYMD } from "../../utils";
 import { mockJosnRoles } from "../mockJson";
+import { getScrutinyDetails } from "../../utils";
 
 export const basicDetails = getCommonCard({
   header: getCommonTitle(
@@ -24,31 +25,53 @@ export const basicDetails = getCommonCard({
     }
   ),
   basicDetailsContainer: getCommonContainer({
-    scrutinynumber: {
-      ...getTextField({
-        label: {
-          labelName: "Building plan scrutiny number",
-          labelKey: "Building plan scrutiny number"
-        },
-        placeholder: {
-          labelName: "Enter Scrutiny Number",
-          labelKey: "Enter Scrutiny Number"
-        },
-        // pattern: '^[a-zA-Z0-9]*$',
-        jsonPath: "BPAs[0].BPADetails.basicdetails.scrutinynumber"
-      })
-    },
+    scrutinynumber: getTextField({
+      label: {
+        labelName: "Building plan scrutiny number",
+        labelKey: "Building plan scrutiny number"
+      },
+      placeholder: {
+        labelName: "Enter Scrutiny Number",
+        labelKey: "Enter Scrutiny Number"
+      },
+      // required: true,
+      title: {
+        value: "Please search scrutiny details linked to the scrutiny number",
+        key: "Please search scrutiny details linked to the scrutiny number"
+      },
+      infoIcon: "info_circle",
+      pattern: "^[a-zA-Z0-9]*$",
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "BPAs[0].BPADetails.basicdetails.scrutinynumber",
+      iconObj: {
+        iconName: "search",
+        position: "end",
+        color: "#FE7A51",
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch, fieldInfo) => {
+            getScrutinyDetails(state, dispatch, fieldInfo);
+          }
+        }
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      }
+    }),
     occupancy: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-bpa",
       componentPath: "AutosuggestContainer",
-      jsonPath: "Employee[0].user.roles",
+      jsonPath: "BPAs[0].BPADetails.basicdetails.occupancy",
       required: true,
       props: {
         style: {
           width: "100%",
           cursor: "pointer"
         },
+        isDisabled: "true",
         label: { labelName: "Occupancy", labelKey: "Occupancy" },
         placeholder: {
           labelName: "Select Occupancy",
@@ -76,13 +99,14 @@ export const basicDetails = getCommonCard({
             label: "Occupancy Type 2"
           }
         ],
-        data: mockJosnRoles,
+        data: mockJosnRoles
         // error: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        disable: true
+        // disable: true
       },
       gridDefination: {
         xs: 12,
-        sm: 6
+        sm: 12,
+        md: 6
       }
     },
     applicationtype: {
@@ -145,6 +169,11 @@ export const basicDetails = getCommonCard({
           ],
           optionValue: "value",
           optionLabel: "label"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
         }
       })
     },
@@ -156,13 +185,22 @@ export const basicDetails = getCommonCard({
         },
         required: true,
         // pattern: getPattern("Date"),
-        jsonPath: "BPAs[0].BPADetails.basicdetails.appdate",
-        value: getTodaysDateInYMD(),
+        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.applicationDate",
         props: {
-          inputProps: {
-            max: getTodaysDateInYMD()
-          },
-          defaultValue : getTodaysDateInYMD()
+          defaultValue: getTodaysDateInYMD(),
+          // value: getTodaysDateInYMD(),
+          // inputProps: {
+          //   max: getTodaysDateInYMD()
+          // },
+          // disabled: 'true'
+          // InputProps : {
+          //   readOnly: true,
+          // },
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
         }
       })
     },
@@ -172,18 +210,19 @@ export const basicDetails = getCommonCard({
           labelName: "Application Fee",
           labelKey: "Application Fee"
         },
-        // placeholder: {
-        //   labelName: "Enter Corrospondence Address",
-        //   labelKey: "HR_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
-        // },
         jsonPath: "BPAs[0].BPADetails.basicdetails.appfee",
         value: 1000,
         props: {
           value: 100,
-          disabled: true,
+          disabled: true
           // InputProps : {
           //   readOnly: true,
           // },
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
         }
       })
     },
@@ -201,6 +240,11 @@ export const basicDetails = getCommonCard({
         props: {
           multiline: true,
           rows: "4"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
         }
       })
     }

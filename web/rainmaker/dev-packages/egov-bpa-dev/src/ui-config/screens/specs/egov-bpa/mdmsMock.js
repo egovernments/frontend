@@ -433,14 +433,14 @@ export const mdmsMockJson = {
         ],
         "NOC": [
             {
-              "code": "OWNER.IDENTITYPROOF",
+              "code": "Noc Proof",
               "documentType": "OWNER",
               "required": true,
               "active": true,
               "hasDropdown": true,
               "natureOfNoc": [],
               "remarks": [],
-              "description": "OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"
+              "description": "Noc Proof"
             },
             {
               "code": "OWNER.ADDRESSPROOF",
