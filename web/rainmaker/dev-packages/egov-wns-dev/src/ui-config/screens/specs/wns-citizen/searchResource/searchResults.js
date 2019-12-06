@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
+import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
 import { Link } from "react-router-dom"
 
 export const searchResults = {
@@ -47,7 +43,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, data) => (
-            <Link to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+            <Link to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[8]}`} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
               Pay now
             </Link>
           )
@@ -69,10 +65,7 @@ export const searchResults = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Application Date",
@@ -89,21 +82,5 @@ export const searchResults = {
         return { data: finalData, currentOrder: !order ? "asc" : "desc" };
       }
     }
-  }
-};
-
-const onRowClick = rowData => {
-  switch (rowData[5]) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
-        }`;
-
-      break;
-    default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-        }&tenantId=${rowData[6]}`;
-      break;
   }
 };

@@ -9,42 +9,15 @@ import {
     setFilteredTradeTypes,
     getTradeTypeDropdownData
 } from "../ui-config/screens/specs/utils";
-import {
-    prepareFinalObject,
-    toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-    getTranslatedLabel,
-    updateDropDowns,
-    ifUserRoleExists
-} from "../ui-config/screens/specs/utils";
+import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTranslatedLabel, updateDropDowns, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
-import {
-    getQueryArg,
-    getFileUrlFromAPI
-} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {
-    setBusinessServiceDataToLocalStorage,
-    getMultiUnits
-} from "egov-ui-framework/ui-utils/commons";
-
-export const updateTradeDetails = async requestBody => {
-    try {
-        const payload = await httpRequest(
-            "post",
-            "/tl-services/v1/_update",
-            "", [],
-            requestBody
-        );
-        return payload;
-    } catch (error) {
-        store.dispatch(toggleSnackbar(true, error.message, "error"));
-    }
-};
+import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
     alert(1);
@@ -65,9 +38,28 @@ export const getSearchResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/wc/_search",
-            "",
+            "/ws-services/wc/_search",
+            "_search",
             queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
+export const getDescriptionFromMDMS = async requestBody => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/egov-mdms-service-test/v1/_search",
+            "_search", [],
+            requestBody
         );
         return response;
     } catch (error) {
@@ -84,8 +76,8 @@ export const fetchBill = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill",
-            "",
+            "/billing-service-v1/bill/_fetchbill",
+            "_fetchBill",
             queryObject
         );
         return response;
@@ -142,8 +134,7 @@ export const getConsumptionDetails = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            // "http://172.17.25.34:8083/meterConnection/_search?connectionNos=WERTY123456789",
-            "http://172.17.25.34:8083/meterConnection/_search",
+            "/meterConnection/_search",
             "",
             queryObject
         );
