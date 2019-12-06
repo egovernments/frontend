@@ -30,13 +30,16 @@ const remoteConfigPath = (path, screenKey) => {
     case "bpastakeholder-citizen":
       config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
+    case "egov-pt":
+      config = require(`egov-pt/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     case "wns":
     case "wns-citizen":
-        config = require(`egov-wns/ui-config/screens/specs/${path}/${screenKey}`).default;
-        break;
+      config = require(`egov-wns/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     case "uc-citizen":
-        config = require(`egov-uc/ui-config/screens/specs/${path}/${screenKey}`).default;
-        break;
+      config = require(`egov-uc/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;
       break;

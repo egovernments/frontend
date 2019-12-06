@@ -1,6 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
+
 export const viewBillFooter = getCommonApplyFooter({
   downloadButton: {
     componentPath: "Button",
@@ -20,7 +21,7 @@ export const viewBillFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      // callBack: callBackForPrevious
+      // callBack: callDownloadBill
     },
   },
   payButton: {
