@@ -2137,3 +2137,70 @@ export const mdmsMockJson = {
       }
     }
   }
+
+export const mdmsMockJson1 = {
+  "ResponseInfo": null,
+  "MdmsRes": {
+    "BPA": {
+      "ApplicationType": [
+        {
+          "code": "BUILDING_PLAN_SCRUTINY",
+          "active": true
+        }
+      ],
+      "DocTypeMapping": [
+        {
+          "applicationType": "BUILDING_PLAN_SCRUTINY",
+          "ServiceType": "NEW_CONSTRUCTION",
+          "RiskType": "High",
+          "docTypes": [
+            {
+              "code": "OWNERIDENTITYPROOF.VOTERID",
+              "required": true,
+              "sequence": 0
+            },
+            {
+              "code": "OWNERIDENTITYPROOF.AADHAAR",
+              "required": false,
+              "sequence": 1
+            }
+          ]
+        }
+      ],
+      "ServiceType": [
+        {
+          "code": "NEW_CONSTRUCTION",
+          "active": true
+        }
+      ]
+    },
+    "common-masters": {
+      "DocumentType": [
+        {
+          "code": "OWNERIDPROOF",
+          "active": true
+        },
+        {
+          "code": "OWNERSHIPPROOF",
+          "active": true
+        },
+        {
+          "code": "AADHAAR",
+          "active": true
+        },
+        {
+          "code": "VOTERID",
+          "active": true
+        },
+        {
+          "code": "ELECTRICITYBILL",
+          "active": true
+        },
+        {
+          "code": "DRIVINGLICENSE",
+          "active": true
+        }
+      ]
+    }
+  }
+}

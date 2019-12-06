@@ -114,7 +114,7 @@ export const BPAApplication = getCommonCard({
         masterName: "BPA"
       },
       jsonPath: "searchScreen.serviceType",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.serviceType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.DocTypeMapping[0].applicationType",
       required: false,
       gridDefination: {
         xs: 12,
@@ -157,7 +157,7 @@ export const BPAApplication = getCommonCard({
         masterName: "BPA"
       },
       jsonPath: "searchScreen.serviceSubType",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.serviceSubType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.DocTypeMapping[0].ServiceType",
       required: false,
       gridDefination: {
         xs: 12,
@@ -201,7 +201,7 @@ export const BPAApplication = getCommonCard({
         masterName: "BPA"
       },
       jsonPath: "searchScreen.riskType",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.riskType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.DocTypeMapping[0].RiskType",
       required: false,
       gridDefination: {
         xs: 12,

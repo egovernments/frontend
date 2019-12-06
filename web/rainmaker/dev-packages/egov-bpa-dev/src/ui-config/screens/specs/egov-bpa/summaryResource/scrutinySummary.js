@@ -152,7 +152,7 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "Residential"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
+                            jsonPath: "bpa.summary.residential",
                             callBack: value => {
                                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
                             }

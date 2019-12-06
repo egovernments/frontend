@@ -25,6 +25,8 @@ import { nocSummary } from "./summaryResource/nocSummary";
 // import { propertySummary } from "./summaryResource/propertySummary";
 // import { generateBill } from "../utils/index";
 
+import { setResidentialList } from "../egov-bpa/searchResource/functions";
+
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "BPA - Application Summary",
@@ -150,6 +152,7 @@ const screenConfig = {
     // generateBill(dispatch, applicationNumber, tenantId);
     prepareNocDocumentsView(state, dispatch);
     prepareDocumentsDetailsView(state, dispatch);
+    setResidentialList(state, dispatch);
     return action;
   },
   components: {

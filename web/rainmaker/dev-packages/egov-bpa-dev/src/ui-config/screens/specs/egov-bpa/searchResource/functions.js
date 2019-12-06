@@ -6,6 +6,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { textToLocalMapping } from "./searchResults";
 import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -162,6 +163,23 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow
+    )
+  );
+};
+
+export const setResidentialList = (state, dispatch) => {
+  let residentialList = get(
+    state.screenConfiguration.preparedFinalObject,
+    `BPAs[0].BPADetails.blockwiseusagedetails.residential`,
+    []
+  );
+  let furnishedRolesList = residentialList.map(item => {
+    return " " + item.label;
+  });
+  dispatch(
+    prepareFinalObject(
+      "bpa.summary.residential",
+      furnishedRolesList.join()
     )
   );
 };

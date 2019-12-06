@@ -2,11 +2,8 @@ import {
   getCommonCard,
   getCommonTitle,
   getTextField,
-  getDateField,
-  getSelectField,
   getCommonContainer,
   getPattern,
-  getCheckBoxwithLabel,
   getCommonGrayCard,
   getCommonSubHeader,
   getLabelWithValue,
@@ -138,7 +135,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "AutosuggestContainer",
-        jsonPath: "Employee[0].user.roles",
+        jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
         required: true,
         props: {
           style: {
