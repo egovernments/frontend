@@ -529,3 +529,43 @@ export const download = (receiptQueryString, mode = "download") => {
     alert('Some Error Occured while downloading Receipt!');
   }
 }
+
+export const downloadBill = (receiptQueryString, mode = "download") => {
+  const FETCHBILL = {
+    GET: {
+      URL: "/billing-service/bill/v2/_fetchbill",
+      ACTION: "_get",
+    },
+  };
+  const DOWNLOADBILL = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+
+  try {
+    httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+      const queryStr = [
+        { key: "key", value: "consolidatedbill" },
+        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+      ]
+      httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bills: payloadReceiptDetails.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+            if (mode === 'download') {
+              var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+              win.focus();
+            }
+            else {
+              printJS(fileRes[res.filestoreIds[0]])
+            }
+          });
+
+        });
+    })
+
+  } catch (exception) {
+    alert('Some Error Occured while downloading Receipt!');
+  }
+}

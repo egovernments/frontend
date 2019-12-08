@@ -47,8 +47,6 @@ export const updateTradeDetails = async requestBody => {
 };
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
-    alert(1);
-    console.log(label, labelKey)
     if (labelKey) {
         let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
         if (!translatedLabel || labelKey === translatedLabel) {
@@ -65,7 +63,7 @@ export const getSearchResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/wc/_search",
+            "/ws-services/wc/_search",
             "",
             queryObject
         );
@@ -84,7 +82,7 @@ export const fetchBill = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill",
+            "/billing-service-v1/bill/_fetchbill",
             "",
             queryObject
         );
@@ -104,29 +102,26 @@ export const getMyConnectionResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022&tenantId=pb.amritsar",
+            "/ws-services/wc/_search",
             "",
             queryObject
         );
-        return response;
-    } catch (error) {
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
-};
-// api call to get my connection details Due
-export const getMyConnectionDueResults = async queryObject => {
-    try {
-        const response = await httpRequest(
-            "post",
-            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?tenantId=pb.amritsar&consumerCode=WS/107/2019-20/000022&businessService=WS",
-            "",
-            queryObject
-        );
+        if (response.WaterConnection.length > 0) {
+            const dueResponse = await response.WaterConnection.map(item => {
+                const data = httpRequest(
+                    "post",
+                    `/billing-service-v1/bill/_fetchbill?consumerCode=${item.connectionNo}&tenantId=${item.property.tenantId}&businessService=WS`,
+                    "",
+                    // queryObject
+                );
+
+                const resolvedData = Promise.resolve(data)
+                resolvedData.then(function (value) {
+                    item.due = value.Bill[0].billDetails.length > 0 ? value.Bill[0].billDetails[0].totalAmount : 0
+                });
+                return data;
+            });
+        }
         return response;
     } catch (error) {
         store.dispatch(
@@ -143,7 +138,7 @@ export const getConsumptionDetails = async queryObject => {
         const response = await httpRequest(
             "post",
             // "http://172.17.25.34:8083/meterConnection/_search?connectionNos=WERTY123456789",
-            "http://172.17.25.34:8083/meterConnection/_search",
+            "/meterConnection/_search",
             "",
             queryObject
         );
