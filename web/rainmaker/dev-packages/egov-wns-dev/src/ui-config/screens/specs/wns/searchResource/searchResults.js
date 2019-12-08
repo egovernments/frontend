@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
+import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
 import { Link } from "react-router-dom"
 
 export const searchResults = {
@@ -41,13 +37,12 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, data) => (
-            <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`}>
+            <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}`}>
               {value}
             </Link>
           )
         }
       },
-      // &connectionType=${data.rowData[8]}
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Address"),
       getTextToLocalMapping("Status"),
@@ -58,7 +53,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, data) => (
-            <Link to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+            <Link to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}`} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
               Pay now
             </Link>
           )

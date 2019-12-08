@@ -29,14 +29,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.applicationstatus",
-      "props.value",
-      ""
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.applicationstatus",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
   // dispatch(
   //   handleField(
   //     "search",
@@ -45,22 +45,22 @@ const resetFields = (state, dispatch) => {
   //     ""
   //   )
   // );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.fromDate",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.toDate",
-      "props.value",
-      ""
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.fromDate",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.toDate",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
 };
 
 export const tradeLicenseApplication = getCommonCard({
@@ -124,7 +124,7 @@ export const tradeLicenseApplication = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.billingYear"
+      jsonPath: "searchScreen.mobileNumber"
     }),
     // applicationstatus: getSelectField({
     //   label: {

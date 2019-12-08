@@ -1,6 +1,11 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
+import get from "lodash/get";
+
+const applicationNo = "WS/107/2019-20/000022";
+const tenantId = "pb.amritsar";
+// const financialYear = get(LicenseData, "financialYear");
 export const viewBillFooter = getCommonApplyFooter({
   downloadButton: {
     componentPath: "Button",
@@ -40,9 +45,8 @@ export const viewBillFooter = getCommonApplyFooter({
       })
     },
     onClickDefination: {
-      action: "condition",
-      // callBack: callBackForPrevious
-    },
-    // visible: false
-  },
+      action: "page_change",
+      path: `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=WS`
+    }
+  }
 });

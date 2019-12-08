@@ -1,22 +1,13 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, fetchBill } from "../../../../..//ui-utils/commons";
-import {
-  convertEpochToDate,
-  convertDateToEpoch,
-  getTextToLocalMapping,
-} from "../../utils/index";
+import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
-    {
-      key: "tenantId",
-      value: "pb.amritsar"
-    },
     { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
@@ -70,28 +61,35 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    const response = await getSearchResults(queryObject);
-    let queryObjectForFetchBill = [{ key: "tenantId", value: 'pb.amritsar' }, { key: "consumerCode", value: response.WaterConnection[0].connectionNo }, { key: "businessService", value: "WS" }];
-    const billData = await fetchBill(queryObjectForFetchBill)
-    response.WaterConnection[0].service = "WATER"
-    response.WaterConnection[0].due = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].totalAmount : 0
-    response.WaterConnection[0].dueDate = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].expiryDate : ""
     try {
-      let data = response.WaterConnection.map(item => (
-        // console.log(22222, item),
-        {
-
-          [getTextToLocalMapping("Service")]:
-            item.service || "-", //will be modified later
-          [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
-          [getTextToLocalMapping("Owner Name")]:
-            (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : "-" || "-",
-          [getTextToLocalMapping("Status")]: item.status || "-",
-          [getTextToLocalMapping("Due")]: item.due || 0,
-          [getTextToLocalMapping("Address")]: item.property.address.street || "-",
-          [getTextToLocalMapping("Due Date")]: convertEpochToDate(item.dueDate) || "-",
-          ["tenantId"]: 'pb.amritsar',
-        }));
+      const response = await getSearchResults(queryObject);
+      let queryObjectForFetchBill, billData;
+      let tenantId = get(state, "screenConfiguration.preparedFinalObject.searchScreen.tenantId");
+      if (response !== undefined && response !== null && response.WaterConnection.length > 0) {
+        response.WaterConnection[0].service = "WATER"
+        queryObjectForFetchBill = [
+          { key: "tenantId", value: tenantId },
+          { key: "consumerCode", value: response.WaterConnection[0].connectionNo },
+          { key: "businessService", value: "WS" }
+        ];
+        billData = await fetchBill(queryObjectForFetchBill)
+        if (billData !== undefined && billData !== null && billData.Bill.length > 0) {
+          response.WaterConnection[0].due = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].totalAmount : " "
+          response.WaterConnection[0].dueDate = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].expiryDate : " "
+        }
+      }
+      let data = response.WaterConnection.map(item => ({
+        [getTextToLocalMapping("Service")]:
+          item.service || "-", //will be modified later
+        [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
+        [getTextToLocalMapping("Owner Name")]:
+          (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : " " || " ",
+        [getTextToLocalMapping("Status")]: item.status || "-",
+        [getTextToLocalMapping("Due")]: item.due || 0,
+        [getTextToLocalMapping("Address")]: item.property.address.street || "-",
+        [getTextToLocalMapping("Due Date")]: item.dueDate !== undefined ? convertEpochToDate(item.dueDate) : " " || " ",
+        ["tenantId"]: tenantId
+      }));
 
       dispatch(
         handleField(

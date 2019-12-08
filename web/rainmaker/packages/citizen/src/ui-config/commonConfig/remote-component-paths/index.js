@@ -10,16 +10,6 @@ const remoteComponentPath = (moduleName, path) => {
         component = import("egov-tradelicence/ui-containers-local");
       }
       break;
-<<<<<<< HEAD
-    case "egov-pt":
-      if (path === "ui-atoms-local") {
-        component = import("egov-pt/ui-atoms-local");
-      } else if (path === "ui-molecules-local") {
-        component = import("egov-pt/ui-molecules-local");
-      } else if (path === "ui-containers-local") {
-        component = import("egov-pt/ui-containers-local");
-      }
-      break;
     case "egov-common":
       if (path === "ui-atoms-local") {
         component = import("egov-common/ui-atoms-local");
@@ -36,7 +26,8 @@ const remoteComponentPath = (moduleName, path) => {
         component = import("egov-noc/ui-molecules-local");
       } else if (path === "ui-containers-local") {
         component = import("egov-noc/ui-containers-local");
-=======
+      }
+      break;
     case "egov-wns":
       if (path === "ui-atoms-local") {
         component = import("egov-wns/ui-atoms-local");
@@ -44,7 +35,6 @@ const remoteComponentPath = (moduleName, path) => {
         component = import("egov-wns/ui-molecules-local");
       } else if (path === "ui-containers-local") {
         component = import("egov-wns/ui-containers-local");
->>>>>>> wms-phase-1
       }
       break;
     case "egov-uc":

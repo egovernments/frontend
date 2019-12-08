@@ -16,23 +16,12 @@ import {
 import { footerReview } from "./viewBillResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import {
-  createEstimateData,
-  setMultiOwnerForSV,
-  setValidToFromVisibilityForSV,
-} from "../utils";
 
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
-import {
-  getHeaderSideText,
-  getTransformedStatus
-} from "../utils";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
-import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-
-const tenantId = getQueryArg(window.location.href, "tenantId");
+const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 let headerSideText = { word1: "", word2: "" };
 
@@ -81,118 +70,19 @@ const setDocuments = async (
   reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
 };
 
-const getTradeTypeSubtypeDetails = payload => {
-  const tradeUnitsFromApi = get(
-    payload,
-    "WaterConnection[0].tradeLicenseDetail.tradeUnits",
-    []
-  );
-  const tradeUnitDetails = [];
-  tradeUnitsFromApi.forEach(tradeUnit => {
-    const { tradeType } = tradeUnit;
-    const tradeDetails = tradeType.split(".");
-    tradeUnitDetails.push({
-      trade: get(tradeDetails, "[0]", ""),
-      tradeType: get(tradeDetails, "[1]", ""),
-      tradeSubType: get(tradeDetails, "[2]", "")
-    });
-  });
-  return tradeUnitDetails;
-};
-
 const searchResults = async (action, state, dispatch, connectionNumber) => {
-  let queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "connectionNumber", value: connectionNumber }
-  ];
+  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNumber }];
   let payloadData = await getSearchResults(queryObject);
-  payloadData.WaterConnection[0].service = "WATER"
-
-  await setDocuments(
-    payloadData,
-    "WaterConnection[0].tradeLicenseDetail.applicationDocuments",
-    "WaterConnectionTemp[0].reviewDocData",
-    dispatch
-  );
-  let sts = getTransformedStatus(get(payloadData, "WaterConnection[0].status"));
-  payloadData && dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
-  payloadData &&
-    dispatch(
-      prepareFinalObject(
-        "WaterConnectionTemp[0].tradeDetailsResponse",
-        getTradeTypeSubtypeDetails(payloadData)
-      )
-    );
-  const LicenseData = payloadData.WaterConnection[0];
-  const fetchFromReceipt = sts !== "pending_payment";
-  createEstimateData(
-    LicenseData,
-    "WaterConnectionTemp[0].estimateCardData",
-    dispatch,
-    {},
-    fetchFromReceipt
-  );
-  //Fetch Bill and populate estimate card
-  // const code = get(
-  //   payloadData,
-  //   "WaterConnection[0].tradeLicenseDetail.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: tenantId }];
-  // // getBoundaryData(action, state, dispatch, queryObj, code);
+  if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
+    payloadData.WaterConnection[0].service = "WATER"
+    dispatch(prepareFinalObject("WaterConnection", payloadData.WaterConnection))
+  }
 };
 
 const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   //Search details for given application Number
   if (connectionNumber) {
-    !getQueryArg(window.location.href, "edited") &&
-      (await searchResults(action, state, dispatch, connectionNumber));
-
-    // const status = getTransformedStatus(
-    //   get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].status")
-    // );
-    // const status = get(
-    //   state,
-    //   "screenConfiguration.preparedFinalObject.WaterConnection[0].status"
-    // );
-
-    let data = get(state, "screenConfiguration.preparedFinalObject");
-    // Get approval details based on status and set it in screenconfig
-
-    if (
-      status === "APPROVED" ||
-      status === "REJECTED" ||
-      status === "CANCELLED"
-    ) {
-      set(
-        action,
-        "screenConfig.components.div.children.connectionDetails.children.cardContent.children.approvalDetails.visible",
-        true
-      );
-
-      if (get(data, "WaterConnection[0].tradeLicenseDetail.verificationDocuments")) {
-        // await setDocuments(
-        //   data,
-        //   "WaterConnection[0].tradeLicenseDetail.verificationDocuments",
-        //   "WaterConnectionTemp[0].verifyDocData",
-        //   dispatch
-        // );
-      } else {
-        // dispatch(
-        //   handleField(
-        //     "search-preview",
-        //     "components.div.children.connectionDetails.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
-        //     "visible",
-        //     false
-        //   )
-        // );
-      }
-    } else {
-      // set(
-      //   action,
-      //   "screenConfig.components.div.children.connectionDetails.children.cardContent.children.approvalDetails.visible",
-      //   false
-      // );
-    }
+    (await searchResults(action, state, dispatch, connectionNumber));
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
     if (connectionType !== "Metered") {
       set(
@@ -219,71 +109,6 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
-
-    if (status === "cancelled")
-      set(
-        action,
-        "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
-        true
-      );
-
-    // setActionItems(action, obj);
-    // loadReceiptGenerationData(connectionNumber, tenantId);
-  }
-};
-
-
-const setStatusBasedValue = status => {
-  switch (status) {
-    case "approved":
-      return {
-        titleText: "Review the Trade License",
-        titleKey: "TL_REVIEW_TRADE_LICENSE",
-        titleVisibility: true,
-        roleDefination: {
-          rolePath: "user-info.roles",
-          roles: ["TL_APPROVER"]
-        }
-      };
-    case "pending_payment":
-      return {
-        titleText: "Review the Application and Proceed",
-        titleKey: "TL_REVIEW_APPLICATION_AND_PROCEED",
-        titleVisibility: true,
-        roleDefination: {
-          rolePath: "user-info.roles",
-          roles: ["TL_CEMP"]
-        }
-      };
-    case "pending_approval":
-      return {
-        titleText: "Review the Application and Proceed",
-        titleKey: "TL_REVIEW_APPLICATION_AND_PROCEED",
-        titleVisibility: true,
-        roleDefination: {
-          rolePath: "user-info.roles",
-          roles: ["TL_APPROVER"]
-        }
-      };
-    case "cancelled":
-      return {
-        titleText: "",
-        titleVisibility: false,
-        roleDefination: {}
-      };
-    case "rejected":
-      return {
-        titleText: "",
-        titleVisibility: false,
-        roleDefination: {}
-      };
-
-    default:
-      return {
-        titleText: "Active",
-        titleVisibility: false,
-        roleDefination: {}
-      };
   }
 };
 
@@ -307,28 +132,6 @@ const propertyDetails = getPropertyDetails(false);
 
 const ownerDetails = getOwnerDetails(false);
 
-
-// const setActionItems = (action, object) => {
-//   set(
-//     action,
-//     "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title",
-//     getCommonTitle({
-//       labelName: get(object, "titleText"),
-//       labelKey: get(object, "titleKey")
-//     })
-//   );
-//   set(
-//     action,
-//     "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title.visible",
-//     get(object, "titleVisibility")
-//   );
-//   set(
-//     action,
-//     "screenConfig.components.div.children.connectionDetails.children.cardContent.children.title.roleDefination",
-//     get(object, "roleDefination")
-//   );
-// };
-
 export const connectionDetails = getCommonCard({
   serviceDetails,
   propertyDetails,
@@ -345,19 +148,9 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
       connectionNumber
     );
-    // if (status !== "pending_payment") {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.connectionDetails.children.cardContent.children.viewBreakupButton.visible",
-    //     false
-    //   );
-    // }
     const tenantId = getQueryArg(window.location.href, "tenantId");
     connectionNumber = getQueryArg(window.location.href, "connectionNumber");
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
-    ];
+    const queryObject = [{ key: "tenantId", value: tenantId }, { key: "businessService", value: "WS" }];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, connectionNumber);
     return action;
@@ -396,9 +189,6 @@ const screenConfig = {
                 align: "right"
               },
               children: {
-                // process.env.REACT_APP_NAME === "Employee"
-                //   ? {} 
-                //   : {
                 word1: {
                   ...getCommonTitle(
                     {
@@ -425,16 +215,6 @@ const screenConfig = {
                       }
                     })
                 },
-                // cancelledLabel: {
-                //   ...getCommonHeader(
-                //     {
-                //       labelName: "Cancelled",
-                //       labelKey: "TL_COMMON_STATUS_CANC"
-                //     },
-                //     { variant: "body1", style: { color: "#E54D42" } }
-                //   ),
-                //   visible: false
-                // }
               }
             }
           }
