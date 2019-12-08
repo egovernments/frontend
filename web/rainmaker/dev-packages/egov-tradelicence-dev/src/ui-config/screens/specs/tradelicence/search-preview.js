@@ -5,6 +5,9 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  getUserInfo
+} from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -115,9 +118,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   set(payload, "Licenses[0].headerSideText", headerSideText);
 
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-    "."
-  )[0] === "INDIVIDUAL"
+    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
@@ -178,7 +181,14 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
-
+    if (get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments")) {
+      await setDocuments(
+        data,
+        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "LicensesTemp[0].reviewDocData",
+        dispatch
+      );
+    }
     // Get approval details based on status and set it in screenconfig
 
     if (
@@ -191,7 +201,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
         true
       );
-
+     
       if (get(data, "Licenses[0].tradeLicenseDetail.verificationDocuments")) {
         await setDocuments(
           data,
@@ -228,7 +238,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
-
+      const userRoles = JSON.parse(getUserInfo()).roles; 
+        userRoles.map((userRole)=>{
+        if(userRole.code=='TL_CEMP' &&  userRole.tenantId==tenantId && status=="APPROVED"){
+          set(action, "screenConfig.components.div.children.footer", footer)
+        }
+      })
+      
     if (status === "cancelled")
       set(
         action,
@@ -425,35 +441,35 @@ const screenConfig = {
                 process.env.REACT_APP_NAME === "Employee"
                   ? {}
                   : {
-                      word1: {
-                        ...getCommonTitle(
-                          {
-                            jsonPath: "Licenses[0].headerSideText.word1"
-                          },
-                          {
-                            style: {
-                              marginRight: "10px",
-                              color: "rgba(0, 0, 0, 0.6000000238418579)"
-                            }
+                    word1: {
+                      ...getCommonTitle(
+                        {
+                          jsonPath: "Licenses[0].headerSideText.word1"
+                        },
+                        {
+                          style: {
+                            marginRight: "10px",
+                            color: "rgba(0, 0, 0, 0.6000000238418579)"
                           }
-                        )
-                      },
-                      word2: {
-                        ...getCommonTitle({
-                          jsonPath: "Licenses[0].headerSideText.word2"
-                        })
-                      },
-                      cancelledLabel: {
-                        ...getCommonHeader(
-                          {
-                            labelName: "Cancelled",
-                            labelKey: "TL_COMMON_STATUS_CANC"
-                          },
-                          { variant: "body1", style: { color: "#E54D42" } }
-                        ),
-                        visible: false
-                      }
+                        }
+                      )
+                    },
+                    word2: {
+                      ...getCommonTitle({
+                        jsonPath: "Licenses[0].headerSideText.word2"
+                      })
+                    },
+                    cancelledLabel: {
+                      ...getCommonHeader(
+                        {
+                          labelName: "Cancelled",
+                          labelKey: "TL_COMMON_STATUS_CANC"
+                        },
+                        { variant: "body1", style: { color: "#E54D42" } }
+                      ),
+                      visible: false
                     }
+                  }
             }
           }
         },
@@ -461,7 +477,12 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            dataPath: "Licenses",
+            moduleName: "NewTL",
+            updateUrl: "/tl-services/v1/_update"
+          }
         },
         tradeReviewDetails
         //footer
