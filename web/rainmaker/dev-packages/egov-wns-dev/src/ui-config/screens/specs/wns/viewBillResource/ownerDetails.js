@@ -27,23 +27,38 @@ export const getOwner = () => {
 
             }
         },
-        ownerCardContainer: getCommonContainer({
-            ownerName: getLabelWithValue(
-                {
-                    labelKey: "WS_OWN_DETAIL_NAME"
-                },
-                {
-                    jsonPath: "WaterConnection[0].property.owners[0].name"
-                }
-            ),
-            correspondenceAddress: getLabelWithValue(
-                {
-                    labelKey: "WS_OWN_DETAIL_CROSADD"
-                },
-                {
-                    jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress"
-                }
-            )
-        }),
+        multiOwner: {
+            uiFramework: "custom-containers",
+            componentPath: "MultiItem",
+            props: {
+                scheama: getCommonGrayCard({
+                    viewFive: getCommonContainer({
+                        reviewOwnerName: getLabelWithValue(
+                            {
+                                labelName: "Name",
+                                labelKey: "WS_OWN_DETAIL_NAME"
+                            },
+                            { jsonPath: "WaterConnection[0].property.owners[0].name" }
+                        ),
+                        reviewOwnerAddr: getLabelWithValue(
+                            {
+                                labelName: "Corrospondence Address",
+                                labelKey: "WS_OWN_DETAIL_CROSADD"
+                            },
+                            {
+                                jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress",
+                            }
+                        )
+                    })
+                }),
+
+                items: [],
+                hasAddItem: false,
+                sourceJsonPath: "WaterConnection[0].property.owners",
+                prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
+                afterPrefixJsonPath: "children.value.children.key"
+            },
+            type: "array"
+        }
     })
 };

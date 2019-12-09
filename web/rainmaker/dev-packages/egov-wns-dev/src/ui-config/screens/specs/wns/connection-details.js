@@ -72,10 +72,101 @@ const setDocuments = async (
 
 const searchResults = async (action, state, dispatch, connectionNumber) => {
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNumber }];
-  let payloadData = await getSearchResults(queryObject);
+  // let payloadData = await getSearchResults(queryObject);
+  let payloadData = {
+    "ResponseInfo": {
+      "apiId": "",
+      "ver": ".",
+      "ts": null,
+      "resMsgId": "uief87324",
+      "msgId": "",
+      "status": "successful"
+    },
+    "WaterConnection": [
+      {
+        "id": "4d33e86d-7511-4e14-ac54-d1662dc88d0e",
+        "property": {
+          "id": "1234",
+          "propertyId": null,
+          "linkPropertyId": null,
+          "tenantId": "pb.amritsar",
+          "accountId": "AccountId ",
+          "oldPropertyId": null,
+          "status": null,
+          "address": {
+            "tenantId": null,
+            "doorNo": "5",
+            "plotNo": null,
+            "id": null,
+            "landmark": null,
+            "city": "Bangalore",
+            "district": "Bangalore",
+            "region": null,
+            "state": null,
+            "country": "India",
+            "pincode": "56004",
+            "additionDetails": null,
+            "buildingName": "Umiya Emporium",
+            "street": "147/J, 10th Cross, 12th Main, 3rd Block, Koramangala, Bengaluru, Karnataka 560034",
+            "locality": null,
+            "geoLocation": {
+              "latitude": 12.9716,
+              "longitude": 77.5946,
+              "additionalDetails": null
+            }
+          },
+          "acknowldgementNumber": "AcknowldgementNumber ",
+          "propertyType": "Domestic",
+          "ownershipCategory": null,
+          "owners": [
+            {
+              "name": "Mr George",
+              "mobileNumber": "7894567345",
+              "gender": "Male",
+              "fatherOrHusbandName": "Mr Jacob",
+              "correspondenceAddress": "No.97, 3rd Floor, Umiya Emporium, Hosur Main Road, Madiwala, Opposite Forum Mall, Bengaluru, Karnataka 560029",
+              "isPrimaryOwner": true,
+              "ownerShipPercentage": null,
+              "ownerType": "Joint",
+              "institutionId": "Institue",
+              "documents": null,
+              "relationship": null,
+              "additionalDetails": {}
+            }
+          ],
+          "institution": null,
+          "creationReason": null,
+          "noOfFloors": null,
+          "landArea": 2400.0,
+          "source": null,
+          "channel": "CITIZEN",
+          "documents": null,
+          "unit": null,
+          "additionalDetails": null
+        },
+        "applicationNo": null,
+        "applicationStatus": null,
+        "status": "Active",
+        "connectionNo": "WS/107/2019-20/000022",
+        "oldConnectionNo": null,
+        "documents": null,
+        "connectionCategory": "Permanent",
+        "rainWaterHarvesting": false,
+        "connectionType": "Metered",
+        "waterSource": "Bulk-Supply",
+        "meterId": null,
+        "meterInstallationDate": 0,
+        "pipeSize": 127.0,
+        "noOfTaps": 0,
+        "waterSubSource": "Raw",
+        "uom": "kL",
+        "calculationAttribute": "Water consumption"
+      }
+    ]
+  }
   if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
     payloadData.WaterConnection[0].service = "WATER"
-    dispatch(prepareFinalObject("WaterConnection", payloadData.WaterConnection))
+    dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]))
   }
 };
 
@@ -87,13 +178,13 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
     if (connectionType !== "Metered") {
       set(
         action.screenConfig,
-        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
+        "components.div.children.connection-details.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
         false
       );
     } else {
       set(
         action.screenConfig,
-        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
+        "components.div.children.connection-details.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
         true
       );
     }
@@ -140,7 +231,7 @@ export const connectionDetails = getCommonCard({
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "search-preview",
+  name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
     //To set the application no. at the  top
     set(

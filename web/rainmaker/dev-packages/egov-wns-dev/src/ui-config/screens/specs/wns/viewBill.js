@@ -323,14 +323,14 @@ const serviceDetails = getService();
 
 export const viewBill = getCommonCard({
   estimate,
-  serviceDetails,
-  propertyDetails,
+  // serviceDetails,
+  // propertyDetails,
   ownerDetails,
 });
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "view-bill",
+  name: "viewBill",
   beforeInitScreen: (action, state, dispatch) => {
     consumerCode = getQueryArg(window.location.href, "connectionNumber");
     // To set the application no. at the  top
@@ -385,7 +385,7 @@ const screenConfig = {
     },
     breakUpDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-wns",
       componentPath: "ViewBreakupContainer",
       props: {
         open: false,
