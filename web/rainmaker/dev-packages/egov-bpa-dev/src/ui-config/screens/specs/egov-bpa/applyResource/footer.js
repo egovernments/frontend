@@ -31,56 +31,56 @@ const setReviewPageRoute = (state, dispatch) => {
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
-  const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "nocDocumentsUploadRedux")
-  );
+  // const documentsFormat = Object.values(
+  //   get(state.screenConfiguration.preparedFinalObject, "nocDocumentsUploadRedux")
+  // );
 
-  let validateDocumentField = false;
+  // let validateDocumentField = false;
 
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(
-      documentsFormat[i],
-      "isDocumentTypeRequired"
-    );
+  // for (let i = 0; i < documentsFormat.length; i++) {
+  //   let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+  //   let isDocumentTypeRequired = get(
+  //     documentsFormat[i],
+  //     "isDocumentTypeRequired"
+  //   );
 
-    let documents = get(documentsFormat[i], "documents");
-    if (isDocumentRequired) {
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "natureOfNoc.value")) {
-            validateDocumentField = true;
-          }else if (get(documentsFormat[i], "remarks.value")) {
-            validateDocumentField = true;
-          } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please select type of Document!", labelKey: "" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
-          }
-        } else {
-          validateDocumentField = true;
-        }
-      } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
-      }
-    } else {
-      validateDocumentField = true;
-    }
-  }
+  //   let documents = get(documentsFormat[i], "documents");
+  //   if (isDocumentRequired) {
+  //     if (documents && documents.length > 0) {
+  //       if (isDocumentTypeRequired) {
+  //         if (get(documentsFormat[i], "natureOfNoc.value")) {
+  //           validateDocumentField = true;
+  //         }else if (get(documentsFormat[i], "remarks.value")) {
+  //           validateDocumentField = true;
+  //         } else {
+  //           dispatch(
+  //             toggleSnackbar(
+  //               true,
+  //               { labelName: "Please select type of Document!", labelKey: "" },
+  //               "warning"
+  //             )
+  //           );
+  //           validateDocumentField = false;
+  //           break;
+  //         }
+  //       } else {
+  //         validateDocumentField = true;
+  //       }
+  //     } else {
+  //       dispatch(
+  //         toggleSnackbar(
+  //           true,
+  //           { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+  //           "warning"
+  //         )
+  //       );
+  //       validateDocumentField = false;
+  //       break;
+  //     }
+  //   } else {
+  //     validateDocumentField = true;
+  //   }
+  // }
 
   // if (validateDocumentField) {
     setReviewPageRoute(state, dispatch);
@@ -102,18 +102,18 @@ const getMdmsData = async (state, dispatch) => {
   };
   try {
     let payload = mdmsMockJson;
-    // await httpRequest(
-      // "post",
-      // "/egov-mdms-service/v1/_search",
-      // "_search",
-      // [],
-      // mdmsBody
+    // let payload = await httpRequest(
+    //   "post",
+    //   "/egov-mdms-service/v1/_search",
+    //   "_search",
+    //   [],
+    //   mdmsBody
     // );
 
     dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.BPA.Documents",
-        payload.MdmsRes.BPA.Documents
+        "applyScreenMdmsData",
+        payload.MdmsRes
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -303,7 +303,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 41) {
+  if (activeStep === 4) {
     const documentsFormat = Object.values(
       get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
     );
@@ -365,7 +365,7 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep !== 5) {
     if (isFormValid) {
       let responseStatus = "success";
-      if (activeStep === 4) {
+      if (activeStep === 3) {
         prepareDocumentsUploadData(state, dispatch);
       }
       if (activeStep === 2) {

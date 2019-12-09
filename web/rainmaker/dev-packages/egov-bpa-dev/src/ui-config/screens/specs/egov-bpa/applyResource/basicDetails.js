@@ -58,62 +58,15 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
-    // occupancy: {
-    //   uiFramework: "custom-containers-local",
-    //   moduleName: "egov-bpa",
-    //   componentPath: "AutosuggestContainer",
-    //   jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy",
-    //   required: true,
-    //   props: {
-    //     style: {
-    //       width: "100%",
-    //       cursor: "pointer"
-    //     },
-    //     isDisabled: "true",
-    //     label: { labelName: "Occupancy", labelKey: "Occupancy" },
-    //     placeholder: {
-    //       labelName: "Select Occupancy",
-    //       labelKey: "Occupancy"
-    //     },
-    //     jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy",
-    //     labelsFromLocalisation: false,
-    //     suggestions: [],
-    //     fullwidth: true,
-    //     required: true,
-    //     inputLabelProps: {
-    //       shrink: true
-    //     },
-    //     isMulti: true,
-    //     // labelName: "name",
-    //     // valueName: "name",
-    //     // value: [
-    //     //   {
-    //     //     value: "Occupancy Type 1",
-    //     //     label: "Occupany Type 1"
-    //     //   },
-    //     //   {
-    //     //     value: "Occupancy Type 2",
-    //     //     label: "Occupancy Type 2"
-    //     //   }
-    //     // ],
-    //     data: mockJosnRoles
-    //     // error: "ERR_DEFAULT_INPUT_FIELD_MSG",
-    //     // disable: true
-    //   },
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 12,
-    //     md: 6
-    //   }
-    // },
     occupancy: getTextField({
       label: {
         labelName: "Occupancy",
         labelKey: "Occupancy"
       },
       required: true,
-      jsonPath:
-        "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy",
+      jsonPath : 'BPAs[0].BPADetails.basicdetails.occupancy',
+      // jsonPath:
+      //   "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -145,7 +98,6 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
-
     servicetype: getSelectField({
       label: {
         labelName: "Service type",
@@ -155,7 +107,6 @@ export const basicDetails = getCommonCard({
         labelName: "Select service type",
         labelKey: "Select Service type"
       },
-      required: true,
       localePrefix: {
         moduleName: "WF",
         masterName: "BPA"
@@ -173,11 +124,11 @@ export const basicDetails = getCommonCard({
         labelName: "Application Date",
         labelKey: "Application Date"
       },
-      required: true,
-      jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.applicationDate",
+      // required: true,
+      jsonPath: "BPAs[0].BPADetails.basicdetails.appdate",
+      // jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.applicationDate",
       props: {
         defaultValue: getTodaysDateInYMD(),
-        // value: getTodaysDateInYMD(),
         inputProps: {
           max: getTodaysDateInYMD()
         },

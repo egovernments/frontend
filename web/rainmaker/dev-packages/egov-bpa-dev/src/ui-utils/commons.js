@@ -299,78 +299,70 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 export const prepareDocumentsUploadData = (state, dispatch) => {
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.Documents",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping[0].docTypes",
     []
   );
-  documents = documents.filter(item => {
-    return item.active;
+  let documentsDropDownValues = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
+
+  let documentsList = [];
+  documents.forEach(doc => {
+    let code = doc.code;
+    doc.dropDownValues = [];
+    documentsDropDownValues.forEach(value => {
+      if (code === value.code.split(".")[0]) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc);
   });
+  documents = documentsList;
+
+  // documents = documents.filter(item => {
+  //   return item.active;
+  // });
   let documentsContract = [];
   let tempDoc = {};
   documents.forEach(doc => {
     let card = {};
-    card["code"] = doc.documentType;
-    card["title"] = doc.documentType;
+    card["code"] = 'Documents',//doc.documentType;
+    card["title"] = 'Documents',//doc.documentType;
     card["cards"] = [];
     tempDoc[doc.documentType] = card;
   });
 
   documents.forEach(doc => {
-    // Handle the case for multiple muildings
-    if (
-      doc.code === "BUILDING.BUILDING_PLAN" &&
-      doc.hasMultipleRows &&
-      doc.options
-    ) {
-      let buildingsData = get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-        []
-      );
-
-      buildingsData.forEach(building => {
-        let card = {};
-        card["name"] = building.name;
-        card["code"] = doc.code;
-        card["hasSubCards"] = true;
-        card["subCards"] = [];
-        doc.options.forEach(subDoc => {
-          let subCard = {};
-          subCard["name"] = subDoc.code;
-          subCard["required"] = subDoc.required ? true : false;
-          card.subCards.push(subCard);
-        });
-        tempDoc[doc.documentType].cards.push(card);
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropDownValues) {
+      let dropDownValues = {};
+      dropDownValues.label = "Select Documents";
+      dropDownValues.required = doc.required;
+      dropDownValues.menu = doc.dropDownValues.filter(item => {
+        return item.active;
       });
-    } else {
-      let card = {};
-      card["name"] = doc.code;
-      card["code"] = doc.code;
-      card["required"] = doc.required ? true : false;
-      if (doc.hasDropdown && doc.remarks) {
-        let remarks = {};
-        remarks.label = "Remarks";
-        remarks.required = true;
-        remarks.menu = doc.remarks.filter(item => {
-          return item.active;
-        });
-        remarks.menu = remarks.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
-        });
-        card["remarks"] = remarks;
-      }
-      tempDoc[doc.documentType].cards.push(card);
+      dropDownValues.menu = dropDownValues.menu.map(item => {
+        return { code: item.code, label: getTransformedLocale(item.code) };
+      });
+      card["dropDownValues"] = dropDownValues;
     }
+    tempDoc[doc.documentType].cards.push(card);
   });
 
   Object.keys(tempDoc).forEach(key => {
     documentsContract.push(tempDoc[key]);
   });
-
   dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 
 export const prepareNOCUploadData = (state, dispatch) => {
+  return;
   let documents = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.NOC",
@@ -455,63 +447,6 @@ export const prepareNOCUploadData = (state, dispatch) => {
 
   dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
 };
-
-// export const prepareDocumentsUploadRedux = (state, dispatch) => {
-//   const {
-//     documentsList,
-//     documentsUploadRedux = {},
-//     prepareFinalObject
-//   } = this.props;
-//   let index = 0;
-//   documentsList.forEach(docType => {
-//     docType.cards &&
-//       docType.cards.forEach(card => {
-//         if (card.subCards) {
-//           card.subCards.forEach(subCard => {
-//             let oldDocType = get(
-//               documentsUploadRedux,
-//               `[${index}].documentType`
-//             );
-//             let oldDocCode = get(
-//               documentsUploadRedux,
-//               `[${index}].documentCode`
-//             );
-//             let oldDocSubCode = get(
-//               documentsUploadRedux,
-//               `[${index}].documentSubCode`
-//             );
-//             if (
-//               oldDocType != docType.code ||
-//               oldDocCode != card.name ||
-//               oldDocSubCode != subCard.name
-//             ) {
-//               documentsUploadRedux[index] = {
-//                 documentType: docType.code,
-//                 documentCode: card.name,
-//                 documentSubCode: subCard.name
-//               };
-//             }
-//             index++;
-//           });
-//         } else {
-//           let oldDocType = get(documentsUploadRedux, `[${index}].documentType`);
-//           let oldDocCode = get(documentsUploadRedux, `[${index}].documentCode`);
-//           if (oldDocType != docType.code || oldDocCode != card.name) {
-//             documentsUploadRedux[index] = {
-//               documentType: docType.code,
-//               documentCode: card.name,
-//               isDocumentRequired: card.required,
-//               isDocumentTypeRequired: card.dropdown
-//                 ? card.dropdown.required
-//                 : false
-//             };
-//           }
-//         }
-//         index++;
-//       });
-//   });
-//   prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
-// };
 
 export const furnishNocResponse = response => {
   // Handle applicant ownership dependent dropdowns

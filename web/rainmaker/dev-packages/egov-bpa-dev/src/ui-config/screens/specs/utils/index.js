@@ -20,7 +20,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 import { mdmsMockJson } from '../egov-bpa/mdmsMock';
-import { scrutinyDetailsMockJson } from './scrutinyDetailsMockJson';
+import { scrutinyDetailsMockJson, scrutinyDetailsMockJson1 } from './scrutinyDetailsMockJson';
 
 export const getCommonApplyFooter = children => {
   return {
@@ -450,6 +450,48 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
   }
 };
 
+const freezeAppType = (state, dispatch) => {
+  let apptype = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.basicdetails.apptype"
+  );
+  let scrutinyAppType = get(
+    state.screenConfiguration.preparedFinalObject,
+    'applyScreenMdmsData.BPA.ApplicationType[0].code'
+  )
+  if (!apptype) {
+    dispatch(prepareFinalObject("BPAs[0].BPADetails.basicdetails.apptype", scrutinyAppType));
+  }
+};
+
+const occupancy = (state, dispatch) => {
+  let occupancy = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.basicdetails.occupancy"
+  );
+  let scrutinyOccupancy = get(
+    state.screenConfiguration.preparedFinalObject,
+    'BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy'
+  )
+  if (!occupancy) {
+    dispatch(prepareFinalObject("BPAs[0].BPADetails.basicdetails.occupancy", scrutinyOccupancy));
+  }
+};
+
+const appDate = (state, dispatch) => {
+  let appDate = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.basicdetails.appdate"
+  );
+  let scrutinyAppDate = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.scrutinyDetails.planDetail.applicationDate"
+  )
+  if (!appDate) {
+    dispatch(prepareFinalObject("BPAs[0].BPADetails.basicdetails.appdate", scrutinyAppDate));
+  }
+};
+
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
   try {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
@@ -525,6 +567,9 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         );
       }
     }
+    freezeAppType(state, dispatch);
+    occupancy(state, dispatch);
+    appDate(state, dispatch)
   } catch (e) {
     dispatch(
       toggleSnackbar(

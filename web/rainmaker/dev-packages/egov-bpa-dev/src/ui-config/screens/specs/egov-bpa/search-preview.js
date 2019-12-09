@@ -25,8 +25,7 @@ import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import {
-  applicantSummary,
-  institutionSummary
+  applicantSummary
 } from "./summaryResource/applicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
@@ -311,15 +310,6 @@ const setSearchResponse = async (
         false
       )
     );
-  } else {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.institutionSummary",
-        "visible",
-        false
-      )
-    );
   }
 
   prepareDocumentsView(state, dispatch);
@@ -366,11 +356,6 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
@@ -410,11 +395,10 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          estimateSummary: estimateSummary,
+          // estimateSummary: estimateSummary,
           nocSummary: nocSummary,
           propertySummary: propertySummary,
           applicantSummary: applicantSummary,
-          institutionSummary: institutionSummary,
           documentsSummary: documentsSummary
         }),
         citizenFooter:

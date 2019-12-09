@@ -416,7 +416,7 @@ const screenConfig = {
         "formwizardFifthStep",
         "formwizardSixthStep"
       ];
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 6; i++) {
         set(
           action.screenConfig,
           `components.div.children.${formWizardNames[i]}.visible`,
@@ -482,47 +482,6 @@ const screenConfig = {
         { visibility: "hidden" }
       );
     }
-    // if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("MULTIPLEOWNERS")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
-    //     {}
-    //   );
-    // } else if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("INSTITUTIONAL")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.props.style",
-    //     {}
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType.props.style",
-    //     {}
-    //   );
-    // }
-
     return action;
   },
   components: {

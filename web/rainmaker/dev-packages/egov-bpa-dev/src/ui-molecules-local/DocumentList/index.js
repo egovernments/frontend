@@ -176,8 +176,8 @@ class DocumentList extends Component {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
-                isDocumentTypeRequired: card.remarks
-                  ? card.remarks.required
+                isDocumentTypeRequired: card.dropDownValues
+                  ? card.dropDownValues.required
                   : false
               };
             }
@@ -227,14 +227,14 @@ class DocumentList extends Component {
       ...documentDetailsUploadRedux,
       [key]: {
         ...documentDetailsUploadRedux[key],
-        remarks: { value: event.target.value }
+        dropDownValues: { value: event.target.value }
       }
     });
   };
 
   getUploadCard = (card, key) => {
     const { classes, documentDetailsUploadRedux } = this.props;
-    let jsonPath = `documentDetailsUploadRedux[${key}].remarks.value`;
+    let jsonPath = `documentDetailsUploadRedux[${key}].dropDownValues.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
@@ -265,12 +265,12 @@ class DocumentList extends Component {
           {card.required && requiredIcon}
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
-          {card.remarks && (
+          {card.dropDownValues && (
             <TextFieldContainer
-              select={false}
-              label={{ labelKey: getTransformedLocale(card.remarks.label) }}
-              placeholder={{ labelKey: card.remarks.label }}
-              data={card.remarks.menu}
+              select={true}
+              label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
+              placeholder={{ labelKey: card.dropDownValues.label }}
+              data={card.dropDownValues.menu}
               optionValue="code"
               optionLabel="label"
               required={true}

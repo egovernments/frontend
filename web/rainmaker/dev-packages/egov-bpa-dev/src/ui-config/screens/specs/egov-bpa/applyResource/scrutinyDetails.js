@@ -9,7 +9,6 @@ import {
   getLabelWithValue,
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-// import { getTodaysDateInYMD } from "../utils";
 
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
@@ -24,7 +23,6 @@ export const buildingPlanScrutinyDetails = getCommonCard({
     }
   ),
   buildingPlanScrutinyDetailsContainer: getCommonContainer({
-
     buildingplanscrutinyapplicationnumber: getLabelWithValue(
       {
         labelName: "Building permit application Number",
@@ -35,7 +33,6 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         required: true
       }
     ),
-
     uploadedfile: getLabelWithValue(
       {
         labelName: "Uploaded Diagram",
@@ -46,7 +43,6 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         required: true
       },
     ),
-
     scrutinyreport: getLabelWithValue(
       {
         labelName: "Scrutiny Report",
@@ -56,53 +52,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         jsonPath: "BPAs[0].BPADetails.scrutinyDetails.updatedDxfFile",
         required: true
       },
-    ),
-
-
-    // buildingplanscrutinyapplicationnumber: {
-    //   ...getTextField({
-    //     label: {
-    //       labelName: "Building permit application Number",
-    //       labelKey: "Building permit application Number"
-    //     },
-    //     placeholder: {
-    //       labelName: "Building permit application Number",
-    //       labelKey: "Building permit application Number"
-    //     },
-    //     required: true,
-    //     jsonPath: "BPAs[0].BPADetails.planscrutinydetails.appnum"
-    //   })
-    // },
-    // uploadedfile: {
-    //   ...getTextField({
-    //     label: {
-    //       labelName: "Uploaded Diagram",
-    //       labelKey: "Uploaded Diagram"
-    //     },
-    //     placeholder: {
-    //       labelName: "Uploaded Diagram",
-    //       labelKey: "Uploaded Diagram"
-    //     },
-    //     required: true,
-    //     // pattern: getPattern("Name") || null,
-    //     jsonPath: "BPAs[0].BPADetails.planscrutinydetails.diagram"
-    //   })
-    // },
-    // scrutinyreport: {
-    //   ...getTextField({
-    //     label: {
-    //       labelName: "Scrutiny Report",
-    //       labelKey: "Scrutiny Report"
-    //     },
-    //     placeholder: {
-    //       labelName: "Scrutiny Report",
-    //       labelKey: "Scrutiny Report"
-    //     },
-    //     required: true,
-    //     // pattern: getPattern("Name") || null,
-    //     jsonPath: "BPAs[0].BPADetails.planscrutinydetails.report"
-    //   })
-    // }
+    )
   })
 });
 
