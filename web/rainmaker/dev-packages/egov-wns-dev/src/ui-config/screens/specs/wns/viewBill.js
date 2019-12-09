@@ -323,8 +323,8 @@ const serviceDetails = getService();
 
 export const viewBill = getCommonCard({
   estimate,
-  // serviceDetails,
-  // propertyDetails,
+  serviceDetails,
+  propertyDetails,
   ownerDetails,
 });
 

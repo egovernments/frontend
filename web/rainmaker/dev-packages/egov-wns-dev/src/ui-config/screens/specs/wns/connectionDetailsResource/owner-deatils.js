@@ -38,7 +38,7 @@ export const guardian = getLabelWithValue(
     labelName: "Guardian",
     labelKey: "WS_OWN_DETAIL_GUARDIAN_LABEL"
   },
-  { jsonPath: "WaterConnection[0].property.owners[0].guardian" }
+  { jsonPath: "WaterConnection[0].property.owners[0].relationship" }
 )
 export const guardianName = getLabelWithValue(
   {
