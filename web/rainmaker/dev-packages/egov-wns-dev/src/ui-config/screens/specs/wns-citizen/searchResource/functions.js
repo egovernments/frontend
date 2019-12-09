@@ -3,6 +3,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getSearchResults, fetchBill } from "../../../../..//ui-utils/commons";
 import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { validateFields } from "../../utils";
 
 export const searchApiCall = async (state, dispatch) => {
@@ -63,19 +64,38 @@ export const searchApiCall = async (state, dispatch) => {
     }
     try {
       const response = await getSearchResults(queryObject);
-      let queryObjectForFetchBill, billData;
-      let tenantId = get(state, "screenConfiguration.preparedFinalObject.searchScreen.tenantId");
-      if (response !== undefined && response !== null && response.WaterConnection.length > 0) {
-        response.WaterConnection[0].service = "WATER"
-        queryObjectForFetchBill = [
-          { key: "tenantId", value: tenantId },
-          { key: "consumerCode", value: response.WaterConnection[0].connectionNo },
-          { key: "businessService", value: "WS" }
+      const sewerageResponse = await getSearchResultsForSewerage(queryObject)
+      if (sewerageResponse !== undefined && sewerageResponse !== null && sewerageResponse.SewerageConnections.length > 0) {
+        sewerageResponse.SewerageConnections[0].service = "SEWERAGE"
+        let queryObjectForSewerageFetchBill = [
+          { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId },
+          { key: "consumerCode", value: sewerageResponse.SewerageConnections[0].connectionNo },
+          { key: "businessService", value: "SW" }
         ];
-        billData = await fetchBill(queryObjectForFetchBill)
+        let billData = await fetchBill(queryObjectForSewerageFetchBill)
         if (billData !== undefined && billData !== null && billData.Bill.length > 0) {
-          response.WaterConnection[0].due = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].totalAmount : " "
-          response.WaterConnection[0].dueDate = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].expiryDate : " "
+          sewerageResponse.SewerageConnections[0].due = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].totalAmount : " "
+          sewerageResponse.SewerageConnections[0].dueDate = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].expiryDate : " "
+        }
+      }
+      let tenantId = get(state, "screenConfiguration.preparedFinalObject.searchScreen.tenantId");
+
+      if (response !== undefined && response !== null) {
+        if (response.WaterConnection.length > 0) {
+          response.WaterConnection[0].service = "WATER"
+          let queryObjectForFetchBill = [
+            { key: "tenantId", value: tenantId },
+            { key: "consumerCode", value: response.WaterConnection[0].connectionNo },
+            { key: "businessService", value: "WS" }
+          ];
+          let billData = await fetchBill(queryObjectForFetchBill)
+          if (billData !== undefined && billData !== null && billData.Bill.length > 0) {
+            response.WaterConnection[0].due = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].totalAmount : " "
+            response.WaterConnection[0].dueDate = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].expiryDate : " "
+          }
+        }
+        if (sewerageResponse !== undefined && sewerageResponse !== null && sewerageResponse.SewerageConnections.length > 0) {
+          response.WaterConnection.push(sewerageResponse.SewerageConnections[0]);
         }
       }
       let data = response.WaterConnection.map(item => ({

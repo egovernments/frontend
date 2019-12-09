@@ -53,6 +53,25 @@ export const getSearchResults = async queryObject => {
     }
 };
 
+export const getSearchResultsForSewerage = async queryObject => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-services/swc/_search",
+            "_search",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
 export const getDescriptionFromMDMS = async requestBody => {
     try {
         const response = await httpRequest(

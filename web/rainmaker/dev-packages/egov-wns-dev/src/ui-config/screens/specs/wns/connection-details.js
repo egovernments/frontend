@@ -189,14 +189,7 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
       );
     }
 
-    const footer = footerReview(
-      action,
-      state,
-      dispatch,
-      status,
-      connectionNumber,
-      tenantId
-    );
+    const footer = footerReview(action, state, dispatch, status, connectionNumber, tenantId);
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
@@ -204,9 +197,7 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
 };
 
 const headerrow = getCommonContainer({
-  header: getCommonHeader({
-    labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER"
-  }),
+  header: getCommonHeader({ labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER" }),
   connectionNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
@@ -223,22 +214,13 @@ const propertyDetails = getPropertyDetails(false);
 
 const ownerDetails = getOwnerDetails(false);
 
-export const connectionDetails = getCommonCard({
-  serviceDetails,
-  propertyDetails,
-  ownerDetails
-});
+export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails });
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    //To set the application no. at the  top
-    set(
-      action.screenConfig,
-      "components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
-      connectionNumber
-    );
+    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connectionNumber.props.number", connectionNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     connectionNumber = getQueryArg(window.location.href, "connectionNumber");
     const queryObject = [{ key: "tenantId", value: tenantId }, { key: "businessService", value: "WS" }];
