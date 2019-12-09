@@ -186,6 +186,9 @@ export const loadReceiptData = async response => {
     data.comments = nullToNa(
       get(response, "Bill[0].billDetails[0].additionalDetails.comment", "NA")
     );
+    data.address = nullToNa(
+      get(response, "Bill[0].payerAddress", "NA")
+    );
     data.receiptNumber = get(
       response,
       "Bill[0].billDetails[0].receiptNumber",

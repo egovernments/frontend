@@ -355,6 +355,18 @@ export const newCollectionDetailsCard = getCommonCard(
         },
         Required: false,
         jsonPath: "Demands[0].additionalDetails.comment"
+      }),
+      address: getTextField({
+        label: {
+          labelName: "Address",
+          labelKey: "UC_ADDRESS_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Address ",
+          labelKey: "UC_ADDRESS_PLACEHOLDER"
+        },
+        Required: false,
+        jsonPath: "Demands[0].additionalDetails.address"
       })
     })
   },

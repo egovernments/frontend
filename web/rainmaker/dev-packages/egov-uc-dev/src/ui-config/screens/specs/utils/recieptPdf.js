@@ -261,6 +261,26 @@ const getCitizenReceipetData = transformedData => {
                 text: transformedData.paidBy,
                 border: [false, true, true, true]
               }
+            ],
+            [
+              {
+                text: "Address",
+                border: [true, true, false, true],
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.address,
+                border: [false, true, true, true]
+              },
+              {
+                text: "",
+                border: [true, true, false, true],
+                style: "receipt-table-key"
+              },
+              {
+                text: "",
+                border: [false, true, true, true]
+              }
             ]
           ]
 
@@ -625,6 +645,26 @@ const getReceiptData = transformedData => {
                 text: transformedData.paidBy,
                 border: [false, true, true, true]
               }
+            ],
+            [
+              {
+                text: "Address",
+                border: [true, true, false, true],
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.address,
+                border: [false, true, true, true]
+              },
+              {
+                text: "",
+                border: [true, true, false, true],
+                style: "receipt-table-key"
+              },
+              {
+                text: "",
+                border: [false, true, true, true]
+              }
             ]
           ]
 
@@ -910,6 +950,26 @@ const getReceiptData = transformedData => {
               },
               {
                 text: transformedData.paidBy,
+                border: [false, true, true, true]
+              }
+            ],
+            [
+              {
+                text: "Address",
+                border: [true, true, false, true],
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.address,
+                border: [false, true, true, true]
+              },
+              {
+                text: "",
+                border: [true, true, false, true],
+                style: "receipt-table-key"
+              },
+              {
+                text: "",
                 border: [false, true, true, true]
               }
             ]

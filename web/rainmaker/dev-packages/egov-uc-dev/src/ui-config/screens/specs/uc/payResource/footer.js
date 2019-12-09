@@ -204,6 +204,15 @@ const callBackForPay = async (state, dispatch) => {
       ""
     )
   );
+  set(
+    finalReceiptData,
+    "Bill[0].payerAddress",
+    get(
+      state.screenConfiguration,
+      "preparedFinalObject.Demands[0].additionalDetails.address",
+      ""
+    )
+  );
 
   if (get(finalReceiptData, "instrument.transactionNumber")) {
     set(
