@@ -660,7 +660,6 @@ const getReceiptData = (transformedData, ulbLogo) => {
 };
 
 const getCertificateData = (transformedData, ulbLogo) => {
-console.log(transformedData);
   var tlCertificateData = {
     defaultStyle: {
       font: "Camby"
