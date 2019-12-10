@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
 import ServiceList from "egov-ui-kit/common/common/ServiceList"
+import FilterDialog from "./components/FilterDialog"
 
 const iconStyle = {
   width: "48px",
@@ -13,6 +14,7 @@ class Inbox extends Component {
   state = {
     actionList: [],
     hasWorkflow: false,
+    filterPopupOpen : false
   };
   componentWillReceiveProps(nextProps) {
     const { menu } = nextProps;
@@ -32,6 +34,15 @@ class Inbox extends Component {
       actionList: list,
     });
   }
+
+  handleClose = () => {
+    this.setState({ filterPopupOpen: false });
+  };
+
+  onPopupOpen = () => {
+    this.setState({ filterPopupOpen: true });
+  }
+
   render() {
     const { name, history } = this.props;
     const { actionList, hasWorkflow } = this.state;
@@ -45,7 +56,8 @@ class Inbox extends Component {
           <ServiceList history={history} />
         </div>
 
-        {hasWorkflow && <TableData />}
+        {hasWorkflow && <TableData onPopupOpen={this.onPopupOpen}/>}
+        <FilterDialog   popupOpen={this.state.filterPopupOpen}  popupClose={this.handleClose}/>
       </div>
     );
   }

@@ -9,9 +9,13 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withStyles } from "@material-ui/core/styles";
-// import get from "lodash";
-// import isEmpty from "lodash/isEmpty";
-import _ from "lodash";
+import {Icon} from "components";
+import TextField from "@material-ui/core/TextField";
+// import _ from "lodash";
+import isEmpty from "lodash/isEmpty"
+import get from "lodash/get"
+import filter from "lodash/filter"
+import orderBy from "lodash/orderBy"
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
@@ -35,11 +39,11 @@ const getWFstatus = (status) => {
 };
 
 const prepareInboxDataRows = (data) => {
-  if (_.isEmpty(data)) return [];
+  if (isEmpty(data)) return [];
   return data.map((item) => {
     var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
     let dataRows = [
-      { text: _.get(item, "moduleName", "--"), subtext: `CS_COMMON_INBOX_${item.businessService.toUpperCase()}` },
+      { text: get(item, "moduleName", "--"), subtext: `CS_COMMON_INBOX_${item.businessService.toUpperCase()}` },
       { text: item.businessId },
       {
         text: item.state ? (
@@ -80,7 +84,7 @@ class TableData extends Component {
     const { toggleSnackbarAndSetText } = this.props;
     try {
       const payload = await httpRequest("egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
-      localStorageSet("businessServiceData", JSON.stringify(_.get(payload, "BusinessServices")));
+      localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
     } catch (e) {
       toggleSnackbarAndSetText(
         true,
@@ -95,7 +99,7 @@ class TableData extends Component {
 
   componentDidMount = async () => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
-    const uuid = _.get(this.props, "userInfo.uuid");
+    const uuid = get(this.props, "userInfo.uuid");
     const tenantId = getTenantId();
 
     const taskboardData = [];
@@ -105,10 +109,11 @@ class TableData extends Component {
     try {
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
-      const assignedData = _.orderBy(_.filter(responseData.ProcessInstances, (item) => _.get(item.assignee, "uuid") === uuid), [
-        "businesssServiceSla",
-      ]);
-      const allData = _.orderBy(_.get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+      const assignedData = orderBy(
+        filter(responseData.ProcessInstances, (item) => get(item.assignee, "uuid") === uuid),
+        ["businesssServiceSla"]
+      );
+      const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
 
       const assignedDataRows = prepareInboxDataRows(assignedData);
       const allDataRows = prepareInboxDataRows(allData);
@@ -125,12 +130,12 @@ class TableData extends Component {
       inboxData[0].rows = assignedDataRows;
 
       const taskCount = allDataRows.length;
-      const overSla = _.filter(responseData.ProcessInstances, (item) => item.businesssServiceSla < 0).length;
+      const overSla = filter(responseData.ProcessInstances, (item) => item.businesssServiceSla < 0).length;
 
       taskboardData.push(
-        { head: taskCount, body: "WF_TOTAL_TASK" },
-        { head: "0", body: "WF_TOTAL_NEARING_SLA" },
-        { head: overSla, body: "WF_TOTAL_OVER_SLA" }
+        { head: taskCount, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
+        { head: "0", body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
+        { head: overSla, body: "WF_TOTAL_OVER_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
       );
 
       tabData.push({ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [assignedDataRows.length] });
@@ -174,10 +179,19 @@ class TableData extends Component {
 
   render() {
     const { value, taskboardData, tabData, inboxData, moduleName } = this.state;
-    const { classes } = this.props;
+    const { classes,onPopupOpen } = this.props;
     return (
       <div className="col-sm-12">
-        <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
+        <div>
+          <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
+          <TextField
+            /* className={classNames(classes.margin, classes.textField)} */
+            value={"search"}
+            /* onChange={this.handleChange("weightRange")} */
+          />
+          <Icon action="custom" name="filter" onClick={onPopupOpen} style={{cursor : "pointer"}}/>
+        </div>
+
         <Taskboard data={taskboardData} />
         <div className="col-sm-12 backgroundWhite">
           <Tabs
@@ -239,9 +253,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(TableData)
-);
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(TableData));

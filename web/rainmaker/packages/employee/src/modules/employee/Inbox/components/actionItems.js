@@ -3,24 +3,62 @@ import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import Icon from "egov-ui-kit/components/Icon";
 
-export const Taskboard = ({ data }) => {
-  return (
-    <div className="inbox-taskboard">
-      {data.map((item, i) => (
-        <Card
-          className="inbox-card inbox-worklist-card"
-          key={i}
-          textChildren={
-            <div>
-              <div className="head">{item.head}</div>
-              <Label labelClassName="inbox-taskboard-subtext" label={item.body} />
-            </div>
-          }
-        />
-      ))}
-    </div>
-  );
-};
+export class Taskboard extends React.Component{
+  state={
+    color:""
+  }
+
+  onTaskBoardClick = (baseColor) =>{
+    this.setState({
+      color : baseColor 
+    })
+  } 
+
+  render(){
+    const {onTaskBoardClick} = this;
+    const {data} = this.props
+    return (
+      <div className="inbox-taskboard">
+        {data.map((item, i) => (
+          <Card
+            className="inbox-card inbox-worklist-card"
+            key={i}
+            onClick={() => onTaskBoardClick(item.baseColor)}
+            style={{backgroundColor : item.color ,borderTop:  item.baseColor === this.state.color ?  `4px solid ${this.state.color}`  : ""}}
+            textChildren={
+              <div>
+                <div className="head">{item.head}</div>
+                <Label labelClassName="inbox-taskboard-subtext" label={item.body} />
+              </div>
+            }
+          />
+        ))}
+      </div>
+    );
+  }
+}
+
+// export const Taskboard = ({ data }) => {
+//   return (
+//     <div className="inbox-taskboard">
+//       {data.map((item, i) => (
+//         <Card
+//           className="inbox-card inbox-worklist-card"
+//           key={i}
+//           style={{backgroundColor : item.color}}
+//           textChildren={
+//             <div>
+//               <div className="head">{item.head}</div>
+//               <Label labelClassName="inbox-taskboard-subtext" label={item.body} />
+//             </div>
+//           }
+//         />
+//       ))}
+//     </div>
+//   );
+// };
+
+
 
 const onModuleCardClick = (route, setRoute) => {
   // const url = process.env.NODE_ENV === "production" ? `employee/${route}` : route;
