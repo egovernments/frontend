@@ -492,6 +492,49 @@ const appDate = (state, dispatch) => {
   }
 };
 
+const riskType = (state, dispatch) => {
+  let occupancyType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+  );
+  let plotArea = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.scrutinyDetails.planDetail.plot.area"
+  );
+  let buildingBlocks = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks"
+  );
+  let blocks = buildingBlocks.map(item => {
+    return item && item.building && item.building.buildingHeight;
+  });
+  let buildingHeight = Math.max(blocks);
+  let scrutinyRiskType;
+  if (
+    occupancyType === "Residential" &&
+    plotArea > 500 &&
+    buildingHeight > 15
+  ) {
+    scrutinyRiskType = "High";
+  } else if (
+    occupancyType === "Residential" &&
+    plotArea <= 500 &&
+    plotArea <= 300 &&
+    buildingHeight <= 15 &&
+    buildingHeight <= 10
+  ) {
+    scrutinyRiskType = "Medium";
+  } else {
+    scrutinyRiskType = "Low";
+  }
+  dispatch(
+    prepareFinalObject(
+      "BPAs[0].BPADetails.basicdetails.riskType",
+      scrutinyRiskType
+    )
+  );
+};
+
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
   try {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
@@ -569,7 +612,8 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     }
     freezeAppType(state, dispatch);
     occupancy(state, dispatch);
-    appDate(state, dispatch)
+    appDate(state, dispatch);
+    riskType(state, dispatch);
   } catch (e) {
     dispatch(
       toggleSnackbar(

@@ -29,30 +29,43 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         labelKey: "Building permit application Number"
       },
       {
-        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.edcrNumber",
-        required: true
+        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.edcrNumber"
       }
     ),
-    uploadedfile: getLabelWithValue(
-      {
-        labelName: "Uploaded Diagram",
-        labelKey: "Uploaded Diagram"
+
+    uploadedfile: {
+      uiFramework: "custom-atoms-local",
+      componentPath: "downloadFile",
+      jsonPath: "BPAs[0].BPADetails.scrutinyDetails.dxfFile",
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 4
       },
-      {
-        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.dxfFile",
-        required: true
+      props: {
+          label: 'Uploaded Diagram',
+          linkDetail : 'uploadedDiagram.dxfFile',
+          jsonPath: "BPAs[0].BPADetails.scrutinyDetails.dxfFile",
       },
-    ),
-    scrutinyreport: getLabelWithValue(
-      {
-        labelName: "Scrutiny Report",
-        labelKey: "Scrutiny Report"
-      },
-      {
+      type: "array"
+    },
+
+    scrutinyreport: {
+    uiFramework: "custom-atoms-local",
+    componentPath: "downloadFile",
+    jsonPath: "BPAs[0].BPADetails.scrutinyDetails.dxfFile",
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 4
+    },
+    props: {
+        label: 'Scrutiny Report',
+        linkDetail: 'ScrutinyReport.pdf',
         jsonPath: "BPAs[0].BPADetails.scrutinyDetails.updatedDxfFile",
-        required: true
       },
-    )
+    type: "array"
+    }
   })
 });
 
@@ -277,7 +290,7 @@ export const proposedBuildingDetails = getCommonCard({
             },
             required: true,
             jsonPath:
-              "BPAs[0].BPADetails.scrutinyDetails.planDetail.distancesFromMonument",
+              "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.buildingHeight",
             props: {
               disabled: 'true'
             }

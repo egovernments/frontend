@@ -11,8 +11,13 @@ const AutoSuggest =  Loadable({
   loader: () => import("./AutoSuggest"),
   loading: () => <Loading />
 });
+const downloadFile = Loadable({
+  loader: () => import("./downloadFile"),
+  loading: () => <Loading />
+})
 
 export {
   TestAtoms,
-  AutoSuggest
+  AutoSuggest,
+  downloadFile
 };

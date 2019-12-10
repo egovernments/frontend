@@ -20,6 +20,8 @@ import { getDetailsForOwner } from "../../utils";
 import get from "lodash/get";
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "../../../../../ui-utils";
 
 export const boundaryDetails = getCommonCard({
     header: getCommonTitle(
@@ -119,7 +121,7 @@ export const detailsofplot = getCommonCard({
                     labelKey: "Enter Plot Area"
                 },
                 required: true,
-                jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.plotArea",
+                jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.plot.area",
                 props: {
                     disabled: 'true'
                   }

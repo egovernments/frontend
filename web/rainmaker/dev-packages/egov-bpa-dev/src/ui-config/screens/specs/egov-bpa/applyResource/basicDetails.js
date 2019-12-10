@@ -98,6 +98,30 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
+    riskType: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "Risk Type"
+      },
+      placeholder: {
+        labelName: "Select Risk Type",
+        labelKey: "Select Risk Type"
+      },
+      localePrefix: {
+        moduleName: "WF",
+        masterName: "BPA"
+      },
+      jsonPath: "BPAs[0].BPADetails.basicdetails.riskType",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        disabled: true
+      }
+    }),
     servicetype: getSelectField({
       label: {
         labelName: "Service type",

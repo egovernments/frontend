@@ -132,7 +132,7 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  if (activeStep === 10) {
+  if (activeStep === 0) {
     let isBasicDetailsCardValid = validateFields(
       "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children",
       state,
@@ -150,14 +150,14 @@ const callBackForNext = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.floors",
       []
   );
-
+    let index = 0;
     let data = response.map(item => ({
       // [getTextToLocalMapping("Application No")]:
         "Floor Description" :
         item.occupancies[0].floorArea || "-",
         // [getTextToLocalMapping("Level")]:
         "Level":
-        item.occupancies[0].deduction || "-",
+        index++ || "0",
         // [getTextToLocalMapping("Occupancy/Sub Occupancy")]:
         "Occupancy/Sub Occupancy":
         item.occupancies[0].type || "-",
@@ -181,17 +181,17 @@ const callBackForNext = async (state, dispatch) => {
     );
   }
 
-  if (activeStep === 11) {
+  if (activeStep === 1) {
     let isBuildingPlanScrutinyDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.buildingPlanScrutinyDetails.children.cardContent.children.buildingPlanScrutinyDetailsContainer.children",
       state,
       dispatch
     );
     let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children",
-      state,
+      "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.blockWiseContainer.children",
+      state, 
       dispatch
-    );
+    )
     let isDemolitiondetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.demolitiondetails.children.cardContent.children.demolitionDetailsContainer.children",
       state,
@@ -204,7 +204,7 @@ const callBackForNext = async (state, dispatch) => {
     );
 
     if (
-      !isBuildingPlanScrutinyDetailsCardValid ||
+      // !isBuildingPlanScrutinyDetailsCardValid 
       !isBlockWiseOccupancyAndUsageDetailsCardValid ||
       !isDemolitiondetailsCardValid ||
       !isProposedBuildingDetailsCardValid
@@ -282,7 +282,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 31) {
+  if (activeStep === 3) {
     let isBoundaryDetailsCardValid = validateFields(
       "components.div.children.formwizardFourthStep.children.boundaryDetails.children.cardContent.children.boundaryDetailsConatiner.children",
       state,
@@ -317,11 +317,11 @@ const callBackForNext = async (state, dispatch) => {
         "isDocumentTypeRequired"
       );
 
-      let documents = get(documentsFormat[i], "documentDetails");
+      let documents = get(documentsFormat[i], "documents");
       if (isDocumentRequired) {
         if (documents && documents.length > 0) {
           if (isDocumentTypeRequired) {
-            if (get(documentsFormat[i], "remarks.value")) {
+            if (get(documentsFormat[i], "dropDownValues.value")) {
               validateDocumentField = true;
             } else {
               dispatch(
@@ -352,10 +352,10 @@ const callBackForNext = async (state, dispatch) => {
         validateDocumentField = true;
       }
     }
-    // if (!validateDocumentField) {
-    // isFormValid = false;
-    // hasFieldToaster = true;
-    // }
+    if (!validateDocumentField) {
+    isFormValid = false;
+    hasFieldToaster = true;
+    }
   }
 
   if (activeStep === 5) {
