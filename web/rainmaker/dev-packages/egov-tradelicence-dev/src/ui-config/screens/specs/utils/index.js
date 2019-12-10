@@ -656,7 +656,10 @@ export const getHeaderSideText = (status, licenseNo = null) => {
   }
 };
 
-export const getMdmsData = async (  tenantId) => {
+export const getMdmsData = async (  queryObj) => {
+
+let tenantId=getQueryArg(window.location.href, "tenantId");
+
   let queryObject = {
     MdmsCriteria: {
       tenantId: tenantId,
