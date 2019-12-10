@@ -57,13 +57,8 @@ export const getSearchResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-<<<<<<< Updated upstream
-            "/ws-services/wc/_search",
-            "_search",
-=======
             "/wc/_search",
             "",
->>>>>>> Stashed changes
             queryObject
         );
         return response;
