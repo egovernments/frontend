@@ -337,7 +337,7 @@ export const loadMdmsData = async tenantid => {
       value: "tenants"
     }
   ];
-  let response = await getMdmsData(queryObject);
+  let response = await getMdmsData(tenantid);
 
   if (
     response &&
