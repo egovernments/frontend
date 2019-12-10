@@ -106,7 +106,7 @@ export const findCorrectDateObj = (financialYear, category) => {
   } else if (chosenDateObj.endingDay) {
     month = getMonth(chosenDateObj.endingDay);
     if (month === 1 || month === 2 || month === 3) {
-      chosenDateObj.endingDay = chosenDateObj.endingDay + `/${++assessYear}`;
+      chosenDateObj.endingDay = chosenDateObj.endingDay ;
     } else {
       chosenDateObj.endingDay = chosenDateObj.endingDay + `/${assessYear}`;
     }
