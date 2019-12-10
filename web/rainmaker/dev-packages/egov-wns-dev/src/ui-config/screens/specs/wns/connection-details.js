@@ -265,7 +265,7 @@ const screenConfig = {
                 word1: {
                   ...getCommonTitle(
                     {
-                      labelKey: "WS_CONNECTION_DETAILS_STATUS_HEADER"
+                      labelKey: "WS_CONNECTION_DETAILS_CONNECTION_STATUS_HEADER"
                     },
                     {
                       style: {

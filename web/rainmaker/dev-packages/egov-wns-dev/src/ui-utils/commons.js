@@ -139,29 +139,24 @@ export const getMyConnectionResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022&tenantId=pb.amritsar",
+            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022",
             "",
             queryObject
         );
-        return response;
-    } catch (error) {
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
-};
-// api call to get my connection details Due
-export const getMyConnectionDueResults = async queryObject => {
-    try {
-        const response = await httpRequest(
-            "post",
-            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?tenantId=pb.amritsar&consumerCode=WS/107/2019-20/000022&businessService=WS",
-            "",
-            queryObject
-        );
+        const dueResponse = await response.WaterConnection.map(item => {
+            const data = httpRequest(
+                "post",
+                `http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?consumerCode=${item.connectionNo}&tenantId=${item.property.tenantId}&businessService=WS`,
+                "",
+                // queryObject
+            );
+
+            const resolvedData = Promise.resolve(data)
+            resolvedData.then(function (value) {
+                item.due = value.Bill[0].billDetails.length > 0 ? value.Bill[0].billDetails[0].totalAmount : 0
+            });
+            return data;
+        });
         return response;
     } catch (error) {
         store.dispatch(
@@ -177,11 +172,35 @@ export const getConsumptionDetails = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
+            // "http://172.17.25.34:8083/meterConnection/_search?connectionNos=WERTY123456789",
+            "http://172.17.25.34:8083/meterConnection/_search",
+            "",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
+export const getPastPaymentDetials = async queryObject => {
+    try {
+        const response = await httpRequest(
+            "post",
+<<<<<<< HEAD
 <<<<<<< Updated upstream
             "/meterConnection/_search",
 =======
             "/ws-calculator/meterConnection/_search",
 >>>>>>> Stashed changes
+=======
+            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022&tenantId=pb",
+>>>>>>> 47f9b9a27fb787d1be88a119beace568cbfedb0d
             "",
             queryObject
         );
