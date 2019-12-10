@@ -17,7 +17,26 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { getQueryArg, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
+import {
+    setBusinessServiceDataToLocalStorage,
+    getMultiUnits
+} from "egov-ui-framework/ui-utils/commons";
+import commonConfig from "config/common.js";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+export const updateTradeDetails = async requestBody => {
+    try {
+        const payload = await httpRequest(
+            "post",
+            "/tl-services/v1/_update",
+            "", [],
+            requestBody
+        );
+        return payload;
+    } catch (error) {
+        store.dispatch(toggleSnackbar(true, error.message, "error"));
+    }
+};
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
     alert(1);
@@ -38,8 +57,13 @@ export const getSearchResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
+<<<<<<< Updated upstream
             "/ws-services/wc/_search",
             "_search",
+=======
+            "/wc/_search",
+            "",
+>>>>>>> Stashed changes
             queryObject
         );
         return response;
@@ -153,7 +177,11 @@ export const getConsumptionDetails = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
+<<<<<<< Updated upstream
             "/meterConnection/_search",
+=======
+            "/ws-calculator/meterConnection/_search",
+>>>>>>> Stashed changes
             "",
             queryObject
         );
@@ -647,3 +675,251 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
         }
     }
 };
+
+
+export const getMdmsDataForMeterStatus = async (dispatch) => {
+    let mdmsBody = {
+        MdmsCriteria: {
+            tenantId: commonConfig.tenantId,
+            moduleDetails: [
+                {
+                    moduleName: "tenant",
+                    masterDetails: [
+                        {
+                            name: "tenants"
+                        }
+                    ]
+                },
+            ]
+        }
+    };
+    try {
+        let payload = null;
+        payload = await httpRequest(
+            "post",
+            "/egov-mdms-service/v1/_search",
+            "_search",
+            [],
+            mdmsBody
+        );
+        console.log(payload.MdmsRes)
+        let sampleData = [
+            {
+                "code": "Working",
+                "name": "Working",
+                "description": "Working",
+                "status": {
+                    "name": "Working",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "Locked",
+                "name": "Locked",
+                "description": "Locked",
+                "status": {
+                    "name": "Locked",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "Breakdown",
+                "name": "Breakdown",
+                "description": "Breakdown",
+                "status": {
+                    "name": "Breakdown",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "No meter",
+                "name": "No meter",
+                "description": "No meter",
+                "status": {
+                    "name": "No meter",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "Reset",
+                "name": "Reset",
+                "description": "Reset",
+                "status": {
+                    "name": "Reset",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "Replacement",
+                "name": "Replacement",
+                "description": "Replacement",
+                "status": {
+                    "name": "Replacement",
+                    "code": "1013",
+                }
+            }
+
+        ]
+        payload.MdmsRes.tenant.tenants = sampleData
+
+        dispatch(prepareFinalObject("meterMdmsData", payload.MdmsRes));
+
+    } catch (e) {
+        console.log(e);
+    }
+};
+export const getMdmsDataForAutopopulated = async (dispatch) => {
+    let mdmsBody = {
+        MdmsCriteria: {
+            tenantId: commonConfig.tenantId,
+            moduleDetails: [
+                {
+                    moduleName: "ws-services-masters",
+                    masterDetails: [
+                        {
+                            name: "billingPeriod"
+                        }
+                    ]
+                },
+            ]
+        }
+    };
+    try {
+        // let payload = null;
+        // payload = await httpRequest(
+        //     "post",
+        //     "http://192.168.1.68:8094/egov-mdms-service-test/v1/_search",
+        //     "_search",
+        //     [],
+        //     mdmsBody
+        // );
+
+        let connectionType = "Non Metered"
+        let queryObject = [
+            {
+                key: "tenantId",
+                value: JSON.parse(getUserInfo()).tenantId
+            },
+            { key: "offset", value: "0" }
+        ];
+      let res=  getSearchResults(queryObject)
+      console.log(res,"res")
+        payload = {
+            "MdmsRes": {
+                "ws-services-masters": {
+                    "billingPeriod": [
+                        {
+                            "active": true,
+                            "connectionType": "Metered",
+                            "billingCycle": "monthly"
+                        },
+                        {
+                            "active": true,
+                            "connectionType": "Non Metered",
+                            "billingCycle": "quarterly"
+                        }
+                    ]
+                }
+            }
+        }
+
+        let billingCycle;
+        payload.MdmsRes['ws-services-masters'].billingPeriod.map((x) => {
+            if (x.connectionType === connectionType) {
+                billingCycle = x.billingCycle
+            }
+        })
+        dispatch(prepareFinalObject("billingCycle", billingCycle));
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const getMeterReadingData = async (dispatch) => {
+    let queryObject = [
+        {
+            key: "tenantId",
+            value: "pb.amritsar"
+        },
+        {
+            key: "connectionNos",
+            value: getQueryArg(window.location.href, "connectionNos")
+        },
+        { key: "offset", value: "0" }
+    ];
+
+
+    // const mdmsRes = await getMdmsData(dispatch);
+    // let tenants =
+    //   mdmsRes &&
+    //   mdmsRes.MdmsRes &&
+    //   mdmsRes.MdmsRes.tenant.citymodule.find(item => {
+    //     if (item.code === "TL") return true;
+    //   });
+    // dispatch(
+    //   prepareFinalObject(
+    //     "applyScreenMdmsData.common-masters.citiesByModule.TL",
+    //     tenants
+    //   )
+    // );
+    try {
+        const response = await getConsumptionDetails(queryObject);
+        // const response =
+        // {
+        //     "ResponseInfo": {
+        //         "apiId": "",
+        //         "ver": ".",
+        //         "ts": null,
+        //         "resMsgId": "uief87324",
+        //         "msgId": "",
+        //         "status": "successful"
+        //     },
+        //     "meterReadings": [
+        //         {
+        //             "id": "c6326927-0f4c-46ea-b05f-b7bd3a046aca",
+        //             "billingPeriod": "Apr - 2019",
+        //             "meterStatus": "Working",
+        //             "lastReading": 70,
+        //             "lastReadingDate": 1575028112,
+        //             "currentReading": 347,
+        //             "currentReadingDate": 1575028312,
+        //             "connectionNo": "WS/107/2019-20/000022"
+        //         }
+        //     ]
+        // }
+        if (response && response.meterReadings && response.meterReadings.length > 0) {
+            dispatch(prepareFinalObject("consumptionDetails", response.meterReadings));
+            dispatch(
+                prepareFinalObject("consumptionDetailsCount", response.meterReadings.length)
+            );
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+export const createMeterReading = async (dispatch, body) => {
+
+    const response = await httpRequest(
+        "post",
+        "/ws-calculator/meterConnection/_create",
+        "", [], { meterReadings: body }
+    );
+
+    if (response && response !== undefined && response !== null) {
+        getMeterReadingData(dispatch)
+    }
+
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable",
+            "visible",
+            false
+        )
+    );
+}
+
+

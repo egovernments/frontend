@@ -47,14 +47,14 @@ class MeterReading extends React.Component {
                 <CardContent>
                   <div>
                     <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <LabelContainer
                           labelKey="WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <Label
                           labelName={item.billingPeriod}
                           fontSize={14}
@@ -63,30 +63,30 @@ class MeterReading extends React.Component {
                       </Grid>
                     </Grid>
                     <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <LabelContainer
                           labelKey="WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <Label
-                          labelKey={item.meterStatus}
+                          labelName={item.meterStatus}
                           fontSize={14}
                           style={{ fontSize: 14 }}
                         />
                       </Grid>
                     </Grid>
                     <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <LabelContainer
                           labelKey="WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <Label
                           labelName={item.lastReading}
                           fontSize={14}
@@ -95,14 +95,14 @@ class MeterReading extends React.Component {
                       </Grid>
                     </Grid>
                     <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <LabelContainer
                           labelKey="WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <Label
                           labelName={lastReadingDate}
                           fontSize={14}
@@ -111,14 +111,14 @@ class MeterReading extends React.Component {
                       </Grid>
                     </Grid>
                     <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <LabelContainer
                           labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <Label
                           labelName={item.currentReading}
                           fontSize={14}
@@ -127,14 +127,14 @@ class MeterReading extends React.Component {
                       </Grid>
                     </Grid>
                     <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <LabelContainer
                           labelKey="WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <Label
                           labelName={currentReadingDate}
                           fontSize={14}
@@ -143,14 +143,14 @@ class MeterReading extends React.Component {
                       </Grid>
                     </Grid>
                     <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <LabelContainer
                           labelKey="WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item sm={3} xs={12}>
                         <Label
                           labelName={item.currentReading - item.lastReading}
                           fontSize={14}
@@ -164,10 +164,14 @@ class MeterReading extends React.Component {
             );
           })
         ) : (
-            <div className="no-assessment-message-cont">
+            <div style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+              textAlign: "center"
+            }}>
               <LabelContainer
                 labelKey={"No results Found!"}
-                style={{ marginBottom: 10 }}
               />
               {/* <Button
                 style={{

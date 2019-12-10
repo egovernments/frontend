@@ -14,6 +14,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { httpRequest } from "../../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
+
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -177,45 +178,5 @@ const getMdmsData = async () => {
     return payload;
   } catch (e) {
     console.log(e);
-  }
-};
-export const fetchData = async (action, state, dispatch) => {
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: "pb.amritsar"
-    },
-    {
-      key: "connectionNos",
-      value: getQueryArg(window.location.href, "connectionNos")
-    },
-    { key: "offset", value: "0" }
-  ];
-  const response = await getConsumptionDetails(queryObject);
-  const mdmsRes = await getMdmsData(dispatch);
-  let tenants =
-    mdmsRes &&
-    mdmsRes.MdmsRes &&
-    mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-      if (item.code === "TL") return true;
-    });
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.common-masters.citiesByModule.TL",
-  //     tenants
-  //   )
-  // );
-  try {
-    /*Mseva 2.0 */
-    console.log(1, response)
-    console.log(2, response.meterReadings)
-    if (response && response.meterReadings && response.meterReadings.length > 0) {
-      dispatch(prepareFinalObject("consumptionDetails", response.meterReadings));
-      dispatch(
-        prepareFinalObject("consumptionDetailsCount", response.meterReadings.length)
-      );
-    }
-  } catch (error) {
-    console.log(error);
   }
 };
