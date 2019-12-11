@@ -123,6 +123,7 @@ export const searchForm = getCommonCard({
     }),
 
     department: getSelectField({
+      componentPath: "AutosuggestContainer",
       label: { labelName: "Department", labelKey: "HR_DEPT_LABEL" },
       placeholder: {
         labelName: "Select Department",
@@ -137,7 +138,8 @@ export const searchForm = getCommonCard({
       sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
       props: {
         optionLabel: "name",
-        optionValue: "code"
+        optionValue: "code",
+        menuPortalTarget:document.querySelector('body')
         // hasLocalization: false
       },
       localePrefix: {
@@ -146,6 +148,7 @@ export const searchForm = getCommonCard({
       }
     }),
     designation: getSelectField({
+      componentPath: "AutosuggestContainer",
       label: { labelName: "Designation", labelKey: "HR_DESG_LABEL" },
       placeholder: {
         labelName: "Select Designation",
@@ -160,7 +163,8 @@ export const searchForm = getCommonCard({
       sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
       props: {
         optionValue: "code",
-        optionLabel: "name"
+        optionLabel: "name",
+        menuPortalTarget:document.querySelector('body')
         // hasLocalization: false
       },
       localePrefix: {
