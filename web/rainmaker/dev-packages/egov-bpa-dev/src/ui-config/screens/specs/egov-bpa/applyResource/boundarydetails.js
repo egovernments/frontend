@@ -94,6 +94,125 @@ export const boundaryDetails = getCommonCard({
                 }
             })
         },
+        // propertyCity: {
+        //     ...getSelectField({
+        //       label: { labelName: "City", labelKey: "NOC_PROPERTY_CITY_LABEL" },
+        //       localePrefix: {
+        //         moduleName: "TENANT",
+        //         masterName: "TENANTS"
+        //       },
+        //       optionLabel: "name",
+        //       placeholder: {
+        //         labelName: "Select City",
+        //         labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
+        //       },
+        //       sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+        //       jsonPath: "BPAs[0].BPADetails.boundarydetails.circle",
+        //       required: true,
+        //       props: {
+        //         required: true,
+        //         // disabled: true
+        //         data: [
+        //             {
+        //                 value: "Circle 1",
+        //                 label: "Circle 1"
+        //             },
+        //             {
+        //                 value: "Circle 2",
+        //                 label: "Circle 2"
+        //             }
+        //         ],
+        //         optionValue: "value",
+        //         optionLabel: "label"
+        //       }
+        //     }),
+        //     beforeFieldChange: async (action, state, dispatch) => {
+        //       //Below only runs for citizen - not required here in employee
+        //       dispatch(
+        //         prepareFinalObject(
+        //           "BPAs[0].BPADetails.boundarydetails.circle",
+        //           action.value
+        //         )
+        //       );
+        //       try {
+        //         let payload = await httpRequest(
+        //           "post",
+        //           "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+        //           "_search",
+        //           [{ key: "tenantId", value: action.value }],
+        //           {}
+        //         );
+        //         const mohallaData =
+        //           payload &&
+        //           payload.TenantBoundary[0] &&
+        //           payload.TenantBoundary[0].boundary &&
+        //           payload.TenantBoundary[0].boundary.reduce((result, item) => {
+        //             result.push({
+        //               ...item,
+        //               name: `${action.value
+        //                 .toUpperCase()
+        //                 .replace(
+        //                   /[.]/g,
+        //                   "_"
+        //                 )}_REVENUE_${item.code
+        //                 .toUpperCase()
+        //                 .replace(/[._:-\s\/]/g, "_")}`
+        //             });
+        //             return result;
+        //           }, []);
+    
+        //         dispatch(
+        //           prepareFinalObject(
+        //             "applyScreenMdmsData.tenant.localities",
+        //             mohallaData
+        //           )
+        //         );
+        //         dispatch(
+        //           handleField(
+        //             "apply",
+        //             "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
+        //             "props.suggestions",
+        //             mohallaData
+        //           )
+        //         );
+        //         const mohallaLocalePrefix = {
+        //           moduleName: action.value,
+        //           masterName: "REVENUE"
+        //         };
+        //         dispatch(
+        //           handleField(
+        //             "apply",
+        //             "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
+        //             "props.localePrefix",
+        //             mohallaLocalePrefix
+        //           )
+        //         );
+    
+        //         dispatch(
+        //           fetchLocalizationLabel(getLocale(), action.value, action.value)
+        //         );
+        //       } catch (e) {
+        //         console.log(e);
+        //       }
+        //       // Set Firestation based on ULB
+        //       let fireStationsList = get(
+        //         state,
+        //         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+        //         []
+        //       );
+        //       let fireStations = fireStationsList.filter(firestation => {
+        //         return firestation.baseTenantId === action.value;
+        //       });
+        //       dispatch(
+        //         handleField(
+        //           "apply",
+        //           "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyFirestation",
+        //           "props.data",
+        //           fireStations
+        //         )
+        //       );
+        //     }
+        //   },
     })
 });
 

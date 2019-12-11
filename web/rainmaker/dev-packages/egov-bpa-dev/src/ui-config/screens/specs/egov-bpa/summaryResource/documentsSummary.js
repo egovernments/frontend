@@ -1,10 +1,7 @@
 import {
-  getBreak,
-  getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabel,
-  getLabelWithValue
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
 

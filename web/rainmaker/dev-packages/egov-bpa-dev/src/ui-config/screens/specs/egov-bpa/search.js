@@ -41,7 +41,7 @@ const pageResetAndChange = (state, dispatch) => {
 const startApplyFlow = (state, dispatch) => {
   dispatch(prepareFinalObject("BPAs", []));
   const applyUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/apply` : `/egov-bpa/apply`;
+    process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/citySelection` : `/egov-bpa/citySelection`;
   dispatch(setRoute(applyUrl));
 };
 
@@ -148,8 +148,8 @@ const NOCSearchAndResult = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  pageResetAndChange(state, dispatch);
-                  showHideAdhocPopup(state, dispatch, "search");
+                  // pageResetAndChange(state, dispatch);
+                  // showHideAdhocPopup(state, dispatch, "search");
                   startApplyFlow(state, dispatch);
                 }
               },

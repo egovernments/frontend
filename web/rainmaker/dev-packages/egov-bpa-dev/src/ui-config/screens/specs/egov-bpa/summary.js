@@ -22,7 +22,6 @@ import { estimateSummary } from "./summaryResource/estimateSummary";
 import { footer } from "./summaryResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
 import { nocSummary } from "./summaryResource/nocSummary";
-// import { propertySummary } from "./summaryResource/propertySummary";
 // import { generateBill } from "../utils/index";
 
 import { setResidentialList } from "../egov-bpa/searchResource/functions";
@@ -184,9 +183,6 @@ const screenConfig = {
           plotAndBoundaryInfoSummary : plotAndBoundaryInfoSummary,
           documentsSummary: documentsSummary,          
           nocSummary: nocSummary,
-          // propertySummary: propertySummary,
-          
-          // institutionSummary: institutionSummary,
         }),
         footer: footer
       }

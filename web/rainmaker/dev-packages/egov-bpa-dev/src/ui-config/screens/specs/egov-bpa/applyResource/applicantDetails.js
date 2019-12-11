@@ -130,6 +130,41 @@ const commonApplicantInformation = () => {
                     md: 6
                 }
             }),
+            genderRadioGroup: {
+                uiFramework: "custom-containers",
+                componentPath: "RadioGroupContainer",
+                gridDefination: {
+                  xs: 12,
+                  sm: 12,
+                  md: 6
+                },
+                jsonPath:
+                  "BPAs[0].BPADetails.applicantDetails.owners[0].gender",
+                props: {
+                  label: { name: "Gender", key: "NOC_GENDER_LABEL" },
+                  buttons: [
+                    {
+                      labelName: "Male",
+                      labelKey: "NOC_GENDER_MALE_RADIOBUTTON",
+                      value: "MALE"
+                    },
+                    {
+                      labelName: "FEMALE",
+                      labelKey: "NOC_GENDER_FEMALE_RADIOBUTTON",
+                      value: "FEMALE"
+                    },
+                    {
+                      labelName: "Transgender",
+                      labelKey: "NOC_GENDER_TRANSGENDER_RADIOBUTTON",
+                      value: "TRANSGENDER"
+                    }
+                  ],
+                  jsonPath:
+                    "BPAs[0].BPADetails.applicantDetails.owners[0].gender",
+                  required: true
+                },
+                type: "array"
+              },
             gender: {
                 ...getSelectField({
                     label: {

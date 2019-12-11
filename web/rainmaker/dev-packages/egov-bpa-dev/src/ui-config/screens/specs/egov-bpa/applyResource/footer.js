@@ -430,16 +430,7 @@ export const changeStep = (
     0
   );
   if (defaultActiveStep === -1) {
-    // if (activeStep === 2 && mode === "next") {
-    //   const isDocsUploaded = get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "LicensesTemp[0].reviewDocData",
-    //     null
-    //   );
-    //   activeStep = isDocsUploaded ? 3 : 2;
-    // } else {
     activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
-    // }
   } else {
     activeStep = defaultActiveStep;
   }

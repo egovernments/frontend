@@ -30,7 +30,7 @@ import {
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
-import { propertySummary } from "./summaryResource/propertySummary";
+// import { propertySummary } from "./summaryResource/propertySummary";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -163,15 +163,6 @@ const prepareUoms = (state, dispatch) => {
             item.code
           }`
         }
-      );
-
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children",
-          item.code,
-          labelElement
-        )
       );
     });
   });
@@ -346,11 +337,6 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
       "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
@@ -397,7 +383,7 @@ const screenConfig = {
         body: getCommonCard({
           // estimateSummary: estimateSummary,
           nocSummary: nocSummary,
-          propertySummary: propertySummary,
+          // propertySummary: propertySummary,
           applicantSummary: applicantSummary,
           documentsSummary: documentsSummary
         }),
