@@ -57,7 +57,7 @@ export const getSearchResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/wc/_search",
+            "/ws-services/wc/_search",
             "",
             queryObject
         );
@@ -167,8 +167,7 @@ export const getConsumptionDetails = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            // "http://172.17.25.34:8083/meterConnection/_search?connectionNos=WERTY123456789",
-            "http://172.17.25.34:8083/meterConnection/_search",
+            "/ws-calculator/meterConnection/_search",
             "",
             queryObject
         );
@@ -187,15 +186,9 @@ export const getPastPaymentDetials = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-<<<<<<< HEAD
-<<<<<<< Updated upstream
             "/meterConnection/_search",
-=======
             "/ws-calculator/meterConnection/_search",
->>>>>>> Stashed changes
-=======
             "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022&tenantId=pb",
->>>>>>> 47f9b9a27fb787d1be88a119beace568cbfedb0d
             "",
             queryObject
         );
@@ -808,17 +801,20 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
         //     mdmsBody
         // );
 
-        let connectionType = "Non Metered"
+        let connectionNo = getQueryArg(window.location.href, "connectionNos");
         let queryObject = [
             {
                 key: "tenantId",
                 value: JSON.parse(getUserInfo()).tenantId
             },
-            { key: "offset", value: "0" }
+            { key: "offset", value: "0" },
+            { key: "connectionNumber", value: connectionNo }
         ];
-      let res=  getSearchResults(queryObject)
-      console.log(res,"res")
-        payload = {
+        let res = await getSearchResults(queryObject)
+        console.log(res)
+        let connectionType = res.WaterConnection[0].connectionType
+        console.log(connectionType, "res")
+        let payload = {
             "MdmsRes": {
                 "ws-services-masters": {
                     "billingPeriod": [

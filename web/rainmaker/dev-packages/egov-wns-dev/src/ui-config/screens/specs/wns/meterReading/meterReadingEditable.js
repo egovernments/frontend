@@ -154,26 +154,101 @@ export const meterReadingEditable =
                         })
                     },
                 },
-                status: getSelectField({
-                    placeholder: {
-                        labelKey: "WS_SELECT_METER_STATUS_PLACEHOLDER"
-                    },
-                    labelPrefix: {
-                        moduleName: "TENANT",
-                        masterName: "TENANTS"
-                    },
-                    props: {
-                        value: "",
-                    },
-                    sourceJsonPath: "meterMdmsData.tenant.tenants",
-                    jsonPath: "metereading.meterStatus",
-                    gridDefination: {
-                        xs: 12,
-                        sm: 3
-                    },
-                    required: false,
-                    errorMessage: "ERR_INVALID_BILLING_PERIOD",
-                }),
+                status:
+                {
+                    ...getSelectField({
+                        placeholder: {
+                            labelKey: "WS_SELECT_METER_STATUS_PLACEHOLDER"
+                        },
+                        labelPrefix: {
+                            moduleName: "TENANT",
+                            masterName: "TENANTS"
+                        },
+                        props: {
+                            value: "",
+                        },
+                        sourceJsonPath: "meterMdmsData.tenant.tenants",
+                        jsonPath: "metereading.meterStatus",
+                        gridDefination: {
+                            xs: 12,
+                            sm: 3
+                        },
+                        required: false,
+                        errorMessage: "ERR_INVALID_BILLING_PERIOD",
+                    }),
+                    afterFieldChange: async (action, state, dispatch) => {
+                        let status = get(state, "screenConfiguration.preparedFinalObject.metereading.meterStatus");
+                        if (status !== 'Working') {
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                                    "disabled",
+                                    true
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                                    "disabled",
+                                    true
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
+                                    "visible",
+                                    false
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
+                                    "visible",
+                                    true
+                                )
+                            );
+                        } else {
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                                    "disabled",
+                                    false
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                                    "disabled",
+                                    false
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
+                                    "visible",
+                                    true
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
+                                    "visible",
+                                    false
+                                )
+                            );
+                        }
+
+                    }
+                },
+
 
                 lastCont: {
                     uiFramework: "custom-atoms",
@@ -417,9 +492,11 @@ export const meterReadingEditable =
                         })
                     },
                 },
-                secCont: {
+                secCont:
+                {
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
+                    visible: true,
                     gridDefination: {
                         xs: 12,
                         sm: 3
@@ -437,6 +514,21 @@ export const meterReadingEditable =
                         })
                     },
                 },
+                thirdCont:
+                    getTextField({
+                        placeholder: {
+                            labelKey: "WS_CONSUMPTION_DETAILS_CONSUMPTION_READING_PLACEHOLDER"
+                        },
+                        gridDefination: {
+                            xs: 12,
+                            sm: 3
+                        },
+                        visible: false,
+                        required: true,
+                        pattern: /^[0-9]*$/i,
+                        // errorMessage: "ERR_INVALID_CONSUMER_NO",
+                        jsonPath: "metereading.consumption"
+                    }),
                 lastCont: {
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
