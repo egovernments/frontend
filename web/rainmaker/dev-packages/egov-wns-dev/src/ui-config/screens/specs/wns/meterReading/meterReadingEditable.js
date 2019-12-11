@@ -50,6 +50,9 @@ const saveData = (state, dispatch) => {
         if (!data.meterStatus) {
             data.meterStatus = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.tenant.tenants[0].name");
         }
+        if (!data.currentReadingDate) {
+            data.currentReadingDate = new Date().getTime()
+        }
         data.connectionNo = getQueryArg(window.location.href, "connectionNos")
         set(data,
             "currentReadingDate",
@@ -60,6 +63,7 @@ const saveData = (state, dispatch) => {
         if (get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")) {
             data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate");
         }
+        data.currentReading = parseInt(data.currentReading)
         console.log(data)
         createMeterReading(dispatch, data)
     }
