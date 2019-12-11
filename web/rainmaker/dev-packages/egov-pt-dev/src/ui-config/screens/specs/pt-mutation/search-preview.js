@@ -35,16 +35,20 @@ import { propertySummary } from "./summaryResource/propertySummary";
 import {registrationSummary} from'./summaryResource/registrationSummary';
 const titlebar = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Task Details",
-    labelKey: "NOC_TASK_DETAILS_HEADER"
+    labelName: "Application for Transfer of Ownership",
+    labelKey: "PT_MUTATION_APPLICATION_HEADER"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-pt",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "applicationNumber")
-    }
+      number: getQueryArg(window.location.href, "applicationNumber"),
+      label: {
+          labelValue: "Application No.",
+          labelKey: "PT_MUTATION_APPLICATION_NO"
+      }
+  }
   },
   // downloadMenu: {
   //   uiFramework: "custom-atoms",
