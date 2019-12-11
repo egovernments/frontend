@@ -55,7 +55,7 @@ export const ownerCategory = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_CATEGORY_LABEL"
   },
   {
-    jsonPath: "WaterConnection[0].property.owners[0].ownerType",
+    jsonPath: "WaterConnection[0].property.ownershipCategory",
   }
 )
 export const email = getLabelWithValue(

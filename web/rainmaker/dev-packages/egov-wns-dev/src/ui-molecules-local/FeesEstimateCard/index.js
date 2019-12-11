@@ -83,7 +83,7 @@ function FeesEstimateCard(props) {
                     <Grid container >
                         <Grid item xs={6}>
                             <Typography variant="body2" >
-                                <LabelContainer labelKey="WS_BILLING_PERIOD" />
+                                <LabelContainer labelKey="WS_VIEW_BILL_BILLING_PERIOD_LABEL" />
                             </Typography>
                         </Grid>
                         <Grid item xs={6}
