@@ -42,11 +42,21 @@ export const searchResults = {
         name: getTextToLocalMapping(" "),
         options: {
           filter: false,
-          customBodyRender: (value, data) => (
-            <Link to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[8]}`} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
-              Pay now
-            </Link>
-          )
+          customBodyRender: (value, data) => {
+            if (data.rowData[5] > 0) {
+              return (
+                <Link
+                  to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}
+                  style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+                  Pay now
+                </Link>
+              )
+            } else {
+              return (
+                " "
+              )
+            }
+          }
         }
       },
       {

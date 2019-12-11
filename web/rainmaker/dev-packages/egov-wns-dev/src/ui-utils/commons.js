@@ -17,7 +17,26 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { getQueryArg, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
+import {
+    setBusinessServiceDataToLocalStorage,
+    getMultiUnits
+} from "egov-ui-framework/ui-utils/commons";
+import commonConfig from "config/common.js";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+export const updateTradeDetails = async requestBody => {
+    try {
+        const payload = await httpRequest(
+            "post",
+            "/tl-services/v1/_update",
+            "", [],
+            requestBody
+        );
+        return payload;
+    } catch (error) {
+        store.dispatch(toggleSnackbar(true, error.message, "error"));
+    }
+};
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
     alert(1);
@@ -53,11 +72,30 @@ export const getSearchResults = async queryObject => {
     }
 };
 
+export const getSearchResultsForSewerage = async queryObject => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-services/swc/_search",
+            "_search",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
 export const getDescriptionFromMDMS = async requestBody => {
     try {
         const response = await httpRequest(
             "post",
-            "/egov-mdms-service-test/v1/_search",
+            "/egov-mdms-service/v1/_search",
             "_search", [],
             requestBody
         );
@@ -76,18 +114,13 @@ export const fetchBill = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/billing-service-v1/bill/_fetchbill",
+            "/billing-service/bill/v2/_fetchbill",
             "_fetchBill",
             queryObject
         );
         return response;
     } catch (error) {
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
+        store.dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error"));
     }
 };
 
@@ -96,29 +129,24 @@ export const getMyConnectionResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022&tenantId=pb.amritsar",
+            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022",
             "",
             queryObject
         );
-        return response;
-    } catch (error) {
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
-};
-// api call to get my connection details Due
-export const getMyConnectionDueResults = async queryObject => {
-    try {
-        const response = await httpRequest(
-            "post",
-            "http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?tenantId=pb.amritsar&consumerCode=WS/107/2019-20/000022&businessService=WS",
-            "",
-            queryObject
-        );
+        const dueResponse = await response.WaterConnection.map(item => {
+            const data = httpRequest(
+                "post",
+                `http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?consumerCode=${item.connectionNo}&tenantId=${item.property.tenantId}&businessService=WS`,
+                "",
+                // queryObject
+            );
+
+            const resolvedData = Promise.resolve(data)
+            resolvedData.then(function (value) {
+                item.due = value.Bill[0].billDetails.length > 0 ? value.Bill[0].billDetails[0].totalAmount : 0
+            });
+            return data;
+        });
         return response;
     } catch (error) {
         store.dispatch(
@@ -134,8 +162,27 @@ export const getConsumptionDetails = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/meterConnection/_search",
+            "/ws-calculator/meterConnection/_search",
             "",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
+export const getPastPaymentDetials = async queryObject => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-calculator/meterConnection/_search",
+            "_search",
             queryObject
         );
         return response;
@@ -628,3 +675,254 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
         }
     }
 };
+
+
+export const getMdmsDataForMeterStatus = async (dispatch) => {
+    let mdmsBody = {
+        MdmsCriteria: {
+            tenantId: commonConfig.tenantId,
+            moduleDetails: [
+                {
+                    moduleName: "tenant",
+                    masterDetails: [
+                        {
+                            name: "tenants"
+                        }
+                    ]
+                },
+            ]
+        }
+    };
+    try {
+        let payload = null;
+        payload = await httpRequest(
+            "post",
+            "/egov-mdms-service/v1/_search",
+            "_search",
+            [],
+            mdmsBody
+        );
+        console.log(payload.MdmsRes)
+        let sampleData = [
+            {
+                "code": "Working",
+                "name": "Working",
+                "description": "Working",
+                "status": {
+                    "name": "Working",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "Locked",
+                "name": "Locked",
+                "description": "Locked",
+                "status": {
+                    "name": "Locked",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "Breakdown",
+                "name": "Breakdown",
+                "description": "Breakdown",
+                "status": {
+                    "name": "Breakdown",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "No meter",
+                "name": "No meter",
+                "description": "No meter",
+                "status": {
+                    "name": "No meter",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "Reset",
+                "name": "Reset",
+                "description": "Reset",
+                "status": {
+                    "name": "Reset",
+                    "code": "1013",
+                }
+            },
+            {
+                "code": "Replacement",
+                "name": "Replacement",
+                "description": "Replacement",
+                "status": {
+                    "name": "Replacement",
+                    "code": "1013",
+                }
+            }
+
+        ]
+        payload.MdmsRes.tenant.tenants = sampleData
+
+        dispatch(prepareFinalObject("meterMdmsData", payload.MdmsRes));
+
+    } catch (e) {
+        console.log(e);
+    }
+};
+export const getMdmsDataForAutopopulated = async (dispatch) => {
+    let mdmsBody = {
+        MdmsCriteria: {
+            tenantId: commonConfig.tenantId,
+            moduleDetails: [
+                {
+                    moduleName: "ws-services-masters",
+                    masterDetails: [
+                        {
+                            name: "billingPeriod"
+                        }
+                    ]
+                },
+            ]
+        }
+    };
+    try {
+        // let payload = null;
+        // payload = await httpRequest(
+        //     "post",
+        //     "http://192.168.1.68:8094/egov-mdms-service-test/v1/_search",
+        //     "_search",
+        //     [],
+        //     mdmsBody
+        // );
+
+        let connectionNo = getQueryArg(window.location.href, "connectionNos");
+        let queryObject = [
+            {
+                key: "tenantId",
+                value: JSON.parse(getUserInfo()).tenantId
+            },
+            { key: "offset", value: "0" },
+            { key: "connectionNumber", value: connectionNo }
+        ];
+        let res = await getSearchResults(queryObject)
+        console.log(res)
+        let connectionType = res.WaterConnection[0].connectionType
+        console.log(connectionType, "res")
+        let payload = {
+            "MdmsRes": {
+                "ws-services-masters": {
+                    "billingPeriod": [
+                        {
+                            "active": true,
+                            "connectionType": "Metered",
+                            "billingCycle": "monthly"
+                        },
+                        {
+                            "active": true,
+                            "connectionType": "Non Metered",
+                            "billingCycle": "quarterly"
+                        }
+                    ]
+                }
+            }
+        }
+
+        let billingCycle;
+        payload.MdmsRes['ws-services-masters'].billingPeriod.map((x) => {
+            if (x.connectionType === connectionType) {
+                billingCycle = x.billingCycle
+            }
+        })
+        dispatch(prepareFinalObject("billingCycle", billingCycle));
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const getMeterReadingData = async (dispatch) => {
+    let queryObject = [
+        {
+            key: "tenantId",
+            value: "pb.amritsar"
+        },
+        {
+            key: "connectionNos",
+            value: getQueryArg(window.location.href, "connectionNos")
+        },
+        { key: "offset", value: "0" }
+    ];
+
+
+    // const mdmsRes = await getMdmsData(dispatch);
+    // let tenants =
+    //   mdmsRes &&
+    //   mdmsRes.MdmsRes &&
+    //   mdmsRes.MdmsRes.tenant.citymodule.find(item => {
+    //     if (item.code === "TL") return true;
+    //   });
+    // dispatch(
+    //   prepareFinalObject(
+    //     "applyScreenMdmsData.common-masters.citiesByModule.TL",
+    //     tenants
+    //   )
+    // );
+    try {
+        const response = await getConsumptionDetails(queryObject);
+        // const response =
+        // {
+        //     "ResponseInfo": {
+        //         "apiId": "",
+        //         "ver": ".",
+        //         "ts": null,
+        //         "resMsgId": "uief87324",
+        //         "msgId": "",
+        //         "status": "successful"
+        //     },
+        //     "meterReadings": [
+        //         {
+        //             "id": "c6326927-0f4c-46ea-b05f-b7bd3a046aca",
+        //             "billingPeriod": "Apr - 2019",
+        //             "meterStatus": "Working",
+        //             "lastReading": 70,
+        //             "lastReadingDate": 1575028112,
+        //             "currentReading": 347,
+        //             "currentReadingDate": 1575028312,
+        //             "connectionNo": "WS/107/2019-20/000022"
+        //         }
+        //     ]
+        // }
+        if (response && response.meterReadings && response.meterReadings.length > 0) {
+            dispatch(prepareFinalObject("consumptionDetails", response.meterReadings));
+            dispatch(
+                prepareFinalObject("consumptionDetailsCount", response.meterReadings.length)
+            );
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+export const createMeterReading = async (dispatch, body) => {
+
+    const response = await httpRequest(
+        "post",
+        "/ws-calculator/meterConnection/_create",
+        "", [], { meterReadings: body }
+    );
+
+    if (response && response !== undefined && response !== null) {
+        getMeterReadingData(dispatch)
+    }
+
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable",
+            "visible",
+            false
+        )
+    );
+}
+
+

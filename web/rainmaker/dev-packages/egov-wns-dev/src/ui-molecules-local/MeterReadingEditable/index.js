@@ -11,6 +11,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';
 import Button from '@material-ui/core/Button';
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import {addMeterReading} from '../../ui-config/screens/specs/wns/meterReading/functions'
 
 const styles = {
     card: {
@@ -33,13 +34,36 @@ const styles = {
 // }
 
 class MeterReading extends React.Component {
+
+    createBody = {
+        "billingPeriod": "Q3-2018-19",
+        "meterStatus": "Working",
+        "lastReading": 70,
+        "currentReading": '',
+        "currentReadingDate": '',
+        "consumption": ""
+    }
+    setTwoNumberDecimal(val) {
+        this.createBody.currentReading = parseFloat(val).toFixed(2);
+
+    }
+    onSelectFieldChange(event, key, payload, history, item) {
+        console.log(event)
+        console.log(this.createBody)
+    }
+    getDate(val) {
+        this.createBody.currentReadingDate = val
+        console.log(this.createBody)
+    }
+
+    saveMeterReading() {
+        console.log(this.createBody)
+        console.log("this.createBody")
+        addMeterReading(this.createBody);
+    }
+
     render() {
         const { classes } = this.props;
-        function setTwoNumberDecimal(event) {
-            return parseFloat(event).toFixed(2);
-            
-        }
-        
         return (
             <Card className={classes.card}>
                 <CardContent>
@@ -53,7 +77,6 @@ class MeterReading extends React.Component {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={3}>
-                        
                                 <Label
                                     labelName="Q4-2018-19"
                                     fontSize={14}
@@ -78,7 +101,7 @@ class MeterReading extends React.Component {
                                     style={styles.customWidth}
                                     hintStyle={styles.hintStyle}
                                     onChange={(event, key, payload) =>
-                                        onSelectFieldChange(event, key, payload, history, item)
+                                        this.onSelectFieldChange(event, key, payload, history, item)
                                     }
                                 ></SelectField>
                             </Grid>
@@ -110,12 +133,11 @@ class MeterReading extends React.Component {
                             </Grid>
                             <Grid item xs={12} sm={3}>
                                 <TextField
-                                    onChange={(e)=>console.log(setTwoNumberDecimal(e.target.value))}
+                                    onChange={(e) => this.setTwoNumberDecimal(e.target.value)}
                                     style={styles.customWidth}
                                     hintStyle={styles.hintStyle}
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                                
                                 />
 
                             </Grid>
@@ -134,6 +156,7 @@ class MeterReading extends React.Component {
                                     id="date"
                                     type="date"
                                     className={classes.textField}
+                                    onChange={(e) => this.getDate(e.target.value)}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
@@ -160,7 +183,7 @@ class MeterReading extends React.Component {
                             <Grid item xs={12} sm={3}>
                             </Grid>
                             <Grid item xs={12} sm={3} style={{ paddingTop: '20px' }}>
-                                <Button variant="outlined" style={{ width: "50%" }} color="primary" className={classes.button}>
+                                <Button variant="outlined" onClick={() => this.saveMeterReading()} style={{ width: "50%" }} color="primary" className={classes.button}>
                                     <LabelContainer
                                         labelKey="WS_COMMON_BUTTON_SAVE"
                                         fontSize={14}

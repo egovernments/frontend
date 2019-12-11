@@ -40,7 +40,7 @@ export const getProperty = () => {
                     labelKey: "WS_PROP_DETAIL_PHNO_LABEL"
                 },
                 {
-                    jsonPath: "WaterConnection[0].property.address.plotNo"
+                    jsonPath: "WaterConnection[0].property.address.doorNo"
                 }
             ),
             propertyBuilding: getLabelWithValue(
@@ -64,7 +64,7 @@ export const getProperty = () => {
                     labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
                 },
                 {
-                    jsonPath: "WaterConnection[0].property.address.locality"
+                    jsonPath: "WaterConnection[0].property.address.locality.name"
                 }
             ),
             propertyPincode: getLabelWithValue(
