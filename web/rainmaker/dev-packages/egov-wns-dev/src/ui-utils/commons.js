@@ -95,7 +95,7 @@ export const getDescriptionFromMDMS = async requestBody => {
     try {
         const response = await httpRequest(
             "post",
-            "/egov-mdms-service-test/v1/_search",
+            "/egov-mdms-service/v1/_search",
             "_search", [],
             requestBody
         );
@@ -114,18 +114,13 @@ export const fetchBill = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/billing-service-v1/bill/_fetchbill",
+            "/billing-service/bill/v2/_fetchbill",
             "_fetchBill",
             queryObject
         );
         return response;
     } catch (error) {
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
+        store.dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error"));
     }
 };
 
@@ -186,10 +181,8 @@ export const getPastPaymentDetials = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/meterConnection/_search",
             "/ws-calculator/meterConnection/_search",
-            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022&tenantId=pb",
-            "",
+            "_search",
             queryObject
         );
         return response;

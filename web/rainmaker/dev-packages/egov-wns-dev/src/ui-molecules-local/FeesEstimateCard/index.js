@@ -54,16 +54,18 @@ const styles = {
 };
 
 function FeesEstimateCard(props) {
-    const { classes, estimate, optionSelected = "Partial_Amount" } = props;
+    const { classes, estimate } = props;
     let sortedArray = [], totalAmount, dueDate, billingPeriod;
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
-    if (estimate.fees[0].data.length > 0) {
-        billingPeriod = convertEpochToDate(estimate.fees[0].data[0].fromPeriod) + " - " + convertEpochToDate(estimate.fees[0].data[0].toPeriod);
-        totalAmount = estimate.fees[0].data[0].total;
-        dueDate = estimate.fees[0].data[0].expiryDate;
-    }
-    if (estimate.fees[0].description.length > 0) {
-        sortedArray = estimate.fees[0].description.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+    if (estimate !== null && estimate !== undefined && estimate.fees !== undefined && estimate.fees !== null && estimate.fees.length > 0) {
+        if (estimate.fees[0].data !== null && estimate.fees[0].data !== undefined && estimate.fees[0].data.length > 0) {
+            billingPeriod = convertEpochToDate(estimate.fees[0].data[0].fromPeriod) + " - " + convertEpochToDate(estimate.fees[0].data[0].toPeriod);
+            totalAmount = estimate.fees[0].data[0].total;
+            dueDate = estimate.fees[0].data[0].expiryDate;
+        }
+        if (estimate.fees[0].description !== null && estimate.fees[0].description !== undefined && estimate.fees[0].description.length > 0) {
+            sortedArray = estimate.fees[0].description.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+        }
     }
 
     return (
@@ -94,7 +96,7 @@ function FeesEstimateCard(props) {
                         </Grid>
                     </Grid>
                     <Grid container> {
-                        sortedArray.map(fee => {
+                        sortedArray.length > 0 && sortedArray.map(fee => {
                             return (
                                 <Grid container >
                                     <Grid item xs={4}>
