@@ -29,6 +29,7 @@ class MyConnections extends React.Component {
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
           myConnectionResults.map(item => {
+
             return (
               <div>
                 <Card className={classes.card}>

@@ -1,6 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCommonApplyFooter } from "../../utils";
-import { download } from "egov-common/ui-utils/commons";
+import { downloadBill } from "egov-common/ui-utils/commons";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
@@ -8,13 +8,12 @@ const callDownloadBill = () => {
   const val = [
     {
       key: 'consumerCode',
-      // value: 'WS/107/2019-20/000018',
       value: getQueryArg(window.location.href, "connectionNumber")
     },
     // { key: "billIds", value: '9d9293bc-da3f-474f-a392-b71242791471' },
 
     { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
-  download(val);
+  downloadBill(val);
 }
 
 export const viewBillFooter = getCommonApplyFooter({
@@ -57,7 +56,7 @@ export const viewBillFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      // callBack: callBackForPrevious
+      // callBack: callPay
     },
     // visible: false
   },

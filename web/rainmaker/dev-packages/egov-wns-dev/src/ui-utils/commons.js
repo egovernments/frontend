@@ -106,21 +106,31 @@ export const getMyConnectionResults = async queryObject => {
             "",
             queryObject
         );
-        if (response.WaterConnection.length > 0) {
-            const dueResponse = await response.WaterConnection.map(item => {
-                const data = httpRequest(
-                    "post",
-                    `/billing-service-v1/bill/_fetchbill?consumerCode=${item.connectionNo}&tenantId=${item.property.tenantId}&businessService=WS`,
-                    "",
-                    // queryObject
-                );
 
-                const resolvedData = Promise.resolve(data)
-                resolvedData.then(function (value) {
-                    item.due = value.Bill[0].billDetails.length > 0 ? value.Bill[0].billDetails[0].totalAmount : 0
-                });
-                return data;
-            });
+        if (response.WaterConnection.length > 0) {
+            for (let i = 0; i < response.WaterConnection.length; i++) {
+                try {
+                    const data = await httpRequest(
+                        "post",
+                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
+                        "",
+                        // queryObject
+                    );
+                    if (data && data !== undefined) {
+                        if (data.Bill !== undefined && data.Bill.length > 0) {
+                            response.WaterConnection[i].due = data.Bill[0].totalAmount
+                        }
+
+                    } else {
+                        response.WaterConnection[i].due = 0
+                    }
+
+                } catch (err) {
+                    console.log(err)
+                    response.WaterConnection[i].due = 0
+                }
+            }
+            // });
         }
         return response;
     } catch (error) {
