@@ -2,6 +2,7 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {download} from "egov-common/ui-utils/commons"
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
@@ -12,8 +13,7 @@ import {
   setOwnerShipDropDownFieldChange,
   createEstimateData,
   validateFields,
-  ifUserRoleExists
-} from "../../utils";
+  } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -505,9 +505,10 @@ export const footer = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        borderRadius:"inherit"
       }
     },
     children: {
@@ -535,9 +536,10 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
-        marginRight: "45px"
+        marginRight: "45px",
+        borderRadius:"inherit"
       }
     },
     children: {
@@ -564,9 +566,10 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
-        marginRight: "45px"
+        marginRight: "45px",
+        borderRadius:"inherit"
       }
     },
     children: {
@@ -598,9 +601,6 @@ export const footerReview = (
   applicationNumber,
   tenantId
 ) => {
-  const roleExists = ifUserRoleExists("CITIZEN");
-  const redirectionURL = roleExists ? "/tradelicense-citizen" : "/tradelicence";
-
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
@@ -621,7 +621,14 @@ export const footerReview = (
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      generateReceipt(state, dispatch, "receipt_download");
+     
+      
+      const receiptQueryString = [
+        { key: "consumerCodes", value:  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber")},
+        { key: "tenantId", value:get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString);
+      // generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
   };
@@ -660,6 +667,8 @@ export const footerReview = (
       ];
       break;
     case "APPLIED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
@@ -706,20 +715,6 @@ export const footerReview = (
                   menu: downloadMenu
                 }
               }
-            },
-            printMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "MenuButton",
-              props: {
-                data: {
-                  label: "Print",
-                  leftIcon: "print",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: printMenu
-                }
-              }
             }
           },
           gridDefination: {
@@ -737,9 +732,10 @@ export const footerReview = (
                 variant: "outlined",
                 color: "primary",
                 style: {
-                  minWidth: "200px",
+                  minWidth: "180px",
                   height: "48px",
-                  marginRight: "16px"
+                  marginRight: "16px",
+                  borderRadius:"inherit"
                 }
               },
               children: {
@@ -764,7 +760,7 @@ export const footerReview = (
                 variant: "contained",
                 color: "primary",
                 style: {
-                  minWidth: "200px",
+                  minWidth: "180px",
                   height: "48px",
                   marginRight: "45px"
                 }
@@ -791,7 +787,7 @@ export const footerReview = (
                 variant: "contained",
                 color: "primary",
                 style: {
-                  minWidth: "200px",
+                  minWidth: "180px",
                   height: "48px",
                   marginRight: "45px"
                 }
@@ -804,12 +800,11 @@ export const footerReview = (
               },
               onClickDefination: {
                 action: "page_change",
-                path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
+                path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
+                //path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
               },
-              //visible: getButtonVisibility(status, "PROCEED TO PAYMENT"),
               roleDefination: {
                 rolePath: "user-info.roles",
-                //roles: ["TL_CEMP", "CITIZEN"]
                 action: "PAY"
               }
             },
@@ -819,7 +814,7 @@ export const footerReview = (
                 variant: "contained",
                 color: "primary",
                 style: {
-                  minWidth: "200px",
+                  minWidth: "180px",
                   height: "48px",
                   marginRight: "45px"
                 }
@@ -849,4 +844,130 @@ export const footerReview = (
       }
     }
   });
+};
+
+
+export const downloadPrintContainer = (
+  action,
+  state,
+  dispatch,
+  status,
+  applicationNumber,
+  tenantId
+) => {
+  /** MenuButton data based on status */
+  let downloadMenu = [];
+  let printMenu = [];
+  let tlCertificateDownloadObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    link: () => {
+      generateReceipt(state, dispatch, "certificate_download");
+    },
+    leftIcon: "book"
+  };
+  let tlCertificatePrintObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    link: () => {
+      generateReceipt(state, dispatch, "certificate_print");
+    },
+    leftIcon: "book"
+  };
+  let receiptDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value:  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber")},
+        { key: "tenantId", value:get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString);
+    },
+    leftIcon: "receipt"
+  };
+  let receiptPrintObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      generateReceipt(state, dispatch, "receipt_print");
+    },
+    leftIcon: "receipt"
+  };
+  let applicationDownloadObject = {
+    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    link: () => {
+      generatePdfFromDiv("download", applicationNumber);
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    link: () => {
+      generatePdfFromDiv("print", applicationNumber);
+    },
+    leftIcon: "assignment"
+  };
+  switch (status) {
+    case "APPROVED":
+      downloadMenu = [
+        tlCertificateDownloadObject,
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        tlCertificatePrintObject,
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+      break;
+    case "APPLIED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
+    case "PENDINGPAYMENT":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case "pending_approval":
+      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      printMenu = [receiptPrintObject, applicationPrintObject];
+      break;
+    case "CANCELLED":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case "REJECTED":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    default:
+      break;
+  }
+  /** END */
+
+  return {
+    rightdiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+        downloadMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: "Download",
+              leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { marginLeft: 10 } },
+              menu: downloadMenu
+            }
+          }
+        }
+      },
+      // gridDefination: {
+      //   xs: 12,
+      //   sm: 6
+      // }
+    }
+  }
 };
