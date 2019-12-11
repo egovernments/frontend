@@ -25,14 +25,14 @@ import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import {
-  applicantSummary,
-  institutionSummary
-} from "./summaryResource/applicantSummary";
+  transferorSummary,transferorInstitutionSummary
+} from "./summaryResource/transferorSummary";
+import {
+  transfereeSummary,transfereeInstitutionSummary
+} from "./summaryResource/transfereeSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
-import { estimateSummary } from "./summaryResource/estimateSummary";
-import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
-
+import {registrationSummary} from'./summaryResource/registrationSummary';
 const titlebar = getCommonContainer({
   header: getCommonHeader({
     labelName: "Task Details",
@@ -46,32 +46,32 @@ const titlebar = getCommonContainer({
       number: getQueryArg(window.location.href, "applicationNumber")
     }
   },
-  downloadMenu: {
-    uiFramework: "custom-atoms",
-    componentPath: "MenuButton",
-    props: {
-      data: {
-        label: "Download",
-        leftIcon: "cloud_download",
-        rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
-        menu: []
-      }
-    }
-  },
-  printMenu: {
-    uiFramework: "custom-atoms",
-    componentPath: "MenuButton",
-    props: {
-      data: {
-        label: "Print",
-        leftIcon: "print",
-        rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
-        menu: []
-      }
-    }
-  }
+  // downloadMenu: {
+  //   uiFramework: "custom-atoms",
+  //   componentPath: "MenuButton",
+  //   props: {
+  //     data: {
+  //       label: "Download",
+  //       leftIcon: "cloud_download",
+  //       rightIcon: "arrow_drop_down",
+  //       props: { variant: "outlined", style: { marginLeft: 10 } },
+  //       menu: []
+  //     }
+  //   }
+  // },
+  // printMenu: {
+  //   uiFramework: "custom-atoms",
+  //   componentPath: "MenuButton",
+  //   props: {
+  //     data: {
+  //       label: "Print",
+  //       leftIcon: "print",
+  //       rightIcon: "arrow_drop_down",
+  //       props: { variant: "outlined", style: { marginLeft: 10 } },
+  //       menu: []
+  //     }
+  //   }
+  // }
 });
 
 const prepareDocumentsView = async (state, dispatch) => {
@@ -260,22 +260,22 @@ const setDownloadMenu = (state, dispatch) => {
     default:
       break;
   }
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.div.children.headerDiv.children.header.children.downloadMenu",
-      "props.data.menu",
-      downloadMenu
-    )
-  );
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.div.children.headerDiv.children.header.children.printMenu",
-      "props.data.menu",
-      printMenu
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "search-preview",
+  //     "components.div.children.headerDiv.children.header.children.downloadMenu",
+  //     "props.data.menu",
+  //     downloadMenu
+  //   )
+  // );
+  // dispatch(
+  //   handleField(
+  //     "search-preview",
+  //     "components.div.children.headerDiv.children.header.children.printMenu",
+  //     "props.data.menu",
+  //     printMenu
+  //   )
+  // );
   /** END */
 };
 
@@ -361,19 +361,19 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.children.cardContent.children.header.children.editSection.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.children.cardContent.children.header.children.editSection.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
+    // set(
+    //   action,
+    //   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+    //   false
+    // );
 
     return action;
   },
@@ -410,11 +410,12 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          estimateSummary: estimateSummary,
-          nocSummary: nocSummary,
           propertySummary: propertySummary,
-          applicantSummary: applicantSummary,
-          institutionSummary: institutionSummary,
+          transferorSummary: transferorSummary,
+          // transferorInstitutionSummary:transferorInstitutionSummary,
+          transfereeSummary: transfereeSummary,
+          // transfereeInstitutionSummary: transfereeInstitutionSummary,
+          registrationSummary:registrationSummary,
           documentsSummary: documentsSummary
         }),
         citizenFooter:

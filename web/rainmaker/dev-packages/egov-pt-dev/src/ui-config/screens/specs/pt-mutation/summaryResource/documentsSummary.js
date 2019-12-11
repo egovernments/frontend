@@ -48,7 +48,7 @@ export const documentsSummary = getCommonGrayCard({
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
+            labelKey: "PT_EDIT"
           })
         },
         onClickDefination: {
@@ -62,11 +62,11 @@ export const documentsSummary = getCommonGrayCard({
   },
   body: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-pt",
     componentPath: "DownloadFileContainer",
     props: {
       sourceJsonPath: "documentsPreview",
-      className: "noc-review-documents"
+      className: "pt-review-documents"
     }
   }
 });
