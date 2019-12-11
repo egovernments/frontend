@@ -138,7 +138,6 @@ class MeterReading extends React.Component {
                                     hintStyle={styles.hintStyle}
                                     fontSize={14}
                                     style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-
                                 />
 
                             </Grid>

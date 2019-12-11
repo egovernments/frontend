@@ -58,7 +58,7 @@ export const getSearchResults = async queryObject => {
         const response = await httpRequest(
             "post",
             "/ws-services/wc/_search",
-            "",
+            "_search",
             queryObject
         );
         return response;

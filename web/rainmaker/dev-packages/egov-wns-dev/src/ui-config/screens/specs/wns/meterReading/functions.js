@@ -14,7 +14,6 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { httpRequest } from "../../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
-
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
