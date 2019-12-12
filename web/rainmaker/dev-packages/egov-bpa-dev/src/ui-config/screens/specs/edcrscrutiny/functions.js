@@ -33,7 +33,7 @@ export const uuidv4 = () => {
 const moveToSuccess = (dispatch, edcrDetail) => {
   const applicationNo = edcrDetail.transactionNumber;
 
-  const tenantId = edcrDetail.transactionNumber;
+  const tenantId = edcrDetail.tenantId;
 
   const purpose = "apply";
   const status = edcrDetail.status === "Accepted" ? "success" : "reject";
