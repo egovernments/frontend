@@ -18,14 +18,14 @@ const styles = {
 };
 
 class MyConnections extends React.Component {
-
+  service = 'WATER'
   onCardClick = item => {
-    return `/wns/viewBill?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}`;
+    return `/wns/viewBill?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}&service=${this.service}`;
   };
 
   render() {
     const { myConnectionResults, onActionClick, classes } = this.props;
-    const service = 'WATER'
+
     return (
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
@@ -77,7 +77,7 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item xs={3}>
-                          <Link to={`/wns/connection-details?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}&service=${service}`}>
+                          <Link to={`/wns/connection-details?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}&service=${this.service}`}>
                             <Label
                               labelName={item.connectionNo}
                               fontSize={14}
