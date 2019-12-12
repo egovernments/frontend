@@ -62,6 +62,8 @@ const saveData = (state, dispatch) => {
         data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
         if (get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")) {
             data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate");
+        } else {
+            data.lastReadingDate = 0
         }
         data.currentReading = parseInt(data.currentReading)
         console.log(data)
