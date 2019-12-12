@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router-dom';
 import AppRouter from './AppRouter';
-// import NavDrawer from '../components/authenticated/navdrawer/NavDrawer';
-// import NavBar from '../components/common/NavBar';
-// import DashboardFooter from '../components/common/dashboardFooter';
-import variables from '../styles/variables';
-import NavBar from '../components/common/navbar';
 import Spinner from '../components/common/Spinner';
-import Sidebar from '../components/common/sidebar';
-import { isMobile } from 'react-device-detect';
+import SideBar from '../components/common/sidebar'
 
 const styles = (theme) => ({
     root: {
@@ -44,6 +37,7 @@ class Layout extends Component {
                     {/* <div className="row"> */}
                     <Spinner />
                     <main role="main" style={{ backgroundColor: '#f4f7fb' }} className={classes.main}>
+                    {/* <SideBar /> */}
                         <AppRouter />
                     </main>
                 </div>

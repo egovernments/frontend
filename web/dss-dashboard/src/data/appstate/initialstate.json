@@ -12,28 +12,24 @@
     "globalFilter": [{
             "label": "Date Range",
             "type": "dropdown",
-            "values": [
-                "FY 17-18",
-                "FY 18-19",
-                "FY 19-20"
-            ]
+            "values": ""
         },
         {
             "label": "DDRs",
             "type": "dropdown",
             "values": ["Jalandhar-MC",
-                        "Phagwara-MC",
-                        "Amritsar-MC",
-                        "Jalandhar-DDR",
-                        "Patiala-DDR"
-                      ],
+                "Phagwara-MC",
+                "Amritsar-MC",
+                "Jalandhar-DDR",
+                "Patiala-DDR"
+            ],
             "master": {
-                        "Jalandhar-MC" : ["pb.jalandhar"],
-                        "Phagwara-MC" : ["pb.phagwara"],
-                        "Amritsar-MC" : ["pb.amritsar"],
-                        "Jalandhar-DDR" : ["pb.nawanshahr"],
-                        "Patiala-DDR" : ["pb.nayagaon","pb.derabassi"]
-                    }
+                "Jalandhar-MC": ["pb.jalandhar"],
+                "Phagwara-MC": ["pb.phagwara"],
+                "Amritsar-MC": ["pb.amritsar"],
+                "Jalandhar-DDR": ["pb.nawanshahr"],
+                "Patiala-DDR": ["pb.nayagaon", "pb.derabassi"]
+            }
         },
         {
             "label": "ULBS",
@@ -235,8 +231,13 @@
         "DDRs": [],
         "Services": "",
         "duration": {
-            "title": "FY 19-20",
-            "value": {}
+            "title": "",
+            "value": {
+                "startDate": "",
+                "endDate": "",
+                "interval": "month"
+                
+            }
         }
     },
     "DemandAndCollectionData": [{

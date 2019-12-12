@@ -231,7 +231,7 @@ h6 span {
 
 .tableHeading {
     display: flex;
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
     flex: 1 1;
 }
 
@@ -255,11 +255,12 @@ h6 span {
     height: 30px;
 }
 
-.MuiTable-root th,
+
+/* .MuiTable-root th,
 .MuiTable-root tr,
 .MuiTable-root td {
     border: 1px solid #e6e6e6 !important;
-}
+} */
 
 .MuiTableBody-root {
     font-family: Roboto;
@@ -292,7 +293,7 @@ h6 span {
 }
 
 .MuiCardContent-root {
-    padding: 10px 10px !important;
+    padding: 20px 20px !important;
 }
 
 .tableWrapper .MuiCardContent-root {
@@ -472,7 +473,7 @@ button:focus {
 @media (max-width: 1293px) {
     .tableHeading {
         display: flex;
-        flex-direction: row-reverse;
+        /* flex-direction: row-reverse; */
         flex: 1
     }
 }
@@ -480,7 +481,7 @@ button:focus {
 @media (max-width: 1024px) {
     .tableHeading {
         display: flex;
-        flex-direction: row-reverse;
+        /* flex-direction: row-reverse; */
         flex: 1
     }
 }
@@ -488,7 +489,7 @@ button:focus {
 @media (max-width: 768px) {
     .tableHeading {
         display: flex;
-        flex-direction: row-reverse;
+        /* flex-direction: row-reverse; */
         flex: 1
     }
 }
@@ -496,7 +497,7 @@ button:focus {
 @media (max-width: 375px) {
     .tableHeading {
         display: flex;
-        flex-direction: row-reverse;
+        /* flex-direction: row-reverse; */
         flex: 1
     }
 }

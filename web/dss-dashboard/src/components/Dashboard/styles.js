@@ -1,4 +1,10 @@
 const styles = theme => ({
+    pageHeader: {
+        fontFamily: 'Roboto',
+        fontSize: '24px', 
+        flex: 1, 
+        textAlign: 'left'
+    },
     dashboard: {
         display: 'flex',
         flexDirection: 'column',
@@ -23,36 +29,34 @@ const styles = theme => ({
     btn1: { borderRadius: '2px', height: 'fit-content', backgroundColor: "#fe7a51", color: "white" },
     actions: {
         display: 'flex',
-        margin: '0 0 10px 0',
-        paddingLeft: '5px',
-        paddingRight: '5px',
+        margin: '12px !important',
+        // paddingLeft: '5px',
+        // paddingRight: '5px',
     },
     posit: {
         display: 'flex',
         flex: 1,
-        justifyContent: 'flex-end'
+        justifyContent: 'end'
     },
     acbtn: {
         display: 'flex'
     },
-    '@media (max-width: 768px)': {
+    '@media (max-width: 2560px)': {
         actions: {
-            flexDirection: 'column'
+            flexDirection: 'row'
         },
         posit: {
             // display: 'flex',
-            // flexDirection: 'row-reverse',
+            flexDirection: 'row-reverse',
             marginTop: '3px'
         }
     },
     '@media (max-width: 768px)': {
-
-
         actions: {
             flexDirection: 'column'
         },
         posit: {
-            // flexDirection: 'row-reverse',
+            flexDirection: 'row-reverse',
             marginTop: '3px'
         }
     },

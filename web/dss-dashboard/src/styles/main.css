@@ -1,20 +1,19 @@
-
 @import url('../fonts/barlow/barlow.css');
 @import url('../fonts/montserrat/montserrat.css');
-
 .wrapper {
-  height: 1024px;
-  width: 100%;
-  background-color: yellowgreen;
+    height: 1024px;
+    width: 100%;
+    background-color: yellowgreen;
 }
+
 body {
-  overflow-y: auto;
-  overflow-x: hidden;
-  font-family: 'barlow';
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: 'barlow';
 }
 
 .appbar {
-  background-color: white;
+    background-color: white;
 }
 
 .leftcolumn {
@@ -22,7 +21,7 @@ body {
     width: 70%;
     float: left;
     background-color: white;
-    background-size: cover;     
+    background-size: cover;
 }
 
 .rightcolumn {
@@ -44,36 +43,49 @@ body {
     margin: 20px;
 }
 
+
 /* // this class should go in div that wraps Layout component, maybe rename as '.app' */
-.layout {  
-  position: absolute;
-}
-/* // where content go */
-.content {  
-  flex: 1 1 auto;
-  overflow-y: auto;
-  position: relative; 
-  width: 100%;
-}
-/* // need this to position inner content */
-.header {  
-  flex: 0 0 auto;
+
+.layout {
+    position: absolute;
 }
 
-.active{
-	border:'1px solid blue'
+
+/* // where content go */
+
+.content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    position: relative;
+    width: 100%;
 }
-.list-group-item{
-  border: none !important;
-  width:200px;
+
+
+/* // need this to position inner content */
+
+.header {
+    flex: 0 0 auto;
 }
+
+.active {
+    border: '1px solid blue'
+}
+
+.list-group-item {
+    border: none !important;
+    width: 200px;
+}
+
 .cursor_disabled {
-  cursor: not-allowed;
-  color: lightgray !important;
+    cursor: not-allowed;
+    color: lightgray !important;
 }
-.break_word{
-  word-break: break-word
+
+.break_word {
+    word-break: break-word
 }
+
+
 /* @media only screen and (max-device-width : 1024px) and (min-device-width : 768px) { 
 
   .leftpanel {
@@ -94,65 +106,71 @@ body {
     margin-top: 40px !important;
   }
 } */
+
 .resource_label {
- /* min-width: 350px; */
- display: flex;
+    /* min-width: 350px; */
+    display: flex;
 }
+
 .number_fileld {
-  font-family: 'montserrat';
+    font-family: 'montserrat';
 }
+
 .number_fileld_resource {
-  font-family: 'montserrat';
-  font-size: 37px;
-  display: flex;
-  width: 10px;
-  height:10px;
-  flex-grow: 1;
-  cursor: pointer;
-  /* font-weight: 600; */
-  /* display: flex;
+    font-family: 'montserrat';
+    font-size: 37px;
+    display: flex;
+    width: 10px;
+    height: 10px;
+    flex-grow: 1;
+    cursor: pointer;
+    /* font-weight: 600; */
+    /* display: flex;
   flex: 1; */
 }
 
 .labelClass::after {
-  content: '*';
-  color: red;
-  padding-left: 5px
-}
-.dropdown-toggle {
-  width:100%;
-  
+    content: '*';
+    color: red;
+    padding-left: 5px
 }
 
-#kpiexpression-ace{
-  width: 100% !important;
-  height:192px !important;
-  border-radius: 4px !important;
-  margin-bottom: 10px !important;
+.dropdown-toggle {
+    width: 100%;
 }
-.App-intro{
-  color: #1692F2;
+
+#kpiexpression-ace {
+    width: 100% !important;
+    height: 192px !important;
+    border-radius: 4px !important;
+    margin-bottom: 10px !important;
 }
-.error{
-  color:red;
-  font-size: 14px;
-  position: absolute;
+
+.App-intro {
+    color: #1692F2;
 }
+
+.error {
+    color: red;
+    font-size: 14px;
+    position: absolute;
+}
+
 .content_editable {
-  -webkit-user-modify: read-write;
+    -webkit-user-modify: read-write;
     -moz-user-modify: read-write;
     user-modify: read-write;
     margin: 10px;
     padding: 10px;
-    width:50px;
+    width: 50px;
     overflow: hidden;
     outline: none;
     cursor: text;
-    text-transform:none;
+    text-transform: none;
 }
 
 @media screen and (max-width: 947px) {
- .responsiveTable thead{
+    /* .responsiveTable thead{
   display: none
 }
 .responsiveTable tbody{
@@ -176,191 +194,209 @@ body {
   margin-left: 10px;
   margin-right: 10px;
   font-weight: 600;
+} */
+    .number_fileld_resource {
+        font-size: 12px;
+    }
 }
-.number_fileld_resource {
-   font-size: 12px; 
-}
-} 
+
 .tooltipClass {
-  line-height: 2;
-  padding-left: 15px;
+    line-height: 2;
+    padding-left: 15px;
 }
+
 .vis-tooltip {
-  background-color: #FFFFFF !important;
+    background-color: #FFFFFF !important;
 }
+
 .criticalColor {
-  background-color: #E53F23 !important;
-  color: #FFFFFF !important;
-  border-radius: 9px;
-  padding-left: 7px;
-  padding-right: 7px;
-  padding-top: 3px;
-  padding-bottom: 3px;
+    background-color: #E53F23 !important;
+    color: #FFFFFF !important;
+    border-radius: 9px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
+
 .majorColor {
-  background-color: #FD712D !important;
-  border-radius: 9px;
-  padding-left: 7px;
-  padding-right: 7px;
-  padding-top: 3px;
-  padding-bottom: 3px;
+    background-color: #FD712D !important;
+    border-radius: 9px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
+
 .minorColor {
-  background-color: #F09F1C !important;
-  border-radius: 9px;
-  padding-left: 7px;
-  padding-right: 7px;
-  padding-top: 3px;
-  padding-bottom: 3px;
+    background-color: #F09F1C !important;
+    border-radius: 9px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
-.healthyColor{
-  background-color:#66CC66 !important;
-  border-radius: 9px;
-  padding-left: 7px;
-  padding-right: 7px;
-  padding-top: 3px;
-  padding-bottom: 3px;
+
+.healthyColor {
+    background-color: #66CC66 !important;
+    border-radius: 9px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
+
 
 /* tablescroll */
 
 .table-wrapper {
-  position: relative; 
-}
-.table-scroller {
-  height:300px;
-  overflow:auto;  
-  margin-top:15px;
-  margin-right:5px;
+    position: relative;
 }
 
-.table-wrapper table thead th .head { 
-        z-index:2px;        
-        width:'35%'
+.table-scroller {
+    height: 300px;
+    overflow: auto;
+    margin-top: 15px;
+    margin-right: 5px;
+}
+
+.table-wrapper table thead th .head {
+    z-index: 2px;
+    width: '35%'
 }
 
 .table-scroller table {
-  width:100%;
+    width: 100%;
 }
 
-.scrollbar::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	border-radius: 10px;
-	background-color: #F5F5F5;
+.scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
 }
 
-.scrollbar::-webkit-scrollbar
-{
-	width: 12px;
-	background-color: #F5F5F5;
+.scrollbar::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
 }
 
-.scrollbar::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color:#999999;
+.scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #999999;
 }
-
 
 .scrollbar::-moz-scrollbar {
-  width: 12px;
-  }
-.scrollbar::-moz-scrollbar-track {
-  -moz-box-shadow: inset 0 0 6px #fff;
-  background:#000;
-  }
-.scrollbar::-moz-scrollbar-thumb {
-  border-radius: 10px;
-  -moz-box-shadow: inset 0 0 6px #fff;
-  background:#7A252B;
-  }
+    width: 12px;
+}
 
+.scrollbar::-moz-scrollbar-track {
+    -moz-box-shadow: inset 0 0 6px #fff;
+    background: #000;
+}
+
+.scrollbar::-moz-scrollbar-thumb {
+    border-radius: 10px;
+    -moz-box-shadow: inset 0 0 6px #fff;
+    background: #7A252B;
+}
 
 .tabIndicator {
-  background-color: #1692F2 !important
-}
-.tabOutline button{  
-      border: 1px solid lightgray !important
+    background-color: #1692F2 !important
 }
 
+.tabOutline button {
+    border: 1px solid lightgray !important
+}
 
 .fontBold_500 {
-  font-weight: 500
+    font-weight: 500
 }
 
 .fontBold_600 {
-  font-weight: 600
+    font-weight: 600
 }
 
 .fontSize_1 {
-  font-size:2vw
+    font-size: 2vw
 }
-/* scroll bar  */
-  body.custom { 
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 10px;
-  overflow-y: auto;
-  overflow-x: hidden;
-} 
 
+
+/* scroll bar  */
+
+body.custom {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 
 ::-moz-scrollbar {
-  width: 8px;
-  height: 6px;
+    width: 8px;
+    height: 6px;
 }
+
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 6px;
+    width: 8px;
+    height: 6px;
 }
 
 ::-moz-scrollbar-button:start:decrement,
 ::-moz-scrollbar-button:start:decrement {
-  /* height: 0px; */
-  display: block;
-  background-color: white;
+    /* height: 0px; */
+    display: block;
+    background-color: white;
 }
+
 ::-webkit-scrollbar-button:start:decrement,
 ::-webkit-scrollbar-button:end:increment {
-  height: 0px;
-  display: block;
-  background-color: white;
+    height: 0px;
+    display: block;
+    background-color: white;
 }
 
 ::-moz-scrollbar-track-piece {
-  background-color: white;          /*Global Track Peice(the slider noob.)*/
-  -webkit-border-radius: 6px;
+    background-color: white;
+    /*Global Track Peice(the slider noob.)*/
+    -webkit-border-radius: 6px;
 }
+
 ::-webkit-scrollbar-track-piece {
-  background-color: white;          /*Global Track Peice(the slider noob.)*/
-  -webkit-border-radius: 6px;
+    background-color: white;
+    /*Global Track Peice(the slider noob.)*/
+    -webkit-border-radius: 6px;
 }
 
 ::-moz-scrollbar-thumb:vertical {
-  height: 50px;
-  background-color: #666;            /* Up/Down slider background*/
-  -webkit-border-radius: 6px;
-}    
+    height: 50px;
+    background-color: #666;
+    /* Up/Down slider background*/
+    -webkit-border-radius: 6px;
+}
+
 ::-webkit-scrollbar-thumb:vertical {
-  height: 50px;
-  background-color: #666;            /* Up/Down slider background*/
-  -webkit-border-radius: 6px;
+    height: 50px;
+    background-color: #666;
+    /* Up/Down slider background*/
+    -webkit-border-radius: 6px;
 }
 
 ::-moz-scrollbar-thumb:horizontal {
-  width: 50px;
-  background-color: #666;            /* Side/Side slider background*/
-  -webkit-border-radius: 3px;
-}    
+    width: 50px;
+    background-color: #666;
+    /* Side/Side slider background*/
+    -webkit-border-radius: 3px;
+}
+
 ::-webkit-scrollbar-thumb:horizontal {
-  width: 50px;
-  background-color: #666;            /* Side/Side slider background*/
-  -webkit-border-radius: 3px;
+    width: 50px;
+    background-color: #666;
+    /* Side/Side slider background*/
+    -webkit-border-radius: 3px;
 }
 
 .xterm .xterm-viewport {
-  overflow-y: auto !important;
+    overflow-y: auto !important;
 }

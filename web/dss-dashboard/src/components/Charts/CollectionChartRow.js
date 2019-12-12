@@ -25,8 +25,7 @@ class CollectionChartRow extends React.Component {
 	callAPI() {
 		let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
 		if (code) {
-			let requestBody = getChartOptions(code, {});
-
+			let requestBody = getChartOptions(code, this.props.filters);
 			let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
 			this.props.APITransport(chartsAPI);
 		}

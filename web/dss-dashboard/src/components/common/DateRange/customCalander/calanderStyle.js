@@ -249,7 +249,7 @@ const styles = theme => ({
                 '& tr': {
                     '& td': {
                         '& span': {
-                            margin: 19
+                            margin: 12
                         }
                     }
                 }

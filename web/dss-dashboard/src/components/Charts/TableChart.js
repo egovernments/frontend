@@ -10,10 +10,10 @@ import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import APITransport from '../../actions/apitransport/apitransport';
-// import axios from 'axios';
 import NFormatterFun from '../common/numberFormaterFun';
 import getChartOptions from '../../actions/getChartOptions';
 import axios from 'axios';
+
 class TableChart extends Component {
   constructor(props) {
     super(props);
@@ -23,50 +23,50 @@ class TableChart extends Component {
       data: null,
       drillCode: null,
       visualcode: null,
-      tabFilterKey: null
+      tabFilterKey: null,
+      drillDownId: null,
     }
   }
 
-  componentDidMount() {
-  }
-  componentWillReceiveProps(nextProps) {
-    // console.log("TableChart", nextProps, this.props);
-  }
   getRequest(calledFrom, visualcode, filters, moduleLevel, dataChips) {
     let getAxiosOptions = getChartOptions(visualcode, filters);
-    if(getAxiosOptions && getAxiosOptions.url){
-    axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
-      .then(response => {
-        let tempState = {};
-        let tempData = response.data.responseData;
-        let drillCode = response.data.responseData['drillDownChartId'];
-        let visualcode = response.data.responseData['visualizationCode'];
-        if (dataChips) {
-          tempData['filter'] = dataChips['filter'];
-          tempData['tt'] = dataChips['tt'];
+    if (getAxiosOptions && getAxiosOptions.url) {
+      axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
+        .then(response => {
+          let tempState = {};
+          let tempData = response.data.responseData;
+          let drillCode = response.data.responseData['drillDownChartId'];
+          let visualcode = response.data.responseData['visualizationCode'];
+          if (dataChips) {
+            tempData['filter'] = dataChips['filter'];
+            tempData['tt'] = dataChips['tt'];
 
-          tempState.data = tempData;
-          tempState.filter = dataChips['filter'];
-          tempState.filterValue = dataChips['tt'];
-          tempState.drillCode = drillCode;
-          if (drillCode != 'none' || calledFrom == 'clickFromTab')
-            tempState.visualcode = visualcode;
-        } else {
-          tempState.data = tempData;
-          tempState.drillCode = drillCode;
-          if (drillCode != 'none' || calledFrom == 'clickFromTab')
-            tempState.visualcode = visualcode;
-        }
-        this.setState(tempState);
-      })
-      .catch(error => {
-        console.log(error.response)
-      });
+            tempState.data = tempData;
+            tempState.filter = dataChips['filter'];
+            tempState.filterValue = dataChips['tt'];
+            tempState.drillCode = drillCode;
+            if (drillCode != 'none' || calledFrom == 'clickFromTab')
+              tempState.visualcode = visualcode;
+          } else {
+            tempState.data = tempData;
+            tempState.drillCode = drillCode;
+            if (drillCode != 'none' || calledFrom == 'clickFromTab')
+              tempState.visualcode = visualcode;
+          }
+          this.setState(tempState);
+        })
+        .catch(error => {
+          console.log(error.response)
+        });
     }
   }
 
   handleChipClick = (visualcode) => {
     //this.setState({ data: prodData[0] })   
+    this.setState({
+      drillDownId: this.props.chartsData[this.props.chartKey].filter[0]
+    })
+
     let dataChips = {
       filter: false
     }
@@ -78,26 +78,36 @@ class TableChart extends Component {
       tt:
       {
         id: 1,
-        'label': rowData.Boundary,
+        'label': rowData[this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].column : this.props.chartsData[this.props.chartKey].filter[0].column] ,
         'type': 'ULBS',
         'color': 'orange',
-        tenantId:  [_.toLower('pb.'+ rowData.Boundary)]
+        [this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0  && this.state.data.filter[0].key ?  this.state.data.filter[0].key :'']: rowData[this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].column : '']
       },
       visualcode: visualcode
     };
-    this.getRequest("applyFilter", drillCode, { tenantId:  dataChips.tt.tenantId }, 'PT', dataChips)
+    this.getRequest("applyFilter", drillCode, { [this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].key : '']: dataChips.tt[this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].key : ''] }, 'PT', dataChips)
   }
+
+  
   clickFromTab = (visualcode) => {
     let tenantId = {};
     if (this.state.filter) {
       tenantId = { tenantId: this.state.filterValue.tenantId }
     }
+    let dataChips = {
+      filter: false
+    }
+    
 
     this.getRequest("clickFromTab", visualcode, tenantId, 'PT', "")
+    this.setState({
+      filter: false
+    })
+
+
   }
 
   render() {
-    // console.log(this.props.chartData)
     let { classes, chartData, chartKey, chartsData, strings } = this.props;
     let drillCode, visualcode, tabFilterKey;
     if (this.props && chartData) {
@@ -108,10 +118,10 @@ class TableChart extends Component {
       }
       drillCode = drillCode ? drillCode : chartsData[this.props.chartKey]['drillDownChartId'];
       visualcode = visualcode ? visualcode : chartsData[this.props.chartKey]['visualizationCode'];
-
       let columnData = _.chain(chartData).first().get("plots").map((k, v) => {
-        let yes = v < 1;
-        return { id: k.name, numeric: k.symbol, stickyHeader: yes, disablePadding: false, label: k.name }
+        let yes = v < 0;
+        let isNumeric = _.toLower(k.symbol) === 'amount' || _.toLower(k.symbol) === "number" || _.toLower(k.symbol) === "percentage";
+        return { id: k.name, numeric: isNumeric, stickyHeader: yes, disablePadding: false, label: k.name }
 
 
       }).value();
@@ -120,7 +130,7 @@ class TableChart extends Component {
           if (a.symbol.toUpperCase() === 'TEXT') {
 
             let label = _.chain(a.label).split('.').join("_").toUpper().value();
-            let text = null; 
+            let text = null;
             try {
               text = strings["TENANT_TENANTS_" + label]
             } catch{
@@ -131,15 +141,15 @@ class TableChart extends Component {
             }
             return { [a.name]: text }
           } else {
-            return { [a.name]: NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], true) }
+            let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
+            // console.log(typeof(val))
+            return { [a.name]: val }
           }
         }));
 
       }).value();
-      // console.log("clickFromTab", this.props.chartParent);
-
       return (
-        <div class={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="tableHeading">
             {/* <h5 style={{ flex: '1', textAlign: 'left' }}>Demand & Collection Index</h5> */}
             {/* <div className="fwh"></div> */}
@@ -161,6 +171,7 @@ class TableChart extends Component {
           {/* <Table tableData={this.state.data} callBack={this.applyFilter.bind(this)} />               */}
           {
             <UiTable
+              column={this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 && this.state.data.filter[0].column ? this.state.data.filter[0].column : chartsData[chartKey].filter[0].column}
               data={newData}
               columnData={columnData}
               // callAPI={this.filterPageAPI.bind(this)}
@@ -171,8 +182,9 @@ class TableChart extends Component {
               // needHash={false}
               Gfilter={this.props.GFilterData}
               needSearch
+              needHash={true}
               needExport
-              excelName={"Demand & Collection Index"}
+              excelName={this.props.label || "DSS"}
             // toggleSideDrawer={this.handleInfoClick.bind(this)}
             // editInfo={this.handleEditClick.bind(this)}
             // deleteCenter={this.setdeleteCenter.bind(this)}

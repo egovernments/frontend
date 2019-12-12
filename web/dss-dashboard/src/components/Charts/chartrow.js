@@ -11,7 +11,7 @@ class ChartRow extends Component {
 
 	render() {
 		let { strings } = this.props;
-		let { classes, rowData, displayName, filters, page,Gfilter } = this.props;
+		let { classes, rowData, displayName, filters, page,Gfilter,row } = this.props;
 		// console.log(rowData.name)
 		return (
 			<div className="container-fluid" style={{ padding: '0px', margin: '0px' }}>
@@ -19,7 +19,7 @@ class ChartRow extends Component {
 					displayName &&
 					<div className={classes.tab}><div className={classes.header}>{strings[rowData.name]}</div></div>
 				}
-				<GenericChart key={rowData.id} gFilter={Gfilter} chartData={rowData} filters={filters} page={page} />
+				<GenericChart key={rowData.id} row={row} gFilter={Gfilter} chartData={rowData} filters={filters} page={page} />
 			</div>
 		);
 	}

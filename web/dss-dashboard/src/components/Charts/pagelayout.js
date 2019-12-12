@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import ChartRow from './chartrow';
 import { withStyles } from '@material-ui/core';
 import style from './layOutStyle';
-import _ from 'lodash';
 import getFilterObj from '../../actions/getFilterObj';
 
 class PageLayout extends Component {
@@ -23,7 +22,7 @@ class PageLayout extends Component {
 
                 {
                     chartRowData.map((vizData, j) =>
-                        <ChartRow key={j} rowData={vizData} Gfilter={this.props.GFilterData} displayName={displayName[j]} filters={filters} page={page} />)
+                        <ChartRow key={j} row={j} rowData={vizData} Gfilter={this.props.GFilterData} displayName={displayName[j]} filters={filters} page={page} />)
                 }
             </div>);
     }

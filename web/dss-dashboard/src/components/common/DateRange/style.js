@@ -12,8 +12,8 @@ const styles = theme => ({
         flexGrow: 1,
         maxWidth: '100%',
         // background: 'red',
-        top: '17%',
-        left: '18%',
+        top: 0,
+        left: 0,
         position: 'absolute'
     },
     paper: {
@@ -190,6 +190,11 @@ const styles = theme => ({
             // }
     },
     '@media (max-width: 1115px)': {
+        root: {
+            top: 0,
+            left: 0,
+
+        },
         calanderDisplay: {
             display: 'flex',
             flexDirection: 'column'

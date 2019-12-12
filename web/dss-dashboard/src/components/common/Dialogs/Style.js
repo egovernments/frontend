@@ -13,12 +13,14 @@ const styles = theme => ({
         color: variables.black,
         padding: '30px 0px 18px 23px',
         margin: 0,
+        marginTop: 'auto',
+        marginBottom: 'auto'
     },
     heading: {
         display: 'flex',
         flexDerection: 'row',
         cursor: 'pointer',
-        padding: ' 20px 50% 20px 23px',
+        padding: ' 20px 50px 20px 23px',
         // marginRight: '70vw'
     },
     '@media (max-width: 768px)': {

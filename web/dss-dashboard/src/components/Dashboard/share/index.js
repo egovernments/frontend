@@ -10,15 +10,14 @@ import share from '../../../images/share.svg';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../../utils/Share';
-import jsPDF from 'jspdf'
-import { downloadAsImage, printDocument } from '../../../utils/block';
+import { printDocumentShare } from '../../../utils/block';
 import { renderToString, } from 'react-dom/server'
 import FilterTable from '../download/filterTable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { APIStatus } from '../../../actions/apiStatus'
 import domtoimage from 'dom-to-image';
-
+import Variables from '../../../styles/variables'
 
 const StyledMenu = withStyles({
     paper: {
@@ -67,15 +66,18 @@ export function CustomizedShare(props) {
     const renderTable = () => {
         return renderToString(<FilterTable data={props.GFilterData} name= {props.fileHeader || "Dashboard"} />)
     }
-
+    const filterFunc = function(node) {
+        if (node.id == 'divNotToPrint') return false;
+        return true;
+    };
     const shareWhatsAppPDF = () => {
         props.APITrans(true);
-        const pdf1 = new jsPDF("p", "mm", "a1");
-        pdf1.scaleFactor = 3;
+        // const pdf1 = new jsPDF("p", "mm", "a1");
+        // pdf1.scaleFactor = 3;
 
-        printDocument(pdf1, renderTable()).then(function (pdfO) {
-            let element = document.getElementById("printFtable")
-            element.parentNode.removeChild(element);
+        printDocumentShare(renderTable()).then(function (pdfO) {
+            // let element = document.getElementById("printFtable")
+            // element.parentNode.removeChild(element);
             setAnchorEl(null);
             try {
                 props.APITrans(false);
@@ -89,12 +91,12 @@ export function CustomizedShare(props) {
 
     const shareEmailPDF = () => {
         props.APITrans(true);
-        const pdf1 = new jsPDF("p", "mm", "a1");
-        pdf1.scaleFactor = 3;
+        // const pdf1 = new jsPDF("p", "mm", "a1");
+        // pdf1.scaleFactor = 3;
 
-        printDocument(pdf1, renderTable()).then(function (pdfO) {
-            let element = document.getElementById("printFtable")
-            element.parentNode.removeChild(element);
+        printDocumentShare(renderTable()).then(function (pdfO) {
+            // let element = document.getElementById("printFtable")
+            // element.parentNode.removeChild(element);
             setAnchorEl(null);
             try {
                 props.APITrans(false);
@@ -121,7 +123,7 @@ export function CustomizedShare(props) {
         var ts = Math.round((new Date()).getTime() / 1000);
 
         let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: filterFunc  })
             .then(function (dataUrl) {
                 var blobData = dataURItoBlob(dataUrl);
                 blobData.name = "dss" + ts + ".jpeg"
@@ -139,7 +141,7 @@ export function CustomizedShare(props) {
         var ts = Math.round((new Date()).getTime() / 1000);
 
         let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: filterFunc  })
             .then(function (dataUrl) {
                 var blobData = dataURItoBlob(dataUrl);
                 blobData.name = "dss" + ts + ".jpeg"
@@ -175,25 +177,25 @@ export function CustomizedShare(props) {
                 >
                     <StyledMenuItem onClick={shareEmailPDF}>
                         <ListItemIcon>
-                            <DraftsIcon fontSize="small" />
+                            <DraftsIcon fontSize="small" style={{color:Variables.email}}/>
                         </ListItemIcon>
                         <ListItemText primary="PDF" />
                     </StyledMenuItem>
                     <StyledMenuItem onClick={shareEmailImage}>
                         <ListItemIcon>
-                            <DraftsIcon fontSize="small" />
+                            <DraftsIcon fontSize="small" style={{color:Variables.email}}/>
                         </ListItemIcon>
                         <ListItemText primary="Image" />
                     </StyledMenuItem>
                     <StyledMenuItem onClick={shareWhatsAppPDF}>
                         <ListItemIcon>
-                            <WhatsappIcon fontSize="small" />
+                            <WhatsappIcon fontSize="small" style={{color: Variables.whatsApp}}/>
                         </ListItemIcon>
                         <ListItemText primary="PDF" />
                     </StyledMenuItem>
                     <StyledMenuItem onClick={shareWhatsAppImage}>
                         <ListItemIcon>
-                            <WhatsappIcon fontSize="small" />
+                            <WhatsappIcon fontSize="small" style={{color:Variables.whatsApp}}/>
                         </ListItemIcon>
                         <ListItemText primary="Image" />
                     </StyledMenuItem>

@@ -39,6 +39,8 @@ class SwitchButton extends Component {
                 text={item.value}
                 selected={item.value === selected}
                 handleClick={this.handleClick.bind(this)}
+                padding={this.props.padding}
+                fontSize={this.props.fontSize}
             />
             )
         });

@@ -4,7 +4,7 @@ const PerformanceChartStyles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         textAlign: 'left',
-        margin: '10px 0px'
+        margin: '20px 0px'
     },
     progess: {
         margin: '5px 0px',
@@ -13,7 +13,7 @@ const PerformanceChartStyles = theme => ({
     },
     topLabel: {
         fontFamily: 'Roboto',
-        fontSize: '12px',
+        fontSize: '14px',
         fontWeight: '500',
         fontStretch: 'normal',
         fontStyle: 'normal',
@@ -23,7 +23,7 @@ const PerformanceChartStyles = theme => ({
     },
     bottomLabel: {
         fontFamily: 'Roboto',
-        fontSize: '10px',
+        fontSize: '12px',
         fontStretch: 'normal',
         fontStyle: 'normal',
         lineHeight: 'normal',
@@ -54,8 +54,15 @@ const PerformanceChartStyles = theme => ({
         height: 5
     },
     bottomDiv: {
-        borderTop: '1px solid #c3bebe',
-        margin: '30px 30px 0 30px'
+        // borderTop: '1px solid #c3bebe',
+        // margin: '30px 30px 0 0',
+        textAlign: 'initial'
+    },
+    body: {
+        display: 'flex',
+        flexDirection: 'column'
+            // margin: '30px 30px 0 30px'
+            // display: 'flex'
     }
 
 });

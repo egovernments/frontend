@@ -7,7 +7,7 @@ const styles = theme => ({
     },
     toggleContainer: {
         width: '91px',
-        height: '17px',
+        // height: '17px',
         backgroundColor: '#f0f0f0'
     },
     toggleContainer_big: {

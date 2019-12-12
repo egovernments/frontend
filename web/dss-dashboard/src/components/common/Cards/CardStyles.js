@@ -1,7 +1,7 @@
 import variables from '../../../styles/variables';
 export const CardStyle = {
     root: {
-        margin: '5px 5px 5px 5px !important',
+        margin: '10px 10px 10px 10px !important !important',
         // maxWidth: '97%'
     },
     card: {
@@ -10,10 +10,10 @@ export const CardStyle = {
     },
     cardheader: {
         paddingBottom: 0,
-        paddingLeft: '10px',
-        paddingTop: '10px',
+        paddingLeft: '20px',
+        paddingTop: '20px',
         // flex: 6,
-        maxWidth: '70% !important',
+        maxWidth: '100% !important',
         wordBreak: 'break-all',
         display: 'flex',
         // padding: 10,
@@ -32,11 +32,11 @@ export const CardStyle = {
     },
     full: {
         width: '100%',
-        margin: '5px 5px 5px 5px !important',
+        margin: '12px !important',
     },
     redused: {
         maxWidth: '97%',
-        margin: '5px 5px 5px 5px !important',
+        margin: '12px 12px 12px 12px !important',
     },
     cardContent: {
         paddingTop: 5,
@@ -50,12 +50,16 @@ export const CardStyle = {
     },
     title: {
         // marginBottom: 5,s
+        fontWeight: '500',
+        fontFamily: 'Roboto'
     },
     pos: {
         marginBottom: 12,
     },
     actionMenues: {
         display: 'flex',
+        paddingRight: '5px',
+        paddingTop: '10px',
         // flexDirection:'row-reverce'
     },
     actions: {
@@ -76,11 +80,26 @@ export const CardStyle = {
     itemIcon: {
         minWidth: '30px'
     },
-
+    lightTooltip: {
+        background: variables.white,
+        color: variables.black,
+        // fontSize: 11,
+        // fontFamily: variables.SecondaryFont,
+        // margin: 'auto',
+        // padding: 'auto'
+    },
+    
     '@media (max-width: 3000px)': {
         redused: {
             maxWidth: '100%',
+            margin: '12px 12px 12px 12px !important',
         }
+    },
+    '@media (max-width:823px)': {
+        redused: {
+            margin: '10px 5px 10px 5px !important',
+        },
+
     },
     '@media (max-width: 768px)': {
         redused: {

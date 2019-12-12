@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { changeTheName } from '../src/actions/firstAction';
 import { bindActionCreators } from 'redux';
 import { updateLanguage } from './actions/languageChange';
@@ -79,6 +79,7 @@ const theme = createMuiTheme({
 
 let dataL = {
   "en": {
+    "DSS_OVERVIEW": "Overview",
     "DSS_TOTAL_COLLECTION": "Total Collection",
     "DSS_TARGET_COLLECTION": "Target Collection",
     "DSS_TARGET_ACHIEVED": "Target Achievement",
@@ -99,12 +100,12 @@ let dataL = {
     "DSS_PT_TOTAL_PROPERTIES_ASSESSED": "Total Properties Assessed",
     "DSS_PT_TOTAL_ASSESSMENTS": "Total Assessments",
     "DSS_PT_TOTAL_ACTIVE_ULBS": "Total Active ULBs",
-    "DSS_PT_TOTAL_ACTIVE_ULBS": "Total Active ULBs",
     "DSS_PT_PROPERTIES_BY_USAGE_TYPE": "Properties by Usage Type",
     "DSS_PT_CUMULATIVE_PROPERTIES_ASSESSED": "Total Cumulative Properties Assessed",
     "DSS_PT_DEMAND_COLLECTION_BOUNDARY": "Boundary",
     "DSS_PT_DEMAND_COLLECTION_USAGETYPE": "Usage Type",
     "DSS_PT_DEMAND_COLLECTION": "Key Performance Indicator",
+    "DSS_PT_TAX_HEAD_BREAKUP_REVENUE": "Tax Heads Breakups",
     "DSS_TL_LICENSE_ISSUED": "Total License Issued",
     "DSS_TL_CUMULATIVE_LICENSE_ISSUED": "Total Cumulative License Issued",
     "DSS_TL_LICENSE_BY_TYPE": "License by Type",
@@ -124,7 +125,6 @@ let dataL = {
   }
 }
 
-let strings;
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -161,7 +161,7 @@ class App extends React.Component {
       'en': newIndex,
       'hi': {}
     }
-    let dataL1 = JSON.parse(localStorage.getItem(`lang`));
+    // let dataL1 = JSON.parse(localStorage.getItem(`lang`));
     this.props.updateLanguage(dataL);
   }
 
@@ -175,7 +175,6 @@ class App extends React.Component {
 
   render() {
 
-    let { classes, strings } = this.props;
     // strings.setLanguage(this.state.language);
 
     return (

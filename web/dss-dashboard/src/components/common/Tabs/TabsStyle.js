@@ -5,7 +5,7 @@ const tabsStyles = theme => ({
         fontSize: variables.fs_14,
         fontWeight: variables.f_500,
         background: variables.white,
-        margin: '0 5px 0 5px'
+        margin: '12px !important'
     },
     indicator: {
         fontFamily: 'Roboto',

@@ -1,5 +1,8 @@
 import domtoimage from 'dom-to-image';
 import { Promise } from 'bluebird';
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf'
+
 import {
     BrowserView,
     MobileView,
@@ -7,6 +10,10 @@ import {
     isMobile
 } from "react-device-detect";
 
+const filterFunc = function(node) {
+    if (node.id == 'divNotToPrint') return false;
+    return true;
+};
 export const downloadAsImage = (name) => {
     // props.APITrans(true)
     return new Promise((resolve, reject) => {
@@ -35,7 +42,7 @@ export const downloadAsImage = (name) => {
             //     reject(false);
             // })
             let div = document.getElementById('divToPrint');
-            domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+            domtoimage.toJpeg(div, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
                 .then(function(dataUrl) {
                     var link = document.createElement('a');
                     link.download = name || 'image.jpeg';
@@ -47,12 +54,13 @@ export const downloadAsImage = (name) => {
                 })
         } else if (isBrowser) {
             let div = document.getElementById('divToPrint');
-            domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+            domtoimage.toJpeg(div, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
                 .then(function(dataUrl) {
                     var link = document.createElement('a');
                     link.download = name || 'image.jpeg';
                     link.href = dataUrl;
                     link.click();
+                    // saveAs(dataUrl, 'my-node.png');
                     resolve({});
                 }.bind(this)).catch(function(er) {
                     reject(er)
@@ -82,78 +90,90 @@ const getFilters = (tableObj) => {
     })
 
 }
-const addPages = (pdf, elem, idx, length) => {
+const getImageData = (dataUrl) => {
     return new Promise((resolve, reject) => {
-        // Scaling fix set scale to 2
-        if (isMobile) {
-            domtoimage.toJpeg(elem, { quality: 0.95, bgcolor: 'white' })
-                .then(function(dataUrl) {
-                    if (idx < length) {
-                        if (idx == 0) {
-                            // pdf.addPage();
-                            pdf.addImage(dataUrl, 'JPG', 100, 10);
-                        } else {
-                            // pdf.addPage();
-                            pdf.addImage(dataUrl, 'image/png', 10, 20);
-
-                        }
-                        return setTimeout(resolve, 100, "Timeout adding page #" + idx);
-                    } else {
-                        // pdf.addPage();
-                        pdf.addImage(dataUrl, 130, 90);
-                        // console.log("Reached last page, completing");
-                        return setTimeout(resolve, 100, "Timeout adding page #" + idx);
-                    }
-                }.bind(this))
-        } else if (isBrowser) {
-            domtoimage.toJpeg(elem, { quality: 0.95, bgcolor: 'white' })
-                .then(function(dataUrl) {
-                    if (idx < length) {
-                        if (idx == 0) {
-                            // pdf.addPage();
-                            pdf.addImage(dataUrl, 'JPG', 100, 10);
-                        } else {
-                            // pdf.addPage();
-                            pdf.addImage(dataUrl, 'image/png', 10, 20);
-
-                        }
-                        return setTimeout(resolve, 100, "Timeout adding page #" + idx);
-                    } else {
-                        // pdf.addPage();
-                        pdf.addImage(dataUrl, 100, 90);
-                        // console.log("Reached last page, completing");
-                        return setTimeout(resolve, 100, "Timeout adding page #" + idx);
-                    }
-                }.bind(this))
+        let image = new Image();
+        image.src = dataUrl;
+        image.onload = function() {
+            var imgWidth = image.naturalWidth,
+                imgHeight = image.naturalHeight;
+            var iRatio = imgHeight / imgWidth;
+            return resolve({ iRatio, imgWidth, imgHeight });
         }
+    });
+}
+
+const addPages = (elem) => {
+    return new Promise((resolve, reject) => {
+        domtoimage.toJpeg(elem, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
+            .then(function(dataUrl) {
+                return getImageData(dataUrl).then(function(hw) {
+                    if (isMobile) {
+                        let iheight = hw.imgWidth * hw.iRatio;
+                        console.log(window.innerWidth)
+                        let pdf = new jsPDF("p", "pt", [iheight - 80, hw.imgWidth - 80]);
+                        pdf.addImage(dataUrl, 'JPG', 0, 0);
+                        // pdf.save()
+                        return resolve(pdf)
+                    } else {
+                        let iheight = hw.imgWidth * hw.iRatio;
+                        let pdf = new jsPDF("l", "pt", [hw.imgWidth - 250, hw.imgHeight - 100]);
+                        pdf.addImage(dataUrl, 'JPG', 30, 10);
+                        // pdf.save()
+                        return resolve(pdf)
+                    }
+
+                }.bind(this)).catch((err) => {
+                    console.log(err);
+                    return reject(null)
+                })
+            }.bind(this)).catch((err) => {
+                console.log(err);
+                return reject(null)
+            })
 
     })
 }
-export const printDocument = (pdf, table) => {
+
+export const printDocument = (table, name) => {
     // console.log("printDocument called");
     return new Promise(function(resolve, reject) {
-        getFilters(table).then(function(params) {
-            let compon = document.getElementById("printFtable")
-            let elems = document.querySelectorAll('.elemClass');
+            // getFilters(table).then(function(params) {
+            //     let compon = document.getElementById("printFtable")
+            //         // let elems = document.querySelectorAll('.elemClass');
+            let elems = document.getElementById('divToPrint');
             // Fix Graphics Output by scaling PDF and html2canvas output to 2
-            let promiseObj = [];
-            let me = []
-            me.push(compon);
-            elems.forEach((elem, idx) => {
-                me.push(elem)
-            })
-            me.forEach((elem, idx) => {
 
-                promiseObj.push(addPages(pdf, elem, idx, elems.length))
-            })
-            Promise.all(promiseObj).then(function(response) {
+            return addPages(elems).then(function(response) {
                 // console.log("PDF updated");
-                resolve(pdf);
+                response.save(name || 'DSS');
+                return resolve(response);
 
             }.bind(this)).catch(function(error) {
                 console.log(error);
+                return reject(false);
             })
-
         })
-    });
+        // });
+}
+export const printDocumentShare = (table) => {
+    // console.log("printDocument called");
+    return new Promise(function(resolve, reject) {
+            // getFilters(table).then(function(params) {
+            //     let compon = document.getElementById("printFtable")
+            //         // let elems = document.querySelectorAll('.elemClass');
+            let elems = document.getElementById('divToPrint');
+            // Fix Graphics Output by scaling PDF and html2canvas output to 2
+
+            return addPages(elems).then(function(response) {
+                // console.log("PDF updated");
+                // response.save();
+                return resolve(response);
+
+            }.bind(this)).catch(function(error) {
+                console.log(error);
+                return reject(false);
+            })
+        })
+        // });
 }

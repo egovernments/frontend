@@ -2,22 +2,23 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
 
     var SI_SYMBOL = ["Unit", "Lac", "Cr"];
     const Rformatter = new Intl.NumberFormat('en-IN', {
-        // maximumFractionDigits:0,
-        useGrouping: true,
-        // currencyDisplay : Intl.NumberFormatOptions
-        //style: 'currency',
-        currency: 'INR'
-    })
+            // maximumFractionDigits:0,
+            useGrouping: true,
+            // currencyDisplay : Intl.NumberFormatOptions
+            //style: 'currency',
+            currency: 'INR'
+        })
+        // return value;
     switch (type) {
         case "amount":
         case "Amount":
             switch (symbol) {
 
                 case SI_SYMBOL[1]:
-                    return `${Rformatter.format((value / 100000).toFixed(2) || 0)} `
+                    return `${Rformatter.format((value / 100000).toFixed(2) || 0)}`
 
                 case SI_SYMBOL[2]:
-                    return `${Rformatter.format((value / 10000000).toFixed(2) || 0)} `
+                    return `${Rformatter.format((value / 10000000).toFixed(2) || 0)}`
 
                 case SI_SYMBOL[0]:
                     if (value <= 9999999) {
@@ -40,7 +41,7 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
                     }
 
                 default:
-                    return `${Rformatter.format(value || 0)}`
+                    return parseFloat(`${Rformatter.format(value || 0)}`)
             }
         case "number":
         case "Number":

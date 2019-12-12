@@ -120,7 +120,11 @@ const variables = {
     fontSize: 22,
     black: '#000000',
     grey: '#D3D3D3',
-    lightWhite: '#F7F7F5'
+    lightWhite: '#F7F7F5',
+
+    whatsApp: '#4AC959',
+    pdf: '#ff0000',
+    email: '#ff0000',
 }
 
 export default variables;

@@ -7,7 +7,6 @@ export default function getChartOptions(code, filters) {
     let moduleLevel = newFilter.modulelevel ? newFilter.modulelevel : "";
     delete newFilter.duration;
     delete newFilter.modulelevel;
-
     if (url) {
         const options = {
             headers: {

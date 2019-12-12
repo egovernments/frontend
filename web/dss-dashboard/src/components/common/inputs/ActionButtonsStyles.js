@@ -323,7 +323,7 @@ const actionButtonStyles = theme => ({
         padding: 0,
         minWidth: '32px',
         textTransform: 'capitalize',
-        width: '11px',
+        // width: '11px',
         height: 'auto',
         fontFamily: 'Roboto',
         fontSize: '10px',

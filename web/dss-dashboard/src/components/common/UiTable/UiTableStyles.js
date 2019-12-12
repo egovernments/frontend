@@ -9,13 +9,18 @@ const styles = theme => ({
         marginTop: theme.spacing(1),
         background: variables.white,
     },
+    table: {
+        borderCollapse: 'separate'
+    },
     downloadNsearch: {
         display: 'flex',
         flexDirection: 'row-reverse'
     },
     tableDiv: {
         width: '100%',
-        overflowX: 'auto'
+        overflowX: 'auto',
+        border: 'none',
+        borderLeft: '1px solid #e6e6e6'
     },
     expansionTable: {
         display: 'table'
@@ -61,7 +66,10 @@ const styles = theme => ({
         '& td': {
             color: variables.black,
             // fontSize: variables.fs_16,
-            border: 'solid 1px #e6e6e6',
+            // border: 'solid 1px #e6e6e6',
+            border: 'none',
+            borderRight: 'solid 1px #e6e6e6',
+            borderBottom: 'solid 1px #e6e6e6',
             fontFamily: 'Roboto',
             // backgroundColor: variables.whiteColor,
             fontSize: variables.fs_14,
@@ -78,7 +86,7 @@ const styles = theme => ({
         //     zIndex: 1,
         //     left: 0,
         // },
-        '& td:nth-child(2)': {
+        '& td:nth-child(3)': {
             position: '-webkit-sticky',
             /* for Safari */
             position: 'sticky',
@@ -86,7 +94,7 @@ const styles = theme => ({
             backgroundColor: variables.whiteColor,
             zIndex: 1,
             left: -1,
-            border: '1px solid'
+            // border: '1px solid'
         },
         '& th': {
             padding: '0px 0px 0px 0px',

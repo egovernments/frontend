@@ -57,7 +57,7 @@ class CustomTabs extends React.Component {
                     <Tab
                         // disableRipple
                         value={tab.name}
-                        label={strings[tab.lbl]}
+                        label={(strings[tab.lbl] || tab.lbl)}
                         key={tab.key}
                     
                     />

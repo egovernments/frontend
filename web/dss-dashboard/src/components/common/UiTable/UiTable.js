@@ -7,11 +7,8 @@ import TableCell from '@material-ui/core/TableCell'
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
-// import Checkbox from '@material-ui/core/Checkbox';
 import UiTableHead from './UiTableHead'
 import styles from './UiTableStyles'
-// import ActionButtons from '../inputs/ActionButtons';
-// import moment from 'moment';
 import TableSearch from '../TableSearch/TableSearch'
 import ExportToExcel from '../ExportToExel'
 
@@ -21,7 +18,7 @@ class EnhancedTable extends React.Component {
 
     this.state = {
       order: this.props.order || 'asc',
-      orderBy: this.props.orderBy || 'Email',
+      orderBy: this.props.orderBy || 'S.N.',
       selected: this.props.selected || [],
       data: this.props.data,
       columnData: this.props.columnData,
@@ -121,7 +118,7 @@ class EnhancedTable extends React.Component {
     }
   }
   renderALLULBTable(n, idx) {
-    const { classes, columnData } = this.props
+    const { classes, columnData, needHash } = this.props
     const isSelected = this.isSelected(n.Email)
     return (
       <TableRow
@@ -134,12 +131,18 @@ class EnhancedTable extends React.Component {
         selected={isSelected}
         className={classes.tBodyStyle}
       >
+         {needHash ?
+          <TableCell component="td" scope="row" className={classes.hashcolumn} data-title={"SN: "}>
+            {this.state.page * this.state.rowsPerPage + idx + 1}
+          </TableCell>
+          : null
+        }
         {_.keys(n).map(d => {
           if (n !== 'color') {
             return (
               <TableCell key={d}
                 align="left"
-                component='td' scope='row' data-title={`${n[d]}: `}>
+                component='td' scope='row' data-title={d}>
                 {d === 'status' ?
                   <div className={classes.progess}>
                     <div className={classes.progressLine} role="progressbar" style={{ width: n[d] + '%', backgroundColor: (n[d] > 50) ? "#259b24" : "#e54d42" }} aria-valuenow={n[d]} aria-valuemin={0} aria-valuemax={100} />
@@ -148,12 +151,13 @@ class EnhancedTable extends React.Component {
                 }
 
               </TableCell>)
-          }})}
+          }
+        })}
       </TableRow>
     )
   }
   renderCenterTable(n, idx) {
-    const { classes, columnData } = this.props
+    const { classes, columnData , needHash} = this.props
     const isSelected = this.isSelected(n.Email)
     return (
       <TableRow
@@ -166,16 +170,20 @@ class EnhancedTable extends React.Component {
         selected={isSelected}
         className={classes.tBodyStyle}
       >
+         {needHash ?
+          <TableCell component="td" scope="row" className={classes.hashcolumn} data-title={"SN: "}>
+            {this.state.page * this.state.rowsPerPage + idx + 1}
+          </TableCell>
+          : null
+        }
         {_.keys(n).map(d => {
           return (
             <TableCell key={d}
-              align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false)
-                && d !== 'Sl no')
+              align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false))
                 ? 'right' : 'left'}
-
-              component='td' scope='row' data-title={`${n[d]}: `}>
+              component='td' scope='row' data-title={d}>
               {
-                d === 'Boundary' ? <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d]}</span> : n[d]
+                d === this.props.column ? <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d]}</span> : n[d]
 
               }
 
@@ -223,6 +231,7 @@ class EnhancedTable extends React.Component {
 
     // const { data, columnData, totalCount, classes, tableType, needCheckBox, needHash, needSearch } = this.props;
     const { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
+    var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
     return (
       <Paper className={classes.root}>
         <div className={classes.downloadNsearch}>
@@ -243,7 +252,7 @@ class EnhancedTable extends React.Component {
         </div>
         <div className={classes.tableDiv}>
           {
-            <Table className={[classes.table, 'responsiveTable'].join(' ')} aria-labelledby='tableTitle'>
+            <Table  className={[classes.table, 'responsiveTable'].join(' ')} aria-labelledby='tableTitle'>
               <UiTableHead
                 className={classes.thead}
                 columnData={columnData}
@@ -261,11 +270,15 @@ class EnhancedTable extends React.Component {
               />
               {tableData && tableData.length > 0 ? (
                 <TableBody className={classes.fontStyle}>
-                  {_.orderBy(tableData, item => (_.get(item, orderBy) || '').toString().toLowerCase(), [order])
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((n, idx) => {
-                      return this.renderConfigTable(n, idx)
-                    })}
+                  {/* "maintain orderby lodash" */}
+
+                  {
+
+                    _.orderBy(tableData, item => columnType ? parseFloat(_.get(item, orderBy) || 0) : (_.get(item, orderBy)), [order])
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((n, idx) => {
+                        return this.renderConfigTable(n, idx)
+                      })}
                 </TableBody>
               ) : (
                   <TableBody>

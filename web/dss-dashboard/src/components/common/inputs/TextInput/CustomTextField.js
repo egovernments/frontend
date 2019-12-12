@@ -173,7 +173,7 @@ class CustomTextField extends React.Component {
   }
 
   render() {
-    const { classes, label, isRequired, type, disabled, maxLength, minLength, needLabel } = this.props
+    const { classes, label, isRequired, type, disabled, maxLength, minLength, needLabel,styl } = this.props
     const name = _.uniqueId('input-')
     return (
       <div className={classes.container}>
@@ -184,6 +184,7 @@ class CustomTextField extends React.Component {
           name={name}
           type={type || 'email'}
           disabled={disabled || false}
+          style={styl}
           // defaultValue={this.state.defaltValue || ''}
           value={this.state.defaltValue || this.state.value || ''}
           label={needLabel ? label || 'Name' : null}

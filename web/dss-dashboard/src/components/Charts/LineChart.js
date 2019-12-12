@@ -8,10 +8,18 @@ import style from './styles';
 import _ from 'lodash';
 
 const options = {
+  scales: {
+    xAxes: [{
+        gridLines: {
+            color: "rgba(0, 0, 0, 0)",
+        }
+    }]
+},
   responsive: true,
   options: {
     responsive: true,
-    maintainAspectRatio: false,
+    
+    maintainAspectRatio: true,
     scales: {
       yAxes: [{
         ticks: {
@@ -29,12 +37,32 @@ const options = {
   }
 };
 
+// var options = {
+//   scales: {
+//       xAxes: [{
+//           gridLines: {
+//               color: "rgba(0, 0, 0, 0)",
+//           }
+//       }],
+//       yAxes: [{
+//           gridLines: {
+//               color: "rgba(0, 0, 0, 0)",
+//           }   
+//       }]
+//   }
+// }
+
 class LineChart extends React.Component {
 
   constructor(props) {
     super(props);
   }
   
+  callforNewData(elems) {
+		// console.log(elems[0]._datasetIndex + ', ' + elems[0]._index);
+		// this.setState({ data: null })
+
+	}
   manupulateData(chartData) {
     // let temp, tempdata;
     // temp = this.props.chartData;
@@ -52,7 +80,7 @@ class LineChart extends React.Component {
       }
       let tempdataArr = [];
       let tempdatalabel = [],tempVal='';
-      let val = NFormatterFun(_.get(d,'headerValue.value'), _.get(d,'headerValue.symbol'), this.props.GFilterData['Denomination'])
+      // let val = NFormatterFun(_.get(d,'headerValue.value'), _.get(d,'headerValue.symbol'), this.props.GFilterData['Denomination'])
       // tempObj.label = d.headerName + " : " + val;
       tempObj.label =   d.headerName;
       d.plots.map((d1, i) => {
@@ -72,13 +100,17 @@ class LineChart extends React.Component {
     let { chartData,classes } = this.props;
     let data = this.manupulateData(chartData);
     if (data) {
-      return (
+      return ( 
+        // style={{ height:300}}
         <div className={classes.lineChart}>
           <Line
+            style={{ fill: 'none'}}
             data={data}
             options={options}
-            height={175}
-          />
+            onElementsClick={this.callforNewData.bind(this)}
+          >
+
+          </Line>
         </div>
       )
     }

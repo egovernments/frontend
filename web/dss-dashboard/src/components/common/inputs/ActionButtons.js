@@ -44,7 +44,7 @@ class ActionButton extends React.Component {
     renderInfoButton() {
         const { classes, text } = this.props;
         return (
-            <Tooltip title= "Download" classes={{ tooltip: classes.lightTooltip }}>
+            <Tooltip title= {text ? text : "Download"} classes={{ tooltip: classes.lightTooltip }}>
                 <div>
                     <Button className={classes.cancelButton} onClick={this.handleClick.bind(this)}>
                         <MoreVertIcon    className={classes.Actionmenus}> {text} </MoreVertIcon >
@@ -68,15 +68,28 @@ class ActionButton extends React.Component {
 
     renderDefaultButton() {
         const { classes, text, disabled, clas } = this.props;
-        return (
-            <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
-                <div>
-                    <Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a"}}>
-                        {text}
-                    </Button>
-                </div>
-            </Tooltip>
-        );
+        if(this.props.containedButton === true){
+            return (
+                <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
+                    <div style={{marginRight: '2px'}}>
+                        <Button disabled={disabled} variant="contained" onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color: 'white', backgroundColor: '#fe7a51', fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
+                            {text}
+                        </Button>
+                    </div>
+                </Tooltip>
+            );
+        } else {
+            return (
+                <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
+                    <div>
+                        <Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a", fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
+                            {text}
+                        </Button>
+                    </div>
+                </Tooltip>
+            );
+        }
+        
     }
     renderSmallButton() {
         const { classes, text, disabled, value, checked } = this.props;
@@ -89,6 +102,7 @@ class ActionButton extends React.Component {
                 disableRipple
                 selected={checked}
                 className={classes.actionButton_small}
+                style={{padding: this.props.padding ? this.props.padding : '', fontSize: this.props.fontSize}}
                 onClick={this.handleClick.bind(this)}>
                 {text}
             </ToggleButton>

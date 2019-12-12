@@ -2,31 +2,31 @@ import variables from "../../styles/variables";
 
 const styles = theme => ({
     root: {
-        color: variables.black,
+        color: 'rgba(0, 0, 0, 0.87)',
         display: 'flex',
         flex: 1,
         fontFamily: variables.primaryFont,
         '& span': {
 
-            fontSize: variables.fs_24,
+            fontSize: variables.fs_20,
             fontWeight: variables.f_500,
             height: 32
         }
 
     },
     tableChart: {
-        maxWidth: '85vw',
+        maxWidth: '100vw',
         margin: 'auto'
     },
     collection: {
         display: 'flex',
-        borderBottom: '1px solid #ccc'
+        borderBottom: '1px solid #f4f7fb'
     },
     collectionRow: {
         display: 'flex',
         flex: 1,
         flexDirection: 'column',
-        padding: '30px 0',
+        padding: '15px 0',
 
     },
     CollectionLabel: {
@@ -46,6 +46,12 @@ const styles = theme => ({
     lineChart: {
         display: 'flex'
     },
+    '@media (max-width:823px)': {
+        tableChart: {
+            maxWidth: '85vw',
+        },
+
+    }
 
 });
 export default styles;

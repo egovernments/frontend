@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import NFormatter from '../common/numberFormater';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import style from './PerformanceChartStyle';
 import getChartOptions from '../../actions/getChartOptions';
@@ -12,11 +13,12 @@ import APITransport from '../../actions/apitransport/apitransport';
 import ActionButtons from '../common/inputs/ActionButtons';
 import Cards from '../common/Cards/Cards';
 import UiTable from '../common/UiTable/UiTable';
+import variables from '../../styles/variables';
 
 class PerformanceChart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: null, IsOpen: false }
+    this.state = { data: null, IsOpen: false,page: _.get(this.props, 'match.params.pageId') }
   }
   formatPlotValue(value, type) {
     return <NFormatter value={value} nType={type} />
@@ -36,60 +38,61 @@ class PerformanceChart extends React.Component {
     this.callAPI();
   }
   handleClick() {
-    this.setState({
-      IsOpen: true
-    })
+    // this.setState({
+    //   IsOpen: true
+    // })
+    let codekey = _.chain(this.props).get('chartData').first().get("id").value();
+    this.props.history.push(`/${this.state.page}/${codekey}`)
   }
+
   closeDialogue() {
     this.setState({
       IsOpen: false
     })
   }
   renderCard(data) {
-    console.log(data);
+    // console.log(data);
+    if (data && data.length > 0) {
+      let { order } = this.props;
+      let columnData = [];
+      columnData.push({ id: 'rank', numeric: true, stickyHeader: false, disablePadding: false, label: 'Rank' })
+      columnData.push({ id: 'ULBs', numeric: true, stickyHeader: false, disablePadding: false, label: 'ULBs' })
+      columnData.push({ id: 'TargetAchieved', numeric: true, stickyHeader: false, disablePadding: false, label: 'Target Achieved' })
+      columnData.push({ id: 'status', numeric: true, stickyHeader: false, disablePadding: false, label: 'Status' })
+      let newData = _.chain(data).map((rowData, i) => {
+        return {
+          rank: (rowData.order),
+          ULBs: rowData.fortable,
+          TargetAchieved: parseFloat((rowData.value || 0)).toFixed(2) + '%',
+          status: rowData.value,
+        }
+      }).value();
 
-    let obj = {
-      rank: "",
-      ULBs: "",
-      TargetAchieved: '',
-      status: ''
+
+      return (<Cards>
+        <UiTable
+          data={newData}
+          columnData={columnData}
+          needHash={true}
+          orderBy={"rank"}
+          order={(_.get(newData[0], 'rank') === 1 || false) ? 'asc' : 'desc'}
+          tableType='ULB'
+          noPage={false}
+          needSearch={true}
+          needExport={true}
+          excelName={"All ULBs"}
+
+        />
+      </Cards >)
+    } else {
+      return null;
     }
-    let columnData = [];
-    columnData.push({ id: 'rank', numeric: true, stickyHeader: false, disablePadding: false, label: 'Rank' })
-    columnData.push({ id: 'ULBs', numeric: true, stickyHeader: false, disablePadding: false, label: 'ULBs' })
-    columnData.push({ id: 'TargetAchieved', numeric: true, stickyHeader: false, disablePadding: false, label: 'Target Achieved' })
-    columnData.push({ id: 'status', numeric: true, stickyHeader: false, disablePadding: false, label: 'Status' })
-    let newData = _.chain(data).orderBy('value','desc').map((rowData, i) => {
-      return {
-        rank: (i + 1),
-        ULBs: rowData.fortable,
-        TargetAchieved: Math.floor((rowData.value || 0)) + '%',
-        status: rowData.value,
-      }
-    }).value();
-
-
-    return (<Cards >
-      <UiTable
-        data={newData}
-        columnData={columnData}
-
-        tableType='ULB'
-        // cellClick={this.applyFilter.bind(this, visualcode, drillCode)}
-        noPage={false}
-        // Gfilter={this.props.GFilterData}
-        needSearch={false}
-        needExport={false}
-        excelName={""}
-
-      />
-    </Cards >)
   }
   renderPopup(data) {
     const { classes } = this.props;
     if (data.length > 3) {
       return (<div className={classes.bottomDiv}>
-        <ActionButtons buttonType={"default"} text={"View all ulbs"} handleClick={this.handleClick.bind(this)} />
+        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} text={"View all"} handleClick={this.handleClick.bind(this)} />
         <Dialogs close={this.closeDialogue.bind(this)} IsOpen={this.state.IsOpen} title={"Back to MyDashboard"} needCustomTitle={true}>
           {this.renderCard(data)}
         </Dialogs>
@@ -112,6 +115,7 @@ class PerformanceChart extends React.Component {
       let label = _.chain(plot.name).split('.').join("_").toUpper().value();
       return {
         "fortable": (strings["TENANT_TENANTS_" + label] || label),
+        "order": d.headerValue,
         "label": d.headerName + " " + d.headerValue + " : " + (strings["TENANT_TENANTS_" + label] || label),
         "value": plot.value,
         "label2": (strings[plot.label] || plot.label) + ": ",
@@ -120,9 +124,11 @@ class PerformanceChart extends React.Component {
     }).compact().value() || [];
 
     if (data) {
-      return (<div>
+      console.log(data);
+
+      return (<div className={classes.body}>
         {data.map((d, i) => {
-          if (i < 4) {
+          if (i < 3) {
             return (<div className={classes.maincls} key={i}>
               <span className={classes.topLabel}>{d.label}</span>
               <div className={classes.progess} >
@@ -135,7 +141,7 @@ class PerformanceChart extends React.Component {
           }
         }
         )}
-        {this.renderPopup(data)}
+        {this.renderPopup(data)}        
       </div>
       )
     }
@@ -157,4 +163,4 @@ const mapDispatchToProps = dispatch => {
     // updateFilterData: updateGlobalFilterData
   }, dispatch)
 }
-export default withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(PerformanceChart));
+export default withRouter(withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(PerformanceChart)));

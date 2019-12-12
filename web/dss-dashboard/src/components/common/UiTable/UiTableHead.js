@@ -12,7 +12,7 @@ class UiTableHead extends Component {
   };
 
   render() {
-    const { classes, onSelectAllClick,Globfilter, order, orderBy, numSelected, rowCount, columnData, needHash, needCheckBox } = this.props;
+    const { classes, onSelectAllClick, Globfilter, order, orderBy, numSelected, rowCount, columnData, needHash, needCheckBox } = this.props;
     return (
       <TableHead className={classes.root}>
         <TableRow>
@@ -28,36 +28,39 @@ class UiTableHead extends Component {
               </TableCell>
               :
               null
-          }
+          }*/}
           {
             needHash ?
               <TableCell style={{ width: this.props.width ? this.props.width : 'auto' }}>
                 <span>#</span>
               </TableCell>
               :
-              <TableCell style={{ width: this.props.width ? this.props.width : 'auto' }}>
-                <span></span>
-              </TableCell>
-          } */}
+             null
+          } 
 
           {columnData.map((column, idx) => {
             return (
               <TableCell
                 key={column.id}
                 // stickyHeader={column.stickyHeader}
-                align={(column.numeric ==='amount' || column.numeric ==='number')  ? 'left' : 'left'}
+                align={(column.numeric === 'amount' || column.numeric === 'number' || column.numeric === 'percentage') ? 'left' : 'left'}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
                 style={{ width: this.props.width ? this.props.width : 'auto' }}
               >
-                <TableSortLabel
-                  style={{ flexDirection: "row" }}
-                  active={orderBy === column.id}
-                  direction={order}
-                  onClick={this.createSortHandler(column.id)}
-                >
-                  {column.label + (column.numeric === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')} 
-                </TableSortLabel>
+                {
+                  idx !== -1 ? <TableSortLabel
+                    style={{ flexDirection: "row" }}
+                    active={orderBy === column.id}
+                    direction={order}
+                    onClick={this.createSortHandler(column.id)}
+                  >
+
+                    {column.label + (column.numeric === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')}
+                  </TableSortLabel>
+                    :
+                    <span>{column.label}</span>
+                }
               </TableCell>
             );
           }, this)}

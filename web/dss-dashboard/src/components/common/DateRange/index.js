@@ -21,7 +21,7 @@ const year = (new Date()).getFullYear();
 
 class DateRange extends React.Component {
   // The first commit of Material-UI
-   
+
 
   constructor(props) {
     super(props);
@@ -58,6 +58,19 @@ class DateRange extends React.Component {
 
   };
 
+  getDuration(startDate, endDate) {
+    let noOfDays = (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 3600 * 24)
+    if (noOfDays > 91) {
+      return 'month'
+    }
+    if (noOfDays < 90 && noOfDays >= 7) {
+      return 'week'
+    }
+    if (noOfDays <= 7) {
+      return 'date'
+    }
+  }
+
   getDateFilter(value) {
     switch (_.toUpper(value)) {
       case 'TODAY':
@@ -66,7 +79,8 @@ class DateRange extends React.Component {
           title: "TODAY",
           value: {
             startDate: moment().startOf('day').unix(),
-            endDate: moment().endOf('day').unix()
+            endDate: moment().endOf('day').unix(),
+            interval: 'date'
           }
         }
       case 'THIS WEEK':
@@ -75,7 +89,8 @@ class DateRange extends React.Component {
           title: "WEEK",
           value: {
             startDate: moment().startOf('week').unix(),
-            endDate: moment().endOf('week').unix()
+            endDate: moment().endOf('week').unix(),
+            interval: 'week'
           }
         }
       case 'THIS MONTH':
@@ -83,15 +98,18 @@ class DateRange extends React.Component {
           title: "MONTH",
           value: {
             startDate: moment().startOf('month').unix(),
-            endDate: moment().endOf('month').unix()
+            endDate: moment().endOf('month').unix(),
+            interval: 'week'
           }
         }
       case 'THIS QUARTER':
+        // let duration2 = this.getDuration(moment().startOf('quarter').format('YYYY-MM-DD'), moment().endOf('quarter').format('YYYY-MM-DD'))
         return {
           title: "QUARTER",
           value: {
             startDate: moment().startOf('quarter').unix(),
-            endDate: moment().endOf('quarter').unix()
+            endDate: moment().endOf('quarter').unix(),
+            interval: 'week'
           }
         }
       case 'THIS YEAR':
@@ -99,15 +117,19 @@ class DateRange extends React.Component {
           title: "YEAR",
           value: {
             startDate: moment().startOf('year').unix(),
-            endDate: moment().endOf('year').unix()
+            endDate: moment().endOf('year').unix(),
+            interval: 'month'
           }
         }
       case 'CUSTOM':
+        let duration1 = this.getDuration(moment(this.state.from || new Date(), "DD/MM/YYYY"), moment(this.state.to || new Date(), "DD/MM/YYYY"))
+
         return {
           title: "CUSTOM",
           value: {
-            startDate: moment(this.state.from, "DD/MM/YYYY").unix(),
-            endDate: moment(this.state.to, "DD/MM/YYYY").unix()
+            startDate: moment(this.state.from || new Date(), "DD/MM/YYYY").unix(),
+            endDate: moment(this.state.to || new Date(), "DD/MM/YYYY").unix(),
+            interval: duration1
           }
         }
 
@@ -116,7 +138,8 @@ class DateRange extends React.Component {
           title: `FY ${moment().month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').add(1, 'years').format("YY")}`,
           value: {
             startDate: moment().month(3).startOf('month').unix(),
-            endDate: moment().month(2).endOf('month').add(1, 'years').unix()
+            endDate: moment().month(2).endOf('month').add(1, 'years').unix(),
+            interval: 'month'
           }
 
         }
@@ -162,7 +185,7 @@ class DateRange extends React.Component {
     let cardStyle = {}
     return (
       <Dialog
-      // fullScreen={}
+        // fullScreen={}
         disableBackdropClick
         disableEscapeKeyDown
         // invisible={true}
@@ -173,7 +196,7 @@ class DateRange extends React.Component {
         // style={{ backgroundColor: 'transparent' }}
 
         classes={{ paper: classes.root }}
-        // {...other}
+      // {...other}
       >
         <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#000000' }}>
           {/* <h5> */}
@@ -209,7 +232,7 @@ class DateRange extends React.Component {
             Cancel
         </Button>
           <Button className={classes.okbtn} onClick={this.handleOk.bind(this)}>
-            Apply
+            Select
         </Button>
         </DialogActions>
       </Dialog>

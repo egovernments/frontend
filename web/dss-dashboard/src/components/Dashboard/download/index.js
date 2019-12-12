@@ -88,24 +88,24 @@ export function CustomizedMenus(props) {
 
     const downloadPDF = () => {
         props.APITrans(true);
-        printDocument(pdf, renderTable()).then(function (pdfO) {
-            let element = document.getElementById("printFtable")
-            element.parentNode.removeChild(element);
+        printDocument(renderTable(),props.fileName || 'DSS').then(function (pdfO) {
+            // let element = document.getElementById("printFtable")
+            // element.parentNode.removeChild(element);
             setAnchorEl(null);
-            pdfO.save();
+            // pdfO.save();
 
             try {
-                pdf.deletePage(3)
-                pdf.deletePage(2)
-                pdf.deletePage(1)
-                pdf.addPage();
+                // pdf.deletePage(3)
+                // pdf.deletePage(2)
+                // pdf.deletePage(1)
+                // pdf.addPage();
             props.APITrans(false);
 
             } catch{ }
-        }).catch(function (error) {
+        }.bind(this)).catch(function (error) {
             console.log(error);
             setAnchorEl(null);
-        })
+        }.bind(this))
 
     }
     // console.log(props)
@@ -132,15 +132,15 @@ export function CustomizedMenus(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <StyledMenuItem onClick={downloadPDF}>
+                <StyledMenuItem onClick={downloadPDF.bind(this)}>
                     <ListItemIcon>
-                        <PdfIcon />
+                        <PdfIcon style={{color: '#ff0000'}}/>
                     </ListItemIcon>
                     <ListItemText primary="PDF" />
                 </StyledMenuItem>
-                <StyledMenuItem onClick={downloadImage}>
+                <StyledMenuItem onClick={downloadImage.bind(this)}>
                     <ListItemIcon>
-                        <ImageIcon />
+                        <ImageIcon style={{color: '#ff0000'}}/>
                     </ListItemIcon>
                     <ListItemText primary="Image" />
                 </StyledMenuItem>

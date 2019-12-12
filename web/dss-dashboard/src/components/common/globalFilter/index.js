@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
@@ -19,13 +20,15 @@ import { connect } from 'react-redux';
 import DropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import { Chip } from '@material-ui/core';
+import { isMobile } from 'react-device-detect';
 
 class GlobalFilter extends Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
-            value: 'FY 19-20', //fOR date range
+            value: `FY ${moment().month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').add(1, 'years').format("YY")}`, //fOR date range
             filterData: this.props.GFilterData,
             title: '',
             dept: "All Services",
@@ -62,9 +65,9 @@ class GlobalFilter extends Component {
                 this.setState({ [`${target}IsOpen`]: !open, filterData: newFilterData });
             } else {
                 if (newFilterData.duration.title === 'CUSTOM') {
-                    newFilterData.duration.title = moment.unix(_.get(newFilterData, 'duration.value.startDate')).format("DD/MM/YY")
+                    newFilterData.duration.title = moment.unix(_.get(newFilterData, 'duration.value.startDate')).format('ll')
 
-                        + '-' + moment.unix(_.get(newFilterData, 'duration.value.endDate')).format("DD/MM/YY");
+                        + '-' + moment.unix(_.get(newFilterData, 'duration.value.endDate')).format('ll');
                 }
                 this.setState({ open: open, filterData: newFilterData });
             }
@@ -96,7 +99,16 @@ class GlobalFilter extends Component {
         //         'Denomination': 'Lac'
         //     }
         // }, this.props.applyFilters(this.state.filterData));
-        window.location.reload();
+        // let pageId=_.get(this.props,'match.params.pageId');
+        let viewAll = _.get(this.props, 'match.params.viewAll');
+        if (viewAll) {
+            let pageId = _.get(this.props, 'match.params.pageId');
+            this.props.history.push(`/${pageId}`);
+            window.location.reload();
+        } else {
+            window.location.reload();
+        }
+
     }
 
     openPicker() {
@@ -124,8 +136,9 @@ class GlobalFilter extends Component {
                     id="adornment-amount"
                     value={(_.get(this.state, "filterData.duration.title") || this.state.value)}
                     style={{
-                        color: '#000000', width: 'auto',
-                        margin: '0 10px 0 0'
+                        color: '#000000',
+                        margin: '0 0px 0 0',
+                        width: _.get(this.state, "filterData.duration.title") ? '230px' : '120px'
                     }}
                     // onChange={handleChange('amount')}
                     startAdornment={<InputAdornment position="start">
@@ -173,7 +186,7 @@ class GlobalFilter extends Component {
             }
         })
         return (
-            <SwitchButton type="small" topMmargin="5px" selected={this.state.filterData[label] || data[0]} target={label} data={newData} handleSelected={this.handleChanges}></SwitchButton>
+            <SwitchButton type="small" topMmargin="5px" padding="3px" fontSize="14px" selected={this.state.filterData[label] || data[0]} target={label} data={newData} handleSelected={this.handleChanges}></SwitchButton>
         )
     }
 
@@ -205,7 +218,7 @@ class GlobalFilter extends Component {
             case "dropdown":
                 switch (label) {
                     case "ULBS":
-                        return this.renderMultiselect(object.label, this.handleChanges, this.state.Ulbs, object.values)
+                        return this.renderMultiselect(object.label, this.handleChanges, this.state.ulbs, object.values)
                     case "DDRs":
                         return this.renderMultiselect(object.label, this.handleChanges, this.state.ddrs, object.values)
                     case "Services":
@@ -220,8 +233,67 @@ class GlobalFilter extends Component {
         }
     }
 
+    handleOnDelete(target, value) {
+        let filterData = this.state.filterData;
+        
+        let newFilterData = []
+        if (filterData[target] && Array.isArray(filterData[target])) {
+            filterData[target].map((data) => {
+                if (data !== value) {
+                    newFilterData.push(data)
+                }
+            })
+        }
+        filterData[target] = newFilterData
+        this.setState({ filterData: filterData , DDRs: newFilterData});
+        if (typeof this.props.applyFilters === 'function') {
+            // this.props.applyFilters(filterData);
+            this.setState({DDRs: newFilterData,
+            // defaultV: newFilterData
+        })
+        }
+        if(target === 'ULBS') {
+            this.setState({
+                ulbs: newFilterData
+            })
+        }
+        if(target === 'DDRs') {
+            this.setState({
+                ddrs: newFilterData
+            })
+        }
+    }
+
+    renderFilters() {
+        let { classes, GFilterData } = this.props;
+        return <div className={classes.fVisible}>
+            {GFilterData && GFilterData.DDRs && GFilterData.DDRs.length > 0 && <div className={classes.fVRow}>
+                <div className={classes.fTitle}><span style={{margin: !isMobile ? 'auto' : ''}}>Selected DDRs:</span></div>
+                <div className={classes.mChips}>
+                    {GFilterData.DDRs.map(item => {
+                         let handleOnDelete = this.handleOnDelete.bind(this)
+                        return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}><Chip fullwidth className={classes.mCustomChip} label={item} color={'gray'}  onDelete={() => handleOnDelete('DDRs',item)}></Chip></div>
+                    })
+
+                    }
+                </div>
+            </div>}
+            {GFilterData && GFilterData.ULBS && GFilterData.ULBS.length > 0 && <div className={classes.fVRow}>
+                <div className={classes.fTitle}><span  style={{margin: !isMobile ? 'auto' : ''}}>Selected ULBs:</span></div>
+                <div className={classes.mChips}>
+                    {GFilterData.ULBS.map(item => {
+                        let handleOnDelete = this.handleOnDelete.bind(this)
+                        return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}><Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete('ULBS',item)}></Chip></div>
+                    })
+
+                    }</div>
+            </div>
+            }
+        </div>
+    }
+
     render() {
-        let { classes, globalFilterData } = this.props;
+        let { classes, globalFilterData, GFilterData } = this.props;
         return (
             <Cards key="gf" fullW={true}>
                 <div className={classes.mainFilter}>
@@ -242,11 +314,39 @@ class GlobalFilter extends Component {
 
                     </div> */}
 
-                    <div className={classes.actions}>
-                        <ActionButtons buttonType="default" text="CLEAR ALL" disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
-                        <ActionButtons buttonType="default" text="APPLY" clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                    {isMobile && this.renderFilters()}
+
+                    <div id="divNotToPrint" className={classes.actions}>
+                        <ActionButtons buttonType="default" fontSize="16px" text="CLEAR ALL" disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                        <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text="APPLY" clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
                     </div>
                 </div>
+
+                {!isMobile && this.renderFilters()}
+
+                {/* <div className={classes.fVisible}>
+                    {GFilterData && GFilterData.DDRs && GFilterData.DDRs.length > 0 && <div className={classes.fVRow}>
+                        <div className={classes.fTitle}><span style={{ margin: 'auto' }}>Selected DDRs:</span></div>
+                        <div className={classes.mChips}>
+                            {GFilterData.DDRs.map(item => {
+                                let handleOnDelete = this.handleOnDelete.bind(this)
+                                return <Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete(item)}></Chip>
+                            })
+
+                            }
+                        </div>
+                    </div>}
+                    {GFilterData && GFilterData.ULBS && GFilterData.ULBS.length > 0 && <div className={classes.fVRow}>
+                        <div className={classes.fTitle}><span style={{ margin: 'auto' }}>Selected ULBs:</span></div>
+                        <div className={classes.mChips}>
+                            {GFilterData.ULBS.map(item => {
+                                return <div style={{ marginRight: '5px' }}><Chip className={classes.mCustomChip} label={item} color={'gray'}></Chip></div>
+                            })
+
+                            }</div>
+                    </div>
+                    }
+                </div> */}
 
             </Cards>
         );
@@ -267,4 +367,4 @@ const mapDispatchToProps = dispatch => {
     }, dispatch)
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(GlobalFilter));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(GlobalFilter)));

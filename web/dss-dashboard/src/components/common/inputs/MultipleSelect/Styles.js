@@ -9,7 +9,7 @@ const styles = theme => ({
         '& div': {
             color: variables.black,
             margin: '0 3px 0 0',
-            flex: 1,
+            // flex: 1,
             // '& div:before': '',
             // '& svg': {
             //   color: variables.black,

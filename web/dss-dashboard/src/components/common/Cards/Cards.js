@@ -18,11 +18,17 @@ import CardHeader from '@material-ui/core/CardHeader'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
+import share from '../../../images/share.svg';
+import SVG from 'react-inlinesvg';
+import { APIStatus } from '../../../actions/apiStatus'
+import { handleWhatsAppImageShare } from '../../../utils/Share';
+import InfoIcon from '@material-ui/icons/Info';
+import { Tooltip } from '@material-ui/core';
 
 const cardStyle = {
   backgroundColor: variables.widget_background,
   height: 'auto',
-  margin: '10px 10px 10px 10px !important',
+  margin: '12px 12px 12px 12px !important',
   width: '100%'
 }
 
@@ -48,25 +54,53 @@ class Cards extends Component {
   componentWillReceiveProps(nextProps) {
     // console.log("Card=>>>>>",nextProps.GFilterData,this.props.GFilterData);
   }
+
   downloadAsImage = () => {
+    let { strings, title } = this.props;
     let div = document.getElementById('card' + this.props.id);
     // this.props.APITransport(true)
     domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
       .then(function (dataUrl) {
         var link = document.createElement('a');
-        link.download = this.props.name || 'image.jpeg';
+        link.download = (strings[title] || title) || 'image.jpeg';
         link.href = dataUrl;
         link.click();
         this.setState({ anchorEl: null });
         // this.props.APITransport(false)
       }.bind(this))
-
-
   }
+
+  shareAsImage = () => {
+    let { strings, title } = this.props;
+    let div = document.getElementById('card' + this.props.id);
+    this.props.APITrans(true)
+    var ts = Math.round((new Date()).getTime() / 1000);
+
+    domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+      .then(function (dataUrl) {
+        var blobData = this.dataURItoBlob(dataUrl);
+        blobData.name = (strings[title] || 'image') + ts + ".jpeg"
+
+        try {
+          this.props.APITrans(false);
+          handleWhatsAppImageShare(blobData)
+        } catch{ }
+      }.bind(this))
+  }
+
+  dataURItoBlob = (dataURI) => {
+    var binary = atob(dataURI.split(',')[1]);
+    var array = [];
+    for (var i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
+  }
+
   renderMenues() {
     const { classes, title } = this.props;
     return (<div className={[classes.actionMenues, classes.fullw].join(' ')}>
-      <ActionButtons text={title} handleClick={this.handleClick} buttonType="info" target="info"></ActionButtons>
+      <ActionButtons text={"More Actions"} handleClick={this.handleClick} buttonType="info" target="info"></ActionButtons>
       {/* <Button 
         aria-controls="customized-menu"
         aria-haspopup="true"
@@ -103,7 +137,13 @@ class Cards extends Component {
           </ListItemIcon>
           <ListItemText primary="Image" />
         </MenuItem>
-
+        <MenuItem onClick={this.shareAsImage.bind(this)} className={classes.menuItem}>
+        <ListItemIcon className={classes.itemIcon}>
+            <SVG src={share} style={{ marginRight: '10px' }} >
+            </SVG>
+          </ListItemIcon>
+          <ListItemText primary="Share" />
+        </MenuItem>
       </Menu>
     </div>)
   }
@@ -112,14 +152,24 @@ class Cards extends Component {
     let { strings } = this.props;
     const { classes, needInfo, id, title, fullW, noUnit } = this.props;
     let newClass = fullW ? classes.full : classes.redused;
-    console.log('noUnit',noUnit, title);
-    
+    // console.log('noUnit',noUnit, title);
+
     return (
       // this.props.cardStyle || cardStyle
       <Card id={'card' + id} style={this.props.cardStyle || cardStyle} classes={{ root: newClass }}>
         <div className={classes.headRoot}>
-          {title && <CardHeader classes={{ title: classes.title, root: classes.cardheader }} title={(strings[title] || title) + (!noUnit ? '' : (' (In ' + this.props.GFilterData['Denomination'] + ')'))} onClick={(event) => this.clickEvent(event)}>
-          </CardHeader>}
+          {title && <CardHeader classes={{ title: classes.title, root: classes.cardheader }} title={(strings[title] || title) + (!noUnit ? '' : (' (In ' + this.props.GFilterData['Denomination'] + ')'))} onClick={(event) => this.clickEvent(event)}
+            action={
+              <div style={{ paddingLeft: '4px' }}>
+                <Tooltip title={strings[title] || title} classes={{ tooltip: classes.lightTooltip }}>
+                  <InfoIcon style={{ color: '#96989a',verticalAlign: '-webkit-baseline-middle',paddingTop:'3px' }} />
+                </Tooltip>
+              </div>
+            }
+            >
+
+          </CardHeader>
+          }
           {/* <div className={classes.fullw}></div> */}
           {needInfo && this.renderMenues()}
         </div>
@@ -149,6 +199,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
+    APITrans: APIStatus,
   }, dispatch)
 }
 

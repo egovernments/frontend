@@ -38,7 +38,7 @@ export default function NFormatter(props) {
                             return newVal.replace(",,", ',');
                         }
                     default:
-                        return `${Rformatter.format(props.value || 0)}`;
+                        return parseFloat(`${Rformatter.format(props.value || 0)}`);
                 }
             case "number":
             case "Number":
@@ -47,7 +47,7 @@ export default function NFormatter(props) {
             case "percentage":
             case "Percentage":
                 const Pformatter = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });
-                return `${Pformatter.format(props.value)} %`;
+                return `${parseFloat(Pformatter.format(props.value) || '0').toFixed(2)} %`;
             case "text":
             case "Text":
                 return props.value;

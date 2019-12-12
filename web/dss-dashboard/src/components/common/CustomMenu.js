@@ -28,6 +28,7 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../utils/Share'
 import domtoimage from 'dom-to-image';
+import Variables from '../../styles/variables'
 
 const pdf = new jsPDF("p", "mm", "a1");
 pdf.scaleFactor = 3;
@@ -71,7 +72,10 @@ export function CustomizedMenus(props) {
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
     };
-
+    const filterFunc = function(node) {
+        if (node.id == 'divNotToPrint') return false;
+        return true;
+    };
     const handleClick1 = event => {
         setOpen(!open)
     };
@@ -102,17 +106,17 @@ export function CustomizedMenus(props) {
 
     const downloadPDF = () => {
         props.APITrans(true)
-        printDocument(pdf, renderTable()).then(function (pdfO) {
-            let element = document.getElementById("printFtable")
-            element.parentNode.removeChild(element);
+        printDocument(renderTable(),props.fileName || 'DSS').then(function (pdfO) {
+            // let element = document.getElementById("printFtable")
+            // element.parentNode.removeChild(element);
             setAnchorEl(null);
-            pdfO.save();
+            // pdfO.save();
 
             try {
-                pdf.deletePage(3)
-                pdf.deletePage(2)
-                pdf.deletePage(1)
-                pdf.addPage();
+                // pdf.deletePage(3)
+                // pdf.deletePage(2)
+                // pdf.deletePage(1)
+                // pdf.addPage();
                 props.APITrans(false)
             } catch{ }
             // props.APITrans(false);
@@ -124,12 +128,12 @@ export function CustomizedMenus(props) {
 
     const shareWhatsAppPDF = () => {
         props.APITrans(true);
-        const pdf1 = new jsPDF("p", "mm", "a1");
-        pdf1.scaleFactor = 3;
+        // const pdf1 = new jsPDF("p", "mm", "a1");
+        // pdf1.scaleFactor = 3;
 
-        printDocument(pdf1, renderTable()).then(function (pdfO) {
-            let element = document.getElementById("printFtable")
-            element.parentNode.removeChild(element);
+        printDocument(renderTable()).then(function (pdfO) {
+            // let element = document.getElementById("printFtable")
+            // element.parentNode.removeChild(element);
             setAnchorEl(null);
             // pdfO.save();
 
@@ -145,12 +149,12 @@ export function CustomizedMenus(props) {
 
     const shareEmailPDF = () => {
         props.APITrans(true);
-        const pdf1 = new jsPDF("p", "mm", "a1");
-        pdf1.scaleFactor = 3;
+        // const pdf1 = new jsPDF("p", "mm", "a1");
+        // pdf1.scaleFactor = 3;
 
-        printDocument(pdf1, renderTable()).then(function (pdfO) {
-            let element = document.getElementById("printFtable")
-            element.parentNode.removeChild(element);
+        printDocument(renderTable()).then(function (pdfO) {
+            // let element = document.getElementById("printFtable")
+            // element.parentNode.removeChild(element);
             setAnchorEl(null);
             // pdfO.save();
 
@@ -169,7 +173,7 @@ export function CustomizedMenus(props) {
         var ts = Math.round((new Date()).getTime() / 1000);
 
         let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white',filter: filterFunc  })
             .then(function (dataUrl) {
                 var blobData = dataURItoBlob(dataUrl);
                 blobData.name = "dss" + ts + ".jpeg"
@@ -187,7 +191,7 @@ export function CustomizedMenus(props) {
         var ts = Math.round((new Date()).getTime() / 1000);
 
         let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: filterFunc  })
             .then(function (dataUrl) {
                 var blobData = dataURItoBlob(dataUrl);
                 blobData.name = "dss" + ts + ".jpeg"
@@ -246,15 +250,15 @@ export function CustomizedMenus(props) {
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <Divider />
                     <List component="div" disablePadding>
-                        <StyledMenuItem button onClick={downloadImage}>
+                        <StyledMenuItem button onClick={downloadImage.bind(this)}>
                             <ListItemIcon>
-                                <ImageIcon />
+                                <ImageIcon style={{color: '#ff0000'}}/>
                             </ListItemIcon>
                             <ListItemText primary="Image" />
                         </StyledMenuItem>
-                        <StyledMenuItem button onClick={downloadPDF}>
+                        <StyledMenuItem button onClick={downloadPDF.bind(this)}>
                             <ListItemIcon>
-                                <PdfIcon />
+                                <PdfIcon style={{color: '#ff0000'}}/>
                             </ListItemIcon>
                             <ListItemText primary="PDF" />
                         </StyledMenuItem>
@@ -273,27 +277,27 @@ export function CustomizedMenus(props) {
                 <Collapse in={shareOpen} timeout="auto" unmountOnExit>
                     <Divider />
                     <List component="div" disablePadding>
-                        <StyledMenuItem button onClick={shareEmailPDF}>
+                        <StyledMenuItem button onClick={shareEmailPDF.bind(this)}>
                             <ListItemIcon>
-                                <DraftsIcon />
+                                <DraftsIcon style={{color:Variables.email}}/>
                             </ListItemIcon>
                             <ListItemText primary="PDF" />
                         </StyledMenuItem>
-                        <StyledMenuItem button onClick={shareEmailImage}>
+                        <StyledMenuItem button onClick={shareEmailImage.bind(this)}>
                             <ListItemIcon>
-                                <DraftsIcon />
+                                <DraftsIcon style={{color:Variables.email}}/>
                             </ListItemIcon>
                             <ListItemText primary="Image" />
                         </StyledMenuItem>
-                        <StyledMenuItem button onClick={shareWhatsAppPDF}>
+                        <StyledMenuItem button onClick={shareWhatsAppPDF.bind(this)}>
                             <ListItemIcon>
-                                <WhatsappIcon />
+                                <WhatsappIcon style={{color:Variables.whatsApp}}/>
                             </ListItemIcon>
                             <ListItemText primary="PDF" />
                         </StyledMenuItem>
-                        <StyledMenuItem button onClick={shareWhatsAppImage}>
+                        <StyledMenuItem button onClick={shareWhatsAppImage.bind(this)}>
                             <ListItemIcon>
-                                <WhatsappIcon />
+                                <WhatsappIcon style={{color:Variables.whatsApp}}/>
                             </ListItemIcon>
                             <ListItemText primary="Image" />
                         </StyledMenuItem>

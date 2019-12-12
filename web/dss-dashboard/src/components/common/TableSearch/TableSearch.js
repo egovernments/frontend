@@ -149,6 +149,7 @@ class TableSearch extends Component {
                     label="Search"
                     defaultValue=""
                     type="text"
+                    styl={{ border:'1px solid #e6e6e6'}}
                     onKeyDown={this._handleKeyDown.bind(this)}
                     UpdateValues={this.handleChanges_search.bind(this)}
                 /> : null

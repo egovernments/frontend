@@ -1,4 +1,5 @@
 import variables from "../../../styles/variables";
+import { isMobile } from 'react-device-detect';
 
 const styles = theme => ({
     mainFilter: {
@@ -34,9 +35,31 @@ const styles = theme => ({
     fullWidth: {
         flex: 1
     },
+    fVisible: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    fVRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        margin: isMobile ? '7px 0 5px 0' : '0 0 5px 0'
+    },
+    fTitle: {
+        display: 'flex',
+        marginRight: '10px',
+    },
+    mChips: {
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row'
+    },
+    mCustomChip: {
+        '& span': {
+            margin: '0 5px 0 5px'
+        }
+    },
     clearbtn: {
         backgroundColor: variables.white,
-        marginTop: 10,
+        marginTop: 12,
         // opacity: 0.2,
         fontFamily: 'Roboto',
         fontSize: 12,

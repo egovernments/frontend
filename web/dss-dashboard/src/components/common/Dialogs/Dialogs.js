@@ -15,9 +15,9 @@ class Dialogs extends Component {
         return (
             <Dialog fullScreen open={this.props.IsOpen} className={classes.rootDialogue}>
                 {needCustomTitle ?
-                    <Card>
+                    <Card style={{overflow: 'initial'}}>
                         <div className={classes.heading} onClick={this.close.bind(this)}>
-                            <ArrowBack /> <span>{this.props.title}</span>
+                            <ArrowBack /> <span style={{marginTop: 'auto', marginBottom: 'auto'}}>{this.props.title}</span>
                         </div>
                     </Card>
                     : <h3 className={classes.dialogueHeading}>{this.props.title}</h3>}

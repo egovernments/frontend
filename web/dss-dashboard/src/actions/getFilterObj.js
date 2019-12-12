@@ -1,5 +1,5 @@
-import CONFIGS from '../config/configs';
 import _ from 'lodash';
+
 export default function getFilterObj(GFilterData, globalFilterData, page) {
     let newGFilterData = _.cloneDeep(GFilterData);
 
@@ -31,19 +31,24 @@ export default function getFilterObj(GFilterData, globalFilterData, page) {
         let startDate = _.get(newGFilterData, 'duration.value.startDate') * 1000;
         let endDate = _.get(newGFilterData, 'duration.value.endDate') * 1000;
         let title = _.get(newGFilterData, 'duration.title');
+        let interval= _.get(newGFilterData, 'duration.value.interval');
         _.set(filters, 'duration.endDate', endDate)
         _.set(filters, 'duration.startDate', startDate)
         _.set(filters, 'duration.title', title)
+        _.set(filters, 'duration.interval', interval)
     }
 
-    switch (page) {
-        case 'propertyTax':
+    switch (_.toLower(page)) {
+        case 'propertytax':
             filters['modulelevel'] = 'PT';
             break;
-        case 'tradeLicense':
+        case 'dashboard':
+            filters['modulelevel'] = null;
+            break;
+        case 'tradelicense':
             filters['modulelevel'] = 'TL';
             break;
-        case 'PGR':
+        case 'pgr':
             filters['modulelevel'] = 'PGR';
             break;
     }

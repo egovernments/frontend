@@ -19,8 +19,8 @@ const toolbarStyles = theme => ({
                 backgroundColor: variables.tableheaBackgrount,
                 '& span': {
                     color: variables.tableHeadetTextColor,
-                    fontSize: variables.fs_16,
-                    fontWeight: variables.f_normal,
+                    fontSize: variables.fs_14,
+                    fontWeight: variables.f_500,
                     fontFamily: variables.primaryFont,
                     '&:hover': {
                         color: variables.tableHeaderColor
@@ -37,7 +37,7 @@ const toolbarStyles = theme => ({
                 // left: 0,
                 // zIndex: 1,
             },
-            '& th:nth-child(2)': {
+            '& th:nth-child(3)': {
                 position: 'sticky',
                 left: -1,
                 zIndex: 1,
