@@ -53,6 +53,12 @@ const AutoSuggest = Loadable({
   loading: () => <Loading />
 });
 
+
+// const ConsumerNoContainer = Loadable({
+//   loader: () => import("./ConsumerNo"),
+//   loading: () => <Loading />
+// });
+
 export {
   TestAtoms,
   ApplicationNoContainer,
@@ -63,5 +69,6 @@ export {
   Asteric,
   MenuButton,
   Switch,
-  AutoSuggest
+  AutoSuggest,
+  ConsumerNoContainer
 };

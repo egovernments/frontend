@@ -68,10 +68,14 @@ export const getCommonParagraph = (paragraph, props = {}) => {
         fontSize: "14px",
         fontWeight: 400,
         lineHeight: "20px",
-        marginBottom: "12px"
+        marginBottom: "12px",
+        position: "relative",
+        top: "1px",
+        flex: "none"
       },
       ...props
     },
+
     children: {
       [paragraph]: getLabel(paragraph)
     }
@@ -212,6 +216,7 @@ export const getTextField = textScheama => {
     pattern,
     jsonPath = "",
     sourceJsonPath = "",
+    cityDropdown = "",
     data = [],
     optionValue = "code",
     optionLabel = "code",
@@ -247,6 +252,7 @@ export const getTextField = textScheama => {
       optionValue,
       optionLabel,
       sourceJsonPath,
+      cityDropdown,
       jsonPath,
       iconObj,
       title,
@@ -357,7 +363,8 @@ export const getRadioButton = (buttons, jsonPath, defaultValue) => {
       buttons,
       jsonPath,
       defaultValue
-    }
+    },
+    jsonPath
   };
 };
 
@@ -406,6 +413,26 @@ export const getLabelWithValue = (label, value, props = {}) => {
     },
     children: {
       label: getCommonCaption(label),
+      value: getCommonValue(value)
+    }
+  };
+};
+
+export const getLabelValue= (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 3
+    },
+    props: {
+      style: {
+        marginBottom: "16px"
+      },
+      ...props
+    },
+    children: {
       value: getCommonValue(value)
     }
   };
@@ -464,7 +491,7 @@ export const getTab = (label, props = {}) => {
 export const getPattern = type => {
   switch (type) {
     case "Name":
-      return /^[a-zA-Z&)(\\\/-\s\,\.\-\’\`\,\']{1,50}$/i;
+      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
@@ -472,11 +499,11 @@ export const getPattern = type => {
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":
-      return /^[<>()\-+_\|\[\]\\.,;:\s$*@'"\/#%& 0-9A-Za-z]{1,500}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
-      return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,100}$/i;
     case "Date":
       return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
     case "UOMValue":
@@ -488,9 +515,9 @@ export const getPattern = type => {
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":
-      return /^[a-zA-Z0-9&)(\\\/-\s,#]{1,50}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "BuildingStreet":
-      return /^[a-zA-Z0-9\s()-@#&.,?/]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
     case "PropertyID":
@@ -498,8 +525,10 @@ export const getPattern = type => {
     case "ElectricityConnNo":
       return /^[0-9]{15}$/i;
     case "eventName":
-      return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,65}$/i;
+      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
     case "eventDescription":
-      return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,500}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
+    case "FireNOCNo":
+      return /^[a-zA-Z0-9-]*$/i;
   }
 };
