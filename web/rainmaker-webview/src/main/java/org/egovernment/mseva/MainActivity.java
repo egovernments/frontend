@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 	private static String URL   =BuildConfig.url;
 	private String FILE_TYPE    = "image/*";  //to upload any file type using "*/*"; check file type references for more
 	public static String HOST	= getHost(URL);
-	static final int SEND_PYAMENT_INFORMATION = 1;
+	static final int SEND_PYAMENT_INFORMATION = 2;
 
 	//Careful with these variable names if altering
     private WebView webView;
@@ -133,16 +133,28 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
-
 				if (requestCode == SEND_PYAMENT_INFORMATION) {
 					// Make sure the request was successful
 					if (resultCode == RESULT_OK) {
+//						Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+//
+//						Toast.makeText(getBaseContext(), "Sucess!" , Toast.LENGTH_SHORT ).show();
 						// The user picked a contact.
-						// The Intent's data Uri identifies which contact was selected.
+						//call javascript bridge to update the status
 
 						// Do something with the contact here (bigger example below)
 					}
+					else
+					{
+//						Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+//
+//						Toast.makeText(getBaseContext(), "Failure!" , Toast.LENGTH_SHORT ).show();
+
+						//call javascript bridge to update the status
+
+					}
 				}
+
             }
             asw_file_path.onReceiveValue(results);
             asw_file_path = null;
@@ -153,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 asw_file_message.onReceiveValue(result);
                 asw_file_message = null;
             }
+
         }
     }
 

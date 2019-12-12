@@ -33,12 +33,12 @@
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="center">
 
-        <Button
-            android:id="@+id/print"
-            android:layout_width="218dp"
-            android:layout_height="29dp"
-            android:layout_weight="1"
-            android:text="Print" />
+<!--        <Button-->
+<!--            android:id="@+id/print"-->
+<!--            android:layout_width="218dp"-->
+<!--            android:layout_height="29dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Print" />-->
 
         <Button
             android:id="@+id/success"

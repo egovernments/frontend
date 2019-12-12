@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity {
           }
 
         }
-        Button print = (Button) findViewById(R.id.print);
-        print.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)  {
-                Toast.makeText(getBaseContext(), "Printing!" , Toast.LENGTH_SHORT ).show();
-                //connect to printer driver for print
-            }
-        });
+//        Button print = (Button) findViewById(R.id.print);
+//        print.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v)  {
+//                Toast.makeText(getBaseContext(), "Printing!" , Toast.LENGTH_SHORT ).show();
+//                //connect to printer driver for print
+//            }
+//        });
 
         Button success = (Button) findViewById(R.id.success);
         success.setOnClickListener(new View.OnClickListener() {
