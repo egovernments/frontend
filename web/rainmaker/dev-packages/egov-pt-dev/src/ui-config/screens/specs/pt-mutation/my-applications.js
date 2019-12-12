@@ -51,7 +51,7 @@ const screenConfig = {
               label: "NOC_COMMON_TABLE_COL_STATUS_LABEL",
               jsonPath: "fireNOCDetails.status"
             },
-            moduleName: "FIRENOC",
+            moduleName: "PT-MUTATION",
             statusPrefix: "WF_FIRENOC_"
           }
         }

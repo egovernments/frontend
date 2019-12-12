@@ -40,6 +40,7 @@ import { propertySummary } from "./summaryResource/propertySummary";
 import { transfereeSummary } from "./summaryResource/transfereeSummary";
 import { registrationSummary } from "./summaryResource/registrationSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
+import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
@@ -125,11 +126,12 @@ export const formwizardThirdStep = {
     id: "apply_form3"
   },
   children:{
-    summary:getCommonCard({   propertySummary: propertySummary,
+    summary:getCommonCard({  
       transferorSummary: transferorSummary,
       // transferorInstitutionSummary:transferorInstitutionSummary,
       transfereeSummary: transfereeSummary,
       // transfereeInstitutionSummary: transfereeInstitutionSummary,
+      mutationSummary:mutationSummary,
       registrationSummary:registrationSummary,
       documentsSummary: documentsSummary  
     }),
@@ -306,7 +308,7 @@ const screenConfig = {
     const step = getQueryArg(window.location.href, "step");
 
     //Set Module Name
-    set(state, "screenConfiguration.moduleName", "fire-noc");
+    set(state, "screenConfiguration.moduleName", "pt-mutation");
 
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
@@ -497,21 +499,7 @@ const screenConfig = {
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
-    //   false
-    // );
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
-    //   false
-    // );
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
-    //   false
-    // );
+ 
     return action;
   },
   components: {
