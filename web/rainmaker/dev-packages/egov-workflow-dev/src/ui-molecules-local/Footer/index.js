@@ -5,7 +5,7 @@ import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import MenuButton from "../MenuButton";
+import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
 import "./index.css";
@@ -119,20 +119,29 @@ class Footer extends React.Component {
       contractData.map(item => {
         const { buttonLabel, moduleName } = item;
         return {
-          label: {
-            labelName:{buttonLabel},
-            labelKey:`WF_${moduleName.toUpperCase()}_${buttonLabel}`
-          },
-          link: () => {this.openActionDialog(item)}
+          labelName: { buttonLabel },
+          labelKey: `WF_${moduleName.toUpperCase()}_${buttonLabel}`,
+          link: () => {
+            this.openActionDialog(item);
+          }
         };
       });
-      const buttonItems = {
-        label: "Take Action",
-        rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10,
-          backgroundColor:"#FE7A51",color:"#fff",border:"none",height:"48px",width :"200px" } },
-        menu: downloadMenu
-      }
+    const buttonItems = {
+      label: "Take Action",
+      rightIcon: "arrow_drop_down",
+      props: {
+        variant: "outlined",
+        style: {
+          marginLeft: 10,
+          backgroundColor: "#FE7A51",
+          color: "#fff",
+          border: "none",
+          height: "48px",
+          width: "200px"
+        }
+      },
+      menu: downloadMenu
+    };
     return (
       <div className="apply-wizard-footer" id="custom-atoms-footer">
         <Container>
