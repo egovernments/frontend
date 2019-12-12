@@ -1175,61 +1175,17 @@ const isApplicationPaid = currentStatus => {
 };
 
 export const createEstimateData = async (
-  LicenseData,
+  billData,
   jsonPath,
   dispatch,
   href = {},
   getFromReceipt
 ) => {
-  const applicationNo =
-    get(LicenseData, "applicationNumber") ||
-    getQueryArg(href, "applicationNumber");
-  const tenantId =
-    get(LicenseData, "tenantId") || getQueryArg(href, "tenantId");
-  const businessService = "TL"; //Hardcoding Alert
-  const queryObj = [
-    { key: "tenantId", value: tenantId },
-    {
-      key: "consumerCode",
-      value: applicationNo
-    },
-    {
-      key: "businessService",
-      value: businessService
-    }
-  ];
-  const currentStatus = LicenseData.status;
-  const isPAID = isApplicationPaid(currentStatus);
-  // const payload = getFromReceipt
-  //   ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-  //   : await getBill(queryObj);
-  // const estimateData = payload
-  //   ? getFromReceipt
-  //     ? getEstimateData(payload.Receipt[0].Bill, getFromReceipt, LicenseData)
-  //     : payload.billResponse &&
-  //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
-  //   : [];
-
-  const payload = isPAID
-    ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : await getBill(queryObj);
+  const payload = billData
   const estimateData = payload
-    ? isPAID
-      ? getEstimateData(payload.Receipt[0].Bill, isPAID, LicenseData)
-      : payload.billResponse &&
-      getEstimateData(payload.billResponse.Bill, false, LicenseData)
-    : [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
-  const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
-  payload &&
-    payload.billingSlabIds &&
-    getBillingSlabData(dispatch, payload.billingSlabIds, tenantId, accessories);
-
-  /** Waiting for estimate to load while downloading confirmation form */
   var event = new CustomEvent("estimateLoaded", { detail: true });
   window.parent.document.dispatchEvent(event);
-  /** END */
-
   return payload;
 };
 

@@ -13,8 +13,8 @@ export const fetchData = async (action, state, dispatch) => {
         },
         {
             key: "tenantId",
-            value:"pb.amritsar"
-            // value: JSON.parse(getUserInfo()).tenantId
+            // value:"pb.amritsar"
+            value: JSON.parse(getUserInfo()).tenantId
         }]
     const response = await getMyConnectionResults(queryObject);
 

@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
+import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
 import { Link } from "react-router-dom"
 
 export const searchResults = {
@@ -41,27 +37,36 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, data) => (
-            <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`}>
+            <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}>
               {value}
             </Link>
           )
         }
       },
-      // &connectionType=${data.rowData[8]}
       getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Address"),
       getTextToLocalMapping("Status"),
       getTextToLocalMapping("Due"),
+      getTextToLocalMapping("Address"),
       getTextToLocalMapping("Due Date"),
       {
         name: getTextToLocalMapping(" "),
         options: {
           filter: false,
-          customBodyRender: (value, data) => (
-            <Link to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tanentId=${data.rowData[7]}`} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
-              Pay now
-            </Link>
-          )
+          customBodyRender: (value, data) => {
+            if (data.rowData[4] > 0) {
+              return (
+                <Link
+                  to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}
+                  style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+                  Pay now
+                </Link>
+              )
+            } else {
+              return (
+                " "
+              )
+            }
+          }
         }
       },
       {

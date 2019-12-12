@@ -1,22 +1,12 @@
 import React from "react";
-import {
-    withStyles
-} from "@material-ui/core/styles";
-import {
-    Card,
-    CardHeader,
-    CardText
-} from "material-ui/Card";
+import { withStyles } from "@material-ui/core/styles";
+import { Card } from "material-ui/Card";
+import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
-import {
-    Tooltip
-} from "egov-ui-framework/ui-molecules";
-import {
-    LabelContainer
-} from "egov-ui-framework/ui-containers";
-import Label from "egov-ui-kit/utils/translationNode";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { Tooltip, Icon } from "@material-ui/core";
 
 const styles = {
     card: {
@@ -63,26 +53,20 @@ const styles = {
     }
 };
 
-// function totalAmount(arr) {
-//     return arr
-//         .map(item => (item.value ? item.value : 0))
-//         .reduce((prev, next) => prev + next, 0);
-// }
-
 function FeesEstimateCard(props) {
-    const {
-        classes,
-        estimate,
-        optionSelected = "Partial_Amount"
-    } = props;
-    let sortedArray = []
-    const billingPeriod = estimate.fees.length > 0 ? new Date(estimate.fees[0].fromPeriod).toLocaleString().slice(0, 8) + " - " + new Date(estimate.fees[0].toPeriod).toLocaleString().slice(0, 8) : " "
-    if (estimate.fees.length > 0) {
-        sortedArray = estimate.fees[0].billAccountDetails.sort((a, b) => parseInt(a.order) - parseInt(b.order))
-    }
+    const { classes, estimate } = props;
+    let sortedArray = [], totalAmount, dueDate, billingPeriod;
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
-    const totalAmount = estimate.fees.length > 0 ? estimate.fees[0].totalAmount : 0
-    const dueDate = estimate.fees.length > 0 ? estimate.fees[0].expiryDate : 0
+    if (estimate !== null && estimate !== undefined && estimate.fees !== undefined && estimate.fees !== null && estimate.fees.length > 0) {
+        if (estimate.fees[0].data !== null && estimate.fees[0].data !== undefined && estimate.fees[0].data.length > 0) {
+            billingPeriod = convertEpochToDate(estimate.fees[0].data[0].fromPeriod) + " - " + convertEpochToDate(estimate.fees[0].data[0].toPeriod);
+            totalAmount = estimate.fees[0].data[0].total;
+            dueDate = estimate.fees[0].data[0].expiryDate;
+        }
+        if (estimate.fees[0].description !== null && estimate.fees[0].description !== undefined && estimate.fees[0].description.length > 0) {
+            sortedArray = estimate.fees[0].description.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+        }
+    }
 
     return (
         <Grid container >
@@ -95,12 +79,11 @@ function FeesEstimateCard(props) {
                 <Typography className={totalHeadClassName} align="right" >Rs {totalAmount}</Typography>
             </Grid>
             <Grid xs={12} sm={7}>
-                {/* <Typography variant="subheading">{estimate.header}</Typography> */}
                 <div style={{ marginTop: 48, maxWidth: 600 }}>
                     <Grid container >
                         <Grid item xs={6}>
                             <Typography variant="body2" >
-                                <LabelContainer labelKey="WS_BILLING_PERIOD" />
+                                <LabelContainer labelKey="WS_VIEW_BILL_BILLING_PERIOD_LABEL" />
                             </Typography>
                         </Grid>
                         <Grid item xs={6}
@@ -113,52 +96,20 @@ function FeesEstimateCard(props) {
                         </Grid>
                     </Grid>
                     <Grid container> {
-                        sortedArray.map((fee, key) => {
-                            // // let tooltip = (
-                            // //     <Tooltip val={fee.info}
-                            // //         icon={"info_circle"} />)
-                            // // // ) : (
-                            // //         ""
-                            // //     );
-                            // let textLeft = fee.taxHeadCode ? (
-                            //     <Grid container xs={8} >
-                            //         <LabelContainer labelName={fee.taxHeadCode}
-                            //             labelKey={fee.taxHeadCode}
-                            //             style={styles.taxStyles}
-                            //         />
-                            //     </Grid >
-                            // ) : (
-                            //         <Grid xs={8} />
-                            //     );
-                            // let textRight = fee.taxHeadCode ? (
-                            //     <Grid xs={4}
-                            //         align="right" >
-                            //         <LabelContainer
-                            //             labelName={fee.taxHeadCode}
-                            //             labelKey={fee.taxHeadCode}
-                            //             style={styles.taxStyles} />
-                            //     </Grid >
-                            // ) : (
-                            //         <Grid xs={4}
-                            //             align="right" >
-                            //             <LabelContainer
-                            //                 labelName={0}
-                            //                 labelKey={0}
-                            //                 style={styles.taxStyles} />
-                            //         </Grid>
-                            //     );
-                            // return (
-                            //     <Grid key={key} container>
-                            //         {textLeft}
-                            //         {textRight}
-                            //     </Grid>
-                            // );
+                        sortedArray.length > 0 && sortedArray.map(fee => {
                             return (
                                 <Grid container >
-                                    <Grid item xs={6}>
+                                    <Grid item xs={4}>
                                         <Typography variant="body2" >
-                                            <LabelContainer labelKey={fee.taxHeadCode} />
+                                            <LabelContainer labelKey={fee.key} />
                                         </Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Tooltip title={fee.value}>
+                                            <Icon className={styles.toolTipIcon}>
+                                                <i class="material-icons" style={{ fontSize: 18 }}>info_circle</i>
+                                            </Icon>
+                                        </Tooltip>
                                     </Grid>
                                     <Grid item xs={6}
                                         align="right"
@@ -194,64 +145,7 @@ function FeesEstimateCard(props) {
             <Grid xs={12}
                 sm={1} >
             </Grid>
-            <Grid xs={12} sm={4} >
-                {
-                    /* <Typography
-                              variant="body2"
-                              align="right"
-                              className="tl-total-amount-text"
-                            >
-                              <LabelContainer
-                                labelName="Total Amount"
-                                labelKey="WS_COMMON_TOTAL_AMT"
-                              />
-                            </Typography>
-                            <Typography className={totalHeadClassName} align="right">
-                              Rs {5500}
-                            </Typography> */
-                } {
-                    /* {estimate.extra && estimate.extra.length !== 0 ? ( */
-                } {
-                    /* <Card className={classes.whiteCard}> */
-                } {
-                    /* {estimate.extra.map((item, key) => {
-                                let textLeft, textRight;
-                                let colLeft = item.textRight ? 6 : 12;
-                                let colRight = item.textLeft ? 6 : 12;
-                                if (!item.textLeft) { */
-                } {
-                    /* // textLeft = (
-                                //   <Grid xs={colLeft}>
-                                //     <Typography>Due Date</Typography>
-                                //   </Grid>
-                                // );
-                                // } else { */
-                } {
-                    /* //   textLeft = <Grid xs={colLeft} />;
-                                // }
-                                // if (item.textRight) { */
-                } {
-                    /* // textRight = (
-                                //   <Grid xs={colRight}>
-                                //     <Typography>01/01/2019</Typography>
-                                //   </Grid>
-                                // );
-                                // } else { */
-                } {
-                    /* //   textRight = <Grid xs={colRight} />;
-                                // }
-                              //   return (
-                              //     <Grid container>
-                              //       <Grid xs={6}>
-                              //         <Typography>Due Date</Typography>
-                              //       </Grid>
-                              //       <Grid xs={6}>
-                              //         <Typography>01/01/2019</Typography>
-                              //       </Grid>
-                              //     </Grid>
-                              //   );
-                              // })} */
-                }
+            <Grid xs={12} sm={4}>
                 <Card className={classes.whiteCard}
                     style={{ backgroundColor: '#fff', boxShadow: "none" }} >
                     <Grid container >
@@ -271,7 +165,7 @@ function FeesEstimateCard(props) {
                 </Card >
                 {/* // ) : null} */}
             </Grid>
-        </Grid>
+        </Grid >
     )
 }
 

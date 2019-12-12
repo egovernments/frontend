@@ -51,7 +51,7 @@ const propertyDetails = getCommonContainer({
       labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].property.plotSize"
+      jsonPath: "WaterConnection[0].property.landArea"
     }
   )
 })
@@ -100,7 +100,7 @@ const propertyLocationDetails = getCommonContainer({
       labelKey: "WS_PROP_DETAIL_LOCALITY_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].property.address.locality",
+      jsonPath: "WaterConnection[0].property.address.locality.code",
     }
   ),
   pincode: getLabelWithValue(

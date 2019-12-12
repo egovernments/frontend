@@ -64,7 +64,7 @@ export const getService = () => {
                     labelKey: "WS_SERV_DETAIL_METER_ID"
                 },
                 {
-                    jsonPath: "WaterConnection[0].meterId"
+                    jsonPath: "consumptionDetails[0].id"
                 }
             ),
             meterStatus: getLabelWithValue(
@@ -72,7 +72,7 @@ export const getService = () => {
                     labelKey: "WS_SERV_DETAIL_METER_STAT"
                 },
                 {
-                    jsonPath: "WaterConnection[0].meterStatus"
+                    jsonPath: "consumptionDetails[0].meterStatus"
                 }
             ),
             meterReadingDate: getLabelWithValue(
@@ -80,7 +80,7 @@ export const getService = () => {
                     labelKey: "WS_SERV_DETAIL_METER_READ_DATE_LABEL"
                 },
                 {
-                    jsonPath: "WaterConnection[0].meterReadingDate"
+                    jsonPath: "consumptionDetails[0].currentReadingDate"
                 }
             ),
             consumption: getLabelWithValue(
@@ -96,7 +96,7 @@ export const getService = () => {
                     labelKey: "WS_SERV_DETAIL_CUR_METER_READ"
                 },
                 {
-                    jsonPath: "WaterConnection[0].currentMeterReading"
+                    jsonPath: "consumptionDetails[0].currentReading"
                 }
             ),
             lastMeterReading: getLabelWithValue(
@@ -104,7 +104,7 @@ export const getService = () => {
                     labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
                 },
                 {
-                    jsonPath: "WaterConnection[0].lastMeterReading"
+                    jsonPath: "consumptionDetails[0].lastReading"
                 }
             )
         })

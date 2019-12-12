@@ -1,4 +1,4 @@
-import { fetchData } from "./citizenSearchResource/citizenFunctions";
+import { fetchData } from "./pastPaymentResource/pastPaymentDetails";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const header = getCommonHeader(
