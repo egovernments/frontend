@@ -54,7 +54,7 @@ export const documentsSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 3);
+            gotoApplyWithStep(state, dispatch, 1);
           }
         }
       }

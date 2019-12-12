@@ -35,8 +35,8 @@ import { propertySummary } from "./summaryResource/propertySummary";
 import {registrationSummary} from'./summaryResource/registrationSummary';
 const titlebar = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Application for Transfer of Ownership",
-    labelKey: "PT_MUTATION_APPLICATION_HEADER"
+    labelName: "Application Details",
+    labelKey: "PT_MUTATION_APPLICATION_DETAILS"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
