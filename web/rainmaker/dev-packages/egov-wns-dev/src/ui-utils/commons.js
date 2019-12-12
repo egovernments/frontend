@@ -39,6 +39,8 @@ export const updateTradeDetails = async requestBody => {
 };
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
+    alert(1);
+    console.log(label, labelKey)
     if (labelKey) {
         let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
         if (!translatedLabel || labelKey === translatedLabel) {
@@ -127,36 +129,43 @@ export const getMyConnectionResults = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/ws-services/wc/_search",
+            "http://172.17.25.34:8090/wc/_search?connectionNumber=WS/107/2019-20/000022",
             "",
             queryObject
         );
+        const dueResponse = await response.WaterConnection.map(item => {
+            const data = httpRequest(
+                "post",
+                `http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?consumerCode=${item.connectionNo}&tenantId=${item.property.tenantId}&businessService=WS`,
+                "",
+                // queryObject
+            );
 
-        if (response.WaterConnection.length > 0) {
-            for (let i = 0; i < response.WaterConnection.length; i++) {
-                try {
-                    const data = await httpRequest(
-                        "post",
-                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
-                        "",
-                        // queryObject
-                    );
-                    if (data && data !== undefined) {
-                        if (data.Bill !== undefined && data.Bill.length > 0) {
-                            response.WaterConnection[i].due = data.Bill[0].totalAmount
-                        }
+            const resolvedData = Promise.resolve(data)
+            resolvedData.then(function (value) {
+                item.due = value.Bill[0].billDetails.length > 0 ? value.Bill[0].billDetails[0].totalAmount : 0
+            });
+            return data;
+        });
+        return response;
+    } catch (error) {
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
 
-                    } else {
-                        response.WaterConnection[i].due = 0
-                    }
-
-                } catch (err) {
-                    console.log(err)
-                    response.WaterConnection[i].due = 0
-                }
-            }
-            // });
-        }
+export const getConsumptionDetails = async queryObject => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-calculator/meterConnection/_search",
+            "",
+            queryObject
+        );
         return response;
     } catch (error) {
         store.dispatch(

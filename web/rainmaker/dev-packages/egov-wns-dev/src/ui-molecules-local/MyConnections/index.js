@@ -29,7 +29,6 @@ class MyConnections extends React.Component {
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
           myConnectionResults.map(item => {
-
             return (
               <div>
                 <Card className={classes.card}>
@@ -168,7 +167,7 @@ class MyConnections extends React.Component {
           })
         ) : (
             <div className="no-assessment-message-cont">
-              <LabelContainer
+              <Label
                 labelKey={"No results Found!"}
                 style={{ marginBottom: 10 }}
               />
@@ -185,9 +184,13 @@ const mapStateToProps = state => {
     "myConnectionResults",
     []
   );
-
+  const myConnectionDue = get(
+    state.screenConfiguration.preparedFinalObject,
+    "myConnectionDue",
+    []
+  );
   const screenConfig = get(state.screenConfiguration, "screenConfig");
-  return { screenConfig, myConnectionResults };
+  return { screenConfig, myConnectionResults, myConnectionDue };
 };
 
 const mapDispatchToProps = dispatch => {
