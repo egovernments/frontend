@@ -20,6 +20,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -40,6 +41,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 	private static String URL   =BuildConfig.url;
 	private String FILE_TYPE    = "image/*";  //to upload any file type using "*/*"; check file type references for more
 	public static String HOST	= getHost(URL);
+	static final int SEND_PYAMENT_INFORMATION = 1;
 
 	//Careful with these variable names if altering
     private WebView webView;
@@ -130,6 +133,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+
+				if (requestCode == SEND_PYAMENT_INFORMATION) {
+					// Make sure the request was successful
+					if (resultCode == RESULT_OK) {
+						// The user picked a contact.
+						// The Intent's data Uri identifies which contact was selected.
+
+						// Do something with the contact here (bigger example below)
+					}
+				}
             }
             asw_file_path.onReceiveValue(results);
             asw_file_path = null;
@@ -168,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
 		webView = (WebView) findViewById(R.id.webview);
 		webView.addJavascriptInterface(proxy, "mSewaApp");
+//		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
 		String versionName = "";
 		int versionCode = 0;
@@ -342,8 +356,33 @@ public class MainActivity extends AppCompatActivity {
             loadView(path,false);
         }
 
+		Button pay = (Button) findViewById(R.id.pay);
+		pay.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v)  {
+				Toast.makeText(getBaseContext(), "Paying!" , Toast.LENGTH_SHORT ).show();
+				Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
+				sendPaymentIntent.setClassName("com.example.pospocapp", "com.example.pospocapp.MainActivity");
+				//it should be come from web applicaiton
+				sendPaymentIntent.putExtra("instrumentType","CASH");
+				sendPaymentIntent.putExtra("paymentAmount","CASH");
+				sendPaymentIntent.putExtra("customerName","Murali M");
+				sendPaymentIntent.putExtra("customerMobile","6360807028");
+				sendPaymentIntent.putExtra("message","Payment details");
+				sendPaymentIntent.putExtra("emailId","murali.m@goodworklabs.com");
+				sendPaymentIntent.putExtra("billNumber","12123");
+				sendPaymentIntent.putExtra("consumerCode","12132");
+				sendPaymentIntent.putExtra("businessService","PT");
+				sendPaymentIntent.putExtra("collectorName","Murali");
+				sendPaymentIntent.putExtra("collectorId","12132");
+				sendPaymentIntent.putExtra("instrumentDate","12123123123");
+				sendPaymentIntent.putExtra("instrumentNumber","12132");
+				startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
+			}
+		});
 
     }
+
+
 
 
 	public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimetype)

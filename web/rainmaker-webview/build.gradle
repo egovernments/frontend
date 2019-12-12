@@ -120,11 +120,14 @@ android {
 			//QA
 //			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/employee/user/login"'
 
+			//local
+			buildConfigField 'String', 'url', '"https://a8cadacb.ngrok.io"'
+
 			//DEV
 //			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/employee/user/login"'
 
 			//UAT
-			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee/user/login"'
+//			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee/user/login"'
 		}
 	}
 }

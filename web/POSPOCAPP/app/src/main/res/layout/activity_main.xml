@@ -7,27 +7,55 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:text="POS POC APP"
+            android:textSize="24sp"
+            android:textAlignment="center" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_main" />
 
-    <include layout="@layout/content_main" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="274dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center">
+
+        <Button
+            android:id="@+id/print"
+            android:layout_width="218dp"
+            android:layout_height="29dp"
+            android:layout_weight="1"
+            android:text="Print" />
+
+        <Button
+            android:id="@+id/success"
+            android:layout_width="218dp"
+            android:layout_height="70px"
+            android:layout_weight="1"
+            android:text="Success" />
+
+        <Button
+            android:id="@+id/failure"
+            android:layout_width="218dp"
+            android:layout_height="70px"
+            android:layout_weight="1"
+            android:text="Failure" />
+
+
+    </LinearLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

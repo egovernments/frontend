@@ -90,6 +90,9 @@ class App extends Component {
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
         <CommonShareContainer componentId="rainmaker-common-share" />
+        {/*<button onClick={(e)=>{
+          document.Android.showToast("connected");
+        }}>Bridge Button</button>*/}
       </div>
     );
   }
