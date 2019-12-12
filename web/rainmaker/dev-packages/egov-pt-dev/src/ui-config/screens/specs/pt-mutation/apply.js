@@ -5,7 +5,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
-import { nocDetails } from "./applyResource/nocDetails";
+import { transfereeDetails,mutationDetails,registrationDetails,
+  transferorSummary } from "./applyResourceMutation/mutationDetails";
 import { propertyDetails } from "./applyResource/propertyDetails";
 import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
@@ -84,7 +85,10 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    nocDetails
+    transferorSummary,
+    transfereeDetails,
+    mutationDetails,
+    registrationDetails
   }
 };
 
