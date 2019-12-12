@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
-import ServiceList from "egov-ui-kit/common/common/ServiceList"
-import FilterDialog from "./components/FilterDialog"
+import ServiceList from "egov-ui-kit/common/common/ServiceList";
+import FilterDialog from "./components/FilterDialog";
+import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const iconStyle = {
   width: "48px",
@@ -44,13 +46,59 @@ class Inbox extends Component {
   }
 
   render() {
-    const { name, history } = this.props;
+    const { name, history ,setRoute} = this.props;
     const { actionList, hasWorkflow } = this.state;
+    const downloadMenu =
+      [
+        {
+          labelName:"Apply for TL",
+          labelKey:"",
+          link : () => setRoute("/tradelicence/apply")
+        },
+        {
+          labelName:"Search TL",
+          labelKey:"",
+          link : () => setRoute("/tradelicence/search")
+        },
+        {
+          labelName:"Asses Property",
+          labelKey:"",
+          link : () => setRoute("/property-tax/search-property")
+        },
+        {
+          labelName:"Search Property",
+          labelKey:"",
+          link : () => setRoute("/property-tax/search-property")
+        },
+        {
+          labelName:"File Complaint",
+          labelKey:"",
+          link : () => setRoute()
+        },
+        {
+          labelName:"Search Complaint",
+          labelKey:"",
+          link : () => setRoute("/all-complaints")
+        }
+
+      ]
+    const buttonItems = {
+      label: "Take Action",
+      rightIcon: "arrow_drop_down",
+      props: { variant: "outlined", style: { marginLeft: 10,
+        backgroundColor:"#FE7A51",color:"#fff",border:"none",height:"48px",width :"200px" } },
+      menu: downloadMenu
+    }
     return (
       <div>
-        <div className="rainmaker-topHeader">
+        <div className="rainmaker-topHeader" style={{marginTop : 30 , justifyContent : "space-between"}}>
+          <div className="rainmaker-topHeader">
           <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
           <Label className="landingPageUser" label={name} />
+          </div>
+          <div >
+          <MenuButton data={buttonItems} />
+          </div>
         </div>
         <div style={{margin : "16px 16px 0px 16px" }}>
           <ServiceList history={history} />
@@ -72,6 +120,12 @@ const mapStateToProps = (state) => {
   return { name, menu };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setRoute: url => dispatch(setRoute(url))
+  };
+}
+
 export default connect(
-  mapStateToProps,
+  mapStateToProps,mapDispatchToProps
   )(Inbox);
