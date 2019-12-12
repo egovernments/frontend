@@ -1,11 +1,8 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCommonApplyFooter } from "../../utils";
 import { downloadBill } from "egov-common/ui-utils/commons";
-import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
-const connectionNo = getQueryArg(window.location.href, "connectionNumber");
-const tenantId = getQueryArg(window.location.href, "tenantId");
+import "./index.css";
 
 const callDownloadBill = () => {
   const val = [
@@ -18,7 +15,6 @@ const callDownloadBill = () => {
     { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
   downloadBill(val);
 }
-
 
 export const viewBillFooter = getCommonApplyFooter({
   downloadButton: {
@@ -59,8 +55,9 @@ export const viewBillFooter = getCommonApplyFooter({
       })
     },
     onClickDefination: {
-      action: "page_change",
-      path: `/egov-common/pay?consumerCode=${connectionNo}&tenantId=${tenantId}&businessService=WS`
-    }
-  }
+      action: "condition",
+      // callBack: callPay
+    },
+    // visible: false
+  },
 });
