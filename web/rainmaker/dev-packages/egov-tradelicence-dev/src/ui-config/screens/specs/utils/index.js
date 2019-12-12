@@ -104,7 +104,7 @@ export const getUploadFilesMultiple = jsonPath => {
       inputProps: {
         accept: "image/*, .pdf, .png, .jpeg"
       },
-      buttonLabel: "UPLOAD FILES",
+      buttonLabel: getLocaleLabels("TL_UPLOAD_FILES_BUTTON","TL_UPLOAD_FILES_BUTTON"),
       maxFileSize: 5000,
       moduleName: "TL"
     }
@@ -912,9 +912,11 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
 const getStatementForDocType = docType => {
   switch (docType) {
     case "OWNERIDPROOF":
-      return "Allowed documents are Aadhar Card / Voter ID Card / Driving License";
+     // return "Allowed documents are Aadhar Card / Voter ID Card / Driving License";
+     return getLocaleLabels("TL_OWNERIDPROOF_NOTE","TL_OWNERIDPROOF_NOTE");
     case "OWNERSHIPPROOF":
-      return "Allowed documents are Rent Deed / Lease Doc / Property Registry / General or Special Power of Attorney";
+    //  return "Allowed documents are Rent Deed / Lease Doc / Property Registry / General or Special Power of Attorney";
+    return getLocaleLabels("TL_OWNERSHIPPROOF_NOTE","TL_OWNERSHIPPROOF_NOTE");
     default:
       return "";
   }

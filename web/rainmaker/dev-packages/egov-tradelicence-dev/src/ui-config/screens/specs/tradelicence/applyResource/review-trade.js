@@ -7,7 +7,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-
+import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
 import { convertEpochToDate, checkValueForNA } from "../../utils";
 
 const accessoriesCard = {
@@ -255,7 +255,7 @@ export const getReviewTrade = (isEditable = true) => {
         }
       ),
       reviewStructureType: getLabelWithValue(
-        { labelName: "Structure Type" },
+        { labelName: getLocaleLabels("TL_STRUCTURE_TYPE","TL_STRUCTURE_TYPE") },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
           localePrefix: {
@@ -268,7 +268,7 @@ export const getReviewTrade = (isEditable = true) => {
         }
       ),
       reviewSubStructureType: getLabelWithValue(
-        { labelName: "Structure Sub Type" },
+        { labelName: getLocaleLabels("TL_STRUCTURE_SUB_TYPE","TL_STRUCTURE_SUB_TYPE") },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
           localePrefix: {

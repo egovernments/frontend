@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
 import {
+  getLocaleLabels,
+} from "egov-ui-framework/ui-utils/commons";
+import {
   LabelContainer,
   TextFieldContainer
 } from "egov-ui-framework/ui-containers";
@@ -234,7 +237,9 @@ class ActionDialog extends React.Component {
                       inputProps={{
                         accept: "image/*, .pdf, .png, .jpeg"
                       }}
-                      buttonLabel={{ labelName: "UPLOAD FILES" }}
+                      //buttonLabel={{ labelName: "UPLOAD FILES" }}
+                      buttonLabel={{ labelName:getLocaleLabels("TL_UPLOAD_FILES_BUTTON","TL_UPLOAD_FILES_BUTTON") }}
+                      
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />

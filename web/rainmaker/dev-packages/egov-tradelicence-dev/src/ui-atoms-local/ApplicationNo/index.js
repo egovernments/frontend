@@ -1,4 +1,5 @@
 import React from "react";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -14,7 +15,9 @@ const styles = {
 
 function ApplicationNoContainer(props) {
   const { number } = props;
-  return <div style={styles}>Application No. {number}</div>;
+ // return <div style={styles}>Application No. {number}</div>;
+return <div style={styles}>{getLocaleLabels("TL_APPLICATION_NO_CODE","TL_APPLICATION_NO_CODE")}{number}</div>
+   ;
 }
 
 export default ApplicationNoContainer;

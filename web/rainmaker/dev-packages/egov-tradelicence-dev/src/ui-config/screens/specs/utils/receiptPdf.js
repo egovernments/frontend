@@ -688,7 +688,8 @@ console.log(transformedData);
                    // font:"Roboto"
                   },
                   {
-                    text: getLocaleLabels("TL_LOCALIZATION_CORPORATION_ADDRESS","TL_LOCALIZATION_CORPORATION_ADDRESS")+ "\n" + getLocaleLabels("Contact : ","TL_LOCALIZATION_CORPORATION_CONTACT") + 
+                    text: getLocaleLabels("TL_LOCALIZATION_"+(transformedData.actualAddress.tenantId.replace('.','_')).toUpperCase()+"_CORPORATION_ADDRESS","TL_LOCALIZATION_"+(transformedData.actualAddress.tenantId.replace('.','_')).toUpperCase()+"_CORPORATION_ADDRESS")
+                    + "\n" + getLocaleLabels("Contact : ","TL_LOCALIZATION_CORPORATION_CONTACT") + 
                       transformedData.corporationContact +
                       "\n" +getLocaleLabels("Website : ","TL_LOCALIZATION_CORPORATION_WEBSITE") +
                       transformedData.corporationWebsite +
