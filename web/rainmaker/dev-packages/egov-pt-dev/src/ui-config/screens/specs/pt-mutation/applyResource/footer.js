@@ -324,8 +324,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 4 ? true : false;
-  const isPayButtonVisible = activeStep === 4 ? true : false;
+  const isNextButtonVisible = activeStep < 3 ? true : false;
+  const isPayButtonVisible = activeStep === 3 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",

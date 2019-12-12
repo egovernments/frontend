@@ -56,7 +56,7 @@ export const transferorSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 2);
+            gotoApplyWithStep(state, dispatch, 0);
           }
         }
       }

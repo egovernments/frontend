@@ -1,12 +1,17 @@
+
 import {
+  getCommonCard,
   getCommonContainer,
   getCommonHeader,
   getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
-import { transfereeDetails,mutationDetails,registrationDetails,
-  transferorSummary } from "./applyResourceMutation/mutationDetails";
+import { transfereeDetails,mutationDetails,registrationDetails
+   } from "./applyResourceMutation/mutationDetails";
+   import {
+    transferorSummary,transferorInstitutionSummary
+  } from "./summaryResource/transferorSummary";
 import { propertyDetails } from "./applyResource/propertyDetails";
 import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
@@ -31,6 +36,10 @@ import {
   furnishNocResponse,
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
+import { propertySummary } from "./summaryResource/propertySummary";
+import { transfereeSummary } from "./summaryResource/transfereeSummary";
+import { registrationSummary } from "./summaryResource/registrationSummary";
+import { documentsSummary } from "./summaryResource/documentsSummary";
 
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
@@ -72,7 +81,11 @@ export const header = getCommonContainer({
     moduleName: "egov-pt",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: "NA"
+      number: "NA",
+      label: {
+        labelValue: "Application No.",
+        labelKey: "PT_MUTATION_APPLICATION_NO"
+    }
     },
     visible: false
   }
@@ -111,23 +124,21 @@ export const formwizardThirdStep = {
   props: {
     id: "apply_form3"
   },
-  children: {
-    applicantDetails
+  children:{
+    summary:getCommonCard({   propertySummary: propertySummary,
+      transferorSummary: transferorSummary,
+      // transferorInstitutionSummary:transferorInstitutionSummary,
+      transfereeSummary: transfereeSummary,
+      // transfereeInstitutionSummary: transfereeInstitutionSummary,
+      registrationSummary:registrationSummary,
+      documentsSummary: documentsSummary  
+    }),
+ 
   },
+  
   visible: false
 };
 
-export const formwizardFourthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form4"
-  },
-  children: {
-    documentDetails
-  },
-  visible: false
-};
 
 const getMdmsData = async (action, state, dispatch) => {
   let tenantId =
@@ -368,8 +379,7 @@ const screenConfig = {
       let formWizardNames = [
         "formwizardFirstStep",
         "formwizardSecondStep",
-        "formwizardThirdStep",
-        "formwizardFourthStep"
+        "formwizardThirdStep"
       ];
       for (let i = 0; i < 4; i++) {
         set(
@@ -477,7 +487,31 @@ const screenConfig = {
     //     {}
     //   );
     // }
-
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    // set(
+    //   action,
+    //   "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
+    //   false
+    // );
+    // set(
+    //   action,
+    //   "screenConfig.components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
+    //   false
+    // );
+    // set(
+    //   action,
+    //   "screenConfig.components.div.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
+    //   false
+    // );
     return action;
   },
   components: {
@@ -505,7 +539,6 @@ const screenConfig = {
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
-        formwizardFourthStep,
         footer
       }
     }
