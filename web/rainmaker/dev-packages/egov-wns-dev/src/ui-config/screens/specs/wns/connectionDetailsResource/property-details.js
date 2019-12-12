@@ -51,7 +51,7 @@ const propertyDetails = getCommonContainer({
       labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].property.plotSize"
+      jsonPath: "WaterConnection[0].property.landArea"
     }
   )
 })

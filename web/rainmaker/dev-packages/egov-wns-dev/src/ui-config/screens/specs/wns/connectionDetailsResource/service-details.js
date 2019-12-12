@@ -23,6 +23,11 @@ const gotoCreatePage = (state, dispatch) => {
 export const getServiceDetails = () => {
   const tenantId = JSON.parse(getUserInfo()).tenantId
   const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+
+  // const tenantId = "pb"
+  // const connectionNumber = 'WS/107/2019-20/060024'
+
+
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",

@@ -8,14 +8,10 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getQueryArg,
-  setBusinessServiceDataToLocalStorage,
-  getFileUrlFromAPI
-} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { footerReview } from "./viewBillResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults, getSearchResultsForSewerage } from "../../../../ui-utils/commons";
 
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
@@ -23,6 +19,7 @@ import { getPropertyDetails } from "./connectionDetailsResource/property-details
 import { getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
 const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+const service = getQueryArg(window.location.href, "service")
 let headerSideText = { word1: "", word2: "" };
 
 const setDocuments = async (
@@ -71,11 +68,22 @@ const setDocuments = async (
 };
 
 const searchResults = async (action, state, dispatch, connectionNumber) => {
+  /**
+   * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
+   */
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNumber }];
-  let payloadData = await getSearchResults(queryObject);
-  if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
-    payloadData.WaterConnection[0].service = "WATER"
-    dispatch(prepareFinalObject("WaterConnection", payloadData.WaterConnection))
+  if (service === "SEWERAGE") {
+    let payloadData = await getSearchResultsForSewerage(queryObject);
+    if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
+      payloadData.SewerageConnections[0].service = service;
+      dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]));
+    }
+  } else if (service === "WATER") {
+    let payloadData = await getSearchResults(queryObject);
+    if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
+      payloadData.WaterConnection[0].service = service;
+      dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
+    }
   }
 };
 
@@ -98,14 +106,7 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
       );
     }
 
-    const footer = footerReview(
-      action,
-      state,
-      dispatch,
-      status,
-      connectionNumber,
-      tenantId
-    );
+    const footer = footerReview(action, state, dispatch, status, connectionNumber, tenantId);
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
@@ -113,9 +114,7 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
 };
 
 const headerrow = getCommonContainer({
-  header: getCommonHeader({
-    labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER"
-  }),
+  header: getCommonHeader({ labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER" }),
   connectionNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
@@ -132,22 +131,13 @@ const propertyDetails = getPropertyDetails(false);
 
 const ownerDetails = getOwnerDetails(false);
 
-export const connectionDetails = getCommonCard({
-  serviceDetails,
-  propertyDetails,
-  ownerDetails
-});
+export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails });
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "search-preview",
+  name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    //To set the application no. at the  top
-    set(
-      action.screenConfig,
-      "components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
-      connectionNumber
-    );
+    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connectionNumber.props.number", connectionNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     connectionNumber = getQueryArg(window.location.href, "connectionNumber");
     const queryObject = [{ key: "tenantId", value: tenantId }, { key: "businessService", value: "WS" }];
@@ -192,7 +182,7 @@ const screenConfig = {
                 word1: {
                   ...getCommonTitle(
                     {
-                      labelKey: "WS_CONNECTION_DETAILS_STATUS_HEADER"
+                      labelKey: "WS_CONNECTION_DETAILS_CONNECTION_STATUS_HEADER"
                     },
                     {
                       style: {
