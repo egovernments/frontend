@@ -39,6 +39,8 @@ export const updateTradeDetails = async requestBody => {
 };
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
+    alert(1);
+    console.log(label, labelKey)
     if (labelKey) {
         let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
         if (!translatedLabel || labelKey === translatedLabel) {
@@ -147,7 +149,12 @@ export const getMyConnectionResults = async queryObject => {
         });
         return response;
     } catch (error) {
-        store.dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error"));
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
     }
 };
 
@@ -159,32 +166,6 @@ export const getConsumptionDetails = async queryObject => {
             "",
             queryObject
         );
-
-        if (response.WaterConnection.length > 0) {
-            for (let i = 0; i < response.WaterConnection.length; i++) {
-                try {
-                    const data = await httpRequest(
-                        "post",
-                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
-                        "",
-                        // queryObject
-                    );
-                    if (data && data !== undefined) {
-                        if (data.Bill !== undefined && data.Bill.length > 0) {
-                            response.WaterConnection[i].due = data.Bill[0].totalAmount
-                        }
-
-                    } else {
-                        response.WaterConnection[i].due = 0
-                    }
-
-                } catch (err) {
-                    console.log(err)
-                    response.WaterConnection[i].due = 0
-                }
-            }
-            // });
-        }
         return response;
     } catch (error) {
         store.dispatch(
