@@ -25,6 +25,7 @@ class MyConnections extends React.Component {
 
   render() {
     const { myConnectionResults, onActionClick, classes } = this.props;
+    const service = 'WATER'
     return (
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
@@ -76,7 +77,7 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item xs={3}>
-                          <Link to={`/wns/connection-details?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}`}>
+                          <Link to={`/wns/connection-details?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}&service=${service}`}>
                             <Label
                               labelName={item.connectionNo}
                               fontSize={14}

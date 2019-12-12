@@ -48,9 +48,9 @@ const setAutopopulatedvalues = async (state, dispatch) => {
             let prevBillingPeriod = month + ' - ' + presYear
             consumptionDetails['billingPeriod'] = prevBillingPeriod
         }
-        consumptionDetails['lastReading'] = "";
+        consumptionDetails['lastReading'] = 0;
         consumptionDetails['consumption'] = 0;
-        consumptionDetails['lastReadingDate'] = "";
+        consumptionDetails['lastReadingDate'] = 0;
 
 
     } else {
@@ -64,9 +64,9 @@ const setAutopopulatedvalues = async (state, dispatch) => {
                 let presYear = date.getFullYear();
                 let prevYear = date.getFullYear() - 1;
                 consumptionDetails['billingPeriod'] = 'Q1-' + prevYear + '-' + presYear.toString().substring(2);
-                consumptionDetails['lastReading'] = ""
+                consumptionDetails['lastReading'] = 0
                 consumptionDetails['consumption'] = 0;
-                consumptionDetails['lastReadingDate'] = "";
+                consumptionDetails['lastReadingDate'] = 0;
 
             } else {
                 let newValue = parseInt(preValue) + 1
@@ -85,9 +85,9 @@ const setAutopopulatedvalues = async (state, dispatch) => {
                 const month = date.toLocaleString('default', { month: 'short' });
                 prevBillingPeriod = month + ' - ' + presYear
                 consumptionDetails['billingPeriod'] = prevBillingPeriod
-                consumptionDetails['lastReading'] = ""
+                consumptionDetails['lastReading'] = 0
                 consumptionDetails['consumption'] = 0;
-                consumptionDetails['lastReadingDate'] = "";
+                consumptionDetails['lastReadingDate'] = 0;
 
             }
             date.setMonth(getDatefromString)

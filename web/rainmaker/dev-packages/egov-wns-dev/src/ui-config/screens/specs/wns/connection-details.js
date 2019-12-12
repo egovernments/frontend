@@ -106,10 +106,10 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
       );
     }
 
-    const footer = footerReview(action, state, dispatch, status, connectionNumber, tenantId);
-    process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.footer", footer)
-      : set(action, "screenConfig.components.div.children.footer", {});
+  //   const footer = footerReview(action, state, dispatch, status, connectionNumber, tenantId);
+  //   process.env.REACT_APP_NAME === "Citizen"
+  //     ? set(action, "screenConfig.components.div.children.footer", footer)
+  //     : set(action, "screenConfig.components.div.children.footer", {});
   }
 };
 

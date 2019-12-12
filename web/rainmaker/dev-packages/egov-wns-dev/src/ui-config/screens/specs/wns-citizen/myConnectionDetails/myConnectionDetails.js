@@ -1,4 +1,4 @@
-import { getMyConnectionResults, getMyConnectionDueResults } from "../../../../../ui-utils/commons";
+import { getMyConnectionResults } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
@@ -8,9 +8,13 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 export const fetchData = async (action, state, dispatch) => {
     let queryObject = [
         {
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber
+        }, {
             key: "tenantId",
-            value: JSON.parse(getUserInfo()).tenantId
-        }]
+            value: "pb.amritsar"
+        },]
+
     const response = await getMyConnectionResults(queryObject);
     // const billResponse = await getMyConnectionDueResults();
     try {
