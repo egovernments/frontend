@@ -9,7 +9,7 @@ import {
     setFilteredTradeTypes,
     getTradeTypeDropdownData
 } from "../ui-config/screens/specs/utils";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTranslatedLabel, updateDropDowns, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
@@ -77,7 +77,7 @@ export const getSearchResultsForSewerage = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/ws-services/swc/_search",
+            "/sw-services/swc/_search",
             "_search",
             queryObject
         );
@@ -121,12 +121,13 @@ export const fetchBill = async queryObject => {
         );
         return response;
     } catch (error) {
-        store.dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error"));
+        console.log(error)
     }
 };
 
 // api call to get my connection details
-export const getMyConnectionResults = async queryObject => {
+export const getMyConnectionResults = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -155,13 +156,15 @@ export const getMyConnectionResults = async queryObject => {
 
                 } catch (err) {
                     console.log(err)
-                    response.WaterConnection[i].due = 0
+                    response.WaterConnection[i].due = "-"
                 }
             }
             // });
         }
+        dispatch(toggleSpinner());
         return response;
     } catch (error) {
+        dispatch(toggleSpinner());
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
