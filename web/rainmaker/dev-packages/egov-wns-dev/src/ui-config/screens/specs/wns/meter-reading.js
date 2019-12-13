@@ -97,9 +97,9 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         }
 
 
-        consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].lastReading`);
+        consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].currentReading`);
         consumptionDetails['consumption'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].lastReading`);
-        consumptionDetails['lastReadingDate'] = convertEpochToDate(get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].lastReadingDate`))
+        consumptionDetails['lastReadingDate'] = convertEpochToDate(get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].currentReadingDate`))
     }
 
 

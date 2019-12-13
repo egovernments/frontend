@@ -9,7 +9,7 @@ import {
     setFilteredTradeTypes,
     getTradeTypeDropdownData
 } from "../ui-config/screens/specs/utils";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTranslatedLabel, updateDropDowns, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
@@ -23,6 +23,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import printJS from 'print-js';
 
 export const updateTradeDetails = async requestBody => {
     try {
@@ -76,7 +77,7 @@ export const getSearchResultsForSewerage = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/ws-services/swc/_search",
+            "/sw-services/swc/_search",
             "_search",
             queryObject
         );
@@ -120,12 +121,13 @@ export const fetchBill = async queryObject => {
         );
         return response;
     } catch (error) {
-        store.dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error"));
+        console.log(error)
     }
 };
 
 // api call to get my connection details
-export const getMyConnectionResults = async queryObject => {
+export const getMyConnectionResults = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -133,7 +135,7 @@ export const getMyConnectionResults = async queryObject => {
             "",
             queryObject
         );
- 
+
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 try {
@@ -147,20 +149,22 @@ export const getMyConnectionResults = async queryObject => {
                         if (data.Bill !== undefined && data.Bill.length > 0) {
                             response.WaterConnection[i].due = data.Bill[0].totalAmount
                         }
- 
+
                     } else {
                         response.WaterConnection[i].due = 0
                     }
- 
+
                 } catch (err) {
                     console.log(err)
-                    response.WaterConnection[i].due = 0
+                    response.WaterConnection[i].due = "-"
                 }
             }
             // });
         }
+        dispatch(toggleSpinner());
         return response;
     } catch (error) {
+        dispatch(toggleSpinner());
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -168,8 +172,8 @@ export const getMyConnectionResults = async queryObject => {
             )
         );
     }
- };
- 
+};
+
 
 export const getConsumptionDetails = async queryObject => {
     try {
@@ -936,6 +940,46 @@ export const createMeterReading = async (dispatch, body) => {
             false
         )
     );
+}
+
+export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
+    const FETCHCONNECTIONDETAILS = {
+        GET: {
+            URL: "/ws-services/wc/_search",
+            ACTION: "_post",
+        },
+    };
+    const DOWNLOADCONNECTIONDETAILS = {
+        GET: {
+            URL: "/pdf-service/v1/_create",
+            ACTION: "_get",
+        },
+    };
+
+    try {
+        httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+            const queryStr = [
+                { key: "key", value: "ws-consolidatedacknowlegment" },
+                { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+            ]
+            httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                .then(res => {
+                    getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                        if (mode === 'download') {
+                            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                            win.focus();
+                        }
+                        else {
+                            printJS(fileRes[res.filestoreIds[0]])
+                        }
+                    });
+
+                });
+        })
+
+    } catch (exception) {
+        alert('Some Error Occured while downloading!');
+    }
 }
 
 
