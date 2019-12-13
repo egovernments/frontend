@@ -25,7 +25,7 @@ const edcrInstance = axios.create({
 })
 
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
-  const authToken = "2e726bd3-6494-4597-9b26-c662c57c46ae";// getAccessToken();
+  const authToken = getAccessToken();
   let RequestInfo = {
     apiId: "Rainmaker",
     ver: ".01",
@@ -37,15 +37,7 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     requesterId: "",
     authToken
   };
-  // let RequestInfo = {
-  //   apiId: "rainmaker",
-  //   ver: "1",
-  //   ts: null,
-  //   action: "POST",
-  //   did: null,
-  //   key: null,
-  //   authToken : "da3ab160-4f18-40df-a3b5-13b13d636ad6"
-  // };
+
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(
     {},
@@ -135,9 +127,9 @@ export const edcrHttpRequest = async (
   var response;
   try {
     response = await edcrInstance.post(
-      endPoint,
-      wrapRequestBody(requestBody, action, customRequestInfo)
-    );
+        endPoint,
+        wrapRequestBody(requestBody, action, customRequestInfo)
+      );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
     if (responseStatus === 200 || responseStatus === 201) {

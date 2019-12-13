@@ -214,7 +214,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 21) {
+  if (activeStep === 2) {
     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
@@ -406,6 +406,13 @@ const callBackForNext = async (state, dispatch) => {
           };
           break;
         case 3:
+          errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Plot & Boundary Details, then proceed!",
+            labelKey: "Please fill all mandatory fields for Plot & Boundary Details, then proceed!"
+          };
+          break;
+        case 4:
           errorMessage = {
             labelName:
               "Please fill all mandatory fields for Plot & Boundary Info Details, then proceed!",
