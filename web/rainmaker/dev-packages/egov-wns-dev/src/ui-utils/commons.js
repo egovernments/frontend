@@ -23,6 +23,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import printJS from 'print-js';
 
 export const updateTradeDetails = async requestBody => {
     try {
@@ -939,6 +940,46 @@ export const createMeterReading = async (dispatch, body) => {
             false
         )
     );
+}
+
+export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
+    const FETCHCONNECTIONDETAILS = {
+        GET: {
+            URL: "/ws-services/wc/_search",
+            ACTION: "_post",
+        },
+    };
+    const DOWNLOADCONNECTIONDETAILS = {
+        GET: {
+            URL: "/pdf-service/v1/_create",
+            ACTION: "_get",
+        },
+    };
+
+    try {
+        httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+            const queryStr = [
+                { key: "key", value: "ws-consolidatedacknowlegment" },
+                { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+            ]
+            httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                .then(res => {
+                    getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                        if (mode === 'download') {
+                            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                            win.focus();
+                        }
+                        else {
+                            printJS(fileRes[res.filestoreIds[0]])
+                        }
+                    });
+
+                });
+        })
+
+    } catch (exception) {
+        alert('Some Error Occured while downloading!');
+    }
 }
 
 

@@ -82,6 +82,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     let payloadData = await getSearchResults(queryObject);
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
       payloadData.WaterConnection[0].service = service;
+      payloadData.WaterConnection[0].property.address.locality.locationOnMap = payloadData.WaterConnection[0].property.address.locality.latitude + ' ' + payloadData.WaterConnection[0].property.address.locality.longitude
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
     }
   }
@@ -106,10 +107,10 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
       );
     }
 
-  //   const footer = footerReview(action, state, dispatch, status, connectionNumber, tenantId);
-  //   process.env.REACT_APP_NAME === "Citizen"
-  //     ? set(action, "screenConfig.components.div.children.footer", footer)
-  //     : set(action, "screenConfig.components.div.children.footer", {});
+    //   const footer = footerReview(action, state, dispatch, status, connectionNumber, tenantId);
+    //   process.env.REACT_APP_NAME === "Citizen"
+    //     ? set(action, "screenConfig.components.div.children.footer", footer)
+    //     : set(action, "screenConfig.components.div.children.footer", {});
   }
 };
 
