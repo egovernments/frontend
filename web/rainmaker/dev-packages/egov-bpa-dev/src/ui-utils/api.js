@@ -11,15 +11,9 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
-  baseURL:
-  //'http://192.168.1.134:8094',
-  //https://cors-anywhere.herokuapp.com
-  //'https://egov-micro-dev.egovernments.org',
-  window.location.origin,
+  baseURL: window.location.origin,
   headers: {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    // "Origin" : "http://localhost:3000/"
+    "Content-Type": "application/json"
   }
 });
 

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "license": "egov",
   "private": true,
-  "homepage": "https://egov-micro-dev.egovernments.org/employee-noc/",
+  "homepage": "https://egov-micro-dev.egovernments.org/employee/",
   "proxy": "https://egov-micro-dev.egovernments.org/",
   "dependencies": {
     "@babel/runtime": "^7.3.1",

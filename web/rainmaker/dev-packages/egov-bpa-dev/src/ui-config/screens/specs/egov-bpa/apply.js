@@ -211,15 +211,15 @@ const getMdmsData = async (action, state, dispatch) => {
     }
   };
   try {
-    // let payload = null;
-    // payload = await httpRequest(
-    //   "post",
-    //   "/egov-mdms-service/v1/_search",
-    //   "_search",
-    //   [],
-    //   mdmsBody
-    // );
-    let payload = mdmsMockJson;
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+   // let payload = mdmsMockJson;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
