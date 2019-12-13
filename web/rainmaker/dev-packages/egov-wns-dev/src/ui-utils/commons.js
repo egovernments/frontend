@@ -76,7 +76,7 @@ export const getSearchResultsForSewerage = async queryObject => {
     try {
         const response = await httpRequest(
             "post",
-            "/ws-services/swc/_search",
+            "/sw-services/swc/_search",
             "_search",
             queryObject
         );
@@ -120,7 +120,7 @@ export const fetchBill = async queryObject => {
         );
         return response;
     } catch (error) {
-        store.dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error"));
+        console.log(error)
     }
 };
 
@@ -133,7 +133,7 @@ export const getMyConnectionResults = async queryObject => {
             "",
             queryObject
         );
- 
+
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 try {
@@ -147,11 +147,11 @@ export const getMyConnectionResults = async queryObject => {
                         if (data.Bill !== undefined && data.Bill.length > 0) {
                             response.WaterConnection[i].due = data.Bill[0].totalAmount
                         }
- 
+
                     } else {
                         response.WaterConnection[i].due = 0
                     }
- 
+
                 } catch (err) {
                     console.log(err)
                     response.WaterConnection[i].due = 0
@@ -168,8 +168,8 @@ export const getMyConnectionResults = async queryObject => {
             )
         );
     }
- };
- 
+};
+
 
 export const getConsumptionDetails = async queryObject => {
     try {
