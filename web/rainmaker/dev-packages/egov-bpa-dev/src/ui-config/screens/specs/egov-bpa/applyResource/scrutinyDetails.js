@@ -36,7 +36,6 @@ export const buildingPlanScrutinyDetails = getCommonCard({
     uploadedfile: {
       uiFramework: "custom-atoms-local",
       componentPath: "downloadFile",
-      jsonPath: "BPAs[0].BPADetails.scrutinyDetails.dxfFile",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -44,16 +43,14 @@ export const buildingPlanScrutinyDetails = getCommonCard({
       },
       props: {
           label: 'Uploaded Diagram',
-          linkDetail : 'uploadedDiagram.dxfFile',
-          jsonPath: "BPAs[0].BPADetails.scrutinyDetails.dxfFile",
+          linkDetail : 'uploadedDiagram.dxf',
+          jsonPath: "BPAs[0].BPADetails.scrutinyDetails.updatedDxfFile",
       },
       type: "array"
     },
-
     scrutinyreport: {
     uiFramework: "custom-atoms-local",
     componentPath: "downloadFile",
-    jsonPath: "BPAs[0].BPADetails.scrutinyDetails.dxfFile",
     gridDefination: {
       xs: 12,
       sm: 12,
@@ -62,7 +59,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
     props: {
         label: 'Scrutiny Report',
         linkDetail: 'ScrutinyReport.pdf',
-        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.updatedDxfFile",
+        jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planReport",
       },
     type: "array"
     }

@@ -94,9 +94,11 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId,
       moduleDetails: [
-        { moduleName: "BPA", masterDetails: [{ name: "Documents" }] }
+        { 
+          moduleName: "BPA", 
+          masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
@@ -120,6 +122,11 @@ const getMdmsData = async (state, dispatch) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+const getFloorDetail = (index) => {
+  let floorNo = ['Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
+  return `${floorNo[index]} floor`;
 };
 
 const callBackForNext = async (state, dispatch) => {
@@ -150,26 +157,20 @@ const callBackForNext = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.floors",
       []
   );
-    let index = 0;
-    let data = response.map(item => ({
+    //let index = 0;
+    let data = response.map((item, index) => ({
       // [getTextToLocalMapping("Application No")]:
-        "Floor Description" :
-        item.occupancies[0].floorArea || "-",
+        "Floor Description": getFloorDetail(index),
         // [getTextToLocalMapping("Level")]:
-        "Level":
-        index++ || "0",
+        "Level": index,
         // [getTextToLocalMapping("Occupancy/Sub Occupancy")]:
-        "Occupancy/Sub Occupancy":
-        item.occupancies[0].type || "-",
+        "Occupancy/Sub Occupancy": item.occupancies[0].type || "-",
         // [getTextToLocalMapping("Buildup Area")]:
-        "Buildup Area":
-        item.occupancies[0].builtUpArea || "-",
+        "Buildup Area": item.occupancies[0].builtUpArea || "-",
         // [getTextToLocalMapping("Floor Area")]:
-        "Floor Area":
-        item.occupancies[0].floorArea || "-",
+        "Floor Area": item.occupancies[0].floorArea || "-",
         // [getTextToLocalMapping("Carpet Area")]:
-        "Carpet Area":
-        item.occupancies[0].carpetArea || "-"
+        "Carpet Area": item.occupancies[0].carpetArea || "-"
     }));
     dispatch(
       handleField(

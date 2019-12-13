@@ -48,6 +48,34 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   );
 };
 
+const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
+  const authToken = getAccessToken();
+  let RequestInfo = {
+    "apiId": "1",
+    "ver": "1",
+    "ts": "01-01-2017 01:01:01",
+    "action": "create",
+    "did": "jh",
+    "key": "",
+    "msgId": "gfcfc",
+    "correlationId": "wefiuweiuff897",
+    authToken,
+    "userInfo": {
+        "id":1,
+        "tenantId": "generic"
+    }
+  };
+
+  RequestInfo = { ...RequestInfo, ...customRequestInfo };
+  return Object.assign(
+    {},
+    {
+      RequestInfo
+    },
+    requestBody
+  );
+};
+
 export const httpRequest = async (
   method = "get",
   endPoint,
@@ -128,7 +156,7 @@ export const edcrHttpRequest = async (
   try {
     response = await edcrInstance.post(
         endPoint,
-        wrapRequestBody(requestBody, action, customRequestInfo)
+        wrapEdcrRequestBody(requestBody, action, customRequestInfo)
       );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
