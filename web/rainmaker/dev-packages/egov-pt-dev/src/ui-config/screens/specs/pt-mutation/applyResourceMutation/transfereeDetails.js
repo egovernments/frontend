@@ -13,6 +13,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getDetailsForOwner } from "../../utils";
 import get from "lodash/get";
+import "./index.css";
 
 const showComponent = (dispatch, componentJsonPath, display) => {
   let displayProps = display ? {} : { display: "none" };
@@ -26,7 +27,7 @@ const commonApplicantInformation = () => {
     header: getCommonSubHeader(
       {
         labelName: "Applicant Information",
-        labelKey: "NOC_APPLICANT_INFORMATION_SUBHEADER"
+        labelKey: "PT_MUTATION_APPLICANT_INFORMATION_SUBHEADER"
       },
       {
         style: {
@@ -38,16 +39,19 @@ const commonApplicantInformation = () => {
       mobileNumber: getTextField({
         label: {
           labelName: "Mobile No.",
-          labelKey: "NOC_APPLICANT_MOBILE_NO_LABEL"
+          labelKey: "PT_MUTATION_APPLICANT_MOBILE_NO_LABEL"
         },
         placeholder: {
           labelName: "Enter Mobile No.",
-          labelKey: "NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
+          labelKey: "PT_MUTATION_APPLICANT_MOBILE_NO_PLACEHOLDER"
         },
         required: true,
+        props:{
+          className:"applicant-details-error"
+        },
         title: {
           value: "Please search profile linked to the mobile no.",
-          key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
+          key: "PT_MUTATION_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
         },
         infoIcon: "info_circle",
         pattern: getPattern("MobileNo"),
@@ -91,21 +95,19 @@ const commonApplicantInformation = () => {
       applicantName: getTextField({
         label: {
           labelName: "Name",
-          labelKey: "NOC_APPLICANT_NAME_LABEL"
+          labelKey: "PT_MUTATION_APPLICANT_NAME_LABEL"
         },
         placeholder: {
           labelName: "Enter Name",
-          labelKey: "NOC_ENTER_APPLICANT_NAME_PLACEHOLDER"
+          labelKey: "PT_MUTATION_APPLICANT_NAME_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
-        // props: {
-        //   style: {
-        //     maxWidth: "400px"
-        //   }
-        // },
+        props:{
+          className:"applicant-details-error"
+        },
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -123,21 +125,22 @@ const commonApplicantInformation = () => {
         jsonPath:
           "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender",
         props: {
-          label: { name: "Gender", key: "NOC_GENDER_LABEL" },
+          label: { name: "Gender", key: "PT_MUTATION_TRANSFEREE_GENDER_LABEL" },
+          className:"applicant-details-error",
           buttons: [
             {
               labelName: "Male",
-              labelKey: "NOC_GENDER_MALE_RADIOBUTTON",
+              labelKey: "PT_MUTATION_TRANSFEREE_GENDER_MALE_RADIOBUTTON",
               value: "MALE"
             },
             {
               labelName: "FEMALE",
-              labelKey: "NOC_GENDER_FEMALE_RADIOBUTTON",
+              labelKey: "PT_MUTATION_TRANSFEREE_GENDER_FEMALE_RADIOBUTTON",
               value: "FEMALE"
             },
             {
               labelName: "Transgender",
-              labelKey: "NOC_GENDER_TRANSGENDER_RADIOBUTTON",
+              labelKey: "PT_MUTATION_TRANSFEREE_GENDER_TRANSGENDER_RADIOBUTTON",
               value: "TRANSGENDER"
             }
           ],
@@ -150,11 +153,11 @@ const commonApplicantInformation = () => {
       applicantDob: getDateField({
         label: {
           labelName: "Date Of Birth",
-          labelKey: "NOC_APPLICANT_DOB_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_DOB_LABEL"
         },
         placeholder: {
           labelName: "DD/MM/YYYY",
-          labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_DOB_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Date"),
@@ -164,16 +167,19 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       applicantEmail: getTextField({
         label: {
           labelName: "Email",
-          labelKey: "NOC_APPLICANT_EMAIL_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_LABEL"
         },
         placeholder: {
           labelName: "Enter Email",
-          labelKey: "NOC_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
         errorMessage: "Invalid Email",
@@ -183,16 +189,19 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       fatherHusbandName: getTextField({
         label: {
           labelName: "Father/Husband's Name",
-          labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
         },
         placeholder: {
           labelName: "Enter Father/Husband's Name",
-          labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_FATHER_HUSBAND_NAME_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -203,6 +212,9 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       relationshipRadioGroup: {
@@ -218,17 +230,18 @@ const commonApplicantInformation = () => {
         props: {
           label: {
             name: "Relationship",
-            key: "NOC_APPLICANT_RELATIONSHIP_LABEL"
+            key: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL",
+            className:"applicant-details-error"
           },
           buttons: [
             {
               labelName: "Father",
-              labelKey: "NOC_APPLICANT_RELATIONSHIP_FATHER_RADIOBUTTON",
+              labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_FATHER_RADIOBUTTON",
               value: "FATHER"
             },
             {
               label: "Husband",
-              labelKey: "NOC_APPLICANT_RELATIONSHIP_HUSBAND_RADIOBUTTON",
+              labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_HUSBAND_RADIOBUTTON",
               value: "HUSBAND"
             }
           ],
@@ -242,11 +255,11 @@ const commonApplicantInformation = () => {
       applicantPan: getTextField({
         label: {
           labelName: "PAN No.",
-          labelKey: "NOC_APPLICANT_PAN_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_PAN_LABEL"
         },
         placeholder: {
           labelName: "Enter Applicant's PAN No.",
-          labelKey: "NOC_ENTER_APPLICANT_PAN_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_ENTER_APPLICANT_PAN_PLACEHOLDER"
         },
         pattern: getPattern("PAN"),
         errorMessage: "Invalid PAN",
@@ -255,16 +268,19 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       applicantAddress: getTextField({
         label: {
           labelName: "Correspondence Address",
-          labelKey: "NOC_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
         },
         placeholder: {
           labelName: "Enter Correspondence Address",
-          labelKey: "NOC_ENTER_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Address"),
@@ -275,16 +291,19 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       specialApplicantCategory: getSelectField({
         label: {
           labelName: "Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_APPLICANT_CATEGORY_LABEL"
         },
         placeholder: {
           labelName: "Select Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
         },
         jsonPath:
           "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
@@ -316,7 +335,7 @@ const institutionInformation = () => {
     header: getCommonSubHeader(
       {
         labelName: "Applicant Information",
-        labelKey: "NOC_APPLICANT_INFORMATION_SUBHEADER"
+        labelKey: "PT_MUTATION_APPLICANT_INFORMATION_SUBHEADER"
       },
       {
         style: {
@@ -328,11 +347,11 @@ const institutionInformation = () => {
       institutionName: getTextField({
         label: {
           labelName: "Name of Institution",
-          labelKey: "NOC_INSTITUTION_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_INSTITUTION_LABEL"
         },
         placeholder: {
           labelName: "Enter Name of Institution",
-          labelKey: "NOC_ENTER_INSTITUTION_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_INSTITUTION_PLACEHOLDER"
         },
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
@@ -348,11 +367,11 @@ const institutionInformation = () => {
       telephoneNumber: getTextField({
         label: {
           labelName: "Official Telephone No.",
-          labelKey: "NOC_TELEPHONE_NUMBER_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_TELEPHONE_NUMBER_LABEL"
         },
         placeholder: {
           labelName: "Enter Official Telephone No.",
-          labelKey: "NOC_ENTER_TELEPHONE_NUMBER_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_TELEPHONE_NUMBER_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("MobileNo"),
@@ -368,11 +387,11 @@ const institutionInformation = () => {
       authorisedPerson: getTextField({
         label: {
           labelName: "Name of Authorized Person",
-          labelKey: "NOC_AUTHORIZED_PERSON_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_AUTHORIZED_PERSON_LABEL"
         },
         placeholder: {
           labelName: "Enter Name of Authorized Person",
-          labelKey: "NOC_ENTER_AUTHORIZED_PERSON_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_AUTHORIZED_PERSON_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -387,11 +406,11 @@ const institutionInformation = () => {
       designation: getTextField({
         label: {
           labelName: "Designation in Institution",
-          labelKey: "NOC_INSTITUTION_DESIGNATION_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_INSTITUTION_DESIGNATION_LABEL"
         },
         placeholder: {
           labelName: "Enter designation of Institution",
-          labelKey: "NOC_ENTER_INSTITUTION_DESIGNATION_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_INSTITUTION_DESIGNATION_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -407,11 +426,11 @@ const institutionInformation = () => {
       authorizedPersonMobile: getTextField({
         label: {
           labelName: "Mobile No. of Authorized Person",
-          labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_LABEL"
+          labelKey: "PT_MUTATION_TRANSFEREE_AUTHORIZED_PERSON_MOBILE_LABEL"
         },
         placeholder: {
           labelName: "Enter Mobile No. of Authorized Person",
-          labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_PLACEHOLDER"
+          labelKey: "PT_MUTATION_TRANSFEREE_AUTHORIZED_PERSON_MOBILE_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("MobileNo"),
@@ -428,11 +447,11 @@ const institutionInformation = () => {
       authorizedPersonEmail: getTextField({
         label: {
           labelName: "Email of Authorized Person",
-          labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_LABEL"
+          labelKey: "PT_MUTATION_AUTHORIZED_PERSON_EMAIL_LABEL"
         },
         placeholder: {
           labelName: "Enter Email of Authorized Person",
-          labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_PLACEHOLDER"
+          labelKey: "PT_MUTATION_AUTHORIZED_PERSON_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
         errorMessage: "Invalid Email",
@@ -448,11 +467,11 @@ const institutionInformation = () => {
       officialCorrespondenceAddress: getTextField({
         label: {
           labelName: "Official Correspondence Address",
-          labelKey: "NOC_OFFICIAL_CORRESPONDENCE_ADDRESS_LABEL"
+          labelKey: "PT_MUTATION_CORRESPONDENCE_ADDRESS_LABEL"
         },
         placeholder: {
           labelName: "Enter Official Correspondence Address ",
-          labelKey: "NOC_ENTER_OFFICIAL_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+          labelKey: "PT_MUTATION_OFFICIAL_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Address"),
@@ -469,11 +488,11 @@ const institutionInformation = () => {
   });
 };
 
-export const applicantDetails = getCommonCard({
+export const transfereeDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Applicant Details",
-      labelKey: "NOC_APPLICANT_DETAILS_HEADER"
+      labelName: "Transferee Details",
+      labelKey: "PT_MUTATION_TRANSFEREE_DETAILS_HEADER"
     },
     {
       style: {
@@ -488,11 +507,11 @@ export const applicantDetails = getCommonCard({
         ...getSelectField({
           label: {
             labelName: "Applicant Type",
-            labelKey: "NOC_APPLICANT_TYPE_LABEL"
+            labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL"
           },
           placeholder: {
             labelName: "Select Applicant Type",
-            labelKey: "NOC_APPLICANT_TYPE_PLACEHOLDER"
+            labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL_PLACEHOLDER"
           },
           jsonPath:
             "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
@@ -517,6 +536,9 @@ export const applicantDetails = getCommonCard({
             xs: 12,
             sm: 12,
             md: 6
+          },
+          props:{
+            className:"applicant-details-error"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -539,11 +561,11 @@ export const applicantDetails = getCommonCard({
         ...getSelectField({
           label: {
             labelName: "Type of Applicant - Subtype",
-            labelKey: "NOC_APPLICANT_SUBTYPE_LABEL"
+            labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_SUBTYPE_LABEL"
           },
           placeholder: {
             labelName: "Select Applicant Subtype",
-            labelKey: "NOC_APPLICANT_SUBTYPE_PLACEHOLDER"
+            labelKey: "PT_MUTATION_APPLICANT_TRANSFEREE_SUBTYPE_PLACEHOLDER"
           },
           jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
           localePrefix: {
@@ -565,6 +587,9 @@ export const applicantDetails = getCommonCard({
             xs: 12,
             sm: 12,
             md: 6
+          },
+          props:{
+            className:"applicant-details-error"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -619,7 +644,7 @@ export const applicantDetails = getCommonCard({
             items: [],
             addItemLabel: {
               labelName: "Add Applicant",
-              labelKey: "NOC_ADD_APPLICANT_LABEL"
+              labelKey: "PT_MUTATION_ADD_APPLICANT_LABEL"
             },
             sourceJsonPath:
               "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
