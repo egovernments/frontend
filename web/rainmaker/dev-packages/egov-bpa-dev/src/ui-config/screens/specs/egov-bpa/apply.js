@@ -171,40 +171,42 @@ export const formwizardSixthStep = {
 };
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-    ) || getTenantId();
+  let tenantId = tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "citiesByModule.citizenTenantId.value"
+  ) || getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: 'pb', //tenantId,
       moduleDetails: [
         {
           moduleName: "common-masters",
-          masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }]
-        },
-        {
-          moduleName: "firenoc",
-          masterDetails: [{ name: "BuildingType" }, { name: "FireStations" }]
-        },
-        {
-          moduleName: "egov-location",
           masterDetails: [
             {
-              name: "TenantBoundary"
+              name: "DocumentType"
+            },
+            {
+              name: "OwnerType"
+            },
+            {
+              name: "OwnerShipCategory"
             }
           ]
         },
         {
-          moduleName: "tenant",
+          moduleName: "BPA",
           masterDetails: [
             {
-              name: "tenants"
+              name: "DocTypeMapping"
+            },
+            {
+              name: "ApplicationType"
+            },
+            {
+              name: "ServiceType"
             }
           ]
-        },
-        { moduleName: "BPA", masterDetails: [{ name: "Documents" }] }
+        }
       ]
     }
   };

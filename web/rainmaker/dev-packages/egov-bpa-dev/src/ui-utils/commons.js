@@ -76,7 +76,6 @@ export const getSearchResults = async (queryObject, dispatch) => {
 };
 
 export const createUpdateNocApplication = async (state, dispatch, status) => {
-  console.log('vamshikrishna')
   let nocId = get(
     state,
     "screenConfiguration.preparedFinalObject.BPAs[0].id"

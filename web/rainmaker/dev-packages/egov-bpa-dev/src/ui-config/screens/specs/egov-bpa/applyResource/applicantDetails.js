@@ -165,38 +165,6 @@ const commonApplicantInformation = () => {
                 },
                 type: "array"
               },
-            gender: {
-                ...getSelectField({
-                    label: {
-                        labelName: "Gender",
-                        labelKey: "Gender"
-                    },
-                    placeholder: {
-                        labelName: "NOC_GENDER_LABEL",
-                        labelKey: "NOC_GENDER_LABEL"
-                    },
-                    required: true,
-                    jsonPath: "BPAs[0].BPADetails.applicantDetails.owners[0].gender",
-                    props: {
-                        data: [
-                            {
-                                value: "Male",
-                                label: "Male"
-                            },
-                            {
-                                value: "FEMALE",
-                                label: "FEMALE"
-                            },
-                            {
-                                value: "Transgender",
-                                label: "Transgender"
-                            }
-                        ],
-                        optionValue: "value",
-                        optionLabel: "label"
-                    }
-                })
-            },
             primaryOwner: {
                 uiFramework: "custom-containers-local",
                 componentPath: "CheckboxContainer",

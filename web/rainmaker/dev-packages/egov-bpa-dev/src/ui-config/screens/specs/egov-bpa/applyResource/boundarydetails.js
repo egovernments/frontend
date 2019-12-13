@@ -292,20 +292,41 @@ export const detailsofplot = getCommonCard({
             })
         },
         cityTown: {
-            ...getTextField({
-                label: {
-                    labelName: "City/Town",
-                    labelKey: "City/Town"
-                },
-                placeholder: {
-                    labelName: "Enter city/town Name",
-                    labelKey: "Enter city/town Name"
-                },
-                required: true,
-                // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.citytown"
-            })
-        },
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-bpa",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "citiesByModule.citizenTenantId",
+            required: true,
+            gridDefination: {
+                xs: 12,
+                sm: 12,
+                md: 6
+            },
+            props: {
+              style: {
+                width: "100%",
+                cursor: "pointer"
+              },
+              isDisabled : true,
+              localePrefix: {
+                moduleName: "TENANT",
+                masterName: "TENANTS"
+              },
+              className: "citizen-city-picker",
+              label: {
+                labelName: "City/Town",
+                labelKey: "City/Town"
+              },
+              placeholder: { labelName: "Select City/Town", labelKey: "Select City/Town" },
+              jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
+              labelsFromLocalisation: true,
+              fullwidth: true,
+              required: true,
+              inputLabelProps: {
+                shrink: true
+              }
+            }
+          },
         landRegDetails: {
             ...getTextField({
                 label: {

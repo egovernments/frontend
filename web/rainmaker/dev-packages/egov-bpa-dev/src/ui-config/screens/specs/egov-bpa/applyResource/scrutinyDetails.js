@@ -258,6 +258,11 @@ export const proposedBuildingDetails = getCommonCard({
               "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
             props: {
               disabled: 'true'
+            },
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
             }
           })
         },
@@ -275,6 +280,11 @@ export const proposedBuildingDetails = getCommonCard({
             jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.totalFloors",
             props: {
               disabled: 'true'
+            },
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
             }
           })
         },
@@ -293,6 +303,11 @@ export const proposedBuildingDetails = getCommonCard({
               "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.buildingHeight",
             props: {
               disabled: 'true'
+            },
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
             }
           })
         }

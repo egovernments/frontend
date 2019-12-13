@@ -11,9 +11,15 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
-  baseURL: window.location.origin,
+  baseURL:
+  //'http://192.168.1.134:8094',
+  //https://cors-anywhere.herokuapp.com
+  //'https://egov-micro-dev.egovernments.org',
+  window.location.origin,
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    // "Origin" : "http://localhost:3000/"
   }
 });
 
@@ -30,6 +36,15 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     requesterId: "",
     authToken
   };
+  // let RequestInfo = {
+  //   apiId: "rainmaker",
+  //   ver: "1",
+  //   ts: null,
+  //   action: "POST",
+  //   did: null,
+  //   key: null,
+  //   authToken : "da3ab160-4f18-40df-a3b5-13b13d636ad6"
+  // };
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(
     {},

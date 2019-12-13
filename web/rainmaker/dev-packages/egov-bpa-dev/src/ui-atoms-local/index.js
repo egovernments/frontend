@@ -14,10 +14,15 @@ const AutoSuggest =  Loadable({
 const downloadFile = Loadable({
   loader: () => import("./downloadFile"),
   loading: () => <Loading />
-})
+});
+const FormIcon = Loadable({
+  loader: () => import("./Icons/FormIcon"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
   AutoSuggest,
-  downloadFile
+  downloadFile,
+  FormIcon
 };

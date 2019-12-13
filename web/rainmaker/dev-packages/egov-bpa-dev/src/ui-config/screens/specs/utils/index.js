@@ -21,6 +21,7 @@ import {
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 import { mdmsMockJson } from '../egov-bpa/mdmsMock';
 import { scrutinyDetailsMockJson, scrutinyDetailsMockJson1 } from './scrutinyDetailsMockJson';
+import { cityModuleMockJson } from '../egov-bpa/cityResJson';
 
 export const getCommonApplyFooter = children => {
   return {
@@ -561,14 +562,14 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     console.log(payload);
     // let payload = await httpRequest(
     //   "post",
-    //   "/user/_search?tenantId=pb",
-    //   "_search",
+    //   "https://egov-dcr-galaxy.egovernments.org/edcr/rest/dcr/scrutinydetails?edcrNumber=DCR122019M5HQU&tenantId=jupiter",
     //   [],
-    //   {
-    //     tenantId: "pb",
-    //     userName: `${scrutinyNo}`
-    //   }
+    //   // {
+    //   //   tenantId: "pb",
+    //   //   userName: `${scrutinyNo}`
+    //   // }
     // );
+    // payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
       if (payload.length === 0) {
         dispatch(
@@ -593,27 +594,44 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           userInfo.pwdExpiryDate = convertDateTimeToEpoch(
             userInfo.pwdExpiryDate
           );
-        }
-        let currOwnersArr = get(
-          state.screenConfiguration.preparedFinalObject,
-          "BPAs[0].BPADetails.scrutinyDetails",
-          []
-        );
+        };
 
-        currOwnersArr = userInfo[0];
-        console.log(userInfo);
-        dispatch(
-          prepareFinalObject(
-            `BPAs[0].BPADetails.scrutinyDetails`,
-            currOwnersArr
-          )
+        const tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "citiesByModule.citizenTenantId.value"
         );
+        const city = userInfo[0].tenantId;
+        if(tenantId && city){
+          let currOwnersArr = get(
+            state.screenConfiguration.preparedFinalObject,
+            "BPAs[0].BPADetails.scrutinyDetails",
+            []
+          );
+          currOwnersArr = userInfo[0];
+          dispatch(
+            prepareFinalObject(
+              `BPAs[0].BPADetails.scrutinyDetails`,
+              currOwnersArr
+            )
+          );
+          freezeAppType(state, dispatch);
+          occupancy(state, dispatch);
+          appDate(state, dispatch);
+          riskType(state, dispatch);
+        }else {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Not Authorised for next steps",
+                labelKey: "Not Authorised for next steps"
+              },
+              "error"
+            )
+          );
+        }
       }
     }
-    freezeAppType(state, dispatch);
-    occupancy(state, dispatch);
-    appDate(state, dispatch);
-    riskType(state, dispatch);
   } catch (e) {
     dispatch(
       toggleSnackbar(
@@ -971,4 +989,108 @@ export const getTodaysDateInYMD = () => {
   date = `${date.getFullYear()}-${month}-${day}`;
   // date = epochToYmdDate(date);
   return date;
+};
+export const showCityPicker = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["search"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("search", "components.cityPickerDialog", "props.open", !toggle)
+  );
+};
+
+export const applyForm = (state, dispatch) => {
+  const tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "citiesByModule.citizenTenantId"
+  );
+
+  const isTradeDetailsValid = validateFields(
+    "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  if(isTradeDetailsValid){
+    dispatch(prepareFinalObject("BPAs", []));
+    const applyUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/apply` : `/egov-bpa/apply`;
+    dispatch(setRoute(applyUrl));
+    city(state, dispatch, tenantId);
+  }
+
+  // if (isTradeDetailsValid) {
+  //   window.location.href =
+  //     process.env.NODE_ENV === "production"
+  //       ? `/citizen/tradelicense-citizen/apply?tenantId=${tenantId}`
+  //       : process.env.REACT_APP_SELF_RUNNING === true
+  //       ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+  //       : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+  // }
+};
+
+const city = (state, dispatch, tenantId) => {
+  let city = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.plotdetails.citytown"
+  );
+  if (!city) {
+    dispatch(prepareFinalObject("BPAs[0].BPADetails.plotdetails.citytown", tenantId));
+  }
+};
+
+// const getMdmsData = async () => {
+//   let mdmsBody = {
+//     // MdmsCriteria: {
+//     //   tenantId: commonConfig.tenantId,
+//     //   moduleDetails: [
+//     //     {
+//     //       moduleName: "tenant",
+//     //       masterDetails: [{ name: "citymodule" }]
+//     //     }
+//     //   ]
+//     // }
+//   };
+//   try {
+//     let payload = await httpRequest(
+//       "post",
+//       "/egov-mdms-service/v1/_search",
+//       "_search",
+//       [],
+//       mdmsBody
+//     );
+//     return payload;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
+
+export const fetchData = async (action, state, dispatch) => {
+  // const response = cityModuleMockJson; //await getSearchResults();
+  const mdmsRes = cityModuleMockJson; //await getMdmsData(dispatch);
+  let tenants =
+    mdmsRes &&
+    mdmsRes.MdmsRes &&
+    mdmsRes.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "TL") return true;
+    });
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      tenants
+    )
+  );
+  // try {
+  //   if (response && response.Licenses && response.Licenses.length > 0) {
+  //     dispatch(prepareFinalObject("searchResults", response.Licenses));
+  //     dispatch(
+  //       prepareFinalObject("myApplicationsCount", response.Licenses.length)
+  //     );
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
