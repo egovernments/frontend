@@ -7,15 +7,14 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
-import { transfereeDetails,mutationDetails,registrationDetails
+import { transferorDetails,mutationDetails,registrationDetails
    } from "./applyResourceMutation/mutationDetails";
    import {
     transferorSummary,transferorInstitutionSummary
   } from "./summaryResource/transferorSummary";
 import { propertyDetails } from "./applyResource/propertyDetails";
 import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
-import { applicantDetails } from "./applyResource/applicantDetails";
-import { documentDetails } from "./applyResource/documentDetails";
+
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -43,7 +42,8 @@ import { declarationSummary } from "./summaryResource/declarationSummary";
 
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
-
+import {documentDetails} from "./applyResourceMutation/mutationDocuments";
+import {transfereeDetails} from './applyResourceMutation/transfereeDetails'
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
   { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
@@ -103,7 +103,7 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    transferorSummary,
+    transferorDetails,
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -117,8 +117,7 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    propertyDetails,
-    propertyLocationDetails
+    documentDetails:documentDetails
   },
   visible: false
 };

@@ -346,7 +346,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropdownData) {
         let dropdown = {};
-        dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+        dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
         dropdown.required = true;
         dropdown.menu = doc.dropdownData.filter(item => {
           return item.active;

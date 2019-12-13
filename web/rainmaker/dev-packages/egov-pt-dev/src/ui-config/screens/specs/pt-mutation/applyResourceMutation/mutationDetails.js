@@ -1,4 +1,5 @@
 import {
+  getBreak,
     getCommonCard,
     getCommonGrayCard,
     getCommonContainer,
@@ -11,169 +12,20 @@ import {
     getTextField,
     getDateField    
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {
     getDetailsForOwner,
     getTodaysDateInYMD,
   } from "../../utils";
+  import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import get from "lodash/get";
 
-  export const transferorSummary = getCommonGrayCard({
-    header: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      props: {
-        style: { marginBottom: "10px" }
-      },
-      children: {
-        header: {
-          gridDefination: {
-            xs: 8
-          },
-          ...getCommonSubHeader({
-            labelName: "Transferor Details",
-            labelKey: "PT_MUTATION_TRANSFEROR_DETAILS"
-          })
-        },
-        editSection: {
-          componentPath: "Button",
-          props: {
-            color: "primary",
-            style: {
-              marginTop: "-10px",
-              marginRight: "-18px"
-            }
-          },
-          gridDefination: {
-            xs: 4,
-            align: "right"
-          },
-          children: {
-            editIcon: {
-              uiFramework: "custom-atoms",
-              componentPath: "Icon",
-              props: {
-                iconName: "edit"
-              }
-            },
-            buttonLabel: getLabel({
-              labelName: "Edit",
-              labelKey: "PT_MUTATION_TRANSFEROR_EDIT"
-            })
-          },
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch) => {
-              gotoApplyWithStep(state, dispatch, 0);
-            }
-          }
-        }
-      }
-    },
-    body: getCommonContainer({
-      transferorName: getLabelWithValue(
-        {
-          labelName: "Name",
-          labelKey: "PT_MUTATION_TRANSFEROR_NAME"
-        },
-        {
-          jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType"
-          // callBack: value => {
-          //   return value.split(".")[0];
-          // }
-        }
-      ),
-      guardianName: getLabelWithValue(
-        {
-          labelName: "Guardian's Name",
-          labelKey: "PT_MUTATION_TRANSFEROR_GUARDIAN_NAME"
-        },
-        {
-          jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-          // callBack: value => {
-          //   return value.split(".")[1];
-          // }
-        }
-      ),
-      transferorGender: getLabelWithValue(
-        {
-          labelName: "Gender",
-          labelKey: "PT_MUTATION_TRANSFEROR_GENDER"
-        },
-        {
-          jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-          // callBack: value => {
-          //   return value.split(".")[1];
-          // }
-        }
-      ),
-      transferorDOB: getLabelWithValue(
-        {
-          labelName: "Date Of Birth",
-          labelKey: "PT_MUTATION_TRANSFEROR_DOB"
-        },
-        {
-          jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-          // callBack: value => {
-          //   return value.split(".")[1];
-          // }
-        }
-      ),
-      transferorMobile: getLabelWithValue(
-        {
-          labelName: "Mobile No.",
-          labelKey: "PT_MUTATION_TRANSFEROR_MOBILE"
-        },
-        {
-          jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-          // callBack: value => {
-          //   return value.split(".")[1];
-          // }
-        }
-      ),
-      transferorEmail: getLabelWithValue(
-        {
-          labelName: "Email",
-          labelKey: "PT_MUTATION_TRANSFEROR_EMAIL"
-        },
-        {
-          jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-          // callBack: value => {
-          //   return value.split(".")[1];
-          // }
-        }
-      ),
-      transferorSpecialCategory: getLabelWithValue(
-        {
-          labelName: "Special Category",
-          labelKey: "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY"
-        },
-        {
-          jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-          // callBack: value => {
-          //   return value.split(".")[1];
-          // }
-        }
-      ),
-      transferorCorrespondenceAddress: getLabelWithValue(
-        {
-          labelName: "Correspondence Address",
-          labelKey: "PT_MUTATION_TRANSFEROR_CORRESPONDENCE_ADDRESS"
-        },
-        {
-          jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-          // callBack: value => {
-          //   return value.split(".")[1];
-          // }
-        }
-      )
-    })
-  });
-
-export const transfereeDetails = getCommonCard(
+  export const transferorDetails = getCommonCard(
     {
       header: getCommonTitle(
         {
-          labelName: "Transferee Details",
-          labelKey: "PT_MUTATION_TRANSFEREE_DETAILS"
+          labelName: "Transferor Details",
+          labelKey: "PT_MUTATION_TRANSFEROR_DETAILS"
         },
         {
           style: {
@@ -181,182 +33,112 @@ export const transfereeDetails = getCommonCard(
           }
         }
       ),
-  
-      transfereeDetailsContainer: getCommonContainer({
-        transfereeName: getTextField({
-          label: {
-            labelName: "Transferee Name",
-            labelKey: "PT_MUTATION_TRANSFEREE_NAME"
+      body: getCommonContainer({
+        transferorName: getLabelWithValue(
+          {
+            labelName: "Name",
+            labelKey: "PT_MUTATION_TRANSFEROR_NAME"
           },
-          placeholder: {
-            labelName: "Enter Name",
-            labelKey: "PT_MUTATION_TRANSFEREE_NAME_PLACEHOLDER"
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType"
+            // callBack: value => {
+            //   return value.split(".")[0];
+            // }
+          }
+        ),
+        guardianName: getLabelWithValue(
+          {
+            labelName: "Guardian's Name",
+            labelKey: "PT_MUTATION_TRANSFEROR_GUARDIAN_NAME"
           },
-          props:{
-            className:"applicant-details-error"
+          {
+            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        ),
+        transferorGender: getLabelWithValue(
+          {
+            labelName: "Gender",
+            labelKey: "PT_MUTATION_TRANSFEROR_GENDER"
           },
-          pattern: getPattern("Name"),
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-          required: true,
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId"
-        }),
-        getGenderRadioButton : {
-            uiFramework: "custom-containers",
-            componentPath: "RadioGroupContainer",
-            gridDefination: {
-              xs: 12,
-              sm: 12,
-              md: 6
-            },
-            jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-            props: {
-              label: {
-                name: "Gender",
-                key: "PT_MUTATION_TRANSFEREE_GENDER"
-              },
-              buttons: [
-                {
-                  labelName: "Male",
-                  labelKey: "PT_MUTATION_MALE_GENDER",
-                  value: "MALE"
-                },
-                {
-                  label: "Female",
-                  labelKey: "PT_MUTATION_FEMALE_GENDER",
-                  value: "FEMALE"
-                },
-                {
-                    label: "Transgender",
-                    labelKey: "PT_MUTATION_TRANSGENDER_GENDER",
-                    value: "TRANSGENDER"
-                  }
-              ],
-              jsonPath:"Licenses[0].tradeLicenseDetail.owners[0].relationship",
-              required: true
-            },
-            required: true,
-            type: "array"
+          {
+            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        ),
+        transferorDOB: getLabelWithValue(
+          {
+            labelName: "Date Of Birth",
+            labelKey: "PT_MUTATION_TRANSFEROR_DOB"
           },
-          getTransfereeMobNoField: getTextField({
-            label: {
-              labelName: "Mobile No.",
-              labelKey: "PT_MUTATION_TRANSFEREE_MOBILE"
-            },
-            props:{
-              className:"applicant-details-error"
-            },
-            placeholder: {
-              labelName: "Enter Mobile No.",
-              labelKey: "PT_MUTATION_TRANSFEREE_MOB_NO_PLACEHOLDER"
-            },
-            required: true,
-            pattern: getPattern("MobileNo"),
-            jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
-            iconObj: {
-              iconName: "search",
-              position: "end",
-              color: "#FE7A51",
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch, fieldInfo) => {
-                  getDetailsForOwner(state, dispatch, fieldInfo);
-                }
-              }
-            },
-            title: {
-              value: "Please search owner profile linked to the mobile no.",
-              key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
-            },
-            infoIcon: "info_circle"
-          }),
-          getTransfereeEmailField: getTextField({
-            label: {
-              labelName: "Email",
-              labelKey: "PT_MUTATION_TRANSFEREE_EMAIL"
-            },
-            props:{
-              className:"applicant-details-error"
-            },
-            placeholder: {
-              labelName: "Enter Email",
-              labelKey: "PT_MUTATION_TRANSFEREE_EMAIL_PLACEHOLDER"
-            },
-            pattern: getPattern("Email"),
-            jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
-          }),
-          getTransfereeGuardianNameField: getTextField({
-            label: {
-              labelName: "Guardian's Name",
-              labelKey: "PT_MUTATION_TRANSFEREE_GUARDIAN_NAME"
-            },
-            props:{
-              className:"applicant-details-error"
-            },
-            placeholder: {
-              labelName: "Enter Guardian's Name",
-              labelKey: "PT_MUTATION_TRANSFEREE_GUARDIAN_NAME_PLACEHOLDER"
-            },
-            pattern: getPattern("Name"),
-            jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
-          }),
-          getRelationshipWithGuardianField: getSelectField({
-            label: {
-              labelName: "Relationship With Guardian",
-              labelKey: "PT_MUTATION_TRANSFEREE_RELATIONSHIP_WITH_GUARDIAN"
-            },
-            placeholder: {
-              labelName: "Select Relationship",
-              labelKey: "PT_MUTATION_TRANSFEREE_RELATIONSHIP_WITH_GUARDIAN_PLACEHOLDER"
-            },
-            required: true,
-            optionValue: "code",
-            optionLabel: "label",
-            jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-            data: [
-              {
-                code: "Father",
-                label: "PT_MUTATION_TRANSFEREE_FATHER_RELATIONSHIP"
-              },
-              {
-                code: "Husband",
-                label: "PT_MUTATION_TRANSFEREE_HUSBAND_RELATIONSHIP"
-              }
-            ]
-          }),
-          SpecialApplicantCategory: getSelectField({
-            label: {
-              labelName: "Special Applicant Category",
-              labelKey: "PT_MUTATION_SPECIAL_APPLICANT_CATEGORY"
-            },
-            placeholder: {
-              labelName: "Select Special Applicant Category",
-              labelKey: "PT_MUTATION_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-            },
-            jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-            sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-            localePrefix: {
-              moduleName: "common-masters",
-              masterName: "OwnerType"
-            }
-          }),
-          correspondeceAddress: getTextField({
-            label: {
-              labelName: "Correspondence Address",
-              labelKey: "PT_MUTATION_CORRESPONDENCE_ADDRESS"
-            },
-            props:{
-              className:"applicant-details-error"
-            },
-            placeholder: {
-              labelName: "Enter Correspondence Address",
-              labelKey: "PT_MUTATION_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
-            },
-            required: true,
-            pattern: getPattern("Address"),
-         //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
-          })
-        })
-      });
+          {
+            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        ),
+        transferorMobile: getLabelWithValue(
+          {
+            labelName: "Mobile No.",
+            labelKey: "PT_MUTATION_TRANSFEROR_MOBILE"
+          },
+          {
+            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        ),
+        transferorEmail: getLabelWithValue(
+          {
+            labelName: "Email",
+            labelKey: "PT_MUTATION_TRANSFEROR_EMAIL"
+          },
+          {
+            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        ),
+        transferorSpecialCategory: getLabelWithValue(
+          {
+            labelName: "Special Category",
+            labelKey: "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY"
+          },
+          {
+            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        ),
+        transferorCorrespondenceAddress: getLabelWithValue(
+          {
+            labelName: "Correspondence Address",
+            labelKey: "PT_MUTATION_TRANSFEROR_CORRESPONDENCE_ADDRESS"
+          },
+          {
+            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        )
+      })
+    });
+
+    
+
+
+
+
+
 
       export const mutationDetails = getCommonCard(
         {
@@ -567,3 +349,10 @@ export const transfereeDetails = getCommonCard(
               }),
             })
           }) ; 
+
+
+              
+              
+
+
+             
