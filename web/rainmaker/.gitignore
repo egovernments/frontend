@@ -23,4 +23,5 @@ yarn-error.log*
 lerna-debug.log*
 
 index.css*
-
+dev-packages/**
+!dev-packages/**/*.css

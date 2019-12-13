@@ -10,7 +10,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils/api";
+import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import isUndefined from "lodash/isUndefined";
 import {
   getCommonCard,
@@ -544,6 +544,10 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       `BPAs[0].BPADetails.basicdetails.scrutinynumber`,
       ""
     );
+    // const tenantId = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "citiesByModule.citizenTenantId.value"
+    // );
     // if (!scrutinyNo.match(getPattern("MobileNo"))) {
     //   dispatch(
     //     toggleSnackbar(
@@ -557,19 +561,17 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     //   );
     //   return;
     // }
-    let payload = scrutinyDetailsMockJson;
-    payload = payload[0].body.edcrDetail;
+    // let payload = scrutinyDetailsMockJson;
+    // payload = payload[0].body.edcrDetail;
+    // console.log(payload);
+    console.log('edcrHttpRequest');
+    let payload = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + scrutinyNo + "&tenantId=jupiter",
+      {}
+    );
     console.log(payload);
-    // let payload = await httpRequest(
-    //   "post",
-    //   "https://egov-dcr-galaxy.egovernments.org/edcr/rest/dcr/scrutinydetails?edcrNumber=DCR122019M5HQU&tenantId=jupiter",
-    //   [],
-    //   // {
-    //   //   tenantId: "pb",
-    //   //   userName: `${scrutinyNo}`
-    //   // }
-    // );
-    // payload = payload.edcrDetail;
+    payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
       if (payload.length === 0) {
         dispatch(

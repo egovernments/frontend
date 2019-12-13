@@ -17,8 +17,15 @@ const instance = axios.create({
   }
 });
 
+const edcrInstance = axios.create({
+  baseURL: "https://egov-dcr-galaxy.egovernments.org",
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
-  const authToken = getAccessToken();
+  const authToken = "2e726bd3-6494-4597-9b26-c662c57c46ae";// getAccessToken();
   let RequestInfo = {
     apiId: "Rainmaker",
     ver: ".01",
@@ -79,6 +86,58 @@ export const httpRequest = async (
       default:
         response = await instance.get(endPoint);
     }
+    const responseStatus = parseInt(response.status, 10);
+    store.dispatch(toggleSpinner());
+    if (responseStatus === 200 || responseStatus === 201) {
+      return response.data;
+    }
+  } catch (error) {
+    const { data, status } = error.response;
+    if (status === 400 && data === "") {
+      apiError = "INVALID_TOKEN";
+    } else {
+      apiError =
+        (data.hasOwnProperty("Errors") &&
+          data.Errors &&
+          data.Errors.length &&
+          data.Errors[0].message) ||
+        (data.hasOwnProperty("error") &&
+          data.error.fields &&
+          data.error.fields.length &&
+          data.error.fields[0].message) ||
+        (data.hasOwnProperty("error_description") && data.error_description) ||
+        apiError;
+    }
+    store.dispatch(toggleSpinner());
+  }
+  // unhandled error
+  throw new Error(apiError);
+};
+
+export const edcrHttpRequest = async (
+  method = "post",
+  endPoint,
+  action,
+  queryObject = [],
+  requestBody = {},
+  headers = [],
+  customRequestInfo = {}
+) => {
+  store.dispatch(toggleSpinner());
+  let apiError = "Api Error";
+
+  if (headers)
+    edcrInstance.defaults = Object.assign(edcrInstance.defaults, {
+      headers
+    });
+
+  endPoint = addQueryArg(endPoint, queryObject);
+  var response;
+  try {
+    response = await edcrInstance.post(
+      endPoint,
+      wrapRequestBody(requestBody, action, customRequestInfo)
+    );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
     if (responseStatus === 200 || responseStatus === 201) {

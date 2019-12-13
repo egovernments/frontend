@@ -225,7 +225,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+            //sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
             prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
