@@ -74,7 +74,7 @@ class PTHome extends Component {
         dynamicArray: [numProperties],
         route: "/property-tax/my-properties"
       },{
-        label: "PT_MY_APPLICATIONS",
+        label: "PT_MUTATION_MY_APPLICATIONS",
         icon: <Icon style={iconStyle} action="custom" name="home-account" />,
         dynamicArray: [numProperties],
         route: "/pt-mutation/my-applications"

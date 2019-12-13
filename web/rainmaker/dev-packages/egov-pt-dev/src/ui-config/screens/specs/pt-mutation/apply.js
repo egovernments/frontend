@@ -39,6 +39,8 @@ import {
 import { propertySummary } from "./summaryResource/propertySummary";
 import { transfereeSummary } from "./summaryResource/transfereeSummary";
 import { registrationSummary } from "./summaryResource/registrationSummary";
+import { declarationSummary } from "./summaryResource/declarationSummary";
+
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 
@@ -92,6 +94,8 @@ export const header = getCommonContainer({
   }
 });
 
+
+
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
@@ -133,7 +137,8 @@ export const formwizardThirdStep = {
       // transfereeInstitutionSummary: transfereeInstitutionSummary,
       mutationSummary:mutationSummary,
       registrationSummary:registrationSummary,
-      documentsSummary: documentsSummary  
+      documentsSummary: documentsSummary ,
+      declarationSummary:declarationSummary
     }),
  
   },
