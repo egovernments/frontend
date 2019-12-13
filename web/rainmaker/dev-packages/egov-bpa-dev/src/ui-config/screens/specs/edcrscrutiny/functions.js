@@ -108,12 +108,12 @@ const scrutinizePlan = async (state, dispatch) => {
     let { screenConfiguration } = state;
     let { preparedFinalObject } = screenConfiguration;
     const tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
-    const name = get(preparedFinalObject, "Scrutiny[0].applicantName");
+    const applicantName = get(preparedFinalObject, "Scrutiny[0].applicantName");
     const file = get(preparedFinalObject, "Scrutiny[0].buildingPlan[0]");
 
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
-    set(edcrRequest, "RequestInfo.userInfo.name", name);
+    edcrRequest = { ...edcrRequest, applicantName };
     var bodyFormData = new FormData();
     bodyFormData.append("edcrRequest", JSON.stringify(edcrRequest));
     bodyFormData.append("planFile", file);
