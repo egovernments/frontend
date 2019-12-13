@@ -60,6 +60,19 @@ const saveData = (state, dispatch) => {
         );
         data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
         data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
+        if (data.currentReading < data.lastReading) {
+            dispatch(
+                toggleSnackbar(
+                    true,
+                    {
+                        labelName: "",
+                        labelKey: "WS_CONSUMPTION_DETAILS_ERRO_MSG"
+                    },
+                    "warning"
+                )
+            );
+            return;
+        }
         if (get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")) {
             data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate");
         } else {
