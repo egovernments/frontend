@@ -566,6 +566,7 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
     })
 
   } catch (exception) {
-    alert('Some Error Occured while downloading Receipt!');
+    alert('Some Error Occured while downloading Bill!');
   }
 }
+
