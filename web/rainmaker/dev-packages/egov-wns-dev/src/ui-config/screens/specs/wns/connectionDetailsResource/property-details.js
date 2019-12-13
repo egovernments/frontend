@@ -23,12 +23,12 @@ const getHeader = label => {
   };
 };
 
-// const properyDetailsHeader = getHeader({
-//   labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
-// });
-// const propertyLocationDetailsHeader = getHeader({
-//   labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
-// });
+const properyDetailsHeader = getHeader({
+  labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
+});
+const propertyLocationDetailsHeader = getHeader({
+  labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
+});
 
 const propertyDetails = getCommonContainer({
   propertyType: getLabelWithValue(
@@ -61,7 +61,7 @@ const propertyLocationDetails = getCommonContainer({
     {
       labelKey: "WS_PROPERTY_ID_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.id" }
+    { jsonPath: "WaterConnection[0].property._id" }
   ),
   city: getLabelWithValue(
     {
@@ -170,13 +170,13 @@ export const getPropertyDetails = (isEditable = true) => {
         }
       }
     },
-    viewOne: propertyDetails,
-    viewTwo: propertyLocationDetails
+    // viewOne: propertyDetails,
+    // viewTwo: propertyLocationDetails
 
-    // viewOne: properyDetailsHeader,
-    // viewTwo: propertyDetails,
-    // viewThree: propertyLocationDetailsHeader,
-    // viewFour: propertyLocationDetails
+    viewOne: properyDetailsHeader,
+    viewTwo: propertyDetails,
+    viewThree: propertyLocationDetailsHeader,
+    viewFour: propertyLocationDetails
   });
 };
 

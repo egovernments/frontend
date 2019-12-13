@@ -9,7 +9,7 @@ import {
     setFilteredTradeTypes,
     getTradeTypeDropdownData
 } from "../ui-config/screens/specs/utils";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTranslatedLabel, updateDropDowns, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
@@ -125,7 +125,8 @@ export const fetchBill = async queryObject => {
 };
 
 // api call to get my connection details
-export const getMyConnectionResults = async queryObject => {
+export const getMyConnectionResults = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -133,7 +134,7 @@ export const getMyConnectionResults = async queryObject => {
             "",
             queryObject
         );
- 
+
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 try {
@@ -147,20 +148,22 @@ export const getMyConnectionResults = async queryObject => {
                         if (data.Bill !== undefined && data.Bill.length > 0) {
                             response.WaterConnection[i].due = data.Bill[0].totalAmount
                         }
- 
+
                     } else {
                         response.WaterConnection[i].due = 0
                     }
- 
+
                 } catch (err) {
                     console.log(err)
-                    response.WaterConnection[i].due = 0
+                    response.WaterConnection[i].due = "-"
                 }
             }
             // });
         }
+        dispatch(toggleSpinner());
         return response;
     } catch (error) {
+        dispatch(toggleSpinner());
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -168,8 +171,8 @@ export const getMyConnectionResults = async queryObject => {
             )
         );
     }
- };
- 
+};
+
 
 export const getConsumptionDetails = async queryObject => {
     try {

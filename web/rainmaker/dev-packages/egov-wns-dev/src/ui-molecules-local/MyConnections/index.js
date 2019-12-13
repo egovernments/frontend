@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { connect } from "react-redux";
 import get from "lodash/get";
+import "./index.css"
 
 const styles = {
   card: {
@@ -18,14 +19,17 @@ const styles = {
 };
 
 class MyConnections extends React.Component {
+  service = 'WATER'
+  getConnectionDetails = data => {
+    window.location.href = `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${this.service}`
+  }
 
-  onCardClick = item => {
-    return `/wns/viewBill?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}`;
-  };
+  getViewBillDetails = data => {
+    window.location.href = `/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${this.service}`
+  }
 
   render() {
-    const { myConnectionResults, onActionClick, classes } = this.props;
-    const service = 'WATER'
+    const { myConnectionResults, classes } = this.props;
     return (
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
@@ -77,13 +81,14 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item xs={3}>
-                          <Link to={`/wns/connection-details?connectionNumber=${item.connectionNo}&tenantId=${item.property.tenantId}&service=${service}`}>
-                            <Label
+                          <div className="linkStyle" onClick={() => this.getConnectionDetails(item)}>
+                            <a> <Label
                               labelName={item.connectionNo}
                               fontSize={14}
                               style={{ fontSize: 14 }}
                             />
-                          </Link>
+                            </a>
+                          </div>
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginBottom: 12 }}>
@@ -150,17 +155,25 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                       </Grid>
-                      <Link to={this.onCardClick(item)}>
-                        <div >
-                          <LabelContainer
-                            labelKey="CS_COMMON_PAY"
-                            style={{
-                              color: "#fe7a51",
-                              fontSize: 14,
-                            }}
-                          />
-                        </div>
-                      </Link>
+                      <div onClick={() => this.getViewBillDetails(item)}>
+                        {item.due === "-" ?
+                          (<div></div>)
+                          : item.due === 0 ?
+                            (<div> <LabelContainer
+                              labelKey="WS_COMMON_PAID_LABEL"
+                              style={{ color: '#008000', textTransform: 'uppercase', fontWeight: 400 }}
+                            /></div>) :
+                            (<div className="linkStyle">
+                              <LabelContainer
+                                labelKey="CS_COMMON_PAY"
+                                style={{
+                                  color: "#fe7a51",
+                                  fontSize: 14,
+                                }}
+                              />
+                            </div>)
+                        }
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -168,7 +181,14 @@ class MyConnections extends React.Component {
             );
           })
         ) : (
-            <div className="no-assessment-message-cont">
+            <div style={{
+              display: "flex",
+              width: "100%",
+              height: "50vh",
+              alignItems: 'center',
+              justifyContent: "center",
+              textAlign: "center"
+            }}>
               <LabelContainer
                 labelKey={"No results Found!"}
                 style={{ marginBottom: 10 }}
