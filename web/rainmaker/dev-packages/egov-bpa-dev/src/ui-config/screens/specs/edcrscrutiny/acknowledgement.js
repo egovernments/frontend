@@ -116,107 +116,6 @@ const getSearchResultsfromEDCR = async (applicationNumber, tenantId) => {
   }
 };
 
-const fileprintdownload = {
-  uiFramework: "custom-atoms",
-  componentPath: "Div",
-  children: {
-    downloadFormButton: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      children: {
-        div1: {
-          uiFramework: "custom-atoms",
-          componentPath: "Icon",
-
-          props: {
-            iconName: "cloud_download",
-            style: {
-              marginTop: "7px",
-              marginRight: "8px"
-            }
-          },
-          onClick: {
-            action: "condition",
-            callBack: () => {
-              generatePdfAndDownload(
-                state,
-                dispatch,
-                "download",
-                applicationNumber,
-                tenant,
-                reporturl
-              );
-            }
-          }
-        },
-        div2: getLabel({
-          labelName: "Scrutiny Report",
-          labelKey: "EDCR_SCUTINY_REPORT"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: () => {
-          generatePdfAndDownload(
-            state,
-            dispatch,
-            "download",
-            applicationNumber,
-            tenant,
-            reporturl
-          );
-        }
-      }
-    },
-    PrintFormButton: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      children: {
-        div1: {
-          uiFramework: "custom-atoms",
-          componentPath: "Icon",
-
-          props: {
-            iconName: "local_printshop",
-            style: {
-              marginTop: "7px",
-              marginRight: "8px",
-              marginLeft: "10px"
-            }
-          },
-          onClick: {
-            action: "condition",
-            callBack: () => {
-              generatePdfAndDownload(
-                state,
-                dispatch,
-                "print",
-                reporturl,
-                tenant
-              );
-            }
-          }
-        },
-        div2: getLabel({
-          labelName: "Scrutiny Report",
-          labelKey: "EDCR_SCUTINY_REPORT"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: () => {
-          generatePdfAndDownload(state, dispatch, "print", reporturl, tenant);
-        }
-      }
-    }
-  },
-  props: {
-    style: {
-      display: "flex"
-    }
-  }
-};
-
 const getAcknowledgementCard = (
   state,
   dispatch,
@@ -268,7 +167,114 @@ const getAcknowledgementCard = (
           })
         }
       },
-      fileprintdownload,
+      abs: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          downloadFormButton: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+              div1: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
+
+                props: {
+                  iconName: "cloud_download",
+                  style: {
+                    marginTop: "7px",
+                    marginRight: "8px"
+                  }
+                },
+                onClick: {
+                  action: "condition",
+                  callBack: () => {
+                    generatePdfAndDownload(
+                      state,
+                      dispatch,
+                      "download",
+                      applicationNumber,
+                      tenant,
+                      reporturl
+                    );
+                  }
+                }
+              },
+              div2: getLabel({
+                labelName: "Scrutiny Report",
+                labelKey: "EDCR_SCUTINY_REPORT"
+              })
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: () => {
+                generatePdfAndDownload(
+                  state,
+                  dispatch,
+                  "download",
+                  applicationNumber,
+                  tenant,
+                  reporturl
+                );
+              }
+            }
+          },
+          PrintFormButton: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+              div1: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
+
+                props: {
+                  iconName: "local_printshop",
+                  style: {
+                    marginTop: "7px",
+                    marginRight: "8px",
+                    marginLeft: "10px"
+                  }
+                },
+                onClick: {
+                  action: "condition",
+                  callBack: () => {
+                    generatePdfAndDownload(
+                      state,
+                      dispatch,
+                      "print",
+                      applicationNumber,
+                      tenant,
+                      reporturl
+                    );
+                  }
+                }
+              },
+              div2: getLabel({
+                labelName: "Scrutiny Report",
+                labelKey: "EDCR_SCUTINY_REPORT"
+              })
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: () => {
+                generatePdfAndDownload(
+                  state,
+                  dispatch,
+                  "print",
+                  applicationNumber,
+                  tenant,
+                  reporturl
+                );
+              }
+            }
+          }
+        },
+        props: {
+          style: {
+            display: "flex"
+          }
+        }
+      },
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"
@@ -305,7 +311,114 @@ const getAcknowledgementCard = (
           })
         }
       },
-      fileprintdownload,
+      abs: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          downloadFormButton: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+              div1: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
+
+                props: {
+                  iconName: "cloud_download",
+                  style: {
+                    marginTop: "7px",
+                    marginRight: "8px"
+                  }
+                },
+                onClick: {
+                  action: "condition",
+                  callBack: () => {
+                    generatePdfAndDownload(
+                      state,
+                      dispatch,
+                      "download",
+                      applicationNumber,
+                      tenant,
+                      reporturl
+                    );
+                  }
+                }
+              },
+              div2: getLabel({
+                labelName: "Scrutiny Report",
+                labelKey: "EDCR_SCUTINY_REPORT"
+              })
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: () => {
+                generatePdfAndDownload(
+                  state,
+                  dispatch,
+                  "download",
+                  applicationNumber,
+                  tenant,
+                  reporturl
+                );
+              }
+            }
+          },
+          PrintFormButton: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+              div1: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
+
+                props: {
+                  iconName: "local_printshop",
+                  style: {
+                    marginTop: "7px",
+                    marginRight: "8px",
+                    marginLeft: "10px"
+                  }
+                },
+                onClick: {
+                  action: "condition",
+                  callBack: () => {
+                    generatePdfAndDownload(
+                      state,
+                      dispatch,
+                      "print",
+                      applicationNumber,
+                      tenant,
+                      reporturl,
+                    );
+                  }
+                }
+              },
+              div2: getLabel({
+                labelName: "Scrutiny Report",
+                labelKey: "EDCR_SCUTINY_REPORT"
+              })
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: () => {
+                generatePdfAndDownload(
+                  state,
+                  dispatch,
+                  "print",
+                  applicationNumber,
+                  tenant,
+                  reporturl,
+                );
+              }
+            }
+          }
+        },
+        props: {
+          style: {
+            display: "flex"
+          }
+        }
+      },
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"
