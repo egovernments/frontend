@@ -85,119 +85,29 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
   try {
     let payload = get(
       state.screenConfiguration.preparedFinalObject,
-      "BPAs[0]",
+      "BPA",
       []
     );
     let tenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+      "citiesByModule.citizenTenantId",
       getTenantId()
     );
-    set(payload[0], "tenantId", tenantId);
-    set(payload[0], "fireNOCDetails.action", status);
+    // set(payload[0], "tenantId", tenantId);
+    // set(payload[0], "fireNOCDetails.action", status);
+    payload.tenantId = tenantId;
 
     // Get uploaded documents from redux
     let reduxDocuments = get(
       state,
-      "screenConfiguration.preparedFinalObject.documentsUploadRedux",
+      "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
       {}
     );
-
-    handleDeletedCards(payload[0], "fireNOCDetails.buildings", "id");
     handleDeletedCards(
       payload[0],
-      "fireNOCDetails.applicantDetails.owners",
+      "BPA.owners",
       "id"
     );
-
-    let buildings = get(payload, "[0].fireNOCDetails.buildings", []);
-    buildings.forEach((building, index) => {
-      // GET UOMS FOR THE SELECTED BUILDING TYPE
-      let requiredUoms = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
-        []
-      ).filter(buildingType => {
-        return buildingType.code === building.usageType;
-      });
-      requiredUoms = get(requiredUoms, "[0].uom", []);
-      // GET UNIQUE UOMS LIST INCLUDING THE DEFAULT
-      let allUoms = [
-        ...new Set([
-          ...requiredUoms,
-          ...[
-            "NO_OF_FLOORS",
-            "NO_OF_BASEMENTS",
-            "PLOT_SIZE",
-            "BUILTUP_AREA",
-            "HEIGHT_OF_BUILDING"
-          ]
-        ])
-      ];
-      let finalUoms = [];
-      allUoms.forEach(uom => {
-        let value = get(building.uomsMap, uom);
-        value &&
-          finalUoms.push({
-            code: uom,
-            value: parseInt(value),
-            isActiveUom: requiredUoms.includes(uom) ? true : false,
-            active: true
-          });
-      });
-
-      // Quick fix to repair old uoms
-      let oldUoms = get(
-        payload[0],
-        `fireNOCDetails.buildings[${index}].uoms`,
-        []
-      );
-      oldUoms.forEach((oldUom, oldUomIndex) => {
-        set(
-          payload[0],
-          `fireNOCDetails.buildings[${index}].uoms[${oldUomIndex}].isActiveUom`,
-          false
-        );
-        set(
-          payload[0],
-          `fireNOCDetails.buildings[${index}].uoms[${oldUomIndex}].active`,
-          false
-        );
-      });
-      // End Quick Fix
-
-      set(payload[0], `fireNOCDetails.buildings[${index}].uoms`, [
-        ...finalUoms,
-        ...oldUoms
-      ]);
-
-      // Set building documents
-      let uploadedDocs = [];
-      jp.query(reduxDocuments, "$.*").forEach(doc => {
-        if (doc.documents && doc.documents.length > 0) {
-          if (
-            doc.documentSubCode &&
-            doc.documentSubCode.startsWith("BUILDING.BUILDING_PLAN")
-          ) {
-            if (doc.documentCode === building.name) {
-              uploadedDocs = [
-                ...uploadedDocs,
-                {
-                  tenantId: tenantId,
-                  documentType: doc.documentSubCode,
-                  fileStoreId: doc.documents[0].fileStoreId
-                }
-              ];
-            }
-          }
-        }
-      });
-      set(
-        payload[0],
-        `fireNOCDetails.buildings[${index}].applicationDocuments`,
-        uploadedDocs
-      );
-    });
 
     // Set owners & other documents
     let ownerDocuments = [];
@@ -231,27 +141,27 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 
     set(
       payload[0],
-      "fireNOCDetails.applicantDetails.additionalDetail.documents",
+      "BPA.additionalDetail.documents",
       ownerDocuments
     );
     set(
       payload[0],
-      "fireNOCDetails.additionalDetail.documents",
+      "BPA.additionalDetail.documents",
       otherDocuments
     );
 
     // Set Channel and Financial Year
     process.env.REACT_APP_NAME === "Citizen"
-      ? set(payload[0], "fireNOCDetails.channel", "CITIZEN")
-      : set(payload[0], "fireNOCDetails.channel", "COUNTER");
-    set(payload[0], "fireNOCDetails.financialYear", "2019-20");
+      ? set(payload[0], "bpaDetails.channel", "CITIZEN")
+      : set(payload[0], "bpaDetails.channel", "COUNTER");
+    set(payload[0], "bpaDetails.financialYear", "2019-20");
 
     // Set Dates to Epoch
-    let owners = get(payload[0], "fireNOCDetails.applicantDetails.owners", []);
+    let owners = get(payload[0], "BPA.owners", []);
     owners.forEach((owner, index) => {
       set(
         payload[0],
-        `fireNOCDetails.applicantDetails.owners[${index}].dob`,
+        `BPA.owners[${index}].dob`,
         convertDateToEpoch(get(owner, "dob"))
       );
     });
@@ -260,26 +170,25 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     if (method === "CREATE") {
       // response = await httpRequest(
       //   "post",
-      //   "/firenoc-services/v1/_create",
+      //   "/bpa/appl/_create",
       //   "",
       //   [],
-      //   { FireNOCs: payload }
+      //   { BPA : payload }
       // );
       // response = furnishNocResponse(response);
-      // dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+      // dispatch(prepareFinalObject("BPA", response.BPA));
       // setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "/firenoc-services/v1/_update",
+        "/bpa/appl/_update",
         "",
         [],
-        { FireNOCs: payload }
+        { BPA: payload }
       );
       response = furnishNocResponse(response);
-      dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+      dispatch(prepareFinalObject("BPA", response.BPA));
     }
-
     return { status: "success", message: response };
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -311,7 +220,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
   let documentsList = [];
   documents.forEach(doc => {
-    let code = doc.code;
+    let code = doc.code.split(".")[0];
     doc.dropDownValues = [];
     documentsDropDownValues.forEach(value => {
       if (code === value.code.split(".")[0]) {

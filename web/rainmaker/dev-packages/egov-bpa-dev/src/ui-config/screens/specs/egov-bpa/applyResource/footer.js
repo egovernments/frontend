@@ -94,24 +94,48 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId,
+      tenantId: 'pb',
       moduleDetails: [
-        { 
-          moduleName: "BPA", 
-          masterDetails: [{ name: "Documents" }] }
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "DocumentType"
+            },
+            {
+              name: "OwnerType"
+            },
+            {
+              name: "OwnerShipCategory"
+            }
+          ]
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [
+            {
+              name: "DocTypeMapping"
+            },
+            {
+              name: "ApplicationType"
+            },
+            {
+              name: "ServiceType"
+            }
+          ]
+        }
       ]
     }
   };
   try {
-    let payload = mdmsMockJson;
-    // let payload = await httpRequest(
-    //   "post",
-    //   "/egov-mdms-service/v1/_search",
-    //   "_search",
-    //   [],
-    //   mdmsBody
-    // );
-
+    // let payload = mdmsMockJson;
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData",
@@ -367,10 +391,10 @@ const callBackForNext = async (state, dispatch) => {
     if (isFormValid) {
       let responseStatus = "success";
       if (activeStep === 3) {
-        prepareDocumentsUploadData(state, dispatch);
+        // getMdmsData(state, dispatch);
+        // prepareDocumentsUploadData(state, dispatch);
       }
       if (activeStep === 2) {
-        getMdmsData(state, dispatch);
         let response = await createUpdateNocApplication(
           state,
           dispatch,

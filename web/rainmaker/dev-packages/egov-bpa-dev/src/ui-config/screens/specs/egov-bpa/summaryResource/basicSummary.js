@@ -73,7 +73,7 @@ export const basicSummary = getCommonGrayCard({
               labelKey: "Building plan scrutiny number"
             },
             {
-              jsonPath: "BPAs[0].BPADetails.basicdetails.scrutinynumber",
+              jsonPath: "BPA.edcrNumber",
               callBack: value => {
                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
               }
@@ -86,7 +86,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPAs[0].BPADetails.basicdetails.occupancy",
+                "BPA.occupancy",
               callBack: value => {
                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
               }
@@ -99,7 +99,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPAs[0].BPADetails.basicdetails.apptype"
+                "BPA.applicationType"
             }
           ),
           servicetype: getLabelWithValue(
@@ -108,7 +108,7 @@ export const basicSummary = getCommonGrayCard({
               labelKey: "Service Type"
             },
             {
-              jsonPath: "BPAs[0].BPADetails.basicdetails.servicetype"
+              jsonPath: "BPA.serviceType"
             }
           ),
           applicationdate: getLabelWithValue(
@@ -118,7 +118,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPAs[0].BPADetails.basicdetails.appdate"
+                "BPA.appdate"
             }
           ),
           applicationFee: getLabelWithValue(
@@ -128,7 +128,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPAs[0].BPADetails.basicdetails.appfee"
+                "BPA.appfee"
             }
           ),
           remarks: getLabelWithValue(
@@ -138,7 +138,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPAs[0].BPADetails.basicdetails.remarks"
+                "BPA.remarks"
             }
           )
         })

@@ -25,7 +25,6 @@ class CheckboxLabels extends React.Component {
 
   handleChange = name => event => {
     const { jsonPath, approveCheck } = this.props;
-    console.log(this.props);
     this.setState({ [name]: event.target.checked }, () =>
       approveCheck(jsonPath, this.state.checkedG)
     );

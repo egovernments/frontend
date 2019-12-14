@@ -40,7 +40,7 @@ export const basicDetails = getCommonCard({
       infoIcon: "info_circle",
       pattern: "^[a-zA-Z0-9]*$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "BPAs[0].BPADetails.basicdetails.scrutinynumber",
+      jsonPath: "BPA.edcrNumber",
       iconObj: {
         iconName: "search",
         position: "end",
@@ -64,7 +64,8 @@ export const basicDetails = getCommonCard({
         labelKey: "Occupancy"
       },
       required: true,
-      jsonPath : 'BPAs[0].BPADetails.basicdetails.occupancy',
+      jsonPath: 'BPA.occupancy',
+      jsonPath : 'BPA.occupancy',
       // jsonPath:
       //   "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy",
       gridDefination: {
@@ -89,7 +90,7 @@ export const basicDetails = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
-      jsonPath: "BPAs[0].BPADetails.basicdetails.apptype",
+      jsonPath: "BPA.applicationType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
       required: true,
       gridDefination: {
@@ -111,7 +112,7 @@ export const basicDetails = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
-      jsonPath: "BPAs[0].BPADetails.basicdetails.riskType",
+      jsonPath: "BPA.riskType",
       required: true,
       gridDefination: {
         xs: 12,
@@ -135,7 +136,7 @@ export const basicDetails = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
-      jsonPath: "BPAs[0].BPADetails.basicdetails.servicetype",
+      jsonPath: "BPA.serviceType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
       gridDefination: {
         xs: 12,
@@ -149,7 +150,7 @@ export const basicDetails = getCommonCard({
         labelKey: "Application Date"
       },
       // required: true,
-      jsonPath: "BPAs[0].BPADetails.basicdetails.appdate",
+      jsonPath: "BPA.appdate",
       // jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.applicationDate",
       props: {
         defaultValue: getTodaysDateInYMD(),
@@ -172,7 +173,7 @@ export const basicDetails = getCommonCard({
         labelName: "Application Fee",
         labelKey: "Application Fee"
       },
-      jsonPath: "BPAs[0].BPADetails.basicdetails.appfee",
+      jsonPath: "BPA.appfee",
       value: 1000,
       props: {
         value: 100,
@@ -193,7 +194,7 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Remarks Here",
         labelKey: "Enter Remarks Here"
       },
-      jsonPath: "BPAs[0].BPADetails.basicdetails.remarks",
+      jsonPath: "BPA.remarks",
       props: {
         multiline: true,
         rows: "4"

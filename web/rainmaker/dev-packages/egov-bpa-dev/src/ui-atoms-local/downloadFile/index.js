@@ -2,14 +2,33 @@ import React from "react";
 import { connect } from "react-redux";
 //import "./index.css";
 import get from "lodash/get";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = {
+  root: {
+    color: 'rgba(0, 0, 0, 0.54)',
+    fontSize: '0.75rem',
+    fontWeight: 400,
+    lineHeight: '1.375em',
+  },
+  linkDetails : {
+    // color: 'rgba(0, 0, 0, 0.87)',
+    fontSize: '16px',
+    fontWeight: 400,
+    fontFamily: 'Roboto',
+    lineHeight: '19px',
+    letterSpacing: '0.67px',
+    textDecoration : 'none'
+  }
+};
 
 class downloadFile extends React.Component {
   render() {
-    const { label, linkDetail, value } = this.props;
+    const { label, linkDetail, value, classes } = this.props;
     return (
       <div>
-        <div className="fileDownload-label">{label}</div>
-        <a className="fileDownload-body" href={value} target="_blank">
+        <div className={classes.root}>{label}</div>
+        <a className={classes.linkDetails} href={value} target="_blank">
           {linkDetail}
         </a>
       </div>
@@ -26,4 +45,4 @@ const mapStateToProps = (state, ownprops) => {
   return { value: fieldValue };
 };
 
-export default connect(mapStateToProps)(downloadFile);
+export default withStyles(styles)(connect(mapStateToProps)(downloadFile));

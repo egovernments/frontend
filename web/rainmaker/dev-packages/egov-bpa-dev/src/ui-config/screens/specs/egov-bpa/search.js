@@ -5,7 +5,7 @@ import {
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { BPAApplication } from "./searchResource/fireNocApplication";
-import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
+import { showHideAdhocPopup, resetFields } from "../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchResults } from "./searchResource/searchResults";
@@ -77,18 +77,18 @@ const NOCSearchAndResult = {
         )
       );
     }
-    getRequiredDocData(action, state, dispatch).then(() => {
-      let documents = get(
-        state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.BPA.Documents",
-        []
-      );
-      set(
-        action,
-        "screenConfig.components.adhocDialog.children.popup",
-        // getRequiredDocuments(documents)
-      );
-    });
+    // getRequiredDocData(action, state, dispatch).then(() => {
+    //   let documents = get(
+    //     state,
+    //     "screenConfiguration.preparedFinalObject.searchScreenMdmsData.BPA.Documents",
+    //     []
+    //   );
+    //   set(
+    //     action,
+    //     "screenConfig.components.adhocDialog.children.popup",
+    //     // getRequiredDocuments(documents)
+    //   );
+    // });
     //for city module
     fetchData(action, state, dispatch);
     return action;

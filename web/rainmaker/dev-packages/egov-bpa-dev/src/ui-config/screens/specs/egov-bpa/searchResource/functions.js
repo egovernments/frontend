@@ -15,8 +15,6 @@ export const searchApiCall = async (state, dispatch) => {
       key: "tenantId",
       value: getTenantId()
     }
-    // { key: "limit", value: "10" },
-    // { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,

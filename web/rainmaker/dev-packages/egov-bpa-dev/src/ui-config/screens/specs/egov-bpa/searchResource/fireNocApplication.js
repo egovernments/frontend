@@ -209,22 +209,13 @@ export const BPAApplication = getCommonCard({
       },
       data: [
         {
-          code: "INITIATED"
+          code: "HiGH"
         },
         {
-          code: "APPLIED"
+          code: "MEDIUM"
         },
         {
-          code: "PAID"
-        },
-        {
-          code: "APPROVED"
-        },
-        {
-          code: "REJECTED"
-        },
-        {
-          code: "CANCELLED"
+          code: "LOW"
         }
       ]
     }),
@@ -345,25 +336,6 @@ export const BPAApplication = getCommonCard({
       jsonPath: "searchScreen.mobileNumber",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
     }),
-
-    // tenantID: getTextField({
-    //   label: {
-    //     labelName: "Tenant ID",
-    //     labelKey: "Tenant ID"
-    //   },
-    //   placeholder: {
-    //     labelName: "Enter Tenant ID",
-    //     labelKey: "Enter Tenant ID"
-    //   },
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 4
-    //   },
-    //   required: true,
-    //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-    //   jsonPath: "searchScreen.fireNOCNumber"
-    // }),
-
   }),
 
 
@@ -403,7 +375,6 @@ export const BPAApplication = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 6
-          // align: "center"
         },
         props: {
           variant: "contained",

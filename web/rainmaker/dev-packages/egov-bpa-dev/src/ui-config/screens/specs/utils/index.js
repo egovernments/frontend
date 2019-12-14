@@ -295,7 +295,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const ownerNo = get(
       state.screenConfiguration.preparedFinalObject,
-      `BPAs[0].BPADetails.applicantDetails.owners[${cardIndex}].mobileNumber`,
+      `BPA.owners[${cardIndex}].mobileNumber`,
       ""
     );
     if (!ownerNo.match(getPattern("MobileNo"))) {
@@ -313,13 +313,13 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
     }
     const owners = get(
       state.screenConfiguration.preparedFinalObject,
-      `BPAs[0].BPADetails.applicantDetails.owners`,
+      `BPA.owners`,
       []
     );
     //owners from search call before modification.
     const oldOwnersArr = get(
       state.screenConfiguration.preparedFinalObject,
-      "BPAs[0].BPADetails.applicantDetails.owners",
+      "BPA.owners",
       []
     );
     //Same no search on Same index
@@ -349,13 +349,13 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
         //rearrange
         dispatch(
           prepareFinalObject(
-            `BPAs[0].BPADetails.applicantDetails.owners[${matchingOwnerIndex}].userActive`,
+            `BPA.owners[${matchingOwnerIndex}].userActive`,
             true
           )
         );
         dispatch(
           prepareFinalObject(
-            `BPAs[0].BPADetails.applicantDetails.owners[${cardIndex}].userActive`,
+            `BPA.owners[${cardIndex}].userActive`,
             false
           )
         );
@@ -368,7 +368,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           owners.splice(cardIndex, 1);
           dispatch(
             prepareFinalObject(
-              `BPAs[0].BPADetails.applicantDetails.owners`,
+              `BPA.owners`,
               owners
             )
           );
@@ -426,14 +426,14 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           }
           let currOwnersArr = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPAs[0].BPADetails.applicantDetails.owners",
+            "BPA.owners",
             []
           );
 
           currOwnersArr[cardIndex] = userInfo;
           dispatch(
             prepareFinalObject(
-              `BPAs[0].BPADetails.applicantDetails.owners`,
+              `BPA.owners`,
               currOwnersArr
             )
           );
@@ -454,42 +454,42 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
 const freezeAppType = (state, dispatch) => {
   let apptype = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPAs[0].BPADetails.basicdetails.apptype"
+    "BPA.applicationType"
   );
   let scrutinyAppType = get(
     state.screenConfiguration.preparedFinalObject,
     'applyScreenMdmsData.BPA.ApplicationType[0].code'
   )
   if (!apptype) {
-    dispatch(prepareFinalObject("BPAs[0].BPADetails.basicdetails.apptype", scrutinyAppType));
+    dispatch(prepareFinalObject("BPA.applicationType", scrutinyAppType));
   }
 };
 
 const occupancy = (state, dispatch) => {
   let occupancy = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPAs[0].BPADetails.basicdetails.occupancy"
+    "BPAs.occupancy"
   );
   let scrutinyOccupancy = get(
     state.screenConfiguration.preparedFinalObject,
     'BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy'
   )
   if (!occupancy) {
-    dispatch(prepareFinalObject("BPAs[0].BPADetails.basicdetails.occupancy", scrutinyOccupancy));
+    dispatch(prepareFinalObject("BPA.occupancy", scrutinyOccupancy));
   }
 };
 
 const appDate = (state, dispatch) => {
   let appDate = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPAs[0].BPADetails.basicdetails.appdate"
+    "BPA.appdate"
   );
   let scrutinyAppDate = get(
     state.screenConfiguration.preparedFinalObject,
     "BPAs[0].BPADetails.scrutinyDetails.planDetail.applicationDate"
   )
   if (!appDate) {
-    dispatch(prepareFinalObject("BPAs[0].BPADetails.basicdetails.appdate", scrutinyAppDate));
+    dispatch(prepareFinalObject("BPA.appdate", scrutinyAppDate));
   }
 };
 
@@ -530,7 +530,7 @@ const riskType = (state, dispatch) => {
   }
   dispatch(
     prepareFinalObject(
-      "BPAs[0].BPADetails.basicdetails.riskType",
+      "BPA.riskType",
       scrutinyRiskType
     )
   );
@@ -541,7 +541,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const scrutinyNo = get(
       state.screenConfiguration.preparedFinalObject,
-      `BPAs[0].BPADetails.basicdetails.scrutinynumber`,
+      `BPA.edcrNumber`,
       ""
     );
     // const tenantId = get(
@@ -858,36 +858,36 @@ export const resetFields = (state, dispatch) => {
   );
 };
 
-export const getRequiredDocData = async (action, state, dispatch) => {
-  let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? "pb.amritsar" : getTenantId();
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
-        {
-          moduleName: "BPA",
-          masterDetails: [{ name: "Documents" }]
-        }
-      ]
-    }
-  };
-  try {
-    let payload = null;
-    payload = mdmsMockJson;
-    console.log(mdmsMockJson);
-    // payload = await httpRequest(
-    //   "post",
-    //   "/egov-mdms-service/v1/_search",
-    //   "_search",
-    //   [],
-    //   mdmsBody
-    // );
-    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-  } catch (e) {
-    console.log(e);
-  }
-};
+// export const getRequiredDocData = async (action, state, dispatch) => {
+//   let tenantId =
+//     process.env.REACT_APP_NAME === "Citizen" ? "pb.amritsar" : getTenantId();
+//   let mdmsBody = {
+//     MdmsCriteria: {
+//       tenantId: tenantId,
+//       moduleDetails: [
+//         {
+//           moduleName: "BPA",
+//           masterDetails: [{ name: "Documents" }]
+//         }
+//       ]
+//     }
+//   };
+//   try {
+//     let payload = null;
+//     payload = mdmsMockJson;
+//     console.log(mdmsMockJson);
+//     // payload = await httpRequest(
+//     //   "post",
+//     //   "/egov-mdms-service/v1/_search",
+//     //   "_search",
+//     //   [],
+//     //   mdmsBody
+//     // );
+//     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
