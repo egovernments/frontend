@@ -135,6 +135,13 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
             "_search",
             queryObject
         );
+        const dueResponse = await response.WaterConnection.map(item => {
+            const data = httpRequest(
+                "post",
+                `http://172.17.25.34:8081/billing-service-v1/bill/_fetchbill?consumerCode=${item.connectionNo}&tenantId=${item.property.tenantId}&businessService=WS`,
+                "",
+                // queryObject
+            );
 
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
@@ -173,7 +180,6 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
         );
     }
 };
-
 
 export const getConsumptionDetails = async queryObject => {
     try {
