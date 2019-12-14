@@ -78,6 +78,36 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
   }
 };
 
+export const getSearchResultsfromEDCRWithApplcationNo = async (applicationNumber, tenantId) => {
+  try {
+    const response = await axios.post(
+      `https://egov-dcr-galaxy.egovernments.org/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
+      {
+        RequestInfo: {
+          apiId: "1",
+          ver: "1",
+          ts: "01-01-2017 01:01:01",
+          action: "create",
+          did: "jh",
+          key: "",
+          msgId: "gfcfc",
+          correlationId: "wefiuweiuff897",
+          authToken: "",
+          userInfo: {
+            id: 1,
+            tenantId: "generic"
+          }
+        }
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 const scrutinizePlan = async (state, dispatch) => {
   try {
     dispatch(toggleSpinner());
