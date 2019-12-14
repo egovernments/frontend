@@ -97,30 +97,32 @@ function FeesEstimateCard(props) {
                     </Grid>
                     <Grid container> {
                         sortedArray.length > 0 && sortedArray.map(fee => {
-                            return (
-                                <Grid container >
-                                    <Grid item xs={4}>
-                                        <Typography variant="body2" >
-                                            <LabelContainer labelKey={fee.key} />
-                                        </Typography>
+                            if (fee !== undefined && fee.key !== undefined) {
+                                return (
+                                    <Grid container >
+                                        <Grid item xs={4}>
+                                            <Typography variant="body2" >
+                                                <LabelContainer labelKey={fee.key} />
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            <Tooltip title={fee.value}>
+                                                <Icon className={styles.toolTipIcon}>
+                                                    <i class="material-icons" style={{ fontSize: 18 }}>info_circle</i>
+                                                </Icon>
+                                            </Tooltip>
+                                        </Grid>
+                                        <Grid item xs={6}
+                                            align="right"
+                                            style={styles.taxStyles}
+                                            className="tl-application-table-total-value" >
+                                            <Typography variant="body2">
+                                                Rs {fee.amount}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={2}>
-                                        <Tooltip title={fee.value}>
-                                            <Icon className={styles.toolTipIcon}>
-                                                <i class="material-icons" style={{ fontSize: 18 }}>info_circle</i>
-                                            </Icon>
-                                        </Tooltip>
-                                    </Grid>
-                                    <Grid item xs={6}
-                                        align="right"
-                                        style={styles.taxStyles}
-                                        className="tl-application-table-total-value" >
-                                        <Typography variant="body2">
-                                            Rs {fee.amount}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            )
+                                )
+                            }
                         })
                     }
                     </Grid>

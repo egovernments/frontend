@@ -1,6 +1,8 @@
 import React from "react";
 import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
 import { Link } from "react-router-dom"
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import "./index.css"
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -43,7 +45,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, data) => {
-            if (data.rowData[4] > 0 && data.rowData[4] !== 0) {
+            if (data.rowData[5] > 0 && data.rowData[5] !== 0) {
               return (
                 // <Link
                 //   to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}
@@ -60,7 +62,7 @@ export const searchResults = {
                   />
                 </div>
               )
-            } else if (data.rowData[4] === 0) {
+            } else if (data.rowData[5] === 0) {
               return (
                 <div style={{ color: '#008000', textTransform: 'uppercase', fontWeight: 400 }}>
                   Paid

@@ -132,7 +132,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
         const response = await httpRequest(
             "post",
             "/ws-services/wc/_search",
-            "",
+            "_search",
             queryObject
         );
 
@@ -142,7 +142,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
                     const data = await httpRequest(
                         "post",
                         `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
-                        "",
+                        "_fetchbill",
                         // queryObject
                     );
                     if (data && data !== undefined) {
@@ -180,7 +180,7 @@ export const getConsumptionDetails = async queryObject => {
         const response = await httpRequest(
             "post",
             "/ws-calculator/meterConnection/_search",
-            "",
+            "_search",
             queryObject
         );
         return response;
