@@ -64,53 +64,44 @@ export const searchApiCall = async (state, dispatch) => {
     let tenantId = get(state, "screenConfiguration.preparedFinalObject.searchScreen.tenantId");
     let getSearchResult = getSearchResults(queryObject)
     let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject)
-    Promise.all([getSearchResult, getSearchResultForSewerage]).then(response => {
-      if (response[0] !== undefined && response[0] !== null && response[0].WaterConnection.length > 0) {
-        for (let i = 0; i < response[0].WaterConnection.length; i++) {
-          let element = response[0].WaterConnection[i]
-          element.service = "WATER"
-          let queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: response[0].WaterConnection[i].connectionNo }, { key: "businessService", value: "WS" }];
-          fetchBill(queryObjectForWaterFetchBill).then(resp => {
-            if (resp !== undefined && resp !== null && resp.Bill.length > 0) {
-              for (let j = 0; j < resp.Bill.length; j++) {
-                response[0].WaterConnection[i]['due'] = resp.Bill[j]['totalAmount']
-                response[0].WaterConnection[i]['dueDate'] = resp.Bill[j].billDetails[0]['expiryDate']
-              }
-              dispatch(prepareFinalObject("connectionsToRender", response[0].WaterConnection))
+    try {
+      let searchWaterConnectionResults = await getSearchResult
+      let searcSewerageConnectionResults = await getSearchResultForSewerage
+      const waterConnections = searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e });
+      const sewerageConnections = searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e });
+      let combinedSearchResults = searchWaterConnectionResults && searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
+      let finalArray = [];
+      for (let i = 0; i < combinedSearchResults.length; i++) {
+        let element = combinedSearchResults[i];
+        let queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
+        let billResults = await fetchBill(queryObjectForWaterFetchBill)
+        try {
+          billResults ? billResults.Bill.map(bill => {
+            let obj = {
+              due: bill.totalAmount,
+              dueDate: bill.billDetails[0].expiryDate,
+              service: element.service,
+              connectionNo: element.connectionNo,
+              name: element.property.owners[0].name,
+              status: element.status,
+              address: element.property.address.street,
+              tenantId: tenantId
             }
-          }, err => { console.log(err) }).catch(error => { console.log(error) })
-        }
-        dispatch(prepareFinalObject("connectionsToRender", response[0].WaterConnection))
-      } else {
-        dispatch(prepareFinalObject("connectionsToRender", []))
+            finalArray.push(obj)
+          }) : finalArray.push({
+            due: ' ',
+            dueDate: ' ',
+            service: element.service,
+            connectionNo: element.connectionNo,
+            name: element.property.owners[0].name,
+            status: element.status,
+            address: element.property.address.street,
+            tenantId: tenantId
+          })
+        } catch (e) { console.error(e) }
       }
-      if (response[1] !== undefined && response[1] !== null && response[1].SewerageConnections.length > 0) {
-        for (let i = 0; i < response[1].SewerageConnections.length; i++) {
-          let element = response[1].SewerageConnections[i]
-          element.service = "SEWERAGE";
-          let queryObjectForSewerageFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
-          fetchBill(queryObjectForSewerageFetchBill).then(billData => {
-            if (billData !== undefined && billData !== null && billData.Bill.length > 0) {
-              for (let j = 0; j < billData.Bill.length; j++) {
-                element['due'] = billData.Bill[j].totalAmount
-                element['dueDate'] = billData.Bill[j].billDetails.length > 0 ? billData.Bill[j].billDetails[0].expiryDate : " "
-              }
-            }
-            let connectionsSewerage = get(state, "screenConfiguration.preparedFinalObject.connectionsToRenderSewerage")
-            let connectionsWater = get(state, "screenConfiguration.preparedFinalObject.connectionsToRender")
-            let finalArray = connectionsWater.concat(connectionsSewerage)
-            showResults(finalArray, dispatch, tenantId)
-          }, err => { console.log(err) }).catch(error => { console.log(error) })
-        }
-        dispatch(prepareFinalObject("connectionsToRenderSewerage", response[1].SewerageConnections))
-      } else {
-        dispatch(prepareFinalObject("connectionsToRenderSewerage", []))
-        let connectionsSewerage = get(state, "screenConfiguration.preparedFinalObject.connectionsToRenderSewerage")
-        let connectionsWater = get(state, "screenConfiguration.preparedFinalObject.connectionsToRender")
-        let finalArray = connectionsWater.concat(connectionsSewerage)
-        showResults(finalArray, dispatch, tenantId)
-      }
-    }, err => { console.log(err) }).catch(error => console.log(error))
+      showResults(finalArray, dispatch, tenantId)
+    } catch (e) { console.error(e) }
   }
 }
 const showHideTable = (booleanHideOrShow, dispatch) => {
@@ -125,30 +116,27 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
 };
 
 const showResults = (connections, dispatch, tenantId) => {
-  if (connections !== undefined && connections !== null) {
-    let data = connections.map(item => ({
-      [getTextToLocalMapping("Service")]: item.service || "-",
-      [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
-      [getTextToLocalMapping("Owner Name")]:
-        (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : " " || " ",
-      [getTextToLocalMapping("Status")]: item.status || "-",
-      [getTextToLocalMapping("Due")]: item.due || 0,
-      [getTextToLocalMapping("Address")]: item.property.address.street || "-",
-      [getTextToLocalMapping("Due Date")]: item.dueDate !== undefined ? convertEpochToDate(item.dueDate) : " " || " ",
-      ["tenantId"]: tenantId
-    }));
+  let data = connections.map(item => ({
+    [getTextToLocalMapping("Service")]: item.service || "-",
+    [getTextToLocalMapping("Consumer No")]: item.connectionNo || "-",
+    [getTextToLocalMapping("Owner Name")]: item.name !== undefined ? item.name : " " || " ",
+    [getTextToLocalMapping("Status")]: item.status || "-",
+    [getTextToLocalMapping("Due")]: (item.due !== undefined || item.due !== null) ? item.due : " " || " ",
+    [getTextToLocalMapping("Address")]: item.address || "-",
+    [getTextToLocalMapping("Due Date")]: (item.dueDate !== undefined && item.dueDate !== ' ') ? convertEpochToDate(item.dueDate) : " " || " ",
+    ["tenantId"]: tenantId
+  }))
 
-    dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
-    dispatch(
-      handleField(
-        "search",
-        "components.div.children.searchResults",
-        "props.title",
-        `${getTextToLocalMapping(
-          "Search Results for Water & Sewerage Connections"
-        )} (${connections.length})`
-      )
-    );
-    showHideTable(true, dispatch);
-  }
+  dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.searchResults",
+      "props.title",
+      `${getTextToLocalMapping(
+        "Search Results for Water & Sewerage Connections"
+      )} (${connections.length})`
+    )
+  );
+  showHideTable(true, dispatch);
 }

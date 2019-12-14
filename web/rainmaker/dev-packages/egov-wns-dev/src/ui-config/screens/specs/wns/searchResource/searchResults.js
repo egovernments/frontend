@@ -80,7 +80,7 @@ export const searchResults = {
               )
             } else if (data.rowData[4] === 0) {
               return (
-                <div style={{ color: '#008000', textTransform: 'uppercase', fontWeight: 400 }}>
+                <div style={{ textTransform: 'uppercase' }}>
                   Paid
                 </div>
               )

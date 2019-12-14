@@ -74,7 +74,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNumber }];
   if (service === "SEWERAGE") {
     let payloadData = await getSearchResultsForSewerage(queryObject);
-    if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
+    if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
       payloadData.SewerageConnections[0].service = service;
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]));
     }
