@@ -51,75 +51,68 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-  }
-  try {
-    let response = await getSearchResults(queryObject);
-    // let sewerageResponse = await getSearchResultsForSewerage(queryObject)
-    // if (sewerageResponse !== undefined && sewerageResponse !== null && sewerageResponse.SewerageConnections.length > 0) {
-    //   sewerageResponse.SewerageConnections.forEach(async element => {
-    //     renderSewerage = 1;
-    //     element.service = "SEWERAGE";
-    //     let queryObjectForSewerageFetchBill = [
-    //       { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId },
-    //       { key: "consumerCode", value: element.connectionNo },
-    //       { key: "businessService", value: "SW" }
-    //     ];
-    //     let billData = await fetchBill(queryObjectForSewerageFetchBill);
-    //     if (billData !== undefined && billData !== null && billData.Bill.length > 0) {
-    //       element['due'] = billData.Bill[0].totalAmount;
-    //       element['dueDate'] = billData.Bill[0].billDetails.length > 0 ? billData.Bill[0].billDetails[0].expiryDate : " ";
-    //     }
-    //   });
-    // }
-    if (response !== undefined && response !== null) {
-      if (response.WaterConnection.length > 0) {
-        response.WaterConnection.forEach(async element => {
-          element.service = "WATER";
-          let queryObjectForWaterFetchBill = [
-            { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId },
-            { key: "consumerCode", value: element.connectionNo },
-            { key: "businessService", value: "WS" }
-          ];
-          let billData = await fetchBill(queryObjectForWaterFetchBill);
-          if (billData !== undefined && billData !== null && billData.Bill.length > 0) {
-            element['due'] = billData.Bill[0]['totalAmount'];
-            element['dueDate'] = billData.Bill[0].billDetails[0]['expiryDate'];
-          }
-          dispatch(prepareFinalObject("connectionsToRender", response.WaterConnection));
-        });
-        // if (sewerageResponse !== undefined && sewerageResponse !== null && sewerageResponse.SewerageConnections.length > 0) {
-        //   sewerageResponse.SewerageConnections.forEach(element => response.WaterConnection.push(element))
-        //   dispatch(prepareFinalObject("connectionsToRender", response.WaterConnection));
-        // }
+    let getSearchResult = getSearchResults(queryObject)
+    let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject)
+    try {
+      let searchWaterConnectionResults = await getSearchResult
+      let searcSewerageConnectionResults = await getSearchResultForSewerage
+      const waterConnections = searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e });
+      const sewerageConnections = searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e });
+      let combinedSearchResults = searchWaterConnectionResults && searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
+      let finalArray = [];
+      for (let i = 0; i < combinedSearchResults.length; i++) {
+        let element = combinedSearchResults[i];
+        let queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
+        let billResults = await fetchBill(queryObjectForWaterFetchBill)
+        try {
+          billResults ? billResults.Bill.map(bill => {
+            let obj = {
+              due: bill.totalAmount,
+              dueDate: bill.billDetails[0].expiryDate,
+              service: element.service,
+              connectionNo: element.connectionNo,
+              name: element.property.owners[0].name,
+              status: element.status,
+              address: element.property.address.street
+            }
+            finalArray.push(obj)
+          }) : finalArray.push({
+            due: ' ',
+            dueDate: ' ',
+            service: element.service,
+            connectionNo: element.connectionNo,
+            name: element.property.owners[0].name,
+            status: element.status,
+            address: element.property.address.street
+          })
+        } catch (e) { console.error(e) }
       }
-    }
-    const connections = get(state, "screenConfiguration.preparedFinalObject.connectionsToRender");
-    if (connections !== undefined && connections !== null && connections.length > 0) {
-      let data = connections.map(item => ({
-
-        [getTextToLocalMapping("Service")]: item.service,
-        [getTextToLocalMapping("Consumer No")]: item.connectionNo || " ",
-        [getTextToLocalMapping("Owner Name")]: (item.property.owners !== undefined && item.property.owners.length > 0) ? item.property.owners[0].name : " " || " ",
-        [getTextToLocalMapping("Status")]: item.status || " ",
-        [getTextToLocalMapping("Due")]: (item.due !== undefined || item.due !== null) ? item.due : " " || " ",
-        [getTextToLocalMapping("Address")]: item.property.address.street || " ",
-        [getTextToLocalMapping("Due Date")]: item.dueDate !== undefined ? convertEpochToDate(item.dueDate) : " " || " ",
-        ["tenantId"]: JSON.parse(getUserInfo()).tenantId
-      }));
-
-      dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
-      dispatch(handleField("search", "components.div.children.searchResults", "props.title",
-        `${getTextToLocalMapping(
-          "Search Results for Water & Sewerage Connections"
-        )} (${response.WaterConnection.length})`
-      ));
-      showHideTable(true, dispatch);
-    }
-  } catch (error) {
-    dispatch(toggleSnackbar(true, error.message, "error"));
+      showResults(finalArray, dispatch)
+    } catch (e) { console.error(e) }
   }
 }
-// };
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(handleField("search", "components.div.children.searchResults", "visible", booleanHideOrShow));
 };
+
+const showResults = (connections, dispatch) => {
+  let data = connections.map(item => ({
+
+    [getTextToLocalMapping("Service")]: item.service,
+    [getTextToLocalMapping("Consumer No")]: item.connectionNo || " ",
+    [getTextToLocalMapping("Owner Name")]: item.name !== undefined ? item.name : " " || " ",
+    [getTextToLocalMapping("Status")]: item.status || " ",
+    [getTextToLocalMapping("Due")]: (item.due !== undefined || item.due !== null) ? item.due : " " || " ",
+    [getTextToLocalMapping("Address")]: item.address || " ",
+    [getTextToLocalMapping("Due Date")]: (item.dueDate !== undefined && item.dueDate !== ' ') ? convertEpochToDate(item.dueDate) : " " || " ",
+    ["tenantId"]: JSON.parse(getUserInfo()).tenantId
+  }));
+
+  dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
+  dispatch(handleField("search", "components.div.children.searchResults", "props.title",
+    `${getTextToLocalMapping(
+      "Search Results for Water & Sewerage Connections"
+    )} (${connections.length})`
+  ));
+  showHideTable(true, dispatch);
+}

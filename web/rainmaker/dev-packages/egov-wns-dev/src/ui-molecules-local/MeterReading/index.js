@@ -167,6 +167,8 @@ class MeterReading extends React.Component {
             <div style={{
               display: "flex",
               width: "100%",
+              height:'50vh',
+              alignItems:'center',
               justifyContent: "center",
               textAlign: "center"
             }}>

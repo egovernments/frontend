@@ -8,10 +8,15 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 export const fetchData = async (action, state, dispatch) => {
     let queryObject = [
         {
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber
+        }, {
             key: "tenantId",
-            value: JSON.parse(getUserInfo()).tenantId
+            value: JSON.parse(getUserInfo()).permanentCity
         }]
-    const response = await getMyConnectionResults(queryObject);
+
+    const response = await getMyConnectionResults(queryObject,dispatch);
+
     // const billResponse = await getMyConnectionDueResults();
     try {
         /*Mseva 2.0 */

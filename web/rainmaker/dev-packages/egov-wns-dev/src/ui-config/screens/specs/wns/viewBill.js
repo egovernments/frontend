@@ -76,8 +76,8 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
     data = await fetchBill(queryObjectForFetchBill)
     let viewBillTooltip = []
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
-      if (payload.WaterConnection.length > 0 && data.Bill.length > 0) {
-        payload.WaterConnection[0].service = service
+      if (payload.SewerageConnections.length > 0 && data.Bill.length > 0) {
+        payload.SewerageConnections[0].service = service
         data.Bill[0].billDetails[0].billAccountDetails.forEach(async element => {
           /**
            * For displaying description of keys in bill details as tooltip
@@ -102,11 +102,11 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
          * For displaying consumption, current Meter Reading and Last Meter Reading
          */
         if (meterReadingsData !== null && meterReadingsData !== undefined && meterReadingsData.meterReadings.length > 0) {
-          payload.WaterConnection[0].consumption = meterReadingsData.meterReadings[0].currentReading - meterReadingsData.meterReadings[0].lastReading
-          payload.WaterConnection[0].currentMeterReading = meterReadingsData.meterReadings[0].currentReading
-          payload.WaterConnection[0].lastMeterReading = meterReadingsData.meterReadings[0].lastReading
+          payload.SewerageConnections[0].consumption = meterReadingsData.meterReadings[0].currentReading - meterReadingsData.meterReadings[0].lastReading
+          payload.SewerageConnections[0].currentMeterReading = meterReadingsData.meterReadings[0].currentReading
+          payload.SewerageConnections[0].lastMeterReading = meterReadingsData.meterReadings[0].lastReading
         }
-        dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+        dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
         dispatch(prepareFinalObject("consumptionDetails", meterReadingsData.meterReadings[0]))
       }
@@ -156,8 +156,6 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.consumerCode.props.number",
       consumerCode
     );
-    const queryObject = [{ key: "tenantId", value: tenantId }, { key: "businessService", value: "WS" }];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, consumerCode);
     return action;
   },

@@ -132,8 +132,8 @@ export const getOwnerDetails = (isEditable = true) => {
       props: {
         scheama: getCommonGrayCard({
           viewFive: getCommonContainer({
-            ownerName,
             ownerMobileNumber,
+            ownerName,
             gender,
             guardian,
             guardianName,
