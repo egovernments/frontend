@@ -88,9 +88,9 @@ const moveToReview = (state, dispatch) => {
 };
 
 const getMdmsData = async (state, dispatch) => {
-  let tenantId = get(
+  const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+    "citiesByModule.citizenTenantId.value"
   );
   let mdmsBody = {
     MdmsCriteria: {
@@ -352,7 +352,7 @@ const callBackForNext = async (state, dispatch) => {
               dispatch(
                 toggleSnackbar(
                   true,
-                  { labelName: "Please select type of Document!", labelKey: "" },
+                  { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
                   "warning"
                 )
               );
@@ -366,7 +366,7 @@ const callBackForNext = async (state, dispatch) => {
           dispatch(
             toggleSnackbar(
               true,
-              { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+              { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
               "warning"
             )
           );
@@ -633,7 +633,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "NOC_COMMON_BUTTON_PREV_STEP"
+        labelKey: "BPA_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -656,7 +656,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "NOC_COMMON_BUTTON_NXT_STEP"
+        labelKey: "BPA_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -685,7 +685,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "NOC_COMMON_BUTTON_SUBMIT"
+        labelKey: "BPA_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

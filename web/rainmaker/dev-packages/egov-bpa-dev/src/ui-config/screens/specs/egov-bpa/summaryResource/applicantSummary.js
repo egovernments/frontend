@@ -22,8 +22,8 @@ export const applicantSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Owner Info",
-          labelKey: "Owner Info"
+          labelName: "Owner Information",
+          labelKey: "BPA_OWNER_INFO_TITLE"
         })
       },
       editSection: {
@@ -49,7 +49,7 @@ export const applicantSummary = getCommonGrayCard({
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
+            labelKey: "BPA_SUMMARY_EDIT"
           })
         },
         onClickDefination: {
@@ -71,7 +71,7 @@ export const applicantSummary = getCommonGrayCard({
           mobileNo: getLabelWithValue(
             {
               labelName: "Mobile No.",
-              labelKey: "NOC_APPLICANT_MOBILE_NO_LABEL"
+              labelKey: "BPA_APPLICANT_MOBILE_NO_LABEL"
             },
             {
               jsonPath:
@@ -81,7 +81,7 @@ export const applicantSummary = getCommonGrayCard({
           applicantName: getLabelWithValue(
             {
               labelName: "Name",
-              labelKey: "NOC_APPLICANT_NAME_LABEL"
+              labelKey: "BPA_OWNER_NAME_LABEL"
             },
             {
               jsonPath: "BPA.owners[0].name"
@@ -90,7 +90,7 @@ export const applicantSummary = getCommonGrayCard({
           applicantGender: getLabelWithValue(
             {
               labelName: "Gender",
-              labelKey: "NOC_GENDER_LABEL"
+              labelKey: "BPA_GENDER_LABEL"
             },
             {
               jsonPath: "BPA.owners[0].gender"
@@ -99,7 +99,7 @@ export const applicantSummary = getCommonGrayCard({
           applicantFatherHusbandName: getLabelWithValue(
             {
               labelName: "Father/Husband's Name",
-              labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+              labelKey: "BPA_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
             },
             {
               jsonPath:
@@ -109,7 +109,7 @@ export const applicantSummary = getCommonGrayCard({
           applicantRelation: getLabelWithValue(
             {
               labelName: "Relationship",
-              labelKey: "NOC_APPLICANT_RELATIONSHIP_LABEL"
+              labelKey: "BPA_APPLICANT_RELATIONSHIP_LABEL"
             },
             {
               jsonPath:
@@ -119,7 +119,7 @@ export const applicantSummary = getCommonGrayCard({
           applicantDob: getLabelWithValue(
             {
               labelName: "Date of Birth",
-              labelKey: "NOC_APPLICANT_DOB_LABEL"
+              labelKey: "BPA_APPLICANT_DOB_LABEL"
             },
             {
               jsonPath: "BPA.owners[0].dob",
@@ -131,7 +131,7 @@ export const applicantSummary = getCommonGrayCard({
           applicantEmail: getLabelWithValue(
             {
               labelName: "Email",
-              labelKey: "NOC_APPLICANT_EMAIL_LABEL"
+              labelKey: "BPA_APPLICANT_EMAIL_LABEL"
             },
             {
               jsonPath: "BPA.owners[0].emailId"
@@ -139,8 +139,8 @@ export const applicantSummary = getCommonGrayCard({
           ),
           applicantPan: getLabelWithValue(
             {
-              labelName: "PAN",
-              labelKey: "NOC_APPLICANT_PAN_LABEL"
+              labelName: "PAN No.",
+              labelKey: "BPA_APPLICANT_PAN_LABEL"
             },
             {
               jsonPath: "BPA.owners[0].pan"
@@ -149,7 +149,7 @@ export const applicantSummary = getCommonGrayCard({
           applicantAddress: getLabelWithValue(
             {
               labelName: "Correspondence Address",
-              labelKey: "NOC_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
+              labelKey: "BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
             },
             {
               jsonPath:
@@ -184,7 +184,7 @@ export const institutionSummary = getCommonGrayCard({
         },
         ...getCommonSubHeader({
           labelName: "Institution Details",
-          labelKey: "NOC_INSTITUTION_DETAILS_HEADER"
+          labelKey: "BPA_INSTITUTION_DETAILS_HEADER"
         })
       },
       editSection: {
@@ -210,7 +210,7 @@ export const institutionSummary = getCommonGrayCard({
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
+            labelKey: "BPA_SUMMARY_EDIT"
           })
         },
         onClickDefination: {
@@ -226,7 +226,7 @@ export const institutionSummary = getCommonGrayCard({
     institutionType: getLabelWithValue(
       {
         labelName: "Institution Type",
-        labelKey: "NOC_INSTITUTION_TYPE_LABEL"
+        labelKey: "BPA_INSTITUTION_TYPE_LABEL"
       },
       {
         jsonPath: "BPA.ownerShipType",
@@ -240,7 +240,7 @@ export const institutionSummary = getCommonGrayCard({
     institutionName: getLabelWithValue(
       {
         labelName: "Name of Institution",
-        labelKey: "NOC_NAME_OF_INSTITUTION_LABEL"
+        labelKey: "BPA_NAME_OF_INSTITUTION_LABEL"
       },
       {
         jsonPath:
@@ -250,7 +250,7 @@ export const institutionSummary = getCommonGrayCard({
     telephoneNumber: getLabelWithValue(
       {
         labelName: "Official Telephone No.",
-        labelKey: "NOC_OFFICIAL_TELEPHONE_LABEL"
+        labelKey: "BPA_TELEPHONE_NUMBER_LABEL"
       },
       {
         jsonPath:
@@ -260,7 +260,7 @@ export const institutionSummary = getCommonGrayCard({
     authorizedPersonName: getLabelWithValue(
       {
         labelName: "Name of Authorized Person",
-        labelKey: "NOC_AUTHORIZED_PERSON_NAME_LABEL"
+        labelKey: "BPA_AUTHORIZED_PERSON_LABEL"
       },
       {
         jsonPath: "BPA.owners[0].name"
@@ -269,7 +269,7 @@ export const institutionSummary = getCommonGrayCard({
     designation: getLabelWithValue(
       {
         labelName: "Designation in Institution",
-        labelKey: "NOC_DESIGNATION_LABEL"
+        labelKey: "BPA_INSTITUTION_DESIGNATION_LABEL"
       },
       {
         jsonPath:
@@ -279,7 +279,7 @@ export const institutionSummary = getCommonGrayCard({
     mobileNumber: getLabelWithValue(
       {
         labelName: "Mobile No. of Authorized Person",
-        labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_LABEL"
+        labelKey: "BPA_AUTHORIZED_PERSON_MOBILE_LABEL"
       },
       {
         jsonPath: "BPA.owners[0].mobileNumber"
@@ -288,7 +288,7 @@ export const institutionSummary = getCommonGrayCard({
     authorizedEmail: getLabelWithValue(
       {
         labelName: "Email of Authorized Person",
-        labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_LABEL"
+        labelKey: "BPA_AUTHORIZED_PERSON_EMAIL_LABEL"
       },
       {
         jsonPath: "BPA.owners[0].emailId"
@@ -297,7 +297,7 @@ export const institutionSummary = getCommonGrayCard({
     officialAddress: getLabelWithValue(
       {
         labelName: "Official Correspondence Address",
-        labelKey: "NOC_OFFICIAL_CORRESPONDENCE_ADDRESS_LABEL"
+        labelKey: "BPA_OFFICIAL_CORRESPONDENCE_ADDRESS_LABEL"
       },
       {
         jsonPath:

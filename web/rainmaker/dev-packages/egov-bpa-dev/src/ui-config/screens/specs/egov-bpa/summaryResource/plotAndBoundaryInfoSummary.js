@@ -39,7 +39,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                 },
                 ...getCommonSubHeader({
                     labelName: "Plot & Boundary Details",
-                    labelKey: "Plot & Boundary Details"
+                    labelKey: "BPA_BOUNDARY_SUMMARY"
                 })
             },
             editSection: {
@@ -65,7 +65,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     },
                     buttonLabel: getLabel({
                         labelName: "Edit",
-                        labelKey: "NOC_SUMMARY_EDIT"
+                        labelKey: "BPA_SUMMARY_EDIT"
                     })
                 },
                 onClickDefination: {
@@ -79,7 +79,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
     },
     boundaryDetails: getHeader({
         labelName: "Boundary Details",
-        labelKey: "Boundary Details"
+        labelKey: "BPA_BOUNDARY_DETAILS_TITLE"
     }),
     break1: getBreak(),
     cardOne: {
@@ -92,7 +92,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     circle: getLabelWithValue(
                         {
                             labelName: "Circle",
-                            labelKey: "Circle"
+                            labelKey: "BPA_BOUNDARY_CIRCLE_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.boundarydetails.circle",
@@ -103,8 +103,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     ),
                     revenueward: getLabelWithValue(
                         {
-                            labelName: "revenueward",
-                            labelKey: "revenueward"
+                            labelName: "Revenue Ward",
+                            labelKey: "BPA_BOUNDARY_REVENUE_WARD_LABEL"
                         },
                         {
                             jsonPath:
@@ -116,7 +116,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+            sourceJsonPath: "BPAs[0].BPADetails.boundarydetails",
             prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
@@ -125,7 +125,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
     },
     DetailsOfPlot: getHeader({
         labelName: "Details Of Plot",
-        labelKey: "Details Of Plot"
+        labelKey: "BPA_BOUNDARY_PLOT_DETAILS_TITLE"
     }),
     break1: getBreak(),
     cardTwo: {
@@ -139,7 +139,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     plotArea: getLabelWithValue(
                         {
                             labelName: "Plot Area",
-                            labelKey: "Plot Area"
+                            labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.plotdetails.plotarea",
@@ -151,7 +151,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     kathaNumber: getLabelWithValue(
                         {
                             labelName: "Khata No.",
-                            labelKey: "Khata No."
+                            labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.plotdetails.kathanumber",
@@ -163,7 +163,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     holdingNumber: getLabelWithValue(
                         {
                             labelName: "Holding No.",
-                            labelKey: "Holding No."
+                            labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber",
@@ -175,7 +175,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     plotNo: getLabelWithValue(
                         {
                             labelName: "Plot No(MSP)",
-                            labelKey: "Plot No(MSP)"
+                            labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.plotdetails.plotnumber",
@@ -186,8 +186,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     ),
                     cityTown: getLabelWithValue(
                         {
-                            labelName: "cityTown",
-                            labelKey: "cityTown"
+                            labelName: "City/Town",
+                            labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
@@ -199,7 +199,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     landRegDetails: getLabelWithValue(
                         {
                             labelName: "Land Registration Details",
-                            labelKey: "Land Registration Details"
+                            labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails",
@@ -211,7 +211,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                     whetherGovOrQuasi: getLabelWithValue(
                         {
                             labelName: "Whether Government or Quasi Government",
-                            labelKey: "Whether Government or Quasi Government"
+                            labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi",
@@ -225,8 +225,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            //sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
-            prefixSourceJsonPath:
+            // sourceJsonPath: "BPAs[0].BPADetails.plotdetails",
+            prefixSourceJsonPath: 
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
         },

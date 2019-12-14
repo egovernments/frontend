@@ -14,7 +14,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Building Plan Scrutiny Application Details",
-      labelKey: "Building Plan Scrutiny Application Details"
+      labelKey: "BPA_APPLICATION_SCRUNITY_DETAILS_TITLE"
     },
     {
       style: {
@@ -26,7 +26,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
     buildingplanscrutinyapplicationnumber: getLabelWithValue(
       {
         labelName: "Building permit application Number",
-        labelKey: "Building permit application Number"
+        labelKey: "BPA_APPLICATION_BUILDING_PERMIT_NO_LABEL"
       },
       {
         jsonPath: "BPAs[0].BPADetails.scrutinyDetails.edcrNumber"
@@ -70,7 +70,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Block wise occupancy /sub occupancy and usage details",
-      labelKey: "Block wise occupancy /sub occupancy and usage details"
+      labelKey: "BPA_APPLICATION_BLOCK_WISE_OCCUPANCY_SUB_OCCUPANCY_USAGE_TITLE"
     },
     {
       style: {
@@ -82,7 +82,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
     header: getCommonSubHeader(
       {
         labelName: "Block 1",
-        labelKey: "Block 1"
+        labelKey: "BPA_APPLICATION_BLOCK1_LABEL"
       },
       {
         style: {
@@ -102,10 +102,10 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             width: "100%",
             cursor: "pointer"
           },
-          label: { labelName: "Residential", labelKey: "Residential" },
+          label: { labelName: "Residential", labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL" },
           placeholder: {
             labelName: "Select Occupancy",
-            labelKey: "Occupancy"
+            labelKey: "BPA_APPLICATION_OCCUPANCY_PLACEHOLDER"
           },
           jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
           // sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
@@ -147,7 +147,7 @@ export const demolitiondetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Demolition Details",
-      labelKey: "Demolition Details"
+      labelKey: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL"
     },
     {
       style: {
@@ -160,7 +160,7 @@ export const demolitiondetails = getCommonCard({
       ...getTextField({
         label: {
           labelName: "Demolition Area",
-          labelKey: "Demolition Area"
+          labelKey: "BPA_APPLICATION_DEMOLITION_AREA_LABEL"
         },
         jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.demolitionArea",
         props: {
@@ -175,7 +175,7 @@ export const proposedBuildingDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Proposed Building Details",
-      labelKey: "Proposed Building Details"
+      labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
     },
     {
       style: {
@@ -244,11 +244,7 @@ export const proposedBuildingDetails = getCommonCard({
           ...getTextField({
             label: {
               labelName: "Total Buildup Area (sq.mtrs)",
-              labelKey: "Total Buildup Area (sq.mtrs)"
-            },
-            placeholder: {
-              labelName: "Total Buildup Area (sq.mtrs)",
-              labelKey: "Total Buildup Area (sq.mtrs)"
+              labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
             },
             required: true,
             jsonPath:
@@ -267,11 +263,7 @@ export const proposedBuildingDetails = getCommonCard({
           ...getTextField({
             label: {
               labelName: "Number Of Floors",
-              labelKey: "Number Of Floors"
-            },
-            placeholder: {
-              labelName: "Number Of Floors",
-              labelKey: "Number Of Floors"
+              labelKey: "BPA_APPLICATION_NO_OF_FLOORS"
             },
             required: true,
             jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.totalFloors",
@@ -289,11 +281,7 @@ export const proposedBuildingDetails = getCommonCard({
           ...getTextField({
             label: {
               labelName: "High From Ground Level From Mumty (In Mtrs)",
-              labelKey: "High From Ground Level From Mumty (In Mtrs)"
-            },
-            placeholder: {
-              labelName: "High From Ground Level From Mumty (In Mtrs)",
-              labelKey: "High From Ground Level From Mumty (In Mtrs)"
+              labelKey: "BPA_APPLICATION_HIGH_FROM_GROUND"
             },
             required: true,
             jsonPath:

@@ -29,7 +29,7 @@ import { setResidentialList } from "../egov-bpa/searchResource/functions";
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "BPA - Application Summary",
-    labelKey: "BPA - Application Summary"
+    labelKey: "BPA_SUMMARY_HEADER"
   })
 });
 

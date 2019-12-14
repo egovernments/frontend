@@ -91,22 +91,22 @@ const resetFields = (state, dispatch) => {
 export const BPAApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search BPA Application",
-    labelKey: "Search BPA Application"
+    labelKey: "BPA_SEARCH_PAGE_TITLE"
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "Provide at least one parameter to search for an application"
+    labelKey: "BPA_SEARCH_PAGE_DESC"
   }),
   appBPAHomeSearchResultsContainer: getCommonContainer({
 
     applicationType: getSelectField({
       label: {
         labelName: "Application Type",
-        labelKey: "Application Type"
+        labelKey: "BPA_SEARCH_APPLICATION_TYPE_LABEL"
       },
       placeholder: {
         labelName: "Select Application Type",
-        labelKey: "Select Application Type"
+        labelKey: "BPA_SEARCH_APPLICATION_TYPE_PLACEHOLDER"
       },
 
       localePrefix: {
@@ -145,11 +145,11 @@ export const BPAApplication = getCommonCard({
     serviceType: getSelectField({
       label: {
         labelName: "Service type",
-        labelKey: "Service type"
+        labelKey: "BPA_SEARCH_RISK_TYPE_LABEL"
       },
       placeholder: {
         labelName: "Select Service type",
-        labelKey: "Select Service type"
+        labelKey: "BPA_SEARCH_SERVICE_TYPE_PLACEHOLDER"
       },
 
       localePrefix: {
@@ -189,11 +189,11 @@ export const BPAApplication = getCommonCard({
     riskType: getSelectField({
       label: {
         labelName: "Risk Type",
-        labelKey: "Risk Type"
+        labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
       },
       placeholder: {
         labelName: "Select Risk Type",
-        labelKey: "Select Risk Type"
+        labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_PLACEHOLDER"
       },
 
       localePrefix: {
@@ -223,11 +223,11 @@ export const BPAApplication = getCommonCard({
     applicationStatus: getSelectField({
       label: {
         labelName: "Application status",
-        labelKey: "Application status"
+        labelKey: "BPA_SEARCH_APPLICATION_STATUS_LABEL"
       },
       placeholder: {
         labelName: "Select Application Status",
-        labelKey: "Select Application Status"
+        labelKey: "BPA_SEARCH_APPLICATION_STATUS_PLACEHOLDER"
       },
 
       localePrefix: {
@@ -264,10 +264,10 @@ export const BPAApplication = getCommonCard({
     }),
 
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "From Date" },
+      label: { labelName: "From Date", labelKey: "BPA_SEARCH_FROM_DATE_LABEL" },
       placeholder: {
         labelName: "From Date",
-        labelKey: "BPA_FROM_DATE_PLACEHOLDER"
+        labelKey: "BPA_SEARCH_FROM_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.fromDate",
       gridDefination: {
@@ -280,10 +280,10 @@ export const BPAApplication = getCommonCard({
     }),
 
     toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "To Date" },
+      label: { labelName: "To Date", labelKey: "BPA_SEARCH_TO_DATE_LABEL" },
       placeholder: {
         labelName: "To Date",
-        labelKey: "BPA_TO_DATE_PLACEHOLDER"
+        labelKey: "BPA_SEARCH_TO_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.toDate",
       gridDefination: {
@@ -298,11 +298,11 @@ export const BPAApplication = getCommonCard({
     bpaNo: getTextField({
       label: {
         labelName: "Application number",
-        labelKey: "Application number"
+        labelKey: "BPA_SEARCH_APPLICATION_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Application number",
-        labelKey: "Enter Application number"
+        labelKey: "BPA_SEARCH_APPLICATION_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -317,11 +317,11 @@ export const BPAApplication = getCommonCard({
     ownerMobNo: getTextField({
       label: {
         labelName: "Mobile Number",
-        labelKey: "Mobile Number"
+        labelKey: "BPA_SEARCH_MOBILE_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter your mobile No.",
-        labelKey: "Enter your mobile No"
+        labelKey: "BPA_SEARCH_MOBILE_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -362,7 +362,7 @@ export const BPAApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Reset",
-            labelKey: "NOC_HOME_SEARCH_RESET_BUTTON"
+            labelKey: "BPA_RESET_BUTTON"
           })
         },
         onClickDefination: {
@@ -390,7 +390,7 @@ export const BPAApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "NOC_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "BPA_SEARCH_BUTTON"
           })
         },
         onClickDefination: {

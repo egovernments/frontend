@@ -22,7 +22,7 @@ export const basicSummary = getCommonGrayCard({
         },
         ...getCommonSubHeader({
           labelName: "Basic Details",
-          labelKey: "Basic Details"
+          labelKey: "BPA_BASIC_DETAILS_TITLE"
         })
       },
       editSection: {
@@ -48,7 +48,7 @@ export const basicSummary = getCommonGrayCard({
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
+            labelKey: "BPA_SUMMARY_EDIT"
           })
         },
         onClickDefination: {
@@ -70,7 +70,7 @@ export const basicSummary = getCommonGrayCard({
           scrutinynumber: getLabelWithValue(
             {
               labelName: "Building plan scrutiny number",
-              labelKey: "Building plan scrutiny number"
+              labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_LABEL"
             },
             {
               jsonPath: "BPA.edcrNumber",
@@ -82,7 +82,7 @@ export const basicSummary = getCommonGrayCard({
           occupancy: getLabelWithValue(
             {
               labelName: "occupancy",
-              labelKey: "occupancy"
+              labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
             },
             {
               jsonPath:
@@ -95,7 +95,7 @@ export const basicSummary = getCommonGrayCard({
           applicationtype: getLabelWithValue(
             {
               labelName: "Application Type",
-              labelKey: "Application Type"
+              labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
             },
             {
               jsonPath:
@@ -111,10 +111,19 @@ export const basicSummary = getCommonGrayCard({
               jsonPath: "BPA.serviceType"
             }
           ),
+          risktype: getLabelWithValue(
+            {
+              labelName: "Risk Type",
+              labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
+            },
+            {
+              jsonPath: "BPA.riskType"
+            }
+          ),
           applicationdate: getLabelWithValue(
             {
               labelName: "Application Date",
-              labelKey: "Application Date"
+              labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
             },
             {
               jsonPath:
@@ -124,7 +133,7 @@ export const basicSummary = getCommonGrayCard({
           applicationFee: getLabelWithValue(
             {
               labelName: "Application Fee",
-              labelKey: "Application Fee"
+              labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
             },
             {
               jsonPath:
@@ -134,7 +143,7 @@ export const basicSummary = getCommonGrayCard({
           remarks: getLabelWithValue(
             {
               labelName: "Remarks",
-              labelKey: "Remarks"
+              labelKey: "BPA_BASIC_DETAILS_REMARKS_LABEL"
             },
             {
               jsonPath:
@@ -146,7 +155,7 @@ export const basicSummary = getCommonGrayCard({
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+      sourceJsonPath: "BPA",
       prefixSourceJsonPath:
         "children.cardContent.children.basicDetailsContainer.children",
       afterPrefixJsonPath: "children.value.children.key"

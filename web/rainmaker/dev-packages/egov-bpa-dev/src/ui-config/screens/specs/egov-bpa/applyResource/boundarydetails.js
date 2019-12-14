@@ -2,32 +2,15 @@ import {
     getCommonCard,
     getCommonTitle,
     getTextField,
-    getDateField,
     getSelectField,
     getCommonContainer,
-    getPattern,
-    getCheckBoxwithLabel,
-    getBreak,
-    getCommonGrayCard,
-    getCommonSubHeader,
-    getLabel,
-    getLabelWithValue,
-    convertEpochToDate
 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getDetailsForOwner } from "../../utils";
-import get from "lodash/get";
-import { gotoApplyWithStep } from "../../utils/index";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../../ui-utils";
-
 export const boundaryDetails = getCommonCard({
     header: getCommonTitle(
         {
             labelName: "Boundary Details",
-            labelKey: "Boundary Details"
+            labelKey: "BPA_BOUNDARY_DETAILS_TITLE"
         },
         {
             style: {
@@ -40,11 +23,11 @@ export const boundaryDetails = getCommonCard({
             ...getSelectField({
                 label: {
                     labelName: "Circle",
-                    labelKey: "Circle"
+                    labelKey: "BPA_BOUNDARY_CIRCLE_LABEL"
                 },
                 placeholder: {
                     labelName: "Select Circle",
-                    labelKey: "Select Circle"
+                    labelKey: "BPA_BOUNDARY_CIRCLE_PLACEHOLDER"
                 },
                 required: true,
                 jsonPath: "BPAs[0].BPADetails.boundarydetails.circle",
@@ -69,11 +52,11 @@ export const boundaryDetails = getCommonCard({
             ...getSelectField({
                 label: {
                     labelName: "Revenue Ward",
-                    labelKey: "Revenue Ward"
+                    labelKey: "BPA_BOUNDARY_REVENUE_WARD_LABEL"
                 },
                 placeholder: {
                     labelName: "Select Revenue Ward",
-                    labelKey: "Select Revenue Ward"
+                    labelKey: "BPA_BOUNDARY_REVENUE_WARD_PLACEHOLDER"
                 },
                 required: true,
                 jsonPath: "BPAs[0].BPADetails.boundarydetails.revenueward",
@@ -94,125 +77,6 @@ export const boundaryDetails = getCommonCard({
                 }
             })
         },
-        // propertyCity: {
-        //     ...getSelectField({
-        //       label: { labelName: "City", labelKey: "NOC_PROPERTY_CITY_LABEL" },
-        //       localePrefix: {
-        //         moduleName: "TENANT",
-        //         masterName: "TENANTS"
-        //       },
-        //       optionLabel: "name",
-        //       placeholder: {
-        //         labelName: "Select City",
-        //         labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
-        //       },
-        //       sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-        //       jsonPath: "BPAs[0].BPADetails.boundarydetails.circle",
-        //       required: true,
-        //       props: {
-        //         required: true,
-        //         // disabled: true
-        //         data: [
-        //             {
-        //                 value: "Circle 1",
-        //                 label: "Circle 1"
-        //             },
-        //             {
-        //                 value: "Circle 2",
-        //                 label: "Circle 2"
-        //             }
-        //         ],
-        //         optionValue: "value",
-        //         optionLabel: "label"
-        //       }
-        //     }),
-        //     beforeFieldChange: async (action, state, dispatch) => {
-        //       //Below only runs for citizen - not required here in employee
-        //       dispatch(
-        //         prepareFinalObject(
-        //           "BPAs[0].BPADetails.boundarydetails.circle",
-        //           action.value
-        //         )
-        //       );
-        //       try {
-        //         let payload = await httpRequest(
-        //           "post",
-        //           "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-        //           "_search",
-        //           [{ key: "tenantId", value: action.value }],
-        //           {}
-        //         );
-        //         const mohallaData =
-        //           payload &&
-        //           payload.TenantBoundary[0] &&
-        //           payload.TenantBoundary[0].boundary &&
-        //           payload.TenantBoundary[0].boundary.reduce((result, item) => {
-        //             result.push({
-        //               ...item,
-        //               name: `${action.value
-        //                 .toUpperCase()
-        //                 .replace(
-        //                   /[.]/g,
-        //                   "_"
-        //                 )}_REVENUE_${item.code
-        //                 .toUpperCase()
-        //                 .replace(/[._:-\s\/]/g, "_")}`
-        //             });
-        //             return result;
-        //           }, []);
-    
-        //         dispatch(
-        //           prepareFinalObject(
-        //             "applyScreenMdmsData.tenant.localities",
-        //             mohallaData
-        //           )
-        //         );
-        //         dispatch(
-        //           handleField(
-        //             "apply",
-        //             "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
-        //             "props.suggestions",
-        //             mohallaData
-        //           )
-        //         );
-        //         const mohallaLocalePrefix = {
-        //           moduleName: action.value,
-        //           masterName: "REVENUE"
-        //         };
-        //         dispatch(
-        //           handleField(
-        //             "apply",
-        //             "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
-        //             "props.localePrefix",
-        //             mohallaLocalePrefix
-        //           )
-        //         );
-    
-        //         dispatch(
-        //           fetchLocalizationLabel(getLocale(), action.value, action.value)
-        //         );
-        //       } catch (e) {
-        //         console.log(e);
-        //       }
-        //       // Set Firestation based on ULB
-        //       let fireStationsList = get(
-        //         state,
-        //         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
-        //         []
-        //       );
-        //       let fireStations = fireStationsList.filter(firestation => {
-        //         return firestation.baseTenantId === action.value;
-        //       });
-        //       dispatch(
-        //         handleField(
-        //           "apply",
-        //           "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyFirestation",
-        //           "props.data",
-        //           fireStations
-        //         )
-        //       );
-        //     }
-        //   },
     })
 });
 
@@ -220,7 +84,7 @@ export const detailsofplot = getCommonCard({
     header: getCommonTitle(
         {
             labelName: "Details Of Plot",
-            labelKey: "Details Of Plot"
+            labelKey: "BPA_BOUNDARY_PLOT_DETAILS_TITLE"
         },
         {
             style: {
@@ -233,11 +97,7 @@ export const detailsofplot = getCommonCard({
             ...getTextField({
                 label: {
                     labelName: "Plot Area",
-                    labelKey: "Plot Area"
-                },
-                placeholder: {
-                    labelName: "Enter Plot Area",
-                    labelKey: "Enter Plot Area"
+                    labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
                 },
                 required: true,
                 jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.plot.area",
@@ -250,11 +110,11 @@ export const detailsofplot = getCommonCard({
             ...getTextField({
                 label: {
                     labelName: "Khata No.",
-                    labelKey: "Khata No."
+                    labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL"
                 },
                 placeholder: {
                     labelName: "Enter Khata No.",
-                    labelKey: "Enter Khata No."
+                    labelKey: "BPA_BOUNDARY_KHATA_NO_PLACEHOLDER"
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
@@ -265,11 +125,11 @@ export const detailsofplot = getCommonCard({
             ...getTextField({
                 label: {
                     labelName: "Holding No.",
-                    labelKey: "Holding No."
+                    labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL"
                 },
                 placeholder: {
                     labelName: "Enter Holding No.",
-                    labelKey: "Enter Holding No."
+                    labelKey: "BPA_BOUNDARY_HOLDING_NO_PLACEHOLDER"
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
@@ -280,11 +140,11 @@ export const detailsofplot = getCommonCard({
             ...getTextField({
                 label: {
                     labelName: "Plot No(MSP)",
-                    labelKey: "Plot No(MSP)"
+                    labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
                 },
                 placeholder: {
                     labelName: "Enter Plot No(MSP)",
-                    labelKey: "Enter Plot No(MSP)"
+                    labelKey: "BPA_BOUNDARY_PLOT_NO_PLACEHOLDER"
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
@@ -315,9 +175,9 @@ export const detailsofplot = getCommonCard({
               className: "citizen-city-picker",
               label: {
                 labelName: "City/Town",
-                labelKey: "City/Town"
+                labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
               },
-              placeholder: { labelName: "Select City/Town", labelKey: "Select City/Town" },
+              placeholder: { labelName: "Select City/Town", labelKey: "BPA_BOUNDARY_CITY_TOWN_PLACEHOLDER" },
               jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
               labelsFromLocalisation: true,
               fullwidth: true,
@@ -331,11 +191,11 @@ export const detailsofplot = getCommonCard({
             ...getTextField({
                 label: {
                     labelName: "Land Registration Details",
-                    labelKey: "Land Registration Details"
+                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
                 },
                 placeholder: {
                     labelName: "Enter Land Registration Details",
-                    labelKey: "Enter Land Registration Details"
+                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_PLACEHOLDER"
                 },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails"
@@ -345,11 +205,11 @@ export const detailsofplot = getCommonCard({
             ...getSelectField({
                 label: {
                     labelName: "Whether Government or Quasi Government",
-                    labelKey: "Whether Government or Quasi Government"
+                    labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"
                 },
                 placeholder: {
                     labelName: "Select Government",
-                    labelKey: "Select Government"
+                    labelKey: "BPA_BOUNDARY_GOVT_QUASI_PLACEHOLDER"
                 },
                 jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi",
                 props: {

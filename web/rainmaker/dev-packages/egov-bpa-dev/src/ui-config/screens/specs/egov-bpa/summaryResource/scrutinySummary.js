@@ -39,7 +39,7 @@ export const scrutinySummary = getCommonGrayCard({
                 },
                 ...getCommonSubHeader({
                     labelName: "Scrutiny Details",
-                    labelKey: "Scrutiny Details"
+                    labelKey: "BPA_SCRUNITY_SUMMARY"
                 })
             },
             editSection: {
@@ -65,7 +65,7 @@ export const scrutinySummary = getCommonGrayCard({
                     },
                     buttonLabel: getLabel({
                         labelName: "Edit",
-                        labelKey: "NOC_SUMMARY_EDIT"
+                        labelKey: "BPA_SUMMARY_EDIT"
                     })
                 },
                 onClickDefination: {
@@ -79,7 +79,7 @@ export const scrutinySummary = getCommonGrayCard({
     },
     buildingPlanScrutinyApplicationDetails: getHeader({
         labelName: "Building Plan Scrutiny Application Details",
-        labelKey: "Building Plan Scrutiny Application Details"
+        labelKey: "BPA_APPLICATION_SCRUNITY_DETAILS_TITLE"
     }),
     break1: getBreak(),
     cardOne: {
@@ -92,7 +92,7 @@ export const scrutinySummary = getCommonGrayCard({
                     buildingplanscrutinyapplicationnumber: getLabelWithValue(
                         {
                             labelName: "Building permit application Number",
-                            labelKey: "Building permit application Number"
+                            labelKey: "BPA_APPLICATION_BUILDING_PERMIT_NO_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.planscrutinydetails.appnum",
@@ -104,7 +104,7 @@ export const scrutinySummary = getCommonGrayCard({
                     uploadedfile: getLabelWithValue(
                         {
                             labelName: "Uploaded Diagram",
-                            labelKey: "Uploaded Diagram"
+                            labelKey: "BPA_APPLICATION_UPLOAD_DIAGRAM_LABEL"
                         },
                         {
                             jsonPath:
@@ -114,7 +114,7 @@ export const scrutinySummary = getCommonGrayCard({
                     scrutinyreport: getLabelWithValue(
                         {
                             labelName: "Scrutiny Report",
-                            labelKey: "Scrutiny Report"
+                            labelKey: "BPA_APPLICATION_SCRUNITY_REPORT_LABEL"
                         },
                         {
                             jsonPath:
@@ -134,8 +134,8 @@ export const scrutinySummary = getCommonGrayCard({
         type: "array"
     },
     BlockWiseOccupancyAndUsageDetails: getHeader({
-        labelName: "Block wise occupancy/sub occupancy and usage details",
-        labelKey: "Block wise occupancy/sub occupancy and usage details"
+        labelName: "Block wise occupancy /sub occupancy and usage details",
+        labelKey: "BPA_APPLICATION_BLOCK_WISE_OCCUPANCY_SUB_OCCUPANCY_USAGE_TITLE"
     }),
     break1: getBreak(),
     cardTwo: {
@@ -149,7 +149,7 @@ export const scrutinySummary = getCommonGrayCard({
                     buildingplanscrutinyapplicationnumber: getLabelWithValue(
                         {
                             labelName: "Residential",
-                            labelKey: "Residential"
+                            labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL"
                         },
                         {
                             jsonPath: "bpa.summary.residential",
@@ -163,7 +163,7 @@ export const scrutinySummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+            sourceJsonPath: "BPAs[0].BPADetails.blockwiseusagedetails",
             prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
@@ -172,7 +172,7 @@ export const scrutinySummary = getCommonGrayCard({
     },
     DemolitionDetails: getHeader({
         labelName: "Demolition Details",
-        labelKey: "Demolition Details"
+        labelKey: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL"
     }),
     break1: getBreak(),
     cardThree: {
@@ -185,7 +185,7 @@ export const scrutinySummary = getCommonGrayCard({
                     demolitionArea: getLabelWithValue(
                         {
                             labelName: "Demolition Area",
-                            labelKey: "Demolition Area"
+                            labelKey: "BPA_APPLICATION_DEMOLITION_AREA_LABEL"
                         },
                         {
                             jsonPath: "BPAs[0].BPADetails.demolitiondetails.area",
@@ -199,7 +199,7 @@ export const scrutinySummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+            sourceJsonPath: "BPAs[0].BPADetails",
             prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"

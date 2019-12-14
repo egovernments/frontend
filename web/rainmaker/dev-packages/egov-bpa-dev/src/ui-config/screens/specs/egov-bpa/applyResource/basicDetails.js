@@ -15,7 +15,7 @@ export const basicDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Basic Details",
-      labelKey: "Basic Details"
+      labelKey: "BPA_BASIC_DETAILS_TITLE"
     },
     {
       style: {
@@ -27,15 +27,15 @@ export const basicDetails = getCommonCard({
     scrutinynumber: getTextField({
       label: {
         labelName: "Building plan scrutiny number",
-        labelKey: "Building plan scrutiny number"
+        labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_LABEL"
       },
       placeholder: {
         labelName: "Enter Scrutiny Number",
-        labelKey: "Enter Scrutiny Number"
+        labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_PLACEHOLDER"
       },
       title: {
         value: "Please search scrutiny details linked to the scrutiny number",
-        key: "Please search scrutiny details linked to the scrutiny number"
+        key: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
       },
       infoIcon: "info_circle",
       pattern: "^[a-zA-Z0-9]*$",
@@ -61,7 +61,7 @@ export const basicDetails = getCommonCard({
     occupancy: getTextField({
       label: {
         labelName: "Occupancy",
-        labelKey: "Occupancy"
+        labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
       },
       required: true,
       jsonPath: 'BPA.occupancy',
@@ -80,11 +80,11 @@ export const basicDetails = getCommonCard({
     applicationType: getSelectField({
       label: {
         labelName: "Application Type",
-        labelKey: "Application Type"
+        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
       },
       placeholder: {
         labelName: "Select Application Type",
-        labelKey: "Select Application Type"
+        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_PLACEHOLDER"
       },
       localePrefix: {
         moduleName: "WF",
@@ -102,11 +102,7 @@ export const basicDetails = getCommonCard({
     riskType: getTextField({
       label: {
         labelName: "Risk Type",
-        labelKey: "Risk Type"
-      },
-      placeholder: {
-        labelName: "Select Risk Type",
-        labelKey: "Select Risk Type"
+        labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
       },
       localePrefix: {
         moduleName: "WF",
@@ -126,11 +122,11 @@ export const basicDetails = getCommonCard({
     servicetype: getSelectField({
       label: {
         labelName: "Service type",
-        labelKey: "Service type"
+        labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
       },
       placeholder: {
         labelName: "Select service type",
-        labelKey: "Select Service type"
+        labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_PLACEHOLDER"
       },
       localePrefix: {
         moduleName: "WF",
@@ -147,7 +143,7 @@ export const basicDetails = getCommonCard({
     applicationdate: getDateField({
       label: {
         labelName: "Application Date",
-        labelKey: "Application Date"
+        labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
       },
       // required: true,
       jsonPath: "BPA.appdate",
@@ -171,7 +167,7 @@ export const basicDetails = getCommonCard({
     applicationFee: getTextField({
       label: {
         labelName: "Application Fee",
-        labelKey: "Application Fee"
+        labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
       },
       jsonPath: "BPA.appfee",
       value: 1000,
@@ -188,11 +184,11 @@ export const basicDetails = getCommonCard({
     remarks: getTextField({
       label: {
         labelName: "Remarks",
-        labelKey: "Remarks"
+        labelKey: "BPA_BASIC_DETAILS_REMARKS_LABEL"
       },
       placeholder: {
         labelName: "Enter Remarks Here",
-        labelKey: "Enter Remarks Here"
+        labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
       },
       jsonPath: "BPA.remarks",
       props: {
