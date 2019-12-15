@@ -73,7 +73,8 @@ export const getSearchResults = async queryObject => {
     }
 };
 
-export const getSearchResultsForSewerage = async queryObject => {
+export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -81,8 +82,10 @@ export const getSearchResultsForSewerage = async queryObject => {
             "_search",
             queryObject
         );
+        dispatch(toggleSpinner());
         return response;
     } catch (error) {
+        dispatch(toggleSpinner());
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -92,7 +95,8 @@ export const getSearchResultsForSewerage = async queryObject => {
     }
 };
 
-export const getDescriptionFromMDMS = async requestBody => {
+export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
+    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -100,8 +104,10 @@ export const getDescriptionFromMDMS = async requestBody => {
             "_search", [],
             requestBody
         );
+        dispatch(toggleSpinner());
         return response;
     } catch (error) {
+        dispatch(toggleSpinner());
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -111,7 +117,8 @@ export const getDescriptionFromMDMS = async requestBody => {
     }
 };
 
-export const fetchBill = async queryObject => {
+export const fetchBill = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -119,8 +126,10 @@ export const fetchBill = async queryObject => {
             "_fetchBill",
             queryObject
         );
+        dispatch(toggleSpinner());
         return response;
     } catch (error) {
+        dispatch(toggleSpinner());
         console.log(error)
     }
 };
@@ -135,7 +144,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
             "_search",
             queryObject
         );
-
+       
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 try {
@@ -175,7 +184,8 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
 };
 
 
-export const getConsumptionDetails = async queryObject => {
+export const getConsumptionDetails = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -183,8 +193,10 @@ export const getConsumptionDetails = async queryObject => {
             "_search",
             queryObject
         );
+        dispatch(toggleSpinner());
         return response;
     } catch (error) {
+        dispatch(toggleSpinner());
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -884,7 +896,7 @@ export const getMeterReadingData = async (dispatch) => {
     //   )
     // );
     try {
-        const response = await getConsumptionDetails(queryObject);
+        const response = await getConsumptionDetails(queryObject, dispatch);
         // const response =
         // {
         //     "ResponseInfo": {
@@ -981,9 +993,5 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
         alert('Some Error Occured while downloading!');
     }
 }
-
-
-
-
 
 

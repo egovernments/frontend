@@ -1,4 +1,4 @@
-import { getMyConnectionResults } from "../../../../../ui-utils/commons";
+import { getMyConnectionResults, getMyConnectionDueResults } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
@@ -13,9 +13,10 @@ export const fetchData = async (action, state, dispatch) => {
         }, {
             key: "tenantId",
             value: JSON.parse(getUserInfo()).permanentCity
-        },]
+        }]
 
     const response = await getMyConnectionResults(queryObject,dispatch);
+
     // const billResponse = await getMyConnectionDueResults();
     try {
         /*Mseva 2.0 */
