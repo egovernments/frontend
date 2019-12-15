@@ -6,8 +6,6 @@ import { applicationSuccessFooter } from "./acknowledgementResource/applicationS
 import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-// import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import get from "lodash/get";
 import set from "lodash/set";
 import { ifUserRoleExists } from "../utils";
 
