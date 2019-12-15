@@ -45,13 +45,13 @@ const epochToDate = et => {
   return formattedDate;
 };
 
-const getMessageFromLocalization = code => {
+export const getMessageFromLocalization = code => {
   let messageObject = JSON.parse(
     getLocalization(`localization_${getLocale()}`)
   ).find(item => {
     return item.code == code;
   });
-  return messageObject ? messageObject.message : code;
+  return messageObject ? messageObject.code : code;
 };
 
 export const loadUlbLogo = tenantid => {
@@ -323,21 +323,36 @@ export const loadMdmsData = async tenantid => {
   );
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: `${tenantid}`
-    },
-    {
-      key: "moduleName",
-      value: "tenant"
-    },
-    {
-      key: "masterName",
-      value: "tenants"
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantid,
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        }
+      ]
     }
-  ];
-  let response = await getMdmsData(queryObject);
+  };
+  // let queryObject = [
+  //   {
+  //     key: "tenantId",
+  //     value: `${tenantid}`
+  //   },
+  //   {
+  //     key: "moduleName",
+  //     value: "tenant"
+  //   },
+  //   {
+  //     key: "masterName",
+  //     value: "tenants"
+  //   }
+  // ];
+  let response = await getMdmsData(mdmsBody);
 
   if (
     response &&

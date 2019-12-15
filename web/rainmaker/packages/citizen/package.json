@@ -20,6 +20,7 @@
     "egov-noc": "0.0.1",
     "egov-tradelicence": "0.0.1",
     "egov-wns": "0.0.1",
+    "egov-pt": "0.0.1",
     "egov-boilerplate": "0.0.1",
     "egov-common": "0.0.1",
     "egov-abg": "0.0.1",
@@ -69,7 +70,7 @@
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
     "webfontloader": "^1.6.28",
-    "print-js":"1.0.63"
+    "print-js": "1.0.63"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
