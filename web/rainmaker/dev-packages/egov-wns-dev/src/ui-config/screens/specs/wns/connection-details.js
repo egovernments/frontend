@@ -3,7 +3,8 @@ import {
   getCommonCard,
   getCommonTitle,
   getCommonGrayCard,
-  getCommonContainer
+  getCommonContainer,
+  convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -73,15 +74,21 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
    */
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNumber }];
   if (service === "SEWERAGE") {
-    let payloadData = await getSearchResultsForSewerage(queryObject);
+    let payloadData = await getSearchResultsForSewerage(queryObject, dispatch);
     if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
-      payloadData.SewerageConnections[0].service = service;
-      dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]));
+      payloadData.SewerageConnections[0].service = service
+      payloadData.SewerageConnections[0].connectionExecutionDate = convertEpochToDate(payloadData.SewerageConnections[0].connectionExecutionDate)
+      dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]))
     }
   } else if (service === "WATER") {
     let payloadData = await getSearchResults(queryObject);
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
       payloadData.WaterConnection[0].service = service;
+      if (payloadData.WaterConnection[0].connectionExecutionDate !== undefined && payloadData.WaterConnection[0].connectionExecutionDate !== null) {
+        payloadData.WaterConnection[0].connectionExecutionDate = convertEpochToDate(payloadData.WaterConnection[0].connectionExecutionDate)
+      } else {
+        payloadData.WaterConnection[0].connectionExecutionDate = ' '
+      }
       payloadData.WaterConnection[0].property.address.locality.locationOnMap = payloadData.WaterConnection[0].property.address.locality.latitude + ' ' + payloadData.WaterConnection[0].property.address.locality.longitude
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
     }
@@ -93,16 +100,26 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   if (connectionNumber) {
     (await searchResults(action, state, dispatch, connectionNumber));
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
-    if (connectionType !== "Metered") {
+    if (service !== "SEWERAGE" && connectionType !== "Metered") {
       set(
         action.screenConfig,
         "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.meterID.visible",
         false
       );
     } else {
       set(
         action.screenConfig,
         "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.meterID.visible",
         true
       );
     }

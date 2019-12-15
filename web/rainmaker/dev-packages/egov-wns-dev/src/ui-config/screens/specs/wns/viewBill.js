@@ -26,19 +26,16 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
     /**
      * For displaying data for water service when user arrives at view bill page
      */
-    let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails);
+    let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails, dispatch);
     let payload = await getSearchResults(queryObjForSearch);
-    data = await fetchBill(queryObjectForFetchBill);
+    data = await fetchBill(queryObjectForFetchBill, dispatch);
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
       if (payload.WaterConnection.length > 0 && data.Bill.length > 0) {
         payload.WaterConnection[0].service = service
         data.Bill[0].billDetails[0].billAccountDetails.forEach(async element => {
-          /**
-           * For displaying description of keys in bill details as tooltip
-           */
           let cessKey = element.taxHeadCode
           let body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
-          let res = await getDescriptionFromMDMS(body)
+          let res = await getDescriptionFromMDMS(body, dispatch)
           let des, obj;
           if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) { des = res.MdmsRes["ws-services-calculation"]; }
           if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
@@ -52,9 +49,6 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
             dispatch(prepareFinalObject("viewBillToolipData", finalArray));
           }
         });
-        /**
-         * For displaying consumption, current Meter Reading and Last Meter Reading
-         */
         if (meterReadingsData !== null && meterReadingsData !== undefined && meterReadingsData.meterReadings.length > 0) {
           payload.WaterConnection[0].consumption = meterReadingsData.meterReadings[0].currentReading - meterReadingsData.meterReadings[0].lastReading
           payload.WaterConnection[0].currentMeterReading = meterReadingsData.meterReadings[0].currentReading
@@ -68,23 +62,17 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
       }
     }
   } else if (service === "SEWERAGE") {
-    /**
-     * For displaying data for sewerage service when user arrives at view bill page
-     */
-    let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails)
-    let payload = await getSearchResultsForSewerage(queryObjForSearch);
-    data = await fetchBill(queryObjectForFetchBill)
+    let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails, dispatch)
+    let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
+    data = await fetchBill(queryObjectForFetchBill, dispatch)
     let viewBillTooltip = []
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
       if (payload.SewerageConnections.length > 0 && data.Bill.length > 0) {
         payload.SewerageConnections[0].service = service
         data.Bill[0].billDetails[0].billAccountDetails.forEach(async element => {
-          /**
-           * For displaying description of keys in bill details as tooltip
-           */
           let cessKey = element.taxHeadCode
           let body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
-          let res = await getDescriptionFromMDMS(body)
+          let res = await getDescriptionFromMDMS(body, dispatch)
           let des, obj;
           if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) { des = res.MdmsRes["ws-services-calculation"]; }
           if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
@@ -98,9 +86,6 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
             dispatch(prepareFinalObject("viewBillToolipData", finalArray));
           }
         });
-        /**
-         * For displaying consumption, current Meter Reading and Last Meter Reading
-         */
         if (meterReadingsData !== null && meterReadingsData !== undefined && meterReadingsData.meterReadings.length > 0) {
           payload.SewerageConnections[0].consumption = meterReadingsData.meterReadings[0].currentReading - meterReadingsData.meterReadings[0].lastReading
           payload.SewerageConnections[0].currentMeterReading = meterReadingsData.meterReadings[0].currentReading
@@ -112,15 +97,99 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
       }
     }
   }
-  /**
-   * For displaying the bill details card in view bill
-   */
   createEstimateData(data, "screenConfiguration.preparedFinalObject.billData.billDetails", dispatch, {}, {});
 };
 
 const beforeInitFn = async (action, state, dispatch, consumerCode) => {
   if (consumerCode) {
     (await searchResults(action, state, dispatch, consumerCode));
+    if (service === "WATER") {
+      set(
+        action.screenConfig,
+        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.connectionType.visible",
+        true
+      );
+      let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
+      if (connectionType !== "Metered") {
+        set(
+          action.screenConfig,
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterId.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.consumption.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterReadingDate.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterStatus.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.currentMeterReading.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.lastMeterReading.visible",
+          false
+        );
+      } else {
+        set(
+          action.screenConfig,
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterId.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.consumption.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterReadingDate.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterStatus.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.currentMeterReading.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.lastMeterReading.visible",
+          true
+        );
+      }
+    }
+  } else {
+    set(
+      action.screenConfig,
+      "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.connectionType.visible",
+      false
+    );
   }
 };
 

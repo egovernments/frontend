@@ -64,7 +64,7 @@ export const getService = () => {
                     labelKey: "WS_SERV_DETAIL_METER_ID"
                 },
                 {
-                    jsonPath: "consumptionDetails[0].id"
+                    jsonPath: "WaterConnection[0].meterId"
                 }
             ),
             meterStatus: getLabelWithValue(
