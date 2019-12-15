@@ -1,21 +1,24 @@
-import pdfMake from "pdfmake/build/pdfmake";
+import pdfMakeCustom from "pdfmake/build/pdfmake";
 import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
 import _ from "lodash";
+import {getMessageFromLocalization} from "./receiptTransformer";
 import pdfFonts from "./vfs_fonts";
-pdfMake.vfs = pdfFonts.vfs;
+// pdfMakeCustom.vfs = pdfFonts.vfs;
 import {
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
+import { from } from "rxjs";
 
-pdfMake.fonts = {
-  Camby:{
-          normal: 'Cambay-Regular.ttf',
-          bold: 'Cambay-Regular.ttf',
-          italics: 'Cambay-Regular.ttf',
-          bolditalics: 'Cambay-Regular.ttf'
-  },
 
-};
+// pdfMakeCustom.fonts = {
+//   Camby:{
+//           normal: 'Cambay-Regular.ttf',
+//           bold: 'Cambay-Regular.ttf',
+//           italics: 'Cambay-Regular.ttf',
+//           bolditalics: 'Cambay-Regular.ttf'
+//   },
+
+// };
 
 
 let tableborder = {
@@ -50,6 +53,40 @@ let payableAmountBorderKey = [true, true, true, true, true, true, true];
 let payableInfoTable3 = ["*", "*", "*"];
 let accessoriesTable = ["24%", "76%"];
 
+const getLocaleForTradeType = (tradeType)=>{
+  if(tradeType && tradeType.split("/").length){
+    const tradeTypeSplitted = tradeType.toUpperCase().split("/");
+    if(tradeTypeSplitted.length===3){
+      return getLocaleLabels("NA", (tradeTypeSplitted[0].trim())) + "/"+ 
+      getLocaleLabels("NA", (tradeTypeSplitted[1].trim())) +"/"+ 
+      getLocaleLabels("NA", (tradeTypeSplitted[2].trim().trim()));
+    } else {
+      return getLocaleLabels("NA", (tradeTypeSplitted[0].trim())) + "/"+ 
+      getLocaleLabels("NA", (tradeTypeSplitted[1].trim()));
+    }
+  } else {
+    return tradeType;
+  }
+}
+
+const getAssesories = (accessories) => {
+  if(accessories){
+    const splittedAccessories = accessories.split("(");
+  return splittedAccessories.length ? getLocaleLabels("NA",splittedAccessories[0])+"("+splittedAccessories[1]: "NA"
+  }else{
+    return "NA"
+  }
+}
+
+const getCorporationName = (corporationName, actualAddress) => {
+  if(corporationName){
+    //const splittedName = corporationName.split(" ");
+    return getLocaleLabels("TL_LOCALIZATION_ULBGRADE_MC1","TL_LOCALIZATION_ULBGRADE_MC1")+" "+ getLocaleLabels("TENANT_TENANTS_"+actualAddress.tenantId.replace('.','_').toUpperCase(),"TENANT_TENANTS_"+actualAddress.tenantId.replace('.','_').toUpperCase());
+  } else {
+    return "NA"
+  }
+}
+
 const getReceiptData = (transformedData, ulbLogo) => {
   let owners = transformedData.owners.map(owner => [
     {
@@ -57,13 +94,15 @@ const getReceiptData = (transformedData, ulbLogo) => {
       border: [true, true, false, true],
       style: "receipt-table-key"
     },
-    { text: getLocaleLabels("Owner Name","TL_LOCALIZATION_OWNER_NAME"), border: [false, true, true, true] },
+    { 
+    text:owner.name  },
+    
     {
       text: getLocaleLabels("Owner Mobile","TL_LOCALIZATION_OWNER_MOBILE"),
       border: [true, true, false, true],
       style: "receipt-table-key"
     },
-    { text: getLocaleLabels("Owner Mobile","TL_LOCALIZATION_OWNER_MOBILE"), border: [false, true, true, true] }
+    { text:owner.mobile, }
   ]);
   var receiptData = {
     defaultStyle: {
@@ -86,7 +125,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 //stack is used here to give multiple sections one after another in same body
                 stack: [
                   {
-                    text: transformedData.corporationName,
+                    text: getCorporationName(transformedData.corporationName, transformedData.actualAddress),
                     style: "receipt-logo-header"
                   },
                   {
@@ -124,7 +163,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 bold: true
               },
               {
-                text: transformedData.applicationType,
+                text: getLocaleLabels("TL_LOCALIZATION_" + (transformedData.applicationType).replace('.','_'),"TL_LOCALIZATION_" + (transformedData.applicationType).replace('.','_')),
                 bold: false
               }
             ],
@@ -228,7 +267,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.tradeCategory,
+                text: getLocaleLabels("NA",transformedData.tradeCategory),
                 border: borderValue
               }
             ]
@@ -248,7 +287,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.tradeTypeReceipt,
+                text: getLocaleForTradeType(transformedData.tradeTypeReceipt),
                 border: [false, false, true, true]
               }
             ],
@@ -259,7 +298,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 style: "receipt-table-key"
               },
               {
-                text: `${transformedData.accessoriesList}`,
+                text: getAssesories(transformedData.accessoriesList),
                 border: borderValue
               }
             ]
@@ -279,7 +318,9 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 border: borderKey,
                 style: "receipt-table-key"
               },
-              { text: transformedData.doorNo, border: borderValue },
+              { text: transformedData.doorNo, 
+                border: borderValue 
+              },
               {
                 text: getLocaleLabels("Building Name","TL_LOCALIZATION_BUILDING_NAME"),
                 border: borderKey,
@@ -303,7 +344,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 style: "receipt-table-key"
               },
               {
-                text: getLocaleLabels("NA",(transformedData.actualAddress.tenantId.replace('.','_')+'_REVENUE_'+transformedData.actualAddress.locality.code).toUpperCase()),
+                text: getLocaleLabels("NA",(transformedData.actualAddress.tenantId.replace('.','_')+'_REVENUE_'+transformedData.actualAddress.locality.code).toUpperCase())+" "+getLocaleLabels("NA", transformedData.city),
                 border: borderValue
               }
             ]
@@ -621,7 +662,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
 };
 
 const getCertificateData = (transformedData, ulbLogo) => {
-  console.log("transformedData-- ",transformedData);
+console.log(transformedData);
   var tlCertificateData = {
     defaultStyle: {
       font: "Camby"
@@ -641,20 +682,20 @@ const getCertificateData = (transformedData, ulbLogo) => {
                     alignment: "center"
                   },
                   {
-                    text: transformedData.corporationName,
+                    text: getCorporationName(transformedData.corporationName, transformedData.actualAddress),
                     style: "receipt-logo-header",
                     margin: [0, 10, 0, 0],
                    // font:"Roboto"
                   },
                   {
-                    text: transformedData.corporationAddress+ "\n" + getLocaleLabels("Contact : ","TL_LOCALIZATION_CORPORATION_CONTACT") + 
+                    text: getLocaleLabels("TL_LOCALIZATION_CORPORATION_ADDRESS","TL_LOCALIZATION_CORPORATION_ADDRESS")+ "\n" + getLocaleLabels("Contact : ","TL_LOCALIZATION_CORPORATION_CONTACT") + 
                       transformedData.corporationContact +
                       "\n" +getLocaleLabels("Website : ","TL_LOCALIZATION_CORPORATION_WEBSITE") +
                       transformedData.corporationWebsite +
                       "\n" +getLocaleLabels("Email : ","TL_LOCALIZATION_CORPORATION_EMAIL") + transformedData.corporationEmail,
                     style: "receipt-logo-sub-text",
                     margin: [0, 8, 0, 0],
-                   // font:"Roboto"  
+                   
                   },
                   {
                     text: getLocaleLabels("TRADE LICENSE CERTIFICATE","TL_LOCALIZATION_TRADE_LICENSE_CERTIFICATE"),
@@ -708,7 +749,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: transformedData.receiptNumber,
-         //   font: "Roboto"
+    
           }
         ]
       },
@@ -722,7 +763,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: transformedData.financialYear,
-       //     font: "Roboto"
+     
           }
         ]
       },
@@ -777,7 +818,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           {
             width: "*",
             //text: transformedData.address
-            text:getLocaleLabels("NA",(transformedData.actualAddress.tenantId.replace('.','_')+'_REVENUE_'+transformedData.actualAddress.locality.code).toUpperCase())
+            text:getLocaleLabels("NA",(transformedData.actualAddress.tenantId.replace('.','_')+'_REVENUE_'+transformedData.actualAddress.locality.code).toUpperCase())+" "+getLocaleLabels("NA", transformedData.city)
 
         //    font: "Roboto"
           }
@@ -792,7 +833,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           },
           {
             width: "*",
-            text: transformedData.tradeTypeCertificate,
+            text: getLocaleForTradeType(transformedData.tradeTypeCertificate),
             
           }
         ]
@@ -806,7 +847,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           },
           {
             width: "*",
-            text: `${transformedData.accessoriesList}`,
+            text: getAssesories(transformedData.accessoriesList),
             
           }
         ]
@@ -835,7 +876,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: transformedData.licenseIssueDate,
-       //     font: "Roboto"
+      
           }
         ]
       },
@@ -851,7 +892,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: transformedData.licenseValidity.startDate +getLocaleLabels("To","TL_LOCALIZATION_TRADE_LICENSE_TO")+
               transformedData.licenseValidity.endDate
             ,
-        //    font: "Roboto"
+       
           }
         ]
       },
@@ -865,7 +906,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
               },
               {
                 text: transformedData.auditorName,
-          //      font: "Roboto"
+        
               }
             ],
             alignment: "left"
@@ -940,20 +981,20 @@ const getCertificateData = (transformedData, ulbLogo) => {
       },
       "receipt-logo-header": {
         color: "#1E1E1E",
-        //fontFamily: "Noto",
+        
         fontSize: 18,
         bold: true,
         letterSpacing: 0.74
       },
       "receipt-logo-sub-text": {
         color: "#656565",
-        //fontFamily: fontName,
+       
         fontSize: 14,
         letterSpacing: 0.74
       },
       "receipt-logo-sub-header": {
         color: "#1E1E1E",
-     //   fontFamily: fontName,
+    
         fontSize: 16,
         letterSpacing: 1.6,
         bold: true
@@ -974,11 +1015,22 @@ const getCertificateData = (transformedData, ulbLogo) => {
       }
     }
   };
-  console.log("tlCertificateData-- ",tlCertificateData);
+ 
   return tlCertificateData;
 };
 
 const generateReceipt = async (state, dispatch, type) => {
+//  console.log("Transformed Data--",transformedData);
+  pdfMakeCustom.vfs = pdfFonts.vfs;
+  pdfMakeCustom.fonts = {
+    Camby:{
+            normal: 'Cambay-Regular.ttf',
+            bold: 'Cambay-Regular.ttf',
+            italics: 'Cambay-Regular.ttf',
+            bolditalics: 'Cambay-Regular.ttf'
+    },
+  
+  };
   let data1 = _.get(
     state.screenConfiguration.preparedFinalObject,
     "applicationDataForReceipt",
@@ -1035,25 +1087,26 @@ const generateReceipt = async (state, dispatch, type) => {
   };
   switch (type) {
     case "certificate_download":
+   
       let certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data &&
-     //  pdfMake.createPdf(certificate_data).download("tl_certificate.pdf");
-      pdfMake.createPdf(certificate_data).open();
+     //  pdfMakeCustom.createPdf(certificate_data).download("tl_certificate.pdf");
+      pdfMakeCustom.createPdf(certificate_data).open();
       break;
     case "certificate_print":
       certificate_data = getCertificateData(transformedData, ulbLogo);
-      certificate_data && pdfMake.createPdf(certificate_data).print();
+      certificate_data && pdfMakeCustom.createPdf(certificate_data).print();
       break;
     case "receipt_download":
       let receipt_data = getReceiptData(transformedData, ulbLogo);
-      console.log("receipt_data--- ",receipt_data);
+      
       receipt_data &&
-     //   pdfMake.createPdf(receipt_data).download("tl_receipt.pdf");
-        pdfMake.createPdf(receipt_data).open();
+     //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
+        pdfMakeCustom.createPdf(receipt_data).open();
       break;
     case "receipt_print":
       receipt_data = getReceiptData(transformedData, ulbLogo);
-      receipt_data && pdfMake.createPdf(receipt_data).print();
+      receipt_data && pdfMakeCustom.createPdf(receipt_data).print();
       break;
     default:
       break;

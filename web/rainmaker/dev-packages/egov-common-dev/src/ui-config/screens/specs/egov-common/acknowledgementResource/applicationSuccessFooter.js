@@ -18,9 +18,6 @@ const getCommonApplyFooter = children => {
     };
 };
 
-
-
-
 export const applicationSuccessFooter = (
     state,
     dispatch,
@@ -28,9 +25,7 @@ export const applicationSuccessFooter = (
     tenant,
     consumerCode
 ) => {
-
     const roleExists = ifUserRoleExists("CITIZEN");
-
     const redirectionURL = roleExists ? "/" : "/inbox";
     return getCommonApplyFooter({
 
@@ -39,13 +34,11 @@ export const applicationSuccessFooter = (
             props: {
                 variant: "outlined",
                 color: "primary",
-                // className: "apply-wizard-footer-left-button",
                 style: {
                     minWidth: "290px",
                     height: "48px",
                     marginRight: "16px"
                 },
-                // disabled:true
             },
             children: {
                 downloadFormButtonLabel: getLabel({
@@ -56,7 +49,6 @@ export const applicationSuccessFooter = (
             onClickDefination: {
                 action: "condition",
                 callBack: () => {
-
                     const receiptQueryString = [
                         { key: "receiptNumbers", value: applicationNumber },
                         { key: "tenantId", value: tenant }
@@ -87,7 +79,6 @@ export const applicationSuccessFooter = (
         //     onClickDefination: {
         //         action: "condition",
         //         callBack: () => {
-
         //             const receiptQueryString = [
         //                 { key: "receiptNumbers", value: applicationNumber },
         //                 { key: "tenantId", value: tenant }

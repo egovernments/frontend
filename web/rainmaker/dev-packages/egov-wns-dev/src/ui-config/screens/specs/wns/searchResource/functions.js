@@ -52,7 +52,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     let getSearchResult = getSearchResults(queryObject)
-    let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject)
+    let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
     try {
       let searchWaterConnectionResults = await getSearchResult
       let searcSewerageConnectionResults = await getSearchResultForSewerage
@@ -63,7 +63,7 @@ export const searchApiCall = async (state, dispatch) => {
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
         let queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
-        let billResults = await fetchBill(queryObjectForWaterFetchBill)
+        let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
         try {
           billResults ? billResults.Bill.map(bill => {
             let obj = {
