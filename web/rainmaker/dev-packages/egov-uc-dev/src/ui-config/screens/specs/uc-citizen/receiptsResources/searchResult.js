@@ -17,6 +17,7 @@ export const searchResult = {
       getTextToLocalMapping("Date"),
       getTextToLocalMapping("Amount[INR]"),
       getTextToLocalMapping("Status"),
+      getTextToLocalMapping("Address"),
       {
         name: "tenantId",
         options: {
