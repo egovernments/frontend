@@ -16,6 +16,9 @@ export default function getChartOptions(code, filters) {
             }
         };
         let dataoption = {
+            "RequestInfo":{
+                "authToken": `${localStorage.getItem('Employee.token')}`
+            },
             "headers": {
                 "tenantId": "pb.amritsar"
             },
