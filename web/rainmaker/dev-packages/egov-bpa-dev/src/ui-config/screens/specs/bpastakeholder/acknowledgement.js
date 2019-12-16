@@ -145,8 +145,8 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application is Approved Successfully",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+              labelName: "Application Approved Successfully",
+              labelKey: "BPA_APPROVAL_CHECKLIST_MESSAGE_HEAD"
             },
             body: {
               labelName:
@@ -421,7 +421,7 @@ const screenConfig = {
       tenant
     );
     set(action, "screenConfig.components.div.children", data);
-    if (window.location.pathname.includes("whitelisted")) {
+    if (window.location.pathname.includes("openlink")) {
       set(
         action.screenConfig,
         "components.div.children.applicationSuccessFooter.props.style",

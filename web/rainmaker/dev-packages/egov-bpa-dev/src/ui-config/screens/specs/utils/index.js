@@ -641,9 +641,9 @@ export const getHeaderSideText = (status, licenseNo = null) => {
     case "REJECTED":
       return { word1: "Status: ", word2: "TL_REJECTED" };
     case "CANCELLED":
-      return { word1: `Trade License No: `, word2: `${licenseNo}` };
+      return { word1: `License No: `, word2: `${licenseNo}` };
     case "APPROVED":
-      return { word1: `Trade License No: `, word2: `${licenseNo}` };
+      return { word1: `License No: `, word2: `${licenseNo}` };
     default:
       return { word1: "", word2: "" };
   }
@@ -2170,7 +2170,7 @@ export const setLicenseeSubTypeDropdownData = async (
       handleField(
         "apply",
         "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
-        "props.required",
+        "required",
         false
       )
     );
@@ -2202,7 +2202,7 @@ export const setLicenseeSubTypeDropdownData = async (
       handleField(
         "apply",
         "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
-        "props.required",
+        "required",
         true
       )
     );
@@ -2312,7 +2312,7 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
     case "CANCELLED":
       return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
-    case "PENDINGAPPROVAL ":
+    case "PENDINGAPPROVAL":
       return getLocaleLabels(
         "Pending for Approval",
         "WF_ARCHITECT_PENDINGAPPROVAL",
@@ -2345,6 +2345,8 @@ export const getTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+    default:
+      return getLocaleLabels(label, label, localisationLabels);
   }
 };
 

@@ -47,7 +47,7 @@ export const getGenderRadioButton = {
   props: {
     label: {
       name: "Gender",
-      key: "BAP_COMMON_GENDER_LABEL"
+      key: "BPA_COMMON_GENDER_LABEL"
     },
     //     {
     //       label: "Husband",
@@ -163,7 +163,7 @@ export const OwnerInfoCard = getCommonCard({
       }),
       beforeFieldChange: async (action, state, dispatch) => {
         await setLicenseeSubTypeDropdownData(action.value, state, dispatch);
-        if (action.value == "ARCHITECT")
+        if (action.value == "ARCHITECT") {
           dispatch(
             handleField(
               "apply",
@@ -172,7 +172,23 @@ export const OwnerInfoCard = getCommonCard({
               true
             )
           );
-        else
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "required",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+              "visible",
+              true
+            )
+          );
+        } else {
           dispatch(
             handleField(
               "apply",
@@ -181,6 +197,23 @@ export const OwnerInfoCard = getCommonCard({
               false
             )
           );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "required",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+              "visible",
+              false
+            )
+          );
+        }
       }
     },
     licenseeSubType: {
@@ -193,7 +226,7 @@ export const OwnerInfoCard = getCommonCard({
           labelName: "Select Technical Person Licensee Sub Type",
           labelKey: "BPA_LICENSEE_SUB_TYPE_PLACEHOLDER"
         },
-        required: false,
+        required: true,
         jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
         localePrefix: {
           moduleName: "TRADELICENSE",
@@ -258,6 +291,7 @@ export const OwnerInfoCard = getCommonCard({
         labelKey: "BPA_COUNCIL_FOR_ARCH_NO_PLACEHOLDER"
       },
       visible: false,
+      required: true,
       jsonPath:
         "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
     })
