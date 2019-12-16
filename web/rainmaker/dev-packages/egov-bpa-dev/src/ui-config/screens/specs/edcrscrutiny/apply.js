@@ -1,103 +1,122 @@
 import {
   getCommonCard,
   getTextField,
-  getCommonTitle,
   getSelectField,
   getCommonContainer,
   getCommonHeader,
-  getCommonParagraph,
-  getPattern
+  getPattern,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-// import { documentList } from "./applyResource/documentList";
+import { documentList } from "./documentList";
+import { resetFields, submitFields } from "./functions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const header = getCommonHeader({
   labelName: "New Building Plan Scrutiny",
   labelKey: "BPA_SCRUTINY_TITLE"
 });
 
-const tradeDocumentDetails = getCommonCard({
-  header: getCommonTitle(
-    {
-      labelName: "Required Documents",
-      labelKey: "TL_NEW-UPLOAD-DOCS_HEADER"
-    },
-    {
-      style: {
-        marginBottom: 18
-      }
-    }
-  ),
-  paragraph: getCommonParagraph({
-    labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
-  })
-});
-
 const buildingInfoCard = getCommonCard({
   buildingPlanCardContainer: getCommonContainer({
-    licenseeType: {
-      ...getSelectField({
-        label: {
-          labelName: "CITY",
-          labelKey: "BPA_SCRUTINY_CITY"
-        },
-        placeholder: {
-          labelName: "Select City",
-          labelKey: "BPA_SCRUTINY_CITY_PLACEHOLDER"
-        },
-        required: true,
+    inputdetails: getCommonContainer({
+      tenantId: {
+        ...getSelectField({
+          label: {
+            labelName: "CITY",
+            labelKey: "EDCR_SCRUTINY_CITY"
+          },
+          placeholder: {
+            labelName: "Select City",
+            labelKey: "EDCR_SCRUTINY_CITY_PLACEHOLDER"
+          },
+          required: true,
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
+          jsonPath: "Scrutiny[0].tenantId",
+          sourceJsonPath: "applyScreenMdmsData.TenantList",
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          }
+        })
+      },
+      dummyDiv: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
         gridDefination: {
           xs: 12,
           sm: 6
+        },
+        visible: true,
+        props: {
+          disabled: true
         }
-      })
-    },
-    dummyDiv: {
+      },
+      applicantName: getTextField({
+        label: {
+          labelName: "Applicant Name",
+          labelKey: "EDCR_SCRUTINY_NAME_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Applicant Name",
+          labelKey: "EDCR_SCRUTINY_NAME_LABEL_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: true,
+        pattern: getPattern("Name"),
+        jsonPath: "Scrutiny[0].applicantName"
+      }),
+      // serviceType: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "Service Type",
+      //       labelKey: "BPA_SCRUTINY_SERVICETYPE_LABEL"
+      //     },
+      //     placeholder: {
+      //       labelName: "Select Service Type",
+      //       labelKey: "BPA_SCRUTINY_SERVICETYPE_PLACEHOLDER"
+      //     },
+      //     required: true,
+      //     gridDefination: {
+      //       xs: 12,
+      //       sm: 6
+      //     }
+      //   })
+      // },
+      dummyDiv1: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        visible: true,
+        props: {
+          disabled: true
+        }
+      }
+    }),
+    dummyDiv2: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       gridDefination: {
         xs: 12,
-        sm: 6
+        sm: 12
       },
       visible: true,
       props: {
         disabled: true
+      },
+      children: {
+        documentList
       }
     },
-    ownerName: getTextField({
-      label: {
-        labelName: "Applicant Name",
-        labelKey: "BPA_SCRUTINY_NAME_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Applicant Name",
-        labelKey: "BPA_SCRUTINY_NAME_LABEL_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      required: true,
-      pattern: getPattern("Name")
-    }),
-    licenseeSubType: {
-      ...getSelectField({
-        label: {
-          labelName: "Service Type",
-          labelKey: "BPA_SCRUTINY_SERVICETYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Service Type",
-          labelKey: "BPA_SCRUTINY_SERVICETYPE_PLACEHOLDER"
-        },
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        }
-      })
-    },
+
     buttonContainer: getCommonContainer({
       firstCont: {
         uiFramework: "custom-atoms",
@@ -127,8 +146,8 @@ const buildingInfoCard = getCommonCard({
         },
         children: {
           buttonLabel: getLabel({
-            labelName: "RESET",
-            labelKey: "ABG_RESET_BUTTON"
+            labelName: "CLEAR FORM",
+            labelKey: "BPA_SCRUTINY_CLEARFORM_BUTTON"
           })
         },
         onClickDefination: {
@@ -148,7 +167,7 @@ const buildingInfoCard = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            backgroundColor: "#696969",
+            backgroundColor: "#FE7A51",
             borderRadius: "2px",
             width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px"
@@ -156,14 +175,14 @@ const buildingInfoCard = getCommonCard({
         },
         children: {
           buttonLabel: getLabel({
-            labelName: "SEARCH",
-            labelKey: "ABG_SEARCH_BUTTON"
+            labelName: "SUBMIT",
+            labelKey: "EDCR_SCRUTINY_SUBMIT_BUTTON"
           })
         },
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            searchApiCall(state, dispatch);
+            submitFields(state, dispatch);
           }
         }
       },
@@ -183,6 +202,20 @@ const buildingInfoCard = getCommonCard({
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
+  beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("Scrutiny[0]", {}));
+    dispatch(prepareFinalObject("LicensesTemp[0]", {}));
+
+    let tenantList = [
+      {
+        code: "pb.amritsar",
+        active: "true"
+      }
+    ];
+    dispatch(prepareFinalObject("applyScreenMdmsData.TenantList", tenantList));
+
+    return action;
+  },
   components: {
     div: {
       uiFramework: "custom-atoms",

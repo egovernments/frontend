@@ -660,8 +660,9 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "egov-mdms-service/v1/_get",
+      "egov-mdms-service/v1/_search",
       "",
+      [],
       queryObject
     );
     return response;
@@ -1134,16 +1135,15 @@ const isApplicationPaid = currentStatus => {
   let isPAID = false;
 
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
-    const buisnessSeviceStates = JSON.parse(
-      localStorageGet("businessServiceData")
-    )[0].states;
-    for (var i = 0; i < buisnessSeviceStates.length; i++) {
-      if (buisnessSeviceStates[i].state === currentStatus) {
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item=>item.businessService === "NewTL")
+    const states = tlBusinessService[0].states;
+    for (var i = 0; i < states.length; i++) {
+      if (states[i].state === currentStatus) {
         break;
       }
       if (
-        buisnessSeviceStates[i].actions &&
-        buisnessSeviceStates[i].actions.filter(item => item.action === "PAY")
+        states[i].actions &&
+        states[i].actions.filter(item => item.action === "PAY")
           .length > 0
       ) {
         isPAID = true;
@@ -1194,35 +1194,36 @@ export const createEstimateData = async (
   ];
   const currentStatus = LicenseData.status;
   const isPAID = isApplicationPaid(currentStatus);
-  // const payload = getFromReceipt
-  //   ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-  //   : await getBill(queryObj);
-  // const estimateData = payload
-  //   ? getFromReceipt
-  //     ? getEstimateData(payload.Receipt[0].Bill, getFromReceipt, LicenseData)
-  //     : payload.billResponse &&
-  //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
-  //   : [];
-const fetchBillResponse=await getBill(getBillQueryObj);
+  const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : fetchBillResponse&&fetchBillResponse.Bill&&fetchBillResponse.Bill[0];
+    : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
   let estimateData = payload
     ? isPAID
-      ?payload&&payload.Payments&&payload.Payments.length>0&& getEstimateData(payload.Payments[0].paymentDetails[0].bill, isPAID, LicenseData)
-      : payload&&
-        getEstimateData(payload, false, LicenseData)
+      ? payload &&
+        payload.Payments &&
+        payload.Payments.length > 0 &&
+        getEstimateData(
+          payload.Payments[0].paymentDetails[0].bill,
+          isPAID,
+          LicenseData
+        )
+      : payload && getEstimateData(payload, false, LicenseData)
     : [];
-    estimateData=estimateData||[];
+  estimateData = estimateData || [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
-  if(payload){
-    const getBillResponse=await calculateBill(getBillQueryObj);
+  if (payload) {
+    const getBillResponse = await calculateBill(getBillQueryObj);
     getBillResponse &&
-    getBillResponse.billingSlabIds &&
-      getBillingSlabData(dispatch, getBillResponse.billingSlabIds, tenantId, accessories);
+      getBillResponse.billingSlabIds &&
+      getBillingSlabData(
+        dispatch,
+        getBillResponse.billingSlabIds,
+        tenantId,
+        accessories
+      );
   }
-
 
   /** Waiting for estimate to load while downloading confirmation form */
   var event = new CustomEvent("estimateLoaded", { detail: true });

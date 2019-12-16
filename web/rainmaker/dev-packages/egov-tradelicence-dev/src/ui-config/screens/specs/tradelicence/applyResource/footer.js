@@ -973,11 +973,12 @@ export const downloadPrintContainer = (
         //     }
         //   }
         // }
+        }
       },
       // gridDefination: {
       //   xs: 12,
       //   sm: 6
       // }
     }
-  }
+  
 };
