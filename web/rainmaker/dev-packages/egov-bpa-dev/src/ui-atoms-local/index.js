@@ -19,10 +19,15 @@ const FormIcon = Loadable({
   loader: () => import("./Icons/FormIcon"),
   loading: () => <Loading />
 });
+const ApplicationBpacontainer = Loadable({
+  loader: () => import("./applicationNumber"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
   AutoSuggest,
   downloadFile,
-  FormIcon
+  FormIcon,
+  ApplicationBpacontainer
 };

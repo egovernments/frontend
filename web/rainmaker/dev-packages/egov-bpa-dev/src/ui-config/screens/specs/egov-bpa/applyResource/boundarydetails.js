@@ -100,7 +100,7 @@ export const detailsofplot = getCommonCard({
                     labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
                 },
                 required: true,
-                jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.plot.area",
+                jsonPath: "BPA.scrutinyDetails.planDetail.plot.area",
                 props: {
                     disabled: 'true'
                   }
@@ -118,7 +118,7 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.khataNo"
+                jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.khataNo"
             })
         },
         holdingNumber: {
@@ -148,7 +148,7 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.plotNo"
+                jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.plotNo"
             })
         },
         cityTown: {

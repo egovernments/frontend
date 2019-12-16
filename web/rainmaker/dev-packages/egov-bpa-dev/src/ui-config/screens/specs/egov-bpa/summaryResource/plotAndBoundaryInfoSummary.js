@@ -142,7 +142,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.plotarea",
+                            jsonPath: "BPA.scrutinyDetails.planDetail.plot.area",
                             callBack: value => {
                                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
                             }
@@ -154,7 +154,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.kathanumber",
+                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.khataNo",
                             callBack: value => {
                                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
                             }
@@ -178,7 +178,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.plotnumber",
+                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.plotNo",
                             callBack: value => {
                                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
                             }

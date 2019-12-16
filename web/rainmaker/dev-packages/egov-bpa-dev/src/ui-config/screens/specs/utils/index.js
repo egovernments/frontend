@@ -472,7 +472,7 @@ const occupancy = (state, dispatch) => {
   );
   let scrutinyOccupancy = get(
     state.screenConfiguration.preparedFinalObject,
-    'BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy'
+    'BPA.scrutinyDetails.planDetail.planInformation.occupancy'
   )
   if (!occupancy) {
     dispatch(prepareFinalObject("BPA.occupancy", scrutinyOccupancy));
@@ -486,7 +486,7 @@ const appDate = (state, dispatch) => {
   );
   let scrutinyAppDate = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPAs[0].BPADetails.scrutinyDetails.planDetail.applicationDate"
+    "BPA.scrutinyDetails.planDetail.applicationDate"
   )
   if (!appDate) {
     dispatch(prepareFinalObject("BPA.appdate", scrutinyAppDate));
@@ -496,15 +496,15 @@ const appDate = (state, dispatch) => {
 const riskType = (state, dispatch) => {
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPAs[0].BPADetails.scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+    "BPA.scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
   );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPAs[0].BPADetails.scrutinyDetails.planDetail.plot.area"
+    "BPA.scrutinyDetails.planDetail.plot.area"
   );
   let buildingBlocks = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks"
+    "BPA.scrutinyDetails.planDetail.blocks"
   );
   let blocks = buildingBlocks.map(item => {
     return item && item.building && item.building.buildingHeight;
@@ -606,19 +606,19 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         if(tenantId && city){
           let currOwnersArr = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPAs[0].BPADetails.scrutinyDetails",
+            "BPA.scrutinyDetails",
             []
           );
           currOwnersArr = userInfo[0];
           dispatch(
             prepareFinalObject(
-              `BPAs[0].BPADetails.scrutinyDetails`,
+              `BPA.scrutinyDetails`,
               currOwnersArr
             )
           );
-          freezeAppType(state, dispatch);
-          occupancy(state, dispatch);
-          appDate(state, dispatch);
+          // freezeAppType(state, dispatch);
+          // occupancy(state, dispatch);
+          // appDate(state, dispatch);
           riskType(state, dispatch);
         }else {
           dispatch(

@@ -188,7 +188,7 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "BPA_APPLICATION_DEMOLITION_AREA_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.demolitiondetails.area",
+                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.demolitionArea",
                             callBack: value => {
                                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
                             }

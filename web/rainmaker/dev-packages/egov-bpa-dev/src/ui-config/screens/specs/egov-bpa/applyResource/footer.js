@@ -178,7 +178,7 @@ const callBackForNext = async (state, dispatch) => {
     }
     const response = get(
       state,
-      "screenConfiguration.preparedFinalObject.BPAs[0].BPADetails.scrutinyDetails.planDetail.blocks[0].building.floors",
+      "screenConfiguration.preparedFinalObject.BPA.scrutinyDetails.planDetail.blocks[0].building.floors",
       []
   );
     //let index = 0;

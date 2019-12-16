@@ -24,23 +24,25 @@ import { searchBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
-import {
-  applicantSummary
-} from "./summaryResource/applicantSummary";
+import { applicantSummary } from "./summaryResource/applicantSummary";
+import { basicSummary } from "./summaryResource/basicSummary"
 import { documentsSummary } from "./summaryResource/documentsSummary";
-import { estimateSummary } from "./summaryResource/estimateSummary";
+import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocSummary } from "./summaryResource/nocSummary";
+import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
 // import { propertySummary } from "./summaryResource/propertySummary";
+import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
+import { searchResMockJson } from './searchresposnsemockjson';
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
     labelName: "Task Details",
-    labelKey: "NOC_TASK_DETAILS_HEADER"
+    labelKey: "BPA_TASK_DETAILS_HEADER"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-noc",
-    componentPath: "ApplicationNoContainer",
+    moduleName: "egov-BPA",
+    componentPath: "ApplicationBpacontainer",
     props: {
       number: getQueryArg(window.location.href, "applicationNumber")
     }
@@ -77,33 +79,36 @@ const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
 
   // Get all documents from response
-  let firenoc = get(
+  let BPA = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0]",
+    "screenConfiguration.preparedFinalObject.BPA",
     {}
   );
-  let buildingDocuments = jp.query(
-    firenoc,
-    "$.fireNOCDetails.buildings.*.applicationDocuments.*"
-  );
+  // let buildingDocuments = jp.query(
+  //   firenoc,
+  //   "$.fireNOCDetails.buildings.*.applicationDocuments.*"
+  // );
   let applicantDocuments = jp.query(
-    firenoc,
-    "$.fireNOCDetails.applicantDetails.additionalDetail.documents.*"
+    BPA,
+    "$.documents.*"
   );
+
   let otherDocuments = jp.query(
-    firenoc,
-    "$.fireNOCDetails.additionalDetail.documents.*"
+    BPA,
+    "$.additionalDetail.documents.*"
   );
   let allDocuments = [
-    ...buildingDocuments,
+   // ...buildingDocuments,
     ...applicantDocuments,
     ...otherDocuments
   ];
 
   allDocuments.forEach(doc => {
+    console.log('doooc', doc)
     documentsPreview.push({
-      title: getTransformedLocale(doc.documentType),
-      fileStoreId: doc.fileStoreId,
+      // title: getTransformedLocale(doc.documentType),
+      title: doc.documentType,
+      fileStoreId: doc.fileStore,
       linkText: "View"
     });
   });
@@ -129,6 +134,7 @@ const prepareDocumentsView = async (state, dispatch) => {
       `Document - ${index + 1}`;
     return doc;
   });
+  console.log("docPre", documentsPreview)
   dispatch(prepareFinalObject("documentsPreview", documentsPreview));
 };
 
@@ -176,26 +182,26 @@ const setDownloadMenu = (state, dispatch) => {
   /** MenuButton data based on status */
   let status = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
+    "screenConfiguration.preparedFinalObject.BPA.status"
   );
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
+    label: { labelName: "BPA Certificate", labelKey: "BPA_CERTIFICATE" },
     link: () => {
       generatePdf(state, dispatch, "certificate_download");
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
+    label: { labelName: "BPA Certificate", labelKey: "BPA_CERTIFICATE" },
     link: () => {
       generatePdf(state, dispatch, "certificate_print");
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "BPA_RECEIPT" },
     link: () => {
       generatePdf(state, dispatch, "receipt_download");
     },
@@ -275,21 +281,36 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId
 ) => {
-  const response = await getSearchResults([
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "applicationNumber", value: applicationNumber }
-  ]);
+  // const response = await getSearchResults([
+  //   {
+  //     key: "tenantId",
+  //     value: tenantId
+  //   },
+  //   { key: "applicationNumber", value: applicationNumber }
+  // ]);
+  const response = searchResMockJson;
+  const edcrNumber = response.Bpa[0].edcrNumber
+
   // const response = sampleSingleSearch();
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + "DCR122019M5HQU" + "&tenantId=jupiter",
+    {}
+    );
+  console.log(edcrRes, "sbdhjfbdsjbfkjbsdf");
+  dispatch(
+    prepareFinalObject(
+      `BPA.scrutinyDetails`,
+      edcrRes.edcrDetail[0]
+    )
+  );
 
   // Set Institution/Applicant info card visibility
   if (
     get(
       response,
-      "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+      "BPA.ownershipCategory",
       ""
     ).startsWith("INSTITUTION")
   ) {
@@ -345,6 +366,21 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.basicSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.plotAndBoundaryInfoSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
 
     return action;
   },
@@ -382,10 +418,14 @@ const screenConfig = {
         },
         body: getCommonCard({
           // estimateSummary: estimateSummary,
+          basicSummary: basicSummary,
+          scrutinySummary:scrutinySummary,
+          applicantSummary: applicantSummary,
+          documentsSummary: documentsSummary,
+          plotAndBoundaryInfoSummary: plotAndBoundaryInfoSummary,
           nocSummary: nocSummary,
           // propertySummary: propertySummary,
-          applicantSummary: applicantSummary,
-          documentsSummary: documentsSummary
+         
         }),
         citizenFooter:
           process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}

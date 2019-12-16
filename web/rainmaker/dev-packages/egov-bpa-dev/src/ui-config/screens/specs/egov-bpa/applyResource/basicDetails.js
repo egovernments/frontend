@@ -64,10 +64,9 @@ export const basicDetails = getCommonCard({
         labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
       },
       required: true,
-      jsonPath: 'BPA.occupancy',
-      jsonPath : 'BPA.occupancy',
+      jsonPath: 'BPA.scrutinyDetails.planDetail.planInformation.occupancy',
       // jsonPath:
-      //   "BPAs[0].BPADetails.scrutinyDetails.planDetail.planInformation.occupancy",
+      //   "BPA.scrutinyDetails.planDetail.planInformation.occupancy",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -146,8 +145,8 @@ export const basicDetails = getCommonCard({
         labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
       },
       // required: true,
-      jsonPath: "BPA.appdate",
-      // jsonPath: "BPAs[0].BPADetails.scrutinyDetails.planDetail.applicationDate",
+      jsonPath: "BPA.scrutinyDetails.planDetail.applicationDate",
+      // jsonPath: "BPA.scrutinyDetails.planDetail.applicationDate",
       props: {
         defaultValue: getTodaysDateInYMD(),
         inputProps: {
