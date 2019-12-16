@@ -18,7 +18,7 @@ class TableChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: false,
+      filter2: false,
       filterValue: {},
       data: null,
       drillCode: null,
@@ -30,6 +30,7 @@ class TableChart extends Component {
 
   getRequest(calledFrom, visualcode, filters, moduleLevel, dataChips) {
     let getAxiosOptions = getChartOptions(visualcode, filters);
+    
     if (getAxiosOptions && getAxiosOptions.url) {
       axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
         .then(response => {
@@ -37,12 +38,13 @@ class TableChart extends Component {
           let tempData = response.data.responseData;
           let drillCode = response.data.responseData['drillDownChartId'];
           let visualcode = response.data.responseData['visualizationCode'];
+
           if (dataChips) {
-            tempData['filter'] = dataChips['filter'];
+            // tempData['filter2'] = dataChips['filter'];
             tempData['tt'] = dataChips['tt'];
 
             tempState.data = tempData;
-            tempState.filter = dataChips['filter'];
+            tempState.filter2 = true
             tempState.filterValue = dataChips['tt'];
             tempState.drillCode = drillCode;
             if (drillCode != 'none' || calledFrom == 'clickFromTab')
@@ -62,19 +64,26 @@ class TableChart extends Component {
   }
 
   handleChipClick = (visualcode) => {
+    visualcode = this.props.chartsData[this.props.chartKey]['visualizationCode']
+    let tenantId = {};
+    if (this.state.filter2 && this.state.filterValue) {
+      tenantId = { tenantId: this.state.filterValue.tenantId }
+    }
     //this.setState({ data: prodData[0] })   
     this.setState({
-      drillDownId: this.props.chartsData[this.props.chartKey].filter[0]
+      drillDownId: this.props.chartsData[this.props.chartKey].filter[0],
+      filter2: false
     })
 
     let dataChips = {
-      filter: false
+      filter2: false
     }
-    this.getRequest("handleChipClick", visualcode, {}, 'PT', dataChips)
+
+    this.getRequest("handleChipClick", this.state.activeTab? this.state.activeTab : visualcode, {}, 'PT', null)
   }
   applyFilter = (visualcode, drillCode, rowData, event) => {
     let dataChips = {
-      filter: true,
+      filter2: true,
       tt:
       {
         id: 1,
@@ -91,17 +100,18 @@ class TableChart extends Component {
   
   clickFromTab = (visualcode) => {
     let tenantId = {};
-    if (this.state.filter) {
+    if (this.state.filter2 && this.state.filterValue) {
       tenantId = { tenantId: this.state.filterValue.tenantId }
     }
     let dataChips = {
-      filter: false
+      filter2: false
     }
     
 
     this.getRequest("clickFromTab", visualcode, tenantId, 'PT', "")
     this.setState({
-      filter: false
+      filter2: false,
+      activeTab: visualcode
     })
 
 
@@ -158,7 +168,7 @@ class TableChart extends Component {
 
             </div>
           </div>
-          {(this.state.data && this.state.filter) &&
+          {(this.state.data && this.state.filter2) &&
             <div className="row tableFilterChipWrap">
               <div className="filLabel">
                 Filters Applied
@@ -171,7 +181,7 @@ class TableChart extends Component {
           {/* <Table tableData={this.state.data} callBack={this.applyFilter.bind(this)} />               */}
           {
             <UiTable
-              column={this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 && this.state.data.filter[0].column ? this.state.data.filter[0].column : chartsData[chartKey].filter[0].column}
+              column={this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 && this.state.data.filter[0].column ? this.state.data.filter[0].column : (chartsData[chartKey] && Array.isArray(chartsData[chartKey].filter) && chartsData[chartKey].filter.length > 0 ? chartsData[chartKey].filter[0].column : '')}
               data={newData}
               columnData={columnData}
               // callAPI={this.filterPageAPI.bind(this)}
@@ -182,7 +192,7 @@ class TableChart extends Component {
               // needHash={false}
               Gfilter={this.props.GFilterData}
               needSearch
-              needHash={true}
+              needHash={false}
               needExport
               excelName={this.props.label || "DSS"}
             // toggleSideDrawer={this.handleInfoClick.bind(this)}

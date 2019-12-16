@@ -81,8 +81,8 @@ export const CardStyle = {
         minWidth: '30px'
     },
     lightTooltip: {
-        background: variables.white,
-        color: variables.black,
+        // background: variables.white,
+        // color: variables.black,
         // fontSize: 11,
         // fontFamily: variables.SecondaryFont,
         // margin: 'auto',

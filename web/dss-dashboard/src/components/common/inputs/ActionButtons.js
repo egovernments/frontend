@@ -44,7 +44,7 @@ class ActionButton extends React.Component {
     renderInfoButton() {
         const { classes, text } = this.props;
         return (
-            <Tooltip title= {text ? text : "Download"} classes={{ tooltip: classes.lightTooltip }}>
+            <Tooltip title= {text ? text : "Download"} classes={{ tooltip: classes.lightTooltip }} placement="top">
                 <div>
                     <Button className={classes.cancelButton} onClick={this.handleClick.bind(this)}>
                         <MoreVertIcon    className={classes.Actionmenus}> {text} </MoreVertIcon >
@@ -70,7 +70,7 @@ class ActionButton extends React.Component {
         const { classes, text, disabled, clas } = this.props;
         if(this.props.containedButton === true){
             return (
-                <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
+                <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }} placement="top">
                     <div style={{marginRight: '2px'}}>
                         <Button disabled={disabled} variant="contained" onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color: 'white', backgroundColor: '#fe7a51', fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
                             {text}
@@ -80,7 +80,7 @@ class ActionButton extends React.Component {
             );
         } else {
             return (
-                <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
+                <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }} placement="top">
                     <div>
                         <Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a", fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
                             {text}
@@ -127,7 +127,7 @@ class ActionButton extends React.Component {
     renderDownloadButton() {
         const { classes, text } = this.props;
         return (
-            <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }}>
+            <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }} placement="top">
                 <div className={`${classes.actionButton} ${classes.download}`} onClick={this.handleClick.bind(this)}>
                     {/* <Fab aria-label="download" > */}
                         <CloudDownloadSharp />

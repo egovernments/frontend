@@ -22,6 +22,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { Chip } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
+import AutoComplete from '../inputs/MultipleSelect/AutoComplete'
 
 class GlobalFilter extends Component {
     constructor(props) {
@@ -203,6 +204,19 @@ class GlobalFilter extends Component {
         />);
     }
 
+    renderAutoComplete(target, hndlslected, defaultV, data) {
+        return (<AutoComplete
+            logo={target}
+            handleSelected={hndlslected}
+            target={target}
+            open={this.state.multiselectStateIsOpen}
+            defaultValue={defaultV}
+            item={data}
+            clear={this.state.clear}
+            handleClear={this.handleClear.bind(this)}
+        />);
+    }
+
     handleClear() {
         this.setState({
             clear: false
@@ -218,9 +232,9 @@ class GlobalFilter extends Component {
             case "dropdown":
                 switch (label) {
                     case "ULBS":
-                        return this.renderMultiselect(object.label, this.handleChanges, this.state.ulbs, object.values)
+                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.ulbs, object.values)
                     case "DDRs":
-                        return this.renderMultiselect(object.label, this.handleChanges, this.state.ddrs, object.values)
+                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.ddrs, object.values)
                     case "Services":
                         return this.renderSimpleSelect(object.label, object.values, this.handleChanges)
                     case "Date Range":
@@ -272,7 +286,11 @@ class GlobalFilter extends Component {
                 <div className={classes.mChips}>
                     {GFilterData.DDRs.map(item => {
                          let handleOnDelete = this.handleOnDelete.bind(this)
-                        return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}><Chip fullwidth className={classes.mCustomChip} label={item} color={'gray'}  onDelete={() => handleOnDelete('DDRs',item)}></Chip></div>
+                        return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}>
+                            {/* <Chip fullwidth className={classes.mCustomChip} label={item} color={'gray'}  onDelete={() => handleOnDelete('DDRs',item)}> */}
+                           
+                            <Chip fullwidth className={classes.mCustomChip} label={item} style={{padingLeft: '3px'}} color={'gray'} >
+                                </Chip></div>
                     })
 
                     }
@@ -283,7 +301,10 @@ class GlobalFilter extends Component {
                 <div className={classes.mChips}>
                     {GFilterData.ULBS.map(item => {
                         let handleOnDelete = this.handleOnDelete.bind(this)
-                        return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}><Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete('ULBS',item)}></Chip></div>
+                        return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}>
+                            {/* <Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete('ULBS',item)}></Chip></div> */}
+                            
+                            <Chip className={classes.mCustomChip} label={item} color={'gray'}></Chip></div>
                     })
 
                     }</div>
@@ -314,7 +335,7 @@ class GlobalFilter extends Component {
 
                     </div> */}
 
-                    {isMobile && this.renderFilters()}
+                    {/* {isMobile && this.renderFilters()}s */}
 
                     <div id="divNotToPrint" className={classes.actions}>
                         <ActionButtons buttonType="default" fontSize="16px" text="CLEAR ALL" disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
@@ -322,7 +343,7 @@ class GlobalFilter extends Component {
                     </div>
                 </div>
 
-                {!isMobile && this.renderFilters()}
+                {/* {!isMobile && this.renderFilters()} */}
 
                 {/* <div className={classes.fVisible}>
                     {GFilterData && GFilterData.DDRs && GFilterData.DDRs.length > 0 && <div className={classes.fVRow}>

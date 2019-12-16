@@ -161,7 +161,7 @@ class Cards extends Component {
           {title && <CardHeader classes={{ title: classes.title, root: classes.cardheader }} title={(strings[title] || title) + (!noUnit ? '' : (' (In ' + this.props.GFilterData['Denomination'] + ')'))} onClick={(event) => this.clickEvent(event)}
             action={
               <div style={{ paddingLeft: '4px' }}>
-                <Tooltip title={strings[title] || title} classes={{ tooltip: classes.lightTooltip }}>
+                <Tooltip title={strings[title] || title} classes={{ tooltip: classes.lightTooltip }} placement="top">
                   <InfoIcon style={{ color: '#96989a',verticalAlign: '-webkit-baseline-middle',paddingTop:'3px' }} />
                 </Tooltip>
               </div>

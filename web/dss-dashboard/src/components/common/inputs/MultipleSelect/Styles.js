@@ -26,7 +26,8 @@ const styles = theme => ({
         minWidth: 120,
         // 'flex-grow': 1,
         '& label': {
-            color: variables.black
+            color: variables.black,
+            top: '-15px'
         },
     },
     listItem: {

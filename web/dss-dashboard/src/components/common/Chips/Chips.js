@@ -29,14 +29,15 @@ class Chips extends React.Component{
 
   render(){
    let { val, classes }=this.props;
+
     return (
       <div >      
         <Chip
         className={classes.root}
           variant="outlined"
           size="small"
-          avatar={<Avatar>{val.type}</Avatar>}
-          label={val.label}
+          avatar={<Avatar>{ val ? val.type : ''}</Avatar>}
+          label={val ? val.label : ''}
           // color="ward"
           clickable
           onDelete={this.handleClick}

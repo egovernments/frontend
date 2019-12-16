@@ -124,7 +124,6 @@ class PerformanceChart extends React.Component {
     }).compact().value() || [];
 
     if (data) {
-      console.log(data);
 
       return (<div className={classes.body}>
         {data.map((d, i) => {

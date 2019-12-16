@@ -43,7 +43,7 @@ class Dashboard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('dashboard fired', _.get(nextProps, 'match.params.viewAll'))
+    // console.log('dashboard fired', _.get(nextProps, 'match.params.viewAll'))
     let newUrl = _.get(nextProps, 'match.params.viewAll');
     if (newUrl && this.state.viewAll !== newUrl) {
       this.setState({
@@ -54,10 +54,11 @@ class Dashboard extends Component {
 
   callDashboardAPI() {
     let dashboardApi = new dashboardAPI(20000);
-    this.props.APITransport(dashboardApi, _.toLower(this.state.page) === 'dashboard' ? 'home' : this.state.page);
+    this.props.APITransport(dashboardApi, (_.toLower(this.state.page) === 'dashboard' || typeof this.state.page == 'undefined') ? 'home' : this.state.page);
   }
 
   componentDidMount() {
+    debugger;
     let startDate= moment().month(3).startOf('month').unix()
     let endDate = moment().month(2).endOf('month').add(1, 'years').unix()
 

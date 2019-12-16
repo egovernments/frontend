@@ -32,8 +32,8 @@ const actionButtonStyles = theme => ({
         borderColor: variables.green
     },
     lightTooltip: {
-        background: variables.white,
-        color: variables.black,
+        // background: variables.white,
+        // color: variables.black,
         boxShadow: theme.shadows[1],
         fontSize: 11,
         fontFamily: variables.SecondaryFont
