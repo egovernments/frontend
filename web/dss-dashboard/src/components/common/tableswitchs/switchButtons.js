@@ -17,7 +17,7 @@ class SwitchButton extends Component {
         this.setState({
             value: newValue
         })
-        this.props.clickFromTab(newValue);
+        this.props.clickFromTab(newValue,event.currentTarget.innerText);
     };
 
     render() {

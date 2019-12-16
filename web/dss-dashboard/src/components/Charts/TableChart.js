@@ -25,6 +25,7 @@ class TableChart extends Component {
       visualcode: null,
       tabFilterKey: null,
       drillDownId: null,
+      active:'BOUNDARY'
     }
   }
 
@@ -88,7 +89,7 @@ class TableChart extends Component {
       {
         id: 1,
         'label': rowData[this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].column : this.props.chartsData[this.props.chartKey].filter[0].column] ,
-        'type': 'ULBS',
+        'type': this.state.active,
         'color': 'orange',
         [this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0  && this.state.data.filter[0].key ?  this.state.data.filter[0].key :'']: rowData[this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].column : '']
       },
@@ -98,7 +99,7 @@ class TableChart extends Component {
   }
 
   
-  clickFromTab = (visualcode) => {
+  clickFromTab = (visualcode,active) => {
     let tenantId = {};
     if (this.state.filter2 && this.state.filterValue) {
       tenantId = { tenantId: this.state.filterValue.tenantId }
@@ -111,7 +112,8 @@ class TableChart extends Component {
     this.getRequest("clickFromTab", visualcode, tenantId, 'PT', "")
     this.setState({
       filter2: false,
-      activeTab: visualcode
+      activeTab: visualcode,
+      active:active
     })
 
 

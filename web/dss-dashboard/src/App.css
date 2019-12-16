@@ -336,13 +336,14 @@ h6 span {
 }
 
 .MuiAvatar-root {
-    width: 50px !important;
+    width: 60px !important;
     height: 32px !important;
     border-radius: 15px !important;
     background-color: #fe7a51 !important;
     /* #17c1f4; */
     color: white !important;
     margin-left: -3px !important;
+        margin-top: -1px;
 }
 
 .MuiChip-label {
@@ -382,6 +383,10 @@ h6 span {
 .progress {
     border-radius: 10px;
     height: 5px;
+}
+
+.MuiTable-root td{
+    background: none !important;
 }
 
 .revenueRow {

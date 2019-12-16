@@ -23,22 +23,22 @@ const inputStyle = {
 };
 
 const theme = createMuiTheme({
-   overrides: {
-      typography: {
-        useNextVariants: true,
-        fontFamily: variables.primaryFont
-      },
-      MuiMenu: {
-        paper: {
-          backgroundColor: 'white',
-          fontFamily: variables.primaryFont,
-          // minWidth: '100%',
-          height: 'auto',
-          color: variables.black
+    overrides: {
+        typography: {
+            useNextVariants: true,
+            fontFamily: variables.primaryFont
+        },
+        MuiMenu: {
+            paper: {
+                backgroundColor: 'white',
+                fontFamily: variables.primaryFont,
+                // minWidth: '100%',
+                //   height: 'auto',
+                color: variables.black
+            }
         }
-      }
     }
-  });
+});
 
 class CheckboxesTags extends React.Component {
     constructor(props) {
@@ -124,9 +124,12 @@ class CheckboxesTags extends React.Component {
                     <FormControl className={classes.formControl} >
                         {/* <InputLabel htmlFor="select-multiple-checkbox">{label || 'Select'}</InputLabel> */}
                         <div className={classes.list}>
-                            <SVG src={svgicon} className={classes.CloseButton} >
+                            <div>
+                                <SVG src={svgicon} className={classes.CloseButton} >
 
-                            </SVG>
+                                </SVG>
+                            </div>
+
                             <Autocomplete
                                 disableUnderline={true}
                                 onChange={this.handleChange.bind(this)}
