@@ -294,11 +294,32 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  let documents = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
-    []
-  );
+  // let documents = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
+  //   []
+  // );
+  let documents=[{active: true,
+    code: "OWNER.IDENTITYPROOF",
+    description: "OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION",
+    documentType: "OWNER",
+    dropdownData:[{code: "OWNER.IDENTITYPROOF.AADHAAR", active: true},{code: "OWNER.IDENTITYPROOF.VOTERID", active: true},{code: "OWNER.IDENTITYPROOF.VOTERID", active: true},{code: "OWNER.IDENTITYPROOF.DRIVING", active: true},{code: "OWNER.IDENTITYPROOF.PAN", active: true},{code: "OWNER.IDENTITYPROOF.PASSPORT", active: true}],
+    length: 5,
+    hasDropdown: true,
+    required: true},
+    
+    {active: true,code: "OWNER.ADDRESSPROOF",description: "OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION",documentType: "OWNER",
+    dropdownData:[{code: "OWNER.ADDRESSPROOF.ELECTRICITYBILL", active: true},{code: "OWNER.ADDRESSPROOF.VOTERID", active: true},{code: "OWNER.ADDRESSPROOF.AADHAAR", active: true},{code: "OWNER.ADDRESSPROOF.PAN", active: true},{code: "OWNER.ADDRESSPROOF.PASSPORT", active: true}],
+    length: 5,
+    hasDropdown: true,
+    required: true},
+    
+    {active: true,code: "OWNER.REGISTRATIONPROOF",description: "OWNER.REGISTRATIONPROOF.REGISTRATIONPROOF_DESCRIPTION",documentType: "OWNER",
+    dropdownData:[{code: "OWNER.REGISTRATIONPROOF.ELECTRICITYBILL", active: true},{code: "OWNER.REGISTRATIONPROOF.VOTERID", active: true},{code: "OWNER.REGISTRATIONPROOF.AADHAAR", active: true},{code: "OWNER.REGISTRATIONPROOF.PAN", active: true},{code: "OWNER.REGISTRATIONPROOF.PASSPORT", active: true}],
+    length: 5,
+    hasDropdown: true,
+    required: true}]
+  
   documents = documents.filter(item => {
     return item.active;
   });

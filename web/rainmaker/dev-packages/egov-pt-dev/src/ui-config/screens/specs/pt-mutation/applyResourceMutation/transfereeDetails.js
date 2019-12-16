@@ -24,74 +24,9 @@ const showComponent = (dispatch, componentJsonPath, display) => {
 
 const commonApplicantInformation = () => {
   return getCommonGrayCard({
-    header: getCommonSubHeader(
-      {
-        labelName: "Applicant Information",
-        labelKey: "PT_MUTATION_APPLICANT_INFORMATION_SUBHEADER"
-      },
-      {
-        style: {
-          marginBottom: 18
-        }
-      }
-    ),
+    
     applicantCard: getCommonContainer({
-      mobileNumber: getTextField({
-        label: {
-          labelName: "Mobile No.",
-          labelKey: "PT_MUTATION_APPLICANT_MOBILE_NO_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Mobile No.",
-          labelKey: "PT_MUTATION_APPLICANT_MOBILE_NO_PLACEHOLDER"
-        },
-        required: true,
-        props:{
-          className:"applicant-details-error"
-        },
-        title: {
-          value: "Please search profile linked to the mobile no.",
-          key: "PT_MUTATION_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
-        },
-        infoIcon: "info_circle",
-        pattern: getPattern("MobileNo"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch, fieldInfo) => {
-              getDetailsForOwner(state, dispatch, fieldInfo);
-            }
-          }
-        },
-        // props: {
-        //   style: {
-        //     maxWidth: "450px"
-        //   }
-        // },
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        }
-      }),
-      dummyDiv: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props: {
-          disabled: true
-        }
-      },
+      
       applicantName: getTextField({
         label: {
           labelName: "Name",
@@ -150,28 +85,63 @@ const commonApplicantInformation = () => {
         },
         type: "array"
       },
-      applicantDob: getDateField({
+      mobileNumber: getTextField({
         label: {
-          labelName: "Date Of Birth",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_DOB_LABEL"
+          labelName: "Mobile No.",
+          labelKey: "PT_MUTATION_APPLICANT_MOBILE_NO_LABEL"
         },
         placeholder: {
-          labelName: "DD/MM/YYYY",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_DOB_PLACEHOLDER"
+          labelName: "Enter Mobile No.",
+          labelKey: "PT_MUTATION_APPLICANT_MOBILE_NO_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Date"),
-        errorMessage: "Invalid Date",
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].dob",
+        props:{
+          className:"applicant-details-error"
+        },
+        title: {
+          value: "Please search profile linked to the mobile no.",
+          key: "PT_MUTATION_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
+        },
+        infoIcon: "info_circle",
+        pattern: getPattern("MobileNo"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath:
+          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
+        iconObj: {
+          iconName: "search",
+          position: "end",
+          color: "#FE7A51",
+          onClickDefination: {
+            action: "condition",
+            callBack: (state, dispatch, fieldInfo) => {
+              getDetailsForOwner(state, dispatch, fieldInfo);
+            }
+          }
+        },
+        // props: {
+        //   style: {
+        //     maxWidth: "450px"
+        //   }
+        // },
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
-        },
-        props:{
-          className:"applicant-details-error"
         }
       }),
+      // dummyDiv: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   },
+      //   props: {
+      //     disabled: true
+      //   }
+      // },
+      
       applicantEmail: getTextField({
         label: {
           labelName: "Email",
@@ -194,14 +164,14 @@ const commonApplicantInformation = () => {
           className:"applicant-details-error"
         }
       }),
-      fatherHusbandName: getTextField({
+      guardianName: getTextField({
         label: {
-          labelName: "Father/Husband's Name",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+          labelName: "Guardian's Name",
+          labelKey: "PT_MUTATION_TRANSFEREE_GUARDIAN_NAME_LABEL"
         },
         placeholder: {
-          labelName: "Enter Father/Husband's Name",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_FATHER_HUSBAND_NAME_PLACEHOLDER"
+          labelName: "Enter Guardian's Name",
+          labelKey: "PT_MUTATION_TRANSFEREE_GUARDIAN_NAME_LABEL_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -252,27 +222,7 @@ const commonApplicantInformation = () => {
         required: true,
         type: "array"
       },
-      applicantPan: getTextField({
-        label: {
-          labelName: "PAN No.",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_PAN_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Applicant's PAN No.",
-          labelKey: "PT_MUTATION_TRANSFEREE_ENTER_APPLICANT_PAN_PLACEHOLDER"
-        },
-        pattern: getPattern("PAN"),
-        errorMessage: "Invalid PAN",
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props:{
-          className:"applicant-details-error"
-        }
-      }),
+      
       applicantAddress: getTextField({
         label: {
           labelName: "Correspondence Address",
@@ -332,17 +282,7 @@ const commonApplicantInformation = () => {
 
 const institutionInformation = () => {
   return getCommonGrayCard({
-    header: getCommonSubHeader(
-      {
-        labelName: "Applicant Information",
-        labelKey: "PT_MUTATION_APPLICANT_INFORMATION_SUBHEADER"
-      },
-      {
-        style: {
-          marginBottom: 18
-        }
-      }
-    ),
+   
     applicantCard: getCommonContainer({
       institutionName: getTextField({
         label: {
