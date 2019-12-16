@@ -13,6 +13,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import DATA from "./documents";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -294,9 +295,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  let documents = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
+  let documents = get(DATA,
+    "Documents",
     []
   );
   documents = documents.filter(item => {

@@ -58,7 +58,7 @@ import {
           {
             name: "Registration Proof ",
             required: true,
-            jsonPath: "noc.documents.addressProof",
+            jsonPath: "noc.documents.registrationProof",
             selector: {
               inputLabel: "Select Document",
               menuItems: [
