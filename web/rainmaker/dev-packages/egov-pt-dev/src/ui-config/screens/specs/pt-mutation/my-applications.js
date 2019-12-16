@@ -31,27 +31,31 @@ const screenConfig = {
           componentPath: "SingleApplication",
           visible: true,
           props: {
-            applicationName:{
-              label: "PT_MUTATION_APPLICATION_NO",
-              jsonPath: "fireNOCDetails.applicationNumber"
-            },
-            applicationNumber: {
-              label: "PT_MUTATION_PID",
-              jsonPath: "fireNOCDetails.applicantDetails.owners[0].name"
-            },
-            ownerName: {
-              label: "PT_MUTATION_APPLICATION_TYPE",
-              jsonPath: "fireNOCDetails.buildings[0].name"
-            }, moduleNumber: {
-              label: "PT_MUTATION_CREATION_DATE",
-              jsonPath: "fireNOCDetails.buildings[0].name"
-            },
-            status: {
-              label: "PT_MUTATION_STATUS",
-              jsonPath: "fireNOCDetails.status"
-            },
+            contents: [
+              {
+                label: "PT_MUTATION_APPLICATION_NO",
+                jsonPath: "fireNOCDetails.applicationNumber"
+              },
+              {
+                label: "PT_MUTATION_PID",
+                jsonPath: "fireNOCDetails.applicantDetails.owners[0].name"
+              },
+              {
+                label: "PT_MUTATION_APPLICATION_TYPE",
+                jsonPath: "fireNOCDetails.buildings[0].name"
+              },
+              {
+                label: "PT_MUTATION_CREATION_DATE",
+                jsonPath: "fireNOCDetails.buildings[0].name"
+              },
+              {
+                label: "PT_MUTATION_STATUS",
+              jsonPath: "fireNOCDetails.status",
+                prefix: "WF_FIRENOC_"
+              }
+            ],
             moduleName: "PT-MUTATION",
-            statusPrefix: "WF_FIRENOC_"
+            homeURL: "/property-tax"
           }
         }
       }
