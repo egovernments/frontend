@@ -131,31 +131,36 @@ class TableChart extends Component {
       drillCode = drillCode ? drillCode : chartsData[this.props.chartKey]['drillDownChartId'];
       visualcode = visualcode ? visualcode : chartsData[this.props.chartKey]['visualizationCode'];
       let columnData = _.chain(chartData).first().get("plots").map((k, v) => {
-        let yes = v < 0;
-        let isNumeric = _.toLower(k.symbol) === 'amount' || _.toLower(k.symbol) === "number" || _.toLower(k.symbol) === "percentage";
-        return { id: k.name, numeric: isNumeric, stickyHeader: yes, disablePadding: false, label: k.name }
-
-
+        if(k.name != "S.N."){
+          let yes = v < 0;
+          let isNumeric = _.toLower(k.symbol) === 'amount' || _.toLower(k.symbol) === "number" || _.toLower(k.symbol) === "percentage";
+          return { id: k.name, numeric: isNumeric, stickyHeader: yes, disablePadding: false, label: k.name }
+        }
       }).value();
+      // small hack but need to remove from backend.
+      columnData.splice(0, 1);
+      
       let newData = _.chain(chartData).map((rowData) => {
         return _.defaults(..._.map(rowData.plots, a => {
-          if (a.symbol.toUpperCase() === 'TEXT') {
+          if(a.name != "S.N."){
+            if (a.symbol.toUpperCase() === 'TEXT') {
 
-            let label = _.chain(a.label).split('.').join("_").toUpper().value();
-            let text = null;
-            try {
-              text = strings["TENANT_TENANTS_" + label]
-            } catch{
-              text = a.label;
+              let label = _.chain(a.label).split('.').join("_").toUpper().value();
+              let text = null;
+              try {
+                text = strings["TENANT_TENANTS_" + label]
+              } catch{
+                text = a.label;
+              }
+              if (!text) {
+                text = a.label;
+              }
+              return { [a.name]: text }
+            } else {
+              let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
+              // console.log(typeof(val))
+              return { [a.name]: val }
             }
-            if (!text) {
-              text = a.label;
-            }
-            return { [a.name]: text }
-          } else {
-            let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
-            // console.log(typeof(val))
-            return { [a.name]: val }
           }
         }));
 
@@ -194,7 +199,7 @@ class TableChart extends Component {
               // needHash={false}
               Gfilter={this.props.GFilterData}
               needSearch
-              needHash={false}
+              needHash={true}
               needExport
               excelName={this.props.label || "DSS"}
             // toggleSideDrawer={this.handleInfoClick.bind(this)}
