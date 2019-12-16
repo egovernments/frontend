@@ -142,10 +142,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
                         },
                         {
-                            jsonPath: "BPA.scrutinyDetails.planDetail.plot.area",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
+                            jsonPath: "BPA.scrutinyDetails.planDetail.plot.area"
                         }
                     ),
                     kathaNumber: getLabelWithValue(
@@ -154,10 +151,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.khataNo",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
+                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.khataNo"
                         }
                     ),
                     holdingNumber: getLabelWithValue(
@@ -166,10 +160,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
+                            jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber"
                         }
                     ),
                     plotNo: getLabelWithValue(
@@ -178,54 +169,45 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.plotNo",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
+                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.plotNo"
                         }
                     ),
-                    cityTown: getLabelWithValue(
-                        {
-                            labelName: "City/Town",
-                            labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
-                        },
-                        {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
-                        }
-                    ),
-                    landRegDetails: getLabelWithValue(
-                        {
-                            labelName: "Land Registration Details",
-                            labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
-                        },
-                        {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
-                        }
-                    ),
-                    whetherGovOrQuasi: getLabelWithValue(
-                        {
-                            labelName: "Whether Government or Quasi Government",
-                            labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"
-                        },
-                        {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
-                        }
-                    )
+                    // cityTown: getLabelWithValue(
+                    //     {
+                    //         labelName: "City/Town",
+                    //         labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPAs[0].BPADetails.plotdetails.citytown"
+                    //     }
+                    // ),
+                    // landRegDetails: getLabelWithValue(
+                    //     {
+                    //         labelName: "Land Registration Details",
+                    //         labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails"
+                    //     }
+                    // ),
+                    // whetherGovOrQuasi: getLabelWithValue(
+                    //     {
+                    //         labelName: "Whether Government or Quasi Government",
+                    //         labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi",
+                    //         callBack: value => {
+                    //             return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+                    //         }
+                    //     }
+                    // )
                 })
             }),
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            // sourceJsonPath: "BPAs[0].BPADetails.plotdetails",
+            sourceJsonPath: "BPA.scrutinyDetails.planDetail",
             prefixSourceJsonPath: 
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"

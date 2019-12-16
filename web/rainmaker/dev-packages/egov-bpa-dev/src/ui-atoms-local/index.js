@@ -20,7 +20,7 @@ const FormIcon = Loadable({
   loading: () => <Loading />
 });
 const ApplicationBpacontainer = Loadable({
-  loader: () => import("./applicationNumber"),
+  loader: () => import("./bpaApplicationNumber"),
   loading: () => <Loading />
 });
 
