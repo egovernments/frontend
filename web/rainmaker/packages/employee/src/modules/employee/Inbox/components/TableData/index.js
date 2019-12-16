@@ -9,13 +9,13 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withStyles } from "@material-ui/core/styles";
-import {Icon} from "components";
+import { Icon } from "components";
 import TextField from "@material-ui/core/TextField";
 // import _ from "lodash";
-import isEmpty from "lodash/isEmpty"
-import get from "lodash/get"
-import filter from "lodash/filter"
-import orderBy from "lodash/orderBy"
+import isEmpty from "lodash/isEmpty";
+import get from "lodash/get";
+import filter from "lodash/filter";
+import orderBy from "lodash/orderBy";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
@@ -74,6 +74,7 @@ class TableData extends Component {
     taskboardData: [],
     inboxData: [{ headers: [], rows: [] }],
     moduleName: "",
+    color: "",
   };
 
   handleChange = (event, value) => {
@@ -127,7 +128,7 @@ class TableData extends Component {
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;
-      inboxData[0].rows = assignedDataRows;
+      inboxData[0].rows = allDataRows;
 
       const taskCount = allDataRows.length;
       const overSla = filter(responseData.ProcessInstances, (item) => item.businesssServiceSla < 0).length;
@@ -135,15 +136,15 @@ class TableData extends Component {
       taskboardData.push(
         { head: taskCount, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
         { head: "0", body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
-        { head: overSla, body: "WF_TOTAL_OVER_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
+        { head: overSla, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
       );
 
-      tabData.push({ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [assignedDataRows.length] });
       tabData.push({ label: "COMMON_INBOX_TAB_ALL", dynamicArray: [allDataRows.length] });
+      tabData.push({ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [assignedDataRows.length] });
 
       inboxData.push({
         headers: headersList,
-        rows: allDataRows,
+        rows: assignedDataRows,
       });
       this.setState({ inboxData, taskboardData, tabData });
     } catch (e) {
@@ -167,8 +168,8 @@ class TableData extends Component {
         };
       });
 
-      tabData[0] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
-      tabData[1] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
+      tabData[0] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
+      tabData[1] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
 
       this.setState({
         inboxData: filteredData,
@@ -177,22 +178,45 @@ class TableData extends Component {
     });
   };
 
+  onTaskBoardClick = (baseColor, label) => {
+    if (label === "WF_TOTAL_NEARING_SLA") {
+      const { InboxData } = this.props;
+      let { tabData } = this.state;
+      const filteredData = InboxData.map((item, index) => {
+        return {
+          headers: item.headers,
+          rows: item.rows.filter((eachRow) => {
+            return eachRow[0].subtext === this.state.moduleName;
+          }),
+        };
+      });
+
+      tabData[0] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
+      tabData[1] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
+
+      this.setState({
+        inboxData: filteredData,
+        tabData,
+      });
+    }
+
+    this.setState({
+      color: baseColor,
+    });
+  };
+
   render() {
     const { value, taskboardData, tabData, inboxData, moduleName } = this.state;
-    const { classes,onPopupOpen } = this.props;
+    const { classes, onPopupOpen } = this.props;
     return (
       <div className="col-sm-12">
         <div>
           <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
-          <TextField
-            /* className={classNames(classes.margin, classes.textField)} */
-            value={"search"}
-            /* onChange={this.handleChange("weightRange")} */
-          />
-          <Icon action="custom" name="filter" onClick={onPopupOpen} style={{cursor : "pointer"}}/>
+          <TextField value={"search"} />
+          <Icon action="custom" name="filter" onClick={onPopupOpen} style={{ cursor: "pointer" }} />
         </div>
 
-        <Taskboard data={taskboardData} />
+        <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
         <div className="col-sm-12 backgroundWhite">
           <Tabs
             value={value}

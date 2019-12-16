@@ -8,23 +8,23 @@ export class Taskboard extends React.Component{
     color:""
   }
 
-  onTaskBoardClick = (baseColor) =>{
-    this.setState({
-      color : baseColor 
-    })
-  } 
+  // onTaskBoardClick = (baseColor) =>{
+  //   this.setState({
+  //     color : baseColor 
+  //   })
+  // } 
 
   render(){
-    const {onTaskBoardClick} = this;
-    const {data} = this.props
+    // const {onTaskBoardClick} = this;
+    const {data ,onSlaClick , color} = this.props
     return (
       <div className="inbox-taskboard">
         {data.map((item, i) => (
           <Card
             className="inbox-card inbox-worklist-card"
             key={i}
-            onClick={() => onTaskBoardClick(item.baseColor)}
-            style={{backgroundColor : item.color ,borderTop:  item.baseColor === this.state.color ?  `4px solid ${this.state.color}`  : ""}}
+            onClick={() => onSlaClick(item.baseColor,item.body)}
+            style={{backgroundColor : item.color ,borderTop:  item.baseColor === color ?  `4px solid ${color}`  : ""}}
             textChildren={
               <div>
                 <div className="head">{item.head}</div>

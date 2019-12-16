@@ -85,7 +85,7 @@ class Inbox extends Component {
     const buttonItems = {
       label: "Take Action",
       rightIcon: "arrow_drop_down",
-      props: { variant: "outlined", style: { marginLeft: 10,
+      props: { variant: "outlined", style: { marginRight: 15,
         backgroundColor:"#FE7A51",color:"#fff",border:"none",height:"48px",width :"200px" } },
       menu: downloadMenu
     }
