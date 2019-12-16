@@ -398,10 +398,13 @@ export const getFileSize = file => {
 
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
+  const fileNameArray = file["name"].split(".");
+  const fileFormat = fileNameArray[fileNameArray.length - 1];
+
   return (
     (mimeType &&
       acceptedFiles &&
-      acceptedFiles.indexOf(mimeType.toUpperCase()) > -1) ||
+      acceptedFiles.indexOf(fileFormat.toUpperCase()) > -1) ||
     false
   );
 };
@@ -456,8 +459,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
     const files = input.files;
     Object.keys(files).forEach(async (key, index) => {
       const file = files[key];
-      // const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
-      const fileValid = true //temporary disabling check as dxf issues in other os
+      const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
       const isSizeValid = getFileSize(file) <= maxFileSize;
       if (!fileValid) {
         alert(`Only dxf files can be uploaded`);
