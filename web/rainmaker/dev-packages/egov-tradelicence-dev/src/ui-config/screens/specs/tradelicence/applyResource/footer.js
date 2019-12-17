@@ -45,9 +45,6 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#custom-atoms-div");
   html2canvas(target, {
     onclone: function (clonedDoc) {
-      // clonedDoc.getElementById("custom-atoms-footer")[
-      //   "data-html2canvas-ignore"
-      // ] = "true";
       clonedDoc.getElementById("custom-atoms-footer").style.display = "none";
     }
   }).then(canvas => {
@@ -83,7 +80,6 @@ export const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
@@ -188,21 +184,6 @@ export const callBackForNext = async (state, dispatch) => {
     } else {
       let ownersJsonPath =
         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainer.children";
-      // let owners = get(
-      //   state.screenConfiguration.screenConfig.apply,
-      //   ownersJsonPath,
-      //   []
-      // );
-      // for (var x = 0; x < owners.length; x++) {
-      //   if (
-      //     (owners[x].isDeleted === undefined ||
-      //       owners[x].isDeleted !== false) &&
-      //     !validateFields(
-      //       `${ownersJsonPath}[${x}].item${x}.children.cardContent.children.tradeUnitCardContainer.children`,
-      //       state,
-      //       dispatch
-      //     )
-      //   )
       if (!validateFields(ownersJsonPath, state, dispatch)) isFormValid = false;
     }
 
