@@ -218,7 +218,7 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "FIRENOC") {
       switch (action) {
         case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}=${tenant}`;
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
         case "EDIT":
           return isAlreadyEdited
             ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
