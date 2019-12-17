@@ -44,6 +44,11 @@ const DialogContainer = Loadable({
   loading: () => <Loading />
 });
 
+const EstimateCardContainer = Loadable({
+  loader: () => import("./EstimateCardContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   TestContainer,
@@ -52,5 +57,6 @@ export {
   AutosuggestContainer,
   DownloadFileContainer,
   CheckboxContainer,
-  DialogContainer
+  DialogContainer,
+  EstimateCardContainer
 };

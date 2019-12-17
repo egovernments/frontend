@@ -182,7 +182,7 @@ const screenConfig = {
           applicantSummary: applicantSummary,
           plotAndBoundaryInfoSummary : plotAndBoundaryInfoSummary,
           documentsSummary: documentsSummary,          
-          nocSummary: nocSummary,
+          nocSummary: nocSummary
         }),
         footer: footer
       }

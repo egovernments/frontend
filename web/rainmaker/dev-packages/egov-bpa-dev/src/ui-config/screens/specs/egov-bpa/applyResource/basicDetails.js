@@ -145,13 +145,13 @@ export const basicDetails = getCommonCard({
         labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
       },
       // required: true,
-      jsonPath: "BPA.scrutinyDetails.planDetail.applicationDate",
+      jsonPath: "bpa.appdate",
       // jsonPath: "BPA.scrutinyDetails.planDetail.applicationDate",
       props: {
-        defaultValue: getTodaysDateInYMD(),
-        inputProps: {
-          max: getTodaysDateInYMD()
-        },
+        // defaultValue: getTodaysDate(),
+        // inputProps: {
+        //   max: getTodaysDateInYMD()
+        // },
         // disabled: true,
         // InputProps: {
           // readOnly: true

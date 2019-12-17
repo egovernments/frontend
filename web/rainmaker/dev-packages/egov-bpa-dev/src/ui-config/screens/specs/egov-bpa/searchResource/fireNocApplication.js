@@ -145,7 +145,7 @@ export const BPAApplication = getCommonCard({
     serviceType: getSelectField({
       label: {
         labelName: "Service type",
-        labelKey: "BPA_SEARCH_RISK_TYPE_LABEL"
+        labelKey: "BPA_SEARCH_SERVICE_TYPE_LABEL"
       },
       placeholder: {
         labelName: "Select Service type",

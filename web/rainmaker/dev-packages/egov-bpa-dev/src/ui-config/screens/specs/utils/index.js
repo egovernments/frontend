@@ -967,10 +967,10 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-    case "Search Results for Fire-NOC Applications":
+    case "Search Results for BPA Applications":
       return getLocaleLabels(
-        "Search Results for Fire-NOC Applications",
-        "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        "Search Results for BPA Applications",
+        "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
 
@@ -1095,4 +1095,25 @@ export const fetchData = async (action, state, dispatch) => {
   // } catch (error) {
   //   console.log(error);
   // }
+};
+
+export const createBill = async (queryObject,dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error,'fetxh');
+  }
 };

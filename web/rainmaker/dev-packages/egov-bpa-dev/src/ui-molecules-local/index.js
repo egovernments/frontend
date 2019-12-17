@@ -37,6 +37,11 @@ const DividerWithLabel = Loadable({
   loading: () => <Loading />
 });
 
+const FeesEstimateCard = Loadable({
+  loader: () => import("./FeesEstimateCard"),
+  loading: () => <Loading />
+});
+
 
 
 export {
@@ -46,5 +51,6 @@ export {
   NocList,
   UploadSingleFile,
   Table,
-  DividerWithLabel
+  DividerWithLabel,
+  FeesEstimateCard
 };

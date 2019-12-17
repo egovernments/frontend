@@ -97,9 +97,9 @@ export const textToLocalMapping = {
     "WF_FIRENOC_FIELDINSPECTION",
     getTransformedLocalStorgaeLabels()
   ),
-  "Search Results for Fire-NOC Applications": getLocaleLabels(
-    "Search Results for Fire-NOC Applications",
-    "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
+  "Search Results for BPA Applications": getLocaleLabels(
+    "Search Results for BPA Applications",
+    "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING",
     getTransformedLocalStorgaeLabels()
   )
 };
@@ -113,8 +113,8 @@ export const searchResults = {
     // data: [],
     columns: [
       getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("NOC No"),
-      getTextToLocalMapping("NOC Type"),
+      // getTextToLocalMapping("NOC No"),
+      // getTextToLocalMapping("NOC Type"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Application Date"),
       {
@@ -139,7 +139,7 @@ export const searchResults = {
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+    title: getTextToLocalMapping("Search Results for BPA Applications"),
     options: {
       filter: false,
       download: false,
@@ -196,16 +196,16 @@ const onRowClick = rowData => {
 //     case get(textToLocalMapping, "REJECTED"):
 //     case get(textToLocalMapping, "CANCELLED"):
 //     case get(textToLocalMapping, "DOCUMENTVERIFY"):
-//       return `${appendUrl}/fire-noc/search-preview?applicationNumber=${
+//       return `${appendUrl}/BPA/search-preview?applicationNumber=${
 //         rowData[get(textToLocalMapping, "Application No")]
 //       }&tenantId=${rowData["tenantId"]}`;
 
 //     case get(textToLocalMapping, "INITIATED"):
-//       return `${appendUrl}/fire-noc/apply?applicationNumber=${
+//       return `${appendUrl}/BPA/apply?applicationNumber=${
 //         rowData[get(textToLocalMapping, "Application No")]
 //       }&tenantId=${rowData.tenantId}`;
 
 //     default:
-//       return `${appendUrl}/fire-noc/search`;
+//       return `${appendUrl}/BPA/search`;
 //   }
 // };

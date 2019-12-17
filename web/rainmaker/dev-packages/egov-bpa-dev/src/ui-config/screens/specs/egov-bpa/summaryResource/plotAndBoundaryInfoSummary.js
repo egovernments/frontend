@@ -172,36 +172,33 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.plotNo"
                         }
                     ),
-                    // cityTown: getLabelWithValue(
-                    //     {
-                    //         labelName: "City/Town",
-                    //         labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
-                    //     },
-                    //     {
-                    //         jsonPath: "BPAs[0].BPADetails.plotdetails.citytown"
-                    //     }
-                    // ),
-                    // landRegDetails: getLabelWithValue(
-                    //     {
-                    //         labelName: "Land Registration Details",
-                    //         labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
-                    //     },
-                    //     {
-                    //         jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails"
-                    //     }
-                    // ),
-                    // whetherGovOrQuasi: getLabelWithValue(
-                    //     {
-                    //         labelName: "Whether Government or Quasi Government",
-                    //         labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"
-                    //     },
-                    //     {
-                    //         jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi",
-                    //         callBack: value => {
-                    //             return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                    //         }
-                    //     }
-                    // )
+                    cityTown: getLabelWithValue(
+                        {
+                            labelName: "City/Town",
+                            labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
+                        },
+                        {
+                            jsonPath: "BPAs[0].BPADetails.plotdetails.citytown.label"
+                        }
+                    ),
+                    landRegDetails: getLabelWithValue(
+                        {
+                            labelName: "Land Registration Details",
+                            labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
+                        },
+                        {
+                            jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails"
+                        }
+                    ),
+                    whetherGovOrQuasi: getLabelWithValue(
+                        {
+                            labelName: "Whether Government or Quasi Government",
+                            labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"
+                        },
+                        {
+                            jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi"
+                        }
+                    )
                 })
             }),
             items: [],

@@ -18,8 +18,8 @@ const updateNocApplication = async (state, dispatch) => {
   if (get(response, "status", "") === "success") {
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
-        ? `/egov-ui-framework/fire-noc/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-        : `/fire-noc/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
     dispatch(setRoute(acknowledgementUrl));
   }
 };

@@ -42,7 +42,7 @@ const titlebar = getCommonContainer({
   applicationNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-BPA",
-    componentPath: "ApplicationBpacontainer",
+    componentPath: "ApplicationNumber",
     props: {
       number: getQueryArg(window.location.href, "applicationNumber")
     }

@@ -107,11 +107,10 @@ export const searchApiCall = async (state, dispatch) => {
       // const response = searchSampleResponse();
 
       let data = response.FireNOCs.map(item => ({
-        [getTextToLocalMapping("Application No")]:
-          item.fireNOCDetails.applicationNumber || "-",
-        [getTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
-        [getTextToLocalMapping("NOC Type")]:
-          item.fireNOCDetails.fireNOCType || "-",
+        [getTextToLocalMapping("Application No")]: item.fireNOCDetails.applicationNumber || "-",
+        // [getTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
+        // [getTextToLocalMapping("NOC Type")]:
+        //   item.fireNOCDetails.fireNOCType || "-",
         [getTextToLocalMapping("Owner Name")]:
           get(item, "fireNOCDetails.applicantDetails.owners[0].name") || "-",
         [getTextToLocalMapping("Application Date")]:
@@ -135,7 +134,7 @@ export const searchApiCall = async (state, dispatch) => {
           "components.div.children.searchResults",
           "props.title",
           `${getTextToLocalMapping(
-            "Search Results for Fire-NOC Applications"
+            "Search Results for BPA Applications"
           )} (${response.FireNOCs.length})`
         )
       );

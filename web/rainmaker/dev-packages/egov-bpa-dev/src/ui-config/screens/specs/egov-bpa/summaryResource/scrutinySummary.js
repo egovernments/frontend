@@ -154,7 +154,7 @@ export const scrutinySummary = getCommonGrayCard({
                         {
                             jsonPath: "bpa.summary.residential",
                             callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+                                return value;
                             }
                         }
                     )
@@ -190,7 +190,7 @@ export const scrutinySummary = getCommonGrayCard({
                         {
                             jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.demolitionArea",
                             callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+                                return value;
                             }
                         }
                     )
@@ -202,6 +202,131 @@ export const scrutinySummary = getCommonGrayCard({
             sourceJsonPath: "BPAs[0].BPADetails",
             prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
+            afterPrefixJsonPath: "children.value.children.key"
+        },
+        type: "array"
+    },
+    proposedBuildingDetails:getHeader({
+        labelName: "Demolition Details",
+        labelKey: "BPA_APP_DETAILS_PROPOSED_BUILDING_DETAILS_LABEL"
+    }),
+    break3: getBreak(),
+    cardFour: {
+        uiFramework: "custom-containers",
+        componentPath: "MultiItem",
+        props: {
+          className: "building-summary",
+          scheama: getCommonGrayCard({
+            buildingContainer: getCommonContainer({
+              occupancySubOccupancy: getLabelWithValue(
+                {
+                  labelName: "Occupancy/Sub Occupancy",
+                  labelKey: "Occupancy/Sub Occupancy"
+                },
+                {
+                  jsonPath:
+                    "BPA.scrutinyDetails.planDetail.blocks[0].building.floors[0]",
+                    callBack: value => {
+                        console.log(value, "gbsaijfbijbsafijbibfs")
+                      return value && value.occupancies[0] && value.occupancies[0].type || "";
+                    }
+                }
+              ),
+              buildupArea: getLabelWithValue(
+                  {
+                    labelName: "Buildup Area",
+                    labelKey: "Buildup Area"
+                  },
+                  {
+                    jsonPath:
+                      "BPA.scrutinyDetails.planDetail.blocks[0].building.floors[0]",
+                      callBack: value => {
+                        return value && value.occupancies[0] && value.occupancies[0].builtUpArea || "";
+                      }
+                  }
+                ),
+                floorArea: getLabelWithValue(
+                  {
+                    labelName: "Floor Area",
+                    labelKey: "Floor Area"
+                  },
+                  {
+                    jsonPath:
+                      "BPA.scrutinyDetails.planDetail.blocks[0].building.floors[0]",
+                      callBack: value => {
+                          return value && value.occupancies[0] && value.occupancies[0].floorArea || "";
+                        }
+                  }
+                ),
+                carpetArea: getLabelWithValue(
+                  {
+                    labelName: "Carpet Area",
+                    labelKey: "Carpet Area"
+                  },
+                  {
+                    jsonPath:
+                      "BPA.scrutinyDetails.planDetail.blocks[0].building.floors[0]",
+                      callBack: value => {
+                          return value && value.occupancies[0] && value.occupancies[0].carpetArea || "";
+                        }
+                  }
+                )
+            })
+          }),
+          items: [],
+          hasAddItem: false,
+          isReviewPage: true,
+          sourceJsonPath: "BPA.scrutinyDetails.planDetail.blocks[0].building.floors",
+          prefixSourceJsonPath:
+            "children.cardContent.children.buildingContainer.children",
+          afterPrefixJsonPath: "children.value.children.key"
+        },
+        type: "array"
+      },
+    cardFive:{
+        uiFramework: "custom-containers",
+        componentPath: "MultiItem",
+        props: {
+            className: "applicant-summary",
+            scheama: getCommonGrayCard({
+                totalBuildUpAreaDetailsContainer: getCommonContainer({
+                    buildingplanscrutinyapplicationnumber: getLabelWithValue(
+                        {
+                            labelName: "Total Buildup Area (sq.mtrs)",
+                            labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
+                        },
+                        {
+                            jsonPath: "BPA.scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea"
+                        }
+                    ),
+                    uploadedfile: getLabelWithValue(
+                        {
+                            labelName: "Number Of Floors",
+                            labelKey: "BPA_APPLICATION_NO_OF_FLOORS"
+                        },
+                        {
+                            jsonPath:
+                                "BPA.scrutinyDetails.planDetail.blocks[0].building.totalFloors"
+                        }
+                    ),
+                    scrutinyreport: getLabelWithValue(
+                        {
+                            labelName: "High From Ground Level From Mumty (In Mtrs)",
+                            labelKey: "BPA_APPLICATION_HIGH_FROM_GROUND"
+                        },
+                        {
+                            jsonPath:
+                                "BPA.scrutinyDetails.planDetail.blocks[0].building.buildingHeight"
+                        }
+                    )
+                })
+            }),
+            items: [],
+            hasAddItem: false,
+            isReviewPage: true,
+            sourceJsonPath: "BPA.scrutinyDetails.planDetail.blocks[0].building",
+            prefixSourceJsonPath:
+                "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
         },
         type: "array"

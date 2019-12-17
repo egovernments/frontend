@@ -42,6 +42,7 @@ import {
   setApplicationNumberBox,
   prepareNOCUploadData
 } from "../../../../ui-utils/commons";
+import { getTodaysDateInYMD } from "../utils"
 
 //mdms mock json data
 import { mdmsMockJson } from './mdmsMock';
@@ -226,6 +227,13 @@ const getMdmsData = async (action, state, dispatch) => {
   }
 };
 
+const getTodaysDate = async(action, state, dispatch) => {
+  const today = getTodaysDateInYMD();
+  if (!today) {
+    dispatch(prepareFinalObject("bpa.appdate", today));
+  }
+}
+
 const getFirstListFromDotSeparated = list => {
   list = list.map(item => {
     if (item.active) {
@@ -375,7 +383,7 @@ const screenConfig = {
       prepareDocumentsUploadData(state, dispatch);
       prepareNOCUploadData(state, dispatch);
     });
-
+    getTodaysDate(action, state, dispatch);
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
