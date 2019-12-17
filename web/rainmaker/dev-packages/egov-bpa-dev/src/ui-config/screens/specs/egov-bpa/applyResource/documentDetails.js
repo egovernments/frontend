@@ -26,7 +26,7 @@ export const documentDetails = getCommonCard({
   documentList: {
     uiFramework: "custom-containers-local",
     moduleName: "egov-bpa",
-    componentPath: "DocumentListContainer",
+    componentPath: "BpaDocumentListContainer",
     props: {
       documents: [
         {

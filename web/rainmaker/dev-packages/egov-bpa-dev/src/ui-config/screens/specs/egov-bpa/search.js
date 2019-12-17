@@ -22,7 +22,7 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { showCityPicker, applyForm } from "../utils";
+import { showApplyCityPicker, applyForm } from "../utils";
 import { fetchData } from "../utils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -153,7 +153,7 @@ const NOCSearchAndResult = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  showCityPicker(state, dispatch)
+                  showApplyCityPicker(state, dispatch)
                   // pageResetAndChange(state, dispatch);
                   // showHideAdhocPopup(state, dispatch, "search");
                   // startApplyFlow(state, dispatch);
@@ -277,7 +277,7 @@ const NOCSearchAndResult = {
                       },
                       onClickDefination: {
                         action: "condition",
-                        callBack: showCityPicker
+                        callBack: showApplyCityPicker
                       }
                     }
                   }

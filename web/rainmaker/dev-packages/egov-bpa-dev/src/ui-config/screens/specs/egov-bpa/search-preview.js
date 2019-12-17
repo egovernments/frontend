@@ -32,7 +32,7 @@ import { nocSummary } from "./summaryResource/nocSummary";
 import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
 // import { propertySummary } from "./summaryResource/propertySummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
-import { searchResMockJson } from './searchresposnsemockjson';
+import { searchResMockJson } from './searchResMockJson';
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -42,7 +42,7 @@ const titlebar = getCommonContainer({
   applicationNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-BPA",
-    componentPath: "ApplicationNumber",
+    componentPath: "ApplicationNoContainer",
     props: {
       number: getQueryArg(window.location.href, "applicationNumber")
     }

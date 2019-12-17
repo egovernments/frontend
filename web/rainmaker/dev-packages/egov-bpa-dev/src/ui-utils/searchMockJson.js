@@ -1,4 +1,4 @@
-export const mockJson = {
+export const appSearchMockData = {
     "ResponseInfo": {
       "apiId": "Mihy",
       "ver": ".01",

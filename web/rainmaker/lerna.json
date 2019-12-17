@@ -15,7 +15,6 @@
     "dev-packages/egov-noc-dev",
     "dev-packages/egov-bpa-dev",
     "dev-packages/egov-boilerplate-dev",
-    "dev-packages/egov-bpa-dev",
     "dev-packages/egov-common-dev",
     "packages/citizen",
     "packages/employee",

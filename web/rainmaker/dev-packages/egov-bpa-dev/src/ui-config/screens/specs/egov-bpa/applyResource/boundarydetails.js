@@ -155,7 +155,7 @@ export const detailsofplot = getCommonCard({
             uiFramework: "custom-containers-local",
             moduleName: "egov-bpa",
             componentPath: "AutosuggestContainer",
-            jsonPath: "citiesByModule.citizenTenantId",
+            jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
             required: true,
             gridDefination: {
                 xs: 12,

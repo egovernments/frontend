@@ -163,7 +163,7 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  if (activeStep === 0) {
+  if (activeStep === 10) {
     let isBasicDetailsCardValid = validateFields(
       "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children",
       state,
@@ -206,7 +206,7 @@ const callBackForNext = async (state, dispatch) => {
     );
   }
 
-  if (activeStep === 1) {
+  if (activeStep === 11) {
     let isBuildingPlanScrutinyDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.buildingPlanScrutinyDetails.children.cardContent.children.buildingPlanScrutinyDetailsContainer.children",
       state,
@@ -239,7 +239,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 2) {
+  if (activeStep === 12) {
     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
@@ -307,7 +307,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 3) {
+  if (activeStep === 13) {
     let isBoundaryDetailsCardValid = validateFields(
       "components.div.children.formwizardFourthStep.children.boundaryDetails.children.cardContent.children.boundaryDetailsConatiner.children",
       state,
@@ -328,7 +328,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 4) {
+  if (activeStep === 14) {
     const documentsFormat = Object.values(
       get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
     );
@@ -383,7 +383,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 5) {
+  if (activeStep === 15) {
     moveToReview(state, dispatch);
   }
 

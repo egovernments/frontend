@@ -20,7 +20,7 @@ const header = getCommonContainer({
   applicationNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-bpa",
-    componentPath: "ApplicationNumber",
+    componentPath: "ApplicationNoContainer",
     props: {
       number: getQueryArg(window.location.href, "applicationNumber")
     }
