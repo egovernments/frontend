@@ -36,7 +36,7 @@ const themeObject = {
         marginTop: "8px"
       },
       fullWidth: {
-        width: window.innerWidth > 480 ? "80%" : "100%"
+        width: window.innerWidth > 768 ? "80%" : "90%"
       }
     },
     MuiSnackbarContent: {

@@ -9,7 +9,8 @@ const UploadSingleFile = ({
   removeDocument,
   onButtonClick,
   inputProps,
-  buttonLabel
+  buttonLabel,
+  id
 }) => {
   return (
     <div>
@@ -20,6 +21,7 @@ const UploadSingleFile = ({
             color: "primary",
             onClick: onButtonClick
           }}
+          id={id}
           handleFileUpload={handleFileUpload}
           inputProps={{ multiple: false, ...inputProps }}
           classes={classes}
@@ -32,10 +34,12 @@ const UploadSingleFile = ({
             documents.map((document, documentIndex) => {
               return (
                 <div key={documentIndex}>
-                  <UploadedDocument
-                    document={document}
-                    removeDocument={removeDocument}
-                  />
+                  {document && (
+                    <UploadedDocument
+                      document={document}
+                      removeDocument={removeDocument}
+                    />
+                  )}
                 </div>
               );
             })}

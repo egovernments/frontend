@@ -3,10 +3,12 @@ import Loadable from "react-loadable";
 import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 
 const Loading = () => <LinearProgress />;
+
 const TestMolecules = Loadable({
   loader: () => import("./TestMolecules"),
   loading: () => <Loading />
 });
+
 const CustomTab = Loadable({
   loader: () => import("./CustomTab"),
   loading: () => <Loading />
@@ -17,8 +19,23 @@ const DocumentList = Loadable({
   loading: () => <Loading />
 });
 
+const BpaDocumentList = Loadable({
+  loader: () => import("./BpaDocumentList"),
+  loading: () => <Loading />
+});
+
 const NocList = Loadable({
   loader: () => import("./NocList"),
+  loading: () => <Loading />
+});
+
+const RadioButtonsGroup = Loadable({
+  loader: () => import("./RadioGroup"),
+  loading: () => <Loading />
+});
+
+const Tooltip = Loadable({
+  loader: () => import("./Tooltip"),
   loading: () => <Loading />
 });
 
@@ -37,20 +54,39 @@ const DividerWithLabel = Loadable({
   loading: () => <Loading />
 });
 
+const MapLocator = Loadable({
+  loader: () => import("./MapLocator"),
+  loading: () => <Loading />
+});
+
 const FeesEstimateCard = Loadable({
   loader: () => import("./FeesEstimateCard"),
   loading: () => <Loading />
 });
 
+const HowItWorks = Loadable({
+  loader: () => import("./HowItWorks"),
+  loading: () => <Loading />
+});
 
+const EdcrSingleApplication = Loadable({
+  loader: () => import("./EdcrSingleApplication"),
+  loading: () => <Loading />
+});
 
 export {
   TestMolecules,
+  RadioButtonsGroup,
+  Tooltip,
   CustomTab,
   DocumentList,
+  BpaDocumentList,
+  MapLocator,
+  FeesEstimateCard,
+  HowItWorks,
+  EdcrSingleApplication,
   NocList,
-  UploadSingleFile,
   Table,
-  DividerWithLabel,
-  FeesEstimateCard
+  UploadSingleFile,
+  DividerWithLabel
 };

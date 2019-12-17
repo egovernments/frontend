@@ -4,7 +4,6 @@ import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 
 const Loading = () => <LinearProgress />;
 
-
 const CustomTabContainer = Loadable({
   loader: () => import("./CustomTabContainer"),
   loading: () => <Loading />
@@ -14,8 +13,14 @@ const TestContainer = Loadable({
   loader: () => import("./TestContainer"),
   loading: () => <Loading />
 });
+
 const DocumentListContainer = Loadable({
   loader: () => import("./DocumentListContainer"),
+  loading: () => <Loading />
+});
+
+const BpaDocumentListContainer = Loadable({
+  loader: () => import("./BpaDocumentListContainer"),
   loading: () => <Loading />
 });
 
@@ -24,13 +29,8 @@ const NocListContainer = Loadable({
   loading: () => <Loading />
 });
 
-const AutosuggestContainer = Loadable({
-  loader: () => import("./AutosuggestContainer"),
-  loading: () => <Loading />
-});
-
-const DownloadFileContainer = Loadable({
-  loader: () => import("./DownloadFileContainer"),
+const LabelContainer = Loadable({
+  loader: () => import("./LabelContainer"),
   loading: () => <Loading />
 });
 
@@ -39,8 +39,8 @@ const CheckboxContainer = Loadable({
   loading: () => <Loading />
 });
 
-const DialogContainer = Loadable({
-  loader: () => import("./DialogContainer"),
+const DownloadFileContainer = Loadable({
+  loader: () => import("./DownloadFileContainer"),
   loading: () => <Loading />
 });
 
@@ -49,14 +49,49 @@ const EstimateCardContainer = Loadable({
   loading: () => <Loading />
 });
 
+const AutosuggestContainer = Loadable({
+  loader: () => import("./AutosuggestContainer"),
+  loading: () => <Loading />
+});
+
+const PaymentRedirectPage = Loadable({
+  loader: () => import("./PaymentRedirectPage"),
+  loading: () => <Loading />
+});
+
+const DialogContainer = Loadable({
+  loader: () => import("./DialogContainer"),
+  loading: () => <Loading />
+});
+
+const ViewBreakupContainer = Loadable({
+  loader: () => import("./ViewbreakupDialogContainer"),
+  loading: () => <Loading />
+});
+
+const RadioGroupWithLabelContainer = Loadable({
+  loader: () => import("./RadioGroupWithLabelContainer"),
+  loading: () => <Loading />
+});
+
+const EDCRUploadCard = Loadable({
+  loader: () => import("./EDCRUploadCard"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
-  TestContainer,
-  DocumentListContainer,
-  NocListContainer,
-  AutosuggestContainer,
-  DownloadFileContainer,
+  LabelContainer,
   CheckboxContainer,
+  DownloadFileContainer,
+  EstimateCardContainer,
+  AutosuggestContainer,
+  DocumentListContainer,
+  BpaDocumentListContainer,
+  PaymentRedirectPage,
+  ViewBreakupContainer,
   DialogContainer,
-  EstimateCardContainer
+  RadioGroupWithLabelContainer,
+  EDCRUploadCard,
+  NocListContainer
 };

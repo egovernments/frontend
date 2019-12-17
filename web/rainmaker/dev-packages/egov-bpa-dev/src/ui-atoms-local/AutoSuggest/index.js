@@ -166,7 +166,7 @@ const components = {
   ValueContainer
 };
 
-class AutoSuggest extends React.Component {
+class IntegrationReactSelect extends React.Component {
   state = {
     single: null
   };
@@ -236,9 +236,9 @@ class AutoSuggest extends React.Component {
   }
 }
 
-AutoSuggest.propTypes = {
+IntegrationReactSelect.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(AutoSuggest);
+export default withStyles(styles, { withTheme: true })(IntegrationReactSelect);

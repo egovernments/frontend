@@ -14,11 +14,12 @@ class DownloadFileContainer extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps);
   const { screenConfiguration } = state;
-  const data = ownProps.data
-    ? ownProps.data
-    : get(screenConfiguration.preparedFinalObject, ownProps.sourceJsonPath, []);
+  const data = get(
+    screenConfiguration.preparedFinalObject,
+    ownProps.sourceJsonPath,
+    []
+  );
   return { data };
 };
 

@@ -1,1225 +1,1011 @@
-import get from "lodash/get";
-import isEmpty from "lodash/isEmpty";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import QRCode from "qrcode";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getMessageFromLocalization } from "./receiptTransformer";
+import _ from "lodash";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const getOwners = data => {
-  let retowners = [];
-  data.owners.forEach(owner => {
-    retowners.push(
-      [
-        {
-          text: "Mobile No.",
-          border: [true, true, false, false]
-        },
-        {
-          text: "Name",
-          border: [false, true, false, false]
-        },
-        {
-          text: "Gender",
-          border: [false, true, false, false]
-        },
-        {
-          text: "Date of Birth",
-          border: [false, true, true, false]
-        }
-      ],
-      [
-        {
-          text: get(owner, "mobile"),
-          style: "receipt-table-value",
-          border: [true, false, false, false]
-        },
-        {
-          text: get(owner, "name"),
-          style: "receipt-table-value",
-          border: [false, false, false, false]
-        },
-        {
-          text: get(owner, "gender"),
-          style: "receipt-table-value",
-          border: [false, false, false, false]
-        },
-        {
-          text: get(owner, "dob"),
-          style: "receipt-table-value",
-          border: [false, false, true, false]
-        }
-      ],
-      [
-        {
-          text: "",
-          border: [true, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, false, false]
-        },
-
-        {
-          text: "",
-          border: [false, false, true, false]
-        }
-      ],
-      [
-        {
-          text: "Father/Husband's Name",
-          border: [true, false, false, false]
-        },
-        {
-          text: "Relationship",
-          border: [false, false, false, false]
-        },
-        {
-          text: "Email",
-          border: [false, false, false, false]
-        },
-        {
-          text: "PAN No.",
-          border: [false, false, true, false]
-        }
-      ],
-      [
-        {
-          text: get(owner, "fatherHusbandName"),
-          style: "receipt-table-value",
-          border: [true, false, false, false]
-        },
-        {
-          text: get(owner, "relationship"),
-          style: "receipt-table-value",
-          border: [false, false, false, false]
-        },
-        {
-          text: get(owner, "email"),
-          style: "receipt-table-value",
-          border: [false, false, false, false]
-        },
-        {
-          text: get(owner, "pan"),
-          style: "receipt-table-value",
-          border: [false, false, true, false]
-        }
-      ],
-      [
-        {
-          text: "",
-          border: [true, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, false, false]
-        },
-
-        {
-          text: "",
-          border: [false, false, true, false]
-        }
-      ],
-      [
-        {
-          text: "Correspondence Address",
-          border: [true, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, true, false]
-        }
-      ],
-      [
-        {
-          text: get(owner, "address"),
-          style: "receipt-table-value",
-          border: [true, false, false, true]
-        },
-        {
-          text: "",
-          style: "receipt-table-value",
-          border: [false, false, false, true]
-        },
-        {
-          text: "",
-          style: "receipt-table-value",
-          border: [false, false, false, true]
-        },
-
-        {
-          text: "",
-          style: "receipt-table-value",
-          border: [false, false, true, true]
-        }
-      ]
-    );
-  });
-
-  return retowners;
+let tableborder = {
+  hLineColor: function(i, node) {
+    return "#979797";
+  },
+  vLineColor: function(i, node) {
+    return "#979797";
+  },
+  hLineWidth: function(i, node) {
+    return 0.5;
+  },
+  vLineWidth: function(i, node) {
+    return 0.5;
+  }
 };
 
-const getBuildings = data => {
-  let retbuildings = [];
-  data &&
-    data.buildings.forEach(building => {
-      retbuildings.push([
-        {
-          text: "Property Type",
-          border: [true, true, false, false]
-        },
-        {
-          text: " Name of Building",
-          border: [false, true, false, false]
-        },
-        {
-          text: "Building Usage Type",
-          border: [false, true, false, false]
-        },
-        {
-          text: "Building Usage Subtype",
-          border: [false, true, true, false]
-        }
-      ]);
-      retbuildings.push([
-        {
-          text: data.propertyType,
-          style: "receipt-table-value",
-          border: [true, false, false, false]
-        },
-        {
-          text: get(building, "name", "NA"),
-          style: "receipt-table-value",
-          border: [false, false, false, false]
-        },
-        {
-          text: get(building, "usageType", "NA"),
-          style: "receipt-table-value",
-          border: [false, false, false, false]
-        },
-        {
-          text: get(building, "usageSubType", "NA"),
-          style: "receipt-table-value",
-          border: [false, false, true, false]
-        }
-      ]);
-      let headerrow = [];
-      let valuerow = [];
-      for (let [uomkey, uomvalue] of Object.entries(building.uoms)) {
-        headerrow.push({
-          text: getMessageFromLocalization(
-            `NOC_PROPERTY_DETAILS_${getTransformedLocale(uomkey)}_LABEL`
-          ),
-          border:
-            valuerow.length == 0
-              ? [true, false, false, false]
-              : valuerow.length == 3
-              ? [false, false, true, false]
-              : [false, false, false, false]
-        });
-        valuerow.push({
-          text: uomvalue,
-          style: "receipt-table-value",
-          border:
-            valuerow.length == 0
-              ? [true, false, false, false]
-              : valuerow.length == 3
-              ? [false, false, true, false]
-              : [false, false, false, false]
-          // left, top ,right ,down
-        });
-        // draw when elements in one row are four
-        if (headerrow.length == 4) {
-          retbuildings.push(
-            [headerrow[0], headerrow[1], headerrow[2], headerrow[3]],
-            [valuerow[0], valuerow[1], valuerow[2], valuerow[3]]
-          );
-          headerrow = [];
-          valuerow = [];
-        }
-      }
-      if (headerrow.length > 0) {
-        var i;
-        for (i = 4 - headerrow.length; i > 0; i--) {
-          headerrow.push({
-            text: "",
-            border:
-              valuerow.length == 3
-                ? [false, false, true, false]
-                : [false, false, false, false]
-          });
-          valuerow.push({
-            text: "",
-            style: "receipt-table-value",
-            border:
-              valuerow.length == 3
-                ? [false, false, true, false]
-                : [false, false, false, true]
-          });
-        }
-        retbuildings.push(
-          [headerrow[0], headerrow[1], headerrow[2], headerrow[3]],
-          [valuerow[0], valuerow[1], valuerow[2], valuerow[3]]
-        );
-        headerrow = [];
-        valuerow = [];
-      }
-      // set last row bottom border
-      retbuildings[retbuildings.length - 1][0].border[3] = true;
-      retbuildings[retbuildings.length - 1][1].border[3] = true;
-      retbuildings[retbuildings.length - 1][2].border[3] = true;
-      retbuildings[retbuildings.length - 1][3].border[3] = true;
-    });
-  return retbuildings;
+let noborder = {
+  hLineWidth: function(i, node) {
+    return 0;
+  },
+  vLineWidth: function(i, node) {
+    return 0;
+  }
 };
-const getApplicationData = async (transformedData, ulbLogo, type) => {
-  let borderLayout = {
-    hLineWidth: function(i, node) {
-      return i === 0 || i === node.table.body.length ? 0.1 : 0.1;
-    },
-    vLineWidth: function(i, node) {
-      return i === 0 || i === node.table.widths.length ? 0.1 : 0.1;
-    },
-    hLineColor: function(i, node) {
-      return i === 0 || i === node.table.body.length ? "#979797" : "#979797";
-    },
-    vLineColor: function(i, node) {
-      return i === 0 || i === node.table.widths.length ? "#979797" : "#979797";
-    }
-    // paddingLeft: function(i, node) {
-    //   return 5;
-    // },
-    // paddingRight: function(i, node) {
-    //   return 5;
-    // },
-    // paddingTop: function(i, node) {
-    //   return 5;
-    // },
-    // paddingBottom: function(i, node) {
-    //   return 5;
-    // }
-  };
 
-  let headerText = "Application Confirmation";
-  let nocSubheadOne = [
-    {
-      text: [
-        {
-          text: "Application No.     ",
-          bold: true
-        },
-        {
-          text: transformedData.applicationNumber,
-          bold: false
-        }
-      ],
-      alignment: "left"
-    },
-    {
-      text: [
-        {
-          text: "Date of Application ",
-          bold: true
-        },
-        {
-          text: transformedData.applicationDate,
-          bold: false
-        }
-      ],
-      alignment: "right"
-    }
-  ];
-  let nocSubheadTwo = [
-    {
-      text: [
-        {
-          text: "Application Mode ",
-          bold: true
-        },
-        {
-          text: transformedData.applicationMode,
-          bold: false
-        }
-      ],
-      alignment: "left"
-    }
-  ];
-  let nocDetails = [
-    {
-      text: "NOC DETAILS",
-      style: "noc-title"
-    },
-    {
-      style: "noc-table",
-      table: {
-        widths: ["*", "*", "*"],
-        body: [
-          [
-            {
-              text: "NOC Type",
-              border: [true, true, false, false],
-              style: "noc-table-key"
-            },
-            {
-              text: "Provisional NOC No.",
-              border: [false, true, false, false]
-            },
-            {
-              text: "Applicable Fire station",
-              border: [false, true, true, false]
-            }
-          ],
-          [
-            {
-              text: transformedData.nocType,
-              border: [true, false, false, true],
-              style: "receipt-table-value"
-            },
-            {
-              text: transformedData.provisionalNocNumber,
-              border: [false, false, false, true],
-              style: "receipt-table-value"
-            },
-            {
-              text: transformedData.fireStationId,
-              border: [false, false, true, true],
-              style: "receipt-table-value"
-            }
-          ]
-        ]
-      },
-      layout: borderLayout
-    }
-  ];
-  let propertyDetails = [
-    {
-      text: "PROPERTY DETAILS",
-      style: "noc-title"
-    },
-    {
-      style: "noc-table",
-      table: {
-        widths: ["*", "*", "*", "*"],
-        body: getBuildings(transformedData)
-      },
-      layout: borderLayout
-    }
-  ];
-  let propertyLocationDetails = [
-    {
-      text: "PROPERTY LOCATION DETAILS",
-      style: "noc-title"
-    },
-    {
-      style: "noc-table",
-      table: {
-        widths: ["*", "*", "*", "*"],
-        body: [
-          [
-            {
-              text: "Property Id",
-              border: [true, true, false, false]
-            },
-            {
-              text: "City",
-              border: [false, true, false, false]
-            },
-            {
-              text: "Door/House No.",
-              border: [false, true, false, false]
-            },
-            {
-              text: "Building/Company Name",
-              border: [false, true, true, false]
-            }
-          ],
-          [
-            {
-              text: transformedData.propertyId,
-              style: "receipt-table-value",
-              border: [true, false, false, false]
-            },
-            {
-              text: transformedData.city,
-              style: "receipt-table-value",
-              border: [false, false, false, false]
-            },
-            {
-              text: transformedData.door,
-              style: "receipt-table-value",
-              border: [false, false, false, false]
-            },
-            {
-              text: transformedData.buildingName,
-              style: "receipt-table-value",
-              border: [false, false, true, false]
-            }
-          ],
-          [
-            {
-              text: "Street Name",
-              border: [true, false, false, false]
-            },
+let borderKey = [true, true, false, true];
+let borderValue = [false, true, true, true];
+let receiptTableWidth = ["*", "*", "*", "*"];
+let payableAmountTable = ["*", "*", "*", "*", "*", "*"];
+let payableAmountBorderKey = [true, true, true, true, true, true, true];
+let payableInfoTable3 = ["*", "*", "*"];
+let accessoriesTable = ["24%", "76%"];
 
-            {
-              text: " Mohalla",
-              border: [false, false, false, false]
-            },
-            {
-              text: "Pincode",
-              border: [false, false, false, false]
-            },
-            {
-              text: "Location on Map",
-              border: [false, false, true, false]
-            }
-          ],
-          [
-            {
-              text: transformedData.street,
-              style: "receipt-table-value",
-              border: [true, false, false, true]
-            },
-            {
-              text: transformedData.mohalla,
-              style: "receipt-table-value",
-              border: [false, false, false, true]
-            },
-            {
-              text: transformedData.pincode,
-              style: "receipt-table-value",
-              border: [false, false, false, true]
-            },
-            {
-              text: transformedData.gis,
-              style: "receipt-table-value",
-              border: [false, false, true, true]
-            }
-          ]
-        ]
-      },
-      layout: borderLayout
-    }
-  ];
-  let applicantDetails = [
-    {
-      text: "APPLICANT DETAILS",
-      style: "noc-title"
-    },
-    {
-      style: "noc-table",
-      table: {
-        widths: ["*", "*", "*", "*"],
-        body: getOwners(transformedData)
-      },
-      layout: borderLayout
-    }
-  ];
-  let institutionDetails = [
-    {
-      text: "INSTITUTION DETAILS",
-      style: "noc-title"
-    },
-    {
-      style: "noc-table",
-      table: {
-        widths: ["*", "*", "*", "*"],
-        body: [
-          [
-            {
-              text: "Type of Institution",
-              border: [true, true, false, false]
-            },
-            {
-              text: "Name of Institute",
-              border: [false, true, false, false]
-            },
-            {
-              text: "Official Telephone No.",
-              border: [false, true, false, false]
-            },
-            {
-              text: "Authorized Person",
-              border: [false, true, true, false]
-            }
-          ],
-          [
-            {
-              text: getMessageFromLocalization(
-                `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(
-                  transformedData.ownershipType
-                )}`
-              ),
-              style: "receipt-table-value",
-              border: [true, false, false, false]
-            },
-            {
-              text: transformedData.institutionName,
-              style: "receipt-table-value",
-              border: [false, false, false, false]
-            },
-            {
-              text: transformedData.telephoneNumber,
-              style: "receipt-table-value",
-              border: [false, false, false, false]
-            },
-            {
-              text: transformedData.owners[0].name,
-              style: "receipt-table-value",
-              border: [false, false, true, false]
-            }
-          ],
-          [
-            {
-              text: "Designation in Institution",
-              border: [true, false, false, false]
-            },
-            {
-              text: "Mobile No. of Authorized Person",
-              border: [false, false, false, false]
-            },
-            {
-              text: "Email of Authorized Person",
-              border: [false, false, false, false]
-            },
-            {
-              text: "Official Correspondence Address",
-              border: [false, false, true, false]
-            }
-          ],
-          [
-            {
-              text: transformedData.institutionDesignation,
-              style: "receipt-table-value",
-              border: [true, false, false, true]
-            },
-            {
-              text: transformedData.owners[0].mobile,
-              style: "receipt-table-value",
-              border: [false, false, false, true]
-            },
-            {
-              text: transformedData.owners[0].email,
-              style: "receipt-table-value",
-              border: [false, false, false, true]
-            },
-            {
-              text: transformedData.owners[0].address,
-              style: "receipt-table-value",
-              border: [false, false, true, true]
-            }
-          ]
-        ]
-      },
-      layout: borderLayout
-    }
-  ];
-  let documents = [];
+const getReceiptData = (transformedData, ulbLogo) => {
   let owners = transformedData.owners.map(owner => [
     {
-      text: "Applicant Name",
+      text: "Owner Name",
       border: [true, true, false, true],
-      style: "receipt-table-value"
+      style: "receipt-table-key"
     },
     { text: owner.name, border: [false, true, true, true] },
     {
       text: "Mobile No.",
       border: [true, true, false, true],
-      style: "receipt-table-value"
+      style: "receipt-table-key"
     },
     { text: owner.mobile, border: [false, true, true, true] }
   ]);
-  let applicantInformation = [
-    { text: "APPLICANT INFORMATION", style: "noc-title" },
-    {
-      style: "noc-table",
-      table: {
-        widths: ["*", "*", "*", "*"],
-        body: owners
-      },
-      layout: borderLayout
-    }
-  ];
-  let amountPaid = [
-    { text: "AMOUNT PAID", style: "noc-title" },
-    {
-      style: "noc-table",
-      table: {
-        widths: ["*", "*", "*", "*"],
-        body: [
-          [
-            {
-              text: "NOC Fee",
-              border: [true, true, true, true],
-              style: "receipt-table-value",
-              alignment: "center"
-            },
-            {
-              text: "NOC Taxes",
-              border: [true, true, true, true],
-              style: "receipt-table-value",
-              alignment: "center"
-            },
-            {
-              text: "Adhoc Penalty/Rebate",
-              border: [true, true, true, true],
-              style: "receipt-table-value",
-              alignment: "center"
-            },
-            {
-              text: "TOTAL",
-              border: [true, true, true, true],
-              style: "receipt-table-value",
-              alignment: "center"
-            }
-          ],
-          [
-            {
-              text: transformedData.nocFee,
-              border: [true, true, true, true],
-              alignment: "center"
-            },
-            {
-              text: transformedData.nocTaxes,
-              border: [true, true, true, true],
-              alignment: "center"
-            },
-            {
-              text: transformedData.nocAdhocPenaltyRebate,
-              border: [true, true, true, true],
-              alignment: "center"
-            },
-            {
-              text: transformedData.totalAmount,
-              border: [true, true, true, true],
-              alignment: "center"
-            }
-          ]
-        ]
-      },
-      layout: borderLayout
-    }
-  ];
-  let paymentInformation = [
-    { text: "PAYMENT INFORMATION", style: "noc-title" },
-    {
-      style: "noc-table",
-      table: {
-        widths: ["*", "*", "*"],
-        body: [
-          [
-            {
-              text: "Payment Mode",
-              border: [true, true, true, true],
-              style: "receipt-table-value",
-              alignment: "center"
-            },
-            {
-              text: "Transaction ID/ Cheque/ DD No.",
-              border: [true, true, true, true],
-              style: "receipt-table-value",
-              alignment: "center"
-            },
-            {
-              text: "Bank Name & Branch",
-              border: [true, true, true, true],
-              style: "receipt-table-value",
-              alignment: "center"
-            }
-          ],
-          [
-            {
-              text: transformedData.paymentMode,
-              border: [true, true, true, true],
-              alignment: "center"
-            },
-            {
-              text: transformedData.transactionNumber,
-              border: [true, true, true, true],
-              alignment: "center"
-            },
-            {
-              text: transformedData.bankAndBranch,
-              border: [true, true, true, true],
-              alignment: "center"
-            }
-          ]
-        ]
-      },
-      layout: borderLayout
-    }
-  ];
-  let generatedApprovedBy = [
-    {
-      style: "receipt-approver",
-      columns: [
-        {
-          text: [
-            {
-              text: "Generated by: ",
-              bold: true
-            },
-            {
-              text: transformedData.auditorName,
-              bold: false
-            }
-          ],
-          alignment: "left"
-        },
-        {
-          text: [
-            {
-              text: "Commissioner/EO",
-              bold: true
-            }
-          ],
-          alignment: "right"
-        }
-      ]
-    }
-  ];
-  let qrText = `Application: ${transformedData.applicationNumber}, Date: ${
-    transformedData.applicationDate
-  }, Buildings: ${transformedData.propertyType}, Applicant: ${
-    transformedData.owners[0].name
-  }, Address: ${transformedData.address}`;
-
-  if (transformedData.ownershipType.startsWith("INSTITUTION")) {
-    applicantDetails = [];
-    applicantInformation = [];
-  } else {
-    institutionDetails = [];
-  }
-
-  switch (type) {
-    case "application":
-      applicantInformation = [];
-      amountPaid = [];
-      paymentInformation = [];
-      generatedApprovedBy = [];
-      break;
-    case "receipt":
-      headerText = "Payment Receipt";
-      nocSubheadOne = [
-        {
-          text: [
-            {
-              text: "Application No.            ",
-              bold: true
-            },
-            {
-              text: transformedData.applicationNumber,
-              bold: false
-            }
-          ],
-          alignment: "left"
-        },
-        {
-          text: [
-            {
-              text: "Date of Payment   ",
-              bold: true
-            },
-            {
-              text: transformedData.paymentDate,
-              bold: false
-            }
-          ],
-          alignment: "right"
-        }
-      ];
-      nocSubheadTwo = [
-        {
-          text: [
-            {
-              text: "Payment Receipt No.  ",
-              bold: true
-            },
-            {
-              text: transformedData.receiptNumber,
-              bold: false
-            }
-          ],
-          alignment: "left"
-        }
-      ];
-      nocDetails = [];
-      propertyDetails = [];
-      propertyLocationDetails = [];
-      applicantDetails = [];
-      documents = [];
-      qrText = `Application: ${
-        transformedData.applicationNumber
-      }, Receipt number: ${transformedData.receiptNumber}, Date of payment: ${
-        transformedData.paymentDate
-      }, Fees Paid: ${transformedData.amountPaid}, Payment mode: ${
-        transformedData.paymentMode
-      }, Transaction ID: ${transformedData.transactionNumber}`;
-      break;
-    case "certificate":
-      headerText = "Certificate";
-      nocSubheadOne = [
-        {
-          text: [
-            {
-              text: "Fire NOC No. ",
-              bold: true
-            },
-            {
-              text: transformedData.fireNOCNumber,
-              bold: false
-            }
-          ],
-          alignment: "left"
-        },
-        {
-          text: [
-            {
-              text: "Application No. ",
-              bold: true
-            },
-            {
-              text: transformedData.applicationNumber,
-              bold: false
-            }
-          ],
-          alignment: "right"
-        }
-      ];
-      nocSubheadTwo = [
-        {
-          text: [
-            {
-              text: "Date of Issue ",
-              bold: true
-            },
-            {
-              text: transformedData.issuedDate,
-              bold: false
-            }
-          ],
-          alignment: "left"
-        },
-        {
-          text: [
-            {
-              text: "Valid Till ",
-              bold: true
-            },
-            {
-              text: transformedData.validTo,
-              bold: false
-            }
-          ],
-          alignment: "right"
-        }
-      ];
-      applicantDetails = [];
-      documents = [];
-      generatedApprovedBy = [
-        {
-          style: "receipt-approver",
-          columns: [
-            {
-              text: [
-                {
-                  text: "Approved by: ",
-                  bold: true
-                },
-                {
-                  text: transformedData.auditorName,
-                  bold: false
-                }
-              ],
-              alignment: "left"
-            },
-            {
-              text: [
-                {
-                  text: "Commissioner/EO",
-                  bold: true
-                }
-              ],
-              alignment: "right"
-            }
-          ]
-        }
-      ];
-      qrText = `Application: ${
-        transformedData.applicationNumber
-      }, NOC Number: ${transformedData.fireNOCNumber}, Date of Issue: ${
-        transformedData.issuedDate
-      }, Valid Till: ${transformedData.validTo}, Buildings: ${
-        transformedData.propertyType
-      }, Applicant: ${transformedData.owners[0].name}`;
-      break;
-  }
-
-  // Generate QR code base64 image
-  let qrcode = await QRCode.toDataURL(qrText);
-
-  let dd = {
+  var receiptData = {
     content: [
       {
-        style: "noc-head",
+        style: "tl-head",
         table: {
-          widths: [120, "*", 120],
+          widths: [50, "*", 100],
           body: [
             [
               {
                 image: ulbLogo,
-                width: 60,
+                width: 50,
                 height: 61.25,
-                margin: [51, 12, 10, 10]
+                margin: [41, 12, 10, 10]
               },
               {
+                //stack is used here to give multiple sections one after another in same body
                 stack: [
                   {
                     text: transformedData.corporationName,
                     style: "receipt-logo-header"
                   },
                   {
-                    text: `Fire NOC ${headerText}`,
+                    text: "Trade License Payment Receipt (Citizen Copy)",
                     style: "receipt-logo-sub-header"
                   }
                 ],
-                alignment: "left",
-                margin: [10, 23, 0, 0]
+                alignment: "center",
+                margin: [56, 23, 0, 0]
               },
               {
-                image: qrcode,
-                width: 70,
-                height: 70,
-                margin: [50, 8, 8, 8],
-                alignment: "right"
+                text: [
+                  {
+                    text: `Receipt No.\n ${transformedData.receiptNumber}`,
+                    bold: true,
+                    style: "receipt-no"
+                  }
+                ],
+                alignment: "center",
+                margin: [-50, 30, 0, 2]
               }
             ]
           ]
         },
-        layout: "noBorders"
+        layout: noborder
       },
       {
-        style: "noc-subhead",
-        columns: nocSubheadOne
+        style: "pt-reciept-citizen-header",
+        columns: [
+          {
+            text: [
+              {
+                text: "Application Type ",
+                bold: true
+              },
+              {
+                text: transformedData.applicationType,
+                bold: false
+              }
+            ],
+
+            alignment: "left"
+          },
+          {
+            text: [
+              {
+                text: "Old License No. ",
+                bold: true
+              },
+              {
+                text: transformedData.oldLicenseNumber,
+                bold: false
+              }
+            ],
+            alignment: "right"
+          }
+        ]
       },
       {
-        style: "noc-subhead",
-        columns: nocSubheadTwo
+        style: "pt-reciept-citizen-header",
+        columns: [
+          {
+            text: [
+              {
+                text: "Application No. ",
+                bold: true
+              },
+              {
+                text: transformedData.applicationNumber,
+                bold: false
+              }
+            ],
+
+            alignment: "left"
+          },
+          {
+            text: [
+              {
+                text: "Receipt No. ",
+                bold: true
+              },
+              {
+                text: transformedData.receiptNumber,
+                bold: false
+              }
+            ],
+            alignment: "right"
+          }
+        ]
       },
-      ...nocDetails,
-      ...propertyDetails,
-      ...propertyLocationDetails,
-      ...applicantDetails,
-      ...documents,
-      ...applicantInformation,
-      ...institutionDetails,
-      ...amountPaid,
-      ...paymentInformation,
-      ...generatedApprovedBy
+      {
+        style: "pt-reciept-citizen-header",
+        columns: [
+          {
+            text: [
+              {
+                text: "Financial Year ",
+                bold: true
+              },
+              {
+                text: transformedData.financialYear,
+                bold: false
+              }
+            ],
+            alignment: "left"
+          },
+          {
+            text: [
+              {
+                text: "Payment Date ",
+                bold: true
+              },
+              {
+                text: transformedData.paymentDate,
+                bold: false
+              }
+            ],
+            alignment: "right"
+          }
+        ]
+      },
+      { text: "TRADE DETAILS", style: "pt-reciept-citizen-subheader" },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: receiptTableWidth,
+          body: [
+            [
+              {
+                text: "Trade Name",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              { text: transformedData.tradeName, border: borderValue },
+              {
+                text: "Trade Category",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.tradeCategory,
+                border: borderValue
+              }
+            ]
+          ]
+        },
+        layout: tableborder
+      },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: accessoriesTable,
+          body: [
+            [
+              {
+                text: "Trade Type",
+                border: [true, false, false, true],
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.tradeTypeReceipt,
+                border: [false, false, true, true]
+              }
+            ],
+            [
+              {
+                text: "Accessories",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              {
+                text: `${transformedData.accessoriesList}`,
+                border: borderValue
+              }
+            ]
+          ]
+        },
+        layout: tableborder
+      },
+      { text: "TRADE LOCATION DETAILS", style: "pt-reciept-citizen-subheader" },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: receiptTableWidth,
+          body: [
+            [
+              {
+                text: "House/Door No.",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              { text: transformedData.doorNo, border: borderValue },
+              {
+                text: "Building/Colony Name.",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.buildingName,
+                border: borderValue
+              }
+            ],
+            [
+              {
+                text: "Street Name",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              { text: transformedData.streetName, border: borderValue },
+              {
+                text: "Locality/Mohalla",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.locality,
+                border: borderValue
+              }
+            ]
+          ]
+        },
+        layout: tableborder
+      },
+      { text: "OWNERSHIP INFORMATION", style: "pt-reciept-citizen-subheader" },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: receiptTableWidth,
+          body: owners
+        },
+        layout: tableborder
+      },
+      { text: "PAYABLE AMOUNT", style: "pt-reciept-citizen-subheader" },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: payableAmountTable,
+          body: [
+            [
+              {
+                text: "Trade License Fee",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              },
+              {
+                text: "Penalty",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              },
+              {
+                text: "Rebate",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              },
+              {
+                text: "Adhoc Penalty",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              },
+              {
+                text: "Adhoc Rebate",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              },
+              {
+                text: "Total",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              }
+            ],
+            [
+              {
+                text: transformedData.tlFee,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              },
+              {
+                text: transformedData.tlPenalty,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              },
+              {
+                text: transformedData.tlRebate,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              },
+              {
+                text: transformedData.tlAdhocPenalty,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              },
+              {
+                text: transformedData.tlAdhocRebate,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              },
+              {
+                text: transformedData.totalAmount,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              }
+            ]
+          ]
+        },
+        layout: tableborder
+      },
+      { text: "PAYMENT INFORMATION", style: "pt-reciept-citizen-subheader" },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: receiptTableWidth,
+          body: [
+            [
+              {
+                text: "Total Amount Paid:",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              { text: transformedData.amountPaid, border: borderValue },
+              {
+                text: "Amount Due:",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.amountDue,
+                border: borderValue
+              }
+            ]
+          ]
+        },
+        layout: tableborder
+      },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: payableInfoTable3,
+          body: [
+            [
+              {
+                text: "Payment Mode",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              },
+              {
+                text: "Transaction ID/ Cheque/ DD No.",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              },
+              {
+                text: "Bank Name & Branch",
+                border: payableAmountBorderKey,
+                style: "receipt-table-key",
+                alignment: "center"
+              }
+            ],
+            [
+              {
+                text: transformedData.paymentMode,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              },
+              {
+                text: transformedData.transactionNumber,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              },
+              {
+                text: transformedData.bankAndBranch,
+                border: payableAmountBorderKey,
+                style: "receipt-table-value",
+                alignment: "center"
+              }
+            ]
+          ]
+        },
+        layout: tableborder
+      },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: receiptTableWidth,
+          body: [
+            [
+              {
+                text: "G8 Receipt No:",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              { text: transformedData.g8ReceiptNo, border: borderValue },
+              {
+                text: "G8 Receipt Issue Date:",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.g8ReceiptDate,
+                border: borderValue
+              }
+            ]
+          ]
+        },
+        layout: tableborder
+      },
+      {
+        style: "receipt-approver",
+        columns: [
+          {
+            text: [
+              {
+                text: "Generated by: ",
+                bold: true
+              },
+              {
+                text: transformedData.auditorName,
+                bold: false
+              }
+            ],
+            alignment: "left"
+          },
+          {
+            text: [
+              {
+                text: "Commissioner/EO",
+                bold: true
+              }
+            ],
+            alignment: "right"
+          }
+        ]
+      }
     ],
-    footer: [],
+    footer: [
+      {
+        text:
+          "Note:\n1. Payment received by cheque/demand draft shall be subject to realization.\n2. This document is not a proof of Property Ownership.\n3. This is a computer generated document, hence requires no signature.",
+        style: "receipt-footer"
+      }
+    ],
     styles: {
-      "noc-head": {
+      "tl-head": {
         fillColor: "#F2F2F2",
-        margin: [-70, -41, -81, 0]
+        margin: [-41, -41, -41, 0]
       },
-      "receipt-logo-header": {
-        color: "#484848",
-        fontFamily: "Roboto",
-        fontSize: 16,
-        bold: true,
-        letterSpacing: 0.74,
-        margin: [0, 0, 0, 5]
-      },
-      "receipt-logo-sub-header": {
-        color: "#484848",
-        fontFamily: "Roboto",
-        fontSize: 13,
-        letterSpacing: 0.6
-      },
-      "noc-subhead": {
+      "pt-reciept-citizen-header": {
         fontSize: 12,
         bold: true,
-        margin: [-18, 8, 0, 0],
+        margin: [0, 8, 0, 0], //left top right bottom
         color: "#484848"
       },
-      "noc-title": {
+      "pt-reciept-citizen-subheader": {
         fontSize: 10,
         bold: true,
-        margin: [-18, 16, 8, 8],
-        color: "#484848",
-        fontWeight: 500
+        margin: [0, 16, 0, 8], //left top right bottom
+        color: "#484848"
       },
-      "noc-table": {
+      "pt-reciept-citizen-table": {
+        fontSize: 10,
+        color: "#484848"
+      },
+      "receipt-assess-table": {
         fontSize: 10,
         color: "#484848",
-        margin: [-20, -2, -8, -8]
+        margin: [0, 8, 0, 0]
+      },
+      "receipt-assess-table-header": {
+        bold: true,
+        fillColor: "#D8D8D8",
+        color: "#484848"
       },
       "receipt-header-details": {
         fontSize: 9,
         margin: [0, 0, 0, 8],
         color: "#484848"
       },
-      "noc-table-key": {
+      "receipt-table-key": {
         color: "#484848",
-        bold: false,
-        fontSize: 10
+        bold: true
       },
       "receipt-table-value": {
+        color: "#484848"
+      },
+      "receipt-logo-header": {
         color: "#484848",
+        fontFamily: "Roboto",
+        fontSize: 16,
         bold: true,
-        fontSize: 10
+        letterSpacing: 0.74
+      },
+      "receipt-logo-sub-header": {
+        color: "#484848",
+        fontFamily: "Roboto",
+        fontSize: 13,
+        letterSpacing: 1.6,
+        margin: [0, 6, 0, 0]
       },
       "receipt-footer": {
         color: "#484848",
         fontSize: 8,
-        margin: [-6, 15, -15, -10]
+        margin: [30, -20, 0, 0]
       },
       "receipt-no": {
         color: "#484848",
         fontSize: 10
       },
       "receipt-approver": {
-        fontSize: 12,
+        fontSize: 10,
         bold: true,
-        margin: [-20, 30, -10, 0],
+        margin: [0, 60, 0, 8], //left top right bottom
         color: "#484848"
       }
     }
   };
-  return dd;
+  return receiptData;
 };
 
-const generatePdf = async (state, dispatch, type) => {
-  let applicationData = get(
+const getCertificateData = (transformedData, ulbLogo) => {
+  var tlCertificateData = {
+    content: [
+      {
+        table: {
+          widths: ["*"],
+          body: [
+            [
+              {
+                stack: [
+                  {
+                    image: ulbLogo,
+                    width: 50,
+                    height: 61.25,
+                    alignment: "center"
+                  },
+                  {
+                    text: transformedData.corporationName,
+                    style: "receipt-logo-header",
+                    margin: [0, 10, 0, 0]
+                  },
+                  {
+                    text: `${transformedData.corporationAddress}\nContact : ${
+                      transformedData.corporationContact
+                    }\nWebsite : ${
+                      transformedData.corporationWebsite
+                    }\nEmail : ${transformedData.corporationEmail}`,
+                    style: "receipt-logo-sub-text",
+                    margin: [0, 8, 0, 0]
+                  },
+                  {
+                    text: "TRADE LICENSE CERTIFICATE",
+                    style: "receipt-logo-sub-header",
+                    margin: [0, 30, 0, 0]
+                  }
+                ],
+                alignment: "center",
+                margin: [0, 0, 0, 0]
+              }
+            ]
+          ]
+        },
+        layout: noborder
+      },
+      {
+        style: "tl-certificate-data",
+        columns: [
+          {
+            width: 160,
+            text: "Trade License Number"
+          },
+          {
+            width: "*",
+            text: transformedData.licenseNumber
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Application Number"
+          },
+          {
+            width: "*",
+            text: transformedData.applicationNumber
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Receipt Number"
+          },
+          {
+            width: "*",
+            text: transformedData.receiptNumber
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Financial Year"
+          },
+          {
+            width: "*",
+            text: transformedData.financialYear
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data",
+        columns: [
+          {
+            width: 160,
+            text: "Trade Name"
+          },
+          {
+            width: "*",
+            text: transformedData.tradeName
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Trade Owner Name"
+          },
+          {
+            width: "*",
+            text: transformedData.ownersList
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Trade Owner Contact"
+          },
+          {
+            width: "*",
+            text: transformedData.owners[0].mobile
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Trade Address"
+          },
+          {
+            width: "*",
+            text: transformedData.address
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Trade Type"
+          },
+          {
+            width: "*",
+            text: transformedData.tradeTypeCertificate
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Accessories"
+          },
+          {
+            width: "*",
+            text: `${transformedData.accessoriesList}`
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Trade License Fee"
+          },
+          {
+            width: "*",
+            text: `Rs. ${transformedData.totalAmount}`
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "License Issue Date"
+          },
+          {
+            width: "*",
+            text: transformedData.licenseIssueDate
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "License Validity"
+          },
+          {
+            width: "*",
+            text: `${transformedData.licenseValidity.startDate} to ${
+              transformedData.licenseValidity.endDate
+            } `
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-footer",
+        columns: [
+          {
+            text: [
+              {
+                text: "Approved by: "
+              },
+              {
+                text: transformedData.auditorName
+              }
+            ],
+            alignment: "left"
+          },
+          {
+            text: [
+              {
+                text: "Commissioner/EO",
+                bold: false
+              }
+            ],
+            alignment: "right"
+          }
+        ]
+      }
+    ],
+    footer: [
+      {
+        text:transformedData.Disclaimer,
+        style: "receipt-footer"
+      }
+    ],
+    //define all the styles here
+    styles: {
+      "pt-reciept-citizen-header": {
+        fontSize: 14,
+        margin: [0, 24, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      },
+      "tl-certificate-data": {
+        fontSize: 14,
+        margin: [0, 40, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      },
+      "tl-certificate-data-2": {
+        fontSize: 14,
+        margin: [0, 8, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      },
+      "pt-reciept-citizen-subheader": {
+        fontSize: 10,
+        bold: true,
+        margin: [0, 16, 0, 8], //left top right bottom
+        color: "#484848"
+      },
+      "pt-reciept-citizen-table": {
+        fontSize: 10,
+        color: "#484848"
+      },
+      "receipt-assess-table": {
+        fontSize: 10,
+        color: "#484848",
+        margin: [0, 8, 0, 0]
+      },
+      "receipt-assess-table-header": {
+        bold: true,
+        fillColor: "#D8D8D8",
+        color: "#484848"
+      },
+      "receipt-header-details": {
+        fontSize: 9,
+        margin: [0, 0, 0, 8],
+        color: "#484848"
+      },
+      "receipt-table-key": {
+        color: "#484848",
+        bold: true
+      },
+      "receipt-table-value": {
+        color: "#484848"
+      },
+      "receipt-logo-header": {
+        color: "#1E1E1E",
+        fontFamily: "Roboto",
+        fontSize: 18,
+        bold: true,
+        letterSpacing: 0.74
+      },
+      "receipt-logo-sub-text": {
+        color: "#656565",
+        fontFamily: "Roboto",
+        fontSize: 14,
+        letterSpacing: 0.74
+      },
+      "receipt-logo-sub-header": {
+        color: "#1E1E1E",
+        fontFamily: "Roboto",
+        fontSize: 16,
+        letterSpacing: 1.6,
+        bold: true
+      },
+      "receipt-footer": {
+        color: "#484848",
+        fontSize: 8,
+        margin: [10, -25, 5, 5]
+      },
+      "receipt-no": {
+        color: "#484848",
+        fontSize: 10
+      },
+      "tl-certificate-footer": {
+        fontSize: 14,
+        margin: [0, 50, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      }
+    }
+  };
+  return tlCertificateData;
+};
+
+const generateReceipt = async (state, dispatch, type) => {
+  let data1 = _.get(
     state.screenConfiguration.preparedFinalObject,
-    "applicationDataForPdf",
+    "applicationDataForReceipt",
     {}
   );
-  let paymentData = get(
+  let data2 = _.get(
     state.screenConfiguration.preparedFinalObject,
-    "receiptDataForPdf",
+    "receiptDataForReceipt",
     {}
   );
-  let mdmsData = get(
+  let data3 = _.get(
     state.screenConfiguration.preparedFinalObject,
-    "mdmsDataForPdf",
+    "mdmsDataForReceipt",
     {}
   );
-  let ulbLogo = get(
+  let data4 = _.get(
     state.screenConfiguration.preparedFinalObject,
-    "base64UlbLogoForPdf",
+    "userDataForReceipt",
+    {}
+  );
+  let ulbLogo = _.get(
+    state.screenConfiguration.preparedFinalObject,
+    "base64UlbLogo",
     ""
   );
-  let auditorData = get(
-    state.screenConfiguration.preparedFinalObject,
-    "userDataForPdf",
-    {}
-  );
-  if (isEmpty(applicationData)) {
+  if (_.isEmpty(data1)) {
     console.log("Error in application data");
     return;
-  } else if (isEmpty(mdmsData)) {
+  } else if (_.isEmpty(data2)) {
+    console.log("Error in receipt data");
+    return;
+  } else if (_.isEmpty(data3)) {
     console.log("Error in mdms data");
     return;
-  } else if (isEmpty(ulbLogo)) {
-    console.log("Error in image data");
-    return;
-  } else if (
-    (type.startsWith("receipt") || type.startsWith("certificate")) &&
-    isEmpty(auditorData)
-  ) {
+  } else if (_.isEmpty(data4)) {
     console.log("Error in auditor user data");
     return;
-  } else if (
-    (type.startsWith("receipt") || type.startsWith("certificate")) &&
-    isEmpty(paymentData)
-  ) {
-    console.log("Error in payment data");
+  } else if (_.isEmpty(ulbLogo)) {
+    console.log("Error in image data");
     return;
   }
   let transformedData = {
-    ...applicationData,
-    ...paymentData,
-    ...mdmsData,
-    ...auditorData
+    ...data1,
+    ...data2,
+    ...data3,
+    ...data4
   };
   switch (type) {
-    case "application_download":
-      let fileName = `noc_application_${transformedData.applicationNumber}`;
-      let application_data = await getApplicationData(
-        transformedData,
-        ulbLogo,
-        "application"
-      );
-      application_data &&
-        pdfMake.createPdf(application_data).download(fileName);
-      break;
-    case "application_print":
-      application_data = await getApplicationData(
-        transformedData,
-        ulbLogo,
-        "application"
-      );
-      application_data && pdfMake.createPdf(application_data).print();
-      break;
-    case "receipt_download":
-      fileName = `noc_receipt_${transformedData.receiptNumber}`;
-      application_data = await getApplicationData(
-        transformedData,
-        ulbLogo,
-        "receipt"
-      );
-      application_data &&
-        pdfMake.createPdf(application_data).download(fileName);
-      break;
-    case "receipt_print":
-      application_data = await getApplicationData(
-        transformedData,
-        ulbLogo,
-        "receipt"
-      );
-      application_data && pdfMake.createPdf(application_data).print();
-      break;
     case "certificate_download":
-      fileName = `noc_certificate_${transformedData.fireNOCNumber}`;
-      application_data = await getApplicationData(
-        transformedData,
-        ulbLogo,
-        "certificate"
-      );
-      application_data &&
-        pdfMake.createPdf(application_data).download(fileName);
+      let certificate_data = getCertificateData(transformedData, ulbLogo);
+      certificate_data &&
+        pdfMake.createPdf(certificate_data).download("tl_certificate.pdf");
       break;
     case "certificate_print":
-      application_data = await getApplicationData(
-        transformedData,
-        ulbLogo,
-        "certificate"
-      );
-      application_data && pdfMake.createPdf(application_data).print();
+      certificate_data = getCertificateData(transformedData, ulbLogo);
+      certificate_data && pdfMake.createPdf(certificate_data).print();
       break;
-
+    case "receipt_download":
+      let receipt_data = getReceiptData(transformedData, ulbLogo);
+      receipt_data &&
+        pdfMake.createPdf(receipt_data).download("tl_receipt.pdf");
+      break;
+    case "receipt_print":
+      receipt_data = getReceiptData(transformedData, ulbLogo);
+      receipt_data && pdfMake.createPdf(receipt_data).print();
+      break;
     default:
       break;
   }
 };
 
-export default generatePdf;
+export default generateReceipt;

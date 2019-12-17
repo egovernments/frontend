@@ -4,6 +4,7 @@ import store from "../../../../ui-redux/store";
 import {
   getMdmsData,
   getReceiptData,
+  getSearchResults,
   getUserDataFromUuid,
   getFinancialYearDates
 } from "../utils";
@@ -17,7 +18,7 @@ import {
   transformById,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getAppSearchResults } from "../../../../ui-utils/commons";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -45,14 +46,13 @@ const epochToDate = et => {
   return formattedDate;
 };
 
-export const getMessageFromLocalization = code => {
-  // let messageObject = JSON.parse(getLocalization("localization_en_IN")).find(
-  //   item => {
-  //     return item.code == code;
-  //   }
-  // );
-  // return messageObject ? messageObject.message : code;
-  return code;
+const getMessageFromLocalization = code => {
+  let messageObject = JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
+    item => {
+      return item.code == code;
+    }
+  );
+  return messageObject ? messageObject.message : code;
 };
 
 export const loadUlbLogo = tenantid => {
@@ -64,9 +64,7 @@ export const loadUlbLogo = tenantid => {
     canvas.height = this.height;
     canvas.width = this.width;
     ctx.drawImage(this, 0, 0);
-    store.dispatch(
-      prepareFinalObject("base64UlbLogoForPdf", canvas.toDataURL())
-    );
+    store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
   img.src = `/pb-egov-assets/${tenantid}/logo.png`;
@@ -78,202 +76,157 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     { key: "tenantId", value: tenant },
     { key: "applicationNumber", value: applicationNumber }
   ];
-  let response = await getSearchResults(queryObject);
+  let response = await getAppSearchResults(queryObject);
 
-  if (response && response.FireNOCs && response.FireNOCs.length > 0) {
+  if (response && response.Licenses && response.Licenses.length > 0) {
     data.applicationNumber = nullToNa(
-      get(response, "FireNOCs[0].fireNOCDetails.applicationNumber", "NA")
+      get(response, "Licenses[0].applicationNumber", "NA")
     );
-    data.applicationStatus = get(response, "FireNOCs[0].fireNOCDetails.status");
-    data.applicationDate = nullToNa(
-      epochToDate(
-        get(response, "FireNOCs[0].fireNOCDetails.applicationDate", "NA")
+    data.oldLicenseNumber = nullToNa(
+      get(response, "Licenses[0].oldLicenseNumber", "NA")
+    );
+    data.applicationType = getMessageFromLocalization(
+      nullToNa(
+        get(
+          response,
+          "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+          "NA"
+        )
       )
     );
-    data.applicationMode = getMessageFromLocalization(
-      nullToNa(get(response, "FireNOCs[0].fireNOCDetails.channel", "NA"))
+    data.licenseNumber = nullToNa(
+      get(response, "Licenses[0].licenseNumber", "NA")
     );
-    data.nocType = nullToNa(
-      get(response, "FireNOCs[0].fireNOCDetails.fireNOCType", "NA")
+    data.financialYear = nullToNa(
+      get(response, "Licenses[0].financialYear", "NA")
     );
-    data.provisionalNocNumber = nullToNa(
-      get(response, "FireNOCs[0].provisionFireNOCNumber", "NA")
-    );
-    data.fireStationId = nullToNa(
-      getMessageFromLocalization(
-        `FIRENOC_FIRESTATIONS_${getTransformedLocale(
-          get(response, "FireNOCs[0].fireNOCDetails.firestationId", "NA")
-        )}`
-      )
-    );
-
-    // Certificate Data
-    data.fireNOCNumber = nullToNa(
-      get(response, "FireNOCs[0].fireNOCNumber", "NA")
-    );
-    data.issuedDate = nullToNa(
-      epochToDate(get(response, "FireNOCs[0].fireNOCDetails.issuedDate", "NA"))
-    );
-    data.validTo = nullToNa(
-      epochToDate(get(response, "FireNOCs[0].fireNOCDetails.validTo", "NA"))
-    );
-
-    // Buildings Data
-    data.propertyType = nullToNa(
-      get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "NA")
-    );
-    let buildings = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
-    data.buildings = buildings.map(building => {
-      let uoms = get(building, "uoms", []);
-      let uomsObject = {};
-      uoms.forEach(uom => {
-        uomsObject[uom.code] = uom.value;
-      });
-      return {
-        name: get(building, "name", "NA"),
-        usageType: getMessageFromLocalization(
-          `FIRENOC_BUILDINGTYPE_${getTransformedLocale(
-            get(building, "usageType", "NA").split(".")[0]
-          )}`
-        ),
-        usageSubType: getMessageFromLocalization(
-          `FIRENOC_BUILDINGTYPE_${getTransformedLocale(
-            get(building, "usageType", "NA")
-          )}`
-        ),
-        uoms: uomsObject
-      };
-    });
-
-    // Property Location
-    data.propertyId = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId",
-        "NA"
-      )
-    );
-    data.city = nullToNa(
-      getMessageFromLocalization(
-        `TENANT_TENANTS_${getTransformedLocale(
-          get(
-            response,
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-            "NA"
-          )
-        )}`
-      )
-    );
-    data.door = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo",
-        "NA"
-      )
+    data.tradeName = nullToNa(get(response, "Licenses[0].tradeName", "NA"));
+    data.doorNo = nullToNa(
+      get(response, "Licenses[0].tradeLicenseDetail.address.doorNo", "NA")
     );
     data.buildingName = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName",
-        "NA"
-      )
+      get(response, "Licenses[0].tradeLicenseDetail.address.buildingName", "NA")
     );
-    data.street = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.street",
-        "NA"
-      )
+    data.streetName = nullToNa(
+      get(response, "Licenses[0].tradeLicenseDetail.address.street", "NA")
     );
-    data.mohalla = nullToNa(
-      getMessageFromLocalization(
-        `revenue.locality.${getTransformedLocale(
-          get(
-            response,
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
-            "NA"
-          )
-        )}`
-      )
-    );
-    data.pincode = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode",
-        "NA"
-      )
-    );
-    data.gis = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude",
-        "NA"
-      )
-    );
-    data.address = createAddress(
-      data.door,
-      data.buildingName,
-      data.street,
-      data.mohalla,
-      data.city
-    );
-
-    // Applicant Details
-    let owners = get(
+    data.locality = get(
       response,
-      "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
-      []
+      "Licenses[0].tradeLicenseDetail.address.locality.name",
+      "NA"
     );
-    data.owners = owners.map(owner => {
+    let cityCode = nullToNa(
+      get(response, "Licenses[0].tradeLicenseDetail.address.tenantId", "NA")
+    );
+    data.city = getMessageFromLocalization("TENANT_TENANTS_"+getTransformedLocale(cityCode));
+    /** Make owners data array */
+    let ownersData = get(response, "Licenses[0].tradeLicenseDetail.owners", []);
+    data.owners = ownersData.map(owner => {
       return {
-        mobile: get(owner, "mobileNumber", "NA"),
         name: get(owner, "name", "NA"),
-        gender: get(owner, "gender", "NA"),
-        fatherHusbandName: get(owner, "fatherOrHusbandName", "NA"),
-        relationship: get(owner, "relationship", "NA"),
-        dob: epochToDate(get(owner, "dob", "NA")),
-        email: get(owner, "emailId", "NA"),
-        pan: get(owner, "pan", "NA"),
-        address: get(owner, "correspondenceAddress", "NA")
+        mobile: get(owner, "mobileNumber", "NA")
       };
     });
-
-    // Institution Details
-    data.ownershipType = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-        "NA"
-      )
+    data.ownersList = ownersData
+      .map(owner => {
+        return get(owner, "name", "NA");
+      })
+      .join(", ");
+    /** End */
+    let licenseIssueDate = get(response, "Licenses[0].issuedDate", "NA");
+    data.licenseIssueDate = nullToNa(epochToDate(licenseIssueDate));
+    data.licenseExpiryDate = nullToNa(
+      epochToDate(get(response, "Licenses[0].validTo", "NA"))
     );
-    data.institutionName = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName",
-        "NA"
-      )
-    );
-    data.telephoneNumber = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber",
-        "NA"
-      )
-    );
-    data.institutionDesignation = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation",
-        "NA"
-      )
+    let licenseValidTo = get(response, "Licenses[0].validTo", "NA");
+    data.licenseValidity = getFinancialYearDates("dd/mm/yyyy", licenseValidTo);
+    /** Trade settings */
+    const tradeUnitsFromResponse = get(
+      response,
+      "Licenses[0].tradeLicenseDetail.tradeUnits",
+      null
     );
 
-    // Documents
+    const transformedTradeData = tradeUnitsFromResponse.reduce(
+      (res, curr) => {
+        let tradeCategory = "NA";
+        let tradeType = "NA";
+        let tradeSubType = "NA";
+        let tradeCode = curr.tradeType;
+        if (tradeCode) {
+          let tradeCodeArray = tradeCode.split(".");
+          if (tradeCodeArray.length == 1) {
+            tradeCategory = nullToNa(tradeCode);
+          } else if (tradeCodeArray.length == 2) {
+            tradeCategory = nullToNa(tradeCodeArray[0]);
+            tradeType = nullToNa( tradeCode);
+          } else if (tradeCodeArray.length > 2) {
+            tradeCategory = nullToNa(tradeCodeArray[0]);
+            tradeType = nullToNa(tradeCodeArray[1]);
+            tradeSubType = nullToNa(tradeCode);
+          }
+        }
+        /** End */
 
-    // User Data
-    loadUserNameData(get(response, "FireNOCs[0].auditDetails.lastModifiedBy"));
+        res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory));
+
+        res.tradeTypeReceipt.push(
+          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
+            " / " +
+            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
+        );
+        res.tradeTypeCertificate.push(
+          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory) +
+            " / " +
+            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
+            " / " +
+            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
+        );
+        return res;
+      },
+      {
+        tradeCategory: [],
+        tradeTypeReceipt: [],
+        tradeTypeCertificate: []
+      }
+    );
+
+    data.tradeCategory = transformedTradeData.tradeCategory.join(", ");
+    data.tradeTypeReceipt = transformedTradeData.tradeTypeReceipt.join(", ");
+    data.tradeTypeCertificate = transformedTradeData.tradeTypeCertificate.join(
+      ", "
+    );
+    data.address = nullToNa(
+      createAddress(
+        data.doorNo,
+        data.buildingName,
+        data.streetName,
+        data.locality,
+        data.city
+      )
+    );
+    const accessories = get(
+      response,
+      "Licenses[0].tradeLicenseDetail.accessories",
+      []
+    );
+    if (accessories && accessories.length > 0) {
+      data.accessoriesList = response.Licenses[0].tradeLicenseDetail.accessories
+        .map(item => {
+          return `${getMessageFromLocalization(`TRADELICENSE_ACCESSORIESCATEGORY_${getTransformedLocale(item.accessoryCategory)}`)}(${
+            item.count ? item.count :"0"
+          })`;
+        })
+        .reduce((pre, cur) => {
+          return pre.concat(", " + cur);
+        });
+    } else {
+      data.accessoriesList = "";
+    }
+    loadUserNameData(response.Licenses[0].auditDetails.lastModifiedBy);
   }
-  store.dispatch(prepareFinalObject("applicationDataForPdf", data));
+
+  store.dispatch(prepareFinalObject("applicationDataForReceipt", data));
 };
 
 export const loadReceiptData = async (consumerCode, tenant) => {
@@ -335,26 +288,26 @@ export const loadReceiptData = async (consumerCode, tenant) => {
         get(response, "Receipt[0].Bill[0].billDetails[0].manualReceiptDate", 0)
       )
     );
-    /** START NOC Fee, Adhoc Penalty/Rebate Calculation */
-    let nocAdhocPenalty = 0,
-      nocAdhocRebate = 0;
+    /** START TL Fee, Adhoc Penalty/Rebate Calculation */
+    var tlAdhocPenalty = 0,
+      tlAdhocRebate = 0;
     response.Receipt[0].Bill[0].billDetails[0].billAccountDetails.map(item => {
       let desc = item.taxHeadCode ? item.taxHeadCode : "";
-      if (desc === "FIRENOC_FEES") {
-        data.nocFee = item.amount;
-      } else if (desc === "FIRENOC_ADHOC_PENALTY") {
-        nocAdhocPenalty = item.amount;
-      } else if (desc === "FIRENOC_ADHOC_REBATE") {
-        nocAdhocRebate = item.amount;
-      } else if (desc === "FIRENOC_TAXES") {
-        data.nocTaxes = item.amount;
+      if (desc === "TL_TAX") {
+        data.tlFee = item.amount;
+      } else if (desc === "TL_ADHOC_PENALTY") {
+        tlAdhocPenalty = item.amount;
+      } else if (desc === "TL_ADHOC_REBATE") {
+        tlAdhocRebate = item.amount;
       }
     });
-    data.nocPenaltyRebate = "NA";
-    data.nocAdhocPenaltyRebate = nocAdhocPenalty + nocAdhocRebate;
+    data.tlPenalty = "NA";
+    data.tlRebate = "NA";
+    data.tlAdhocPenalty = tlAdhocPenalty;
+    data.tlAdhocRebate = tlAdhocRebate;
     /** END */
   }
-  store.dispatch(prepareFinalObject("receiptDataForPdf", data));
+  store.dispatch(prepareFinalObject("receiptDataForReceipt", data));
 };
 
 export const loadMdmsData = async tenantid => {
@@ -396,10 +349,10 @@ export const loadMdmsData = async tenantid => {
       .toUpperCase()
       .replace(/[.]/g, "_")}`;
 
-    data.corporationName = `${getTranslatedLabel(
+    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(
       cityKey,
       localizationLabels
-    ).toUpperCase()} ${getTranslatedLabel(ulbGrade, localizationLabels)}`;
+    ).toUpperCase()} `;
 
     /** END */
     data.corporationAddress = get(ulbData, "address", "NA");
@@ -407,7 +360,7 @@ export const loadMdmsData = async tenantid => {
     data.corporationWebsite = get(ulbData, "domainUrl", "NA");
     data.corporationEmail = get(ulbData, "emailId", "NA");
   }
-  store.dispatch(prepareFinalObject("mdmsDataForPdf", data));
+  store.dispatch(prepareFinalObject("mdmsDataForReceipt", data));
 };
 
 export const loadUserNameData = async uuid => {
@@ -420,7 +373,17 @@ export const loadUserNameData = async uuid => {
   if (response && response.user && response.user.length > 0) {
     data.auditorName = get(response, "user[0].name", "NA");
   }
-  store.dispatch(prepareFinalObject("userDataForPdf", data));
+  data.Disclaimer=getMessageFromLocalization("TL_RECEIPT_FOOTER_1");
+  store.dispatch(prepareFinalObject("userDataForReceipt", data));
+};
+
+/** Data used for creation of receipt is generated and stored in local storage here */
+export const loadReceiptGenerationData = (applicationNumber, tenant) => {
+  /** Logo loaded and stored in local storage in base64 */
+  loadUlbLogo(tenant);
+  loadApplicationData(applicationNumber, tenant); //PB-TL-2018-09-27-000004
+  loadReceiptData(applicationNumber, tenant); //PT-107-001330:AS-2018-08-29-001426     //PT consumerCode
+  loadMdmsData(tenant);
 };
 
 /** Data used for creation of receipt is generated and stored in local storage here */
