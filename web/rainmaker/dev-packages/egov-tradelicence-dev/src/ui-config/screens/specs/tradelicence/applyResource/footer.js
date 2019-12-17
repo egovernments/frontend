@@ -935,10 +935,10 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: "Download",
-              leftIcon: "cloud_download",
+              label: {labelName : "DOWNLOAD" , labelKey :"DOWNLOAD"},
+              // leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10 } },
+              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "200px" , color : "#FE7A51" } },
               menu: downloadMenu
             }
           }
