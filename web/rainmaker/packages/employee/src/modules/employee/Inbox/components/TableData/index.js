@@ -179,26 +179,37 @@ class TableData extends Component {
   };
 
   onTaskBoardClick = (baseColor, label) => {
-    if (label === "WF_TOTAL_NEARING_SLA") {
-      const { InboxData } = this.props;
-      let { tabData } = this.state;
-      const filteredData = InboxData.map((item, index) => {
+    const { InboxData } = this.props;
+    let { tabData } = this.state;
+    let filteredData = [];
+    if(label === "WF_TOTAL_NEARING_SLA" ){
+      filteredData = InboxData.map((item, index) => {
         return {
           headers: item.headers,
           rows: item.rows.filter((eachRow) => {
-            return eachRow[0].subtext === this.state.moduleName;
+            4 < eachRow[5].text && 8 >= eachRow[5].text;
           }),
         };
-      });
-
-      tabData[0] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
-      tabData[1] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
+      }); 
+    }else if(label === "WF_ESCALATED_SLA" ){
+      filteredData = InboxData.map((item, index) => {
+        return {
+          headers: item.headers,
+          rows: item.rows.filter((eachRow) => {
+            8 < eachRow[5].text && 12 >= eachRow[5].text;
+          }),
+        };
+      }); 
+    }else{
+      filteredData = InboxData
+    }
+    tabData[0] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[0].rows.length] };
+    tabData[1] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[1].rows.length] };
 
       this.setState({
         inboxData: filteredData,
         tabData,
       });
-    }
 
     this.setState({
       color: baseColor,

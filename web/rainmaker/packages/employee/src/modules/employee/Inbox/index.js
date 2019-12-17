@@ -46,42 +46,16 @@ class Inbox extends Component {
   }
 
   render() {
-    const { name, history ,setRoute} = this.props;
+    const { name, history ,setRoute , menu} = this.props;
     const { actionList, hasWorkflow } = this.state;
-    const downloadMenu =
-      [
-        {
-          labelName:"Apply for TL",
-          labelKey:"",
-          link : () => setRoute("/tradelicence/apply")
-        },
-        {
-          labelName:"Search TL",
-          labelKey:"",
-          link : () => setRoute("/tradelicence/search")
-        },
-        {
-          labelName:"Asses Property",
-          labelKey:"",
-          link : () => setRoute("/property-tax/search-property")
-        },
-        {
-          labelName:"Search Property",
-          labelKey:"",
-          link : () => setRoute("/property-tax/search-property")
-        },
-        {
-          labelName:"File Complaint",
-          labelKey:"",
-          link : () => setRoute()
-        },
-        {
-          labelName:"Search Complaint",
-          labelKey:"",
-          link : () => setRoute("/all-complaints")
-        }
-
-      ]
+    const a = menu ? menu.filter(item => item.url === "quickAction") : [];
+    const downloadMenu =a.map((obj,index) => {
+      return {
+        labelName:obj.displayName,
+        labelKey:`ACTION_TEST_${obj.displayName.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
+        link : () => setRoute(obj.navigationURL)
+      }
+    })
     const buttonItems = {
       label: "Take Action",
       rightIcon: "arrow_drop_down",
