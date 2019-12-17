@@ -169,11 +169,11 @@ const generatePdfAndDownload = async (
     const fileURL = URL.createObjectURL(file);
     var myWindow = window.open(fileURL);
     if (myWindow != undefined) {
-      myWindow.addEventListener('load', (event) => {
+      myWindow.addEventListener("load", event => {
         setTimeout(function() {
           myWindow.focus();
           myWindow.print();
-        }, 2000)
+        }, 2000);
       });
     }
   } else if (action === "download") {
@@ -253,7 +253,8 @@ const getAcknowledgementCard = (
               labelKey: "EDCR_ACKNOWLEDGEMENT_SUCCESS_MESSAGE"
             },
             body: {
-              labelName:"This plan can now be used for creating permit application",
+              labelName:
+                "This plan can now be used for creating permit application",
               labelKey: "EDCR_ACKNOWLEDGEMENT_SUCCESS_COMMENT"
             },
             tailText: {
@@ -299,7 +300,7 @@ const getAcknowledgementCard = (
               labelKey: "EDCR_REJECTION_MESSAGE"
             },
             body: {
-              labelName:"Please make corrections in the diagram and try again",
+              labelName: "Please make corrections in the diagram and try again",
               labelKey: "EDCR_REJECTION_COMMENT"
             }
           })
