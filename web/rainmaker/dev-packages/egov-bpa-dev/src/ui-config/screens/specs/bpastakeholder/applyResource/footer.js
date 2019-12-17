@@ -32,10 +32,10 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
-  if (window.location.pathname.includes("whitelisted")) {
+  if (window.location.pathname.includes("openlink")) {
     dispatch(
       setRoute(
-        `/whitelisted/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+        `/openlink/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
       )
     );
   } else {
@@ -91,8 +91,6 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
-    await getDocList(state, dispatch);
-
     const data = get(state.screenConfiguration, "preparedFinalObject");
 
     const isTradeDetailsValid = validateFields(
@@ -100,19 +98,20 @@ export const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    let isTradeOrganizationValid = true;
+    // let isTradeOrganizationValid = true;
 
-    let ownershipType = get(
-      data,
-      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-    );
-    if (ownershipType != "INDIVIDUAL") {
-      isTradeOrganizationValid = validateFields(
-        "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
-        state,
-        dispatch
-      );
-    }
+    // let ownershipType = get(
+    //   data,
+    //   "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    // );
+
+    // if (ownershipType != "INDIVIDUAL") {
+    //   isTradeOrganizationValid = validateFields(
+    //     "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
+    //     state,
+    //     dispatch
+    //   );
+    // }
 
     const isPermanentAddrValid = validateFields(
       "components.div.children.formwizardFirstStep.children.permanentAddr.children.cardContent.children.tradeDetailsConatiner.children",
@@ -120,19 +119,20 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     const isCommunicationAddrValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner",
+      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children",
       state,
       dispatch
     );
 
     if (
       !isTradeDetailsValid ||
-      !isTradeOrganizationValid ||
       !isPermanentAddrValid ||
       !isCommunicationAddrValid
     ) {
       isFormValid = false;
     } else {
+      await getDocList(state, dispatch);
+
       isFormValid = await applyTradeLicense(state, dispatch);
       if (!isFormValid) {
         hasFieldToaster = false;
@@ -174,7 +174,7 @@ export const callBackForNext = async (state, dispatch) => {
           uploadedDocData &&
           uploadedDocData.map(item => {
             return {
-              title: `TL_${item.documentType}`,
+              title: `BPA_${item.documentType}`,
               link: item.fileUrl && item.fileUrl.split(",")[0],
               linkText: "View",
               name: item.fileName
@@ -199,7 +199,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch);
+    isFormValid = await applyTradeLicense(state, dispatch, 2);
     if (isFormValid) {
       moveToSuccess(LicenseData, dispatch);
     }
@@ -217,13 +217,13 @@ export const callBackForNext = async (state, dispatch) => {
         case 0:
           errorMessage = {
             labelName:
-              "Please fill all mandatory fields for Trade Details, then do next !",
-            labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
+              "Please fill all mandatory fields for Stakeholder Registration, then do next!",
+            labelKey: "ERR_FILL_BPA_FIELDS"
           };
           break;
         case 1:
           errorMessage = {
-            labelName: "Please upload all the required documents !",
+            labelName: "Please upload all the required documents!",
             labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
           };
           break;
@@ -681,7 +681,6 @@ export const footerReview = (
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["CITIZEN"],
                 action: "PAY"
               }
             },

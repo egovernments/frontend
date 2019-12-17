@@ -669,6 +669,8 @@ export const footerReview = (
       ];
       break;
     case "APPLIED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];

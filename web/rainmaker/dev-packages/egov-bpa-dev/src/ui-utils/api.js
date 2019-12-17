@@ -18,76 +18,6 @@ const instance = axios.create({
   }
 });
 
-const userInfo = {
-  id: 23986,
-  userName: "8275218816",
-  salutation: null,
-  name: "asdad",
-  gender: "MALE",
-  mobileNumber: "8275218816",
-  emailId: "asd@gmail.com",
-  altContactNumber: "0727222222",
-  pan: "",
-  aadhaarNumber: null,
-  permanentAddress: "aa,a,a,a",
-  permanentCity: "a",
-  permanentPinCode: "443121",
-  correspondenceAddress: "asd",
-  correspondenceCity: null,
-  correspondencePinCode: null,
-  addresses: [
-    {
-      pinCode: "443121",
-      city: "a",
-      address: "aa,a,a,a",
-      type: "PERMANENT",
-      id: 47740,
-      tenantId: "pb",
-      userId: 23986,
-      addressType: "PERMANENT",
-      lastModifiedDate: null,
-      lastModifiedBy: null
-    },
-    {
-      pinCode: null,
-      city: null,
-      address: "asd",
-      type: "CORRESPONDENCE",
-      id: 52782,
-      tenantId: "pb",
-      userId: 23986,
-      addressType: "CORRESPONDENCE",
-      lastModifiedDate: null,
-      lastModifiedBy: null
-    }
-  ],
-  active: true,
-  locale: null,
-  type: "CITIZEN",
-  accountLocked: false,
-  accountLockedDate: 0,
-  fatherOrHusbandName: "s",
-  signature: null,
-  bloodGroup: null,
-  photo: null,
-  identificationMark: null,
-  createdBy: 23985,
-  lastModifiedBy: 1,
-  tenantId: "pb",
-  roles: [
-    {
-      code: "CITIZEN",
-      name: "Citizen",
-      tenantId: "pb"
-    }
-  ],
-  uuid: "6fe8fb27-3f4b-473f-8279-ae8cff4173f4",
-  createdDate: "28-08-2018 17:02:32",
-  lastModifiedDate: "29-11-2019 15:51:30",
-  dob: "11/11/2001",
-  pwdExpiryDate: "07-12-2018 22:32:00"
-};
-
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
   let RequestInfo = {
@@ -99,8 +29,7 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     key: "",
     msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
-    authToken,
-    userInfo
+    authToken
   };
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(

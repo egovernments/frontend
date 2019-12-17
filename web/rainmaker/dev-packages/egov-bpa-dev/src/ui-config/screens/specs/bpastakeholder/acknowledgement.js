@@ -76,9 +76,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Payment for New Trade License ${financialYearText}`,
-          labelKey: "TL_COMMON_PAYMENT_NEW_LICENSE",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -126,9 +125,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -147,13 +145,13 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application is Approved Successfully",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+              labelName: "Application Approved Successfully",
+              labelKey: "BPA_APPROVAL_CHECKLIST_MESSAGE_HEAD"
             },
             body: {
               labelName:
-                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_SUB"
+                "A notification regarding application approval has been sent to applicant at registered Mobile No.",
+              labelKey: "BPA_APPROVAL_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
               labelName: "License No.",
@@ -170,9 +168,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -213,9 +210,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -234,13 +230,13 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Trade License Application Rejected",
-              labelKey: "TL_APPROVAL_REJ_MESSAGE_HEAD"
+              labelName: "Stakeholder Registration Application Rejected",
+              labelKey: "BPA_APPROVAL_REJ_MESSAGE_HEAD"
             },
             body: {
               labelName:
-                "A notification regarding Trade License Rejection has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPROVAL_REJ_MESSAGE_SUBHEAD"
+                "A notification regarding Stakeholder Registration Application Rejection has been sent to applicant at registered Mobile No.",
+              labelKey: "BPA_APPROVAL_REJ_MESSAGE_SUBHEAD"
             }
           })
         }
@@ -251,9 +247,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -294,9 +289,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          dynamicArray: [financialYearText],
-          labelKey: "TL_TRADE_APPLICATION"
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -331,9 +325,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "mark" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Trade License ${financialYearText}`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: "Stakeholder Registration Application",
+        labelKey: "BPA_REG_APPLICATION"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -363,9 +356,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "forward" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Trade License ${financialYearText}`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: "Stakeholder Registration Application",
+        labelKey: "BPA_REG_APPLICATION"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -376,12 +368,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Forwarded Successfully",
-              labelKey: "TL_FORWARD_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_FORWARD_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
-                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_FORWARD_SUCCESS"
+                "A notification regarding above application status has been sent to applicant at registered Mobile No.",
+              labelKey: "BPA_APPLICATION_FORWARD_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
@@ -429,7 +421,7 @@ const screenConfig = {
       tenant
     );
     set(action, "screenConfig.components.div.children", data);
-    if (window.location.pathname.includes("whitelisted")) {
+    if (window.location.pathname.includes("openlink")) {
       set(
         action.screenConfig,
         "components.div.children.applicationSuccessFooter.props.style",

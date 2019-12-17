@@ -19,31 +19,10 @@ import {
 } from "../bpastakeholder/apply";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { addressDestruct } from "../utils";
+import { addressDestruct, setMobileNoField } from "../utils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
-};
-
-const setOrganizationVisibility = (action, state, dispatch, ownerShipType) => {
-  dispatch(
-    prepareFinalObject(
-      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-      ownerShipType
-    )
-  );
-  const componentPathToHide = [
-    "components.div.children.formwizardFirstStep.children.organizationDetails",
-    "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails"
-  ];
-  componentPathToHide &&
-    componentPathToHide.map(item => {
-      set(
-        action.screenConfig,
-        `${item}.visible`,
-        ownerShipType != "INDIVIDUAL"
-      );
-    });
 };
 
 const updateSearchResults = async (
@@ -54,7 +33,7 @@ const updateSearchResults = async (
   tenantId
 ) => {
   await getData(action, state, dispatch, tenantId);
-  await updatePFOforSearchResults(
+  let aa = await updatePFOforSearchResults(
     action,
     state,
     dispatch,
@@ -67,7 +46,8 @@ const updateSearchResults = async (
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
   );
-  setOrganizationVisibility(action, state, dispatch, subOwnerShipCategory);
+
+  // setOrganizationVisibility(action, state, dispatch, subOwnerShipCategory);
   const queryValueFromUrl = getQueryArg(
     window.location.href,
     "applicationNumber"
@@ -98,7 +78,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
-    if (window.location.pathname.includes("whitelisted")) {
+    if (window.location.pathname.includes("openlink")) {
       set(action.screenConfig, "components.div.children.footer.props.style", {
         width: "100vw"
       });
@@ -113,7 +93,23 @@ const screenConfig = {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {
       getData(action, state, dispatch, tenantId);
-      setOrganizationVisibility(action, state, dispatch, "INDIVIDUAL");
+      // setOrganizationVisibility(action, state, dispatch, "INDIVIDUAL");
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.owners[0].gender",
+          "MALE"
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+          "INDIVIDUAL"
+        )
+      );
+
+      if (!window.location.pathname.includes("openlink")) {
+        setMobileNoField(action, state, dispatch);
+      }
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;

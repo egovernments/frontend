@@ -623,21 +623,27 @@ export const showHideMapPopup = (state, dispatch) => {
 
 export const getHeaderSideText = (status, licenseNo = null) => {
   switch (status) {
+    case "PENDINGDOCVERIFICATION":
+      return {
+        word1: "Status: ",
+        word2: "WF_ARCHITECT_PENDINGDOCVERIFICATION"
+      };
+
     case "PAID":
     case "PENDINGAPPROVAL":
-      return { word1: "Status: ", word2: "WF_NEWTL_PENDINGAPPROVAL" };
+      return { word1: "Status: ", word2: "WF_ARCHITECT_PENDINGAPPROVAL" };
     case "PENDINGPAYMENT":
-      return { word1: "Status: ", word2: "WF_NEWTL_PENDINGPAYMENT" };
+      return { word1: "Status: ", word2: "WF_ARCHITECT_PENDINGPAYMENT" };
     case "FIELDINSPECTION":
-      return { word1: "Status: ", word2: "WF_NEWTL_FIELDINSPECTION" };
+      return { word1: "Status: ", word2: "WF_ARCHITECT_FIELDINSPECTION" };
     case "APPLIED":
       return { word1: "Status: ", word2: "TL_APPLIED" };
     case "REJECTED":
       return { word1: "Status: ", word2: "TL_REJECTED" };
     case "CANCELLED":
-      return { word1: `Trade License No: `, word2: `${licenseNo}` };
+      return { word1: `License No: `, word2: `${licenseNo}` };
     case "APPROVED":
-      return { word1: `Trade License No: `, word2: `${licenseNo}` };
+      return { word1: `License No: `, word2: `${licenseNo}` };
     default:
       return { word1: "", word2: "" };
   }
@@ -915,9 +921,11 @@ export const getUserDataFromUuid = async bodyObject => {
 const getStatementForDocType = docType => {
   switch (docType) {
     case "OWNERIDPROOF":
-      return "Allowed documents are Aadhar Card / Voter ID Card / Driving License";
+      return "BPA_UPLOAD_STATEMENT1";
     case "OWNERSHIPPROOF":
-      return "Allowed documents are Rent Deed / Lease Doc / Property Registry / General or Special Power of Attorney";
+      return "BPA_UPLOAD_STATEMENT2";
+    case "EXPERIENCEPROOF":
+      return "BPA_UPLOAD_STATEMENT3";
     default:
       return "";
   }
@@ -965,29 +973,26 @@ const getToolTipInfo = (taxHead, LicenseData) => {
 };
 
 const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
-  if (Bill && Bill.length) {
-    const { billAccountDetails } = Bill[0].billDetails[0];
+  if (Bill) {
+    const { billAccountDetails } = Bill.billDetails[0];
     const transformedData = billAccountDetails.reduce((result, item) => {
       if (getFromReceipt) {
-        item.accountDescription &&
+        item.taxHeadCode &&
           result.push({
             name: {
-              labelName: item.accountDescription.split("-")[0],
-              labelKey: item.accountDescription.split("-")[0]
+              labelName: item.taxHeadCode.split("-")[0],
+              labelKey: item.taxHeadCode.split("-")[0]
             },
-            value: getTaxValue(item),
+            value: Bill.billDetails[0].amount,
             info: getToolTipInfo(
-              item.accountDescription.split("-")[0],
+              item.taxHeadCode.split("-")[0],
               LicenseData
             ) && {
               value: getToolTipInfo(
-                item.accountDescription.split("-")[0],
+                item.taxHeadCode.split("-")[0],
                 LicenseData
               ),
-              key: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              )
+              key: getToolTipInfo(item.taxHeadCode.split("-")[0], LicenseData)
             }
           });
       } else {
@@ -1152,7 +1157,7 @@ export const createEstimateData = async (
   jsonPath,
   dispatch,
   href = {},
-  isgetBill
+  isgetBill = false
 ) => {
   const applicationNo =
     get(LicenseData, "applicationNumber") ||
@@ -1194,7 +1199,8 @@ export const createEstimateData = async (
   if (isgetBill) {
     payload = await getBill(queryObjForGetBill);
     estimateData =
-      payload && getEstimateData(payload.billResponse.Bill, false, LicenseData);
+      payload &&
+      getEstimateData(payload.billResponse.Bill[0], false, LicenseData);
   } else {
     payload = isPAID
       ? await getReceipt(queryObjForGetReceipt)
@@ -1209,7 +1215,8 @@ export const createEstimateData = async (
             isPAID,
             LicenseData
           )
-        : payload && getEstimateData(payload, false, LicenseData)
+        : payload &&
+          getEstimateData(payload.billResponse.Bill[0], false, LicenseData)
       : [];
   }
   estimateData = estimateData || [];
@@ -1580,60 +1587,6 @@ export const updateDropDowns = async (
   dispatch,
   queryValue
 ) => {
-  const structType = get(
-    payload,
-    "Licenses[0].tradeLicenseDetail.structureType"
-  );
-  if (structType) {
-    set(
-      payload,
-      "LicensesTemp[0].tradeLicenseDetail.structureType",
-      structType.split(".")[0]
-    );
-    try {
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
-          get(
-            state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
-              "common-masters"
-            ],
-            `StructureType.${structType.split(".")[0]}`,
-            []
-          )
-        )
-      );
-
-      payload &&
-        dispatch(
-          prepareFinalObject(
-            "LicensesTemp[0].tradeLicenseDetail.structureType",
-            payload.LicensesTemp[0].tradeLicenseDetail.structureType
-          )
-        );
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  // const tradeTypes = get(
-  //   state.screenConfiguration.preparedFinalObject,
-  //   "applyScreenMdmsData.TradeLicense.TradeType",
-  //   []
-  // );
-  // // debugger;
-  // const tradeTypeDropdownData =
-  //   tradeTypes &&
-  //   Object.keys(tradeTypes).map(item => {
-  //     return { code: item, active: true };
-  //   });
-  // tradeTypeDropdownData &&
-  //   dispatch(
-  //     prepareFinalObject(
-  //       "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-  //       tradeTypeDropdownData
-  //     )
-  //   );
   const tradeSubTypes = get(
     payload,
     "Licenses[0].tradeLicenseDetail.tradeUnits",
@@ -1643,49 +1596,44 @@ export const updateDropDowns = async (
   if (tradeSubTypes.length > 0) {
     try {
       tradeSubTypes.forEach((tradeSubType, i) => {
-        const tradeCat = tradeSubType.tradeType.split(".")[0];
-        const tradeType = tradeSubType.tradeType.split(".")[1];
-        set(payload, `LicensesTemp.tradeUnits[${i}].tradeType`, tradeCat);
-        set(payload, `LicensesTemp.tradeUnits[${i}].tradeSubType`, tradeType);
+        const licenseeTradeType = tradeSubType.tradeType;
+        const licenseeType = licenseeTradeType.split(".")[0];
+        const licenseeSubType = licenseeTradeType.split(".")[1];
 
-        dispatch(
-          prepareFinalObject(
-            "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
-            objectToDropdown(
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCat}`,
-                []
-              )
-            )
-          )
-        );
-
-        dispatch(
-          prepareFinalObject(
-            "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
-            get(
-              state.screenConfiguration.preparedFinalObject,
-              `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCat}.${tradeType}`,
-              []
-            )
-          )
-        );
-        payload &&
+        licenseeType &&
           dispatch(
             prepareFinalObject(
-              `LicensesTemp.tradeUnits[${i}].tradeType`,
-              tradeCat
+              `LicensesTemp[0].tradeLicenseDetail.tradeUnits[${i}].tradeType`,
+              licenseeType
             )
           );
 
-        payload &&
+        if (licenseeType == "ARCHITECT")
           dispatch(
-            prepareFinalObject(
-              `LicensesTemp.tradeUnits[${i}].tradeSubType`,
-              tradeType
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "visible",
+              true
             )
           );
+        else
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "visible",
+              false
+            )
+          );
+
+        setLicenseeSubTypeDropdownData(licenseeType, state, dispatch);
+        dispatch(
+          prepareFinalObject(
+            `Licenses[0].tradeLicenseDetail.tradeUnits[${i}].tradeType`,
+            licenseeTradeType
+          )
+        );
       });
     } catch (e) {
       console.log(e);
@@ -2185,7 +2133,11 @@ export const getLicenseeTypeDropdownData = tradeTypes => {
   return tradeTypesFiltered;
 };
 
-export const setLicenseeSubTypeDropdownData = (action, state, dispatch) => {
+export const setLicenseeSubTypeDropdownData = async (
+  actionValue,
+  state,
+  dispatch
+) => {
   const tradeTypes = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.TradeLicense.TradeType",
@@ -2197,7 +2149,7 @@ export const setLicenseeSubTypeDropdownData = (action, state, dispatch) => {
       ""
     )
   );
-  const selectedTradeType = action.value;
+  const selectedTradeType = actionValue;
   let filterdTradeTypes = [];
   filterdTradeTypes = tradeTypes.filter(tradeType => {
     return (
@@ -2218,7 +2170,7 @@ export const setLicenseeSubTypeDropdownData = (action, state, dispatch) => {
       handleField(
         "apply",
         "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
-        "props.required",
+        "required",
         false
       )
     );
@@ -2250,7 +2202,7 @@ export const setLicenseeSubTypeDropdownData = (action, state, dispatch) => {
       handleField(
         "apply",
         "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
-        "props.required",
+        "required",
         true
       )
     );
@@ -2324,9 +2276,9 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-    case "Appliact Name":
+    case "Applicant Name":
       return getLocaleLabels(
-        "Appliact Name",
+        "Applicant Name",
         "BPA_COMMON_TABLE_COL_APP_NAME",
         localisationLabels
       );
@@ -2341,40 +2293,49 @@ export const getTextToLocalMapping = label => {
     case "INITIATED":
       return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
     case "APPLIED":
-      getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
+      return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
-
+      return getLocaleLabels(
+        "Paid",
+        "WF_ARCHITECT_PENDINGAPPROVAL",
+        localisationLabels
+      );
+    case "PENDINGDOCVERIFICATION":
+      return getLocaleLabels(
+        "Pending for Document Verification",
+        "WF_ARCHITECT_PENDINGDOCVERIFICATION",
+        localisationLabels
+      );
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
     case "REJECTED":
       return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
     case "CANCELLED":
       return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
-    case "PENDINGAPPROVAL ":
+    case "PENDINGAPPROVAL":
       return getLocaleLabels(
         "Pending for Approval",
-        "WF_NEWTL_PENDINGAPPROVAL",
+        "WF_ARCHITECT_PENDINGAPPROVAL",
         localisationLabels
       );
     case "PENDINGPAYMENT":
       return getLocaleLabels(
         "Pending payment",
-        "WF_NEWTL_PENDINGPAYMENT",
+        "WF_ARCHITECT_PENDINGPAYMENT",
         localisationLabels
       );
 
     case "FIELDINSPECTION":
       return getLocaleLabels(
         "Pending for Field Inspection",
-        "WF_NEWTL_FIELDINSPECTION",
+        "WF_ARCHITECT_FIELDINSPECTION",
         localisationLabels
       );
 
-    case "Search Results for Trade License Applications":
+    case "Search Results for Stakeholder Registration Applications":
       return getLocaleLabels(
         "",
-        "TL_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
 
@@ -2384,6 +2345,8 @@ export const getTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+    default:
+      return getLocaleLabels(label, label, localisationLabels);
   }
 };
 
@@ -2407,4 +2370,52 @@ export const addressDestruct = (action, state, dispatch) => {
   };
 
   dispatch(prepareFinalObject("LicensesTemp[0].userData.address", address));
+};
+
+export const setOrganizationVisibility = (
+  action,
+  state,
+  dispatch,
+  ownerShipType
+) => {
+  dispatch(
+    prepareFinalObject(
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+      ownerShipType
+    )
+  );
+  const componentPathToHide = [
+    "components.div.children.formwizardFirstStep.children.organizationDetails",
+    "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails"
+  ];
+  componentPathToHide &&
+    componentPathToHide.map(item => {
+      set(
+        action.screenConfig,
+        `${item}.visible`,
+        ownerShipType != "INDIVIDUAL"
+      );
+    });
+};
+
+export const checkValueForNA = value => {
+  return value ? value : "NA";
+};
+
+export const setMobileNoField = (action, state, dispatch) => {
+  let userInfo = JSON.parse(getUserInfo());
+  let { mobileNumber } = userInfo;
+  if (mobileNumber) {
+    dispatch(
+      prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
+        mobileNumber
+      )
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getOwnerMobNoField.props.disabled`,
+      true
+    );
+  }
 };
