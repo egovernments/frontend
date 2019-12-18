@@ -2721,34 +2721,32 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       `BPA.edcrNumber`,
       ""
     );
-    // const tenantId = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "citiesByModule.citizenTenantId.value"
-    // );
-    // if (!scrutinyNo.match(getPattern("MobileNo"))) {
-    //   dispatch(
-    //     toggleSnackbar(
-    //       true,
-    //       {
-    //         labelName: "Incorrect Scrutiny Number!",
-    //         labelKey: "Incorrect Scrutiny Number!"
-    //       },
-    //       "error"
-    //     )
-    //   );
-    //   return;
-    // }
+
+    const tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "citiesByModule.citizenTenantId.value"
+    );
+    if (!scrutinyNo || !scrutinyNo.match(getPattern("MobileNo"))) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Scrutiny Number!",
+            labelKey: "Incorrect Scrutiny Number!"
+          },
+          "error"
+        )
+      );
+      return;
+    }
     // let payload = scrutinyDetailsMockJson;
     // payload = payload[0].body.edcrDetail;
     // console.log(payload);
-    console.log('edcrHttpRequest');
     let payload = await edcrHttpRequest(
       "post",
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + scrutinyNo + "&tenantId=jupiter",
       {}
     );
-    
-    //console.log(payload);
     payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
       if (payload.length === 0) {
@@ -2756,16 +2754,15 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           toggleSnackbar(
             true,
             {
-              labelName: "This mobile number is not registered!",
-              labelKey: "ERR_MOBILE_NUMBER_NOT_REGISTERED"
+              labelName: "This scrutiny number is not registered!",
+              labelKey: "ERR_SCRUTINY_NUMBER_NOT_REGISTERED"
             },
             "info"
           )
         );
       } else {
-        const userInfo =
-          payload &&
-          JSON.parse(JSON.stringify(payload));
+        const userInfo = payload && JSON.parse(JSON.stringify(payload));
+
         if (userInfo && userInfo.planDetail && userInfo.planDetail.applicationDate) {
           userInfo.planDetail.applicationDate = convertDateTimeToEpoch(userInfo.planDetail.applicationDate);
           userInfo.lastModifiedDate = convertDateTimeToEpoch(

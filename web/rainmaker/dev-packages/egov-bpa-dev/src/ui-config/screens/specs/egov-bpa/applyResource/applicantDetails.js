@@ -27,7 +27,7 @@ const commonApplicantInformation = () => {
     header: getCommonSubHeader(
       {
         labelName: "Owner Information",
-        labelKey: "BPA_OWNER_INFO_TITLE"
+        labelKey: "NOC_OWNER_INFORMATION"
       },
       {
         style: {
@@ -39,11 +39,11 @@ const commonApplicantInformation = () => {
       mobileNumber: getTextField({
         label: {
           labelName: "Mobile No.",
-          labelKey: "BPA_APPLICANT_MOBILE_NO_LABEL"
+          labelKey: "NOC_APPLICANT_MOBILE_NO_LABEL"
         },
         placeholder: {
           labelName: "Enter Mobile No.",
-          labelKey: "BPA_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
+          labelKey: "NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
         },
         required: true,
         props: {
@@ -51,7 +51,7 @@ const commonApplicantInformation = () => {
         },
         title: {
           value: "Please search profile linked to the mobile no.",
-          key: "BPA_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
+          key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
         },
         infoIcon: "info_circle",
         pattern: getPattern("MobileNo"),
@@ -89,11 +89,11 @@ const commonApplicantInformation = () => {
       applicantName: getTextField({
         label: {
           labelName: "Name",
-          labelKey: "BPA_OWNER_NAME_LABEL"
+          labelKey: "NOC_APPLICANT_NAME_LABEL"
         },
         placeholder: {
           labelName: "Enter Name",
-          labelKey: "BPA_OWNER_NAME_PLACEHOLDER"
+          labelKey: "NOC_ENTER_APPLICANT_NAME_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -118,22 +118,22 @@ const commonApplicantInformation = () => {
         },
         jsonPath: "BPA.owners[0].gender",
         props: {
-          label: { name: "Gender", key: "BPA_GENDER_LABEL" },
+          label: { name: "Gender", key: "NOC_GENDER_LABEL" },
           className: "applicant-details-error",
           buttons: [
             {
               labelName: "Male",
-              labelKey: "BPA_GENDER_MALE_RADIOBUTTON",
+              labelKey: "NOC_GENDER_MALE_RADIOBUTTON",
               value: "MALE"
             },
             {
               labelName: "FEMALE",
-              labelKey: "BPA_GENDER_FEMALE_RADIOBUTTON",
+              labelKey: "NOC_GENDER_FEMALE_RADIOBUTTON",
               value: "FEMALE"
             },
             {
               labelName: "Transgender",
-              labelKey: "BPA_GENDER_TRANSGENDER_RADIOBUTTON",
+              labelKey: "NOC_GENDER_TRANSGENDER_RADIOBUTTON",
               value: "TRANSGENDER"
             }
           ],
@@ -145,11 +145,11 @@ const commonApplicantInformation = () => {
       applicantDob: getDateField({
         label: {
           labelName: "Date Of Birth",
-          labelKey: "BPA_APPLICANT_DOB_LABEL"
+          labelKey: "NOC_APPLICANT_DOB_LABEL"
         },
         placeholder: {
           labelName: "DD/MM/YYYY",
-          labelKey: "BPA_ENTER_APPLICANT_DOB_PLACEHOLDER"
+          labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Date"),
@@ -167,11 +167,11 @@ const commonApplicantInformation = () => {
       applicantEmail: getTextField({
         label: {
           labelName: "Email",
-          labelKey: "BPA_APPLICANT_EMAIL_LABEL"
+          labelKey: "NOC_APPLICANT_EMAIL_LABEL"
         },
         placeholder: {
           labelName: "Enter Email",
-          labelKey: "BPA_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
+          labelKey: "NOC_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
         errorMessage: "Invalid Email",
@@ -188,11 +188,11 @@ const commonApplicantInformation = () => {
       fatherHusbandName: getTextField({
         label: {
           labelName: "Father/Husband's Name",
-          labelKey: "BPA_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+          labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
         },
         placeholder: {
           labelName: "Enter Father/Husband's Name",
-          labelKey: "BPA_APPLICANT_FATHER_HUSBAND_NAME_PLACEHOLDER"
+          labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -220,18 +220,18 @@ const commonApplicantInformation = () => {
         props: {
           label: {
             name: "Relationship",
-            key: "BPA_APPLICANT_RELATIONSHIP_LABEL",
+            key: "NOC_APPLICANT_RELATIONSHIP_LABEL",
             className: "applicant-details-error"
           },
           buttons: [
             {
               labelName: "Father",
-              labelKey: "BPA_APPLICANT_RELATIONSHIP_FATHER_RADIOBUTTON",
+              labelKey: "NOC_APPLICANT_RELATIONSHIP_FATHER_RADIOBUTTON",
               value: "FATHER"
             },
             {
               label: "Husband",
-              labelKey: "BPA_APPLICANT_RELATIONSHIP_HUSBAND_RADIOBUTTON",
+              labelKey: "NOC_APPLICANT_RELATIONSHIP_HUSBAND_RADIOBUTTON",
               value: "HUSBAND"
             }
           ],
@@ -245,11 +245,11 @@ const commonApplicantInformation = () => {
       applicantPan: getTextField({
         label: {
           labelName: "PAN No.",
-          labelKey: "BPA_APPLICANT_PAN_LABEL"
+          labelKey: "NOC_APPLICANT_PAN_LABEL"
         },
         placeholder: {
           labelName: "Enter Applicant's PAN No.",
-          labelKey: "BPA_ENTER_APPLICANT_PAN_PLACEHOLDER"
+          labelKey: "NOC_ENTER_APPLICANT_PAN_PLACEHOLDER"
         },
         pattern: getPattern("PAN"),
         errorMessage: "Invalid PAN",
@@ -266,11 +266,11 @@ const commonApplicantInformation = () => {
       applicantAddress: getTextField({
         label: {
           labelName: "Correspondence Address",
-          labelKey: "BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
+          labelKey: "NOC_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
         },
         placeholder: {
           labelName: "Enter Correspondence Address",
-          labelKey: "BPA_ENTER_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+          labelKey: "NOC_ENTER_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Address"),
@@ -289,11 +289,11 @@ const commonApplicantInformation = () => {
       specialApplicantCategory: getSelectField({
         label: {
           labelName: "Special Applicant Category",
-          labelKey: "BPA_SPECIAL_APPLICANT_CATEGORY_LABEL"
+          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
         },
         placeholder: {
           labelName: "Select Special Applicant Category",
-          labelKey: "BPA_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
+          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
         },
         jsonPath: "BPA.owners[0].ownerType",
         localePrefix: {
@@ -330,7 +330,7 @@ const institutionInformation = () => {
     header: getCommonSubHeader(
       {
         labelName: "Owner Information",
-        labelKey: "BPA_OWNER_INFO_TITLE"
+        labelKey: "NOC_OWNER_INFO_TITLE"
       },
       {
         style: {
@@ -342,11 +342,11 @@ const institutionInformation = () => {
       institutionName: getTextField({
         label: {
           labelName: "Name of Institution",
-          labelKey: "BPA_INSTITUTION_LABEL"
+          labelKey: "NOC_INSTITUTION_LABEL"
         },
         placeholder: {
           labelName: "Enter Name of Institution",
-          labelKey: "BPA_ENTER_INSTITUTION_PLACEHOLDER"
+          labelKey: "NOC_ENTER_INSTITUTION_PLACEHOLDER"
         },
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
@@ -362,11 +362,11 @@ const institutionInformation = () => {
       telephoneNumber: getTextField({
         label: {
           labelName: "Official Telephone No.",
-          labelKey: "BPA_TELEPHONE_NUMBER_LABEL"
+          labelKey: "NOC_TELEPHONE_NUMBER_LABEL"
         },
         placeholder: {
           labelName: "Enter Official Telephone No.",
-          labelKey: "BPA_ENTER_TELEPHONE_NUMBER_PLACEHOLDER"
+          labelKey: "NOC_ENTER_TELEPHONE_NUMBER_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("MobileNo"),
@@ -382,11 +382,11 @@ const institutionInformation = () => {
       authorisedPerson: getTextField({
         label: {
           labelName: "Name of Authorized Person",
-          labelKey: "BPA_AUTHORIZED_PERSON_LABEL"
+          labelKey: "NOC_AUTHORIZED_PERSON_LABEL"
         },
         placeholder: {
           labelName: "Enter Name of Authorized Person",
-          labelKey: "BPA_ENTER_AUTHORIZED_PERSON_PLACEHOLDER"
+          labelKey: "NOC_ENTER_AUTHORIZED_PERSON_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -401,11 +401,11 @@ const institutionInformation = () => {
       designation: getTextField({
         label: {
           labelName: "Designation in Institution",
-          labelKey: "BPA_INSTITUTION_DESIGNATION_LABEL"
+          labelKey: "NOC_INSTITUTION_DESIGNATION_LABEL"
         },
         placeholder: {
           labelName: "Enter designation of Institution",
-          labelKey: "BPA_ENTER_INSTITUTION_DESIGNATION_PLACEHOLDER"
+          labelKey: "NOC_ENTER_INSTITUTION_DESIGNATION_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -421,11 +421,11 @@ const institutionInformation = () => {
       authorizedPersonMobile: getTextField({
         label: {
           labelName: "Mobile No. of Authorized Person",
-          labelKey: "BPA_AUTHORIZED_PERSON_MOBILE_LABEL"
+          labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_LABEL"
         },
         placeholder: {
           labelName: "Enter Mobile No. of Authorized Person",
-          labelKey: "BPA_AUTHORIZED_PERSON_MOBILE_PLACEHOLDER"
+          labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("MobileNo"),
@@ -441,11 +441,11 @@ const institutionInformation = () => {
       authorizedPersonEmail: getTextField({
         label: {
           labelName: "Email of Authorized Person",
-          labelKey: "BPA_AUTHORIZED_PERSON_EMAIL_LABEL"
+          labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_LABEL"
         },
         placeholder: {
           labelName: "Enter Email of Authorized Person",
-          labelKey: "BPA_AUTHORIZED_PERSON_EMAIL_PLACEHOLDER"
+          labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
         errorMessage: "Invalid Email",
@@ -460,11 +460,11 @@ const institutionInformation = () => {
       officialCorrespondenceAddress: getTextField({
         label: {
           labelName: "Official Correspondence Address",
-          labelKey: "BPA_OFFICIAL_CORRESPONDENCE_ADDRESS_LABEL"
+          labelKey: "NOC_OFFICIAL_CORRESPONDENCE_ADDRESS_LABEL"
         },
         placeholder: {
           labelName: "Enter Official Correspondence Address ",
-          labelKey: "BPA_ENTER_OFFICIAL_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+          labelKey: "NOC_ENTER_OFFICIAL_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Address"),
@@ -485,7 +485,7 @@ export const applicantDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Owner Details",
-      labelKey: "BPA_APPLICANT_DETAILS_HEADER"
+      labelKey: "NOC_APPLICANT_DETAILS_HEADER"
     },
     {
       style: {
@@ -500,11 +500,11 @@ export const applicantDetails = getCommonCard({
         ...getSelectField({
           label: {
             labelName: "Owner Type",
-            labelKey: "BPA_APPLICANT_OWNER_TYPE_LABEL"
+            labelKey: "BPA_OWNER_TYPE"
           },
           placeholder: {
             labelName: "Select Owner Type",
-            labelKey: "BPA_APPLICANT_OWNER_TYPE_PLACEHOLDER"
+            labelKey: "BPA_OWNER_TYPE_PLACEHOLDER"
           },
           jsonPath: "BPA.ownerShipMajorType",
           localePrefix: {
@@ -542,11 +542,11 @@ export const applicantDetails = getCommonCard({
         ...getSelectField({
           label: {
             labelName: "Type of Owner - Subtype",
-            labelKey: "BPA_APPLICANT_OWNER_SUB_TYPE_LABEL"
+            labelKey: "BPA_OWNER_SUB_TYPE_LABEL"
           },
           placeholder: {
             labelName: "Select Owner Subtype",
-            labelKey: "BPA_APPLICANT_OWNER_SUB_TYPE_PLACEHOLDER"
+            labelKey: "BPA_OWNER_SUB_TYPE_PLACEHOLDER"
           },
           jsonPath: "BPA.ownerShipType",
           localePrefix: {
@@ -614,7 +614,7 @@ export const applicantDetails = getCommonCard({
             items: [],
             addItemLabel: {
               labelName: "Add Owner",
-              labelKey: "BPA_ADD_APPLICANT_LABEL"
+              labelKey: "BPA_ADD_OWNER"
             },
             sourceJsonPath: "BPA.owners",
             prefixSourceJsonPath:

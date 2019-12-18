@@ -191,7 +191,7 @@ const NOCSearchAndResult = {
             popup: getCommonContainer({
               header: getCommonHeader({
                 labelName: "Select City",
-                labelKey: "BPA_SELECT_CITY"
+                labelKey: "TL_SELECT_CITY"
               }),
               cityPicker: getCommonContainer({
                 cityDropdown: {
@@ -216,9 +216,9 @@ const NOCSearchAndResult = {
                     className: "citizen-city-picker",
                     label: {
                       labelName: "City",
-                      labelKey: "BPA_DETAILS_CITY_LABEL"
+                      labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
                     },
-                    placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_CITY" },
+                    placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
                     jsonPath: "citiesByModule.citizenTenantId",
                     sourceJsonPath:
                       "applyScreenMdmsData.common-masters.citiesByModule.TL.tenants",
@@ -249,7 +249,7 @@ const NOCSearchAndResult = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "SELECT",
-                          labelKey: "BPA_C_SELECT"
+                          labelKey: "TL_CITIZEN_SELECT"
                         })
                       },
                       onClickDefination: {
@@ -272,7 +272,7 @@ const NOCSearchAndResult = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "CANCEL",
-                          labelKey: "BPA_C_CANCEL"
+                          labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
                         })
                       },
                       onClickDefination: {

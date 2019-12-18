@@ -120,11 +120,11 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
 };
 
 export const createUpdateBpaApplication = async (state, dispatch, status) => {
-  let nocId = get(
+  let applicationId = get(
     state,
     "screenConfiguration.preparedFinalObject.BPAs[0].id"
   );
-  let method = nocId ? "UPDATE" : "CREATE";
+  let method = applicationId ? "UPDATE" : "CREATE";
 
   try {
     let payload = get(
@@ -137,9 +137,9 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       "citiesByModule.citizenTenantId",
       getTenantId()
     );
-    // set(payload[0], "tenantId", tenantId);
-    // set(payload[0], "fireNOCDetails.action", status);
-    payload.tenantId = tenantId;
+    set(payload[0], "tenantId", tenantId);
+    set(payload[0], "BPA.action", status);
+    //payload.tenantId = tenantId;
 
     // Get uploaded documents from redux
     let reduxDocuments = get(
@@ -219,7 +219,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA : payload1 }
       );
-      console.log(response, "response jbsd;kjbfdsf");
+      console.log(response, "create response");
       response = furnishNocResponse(response);
       dispatch(prepareFinalObject("BPA", response.BPA));
       setApplicationNumberBox(state, dispatch);

@@ -27,7 +27,7 @@ export const basicDetails = getCommonCard({
     scrutinynumber: getTextField({
       label: {
         labelName: "Building plan scrutiny number",
-        labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_LABEL"
+        labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Scrutiny Number",
