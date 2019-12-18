@@ -506,3 +506,25 @@ button:focus {
         flex: 1
     }
 }
+
+/* .MuiInput-underline-337:before {
+    border-bottom: none !important;
+}
+
+.MuiInput-underline-260:before {
+    border-bottom: none !important;
+}
+
+.MuiInput-underline-341:after {
+    border-bottom: none !important;
+} */
+
+.CheckboxesTags-root-220 div {
+    color: #000000;
+    margin: 0px 3px 2px 0 !important;
+}
+
+.jss222 div {
+    color: #000000;
+    margin: 0 3px 2px 0 !important;
+}

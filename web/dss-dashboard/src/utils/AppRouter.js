@@ -15,7 +15,6 @@ class AppRouter extends Component {
         return (
             <Switch>                
                 <Route path="/dashboard/:pageId/:viewAll?" component={Dashboard} />
-                <Route path="/dashboard/" component={Dashboard} />
             </Switch>
         );
 

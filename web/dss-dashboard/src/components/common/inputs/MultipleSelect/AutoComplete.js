@@ -18,9 +18,6 @@ import variables from '../../../../styles/variables';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
 
-const inputStyle = {
-    color: 'black',
-};
 
 const theme = createMuiTheme({
     overrides: {
@@ -131,6 +128,45 @@ class CheckboxesTags extends React.Component {
                             </div>
 
                             <Autocomplete
+                                onChange={this.handleChange.bind(this)}
+
+                                multiple
+                                id="checkboxes-tags-demo"
+                                options={this.state.localItems}
+                                disableCloseOnSelect
+                                getOptionLabel={option => option}
+                                renderOption={(option, { selected }) => (
+                                    <React.Fragment>
+                                        <Checkbox
+                                            icon={icon}
+                                            checkedIcon={checkedIcon}
+                                            style={{ marginRight: 8, color:'black' }}
+                                            checked={selected}
+                                        />
+                                        {option}
+                                    </React.Fragment>
+                                )}
+                                style={{ minWidth: 200 }}
+                                renderInput={params => (
+                                    <div style={{color:'black'}}>
+
+                                    <TextField
+                                        {...params}
+                                        variant="standard"
+                                        fullWidth
+                                        placeholder={this.state.label}
+                                        style={{ color: 'black' }}
+                                        // InputLabelProps={{
+                                        //     style: {
+                                            
+                                        //     } }}
+                                        // // InputLabelProps={{
+                                        // //     className: classes.floatingLabelFocusStyle,
+                                        // // }}
+                                    /></div>
+                                )}
+                            />
+                            {/* <Autocomplete
                                 disableUnderline={true}
                                 onChange={this.handleChange.bind(this)}
                                 multiple
@@ -167,7 +203,7 @@ class CheckboxesTags extends React.Component {
                                             style={{ color: 'rgba(0, 0, 0, 0.87)' }}
                                         /></div>
                                 )}
-                            />
+                            /> */}
                         </div>
                     </FormControl>
 

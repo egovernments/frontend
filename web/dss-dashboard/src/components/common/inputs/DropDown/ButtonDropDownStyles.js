@@ -32,12 +32,13 @@ const styles = theme => ({
     },
     ddl: {
         display: 'flex',
-        maxWidth: '250px'
+        // minWidth: '200'
     },
     list: {
         // display: 'flex',
         '& div': {
-            flex: 1
+            flex: 1,
+            minWidth:177
         }
     },
     formControl: {

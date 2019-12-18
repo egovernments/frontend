@@ -20,7 +20,7 @@ export default function getChartOptions(code, filters) {
                 "authToken": `${localStorage.getItem('Employee.token')}`
             },
             "headers": {
-                "tenantId": "pb.amritsar"
+                "tenantId": `${localStorage.getItem('tenant-id')}`
             },
 
             "aggregationRequestDto": {

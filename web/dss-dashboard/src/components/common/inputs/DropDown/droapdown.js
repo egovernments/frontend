@@ -44,7 +44,7 @@ class SimpleSelect extends Component {
                     Close
                 </SVG>}
                 <Select
-                    disableUnderline={true}
+                    // disableUnderline={true}
                     value={value || selected}
                     onChange={this.handleChange.bind(this)}
                     // fullWidth

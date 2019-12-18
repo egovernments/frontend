@@ -76,6 +76,7 @@ class GlobalFilter extends Component {
             console.log([`${target}IsOpen`], !open, [target], value);
             if (typeof this.props.applyFilters === 'function') {
                 this.props.applyFilters(newFilterData);
+
             }
             if (target === 'Services') {
                 this.setState({
@@ -130,38 +131,43 @@ class GlobalFilter extends Component {
     renderDateRange(label, data) {
         let { classes } = this.props;
         return (
-            <FormControl fullWidth className={classes.margin}>
-                <Input
-                    disabled
-                    disableUnderline={true}
-                    id="adornment-amount"
-                    value={(_.get(this.state, "filterData.duration.title") || this.state.value)}
-                    style={{
-                        color: '#000000',
-                        margin: '0 0px 0 0',
-                        width: _.get(this.state, "filterData.duration.title") ? '230px' : '120px'
-                    }}
-                    // onChange={handleChange('amount')}
-                    startAdornment={<InputAdornment position="start">
-                        <SVG src={icondepartment} className={classes.CloseButton}>
 
-                        </SVG>
-                    </InputAdornment>}
-                    endAdornment={<DropDownIcon style={{ color: '#656565' }}></DropDownIcon>}
-                    onClick={this.openPicker.bind(this)}
-                />
-                <DateRange
-                    key={"DateRange"}
-                    id="date-range"
-                    title1={(_.get(this.state, "filterData.duration.title") || this.state.value)}
-                    keepMounted
-                    open={this.state.open}
-                    onClose={this.handleClose.bind(this)}
-                    value={this.state.value}
-                    handleSelectedOk={this.handleChanges.bind(this)}
-                ></DateRange>
-                {/* // handleApplyFilter={this.handleApplyFilter.bind(this)} */}
+            <FormControl fullWidth className={classes.formControl} >
+                <div className={classes.list}>
+                    <SVG src={icondepartment} className={classes.CloseButton}>
 
+                    </SVG>
+                    <Input
+                        // disabled
+                        // disableUnderline={true}
+                        id="adornment-amount"
+                        value={(_.get(this.state, "filterData.duration.title") || this.state.value)}
+                        style={{
+                            color: '#000000',
+                            margin: '0 0px 0 0',
+                            width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
+                        }}
+                        // onChange={handleChange('amount')}
+                        //     startAdornment={<InputAdornment position="start">
+                        //     <SVG src={icondepartment} className={classes.CloseButton}>
+
+                        //     </SVG>
+                        // </InputAdornment>}
+                        endAdornment={<DropDownIcon style={{ color: '#656565' }}></DropDownIcon>}
+                        onClick={this.openPicker.bind(this)}
+                    />
+                    <DateRange
+                        key={"DateRange"}
+                        id="date-range"
+                        title1={(_.get(this.state, "filterData.duration.title") || this.state.value)}
+                        keepMounted
+                        open={this.state.open}
+                        onClose={this.handleClose.bind(this)}
+                        value={this.state.value}
+                        handleSelectedOk={this.handleChanges.bind(this)}
+                    ></DateRange>
+                    {/* // handleApplyFilter={this.handleApplyFilter.bind(this)} */}
+                </div>
             </FormControl>
         );
     }
@@ -249,7 +255,7 @@ class GlobalFilter extends Component {
 
     handleOnDelete(target, value) {
         let filterData = this.state.filterData;
-        
+
         let newFilterData = []
         if (filterData[target] && Array.isArray(filterData[target])) {
             filterData[target].map((data) => {
@@ -259,19 +265,20 @@ class GlobalFilter extends Component {
             })
         }
         filterData[target] = newFilterData
-        this.setState({ filterData: filterData , DDRs: newFilterData});
+        this.setState({ filterData: filterData, DDRs: newFilterData });
         if (typeof this.props.applyFilters === 'function') {
             // this.props.applyFilters(filterData);
-            this.setState({DDRs: newFilterData,
-            // defaultV: newFilterData
-        })
+            this.setState({
+                DDRs: newFilterData,
+                // defaultV: newFilterData
+            })
         }
-        if(target === 'ULBS') {
+        if (target === 'ULBS') {
             this.setState({
                 ulbs: newFilterData
             })
         }
-        if(target === 'DDRs') {
+        if (target === 'DDRs') {
             this.setState({
                 ddrs: newFilterData
             })
@@ -282,28 +289,28 @@ class GlobalFilter extends Component {
         let { classes, GFilterData } = this.props;
         return <div className={classes.fVisible}>
             {GFilterData && GFilterData.DDRs && GFilterData.DDRs.length > 0 && <div className={classes.fVRow}>
-                <div className={classes.fTitle}><span style={{margin: !isMobile ? 'auto' : ''}}>Selected DDRs:</span></div>
+                <div className={classes.fTitle}><span style={{ margin: !isMobile ? 'auto' : '' }}>Selected DDRs:</span></div>
                 <div className={classes.mChips}>
                     {GFilterData.DDRs.map(item => {
-                         let handleOnDelete = this.handleOnDelete.bind(this)
+                        let handleOnDelete = this.handleOnDelete.bind(this)
                         return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}>
                             {/* <Chip fullwidth className={classes.mCustomChip} label={item} color={'gray'}  onDelete={() => handleOnDelete('DDRs',item)}> */}
-                           
-                            <Chip fullwidth className={classes.mCustomChip} label={item} style={{padingLeft: '3px'}} color={'gray'} >
-                                </Chip></div>
+
+                            <Chip fullwidth className={classes.mCustomChip} label={item} style={{ padingLeft: '3px' }} color={'gray'} >
+                            </Chip></div>
                     })
 
                     }
                 </div>
             </div>}
             {GFilterData && GFilterData.ULBS && GFilterData.ULBS.length > 0 && <div className={classes.fVRow}>
-                <div className={classes.fTitle}><span  style={{margin: !isMobile ? 'auto' : ''}}>Selected ULBs:</span></div>
+                <div className={classes.fTitle}><span style={{ margin: !isMobile ? 'auto' : '' }}>Selected ULBs:</span></div>
                 <div className={classes.mChips}>
                     {GFilterData.ULBS.map(item => {
                         let handleOnDelete = this.handleOnDelete.bind(this)
                         return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}>
                             {/* <Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete('ULBS',item)}></Chip></div> */}
-                            
+
                             <Chip className={classes.mCustomChip} label={item} color={'gray'}></Chip></div>
                     })
 

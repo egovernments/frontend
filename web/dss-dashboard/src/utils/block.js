@@ -116,11 +116,31 @@ const addPages = (elem) => {
                         // pdf.save()
                         return resolve(pdf)
                     } else {
-                        let iheight = hw.imgWidth * hw.iRatio;
-                        let pdf = new jsPDF("l", "pt", [hw.imgWidth - 250, hw.imgHeight - 100]);
-                        pdf.addImage(dataUrl, 'JPG', 30, 10);
-                        // pdf.save()
-                        return resolve(pdf)
+                        // let iheight = hw.imgWidth * hw.iRatio;
+                        // let pdf = new jsPDF("l", "pt", [hw.imgWidth - 250, hw.imgHeight - 100]);
+                        // pdf.addImage(dataUrl, 'JPG', 30, 10);
+                        // return resolve(pdf)
+                        
+                        var imgWidth = 210; 
+                        var pageHeight = 295; 
+
+                        let image = new Image();
+                        image.src = dataUrl;
+                        var imgHeight = image.height * imgWidth / image.width;
+                        var heightLeft = imgHeight;
+                        var doc = new jsPDF('p', 'mm','a4');
+                        var position = 10; // give some top padding to first page
+                        
+                        doc.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                        
+                        while (heightLeft >= 0) {
+                          position += heightLeft - imgHeight; // top padding for other pages
+                          doc.addPage();
+                          doc.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight);
+                          heightLeft -= pageHeight;
+                        }
+                        return resolve(doc)
                     }
 
                 }.bind(this)).catch((err) => {

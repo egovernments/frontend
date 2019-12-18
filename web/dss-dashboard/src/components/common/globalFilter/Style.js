@@ -2,6 +2,22 @@ import variables from "../../../styles/variables";
 import { isMobile } from 'react-device-detect';
 
 const styles = theme => ({
+    CloseButton: {
+        marginTop: '4px',
+        marginRight: '5px'
+    },
+    formControl: {
+        margin: '0',
+        minWidth: 120,
+        // 'flex-grow': 1,
+        '& label': {
+            color: 'red',
+            top: '-15px'
+        },
+    },
+    list: {
+        display: 'flex'
+    },
     mainFilter: {
         display: 'flex',
         flexDirection: 'row',

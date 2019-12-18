@@ -58,7 +58,6 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    debugger;
     let startDate= moment().month(3).startOf('month').unix()
     let endDate = moment().month(2).endOf('month').add(1, 'years').unix()
 
