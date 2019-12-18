@@ -1,0 +1,13 @@
+.property-amount-radio,
+.amt-radio {
+  display: inline-flex; }
+
+.amt-radio {
+  margin-right: 110px; }
+  .amt-radio input {
+    margin-right: 8px;
+    cursor: pointer; }
+
+@media only screen and (max-width: 768px) {
+  .amt-radio {
+    margin-right: 15px; } }
