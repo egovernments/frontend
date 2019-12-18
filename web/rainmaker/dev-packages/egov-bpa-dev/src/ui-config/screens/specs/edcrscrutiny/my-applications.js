@@ -17,7 +17,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications",
   beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch);
+    fetchData(action, state, dispatch, true);
     return action;
   },
   components: {
