@@ -9,18 +9,17 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { withStyles } from "@material-ui/core/styles";
-//import Icon from "@material-ui/core/Icon";
+import "./index.css"
 import Icon from "egov-ui-framework/ui-atoms/Icon";
 
 const styles = theme => ({
   root: {
-    display: "flex"
   },
   paper: {
     marginRight: theme.spacing.unit * 2
   },
   button: {
-    border : "1px solid #FE7A51"
+    borderBottom : "1px solid rgb(0,0,0,0.12)"
   },
   leftIcon: {
     marginRight: theme.spacing.unit
@@ -57,7 +56,7 @@ class MenuListComposition extends React.Component {
     return (
       <div className={classes.root} data-html2canvas-ignore={true}>
         <div>
-          <Button className={classes.button}
+          <Button
             buttonRef={node => {
               this.anchorEl = node;
             }}
@@ -69,9 +68,9 @@ class MenuListComposition extends React.Component {
             <Icon className={classes.leftIcon} iconName={data.leftIcon} />
               <LabelContainer labelName={data.label.labelName} labelKey={data.label.labelKey} style={{color:data.props.style.color}}/>
               <span style={{marginLeft:30 ,color : data.props.color}}> |  </span>
-            <Icon className={classes.rightIcon} iconName={data.rightIcon} color={data.props.color}/>
+            <Icon className={classes.rightIcon} iconName={data.rightIcon} />
           </Button>
-          <Popper open={open} anchorEl={this.anchorEl} style={{zIndex:100}} transition disablePortal>
+          <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow
                 {...TransitionProps}
@@ -83,11 +82,11 @@ class MenuListComposition extends React.Component {
               >
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
-                    <MenuList>
+                    <MenuList className="menu-list-style">
                       {data.menu.map((item, key) => {
-                        const { labelName, labelKey } = item.label;
+                        const { labelName, labelKey } = item;
                         return (
-                          <MenuItem key={key} onClick={item.link}>
+                          <MenuItem key={key} onClick={item.link} className={classes.button}>
                             <Icon
                               className={classes.leftIcon}
                               iconName={item.leftIcon}
