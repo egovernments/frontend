@@ -80,8 +80,11 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
 
 export const getSearchResultsfromEDCRWithApplcationNo = async (applicationNumber, tenantId) => {
   try {
+    let EDCRHost = process.env.REACT_APP_EDCR_API_HOST
+    ? process.env.REACT_APP_EDCR_API_HOST
+    : "https://egov-dcr-galaxy.egovernments.org";
     const response = await axios.post(
-      `https://egov-dcr-galaxy.egovernments.org/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
+      `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
       {
         RequestInfo: {
           apiId: "1",

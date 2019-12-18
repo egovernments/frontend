@@ -38,7 +38,7 @@ const getPDFbuttons = (
               style: {
                 marginTop: "7px",
                 marginRight: "8px",
-                cursor:"pointer"
+                cursor: "pointer"
               }
             },
             onClick: {
@@ -59,7 +59,7 @@ const getPDFbuttons = (
             labelName: "Scrutiny Report",
             labelKey: "EDCR_SCUTINY_REPORT",
             style: {
-              cursor:"pointer"
+              cursor: "pointer"
             }
           })
         },
@@ -91,7 +91,7 @@ const getPDFbuttons = (
                 marginTop: "7px",
                 marginRight: "8px",
                 marginLeft: "10px",
-                cursor:"pointer"
+                cursor: "pointer"
               }
             },
             onClick: {
@@ -112,7 +112,7 @@ const getPDFbuttons = (
             labelName: "Scrutiny Report",
             labelKey: "EDCR_SCUTINY_REPORT",
             style: {
-              cursor:"pointer"
+              cursor: "pointer"
             }
           })
         },
@@ -168,10 +168,12 @@ const generatePdfAndDownload = async (
     const file = new Blob([response.data], { type: "application/pdf" });
     const fileURL = URL.createObjectURL(file);
     var myWindow = window.open(fileURL);
-    myWindow.onload = ()=>{
-      myWindow.focus();
-      myWindow.print();
-    } 
+    if (myWindow != undefined) {
+      myWindow.addEventListener('load', (event) => {
+        myWindow.focus();
+        myWindow.print();
+      });
+    }
   } else if (action === "download") {
     var iframe = document.createElement("iframe");
     iframe.src = reporturl;
@@ -197,12 +199,12 @@ const generatePdfAndDownload = async (
         "#material-ui-tradeReviewDetails"
       );
     }
-  
+
     // To hide the iframe
     iframe.style.cssText =
       "position: absolute; opacity:0; z-index: -9999; width: 900px; height: 100%";
     document.querySelector("#custom-atoms-iframeForPdf").appendChild(iframe);
-  };
+  }
 };
 
 const getAcknowledgementCard = (
