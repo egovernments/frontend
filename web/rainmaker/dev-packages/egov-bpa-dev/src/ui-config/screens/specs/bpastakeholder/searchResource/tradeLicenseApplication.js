@@ -13,12 +13,12 @@ import { searchApiCall } from "./functions";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
-    labelName: "Search Trade License Application",
-    labelKey: "TL_HOME_SEARCH_RESULTS_HEADING"
+    labelName: "Search Stakeholder Registration Application",
+    labelKey: "BPA_HOME_SEARCH_RESULTS_HEADING"
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "TL_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "BPA_HOME_SEARCH_RESULTS_DESC"
   }),
   appTradeAndMobNumContainer: getCommonContainer({
     applicationNo: getTextField({
@@ -60,12 +60,12 @@ export const tradeLicenseApplication = getCommonCard({
     // }),
     ownerMobNo: getTextField({
       label: {
-        labelName: "Owner Mobile No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        labelName: "Mobile No.",
+        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
       },
       placeholder: {
-        labelName: "Enter your mobile No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+        labelName: "Enter mobile No.",
+        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,

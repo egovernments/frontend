@@ -1,11 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import { httpRequest } from "../../../../../ui-utils/api";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
 import {download} from  "../../../../../ui-utils/commons"
-import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+
 
 const getCommonApplyFooter = children => {
     return {

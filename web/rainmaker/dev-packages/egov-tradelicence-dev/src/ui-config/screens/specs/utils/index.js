@@ -2282,11 +2282,7 @@ export const getTextToLocalMapping = label => {
     case "APPLIED":
       return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      return getLocaleLabels(
-        "Paid",
-        "WF_NEWTL_PENDINGAPPROVAL",
-        localisationLabels
-      );
+      return getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
     case "REJECTED":
@@ -2329,6 +2325,6 @@ export const getTextToLocalMapping = label => {
   }
 };
 
-export const checkValueForNA = value => {
+export const checkValueForNA = (value) => {
   return value ? value : "NA";
-};
+}

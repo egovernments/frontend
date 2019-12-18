@@ -126,7 +126,6 @@ class DocumentList extends Component {
         {
           fileName: file.name,
           fileStoreId,
-          fileUrl: Object.values(fileUrl)[0],
           documentType: name,
           tenantId
         }

@@ -12,7 +12,8 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getTranslatedLabel,
-  updateDropDowns
+  updateDropDowns,
+  setOrganizationVisibility
 } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
@@ -143,6 +144,13 @@ export const updatePFOforSearchResults = async (
   }
   const licenseType = payload && get(payload, "Licenses[0].licenseType");
   updateDropDowns(payload, action, state, dispatch, queryValue);
+  const subOwnerShipCategory = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+  );
+
+  setOrganizationVisibility(action, state, dispatch, subOwnerShipCategory);
+
   if (queryValuePurpose !== "cancel") {
     set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
     set(payload, getHygeneLevelJson(queryValuePurpose), "yes");
@@ -206,7 +214,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       "validFrom",
       convertDateToEpoch(queryObject[0].validFrom, "dayend")
     );
-    set(queryObject[0], "wfDocuments", documents);
+    // set(queryObject[0], "wfDocuments", documents);
     set(
       queryObject[0],
       "validTo",
@@ -274,23 +282,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         queryObject[0].tradeLicenseDetail &&
         queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
-        if (getQueryArg(window.location.href, "action") === "edit") {
-          // const removedDocs = get(
-          //   state.screenConfiguration.preparedFinalObject,
-          //   "LicensesTemp[0].removedDocs",
-          //   []
-          // );
-          // set(queryObject[0], "tradeLicenseDetail.applicationDocuments", [
-          //   ...get(
-          //     state.screenConfiguration.prepareFinalObject,
-          //     "Licenses[0].tradeLicenseDetail.applicationDocuments",
-          //     []
-          //   ),
-          //   ...removedDocs
-          // ]);
-        } else if (activeIndex === 2) {
-          set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
-        } else action = "APPLY";
+        if (activeIndex === 2) {
+          action = "APPLY";
+        }
       }
       // else if (
       //   queryObject[0].tradeLicenseDetail &&
@@ -307,27 +301,15 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       if (!isEditFlow) {
-        if (window.location.pathname.includes("whitelisted")) {
-          searchResponse = await httpRequest(
-            "post",
-            "/tl-services/v1/BPAREG1/_update",
-            "",
-            [],
-            {
-              Licenses: queryObject
-            }
-          );
-        } else {
-          searchResponse = await httpRequest(
-            "post",
-            "/tl-services/v1/BPAREG/_update",
-            "",
-            [],
-            {
-              Licenses: queryObject
-            }
-          );
-        }
+        searchResponse = await httpRequest(
+          "post",
+          "/tl-services/v1/BPAREG/_update",
+          "",
+          [],
+          {
+            Licenses: queryObject
+          }
+        );
       }
       dispatch(toggleSpinner());
 
@@ -340,6 +322,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse = { Licenses: queryObject };
       } else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+        await setDocsForEditFlow(state, dispatch);
       }
       const updatedtradeUnits = get(
         searchResponse,
@@ -368,7 +351,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       if (!response) {
       }
       dispatch(prepareFinalObject("Licenses", response.Licenses));
-      updateownersAddress(dispatch, response);
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */
@@ -415,11 +397,12 @@ export const getFileSize = file => {
 };
 
 export const isFileValid = (file, acceptedFiles) => {
-  const mimeType = file["type"];
+  const fileNameArray = file["name"].split(".");
+  const fileFormat = fileNameArray[fileNameArray.length - 1];
   return (
-    (mimeType &&
+    (fileFormat &&
       acceptedFiles &&
-      acceptedFiles.indexOf(mimeType.split("/")[1]) > -1) ||
+      acceptedFiles.indexOf(fileFormat.toUpperCase()) > -1) ||
     false
   );
 };
@@ -455,5 +438,39 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
     if (conditionCheckerFn(arr[i])) {
       return arr[i];
     }
+  }
+};
+
+export const acceptedFiles = acceptedExt => {
+  const splitExtByName = acceptedExt.split(",");
+  const acceptedFileTypes = splitExtByName.map(item => {
+    return item.toUpperCase();
+  });
+  return acceptedFileTypes;
+};
+
+export const handleFileUpload = (event, handleDocument, props) => {
+  let uploadDocument = true;
+  const { inputProps, maxFileSize, moduleName } = props;
+  const input = event.target;
+  if (input.files && input.files.length > 0) {
+    const files = input.files;
+    Object.keys(files).forEach(async (key, index) => {
+      const file = files[key];
+      const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
+      // const fileValid = true //temporary disabling check as dxf issues in other os
+      const isSizeValid = getFileSize(file) <= maxFileSize;
+      if (!fileValid) {
+        alert(`Only dxf files can be uploaded`);
+        uploadDocument = false;
+      }
+      if (!isSizeValid) {
+        alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
+        uploadDocument = false;
+      }
+      if (uploadDocument) {
+        handleDocument(file);
+      }
+    });
   }
 };

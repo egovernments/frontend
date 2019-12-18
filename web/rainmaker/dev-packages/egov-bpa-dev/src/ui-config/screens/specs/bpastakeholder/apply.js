@@ -70,16 +70,6 @@ export const getOrganizationReqd = {
       name: "On behalf of any organization?",
       key: "BPA_ORGANIZATION_REQD_LABEL"
     },
-    //     {
-    //       label: "Husband",
-    //       labelKey: "COMMON_RELATION_HUSBAND",
-    //       value: "HUSBAND"
-    //     }
-    //   ],
-    //   "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-    //   ""
-    // );
-
     buttons: [
       {
         labelName: "Yes",
@@ -324,8 +314,8 @@ export const formwizardFirstStep = {
   children: {
     OwnerInfoCard,
     breakAfterSearch: getBreak(),
-    getOrganizationReqd,
-    organizationDetails,
+    // getOrganizationReqd,
+    // organizationDetails,
     permanentAddr,
     corrospondanceAddr
   }

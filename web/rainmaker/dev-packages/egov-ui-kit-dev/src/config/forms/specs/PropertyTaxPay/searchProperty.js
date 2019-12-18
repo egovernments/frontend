@@ -52,7 +52,7 @@ const formConfig = {
       id: "old-property-id",
       jsonPath: "",
       type: "textfield",
-      floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
+      floatingLabelText: "PT_UNIQUE_ID",
       errorMessage: "",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
       numcols: 4,
@@ -60,6 +60,18 @@ const formConfig = {
       maxLength: 64,
       value: "",
       pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i
+    },
+    applicationNumber: {
+      id: "application-number",
+      jsonPath: "",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_APPLICATION_NUMBER",
+      errorMessage: "",
+      hintText: "PT_PROPERTY_APPLICATION_NUMBER_PLACEHOLDER",
+      numcols: 4,
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      value: "",
     },
   },
   submit: {
