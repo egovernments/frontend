@@ -37,7 +37,7 @@ const toolbarStyles = theme => ({
                 // left: 0,
                 // zIndex: 1,
             },
-            '& th:nth-child(3)': {
+            '& th:nth-child(2)': {
                 position: 'sticky',
                 left: -1,
                 zIndex: 1,

@@ -5,6 +5,7 @@ import DemandAndCollectionData from './demandAndCollection/dncReducer';
 import GFilterData from './globalFilter/gDataReducer';
 import chartsData from './ChartsR/chartsReduser';
 import language from './language/languageReducer';
+import s3File from './fileUpload/fileUpload'
 
 export default {
     apistatus: apistatus,
@@ -13,5 +14,6 @@ export default {
     DemandAndCollectionData: DemandAndCollectionData,
     GFilterData: GFilterData,
     chartsData: chartsData,
-    lang: language
+    lang: language,
+    s3File: s3File
 }

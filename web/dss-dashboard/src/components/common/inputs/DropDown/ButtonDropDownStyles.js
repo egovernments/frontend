@@ -38,7 +38,8 @@ const styles = theme => ({
         // display: 'flex',
         '& div': {
             flex: 1,
-            minWidth:177
+            minWidth:120,
+            top: -4
         }
     },
     formControl: {
@@ -48,6 +49,14 @@ const styles = theme => ({
         marginTop: '4px',
         marginRight: '5px'
     },
+    '@media (max-width:1024px)': {
+        list: {
+        // display: 'flex',
+        '& div': {
+             minWidth:177,
+            }
+        }
+    }
 });
 
 export default styles;

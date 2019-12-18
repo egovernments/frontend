@@ -4,13 +4,14 @@
 import CONFIGS from '../../config/configs';
 
 export default class API {
-    constructor(method = 'POST', timeout = 2000, auth = false) {
+    constructor(method = 'POST', timeout = 2000, auth = false, reqType='') {
         this.code = null;
         this.message = null;
         this.domain = null;
         this.method = method;
         this.timeout = timeout;
         this.auth = auth;
+        this.reqType = reqType;
     }
 
     toString() {

@@ -86,7 +86,7 @@ const styles = theme => ({
         //     zIndex: 1,
         //     left: 0,
         // },
-        '& td:nth-child(3)': {
+        '& td:nth-child(2)': {
             position: '-webkit-sticky',
             /* for Safari */
             position: 'sticky',

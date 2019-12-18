@@ -141,6 +141,7 @@ class TableChart extends Component {
       columnData.splice(0, 1);
       
       let newData = _.chain(chartData).map((rowData) => {
+      if(rowData){        
         return _.defaults(..._.map(rowData.plots, a => {
           if(a.name != "S.N."){
             if (a.symbol.toUpperCase() === 'TEXT') {
@@ -163,7 +164,7 @@ class TableChart extends Component {
             }
           }
         }));
-
+      }
       }).value();
       return (
         <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' }}>

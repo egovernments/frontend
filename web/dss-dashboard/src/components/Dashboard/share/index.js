@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import SVG from 'react-inlinesvg';
 import Button from '@material-ui/core/Button';
@@ -10,7 +10,7 @@ import share from '../../../images/share.svg';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../../utils/Share';
-import { printDocumentShare } from '../../../utils/block';
+import { printDocumentShare, downloadAsImage } from '../../../utils/block';
 import { renderToString, } from 'react-dom/server'
 import FilterTable from '../download/filterTable';
 import { connect } from 'react-redux';
@@ -18,6 +18,8 @@ import { bindActionCreators } from 'redux';
 import { APIStatus } from '../../../actions/apiStatus'
 import domtoimage from 'dom-to-image';
 import Variables from '../../../styles/variables'
+import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
+import APITransport from '../../../actions/apitransport/apitransport'
 
 const StyledMenu = withStyles({
     paper: {
@@ -50,65 +52,43 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export function CustomizedShare(props) {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+class CustomizedShare extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            anchorEl: null,
+
+        }
+
+    }
+    // const[anchorEl, setAnchorEl] = React.useState(null);
+
+
     // const [anchorEl_email, setAnchorEl_email] = React.useState(null);
     // const [anchorEl_pdf, setAnchorEl_pdf] = React.useState(null);
 
-    const handleClick = event => {
-        setAnchorEl(event.currentTarget);
+    handleClick = event => {
+        // setAnchorEl(event.currentTarget);
+        this.setState({
+            anchorEl: event.currentTarget
+        })
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    handleClose = () => {
+        this.setState({
+            anchorEl: null
+        })
     };
 
-    const renderTable = () => {
-        return renderToString(<FilterTable data={props.GFilterData} name= {props.fileHeader || "Dashboard"} />)
+    renderTable = () => {
+        return renderToString(<FilterTable data={this.props.GFilterData} name={this.props.fileHeader || "Dashboard"} />)
     }
-    const filterFunc = function(node) {
+    filterFunc = function (node) {
         if (node.id == 'divNotToPrint') return false;
         return true;
     };
-    const shareWhatsAppPDF = () => {
-        props.APITrans(true);
-        // const pdf1 = new jsPDF("p", "mm", "a1");
-        // pdf1.scaleFactor = 3;
 
-        printDocumentShare(renderTable()).then(function (pdfO) {
-            // let element = document.getElementById("printFtable")
-            // element.parentNode.removeChild(element);
-            setAnchorEl(null);
-            try {
-                props.APITrans(false);
-                handleWhatsAppPdfShare(pdfO)
-            } catch{ }
-        }).catch(function (error) {
-            console.log(error);
-            setAnchorEl(null);
-        })
-    }
-
-    const shareEmailPDF = () => {
-        props.APITrans(true);
-        // const pdf1 = new jsPDF("p", "mm", "a1");
-        // pdf1.scaleFactor = 3;
-
-        printDocumentShare(renderTable()).then(function (pdfO) {
-            // let element = document.getElementById("printFtable")
-            // element.parentNode.removeChild(element);
-            setAnchorEl(null);
-            try {
-                props.APITrans(false);
-                handlePdfShareEmail(pdfO)
-            } catch{ }
-        }).catch(function (error) {
-            console.log(error);
-            setAnchorEl(null);
-        })
-    }
-
-    const dataURItoBlob = (dataURI) => {
+    dataURItoBlob = (dataURI) => {
         var binary = atob(dataURI.split(',')[1]);
         var array = [];
         for (var i = 0; i < binary.length; i++) {
@@ -117,43 +97,111 @@ export function CustomizedShare(props) {
         return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     }
 
-    const shareEmailImage = () => {
-        props.APITrans(true);
+    shareWhatsAppPDF() {
+        this.setState({
+            type: 'whatsapp'
+        })
+        var APITransport = this.props.APITransport
+        printDocumentShare(this.renderTable()).then(function (pdfO) {
+            // setAnchorEl(null);
 
+            try {
+                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', pdfO.output('blob'));
+                APITransport(fileUploadAPI)
+            } catch{ }
+        }).catch(function (error) {
+            console.log(error);
+            this.setState({
+                anchorEl: null
+            })
+        })
+    }
+
+    shareWhatsAppImage = () => {
+        this.setState({
+            type: 'whatsapp'
+        })
         var ts = Math.round((new Date()).getTime() / 1000);
+        var APITransport = this.props.APITransport
 
         let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: filterFunc  })
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
             .then(function (dataUrl) {
-                var blobData = dataURItoBlob(dataUrl);
+                var blobData = this.dataURItoBlob(dataUrl);
                 blobData.name = "dss" + ts + ".jpeg"
 
                 try {
-                    props.APITrans(false);
-                    handleImageShareEmail(blobData)
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', blobData);
+                    APITransport(fileUploadAPI)
+                } catch{ }
+            }.bind(this))
+
+    }
+
+    shareEmailPDF = () => {
+        this.setState({
+            type: 'email'
+        })
+        var APITransport = this.props.APITransport
+
+        printDocumentShare(this.renderTable()).then(function (pdfO) {
+            // setAnchorEl(null);
+            try {
+                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', pdfO.output('blob'));
+                APITransport(fileUploadAPI)
+            } catch{ }
+        }).catch(function (error) {
+            console.log(error);
+            this.setState({
+                anchorEl: null
+            })
+        })
+    }
+
+
+    shareEmailImage = () => {
+        this.setState({
+            type: 'email'
+        })
+
+        var ts = Math.round((new Date()).getTime() / 1000);
+        let div = document.getElementById('divToPrint');
+        var APITransport = this.props.APITransport
+
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
+            .then(function (dataUrl) {
+                var blobData = this.dataURItoBlob(dataUrl);
+                blobData.name = "dss" + ts + ".jpeg"
+
+                try {
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', blobData);
+                    APITransport(fileUploadAPI)
                 } catch{ }
             }.bind(this))
     }
 
-    const shareWhatsAppImage = () => {
-        props.APITrans(true);
-
-        var ts = Math.round((new Date()).getTime() / 1000);
-
-        let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: filterFunc  })
-            .then(function (dataUrl) {
-                var blobData = dataURItoBlob(dataUrl);
-                blobData.name = "dss" + ts + ".jpeg"
-
-                try {
-                    props.APITrans(false);
-                    handleWhatsAppImageShare(blobData)
-                } catch{ }
-            }.bind(this))
+    isMobileOrTablet = () => {
+        return (/(android|iphone|ipad|mobile)/i.test(navigator.userAgent));
     }
 
-    const renderSharePDFMenue = (menue) => {
+    componentDidUpdate(prevProps) {
+        if (prevProps.s3File != this.props.s3File) {
+            var fakeLink = document.createElement('a');
+            if(this.state.type === 'whatsapp') {
+            fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(this.props.s3File['url']));
+            fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+            fakeLink.setAttribute('target', '_blank');
+            fakeLink.click();
+            }
+            if(this.state.type === 'email') {
+                fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(this.props.s3File['url']));
+                fakeLink.click();
+            }
+        }
+       
+    }
+
+    renderSharePDFMenue = (menue) => {
         return (
             <div >
                 <Button style={{ borderRadius: '2px', border: 'solid 1px #5b5b5b', backgroundColor: "rgba(255, 255, 255, 0)" }}
@@ -161,7 +209,7 @@ export function CustomizedShare(props) {
                     aria-haspopup="true"
                     variant="contained"
                     // color="primary"
-                    onClick={handleClick}
+                    onClick={this.handleClick.bind(this)}
                 >
                     <SVG style={{ marginRight: '10px' }}>
                         {/* className={StyledMenuItem.CloseButton} */}
@@ -170,32 +218,32 @@ export function CustomizedShare(props) {
                 </Button>
                 <StyledMenu
                     id="customized-menu"
-                    anchorEl={anchorEl}
+                    anchorEl={this.state.anchorEl}
                     keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
+                    open={Boolean(this.state.anchorEl)}
+                    onClose={this.handleClose.bind(this)}
                 >
-                    <StyledMenuItem onClick={shareEmailPDF}>
+                    <StyledMenuItem onClick={this.shareEmailPDF.bind(this)}>
                         <ListItemIcon>
-                            <DraftsIcon fontSize="small" style={{color:Variables.email}}/>
+                            <DraftsIcon fontSize="small" style={{ color: Variables.email }} />
                         </ListItemIcon>
                         <ListItemText primary="PDF" />
                     </StyledMenuItem>
-                    <StyledMenuItem onClick={shareEmailImage}>
+                    <StyledMenuItem onClick={this.shareEmailImage.bind(this)}>
                         <ListItemIcon>
-                            <DraftsIcon fontSize="small" style={{color:Variables.email}}/>
+                            <DraftsIcon fontSize="small" style={{ color: Variables.email }} />
                         </ListItemIcon>
                         <ListItemText primary="Image" />
                     </StyledMenuItem>
-                    <StyledMenuItem onClick={shareWhatsAppPDF}>
+                    <StyledMenuItem onClick={this.shareWhatsAppPDF.bind(this)}>
                         <ListItemIcon>
-                            <WhatsappIcon fontSize="small" style={{color: Variables.whatsApp}}/>
+                            <WhatsappIcon fontSize="small" style={{ color: Variables.whatsApp }} />
                         </ListItemIcon>
                         <ListItemText primary="PDF" />
                     </StyledMenuItem>
-                    <StyledMenuItem onClick={shareWhatsAppImage}>
+                    <StyledMenuItem onClick={this.shareWhatsAppImage.bind(this)}>
                         <ListItemIcon>
-                            <WhatsappIcon fontSize="small" style={{color:Variables.whatsApp}}/>
+                            <WhatsappIcon fontSize="small" style={{ color: Variables.whatsApp }} />
                         </ListItemIcon>
                         <ListItemText primary="Image" />
                     </StyledMenuItem>
@@ -203,47 +251,52 @@ export function CustomizedShare(props) {
             </div>
         )
     }
+    render() {
+        return (
+            <div>
+                <Button
+                    style={{ marginLeft: '20px', borderRadius: '2px', border: 'solid 1px #5b5b5b', backgroundColor: "rgba(255, 255, 255, 0)", height: '32px' }}
+                    aria-controls="customized-menu"
+                    aria-haspopup="true"
+                    variant="contained"
+                    // color="primary"
+                    onClick={this.handleClick.bind(this)}
+                >
+                    <SVG src={share} style={{ marginRight: '10px' }} >
+                        {/* className={StyledMenuItem.CloseButton} */}
+                    </SVG>
+                    <div style={{ fontFamily: 'Roboto', fontSize: '12px', fontWeight: '500', fontStretch: 'normal', fontStyle: 'normal', linHeight: 'normal', letterSpacing: 'normal', color: '#5b5b5b' }}>Share</div>
+                </Button>
+                <StyledMenu
+                    id="customized-menu"
+                    anchorEl={this.state.anchorEl}
+                    keepMounted
+                    open={Boolean(this.state.anchorEl)}
+                    onClose={this.handleClose.bind(this)}
+                >
+                    <StyledMenuItem>
 
-    return (
-        <div>
-            <Button
-                style={{ marginLeft: '20px', borderRadius: '2px', border: 'solid 1px #5b5b5b', backgroundColor: "rgba(255, 255, 255, 0)", height: '32px' }}
-                aria-controls="customized-menu"
-                aria-haspopup="true"
-                variant="contained"
-                // color="primary"
-                onClick={handleClick}
-            >
-                <SVG src={share} style={{ marginRight: '10px' }} >
-                    {/* className={StyledMenuItem.CloseButton} */}
-                </SVG>
-                <div style={{ fontFamily: 'Roboto', fontSize: '12px', fontWeight: '500', fontStretch: 'normal', fontStyle: 'normal', linHeight: 'normal', letterSpacing: 'normal', color: '#5b5b5b' }}>Share</div>
-            </Button>
-            <StyledMenu
-                id="customized-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
-                <StyledMenuItem>
+                        {this.renderSharePDFMenue()}
 
-                    {renderSharePDFMenue()}
+                    </StyledMenuItem>
 
-                </StyledMenuItem>
+                </StyledMenu>
+            </div >
+        );
+    }
 
-            </StyledMenu>
-        </div >
-    );
 }
 
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
+    s3File: state.s3File
 });
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         APITrans: APIStatus,
+        APITransport: APITransport,
+
     }, dispatch)
 }
 
