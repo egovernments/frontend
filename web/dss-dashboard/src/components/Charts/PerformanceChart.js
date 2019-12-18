@@ -38,11 +38,11 @@ class PerformanceChart extends React.Component {
     this.callAPI();
   }
   handleClick() {
-    // this.setState({
-    //   IsOpen: true
-    // })
-    let codekey = _.chain(this.props).get('chartData').first().get("id").value();
-    this.props.history.push(`/${this.state.page}/${codekey}`)
+     this.setState({
+       IsOpen: true
+     })
+    //let codekey = _.chain(this.props).get('chartData').first().get("id").value();
+    //this.props.history.push(`/${this.state.page}/${codekey}`)
   }
 
   closeDialogue() {
