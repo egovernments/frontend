@@ -2747,6 +2747,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + scrutinyNo + "&tenantId=jupiter",
       {}
     );
+    
     //console.log(payload);
     payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
@@ -3027,6 +3028,36 @@ export const resetFields = (state, dispatch) => {
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
+    case "Floor Description":
+    return getLocaleLabels(
+        "Floor Description",
+        "BPA_COMMON_TABLE_COL_FLOOR_DES",
+        localisationLabels
+    );
+    case "Occupancy/Sub Occupancy":
+    return getLocaleLabels(
+        "Occupancy/Sub Occupancy",
+        "BPA_COMMON_TABLE_COL_OCCUP",
+        localisationLabels
+    );
+    case "Buildup Area":
+    return getLocaleLabels(
+        "Buildup Area",
+        "BPA_COMMON_TABLE_COL_BUILD_AREA",
+        localisationLabels
+    );
+    case "Floor Area":
+    return getLocaleLabels(
+        "Floor Area",
+        "BPA_COMMON_TABLE_COL_FLOOR_AREA",
+        localisationLabels
+    );
+    case "Carpet Area":
+    return getLocaleLabels(
+        "Carpet Area",
+        "BPA_COMMON_TABLE_COL_CARPET_AREA",
+        localisationLabels
+    );
     case "Application No":
       return getLocaleLabels(
         "Application No",

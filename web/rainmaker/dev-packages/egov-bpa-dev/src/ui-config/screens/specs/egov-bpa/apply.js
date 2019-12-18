@@ -229,9 +229,7 @@ const getMdmsData = async (action, state, dispatch) => {
 
 const getTodaysDate = async(action, state, dispatch) => {
   const today = getTodaysDateInYMD();
-  if (!today) {
     dispatch(prepareFinalObject("bpa.appdate", today));
-  }
 }
 
 const getFirstListFromDotSeparated = list => {
@@ -244,32 +242,6 @@ const getFirstListFromDotSeparated = list => {
     return { code: item };
   });
   return list;
-};
-
-const setCardsIfMultipleBuildings = (state, dispatch) => {
-  if (
-    get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings"
-    ) === "MULTIPLE"
-  ) {
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer",
-        "props.style",
-        { display: "none" }
-      )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer",
-        "props.style",
-        {}
-      )
-    );
-  }
 };
 
 export const prepareEditFlow = async (
@@ -384,31 +356,9 @@ const screenConfig = {
       prepareNOCUploadData(state, dispatch);
     });
     getTodaysDate(action, state, dispatch);
-    // Search in case of EDIT flow
-    prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
     // // Set Property City
     // dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.propertyDetails.address.city", getTenantId()));
-
-    // // Handle dependent dropdowns in edit flow
-    // set(
-    //   "apply",
-    //   "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.buildingSubUsageType",
-    //   { display: "none" }
-    // );
-
-    // let pfo = {};
-    // if (applicationNumber && !step) {
-    //   pfo = searchSampleResponse();
-    //   dispatch(prepareFinalObject("FireNOCs[0]", get(pfo, "FireNOCs[0]")));
-    // }
-    // if (step && get(state, "screenConfiguration.preparedFinalObject")) {
-    //   pfo = get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0]",
-    //     {}
-    //   );
-    // }
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
@@ -438,59 +388,6 @@ const screenConfig = {
           step != 0
         );
       }
-    }
-
-    // Set defaultValues of radiobuttons and selectors
-    let noOfBuildings = get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings",
-      "SINGLE"
-    );
-    set(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings",
-      noOfBuildings
-    );
-    let nocType = get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
-      "PROVISIONAL"
-    );
-    set(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
-      nocType
-    );
-
-    // Preset multi-cards (CASE WHEN DATA PRE-LOADED)
-    if (
-      get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings"
-      ) === "MULTIPLE"
-    ) {
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.props.style",
-        { display: "none" }
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer.props.style",
-        {}
-      );
-    }
-    if (
-      get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
-      ) === "PROVISIONAL"
-    ) {
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber.props.style",
-        { visibility: "hidden" }
-      );
     }
     return action;
   },

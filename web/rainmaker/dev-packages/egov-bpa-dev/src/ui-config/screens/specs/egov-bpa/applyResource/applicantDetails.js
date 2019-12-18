@@ -171,7 +171,7 @@ const commonApplicantInformation = () => {
         },
         placeholder: {
           labelName: "Enter Email",
-          labelKey: "NOC_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
+          labelKey: "BPA_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
         errorMessage: "Invalid Email",
@@ -309,10 +309,14 @@ const commonApplicantInformation = () => {
       }),
       primaryOwner: {
         uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
         componentPath: "CheckboxContainer",
         jsonPath: "BPA.owners[0].primaryOwner",
         props: {
-          content: "Is Primary Owner ?",
+          label : {
+            name : "Is Primary Owner ?",
+            key : "Is Primary Owner ?",
+          },
           jsonPath: "BPA.owners[0].primaryOwner"
         },
         type: "array"

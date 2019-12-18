@@ -29,6 +29,7 @@ import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import { appSearchMockData } from './searchMockJson';
+import { createApp } from './createMock'
 
 
 
@@ -118,7 +119,7 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
   }
 };
 
-export const createUpdateNocApplication = async (state, dispatch, status) => {
+export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let nocId = get(
     state,
     "screenConfiguration.preparedFinalObject.BPAs[0].id"
@@ -208,23 +209,24 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
-
+    let payload1 = createApp;
     let response;
     if (method === "CREATE") {
-      // response = await httpRequest(
-      //   "post",
-      //   "/bpa/appl/_create",
-      //   "",
-      //   [],
-      //   { BPA : payload }
-      // );
-      // response = furnishNocResponse(response);
-      // dispatch(prepareFinalObject("BPA", response.BPA));
-      // setApplicationNumberBox(state, dispatch);
+      response = await httpRequest(
+        "post",
+        "bpa-services/bpa/appl/_create",
+        "",
+        [],
+        { BPA : payload1 }
+      );
+      console.log(response, "response jbsd;kjbfdsf");
+      response = furnishNocResponse(response);
+      dispatch(prepareFinalObject("BPA", response.BPA));
+      setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "/bpa/appl/_update",
+        "bpa-services/bpa/appl/__update",
         "",
         [],
         { BPA: payload }

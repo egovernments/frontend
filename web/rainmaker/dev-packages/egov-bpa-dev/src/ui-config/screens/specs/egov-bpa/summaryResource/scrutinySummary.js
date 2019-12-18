@@ -227,7 +227,6 @@ export const scrutinySummary = getCommonGrayCard({
                   jsonPath:
                     "BPA.scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                     callBack: value => {
-                        console.log(value, "gbsaijfbijbsafijbibfs")
                       return value && value.occupancies[0] && value.occupancies[0].type || "";
                     }
                 }

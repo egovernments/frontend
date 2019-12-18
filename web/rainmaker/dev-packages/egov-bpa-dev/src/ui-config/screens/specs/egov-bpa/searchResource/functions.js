@@ -1,6 +1,6 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../../ui-utils/commons";
+import { getAppSearchResults } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResults";
@@ -21,32 +21,26 @@ export const searchApiCall = async (state, dispatch) => {
     "searchScreen",
     {}
   );
-  const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children",
-    state,
-    dispatch,
-    "search"
-  );
+  // const isSearchBoxFirstRowValid = validateFields(
+  //   "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children",
+  //   state,
+  //   dispatch,
+  //   "search"
+  // );
 
-  const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
-    state,
-    dispatch,
-    "search"
-  );
-
-  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
-        },
-        "error"
-      )
-    );
-  } else if (
+  // if (!(isSearchBoxFirstRowValid)) {
+  //   dispatch(
+  //     toggleSnackbar(
+  //       true,
+  //       {
+  //         labelName: "Please fill valid fields to search",
+  //         labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+  //       },
+  //       "error"
+  //     )
+  //   );
+  // } else 
+  if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
@@ -55,7 +49,7 @@ export const searchApiCall = async (state, dispatch) => {
         true,
         {
           labelName: "Please fill at least one field to start search",
-          labelKey: "NOC_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
+          labelKey: "BPA_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
         },
         "warning"
       )
@@ -91,19 +85,13 @@ export const searchApiCall = async (state, dispatch) => {
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
           });
         }
-        // else if (key === "status") {
-        //   queryObject.push({
-        //     key: "action",
-        //     value: searchScreenObject[key].trim()
-        //   });
-        // }
         else {
           queryObject.push({ key: key, value: searchScreenObject[key].trim() });
         }
       }
     }
     try {
-      const response = await getSearchResults(queryObject);
+      const response = await getAppSearchResults(queryObject);
       // const response = searchSampleResponse();
 
       let data = response.FireNOCs.map(item => ({

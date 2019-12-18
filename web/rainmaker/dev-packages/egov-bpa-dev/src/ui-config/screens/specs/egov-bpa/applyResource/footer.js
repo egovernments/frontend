@@ -10,20 +10,19 @@ import { getCommonApplyFooter, validateFields, getTextToLocalMapping } from "../
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
-  createUpdateNocApplication,
+  createUpdateBpaApplication,
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { mdmsMockJson } from '../mdmsMock';
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+    "screenConfiguration.preparedFinalObject.BPA.address.city"
   );
   const applicationNumber = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
+    "screenConfiguration.preparedFinalObject.BPA.applicationNumber"
   );
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
@@ -122,13 +121,33 @@ const getMdmsData = async (state, dispatch) => {
             {
               name: "ServiceType"
             }
+          ],
+          RiskTypeComputation: [
+            {
+              fromPlotArea: 500,
+              toPlotArea: "Infinity",
+              fromBuildingHeight: 15,
+              toBuildingHeight:"Infinity",
+              RiskType: "HIGH"
+            },{
+              fromPlotArea: 300,
+              toPlotArea: 500,
+              fromBuildingHeight: 10,
+              toBuildingHeight:15,
+              RiskType: "MEDIUM"
+            },{
+              fromPlotArea: 0,
+              toPlotArea: 300,
+              fromBuildingHeight: 0,
+              toBuildingHeight:10,
+              RiskType: "LOW"
+            }
           ]
         }
       ]
     }
   };
   try {
-    // let payload = mdmsMockJson;
     let payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
@@ -159,11 +178,10 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  if (activeStep === 10) {
+  if (activeStep === 0) {
     let isBasicDetailsCardValid = validateFields(
       "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children",
       state,
@@ -183,18 +201,12 @@ const callBackForNext = async (state, dispatch) => {
   );
     //let index = 0;
     let data = response.map((item, index) => ({
-      // [getTextToLocalMapping("Application No")]:
-        "Floor Description": getFloorDetail(index),
-        // [getTextToLocalMapping("Level")]:
-        "Level": index,
-        // [getTextToLocalMapping("Occupancy/Sub Occupancy")]:
-        "Occupancy/Sub Occupancy": item.occupancies[0].type || "-",
-        // [getTextToLocalMapping("Buildup Area")]:
-        "Buildup Area": item.occupancies[0].builtUpArea || "-",
-        // [getTextToLocalMapping("Floor Area")]:
-        "Floor Area": item.occupancies[0].floorArea || "-",
-        // [getTextToLocalMapping("Carpet Area")]:
-        "Carpet Area": item.occupancies[0].carpetArea || "-"
+      [getTextToLocalMapping("Floor Description")]: getFloorDetail(index),
+      [getTextToLocalMapping("Level")]: index,
+      [getTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+      [getTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "-",
+      [getTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "-",
+      [getTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "-"
     }));
     dispatch(
       handleField(
@@ -206,7 +218,7 @@ const callBackForNext = async (state, dispatch) => {
     );
   }
 
-  if (activeStep === 11) {
+  if (activeStep === 1) {
     let isBuildingPlanScrutinyDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.buildingPlanScrutinyDetails.children.cardContent.children.buildingPlanScrutinyDetailsContainer.children",
       state,
@@ -239,7 +251,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 12) {
+  if (activeStep === 2) {
     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
@@ -282,7 +294,7 @@ const callBackForNext = async (state, dispatch) => {
 
     let selectedApplicantType = get(
       state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+      "screenConfiguration.preparedFinalObject.BPA.ownerShipType",
       "SINGLE"
     );
     if (selectedApplicantType.includes("INSTITUTIONAL")) {
@@ -307,7 +319,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 13) {
+  if (activeStep === 3) {
     let isBoundaryDetailsCardValid = validateFields(
       "components.div.children.formwizardFourthStep.children.boundaryDetails.children.cardContent.children.boundaryDetailsConatiner.children",
       state,
@@ -328,7 +340,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 14) {
+  if (activeStep === 4) {
     const documentsFormat = Object.values(
       get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
     );
@@ -383,7 +395,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 15) {
+  if (activeStep === 5) {
     moveToReview(state, dispatch);
   }
 
@@ -394,8 +406,8 @@ const callBackForNext = async (state, dispatch) => {
         // getMdmsData(state, dispatch);
         // prepareDocumentsUploadData(state, dispatch);
       }
-      if (activeStep === 2) {
-        let response = await createUpdateNocApplication(
+      if (activeStep === 21) {
+        let response = await createUpdateBpaApplication(
           state,
           dispatch,
           "INITIATE"

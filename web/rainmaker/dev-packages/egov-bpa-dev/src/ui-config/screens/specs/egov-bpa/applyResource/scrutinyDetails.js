@@ -35,6 +35,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
 
     uploadedfile: {
       uiFramework: "custom-atoms-local",
+      moduleName: "egov-bpa",
       componentPath: "downloadFile",
       gridDefination: {
         xs: 12,
@@ -50,6 +51,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
     },
     scrutinyreport: {
     uiFramework: "custom-atoms-local",
+    moduleName: "egov-bpa",
     componentPath: "downloadFile",
     gridDefination: {
       xs: 12,

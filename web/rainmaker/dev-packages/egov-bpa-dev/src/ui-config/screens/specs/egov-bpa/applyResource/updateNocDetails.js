@@ -32,7 +32,7 @@ export const statusOfNocDetails = getCommonCard({
         {
           name: "Identity ",
           required: true,
-          jsonPath: "noc.documents.identityProof",
+          jsonPath: "bpa.documents.identityProof",
           selector: {
             inputLabel: "Select Document",
             menuItems: [
@@ -45,7 +45,7 @@ export const statusOfNocDetails = getCommonCard({
         {
           name: "Address Proof ",
           required: true,
-          jsonPath: "noc.documents.addressProof",
+          jsonPath: "bpa.documents.addressProof",
           selector: {
             inputLabel: "Select Document",
             menuItems: [
@@ -54,22 +54,6 @@ export const statusOfNocDetails = getCommonCard({
               { value: "VOTERID", label: "Voter ID Card" }
             ]
           }
-        },
-        {
-          name: "Site Plan ",
-          jsonPath: "Trade[0].businessProof"
-        },
-        {
-          name: "Ground Floor Plan ",
-          jsonPath: "Trade[0].businessProof"
-        },
-        {
-          name: "Owner's Checklist as per NBC ",
-          jsonPath: "Trade[0].businessProof"
-        },
-        {
-          name: "Copy of Provisional fire NoC ",
-          jsonPath: "Trade[0].businessProof"
         }
       ],
       buttonLabel: {
