@@ -5,16 +5,12 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import generateReceipt from "../utils/receiptPdf";
-import get from "lodash/get";
-import set from "lodash/set";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
@@ -33,6 +29,8 @@ import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import get from "lodash/get";
+import set from "lodash/set";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -444,7 +442,7 @@ const screenConfig = {
     }
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
+      { key: "businessServices", value: "NewTL" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
@@ -475,7 +473,7 @@ const screenConfig = {
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end", display: "block" }
+                style: { justifyContent: "flex-end" }
               },
               gridDefination: {
                 xs: 12,

@@ -492,6 +492,21 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
+const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
+  getFileUrlFromAPI(fileStoreId).then((fileRes) => {
+    if (mode === 'download') {
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
+      }
+    }
+    else {
+      printJS(fileRes[fileStoreId])
+    }
+  });
+}
+
+
 export const download = (receiptQueryString, mode = "download") => {
   const FETCHRECEIPT = {
     GET: {
@@ -511,21 +526,51 @@ export const download = (receiptQueryString, mode = "download") => {
         { key: "key", value: "consolidatedreceipt" },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
+      if(payloadReceiptDetails&&payloadReceiptDetails.Payments&&payloadReceiptDetails.Payments.length==0){
+        console.log("Could not find any receipts");   
+        return;
+      }
       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
-          getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-            if (mode === 'download') {
-              var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-              win.focus();
-            }
-            else {
-              printJS(fileRes[res.filestoreIds[0]])
-            }
-          });
-
+          res.filestoreIds[0]
+          if(res&&res.filestoreIds&&res.filestoreIds.length>0){
+            res.filestoreIds.map(fileStoreId=>{
+              downloadReceiptFromFilestoreID(fileStoreId,mode)
+            })          
+          }else{
+            console.log("Error In Receipt Download");        
+          }         
         });
     })
   } catch (exception) {
     alert('Some Error Occured while downloading Receipt!');
   }
 }
+
+
+export const downloadBill = async (consumerCode ,tenantId) => {
+  const searchCriteria = {
+    consumerCode ,
+    tenantId
+  }
+  const FETCHBILL={
+    GET:{
+      URL:"egov-searcher/bill-genie/billswithaddranduser/_get",
+      ACTION: "_get",
+    }
+  }
+  const DOWNLOADRECEIPT = {
+      GET: {
+          URL: "/pdf-service/v1/_create",
+          ACTION: "_get",
+      },
+  };
+  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const queryStr = [
+            { key: "key", value: "consolidatedbill" },
+            { key: "tenantId", value: "pb" }
+        ]
+  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
+}
+

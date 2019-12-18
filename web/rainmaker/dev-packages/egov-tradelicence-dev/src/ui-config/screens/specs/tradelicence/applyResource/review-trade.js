@@ -7,6 +7,9 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
+import {
+  getQueryArg
+} from "egov-ui-framework/ui-utils/commons";
 
 import { convertEpochToDate, checkValueForNA } from "../../utils";
 
@@ -241,21 +244,21 @@ export const getReviewTrade = (isEditable = true) => {
         { jsonPath: "Licenses[0].tradeName"}
       ),
       reviewFromDate: getLabelWithValue(
-        { labelName: "From Date" },
+        { labelName: "From Date",labelKey : "TL_COMMON_FROM_DATE_LABEL" },
         {
           jsonPath: "Licenses[0].validFrom",
           callBack: convertEpochToDate
         }
       ),
       reviewToDate: getLabelWithValue(
-        { labelName: "To Date" },
+        { labelName: "To Date",labelKey : "TL_COMMON_TO_DATE_LABEL" },
         {
           jsonPath: "Licenses[0].validTo",
           callBack: convertEpochToDate
         }
       ),
       reviewStructureType: getLabelWithValue(
-        { labelName: "Structure Type" },
+        { labelName: "Structure Type" ,labelKey : "TL_STRUCTURE_TYPE"},
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
           localePrefix: {
@@ -268,7 +271,7 @@ export const getReviewTrade = (isEditable = true) => {
         }
       ),
       reviewSubStructureType: getLabelWithValue(
-        { labelName: "Structure Sub Type" },
+        { labelName: "Structure Sub Type", labelKey : "TL_STRUCTURE_SUB_TYPE" },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
           localePrefix: {
@@ -371,7 +374,13 @@ export const getReviewTrade = (isEditable = true) => {
           labelName: "Mohalla",
           labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
         },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name", callBack: checkValueForNA }
+        {
+          jsonPath:"Licenses[0].tradeLicenseDetail.address.locality.code",
+          localePrefix: {
+            moduleName: getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase(),
+            masterName: "REVENUE"
+          }, callBack: checkValueForNA
+        }
       ),
       reviewPincode: getLabelWithValue(
         {

@@ -2,6 +2,7 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { download } from "egov-common/ui-utils/commons"
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
@@ -12,7 +13,8 @@ import {
   setOwnerShipDropDownFieldChange,
   createEstimateData,
   validateFields,
-  } from "../../utils";
+  downloadAcknowledgementForm,
+} from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -42,7 +44,7 @@ const moveToSuccess = (LicenseData, dispatch) => {
 export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#custom-atoms-div");
   html2canvas(target, {
-    onclone: function(clonedDoc) {
+    onclone: function (clonedDoc) {
       // clonedDoc.getElementById("custom-atoms-footer")[
       //   "data-html2canvas-ignore"
       // ] = "true";
@@ -244,9 +246,9 @@ export const callBackForNext = async (state, dispatch) => {
     );
 
     get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory") &&
-    get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+      get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
+        "."
+      )[0] === "INDIVIDUAL"
       ? setMultiOwnerForApply(state, true)
       : setMultiOwnerForApply(state, false);
 
@@ -507,7 +509,7 @@ export const footer = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius:"inherit"
+        borderRadius: "inherit"
       }
     },
     children: {
@@ -538,7 +540,7 @@ export const footer = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "45px",
-        borderRadius:"inherit"
+        borderRadius: "inherit"
       }
     },
     children: {
@@ -568,7 +570,7 @@ export const footer = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "45px",
-        borderRadius:"inherit"
+        borderRadius: "inherit"
       }
     },
     children: {
@@ -620,7 +622,14 @@ export const footerReview = (
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      generateReceipt(state, dispatch, "receipt_download");
+
+
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString);
+      // generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
   };
@@ -634,7 +643,8 @@ export const footerReview = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber);
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
   };
@@ -705,20 +715,6 @@ export const footerReview = (
                   menu: downloadMenu
                 }
               }
-            },
-            printMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "MenuButton",
-              props: {
-                data: {
-                  label: "Print",
-                  leftIcon: "print",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: printMenu
-                }
-              }
             }
           },
           gridDefination: {
@@ -739,7 +735,7 @@ export const footerReview = (
                   minWidth: "180px",
                   height: "48px",
                   marginRight: "16px",
-                  borderRadius:"inherit"
+                  borderRadius: "inherit"
                 }
               },
               children: {
@@ -804,7 +800,7 @@ export const footerReview = (
               },
               onClickDefination: {
                 action: "page_change",
-                path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
+                path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
                 //path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
               },
               roleDefination: {
@@ -879,7 +875,11 @@ export const downloadPrintContainer = (
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      generateReceipt(state, dispatch, "receipt_download");
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString);
     },
     leftIcon: "receipt"
   };
@@ -893,7 +893,8 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber);
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
   };
@@ -918,13 +919,11 @@ export const downloadPrintContainer = (
       ];
       break;
     case "APPLIED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
-      break;
-    case "pending_approval":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
       break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];
@@ -940,11 +939,11 @@ export const downloadPrintContainer = (
   /** END */
 
   return {
-    leftdiv: {
+    rightdiv: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        style: { textAlign: "left", display: "flex" }
+        style: { textAlign: "right", display: "flex" }
       },
       children: {
         downloadMenu: {
@@ -958,20 +957,6 @@ export const downloadPrintContainer = (
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { marginLeft: 10 } },
               menu: downloadMenu
-            }
-          }
-        },
-        printMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: "Print",
-              leftIcon: "print",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10 } },
-              menu: printMenu
             }
           }
         }
