@@ -247,8 +247,12 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Building Plan Scrutiny is Processed",
+              labelName: "Building plan eDCR scrutiny is Accepted",
               labelKey: "EDCR_ACKNOWLEDGEMENT_SUCCESS_MESSAGE"
+            },
+            body: {
+              labelName:"This plan can now be used for creating permit application",
+              labelKey: "EDCR_ACKNOWLEDGEMENT_SUCCESS_COMMENT"
             },
             tailText: {
               labelName: "Building Plan Scrutiny Number",
@@ -289,8 +293,12 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Building Plan Scrutiny is Rejected",
+              labelName: "Building plan eDCR is Not Accepted",
               labelKey: "EDCR_REJECTION_MESSAGE"
+            },
+            body: {
+              labelName:"Please make corrections in the diagram and try again",
+              labelKey: "EDCR_REJECTION_COMMENT"
             }
           })
         }
