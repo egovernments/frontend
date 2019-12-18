@@ -57,6 +57,7 @@ export const searchForm = getCommonCard({
   }),
   searchFormContainer: getCommonContainer({
     ulb: getSelectField({
+      componentPath: "AutosuggestContainer",
       label: { labelName: "ULB", labelKey: "HR_ULB_LABEL" },
       placeholder: {
         labelName: "Select ULB",
@@ -70,6 +71,7 @@ export const searchForm = getCommonCard({
       },
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       props: {
+        menuPortalTarget:document.querySelector('body'),
         optionLabel: "name",
         optionValue: "code"
         // hasLocalization: false

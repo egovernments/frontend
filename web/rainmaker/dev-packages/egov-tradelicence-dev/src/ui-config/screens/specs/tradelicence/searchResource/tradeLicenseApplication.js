@@ -82,7 +82,8 @@ export const tradeLicenseApplication = getCommonCard({
     })
   }),
   appStatusAndToFromDateContainer: getCommonContainer({
-    applicationNo: getSelectField({
+    applicationStatus: getSelectField({
+      componentPath: "AutosuggestContainer",
       label: {
         labelName: "Application status",
         labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
@@ -98,9 +99,17 @@ export const tradeLicenseApplication = getCommonCard({
       },
       jsonPath: "searchScreen.status",
       sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+     
       gridDefination: {
         xs: 12,
         sm: 4
+      },
+      props: {
+        menuPortalTarget:document.querySelector('body'),
+        setDataInField: true,
+        labelsFromLocalisation: true
+
+        // hasLocalization: false
       }
     }),
 

@@ -102,6 +102,7 @@ export const UCSearchCard = getCommonCard({
     }),
     serviceType: {
       ...getSelectField({
+        componentPath: "AutosuggestContainer",
         label: {
           labelName: "Service Category",
           labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -120,7 +121,13 @@ export const UCSearchCard = getCommonCard({
           xs: 12,
           sm: 4
         },
-        sourceJsonPath: "searchScreenMdmsData.serviceCategory"
+        sourceJsonPath: "searchScreenMdmsData.serviceCategory",
+        props: {
+          menuPortalTarget:document.querySelector('body'),
+          setDataInField: true,
+        labelsFromLocalisation: true
+          // hasLocalization: false
+        }
       }),
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
