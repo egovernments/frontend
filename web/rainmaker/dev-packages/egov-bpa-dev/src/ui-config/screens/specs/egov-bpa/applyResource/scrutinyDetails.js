@@ -29,7 +29,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         labelKey: "BPA_APPLICATION_BUILDING_PERMIT_NO_LABEL"
       },
       {
-        jsonPath: "BPA.scrutinyDetails.edcrNumber"
+        jsonPath: "srutinyDetails.edcrNumber"
       }
     ),
 
@@ -45,7 +45,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
       props: {
           label: 'Uploaded Diagram',
           linkDetail : 'uploadedDiagram.dxf',
-          jsonPath: "BPA.scrutinyDetails.updatedDxfFile",
+          jsonPath: "srutinyDetails.updatedDxfFile",
       },
       type: "array"
     },
@@ -61,7 +61,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
     props: {
         label: 'Scrutiny Report',
         linkDetail: 'ScrutinyReport.pdf',
-        jsonPath: "BPA.scrutinyDetails.planReport",
+        jsonPath: "srutinyDetails.planReport",
       },
     type: "array"
     }
@@ -164,7 +164,7 @@ export const demolitiondetails = getCommonCard({
           labelName: "Demolition Area",
           labelKey: "BPA_APPLICATION_DEMOLITION_AREA_LABEL"
         },
-        jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.demolitionArea",
+        jsonPath: "srutinyDetails.planDetail.planInformation.demolitionArea",
         props: {
           disabled: 'true'
         }
@@ -250,7 +250,7 @@ export const proposedBuildingDetails = getCommonCard({
             },
             required: true,
             jsonPath:
-              "BPA.scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
+              "srutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
             props: {
               disabled: 'true'
             },
@@ -268,7 +268,7 @@ export const proposedBuildingDetails = getCommonCard({
               labelKey: "BPA_APPLICATION_NO_OF_FLOORS"
             },
             required: true,
-            jsonPath: "BPA.scrutinyDetails.planDetail.blocks[0].building.totalFloors",
+            jsonPath: "srutinyDetails.planDetail.blocks[0].building.totalFloors",
             props: {
               disabled: 'true'
             },
@@ -287,7 +287,7 @@ export const proposedBuildingDetails = getCommonCard({
             },
             required: true,
             jsonPath:
-              "BPA.scrutinyDetails.planDetail.blocks[0].building.buildingHeight",
+              "srutinyDetails.planDetail.blocks[0].building.buildingHeight",
             props: {
               disabled: 'true'
             },

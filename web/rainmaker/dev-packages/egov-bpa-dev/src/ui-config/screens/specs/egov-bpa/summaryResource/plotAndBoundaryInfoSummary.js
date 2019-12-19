@@ -142,7 +142,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
                         },
                         {
-                            jsonPath: "BPA.scrutinyDetails.planDetail.plot.area"
+                            jsonPath: "srutinyDetails.planDetail.plot.area"
                         }
                     ),
                     kathaNumber: getLabelWithValue(
@@ -151,7 +151,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.khataNo"
+                            jsonPath: "srutinyDetails.planDetail.planInformation.khataNo"
                         }
                     ),
                     holdingNumber: getLabelWithValue(
@@ -169,7 +169,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPA.scrutinyDetails.planDetail.planInformation.plotNo"
+                            jsonPath: "srutinyDetails.planDetail.planInformation.plotNo"
                         }
                     ),
                     cityTown: getLabelWithValue(
@@ -204,7 +204,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            sourceJsonPath: "BPA.scrutinyDetails.planDetail",
+            sourceJsonPath: "srutinyDetails.planDetail",
             prefixSourceJsonPath: 
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"

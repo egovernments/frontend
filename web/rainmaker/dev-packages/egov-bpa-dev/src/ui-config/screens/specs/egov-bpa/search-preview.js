@@ -301,7 +301,7 @@ const setSearchResponse = async (
   console.log(edcrRes, "sbdhjfbdsjbfkjbsdf");
   dispatch(
     prepareFinalObject(
-      `BPA.scrutinyDetails`,
+      `srutinyDetails`,
       edcrRes.edcrDetail[0]
     )
   );

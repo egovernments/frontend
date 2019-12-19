@@ -135,78 +135,60 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       state.screenConfiguration.preparedFinalObject,
       "BPAs[0].BPADetails.plotdetails.citytown"
     );
-    set(payload[0], "tenantId", tenantId.value);
-    set(payload[0], "action", status);
+
+    set(payload, "tenantId", tenantId.value);
+    set(payload, "action", status);
+    set(payload, "address", {});
+    set(payload, "additionalDetails", {});
+    set(payload, "units", []);
 
     // Get uploaded documents from redux
-    let reduxDocuments = get(
-      state,
-      "screenConfiguration.preparedFinalObject.documentsContract",
-      {}
-    );
-    handleDeletedCards(
-      payload[0],
-      "BPA.owners",
-      "id"
-    );
+    // let reduxDocuments = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.documentsContract",
+    //   {}
+    // );
+    // handleDeletedCards(
+    //   payload[0],
+    //   "BPA.owners",
+    //   "id"
+    // );
 
-    // Set owners & other documents
-    let ownerDocuments = [];
-    let otherDocuments = [];
-    jp.query(reduxDocuments, "$.*").forEach(doc => {
-      if (doc.documents && doc.documents.length > 0) {
-        if (doc.documentType === "OWNER") {
-          ownerDocuments = [
-            ...ownerDocuments,
-            {
-              tenantId: tenantId,
-              documentType: doc.documentSubCode
-                ? doc.documentSubCode
-                : doc.documentCode,
-              fileStoreId: doc.documents[0].fileStoreId
-            }
-          ];
-        } else if (!doc.documentSubCode) {
-          // SKIP BUILDING PLAN DOCS
-          otherDocuments = [
-            ...otherDocuments,
-            {
-              tenantId: tenantId,
-              documentType: doc.documentCode,
-              fileStoreId: doc.documents[0].fileStoreId
-            }
-          ];
-        }
-      }
-    });
+    // let documents = [];
+    // jp.query(reduxDocuments, "$.*").forEach(doc => {
+    //   doc.cards.forEach(card => {
+    //     if(card.required && card.dropDownValues && card.dropDownValues.menu ){
+    //       card.dropDownValues.menu.forEach(item => {
+    //         documents.push({documentType: item.code})
+    //       })
+    //     }
+    //   })
+    // });
 
-    set(
-      payload[0],
-      "BPA.additionalDetail.documents",
-      ownerDocuments
-    );
-    set(
-      payload[0],
-      "BPA.additionalDetail.documents",
-      otherDocuments
-    );
+    let documents = [
+      {"documentType": "OWNER.IDENTITYPROOF.VOTERID"}
+    ];
+    set(payload, "documents", documents);
 
     // Set Channel and Financial Year
     process.env.REACT_APP_NAME === "Citizen"
-      ? set(payload[0], "bpaDetails.channel", "CITIZEN")
-      : set(payload[0], "bpaDetails.channel", "COUNTER");
-    set(payload[0], "bpaDetails.financialYear", "2019-20");
+      ? set(payload[0], "BPA.channel", "CITIZEN")
+      : set(payload[0], "BPA.channel", "COUNTER");
+    set(payload[0], "BPA.financialYear", "2019-20");
 
     // Set Dates to Epoch
-    let owners = get(payload[0], "BPA.owners", []);
+    
+    let owners = get(payload, "owners", []);
     owners.forEach((owner, index) => {
       set(
-        payload[0],
-        `BPA.owners[${index}].dob`,
+        payload,
+        `owners[${index}].dob`,
         convertDateToEpoch(get(owner, "dob"))
       );
     });
+
     let response;
+
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
@@ -215,8 +197,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA : payload }
       );
-      console.log(response, "create response");
-      response = furnishNocResponse(response);
+      response = prepareOwnershipType(response);
       dispatch(prepareFinalObject("BPA", response.BPA));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
@@ -227,22 +208,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA: payload }
       );
-      response = furnishNocResponse(response);
+      response = prepareOwnershipType(response);
       dispatch(prepareFinalObject("BPA", response.BPA));
     }
     return { status: "success", message: response };
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
-
-    // Revert the changed pfo in case of request failure
-    let fireNocData = get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs",
-      []
-    );
-    fireNocData = furnishNocResponse({ FireNOCs: fireNocData });
-    dispatch(prepareFinalObject("FireNOCs", fireNocData.FireNOCs));
-
     return { status: "failure", message: error };
   }
 };
@@ -400,40 +371,18 @@ export const prepareNOCUploadData = (state, dispatch) => {
   dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
 };
 
-export const furnishNocResponse = response => {
+export const prepareOwnershipType = response => {
+  console.log(response);
   // Handle applicant ownership dependent dropdowns
-  let ownershipType = get(
+  let ownershipCategory = get(
     response,
-    "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType"
+    "BPA.ownerShipType"
   );
   set(
     response,
-    "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
-    ownershipType == undefined ? "SINGLE" : ownershipType.split(".")[0]
+    "BPA.ownershipCategory",
+    ownershipCategory == undefined ? "SINGLE" : ownershipType.split(".")[0]
   );
-
-  // Prepare UOMS and Usage Type Dropdowns in required format
-  let buildings = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
-  buildings.forEach((building, index) => {
-    let uoms = get(building, "uoms", []);
-    let uomMap = {};
-    uoms.forEach(uom => {
-      uomMap[uom.code] = `${uom.value}`;
-    });
-    set(
-      response,
-      `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap`,
-      uomMap
-    );
-
-    let usageType = get(building, "usageType");
-    set(
-      response,
-      `FireNOCs[0].fireNOCDetails.buildings[${index}].usageTypeMajor`,
-      usageType == undefined ? "" : usageType.split(".")[0]
-    );
-  });
-
   return response;
 };
 

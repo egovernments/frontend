@@ -548,7 +548,7 @@ export const applicantDetails = getCommonCard({
             labelName: "Select Owner Subtype",
             labelKey: "BPA_OWNER_SUB_TYPE_PLACEHOLDER"
           },
-          jsonPath: "BPA.ownerShipType",
+          jsonPath: "BPA.ownershipCategory",
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerShipCategory"

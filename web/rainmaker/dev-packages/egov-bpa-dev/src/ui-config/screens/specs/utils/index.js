@@ -2673,15 +2673,15 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 const riskType = (state, dispatch) => {
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPA.scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+    "srutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
   );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPA.scrutinyDetails.planDetail.plot.area"
+    "srutinyDetails.planDetail.plot.area"
   );
   let buildingBlocks = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPA.scrutinyDetails.planDetail.blocks"
+    "srutinyDetails.planDetail.blocks"
   );
   let blocks = buildingBlocks.map(item => {
     return item && item.building && item.building.buildingHeight;
@@ -2693,17 +2693,17 @@ const riskType = (state, dispatch) => {
     plotArea > 500 &&
     buildingHeight > 15
   ) {
-    scrutinyRiskType = "High";
+    scrutinyRiskType = "HIGH";
   } else if (
     occupancyType === "Residential" &&
     plotArea <= 500 &&
-    plotArea <= 300 &&
+    plotArea >= 300 &&
     buildingHeight <= 15 &&
-    buildingHeight <= 10
+    buildingHeight >= 10
   ) {
-    scrutinyRiskType = "Medium";
+    scrutinyRiskType = "MEDIUM";
   } else {
-    scrutinyRiskType = "Low";
+    scrutinyRiskType = "LOW";
   }
   dispatch(
     prepareFinalObject(
@@ -2779,13 +2779,13 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         if (tenantId.value === city) {
           let currOwnersArr = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPA.scrutinyDetails",
+            "srutinyDetails",
             []
           );
           currOwnersArr = scrutinyData[0];
           dispatch(
             prepareFinalObject(
-              `BPA.scrutinyDetails`,
+              `srutinyDetails`,
               currOwnersArr
             )
           );
