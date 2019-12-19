@@ -2270,8 +2270,8 @@ export const getTextToLocalMapping = label => {
       );
     case "Owner Name":
       return getLocaleLabels(
-        "Owner Name",
-        "TL_COMMON_TABLE_COL_OWN_NAME",
+        "Assigned To",
+        "BPA_COMMON_TABLE_COL_ASSIGN_TO",
         localisationLabels
       );
 
@@ -3258,5 +3258,23 @@ export const createBill = async (queryObject, dispatch) => {
       )
     );
     console.log(error, 'fetxh');
+  }
+};
+
+export const setNameOfUser = (action, state, dispatch) => {
+  let userInfo = JSON.parse(getUserInfo());
+  let { name } = userInfo;
+  if (name) {
+    dispatch(
+      prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.owners[0].name",
+        name
+      )
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.ownerName.props.disabled`,
+      true
+    );
   }
 };

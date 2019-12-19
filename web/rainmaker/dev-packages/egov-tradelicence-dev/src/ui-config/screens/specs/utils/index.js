@@ -1001,7 +1001,7 @@ const getToolTipInfo = (taxHead, LicenseData) => {
 };
 
 const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
-  if (Bill ) {
+  if (Bill) {
     const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
       return {
         name: {
@@ -1182,8 +1182,7 @@ const isApplicationPaid = currentStatus => {
       }
       if (
         states[i].actions &&
-        states[i].actions.filter(item => item.action === "PAY")
-          .length > 0
+        states[i].actions.filter(item => item.action === "PAY").length > 0
       ) {
         isPAID = true;
         break;
@@ -2282,8 +2281,11 @@ export const getTextToLocalMapping = label => {
     case "APPLIED":
       return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      return getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
-
+      return getLocaleLabels(
+        "Paid",
+        "WF_NEWTL_PENDINGAPPROVAL",
+        localisationLabels
+      );
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
     case "REJECTED":
@@ -2326,6 +2328,6 @@ export const getTextToLocalMapping = label => {
   }
 };
 
-export const checkValueForNA = (value) => {
+export const checkValueForNA = value => {
   return value ? value : "NA";
-}
+};
