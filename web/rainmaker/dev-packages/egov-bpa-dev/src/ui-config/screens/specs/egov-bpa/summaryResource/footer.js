@@ -1,19 +1,19 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { createUpdateNocApplication } from "../../../../../ui-utils/commons";
+import { createUpdateBpaApplication } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.scss";
 
-const updateNocApplication = async (state, dispatch) => {
-  let response = await createUpdateNocApplication(state, dispatch, "APPLY");
+const updateBpaApplication = async (state, dispatch) => {
+  let response = await createUpdateBpaApplication(state, dispatch, "APPLY");
   let applicationNumber = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
+    "screenConfiguration.preparedFinalObject.BPA.applicationNo"
   );
   let tenantId = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].tenantId"
+    "screenConfiguration.preparedFinalObject.BPAs[0].BPADetails.plotdetails.citytown.value"
   );
   if (get(response, "status", "") === "success") {
     const acknowledgementUrl =
@@ -51,7 +51,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: updateNocApplication
+      callBack: updateBpaApplication
     }
   }
 });

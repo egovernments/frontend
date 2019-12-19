@@ -121,7 +121,7 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
 export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let applicationId = get(
     state,
-    "screenConfiguration.preparedFinalObject.BPAs[0].id"
+    "screenConfiguration.preparedFinalObject.BPA.id"
   );
   let method = applicationId ? "UPDATE" : "CREATE";
 
@@ -197,8 +197,8 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA : payload }
       );
-      response = prepareOwnershipType(response);
-      dispatch(prepareFinalObject("BPA", response.BPA));
+      // response = prepareOwnershipType(response);
+      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
       response = await httpRequest(
@@ -208,8 +208,8 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA: payload }
       );
-      response = prepareOwnershipType(response);
-      dispatch(prepareFinalObject("BPA", response.BPA));
+      // response = prepareOwnershipType(response);
+      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
     }
     return { status: "success", message: response };
   } catch (error) {
@@ -722,7 +722,7 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   if (!applicationNo) {
     applicationNo = get(
       state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber",
+      "screenConfiguration.preparedFinalObject.BPA.applicationNo",
       null
     );
   }

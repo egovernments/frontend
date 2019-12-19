@@ -87,7 +87,7 @@ export const header = getCommonContainer({
   //applicationNumber: applicationNumberContainer()
   applicationNumber: {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-bpa",
     componentPath: "ApplicationNoContainer",
     props: {
       number: "NA"
