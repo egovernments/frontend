@@ -14,11 +14,7 @@ export const handlePdfShareEmail = (pdf2) => {
             var blobData = new Blob([pdf2.output('blob')], { type: 'application/pdf' })
 
             const config = {
-                bucketName: 'dss-project-bucket',
-                region: 'ap-south-1',
-                accessKeyId: 'AKIAUAXLRTC3KF53ZRH5',
-                secretAccessKey: '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',
-                ACL: "public-read"
+              
             }
             blobData.name = "dss" + ts + ".pdf"
             S3
@@ -42,11 +38,7 @@ export const handleImageShareEmail = (blobData) => {
     //         blobData.name = "dss" + ts + ".jpeg"
 
             const config = {
-                bucketName: 'dss-project-bucket',
-                region: 'ap-south-1',
-                accessKeyId: 'AKIAUAXLRTC3KF53ZRH5',
-                secretAccessKey: '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',
-                ACL: "public-read"
+             
             }
             S3
                 .uploadFile(blobData, config)
@@ -69,11 +61,7 @@ export const handleWhatsAppImageShare = (blobData) => {
     // blobData.name = "dss" + ts + ".jpeg"
 
             const config = {
-                bucketName: 'dss-project-bucket',
-                region: 'ap-south-1',
-                accessKeyId: 'AKIAUAXLRTC3KF53ZRH5',
-                secretAccessKey: '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',
-                ACL: "public-read"
+               
             }
             S3
                 .uploadFile(blobData, config)
@@ -97,11 +85,7 @@ export const handleWhatsAppPdfShare = (pdf2) => {
             var blobData = new Blob([pdf2.output('blob')], { type: 'application/pdf' })
 
             const config = {
-                bucketName: 'dss-project-bucket',
-                region: 'ap-south-1',
-                accessKeyId: 'AKIAUAXLRTC3KF53ZRH5',
-                secretAccessKey: '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',
-                ACL: "public-read"
+               
             }
             blobData.name = "dss" + ts + ".pdf"
             S3

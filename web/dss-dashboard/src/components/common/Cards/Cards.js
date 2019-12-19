@@ -24,6 +24,8 @@ import { APIStatus } from '../../../actions/apiStatus'
 import { handleWhatsAppImageShare } from '../../../utils/Share';
 import InfoIcon from '@material-ui/icons/Info';
 import { Tooltip } from '@material-ui/core';
+import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
+import APITransport from '../../../actions/apitransport/apitransport'
 
 const cardStyle = {
   backgroundColor: variables.widget_background,
@@ -73,8 +75,8 @@ class Cards extends Component {
   shareAsImage = () => {
     let { strings, title } = this.props;
     let div = document.getElementById('card' + this.props.id);
-    this.props.APITrans(true)
     var ts = Math.round((new Date()).getTime() / 1000);
+    var APITransport = this.props.APITransport
 
     domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
       .then(function (dataUrl) {
@@ -82,12 +84,27 @@ class Cards extends Component {
         blobData.name = (strings[title] || 'image') + ts + ".jpeg"
 
         try {
-          this.props.APITrans(false);
-          handleWhatsAppImageShare(blobData)
+          let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', blobData);
+          APITransport(fileUploadAPI)
         } catch{ }
       }.bind(this))
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.s3File != this.props.s3File) {
+      debugger
+      var fakeLink = document.createElement('a');
+      fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(this.props.s3File['url']));
+      fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+      fakeLink.setAttribute('target', '_blank');
+      fakeLink.click();
+    }
+
+  }
+
+  isMobileOrTablet = () => {
+    return (/(android|iphone|ipad|mobile)/i.test(navigator.userAgent));
+  }
   dataURItoBlob = (dataURI) => {
     var binary = atob(dataURI.split(',')[1]);
     var array = [];
@@ -138,7 +155,7 @@ class Cards extends Component {
           <ListItemText primary="Image" />
         </MenuItem>
         <MenuItem onClick={this.shareAsImage.bind(this)} className={classes.menuItem}>
-        <ListItemIcon className={classes.itemIcon}>
+          <ListItemIcon className={classes.itemIcon}>
             <SVG src={share} style={{ marginRight: '10px' }} >
             </SVG>
           </ListItemIcon>
@@ -162,11 +179,11 @@ class Cards extends Component {
             action={
               <div style={{ paddingLeft: '4px' }}>
                 <Tooltip title={strings[title] || title} classes={{ tooltip: classes.lightTooltip }} placement="top">
-                  <InfoIcon style={{ color: '#96989a',verticalAlign: '-webkit-baseline-middle',paddingTop:'3px' }} />
+                  <InfoIcon style={{ color: '#96989a', verticalAlign: '-webkit-baseline-middle', paddingTop: '3px' }} />
                 </Tooltip>
               </div>
             }
-            >
+          >
 
           </CardHeader>
           }
@@ -194,12 +211,16 @@ Cards.propTypes = {
 const mapStateToProps = (state) => {
   return {
     GFilterData: state.GFilterData,
-    strings: state.lang
+    strings: state.lang,
+    s3File: state.s3File
+
   }
 }
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     APITrans: APIStatus,
+    APITransport: APITransport,
+
   }, dispatch)
 }
 

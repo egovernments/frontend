@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
@@ -23,12 +23,14 @@ import download from '../../images/download.svg';
 import share from '../../images/share.svg';
 import { renderToString, } from 'react-dom/server'
 import FilterTable from '../Dashboard/download/filterTable';
-import { downloadAsImage, printDocument } from '../../utils/block';
+import { downloadAsImage, printDocumentShare } from '../../utils/block';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../utils/Share'
 import domtoimage from 'dom-to-image';
 import Variables from '../../styles/variables'
+import FileUploadAPI from '../../actions/fileUpload/fileUpload'
+import APITransport from '../../actions/apitransport/apitransport'
 
 const pdf = new jsPDF("p", "mm", "a1");
 pdf.scaleFactor = 3;
@@ -64,52 +66,76 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export function CustomizedMenus(props) {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [open, setOpen] = React.useState(false)
-    const [shareOpen, setShareOpen] = React.useState(false)
+class CustomizedMenus extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            anchorEl: null,
+            open: false,
+            shareOpen: false,
+        }
 
-    const handleClick = event => {
-        setAnchorEl(event.currentTarget);
+    }
+
+    // const[anchorEl, setAnchorEl] = React.useState(null);
+    // const[open, setOpen] = React.useState(false)
+    // const[shareOpen, setShareOpen] = React.useState(false)
+
+    handleClick = event => {
+        // setAnchorEl(event.currentTarget);
+        this.setState({
+            anchorEl: event.currentTarget
+        })
     };
-    const filterFunc = function(node) {
+    filterFunc = function (node) {
         if (node.id == 'divNotToPrint') return false;
         return true;
     };
-    const handleClick1 = event => {
-        setOpen(!open)
+    handleClick1 = event => {
+        // setOpen(!open)
+        this.setState({
+            open: !this.state.open
+        })
     };
 
-    const handleClick2 = event => {
-        setShareOpen(!shareOpen)
+    handleClick2 = event => {
+        // setShareOpen(!shareOpen)
+        this.setState({
+            shareOpen: !this.state.shareOpen
+        })
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    handleClose = () => {
+        this.setState({
+            anchorEl: null
+        })
     };
 
-    const downloadImage = () => {
-        props.APITrans(true)
-        downloadAsImage('dashboard').then(function (success) {
-            props.APITrans(false)
-            setAnchorEl(null);
+    downloadImage = () => {
+        this.props.APITrans(true)
+        downloadAsImage(this.props.fileName).then(function (success) {
+            this.props.APITrans(false)
+            // setAnchorEl(null);
         }.bind(this)).catch(function (err) {
             console.log(err);
-            setAnchorEl(null);
+            this.setState({
+                anchorEl: null
+            })
+
         }.bind(this))
 
     }
 
-    const renderTable = () => {
-        return renderToString(<FilterTable data={props.GFilterData} name={props.fileHeader || "Dashboard"} />)
+    renderTable = () => {
+        return renderToString(<FilterTable data={this.props.GFilterData} name={this.props.fileHeader || "Dashboard"} />)
     }
 
-    const downloadPDF = () => {
-        props.APITrans(true)
-        printDocument(renderTable(),props.fileName || 'DSS').then(function (pdfO) {
+    downloadPDF = () => {
+        this.props.APITrans(true)
+        printDocumentShare(this.renderTable(), this.props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
-            setAnchorEl(null);
+            // setAnchorEl(null);
             // pdfO.save();
 
             try {
@@ -117,94 +143,104 @@ export function CustomizedMenus(props) {
                 // pdf.deletePage(2)
                 // pdf.deletePage(1)
                 // pdf.addPage();
-                props.APITrans(false)
+                this.props.APITrans(false)
             } catch{ }
             // props.APITrans(false);
         }).catch(function (error) {
             console.log(error);
-            setAnchorEl(null);
+            this.setState({
+                anchorEl: null
+            })
         })
     }
 
-    const shareWhatsAppPDF = () => {
-        props.APITrans(true);
-        // const pdf1 = new jsPDF("p", "mm", "a1");
-        // pdf1.scaleFactor = 3;
-
-        printDocument(renderTable()).then(function (pdfO) {
-            // let element = document.getElementById("printFtable")
-            // element.parentNode.removeChild(element);
-            setAnchorEl(null);
-            // pdfO.save();
-
+    shareWhatsAppPDF() {
+        this.setState({
+            type: 'whatsapp'
+        })
+        var APITransport = this.props.APITransport
+        printDocumentShare(this.renderTable()).then(function (pdfO) {
+            // setAnchorEl(null);
+            console.log(APITransport)
             try {
-                props.APITrans(false);
-                handleWhatsAppPdfShare(pdfO)
+                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', pdfO.output('blob'));
+                APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
             console.log(error);
-            setAnchorEl(null);
+            this.setState({
+                anchorEl: null
+            })
         })
     }
 
-    const shareEmailPDF = () => {
-        props.APITrans(true);
-        // const pdf1 = new jsPDF("p", "mm", "a1");
-        // pdf1.scaleFactor = 3;
-
-        printDocument(renderTable()).then(function (pdfO) {
-            // let element = document.getElementById("printFtable")
-            // element.parentNode.removeChild(element);
-            setAnchorEl(null);
-            // pdfO.save();
-
-            try {
-                props.APITrans(false);
-                handlePdfShareEmail(pdfO)
-            } catch{ }
-        }).catch(function (error) {
-            console.log(error);
-            setAnchorEl(null);
+    shareWhatsAppImage() {
+        this.setState({
+            type: 'whatsapp'
         })
-    }
-    const shareEmailImage = () => {
-        props.APITrans(true);
-
         var ts = Math.round((new Date()).getTime() / 1000);
+        var APITransport = this.props.APITransport
 
         let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white',filter: filterFunc  })
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
             .then(function (dataUrl) {
-                var blobData = dataURItoBlob(dataUrl);
+                var blobData = this.dataURItoBlob(dataUrl);
                 blobData.name = "dss" + ts + ".jpeg"
 
                 try {
-                    props.APITrans(false);
-                    handleImageShareEmail(blobData)
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', blobData);
+                    APITransport(fileUploadAPI)
                 } catch{ }
             }.bind(this))
     }
 
-    const shareWhatsAppImage = () => {
-        props.APITrans(true);
+    shareEmailPDF() {
+        this.setState({
+            type: 'email'
+        })
+        var APITransport = this.props.APITransport
+
+        printDocumentShare(this.renderTable()).then(function (pdfO) {
+            // setAnchorEl(null);
+            try {
+                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', pdfO.output('blob'));
+                APITransport(fileUploadAPI)
+            } catch{ }
+        }).catch(function (error) {
+            console.log(error);
+            this.setState({
+                anchorEl: null
+            })
+        })
+    }
+
+    shareEmailImage() {
+        this.setState({
+            type: 'email'
+        })
 
         var ts = Math.round((new Date()).getTime() / 1000);
-
         let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: filterFunc  })
+        var APITransport = this.props.APITransport
+
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
             .then(function (dataUrl) {
-                var blobData = dataURItoBlob(dataUrl);
+                var blobData = this.dataURItoBlob(dataUrl);
                 blobData.name = "dss" + ts + ".jpeg"
 
                 try {
-                    props.APITrans(false);
-                    handleWhatsAppImageShare(blobData)
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', blobData);
+                    APITransport(fileUploadAPI)
                 } catch{ }
             }.bind(this))
     }
 
+    isMobileOrTablet = () => {
+        return (/(android|iphone|ipad|mobile)/i.test(navigator.userAgent));
+    }
 
-    const dataURItoBlob = (dataURI) => {
+
+    dataURItoBlob = (dataURI) => {
         var binary = atob(dataURI.split(',')[1]);
         var array = [];
         for (var i = 0; i < binary.length; i++) {
@@ -213,110 +249,133 @@ export function CustomizedMenus(props) {
         return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     }
 
-    return (
-        <div style={{ paddingLeft: '10px' }}>
-            <Button style={{ borderRadius: '2px', backgroundColor: props.bgColor, color: props.color }}
-                aria-controls="customized-menu"
-                aria-haspopup="true"
-                variant="contained"
-                // color="primary"
-                onClick={handleClick}
-            >
-                {props.type === 'filter' &&
-                    <FilterIcon></FilterIcon>
-                }
+    componentDidUpdate(prevProps) {
+        if (prevProps.s3File != this.props.s3File) {
+            var fakeLink = document.createElement('a');
+            if (this.state.type === 'whatsapp') {
+                fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(this.props.s3File['url']));
+                fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+                fakeLink.setAttribute('target', '_blank');
+                fakeLink.click();
+            }
+            if (this.state.type === 'email') {
+                fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(this.props.s3File['url']));
+                fakeLink.click();
+            }
+        }
 
-                {props.type === 'download' &&
-                    <MenuIcon></MenuIcon>
-                }
+    }
 
-            </Button>
-            <StyledMenu
-                id="customized-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
+    render() {
 
-                <StyledMenuItem button onClick={handleClick1}>
-                    <ListItemIcon style={{ width: '10px' }}>
-                        <SVG src={download} style={{ marginRight: '10px' }}>
-                        </SVG>
-                    </ListItemIcon>
-                    <ListItemText primary="Download" />
-                    {open ? <IconExpandLess /> : <IconExpandMore />}
-                </StyledMenuItem>
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                    <Divider />
-                    <List component="div" disablePadding>
-                        <StyledMenuItem button onClick={downloadImage.bind(this)}>
-                            <ListItemIcon>
-                                <ImageIcon style={{color: '#ff0000'}}/>
-                            </ListItemIcon>
-                            <ListItemText primary="Image" />
-                        </StyledMenuItem>
-                        <StyledMenuItem button onClick={downloadPDF.bind(this)}>
-                            <ListItemIcon>
-                                <PdfIcon style={{color: '#ff0000'}}/>
-                            </ListItemIcon>
-                            <ListItemText primary="PDF" />
-                        </StyledMenuItem>
-                    </List>
-                </Collapse>
 
-                <StyledMenuItem button onClick={handleClick2}>
-                    <ListItemIcon style={{ margin: '0px', padding: '0px' }}>
-                        <SVG src={share} style={{ marginRight: '10px' }}>
+        return (
+            <div style={{ paddingLeft: '10px' }}>
+                <Button style={{ borderRadius: '2px', backgroundColor: this.props.bgColor, color: this.props.color }}
+                    aria-controls="customized-menu"
+                    aria-haspopup="true"
+                    variant="contained"
+                    // color="primary"
+                    onClick={this.handleClick}
+                >
+                    {this.props.type === 'filter' &&
+                        <FilterIcon></FilterIcon>
+                    }
 
-                        </SVG>
-                    </ListItemIcon>
-                    <ListItemText primary="Share" />
-                    {shareOpen ? <IconExpandLess /> : <IconExpandMore />}
-                </StyledMenuItem>
-                <Collapse in={shareOpen} timeout="auto" unmountOnExit>
-                    <Divider />
-                    <List component="div" disablePadding>
-                        <StyledMenuItem button onClick={shareEmailPDF.bind(this)}>
-                            <ListItemIcon>
-                                <DraftsIcon style={{color:Variables.email}}/>
-                            </ListItemIcon>
-                            <ListItemText primary="PDF" />
-                        </StyledMenuItem>
-                        <StyledMenuItem button onClick={shareEmailImage.bind(this)}>
-                            <ListItemIcon>
-                                <DraftsIcon style={{color:Variables.email}}/>
-                            </ListItemIcon>
-                            <ListItemText primary="Image" />
-                        </StyledMenuItem>
-                        <StyledMenuItem button onClick={shareWhatsAppPDF.bind(this)}>
-                            <ListItemIcon>
-                                <WhatsappIcon style={{color:Variables.whatsApp}}/>
-                            </ListItemIcon>
-                            <ListItemText primary="PDF" />
-                        </StyledMenuItem>
-                        <StyledMenuItem button onClick={shareWhatsAppImage.bind(this)}>
-                            <ListItemIcon>
-                                <WhatsappIcon style={{color:Variables.whatsApp}}/>
-                            </ListItemIcon>
-                            <ListItemText primary="Image" />
-                        </StyledMenuItem>
+                    {this.props.type === 'download' &&
+                        <MenuIcon></MenuIcon>
+                    }
 
-                    </List>
-                </Collapse>
-            </StyledMenu>
+                </Button>
+                <StyledMenu
+                    id="customized-menu"
+                    anchorEl={this.state.anchorEl}
+                    keepMounted
+                    open={Boolean(this.state.anchorEl)}
+                    onClose={this.handleClose}
+                >
 
-        </div >
-    );
+                    <StyledMenuItem button onClick={this.handleClick1}>
+                        <ListItemIcon style={{ width: '10px' }}>
+                            <SVG src={download} style={{ marginRight: '10px' }}>
+                            </SVG>
+                        </ListItemIcon>
+                        <ListItemText primary="Download" />
+                        {this.state.open ? <IconExpandLess /> : <IconExpandMore />}
+                    </StyledMenuItem>
+                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                        <Divider />
+                        <List component="div" disablePadding>
+                            <StyledMenuItem button onClick={this.downloadImage.bind(this)}>
+                                <ListItemIcon>
+                                    <ImageIcon style={{ color: '#ff0000' }} />
+                                </ListItemIcon>
+                                <ListItemText primary="Image" />
+                            </StyledMenuItem>
+                            <StyledMenuItem button onClick={this.downloadPDF.bind(this)}>
+                                <ListItemIcon>
+                                    <PdfIcon style={{ color: '#ff0000' }} />
+                                </ListItemIcon>
+                                <ListItemText primary="PDF" />
+                            </StyledMenuItem>
+                        </List>
+                    </Collapse>
+
+                    <StyledMenuItem button onClick={this.handleClick2}>
+                        <ListItemIcon style={{ margin: '0px', padding: '0px' }}>
+                            <SVG src={share} style={{ marginRight: '10px' }}>
+
+                            </SVG>
+                        </ListItemIcon>
+                        <ListItemText primary="Share" />
+                        {this.state.shareOpen ? <IconExpandLess /> : <IconExpandMore />}
+                    </StyledMenuItem>
+                    <Collapse in={this.state.shareOpen} timeout="auto" unmountOnExit>
+                        <Divider />
+                        <List component="div" disablePadding>
+                            <StyledMenuItem button onClick={this.shareEmailPDF.bind(this)}>
+                                <ListItemIcon>
+                                    <DraftsIcon style={{ color: Variables.email }} />
+                                </ListItemIcon>
+                                <ListItemText primary="PDF" />
+                            </StyledMenuItem>
+                            <StyledMenuItem button onClick={this.shareEmailImage.bind(this)}>
+                                <ListItemIcon>
+                                    <DraftsIcon style={{ color: Variables.email }} />
+                                </ListItemIcon>
+                                <ListItemText primary="Image" />
+                            </StyledMenuItem>
+                            <StyledMenuItem button onClick={this.shareWhatsAppPDF.bind(this)}>
+                                <ListItemIcon>
+                                    <WhatsappIcon style={{ color: Variables.whatsApp }} />
+                                </ListItemIcon>
+                                <ListItemText primary="PDF" />
+                            </StyledMenuItem>
+                            <StyledMenuItem button onClick={this.shareWhatsAppImage.bind(this)}>
+                                <ListItemIcon>
+                                    <WhatsappIcon style={{ color: Variables.whatsApp }} />
+                                </ListItemIcon>
+                                <ListItemText primary="Image" />
+                            </StyledMenuItem>
+
+                        </List>
+                    </Collapse>
+                </StyledMenu>
+
+            </div >
+        );
+    }
 }
 
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
+    s3File: state.s3File
 });
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         APITrans: APIStatus,
+        APITransport: APITransport
     }, dispatch)
 }
 

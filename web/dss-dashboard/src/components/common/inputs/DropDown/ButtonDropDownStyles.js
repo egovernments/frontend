@@ -38,7 +38,7 @@ const styles = theme => ({
         // display: 'flex',
         '& div': {
             flex: 1,
-            minWidth:100,
+            minWidth:120,
             top: -4
         }
     },

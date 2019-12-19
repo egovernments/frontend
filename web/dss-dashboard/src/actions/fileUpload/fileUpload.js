@@ -16,7 +16,6 @@ export default class FileUploadAPI extends API {
     toString() {}
 
     processResponse(res) {
-        debugger
         super.processResponse(res);
         if (res) {
             console.log(res)

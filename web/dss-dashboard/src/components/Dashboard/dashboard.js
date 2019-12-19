@@ -239,6 +239,7 @@ class Dashboard extends Component {
 
   render() {
     let { classes, dashboardConfigData, GFilterData } = this.props;
+    let dashboardName= dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name
     
     return (<div id="divToPrint" className={classes.dashboard}>
       <div className={classes.actions}>
@@ -247,9 +248,10 @@ class Dashboard extends Component {
       </span>
         {isMobile && <div id="divNotToPrint" className={[classes.desktop, classes.posit].join(' ')}>
 
-          <Menu type="download" bgColor="white" color="black" fileHeader="SURE Dashboard"></Menu>
+          <Menu type="download" bgColor="white" color="black" fileHeader="SURE Dashboard" fileName={dashboardName}></Menu>
           <Button className={classes.btn1}
             onClick={this.handleFilters.bind(this)}
+            fileName={dashboardName}
           >
             <FilterIcon></FilterIcon>
           </Button>
@@ -257,8 +259,8 @@ class Dashboard extends Component {
         }
 
         {!isMobile && <div id="divNotToPrint" className={classes.acbtn}>
-          <CustomizedMenus key="download" fileName={"SURE Dashboard"} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard" />
-          <CustomizedShare key="share" fileName={"SURE Dashboard"} PDFDownloads={this.share.bind(this)} />
+          <CustomizedMenus key="download" fileName={dashboardName} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard" />
+          <CustomizedShare key="share" fileName={dashboardName} PDFDownloads={this.share.bind(this)} />
         </div>}
       </div>
 
