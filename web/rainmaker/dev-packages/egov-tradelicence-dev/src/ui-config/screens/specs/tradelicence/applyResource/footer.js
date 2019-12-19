@@ -83,7 +83,6 @@ export const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
@@ -188,21 +187,6 @@ export const callBackForNext = async (state, dispatch) => {
     } else {
       let ownersJsonPath =
         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainer.children";
-      // let owners = get(
-      //   state.screenConfiguration.screenConfig.apply,
-      //   ownersJsonPath,
-      //   []
-      // );
-      // for (var x = 0; x < owners.length; x++) {
-      //   if (
-      //     (owners[x].isDeleted === undefined ||
-      //       owners[x].isDeleted !== false) &&
-      //     !validateFields(
-      //       `${ownersJsonPath}[${x}].item${x}.children.cardContent.children.tradeUnitCardContainer.children`,
-      //       state,
-      //       dispatch
-      //     )
-      //   )
       if (!validateFields(ownersJsonPath, state, dispatch)) isFormValid = false;
     }
 
@@ -954,10 +938,10 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: "Download",
-              leftIcon: "cloud_download",
+              label: {labelName : "DOWNLOAD" , labelKey :"DOWNLOAD"},
+              // leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10 } },
+              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "200px" , color : "#FE7A51" } },
               menu: downloadMenu
             }
           }
