@@ -375,6 +375,9 @@ h6 span {
     padding-top: 5px;
 }
 
+.GF_Denomination{
+    max-width:100px;
+}
 .fa-info-circle {
     color: grey !important;
     font-size: 20px;

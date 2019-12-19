@@ -331,7 +331,7 @@ class GlobalFilter extends Component {
 
                         }
                         return (
-                            <div key={ro.label} className={classes.filterS}>
+                            <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
                                 <div className={classes.filterHead}>{ro.label}</div>
                                 {this.renderComponents(ro)}
                             </div>
