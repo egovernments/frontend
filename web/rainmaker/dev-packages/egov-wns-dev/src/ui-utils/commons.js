@@ -117,6 +117,28 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     }
 };
 
+export const getNamesFromMDMS = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/billing-service/taxheads/_search",
+            "_search",
+            queryObject
+        );
+        dispatch(toggleSpinner());
+        return response;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
 export const fetchBill = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
@@ -144,7 +166,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
             "_search",
             queryObject
         );
-       
+
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 try {
@@ -994,4 +1016,92 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
     }
 }
 
+export const getSWMyConnectionResults = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/sw-services/swc/_search",
+            "_search",
+            queryObject
+        );
+        if (response.SewerageConnections.length > 0) {
+            for (let i = 0; i < response.SewerageConnections.length; i++) {
+                response.SewerageConnections[i].service = "Sewerage"
+                try {
+                    const data = await httpRequest(
+                        "post",
+                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].connectionNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
+                        "_fetchbill",
+                        // queryObject
+                    );
+                    if (data && data !== undefined) {
+                        if (data.Bill !== undefined && data.Bill.length > 0) {
+                            response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                        }
+
+                    } else {
+                        response.SewerageConnections[i].due = 0
+                    }
+
+                } catch (err) {
+                    console.log(err)
+                    response.SewerageConnections[i].due = "-"
+                }
+            }
+            // });
+        }
+        dispatch(toggleSpinner());
+        return response;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+
+};
+
+export const downloadBill = (receiptQueryString, mode = "download") => {
+    const FETCHBILL = {
+        GET: {
+            URL: "/billing-service/bill/v2/_fetchbill",
+            ACTION: "_get",
+        },
+    };
+    const DOWNLOADBILL = {
+        GET: {
+            URL: "/pdf-service/v1/_create",
+            ACTION: "_get",
+        },
+    };
+
+    try {
+        httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+            const queryStr = [
+                { key: "key", value: "consolidatedbill" },
+                { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+            ]
+            httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                .then(res => {
+                    getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                        if (mode === 'download') {
+                            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                            win.focus();
+                        }
+                        else {
+                            printJS(fileRes[res.filestoreIds[0]])
+                        }
+                    });
+
+                });
+        })
+
+    } catch (exception) {
+        alert('Some Error Occured while downloading Bill!');
+    }
+}
 
