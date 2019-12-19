@@ -145,7 +145,12 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       "Licenses[0].tradeLicenseDetail.tradeUnits",
       null
     );
+    let structure = nullToNa(
+      get(response, "Licenses[0].tradeLicenseDetail.structureType", "NA").split(".")
+    );
 
+    data.structureType= getMessageFromLocalization("TL_"+structure[0]);
+   
     const transformedTradeData = tradeUnitsFromResponse.reduce(
       (res, curr) => {
         let tradeCategory = "NA";
@@ -213,9 +218,14 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       data.accessoriesList = response.Licenses[0].tradeLicenseDetail.accessories
         .map(item => {
           return `${getMessageFromLocalization(`TRADELICENSE_ACCESSORIESCATEGORY_${getTransformedLocale(item.accessoryCategory)}`)}(${
-            item.count ? item.count :"0"
+            item.uomValue ? item.uomValue:""
+          }-${
+            item.uom ? item.uom:""
+          }/${
+            item.count ? item.count:"0"
           })`;
         })
+  
         .reduce((pre, cur) => {
           return pre.concat(", " + cur);
         });

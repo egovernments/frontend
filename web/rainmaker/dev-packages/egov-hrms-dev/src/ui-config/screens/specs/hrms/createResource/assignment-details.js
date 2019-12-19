@@ -136,6 +136,7 @@ const assignmentDetailsCard = {
           },
           department: {
             ...getSelectField({
+              componentPath: "AutosuggestContainer",
               label: {
                 labelName: "Department",
                 labelKey: "HR_DEPT_LABEL"
@@ -148,6 +149,7 @@ const assignmentDetailsCard = {
               jsonPath: "Employee[0].assignments[0].department",
               sourceJsonPath: "createScreenMdmsData.common-masters.Department",
               props: {
+                menuPortalTarget:document.querySelector('body'),
                 className: "hr-generic-selectfield",
                 optionValue: "code",
                 optionLabel: "name"
@@ -161,6 +163,7 @@ const assignmentDetailsCard = {
           },
           designation: {
             ...getSelectField({
+              componentPath: "AutosuggestContainer",
               label: { labelName: "Designation", labelKey: "HR_DESG_LABEL" },
               placeholder: {
                 labelName: "Select Designation",
@@ -170,6 +173,7 @@ const assignmentDetailsCard = {
               jsonPath: "Employee[0].assignments[0].designation",
               sourceJsonPath: "createScreenMdmsData.common-masters.Designation",
               props: {
+                menuPortalTarget:document.querySelector('body'),
                 className: "hr-generic-selectfield",
                 optionValue: "code",
                 optionLabel: "name"
