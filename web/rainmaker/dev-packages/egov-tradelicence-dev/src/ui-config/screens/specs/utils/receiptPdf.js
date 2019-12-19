@@ -1,8 +1,6 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import _ from "lodash";
-import { downloadPDFFileUsingBase64, printPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons";
-
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 let tableborder = {
@@ -617,21 +615,20 @@ const getCertificateData = (transformedData, ulbLogo) => {
                     image: ulbLogo,
                     width: 50,
                     height: 61.25,
-                    alignment: "center"
+                    alignment: "left"
                   },
                   {
                     text: transformedData.corporationName,
                     style: "receipt-logo-header",
-                    margin: [0, 10, 0, 0]
+                    margin: [20, -65, 0, 0]
                   },
                   {
-                    text: `${transformedData.corporationAddress}\nContact : ${
-                      transformedData.corporationContact
-                    }\nWebsite : ${
-                      transformedData.corporationWebsite
-                    }\nEmail : ${transformedData.corporationEmail}`,
+                    text: `${transformedData.corporationAddress}
+                    Contact : ${transformedData.corporationContact}
+                    Email : ${transformedData.corporationEmail}
+                    Website : ${transformedData.corporationWebsite}`,
                     style: "receipt-logo-sub-text",
-                    margin: [0, 8, 0, 0]
+                    margin: [0, 0, 0, 0]
                   },
                   {
                     text: "TRADE LICENSE CERTIFICATE",
@@ -700,7 +697,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
         ]
       },
       {
-        style: "tl-certificate-data",
+        style: "tl-certificate-data-2",
         columns: [
           {
             width: 160,
@@ -762,6 +759,19 @@ const getCertificateData = (transformedData, ulbLogo) => {
             width: "*",
             text: transformedData.tradeTypeCertificate
           }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Structure Type"
+          },
+          {
+            width: "*",
+            text: transformedData.structureType
+           }
         ]
       },
       {
@@ -853,17 +863,17 @@ const getCertificateData = (transformedData, ulbLogo) => {
     //define all the styles here
     styles: {
       "pt-reciept-citizen-header": {
-        fontSize: 14,
+        fontSize: 12,
         margin: [0, 24, 0, 0], //left top right bottom
         color: "#1E1E1E"
       },
       "tl-certificate-data": {
-        fontSize: 14,
-        margin: [0, 40, 0, 0], //left top right bottom
+        fontSize: 12,
+        margin: [0, 30, 0, 0], //left top right bottom
         color: "#1E1E1E"
       },
       "tl-certificate-data-2": {
-        fontSize: 14,
+        fontSize: 12,
         margin: [0, 8, 0, 0], //left top right bottom
         color: "#1E1E1E"
       },
@@ -909,7 +919,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       "receipt-logo-sub-text": {
         color: "#656565",
         fontFamily: "Roboto",
-        fontSize: 14,
+        fontSize: 12,
         letterSpacing: 0.74
       },
       "receipt-logo-sub-header": {
@@ -922,7 +932,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       "receipt-footer": {
         color: "#484848",
         fontSize: 8,
-        margin: [10, -25, 5, 5]
+        margin: [10, -75, 5, 5]
       },
       "receipt-no": {
         color: "#484848",
@@ -930,7 +940,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       },
       "tl-certificate-footer": {
         fontSize: 14,
-        margin: [0, 50, 0, 0], //left top right bottom
+        margin: [0, 35, 0, 0], //left top right bottom
         color: "#1E1E1E"
       }
     }
@@ -938,7 +948,8 @@ const getCertificateData = (transformedData, ulbLogo) => {
   return tlCertificateData;
 };
 
-const generateReceipt = async (state, dispatch, type) => {
+const generateReceipt = async (type, state) => {
+  //const state = store.getState();
   let data1 = _.get(
     state.screenConfiguration.preparedFinalObject,
     "applicationDataForReceipt",
@@ -989,39 +1000,21 @@ const generateReceipt = async (state, dispatch, type) => {
   switch (type) {
     case "certificate_download":
       let certificate_data = getCertificateData(transformedData, ulbLogo);
-      if (certificate_data)  {
-        let pdfData = pdfMake.createPdf(certificate_data);
-        if (window.appOverrides && window.appOverrides.validateForm)
-            window.appOverrides.validateForm("TLCertificatePrint", {pdfData, transformedData, certificate_data})
-        downloadPDFFileUsingBase64(pdfData, `certificate_${transformedData.licenseNumber || transformedData.applicationNumber}.pdf`)
-      } 
+      certificate_data &&
+        pdfMake.createPdf(certificate_data).download("tl_certificate.pdf");
       break;
     case "certificate_print":
       certificate_data = getCertificateData(transformedData, ulbLogo);
-      if (certificate_data)  {
-        let pdfData = pdfMake.createPdf(certificate_data);
-        if (window.appOverrides && window.appOverrides.validateForm)
-            window.appOverrides.validateForm("TLCertificatePrint", {pdfData, transformedData, certificate_data})
-        printPDFFileUsingBase64(pdfData, `certificate_${transformedData.licenseNumber || transformedData.applicationNumber}.pdf`)
-      } 
+      certificate_data && pdfMake.createPdf(certificate_data).print();
       break;
     case "receipt_download":
       let receipt_data = getReceiptData(transformedData, ulbLogo);
-      if (receipt_data)  {
-        let pdfData = pdfMake.createPdf(receipt_data);
-        if (window.appOverrides && window.appOverrides.validateForm)
-            window.appOverrides.validateForm("TLReceiptDownload", {pdfData, transformedData, receipt_data})
-        downloadPDFFileUsingBase64(pdfData, `receipt_${transformedData.licenseNumber || transformedData.applicationNumber}.pdf`)
-      } 
+      receipt_data &&
+        pdfMake.createPdf(receipt_data).download("tl_receipt.pdf");
       break;
     case "receipt_print":
       receipt_data = getReceiptData(transformedData, ulbLogo);
-      if (receipt_data)  {
-        let pdfData = pdfMake.createPdf(receipt_data);
-        if (window.appOverrides && window.appOverrides.validateForm)
-            window.appOverrides.validateForm("TLReceiptPrint", {pdfData, transformedData, receipt_data})
-        printPDFFileUsingBase64(pdfData, `receipt_${transformedData.licenseNumber || transformedData.applicationNumber}.pdf`)
-      } 
+      receipt_data && pdfMake.createPdf(receipt_data).print();
       break;
     default:
       break;
