@@ -29,7 +29,6 @@ import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import { appSearchMockData } from './searchMockJson';
-import { createApp } from './createMock'
 
 
 
@@ -132,19 +131,17 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       "BPA",
       []
     );
-    let tenantId = get(
+    const tenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      "citiesByModule.citizenTenantId",
-      getTenantId()
+      "BPAs[0].BPADetails.plotdetails.citytown"
     );
-    set(payload[0], "tenantId", tenantId);
-    set(payload[0], "BPA.action", status);
-    //payload.tenantId = tenantId;
+    set(payload[0], "tenantId", tenantId.value);
+    set(payload[0], "action", status);
 
     // Get uploaded documents from redux
     let reduxDocuments = get(
       state,
-      "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+      "screenConfiguration.preparedFinalObject.documentsContract",
       {}
     );
     handleDeletedCards(
@@ -209,7 +206,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
-    let payload1 = createApp;
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
@@ -217,7 +213,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         "bpa-services/bpa/appl/_create",
         "",
         [],
-        { BPA : payload1 }
+        { BPA : payload }
       );
       console.log(response, "create response");
       response = furnishNocResponse(response);

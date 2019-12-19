@@ -11,7 +11,7 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getDetailsForOwner } from "../../utils";
+import { getBpaDetailsForOwner } from "../../utils";
 import get from "lodash/get";
 //   import "./index.css";
 
@@ -64,7 +64,7 @@ const commonApplicantInformation = () => {
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch, fieldInfo) => {
-              getDetailsForOwner(state, dispatch, fieldInfo);
+              getBpaDetailsForOwner(state, dispatch, fieldInfo);
             }
           }
         },

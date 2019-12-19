@@ -767,7 +767,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
     console.log(e);
   }
 };
-/*
+
 export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
   try {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
@@ -912,7 +912,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
     dispatch(toggleSnackbar(true, e.message, "info"));
   }
 };
-*/
+
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
@@ -947,14 +947,14 @@ export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
-          documentsArr.push({
-            name: item,
-            required: true,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-            statement: getStatementForDocType(item)
-          });
-          return documentsArr;
-        }, [])
+        documentsArr.push({
+          name: item,
+          required: true,
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          statement: getStatementForDocType(item)
+        });
+        return documentsArr;
+      }, [])
       : [];
   return documentsArr;
 };
@@ -966,10 +966,10 @@ const getTaxValue = item => {
     ? item.amount
       ? item.amount
       : item.debitAmount
-      ? -Math.abs(item.debitAmount)
-      : item.crAmountToBePaid
-      ? item.crAmountToBePaid
-      : 0
+        ? -Math.abs(item.debitAmount)
+        : item.crAmountToBePaid
+          ? item.crAmountToBePaid
+          : 0
     : 0;
 };
 
@@ -1000,12 +1000,12 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.taxHeadCode.split("-")[0],
               LicenseData
             ) && {
-              value: getToolTipInfo(
-                item.taxHeadCode.split("-")[0],
-                LicenseData
-              ),
-              key: getToolTipInfo(item.taxHeadCode.split("-")[0], LicenseData)
-            }
+                value: getToolTipInfo(
+                  item.taxHeadCode.split("-")[0],
+                  LicenseData
+                ),
+                key: getToolTipInfo(item.taxHeadCode.split("-")[0], LicenseData)
+              }
           });
       } else {
         item.taxHeadCode &&
@@ -1220,15 +1220,15 @@ export const createEstimateData = async (
     estimateData = payload
       ? isPAID
         ? payload &&
-          payload.Payments &&
-          payload.Payments.length > 0 &&
-          getEstimateData(
-            payload.Payments[0].paymentDetails[0].bill,
-            isPAID,
-            LicenseData
-          )
+        payload.Payments &&
+        payload.Payments.length > 0 &&
+        getEstimateData(
+          payload.Payments[0].paymentDetails[0].bill,
+          isPAID,
+          LicenseData
+        )
         : payload &&
-          getEstimateData(payload.billResponse.Bill[0], false, LicenseData)
+        getEstimateData(payload.billResponse.Bill[0], false, LicenseData)
       : [];
   }
   estimateData = estimateData || [];
@@ -2508,7 +2508,7 @@ export const getLabelOnlyValue = (value, props = {}) => {
   };
 };
 
-export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
+export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
   try {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const ownerNo = get(
@@ -2722,29 +2722,26 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       ""
     );
 
-    const tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "citiesByModule.citizenTenantId.value"
-    );
-    if (!scrutinyNo || !scrutinyNo.match(getPattern("MobileNo"))) {
+    // const tenantId = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "citiesByModule.citizenTenantId.value"
+    // );
+    if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
       dispatch(
         toggleSnackbar(
           true,
           {
             labelName: "Incorrect Scrutiny Number!",
-            labelKey: "Incorrect Scrutiny Number!"
+            labelKey: "BPA_INCORRECT_SCRUTINY_NUMBER"
           },
           "error"
         )
       );
       return;
     }
-    // let payload = scrutinyDetailsMockJson;
-    // payload = payload[0].body.edcrDetail;
-    // console.log(payload);
     let payload = await edcrHttpRequest(
       "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + scrutinyNo + "&tenantId=jupiter",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + scrutinyNo + "&tenantId=pb.amritsar",
       {}
     );
     payload = payload.edcrDetail;
@@ -2761,15 +2758,15 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           )
         );
       } else {
-        const userInfo = payload && JSON.parse(JSON.stringify(payload));
+        const scrutinyData = payload && JSON.parse(JSON.stringify(payload));
 
-        if (userInfo && userInfo.planDetail && userInfo.planDetail.applicationDate) {
-          userInfo.planDetail.applicationDate = convertDateTimeToEpoch(userInfo.planDetail.applicationDate);
-          userInfo.lastModifiedDate = convertDateTimeToEpoch(
-            userInfo.lastModifiedDate
+        if (scrutinyData && scrutinyData.planDetail && scrutinyData.planDetail.applicationDate) {
+          scrutinyData.planDetail.applicationDate = convertDateTimeToEpoch(scrutinyData.planDetail.applicationDate);
+          scrutinyData.lastModifiedDate = convertDateTimeToEpoch(
+            scrutinyData.lastModifiedDate
           );
-          userInfo.pwdExpiryDate = convertDateTimeToEpoch(
-            userInfo.pwdExpiryDate
+          scrutinyData.pwdExpiryDate = convertDateTimeToEpoch(
+            scrutinyData.pwdExpiryDate
           );
         };
 
@@ -2777,31 +2774,29 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           state.screenConfiguration.preparedFinalObject,
           "BPAs[0].BPADetails.plotdetails.citytown"
         );
-        const city = userInfo[0].tenantId;
-        if(tenantId && city){
+        const city = scrutinyData[0].tenantId;
+
+        if (tenantId.value === city) {
           let currOwnersArr = get(
             state.screenConfiguration.preparedFinalObject,
             "BPA.scrutinyDetails",
             []
           );
-          currOwnersArr = userInfo[0];
+          currOwnersArr = scrutinyData[0];
           dispatch(
             prepareFinalObject(
               `BPA.scrutinyDetails`,
               currOwnersArr
             )
           );
-          // freezeAppType(state, dispatch);
-          // occupancy(state, dispatch);
-          // appDate(state, dispatch);
           riskType(state, dispatch);
-        }else {
+        } else {
           dispatch(
             toggleSnackbar(
               true,
               {
-                labelName: "Not Authorised for next steps",
-                labelKey: "Not Authorised for next steps"
+                labelName: `Scrutiny number ${scrutinyNo} is from ${city}`,
+                labelKey: `Scrutiny number ${scrutinyNo} is from ${city}`
               },
               "error"
             )
@@ -3026,35 +3021,35 @@ export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
     case "Floor Description":
-    return getLocaleLabels(
+      return getLocaleLabels(
         "Floor Description",
         "BPA_COMMON_TABLE_COL_FLOOR_DES",
         localisationLabels
-    );
+      );
     case "Occupancy/Sub Occupancy":
-    return getLocaleLabels(
+      return getLocaleLabels(
         "Occupancy/Sub Occupancy",
         "BPA_COMMON_TABLE_COL_OCCUP",
         localisationLabels
-    );
+      );
     case "Buildup Area":
-    return getLocaleLabels(
+      return getLocaleLabels(
         "Buildup Area",
         "BPA_COMMON_TABLE_COL_BUILD_AREA",
         localisationLabels
-    );
+      );
     case "Floor Area":
-    return getLocaleLabels(
+      return getLocaleLabels(
         "Floor Area",
         "BPA_COMMON_TABLE_COL_FLOOR_AREA",
         localisationLabels
-    );
+      );
     case "Carpet Area":
-    return getLocaleLabels(
+      return getLocaleLabels(
         "Carpet Area",
         "BPA_COMMON_TABLE_COL_CARPET_AREA",
         localisationLabels
-    );
+      );
     case "Application No":
       return getLocaleLabels(
         "Application No",
@@ -3182,10 +3177,10 @@ export const applyForm = (state, dispatch) => {
     "search"
   );
 
-  if(isTradeDetailsValid){
+  if (isTradeDetailsValid) {
     dispatch(prepareFinalObject("BPAs", []));
     const applyUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/apply` : `/egov-bpa/apply`;
+      process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/apply` : `/egov-bpa/apply`;
     dispatch(setRoute(applyUrl));
     city(state, dispatch, tenantId);
   }
@@ -3245,7 +3240,7 @@ export const fetchData = async (action, state, dispatch) => {
   // }
 };
 
-export const createBill = async (queryObject,dispatch) => {
+export const createBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
@@ -3262,6 +3257,6 @@ export const createBill = async (queryObject,dispatch) => {
         "error"
       )
     );
-    console.log(error,'fetxh');
+    console.log(error, 'fetxh');
   }
 };

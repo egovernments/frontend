@@ -199,8 +199,8 @@ const callBackForNext = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.BPA.scrutinyDetails.planDetail.blocks[0].building.floors",
       []
   );
-    //let index = 0;
-    let data = response.map((item, index) => ({
+
+    let tableData = response.map((item, index) => ({
       [getTextToLocalMapping("Floor Description")]: getFloorDetail(index),
       [getTextToLocalMapping("Level")]: index,
       [getTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
@@ -213,7 +213,7 @@ const callBackForNext = async (state, dispatch) => {
         "apply",
         "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
         "props.data",
-        data
+        tableData
       )
     );
   }
@@ -406,7 +406,7 @@ const callBackForNext = async (state, dispatch) => {
         // getMdmsData(state, dispatch);
         // prepareDocumentsUploadData(state, dispatch);
       }
-      if (activeStep === 21) {
+      if (activeStep === 2) {
         let response = await createUpdateBpaApplication(
           state,
           dispatch,
