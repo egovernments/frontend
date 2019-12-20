@@ -3,6 +3,7 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
+import {download} from "egov-common/ui-utils/commons"
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -720,4 +721,77 @@ export const footerReview = (
       }
     }
   });
+};
+
+export const downloadPrintContainer = (
+  action,
+  state,
+  dispatch,
+  status
+) => {
+  /** MenuButton data based on status */
+  let downloadMenu = [];
+  let receiptDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        {
+          key: "consumerCodes",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "tenantId"
+          )
+        }
+      ];
+      download(receiptQueryString);
+    },
+    leftIcon: "receipt"
+  };
+  switch (status) {
+    case "PENDINGDOCVERIFICATION":
+    case "PENDINGAPPROVAL":
+    case "REJECTED":
+    case "APPROVED":
+      downloadMenu = [receiptDownloadObject];
+      break;
+    default:
+      break;
+  }
+
+  return {
+    rightdiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+        downloadMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "DOWNLOAD" , labelKey :"DOWNLOAD"},
+              // leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "200px" , color : "#FE7A51" } },
+              menu: downloadMenu
+            }
+          }
+        }
+      },
+      // gridDefination: {
+      //   xs: 12,
+      //   sm: 6
+      // }
+    }
+  }
 };

@@ -13,6 +13,7 @@ import {
   setBusinessServiceDataToLocalStorage,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
+import { downloadPrintContainer } from "./applyResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -331,6 +332,26 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     // loadReceiptGenerationData(applicationNumber, tenantId);
     addressDestruct(action, state, dispatch);
   }
+
+  const status = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Licenses[0].status"
+  );
+
+  const printCont = downloadPrintContainer(action, state, dispatch, status);
+  if(process.env.REACT_APP_NAME === "Employee")
+  {
+    switch (status) {
+      case "PENDINGDOCVERIFICATION":
+      case "PENDINGAPPROVAL":
+      case "REJECTED":
+      case "APPROVED":
+        set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", printCont);
+        break;
+      default:
+        break;
+    }
+  }
 };
 
 let titleText = "";
@@ -502,7 +523,7 @@ const screenConfig = {
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end", display: "block" }
+                style: { justifyContent: "flex-end"}
               },
               gridDefination: {
                 xs: 12,
@@ -510,9 +531,7 @@ const screenConfig = {
                 align: "right"
               },
               children:
-                process.env.REACT_APP_NAME === "Employee"
-                  ? {}
-                  : {
+                {
                       word1: {
                         ...getCommonTitle(
                           {
