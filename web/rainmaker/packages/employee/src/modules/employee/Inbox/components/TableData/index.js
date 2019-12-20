@@ -49,19 +49,7 @@ class TableData extends Component {
           {
               value: "ALL",
               label: "All",
-          },
-          {
-              value: "India",
-              label: "IN",
-          },
-          {
-              value: "USA",
-              label: "US",
-          },
-          {
-              value: "Australia",
-              label: "AUS",
-          },
+          }
       ]
       },
       moduleFilter: {
@@ -70,19 +58,7 @@ class TableData extends Component {
           {
               value: "ALL",
               label: "All",
-          },
-          {
-              value: "India",
-              label: "IN",
-          },
-          {
-              value: "USA",
-              label: "US",
-          },
-          {
-              value: "Australia",
-              label: "AUS",
-          },
+          }
       ]
       },
       statusFilter: {
@@ -91,19 +67,7 @@ class TableData extends Component {
           {
               value: "ALL",
               label: "All",
-          },
-          {
-              value: "India",
-              label: "IN",
-          },
-          {
-              value: "USA",
-              label: "US",
-          },
-          {
-              value: "Australia",
-              label: "AUS",
-          },
+          }
       ]
       }
     },
@@ -114,9 +78,7 @@ class TableData extends Component {
     moduleName: "",
     color: "",
   };
-  handleChangeFilter=(filterName,value)=>{
-    console.log(value,'filter');
-    
+  handleChangeFilter=(filterName,value)=>{   
     const filter={...this.state.filter}
     filter[filterName].selectedValue=value
         this.setState({
