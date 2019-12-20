@@ -976,46 +976,6 @@ export const createMeterReading = async (dispatch, body) => {
     );
 }
 
-export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
-    const FETCHCONNECTIONDETAILS = {
-        GET: {
-            URL: "/ws-services/wc/_search",
-            ACTION: "_post",
-        },
-    };
-    const DOWNLOADCONNECTIONDETAILS = {
-        GET: {
-            URL: "/pdf-service/v1/_create",
-            ACTION: "_get",
-        },
-    };
-
-    try {
-        httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-            const queryStr = [
-                { key: "key", value: "ws-consolidatedacknowlegment" },
-                { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-            ]
-            httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-                .then(res => {
-                    getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                        if (mode === 'download') {
-                            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                            win.focus();
-                        }
-                        else {
-                            printJS(fileRes[res.filestoreIds[0]])
-                        }
-                    });
-
-                });
-        })
-
-    } catch (exception) {
-        alert('Some Error Occured while downloading!');
-    }
-}
-
 export const getSWMyConnectionResults = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
@@ -1105,3 +1065,80 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
     }
 }
 
+export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
+    const FETCHCONNECTIONDETAILS = {
+        GET: {
+            URL: "/ws-services/wc/_search",
+            ACTION: "_post",
+        },
+    };
+    const DOWNLOADCONNECTIONDETAILS = {
+        GET: {
+            URL: "/pdf-service/v1/_create",
+            ACTION: "_get",
+        },
+    };
+
+    const FETCHSWCONNECTIONDETAILS = {
+        GET: {
+            URL: "/sw-services/swc/_search",
+            ACTION: "_post",
+        },
+    };
+    const service = getQueryArg(window.location.href, "service")
+
+    switch (service) {
+        case 'WATER':
+            try {
+                httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+                    const queryStr = [
+                        { key: "key", value: "ws-consolidatedacknowlegment" },
+                        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+                    ]
+                    httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                        .then(res => {
+                            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                                if (mode === 'download') {
+                                    var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                                    win.focus();
+                                }
+                                else {
+                                    printJS(fileRes[res.filestoreIds[0]])
+                                }
+                            });
+
+                        });
+                })
+
+            } catch (exception) {
+                alert('Some Error Occured while downloading!');
+            }
+            break;
+        case 'SEWERAGE':
+            try {
+                httpRequest("post", FETCHSWCONNECTIONDETAILS.GET.URL, FETCHSWCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+                    const queryStr = [
+                        { key: "key", value: "ws-consolidatedsewerageconnection" },
+                        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+                    ]
+                    httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                        .then(res => {
+                            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                                if (mode === 'download') {
+                                    var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                                    win.focus();
+                                }
+                                else {
+                                    printJS(fileRes[res.filestoreIds[0]])
+                                }
+                            });
+
+                        });
+                })
+
+            } catch (exception) {
+                alert('Some Error Occured while downloading!');
+            }
+            break;
+    }
+}
