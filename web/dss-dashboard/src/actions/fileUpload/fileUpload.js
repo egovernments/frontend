@@ -3,6 +3,7 @@
  */
 import API from '../apis/api';
 import C from '../constants';
+import CONFIGS from '../../config/configs'
 
 export default class FileUploadAPI extends API {
     constructor(timeout = 2000, path, reqBody, queryParams = null) {
@@ -32,6 +33,9 @@ export default class FileUploadAPI extends API {
     getFormData() {
         var data = new FormData();
         data.append("file", this.body);
+        data.append("tenantId", 'pb.amritsar');
+        data.append("module", 'dashboard');
+        data.append("tag", '123452');
         return data;
 
     }
@@ -39,16 +43,15 @@ export default class FileUploadAPI extends API {
         return this.codeKey;
     }
     apiEndPoint() {
-        return `${super.apiEndPoint()}/${this.path}/files`
+        return CONFIGS.FILE_UPLOAD
     }
 
     getHeaders() {
         return {
             headers: {
                 "Content-Type": "multipart/form-data",
-                'Accept': 'application/json',
                 "type": "formData",
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                "Cache-Control":"no-cache"
             }
         }
     }

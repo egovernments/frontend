@@ -92,7 +92,6 @@ class Cards extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.s3File != this.props.s3File) {
-      debugger
       var fakeLink = document.createElement('a');
       fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(this.props.s3File['url']));
       fakeLink.setAttribute('data-action', 'share/whatsapp/share');
