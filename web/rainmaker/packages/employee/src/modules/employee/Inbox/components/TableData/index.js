@@ -11,6 +11,7 @@ import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import filter from "lodash/filter";
 import orderBy from "lodash/orderBy";
+import uniq from "lodash/uniq";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
@@ -152,18 +153,17 @@ class TableData extends Component {
       businessServiceData.map((item, index) => {
         return item.business;
       });
-
-    
+    const uniqueModules = uniq(modules)   
     let localitymap =[];
      try {
-      for (var i = 0; i < modules.length; i++) {
+      for (var i = 0; i < uniqueModules.length; i++) {
         try {
           const requestBody  = {
             searchCriteria : {
               "referenceNumber" :  businessIds
             }
           }
-          const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${modules[i]}/_get`, "search", [] , requestBody);
+          const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [] , requestBody);
           localitymap = [...moduleWiseLocality.Localities];
         }catch(e){
           console.log("error");
