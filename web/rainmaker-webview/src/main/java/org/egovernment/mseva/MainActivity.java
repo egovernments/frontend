@@ -193,8 +193,8 @@ public class MainActivity extends AppCompatActivity {
         //Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
-		webView.addJavascriptInterface(proxy, "mSewaApp");
-//		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
+//		webView.addJavascriptInterface(proxy, "mSewaApp");
+		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
 		String versionName = "";
 		int versionCode = 0;
@@ -369,29 +369,29 @@ public class MainActivity extends AppCompatActivity {
             loadView(path,false);
         }
 
-		Button pay = (Button) findViewById(R.id.pay);
-		pay.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v)  {
-				Toast.makeText(getBaseContext(), "Paying!" , Toast.LENGTH_SHORT ).show();
-				Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
-				sendPaymentIntent.setClassName("com.example.pospocapp", "com.example.pospocapp.MainActivity");
-				//it should be come from web applicaiton
-				sendPaymentIntent.putExtra("instrumentType","CASH");
-				sendPaymentIntent.putExtra("paymentAmount","CASH");
-				sendPaymentIntent.putExtra("customerName","Murali M");
-				sendPaymentIntent.putExtra("customerMobile","6360807028");
-				sendPaymentIntent.putExtra("message","Payment details");
-				sendPaymentIntent.putExtra("emailId","murali.m@goodworklabs.com");
-				sendPaymentIntent.putExtra("billNumber","12123");
-				sendPaymentIntent.putExtra("consumerCode","12132");
-				sendPaymentIntent.putExtra("businessService","PT");
-				sendPaymentIntent.putExtra("collectorName","Murali");
-				sendPaymentIntent.putExtra("collectorId","12132");
-				sendPaymentIntent.putExtra("instrumentDate","12123123123");
-				sendPaymentIntent.putExtra("instrumentNumber","12132");
-				startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
-			}
-		});
+//		Button pay = (Button) findViewById(R.id.pay);
+//		pay.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v)  {
+//				Toast.makeText(getBaseContext(), "Paying!" , Toast.LENGTH_SHORT ).show();
+//				Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
+//				sendPaymentIntent.setClassName("com.example.pospocapp", "com.example.pospocapp.MainActivity");
+//				//it should be come from web applicaiton
+//				sendPaymentIntent.putExtra("instrumentType","CASH");
+//				sendPaymentIntent.putExtra("paymentAmount","CASH");
+//				sendPaymentIntent.putExtra("customerName","Murali M");
+//				sendPaymentIntent.putExtra("customerMobile","6360807028");
+//				sendPaymentIntent.putExtra("message","Payment details");
+//				sendPaymentIntent.putExtra("emailId","murali.m@goodworklabs.com");
+//				sendPaymentIntent.putExtra("billNumber","12123");
+//				sendPaymentIntent.putExtra("consumerCode","12132");
+//				sendPaymentIntent.putExtra("businessService","PT");
+//				sendPaymentIntent.putExtra("collectorName","Murali");
+//				sendPaymentIntent.putExtra("collectorId","12132");
+//				sendPaymentIntent.putExtra("instrumentDate","12123123123");
+//				sendPaymentIntent.putExtra("instrumentNumber","12132");
+//				startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
+//			}
+//		});
 
     }
 
@@ -482,6 +482,7 @@ public class MainActivity extends AppCompatActivity {
 
 			//Use this to open your apps page on google play store app :: href="rate:android"
 		} else if (url.startsWith("share:")) {
+
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
 			intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
