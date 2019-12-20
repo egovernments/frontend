@@ -15,9 +15,6 @@ let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId")
 const service = getQueryArg(window.location.href, "service")
 const searchResults = async (action, state, dispatch, consumerCode) => {
-  /**
-   * This methods holds the api calls and their responses for both water and sewerage service which are required in view bill page
-   */
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: consumerCode }]
   let queryObjectForConsumptionDetails = [{ key: "tenantId", value: tenantId }, { key: "connectionNos", value: consumerCode }]
   let viewBillTooltip = [], data;

@@ -147,13 +147,13 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item xs={3}>
                           <Label
-                            labelName={item.due}
+                            labelName={item.due} onClick={() => this.getViewBillDetails(item)}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
                         </Grid>
                       </Grid>
-                      <div onClick={() => this.getViewBillDetails(item)}>
+                      <div>
                         {item.due === "-" ?
                           (<div></div>)
                           : item.due === 0 ?
@@ -161,7 +161,7 @@ class MyConnections extends React.Component {
                               labelKey="WS_COMMON_PAID_LABEL"
                               style={{ color: '#008000', textTransform: 'uppercase', fontWeight: 400 }}
                             /></div>) :
-                            (<div className="linkStyle">
+                            (<div className="linkStyle" onClick={() => this.getViewBillDetails(item)}>
                               <LabelContainer
                                 labelKey="CS_COMMON_PAY"
                                 style={{

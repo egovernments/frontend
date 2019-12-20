@@ -100,14 +100,12 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       } else {
         payloadData.WaterConnection[0].connectionExecutionDate = ' '
       }
-
       if (payloadData.WaterConnection[0].property.propertyType !== null || payloadData.WaterConnection[0].property.propertyType !== undefined) {
         const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadData.WaterConnection[0].property.propertyType) + ")]"
         let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
         const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
         payloadData.WaterConnection[0].property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
       }
-
       const lat = payloadData.WaterConnection[0].property.address.locality.latitude ? payloadData.WaterConnection[0].property.address.locality.latitude : ' '
       const long = payloadData.WaterConnection[0].property.address.locality.longitude ? payloadData.WaterConnection[0].property.address.locality.longitude : ' '
       payloadData.WaterConnection[0].property.address.locality.locationOnMap = `${lat} ${long}`
