@@ -135,10 +135,40 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       state.screenConfiguration.preparedFinalObject,
       "BPAs[0].BPADetails.plotdetails.citytown"
     );
-
+    const address = {
+      "tenantId": "pb",
+      "doorNo": "23-pb-1212",
+      "plotNo": "1725",
+      "landmark": "temple",
+      "city": "hyd",
+      "district": "hyd",
+      "region": "hyd",
+      "state": "telangana",
+      "country": "india",
+      "pincode": "500158",
+      "additionDetails": "jsdhfhfdg",
+      "buildingName": "quewyr",
+      "street": "qwerqwer",
+      "action": "INITIATE",
+      "locality": {
+              "code": "SUN178",
+              "name": "Mohalla Singh kia - Area2",
+              "label": "Locality",
+              "latitude": null,
+              "longitude": null,
+              "area": "Area2",
+              "boundaryNum": 1,
+              "children": []
+          },
+      "geoLocation": {
+          "latitude": 31.62234,
+          "longitude": 74.87534,
+          "additionalDetails": {}
+      }
+  };
     set(payload, "tenantId", tenantId.value);
     set(payload, "action", status);
-    set(payload, "address", {});
+    set(payload, "address", address);
     set(payload, "additionalDetails", {});
     set(payload, "units", []);
 
@@ -232,32 +262,29 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
   let documentsList = [];
   documents.forEach(doc => {
-    let code = doc.code.split(".")[0];
+    let code = doc.code;
     doc.dropDownValues = [];
     documentsDropDownValues.forEach(value => {
-      if (code === value.code.split(".")[0]) {
+      let values = value.code.slice(0, code.length);
+      if (code === values) {
         doc.hasDropdown = true;
         doc.dropDownValues.push(value);
       }
     });
     documentsList.push(doc);
   });
-  documents = documentsList;
-
-  // documents = documents.filter(item => {
-  //   return item.active;
-  // });
+  const bpaDocuments = documentsList;
   let documentsContract = [];
   let tempDoc = {};
-  documents.forEach(doc => {
+  
+  bpaDocuments.forEach(doc => {
     let card = {};
-    card["code"] = 'Documents',//doc.documentType;
-    card["title"] = 'Documents',//doc.documentType;
+    card["code"] = doc.code.split('.')[0];
+    card["title"] = doc.code.split('.')[0];
     card["cards"] = [];
-    tempDoc[doc.documentType] = card;
+    tempDoc[doc.code.split('.')[0]] = card;
   });
-
-  documents.forEach(doc => {
+  bpaDocuments.forEach(doc => {
     let card = {};
     card["name"] = doc.code;
     card["code"] = doc.code;
@@ -270,17 +297,27 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
         return item.active;
       });
       dropDownValues.menu = dropDownValues.menu.map(item => {
-        return { code: item.code, label: getTransformedLocale(item.code) };
+        return { code: item.code, label: item.code };
       });
       card["dropDownValues"] = dropDownValues;
     }
-    tempDoc[doc.documentType].cards.push(card);
+    tempDoc[doc.code.split('.')[0]].cards.push(card);
   });
-
+  
   Object.keys(tempDoc).forEach(key => {
     documentsContract.push(tempDoc[key]);
   });
-  dispatch(prepareFinalObject("documentsContract", documentsContract));
+  console.log(documentsContract, "gspdibfiusbdfisdfub");
+  let documentDetailsContract = [], nocDetailsContract = []
+  documentsContract.forEach(doc => {
+    if(doc.code == "NOC"){
+      nocDetailsContract.push(doc);
+    }else{
+      documentDetailsContract.push(doc);
+    }
+  })
+  dispatch(prepareFinalObject("documentsContract", documentDetailsContract));
+  dispatch(prepareFinalObject("nocDocumentsContract", nocDetailsContract));
 };
 
 
