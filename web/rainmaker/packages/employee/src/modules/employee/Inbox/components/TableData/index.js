@@ -6,19 +6,14 @@ import InboxData from "../Table";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import { withStyles } from "@material-ui/core/styles";
-import { Icon } from "components";
-import TextField from "@material-ui/core/TextField";
-// import _ from "lodash";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import filter from "lodash/filter";
 import orderBy from "lodash/orderBy";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import Filter from "../Filter";
 
@@ -39,29 +34,6 @@ const getWFstatus = (status) => {
   }
 };
 
-const prepareInboxDataRows = (data) => {
-  if (isEmpty(data)) return [];
-  return data.map((item) => {
-    var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
-    let dataRows = [
-      { text: get(item, "moduleName", "--"), subtext: `CS_COMMON_INBOX_${item.businessService.toUpperCase()}` },
-      { text: item.businessId },
-      {
-        text: item.state ? (
-          <Label label={`WF_${item.businessService.toUpperCase()}_${item.state.state}`} defaultLabel={getWFstatus(item.state.state)} />
-        ) : (
-          "NA"
-        ),
-      },
-      { text: item.assigner ? item.assigner.name : "NA" },
-      { text: item.assignee ? item.assignee.name : "NA" },
-      { text: Math.round(sla), badge: true },
-      { historyButton: true },
-    ];
-    return dataRows;
-  });
-};
-
 const styles = (theme) => ({
   textColorPrimary: {
     color: "red",
@@ -76,6 +48,73 @@ class TableData extends Component {
     inboxData: [{ headers: [], rows: [] }],
     moduleName: "",
     color: "",
+  };
+
+  prepareInboxDataRows = async (data) => {
+    const { toggleSnackbarAndSetText } = this.props;
+    if (isEmpty(data)) return [];
+    const businessIds = data.map((item) => {
+      return item.businessId;
+    });
+    const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+    const modules =
+      businessServiceData &&
+      businessServiceData.map((item, index) => {
+        return item.business;
+      });
+
+    
+    let localitymap =[];
+     try {
+      for (var i = 0; i < modules.length; i++) {
+        try {
+          const requestBody  = {
+            searchCriteria : {
+              "referenceNumber" :  businessIds
+            }
+          }
+          const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${modules[i]}/_get`, "search", [] , requestBody);
+          localitymap = [...moduleWiseLocality.Localities];
+        }catch(e){
+          console.log("error");
+        }       
+      }
+    } catch (e) {
+      toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: "Locality Empty!",
+          labelKey: "Locality Empty!",
+        },
+        "error"
+      );
+    }
+    
+    return data.map((item) => {   
+      const locality = localitymap.find(locality => {
+        return locality.referencenumber === item.businessId;
+      }) 
+      var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
+      let dataRows = [
+        { text: item.businessId, subtext: `CS_COMMON_INBOX_${item.businessService.toUpperCase()}` },
+        { text:  locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000"/> : <Label label={"NA"} color="#000000" />},
+        {
+          text: item.state ? (
+            <Label
+              label={`WF_${item.businessService.toUpperCase()}_${item.state.state}`}
+              defaultLabel={getWFstatus(item.state.state)}
+              color="#000000"
+            />
+          ) : (
+            "NA"
+          ),
+        },
+        { text: item.assignee ? <Label label={item.assignee.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> },
+        { text: Math.round(sla), badge: true },
+        { historyButton: true },
+      ];
+      return dataRows;
+    });
   };
 
   handleChange = (event, value) => {
@@ -117,19 +156,19 @@ class TableData extends Component {
       );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
 
-      const assignedDataRows = prepareInboxDataRows(assignedData);
-      const allDataRows = prepareInboxDataRows(allData);
+      const assignedDataRows = await this.prepareInboxDataRows(assignedData);
+      const allDataRows = await this.prepareInboxDataRows(allData);
 
       let headersList = [
-        "WF_INBOX_HEADER_MODULE_SERVICE",
-        "WF_INBOX_HEADER_TASK_ID",
+        "WF_INBOX_HEADER_APPLICATION_NO",
+        "WF_INBOX_HEADER_LOCALITY",
         "WF_INBOX_HEADER_STATUS",
-        "WF_INBOX_HEADER_ASSIGNED_BY",
+        // "WF_INBOX_HEADER_ASSIGNED_BY",
         "WF_INBOX_HEADER_ASSIGNED_TO",
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;
-      inboxData[0].rows = allDataRows;
+      inboxData[0].rows = assignedDataRows;
 
       const taskCount = allDataRows.length;
       const overSla = filter(responseData.ProcessInstances, (item) => item.businesssServiceSla < 0).length;
@@ -140,12 +179,12 @@ class TableData extends Component {
         { head: overSla, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
       );
 
-      tabData.push({ label: "COMMON_INBOX_TAB_ALL", dynamicArray: [allDataRows.length] });
       tabData.push({ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [assignedDataRows.length] });
+      tabData.push({ label: "COMMON_INBOX_TAB_ALL", dynamicArray: [allDataRows.length] });
 
       inboxData.push({
         headers: headersList,
-        rows: assignedDataRows,
+        rows: allDataRows,
       });
       this.setState({ inboxData, taskboardData, tabData });
     } catch (e) {
@@ -169,8 +208,8 @@ class TableData extends Component {
         };
       });
 
-      tabData[0] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
-      tabData[1] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
+      tabData[0] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
+      tabData[1] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
 
       this.setState({
         inboxData: filteredData,
@@ -183,34 +222,34 @@ class TableData extends Component {
     const { InboxData } = this.props;
     let { tabData } = this.state;
     let filteredData = [];
-    if(label === "WF_TOTAL_NEARING_SLA" ){
+    if (label === "WF_TOTAL_NEARING_SLA") {
       filteredData = InboxData.map((item, index) => {
         return {
           headers: item.headers,
           rows: item.rows.filter((eachRow) => {
-            4 < eachRow[5].text && 8 >= eachRow[5].text;
+            4 < eachRow[4].text && 8 >= eachRow[4].text;
           }),
         };
-      }); 
-    }else if(label === "WF_ESCALATED_SLA" ){
-      filteredData = InboxData.map((item, index) => {
-        return {
-          headers: item.headers,
-          rows: item.rows.filter((eachRow) => {
-            8 < eachRow[5].text && 12 >= eachRow[5].text;
-          }),
-        };
-      }); 
-    }else{
-      filteredData = InboxData
-    }
-    tabData[0] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[0].rows.length] };
-    tabData[1] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[1].rows.length] };
-
-      this.setState({
-        inboxData: filteredData,
-        tabData,
       });
+    } else if (label === "WF_ESCALATED_SLA") {
+      filteredData = InboxData.map((item, index) => {
+        return {
+          headers: item.headers,
+          rows: item.rows.filter((eachRow) => {
+            8 < eachRow[4].text && 12 >= eachRow[4].text;
+          }),
+        };
+      });
+    } else {
+      filteredData = InboxData;
+    }
+    tabData[0] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length]};
+    tabData[1] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length]  };
+
+    this.setState({
+      inboxData: filteredData,
+      tabData,
+    });
 
     this.setState({
       color: baseColor,
@@ -246,29 +285,7 @@ class TableData extends Component {
               );
             })}
           </Tabs>
-          <div className="inbox-filter">
-            <Select value={this.state.moduleName} displayEmpty onChange={this.onModuleFilter}>
-              <MenuItem value="" disabled>
-                <Label label="CS_COMMON_INBOX_MODULE_ALL" />
-              </MenuItem>
-              <MenuItem value={"NewTL"}>
-                <Label label="CS_COMMON_INBOX_NEWTL" />
-              </MenuItem>
-              <MenuItem value={"PGR"}>
-                <Label label="CS_COMMON_INBOX_PGR" />
-              </MenuItem>
-              <MenuItem value={"PT"}>
-                <Label label="CS_COMMON_INBOX_PT" />
-              </MenuItem>
-              <MenuItem value={"FIRENOC"}>
-                <Label label="CS_COMMON_INBOX_FIRENOC" />
-              </MenuItem>
-              <MenuItem value={"BPAREG"}>
-                <Label label="CS_COMMON_INBOX_BPAREG" />
-              </MenuItem>
-            </Select>
-          </div>
-          <InboxData data={inboxData[value]} />
+        <InboxData data={inboxData[value]} />
         </div>
       </div>
     );
