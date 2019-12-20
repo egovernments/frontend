@@ -20,6 +20,7 @@ import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+import Filter from "../Filter";
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -223,8 +224,10 @@ class TableData extends Component {
       <div className="col-sm-12">
         <div>
           <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
+          <Filter inboxData={inboxData}></Filter>
           {/* <TextField value={"search"} />
-          <Icon action="custom" name="filter" onClick={onPopupOpen} style={{ cursor: "pointer" }} /> */}
+          */}
+          {/* <Icon action="custom" name="filter" onClick={onPopupOpen} style={{ cursor: "pointer" }} />  */}
         </div>
 
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
