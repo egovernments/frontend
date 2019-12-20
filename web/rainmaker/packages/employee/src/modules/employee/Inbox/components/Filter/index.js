@@ -5,34 +5,16 @@ import "./index.css";
 
 
 
-const Filter = ({inboxData}) => {
-    console.log(inboxData,'inboxData');
+const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
     return (
-
         <div className="row">
             <div className="col-md-3">
                 <DropDown
+                    onChange={(e, index, value) => { handleChangeFilter('moduleFilter', value) }}
                     floatingLabelText="Module"
                     className="filter-fields"
-                    dropDownData={[
-                        {
-                            value: "ALL",
-                            label: "All",
-                        },
-                        {
-                            value: "India",
-                            label: "IN",
-                        },
-                        {
-                            value: "USA",
-                            label: "US",
-                        },
-                        {
-                            value: "Australia",
-                            label: "AUS",
-                        },
-                    ]}
-                    value={'ALL'}
+                    dropDownData={filter.moduleFilter.dropdownData}
+                    value={filter.moduleFilter.selectedValue}
                     underlineStyle={{
                         position: "absolute",
                         bottom: -1,
@@ -43,27 +25,13 @@ const Filter = ({inboxData}) => {
             </div>
             <div className="col-md-3">
                 <DropDown
+                    onChange={(e, index, value) => {
+                        handleChangeFilter('localityFilter', value)
+                    }}
                     floatingLabelText="Locality"
                     className="filter-fields"
-                    dropDownData={[
-                        {
-                            value: "ALL",
-                            label: "All",
-                        },
-                        {
-                            value: "India",
-                            label: "IN",
-                        },
-                        {
-                            value: "USA",
-                            label: "US",
-                        },
-                        {
-                            value: "Australia",
-                            label: "AUS",
-                        },
-                    ]}
-                    value={'ALL'}
+                    dropDownData={filter.localityFilter.dropdownData}
+                    value={filter.localityFilter.selectedValue}
                     underlineStyle={{
                         position: "absolute",
                         bottom: -1,
@@ -76,25 +44,9 @@ const Filter = ({inboxData}) => {
                 <DropDown
                     floatingLabelText="Status"
                     className="filter-fields"
-                    dropDownData={[
-                        {
-                            value: "ALL",
-                            label: "All",
-                        },
-                        {
-                            value: "India",
-                            label: "IN",
-                        },
-                        {
-                            value: "USA",
-                            label: "US",
-                        },
-                        {
-                            value: "Australia",
-                            label: "AUS",
-                        },
-                    ]}
-                    value={'ALL'}
+                    dropDownData={filter.statusFilter.dropdownData}
+                    onChange={(e, index, value) => { handleChangeFilter('statusFilter', value) }}
+                    value={filter.statusFilter.selectedValue}
                     underlineStyle={{
                         position: "absolute",
                         bottom: -1,
@@ -104,7 +56,7 @@ const Filter = ({inboxData}) => {
                 />
             </div>
             <div className="col-md-3">
-                <div className="rainmaker-displayInline" style={{ cursor: "pointer", marginRight: 5, paddingTop: '30px' }}>
+                <div className="rainmaker-displayInline" onClick={clearFilter} style={{ cursor: "pointer", marginRight: 5, paddingTop: '30px' }}>
                     <Label label="CLEAR ALL" color="#fe7a51" fontSize="15px" />
                 </div>
             </div>

@@ -42,6 +42,71 @@ const styles = (theme) => ({
 
 class TableData extends Component {
   state = {
+    filter: {
+      localityFilter: {
+        selectedValue: 'ALL',
+        dropdownData: [
+          {
+              value: "ALL",
+              label: "All",
+          },
+          {
+              value: "India",
+              label: "IN",
+          },
+          {
+              value: "USA",
+              label: "US",
+          },
+          {
+              value: "Australia",
+              label: "AUS",
+          },
+      ]
+      },
+      moduleFilter: {
+        selectedValue: 'ALL',
+        dropdownData: [
+          {
+              value: "ALL",
+              label: "All",
+          },
+          {
+              value: "India",
+              label: "IN",
+          },
+          {
+              value: "USA",
+              label: "US",
+          },
+          {
+              value: "Australia",
+              label: "AUS",
+          },
+      ]
+      },
+      statusFilter: {
+        selectedValue: 'ALL',
+        dropdownData: [
+          {
+              value: "ALL",
+              label: "All",
+          },
+          {
+              value: "India",
+              label: "IN",
+          },
+          {
+              value: "USA",
+              label: "US",
+          },
+          {
+              value: "Australia",
+              label: "AUS",
+          },
+      ]
+      }
+    },
     value: 0,
     tabData: [],
     taskboardData: [],
@@ -49,7 +114,32 @@ class TableData extends Component {
     moduleName: "",
     color: "",
   };
-
+  handleChangeFilter=(filterName,value)=>{
+    console.log(value,'filter');
+    
+    const filter={...this.state.filter}
+    filter[filterName].selectedValue=value
+        this.setState({
+          filter
+        })
+      }
+      clearFilter=()=>{
+        const filter= {
+          localityFilter: {
+            selectedValue: 'ALL',
+            dropdownData: [...this.state.filter.localityFilter.dropdownData]
+          },
+          moduleFilter: {
+            selectedValue: 'ALL',
+            dropdownData: [...this.state.filter.moduleFilter.dropdownData]
+          },
+          statusFilter: {
+            selectedValue: 'ALL',
+            dropdownData: [...this.state.filter.statusFilter.dropdownData]
+          }
+        }
+        this.setState({filter});
+      }
   prepareInboxDataRows = async (data) => {
     const { toggleSnackbarAndSetText } = this.props;
     if (isEmpty(data)) return [];
@@ -257,13 +347,14 @@ class TableData extends Component {
   };
 
   render() {
-    const { value, taskboardData, tabData, inboxData, moduleName } = this.state;
+    const { value, taskboardData, tabData, inboxData, moduleName,filter } = this.state;
     const { classes, onPopupOpen } = this.props;
+    const {handleChangeFilter,clearFilter} =this;
     return (
       <div className="col-sm-12">
         <div>
           <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
-          <Filter inboxData={inboxData}></Filter>
+          <Filter handleChangeFilter={handleChangeFilter} clearFilter={clearFilter} filter={filter}></Filter>
           {/* <TextField value={"search"} />
           */}
           {/* <Icon action="custom" name="filter" onClick={onPopupOpen} style={{ cursor: "pointer" }} />  */}

@@ -14,24 +14,12 @@ const iconStyle = {
 
 class Inbox extends Component {
   state = {
-    filter: {
-      localityFilter: {
-        selectedValue: 'ALL',
-        dropdownData: []
-      },
-      moduleFilter: {
-        selectedValue: 'ALL',
-        dropdownData: []
-      },
-      statusFilter: {
-        selectedValue: 'ALL',
-        dropdownData: []
-      }
-    },
     actionList: [],
     hasWorkflow: false,
     filterPopupOpen: false
   };
+
+ 
   componentWillReceiveProps(nextProps) {
     const { menu } = nextProps;
     const workflowList = menu && menu.filter((item) => item.name === "rainmaker-common-workflow");
