@@ -115,7 +115,8 @@ class TableData extends Component {
       businessServiceData.map((item, index) => {
         return item.business;
       });
-    const uniqueModules = uniq(modules)   
+      const uniqueModules = uniq(modules)   
+    
     let localitymap =[];
      try {
       for (var i = 0; i < uniqueModules.length; i++) {
@@ -189,7 +190,64 @@ class TableData extends Component {
       );
     }
   };
+// setData=(allData,assignedData)=>{
+  
+//   const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
+//   const uuid = get(this.props, "userInfo.uuid");
+//   const tenantId = getTenantId();
 
+//   const taskboardData = [];
+//   const tabData = [];
+//   const inboxData = [{ headers: [], rows: [] }];
+
+//   try {
+//     const requestBody = [{ key: "tenantId", value: tenantId }];
+//     const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+//     const assignedData = orderBy(
+//       filter(responseData.ProcessInstances, (item) => get(item.assignee, "uuid") === uuid),
+//       ["businesssServiceSla"]
+//     );
+//     const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+
+//     const assignedDataRows = await this.prepareInboxDataRows(assignedData);
+//     const allDataRows = await this.prepareInboxDataRows(allData);
+
+//     let headersList = [
+//       "WF_INBOX_HEADER_APPLICATION_NO",
+//       "WF_INBOX_HEADER_LOCALITY",
+//       "WF_INBOX_HEADER_STATUS",
+//       // "WF_INBOX_HEADER_ASSIGNED_BY",
+//       "WF_INBOX_HEADER_ASSIGNED_TO",
+//       "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+//     ];
+//     inboxData[0].headers = headersList;
+//     inboxData[0].rows = assignedDataRows;
+
+//     const taskCount = allDataRows.length;
+//     const overSla = filter(responseData.ProcessInstances, (item) => item.businesssServiceSla < 0).length;
+
+//     taskboardData.push(
+//       { head: taskCount, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
+//       { head: "0", body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
+//       { head: overSla, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
+//     );
+
+//     tabData.push({ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [assignedDataRows.length] });
+//     tabData.push({ label: "COMMON_INBOX_TAB_ALL", dynamicArray: [allDataRows.length] });
+
+//     inboxData.push({
+//       headers: headersList,
+//       rows: allDataRows,
+//     });
+//     this.setState({ inboxData, taskboardData, tabData });
+//   } catch (e) {
+//     toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
+//   }
+//   prepareFinalObject("InboxData", inboxData);
+
+//   this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
+
+// }
   componentDidMount = async () => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
@@ -316,7 +374,7 @@ class TableData extends Component {
       <div className="col-sm-12">
         <div>
           <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
-          <Filter handleChangeFilter={handleChangeFilter} clearFilter={clearFilter} filter={filter}></Filter>
+          {/* <Filter handleChangeFilter={handleChangeFilter} clearFilter={clearFilter} filter={filter}></Filter> */}
           {/* <TextField value={"search"} />
           */}
           {/* <Icon action="custom" name="filter" onClick={onPopupOpen} style={{ cursor: "pointer" }} />  */}
