@@ -2670,7 +2670,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 };
 
 
-const setRiskType = (action, state, dispatch) => {
+const riskType = (state, dispatch) => {
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
     "srutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
@@ -2789,7 +2789,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
               currOwnersArr
             )
           );
-          setRiskType(state, dispatch);
+          riskType(state, dispatch);
         } else {
           dispatch(
             toggleSnackbar(

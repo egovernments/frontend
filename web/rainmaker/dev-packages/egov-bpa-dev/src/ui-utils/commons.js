@@ -136,7 +136,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       "BPAs[0].BPADetails.plotdetails.citytown"
     );
     const address = {
-      "tenantId": "pb",
+      "tenantId": "pb.amritsar",
       "doorNo": "23-pb-1212",
       "plotNo": "1725",
       "landmark": "temple",
@@ -146,31 +146,25 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       "state": "telangana",
       "country": "india",
       "pincode": "500158",
-      "additionDetails": "jsdhfhfdg",
+      "additionDetails": null,
       "buildingName": "quewyr",
-      "street": "qwerqwer",
-      "action": "INITIATE",
+      "street": null,
       "locality": {
-              "code": "SUN178",
-              "name": "Mohalla Singh kia - Area2",
-              "label": "Locality",
-              "latitude": null,
-              "longitude": null,
-              "area": "Area2",
-              "boundaryNum": 1,
-              "children": []
-          },
-      "geoLocation": {
-          "latitude": 31.62234,
-          "longitude": 74.87534,
-          "additionalDetails": {}
-      }
+          "code": "SUN178",
+          "name": "Mohalla Singh kia - Area2",
+          "label": "Locality",
+          "latitude": null,
+          "longitude": null,
+          "children": []
+      },
+      "geoLocation": null
   };
+  console.log(tenantId.value, status, address, "skjbddsijbfibfisbdfi")
     set(payload, "tenantId", tenantId.value);
     set(payload, "action", status);
-    set(payload, "address", address);
+    
     set(payload, "additionalDetails", {});
-    set(payload, "units", []);
+    set(payload, "units", null);
 
     // Get uploaded documents from redux
     // let reduxDocuments = get(
@@ -195,9 +189,33 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     //   })
     // });
 
-    let documents = [
-      {"documentType": "OWNER.IDENTITYPROOF.VOTERID"}
-    ];
+    let documents;
+    let wfDocuments;
+    if(method === 'UPDATE'){
+      documents = payload.documents;
+      //hard coding these values but time being untill we fix documents capture issue.
+      wfDocuments = [
+        {
+        "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
+        "id":"asfddsafdsaf",
+        "filestore":"adsfsadfsdaf"
+      },{
+        "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
+        "id":"asfddsafdsaf",
+        "filestore":"adsfsadfsdaf"
+      }
+         ];
+      let id = payload.address.id;
+      address.id = id;
+      set(payload, "address", address);
+      set(payload, "wfDocuments", wfDocuments);
+    }else{
+      set(payload, "address", address);
+      documents = [
+        {"documentType": "OWNER.IDENTITYPROOF.VOTERID"}
+      ]
+    }
+    
     set(payload, "documents", documents);
 
     // Set Channel and Financial Year
@@ -233,7 +251,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/bpa/appl/__update",
+        "bpa-services/bpa/appl/_update",
         "",
         [],
         { BPA: payload }
