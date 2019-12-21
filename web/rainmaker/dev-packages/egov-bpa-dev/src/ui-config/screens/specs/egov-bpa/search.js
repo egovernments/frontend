@@ -56,7 +56,7 @@ const NOCSearchAndResult = {
     resetFields(state, dispatch);
     const tenantId = getTenantId();
     const BSqueryObject = [
-      { key: "tenantId", value: "pb.amritsar" },
+      { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "BPA" }
     ];
     setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);

@@ -10,11 +10,11 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
+  let tenantId = getTenantId();
   let queryObject = [
     {
       key: "tenantId",
-      value: "pb.amritsar"
-      //getTenantId()
+      value: tenantId
     }
   ];
   let searchScreenObject = get(

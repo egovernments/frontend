@@ -156,7 +156,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       },
       "geoLocation": null
   };
-  console.log(tenantId.value, status, address, "skjbddsijbfibfisbdfi")
     set(payload, "tenantId", tenantId.value);
     set(payload, "action", status);
     
@@ -194,12 +193,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       wfDocuments = [
         {
         "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
-        "id":"asfddsafdsaf",
+        "id":"asfddsafdsaf1",
         "filestore":"adsfsadfsdaf"
       },{
         "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
         "id":"asfddsafdsaf",
-        "filestore":"adsfsadfsdaf"
+        "filestore":"adsfsadfsdafq"
       }
          ];
       let id = payload.address.id;
@@ -209,7 +208,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     }else{
       set(payload, "address", address);
       documents = [
-        {"documentType": "OWNER.IDENTITYPROOF.VOTERID"}
+        {"documentType": "OWNER.IDENTITYPROOF.VOTERID", 
+        "id": "697a171e-677d-4bb8-a797-c0270a39811e",
+        "fileStore": "hvdsfuhvdsvf",
+        "documentUid": null,
+        "additionalDetails": null
+      }
       ]
     }
     

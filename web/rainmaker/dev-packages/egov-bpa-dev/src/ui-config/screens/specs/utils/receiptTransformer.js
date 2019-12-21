@@ -140,62 +140,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     );
     let licenseValidTo = get(response, "Bpa[0].validTo", "NA");
     data.licenseValidity = getFinancialYearDates("dd/mm/yyyy", licenseValidTo);
-    /** Trade settings */
-    // const tradeUnitsFromResponse = get(
-    //   response,
-    //   "Bpa[0].tradeLicenseDetail.tradeUnits",
-    //   null
-    // );
-
-    // const transformedTradeData = tradeUnitsFromResponse.reduce(
-    //   (res, curr) => {
-    //     let tradeCategory = "NA";
-    //     let tradeType = "NA";
-    //     let tradeSubType = "NA";
-    //     let tradeCode = curr.tradeType;
-    //     if (tradeCode) {
-    //       let tradeCodeArray = tradeCode.split(".");
-    //       if (tradeCodeArray.length == 1) {
-    //         tradeCategory = nullToNa(tradeCode);
-    //       } else if (tradeCodeArray.length == 2) {
-    //         tradeCategory = nullToNa(tradeCodeArray[0]);
-    //         tradeType = nullToNa( tradeCode);
-    //       } else if (tradeCodeArray.length > 2) {
-    //         tradeCategory = nullToNa(tradeCodeArray[0]);
-    //         tradeType = nullToNa(tradeCodeArray[1]);
-    //         tradeSubType = nullToNa(tradeCode);
-    //       }
-    //     }
-        /** End */
-
-        //res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory));
-
-      //   res.tradeTypeReceipt.push(
-      //     getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
-      //       " / " +
-      //       getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
-      //   );
-      //   res.tradeTypeCertificate.push(
-      //     getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory) +
-      //       " / " +
-      //       getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
-      //       " / " +
-      //       getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
-      //   );
-      //   return res;
-      // },
-    //   {
-    //     tradeCategory: [],
-    //     tradeTypeReceipt: [],
-    //     tradeTypeCertificate: []
-    //   }
-    // );
-
-    // data.tradeCategory = transformedTradeData.tradeCategory.join(", ");
-    // data.tradeTypeReceipt = transformedTradeData.tradeTypeReceipt.join(", ");
-    // data.tradeTypeCertificate = transformedTradeData.tradeTypeCertificate.join(
-    //   ", "
-    // );
     data.address = nullToNa(
       createAddress(
         data.doorNo,
@@ -205,24 +149,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         data.city
       )
     );
-    // const accessories = get(
-    //   response,
-    //   "Bpa[0].tradeLicenseDetail.accessories",
-    //   []
-    // );
-    // if (accessories && accessories.length > 0) {
-    //   data.accessoriesList = response.Bpa[0].tradeLicenseDetail.accessories
-    //     .map(item => {
-    //       return `${getMessageFromLocalization(`TRADELICENSE_ACCESSORIESCATEGORY_${getTransformedLocale(item.accessoryCategory)}`)}(${
-    //         item.count ? item.count :"0"
-    //       })`;
-    //     })
-    //     .reduce((pre, cur) => {
-    //       return pre.concat(", " + cur);
-    //     });
-    // } else {
-    //   data.accessoriesList = "";
-    // }
     loadUserNameData(response.Bpa[0].auditDetails.lastModifiedBy);
   }
 

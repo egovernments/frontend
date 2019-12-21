@@ -286,7 +286,7 @@ const setSearchResponse = async (
   const response = await getAppSearchResults([
     {
       key: "tenantId",
-      value: "pb.amritsar"
+      value: tenantId
     },
     { key: "applicationNos", value: applicationNumber }
   ]);
@@ -297,7 +297,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
   let edcrRes = await edcrHttpRequest(
     "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=pb.amritsar",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
     {}
     );
  
@@ -344,10 +344,10 @@ const screenConfig = {
     // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
-    setSearchResponse(state, dispatch, applicationNumber, "pb.amritsar");
+    setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
     const queryObject = [
-      { key: "tenantId", value: "pb.amritsar" },
+      { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "BPA" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
@@ -415,7 +415,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/v1/_update"
+            updateUrl: "/bpa-services/bpa/appl/_update"
           }
         },
         body: getCommonCard({
@@ -426,8 +426,6 @@ const screenConfig = {
           plotAndBoundaryInfoSummary: plotAndBoundaryInfoSummary,
           documentsSummary: documentsSummary,
           nocSummary: nocSummary
-          // propertySummary: propertySummary,
-         
         }),
         citizenFooter:
           process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}

@@ -169,29 +169,3 @@ const onRowClick = rowData => {
       break;
   }
 };
-
-// const onRowClick = rowData => {
-//   let appendUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//   switch (rowData[get(textToLocalMapping, "Status")]) {
-//     case get(textToLocalMapping, "APPLIED"):
-//     case get(textToLocalMapping, "PENDINGPAYMENT"):
-//     case get(textToLocalMapping, "APPROVED"):
-//     case get(textToLocalMapping, "PENDINGAPPROVAL"):
-//     case get(textToLocalMapping, "FIELDINSPECTION"):
-//     case get(textToLocalMapping, "REJECTED"):
-//     case get(textToLocalMapping, "CANCELLED"):
-//     case get(textToLocalMapping, "DOCUMENTVERIFY"):
-//       return `${appendUrl}/BPA/search-preview?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData["tenantId"]}`;
-
-//     case get(textToLocalMapping, "INITIATED"):
-//       return `${appendUrl}/BPA/apply?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData.tenantId}`;
-
-//     default:
-//       return `${appendUrl}/BPA/search`;
-//   }
-// };
