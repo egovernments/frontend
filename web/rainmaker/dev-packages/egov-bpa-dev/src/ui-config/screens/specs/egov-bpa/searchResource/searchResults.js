@@ -117,21 +117,7 @@ export const searchResults = {
       // getTextToLocalMapping("NOC Type"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Application Date"),
-      {
-        name: getTextToLocalMapping("Status"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
-              }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
-          )
-        }
-      },
+      getTextToLocalMapping("Status"),
       {
         name: "tenantId",
         options: {
@@ -170,16 +156,16 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[5]) {
+  switch (rowData[3]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
+        rowData[4]
       }`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[6]}`;
+      }&tenantId=${rowData[4]}`;
       break;
   }
 };

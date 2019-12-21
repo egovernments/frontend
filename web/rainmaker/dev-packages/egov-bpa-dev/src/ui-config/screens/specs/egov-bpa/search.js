@@ -56,7 +56,7 @@ const NOCSearchAndResult = {
     resetFields(state, dispatch);
     const tenantId = getTenantId();
     const BSqueryObject = [
-      { key: "tenantId", value: tenantId },
+      { key: "tenantId", value: "pb.amritsar" },
       { key: "businessServices", value: "BPA" }
     ];
     setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
@@ -146,7 +146,7 @@ const NOCSearchAndResult = {
                   }
                 },
 
-                buttonLabel: getLabel({
+                buttonLabfireNOCNumberel: getLabel({
                   labelName: "NEW APPLICATION",
                   labelKey: "NOC_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
                 })

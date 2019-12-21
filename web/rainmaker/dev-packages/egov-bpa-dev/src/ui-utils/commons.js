@@ -25,7 +25,7 @@ import {
   toggleSnackbar,
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import { appSearchMockData } from './searchMockJson';
@@ -96,16 +96,13 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 
 export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
-    store.dispatch(toggleSpinner());
-    const response = "";
-    //  await httpRequest(
-      // "post",
-      // "/bpa-services/v1/_search",
-      // "",
-      // queryObject
-    // );
-    store.dispatch(toggleSpinner());
-    return appSearchMockData;
+    const response = await httpRequest(
+      "post",
+      "bpa-services/bpa/appl/_search",
+      "",
+      queryObject
+    );
+    return response;
   } catch (error) {
     store.dispatch(
       toggleSnackbar(
