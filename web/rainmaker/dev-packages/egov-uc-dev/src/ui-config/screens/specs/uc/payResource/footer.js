@@ -62,6 +62,38 @@ export const footer = getCommonApplyFooter({
       }
     }
   },
+  posButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "POS COLLECT",
+        labelKey: "UC_BUTTON_POS_COLLECT"
+      }),
+      nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        // callBackForPay(state, dispatch);
+        document.Android && document.Android.showToast("connected");
+      }
+    }
+  },
   nextButton: {
     componentPath: "Button",
     props: {
