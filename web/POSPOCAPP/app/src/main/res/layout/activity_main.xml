@@ -1,61 +1,467 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="POS POC APP"
-            android:textSize="24sp"
-            android:textAlignment="center" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <include
-        android:id="@+id/include"
-        layout="@layout/content_main" />
-
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="274dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="center">
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:orientation="vertical">
 
-<!--        <Button-->
-<!--            android:id="@+id/print"-->
-<!--            android:layout_width="218dp"-->
-<!--            android:layout_height="29dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:text="Print" />-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:padding="5dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Consumer Detail"
+                android:textSize="20sp"
+                android:textColor="#2782F5"
+                android:layout_centerInParent="true"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@mipmap/logt" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="InstructionType"
+                android:id="@+id/instype"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_type"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/instype"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_type"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="ConsumerCode"
+                android:id="@+id/code"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_consumer_code"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/code"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_consumer_code"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="CustomerName"
+                android:id="@+id/name"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_name"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/name"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_name"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+             />
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="Mobile NO"
+                android:id="@+id/mblhint"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_mobile_no"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/mblhint"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_mobile_no"/>
+        </RelativeLayout>
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="EmailAddress"
+                android:id="@+id/emailhint"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_email_adrs"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/emailhint"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_email_adrs"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="Message"
+                android:id="@+id/message"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_message"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/message"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_message"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="Business Service"
+                android:id="@+id/service"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_service"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/service"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_service"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="Bill Date"
+                android:id="@+id/billhint"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_bill_date"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/billhint"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_bill_date"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="Amount Due"
+                android:id="@+id/ambhint"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/et_amtdue"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:layout_below="@+id/ambhint"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_amtdue"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2782F5"
+                android:textSize="16sp"
+                android:text="Pay"
+                android:id="@+id/payhint"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Pay Amount."
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:inputType="number"
+                android:digits="1234567890"
+                android:text=""
+                android:id="@+id/et_pay"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:textColor="#2782F5"
+                android:layout_marginStart="15dp"
+                android:background="@android:color/transparent"
+                android:layout_below="@+id/payhint"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/bodergrey"
+                android:layout_below="@+id/et_pay"/>
+        </RelativeLayout>
+
 
         <Button
-            android:id="@+id/success"
-            android:layout_width="218dp"
-            android:layout_height="70px"
-            android:layout_weight="1"
-            android:text="Success" />
-
-        <Button
-            android:id="@+id/failure"
-            android:layout_width="218dp"
-            android:layout_height="70px"
-            android:layout_weight="1"
-            android:text="Failure" />
-
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="#2782F5"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:text="Pay Now"
+            android:id="@+id/submit"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"/>
 
     </LinearLayout>
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</ScrollView>

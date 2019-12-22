@@ -125,7 +125,7 @@ android {
 //			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/employee/user/login"'
 
 			//local
-			buildConfigField 'String', 'url', '"http://b684e1c4.ngrok.io"'
+			buildConfigField 'String', 'url', '"https://0f480542.ngrok.io"'
 
 			//DEV
 //			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/employee/user/login"'

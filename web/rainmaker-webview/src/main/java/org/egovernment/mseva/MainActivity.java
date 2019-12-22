@@ -10,6 +10,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -33,6 +34,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -72,11 +74,11 @@ import java.io.OutputStream;
 
 import org.egovernment.mseva.BuildConfig;
 import org.egovernment.mseva.R;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
-
-
 	final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
 	private static String URL   =BuildConfig.url;
 	private String FILE_TYPE    = "image/*";  //to upload any file type using "*/*"; check file type references for more
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
 						//call javascript bridge to update the status
 
 						// Do something with the contact here (bigger example below)
+						loadView("javascript:window.posOnSuccess()",false);
 					}
 					else
 					{
@@ -151,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 //						Toast.makeText(getBaseContext(), "Failure!" , Toast.LENGTH_SHORT ).show();
 
 						//call javascript bridge to update the status
-
+						loadView("javascript:window.posOnFailure()",false);
 					}
 				}
 
@@ -168,6 +171,47 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+	public class WebAppInterface {
+		Context mContext;
+		HashMap<String, JSONObject> mObjectsFromJS = new HashMap<String, JSONObject>();
+
+		/**
+		 * Instantiate the interface and set the context
+		 */
+		WebAppInterface(Context c) {
+			mContext = c;
+		}
+
+		/**
+		 * Show a toast from the web page
+		 */
+		@JavascriptInterface
+		public void sendPaymentData(String name, String json) throws JSONException {
+			mObjectsFromJS.put(name, new JSONObject(json));
+//			JSONObject paymentData = mObjectsFromJS.get("paymentData");
+			Toast.makeText(mContext, json, Toast.LENGTH_SHORT).show();
+			//call call back function with paymentDataMap
+			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
+			sendPaymentIntent.setClassName("com.example.pospocapp", "com.example.pospocapp.MainActivity");
+			//it should be come from web applicaiton
+			sendPaymentIntent.putExtra("instrumentType", (String) (mObjectsFromJS.get("paymentData").has("instrumentType")?mObjectsFromJS.get("paymentData").get("instrumentType"):""));
+			sendPaymentIntent.putExtra("paymentAmount", (String) (mObjectsFromJS.get("paymentData").has("paymentAmount")?mObjectsFromJS.get("paymentData").get("paymentAmount"):""));
+			sendPaymentIntent.putExtra("customerName", (String) (mObjectsFromJS.get("paymentData").has("customerName")?mObjectsFromJS.get("paymentData").get("customerName"):""));
+			sendPaymentIntent.putExtra("customerMobile", (String) (mObjectsFromJS.get("paymentData").has("customerMobile")?mObjectsFromJS.get("paymentData").get("customerMobile"):""));
+			sendPaymentIntent.putExtra("message", (String) (mObjectsFromJS.get("paymentData").has("message")?mObjectsFromJS.get("paymentData").get("message"):""));
+			sendPaymentIntent.putExtra("emailId", (String) (mObjectsFromJS.get("paymentData").has("emailId")?mObjectsFromJS.get("paymentData").get("emailId"):""));
+			sendPaymentIntent.putExtra("billNumber", (String) (mObjectsFromJS.get("paymentData").has("billNumber")?mObjectsFromJS.get("paymentData").get("billNumber"):""));
+			sendPaymentIntent.putExtra("consumerCode", (String) (mObjectsFromJS.get("paymentData").has("consumerCode")?mObjectsFromJS.get("paymentData").get("consumerCode"):""));
+			sendPaymentIntent.putExtra("businessService", (String) (mObjectsFromJS.get("paymentData").has("businessService")?mObjectsFromJS.get("paymentData").get("businessService"):""));
+			sendPaymentIntent.putExtra("collectorName", (String) (mObjectsFromJS.get("paymentData").has("collectorName")?mObjectsFromJS.get("paymentData").get("collectorName"):""));
+			sendPaymentIntent.putExtra("collectorId", (String) (mObjectsFromJS.get("paymentData").has("collectorId")?mObjectsFromJS.get("paymentData").get("collectorId"):""));
+			sendPaymentIntent.putExtra("instrumentDate", (String) (mObjectsFromJS.get("paymentData").has("instrumentDate")?mObjectsFromJS.get("paymentData").get("instrumentDate"):""));
+			sendPaymentIntent.putExtra("instrumentNumber", (String) (mObjectsFromJS.get("paymentData").has("instrumentNumber")?mObjectsFromJS.get("paymentData").get("instrumentNumber"):""));
+			startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
+		}
+
+	}
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
@@ -290,6 +334,8 @@ public class MainActivity extends AppCompatActivity {
 */
         //Rendering the default URL
         loadView(URL,false);
+
+
 
         webView.setWebChromeClient(new WebChromeClient() {
             // handling geolocation
@@ -427,6 +473,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onPageFinished(WebView view, String url) {
+			loadView("javascript:window.localStorage.setItem('isPOSmachine',true)",false);
         }
         //For android below API 23
 		@SuppressWarnings("deprecation")

@@ -1,0 +1,31 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:20:1-21:97
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:20:1-21:97
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:20:1-21:97
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:20:1-21:97
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:20:1-21:97
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:20:1-21:97
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:20:1-21:97
+	package
+		ADDED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:21:7-35
+		INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+		INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:21:36-61
+		INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+		INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:20:11-69
+	android:versionCode
+		ADDED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml:21:62-85
+		INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+		INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+uses-sdk
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+		ADDED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml
+		INJECTED from /Users/GoodWork/Documents/GitHub/GWL/frontend/web/POSPOCAPP/CordovaLib/AndroidManifest.xml

@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#000000</color>
+    <color name="black">#000</color>
+    <color name="black_dark">#000000</color>
+    <color name="white">#FFF</color>
+    <color name="grey">#B5B5B5</color>
+    <color name="bodergrey">#E0E0E0</color>
+    <color name="googlebtn">#dd4c39</color>
+    <color name="fbbtn">#3a5999</color>
+    <color name="red">#FE6054</color>
+    <color name="green">#1BD685</color>
+    <color name="blue">#2782F5</color>
+
+    <integer-array name="gplus_colors">
+        <item>@color/gplus_color_1</item>
+        <item>@color/gplus_color_2</item>
+        <item>@color/gplus_color_3</item>
+        <item>@color/gplus_color_4</item>
+    </integer-array>
+
+    <color name="gplus_color_1">#3e802f</color>
+    <color name="gplus_color_2">#f4b400</color>
+    <color name="gplus_color_3">#427fed</color>
+    <color name="gplus_color_4">#b23424</color>
+    <color name="syncblue">#093ea2</color>
+    <color name="syncgreen">#1bad64</color>
+    <color name="syncred">#d92950</color>
 </resources>

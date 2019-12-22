@@ -1,2 +1,1 @@
-include ':app'
-rootProject.name='POS POC APP'
+include ':app', ':CordovaLib', ':ezetapandroidsdk-release.aar1'
