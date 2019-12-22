@@ -301,7 +301,7 @@ const setSearchResponse = async (
  
   dispatch(
     prepareFinalObject(
-      `srutinyDetails`,
+      `scrutinyDetails`,
       edcrRes.edcrDetail[0]
     )
   );

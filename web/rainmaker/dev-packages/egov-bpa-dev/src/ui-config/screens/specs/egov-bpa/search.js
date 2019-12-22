@@ -43,13 +43,13 @@ const pageResetAndChange = (state, dispatch) => {
 
 const startApplyFlow = (state, dispatch) => {
   dispatch(prepareFinalObject("BPAs", []));
-  dispatch(prepareFinalObject("srutinyDetails", {}));
+  dispatch(prepareFinalObject("scrutinyDetails", {}));
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/citySelection` : `/egov-bpa/citySelection`;
   dispatch(setRoute(applyUrl));
 };
 
-const NOCSearchAndResult = {
+const BpaSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
@@ -304,4 +304,4 @@ const NOCSearchAndResult = {
   }
 };
 
-export default NOCSearchAndResult;
+export default BpaSearchAndResult;
