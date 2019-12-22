@@ -488,11 +488,11 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        window.posOnSuccess=(posResponse)=>{
+        window.posOnSuccess=(posResponse={})=>{
           callBackForPay(state,dispatch)
         }
 
-        window.posOnFailure=(posResponse)=>
+        window.posOnFailure=(posResponse={})=>
         {
           dispatch(
             toggleSnackbar(
@@ -555,7 +555,7 @@ export const footer = getCommonApplyFooter({
         }
       }
     },
-    // visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+    visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   generateReceipt: {
     componentPath: "Button",
