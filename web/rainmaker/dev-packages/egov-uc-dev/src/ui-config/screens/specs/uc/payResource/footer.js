@@ -60,7 +60,106 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) => {
         goBack(state, dispatch);
       }
-    }
+    },
+    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+  },
+  posButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        width: "379px",
+        height: "48px ",
+        right: "19px ",
+        position: "relative",
+        borderRadius: "0px "
+      }
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "POS COLLECT",
+        labelKey: "UC_BUTTON_POS_COLLECT"
+      }),
+      nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        window.posOnSuccess=(posResponse={})=>{
+          callBackForPay(state,dispatch)
+        }
+
+        window.posOnFailure=(posResponse={})=>
+        {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Payment failure",
+                labelKey: "ERR_FILL_POS_PAYMENT_FAILURE"
+              },
+              "danger"
+            )
+          );
+        }
+        const paymentData={
+          instrumentType:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentType.name"
+          ),
+          paymentAmount:get(
+            state.screenConfiguration.preparedFinalObject,
+            "AmountPaid"
+          ),
+          customerName:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].payerName"
+          ),
+          customerMobile:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].mobileNumber"
+          ),
+          message:"Pos payment",
+          emailId:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].payerEmail"
+          ),
+          amountDetails:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails"
+          ),
+          billNumber:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billNumber"
+          ),
+          consumerCode:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].consumerCode"
+          ),
+          businessService:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].businessService"
+          ),
+          collectorName:"",
+          collectorId:"",
+          instrumentDate:"",
+          instrumentNumber:""
+        }
+        try {
+          window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    },
+    visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   nextButton: {
     componentPath: "Button",
@@ -91,7 +190,8 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) => {
         callBackForPay(state, dispatch);
       }
-    }
+    },
+    visible: process.env.REACT_APP_NAME === "Citizen" || JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   }
 });
 
