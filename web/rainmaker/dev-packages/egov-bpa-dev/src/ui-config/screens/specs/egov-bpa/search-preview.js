@@ -132,11 +132,9 @@ const prepareDocumentsView = async (state, dispatch) => {
             .slice(13)
         )) ||
       `Document - ${index + 1}`;
-      console.log('doooc', doc)
       return doc;
     
   });
-  console.log("docPre", documentsPreview)
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
 };
 

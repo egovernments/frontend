@@ -187,34 +187,38 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
     let documents;
     let wfDocuments;
-    if(method === 'UPDATE'){
+    if (method === 'UPDATE') {
       documents = payload.documents;
       //hard coding these values but time being untill we fix documents capture issue.
+      //TODO: remove this block once WF Documents integrated
       wfDocuments = [
         {
-        "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
-        "id":"asfddsafdsaf1",
-        "filestore":"adsfsadfsdaf"
-      },{
-        "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
-        "id":"asfddsafdsaf",
-        "filestore":"adsfsadfsdafq"
-      }
-         ];
+          "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
+          "id": "wf-doc-01",
+          "filestore": "firestore-01"
+        },
+        {
+          "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
+          "id": "wf-doc-02",
+          "filestore": "firestore-01"
+        }
+      ];
+
       let id = payload.address.id;
       address.id = id;
       set(payload, "address", address);
       set(payload, "wfDocuments", wfDocuments);
-    }else{
+    } else {
       set(payload, "address", address);
       documents = [
-        {"documentType": "OWNER.IDENTITYPROOF.VOTERID", 
-        "id": "697a171e-677d-4bb8-a797-c0270a39811e",
-        "fileStore": "hvdsfuhvdsvf",
-        "documentUid": null,
-        "additionalDetails": null
-      }
-      ]
+        {
+          "documentType": "OWNER.IDENTITYPROOF.VOTERID", 
+          "id": "697a171e-677d-4bb8-a797-c0270a39811e",
+          "fileStore": "hvdsfuhvdsvf",
+          "documentUid": null,
+          "additionalDetails": null
+        }
+      ];
     }
     
     set(payload, "documents", documents);

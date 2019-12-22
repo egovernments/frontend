@@ -145,8 +145,7 @@ const NOCSearchAndResult = {
                     }
                   }
                 },
-
-                buttonLabfireNOCNumberel: getLabel({
+                buttonLabel: getLabel({
                   labelName: "NEW APPLICATION",
                   labelKey: "NOC_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
                 })
