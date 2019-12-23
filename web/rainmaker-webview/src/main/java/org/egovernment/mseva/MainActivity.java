@@ -195,19 +195,19 @@ public class MainActivity extends AppCompatActivity {
 			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
 			sendPaymentIntent.setClassName("com.example.pospocapp", "com.example.pospocapp.MainActivity");
 			//it should be come from web applicaiton
-			sendPaymentIntent.putExtra("instrumentType", (String) (mObjectsFromJS.get("paymentData").has("instrumentType")?mObjectsFromJS.get("paymentData").get("instrumentType"):""));
-			sendPaymentIntent.putExtra("paymentAmount", (String) (mObjectsFromJS.get("paymentData").has("paymentAmount")?mObjectsFromJS.get("paymentData").get("paymentAmount"):""));
-			sendPaymentIntent.putExtra("customerName", (String) (mObjectsFromJS.get("paymentData").has("customerName")?mObjectsFromJS.get("paymentData").get("customerName"):""));
-			sendPaymentIntent.putExtra("customerMobile", (String) (mObjectsFromJS.get("paymentData").has("customerMobile")?mObjectsFromJS.get("paymentData").get("customerMobile"):""));
-			sendPaymentIntent.putExtra("message", (String) (mObjectsFromJS.get("paymentData").has("message")?mObjectsFromJS.get("paymentData").get("message"):""));
-			sendPaymentIntent.putExtra("emailId", (String) (mObjectsFromJS.get("paymentData").has("emailId")?mObjectsFromJS.get("paymentData").get("emailId"):""));
-			sendPaymentIntent.putExtra("billNumber", (String) (mObjectsFromJS.get("paymentData").has("billNumber")?mObjectsFromJS.get("paymentData").get("billNumber"):""));
-			sendPaymentIntent.putExtra("consumerCode", (String) (mObjectsFromJS.get("paymentData").has("consumerCode")?mObjectsFromJS.get("paymentData").get("consumerCode"):""));
-			sendPaymentIntent.putExtra("businessService", (String) (mObjectsFromJS.get("paymentData").has("businessService")?mObjectsFromJS.get("paymentData").get("businessService"):""));
-			sendPaymentIntent.putExtra("collectorName", (String) (mObjectsFromJS.get("paymentData").has("collectorName")?mObjectsFromJS.get("paymentData").get("collectorName"):""));
-			sendPaymentIntent.putExtra("collectorId", (String) (mObjectsFromJS.get("paymentData").has("collectorId")?mObjectsFromJS.get("paymentData").get("collectorId"):""));
-			sendPaymentIntent.putExtra("instrumentDate", (String) (mObjectsFromJS.get("paymentData").has("instrumentDate")?mObjectsFromJS.get("paymentData").get("instrumentDate"):""));
-			sendPaymentIntent.putExtra("instrumentNumber", (String) (mObjectsFromJS.get("paymentData").has("instrumentNumber")?mObjectsFromJS.get("paymentData").get("instrumentNumber"):""));
+			sendPaymentIntent.putExtra("instrumentType", (String) (mObjectsFromJS.get("paymentData").has("instrumentType")?mObjectsFromJS.get("paymentData").get("instrumentType").toString():""));
+			sendPaymentIntent.putExtra("paymentAmount", (String) (mObjectsFromJS.get("paymentData").has("paymentAmount")?mObjectsFromJS.get("paymentData").get("paymentAmount").toString():""));
+			sendPaymentIntent.putExtra("customerName", (String) (mObjectsFromJS.get("paymentData").has("customerName")?mObjectsFromJS.get("paymentData").get("customerName").toString():""));
+			sendPaymentIntent.putExtra("customerMobile", (String) (mObjectsFromJS.get("paymentData").has("customerMobile")?mObjectsFromJS.get("paymentData").get("customerMobile").toString():""));
+			sendPaymentIntent.putExtra("message", (String) (mObjectsFromJS.get("paymentData").has("message")?mObjectsFromJS.get("paymentData").get("message").toString():""));
+			sendPaymentIntent.putExtra("emailId", (String) (mObjectsFromJS.get("paymentData").has("emailId")?mObjectsFromJS.get("paymentData").get("emailId").toString():""));
+			sendPaymentIntent.putExtra("billNumber", (String) (mObjectsFromJS.get("paymentData").has("billNumber")?mObjectsFromJS.get("paymentData").get("billNumber").toString():""));
+			sendPaymentIntent.putExtra("consumerCode", (String) (mObjectsFromJS.get("paymentData").has("consumerCode")?mObjectsFromJS.get("paymentData").get("consumerCode").toString():""));
+			sendPaymentIntent.putExtra("businessService", (String) (mObjectsFromJS.get("paymentData").has("businessService")?mObjectsFromJS.get("paymentData").get("businessService").toString():""));
+			sendPaymentIntent.putExtra("collectorName", (String) (mObjectsFromJS.get("paymentData").has("collectorName")?mObjectsFromJS.get("paymentData").get("collectorName").toString():""));
+			sendPaymentIntent.putExtra("collectorId", (String) (mObjectsFromJS.get("paymentData").has("collectorId")?mObjectsFromJS.get("paymentData").get("collectorId").toString():""));
+			sendPaymentIntent.putExtra("instrumentDate", (String) (mObjectsFromJS.get("paymentData").has("instrumentDate")?mObjectsFromJS.get("paymentData").get("instrumentDate").toString():""));
+			sendPaymentIntent.putExtra("instrumentNumber", (String) (mObjectsFromJS.get("paymentData").has("instrumentNumber")?mObjectsFromJS.get("paymentData").get("instrumentNumber").toString():""));
 			startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
 		}
 
