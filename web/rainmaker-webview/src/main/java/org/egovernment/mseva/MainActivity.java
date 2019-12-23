@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 			Toast.makeText(mContext, "Opening pos app", Toast.LENGTH_SHORT).show();
 			//call call back function with paymentDataMap
 			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
-			sendPaymentIntent.setClassName("com.example.pospocapp", "com.example.pospocapp.MainActivity");
+			sendPaymentIntent.setClassName("ritika.com.myapplication", "ritika.com.myapplication.MainActivity");
 			//it should be come from web applicaiton
 			sendPaymentIntent.putExtra("instrumentType", (String) (mObjectsFromJS.get("paymentData").has("instrumentType")?mObjectsFromJS.get("paymentData").get("instrumentType").toString():""));
 			sendPaymentIntent.putExtra("paymentAmount", (String) (mObjectsFromJS.get("paymentData").has("paymentAmount")?mObjectsFromJS.get("paymentData").get("paymentAmount").toString():""));
