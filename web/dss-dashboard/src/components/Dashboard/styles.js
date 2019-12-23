@@ -53,13 +53,25 @@ const styles = theme => ({
     },
     '@media (max-width: 768px)': {
         actions: {
-            flexDirection: 'column'
+            flexDirection: 'column',
         },
         posit: {
             flexDirection: 'row-reverse',
             marginTop: '3px'
         }
     },
+
+    '@media (max-width: 3000px)': {
+        actions: {
+            margin: '12px 12px 12px 12px !important',
+        }
+    },
+    '@media (max-width:823px)': {
+        actions: {
+            margin: '10px 5px 10px 5px !important',
+        },
+
+    }
 });
 
 export default styles;

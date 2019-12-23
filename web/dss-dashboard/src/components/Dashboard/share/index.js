@@ -20,6 +20,7 @@ import domtoimage from 'dom-to-image';
 import Variables from '../../../styles/variables'
 import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
 import APITransport from '../../../actions/apitransport/apitransport'
+import S3ImageAPI from '../../../actions/s3Image/s3Image';
 
 const StyledMenu = withStyles({
     paper: {
@@ -186,19 +187,32 @@ class CustomizedShare extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.s3File != this.props.s3File) {
-            var fakeLink = document.createElement('a');
-            if(this.state.type === 'whatsapp') {
-            fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(this.props.s3File['url']));
-            fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-            fakeLink.setAttribute('target', '_blank');
-            fakeLink.click();
+            let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', this.props.s3File.files[0].fileStoreId ? this.props.s3File.files[0].fileStoreId : '');
+            APITransport(s3ImageAPI)
+        }
+
+        if (prevProps.s3Image != this.props.s3Image) {
+            let image = ''
+            if (((this.props.s3Image.fileStoreIds[0].url).match(new RegExp("https", "g")) || []).length > 1) {
+                var n = (this.props.s3Image.fileStoreIds[0].url).lastIndexOf("https");
+                image = (this.props.s3Image.fileStoreIds[0].url).substr(n, (this.props.s3Image.fileStoreIds[0].url).length)
+            } else {
+                image = this.props.s3Image.fileStoreIds[0].url
             }
-            if(this.state.type === 'email') {
-                fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(this.props.s3File['url']));
+
+            var fakeLink = document.createElement('a');
+            if (this.state.type === 'whatsapp') {
+                fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
+                fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+                fakeLink.setAttribute('target', '_blank');
+                fakeLink.click();
+            }
+            if (this.state.type === 'email') {
+                fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
                 fakeLink.click();
             }
         }
-       
+
     }
 
     renderSharePDFMenue = (menue) => {
@@ -289,7 +303,8 @@ class CustomizedShare extends Component {
 
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
-    s3File: state.s3File
+    s3File: state.s3File,
+    s3Image: state.s3Image
 });
 
 const mapDispatchToProps = dispatch => {

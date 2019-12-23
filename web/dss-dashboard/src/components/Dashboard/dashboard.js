@@ -240,16 +240,16 @@ class Dashboard extends Component {
   render() {
     let { classes, dashboardConfigData, GFilterData } = this.props;
     let dashboardName= dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name
-    
+
     return (<div id="divToPrint" className={classes.dashboard}>
       <div className={classes.actions}>
         <span className={classes.pageHeader}>
         {dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name}
       </span>
-        {isMobile && <div id="divNotToPrint" className={[classes.desktop, classes.posit].join(' ')}>
+        {isMobile && <div id="divNotToPrint" data-html2canvas-ignore="true" className={[classes.desktop, classes.posit].join(' ')}>
 
           <Menu type="download" bgColor="white" color="black" fileHeader="SURE Dashboard" fileName={dashboardName}></Menu>
-          <Button className={classes.btn1}
+          <Button className={classes.btn1} data-html2canvas-ignore="true"
             onClick={this.handleFilters.bind(this)}
             fileName={dashboardName}
           >

@@ -115,8 +115,9 @@ class Cards extends Component {
 
   renderMenues() {
     const { classes, title } = this.props;
+    let { strings } = this.props;
     return (<div className={[classes.actionMenues, classes.fullw].join(' ')}>
-      <ActionButtons text={"More Actions"} handleClick={this.handleClick} buttonType="info" target="info"></ActionButtons>
+      <ActionButtons text={strings["DSS_MORE_ACTIONS"] || "More Actions"} handleClick={this.handleClick} buttonType="info" target="info"></ActionButtons>
       {/* <Button 
         aria-controls="customized-menu"
         aria-haspopup="true"
@@ -151,14 +152,14 @@ class Cards extends Component {
           <ListItemIcon className={classes.itemIcon}>
             <CloudDownloadSharp />
           </ListItemIcon>
-          <ListItemText primary="Image" />
+          <ListItemText primary={strings["DSS_IMAGE"] || "Image"} />
         </MenuItem>
         <MenuItem onClick={this.shareAsImage.bind(this)} className={classes.menuItem}>
           <ListItemIcon className={classes.itemIcon}>
             <SVG src={share} style={{ marginRight: '10px' }} >
             </SVG>
           </ListItemIcon>
-          <ListItemText primary="Share" />
+          <ListItemText primary={strings["DSS_MOBILE_SHARE"] || "Share"} />
         </MenuItem>
       </Menu>
     </div>)

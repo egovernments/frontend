@@ -7,7 +7,8 @@ const constants = {
     GLOBAL_FILTER_DATA: 'GLOBAL_FILTER_DATA',
     CHARTS: 'CHARTS',
     LANGUAGE_CHANGE: 'LANGUAGE_CHANGE',
-    FILE_UPLOAD: 'FILE_UPLOAD'
+    FILE_UPLOAD: 'FILE_UPLOAD',
+    S3_IMAGE: 'S3_IMAGE'
 }
 
 export default constants

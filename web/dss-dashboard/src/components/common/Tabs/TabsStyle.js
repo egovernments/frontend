@@ -10,6 +10,17 @@ const tabsStyles = theme => ({
     indicator: {
         fontFamily: 'Roboto',
         background: '#FE7A51'
+    },
+    '@media (max-width: 3000px)': {
+        root: {
+            margin: '12px 12px 12px 12px !important',
+        }
+    },
+    '@media (max-width:823px)': {
+        root: {
+            margin: '10px 5px 10px 5px !important',
+        },
+
     }
 
 });
