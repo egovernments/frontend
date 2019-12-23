@@ -212,7 +212,8 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       set(payload, "address", address);
       documents = [
         {
-          "documentType": "OWNER.IDENTITYPROOF.VOTERID"
+          "documentType": "OWNER.IDENTITYPROOF.VOTERID",
+          "fileStore": "hvdsfuhvdsvf",
         }
       ];
     }
