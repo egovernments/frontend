@@ -3,7 +3,8 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
-import {download} from "egov-common/ui-utils/commons"
+import {download} from "egov-common/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -760,38 +761,16 @@ export const downloadPrintContainer = (
     case "REJECTED":
     case "APPROVED":
       downloadMenu = [receiptDownloadObject];
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.downloadMenu.props",
+          "data.menu",
+          downloadMenu
+        )
+      );
       break;
     default:
       break;
-  }
-
-  return {
-    rightdiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        style: { textAlign: "right", display: "flex" }
-      },
-      children: {
-        downloadMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: {labelName : "DOWNLOAD" , labelKey :"DOWNLOAD"},
-              // leftIcon: "cloud_download",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "200px" , color : "#FE7A51" } },
-              menu: downloadMenu
-            }
-          }
-        }
-      },
-      // gridDefination: {
-      //   xs: 12,
-      //   sm: 6
-      // }
-    }
   }
 };
