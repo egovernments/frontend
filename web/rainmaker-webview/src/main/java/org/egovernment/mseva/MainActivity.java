@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 		public void sendPaymentData(String name, String json) throws JSONException {
 			mObjectsFromJS.put(name, new JSONObject(json));
 //			JSONObject paymentData = mObjectsFromJS.get("paymentData");
-			Toast.makeText(mContext, json, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "Opening pos app", Toast.LENGTH_SHORT).show();
 			//call call back function with paymentDataMap
 			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
 			sendPaymentIntent.setClassName("com.example.pospocapp", "com.example.pospocapp.MainActivity");
