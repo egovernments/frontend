@@ -24,7 +24,6 @@ import {
 import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
-import { async } from "C:/Users/Sandhya Jagadish/AppData/Local/Microsoft/TypeScript/3.6/node_modules/rxjs/internal/scheduler/async";
 
 export const updateTradeDetails = async requestBody => {
     try {
