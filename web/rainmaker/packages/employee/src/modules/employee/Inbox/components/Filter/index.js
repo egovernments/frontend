@@ -10,6 +10,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
         <div className="row">
             <div className="col-md-3">
                 <DropDown
+                multiple
                     onChange={(e, index, value) => { handleChangeFilter('moduleFilter', value) }}
                     floatingLabelText="Module"
                     className="filter-fields"
@@ -25,6 +26,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
             </div>
             <div className="col-md-3">
                 <DropDown
+                 multiple
                     onChange={(e, index, value) => {
                         handleChangeFilter('localityFilter', value)
                     }}
@@ -42,10 +44,14 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
             </div>
             <div className="col-md-3" >
                 <DropDown
+                 multiple
                     floatingLabelText="Status"
                     className="filter-fields"
                     dropDownData={filter.statusFilter.dropdownData}
-                    onChange={(e, index, value) => { handleChangeFilter('statusFilter', value) }}
+                    onChange={(e, index, value) => {
+                        console.log(e, index, value,'e, index, value');
+                        
+                        handleChangeFilter('statusFilter', value) }}
                     value={filter.statusFilter.selectedValue}
                     underlineStyle={{
                         position: "absolute",
