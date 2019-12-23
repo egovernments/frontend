@@ -186,17 +186,24 @@ class CustomizedShare extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        console.log(this.props.s3File)
+        console.log(this.props.s3Image)
+
         if (prevProps.s3File != this.props.s3File) {
+            debugger
             let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', this.props.s3File.files[0].fileStoreId ? this.props.s3File.files[0].fileStoreId : '');
             APITransport(s3ImageAPI)
         }
 
         if (prevProps.s3Image != this.props.s3Image) {
+            debugger
             let image = ''
             if (((this.props.s3Image.fileStoreIds[0].url).match(new RegExp("https", "g")) || []).length > 1) {
+                debugger
                 var n = (this.props.s3Image.fileStoreIds[0].url).lastIndexOf("https");
                 image = (this.props.s3Image.fileStoreIds[0].url).substr(n, (this.props.s3Image.fileStoreIds[0].url).length)
             } else {
+                debugger
                 image = this.props.s3Image.fileStoreIds[0].url
             }
 
