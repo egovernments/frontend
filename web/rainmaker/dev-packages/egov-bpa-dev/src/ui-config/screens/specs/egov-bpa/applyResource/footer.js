@@ -14,19 +14,20 @@ import {
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 const setReviewPageRoute = (state, dispatch) => {
-  let tenantId = get(
-    state,
-    "screenConfiguration.preparedFinalObject.BPA.address.city"
-  );
+  // let tenantId = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.BPA.address.city.value"
+  // );
+  const tenantId = getTenantId();
   const applicationNumber = get(
     state,
-    "screenConfiguration.preparedFinalObject.BPA.applicationNumber"
+    "screenConfiguration.preparedFinalObject.BPA.applicationNo"
   );
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-bpa/summary` //?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/egov-bpa/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -402,6 +403,9 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep !== 5) {
     if (isFormValid) {
       let responseStatus = "success";
+      if(activeStep === 1){
+        dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
+      }
       if (activeStep === 3) {
         // getMdmsData(state, dispatch);
         // prepareDocumentsUploadData(state, dispatch);

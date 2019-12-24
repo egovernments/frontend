@@ -133,7 +133,6 @@ const BpaSearchAndResult = {
                   height: "48px"
                 }
               },
-
               children: {
                 plusIconInsideButton: {
                   uiFramework: "custom-atoms",
@@ -154,22 +153,14 @@ const BpaSearchAndResult = {
                 action: "condition",
                 callBack: (state, dispatch) => {
                   showApplyCityPicker(state, dispatch)
-                  // pageResetAndChange(state, dispatch);
-                  // showHideAdhocPopup(state, dispatch, "search");
-                  // startApplyFlow(state, dispatch);
                 }
-              },
-              // roleDefination: {
-              //   rolePath: "user-info.roles",
-              //   roles: ["NOC_CEMP", "SUPERUSER"]
-              // }
+              }
             }
           }
         },
         pendingApprovals,
         BPAApplication,
         breakAfterSearch: getBreak(),
-        // progressStatus,
         searchResults
       }
     },

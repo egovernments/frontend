@@ -13,6 +13,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getBpaDetailsForOwner } from "../../utils";
 import get from "lodash/get";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 //   import "./index.css";
 
 const showComponent = (dispatch, componentJsonPath, display) => {
@@ -577,11 +578,13 @@ export const applicantDetails = getCommonCard({
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, false);
             showComponent(dispatch, primaryOwnerJsonPath, false);
+            dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
           } else if (action.value.includes("MULTIPLEOWNERS")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, true);
             showComponent(dispatch, institutionContainerJsonPath, false);
             showComponent(dispatch, primaryOwnerJsonPath, true);
+            dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", false));
           } else if (action.value.includes("INSTITUTIONAL")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);

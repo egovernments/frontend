@@ -18,11 +18,11 @@ import { scrutinySummary } from './summaryResource/scrutinySummary';
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
-import { estimateSummary } from "./summaryResource/estimateSummary";
+// import { estimateSummary } from "./summaryResource/estimateSummary";
 import { footer } from "./summaryResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
 import { nocSummary } from "./summaryResource/nocSummary";
-// import { generateBill } from "../utils/index";
+import { generateBillForBPA } from "../utils/index";
 
 import { setResidentialList } from "../egov-bpa/searchResource/functions";
 
@@ -93,62 +93,18 @@ const screenConfig = {
   name: "summary",
   beforeInitScreen: (action, state, dispatch) => {
     let applicationNumber =
-      getQueryArg(window.location.href, "applicationNumber") ||
+      // getQueryArg(window.location.href, "applicationNumber") ||
       get(
         state.screenConfiguration.preparedFinalObject,
-        "FireNOCs[0].fireNOCDetails.applicationNumber"
+        "BPA.applicationNo"
       );
     let tenantId =
-      getQueryArg(window.location.href, "tenantId") ||
+      // getQueryArg(window.location.href, "tenantId") ||
       get(
         state.screenConfiguration.preparedFinalObject,
-        "FireNOCs[0].tenantId"
+        "BPAs[0].BPADetails.plotdetails.citytown.value"
       );
-
-    let uomsObject = get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.buildings[0].uomsMap"
-    );
-    // if (uomsObject) {
-    //   for (const [key, value] of Object.entries(uomsObject)) {
-    //     let labelElement = getLabelWithValue(
-    //       {
-    //         labelName: key,
-    //         labelKey: `NOC_PROPERTY_DETAILS_${key}_LABEL`
-    //       },
-    //       {
-    //         jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${key}`
-    //       }
-    //     );
-    //     set(
-    //       action,
-    //       `screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children.${key}`,
-    //       labelElement
-    //     );
-    //   }
-    // }
-
-    // Set Institution/Applicant info card visibility
-    // if (
-    //   get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).startsWith("INSTITUTION")
-    // ) {
-    //   set(
-    //     action,
-    //     "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.visible",
-    //     false
-    //   );
-    // } else {
-    //   set(
-    //     action,
-    //     "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.visible",
-    //     false
-    //   );
-    // }
-    // generateBill(dispatch, applicationNumber, tenantId);
+    generateBillForBPA(dispatch, applicationNumber, tenantId);
     prepareNocDocumentsView(state, dispatch);
     prepareDocumentsDetailsView(state, dispatch);
     setResidentialList(state, dispatch);

@@ -2360,6 +2360,56 @@ export const getTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+
+      case "Floor Description":
+      return getLocaleLabels(
+        "Floor Description",
+        "BPA_COMMON_TABLE_COL_FLOOR_DES",
+        localisationLabels
+      );
+
+    case "Occupancy/Sub Occupancy":
+      return getLocaleLabels(
+        "Occupancy/Sub Occupancy",
+        "BPA_COMMON_TABLE_COL_OCCUP",
+        localisationLabels
+      );
+
+    case "Buildup Area":
+      return getLocaleLabels(
+        "Buildup Area",
+        "BPA_COMMON_TABLE_COL_BUILD_AREA",
+        localisationLabels
+      );
+
+    case "Floor Area":
+      return getLocaleLabels(
+        "Floor Area",
+        "BPA_COMMON_TABLE_COL_FLOOR_AREA",
+        localisationLabels
+      );
+
+    case "Carpet Area":
+      return getLocaleLabels(
+        "Carpet Area",
+        "BPA_COMMON_TABLE_COL_CARPET_AREA",
+        localisationLabels
+      );
+
+    case "DOCUMENTVERIFY":
+      return getLocaleLabels(
+        "Pending for Document Verification",
+        "WF_FIRENOC_DOCUMENTVERIFY",
+        localisationLabels
+      );
+
+    case "Search Results for BPA Applications":
+      return getLocaleLabels(
+        "Search Results for BPA Applications",
+        "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+      
     default:
       return getLocaleLabels(label, label, localisationLabels);
   }
@@ -2890,6 +2940,55 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
 //     });
 //   return fees;
 // };
+
+export const generateBillForBPA = async (dispatch, applicationNumber, tenantId) => {
+  try {
+    if (applicationNumber && tenantId) {
+      const queryObj = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "consumerCode",
+          value: applicationNumber
+        },
+        { key: "services", value: "BPA" }
+      ];
+      const payload = await createBill(queryObj,dispatch);
+      console.log(payload, "payload ksdbvjhfvsdf")
+      if (payload && payload.Bill[0]) {
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+        const estimateData = createBpaEstimateData(payload.Bill[0]);
+        estimateData &&
+          estimateData.length &&
+          dispatch(
+            prepareFinalObject(
+              "applyScreenMdmsData.estimateCardData",
+              estimateData
+            )
+          );
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const createBpaEstimateData = billObject => {
+  const billDetails = billObject && billObject.billDetails;
+  let fees =
+    billDetails &&
+    billDetails[0].billAccountDetails &&
+    billDetails[0].billAccountDetails.map(item => {
+      return {
+        name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+        value: item.amount,
+        info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+      };
+    });
+  return fees;
+};
 
 export const generateBill = async (dispatch, applicationNumber, tenantId) => {
   try {
