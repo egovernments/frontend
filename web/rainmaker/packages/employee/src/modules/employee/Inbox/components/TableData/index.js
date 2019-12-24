@@ -97,7 +97,7 @@ class TableData extends Component {
     })
     return newList;
   }
-  applyFilter = (uid, value) => {
+  checkMatch = (uid, value) => {
     if (uid[0].text.toLowerCase().includes(value.toLowerCase()) ||
       uid[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
       String(uid[4].text).toLowerCase().includes(value.toLowerCase()) ||
@@ -110,14 +110,12 @@ class TableData extends Component {
     return false;
   }
   handleChangeSearch = (value) => {
-    this.setState({ searchFilter: { value } })
+    this.applyFilter(this.state.filter, { value });
   }
-
-  handleChangeFilter = (filterName, value) => {
+  applyFilter = (filter, searchFilter) => {
     const tempObject = cloneDeep(this.state.initialInboxData);
     let initialInboxData = get(this.state, 'initialInboxData');
-    const filter = { ...this.state.filter }
-    filter[filterName].selectedValue = value
+
     if (initialInboxData.length == 2) {
       initialInboxData.map((row, ind) => {
         if (!filter.localityFilter.selectedValue.includes('ALL')) {
@@ -128,8 +126,8 @@ class TableData extends Component {
         } if (!filter.statusFilter.selectedValue.includes('ALL')) {
           row.rows = row.rows.filter((uid) => filter.statusFilter.selectedValue.includes(uid[2].text.props.label.split('_')[2]))
         }
-        if (this.state.searchFilter.value != '') {
-          row.rows = row.rows.filter((uid) => this.applyFilter(uid, this.state.searchFilter.value)
+        if (searchFilter.value != '') {
+          row.rows = row.rows.filter((uid) => this.checkMatch(uid, searchFilter.value)
           )
         }
       })
@@ -144,8 +142,13 @@ class TableData extends Component {
       inboxData: initialInboxData,
       taskboardData,
       initialInboxData: tempObject,
-      tabData
+      tabData, searchFilter
     })
+  }
+  handleChangeFilter = (filterName, value) => {
+    const filter = { ...this.state.filter }
+    filter[filterName].selectedValue = value
+    this.applyFilter(filter, this.state.searchFilter);
   }
   clearFilter = () => {
     const initialInboxData = cloneDeep(this.state.initialInboxData);
