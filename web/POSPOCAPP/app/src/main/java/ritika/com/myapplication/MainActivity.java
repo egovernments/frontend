@@ -36,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent); // Handle text being sent
+            }
+        }
         setContentView(R.layout.activity_main);
         et_type = (TextView) findViewById(R.id.et_type);
         et_consumer_code = (TextView) findViewById(R.id.et_consumer_code);
@@ -77,6 +87,19 @@ public class MainActivity extends AppCompatActivity {
         doInitializeEzeTap();
     }
 
+    private void handleSendText(Intent intent)
+    {
+        String instrumentType = intent.getStringExtra("instrumentType");
+        if (instrumentType != null) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    instrumentType,
+                    Toast.LENGTH_SHORT);
+
+            toast.show();
+
+            // Update UI to reflect text being shared
+        }
+    }
 
     /**
      * Take credit card transactions for Visa, Mastercard and Rupay. Debit card
