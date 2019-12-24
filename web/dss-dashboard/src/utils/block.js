@@ -110,19 +110,52 @@ const getImageData = (dataUrl) => {
     });
 }
 
-const addPages = (elem) => {
+const addPages = (elem, cityLogo) => {
     return new Promise((resolve, reject) => {
-        domtoimage.toJpeg(elem, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
-            .then(function (dataUrl) {
+        if (isMobile) {
+            html2canvas(document.getElementById('divToPrint'), {
+                allowTaint: true,
+                useCORS: true,
+                backgroundColor: "#F4F7FB",
+                removeContainer: true,
+                x: 0,
+                y: 0,
+                width: window.innerWidth,
+            }).then(function (canvas) {
+                var dataUrl = canvas.toDataURL("image/jpeg")
                 return getImageData(dataUrl).then(function (hw) {
-                    if (isMobile) {
+                    base64Img.requestBase64(cityLogo, function (err, res, body) {
                         let iheight = hw.imgWidth * hw.iRatio;
+                        let isLogoRequired = true;
                         console.log(window.innerWidth)
                         let pdf = new jsPDF("p", "pt", [iheight - 80, hw.imgWidth - 80]);
-                        pdf.addImage(dataUrl, 'JPG', 0, 0);
+                        if(isLogoRequired) {
+                            pdf.addImage(logo, 'PNG', (hw.imgWidth-80-63), 5, 58, 48)
+                        }
+                        if(body){
+                            pdf.addImage(body, 'PNG', 5, 5, 50, 48)
+                        }
+                        if(dataUrl){
+                            pdf.addImage(dataUrl, 'JPG', 0, 55,hw.imgWidth-50,0);
+
+                        }
                         // pdf.save()
                         return resolve(pdf)
-                    } else {
+                    });
+
+                }.bind(this)).catch((err) => {
+                    console.log(err);
+                    return reject(null)
+                })
+
+            }).catch(function () {
+                reject(false);
+            })
+
+        } else {
+            domtoimage.toJpeg(elem, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
+                .then(function (dataUrl) {
+                    return getImageData(dataUrl).then(function (hw) {
                         base64Img.requestBase64("https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.abohar/logo.png", function (err, res, body) {
 
                             var imgWidth = 210;
@@ -155,21 +188,21 @@ const addPages = (elem) => {
                             }
                             return resolve(doc)
                         });
-                    }
 
+                    }.bind(this)).catch((err) => {
+                        console.log(err);
+                        return reject(null)
+                    })
                 }.bind(this)).catch((err) => {
                     console.log(err);
                     return reject(null)
                 })
-            }.bind(this)).catch((err) => {
-                console.log(err);
-                return reject(null)
-            })
+        }
 
     })
 }
 
-export const printDocument = (table, name) => {
+export const printDocument = (cityLogo, name) => {
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
         //     let compon = document.getElementById("printFtable")
@@ -177,7 +210,7 @@ export const printDocument = (table, name) => {
         let elems = document.getElementById('divToPrint');
         // Fix Graphics Output by scaling PDF and html2canvas output to 2
 
-        return addPages(elems).then(function (response) {
+        return addPages(elems, cityLogo).then(function (response) {
             response.save(name || 'DSS');
             return resolve(response);
 
@@ -188,7 +221,7 @@ export const printDocument = (table, name) => {
     })
     // });
 }
-export const printDocumentShare = (table) => {
+export const printDocumentShare = (cityLogo) => {
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
         //     let compon = document.getElementById("printFtable")
@@ -196,7 +229,7 @@ export const printDocumentShare = (table) => {
         let elems = document.getElementById('divToPrint');
         // Fix Graphics Output by scaling PDF and html2canvas output to 2
 
-        return addPages(elems).then(function (response) {
+        return addPages(elems, cityLogo).then(function (response) {
             // response.save();
             return resolve(response);
 

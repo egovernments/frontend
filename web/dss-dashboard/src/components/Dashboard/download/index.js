@@ -88,7 +88,7 @@ export function CustomizedMenus(props) {
 
     const downloadPDF = () => {
         props.APITrans(true);
-        printDocument(renderTable(),props.fileName || 'DSS').then(function (pdfO) {
+        printDocument(props.globalFilter[1]['tentantLogo'][`${localStorage.getItem('tenant-id')}`], props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             setAnchorEl(null);
@@ -152,6 +152,7 @@ export function CustomizedMenus(props) {
 
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
+    globalFilter: state.globalFilter
 });
 
 const mapDispatchToProps = dispatch => {

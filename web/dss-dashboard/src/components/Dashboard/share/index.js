@@ -58,6 +58,8 @@ class CustomizedShare extends Component {
         super(props);
         this.state = {
             anchorEl: null,
+            logo: this.props.globalFilter[1]['tentantLogo'][`${localStorage.getItem('tenant-id')}`]
+            // logo: this.props.globalFilter[1]['tentantLogo']['pb.abohar']
 
         }
 
@@ -99,11 +101,12 @@ class CustomizedShare extends Component {
     }
 
     shareWhatsAppPDF() {
+        console.log(this.state.logo)
         this.setState({
             type: 'whatsapp'
         })
         var APITransport = this.props.APITransport
-        printDocumentShare(this.renderTable()).then(function (pdfO) {
+        printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
 
             try {
@@ -145,7 +148,7 @@ class CustomizedShare extends Component {
         })
         var APITransport = this.props.APITransport
 
-        printDocumentShare(this.renderTable()).then(function (pdfO) {
+        printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
             try {
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', pdfO.output('blob'));
@@ -199,14 +202,18 @@ class CustomizedShare extends Component {
             debugger
             let image = ''
             let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length>0 && this.props.s3Image.fileStoreIds[0].url
-           
+           console.log(file)
             if ((file.match(new RegExp("https", "g")) || []).length > 1) {
                 debugger
                 var n = file.lastIndexOf("https");
                 image = file.substr(n, file.length)
+                console.log(image)
+
             } else {
                 debugger
                 image = file
+                console.log(image)
+
             }
 
             var fakeLink = document.createElement('a');
@@ -275,6 +282,7 @@ class CustomizedShare extends Component {
         )
     }
     render() {
+      
         return (
             <div>
                 <Button
@@ -313,7 +321,8 @@ class CustomizedShare extends Component {
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
     s3File: state.s3File,
-    s3Image: state.s3Image
+    s3Image: state.s3Image,
+    globalFilter: state.globalFilter
 });
 
 const mapDispatchToProps = dispatch => {

@@ -74,6 +74,9 @@ class CustomizedMenus extends Component {
             anchorEl: null,
             open: false,
             shareOpen: false,
+             logo: this.props.globalFilter[1]['tentantLogo'][`${localStorage.getItem('tenant-id')}`]
+            //  logo: this.props.globalFilter[1]['tentantLogo']['pb.banur']
+
         }
 
     }
@@ -132,8 +135,8 @@ class CustomizedMenus extends Component {
     }
 
     downloadPDF = () => {
-        this.props.APITrans(true)
-        printDocument(this.renderTable(), this.props.fileName || 'DSS').then(function (pdfO) {
+        // this.props.APITrans(true)
+        printDocument(this.state.logo, this.props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             // setAnchorEl(null);
@@ -146,7 +149,6 @@ class CustomizedMenus extends Component {
                 // pdf.addPage();
                 this.props.APITrans(false)
             } catch{ }
-            // props.APITrans(false);
         }).catch(function (error) {
             console.log(error);
             this.setState({
@@ -160,7 +162,7 @@ class CustomizedMenus extends Component {
             type: 'whatsapp'
         })
         var APITransport = this.props.APITransport
-        printDocumentShare(this.renderTable()).then(function (pdfO) {
+        printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
             console.log(APITransport)
             try {
@@ -201,7 +203,7 @@ class CustomizedMenus extends Component {
         })
         var APITransport = this.props.APITransport
 
-        printDocumentShare(this.renderTable()).then(function (pdfO) {
+        printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
             try {
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', pdfO.output('blob'));
@@ -263,14 +265,18 @@ class CustomizedMenus extends Component {
         if (prevProps.s3Image != this.props.s3Image) {
             let image = ''
             let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length > 0 && this.props.s3Image.fileStoreIds[0].url
+            console.log(file)
 
             if ((file.match(new RegExp("https", "g")) || []).length > 1) {
                 debugger
                 var n = file.lastIndexOf("https");
                 image = file.substr(n, file.length)
+                console.log(image)
+
             } else {
                 debugger
                 image = file
+                console.log(image)
             }
 
             var fakeLink = document.createElement('a');
@@ -393,7 +399,8 @@ class CustomizedMenus extends Component {
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
     s3File: state.s3File,
-    s3Image: state.s3Image
+    s3Image: state.s3Image,
+    globalFilter: state.globalFilter
 });
 
 const mapDispatchToProps = dispatch => {
