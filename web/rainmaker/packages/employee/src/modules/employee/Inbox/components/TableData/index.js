@@ -19,6 +19,8 @@ import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils
 import "./index.css";
 import Filter from "../Filter";
 import { getLocaleLabels } from "../../../../../ui-utils/commons";
+import { TextField } from "components";
+
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -45,6 +47,9 @@ const styles = (theme) => ({
 
 class TableData extends Component {
   state = {
+    searchFilter: {
+      value: ''
+    },
     filter: {
       localityFilter: {
         selectedValue: ["ALL"],
@@ -92,10 +97,25 @@ class TableData extends Component {
     })
     return newList;
   }
+  applyFilter = (uid, value) => {
+    if (uid[0].text.toLowerCase().includes(value.toLowerCase()) ||
+      uid[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
+      String(uid[4].text).toLowerCase().includes(value.toLowerCase()) ||
+      getLocaleLabels(`CS_COMMON_INBOX_${uid[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
+      getLocaleLabels(uid[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
+      getLocaleLabels(uid[2].text.props.label).toLowerCase().includes(value.toLowerCase())
+    ) {
+      return true;
+    }
+    return false;
+  }
+  handleChangeSearch = (value) => {
+    this.setState({ searchFilter: { value } })
+  }
 
   handleChangeFilter = (filterName, value) => {
     const tempObject = cloneDeep(this.state.initialInboxData);
-    let initialInboxData=get(this.state,'initialInboxData');
+    let initialInboxData = get(this.state, 'initialInboxData');
     const filter = { ...this.state.filter }
     filter[filterName].selectedValue = value
     if (initialInboxData.length == 2) {
@@ -108,18 +128,22 @@ class TableData extends Component {
         } if (!filter.statusFilter.selectedValue.includes('ALL')) {
           row.rows = row.rows.filter((uid) => filter.statusFilter.selectedValue.includes(uid[2].text.props.label.split('_')[2]))
         }
+        if (this.state.searchFilter.value != '') {
+          row.rows = row.rows.filter((uid) => this.applyFilter(uid, this.state.searchFilter.value)
+          )
+        }
       })
-      }
-    let {taskboardData, tabData} = this.state;
-    taskboardData[0].head=initialInboxData[1].rows.length;
-    taskboardData[2].head=initialInboxData[1].rows.length/3;
-    tabData[0].dynamicArray=[initialInboxData[0].rows.length];
-    tabData[1].dynamicArray=[initialInboxData[1].rows.length];
+    }
+    let { taskboardData, tabData } = this.state;
+    taskboardData[0].head = initialInboxData[1].rows.length;
+    taskboardData[2].head = initialInboxData[1].rows.length / 3;
+    tabData[0].dynamicArray = [initialInboxData[0].rows.length];
+    tabData[1].dynamicArray = [initialInboxData[1].rows.length];
     this.setState({
       filter,
       inboxData: initialInboxData,
       taskboardData,
-      initialInboxData:tempObject,
+      initialInboxData: tempObject,
       tabData
     })
   }
@@ -140,12 +164,16 @@ class TableData extends Component {
         dropdownData: [...this.state.filter.statusFilter.dropdownData]
       }
     }
-    let {taskboardData, tabData} = this.state;
-    taskboardData[0].head=initialInboxData[1].rows.length;
-    taskboardData[2].head=initialInboxData[1].rows.length/3;
-    tabData[0].dynamicArray=[initialInboxData[0].rows.length];
-    tabData[1].dynamicArray=[initialInboxData[1].rows.length];
-    this.setState({ filter, taskboardData, tabData,inboxData: initialInboxData,initialInboxData:tempObject });
+    let { taskboardData, tabData } = this.state;
+    taskboardData[0].head = initialInboxData[1].rows.length;
+    taskboardData[2].head = initialInboxData[1].rows.length / 3;
+    tabData[0].dynamicArray = [initialInboxData[0].rows.length];
+    tabData[1].dynamicArray = [initialInboxData[1].rows.length];
+    this.setState({
+      searchFilter: {
+        value: ''
+      }, filter, taskboardData, tabData, inboxData: initialInboxData, initialInboxData: tempObject
+    });
   }
   prepareInboxDataRows = async (data) => {
     const { toggleSnackbarAndSetText } = this.props;
@@ -186,7 +214,7 @@ class TableData extends Component {
         "error"
       );
     }
-   
+
     return data.map((item) => {
       const locality = localitymap.find(locality => {
         return locality.referencenumber === item.businessId;
@@ -234,7 +262,7 @@ class TableData extends Component {
       );
     }
   };
-  
+
   componentDidMount = async () => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
@@ -298,8 +326,8 @@ class TableData extends Component {
         return dropdown;
 
       })
-       this.setState({
-        inboxData, taskboardData, tabData, initialInboxData:cloneDeep(inboxData), filter: {
+      this.setState({
+        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData), filter: {
           localityFilter: {
             selectedValue: ['ALL'],
             dropdownData: this.getUniqueList([
@@ -398,13 +426,26 @@ class TableData extends Component {
   };
 
   render() {
-    const { value, taskboardData, tabData, inboxData, moduleName, filter } = this.state;
+    const { value, taskboardData, tabData, inboxData, moduleName, filter, searchFilter } = this.state;
     const { classes, onPopupOpen } = this.props;
-    const { handleChangeFilter, clearFilter } = this;
+    const { handleChangeFilter, clearFilter, handleChangeSearch } = this;
+
+
     return (
       <div className="col-sm-12">
         <div>
-          <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
+          <div className="col-md-8">
+            <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
+          </div>
+          <div className="col-md-4"> <TextField floatingLabelText="Search"
+            value={searchFilter.value}
+            onChange={(e, value) => {
+
+              handleChangeSearch(value);
+            }}
+
+            className="filter-fields" /></div>
+
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>
           {/* <TextField value={"search"} />
           */}
@@ -439,7 +480,7 @@ const mapStateToProps = (state) => {
   const { preparedFinalObject } = screenConfiguration;
   const { InboxData } = preparedFinalObject;
 
-  return { InboxData,  userInfo };
+  return { InboxData, userInfo };
 };
 
 const mapDispatchToProps = (dispatch) => {
