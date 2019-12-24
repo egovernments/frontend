@@ -90,10 +90,12 @@ class PerformanceChart extends React.Component {
   }
   renderPopup(data) {
     const { classes } = this.props;
+    let { strings } = this.props;
+
     if (data.length > 3) {
       return (<div className={classes.bottomDiv}>
-        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} text={"View all"} handleClick={this.handleClick.bind(this)} />
-        <Dialogs close={this.closeDialogue.bind(this)} IsOpen={this.state.IsOpen} title={"Back to MyDashboard"} needCustomTitle={true}>
+        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} text={strings["DSS_VIEW_ALL"] || "View all"} handleClick={this.handleClick.bind(this)} />
+        <Dialogs close={this.closeDialogue.bind(this)} IsOpen={this.state.IsOpen} title={strings["DSS_BACK_TO_MY_DASHBOARD"] || "Back to MyDashboard"} needCustomTitle={true}>
           {this.renderCard(data)}
         </Dialogs>
       </div>)

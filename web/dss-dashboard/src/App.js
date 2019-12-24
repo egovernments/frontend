@@ -147,7 +147,8 @@ let dataL = {
     "DSS_THIS_QUARTER": "This Quarter",
     "DSS_CUSTOM": "Custom",
     "DSS_FY": "FY",
-    "DSS_RANK": "Rank"
+    "DSS_RANK": "Rank",
+    "DSS_NO_DATA_AVAILABLE": "No Data Available"
   }
 }
 

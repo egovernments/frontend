@@ -229,10 +229,10 @@ class DateRange extends React.Component {
         </DialogContent>
         <DialogActions className={classes.actions}>
           <Button className={classes.cancelbtn} onClick={this.handleCancel.bind(this)}>
-            Cancel
+            { this.props.cancelBtn}
         </Button>
           <Button className={classes.okbtn} onClick={this.handleOk.bind(this)}>
-            Select
+            {this.props.selectBtn}
         </Button>
         </DialogActions>
       </Dialog>

@@ -23,7 +23,7 @@ import download from '../../images/download.svg';
 import share from '../../images/share.svg';
 import { renderToString, } from 'react-dom/server'
 import FilterTable from '../Dashboard/download/filterTable';
-import { downloadAsImage, printDocumentShare } from '../../utils/block';
+import { downloadAsImage, printDocumentShare, printDocument } from '../../utils/block';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../utils/Share'
@@ -133,7 +133,7 @@ class CustomizedMenus extends Component {
 
     downloadPDF = () => {
         this.props.APITrans(true)
-        printDocumentShare(this.renderTable(), this.props.fileName || 'DSS').then(function (pdfO) {
+        printDocument(this.renderTable(), this.props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             // setAnchorEl(null);

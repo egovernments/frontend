@@ -130,6 +130,8 @@ class GlobalFilter extends Component {
 
     renderDateRange(label, data) {
         let { classes } = this.props;
+        let { strings } = this.props;
+
         return (
 
             <FormControl fullWidth className={classes.formControl} >
@@ -157,6 +159,8 @@ class GlobalFilter extends Component {
                         onClick={this.openPicker.bind(this)}
                     />
                     <DateRange
+                        selectBtn={strings["DSS_SELECT"] || "SELECT"}
+                        cancelBtn={strings["DSS_CANCEL"] || "CANCEL"}
                         key={"DateRange"}
                         id="date-range"
                         title1={(_.get(this.state, "filterData.duration.title") || this.state.value)}
@@ -322,6 +326,7 @@ class GlobalFilter extends Component {
 
     render() {
         let { classes, globalFilterData, GFilterData } = this.props;
+        let { strings } = this.props;
         return (
             <Cards key="gf" fullW={true}>
                 <div className={classes.mainFilter}>
@@ -345,8 +350,8 @@ class GlobalFilter extends Component {
                     {/* {isMobile && this.renderFilters()}s */}
 
                     <div id="divNotToPrint" className={classes.actions}>
-                        <ActionButtons buttonType="default" fontSize="16px" text="CLEAR ALL" disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
-                        <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text="APPLY" clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                        <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "CLEAR ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                        <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
                     </div>
                 </div>
 
@@ -384,7 +389,8 @@ class GlobalFilter extends Component {
 const mapStateToProps = (state) => {
     return {
         globalFilterData: state.globalFilter,
-        GFilterData: state.GFilterData
+        GFilterData: state.GFilterData,
+        strings: state.lang
     }
 }
 

@@ -1,6 +1,8 @@
 import React from 'react'
 import _ from 'lodash'
 import { withStyles } from '@material-ui/core/styles'
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -232,6 +234,7 @@ class EnhancedTable extends React.Component {
     // const { data, columnData, totalCount, classes, tableType, needCheckBox, needHash, needSearch } = this.props;
     const { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
     var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
+    let { strings } = this.props;
     return (
       <Paper className={classes.root}>
         <div className={classes.downloadNsearch}>
@@ -284,7 +287,7 @@ class EnhancedTable extends React.Component {
                   <TableBody>
                     <TableRow className={classes.tBodyStyle}>
                       <TableCell colSpan={columnData.length + 3} component='th' scope='row' data-title={'Actions: '}>
-                        <h4 className={classes.alignCenter}>No Data Available</h4>
+                        <h4 className={classes.alignCenter}>{strings["DSS_NO_DATA_AVAILABLE"] || "No Data Available"}</h4>
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -322,4 +325,10 @@ class EnhancedTable extends React.Component {
   }
 }
 
-export default withStyles(styles)(EnhancedTable)
+const mapStateToProps = (state) => {
+  return {
+    strings: state.lang
+  }
+}
+
+export default withRouter(withStyles(styles)(connect(mapStateToProps)(EnhancedTable)))

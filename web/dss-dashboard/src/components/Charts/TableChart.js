@@ -88,7 +88,7 @@ class TableChart extends Component {
   handleChipClick = (index,tabName,visualcode) => {      
     let filterList =  _.cloneDeep(this.state.filterList);
     filterList[tabName] = filterList[tabName].splice(0,index);
-    if(tabName != this.state.active){
+    if(this.state.active && tabName != this.state.active){
       let curTabfilter = filterList[this.state.active]
       visualcode = curTabfilter[curTabfilter.length - 1][0]
     }
@@ -96,7 +96,12 @@ class TableChart extends Component {
   }
 
   applyFilter = (visualcode, drillCode, drilfilters,tabName,rowData, event) => {
-    let tempArr = [visualcode,drillCode,drilfilters,tabName,rowData[drilfilters.column]];
+    let tempValue = rowData[drilfilters.column];
+    // need to change now its hack.
+    if(drilfilters.column != 'DDRs' && drilfilters.key == 'tenantId' && tempValue.split('.').length == 1){
+      tempValue = 'pb.'+tempValue.toLowerCase();
+    }
+    let tempArr = [visualcode,drillCode,drilfilters,tabName,tempValue];
     let filterList = this.state.filterList;
 
     if(_.isEmpty(filterList, true) || typeof filterList[tabName] == "undefined"){
