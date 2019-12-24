@@ -17,16 +17,17 @@
         {
             "label": "DDRs",
             "type": "dropdown",
-            "values": ["Jalandhar-MC",
+            "values": [
+                "Jalandhar-DDR",
                 "Phagwara-MC",
-                "Amritsar-MC",
+                "Amritsar-DDR",
                 "Jalandhar-DDR",
                 "Patiala-DDR"
             ],
             "master": {
-                "Jalandhar-MC": ["pb.jalandhar"],
+                "Jalandhar-DDR": ["pb.jalandhar"],
                 "Phagwara-MC": ["pb.phagwara"],
-                "Amritsar-MC": ["pb.amritsar"],
+                "Amritsar-DDR": ["pb.amritsar"],
                 "Jalandhar-DDR": ["pb.nawanshahr"],
                 "Patiala-DDR": ["pb.nayagaon", "pb.derabassi"]
             }
@@ -225,8 +226,7 @@
             ]
         }
     ],
-    "GFilterData": {
-        "Denomination": "Lac",
+    "GFilterData": {"Denomination": "Lac",
         "ULBS": [],
         "DDRs": [],
         "Services": "",

@@ -24,11 +24,11 @@ class Chips extends React.Component{
       }
   }
   handleClick = () => {
-    this.props.handleClick(this.props.visualcode);
+    this.props.handleClick(this.props.index,this.props.label,this.props.value[0]);
   }
 
   render(){
-   let { val, classes }=this.props;
+   let { label, value,classes }=this.props;
 
     return (
       <div >      
@@ -36,8 +36,8 @@ class Chips extends React.Component{
         className={classes.root}
           variant="outlined"
           size="small"
-          avatar={<Avatar>{ val ? val.type : ''}</Avatar>}
-          label={val ? val.label : ''}
+          avatar={<Avatar>{ label ? label : ''}</Avatar>}
+          label={value[4]}
           // color="ward"
           clickable
           onDelete={this.handleClick}

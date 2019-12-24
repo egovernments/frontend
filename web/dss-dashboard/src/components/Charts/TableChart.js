@@ -12,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import NFormatterFun from '../common/numberFormaterFun';
 import getChartOptions from '../../actions/getChartOptions';
+import getFilterObj from '../../actions/getFilterObj';
 import axios from 'axios';
 
 class TableChart extends Component {
@@ -25,12 +26,40 @@ class TableChart extends Component {
       visualcode: null,
       tabFilterKey: null,
       drillDownId: null,
-      active:'BOUNDARY'
+      active:null,
+      drilfilters:null,
+      filterList : {}
     }
   }
 
-  getRequest(calledFrom, visualcode, filters, moduleLevel, dataChips) {
-    let getAxiosOptions = getChartOptions(visualcode, filters);
+  getRequest(calledFrom, visualcode,active, filterList) {
+    //let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, page);
+    filterList = filterList ? filterList : this.state.filterList;
+    let filters = {},ttest = [],tempFL;
+    if(!_.isEmpty(filterList,true)){      
+      _.map(filterList, (k,v) => { 
+        if(filterList[v] && filterList[v].length >0){
+          tempFL = filterList[v][filterList[v].length - 1];
+            if(tempFL[2]['column'] == 'DDRs'){
+              let tempDDR = this.props.globalFilterData[1]['master'][tempFL[4]];
+                  for (var j = 0; j < tempDDR.length; j++) {
+                    ttest.push(tempDDR[j]);
+                  }
+                  filters[tempFL[2]['key']] = ttest;
+                  console.log(ttest);
+            }else{
+              console.log(tempFL[4]);
+              filters[tempFL[2]['key']] = tempFL[4];
+            }
+
+        }
+      });
+    }
+  
+
+    var globalFilters = this.props.filters;
+    globalFilters = {...globalFilters,...filters};
+    let getAxiosOptions = getChartOptions(visualcode, globalFilters);
     
     if (getAxiosOptions && getAxiosOptions.url) {
       axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
@@ -39,23 +68,15 @@ class TableChart extends Component {
           let tempData = response.data.responseData;
           let drillCode = response.data.responseData['drillDownChartId'];
           let visualcode = response.data.responseData['visualizationCode'];
-
-          if (dataChips) {
-            // tempData['filter2'] = dataChips['filter'];
-            tempData['tt'] = dataChips['tt'];
-
-            tempState.data = tempData;
-            tempState.filter2 = true
-            tempState.filterValue = dataChips['tt'];
-            tempState.drillCode = drillCode;
-            if (drillCode != 'none' || calledFrom == 'clickFromTab')
-              tempState.visualcode = visualcode;
-          } else {
-            tempState.data = tempData;
-            tempState.drillCode = drillCode;
-            if (drillCode != 'none' || calledFrom == 'clickFromTab')
-              tempState.visualcode = visualcode;
-          }
+          let drilfilters = (response.data.responseData['filter'] && response.data.responseData['filter'].length>0)?response.data.responseData['filter'][0]:null;
+          tempState.data = tempData;
+          tempState.drillCode = drillCode;
+          tempState.drilfilters= drilfilters;
+          if(active)
+            tempState.active = active;
+          if (drillCode != 'none' || calledFrom == 'clickFromTab')
+            tempState.visualcode = visualcode;          
+          tempState.filterList=filterList;
           this.setState(tempState);
         })
         .catch(error => {
@@ -64,72 +85,84 @@ class TableChart extends Component {
     }
   }
 
-  handleChipClick = (visualcode) => {
-    visualcode = this.props.chartsData[this.props.chartKey]['visualizationCode']
-    let tenantId = {};
-    if (this.state.filter2 && this.state.filterValue) {
-      tenantId = { tenantId: this.state.filterValue.tenantId }
+  handleChipClick = (index,tabName,visualcode) => {      
+    let filterList =  _.cloneDeep(this.state.filterList);
+    filterList[tabName] = filterList[tabName].splice(0,index);
+    if(tabName != this.state.active){
+      let curTabfilter = filterList[this.state.active]
+      visualcode = curTabfilter[curTabfilter.length - 1][0]
     }
-    //this.setState({ data: prodData[0] })   
-    this.setState({
-      drillDownId: this.props.chartsData[this.props.chartKey].filter[0],
-      filter2: false
-    })
-
-    let dataChips = {
-      filter2: false
-    }
-
-    this.getRequest("handleChipClick", this.state.activeTab? this.state.activeTab : visualcode, {}, 'PT', null)
-  }
-  applyFilter = (visualcode, drillCode, rowData, event) => {
-    let dataChips = {
-      filter2: true,
-      tt:
-      {
-        id: 1,
-        'label': rowData[this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].column : this.props.chartsData[this.props.chartKey].filter[0].column] ,
-        'type': this.state.active,
-        'color': 'orange',
-        [this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0  && this.state.data.filter[0].key ?  this.state.data.filter[0].key :'']: rowData[this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].column : '']
-      },
-      visualcode: visualcode
-    };
-    this.getRequest("applyFilter", drillCode, { [this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].key : '']: dataChips.tt[this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 ? this.state.data.filter[0].key : ''] }, 'PT', dataChips)
+    this.getRequest("handleChipClick", visualcode,'',filterList);
   }
 
-  
+  applyFilter = (visualcode, drillCode, drilfilters,tabName,rowData, event) => {
+    let tempArr = [visualcode,drillCode,drilfilters,tabName,rowData[drilfilters.column]];
+    let filterList = this.state.filterList;
+
+    if(_.isEmpty(filterList, true) || typeof filterList[tabName] == "undefined"){
+      filterList[tabName] = [];
+    }
+    var visualCodeExists = false;
+    if(filterList[tabName].length > 0){
+
+      for(var i=0; i < filterList[tabName].length ; i++ ){
+        if(filterList[tabName][i][0] == visualcode){
+          // if it is exists visualCode
+          filterList[tabName][i] = tempArr;
+          visualCodeExists = true;
+          break;
+        }
+      }
+      // Not Exists so pushing new to exist tab
+      if(!visualCodeExists){
+        filterList[tabName].push(tempArr);
+      }
+    }else{
+      // New entry
+      filterList[tabName].push(tempArr);
+    }
+    this.getRequest("applyFilter", drillCode, '',filterList)
+  }
+
+  getFilterObj(filters){
+    /*let tempDDR = this.props.globalFilterData[1]['master'][tvalue[i]];
+    for (var j = 0; j < tempDDR.length; j++) {
+      tempValue.push(tempDDR[j]);
+    }
+    console.log(this.props.GFilterData);*/
+    return filters;
+  }
+
+  renderChip = (tabName, chipValue) => {
+    var row = [];
+    for(var i=0; i < chipValue.length;i++){
+      if(chipValue[i] && chipValue[i].length >0 ){
+        row.push(<div className="chipWrap"><Chips index={i} label={tabName} value={chipValue[i]} handleClick={this.handleChipClick} /></div>);
+      }
+    }
+    return row;
+  }
+
   clickFromTab = (visualcode,active) => {
-    let tenantId = {};
-    if (this.state.filter2 && this.state.filterValue) {
-      tenantId = { tenantId: this.state.filterValue.tenantId }
-    }
-    let dataChips = {
-      filter2: false
-    }
-    
-
-    this.getRequest("clickFromTab", visualcode, tenantId, 'PT', "")
-    this.setState({
-      filter2: false,
-      activeTab: visualcode,
-      active:active
-    })
-
-
+    this.getRequest("clickFromTab", visualcode,active)    
   }
+
 
   render() {
-    let { classes, chartData, chartKey, chartsData, strings } = this.props;
-    let drillCode, visualcode, tabFilterKey;
+    let { classes, chartData, chartKey, chartsData, strings, chartParent } = this.props;
+    let drillCode, visualcode, tabFilterKey,tabName,drilfilters;
     if (this.props && chartData) {
       if (this.state.data) {
         chartData = this.state.data.data;
         drillCode = this.state.drillCode;
         visualcode = this.state.visualcode;
+        tabName = this.state.active;
+        drilfilters = this.state.drilfilters;
       }
       drillCode = drillCode ? drillCode : chartsData[this.props.chartKey]['drillDownChartId'];
       visualcode = visualcode ? visualcode : chartsData[this.props.chartKey]['visualizationCode'];
+      tabName = tabName ? tabName : chartParent[0]['tabName'];
+      drilfilters = drilfilters? drilfilters : chartsData[this.props.chartKey]['filter'][0];
       let columnData = _.chain(chartData).first().get("plots").map((k, v) => {
         if(k.name != "S.N."){
           let yes = v < 0;
@@ -172,19 +205,21 @@ class TableChart extends Component {
             {/* <h5 style={{ flex: '1', textAlign: 'left' }}>Demand & Collection Index</h5> */}
             {/* <div className="fwh"></div> */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <SwitchButton clickFromTab={this.clickFromTab} chartParent={this.props.chartParent} />
+              <SwitchButton clickFromTab={this.clickFromTab} chartParent={chartParent} />
 
             </div>
           </div>
-          {(this.state.data && this.state.filter2) &&
+          {(this.state.data && !_.isEmpty(this.state.filterList, true)) &&
             <div className="row tableFilterChipWrap">
               <div className="filLabel">
                 Filters Applied
-                        </div>
-              <div className="chipWrap">
-                <Chips val={this.state.filterValue} visualcode={visualcode} handleClick={this.handleChipClick} />
-              </div>
-            </div>
+              </div>              
+              { 
+                _.map(this.state.filterList, (k, v) =>  {
+                    return this.renderChip(v,k)
+                })
+              }
+            </div>    
           }
           {/* <Table tableData={this.state.data} callBack={this.applyFilter.bind(this)} />               */}
           {
@@ -194,7 +229,7 @@ class TableChart extends Component {
               columnData={columnData}
               // callAPI={this.filterPageAPI.bind(this)}
               tableType='CENTERS_TABLE'
-              cellClick={this.applyFilter.bind(this, visualcode, drillCode)}
+              cellClick={this.applyFilter.bind(this, visualcode, drillCode,drilfilters,tabName)}
               //  orderBy={'Sno'}
               // needCheckBox={false}
               // needHash={false}
@@ -220,6 +255,7 @@ const mapStateToProps = (state) => {
     dncData: state.DemandAndCollectionData,
     GFilterData: state.GFilterData,
     chartsData: state.chartsData,
+    globalFilterData:state.globalFilter,
     strings: state.lang
   }
 }

@@ -190,31 +190,33 @@ class CustomizedShare extends Component {
         console.log(this.props.s3Image)
 
         if (prevProps.s3File != this.props.s3File) {
-            debugger
-            let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', this.props.s3File.files[0].fileStoreId ? this.props.s3File.files[0].fileStoreId : '');
-            APITransport(s3ImageAPI)
+            const {S3Transporter} = this.props
+            let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', this.props.s3File.files && Array.isArray(this.props.s3File.files) &&  this.props.s3File.files.length>0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId );
+            S3Transporter(s3ImageAPI)
         }
 
         if (prevProps.s3Image != this.props.s3Image) {
             debugger
             let image = ''
-            if (((this.props.s3Image.fileStoreIds[0].url).match(new RegExp("https", "g")) || []).length > 1) {
+            let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length>0 && this.props.s3Image.fileStoreIds[0].url
+           
+            if ((file.match(new RegExp("https", "g")) || []).length > 1) {
                 debugger
-                var n = (this.props.s3Image.fileStoreIds[0].url).lastIndexOf("https");
-                image = (this.props.s3Image.fileStoreIds[0].url).substr(n, (this.props.s3Image.fileStoreIds[0].url).length)
+                var n = file.lastIndexOf("https");
+                image = file.substr(n, file.length)
             } else {
                 debugger
-                image = this.props.s3Image.fileStoreIds[0].url
+                image = file
             }
 
             var fakeLink = document.createElement('a');
-            if (this.state.type === 'whatsapp') {
+            if (image && this.state.type === 'whatsapp') {
                 fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
                 fakeLink.setAttribute('data-action', 'share/whatsapp/share');
                 fakeLink.setAttribute('target', '_blank');
                 fakeLink.click();
             }
-            if (this.state.type === 'email') {
+            if (image && this.state.type === 'email') {
                 fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
                 fakeLink.click();
             }
@@ -318,7 +320,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         APITrans: APIStatus,
         APITransport: APITransport,
-
+        S3Transporter: APITransport
     }, dispatch)
 }
 

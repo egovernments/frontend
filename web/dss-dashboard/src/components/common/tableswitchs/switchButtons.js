@@ -22,7 +22,7 @@ class SwitchButton extends Component {
 
     render() {
         let { classes, chartParent } = this.props;
-        let switchLabel = ["Boundary", "Usage"];
+        //let switchLabel = ["Boundary", "Usage"];
         return (
             <ToggleButtonGroup
                 value={this.state.value}
@@ -32,7 +32,7 @@ class SwitchButton extends Component {
                 aria-label="text alignment"
             >
                 {chartParent.map((d, i) =>
-                    <ToggleButton key={i} checked={this.state.value === d.id} className={classes.toggleButton} value={d.id} aria-label="left aligned" >{switchLabel[i]}</ToggleButton>
+                    <ToggleButton key={i} checked={this.state.value === d.id} className={classes.toggleButton} value={d.id} aria-label="left aligned" >{d.tabName}</ToggleButton>
                 )}
             </ToggleButtonGroup>
         );

@@ -8,7 +8,8 @@ const constants = {
     CHARTS: 'CHARTS',
     LANGUAGE_CHANGE: 'LANGUAGE_CHANGE',
     FILE_UPLOAD: 'FILE_UPLOAD',
-    S3_IMAGE: 'S3_IMAGE'
+    S3_IMAGE: 'S3_IMAGE',
+    MDMS: 'MDMS'
 }
 
 export default constants

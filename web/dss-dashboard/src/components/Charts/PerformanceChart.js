@@ -73,7 +73,7 @@ class PerformanceChart extends React.Component {
         <UiTable
           data={newData}
           columnData={columnData}
-          needHash={false}
+          needHash={true}
           orderBy={"rank"}
           order={(_.get(newData[0], 'rank') === 1 || false) ? 'asc' : 'desc'}
           tableType='ULB'

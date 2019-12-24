@@ -13,10 +13,10 @@ class GenericChart extends React.Component {
         // let {  page } = this.props;
         let filters = this.props.filters;
         switch (d.vizType.toUpperCase()) {
-            case 'METRIC-COLLECTION':
+            /*case 'METRIC-COLLECTION':
                 return <CollectionChart key={d.id} chartData={d.charts} filters={filters} dimensions={d.dimensions} section={chartData.name} />
             case 'PERFORMING-METRIC':
-                return <PerformanceChart key={d.id} chartData={d.charts} label={d.name} filters={filters} dimensions={d.dimensions} section={chartData.name} />
+                return <PerformanceChart key={d.id} chartData={d.charts} label={d.name} filters={filters} dimensions={d.dimensions} section={chartData.name} />*/
             case 'CHART':
                 return <ChartType key={d.id} gFilter={this.props.gFilter} chartData={d.charts} label={d.name} filters={filters} dimensions={d.dimensions} section={chartData.name} />
             default:
