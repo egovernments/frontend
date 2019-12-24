@@ -27,6 +27,7 @@ import { Tooltip } from '@material-ui/core';
 import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
 import APITransport from '../../../actions/apitransport/apitransport'
 import S3ImageAPI from '../../../actions/s3Image/s3Image';
+import constants from '../../../actions/constants'
 
 const cardStyle = {
   backgroundColor: variables.widget_background,
@@ -85,42 +86,42 @@ class Cards extends Component {
         blobData.name = (strings[title] || 'image') + ts + ".jpeg"
 
         try {
-          let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', blobData);
+          let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_CARD, blobData);
           APITransport(fileUploadAPI)
         } catch{ }
       }.bind(this))
   }
 
   componentDidUpdate(prevProps) {
-    // if (prevProps.s3File != this.props.s3File) {
-    //   const { S3Trans } = this.props
-    //   let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', this.props.s3File.files && Array.isArray(this.props.s3File.files) && this.props.s3File.files.length > 0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId);
-    //   S3Trans(s3ImageAPI)
-    // }
+    if (prevProps.s3FileCard != this.props.s3FileCard) {
+      const { S3Trans } = this.props
+      let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId);
+      S3Trans(s3ImageAPI)
+    }
 
 
-    // if (prevProps.s3Image != this.props.s3Image) {
-    //   let image = ''
-    //   let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length > 0 && this.props.s3Image.fileStoreIds[0].url
-    //   console.log(file)
-    //   if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-    //     debugger
-    //     var n = file.lastIndexOf("https");
-    //     image = file.substr(n, file.length)
-    //     console.log(image)
+    if (prevProps.s3ImageCard != this.props.s3ImageCard) {
+      let image = ''
+      let file = this.props.s3ImageCard && this.props.s3ImageCard.fileStoreIds && Array.isArray(this.props.s3ImageCard.fileStoreIds) && this.props.s3ImageCard.fileStoreIds.length > 0 && this.props.s3ImageCard.fileStoreIds[0].url
+      console.log(file)
+      if ((file.match(new RegExp("https", "g")) || []).length > 1) {
+        debugger
+        var n = file.lastIndexOf("https");
+        image = file.substr(n, file.length)
+        console.log(image)
 
-    //   } else {
-    //     debugger
-    //     image = file
-    //     console.log(image)
-    //   }
+      } else {
+        debugger
+        image = file
+        console.log(image)
+      }
 
-    //   var fakeLink = document.createElement('a');
-    //   fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(this.props.s3File['url']));
-    //   fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-    //   fakeLink.setAttribute('target', '_blank');
-    //   fakeLink.click();
-    // }
+      var fakeLink = document.createElement('a');
+      fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(this.props.s3File['url']));
+      fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+      fakeLink.setAttribute('target', '_blank');
+      fakeLink.click();
+    }
 
   }
 

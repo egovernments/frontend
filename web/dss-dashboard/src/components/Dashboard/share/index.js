@@ -21,6 +21,8 @@ import Variables from '../../../styles/variables'
 import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
 import APITransport from '../../../actions/apitransport/apitransport'
 import S3ImageAPI from '../../../actions/s3Image/s3Image';
+import C from '../../../actions/constants';
+import constants from '../../../actions/constants';
 
 const StyledMenu = withStyles({
     paper: {
@@ -110,7 +112,7 @@ class CustomizedShare extends Component {
             // setAnchorEl(null);
 
             try {
-                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', pdfO.output('blob'));
+                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, pdfO.output('blob'));
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
@@ -135,7 +137,7 @@ class CustomizedShare extends Component {
                 blobData.name = "dss" + ts + ".jpeg"
 
                 try {
-                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', blobData);
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD,blobData);
                     APITransport(fileUploadAPI)
                 } catch{ }
             }.bind(this))
@@ -151,7 +153,7 @@ class CustomizedShare extends Component {
         printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
             try {
-                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', pdfO.output('blob'));
+                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, pdfO.output('blob'));
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
@@ -178,7 +180,7 @@ class CustomizedShare extends Component {
                 blobData.name = "dss" + ts + ".jpeg"
 
                 try {
-                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', blobData);
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, blobData);
                     APITransport(fileUploadAPI)
                 } catch{ }
             }.bind(this))
@@ -194,7 +196,7 @@ class CustomizedShare extends Component {
 
         if (prevProps.s3File != this.props.s3File) {
             const {S3Transporter} = this.props
-            let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', this.props.s3File.files && Array.isArray(this.props.s3File.files) &&  this.props.s3File.files.length>0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId );
+            let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE,this.props.s3File.files && Array.isArray(this.props.s3File.files) &&  this.props.s3File.files.length>0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId );
             S3Transporter(s3ImageAPI)
         }
 

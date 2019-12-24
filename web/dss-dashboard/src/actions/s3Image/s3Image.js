@@ -4,9 +4,9 @@ import C from '../constants';
 import CONFIGS from '../../config/configs'
 
 export default class S3ImageAPI extends API {
-    constructor(timeout = 2000, path, reqBody, queryParams = null) {
+    constructor(timeout = 2000, path, reqType, reqBody, queryParams = null) {
         super('GET', timeout, false);
-        this.type = C.S3_IMAGE;
+        this.type = reqType;
         this.body = reqBody;
         this.path = path;
         this.s3Image = {};

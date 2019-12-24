@@ -6,9 +6,9 @@ import C from '../constants';
 import CONFIGS from '../../config/configs'
 
 export default class FileUploadAPI extends API {
-    constructor(timeout = 2000, path, reqBody, queryParams = null) {
+    constructor(timeout = 2000, path, reqType, reqBody, queryParams = null) {
         super('POST', timeout, false, 'MULTIPART');
-        this.type = C.FILE_UPLOAD;
+        this.type = reqType;
         this.path = path;
         this.s3File = {};
         this.body = reqBody;
