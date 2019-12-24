@@ -112,6 +112,9 @@ class CustomizedShare extends Component {
             // setAnchorEl(null);
 
             try {
+                console.log(pdfO)
+
+                console.log(pdfO.output('blob'))
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, pdfO.output('blob'));
                 APITransport(fileUploadAPI)
             } catch{ }
@@ -137,6 +140,10 @@ class CustomizedShare extends Component {
                 blobData.name = "dss" + ts + ".jpeg"
 
                 try {
+                    console.log(dataUrl)
+
+                    console.log(blobData)
+
                     let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD,blobData);
                     APITransport(fileUploadAPI)
                 } catch{ }
@@ -153,6 +160,10 @@ class CustomizedShare extends Component {
         printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
             try {
+                console.log(pdfO)
+
+                console.log(pdfO.output('blob'))
+
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, pdfO.output('blob'));
                 APITransport(fileUploadAPI)
             } catch{ }
@@ -178,7 +189,8 @@ class CustomizedShare extends Component {
             .then(function (dataUrl) {
                 var blobData = this.dataURItoBlob(dataUrl);
                 blobData.name = "dss" + ts + ".jpeg"
-
+                console.log(dataUrl)
+                console.log(blobData)
                 try {
                     let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, blobData);
                     APITransport(fileUploadAPI)

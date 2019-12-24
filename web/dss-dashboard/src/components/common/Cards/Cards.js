@@ -75,27 +75,34 @@ class Cards extends Component {
   }
 
   shareAsImage = () => {
-    let { strings, title } = this.props;
-    let div = document.getElementById('card' + this.props.id);
-    var ts = Math.round((new Date()).getTime() / 1000);
-    var APITransport = this.props.APITransport
+    var fakeLink = document.createElement('a');
+      fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent("Test"));
+      fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+      fakeLink.setAttribute('target', '_blank');
+      fakeLink.click();
 
-    domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
-      .then(function (dataUrl) {
-        var blobData = this.dataURItoBlob(dataUrl);
-        blobData.name = (strings[title] || 'image') + ts + ".jpeg"
 
-        try {
-          let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_CARD, blobData);
-          APITransport(fileUploadAPI)
-        } catch{ }
-      }.bind(this))
+    // let { strings, title } = this.props;
+    // let div = document.getElementById('card' + this.props.id);
+    // var ts = Math.round((new Date()).getTime() / 1000);
+    // var APITransport = this.props.APITransport
+
+    // domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+    //   .then(function (dataUrl) {
+    //     var blobData = this.dataURItoBlob(dataUrl);
+    //     blobData.name = (strings[title] || 'image') + ts + ".jpeg"
+
+    //     try {
+    //       let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_CARD, blobData);
+    //       APITransport(fileUploadAPI)
+    //     } catch{ }
+    //   }.bind(this))
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.s3FileCard != this.props.s3FileCard) {
       const { S3Trans } = this.props
-      let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId);
+      let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE_CARD,this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId);
       S3Trans(s3ImageAPI)
     }
 
@@ -117,7 +124,7 @@ class Cards extends Component {
       }
 
       var fakeLink = document.createElement('a');
-      fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(this.props.s3File['url']));
+      fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
       fakeLink.setAttribute('data-action', 'share/whatsapp/share');
       fakeLink.setAttribute('target', '_blank');
       fakeLink.click();
