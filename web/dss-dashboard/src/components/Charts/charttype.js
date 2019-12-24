@@ -67,7 +67,7 @@ class ChartType extends React.Component {
             // var chartData = this.state.data.responseData;
             // this.state.data = null;
             switch (chartType) {
-                /*case 'PIE':
+                case 'PIE':
 
                     return <DonutChart chartData = { data }
                     label = { this.props.label }
@@ -90,7 +90,7 @@ class ChartType extends React.Component {
                     GFilterData = { this.props.GFilterData }
                     dimensions = { this.props.dimensions }
                     section = { this.props.section }
-                    />*/
+                    />
                 case 'TABLE':
                     return <TableChart chartData = { data }
                     chartKey = { chartKey }
