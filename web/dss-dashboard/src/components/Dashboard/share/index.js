@@ -96,6 +96,8 @@ class CustomizedShare extends Component {
     dataURItoBlob = (dataURI) => {
         var binary = atob(dataURI.split(',')[1]);
         var array = [];
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+        console.log(mimeString)
         for (var i = 0; i < binary.length; i++) {
             array.push(binary.charCodeAt(i));
         }
@@ -134,19 +136,16 @@ class CustomizedShare extends Component {
         var APITransport = this.props.APITransport
 
         let div = document.getElementById('divToPrint');
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
+        domtoimage.toBlob(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
             .then(function (dataUrl) {
-                var blobData = this.dataURItoBlob(dataUrl);
-                blobData.name = "dss" + ts + ".jpeg"
-
-                var image = new Image();
-                image.src = dataUrl
+                // var blobData = this.dataURItoBlob(dataUrl);
+                // blobData.name = "dss" + ts + ".jpeg"
+                console.log(dataUrl)
                 try {
                     console.log(dataUrl)
 
-                    console.log(blobData)
 
-                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, image);
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, dataUrl);
                     APITransport(fileUploadAPI) 
                 } catch{ }
             }.bind(this))
@@ -187,12 +186,11 @@ class CustomizedShare extends Component {
         let div = document.getElementById('divToPrint');
         var APITransport = this.props.APITransport
 
-        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
-            .then(function (dataUrl) {
-                var blobData = this.dataURItoBlob(dataUrl);
-                blobData.name = "dss" + ts + ".jpeg"
-                console.log(dataUrl)
+        domtoimage.toBlob(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
+            .then(function (blobData) {
+                // var blobData = this.dataURItoBlob(dataUrl);
                 console.log(blobData)
+                // console.log(blobData)
                 try {
                     let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, blobData);
                     APITransport(fileUploadAPI)
@@ -241,6 +239,7 @@ class CustomizedShare extends Component {
             }
             if (image && this.state.type === 'email') {
                 fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
+                fakeLink.setAttribute('target', '_top');
                 fakeLink.click();
             }
         }

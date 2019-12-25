@@ -289,6 +289,8 @@ class CustomizedMenus extends Component {
             }
             if (image && this.state.type === 'email') {
                 fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
+                fakeLink.setAttribute('target', '_top');
+
                 fakeLink.click();
             }
         }
