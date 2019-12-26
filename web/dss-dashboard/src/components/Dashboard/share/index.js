@@ -130,25 +130,27 @@ class CustomizedShare extends Component {
 
     shareWhatsAppImage = () => {
         this.setState({
-            type: 'whatsapp'
+        type: 'whatsapp'
         })
         var ts = Math.round((new Date()).getTime() / 1000);
         var APITransport = this.props.APITransport
-
+        
         let div = document.getElementById('divToPrint');
         domtoimage.toBlob(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
-            .then(function (dataUrl) {
-                // var blobData = this.dataURItoBlob(dataUrl);
-                // blobData.name = "dss" + ts + ".jpeg"
-                console.log(dataUrl)
-                try {
-                    console.log(dataUrl)
-
-
-                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, dataUrl);
-                    APITransport(fileUploadAPI) 
-                } catch{ }
-            }.bind(this))
+        .then(function (dataUrl) {
+        var blobData = this.dataURItoBlob(dataUrl);
+        blobData.name = "dss" + ts + ".jpeg";
+        var f1 = new File(blobData,"blobData.name");
+        
+        console.log(dataUrl)
+        try {
+        console.log(dataUrl)
+        
+        
+        let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, f1);
+        APITransport(fileUploadAPI)
+        } catch{ }
+        }.bind(this))
 
     }
 
