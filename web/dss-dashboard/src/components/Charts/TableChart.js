@@ -73,7 +73,7 @@ class TableChart extends Component {
           tempState.drillCode = drillCode;
           tempState.drilfilters= drilfilters;
           if(active)
-            tempState.active = active;
+            tempState.active = active.toUpperCase();
           if (drillCode != 'none' || calledFrom == 'clickFromTab')
             tempState.visualcode = visualcode;          
           tempState.filterList=filterList;
@@ -101,6 +101,7 @@ class TableChart extends Component {
     if(drilfilters.column != 'DDRs' && drilfilters.key == 'tenantId' && tempValue.split('.').length == 1){
       tempValue = 'pb.'+tempValue.toLowerCase();
     }
+    tabName = tabName.toUpperCase();
     let tempArr = [visualcode,drillCode,drilfilters,tabName,tempValue];
     let filterList = this.state.filterList;
 
