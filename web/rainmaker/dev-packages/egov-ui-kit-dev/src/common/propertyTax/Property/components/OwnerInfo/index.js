@@ -119,14 +119,14 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                 }
               : {
                   key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_TYPE", localizationLabelsData),
-                  value: getTranslatedLabel("PT_"+owner.documents[0].documentType,localizationLabelsData) || "NA",
+                  value:owner.documents[0].documentType? getTranslatedLabel("PT_"+(owner.documents[0].documentType).toUpperCase(),localizationLabelsData) || "NA" : "NA",
                 },
                 isInstitution
               ? {
                 }
               : {
                   key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_ID", localizationLabelsData),
-                  value: owner.documents[0].documentUid || "NA",
+                  value:owner.documents[0].documentType? owner.documents[0].documentUid || "NA":"NA",
                 },
         ]
       })
