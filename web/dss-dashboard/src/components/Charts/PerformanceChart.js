@@ -39,10 +39,10 @@ class PerformanceChart extends React.Component {
   }
   handleClick() {
      this.setState({
-       IsOpen: true
+       IsOpen: false
      })
-    //let codekey = _.chain(this.props).get('chartData').first().get("id").value();
-    //this.props.history.push(`/${this.state.page}/${codekey}`)
+    let codekey = _.chain(this.props).get('chartData').first().get("id").value();
+    this.props.history.push(`/${this.state.page}/${codekey}`)
   }
 
   closeDialogue() {
