@@ -79,6 +79,10 @@ class Cards extends Component {
     var ts = Math.round((new Date()).getTime() / 1000);
     var APITransport = this.props.APITransport
 
+    this.setState({
+      type: 'whatsapp'
+    })
+    
     domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
       .then(function (dataUrl) {
         var blobData = this.dataURItoBlob(dataUrl);
@@ -98,24 +102,23 @@ class Cards extends Component {
       S3Trans(s3ImageAPI)
     }
 
-
+    console.log(this.props.s3ImageCard)
+    console.log(prevProps.s3ImageCard)
     if (prevProps.s3ImageCard != this.props.s3ImageCard) {
       let image = ''
       let file = this.props.s3ImageCard && this.props.s3ImageCard.fileStoreIds && Array.isArray(this.props.s3ImageCard.fileStoreIds) && this.props.s3ImageCard.fileStoreIds.length > 0 && this.props.s3ImageCard.fileStoreIds[0].url
       console.log(file)
       if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-        debugger
         var n = file.lastIndexOf("https");
         image = file.substr(n, file.length)
         console.log(image)
 
       } else {
-        debugger
         image = file
         console.log(image)
       }
 
-      if (image) {
+      if (image && this.state.type === 'whatsapp') {
         var fakeLink = document.createElement('a');
         fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
         fakeLink.setAttribute('data-action', 'share/whatsapp/share');
