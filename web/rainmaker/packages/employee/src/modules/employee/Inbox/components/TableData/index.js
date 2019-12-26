@@ -21,7 +21,7 @@ import Filter from "../Filter";
 import { getLocaleLabels } from "../../../../../ui-utils/commons";
 import { TextField } from "components";
 
-
+const MAX_SLA = 21;
 const getWFstatus = (status) => {
   switch (status) {
     case "INITIATED":
@@ -132,17 +132,32 @@ class TableData extends Component {
         }
       })
     }
+    let ESCALATED_SLA = [];
+    let NEARING_SLA = [];
+    initialInboxData[1].rows.map(eachRow => {
+      if (eachRow[4].text < 0) {
+        ESCALATED_SLA.push(eachRow[4].text);
+      }
+      if (eachRow[4].text > 0 && eachRow[4].text < MAX_SLA / 3) {
+        NEARING_SLA.push(eachRow[4].text);
+      }
+    })
+
+
     let { taskboardData, tabData } = this.state;
     taskboardData[0].head = initialInboxData[1].rows.length;
-    taskboardData[2].head = initialInboxData[1].rows.length / 3;
+    taskboardData[1].head = NEARING_SLA.length;
+    taskboardData[2].head = ESCALATED_SLA.length;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
     tabData[1].dynamicArray = [initialInboxData[1].rows.length];
     this.setState({
       filter,
       inboxData: initialInboxData,
       taskboardData,
+      filteredInboxData: cloneDeep(initialInboxData),
       initialInboxData: tempObject,
       tabData, searchFilter
+
     })
   }
   handleChangeFilter = (filterName, value) => {
@@ -175,7 +190,9 @@ class TableData extends Component {
     this.setState({
       searchFilter: {
         value: ''
-      }, filter, taskboardData, tabData, inboxData: initialInboxData, initialInboxData: tempObject
+      }, filter, taskboardData, tabData, inboxData: initialInboxData,
+      filteredInboxData: cloneDeep(initialInboxData),
+      initialInboxData: tempObject
     });
   }
   prepareInboxDataRows = async (data) => {
@@ -295,14 +312,8 @@ class TableData extends Component {
       inboxData[0].headers = headersList;
       inboxData[0].rows = assignedDataRows;
 
-      const taskCount = allDataRows.length;
-      const overSla = filter(responseData.ProcessInstances, (item) => item.businesssServiceSla < 0).length;
 
-      taskboardData.push(
-        { head: taskCount, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
-        { head: "0", body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
-        { head: overSla, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
-      );
+
 
       tabData.push({ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [assignedDataRows.length] });
       tabData.push({ label: "COMMON_INBOX_TAB_ALL", dynamicArray: [allDataRows.length] });
@@ -314,8 +325,16 @@ class TableData extends Component {
       let locality = [];
       let moduleDD = [];
       let statusDD = [];
-
+      let NEARING_SLA = [];
+      let ESCALATED_SLA = [];
       locality = allDataRows.map((obj) => {
+        if (obj[4].text < 0) {
+          ESCALATED_SLA.push(obj[4].text);
+        }
+        if (obj[4].text > 0 && obj[4].text < MAX_SLA / 3) {
+          NEARING_SLA.push(obj[4].text);
+        }
+
         let dropdown = { label: getLocaleLabels(obj[1].text.props.label), value: obj[1].text.props.label };
         return dropdown;
       })
@@ -329,8 +348,15 @@ class TableData extends Component {
         return dropdown;
 
       })
+      const taskCount = allDataRows.length;
+      // const overSla = filter(responseData.ProcessInstances, (item) => item.businesssServiceSla < 0).length;
+      taskboardData.push(
+        { head: taskCount, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
+        { head: NEARING_SLA.length, body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
+        { head: ESCALATED_SLA.length, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
+      );
       this.setState({
-        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData), filter: {
+        inboxData, taskboardData, tabData, filteredInboxData: cloneDeep(inboxData), initialInboxData: cloneDeep(inboxData), filter: {
           localityFilter: {
             selectedValue: ['ALL'],
             dropdownData: this.getUniqueList([
@@ -391,29 +417,31 @@ class TableData extends Component {
   };
 
   onTaskBoardClick = (baseColor, label) => {
-    const { InboxData } = this.props;
+    let inboxData = cloneDeep(this.state.filteredInboxData);
     let { tabData } = this.state;
     let filteredData = [];
     if (label === "WF_TOTAL_NEARING_SLA") {
-      filteredData = InboxData.map((item, index) => {
+      filteredData = inboxData.map((item, index) => {
         return {
           headers: item.headers,
-          rows: item.rows.filter((eachRow) => {
-            4 < eachRow[4].text && 8 >= eachRow[4].text;
-          }),
+          rows: item.rows.filter((eachRow) =>
+            eachRow[4].text > 0 && eachRow[4].text < MAX_SLA / 3
+            // 4 < eachRow[4].text && 8 >= eachRow[4].text;
+          ),
         };
       });
     } else if (label === "WF_ESCALATED_SLA") {
-      filteredData = InboxData.map((item, index) => {
+      filteredData = inboxData.map((item, index) => {
         return {
           headers: item.headers,
-          rows: item.rows.filter((eachRow) => {
-            8 < eachRow[4].text && 12 >= eachRow[4].text;
-          }),
+          rows: item.rows.filter((eachRow) =>
+            eachRow[4].text < 0
+            // 8 < eachRow[4].text && 12 >= eachRow[4].text;
+          ),
         };
       });
     } else {
-      filteredData = InboxData;
+      filteredData = inboxData;
     }
     tabData[0] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
     tabData[1] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
@@ -470,7 +498,7 @@ class TableData extends Component {
               );
             })}
           </Tabs>
-          <InboxData data={inboxData[value]} />
+          <InboxData MAX_SLA={MAX_SLA} data={inboxData[value]} />
         </div>
       </div>
     );
