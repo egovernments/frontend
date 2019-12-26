@@ -140,7 +140,7 @@ class CustomizedShare extends Component {
         .then(function (dataUrl) {
         var blobData = this.dataURItoBlob(dataUrl);
         blobData.name = "dss" + ts + ".jpeg";
-        var f1 = new File(blobData,"blobData.name");
+        var f1 = new File(blobData,blobData.name);
         
         console.log(dataUrl)
         try {
