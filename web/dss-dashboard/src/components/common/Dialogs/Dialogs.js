@@ -17,7 +17,7 @@ class Dialogs extends Component {
                 {needCustomTitle ?
                     <Card style={{overflow: 'initial'}}>
                         <div className={classes.heading} onClick={this.close.bind(this)}>
-                            <ArrowBack /> <span style={{marginTop: 'auto', marginBottom: 'auto'}}>{this.props.title}</span>
+                            <ArrowBack /> <span className={classes.title}>{this.props.title}</span>
                         </div>
                     </Card>
                     : <h3 className={classes.dialogueHeading}>{this.props.title}</h3>}

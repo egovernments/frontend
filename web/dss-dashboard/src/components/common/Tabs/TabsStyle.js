@@ -11,6 +11,11 @@ const tabsStyles = theme => ({
         fontFamily: 'Roboto',
         background: '#FE7A51'
     },
+    tab: {
+        fontFamily: 'Roboto',
+        fontSize: variables.fs_14,
+        fontWeight: variables.f_500,
+    },
     '@media (max-width: 3000px)': {
         root: {
             margin: '12px 12px 12px 12px !important',

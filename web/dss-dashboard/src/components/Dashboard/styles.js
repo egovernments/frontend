@@ -2,6 +2,7 @@ const styles = theme => ({
     pageHeader: {
         fontFamily: 'Roboto',
         fontSize: '24px', 
+        fontWeight: '500',
         flex: 1, 
         textAlign: 'left'
     },

@@ -59,7 +59,9 @@ class CustomTabs extends React.Component {
                         value={tab.name}
                         label={(strings[tab.lbl] || tab.lbl)}
                         key={tab.key}
-                    
+                        classes={{
+                            root: classes.tab,
+                        }}
                     />
                 )
                 // } else {

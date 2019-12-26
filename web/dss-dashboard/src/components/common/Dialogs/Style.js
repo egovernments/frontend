@@ -23,6 +23,13 @@ const styles = theme => ({
         padding: ' 20px 50px 20px 23px',
         // marginRight: '70vw'
     },
+    title: {
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        fontFamily: 'Roboto',
+        fontSize: '16px',
+        fontWeight: '500',
+    },
     '@media (max-width: 768px)': {
         marginRight: 0
     }

@@ -63,11 +63,11 @@ class DateRange extends React.Component {
     if (noOfDays > 91) {
       return 'month'
     }
-    if (noOfDays < 90 && noOfDays >= 7) {
+    if (noOfDays < 90 && noOfDays >= 14) {
       return 'week'
     }
-    if (noOfDays <= 7) {
-      return 'date'
+    if (noOfDays <= 14) {
+      return 'day'
     }
   }
 
@@ -80,7 +80,7 @@ class DateRange extends React.Component {
           value: {
             startDate: moment().startOf('day').unix(),
             endDate: moment().endOf('day').unix(),
-            interval: 'date'
+            interval: 'day'
           }
         }
       case 'THIS WEEK':
