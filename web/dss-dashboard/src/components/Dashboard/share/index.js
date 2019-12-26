@@ -140,12 +140,11 @@ class CustomizedShare extends Component {
         .then(function (dataUrl) {
         var blobData = this.dataURItoBlob(dataUrl);
         blobData.name = "dss" + ts + ".jpeg";
-        var f1 = new File(blobData,blobData.name);
+        var f1 = new File([blobData], blobData.name, {type: "image/jpeg"});
         
-        console.log(dataUrl)
+        console.log(f1)
         try {
         console.log(dataUrl)
-        
         
         let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, f1);
         APITransport(fileUploadAPI)
