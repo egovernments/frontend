@@ -3385,3 +3385,28 @@ export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
     console.log(e);
   }
 };
+
+export const showHideBpaMapPopup = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog",
+      "props.open",
+      !toggle
+    )
+  );
+};
+
+export const getBpaMapLocator = textSchema => {
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-bpa",
+    componentPath: "MapLocator",
+    props: {}
+  };
+};

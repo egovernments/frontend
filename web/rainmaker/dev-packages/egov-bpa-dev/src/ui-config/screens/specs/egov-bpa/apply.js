@@ -6,14 +6,13 @@ import {
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
+import { bpaLocationDetails } from "./applyResource/propertyLocationDetails";
 import {
   buildingPlanScrutinyDetails,
   blockWiseOccupancyAndUsageDetails,
   demolitiondetails,
   proposedBuildingDetails
 } from "./applyResource/scrutinyDetails";
-// import { propertyDetails } from "./applyResource/propertyDetails";
-// import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import {
   boundaryDetails,
@@ -82,7 +81,8 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    basicDetails
+    basicDetails,
+    bpaLocationDetails
   }
 };
 

@@ -18,7 +18,7 @@ import { scrutinySummary } from './summaryResource/scrutinySummary';
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
-// import { estimateSummary } from "./summaryResource/estimateSummary";
+import { estimateSummary } from "./summaryResource/estimateSummary";
 import { footer } from "./summaryResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
 import { nocSummary } from "./summaryResource/nocSummary";
@@ -132,7 +132,7 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          // estimateSummary: estimateSummary,
+          estimateSummary: estimateSummary,
           basicSummary : basicSummary,
           scrutinySummary : scrutinySummary,
           applicantSummary: applicantSummary,

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { FeesEstimateCard } from "../../ui-molecules-local";
+import { BpaFeesEstimateCard } from "../../ui-molecules-local";
 import { connect } from "react-redux";
 import get from "lodash/get";
 
 class BpaEstimateCardContainer extends Component {
   render() {
-    return <FeesEstimateCard estimate={this.props.estimate} />;
+    return <BpaFeesEstimateCard estimate={this.props.estimate} />;
   }
 }
 
