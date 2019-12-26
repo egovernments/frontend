@@ -136,7 +136,7 @@ class CustomizedShare extends Component {
         var APITransport = this.props.APITransport
         
         let div = document.getElementById('divToPrint');
-        domtoimage.toBlob(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
         .then(function (dataUrl) {
         var blobData = this.dataURItoBlob(dataUrl);
         blobData.name = "dss" + ts + ".jpeg";
