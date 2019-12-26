@@ -100,11 +100,18 @@ class Cards extends Component {
       const { S3Trans } = this.props
       let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE_CARD, this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId);
       S3Trans(s3ImageAPI)
+      this.setState({
+        openWhatsapp: true
+      })
     }
 
     console.log(this.props.s3ImageCard)
     console.log(prevProps.s3ImageCard)
     if (prevProps.s3ImageCard != this.props.s3ImageCard) {
+      if(this.state.openWhatsapp){
+        this.setState({
+          openWhatsapp: false
+        })
       let image = ''
       let file = this.props.s3ImageCard && this.props.s3ImageCard.fileStoreIds && Array.isArray(this.props.s3ImageCard.fileStoreIds) && this.props.s3ImageCard.fileStoreIds.length > 0 && this.props.s3ImageCard.fileStoreIds[0].url
       console.log(file)
@@ -125,6 +132,8 @@ class Cards extends Component {
         fakeLink.setAttribute('target', '_blank');
         fakeLink.click();
       }
+     
+    }
 
     }
 
