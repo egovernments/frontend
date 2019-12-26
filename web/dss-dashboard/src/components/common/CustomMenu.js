@@ -192,7 +192,7 @@ class CustomizedMenus extends Component {
                 blobData.name = "dss" + ts + ".jpeg"
 
                 try {
-                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_MOBILE, blobData);
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_MOBILE, new File([blobData], blobData.name, { type: "image/jpeg" }));
                     APITransport(fileUploadAPI)
                 } catch{ }
             }.bind(this))
@@ -233,7 +233,7 @@ class CustomizedMenus extends Component {
                 blobData.name = "dss" + ts + ".jpeg"
 
                 try {
-                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_MOBILE, blobData);
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_MOBILE, new File([blobData], blobData.name, { type: "image/jpeg" }));
                     APITransport(fileUploadAPI)
                 } catch{ }
             }.bind(this))
@@ -258,12 +258,15 @@ class CustomizedMenus extends Component {
         console.log(this.props.s3ImageMobile)
 
         if (prevProps.s3FileMobile != this.props.s3FileMobile) {
+            console.log(prevProps.s3FileMobile)
+            console.log(this.props.s3FileMobile)
             const { S3Transporter } = this.props
             let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE_MOBILE, this.props.s3FileMobile.files && Array.isArray(this.props.s3FileMobile.files) && this.props.s3FileMobile.files.length > 0 && this.props.s3FileMobile.files[0] && this.props.s3FileMobile.files[0].fileStoreId);
             S3Transporter(s3ImageAPI)
         }
 
         if (prevProps.s3ImageMobile != this.props.s3ImageMobile) {
+            console.log("------calling email and whatsapp api-------")
             let image = ''
             let file = this.props.s3ImageMobile && this.props.s3ImageMobile.fileStoreIds && Array.isArray(this.props.s3ImageMobile.fileStoreIds) && this.props.s3ImageMobile.fileStoreIds.length > 0 && this.props.s3ImageMobile.fileStoreIds[0].url
             console.log(file)
@@ -299,8 +302,6 @@ class CustomizedMenus extends Component {
     }
 
     render() {
-
-
         return (
             <div style={{ paddingLeft: '10px' }}>
                 <Button style={{ borderRadius: '2px', backgroundColor: this.props.bgColor, color: this.props.color }}
@@ -401,8 +402,8 @@ class CustomizedMenus extends Component {
 
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
-    s3File: state.s3File,
-    s3Image: state.s3Image,
+    s3FileMobile: state.s3FileMobile,
+    s3ImageMobile: state.s3ImageMobile,
     globalFilter: state.globalFilter
 });
 

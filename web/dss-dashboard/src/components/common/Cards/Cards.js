@@ -21,7 +21,6 @@ import { withRouter } from 'react-router-dom';
 import share from '../../../images/share.svg';
 import SVG from 'react-inlinesvg';
 import { APIStatus } from '../../../actions/apiStatus'
-import { handleWhatsAppImageShare } from '../../../utils/Share';
 import InfoIcon from '@material-ui/icons/Info';
 import { Tooltip } from '@material-ui/core';
 import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
@@ -75,28 +74,21 @@ class Cards extends Component {
   }
 
   shareAsImage = () => {
-    var fakeLink = document.createElement('a');
-      fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent("Test"));
-      fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-      fakeLink.setAttribute('target', '_blank');
-      fakeLink.click();
+    let { strings, title } = this.props;
+    let div = document.getElementById('card' + this.props.id);
+    var ts = Math.round((new Date()).getTime() / 1000);
+    var APITransport = this.props.APITransport
 
+    domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
+      .then(function (dataUrl) {
+        var blobData = this.dataURItoBlob(dataUrl);
+        blobData.name = (strings[title] || 'image') + ts + ".jpeg"
 
-    // let { strings, title } = this.props;
-    // let div = document.getElementById('card' + this.props.id);
-    // var ts = Math.round((new Date()).getTime() / 1000);
-    // var APITransport = this.props.APITransport
-
-    // domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
-    //   .then(function (dataUrl) {
-    //     var blobData = this.dataURItoBlob(dataUrl);
-    //     blobData.name = (strings[title] || 'image') + ts + ".jpeg"
-
-    //     try {
-    //       let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_CARD, blobData);
-    //       APITransport(fileUploadAPI)
-    //     } catch{ }
-    //   }.bind(this))
+        try {
+          let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_CARD, new File([blobData], blobData.name, { type: "image/jpeg" }));
+          APITransport(fileUploadAPI)
+        } catch{ }
+      }.bind(this))
   }
 
   componentDidUpdate(prevProps) {
@@ -243,8 +235,8 @@ const mapStateToProps = (state) => {
   return {
     GFilterData: state.GFilterData,
     strings: state.lang,
-    s3File: state.s3File,
-    s3Image: state.s3Image,
+    s3FileCard: state.s3FileCard,
+    s3ImageCard: state.s3ImageCard,
 
   }
 }
@@ -258,6 +250,3 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default withRouter(withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(Cards)));
-
-
-// export default withStyles(style)(Cards)

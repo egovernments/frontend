@@ -9,8 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import share from '../../../images/share.svg';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
-import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../../utils/Share';
-import { printDocumentShare, downloadAsImage } from '../../../utils/block';
+import { printDocumentShare } from '../../../utils/block';
 import { renderToString, } from 'react-dom/server'
 import FilterTable from '../download/filterTable';
 import { connect } from 'react-redux';
@@ -21,7 +20,6 @@ import Variables from '../../../styles/variables'
 import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
 import APITransport from '../../../actions/apitransport/apitransport'
 import S3ImageAPI from '../../../actions/s3Image/s3Image';
-import C from '../../../actions/constants';
 import constants from '../../../actions/constants';
 
 const StyledMenu = withStyles({
@@ -105,7 +103,6 @@ class CustomizedShare extends Component {
     }
 
     shareWhatsAppPDF() {
-        console.log(this.state.logo)
         this.setState({
             type: 'whatsapp'
         })
@@ -114,9 +111,6 @@ class CustomizedShare extends Component {
             // setAnchorEl(null);
 
             try {
-                console.log(pdfO)
-
-                console.log(pdfO.output('blob'))
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, pdfO.output('blob'));
                 APITransport(fileUploadAPI)
             } catch{ }
@@ -130,26 +124,21 @@ class CustomizedShare extends Component {
 
     shareWhatsAppImage = () => {
         this.setState({
-        type: 'whatsapp'
+            type: 'whatsapp'
         })
         var ts = Math.round((new Date()).getTime() / 1000);
         var APITransport = this.props.APITransport
-        
+
         let div = document.getElementById('divToPrint');
         domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
-        .then(function (dataUrl) {
-        var blobData = this.dataURItoBlob(dataUrl);
-        blobData.name = "dss" + ts + ".jpeg";
-        var f1 = new File([blobData], blobData.name, {type: "image/jpeg"});
-        
-        console.log(f1)
-        try {
-        console.log(dataUrl)
-        
-        let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, f1);
-        APITransport(fileUploadAPI)
-        } catch{ }
-        }.bind(this))
+            .then(function (dataUrl) {
+                var blobData = this.dataURItoBlob(dataUrl);
+                blobData.name = "dss" + ts + ".jpeg";
+                try {
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, new File([blobData], blobData.name, { type: "image/jpeg" }));
+                    APITransport(fileUploadAPI)
+                } catch{ }
+            }.bind(this))
 
     }
 
@@ -162,10 +151,6 @@ class CustomizedShare extends Component {
         printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
             try {
-                console.log(pdfO)
-
-                console.log(pdfO.output('blob'))
-
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, pdfO.output('blob'));
                 APITransport(fileUploadAPI)
             } catch{ }
@@ -187,13 +172,12 @@ class CustomizedShare extends Component {
         let div = document.getElementById('divToPrint');
         var APITransport = this.props.APITransport
 
-        domtoimage.toBlob(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
-            .then(function (blobData) {
-                // var blobData = this.dataURItoBlob(dataUrl);
-                console.log(blobData)
-                // console.log(blobData)
+        domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white', filter: this.filterFunc })
+            .then(function (dataUrl) {
+                var blobData = this.dataURItoBlob(dataUrl);
+                blobData.name = "dss" + ts + ".jpeg";
                 try {
-                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, blobData);
+                    let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, new File([blobData], blobData.name, { type: "image/jpeg" }));
                     APITransport(fileUploadAPI)
                 } catch{ }
             }.bind(this))
@@ -208,16 +192,16 @@ class CustomizedShare extends Component {
         console.log(this.props.s3Image)
 
         if (prevProps.s3File != this.props.s3File) {
-            const {S3Transporter} = this.props
-            let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE,this.props.s3File.files && Array.isArray(this.props.s3File.files) &&  this.props.s3File.files.length>0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId );
+            const { S3Transporter } = this.props
+            let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE, this.props.s3File.files && Array.isArray(this.props.s3File.files) && this.props.s3File.files.length > 0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId);
             S3Transporter(s3ImageAPI)
         }
 
         if (prevProps.s3Image != this.props.s3Image) {
             debugger
             let image = ''
-            let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length>0 && this.props.s3Image.fileStoreIds[0].url
-           console.log(file)
+            let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length > 0 && this.props.s3Image.fileStoreIds[0].url
+            console.log(file)
             if ((file.match(new RegExp("https", "g")) || []).length > 1) {
                 debugger
                 var n = file.lastIndexOf("https");
@@ -298,7 +282,7 @@ class CustomizedShare extends Component {
         )
     }
     render() {
-      
+
         return (
             <div>
                 <Button
