@@ -182,9 +182,21 @@ class TableData extends Component {
         dropdownData: [...this.state.filter.statusFilter.dropdownData]
       }
     }
+    let ESCALATED_SLA = [];
+    let NEARING_SLA = [];
+    initialInboxData[1].rows.map(eachRow => {
+      if (eachRow[4].text < 0) {
+        ESCALATED_SLA.push(eachRow[4].text);
+      }
+      if (eachRow[4].text > 0 && eachRow[4].text < MAX_SLA / 3) {
+        NEARING_SLA.push(eachRow[4].text);
+      }
+    })
+
     let { taskboardData, tabData } = this.state;
     taskboardData[0].head = initialInboxData[1].rows.length;
-    taskboardData[2].head = initialInboxData[1].rows.length / 3;
+    taskboardData[1].head = NEARING_SLA.length;
+    taskboardData[2].head = ESCALATED_SLA.length;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
     tabData[1].dynamicArray = [initialInboxData[1].rows.length];
     this.setState({
