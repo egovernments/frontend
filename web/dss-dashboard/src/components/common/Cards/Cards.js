@@ -94,7 +94,7 @@ class Cards extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.s3FileCard != this.props.s3FileCard) {
       const { S3Trans } = this.props
-      let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE_CARD,this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId);
+      let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE_CARD, this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId);
       S3Trans(s3ImageAPI)
     }
 
@@ -115,11 +115,14 @@ class Cards extends Component {
         console.log(image)
       }
 
-      var fakeLink = document.createElement('a');
-      fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
-      fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-      fakeLink.setAttribute('target', '_blank');
-      fakeLink.click();
+      if (image) {
+        var fakeLink = document.createElement('a');
+        fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
+        fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+        fakeLink.setAttribute('target', '_blank');
+        fakeLink.click();
+      }
+
     }
 
   }
