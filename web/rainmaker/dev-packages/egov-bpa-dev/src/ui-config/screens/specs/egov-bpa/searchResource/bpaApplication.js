@@ -114,32 +114,12 @@ export const BPAApplication = getCommonCard({
         masterName: "BPA"
       },
       jsonPath: "searchScreen.serviceType",
-      sourceJsonPath: "applyScreenMdmsData.BPA.DocTypeMapping[0].applicationType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
       required: false,
       gridDefination: {
         xs: 12,
         sm: 4
-      },
-      data: [
-        {
-          code: "INITIATED"
-        },
-        {
-          code: "APPLIED"
-        },
-        {
-          code: "PAID"
-        },
-        {
-          code: "APPROVED"
-        },
-        {
-          code: "REJECTED"
-        },
-        {
-          code: "CANCELLED"
-        }
-      ]
+      }
     }),
 
     serviceType: getSelectField({
@@ -157,32 +137,12 @@ export const BPAApplication = getCommonCard({
         masterName: "BPA"
       },
       jsonPath: "searchScreen.serviceSubType",
-      sourceJsonPath: "applyScreenMdmsData.BPA.DocTypeMapping[0].ServiceType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
       required: false,
       gridDefination: {
         xs: 12,
         sm: 4
-      },
-      data: [
-        {
-          code: "INITIATED"
-        },
-        {
-          code: "APPLIED"
-        },
-        {
-          code: "PAID"
-        },
-        {
-          code: "APPROVED"
-        },
-        {
-          code: "REJECTED"
-        },
-        {
-          code: "CANCELLED"
-        }
-      ]
+      }
     }),
 
 

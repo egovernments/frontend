@@ -2725,30 +2725,33 @@ const riskType = (state, dispatch) => {
     return item && item.building && item.building.buildingHeight;
   });
   let buildingHeight = Math.max(blocks);
+  let riskType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.BPA.RiskTypeComputation"
+  );
+  let block = get(
+    state.screenConfiguration.preparedFinalObject,
+    "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
+  );
+  dispatch(prepareFinalObject("BPA.blocks", [block]));
+
   let scrutinyRiskType;
-  if (
-    occupancyType === "Residential" &&
-    plotArea > 500 &&
-    buildingHeight > 15
-  ) {
-    scrutinyRiskType = "HIGH";
-  } else if (
-    occupancyType === "Residential" &&
-    plotArea <= 500 &&
-    plotArea >= 300 &&
-    buildingHeight <= 15 &&
-    buildingHeight >= 10
-  ) {
-    scrutinyRiskType = "MEDIUM";
-  } else {
-    scrutinyRiskType = "LOW";
-  }
+  riskType.forEach(type => {
+    if (
+      occupancyType === "Residential" &&
+      plotArea >= type.fromPlotArea &&
+      plotArea < type.toPlotArea &&
+      buildingHeight >= type.fromBuildingHeight &&
+      buildingHeight < type.toBuildingHeight
+    ) {
+      scrutinyRiskType = type.riskType
+    }
+  });
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
   try {
-    const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const scrutinyNo = get(
       state.screenConfiguration.preparedFinalObject,
       `BPA.edcrNumber`,
@@ -3226,6 +3229,8 @@ export const getBpaTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+      case "INPROGRESS":
+      return getLocaleLabels("Inprogress", "NOC_INPROGRESS", localisationLabels);
   }
 };
 
@@ -3313,7 +3318,7 @@ export const fetchData = async (action, state, dispatch) => {
     });
   dispatch(
     prepareFinalObject(
-      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      "citiesByModule.TL",
       tenants
     )
   );
@@ -3362,5 +3367,21 @@ export const setNameOfUser = (action, state, dispatch) => {
       `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.ownerName.props.disabled`,
       true
     );
+  }
+};
+
+export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
   }
 };

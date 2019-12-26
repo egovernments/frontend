@@ -296,6 +296,7 @@ const commonApplicantInformation = () => {
           labelName: "Select Special Applicant Category",
           labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
         },
+        required: true,
         jsonPath: "BPA.owners[0].ownerType",
         localePrefix: {
           moduleName: "common-masters",

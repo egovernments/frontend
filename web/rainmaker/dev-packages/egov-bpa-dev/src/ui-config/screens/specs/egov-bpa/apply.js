@@ -202,7 +202,6 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-   // let payload = mdmsMockJson;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -306,20 +305,6 @@ const screenConfig = {
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
-      let buildingUsageTypeData = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
-        []
-      );
-      buildingUsageTypeData = getFirstListFromDotSeparated(
-        buildingUsageTypeData
-      );
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.DropdownsData.BuildingUsageType",
-          buildingUsageTypeData
-        )
-      );
       let ownershipCategory = get(
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
@@ -332,6 +317,11 @@ const screenConfig = {
           ownershipCategory
         )
       );
+      let applicationType = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[0].code"
+      );
+      dispatch(prepareFinalObject("BPA.applicationType", applicationType))
 
       // Set Documents Data (TEMP)
       prepareDocumentsUploadData(state, dispatch);

@@ -45,7 +45,12 @@ export const boundaryDetails = getCommonCard({
                     ],
                     optionValue: "value",
                     optionLabel: "label"
-                }
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         revenueward: {
@@ -74,7 +79,12 @@ export const boundaryDetails = getCommonCard({
                     ],
                     optionValue: "value",
                     optionLabel: "label"
-                }
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
     })
@@ -103,6 +113,11 @@ export const detailsofplot = getCommonCard({
                 jsonPath: "scrutinyDetails.planDetail.plot.area",
                 props: {
                     disabled: 'true'
+                  },
+                  gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
                   }
             })
         },
@@ -118,7 +133,12 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo"
+                jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         holdingNumber: {
@@ -133,7 +153,12 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber"
+                jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         plotNo: {
@@ -148,7 +173,12 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo"
+                jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         cityTown: {
@@ -198,7 +228,12 @@ export const detailsofplot = getCommonCard({
                     labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_PLACEHOLDER"
                 },
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails"
+                jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         whetherGovOrQuasi: {
@@ -230,7 +265,12 @@ export const detailsofplot = getCommonCard({
                     ],
                     optionValue: "value",
                     optionLabel: "label"
-                }
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         }
     })
