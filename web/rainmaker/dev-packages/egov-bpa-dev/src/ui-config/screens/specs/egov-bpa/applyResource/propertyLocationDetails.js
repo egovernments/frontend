@@ -9,9 +9,9 @@ import {
 import { httpRequest } from "../../../../../ui-utils/api";
 import { getBpaMapLocator } from "../../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { showHideBpaMapPopup, getDetailsFromProperty } from "../../utils";
+import { showHideBpaMapPopup, geBpatDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
+// import "./index.css";
 
 export const bpaLocationDetails = getCommonCard(
   {
@@ -123,6 +123,9 @@ export const bpaLocationDetails = getCommonCard(
           labelName: "Enter Property ID",
           labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
         },
+        props:{
+          className:"textfield-enterable-selection"
+        },
         iconObj: {
           iconName: "search",
           position: "end",
@@ -130,7 +133,7 @@ export const bpaLocationDetails = getCommonCard(
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              getDetailsFromProperty(state, dispatch);
+              geBpatDetailsFromProperty(state, dispatch);
             }
           }
         },
@@ -140,7 +143,7 @@ export const bpaLocationDetails = getCommonCard(
           key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
         },
         infoIcon: "info_circle",
-        jsonPath: "Licenses[0].propertyId"
+        jsonPath: "BPA.propertyId"
       }),
       tradeLocDoorHouseNo: getTextField({
         label: {
@@ -148,7 +151,7 @@ export const bpaLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
         },
         props:{
-          className:"applicant-details-error"
+          className:"applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -163,7 +166,7 @@ export const bpaLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
         },
         props:{
-          className:"applicant-details-error"
+          className:"applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
@@ -178,7 +181,7 @@ export const bpaLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
         },
         props:{
-          className:"applicant-details-error"
+          className:"applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Street Name",
@@ -189,7 +192,7 @@ export const bpaLocationDetails = getCommonCard(
       }),
       tradeLocMohalla: {
         uiFramework: "custom-containers-local",
-        moduleName: "egov-tradelicence",
+        moduleName: "egov-bpa",
         componentPath: "AutosuggestContainer",
         jsonPath: "BPA.address.locality.code",
         required: true,
@@ -227,7 +230,7 @@ export const bpaLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
         },
         props:{
-          className:"applicant-details-error"
+          className:"applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Pincode",
@@ -240,7 +243,7 @@ export const bpaLocationDetails = getCommonCard(
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
-          className: "gis-div-css",
+          className: "gis-div-css textfield-enterable-selection",
           style: {
             width: "100%",
             cursor: "pointer"
@@ -292,7 +295,9 @@ export const bpaLocationDetails = getCommonCard(
           labelName: "Enter Electricity Connection No. of Trade Loaction",
           labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
         },
-        // pattern: getPattern("ElectricityConnNo"),
+        props:{
+          className:"textfield-enterable-selection"
+        },
         jsonPath:
           "BPA.additionalDetail.electricityConnectionNo"
       })

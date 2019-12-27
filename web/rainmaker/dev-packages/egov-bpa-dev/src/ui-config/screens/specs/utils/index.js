@@ -35,12 +35,6 @@ import {
   getCommonCaption,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
-import { mdmsMockJson } from "../egov-bpa/mdmsMock";
-import {
-  scrutinyDetailsMockJson,
-  scrutinyDetailsMockJson1
-} from "./scrutinyDetailsMockJson";
 import { cityModuleMockJson } from "../egov-bpa/cityResJson";
 
 export const getCommonApplyFooter = children => {
@@ -3007,7 +3001,6 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
         }
       ];
       const payload = await getBill(queryObj);
-      // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
         const estimateData = createEstimateData(payload.Bill[0]);
@@ -3093,8 +3086,6 @@ export const resetFields = (state, dispatch) => {
 //   };
 //   try {
 //     let payload = null;
-//     payload = mdmsMockJson;
-//     console.log(mdmsMockJson);
 //     // payload = await httpRequest(
 //     //   "post",
 //     //   "/egov-mdms-service/v1/_search",
@@ -3409,4 +3400,96 @@ export const getBpaMapLocator = textSchema => {
     componentPath: "MapLocator",
     props: {}
   };
+};
+
+export const geBpatDetailsFromProperty = async (state, dispatch) => {
+  try {
+    const propertyId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPA.propertyId",
+      ""
+    );
+    const cityId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPAs[0].BPADetails.plotdetails.citytown.value",
+      ""
+    );
+    const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
+    if (!tenantId) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please select city to search by property id !!",
+            labelKey: "ERR_SELECT_CITY_TO_SEARCH_PROPERTY_ID"
+          },
+          "warning"
+        )
+      );
+      return;
+    }
+    if (propertyId) {
+      let payload = await httpRequest(
+        "post",
+        `/pt-services-v2/property/_search?tenantId=${tenantId}&ids=${propertyId}`,
+        "_search",
+        [],
+        {}
+      );
+      if (
+        payload &&
+        payload.Properties &&
+        payload.Properties.hasOwnProperty("length")
+      ) {
+        if (payload.Properties.length === 0) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Property is not found with this Property Id",
+                labelKey: "ERR_PROPERTY_NOT_FOUND_WITH_PROPERTY_ID"
+              },
+              "info"
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPropertyID",
+              "props.value",
+              ""
+            )
+          );
+        } else {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
+              "props.value",
+              {
+                value: payload.Properties[0].address.locality.code,
+                label: payload.Properties[0].address.locality.name
+              }
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "Licenses[0].tradeLicenseDetail.address",
+              payload.Properties[0].address
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
+              "props.value",
+              payload.Properties[0].address.tenantId
+            )
+          );
+        }
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
 };

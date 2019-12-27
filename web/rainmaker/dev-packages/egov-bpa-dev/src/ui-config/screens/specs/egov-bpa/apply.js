@@ -27,11 +27,6 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
-import {
-  sampleSearch,
-  sampleSingleSearch,
-  sampleDocUpload
-} from "../../../../ui-utils/sampleResponses";
 import set from "lodash/set";
 import get from "lodash/get";
 import {
@@ -225,69 +220,6 @@ const getFirstListFromDotSeparated = list => {
   return list;
 };
 
-export const prepareEditFlow = async (
-  state,
-  dispatch,
-  applicationNumber,
-  tenantId
-) => {
-  const buildings = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-    []
-  );
-  if (applicationNumber && buildings.length == 0) {
-    let response = await getSearchResults([
-      {
-        key: "tenantId",
-        value: tenantId
-      },
-      { key: "applicationNumber", value: applicationNumber }
-    ]);
-    // let response = sampleSingleSearch();
-
-    response = furnishNocResponse(response);
-
-    dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
-    if (applicationNumber) {
-      setApplicationNumberBox(state, dispatch, applicationNumber);
-    }
-    // Set no of buildings radiobutton and eventually the cards
-    let noOfBuildings =
-      get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
-        "MULTIPLE"
-        ? "MULTIPLE"
-        : "SINGLE";
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingRadioGroup",
-        "props.value",
-        noOfBuildings
-      )
-    );
-
-    // Set no of buildings radiobutton and eventually the cards
-    let nocType =
-      get(response, "FireNOCs[0].fireNOCDetails.fireNOCType", "NEW") === "NEW"
-        ? "NEW"
-        : "PROVISIONAL";
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
-        "props.value",
-        nocType
-      )
-    );
-
-    // setCardsIfMultipleBuildings(state, dispatch);
-
-    // Set sample docs upload
-    // dispatch(prepareFinalObject("documentsUploadRedux", sampleDocUpload()));
-  }
-};
-
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
@@ -328,9 +260,6 @@ const screenConfig = {
       prepareNOCUploadData(state, dispatch);
     });
     getTodaysDate(action, state, dispatch);
-
-    // // Set Property City
-    // dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.propertyDetails.address.city", getTenantId()));
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {

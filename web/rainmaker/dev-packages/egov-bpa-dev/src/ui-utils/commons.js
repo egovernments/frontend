@@ -28,7 +28,6 @@ import {
 import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
-import { appSearchMockData } from './searchMockJson';
 
 
 

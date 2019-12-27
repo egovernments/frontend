@@ -51,7 +51,6 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
         { key: "services", value: "BPA" }
       ];
       const billPayload = await createBill(queryObj,dispatch);
-      // let payload = sampleGetBill();
       if (billPayload && billPayload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billPayload.Bill));
         const estimateData = createEstimateData(billPayload.Bill[0]);
