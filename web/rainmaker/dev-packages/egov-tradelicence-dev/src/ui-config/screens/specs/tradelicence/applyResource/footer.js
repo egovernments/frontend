@@ -14,6 +14,7 @@ import {
   createEstimateData,
   validateFields,
   downloadAcknowledgementForm,
+  downloadCertificateForm
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -592,14 +593,16 @@ export const footerReview = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_download");
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_print");
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses,'print');
     },
     leftIcon: "book"
   };
@@ -869,14 +872,16 @@ export const downloadPrintContainer = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_download");
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_print");
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses,'print');
     },
     leftIcon: "book"
   };
@@ -968,7 +973,7 @@ export const downloadPrintContainer = (
               label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "200px" , color : "#FE7A51" } },
+              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "180px" , color : "#FE7A51" } },
               menu: downloadMenu
             }
           }
@@ -982,7 +987,7 @@ export const downloadPrintContainer = (
               label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "200px" , color : "#FE7A51" } },
+              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "150px" , color : "#FE7A51" } },
               menu: printMenu
             }
           }

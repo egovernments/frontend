@@ -3,6 +3,8 @@ import {
   getTextField,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
@@ -950,38 +952,38 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
   }
 }
 
-const downloadReceiptFromFilestoreID = (fileStoreId,mode) => {
-  getFileUrlFromAPI(fileStoreId).then(async(fileRes) => {
-    if (mode === 'download') {
-      var win = window.open(fileRes[fileStoreId], '_blank');
-      if(win){
-        win.focus();
-      }
-    }
-    else {
-     // printJS(fileRes[fileStoreId])
-      var response =await axios.get(fileRes[fileStoreId], {
-        //responseType: "blob",
-        responseType: "arraybuffer",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/pdf"
+export const downloadCertificateForm = (Licenses,mode='download') => {
+  const queryStr = [
+    { key: "key", value: "tlcertificate" },
+    { key: "tenantId", value: "pb" }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
         }
       });
-      console.log("responseData---",response);
-      const file = new Blob([response.data], { type: "application/pdf" });
-      const fileURL = URL.createObjectURL(file);
-      var myWindow = window.open(fileURL);
-      if (myWindow != undefined) {
-        myWindow.addEventListener("load", event => {
-          myWindow.focus();
-          myWindow.print();
-        });
-      }
-    
-    }
-  });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
 }
+
+
+
+
+
 
 
 export const prepareDocumentTypeObj = documents => {
