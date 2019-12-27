@@ -28,6 +28,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels, getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
+import axios from 'axios';
 
 export const getCommonApplyFooter = children => {
   return {
@@ -921,7 +922,7 @@ const getStatementForDocType = docType => {
 };
 
 
-export const downloadAcknowledgementForm = (Licenses) => {
+export const downloadAcknowledgementForm = (Licenses,mode="download") => {
   const queryStr = [
     { key: "key", value: "tlapplication" },
     { key: "tenantId", value: "pb" }
@@ -938,7 +939,7 @@ export const downloadAcknowledgementForm = (Licenses) => {
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId)
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
           })
         } else {
           console.log("Error In Acknowledgement form Download");
@@ -949,11 +950,35 @@ export const downloadAcknowledgementForm = (Licenses) => {
   }
 }
 
-const downloadReceiptFromFilestoreID = (fileStoreId) => {
-  getFileUrlFromAPI(fileStoreId).then((fileRes) => {
-    var win = window.open(fileRes[fileStoreId], '_blank');
-    if (win) {
-      win.focus();
+const downloadReceiptFromFilestoreID = (fileStoreId,mode) => {
+  getFileUrlFromAPI(fileStoreId).then(async(fileRes) => {
+    if (mode === 'download') {
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
+      }
+    }
+    else {
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+    
     }
   });
 }
