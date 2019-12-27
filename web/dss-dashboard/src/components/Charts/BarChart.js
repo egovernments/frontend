@@ -48,7 +48,7 @@ export default class BarChart extends React.Component {
 			data: []
 		};
 		for (var key in chartData) {
-			if (key == 'data') {
+			if (key === 'data') {
 				for (var i = 0; i < chartData[key].length; i++) {
 					tempData.labels.push(this.getAcronym(chartData[key][i]['label']));
 					tempdataSet.label.push(chartData[key][i]['label']);

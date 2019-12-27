@@ -127,7 +127,7 @@ let dataL = {
     "DSS_MOBILE_DOWNLOAD": 'Download',
     "DSS_MOBILE_SHARE": 'Share',
     "DSS_APPLY": "APPLY",
-    "DSS_CLEAR_ALL": "CLEAR ALL",
+    "DSS_CLEAR_ALL": "CLEAR",
     "DSS_DATE_RANGE": "Date Range",
     "DSS_DDRS": "DDRs",
     "DSS_ULBS": "ULBS",
@@ -148,7 +148,13 @@ let dataL = {
     "DSS_CUSTOM": "Custom",
     "DSS_FY": "FY",
     "DSS_RANK": "Rank",
-    "DSS_NO_DATA_AVAILABLE": "No Data Available"
+    "DSS_NO_DATA_AVAILABLE": "No Data Available",
+    "DSS_TOTAL_COLLECTION_TODAY": "Today's Collection",
+    "DSS_PT_TAX_HEAD": "Tax Heads",
+    "DSS_TL_TAX_HEAD_BREAKUP": "Tax Heads Breakups",
+    "DSS_TOTAL_COMPLAINTS_BY_SOURCE": "Total Complaints by Source",
+    "DSS_TOTAL_COMPLAINTS_STATUS": "Total Complaints by Status",
+    "DSS_PGR_COMPLETION_RATE": "Completion Rate"
   }
 }
 

@@ -148,7 +148,7 @@ class GlobalFilter extends Component {
                             color: '#000000',
                             margin: '0 0px 0 0',
                             // width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
-                            width: isMobile ? '200px' : '170px'
+                            width: isMobile ? '200px' : '150px'
                         }}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">
@@ -351,7 +351,7 @@ class GlobalFilter extends Component {
                     {/* {isMobile && this.renderFilters()}s */}
 
                     <div id="divNotToPrint" className={classes.actions}>
-                        <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "CLEAR ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                        <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "CLEAR"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
                         <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
                     </div>
                 </div>

@@ -1,6 +1,5 @@
 
 import API from '../apis/api';
-import C from '../constants';
 import CONFIGS from '../../config/configs'
 
 export default class S3ImageAPI extends API {

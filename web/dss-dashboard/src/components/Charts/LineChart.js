@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import NFormatterFun from '../common/numberFormaterFun';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
-import _ from 'lodash';
 
 const options = {
   scales: {

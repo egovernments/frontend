@@ -303,7 +303,8 @@ const styles = theme => ({
         // }
     },
     alignCenter: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: variables.primaryFont
     },
     progess: {
         height: 5,

@@ -203,16 +203,10 @@ class CustomizedShare extends Component {
             let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length > 0 && this.props.s3Image.fileStoreIds[0].url
             console.log(file)
             if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-                debugger
                 var n = file.lastIndexOf("https");
                 image = file.substr(n, file.length)
-                console.log(image)
-
             } else {
-                debugger
                 image = file
-                console.log(image)
-
             }
 
             var fakeLink = document.createElement('a');

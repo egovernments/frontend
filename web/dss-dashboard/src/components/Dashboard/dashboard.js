@@ -126,7 +126,7 @@ class Dashboard extends Component {
   }
 
   renderViewAll() {
-    let { classes, dashboardConfigData, GFilterData, chartsData, strings } = this.props;
+    let { classes, strings } = this.props;
     // let codekey = _.chain(this.props).get('chartData').first().get("id").value();
     let data = _.chain(this.props).get("chartsData").get(this.state.viewAll).get('data').map((d, i) => {
       let plot = d.plots[0];
@@ -141,7 +141,6 @@ class Dashboard extends Component {
       }
     }).compact().value() || [];
     if (data && data.length > 0) {
-      let { order } = this.props;
       let columnData = [];
       columnData.push({ id: 'rank', numeric: true, stickyHeader: false, disablePadding: false, label: 'Rank' })
       columnData.push({ id: 'ULBs', numeric: true, stickyHeader: false, disablePadding: false, label: 'ULBs' })

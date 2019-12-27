@@ -82,7 +82,7 @@ class Cards extends Component {
     this.setState({
       type: 'whatsapp'
     })
-    
+
     domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
       .then(function (dataUrl) {
         var blobData = this.dataURItoBlob(dataUrl);
@@ -105,35 +105,30 @@ class Cards extends Component {
       })
     }
 
-    console.log(this.props.s3ImageCard)
-    console.log(prevProps.s3ImageCard)
     if (prevProps.s3ImageCard != this.props.s3ImageCard) {
-      if(this.state.openWhatsapp){
+      if (this.state.openWhatsapp) {
         this.setState({
           openWhatsapp: false
         })
-      let image = ''
-      let file = this.props.s3ImageCard && this.props.s3ImageCard.fileStoreIds && Array.isArray(this.props.s3ImageCard.fileStoreIds) && this.props.s3ImageCard.fileStoreIds.length > 0 && this.props.s3ImageCard.fileStoreIds[0].url
-      console.log(file)
-      if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-        var n = file.lastIndexOf("https");
-        image = file.substr(n, file.length)
-        console.log(image)
+        let image = ''
+        let file = this.props.s3ImageCard && this.props.s3ImageCard.fileStoreIds && Array.isArray(this.props.s3ImageCard.fileStoreIds) && this.props.s3ImageCard.fileStoreIds.length > 0 && this.props.s3ImageCard.fileStoreIds[0].url
+        if ((file.match(new RegExp("https", "g")) || []).length > 1) {
+          var n = file.lastIndexOf("https");
+          image = file.substr(n, file.length)
 
-      } else {
-        image = file
-        console.log(image)
-      }
+        } else {
+          image = file
+        }
 
-      if (image && this.state.type === 'whatsapp') {
-        var fakeLink = document.createElement('a');
-        fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
-        fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-        fakeLink.setAttribute('target', '_blank');
-        fakeLink.click();
+        if (image && this.state.type === 'whatsapp') {
+          var fakeLink = document.createElement('a');
+          fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
+          fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+          fakeLink.setAttribute('target', '_blank');
+          fakeLink.click();
+        }
+
       }
-     
-    }
 
     }
 

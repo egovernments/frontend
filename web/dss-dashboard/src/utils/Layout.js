@@ -3,13 +3,14 @@ import { withStyles } from '@material-ui/core/styles';
 import AppRouter from './AppRouter';
 import Spinner from '../components/common/Spinner';
 import SideBar from '../components/common/sidebar'
+import { isMobile } from 'react-device-detect';
 
 const styles = (theme) => ({
     root: {
         display: 'flex',
         flex: 1,
         flexDirection: 'column',
-        padding: '10px'
+        padding: isMobile ? '5px' : '10px'
       },
       appContainer: {
         display: 'flex',

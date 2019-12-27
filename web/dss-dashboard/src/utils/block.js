@@ -6,8 +6,6 @@ import html2canvas from 'html2canvas'
 import base64Img from 'base64-img'
 import logo from '../images/Digit.png'
 import {
-    BrowserView,
-    MobileView,
     isBrowser,
     isMobile
 } from "react-device-detect";
@@ -19,7 +17,6 @@ const filterFunc = function (node) {
 export const downloadAsImage = (name) => {
     // props.APITrans(true)
     return new Promise((resolve, reject) => {
-        // console.log("isMobile", isMobile)
         if (isMobile) {
             return html2canvas(document.getElementById('divToPrint'), {
                 allowTaint: true,
@@ -127,7 +124,6 @@ const addPages = (elem, cityLogo) => {
                     base64Img.requestBase64(cityLogo, function (err, res, body) {
                         let iheight = hw.imgWidth * hw.iRatio;
                         let isLogoRequired = true;
-                        console.log(window.innerWidth)
                         let pdf = new jsPDF("p", "pt", [iheight - 80, hw.imgWidth - 80]);
                         if(isLogoRequired) {
                             pdf.addImage(logo, 'PNG', (hw.imgWidth-80-63), 5, 58, 48)
@@ -156,12 +152,11 @@ const addPages = (elem, cityLogo) => {
             domtoimage.toJpeg(elem, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
                 .then(function (dataUrl) {
                     return getImageData(dataUrl).then(function (hw) {
-                        base64Img.requestBase64("https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.abohar/logo.png", function (err, res, body) {
+                        base64Img.requestBase64(cityLogo, function (err, res, body) {
 
                             var imgWidth = 210;
                             var pageHeight = 295;
 
-                            let digitLogo = body
                             let image = new Image();
                             image.src = dataUrl;
                             var imgHeight = image.height * imgWidth / image.width;
