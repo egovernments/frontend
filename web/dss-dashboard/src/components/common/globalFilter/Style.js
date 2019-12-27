@@ -87,6 +87,14 @@ const styles = theme => ({
         textAlign: 'right',
         color: '#96989a'
     },
+    '@media (min-width: 1367px)':{
+        list: {
+            '& div': {
+                width:'200px !important'
+            }
+
+        }
+    },
     '@media (max-width: 1293px)': {
         mainFilter: {
             display: 'flex',

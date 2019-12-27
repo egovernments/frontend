@@ -121,23 +121,39 @@ const addPages = (elem, cityLogo) => {
             }).then(function (canvas) {
                 var dataUrl = canvas.toDataURL("image/jpeg")
                 return getImageData(dataUrl).then(function (hw) {
-                    base64Img.requestBase64(cityLogo, function (err, res, body) {
-                        let iheight = hw.imgWidth * hw.iRatio;
-                        let isLogoRequired = true;
-                        let pdf = new jsPDF("p", "pt", [iheight - 80, hw.imgWidth - 80]);
-                        if(isLogoRequired) {
-                            pdf.addImage(logo, 'PNG', (hw.imgWidth-80-63), 5, 58, 48)
-                        }
-                        if(body){
-                            pdf.addImage(body, 'PNG', 5, 5, 50, 48)
-                        }
-                        if(dataUrl){
-                            pdf.addImage(dataUrl, 'JPG', 0, 55,hw.imgWidth-50,0);
-
-                        }
-                        // pdf.save()
-                        return resolve(pdf)
-                    });
+                    if(cityLogo){
+                        base64Img.requestBase64(cityLogo, function (err, res, body) {
+                            let iheight = hw.imgWidth * hw.iRatio;
+                            let isLogoRequired = true;
+                            let pdf = new jsPDF("p", "pt", [iheight - 80, hw.imgWidth - 80]);
+                            if (isLogoRequired) {
+                                pdf.addImage(logo, 'PNG', (hw.imgWidth - 80 - 63), 5, 58, 48)
+                            }
+                            if (body) {
+                                pdf.addImage(body, 'PNG', 5, 5, 50, 48)
+                            }
+                            if (dataUrl) {
+                                pdf.addImage(dataUrl, 'JPG', 0, 55, hw.imgWidth - 50, 0);
+    
+                            }
+                            // pdf.save()
+                            return resolve(pdf)
+                        });
+                    } else {
+                            let iheight = hw.imgWidth * hw.iRatio;
+                            let isLogoRequired = true;
+                            let pdf = new jsPDF("p", "pt", [iheight - 80, hw.imgWidth - 80]);
+                            if (isLogoRequired) {
+                                pdf.addImage(logo, 'PNG', (hw.imgWidth - 80 - 63), 5, 58, 48)
+                            }
+                            if (dataUrl) {
+                                pdf.addImage(dataUrl, 'JPG', 0, 55, hw.imgWidth - 50, 0);
+    
+                            }
+                            // pdf.save()
+                            return resolve(pdf)
+                    }
+                   
 
                 }.bind(this)).catch((err) => {
                     console.log(err);
@@ -152,8 +168,48 @@ const addPages = (elem, cityLogo) => {
             domtoimage.toJpeg(elem, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
                 .then(function (dataUrl) {
                     return getImageData(dataUrl).then(function (hw) {
-                        base64Img.requestBase64(cityLogo, function (err, res, body) {
+                        if (cityLogo) {
+                            base64Img.requestBase64(cityLogo, function (err, res, body) {
+                                var imgWidth = 210;
+                                var pageHeight = 295;
 
+                                let image = new Image();
+                                image.src = dataUrl;
+                                var imgHeight = image.height * imgWidth / image.width;
+                                var heightLeft = imgHeight;
+                                var doc = new jsPDF('p', 'mm', 'a4');
+                                var position = 10; // give some top padding to first page
+                                let isLogoRequired = true;
+                                doc.addImage(body, 'PNG', 1, 1, 10, 8);
+                                if (isLogoRequired) {
+                                    doc.addImage(logo, 'PNG', 194, 1, 15, 8);
+                                }
+
+                                // doc.addImage(dataUrl, 'PNG', position, imgWidth, imgHeight);
+                                if (dataUrl) {
+                                    doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 2, imgHeight);
+                                }
+                                heightLeft -= pageHeight;
+                                var index = 1;
+                                while (heightLeft >= 0) {
+                                    console.log('--------------------------', heightLeft)
+                                    debugger
+                                    if (index == 1) {
+                                        position = -pageHeight * index + 10
+                                    } else {
+                                        position = -pageHeight * index; // top padding for other pages
+                                    }
+                                    doc.addPage();
+                                    doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 1, imgHeight);
+                                    console.log(heightLeft)
+                                    index++;
+                                    heightLeft -= pageHeight;
+                                    debugger
+                                }
+                                return resolve(doc)
+                            });
+                        }
+                        else {
                             var imgWidth = 210;
                             var pageHeight = 295;
 
@@ -164,7 +220,6 @@ const addPages = (elem, cityLogo) => {
                             var doc = new jsPDF('p', 'mm', 'a4');
                             var position = 10; // give some top padding to first page
                             let isLogoRequired = true;
-                            doc.addImage(body, 'PNG', 1, 1, 10, 8);
                             if (isLogoRequired) {
                                 doc.addImage(logo, 'PNG', 194, 1, 15, 8);
                             }
@@ -174,15 +229,25 @@ const addPages = (elem, cityLogo) => {
                                 doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 2, imgHeight);
                             }
                             heightLeft -= pageHeight;
-
+                            var index = 1;
                             while (heightLeft >= 0) {
-                                position += heightLeft - imgHeight; // top padding for other pages
+                                if (index == 1) {
+                                    position = -pageHeight * index + 10
+                                } else {
+                                    position = -pageHeight * index; // top padding for other pages
+                                }
                                 doc.addPage();
                                 doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 1, imgHeight);
+                                console.log(heightLeft)
+                                index++;
                                 heightLeft -= pageHeight;
+                                debugger
                             }
                             return resolve(doc)
-                        });
+                        }
+
+
+
 
                     }.bind(this)).catch((err) => {
                         console.log(err);

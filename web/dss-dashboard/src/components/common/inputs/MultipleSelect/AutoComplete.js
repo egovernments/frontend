@@ -26,15 +26,12 @@ const theme = createMuiTheme({
             useNextVariants: true,
             fontFamily: variables.primaryFont
         },
-        MuiMenu: {
-            paper: {
-                backgroundColor: 'white',
-                fontFamily: variables.primaryFont,
-                // minWidth: '100%',
-                //   height: 'auto',
-                color: variables.black
+        MuiAutocomplete:{            
+            option:{
+                fontSize:'0.8rem'
             }
         }
+
     }
 });
 
@@ -141,13 +138,13 @@ class CheckboxesTags extends React.Component {
                                         <Checkbox
                                             icon={icon}
                                             checkedIcon={checkedIcon}
-                                            style={{ marginRight: 8, color:'black' }}
+                                            style={{ margin: '0px 0px 2px 0px',padding:0,  color:'black' }}
                                             checked={selected}
                                         />
                                         {option}
                                     </React.Fragment>
                                 )}
-                                style={{ minWidth: isMobile ? 200 : 150 }}
+                                style={{ minWidth: isMobile ? 200 : 150 , maxWidth: isMobile ? 200 : 150 }}
                                 renderInput={params => (
                                     <div style={{color:'black'}}>
 
