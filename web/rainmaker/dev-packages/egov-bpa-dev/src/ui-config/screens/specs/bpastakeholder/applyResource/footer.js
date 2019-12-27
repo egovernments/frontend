@@ -3,6 +3,8 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
+import { download } from "egov-common/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -91,10 +93,35 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
+    const isLicenseeTypeValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container1.children",
+      state,
+      dispatch
+    );
+    const isLicenseeSubTypeValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children",
+      state,
+      dispatch
+    );
+    const isLicenseeCOAValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children",
+      state,
+      dispatch
+    );
+
+    if (
+      !isLicenseeCOAValid ||
+      !isLicenseeSubTypeValid ||
+      !isLicenseeTypeValid
+    ) {
+      isFormValid = false;
+    }
+  }
+  if (activeStep === 1) {
     const data = get(state.screenConfiguration, "preparedFinalObject");
 
     const isTradeDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
+      "components.div.children.formwizardSecondStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
       state,
       dispatch
     );
@@ -114,12 +141,12 @@ export const callBackForNext = async (state, dispatch) => {
     // }
 
     const isPermanentAddrValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.permanentAddr.children.cardContent.children.tradeDetailsConatiner.children",
+      "components.div.children.formwizardSecondtep.children.permanentAddr.children.cardContent.children.tradeDetailsConatiner.children",
       state,
       dispatch
     );
     const isCommunicationAddrValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children",
+      "components.div.children.formwizardSecondStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children",
       state,
       dispatch
     );
@@ -143,7 +170,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 1) {
+  if (activeStep === 2) {
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]",
@@ -194,7 +221,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 2) {
+  if (activeStep === 3) {
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
@@ -204,7 +231,7 @@ export const callBackForNext = async (state, dispatch) => {
       moveToSuccess(LicenseData, dispatch);
     }
   }
-  if (activeStep !== 2) {
+  if (activeStep !== 3) {
     if (isFormValid) {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
@@ -251,7 +278,7 @@ export const changeStep = (
         "LicensesTemp[0].reviewDocData",
         null
       );
-      activeStep = isDocsUploaded ? 2 : 1;
+      activeStep = isDocsUploaded ? 3 : 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
@@ -260,8 +287,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 2 ? true : false;
-  const isSubmitButtonVisible = activeStep === 2 ? true : false;
+  const isNextButtonVisible = activeStep < 3 ? true : false;
+  const isSubmitButtonVisible = activeStep === 3 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -720,4 +747,50 @@ export const footerReview = (
       }
     }
   });
+};
+
+export const downloadPrintContainer = (action, state, dispatch, status) => {
+  /** MenuButton data based on status */
+  let downloadMenu = [];
+  let receiptDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        {
+          key: "consumerCodes",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "tenantId"
+          )
+        }
+      ];
+      download(receiptQueryString);
+    },
+    leftIcon: "receipt"
+  };
+  switch (status) {
+    case "PENDINGDOCVERIFICATION":
+    case "PENDINGAPPROVAL":
+    case "REJECTED":
+    case "APPROVED":
+      downloadMenu = [receiptDownloadObject];
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.downloadMenu.props",
+          "data.menu",
+          downloadMenu
+        )
+      );
+      break;
+    default:
+      break;
+  }
 };

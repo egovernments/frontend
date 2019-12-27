@@ -117,28 +117,6 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     }
 };
 
-export const getNamesFromMDMS = async (queryObject, dispatch) => {
-    dispatch(toggleSpinner());
-    try {
-        const response = await httpRequest(
-            "post",
-            "/billing-service/taxheads/_search",
-            "_search",
-            queryObject
-        );
-        dispatch(toggleSpinner());
-        return response;
-    } catch (error) {
-        dispatch(toggleSpinner());
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
-};
-
 export const fetchBill = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
@@ -221,25 +199,6 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
         return response;
     } catch (error) {
         dispatch(toggleSpinner());
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
-};
-
-export const getPastPaymentDetials = async queryObject => {
-    try {
-        const response = await httpRequest(
-            "post",
-            "/ws-calculator/meterConnection/_search",
-            "_search",
-            queryObject
-        );
-        return response;
-    } catch (error) {
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -900,8 +859,8 @@ export const getMeterReadingData = async (dispatch) => {
         console.log(error);
     }
 };
-export const getPastPayments = async (dispatch) => {
-    // console.log(getUserInfo())
+
+export const getPastPaymentsForWater = async (dispatch) => {
     dispatch(toggleSpinner());
     let queryObject = [
         {
@@ -915,7 +874,6 @@ export const getPastPayments = async (dispatch) => {
         {
             key: "mobileNumber",
             value: JSON.parse(getUserInfo()).mobileNumber.toString()
-            // value:'9234674532'
         },
     ];
     try {
@@ -927,7 +885,46 @@ export const getPastPayments = async (dispatch) => {
         );
         dispatch(toggleSpinner());
         if (response && response.Payments) {
-            dispatch(prepareFinalObject("pastPayments", response.Payments));
+            dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));
+        }
+        return response;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+}
+
+export const getPastPaymentsForSewerage = async (dispatch) => {
+    dispatch(toggleSpinner());
+    let queryObject = [
+        {
+            key: "tenantId",
+            value: "pb.amritsar"
+        },
+        {
+            key: "businessServices",
+            value: "SW"
+        },
+        {
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber.toString()
+        },
+    ];
+    try {
+        const response = await httpRequest(
+            "post",
+            "/collection-services/payments/_search",
+            "_search",
+            queryObject
+        );
+        dispatch(toggleSpinner());
+        if (response && response.Payments) {
+            dispatch(prepareFinalObject("pastPaymentsForSewerage", response.Payments));
         }
         return response;
     } catch (error) {
@@ -942,31 +939,111 @@ export const getPastPayments = async (dispatch) => {
 }
 
 export const createMeterReading = async (dispatch, body) => {
-
-    const response = await httpRequest(
-        "post",
-        "/ws-calculator/meterConnection/_create",
-        "", [], { meterReadings: body }
-    );
-
-    if (response && response !== undefined && response !== null) {
-        dispatch(prepareFinalObject("metereading", []));
-        dispatch(prepareFinalObject("consumptionDetails", []));
-        dispatch(prepareFinalObject("autoPopulatedValues", []));
-        getMeterReadingData(dispatch)
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-calculator/meterConnection/_create",
+            "", [], { meterReadings: body }
+        );
+        if (response && response !== undefined && response !== null) {
+            getMeterReadingData(dispatch);
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status.props",
+                    "value",
+                    "Working"
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                    "disabled",
+                    false
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                    "disabled",
+                    false
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
+                    "visible",
+                    true
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
+                    "visible",
+                    false
+                )
+            );
+            let todayDate = new Date()
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                    "value",
+                    todayDate
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                    "value",
+                    ""
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
+                    "value",
+                    ""
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
+                    "labelName",
+                    ""
+                )
+            );
+        }
+        dispatch(
+            handleField(
+                "meter-reading",
+                "components.div.children.meterReadingEditable",
+                "visible",
+                false
+            )
+        );
+        dispatch(prepareFinalObject("metereading", {}));
+        dispatch(toggleSpinner());
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
     }
-
-    dispatch(
-        handleField(
-            "meter-reading",
-            "components.div.children.meterReadingEditable",
-            "visible",
-            false
-        )
-    );
 }
 
-export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
+export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) => {
     const FETCHCONNECTIONDETAILS = {
         GET: {
             URL: "/ws-services/wc/_search",
@@ -991,11 +1068,27 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
     switch (service) {
         case 'WATER':
             try {
-                httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+                httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then(async (payloadReceiptDetails) => {
                     const queryStr = [
                         { key: "key", value: "ws-consolidatedacknowlegment" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
+
+                    if (payloadReceiptDetails.WaterConnection[0].property.propertyType !== null && payloadReceiptDetails.WaterConnection[0].property.propertyType !== undefined) {
+                        const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.WaterConnection[0].property.propertyType) + ")]"
+                        let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
+                        const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
+                        payloadReceiptDetails.WaterConnection[0].property.propertyTypeValue = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
+                    }
+
+                    if (payloadReceiptDetails.WaterConnection[0].property.usageCategory !== null && payloadReceiptDetails.WaterConnection[0].property.usageCategory !== undefined) {
+                        const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.WaterConnection[0].property.usageCategory) + ")]"
+                        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
+                        const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
+                        payloadReceiptDetails.WaterConnection[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
+                    }
+
+
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
@@ -1017,11 +1110,26 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
             break;
         case 'SEWERAGE':
             try {
-                httpRequest("post", FETCHSWCONNECTIONDETAILS.GET.URL, FETCHSWCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+                httpRequest("post", FETCHSWCONNECTIONDETAILS.GET.URL, FETCHSWCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then(async (payloadReceiptDetails) => {
                     const queryStr = [
                         { key: "key", value: "ws-consolidatedsewerageconnection" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
+
+                    if (payloadReceiptDetails.SewerageConnections[0].property.propertyType !== null && payloadReceiptDetails.SewerageConnections[0].property.propertyType !== undefined) {
+                        const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.SewerageConnections[0].property.propertyType) + ")]"
+                        let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
+                        const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
+                        payloadReceiptDetails.SewerageConnections[0].property.propertyTypeValue = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
+                    }
+
+                    if (payloadReceiptDetails.SewerageConnections[0].property.usageCategory !== null && payloadReceiptDetails.SewerageConnections[0].property.usageCategory !== undefined) {
+                        const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.SewerageConnections[0].property.usageCategory) + ")]"
+                        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
+                        const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
+                        payloadReceiptDetails.SewerageConnections[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
+                    }
+
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
@@ -1133,4 +1241,3 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
         alert('Some Error Occured while downloading Bill!');
     }
 }
-

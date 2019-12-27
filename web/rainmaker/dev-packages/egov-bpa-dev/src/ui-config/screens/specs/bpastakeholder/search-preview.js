@@ -13,6 +13,7 @@ import {
   setBusinessServiceDataToLocalStorage,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
+import { downloadPrintContainer } from "./applyResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -31,6 +32,8 @@ import {
 
 import { getOrganizationDetails } from "./applyResource/review-organization";
 import { getReviewOwner } from "./applyResource/review-owner";
+import { getReviewLicenseDetails } from "./applyResource/review-license";
+
 import {
   getPermanentDetails,
   getCommunicactionDetails
@@ -211,13 +214,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       if (tradeType.split(".")[0] == "ARCHITECT")
         set(
           action,
-          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
+          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
           true
         );
       else
         set(
           action,
-          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
+          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
           false
         );
       set(
@@ -245,7 +248,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
       set(
         action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
         false
       );
     }
@@ -330,6 +333,30 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
     addressDestruct(action, state, dispatch);
+  }
+
+  const status = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Licenses[0].status"
+  );
+
+  const printCont = downloadPrintContainer(action, state, dispatch, status);
+  switch (status) {
+    case "PENDINGDOCVERIFICATION":
+    case "PENDINGAPPROVAL":
+    case "REJECTED":
+    case "APPROVED":
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.headerDiv.children.helpSection.children.rightdiv",
+          "visible",
+          true
+        )
+      );
+      break;
+    default:
+      break;
   }
 };
 
@@ -416,6 +443,7 @@ const reviewPermanentDetails = getPermanentDetails(false);
 const reviewCommunicationDetails = getCommunicactionDetails(false);
 
 const reviewOwnerDetails = getReviewOwner(false);
+const reviewLicenseDetails = getReviewLicenseDetails(false);
 
 const reviewDocumentDetails = getReviewDocuments(false);
 
@@ -446,6 +474,7 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
+  reviewLicenseDetails,
   reviewOwnerDetails,
   // reviewOrganizationDetails,
   reviewPermanentDetails,
@@ -453,6 +482,45 @@ export const tradeReviewDetails = getCommonCard({
   reviewDocumentDetails
 });
 
+const rightdiv = {
+  uiFramework: "custom-atoms",
+  componentPath: "Div",
+  visible: false,
+  props: {
+    style: { textAlign: "right", display: "flex" }
+  },
+  children: {
+    downloadMenu: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "MenuButton",
+      props: {
+        data: {
+          label: {
+            labelName: "DOWNLOAD",
+            labelKey: "DOWNLOAD"
+          },
+          // leftIcon: "cloud_download",
+          rightIcon: "arrow_drop_down",
+          props: {
+            variant: "outlined",
+            style: {
+              marginLeft: 10,
+              height: "60px",
+              width: "200px",
+              color: "#FE7A51"
+            }
+          }
+          // menu: downloadMenu
+        }
+      }
+    }
+  }
+  // gridDefination: {
+  //   xs: 12,
+  //   sm: 6
+  // }
+};
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -502,7 +570,7 @@ const screenConfig = {
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end", display: "block" }
+                style: { justifyContent: "flex-end" }
               },
               gridDefination: {
                 xs: 12,
@@ -511,7 +579,9 @@ const screenConfig = {
               },
               children:
                 process.env.REACT_APP_NAME === "Employee"
-                  ? {}
+                  ? {
+                      rightdiv
+                    }
                   : {
                       word1: {
                         ...getCommonTitle(
@@ -531,16 +601,7 @@ const screenConfig = {
                           jsonPath: "Licenses[0].headerSideText.word2"
                         })
                       },
-                      cancelledLabel: {
-                        ...getCommonHeader(
-                          {
-                            labelName: "Cancelled",
-                            labelKey: "TL_COMMON_STATUS_CANC"
-                          },
-                          { variant: "body1", style: { color: "#E54D42" } }
-                        ),
-                        visible: false
-                      }
+                      rightdiv
                     }
             }
           }

@@ -8,9 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
-import { footerReview } from "./viewBillResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, getSearchResultsForSewerage, getDescriptionFromMDMS } from "../../../../ui-utils/commons";
 
@@ -23,51 +21,6 @@ let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
 let headerSideText = { word1: "", word2: "" };
 
-const setDocuments = async (
-  payload,
-  sourceJsonPath,
-  destJsonPath,
-  dispatch
-) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
-
-  const fileStoreIds =
-    uploadedDocData &&
-    uploadedDocData
-      .map(item => {
-        return item.fileStoreId;
-      })
-      .join(",");
-  const fileUrlPayload =
-    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-  const reviewDocData =
-    uploadedDocData &&
-    uploadedDocData.map((item, index) => {
-      return {
-        title: `TL_${item.documentType}` || "",
-        link:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            fileUrlPayload[item.fileStoreId].split(",")[0]) ||
-          "",
-        linkText: "View",
-        name:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            decodeURIComponent(
-              fileUrlPayload[item.fileStoreId]
-                .split(",")[0]
-                .split("?")[0]
-                .split("/")
-                .pop()
-                .slice(13)
-            )) ||
-          `Document - ${index + 1}`
-      };
-    });
-  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
-};
-
 const searchResults = async (action, state, dispatch, connectionNumber) => {
   /**
    * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
@@ -78,7 +31,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
       payloadData.SewerageConnections[0].service = service
 
-      if (payloadData.SewerageConnections[0].property.propertyType !== null || payloadData.SewerageConnections[0].property.propertyType !== undefined) {
+      if (payloadData.SewerageConnections[0].property.propertyType !== null && payloadData.SewerageConnections[0].property.propertyType !== undefined) {
         const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadData.SewerageConnections[0].property.propertyType) + ")]"
         let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
         const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
@@ -89,6 +42,14 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       const lat = payloadData.SewerageConnections[0].property.address.locality.latitude ? payloadData.SewerageConnections[0].property.address.locality.latitude : ' '
       const long = payloadData.SewerageConnections[0].property.address.locality.longitude ? payloadData.SewerageConnections[0].property.address.locality.longitude : ' '
       payloadData.SewerageConnections[0].property.address.locality.locationOnMap = `${lat} ${long}`
+
+      if (payloadData.SewerageConnections[0].property.usageCategory !== null && payloadData.SewerageConnections[0].property.usageCategory !== undefined) {
+        const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadData.SewerageConnections[0].property.usageCategory) + ")]"
+        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
+        const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
+        payloadData.SewerageConnections[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
+      }
+
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]))
     }
   } else if (service === "WATER") {
@@ -100,7 +61,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       } else {
         payloadData.WaterConnection[0].connectionExecutionDate = ' '
       }
-      if (payloadData.WaterConnection[0].property.propertyType !== null || payloadData.WaterConnection[0].property.propertyType !== undefined) {
+      if (payloadData.WaterConnection[0].property.propertyType !== null && payloadData.WaterConnection[0].property.propertyType !== undefined) {
         const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadData.WaterConnection[0].property.propertyType) + ")]"
         let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
         const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
@@ -109,6 +70,14 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       const lat = payloadData.WaterConnection[0].property.address.locality.latitude ? payloadData.WaterConnection[0].property.address.locality.latitude : ' '
       const long = payloadData.WaterConnection[0].property.address.locality.longitude ? payloadData.WaterConnection[0].property.address.locality.longitude : ' '
       payloadData.WaterConnection[0].property.address.locality.locationOnMap = `${lat} ${long}`
+
+      if (payloadData.WaterConnection[0].property.usageCategory !== null && payloadData.WaterConnection[0].property.usageCategory !== undefined) {
+        const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadData.WaterConnection[0].property.usageCategory) + ")]"
+        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
+        const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
+        payloadData.WaterConnection[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
+      }
+
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
     }
   }

@@ -14,6 +14,7 @@ import {
   createEstimateData,
   validateFields,
   downloadAcknowledgementForm,
+  downloadCertificateForm
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -592,7 +593,8 @@ export const footerReview = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_download");
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
@@ -694,7 +696,8 @@ export const footerReview = (
               componentPath: "MenuButton",
               props: {
                 data: {
-                  label: "Download",
+                  label: {
+                    labelName:"Download"},
                   leftIcon: "cloud_download",
                   rightIcon: "arrow_drop_down",
                   props: { variant: "outlined", style: { marginLeft: 10 } },
@@ -847,7 +850,8 @@ export const downloadPrintContainer = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_download");
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
