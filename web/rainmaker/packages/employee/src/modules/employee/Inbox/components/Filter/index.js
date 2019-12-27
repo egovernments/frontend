@@ -1,5 +1,5 @@
 import React from "react";
-import { DropDown } from "components";
+import { DropDown,MultiSelectDropdown } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 
@@ -9,9 +9,9 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
     return (
         <div className="row">
             <div className="col-md-3">
-                <DropDown
+                <MultiSelectDropdown
                 multiple
-                    onChange={(e, index, value) => { handleChangeFilter('moduleFilter', value) }}
+                    onChange={(e) => { handleChangeFilter('moduleFilter', e.target.value) }}
                     floatingLabelText={<Label label="CS_INBOX_MODULE_FILTER" fontSize="12px" />}//"Module"
                     className="filter-fields"
                     dropDownData={filter.moduleFilter.dropdownData}
@@ -25,10 +25,10 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                 />
             </div>
             <div className="col-md-3">
-                <DropDown
+                <MultiSelectDropdown
                  multiple
                     onChange={(e, index, value) => {
-                        handleChangeFilter('localityFilter', value)
+                        handleChangeFilter('localityFilter', e.target.value)
                     }}
                     floatingLabelText={<Label label="CS_INBOX_LOCALITY_FILTER" fontSize="12px"/>}
                     className="filter-fields"
@@ -43,14 +43,14 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                 />
             </div>
             <div className="col-md-3" >
-                <DropDown
+                <MultiSelectDropdown
                  multiple
                     floatingLabelText={<Label label="CS_INBOX_STATUS_FILTER" fontSize="12px"  />}
                     className="filter-fields"
                     dropDownData={filter.statusFilter.dropdownData}
                     onChange={(e, index, value) => {
                                                
-                        handleChangeFilter('statusFilter', value) }}
+                        handleChangeFilter('statusFilter', e.target.value) }}
                     value={filter.statusFilter.selectedValue}
                     underlineStyle={{
                         position: "absolute",

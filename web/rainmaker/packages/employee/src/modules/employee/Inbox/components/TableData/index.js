@@ -82,11 +82,11 @@ class TableData extends Component {
     value: 0,
     tabData: [],
     taskboardData: [],
-    taskboardLabel:'',
+    taskboardLabel: '',
     inboxData: [{ headers: [], rows: [] }],
     initialInboxData: [{ headers: [], rows: [] }],
     moduleName: "",
-    loaded:false,
+    loaded: false,
     color: "",
   };
 
@@ -113,43 +113,42 @@ class TableData extends Component {
   }
   handleChangeSearch = (value) => {
     this.setState({
-      searchFilter:{value}
+      searchFilter: { value }
     })
     // this.applyFilter(this.state.filter, { value });
   }
   // (taskboardLabel=='')||(taskboardLabel=='WF_TOTAL_NEARING_SLA'&&row[4].text > 0 && row[4].text < MAX_SLA / 3)||
   // (taskboardLabel=='WF_ESCALATED_SLA'&&row[4].text < 0)
-  checkSLA=(taskboardLabel,row)=>{
-    if(taskboardLabel==''||taskboardLabel=='WF_TOTAL_TASK')
-    {
+  checkSLA = (taskboardLabel, row) => {
+    if (taskboardLabel == '' || taskboardLabel == 'WF_TOTAL_TASK') {
       return true;
-    }else if((taskboardLabel=='WF_TOTAL_NEARING_SLA'&&row[4].text > 0 && row[4].text < MAX_SLA / 3)){
+    } else if ((taskboardLabel == 'WF_TOTAL_NEARING_SLA' && row[4].text > 0 && row[4].text < MAX_SLA / 3)) {
       return true;
-    }else if((taskboardLabel=='WF_ESCALATED_SLA'&&row[4].text < 0)){
+    } else if ((taskboardLabel == 'WF_ESCALATED_SLA' && row[4].text < 0)) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
-  checkRow=(row,filter,searchFilter,taskboardLabel)=>{
-if(this.checkSLA(taskboardLabel,row)&&(filter.localityFilter.selectedValue.includes('ALL')||filter.localityFilter.selectedValue.includes(row[1].text.props.label))&&
-(filter.moduleFilter.selectedValue.includes('ALL')||filter.moduleFilter.selectedValue.includes(row[2].text.props.label.split('_')[1]))&&
-(filter.statusFilter.selectedValue.includes('ALL')||filter.statusFilter.selectedValue.includes(row[2].text.props.label.split('_')[2]))&&
-(searchFilter.value == ''||this.checkMatch(row, searchFilter.value)
-)
-){
-  return true;
-}
-  return false;
+  checkRow = (row, filter, searchFilter, taskboardLabel) => {
+    if (this.checkSLA(taskboardLabel, row) && (filter.localityFilter.selectedValue.includes('ALL') || filter.localityFilter.selectedValue.includes(row[1].text.props.label)) &&
+      (filter.moduleFilter.selectedValue.includes('ALL') || filter.moduleFilter.selectedValue.includes(row[2].text.props.label.split('_')[1])) &&
+      (filter.statusFilter.selectedValue.includes('ALL') || filter.statusFilter.selectedValue.includes(row[2].text.props.label.split('_')[2])) &&
+      (searchFilter.value == '' || this.checkMatch(row, searchFilter.value)
+      )
+    ) {
+      return true;
+    }
+    return false;
   }
   // applyFilter = (filter, searchFilter) => {
-    applyFilter=()=>{
+  applyFilter = () => {
     // const tempObject = cloneDeep(this.state.initialInboxData);
     let initialInboxData = cloneDeep(this.state.initialInboxData);
-const {filter, searchFilter,taskboardLabel}=this.state;
+    const { filter, searchFilter, taskboardLabel } = this.state;
     if (initialInboxData.length == 2) {
       initialInboxData.map((row, ind) => {
-        row.rows = row.rows.filter((uid) => this.checkRow(uid,filter,searchFilter,taskboardLabel))
+        row.rows = row.rows.filter((uid) => this.checkRow(uid, filter, searchFilter, taskboardLabel))
         // if (!filter.localityFilter.selectedValue.includes('ALL')) {
         //   row.rows = row.rows.filter((uid) => filter.localityFilter.selectedValue.includes(uid[1].text.props.label))
         // }
@@ -183,11 +182,11 @@ const {filter, searchFilter,taskboardLabel}=this.state;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
     tabData[1].dynamicArray = [initialInboxData[1].rows.length];
     return {
-               
-          inboxData: initialInboxData,
-          taskboardData,
-          // filteredInboxData: cloneDeep(initialInboxData),
-          tabData,        
+
+      inboxData: initialInboxData,
+      taskboardData,
+      // filteredInboxData: cloneDeep(initialInboxData),
+      tabData,
     }
     // this.setState({
     //   filter,
@@ -201,14 +200,14 @@ const {filter, searchFilter,taskboardLabel}=this.state;
   }
   handleChangeFilter = (filterName, value) => {
     const filter = { ...this.state.filter }
-   
-    if(value.includes('ALL')&&this.state.filter[filterName].selectedValue.includes('ALL')&&value.length>1){
-        value.shift()
-    }else if(value.includes('ALL')&&value.length>1&&!this.state.filter[filterName].selectedValue.includes('ALL')){
-value=['ALL']
+
+    if (value.includes('ALL') && this.state.filter[filterName].selectedValue.includes('ALL') && value.length > 1) {
+      value.shift()
+    } else if (value.includes('ALL') && value.length > 1 && !this.state.filter[filterName].selectedValue.includes('ALL')) {
+      value = ['ALL']
     }
     filter[filterName].selectedValue = value
-    this.setState({filter});
+    this.setState({ filter });
     // this.applyFilter(filter, this.state.searchFilter);
   }
   clearFilter = () => {
@@ -414,7 +413,7 @@ value=['ALL']
         { head: ESCALATED_SLA.length, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
       );
       this.setState({
-        loaded:true,
+        loaded: true,
         inboxData, taskboardData, tabData, filteredInboxData: cloneDeep(inboxData), initialInboxData: cloneDeep(inboxData), filter: {
           localityFilter: {
             selectedValue: ['ALL'],
@@ -430,7 +429,7 @@ value=['ALL']
             dropdownData: this.getUniqueList([
               {
                 value: "ALL",
-                label:  getLocaleLabels("CS_INBOX_SELECT_ALL"),
+                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
               }, ...moduleDD
             ])
           },
@@ -439,7 +438,7 @@ value=['ALL']
             dropdownData: this.getUniqueList([
               {
                 value: "ALL",
-                label:  getLocaleLabels("CS_INBOX_SELECT_ALL"),
+                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
               }, ...statusDD
             ])
           }
@@ -508,7 +507,7 @@ value=['ALL']
     this.setState({
       // inboxData: filteredData,
       // tabData,
-      taskboardLabel:label
+      taskboardLabel: label
     });
 
     this.setState({
@@ -517,18 +516,18 @@ value=['ALL']
   };
 
   render() {
-    const  { value,  moduleName, filter, searchFilter } = this.state;
+    const { value, moduleName, filter, searchFilter } = this.state;
     const { classes, onPopupOpen } = this.props;
     const { handleChangeFilter, clearFilter, handleChangeSearch } = this;
-    let {taskboardData, tabData, inboxData} =this.state;
-    if(this.state.loaded){
-      const filteredData=this.applyFilter();
-      taskboardData=filteredData.taskboardData;
-      inboxData=filteredData.inboxData;
-      tabData=filteredData.tabData;
+    let { taskboardData, tabData, inboxData } = this.state;
+    if (this.state.loaded) {
+      const filteredData = this.applyFilter();
+      taskboardData = filteredData.taskboardData;
+      inboxData = filteredData.inboxData;
+      tabData = filteredData.tabData;
     }
-// const {taskboardData, tabData, inboxData}=this.applyFilter();
-console.log(this.state,'satte');
+    // const {taskboardData, tabData, inboxData}=this.applyFilter();
+    console.log(this.state, 'satte');
 
     return (
       <div className="col-sm-12">
@@ -537,7 +536,7 @@ console.log(this.state,'satte');
             <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
           </div>
           <div className="col-md-4"> <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
-          hintText={getLocaleLabels("CS_INBOX_SEARCH_PLACEHOLDER")}
+            hintText={getLocaleLabels("CS_INBOX_SEARCH_PLACEHOLDER")}
             value={searchFilter.value}
             onChange={(e, value) => {
 
