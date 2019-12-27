@@ -201,6 +201,12 @@ const {filter, searchFilter,taskboardLabel}=this.state;
   }
   handleChangeFilter = (filterName, value) => {
     const filter = { ...this.state.filter }
+   
+    if(value.includes('ALL')&&this.state.filter[filterName].selectedValue.includes('ALL')&&value.length>1){
+        value.shift()
+    }else if(value.includes('ALL')&&value.length>1&&!this.state.filter[filterName].selectedValue.includes('ALL')){
+value=['ALL']
+    }
     filter[filterName].selectedValue = value
     this.setState({filter});
     // this.applyFilter(filter, this.state.searchFilter);
