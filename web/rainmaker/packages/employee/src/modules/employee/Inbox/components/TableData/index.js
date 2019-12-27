@@ -82,9 +82,11 @@ class TableData extends Component {
     value: 0,
     tabData: [],
     taskboardData: [],
+    taskboardLabel:'',
     inboxData: [{ headers: [], rows: [] }],
     initialInboxData: [{ headers: [], rows: [] }],
     moduleName: "",
+    loaded:false,
     color: "",
   };
 
@@ -110,26 +112,56 @@ class TableData extends Component {
     return false;
   }
   handleChangeSearch = (value) => {
-    this.applyFilter(this.state.filter, { value });
+    this.setState({
+      searchFilter:{value}
+    })
+    // this.applyFilter(this.state.filter, { value });
   }
-  applyFilter = (filter, searchFilter) => {
-    const tempObject = cloneDeep(this.state.initialInboxData);
-    let initialInboxData = get(this.state, 'initialInboxData');
-
+  // (taskboardLabel=='')||(taskboardLabel=='WF_TOTAL_NEARING_SLA'&&row[4].text > 0 && row[4].text < MAX_SLA / 3)||
+  // (taskboardLabel=='WF_ESCALATED_SLA'&&row[4].text < 0)
+  checkSLA=(taskboardLabel,row)=>{
+    if(taskboardLabel==''||taskboardLabel=='WF_TOTAL_TASK')
+    {
+      return true;
+    }else if((taskboardLabel=='WF_TOTAL_NEARING_SLA'&&row[4].text > 0 && row[4].text < MAX_SLA / 3)){
+      return true;
+    }else if((taskboardLabel=='WF_ESCALATED_SLA'&&row[4].text < 0)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  checkRow=(row,filter,searchFilter,taskboardLabel)=>{
+if(this.checkSLA(taskboardLabel,row)&&(filter.localityFilter.selectedValue.includes('ALL')||filter.localityFilter.selectedValue.includes(row[1].text.props.label))&&
+(filter.moduleFilter.selectedValue.includes('ALL')||filter.moduleFilter.selectedValue.includes(row[2].text.props.label.split('_')[1]))&&
+(filter.statusFilter.selectedValue.includes('ALL')||filter.statusFilter.selectedValue.includes(row[2].text.props.label.split('_')[2]))&&
+(searchFilter.value == ''||this.checkMatch(row, searchFilter.value)
+)
+){
+  return true;
+}
+  return false;
+  }
+  // applyFilter = (filter, searchFilter) => {
+    applyFilter=()=>{
+    // const tempObject = cloneDeep(this.state.initialInboxData);
+    let initialInboxData = cloneDeep(this.state.initialInboxData);
+const {filter, searchFilter,taskboardLabel}=this.state;
     if (initialInboxData.length == 2) {
       initialInboxData.map((row, ind) => {
-        if (!filter.localityFilter.selectedValue.includes('ALL')) {
-          row.rows = row.rows.filter((uid) => filter.localityFilter.selectedValue.includes(uid[1].text.props.label))
-        }
-        if (!filter.moduleFilter.selectedValue.includes('ALL')) {
-          row.rows = row.rows.filter((uid) => filter.moduleFilter.selectedValue.includes(uid[2].text.props.label.split('_')[1]))
-        } if (!filter.statusFilter.selectedValue.includes('ALL')) {
-          row.rows = row.rows.filter((uid) => filter.statusFilter.selectedValue.includes(uid[2].text.props.label.split('_')[2]))
-        }
-        if (searchFilter.value != '') {
-          row.rows = row.rows.filter((uid) => this.checkMatch(uid, searchFilter.value)
-          )
-        }
+        row.rows = row.rows.filter((uid) => this.checkRow(uid,filter,searchFilter,taskboardLabel))
+        // if (!filter.localityFilter.selectedValue.includes('ALL')) {
+        //   row.rows = row.rows.filter((uid) => filter.localityFilter.selectedValue.includes(uid[1].text.props.label))
+        // }
+        // if (!filter.moduleFilter.selectedValue.includes('ALL')) {
+        //   row.rows = row.rows.filter((uid) => filter.moduleFilter.selectedValue.includes(uid[2].text.props.label.split('_')[1]))
+        // } if (!filter.statusFilter.selectedValue.includes('ALL')) {
+        //   row.rows = row.rows.filter((uid) => filter.statusFilter.selectedValue.includes(uid[2].text.props.label.split('_')[2]))
+        // }
+        // if (searchFilter.value != '') {
+        //   row.rows = row.rows.filter((uid) => this.checkMatch(uid, searchFilter.value)
+        //   )
+        // }
       })
     }
     let ESCALATED_SLA = [];
@@ -150,20 +182,28 @@ class TableData extends Component {
     taskboardData[2].head = ESCALATED_SLA.length;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
     tabData[1].dynamicArray = [initialInboxData[1].rows.length];
-    this.setState({
-      filter,
-      inboxData: initialInboxData,
-      taskboardData,
-      filteredInboxData: cloneDeep(initialInboxData),
-      initialInboxData: tempObject,
-      tabData, searchFilter
+    return {
+               
+          inboxData: initialInboxData,
+          taskboardData,
+          // filteredInboxData: cloneDeep(initialInboxData),
+          tabData,        
+    }
+    // this.setState({
+    //   filter,
+    //   inboxData: initialInboxData,
+    //   taskboardData,
+    //   filteredInboxData: cloneDeep(initialInboxData),
+    //   initialInboxData: tempObject,
+    //   tabData, searchFilter
 
-    })
+    // })
   }
   handleChangeFilter = (filterName, value) => {
     const filter = { ...this.state.filter }
     filter[filterName].selectedValue = value
-    this.applyFilter(filter, this.state.searchFilter);
+    this.setState({filter});
+    // this.applyFilter(filter, this.state.searchFilter);
   }
   clearFilter = () => {
     const initialInboxData = cloneDeep(this.state.initialInboxData);
@@ -368,6 +408,7 @@ class TableData extends Component {
         { head: ESCALATED_SLA.length, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
       );
       this.setState({
+        loaded:true,
         inboxData, taskboardData, tabData, filteredInboxData: cloneDeep(inboxData), initialInboxData: cloneDeep(inboxData), filter: {
           localityFilter: {
             selectedValue: ['ALL'],
@@ -459,8 +500,9 @@ class TableData extends Component {
     tabData[1] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
 
     this.setState({
-      inboxData: filteredData,
-      tabData,
+      // inboxData: filteredData,
+      // tabData,
+      taskboardLabel:label
     });
 
     this.setState({
@@ -469,10 +511,18 @@ class TableData extends Component {
   };
 
   render() {
-    const { value, taskboardData, tabData, inboxData, moduleName, filter, searchFilter } = this.state;
+    const  { value,  moduleName, filter, searchFilter } = this.state;
     const { classes, onPopupOpen } = this.props;
     const { handleChangeFilter, clearFilter, handleChangeSearch } = this;
-
+    let {taskboardData, tabData, inboxData} =this.state;
+    if(this.state.loaded){
+      const filteredData=this.applyFilter();
+      taskboardData=filteredData.taskboardData;
+      inboxData=filteredData.inboxData;
+      tabData=filteredData.tabData;
+    }
+// const {taskboardData, tabData, inboxData}=this.applyFilter();
+console.log(this.state,'satte');
 
     return (
       <div className="col-sm-12">
