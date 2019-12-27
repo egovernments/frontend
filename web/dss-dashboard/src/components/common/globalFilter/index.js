@@ -147,7 +147,8 @@ class GlobalFilter extends Component {
                         style={{
                             color: '#000000',
                             margin: '0 0px 0 0',
-                            width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
+                            // width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
+                            width: isMobile ? '200px' : '170px'
                         }}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">

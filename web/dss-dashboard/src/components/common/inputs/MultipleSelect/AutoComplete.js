@@ -14,6 +14,7 @@ import ulbs_icon from '../../../../images/icon-ul-bs.svg';
 import styles from './Styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import variables from '../../../../styles/variables';
+import { isMobile } from 'react-device-detect';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
@@ -105,7 +106,7 @@ class CheckboxesTags extends React.Component {
     };
 
     render() {
-        const { innerRef, name, classes, logo, target, } = this.props;
+        const { classes, logo } = this.props;
         let svgicon;
         if (logo === "DDRs") {
             svgicon = districts_icon;
@@ -146,7 +147,7 @@ class CheckboxesTags extends React.Component {
                                         {option}
                                     </React.Fragment>
                                 )}
-                                style={{ minWidth: 200 }}
+                                style={{ minWidth: isMobile ? 200 : 170 }}
                                 renderInput={params => (
                                     <div style={{color:'black'}}>
 
@@ -166,44 +167,6 @@ class CheckboxesTags extends React.Component {
                                     /></div>
                                 )}
                             />
-                            {/* <Autocomplete
-                                disableUnderline={true}
-                                onChange={this.handleChange.bind(this)}
-                                multiple
-                                id="checkboxes-tags-demo"
-                                options={this.state.localItems}
-                                disableCloseOnSelect
-
-                                // renderTags={(value, getTag) =>
-                                //     (
-                                //         <span>{value.length + " Selected"}</span>
-                                //     )
-                                // }
-
-
-                                getOptionLabel={option => option}
-                                renderOption={(option, { selected }) => (
-                                    <React.Fragment>
-                                        <Checkbox
-                                            icon={icon}
-                                            checkedIcon={checkedIcon}
-                                            style={{ marginRight: 8 }}
-                                            checked={selected}
-                                        />
-                                        {option}
-                                    </React.Fragment>
-                                )}
-                                style={{ minWidth: '200px' }}
-                                renderInput={params => (
-                                    <div className={classes.searchinput} style={{ color: 'rgba(0, 0, 0, 0.87)' }}>
-                                        <TextField
-                                            {...params}
-                                            placeholder={this.state.label}
-                                            fullWidth
-                                            style={{ color: 'rgba(0, 0, 0, 0.87)' }}
-                                        /></div>
-                                )}
-                            /> */}
                         </div>
                     </FormControl>
 
