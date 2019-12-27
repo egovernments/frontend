@@ -56,7 +56,7 @@ class TableData extends Component {
         dropdownData: [
           {
             value: "ALL",
-            label: "All",
+            label: "CS_INBOX_SELECT_ALL",
           }
         ]
       },
@@ -65,7 +65,7 @@ class TableData extends Component {
         dropdownData: [
           {
             value: "ALL",
-            label: "All",
+            label: "CS_INBOX_SELECT_ALL",
           }
         ]
       },
@@ -74,7 +74,7 @@ class TableData extends Component {
         dropdownData: [
           {
             value: "ALL",
-            label: "All",
+            label: "CS_INBOX_SELECT_ALL",
           }
         ]
       }
@@ -415,7 +415,7 @@ const {filter, searchFilter,taskboardLabel}=this.state;
             dropdownData: this.getUniqueList([
               {
                 value: "ALL",
-                label: "All",
+                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
               }, ...locality
             ])
           },
@@ -424,7 +424,7 @@ const {filter, searchFilter,taskboardLabel}=this.state;
             dropdownData: this.getUniqueList([
               {
                 value: "ALL",
-                label: "All",
+                label:  getLocaleLabels("CS_INBOX_SELECT_ALL"),
               }, ...moduleDD
             ])
           },
@@ -433,7 +433,7 @@ const {filter, searchFilter,taskboardLabel}=this.state;
             dropdownData: this.getUniqueList([
               {
                 value: "ALL",
-                label: "All",
+                label:  getLocaleLabels("CS_INBOX_SELECT_ALL"),
               }, ...statusDD
             ])
           }
@@ -530,7 +530,8 @@ console.log(this.state,'satte');
           <div className="col-md-8">
             <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
           </div>
-          <div className="col-md-4"> <TextField floatingLabelText="Search"
+          <div className="col-md-4"> <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
+          hintText={getLocaleLabels("CS_INBOX_SEARCH_PLACEHOLDER")}
             value={searchFilter.value}
             onChange={(e, value) => {
 

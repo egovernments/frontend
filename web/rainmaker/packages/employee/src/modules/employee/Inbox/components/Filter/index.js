@@ -12,7 +12,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                 <DropDown
                 multiple
                     onChange={(e, index, value) => { handleChangeFilter('moduleFilter', value) }}
-                    floatingLabelText="Module"
+                    floatingLabelText={<Label label="CS_INBOX_MODULE_FILTER" fontSize="12px" />}//"Module"
                     className="filter-fields"
                     dropDownData={filter.moduleFilter.dropdownData}
                     value={filter.moduleFilter.selectedValue}
@@ -30,7 +30,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                     onChange={(e, index, value) => {
                         handleChangeFilter('localityFilter', value)
                     }}
-                    floatingLabelText="Locality"
+                    floatingLabelText={<Label label="CS_INBOX_LOCALITY_FILTER" fontSize="12px"/>}
                     className="filter-fields"
                     dropDownData={filter.localityFilter.dropdownData}
                     value={filter.localityFilter.selectedValue}
@@ -45,12 +45,11 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
             <div className="col-md-3" >
                 <DropDown
                  multiple
-                    floatingLabelText="Status"
+                    floatingLabelText={<Label label="CS_INBOX_STATUS_FILTER" fontSize="12px"  />}
                     className="filter-fields"
                     dropDownData={filter.statusFilter.dropdownData}
                     onChange={(e, index, value) => {
-                        console.log(e, index, value,'e, index, value');
-                        
+                                               
                         handleChangeFilter('statusFilter', value) }}
                     value={filter.statusFilter.selectedValue}
                     underlineStyle={{
@@ -63,7 +62,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
             </div>
             <div className="col-md-3">
                 <div className="rainmaker-displayInline" onClick={clearFilter} style={{ cursor: "pointer", marginRight: 5, paddingTop: '30px' }}>
-                    <Label label="CLEAR ALL" color="#fe7a51" fontSize="15px" />
+                    <Label label="CS_INBOX_CLEAR" color="#fe7a51" fontSize="15px" />
                 </div>
             </div>
         </div>
