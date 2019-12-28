@@ -14,7 +14,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getBpaDetailsForOwner } from "../../utils";
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-//   import "./index.css";
+import "./index.css";
 
 const showComponent = (dispatch, componentJsonPath, display) => {
   let displayProps = display ? {} : { display: "none" };
@@ -117,10 +117,13 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         },
+        style : {
+          color: "black"
+        },
         jsonPath: "BPA.owners[0].gender",
         props: {
           label: { name: "Gender", key: "NOC_GENDER_LABEL" },
-          className: "applicant-details-error textfield-enterable-selection",
+          className: "applicant-details-error textfield-enterable-selection radio-button-label formLabel, root",
           buttons: [
             {
               labelName: "Male",

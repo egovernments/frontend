@@ -9,7 +9,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTodaysDateInYMD } from "../../utils";
 import { getScrutinyDetails } from "../../utils";
-// import "./index.css";
+import "./index.css";
 
 export const basicDetails = getCommonCard({
   header: getCommonTitle(

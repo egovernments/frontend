@@ -11,7 +11,7 @@ import { getBpaMapLocator } from "../../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { showHideBpaMapPopup, geBpatDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-// import "./index.css";
+import "./index.css";
 
 export const bpaLocationDetails = getCommonCard(
   {
@@ -192,7 +192,7 @@ export const bpaLocationDetails = getCommonCard(
       }),
       tradeLocMohalla: {
         uiFramework: "custom-containers-local",
-        moduleName: "egov-bpa",
+        moduleName: "egov-tradelicence",
         componentPath: "AutosuggestContainer",
         jsonPath: "BPA.address.locality.code",
         required: true,

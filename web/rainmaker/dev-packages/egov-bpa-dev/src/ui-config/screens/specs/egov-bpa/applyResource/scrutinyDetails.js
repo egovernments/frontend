@@ -9,6 +9,7 @@ import {
   getLabelWithValue,
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import "./index.css";
 
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
