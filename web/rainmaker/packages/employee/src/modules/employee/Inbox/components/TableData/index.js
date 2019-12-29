@@ -14,6 +14,7 @@ import filter from "lodash/filter";
 import orderBy from "lodash/orderBy";
 import uniq from "lodash/uniq";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
@@ -143,6 +144,8 @@ class TableData extends Component {
   }
   // applyFilter = (filter, searchFilter) => {
   applyFilter = () => {
+    const {toggleSpinner}=this.props;
+    toggleSpinner();
     // const tempObject = cloneDeep(this.state.initialInboxData);
     let initialInboxData = cloneDeep(this.state.initialInboxData);
     const { filter, searchFilter, taskboardLabel } = this.state;
@@ -181,6 +184,7 @@ class TableData extends Component {
     taskboardData[2].head = ESCALATED_SLA.length;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
     tabData[1].dynamicArray = [initialInboxData[1].rows.length];
+    toggleSpinner()
     return {
 
       inboxData: initialInboxData,
@@ -197,6 +201,7 @@ class TableData extends Component {
     //   tabData, searchFilter
 
     // })
+    
   }
   handleChangeFilter = (filterName, value) => {
     const filter = { ...this.state.filter }
@@ -341,13 +346,14 @@ class TableData extends Component {
   };
 
   componentDidMount = async () => {
-    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
+    const { toggleSnackbarAndSetText, prepareFinalObject,toggleSpinner } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
     const tenantId = getTenantId();
     const taskboardData = [];
     const tabData = [];
     const inboxData = [{ headers: [], rows: [] }];
     try {
+      toggleSpinner()
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const assignedData = orderBy(
@@ -444,6 +450,7 @@ class TableData extends Component {
           }
         }
       });
+      toggleSpinner()
     } catch (e) {
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
@@ -583,6 +590,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    toggleSpinner:()=>dispatch(toggleSpinner()),
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
   };
