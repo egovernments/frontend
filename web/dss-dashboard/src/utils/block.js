@@ -170,6 +170,13 @@ const addPages = (elem, cityLogo) => {
                     return getImageData(dataUrl).then(function (hw) {
                         if (cityLogo) {
                             base64Img.requestBase64(cityLogo, function (err, res, body) {
+                                if(err){
+                                    console.log('--------------------',err)
+                                }
+                                if(body) {
+                                    console.log('--------------------',body)
+                                }
+
                                 var imgWidth = 210;
                                 var pageHeight = 295;
 
@@ -178,14 +185,15 @@ const addPages = (elem, cityLogo) => {
                                 var imgHeight = image.height * imgWidth / image.width;
                                 var heightLeft = imgHeight;
                                 var doc = new jsPDF('p', 'mm', 'a4');
-                                var position = 10; // give some top padding to first page
+                                var position = 10;
                                 let isLogoRequired = true;
-                                doc.addImage(body, 'PNG', 1, 1, 10, 8);
+                                if(body) {
+                                    doc.addImage(body, 'PNG', 1, 1, 10, 8);
+                                }
                                 if (isLogoRequired) {
                                     doc.addImage(logo, 'PNG', 194, 1, 15, 8);
                                 }
 
-                                // doc.addImage(dataUrl, 'PNG', position, imgWidth, imgHeight);
                                 if (dataUrl) {
                                     doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 2, imgHeight);
                                 }
