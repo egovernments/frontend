@@ -116,7 +116,7 @@ export const searchApiCall = async (state, dispatch) => {
           ) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
         [getTextToLocalMapping("Owner Name")]:
-          businessIdToOwnerMapping[item.applicationNumber].assignee || "-",
+          get(businessIdToOwnerMapping[item.applicationNumber],"assignee") || "-",
         [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(item.applicationDate) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
