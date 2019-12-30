@@ -41,15 +41,14 @@ export const bpaLocationDetails = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
           sourceJsonPath: "citiesByModule.TL.tenants",
-          jsonPath: "BPAs[0].BPADetails.plotdetails.citytown.value",
+          jsonPath: "BPA.address.city",
           required: true,
           props: {
             required: true,
-            disabled: true
+            // disabled: true
           }
         }),
         beforeFieldChange: async (action, state, dispatch) => {
-          //Below only runs for citizen - not required here in employee
           dispatch(
             prepareFinalObject(
               "BPA.address.city",
@@ -77,14 +76,14 @@ export const bpaLocationDetails = getCommonCard(
                       /[.]/g,
                       "_"
                     )}_REVENUE_${item.code
-                    .toUpperCase()
-                    .replace(/[._:-\s\/]/g, "_")}`
+                      .toUpperCase()
+                      .replace(/[._:-\s\/]/g, "_")}`
                 });
                 return result;
               }, []);
             dispatch(
               prepareFinalObject(
-                "applyScreenMdmsData.tenant.localities",
+                "mohalla.tenant.localities",
                 mohallaData
               )
             );
@@ -114,6 +113,7 @@ export const bpaLocationDetails = getCommonCard(
           }
         }
       },
+
       tradeLocPropertyID: getTextField({
         label: {
           labelName: "Property ID",
@@ -123,8 +123,8 @@ export const bpaLocationDetails = getCommonCard(
           labelName: "Enter Property ID",
           labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
         },
-        props:{
-          className:"textfield-enterable-selection"
+        props: {
+          className: "textfield-enterable-selection"
         },
         iconObj: {
           iconName: "search",
@@ -150,8 +150,8 @@ export const bpaLocationDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
         },
-        props:{
-          className:"applicant-details-error textfield-enterable-selection"
+        props: {
+          className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -165,8 +165,8 @@ export const bpaLocationDetails = getCommonCard(
           labelName: "Building/Colony Name",
           labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error textfield-enterable-selection"
+        props: {
+          className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
@@ -180,8 +180,8 @@ export const bpaLocationDetails = getCommonCard(
           labelName: "Street Name",
           labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error textfield-enterable-selection"
+        props: {
+          className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Street Name",
@@ -210,7 +210,7 @@ export const bpaLocationDetails = getCommonCard(
             labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
           },
           jsonPath: "BPA.address.locality.code",
-          sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+          sourceJsonPath: "mohalla.tenant.localities",
           labelsFromLocalisation: true,
           suggestions: [],
           fullwidth: true,
@@ -229,8 +229,8 @@ export const bpaLocationDetails = getCommonCard(
           labelName: "Pincode",
           labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
         },
-        props:{
-          className:"applicant-details-error textfield-enterable-selection"
+        props: {
+          className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Pincode",
@@ -295,8 +295,8 @@ export const bpaLocationDetails = getCommonCard(
           labelName: "Enter Electricity Connection No. of Trade Loaction",
           labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
         },
-        props:{
-          className:"textfield-enterable-selection"
+        props: {
+          className: "textfield-enterable-selection"
         },
         jsonPath:
           "BPA.additionalDetail.electricityConnectionNo"

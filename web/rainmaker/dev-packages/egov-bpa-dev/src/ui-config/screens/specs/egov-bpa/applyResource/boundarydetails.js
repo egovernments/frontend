@@ -193,41 +193,31 @@ export const detailsofplot = getCommonCard({
             })
         },
         cityTown: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-bpa",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
-            required: true,
-            gridDefination: {
-                xs: 12,
-                sm: 12,
-                md: 6
-            },
-            props: {
-              style: {
-                width: "100%",
-                cursor: "pointer"
-              },
-              isDisabled : true,
-              localePrefix: {
-                moduleName: "TENANT",
-                masterName: "TENANTS"
-              },
-              className: "citizen-city-picker",
-              label: {
-                labelName: "City/Town",
-                labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
-              },
-              placeholder: { labelName: "Select City/Town", labelKey: "BPA_BOUNDARY_CITY_TOWN_PLACEHOLDER" },
-              jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
-              labelsFromLocalisation: true,
-              fullwidth: true,
-              required: true,
-              inputLabelProps: {
-                shrink: true
-              }
-            }
-          },
+            ...getSelectField({
+                label: {
+                  labelName: "City",
+                  labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+                },
+                localePrefix: {
+                  moduleName: "TENANT",
+                  masterName: "TENANTS"
+                },
+                optionLabel: "name",
+                placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
+                sourceJsonPath: "citiesByModule.TL.tenants",
+                jsonPath: "BPA.address.city",
+                required: true,
+                props: {
+                  required: true,
+                  disabled: true
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
+              }),
+        },
         landRegDetails: {
             ...getTextField({
                 label: {

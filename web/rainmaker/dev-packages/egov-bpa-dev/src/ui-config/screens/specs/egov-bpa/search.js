@@ -23,7 +23,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { showApplyCityPicker, applyForm } from "../utils";
-import { fetchData, getBpaMdmsData } from "../utils";
+import { getBpaMdmsData, getTenantMdmsData } from "../utils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -91,27 +91,7 @@ const BpaSearchAndResult = {
     //   );
     // });
     //for service and app type
-    let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: 'pb',
-        moduleDetails: [
-          {
-            moduleName: "BPA",
-            masterDetails: [
-              {
-                name: "ApplicationType"
-              },
-              {
-                name: "ServiceType"
-              }
-            ]
-          }
-        ]
-      }
-    };
-    getBpaMdmsData(action, state, dispatch, mdmsBody);
-    //for city module
-    fetchData(action, state, dispatch);
+    getTenantMdmsData(action, state, dispatch);
     return action;
   },
   components: {
@@ -230,9 +210,8 @@ const BpaSearchAndResult = {
                       labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
                     },
                     placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
-                    jsonPath: "citiesByModule.citizenTenantId",
-                    sourceJsonPath:
-                      "citiesByModule.TL.tenants",
+                    jsonPath: "BPA.address.city",
+                    sourceJsonPath: "citiesByModule.TL.tenants",
                     labelsFromLocalisation: true,
                     fullwidth: true,
                     required: true,

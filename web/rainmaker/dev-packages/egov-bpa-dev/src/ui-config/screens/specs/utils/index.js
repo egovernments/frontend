@@ -35,7 +35,6 @@ import {
   getCommonCaption,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { cityModuleMockJson } from "../egov-bpa/cityResJson";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -130,7 +129,7 @@ export const getRadioButton = (buttons, jsonPath, defaultValue) => {
     }
   };
 };
-/*
+
 export const getRadioGroupWithLabel = (
   label,
   labelKey,
@@ -179,7 +178,7 @@ export const getRadioGroupWithLabel = (
     }
   };
 };
-*/
+
 export const getApplicationNoContainer = number => {
   return {
     uiFramework: "custom-atoms-local",
@@ -2768,10 +2767,10 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       ""
     );
 
-    // const tenantId = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "citiesByModule.citizenTenantId.value"
-    // );
+    const tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPA.address.city"
+    );
     if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
       dispatch(
         toggleSnackbar(
@@ -2789,7 +2788,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       "post",
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
         scrutinyNo +
-        "&tenantId=pb.amritsar",
+        "&tenantId=" + tenantId,
       {}
     );
     payload = payload.edcrDetail;
@@ -2826,11 +2825,11 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
 
         const tenantId = get(
           state.screenConfiguration.preparedFinalObject,
-          "BPAs[0].BPADetails.plotdetails.citytown"
+          "BPA.address.city"
         );
         const city = scrutinyData[0].tenantId;
 
-        if (tenantId.value === city) {
+        if (tenantId === city) {
           let currOwnersArr = get(
             state.screenConfiguration.preparedFinalObject,
             "scrutinyDetails",
@@ -3247,6 +3246,17 @@ export const showApplyCityPicker = (state, dispatch) => {
   );
 };
 
+export const showCitizenApplyCityPicker = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["citizen"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("citizen", "components.cityPickerDialog", "props.open", !toggle)
+  );
+}
+
 const city = (state, dispatch, tenantId) => {
   let city = get(
     state.screenConfiguration.preparedFinalObject,
@@ -3273,14 +3283,14 @@ export const applyForm = (state, dispatch) => {
   );
 
   if (isTradeDetailsValid) {
-    dispatch(prepareFinalObject("BPAs", []));
-    const applyUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true"
-        ? `/egov-ui-framework/egov-bpa/apply`
-        : `/egov-bpa/apply`;
-    dispatch(setRoute(applyUrl));
-    city(state, dispatch, tenantId);
-  }
+    window.location.href =
+      process.env.NODE_ENV === "production"
+        ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
+        : process.env.REACT_APP_SELF_RUNNING === true
+          ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
+          : `/egov-bpa/apply?tenantId=${tenantId}`;
+  };
+  city(state, dispatch, tenantId);
 };
 
 // const getMdmsData = async () => {
@@ -3308,33 +3318,6 @@ export const applyForm = (state, dispatch) => {
 //     console.log(e);
 //   }
 // };
-
-export const fetchData = async (action, state, dispatch) => {
-  // const response = cityModuleMockJson; //await getSearchResults();
-  const mdmsRes = cityModuleMockJson; //await getMdmsData(dispatch);
-  let tenants =
-    mdmsRes &&
-    mdmsRes.MdmsRes &&
-    mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-      if (item.code === "TL") return true;
-    });
-  dispatch(
-    prepareFinalObject(
-      "citiesByModule.TL",
-      tenants
-    )
-  );
-  // try {
-  //   if (response && response.Licenses && response.Licenses.length > 0) {
-  //     dispatch(prepareFinalObject("searchResults", response.Licenses));
-  //     dispatch(
-  //       prepareFinalObject("myApplicationsCount", response.Licenses.length)
-  //     );
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
-};
 
 export const createBill = async (queryObject, dispatch) => {
   try {
@@ -3503,4 +3486,47 @@ export const geBpatDetailsFromProperty = async (state, dispatch) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+const tenantData = async (action, state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [{ name: "citymodule" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export const getTenantMdmsData = async (action, state, dispatch) => {
+
+  const mdmsRes = await tenantData(action, state, dispatch);
+  let tenants =
+    mdmsRes &&
+    mdmsRes.MdmsRes &&
+    mdmsRes.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "TL") return true;
+    });
+  dispatch(
+    prepareFinalObject(
+      "citiesByModule.TL",
+      tenants
+    )
+  );
 };

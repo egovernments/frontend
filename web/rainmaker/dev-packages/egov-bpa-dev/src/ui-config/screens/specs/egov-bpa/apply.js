@@ -36,7 +36,8 @@ import {
   setApplicationNumberBox,
   prepareNOCUploadData
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYMD } from "../utils"
+import { getTodaysDateInYMD } from "../utils";
+import { getTenantMdmsData } from "../utils";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "" },
@@ -232,8 +233,10 @@ const screenConfig = {
     const step = getQueryArg(window.location.href, "step");
 
     //Set Module Name
-    set(state, "screenConfiguration.moduleName", "bpa");
-
+    set(state, "screenConfiguration.moduleName", "BPA");
+    getTenantMdmsData(action, state, dispatch).then(response => {
+      dispatch(prepareFinalObject("BPA.address.city", tenantId));
+    });
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
@@ -253,8 +256,7 @@ const screenConfig = {
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[0].code"
       );
-      dispatch(prepareFinalObject("BPA.applicationType", applicationType))
-
+      dispatch(prepareFinalObject("BPA.applicationType", applicationType));
       // Set Documents Data (TEMP)
       prepareDocumentsUploadData(state, dispatch);
       prepareNOCUploadData(state, dispatch);

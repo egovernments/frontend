@@ -100,35 +100,36 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
         componentPath: "AutosuggestContainer",
         jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
         required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
         props: {
           style: {
             width: "100%",
             cursor: "pointer"
           },
+          localePrefix: {
+            moduleName: "BPA",
+            masterName: "BLOCK"
+          },
+          className: "citizen-city-picker",
           label: { labelName: "Residential", labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL" },
           placeholder: {
-            labelName: "Select Occupancy",
-            labelKey: "BPA_APPLICATION_OCCUPANCY_PLACEHOLDER"
+          labelName: "Select Occupancy",
+          labelKey: "BPA_APPLICATION_OCCUPANCY_PLACEHOLDER"
           },
           jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
-          sourceJsonPath : "BPA.blocks",
-          labelsFromLocalisation: false,
-          suggestions: [],
+          sourceJsonPath:
+            "BPA.blocks",
+          labelsFromLocalisation: true,
           fullwidth: true,
           required: true,
           inputLabelProps: {
             shrink: true
-          },
-          isMulti: true,
-          labelName: "name",
-          valueName: "code",
-          
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
+          }
         }
-      }
+      },
     }),
     break: getBreak()
   })

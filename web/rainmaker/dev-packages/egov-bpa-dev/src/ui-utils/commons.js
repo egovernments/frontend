@@ -65,6 +65,26 @@ export const getSearchResults = async queryObject => {
   }
 };
 
+export const getBpaSearchResults = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/bpa-services/bpa/appl/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
 export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
@@ -121,6 +141,22 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   );
   let method = applicationId ? "UPDATE" : "CREATE";
 
+  let documentsUpdalod = get(
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux"
+  );
+  
+  let requiredDocuments = [];
+  if(documentsUpdalod && documentsUpdalod.length > 0){
+  documentsUpdalod.forEach(documents => {
+    if(documents && documents.documents){
+      requiredDocuments.push({ "documentType" : documents.dropDownValues.value});
+      requiredDocuments.push({ "fileStore": documents.documents[0].fileStoreId });
+      requiredDocuments.push({ "fileName" : documents.documents[0].fileName});
+      requiredDocuments.push({ "fileUrl" : documents.documents[0].fileUrl});
+    }
+  })
+}
+
   try {
     let payload = get(
       state.screenConfiguration.preparedFinalObject,
@@ -129,9 +165,9 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     );
     const tenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      "BPAs[0].BPADetails.plotdetails.citytown"
+      "BPA.address.city"
     );
-    set(payload, "tenantId", tenantId.value);
+    set(payload, "tenantId", tenantId);
     set(payload, "action", status);
     
     set(payload, "additionalDetails", {});
@@ -159,8 +195,13 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     //     }
     //   })
     // });
-
     let documents;
+    if(requiredDocuments && requiredDocuments.length >0){
+      documents = requiredDocuments;
+    }else{
+      documents = null;
+    }
+
     let wfDocuments;
     if (method === 'UPDATE') {
       documents = payload.documents;
@@ -179,13 +220,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         }
       ];
       set(payload, "wfDocuments", wfDocuments);
-    } else {
-      documents = [
-        {
-          "documentType": "OWNER.IDENTITYPROOF.VOTERID",
-          "fileStore": "hvdsfuhvdsvf",
-        }
-      ];
     }
     
     set(payload, "documents", documents);
@@ -206,7 +240,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
-
     let response;
     if (method === "CREATE") {
       response = await httpRequest(

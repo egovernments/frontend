@@ -99,15 +99,15 @@ const screenConfig = {
         "BPA.applicationNo"
       );
     let tenantId =
-      // getQueryArg(window.location.href, "tenantId") ||
+      getQueryArg(window.location.href, "tenantId") ||
       get(
         state.screenConfiguration.preparedFinalObject,
-        "BPAs[0].BPADetails.plotdetails.citytown.value"
+        "BPA.address.city"
       );
     generateBillForBPA(dispatch, applicationNumber, tenantId);
     prepareNocDocumentsView(state, dispatch);
     prepareDocumentsDetailsView(state, dispatch);
-    setResidentialList(state, dispatch);
+    // setResidentialList(state, dispatch);
     return action;
   },
   components: {
