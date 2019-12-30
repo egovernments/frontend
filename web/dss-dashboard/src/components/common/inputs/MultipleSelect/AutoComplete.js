@@ -29,6 +29,9 @@ const theme = createMuiTheme({
         MuiAutocomplete:{            
             option:{
                 fontSize:'0.8rem'
+            },
+            popupIndicator: {
+                float:'right'
             }
         }
 
