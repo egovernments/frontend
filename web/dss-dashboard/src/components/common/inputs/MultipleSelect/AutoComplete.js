@@ -32,6 +32,9 @@ const theme = createMuiTheme({
             },
             popupIndicator: {
                 float:'right'
+            },
+            inputRoot:{
+                paddingRight:'0px !important'
             }
         }
 
