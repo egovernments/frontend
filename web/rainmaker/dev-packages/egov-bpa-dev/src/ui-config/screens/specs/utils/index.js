@@ -3293,32 +3293,6 @@ export const applyForm = (state, dispatch) => {
   city(state, dispatch, tenantId);
 };
 
-// const getMdmsData = async () => {
-//   let mdmsBody = {
-//     // MdmsCriteria: {
-//     //   tenantId: commonConfig.tenantId,
-//     //   moduleDetails: [
-//     //     {
-//     //       moduleName: "tenant",
-//     //       masterDetails: [{ name: "citymodule" }]
-//     //     }
-//     //   ]
-//     // }
-//   };
-//   try {
-//     let payload = await httpRequest(
-//       "post",
-//       "/egov-mdms-service/v1/_search",
-//       "_search",
-//       [],
-//       mdmsBody
-//     );
-//     return payload;
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
-
 export const createBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
