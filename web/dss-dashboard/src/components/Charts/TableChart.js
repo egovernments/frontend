@@ -90,7 +90,7 @@ class TableChart extends Component {
     filterList[tabName] = filterList[tabName].splice(0,index);
     if(this.state.active && tabName != this.state.active){
       let curTabfilter = filterList[this.state.active]
-      visualcode = curTabfilter[curTabfilter.length - 1][0]
+      visualcode = curTabfilter[curTabfilter.length - 1][1]
     }
     this.getRequest("handleChipClick", visualcode,'',filterList);
   }
@@ -150,6 +150,10 @@ class TableChart extends Component {
   }
 
   clickFromTab = (visualcode,active) => {
+    let filterList = this.state.filterList;
+    if(!_.isEmpty(filterList, true) && typeof filterList[active] !== 'undefined' && filterList[active].length > 0){
+      visualcode = filterList[active][filterList[active].length - 1][1];
+    }
     this.getRequest("clickFromTab", visualcode,active)    
   }
 

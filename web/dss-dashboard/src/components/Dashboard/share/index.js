@@ -107,11 +107,13 @@ class CustomizedShare extends Component {
             type: 'whatsapp'
         })
         var APITransport = this.props.APITransport
+        var ts = Math.round((new Date()).getTime() / 1000);
         printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
-
+            let blobFile = pdfO.output('blob')
+            blobFile.name = 'dss' + ts + '.pdf'
             try {
-                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, pdfO.output('blob'));
+                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, new File([blobFile], blobFile.name, { type: "application/pdf" }));
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
@@ -150,8 +152,11 @@ class CustomizedShare extends Component {
 
         printDocumentShare(this.state.logo).then(function (pdfO) {
             // setAnchorEl(null);
+            var ts = Math.round((new Date()).getTime() / 1000);
+            let blobFile = pdfO.output('blob')
+            blobFile.name = 'dss' + ts + '.pdf'
             try {
-                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, pdfO.output('blob'));
+                let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD, new File([blobFile], blobFile.name, { type: "application/pdf" }));
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
