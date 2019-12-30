@@ -28,7 +28,6 @@ import {
 import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
-import { appSearchMockData } from './searchMockJson';
 
 
 
@@ -132,30 +131,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       state.screenConfiguration.preparedFinalObject,
       "BPAs[0].BPADetails.plotdetails.citytown"
     );
-    const address = {
-      "tenantId": "pb.amritsar",
-      "doorNo": "23-pb-1212",
-      "plotNo": "1725",
-      "landmark": "temple",
-      "city": "hyd",
-      "district": "hyd",
-      "region": "hyd",
-      "state": "telangana",
-      "country": "india",
-      "pincode": "500158",
-      "additionDetails": null,
-      "buildingName": "quewyr",
-      "street": null,
-      "locality": {
-          "code": "SUN178",
-          "name": "Mohalla Singh kia - Area2",
-          "label": "Locality",
-          "latitude": null,
-          "longitude": null,
-          "children": []
-      },
-      "geoLocation": null
-  };
     set(payload, "tenantId", tenantId.value);
     set(payload, "action", status);
     
@@ -203,13 +178,8 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
           "fileStore": "firestore-01"
         }
       ];
-
-      let id = payload.address.id;
-      address.id = id;
-      set(payload, "address", address);
       set(payload, "wfDocuments", wfDocuments);
     } else {
-      set(payload, "address", address);
       documents = [
         {
           "documentType": "OWNER.IDENTITYPROOF.VOTERID",
@@ -238,7 +208,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     });
 
     let response;
-
     if (method === "CREATE") {
       response = await httpRequest(
         "post",

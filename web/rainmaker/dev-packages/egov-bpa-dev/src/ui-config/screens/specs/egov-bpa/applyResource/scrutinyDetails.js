@@ -9,6 +9,7 @@ import {
   getLabelWithValue,
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import "./index.css";
 
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
@@ -40,7 +41,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 12,
-        md: 4
+        md: 3
       },
       props: {
           label: 'Uploaded Diagram',
@@ -56,7 +57,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
     gridDefination: {
       xs: 12,
       sm: 12,
-      md: 4
+      md: 3
     },
     props: {
         label: 'Scrutiny Report',
@@ -110,7 +111,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             labelKey: "BPA_APPLICATION_OCCUPANCY_PLACEHOLDER"
           },
           jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
-          // sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
+          sourceJsonPath : "BPA.blocks",
           labelsFromLocalisation: false,
           suggestions: [],
           fullwidth: true,
@@ -121,27 +122,15 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
           isMulti: true,
           labelName: "name",
           valueName: "code",
-          data: [
-            {
-              code: "Ground Floor",
-              name: "Ground Floor"
-            },
-            {
-              code: "First Floor",
-              name: "First Floor"
-            },
-            {
-              code: "Second Floor",
-              name: "Second Floor"
-            }
-          ]
+          
         },
         gridDefination: {
           xs: 12,
           sm: 6
         }
       }
-    })
+    }),
+    break: getBreak()
   })
 });
 

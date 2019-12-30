@@ -23,7 +23,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { showApplyCityPicker, applyForm } from "../utils";
-import { fetchData } from "../utils";
+import { fetchData, getBpaMdmsData } from "../utils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -90,6 +90,26 @@ const BpaSearchAndResult = {
     //     // getRequiredDocuments(documents)
     //   );
     // });
+    //for service and app type
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: 'pb',
+        moduleDetails: [
+          {
+            moduleName: "BPA",
+            masterDetails: [
+              {
+                name: "ApplicationType"
+              },
+              {
+                name: "ServiceType"
+              }
+            ]
+          }
+        ]
+      }
+    };
+    getBpaMdmsData(action, state, dispatch, mdmsBody);
     //for city module
     fetchData(action, state, dispatch);
     return action;
@@ -133,7 +153,6 @@ const BpaSearchAndResult = {
                   height: "48px"
                 }
               },
-
               children: {
                 plusIconInsideButton: {
                   uiFramework: "custom-atoms",
@@ -154,22 +173,14 @@ const BpaSearchAndResult = {
                 action: "condition",
                 callBack: (state, dispatch) => {
                   showApplyCityPicker(state, dispatch)
-                  // pageResetAndChange(state, dispatch);
-                  // showHideAdhocPopup(state, dispatch, "search");
-                  // startApplyFlow(state, dispatch);
                 }
-              },
-              // roleDefination: {
-              //   rolePath: "user-info.roles",
-              //   roles: ["NOC_CEMP", "SUPERUSER"]
-              // }
+              }
             }
           }
         },
         pendingApprovals,
         BPAApplication,
         breakAfterSearch: getBreak(),
-        // progressStatus,
         searchResults
       }
     },
@@ -221,7 +232,7 @@ const BpaSearchAndResult = {
                     placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
                     jsonPath: "citiesByModule.citizenTenantId",
                     sourceJsonPath:
-                      "applyScreenMdmsData.common-masters.citiesByModule.TL.tenants",
+                      "citiesByModule.TL.tenants",
                     labelsFromLocalisation: true,
                     fullwidth: true,
                     required: true,

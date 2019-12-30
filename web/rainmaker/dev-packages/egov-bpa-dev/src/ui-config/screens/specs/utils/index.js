@@ -35,12 +35,6 @@ import {
   getCommonCaption,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
-import { mdmsMockJson } from "../egov-bpa/mdmsMock";
-import {
-  scrutinyDetailsMockJson,
-  scrutinyDetailsMockJson1
-} from "./scrutinyDetailsMockJson";
 import { cityModuleMockJson } from "../egov-bpa/cityResJson";
 
 export const getCommonApplyFooter = children => {
@@ -2376,6 +2370,56 @@ export const getTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+
+      case "Floor Description":
+      return getLocaleLabels(
+        "Floor Description",
+        "BPA_COMMON_TABLE_COL_FLOOR_DES",
+        localisationLabels
+      );
+
+    case "Occupancy/Sub Occupancy":
+      return getLocaleLabels(
+        "Occupancy/Sub Occupancy",
+        "BPA_COMMON_TABLE_COL_OCCUP",
+        localisationLabels
+      );
+
+    case "Buildup Area":
+      return getLocaleLabels(
+        "Buildup Area",
+        "BPA_COMMON_TABLE_COL_BUILD_AREA",
+        localisationLabels
+      );
+
+    case "Floor Area":
+      return getLocaleLabels(
+        "Floor Area",
+        "BPA_COMMON_TABLE_COL_FLOOR_AREA",
+        localisationLabels
+      );
+
+    case "Carpet Area":
+      return getLocaleLabels(
+        "Carpet Area",
+        "BPA_COMMON_TABLE_COL_CARPET_AREA",
+        localisationLabels
+      );
+
+    case "DOCUMENTVERIFY":
+      return getLocaleLabels(
+        "Pending for Document Verification",
+        "WF_FIRENOC_DOCUMENTVERIFY",
+        localisationLabels
+      );
+
+    case "Search Results for BPA Applications":
+      return getLocaleLabels(
+        "Search Results for BPA Applications",
+        "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+      
     default:
       return getLocaleLabels(label, label, localisationLabels);
   }
@@ -2691,30 +2735,33 @@ const riskType = (state, dispatch) => {
     return item && item.building && item.building.buildingHeight;
   });
   let buildingHeight = Math.max(blocks);
+  let riskType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.BPA.RiskTypeComputation"
+  );
+  let block = get(
+    state.screenConfiguration.preparedFinalObject,
+    "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
+  );
+  dispatch(prepareFinalObject("BPA.blocks", [block]));
+
   let scrutinyRiskType;
-  if (
-    occupancyType === "Residential" &&
-    plotArea > 500 &&
-    buildingHeight > 15
-  ) {
-    scrutinyRiskType = "HIGH";
-  } else if (
-    occupancyType === "Residential" &&
-    plotArea <= 500 &&
-    plotArea >= 300 &&
-    buildingHeight <= 15 &&
-    buildingHeight >= 10
-  ) {
-    scrutinyRiskType = "MEDIUM";
-  } else {
-    scrutinyRiskType = "LOW";
-  }
+  riskType.forEach(type => {
+    if (
+      occupancyType === "Residential" &&
+      plotArea >= type.fromPlotArea &&
+      plotArea < type.toPlotArea &&
+      buildingHeight >= type.fromBuildingHeight &&
+      buildingHeight < type.toBuildingHeight
+    ) {
+      scrutinyRiskType = type.riskType
+    }
+  });
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
   try {
-    const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const scrutinyNo = get(
       state.screenConfiguration.preparedFinalObject,
       `BPA.edcrNumber`,
@@ -2902,6 +2949,55 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
 //   return fees;
 // };
 
+export const generateBillForBPA = async (dispatch, applicationNumber, tenantId) => {
+  try {
+    if (applicationNumber && tenantId) {
+      const queryObj = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "consumerCode",
+          value: applicationNumber
+        },
+        { key: "services", value: "BPA" }
+      ];
+      const payload = await createBill(queryObj,dispatch);
+      console.log(payload, "payload ksdbvjhfvsdf")
+      if (payload && payload.Bill[0]) {
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+        const estimateData = createBpaEstimateData(payload.Bill[0]);
+        estimateData &&
+          estimateData.length &&
+          dispatch(
+            prepareFinalObject(
+              "applyScreenMdmsData.estimateCardData",
+              estimateData
+            )
+          );
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const createBpaEstimateData = billObject => {
+  const billDetails = billObject && billObject.billDetails;
+  let fees =
+    billDetails &&
+    billDetails[0].billAccountDetails &&
+    billDetails[0].billAccountDetails.map(item => {
+      return {
+        name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+        value: item.amount,
+        info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+      };
+    });
+  return fees;
+};
+
 export const generateBill = async (dispatch, applicationNumber, tenantId) => {
   try {
     if (applicationNumber && tenantId) {
@@ -2916,7 +3012,6 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
         }
       ];
       const payload = await getBill(queryObj);
-      // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
         const estimateData = createEstimateData(payload.Bill[0]);
@@ -3002,8 +3097,6 @@ export const resetFields = (state, dispatch) => {
 //   };
 //   try {
 //     let payload = null;
-//     payload = mdmsMockJson;
-//     console.log(mdmsMockJson);
 //     // payload = await httpRequest(
 //     //   "post",
 //     //   "/egov-mdms-service/v1/_search",
@@ -3138,6 +3231,8 @@ export const getBpaTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+      case "INPROGRESS":
+      return getLocaleLabels("Inprogress", "NOC_INPROGRESS", localisationLabels);
   }
 };
 
@@ -3225,7 +3320,7 @@ export const fetchData = async (action, state, dispatch) => {
     });
   dispatch(
     prepareFinalObject(
-      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      "citiesByModule.TL",
       tenants
     )
   );
@@ -3274,5 +3369,138 @@ export const setNameOfUser = (action, state, dispatch) => {
       `components.div.children.formwizardSecondStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.ownerName.props.disabled`,
       true
     );
+  }
+};
+
+export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const showHideBpaMapPopup = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog",
+      "props.open",
+      !toggle
+    )
+  );
+};
+
+export const getBpaMapLocator = textSchema => {
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-bpa",
+    componentPath: "MapLocator",
+    props: {}
+  };
+};
+
+export const geBpatDetailsFromProperty = async (state, dispatch) => {
+  try {
+    const propertyId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPA.propertyId",
+      ""
+    );
+    const cityId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPAs[0].BPADetails.plotdetails.citytown.value",
+      ""
+    );
+    const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
+    if (!tenantId) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please select city to search by property id !!",
+            labelKey: "ERR_SELECT_CITY_TO_SEARCH_PROPERTY_ID"
+          },
+          "warning"
+        )
+      );
+      return;
+    }
+    if (propertyId) {
+      let payload = await httpRequest(
+        "post",
+        `/pt-services-v2/property/_search?tenantId=${tenantId}&ids=${propertyId}`,
+        "_search",
+        [],
+        {}
+      );
+      if (
+        payload &&
+        payload.Properties &&
+        payload.Properties.hasOwnProperty("length")
+      ) {
+        if (payload.Properties.length === 0) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Property is not found with this Property Id",
+                labelKey: "ERR_PROPERTY_NOT_FOUND_WITH_PROPERTY_ID"
+              },
+              "info"
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPropertyID",
+              "props.value",
+              ""
+            )
+          );
+        } else {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
+              "props.value",
+              {
+                value: payload.Properties[0].address.locality.code,
+                label: payload.Properties[0].address.locality.name
+              }
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "Licenses[0].tradeLicenseDetail.address",
+              payload.Properties[0].address
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
+              "props.value",
+              payload.Properties[0].address.tenantId
+            )
+          );
+        }
+      }
+    }
+  } catch (e) {
+    console.log(e);
   }
 };
