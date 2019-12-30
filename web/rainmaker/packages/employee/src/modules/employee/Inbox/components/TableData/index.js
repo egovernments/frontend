@@ -123,9 +123,9 @@ class TableData extends Component {
   checkSLA = (taskboardLabel, row) => {
     if (taskboardLabel == '' || taskboardLabel == 'WF_TOTAL_TASK') {
       return true;
-    } else if ((taskboardLabel == 'WF_TOTAL_NEARING_SLA' && row[4].text > 0 && row[4].text < MAX_SLA / 3)) {
+    } else if ((taskboardLabel == 'WF_TOTAL_NEARING_SLA' && row[4].text > 0 && row[4].text <=( MAX_SLA-MAX_SLA / 3))) {
       return true;
-    } else if ((taskboardLabel == 'WF_ESCALATED_SLA' && row[4].text < 0)) {
+    } else if ((taskboardLabel == 'WF_ESCALATED_SLA' && row[4].text <= 0)) {
       return true;
     } else {
       return false;
@@ -144,7 +144,7 @@ class TableData extends Component {
   }
   // applyFilter = (filter, searchFilter) => {
   applyFilter = () => {
-    const {toggleSpinner}=this.props;
+    const { toggleSpinner } = this.props;
     toggleSpinner();
     // const tempObject = cloneDeep(this.state.initialInboxData);
     let initialInboxData = cloneDeep(this.state.initialInboxData);
@@ -169,10 +169,10 @@ class TableData extends Component {
     let ESCALATED_SLA = [];
     let NEARING_SLA = [];
     initialInboxData[1].rows.map(eachRow => {
-      if (eachRow[4].text < 0) {
+      if (eachRow[4].text <= 0) {
         ESCALATED_SLA.push(eachRow[4].text);
       }
-      if (eachRow[4].text > 0 && eachRow[4].text < MAX_SLA / 3) {
+      if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA-MAX_SLA/3)) {
         NEARING_SLA.push(eachRow[4].text);
       }
     })
@@ -201,7 +201,7 @@ class TableData extends Component {
     //   tabData, searchFilter
 
     // })
-    
+
   }
   handleChangeFilter = (filterName, value) => {
     const filter = { ...this.state.filter }
@@ -235,10 +235,12 @@ class TableData extends Component {
     let ESCALATED_SLA = [];
     let NEARING_SLA = [];
     initialInboxData[1].rows.map(eachRow => {
-      if (eachRow[4].text < 0) {
+      if (eachRow[4].text <= 0) {
         ESCALATED_SLA.push(eachRow[4].text);
       }
-      if (eachRow[4].text > 0 && eachRow[4].text < MAX_SLA / 3) {
+      if (eachRow[4].text > 0 && eachRow[4].text < (MAX_SLA-MAX_SLA / 3)) {
+        
+
         NEARING_SLA.push(eachRow[4].text);
       }
     })
@@ -346,7 +348,7 @@ class TableData extends Component {
   };
 
   componentDidMount = async () => {
-    const { toggleSnackbarAndSetText, prepareFinalObject,toggleSpinner } = this.props;
+    const { toggleSnackbarAndSetText, prepareFinalObject, toggleSpinner } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
     const tenantId = getTenantId();
     const taskboardData = [];
@@ -390,11 +392,12 @@ class TableData extends Component {
       let statusDD = [];
       let NEARING_SLA = [];
       let ESCALATED_SLA = [];
+            
       locality = allDataRows.map((obj) => {
-        if (obj[4].text < 0) {
+        if (obj[4].text <= 0) {
           ESCALATED_SLA.push(obj[4].text);
         }
-        if (obj[4].text > 0 && obj[4].text < MAX_SLA / 3) {
+        if (obj[4].text > 0 && obj[4].text <= (MAX_SLA-MAX_SLA/3)) {
           NEARING_SLA.push(obj[4].text);
         }
 
@@ -514,7 +517,7 @@ class TableData extends Component {
     this.setState({
       // inboxData: filteredData,
       // tabData,
-      // taskboardLabel: label
+      taskboardLabel: label
     });
 
     this.setState({
@@ -533,14 +536,24 @@ class TableData extends Component {
       inboxData = filteredData.inboxData;
       tabData = filteredData.tabData;
     }
-  
+
     return (
       <div className="col-sm-12">
         <div>
-          <div className="row" style={{marginBottom:'5px',marginLeft:'-20px'}}>
-          <div className="col-md-12">
-            <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
-          </div>
+          <div className="row" style={{ marginBottom: '5px', marginLeft: '-20px' }}>
+            <div className="col-md-8">
+              <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
+            </div>
+            <div className="col-md-4">
+              <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
+                hintText={getLocaleLabels("CS_INBOX_SEARCH_PLACEHOLDER")}
+                value={searchFilter.value}
+                className="filter-fields"
+                onChange={(e, value) => {
+                  handleChangeSearch(value);
+                }}
+              />
+            </div>
           </div>
           {/* <div className="col-md-4"> 
            <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
@@ -555,7 +568,7 @@ class TableData extends Component {
             </div> */}
 
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>
-              </div>
+        </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
         <div className="col-sm-12 backgroundWhite">
           <Tabs
@@ -590,7 +603,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleSpinner:()=>dispatch(toggleSpinner()),
+    toggleSpinner: () => dispatch(toggleSpinner()),
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
   };

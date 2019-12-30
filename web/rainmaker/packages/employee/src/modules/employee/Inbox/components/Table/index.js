@@ -81,9 +81,9 @@ class InboxData extends React.Component {
   getSlaColor =(sla) => {
    const {MAX_SLA}=this.props;
     let slaValue = "";
-    if(sla<0){
+    if(sla<=0){
       slaValue = "redSlab"
-    }else if(0<sla&&sla<=MAX_SLA/3){
+    }else if(0<sla&&sla<=(MAX_SLA-MAX_SLA/3)){
       slaValue = "yellowSlab"
     }else{
       slaValue = "greenSlab"
