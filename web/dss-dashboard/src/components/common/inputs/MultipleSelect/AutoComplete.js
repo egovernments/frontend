@@ -34,7 +34,18 @@ const theme = createMuiTheme({
                 float:'right'
             },
             inputRoot:{
-                paddingRight:'0px !important'
+                paddingRight:'0px !important',                
+                '@media (min-width: 1367px)':{                       
+                    minWidth:'180px !important',
+                    maxWidth:'180px !important'                    
+                },
+                '@media (min-width: 1026px) and (max-width:1300px)':{                     
+                    minWidth:'180px !important',
+                    maxWidth:'180px !important'                    
+                }
+            },
+            endAdornment:{
+                bottom:'0px !important'
             }
         }
 

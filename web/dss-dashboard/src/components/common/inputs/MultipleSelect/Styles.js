@@ -126,25 +126,7 @@ const styles = theme => ({
         '&:disabled': {
             background: variables.disableTxt
         }
-    },
-    '@media (min-width: 1367px)':{
-        list: {
-            '& div:nth-child(2)': {
-                minWidth:'180px !important',
-                maxWidth:'180px !important'
-            }
-
-        }
-    },
-    '@media (min-width: 1026px) and (max-width:1300px)':{
-        list: {
-            '& div:nth-child(2)': {
-                minWidth:'130px !important',
-                maxWidth:'130px !important'
-            }
-
-        }
-    },
+    }    
 });
 
 export default styles;
