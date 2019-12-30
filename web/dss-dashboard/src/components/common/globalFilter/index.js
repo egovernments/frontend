@@ -350,7 +350,7 @@ class GlobalFilter extends Component {
 
                     {/* {isMobile && this.renderFilters()}s */}
 
-                    <div id="divNotToPrint" className={classes.actions}>
+                    <div id="divNotToPrint" className={classes.actions} style={{maxWidth:'150px',marginTop:'7px'}}>
                         <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "CLEAR"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
                         <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
                     </div>

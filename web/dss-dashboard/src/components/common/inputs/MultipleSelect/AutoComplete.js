@@ -144,7 +144,7 @@ class CheckboxesTags extends React.Component {
                                         {option}
                                     </React.Fragment>
                                 )}
-                                style={{ minWidth: isMobile ? 200 : 150 , maxWidth: isMobile ? 200 : 150 }}
+                                style={{ minWidth: isMobile ? 200 : 180,maxWidth: isMobile ? 200 : 180}}
                                 renderInput={params => (
                                     <div style={{color:'black'}}>
 

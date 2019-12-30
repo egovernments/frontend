@@ -90,7 +90,7 @@ const styles = theme => ({
     '@media (min-width: 1367px)':{
         list: {
             '& div': {
-                width:'200px !important'
+                width:'210px !important'
             }
 
         }
