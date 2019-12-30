@@ -45,7 +45,8 @@ const theme = createMuiTheme({
                 }
             },
             endAdornment:{
-                bottom:'0px !important'
+                bottom:'0px !important',
+                top: 'initial !important'
             }
         }
 
