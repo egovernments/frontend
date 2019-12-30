@@ -117,28 +117,6 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     }
 };
 
-export const getNamesFromMDMS = async (queryObject, dispatch) => {
-    dispatch(toggleSpinner());
-    try {
-        const response = await httpRequest(
-            "post",
-            "/billing-service/taxheads/_search",
-            "_search",
-            queryObject
-        );
-        dispatch(toggleSpinner());
-        return response;
-    } catch (error) {
-        dispatch(toggleSpinner());
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
-};
-
 export const fetchBill = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
@@ -221,25 +199,6 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
         return response;
     } catch (error) {
         dispatch(toggleSpinner());
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
-};
-
-export const getPastPaymentDetials = async queryObject => {
-    try {
-        const response = await httpRequest(
-            "post",
-            "/ws-calculator/meterConnection/_search",
-            "_search",
-            queryObject
-        );
-        return response;
-    } catch (error) {
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -900,8 +859,8 @@ export const getMeterReadingData = async (dispatch) => {
         console.log(error);
     }
 };
-export const getPastPayments = async (dispatch) => {
-    // console.log(getUserInfo())
+
+export const getPastPaymentsForWater = async (dispatch) => {
     dispatch(toggleSpinner());
     let queryObject = [
         {
@@ -915,7 +874,6 @@ export const getPastPayments = async (dispatch) => {
         {
             key: "mobileNumber",
             value: JSON.parse(getUserInfo()).mobileNumber.toString()
-            // value:'9234674532'
         },
     ];
     try {
@@ -927,7 +885,46 @@ export const getPastPayments = async (dispatch) => {
         );
         dispatch(toggleSpinner());
         if (response && response.Payments) {
-            dispatch(prepareFinalObject("pastPayments", response.Payments));
+            dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));
+        }
+        return response;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+}
+
+export const getPastPaymentsForSewerage = async (dispatch) => {
+    dispatch(toggleSpinner());
+    let queryObject = [
+        {
+            key: "tenantId",
+            value: "pb.amritsar"
+        },
+        {
+            key: "businessServices",
+            value: "SW"
+        },
+        {
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber.toString()
+        },
+    ];
+    try {
+        const response = await httpRequest(
+            "post",
+            "/collection-services/payments/_search",
+            "_search",
+            queryObject
+        );
+        dispatch(toggleSpinner());
+        if (response && response.Payments) {
+            dispatch(prepareFinalObject("pastPaymentsForSewerage", response.Payments));
         }
         return response;
     } catch (error) {
@@ -942,28 +939,108 @@ export const getPastPayments = async (dispatch) => {
 }
 
 export const createMeterReading = async (dispatch, body) => {
-
-    const response = await httpRequest(
-        "post",
-        "/ws-calculator/meterConnection/_create",
-        "", [], { meterReadings: body }
-    );
-
-    if (response && response !== undefined && response !== null) {
-        dispatch(prepareFinalObject("metereading", []));
-        dispatch(prepareFinalObject("consumptionDetails", []));
-        dispatch(prepareFinalObject("autoPopulatedValues", []));
-        getMeterReadingData(dispatch)
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-calculator/meterConnection/_create",
+            "", [], { meterReadings: body }
+        );
+        if (response && response !== undefined && response !== null) {
+            getMeterReadingData(dispatch);
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status.props",
+                    "value",
+                    "Working"
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                    "disabled",
+                    false
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                    "disabled",
+                    false
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
+                    "visible",
+                    true
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
+                    "visible",
+                    false
+                )
+            );
+            let todayDate = new Date()
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                    "value",
+                    todayDate
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                    "value",
+                    ""
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
+                    "value",
+                    ""
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
+                    "labelName",
+                    ""
+                )
+            );
+        }
+        dispatch(
+            handleField(
+                "meter-reading",
+                "components.div.children.meterReadingEditable",
+                "visible",
+                false
+            )
+        );
+        dispatch(prepareFinalObject("metereading", {}));
+        dispatch(toggleSpinner());
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
     }
-
-    dispatch(
-        handleField(
-            "meter-reading",
-            "components.div.children.meterReadingEditable",
-            "visible",
-            false
-        )
-    );
 }
 
 export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) => {

@@ -1571,6 +1571,14 @@ export const ifUserRoleExists = role => {
   } else return false;
 };
 
+export const ifUserRoleMatches = roleList => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  let found = roleList.some(elem => roleCodes.includes(elem));
+  return !found;
+};
+
 export const getTransformedStatus = status => {
   switch (status) {
     case "PAID":
@@ -1620,7 +1628,7 @@ export const updateDropDowns = async (
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
               "visible",
               true
             )
@@ -1629,7 +1637,7 @@ export const updateDropDowns = async (
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
               "visible",
               false
             )
@@ -2151,12 +2159,21 @@ export const setLicenseeSubTypeDropdownData = async (
     "applyScreenMdmsData.TradeLicense.TradeType",
     []
   );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+  //     null
+  //   )
+  // );
   dispatch(
-    prepareFinalObject(
-      "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-      ""
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
+      "props.value",
+      null
     )
   );
+
   const selectedTradeType = actionValue;
   let filterdTradeTypes = [];
   filterdTradeTypes = tradeTypes.filter(tradeType => {
@@ -2169,7 +2186,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
         true
       )
@@ -2177,7 +2194,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "required",
         false
       )
@@ -2185,7 +2202,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
         false
       )
@@ -2201,7 +2218,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
         false
       )
@@ -2209,7 +2226,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "required",
         true
       )
@@ -2217,7 +2234,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
         true
       )
@@ -2239,7 +2256,6 @@ export const fillOldLicenseData = async (state, dispatch) => {
     )
   );
 };
-
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
@@ -2473,7 +2489,7 @@ export const setMobileNoField = (action, state, dispatch) => {
     );
     set(
       action.screenConfig,
-      `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getOwnerMobNoField.props.disabled`,
+      `components.div.children.formwizardSecondStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getOwnerMobNoField.props.disabled`,
       true
     );
   }
@@ -2821,12 +2837,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             []
           );
           currOwnersArr = scrutinyData[0];
-          dispatch(
-            prepareFinalObject(
-              `scrutinyDetails`,
-              currOwnersArr
-            )
-          );
+          dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
           riskType(state, dispatch);
         } else {
           dispatch(
@@ -3355,7 +3366,7 @@ export const setNameOfUser = (action, state, dispatch) => {
     );
     set(
       action.screenConfig,
-      `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.ownerName.props.disabled`,
+      `components.div.children.formwizardSecondStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.ownerName.props.disabled`,
       true
     );
   }
