@@ -14,6 +14,9 @@ class PageLayout extends Component {
             data: null
         }
     }
+    setViewAll = (visualCode) =>{
+        this.props.setViewAll(visualCode);
+    }
     render() {
         let { classes, chartRowData, displayName, page } = this.props;
         let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, page);
@@ -22,7 +25,7 @@ class PageLayout extends Component {
 
                 {
                     chartRowData.map((vizData, j) =>
-                        <ChartRow key={j} row={j} rowData={vizData} Gfilter={this.props.GFilterData} displayName={displayName[j]} filters={filters} page={page} />)
+                        <ChartRow key={j} row={j} rowData={vizData} Gfilter={this.props.GFilterData} displayName={displayName[j]} filters={filters} page={page} setViewAll={this.setViewAll.bind(this)}/>)
                 }
             </div>);
     }

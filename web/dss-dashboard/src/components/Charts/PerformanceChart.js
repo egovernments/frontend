@@ -37,10 +37,11 @@ class PerformanceChart extends React.Component {
     // this.callRequest(this.props, filters);
     this.callAPI();
   }
-  handleClick() {
-     this.setState({
+  handleClick(visualCode) {
+     /*this.setState({
        IsOpen: true
-     })
+     })*/
+     this.props.setViewAll(visualCode);
     //let codekey = _.chain(this.props).get('chartData').first().get("id").value();
     //this.props.history.push(`/${this.state.page}/${codekey}`)
   }
@@ -88,16 +89,13 @@ class PerformanceChart extends React.Component {
       return null;
     }
   }
-  renderPopup(data) {
+  renderPopup(data,codekey) {
     const { classes } = this.props;
     let { strings } = this.props;
 
     if (data.length > 3) {
       return (<div className={classes.bottomDiv}>
-        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} text={strings["DSS_VIEW_ALL"] || "View all"} handleClick={this.handleClick.bind(this)} />
-        <Dialogs close={this.closeDialogue.bind(this)} IsOpen={this.state.IsOpen} title={strings["DSS_BACK_TO_MY_DASHBOARD"] || "Back to MyDashboard"} needCustomTitle={true}>
-          {this.renderCard(data)}
-        </Dialogs>
+        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} value={codekey} text={strings["DSS_VIEW_ALL"] || "View all"} handleClick={this.handleClick.bind(this)} />        
       </div>)
     } else {
       return null;
@@ -142,7 +140,7 @@ class PerformanceChart extends React.Component {
           }
         }
         )}
-        {this.renderPopup(data)}        
+        {this.renderPopup(data,codekey)}        
       </div>
       )
     }

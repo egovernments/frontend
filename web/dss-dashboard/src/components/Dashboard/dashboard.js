@@ -104,7 +104,11 @@ class Dashboard extends Component {
       filter: filter
     }, this.callAll())
   }
-
+  setViewAll = (visualCode) =>{
+    this.setState({
+      viewAll: visualCode
+    })
+  }
   handleFilters() {
     // let fil = this.state.isFilterOpen
     this.setState({
@@ -112,8 +116,8 @@ class Dashboard extends Component {
     })
   }
   goback() {
-    let pageId = _.get(this.props, 'match.params.pageId');
-    this.props.history.push(`/${pageId}`);
+    //let pageId = _.get(this.props, 'match.params.pageId');
+    //this.props.history.push(`/${pageId}`);
 
     this.setState({
       viewAll: undefined
@@ -226,7 +230,7 @@ class Dashboard extends Component {
             // {...other}
             >
               <div id={(defaultTab) === v ? "div1ToPrint" : 'divNotToPrint'} className={(defaultTab) === v ? "elemClass" : 'elemClass1'}>
-                <PageLayout chartRowData={k} headingTitle="Revenue" GFilterData={GFilterData} displayName={""} page={this.state.page} />
+                <PageLayout chartRowData={k} headingTitle="Revenue" GFilterData={GFilterData} displayName={""} page={this.state.page} setViewAll={this.setViewAll.bind(this)}/>
               </div>
             </Typography>)
           })
