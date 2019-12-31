@@ -77,7 +77,6 @@ class InboxData extends React.Component {
           : getWFConfig(row[0].hiddenText).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
-    console.log(`${baseUrl}${contextPath}?${queryParams}`,'url for redirection');
     this.props.setRoute(`${contextPath}?${queryParams}`);
     // window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
   };
