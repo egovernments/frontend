@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import NFormatterFun from '../common/numberFormaterFun';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
+import { isMobile } from 'react-device-detect';
 
 const options = {
   scales: {
@@ -99,19 +100,32 @@ class LineChart extends React.Component {
     let { chartData,classes } = this.props;
     let data = this.manupulateData(chartData);
     if (data) {
-      return ( 
-        // style={{ height:300}}
-        <div className={classes.lineChart}>
-          <Line
-            style={{ fill: 'none'}}
-            data={data}
-            options={options}
-            onElementsClick={this.callforNewData.bind(this)}
-          >
-
-          </Line>
-        </div>
-      )
+      if (isMobile){
+            return ( 
+              <div className={classes.lineChart}>
+                <Line
+                  style={{ fill: 'none'}}
+                  data={data}
+                  options={options}
+                  onElementsClick={this.callforNewData.bind(this)} 
+                  height={350}         
+                >
+                </Line>
+              </div>
+            )
+      }else{
+        return ( 
+              <div className={classes.lineChart}>
+                <Line
+                  style={{ fill: 'none'}}
+                  data={data}
+                  options={options}
+                  onElementsClick={this.callforNewData.bind(this)}
+                >
+                </Line>
+              </div>
+            )
+      }
     }
     return <div>Loading...</div>
   }

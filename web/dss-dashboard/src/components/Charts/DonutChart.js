@@ -6,6 +6,7 @@ import NFormatterFun from '../common/numberFormaterFun';
 import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
+import { isMobile } from 'react-device-detect';
 
 const options = {
 	responsive: true,
@@ -85,15 +86,27 @@ class DonutChart extends React.Component {
 		let { chartData, classes } = this.props;
  		let _data = this.getData(chartData)
 		if (_data) {
-			return (
-				<div className={classes.piChart}>
-					<Doughnut
-						data={_data}
-						height={165}
-						options={options}
-					/>
-				</div>
-			)
+			if (isMobile){
+				return (
+					<div className={classes.piChart}>
+						<Doughnut
+							data={_data}
+							height={350}
+							options={options}
+						/>
+					</div>
+				)
+			}else{
+				return (
+					<div className={classes.piChart}>
+						<Doughnut
+							data={_data}							
+							options={options}
+							height={200}
+						/>
+					</div>
+				)
+			}
 		}
 		return <div>Loading...</div>
 	}
