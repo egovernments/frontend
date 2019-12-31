@@ -14,7 +14,8 @@ const styles = theme => ({
     },
     downloadNsearch: {
         display: 'flex',
-        flexDirection: 'row-reverse'
+        flexDirection: 'row-reverse',
+        marginBottom:'10px'
     },
     tableDiv: {
         width: '100%',

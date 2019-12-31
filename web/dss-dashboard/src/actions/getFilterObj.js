@@ -51,6 +51,10 @@ export default function getFilterObj(GFilterData, globalFilterData, page) {
         case 'pgr':
             filters['modulelevel'] = 'PGR';
             break;
+        case 'w&s':
+            filters['modulelevel'] = 'W&S';
+        break;
+
     }
     if (newGFilterData && newGFilterData['Services'] && newGFilterData['Services'].length > 0) {
         filters['modulelevel'] = newGFilterData['Services'];

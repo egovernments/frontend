@@ -25,7 +25,9 @@ const styles = theme => ({
         fontStyle: 'normal',
         lineHeight: 'normal',
         letterSpacing: 'normal',
-        color: '#000000'
+        color: '#000000',
+        display: 'flex',
+        cursor: 'pointer'
     },
     btn1: { borderRadius: '2px', height: 'fit-content', backgroundColor: "#fe7a51", color: "white" },
     actions: {

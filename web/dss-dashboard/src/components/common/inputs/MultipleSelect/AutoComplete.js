@@ -40,13 +40,16 @@ const theme = createMuiTheme({
                     maxWidth:'180px !important'                    
                 },
                 '@media (min-width: 1026px) and (max-width:1300px)':{                     
-                    minWidth:'180px !important',
-                    maxWidth:'180px !important'                    
+                    minWidth:'150px !important',
+                    maxWidth:'150px !important'                    
                 }
             },
             endAdornment:{
                 bottom:'0px !important',
                 top: 'initial !important'
+            },
+            clearIndicator:{
+                display:'none !important'
             }
         }
 
@@ -162,7 +165,7 @@ class CheckboxesTags extends React.Component {
                                         {option}
                                     </React.Fragment>
                                 )}
-                                style={{ minWidth: isMobile ? 200 : 180,maxWidth: isMobile ? 200 : 180}}
+                                style={(isMobile) ? { minWidth: 200 , maxWidth: 200 } : {}}                                
                                 renderInput={params => (
                                     <div style={{color:'black'}}>
 

@@ -163,7 +163,7 @@ class Dashboard extends Component {
       return (<Cards>
         <Card style={{ overflow: 'initial' }}>
           <div className={classes.heading} onClick={this.goback.bind(this)}>
-            <ArrowBack /> <span style={{ marginTop: 'auto', marginBottom: 'auto' }}>{this.props.title}</span>
+            <ArrowBack /> <span style={{ marginTop: 'auto', marginBottom: 'auto' }}>Back</span>
           </div>
         </Card>
         <UiTable
