@@ -40,8 +40,8 @@ const theme = createMuiTheme({
                     maxWidth:'180px !important'                    
                 },
                 '@media (min-width: 1026px) and (max-width:1300px)':{                     
-                    minWidth:'180px !important',
-                    maxWidth:'180px !important'                    
+                    minWidth:'150px !important',
+                    maxWidth:'150px !important'                    
                 }
             },
             endAdornment:{
