@@ -44,6 +44,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
@@ -111,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 	private static final String TAG = MainActivity.class.getSimpleName();
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -263,6 +267,12 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
+		//improve performance
+		webSettings.setLoadWithOverviewMode(true);
+		webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+		webView.setScrollbarFadingEnabled(true);
+
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -273,6 +283,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
+        else {
+			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
         webView.setVerticalScrollBarEnabled(false);
         webView.setWebViewClient(new CustomWebView());
 		webView.getSettings().setGeolocationDatabasePath(getFilesDir().getPath());
@@ -284,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+						if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 							== PackageManager.PERMISSION_GRANTED) {
 							Log.v(TAG,"Permission is granted");
 							downloadDialog(url,userAgent,contentDisposition,mimeType);
@@ -380,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             //Handling input[type="file"] requests for android API 21+
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams){
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
 
 				if (asw_file_path != null) {
 					asw_file_path.onReceiveValue(null);
@@ -443,14 +456,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
 	public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimetype)
 	{
 		startActivity(Intent.makeMainSelectorActivity(
 			Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
 			.setData(Uri.parse(url.toString())));
 	}
-
 
 
     @Override

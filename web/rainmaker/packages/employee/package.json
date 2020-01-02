@@ -82,7 +82,8 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "egov-ui-kit-components": "babel src/components --out-dir src/egov-ui-kit/components --copy-files",
     "egov-ui-kit-redux": "babel src/redux --out-dir src/egov-ui-kit/redux --copy-files",
-    "egov-ui-kit-utils": "babel src/utils --out-dir src/egov-ui-kit/utils --copy-files"
+    "egov-ui-kit-utils": "babel src/utils --out-dir src/egov-ui-kit/utils --copy-files",
+    "postbuild": "rimraf build/**/*.map"
   },
   "devDependencies": {
     "@storybook/addon-knobs": "^3.3.13",
