@@ -56,6 +56,14 @@ const styles = theme => ({
              minWidth:177,
             }
         }
+    },
+    '@media (min-width: 900px) and (max-width:1300px)':{
+        list: {
+        // display: 'flex',
+        '& div': {
+             minWidth:95,
+            }
+        }
     }
 });
 

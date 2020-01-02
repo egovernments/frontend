@@ -26,6 +26,7 @@ import { Typography } from '@material-ui/core';
 import Cards from '../common/Cards/Cards';
 import UiTable from '../common/UiTable/UiTable';
 import moment from 'moment';
+import getFinancialYearObj from '../../actions/getFinancialYearObj';
 
 // let page = 'home';
 class Dashboard extends Component {
@@ -58,13 +59,12 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    let startDate= moment().month(3).startOf('month').unix()
-    let endDate = moment().month(2).endOf('month').add(1, 'years').unix()
+    let getFYobj = getFinancialYearObj();
 
     let newFilterData = this.state.filter
     
-    newFilterData.duration.value.startDate = startDate
-    newFilterData.duration.value.endDate = endDate
+    newFilterData.duration.value.startDate = getFYobj.value.startDate
+    newFilterData.duration.value.endDate = getFYobj.value.endDate
 
     this.setState({
       filter: newFilterData

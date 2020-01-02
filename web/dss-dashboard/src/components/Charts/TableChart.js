@@ -88,9 +88,16 @@ class TableChart extends Component {
   handleChipClick = (index,tabName,visualcode) => {      
     let filterList =  _.cloneDeep(this.state.filterList);
     filterList[tabName] = filterList[tabName].splice(0,index);
+    if(_.isEmpty(filterList[tabName],true) && filterList[tabName].length == 0){
+      delete filterList[tabName];
+    }
     if(this.state.active && tabName != this.state.active){
       let curTabfilter = filterList[this.state.active]
-      visualcode = curTabfilter[curTabfilter.length - 1][1]
+      if(curTabfilter){
+        visualcode = curTabfilter[curTabfilter.length - 1][1]
+      }else{
+        visualcode = this.state.visualcode
+      }
     }
     this.getRequest("handleChipClick", visualcode,'',filterList);
   }

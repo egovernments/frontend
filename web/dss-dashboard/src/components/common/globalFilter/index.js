@@ -23,13 +23,15 @@ import moment from 'moment';
 import { Chip } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
 import AutoComplete from '../inputs/MultipleSelect/AutoComplete'
+import getFinancialYearObj from '../../../actions/getFinancialYearObj';
 
 class GlobalFilter extends Component {
     constructor(props) {
         super(props);
+        
         this.state = {
             open: false,
-            value: `FY ${moment().month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').add(1, 'years').format("YY")}`, //fOR date range
+            value: getFinancialYearObj(true), //fOR date range
             filterData: this.props.GFilterData,
             title: '',
             dept: "All Services",

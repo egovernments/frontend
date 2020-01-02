@@ -13,6 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import style from './style';
 import moment from 'moment';
 import _ from 'lodash';
+import getFinancialYearObj from '../../../actions/getFinancialYearObj';
 // import { MediaQuery } from '@material-ui/core';
 // import { useTheme } from '@material-ui/core/styles';
 
@@ -36,7 +37,7 @@ class DateRange extends React.Component {
       { key: "2", value: "This Week" },
       { key: "3", value: "This Month" },
       { key: "4", value: "This Quarter" },
-      { key: "5", value: "FY " + (moment().month(3).startOf('month').format("YY")) + " - " + (moment().month(2).endOf('month').add(1, 'years').format("YY")), },
+      { key: "5", value: getFinancialYearObj(true)},
       { key: "6", value: "Custom" },
       ],
     }
@@ -134,15 +135,7 @@ class DateRange extends React.Component {
         }
 
       default:
-        return {
-          title: `FY ${moment().month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').add(1, 'years').format("YY")}`,
-          value: {
-            startDate: moment().month(3).startOf('month').unix(),
-            endDate: moment().month(2).endOf('month').add(1, 'years').unix(),
-            interval: 'month'
-          }
-
-        }
+       return getFinancialYearObj()
     }
   }
 
