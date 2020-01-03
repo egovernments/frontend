@@ -2,43 +2,36 @@ import _ from 'lodash';
 import axios from 'axios';
 import CONFIGS from '../config/configs';
 
-export default function getMDMSData(){
+export default function getMDMSData(tenants){
+let tempDRRsObj = {},tempDDRs=[],tenantId = "",tenantLogo ={};
+_.each(tenants,(v,k) => {
+    //console.log(te)
+    //console.log(v.city.ddrName);
+    //console.log(v.logoId);
 
-    let options = {
-            'headers': {
-                    'Content-Type': 'application/json'
-                    }
-            }
-    let dataoption = {
-           "RequestInfo": {
-               "authToken": ""
-           },
-           "MdmsCriteria": {
-               "tenantId": "pb",
-               "moduleDetails": [
-                {
-                "moduleName": "tenant",
-                "masterDetails": [
-                {
-                "name": "tenants"
-                }]
-                }
-               ]
-           }
+    if(v.code)
+        tenantLogo[v.code] = v.logoId;
+    if(v.city.ddrName){     
+        tenantId = v.code;
+        if(!_.isEmpty(tempDRRsObj,true) && typeof tempDRRsObj[v.city.ddrName] != 'undefined'){
+            tempDRRsObj[v.city.ddrName].push(tenantId);
+        }else{
+            tempDRRsObj[v.city.ddrName] = [tenantId]
+            tempDDRs.push(v.city.ddrName);
         }
-
-    let url = CONFIGS.BASE_URL + CONFIGS.MDMS;
-    axios.post(url, dataoption, options)
-      .then(response => {            
-            //this.setState({data:response.data})
-            return response.data
-        })
-      .catch(error => {
-        console.log(error.response)
-    }); 
+    }
+})
 
 
- /* return fetch(`${baseURL}/api/status`).then(res => {
-    return res.json();
-  });*/
+//console.log(responseData.MdmsRes.tenant.tenants);
+//console.log(tempDRRsObj);
+//console.log(tempDDRs);
+//console.log(tenantLogo);
+return {
+    label: "DDRs",
+    type: "dropdown",
+    values : tempDDRs,
+    master : tempDRRsObj,
+    tentantLogo : tenantLogo
+}
 };

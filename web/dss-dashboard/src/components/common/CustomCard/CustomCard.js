@@ -1,17 +1,11 @@
 import React from "react";
 import Grid from '@material-ui/core/Grid';
-import { red, yellow, green, blue } from '@material-ui/core/colors';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import APITransport from '../../../actions/apitransport/apitransport';
 import { Typography } from '@material-ui/core';
 import style from './Style';
 import { withStyles } from '@material-ui/core/styles';
-import Card from "../Card/Card";
-import CardBody from "../Card/CardBody.js";
-import CardHeader from "../Card/CardHeader.js";
-import CardIcon from "../Card/CardIcon.js";
-import Language from "@material-ui/icons/Language";
 import _ from 'lodash';
 import getChartOptions from '../../../actions/getChartOptions';
 import ChartsAPI from '../../../actions/charts/chartsAPI'
@@ -19,10 +13,6 @@ import ChartsAPI from '../../../actions/charts/chartsAPI'
 class CustomCard extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-
-        };
     }
 
     callAPI() {
@@ -72,15 +62,12 @@ const mapStateToProps = state => ({
     strings: state.lang,
     dashboardConfigData: state.firstReducer.dashboardConfigData,
     chartsGData: state.chartsData
-
-
 });
 
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
             APITransport: APITransport,
-
         },
         dispatch
     );

@@ -157,7 +157,8 @@ let dataL = {
     "DSS_PGR_COMPLETION_RATE": "Completion Rate",
     "DSS_PROPERTY_TAX": "Property Tax",
     "DSS_TRADE_LICENCE": "Trade License",
-    "DSS_COMPLAINS": 'Complaints'
+    "DSS_COMPLAINS": 'Complaints',
+    "DSS_PGR_TOTAL_COMPLAINTS": "Total Complaints"
   }
 }
 

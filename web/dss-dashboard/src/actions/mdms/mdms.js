@@ -1,6 +1,7 @@
 import API from '../apis/api';
 import C from '../constants';
-import CONFIGS from '../../config/configs'
+import CONFIGS from '../../config/configs';
+import getMDMSData from '../getMDMSData'
 
 export default class MdmsAPI extends API {
 
@@ -16,8 +17,13 @@ export default class MdmsAPI extends API {
 
     processResponse(res) {
         super.processResponse(res);
-        if (res) {
+        if (res) {            
+            res = getMDMSData(res.MdmsRes.tenant.tenants);
             this.mdmsData = res
+            console.log(res)
+            console.log(MdmsRes)
+            console.log(tenant)
+            console.log(tenent)
             return true
         }
         return false
@@ -29,43 +35,34 @@ export default class MdmsAPI extends API {
 
     getBody() {
         return {
-            "RequestInfo": {
-                "apiId": "Rainmaker",
-                "ver": ".01",
-                "ts": "",
-                "action": "_search",
-                "did": "1",
-                "key": "",
-                "msgId": "20170310130900|en_IN",
-                "authToken": `${localStorage.getItem('Employee.token')}`
-            },
-            "MdmsCriteria": {
-                "tenantId": "pb.amritsar",
-                "moduleDetails": [
-                    {
-                        "moduleName": "tenant",
-                        "masterDetails": [
-                            {
-                                "name": "tenants"
-                            }]
-                    }
-                ]
-            }
+           "RequestInfo": {
+               "authToken": ""
+           },
+           "MdmsCriteria": {
+               "tenantId": "pb",
+               "moduleDetails": [
+                {
+                "moduleName": "tenant",
+                "masterDetails": [
+                {
+                "name": "tenants"
+                }]
+                }
+               ]
+           }
         }
     }
     getChartKey() {
         return this.codeKey;
     }
     apiEndPoint() {
-        return CONFIGS.MDMS + '?tenantId=pb.amritsar'
+        return CONFIGS.MDMS 
     }
 
     getHeaders() {
         return {
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                'Content-Type': 'application/json'
             }
         }
     }

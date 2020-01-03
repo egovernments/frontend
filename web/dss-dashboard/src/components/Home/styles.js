@@ -34,6 +34,13 @@ const styles = theme => ({
         fontWeight: '500',
         margin: '18px'
     },
+    paperTitle: {
+        fontFamily: 'Roboto',
+        fontSize: '20px',
+        fontWeight: '500',
+        padding: '5px',
+        margin: '0px'
+    },
     value: {
         textAlign: 'left',
         fontFamily: 'Roboto',
@@ -50,13 +57,14 @@ const styles = theme => ({
     },
     customCard: {
         padding: '5px'
-    }, 
+    },
     iconPaper: {
         backgroundColor: '#2196F3',
-        color: 'white', 
-        height: '93px', 
+        color: 'white',
+        height: '73px',
         width: '93px',
         verticalAlign: 'middle',
+        paddingTop: '20px'
     },
     // grid: {
     //     paddingLeft: '15px'

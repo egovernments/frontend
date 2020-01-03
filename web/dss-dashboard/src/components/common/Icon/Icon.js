@@ -22,14 +22,18 @@ class Icon extends React.Component {
         let { classes } = this.props;
 
         switch (type.toLowerCase()) {
-            case 'overview' || 'dss_overview':
-                return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '50px',height: '50px', color:'white'}}></SVG>
-            case 'dss_property_tax' || 'property tax' :
-                return <SVG src={PropertyTaxIcon} fill="white" className={classes.icon} style={{ width: '40px',height: '40px'}}></SVG>
-            case 'dss_trade_licence' || 'trade license' :
-                return <SVG src={TradeIcon} fill="white" className={classes.icon} style={{ width: '40px',height: '40px'}}></SVG>
-            case 'dss_complains' || 'complains' :
-                return <SVG src={ComplaintsIcon} fill="white" className={classes.icon} style={{ width: '40px',height: '40px'}}></SVG>
+            case 'overview':
+            case 'dss_overview':
+                return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '50px', height: '50px', color: 'white' }}></SVG>
+            case 'property tax':
+            case 'dss_property_tax':
+                return <SVG src={PropertyTaxIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'trade license':
+            case 'dss_trade_licence':
+                return <SVG src={TradeIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'complains':
+            case 'dss_complains':
+                return <SVG src={ComplaintsIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
             default:
                 return <div></div>
 

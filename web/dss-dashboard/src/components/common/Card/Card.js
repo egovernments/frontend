@@ -22,11 +22,12 @@ export default function Card(props) {
   let url = Config.DEMO_API_URL + Config.APP_NAME + page
   return (
     <div className={cardClasses} {...rest} style={{backgroundColor:bgColor}}>
-      <a href={url} style={{textDecoration: 'none'}}>{children}</a>
+      {/* <a href={url} style={{textDecoration: 'none'}}> */}
+        {children}
+        {/* </a> */}
     </div>
   );
 }
-
 
 Card.propTypes = {
   className: PropTypes.string,

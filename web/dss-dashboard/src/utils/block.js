@@ -243,7 +243,6 @@ const addPages = (elem, cityLogo) => {
                                 }
                                 doc.addPage();
                                 doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 1, imgHeight);
-                                console.log(heightLeft)
                                 index++;
                                 heightLeft -= pageHeight;
                             }

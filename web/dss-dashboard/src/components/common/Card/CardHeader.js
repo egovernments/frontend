@@ -1,20 +1,15 @@
 import React from "react";
-// nodejs library that concatenates classes
 import classNames from "classnames";
-// nodejs library to set properties for components
 import PropTypes from "prop-types";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
-
-// core components
 import styles from "./styles/CardHeaderStyle";
+import Config from '../../../config/configs'
 
 const useStyles = makeStyles(styles);
 
 export default function CardHeader(props) {
   const classes = useStyles();
-  const { className, children, color, plain, stats, icon, ...rest } = props;
+  const { className, children, color, plain, stats, icon, page, ...rest } = props;
   const cardHeaderClasses = classNames({
     [classes.cardHeader]: true,
     [classes[color + "CardHeader"]]: color,
@@ -23,9 +18,12 @@ export default function CardHeader(props) {
     [classes.cardHeaderIcon]: icon,
     [className]: className !== undefined
   });
+  let url = Config.DEMO_API_URL + Config.APP_NAME + page
   return (
     <div className={cardHeaderClasses} {...rest}>
-      {children}
+      <a href={url} style={{ textDecoration: 'none' }}>
+        {children}
+      </a>
     </div>
   );
 }

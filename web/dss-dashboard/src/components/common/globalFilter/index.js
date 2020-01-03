@@ -24,6 +24,7 @@ import { Chip } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
 import AutoComplete from '../inputs/MultipleSelect/AutoComplete'
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
+import mdmsAPI from '../../../actions/mdms/mdms';
 
 class GlobalFilter extends Component {
     constructor(props) {
@@ -50,6 +51,11 @@ class GlobalFilter extends Component {
             return 'PGR'
         }
         return null;
+    }
+
+    componentDidMount(){        
+        let mdmsApi = new mdmsAPI(20000);
+        this.props.APITransport(mdmsApi);        
     }
 
     handleChanges(open, target, value) {
@@ -328,7 +334,7 @@ class GlobalFilter extends Component {
     }
 
     render() {
-        let { classes, globalFilterData, GFilterData } = this.props;
+        let { classes, globalFilterData,mdmsData, GFilterData } = this.props;
         let { strings } = this.props;
         return (
             <Cards key="gf" fullW={true}>
@@ -337,13 +343,21 @@ class GlobalFilter extends Component {
                         if (this.props.hideDepart && ro.label == "Services") {
                             return (<div></div>);
 
+                        }else if(ro.label == "DDRs"){
+                            return (
+                                <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
+                                    <div className={classes.filterHead}>{ro.label}</div>
+                                    {this.renderComponents(mdmsData)}
+                                </div>
+                            );
+                        }else{
+                            return (
+                                <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
+                                    <div className={classes.filterHead}>{ro.label}</div>
+                                    {this.renderComponents(ro)}
+                                </div>
+                            );
                         }
-                        return (
-                            <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
-                                <div className={classes.filterHead}>{ro.label}</div>
-                                {this.renderComponents(ro)}
-                            </div>
-                        );
                     })
                     }
                     {/* <div className={`${classes.filterS} ${classes.fullWidth}`}>
@@ -391,6 +405,7 @@ class GlobalFilter extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        mdmsData: state.mdmsData,
         globalFilterData: state.globalFilter,
         GFilterData: state.GFilterData,
         strings: state.lang
