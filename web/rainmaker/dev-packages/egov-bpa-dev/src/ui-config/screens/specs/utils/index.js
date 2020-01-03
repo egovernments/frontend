@@ -2828,7 +2828,6 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         state.screenConfiguration.preparedFinalObject,
         "BPA.address.city"
       );
-
     if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
       dispatch(
         toggleSnackbar(

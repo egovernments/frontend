@@ -3,6 +3,8 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import { TaskDialog } from "egov-workflow/ui-molecules-local";
 import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -16,11 +18,15 @@ import { getWFConfig } from "./workflowRedirectionConfig";
 import React from "react";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+
 
 class InboxData extends React.Component {
   state = {
     dialogOpen: false,
     workflowHistory: [],
+    sortOrder: 'asc',
+    isSorting: false
   };
 
   getProcessIntanceData = async (pid) => {
@@ -67,15 +73,12 @@ class InboxData extends React.Component {
     let baseUrl = document.location.origin;
     let contextPath =
       status === "Initiated"
-        ? process.env.NODE_ENV === "production"
-          ? `/employee${getWFConfig(row[0].hiddenText).INITIATED}`
-          : getWFConfig(row[0].hiddenText).INITIATED
-        : process.env.NODE_ENV === "production"
-          ? `/employee${getWFConfig(row[0].hiddenText).DEFAULT}`
-          : getWFConfig(row[0].hiddenText).DEFAULT;
+        ? getWFConfig(row[0].hiddenText).INITIATED
+        :  getWFConfig(row[0].hiddenText).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
-    window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
+    this.props.setRoute(`${contextPath}?${queryParams}`);
+    // window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
   };
 
   getSlaColor = (sla, businessService) => {
@@ -96,16 +99,36 @@ class InboxData extends React.Component {
     }
   }
 
+  sortingTable = (order) => {
+    const { sortOrder } = this.state;
+    if (sortOrder !== order) {
+      this.setState({
+        sortOrder: order,
+        isSorting: true
+      })
+    }
+  }
+
   render() {
     const { data, ProcessInstances } = this.props;
     const { onHistoryClick, onDialogClose, getModuleLink } = this;
+    const { isSorting, sortOrder } = this.state;
+    if(isSorting){
+      data.rows.reverse();
+    }
     return (
       <Table>
         <TableHead>
           <TableRow>
             {data.headers.map((item, index) => {
               let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
-              return <TableCell className={classNames}>{<Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />}</TableCell>;
+              return <TableCell className={classNames}>
+                {<Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />}
+                {index===4 && <span className="arrow-icon-container">
+                  {sortOrder === "desc" && <div className="arrow-icon-style" onClick={()=>this.sortingTable('asc')}><ArrowDropUpIcon /></div>}
+                  {sortOrder === "asc" && <div className="arrow-icon-style" onClick={()=>this.sortingTable('desc')}><ArrowDropDownIcon /></div>}
+                  </span>}
+                </TableCell>;
             })}
           </TableRow>
         </TableHead>
@@ -123,7 +146,7 @@ class InboxData extends React.Component {
                       if (item.subtext) {
                         return (
                           <TableCell className={classNames}>
-                            <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">{<a>{item.text} </a>}</div>
+                            <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">{<a onClick={() => getModuleLink(item, row, index)}>{item.text} </a>}</div>
                             <div className="inbox-cell-subtext">{<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}</div>
                           </TableCell>
                         );
@@ -177,6 +200,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    setRoute: url => dispatch(setRoute(url)),
     toggleSnackbarAndSetText: (open, message) => dispatch(toggleSnackbarAndSetText(open, message)),
     prepareFinalObject: (path, value) => dispatch(prepareFinalObject(path, value)),
   };

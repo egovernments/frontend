@@ -26,7 +26,6 @@ export const bpaLocationDetails = getCommonCard(
         }
       }
     ),
-
     bpaDetailsConatiner: getCommonContainer({
       tradeLocCity: {
         ...getSelectField({
@@ -113,7 +112,6 @@ export const bpaLocationDetails = getCommonCard(
           }
         }
       },
-
       // tradeLocPropertyID: getTextField({
       //   label: {
       //     labelName: "Property ID",
@@ -146,6 +144,7 @@ export const bpaLocationDetails = getCommonCard(
       //   infoIcon: "info_circle",
       //   jsonPath: "BPA.propertyId"
       // }),
+
       tradeLocDoorHouseNo: getTextField({
         label: {
           labelName: "Door/House No.",

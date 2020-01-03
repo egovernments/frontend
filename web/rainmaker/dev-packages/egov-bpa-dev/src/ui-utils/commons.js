@@ -224,7 +224,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
           "id": "wf-doc-02",
           "fileStore": "firestore-01"
         }
-      ];;
+      ];
       set(payload, "wfDocuments", wfDocuments);
     }
     
