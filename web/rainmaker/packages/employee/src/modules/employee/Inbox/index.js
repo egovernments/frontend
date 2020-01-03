@@ -6,7 +6,7 @@ import ServiceList from "egov-ui-kit/common/common/ServiceList";
 import FilterDialog from "./components/FilterDialog";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
+import "./index.css";
 const iconStyle = {
   width: "48px",
   height: "46.02px",
@@ -61,17 +61,17 @@ class Inbox extends Component {
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "INBOX_QUICK_ACTION" },
       rightIcon: "arrow_drop_down",
-      props: { variant: "outlined", style: { marginRight: 15, backgroundColor: "#FE7A51", color: "#fff", border: "none", height: "60px", width: "200px" } },
+      props: { variant: "outlined", style: { marginLeft: 5, marginRight: 15, backgroundColor: "#FE7A51", color: "#fff", border: "none", height: "60px", width: "200px" } },
       menu: downloadMenu
     }
     return (
       <div>
         <div className="rainmaker-topHeader" style={{ marginTop: 30, justifyContent: "space-between" }}>
-          <div className="rainmaker-topHeader">
+          <div className="rainmaker-topHeader flex">
             <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
             <Label className="landingPageUser" label={name} />
           </div>
-          <div >
+          <div className="quick-action-button">
             <MenuButton data={buttonItems} />
           </div>
         </div>
