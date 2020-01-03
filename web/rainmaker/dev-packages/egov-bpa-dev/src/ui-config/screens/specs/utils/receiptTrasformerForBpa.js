@@ -74,7 +74,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     { key: "applicationNos", value: applicationNumber }
   ];
   let response = await getAppSearchResults(queryObject);
-  console.log(response, "bjaskjbsakjbkjsabd")
   store.dispatch(prepareFinalObject("Bpa[0]", response.Bpa[0]));
 
   if (response && response.Bpa && response.Bpa.length > 0) {
@@ -155,7 +154,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       data.mohalla,
       data.city
     );
-    console.log(data, "abslkjdbajksdb")
     // Applicant Details
     let owners = get(
       response,
@@ -207,7 +205,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     );
     loadUserNameData(get(response, "Bpa[0].auditDetails.lastModifiedBy"));
   }
-  console.log(data, "kasbjkdbaskjbskajd")
   store.dispatch(prepareFinalObject("applicationDataForPdf", data));
 };
 
@@ -271,7 +268,6 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       )
     );
     /** START NOC Fee, Adhoc Penalty/Rebate Calculation */
-    console.log(response, "amount albjsbadjbads")
     let nocAdhocPenalty = 0,
       nocAdhocRebate = 0;
     response.Receipt[0].Bill[0].billDetails[0].billAccountDetails.map(item => {

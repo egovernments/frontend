@@ -176,7 +176,6 @@ const getOwners = data => {
 };
 
 const getApplicationData = async (transformedData, ulbLogo, type) => {
-  console.log(transformedData, "abskjdbaskbdkbskjbsjab")
   let borderLayout = {
     hLineWidth: function(i, node) {
       return i === 0 || i === node.table.body.length ? 0.1 : 0.1;

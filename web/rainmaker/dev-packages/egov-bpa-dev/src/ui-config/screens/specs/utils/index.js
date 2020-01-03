@@ -2792,27 +2792,27 @@ export const calculationType = (state, dispatch) => {
     "BPA.serviceType"
   );
   let amount;
+  if (serviceType) {
+    let filterOneCalculation = [], filterTwoCalculation = [];
+    calculation.forEach(type => {
+      if( (appType === type.applicationType || type.applicationType === "ALL") && type.feeType === "ApplicationFee"){
+        filterOneCalculation.push(type);
+      }
+    });
 
-  let filterOneCalculation = [], filterTwoCalculation = [];
-  calculation.forEach(type => {
-    if( (appType === type.applicationType || type.applicationType === "ALL") && type.feeType === "ApplicationFee"){
-      filterOneCalculation.push(type);
-    }
-  });
+    filterTwoCalculation.forEach(type => {
+      if((serviceType === type.serviceType || type.serviceType === "ALL")){
+        filterTwoCalculation.push(type);
+      }
+    });
 
-  filterTwoCalculation.forEach(type => {
-    if((serviceType === type.serviceType || type.serviceType === "ALL")){
-      filterTwoCalculation.push(type);
-    }
-  });
-
-  filterOneCalculation.forEach(type => {
-    if((riskType === type.riskType || type.riskType === "ALL")){
-      amount = type.amount;
-    }
-  });
-
-  dispatch(prepareFinalObject("BPAs[0].appfee", amount));
+    filterOneCalculation.forEach(type => {
+      if((riskType === type.riskType || type.riskType === "ALL")){
+        amount = type.amount;
+      }
+    });
+    dispatch(prepareFinalObject("BPAs[0].appfee", amount));
+  }
 }
 
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {

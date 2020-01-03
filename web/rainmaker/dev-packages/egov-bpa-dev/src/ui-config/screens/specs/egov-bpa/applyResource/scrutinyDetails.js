@@ -41,7 +41,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 12,
-        md: 3
+        md: 4
       },
       props: {
           label: 'Uploaded Diagram',

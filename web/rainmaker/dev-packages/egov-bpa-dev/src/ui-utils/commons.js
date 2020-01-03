@@ -142,11 +142,13 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let method = applicationId ? "UPDATE" : "CREATE";
 
   let documentsUpdalod = get(
+    state,
     "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux"
   );
 
   let nocDocumentsUpload = get (
-    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux"
+    state,
+    "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux"
   );
   
   let requiredDocuments = [];
@@ -211,7 +213,18 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       documents = payload.documents;
       //hard coding these values but time being untill we fix documents capture issue.
       //TODO: remove this block once WF Documents integrated
-      wfDocuments = null;
+      wfDocuments = [
+        {
+          "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
+          "id": "wf-doc-01",
+          "fileStore": "firestore-0111"
+        },
+        {
+          "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
+          "id": "wf-doc-02",
+          "fileStore": "firestore-01"
+        }
+      ];;
       set(payload, "wfDocuments", wfDocuments);
     }
     
