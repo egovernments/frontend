@@ -7,7 +7,7 @@ const configs = {
 
     // 'BASE_URL': 'http://localhost:3333',
     'DEV_URL': "http://localhost:3000/url",
-    'DEMO_API_URL': "/dashboard-analytics",
+    'DEMO_API_URL': "",
     'BASE_URL': '/dashboard-analytics',
     'UPLOAD_URL': '',
     'POWERED_BY': 'Tarento',
