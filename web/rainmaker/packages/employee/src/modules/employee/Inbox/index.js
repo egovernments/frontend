@@ -66,8 +66,7 @@ console.log(nextProps);
       props: { variant: "outlined", style: { marginRight: 15, backgroundColor: "#FE7A51", color: "#fff", border: "none", height: "60px", width: "200px" } },
       menu: downloadMenu
     }
-    console.log(this.props,this.props.isLoading,'prr');
-    
+        
     return (
       <div>
         <div className="rainmaker-topHeader" style={{ marginTop: 30, justifyContent: "space-between" }}>

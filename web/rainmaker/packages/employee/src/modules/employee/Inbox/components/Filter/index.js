@@ -14,6 +14,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                     onChange={(e) => { handleChangeFilter('moduleFilter', e.target.value) }}
                     floatingLabelText={<Label label="CS_INBOX_MODULE_FILTER" fontSize="12px" />}//"Module"
                     className="filter-fields"
+                    labelStyle={{fontWeight:500}}
                     dropDownData={filter.moduleFilter.dropdownData}
                     value={filter.moduleFilter.selectedValue}
                     underlineStyle={{
