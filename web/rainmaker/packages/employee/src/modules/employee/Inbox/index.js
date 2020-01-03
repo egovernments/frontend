@@ -33,7 +33,6 @@ class Inbox extends Component {
         hasWorkflow: false,
       });
     }
-console.log(nextProps);
 
     const list = menu && menu.filter((item) => item.url === "card");
     this.setState({
