@@ -154,7 +154,10 @@ let dataL = {
     "DSS_TL_TAX_HEAD_BREAKUP": "Tax Heads Breakups",
     "DSS_TOTAL_COMPLAINTS_BY_SOURCE": "Total Complaints by Source",
     "DSS_TOTAL_COMPLAINTS_STATUS": "Total Complaints by Status",
-    "DSS_PGR_COMPLETION_RATE": "Completion Rate"
+    "DSS_PGR_COMPLETION_RATE": "Completion Rate",
+    "DSS_PROPERTY_TAX": "Property Tax",
+    "DSS_TRADE_LICENCE": "Trade License",
+    "DSS_COMPLAINS": 'Complaints'
   }
 }
 

@@ -13,7 +13,7 @@ const configs = {
     'POWERED_BY': 'Tarento',
     // "APP_LOGO": logo,
     // "APP_LOGO_1X": logo,
-    'APP_AAME': 'app',
+    'APP_NAME': '/dashboard/',
     'FILE_UPLOAD':'/filestore/v1/files',
     'FETCH_FILE':'/filestore/v1/files/url',
     'MDMS': '/egov-mdms-service/v1/_search'

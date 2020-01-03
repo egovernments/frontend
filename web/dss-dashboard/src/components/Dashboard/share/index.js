@@ -193,9 +193,6 @@ class CustomizedShare extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.props.s3File)
-        console.log(this.props.s3Image)
-
         if (prevProps.s3File != this.props.s3File) {
             const { S3Transporter } = this.props
             let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE, this.props.s3File.files && Array.isArray(this.props.s3File.files) && this.props.s3File.files.length > 0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId);

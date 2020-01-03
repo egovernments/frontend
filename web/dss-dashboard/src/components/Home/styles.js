@@ -1,0 +1,95 @@
+const styles = theme => ({
+    root: {
+        padding: '12px',
+    },
+    paper: {
+        padding: '18px 12px 30px 12px !important',
+    },
+    filter: {
+        textAlign: 'left',
+        fontFamily: 'Roboto',
+        fontSize: '16px',
+        fontWeight: '500',
+        color: '#fe7a51',
+        padding: '12px !important'
+    },
+    title: {
+        textAlign: 'left',
+        fontFamily: 'Roboto',
+        fontSize: '16px',
+        fontWeight: '500',
+        color: 'rgba(0, 0, 0, 0.87)',
+        // padding: '12px !important'
+    },
+    subTitle: {
+        textAlign: 'left',
+        fontFamily: 'Roboto',
+        fontSize: '16px',
+        fontWeight: '400',
+        color: 'rgba(0, 0, 0, 0.87)'
+    },
+    cardTitle: {
+        fontFamily: 'Roboto',
+        fontSize: '20px',
+        fontWeight: '500',
+        margin: '18px'
+    },
+    value: {
+        textAlign: 'left',
+        fontFamily: 'Roboto',
+        fontSize: '16px',
+        fontWeight: '500',
+        color: 'rgba(0, 0, 0, 0.87)'
+    },
+    variant: {
+        textAlign: 'left',
+        fontFamily: 'Roboto',
+        fontSize: '16px',
+        fontWeight: '400',
+        color: '#259b24'
+    },
+    customCard: {
+        padding: '5px'
+    }, 
+    iconPaper: {
+        backgroundColor: '#2196F3',
+        color: 'white', 
+        height: '93px', 
+        width: '93px',
+        verticalAlign: 'middle',
+    },
+    // grid: {
+    //     paddingLeft: '15px'
+    // },
+    '@media (max-width: 3000px)': {
+        root: {
+            padding: '0px 12px 0px 12px !important',
+        },
+        paper: {
+            padding: '18px 12px 30px 12px !important',
+
+        },
+        customCard: {
+            padding: '5px'
+        },
+    },
+    // '@media (max-width: 1150px)': {
+    //     grid: {
+    //         paddingLeft: '30px'
+    //     },
+    // },
+    '@media (max-width:823px)': {
+        root: {
+            padding: '10px 5px 10px 5px !important',
+        },
+        paper: {
+            padding: '10px 5px 10px 5px !important',
+        },
+        customCard: {
+            padding: '15px'
+        },
+
+    },
+});
+
+export default styles;

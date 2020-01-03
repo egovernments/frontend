@@ -272,13 +272,11 @@ class CustomizedMenus extends Component {
             console.log(file)
 
             if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-                debugger
                 var n = file.lastIndexOf("https");
                 image = file.substr(n, file.length)
                 console.log(image)
 
             } else {
-                debugger
                 image = file
                 console.log(image)
             }

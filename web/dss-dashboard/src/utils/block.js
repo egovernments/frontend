@@ -200,8 +200,6 @@ const addPages = (elem, cityLogo) => {
                                 heightLeft -= pageHeight;
                                 var index = 1;
                                 while (heightLeft >= 0) {
-                                    console.log('--------------------------', heightLeft)
-                                    debugger
                                     if (index == 1) {
                                         position = -pageHeight * index + 10
                                     } else {
@@ -212,7 +210,6 @@ const addPages = (elem, cityLogo) => {
                                     console.log(heightLeft)
                                     index++;
                                     heightLeft -= pageHeight;
-                                    debugger
                                 }
                                 return resolve(doc)
                             });
@@ -249,7 +246,6 @@ const addPages = (elem, cityLogo) => {
                                 console.log(heightLeft)
                                 index++;
                                 heightLeft -= pageHeight;
-                                debugger
                             }
                             return resolve(doc)
                         }

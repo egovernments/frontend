@@ -26,6 +26,7 @@ import { Typography } from '@material-ui/core';
 import Cards from '../common/Cards/Cards';
 import UiTable from '../common/UiTable/UiTable';
 import moment from 'moment';
+import Home from '../Home/Home'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 
 // let page = 'home';
@@ -38,7 +39,8 @@ class Dashboard extends Component {
       isFilterOpen: false,
       selectedTab: null,
       page: _.get(this.props, 'match.params.pageId'),
-      viewAll: _.get(this.props, 'match.params.viewAll')
+      viewAll: _.get(this.props, 'match.params.viewAll'),
+      dontShowHeader: true
     }
 
   }
@@ -55,7 +57,15 @@ class Dashboard extends Component {
 
   callDashboardAPI() {
     let dashboardApi = new dashboardAPI(20000);
-    this.props.APITransport(dashboardApi, (_.toLower(this.state.page) === 'dashboard' || typeof this.state.page == 'undefined') ? 'home' : this.state.page);
+    let overview = false
+    if(_.toLower(this.state.page) === 'dashboard' || typeof this.state.page == 'undefined'){
+      overview = true
+    }else{
+      this.setState({
+        dontShowHeader: false
+      })
+    }
+    this.props.APITransport(dashboardApi, overview ? 'overview' : this.state.page);
   }
 
   componentDidMount() {
@@ -188,7 +198,7 @@ class Dashboard extends Component {
 
 
   renderNormal() {
-    let { classes, dashboardConfigData, GFilterData } = this.props;
+    let { dashboardConfigData, GFilterData } = this.props;
     // let displayName = [true, false, true, false];
     let tabsInitData = _.chain(dashboardConfigData).first().get("visualizations").groupBy("name").value();
     let tabs = _.map(tabsInitData, (k, v) => {
@@ -199,13 +209,8 @@ class Dashboard extends Component {
       };
     });
     let defaultTab = this.state.selectedTab ? this.state.selectedTab : _.get(_.first(tabs), 'name')
-
     return (
       <div>
-
-
-
-
 
         {/* </div> */}
         {/* <div id="divToPrint"> */}
@@ -241,23 +246,26 @@ class Dashboard extends Component {
   }
 
   render() {
-    let { classes, dashboardConfigData, GFilterData } = this.props;
-    let dashboardName= dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name
+    let { classes, dashboardConfigData } = this.props;
+    let dashboardName = dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name
 
     return (<div id="divToPrint" className={classes.dashboard}>
       <div className={classes.actions}>
         <span className={classes.pageHeader}>
-        {dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name}
-      </span>
+          {dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name}
+        </span>
+
         {isMobile && <div id="divNotToPrint" data-html2canvas-ignore="true" className={[classes.desktop, classes.posit].join(' ')}>
 
           <Menu type="download" bgColor="white" color="black" fileHeader="SURE Dashboard" fileName={dashboardName}></Menu>
+          {!this.state.dontShowHeader && 
           <Button className={classes.btn1} data-html2canvas-ignore="true"
             onClick={this.handleFilters.bind(this)}
             fileName={dashboardName}
           >
             <FilterIcon></FilterIcon>
           </Button>
+          }
         </div>
         }
 
@@ -267,14 +275,24 @@ class Dashboard extends Component {
         </div>}
       </div>
 
-      <div className={classes.mobile} style={{ paddingRight: '24px' }}>
-        {(this.state.isFilterOpen || !isMobile) &&
-          <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={this.state.page && this.state.page.toLowerCase() !== 'dashboard'} applyFiltersLive={this.applyFiltersLive.bind(this)} />
-        }
-      </div>
       {
-        this.state.viewAll ? this.renderViewAll() : this.renderNormal()
+        _.chain(this.props.dashboardConfigData).first().get("id").value() === 'overview' ? <Home></Home> :
+       ( !this.state.dontShowHeader ?
+          <div>
+            <div className={classes.mobile} style={{ paddingRight: '24px' }}>
+              {(this.state.isFilterOpen || !isMobile) &&
+                <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={this.state.page && this.state.page.toLowerCase() !== 'dashboard'} applyFiltersLive={this.applyFiltersLive.bind(this)} />
+              }
+            </div>
+            <div>
+              {
+                this.state.viewAll ? this.renderViewAll() : this.renderNormal()
+              }
+            </div>
+          </div>
+          : null)
       }
+
 
     </div>
     )
