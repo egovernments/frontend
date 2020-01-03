@@ -20,10 +20,6 @@ export default class MdmsAPI extends API {
         if (res) {            
             res = getMDMSData(res.MdmsRes.tenant.tenants);
             this.mdmsData = res
-            console.log(res)
-            console.log(MdmsRes)
-            console.log(tenant)
-            console.log(tenent)
             return true
         }
         return false
