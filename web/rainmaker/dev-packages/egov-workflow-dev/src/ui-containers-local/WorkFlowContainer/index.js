@@ -231,6 +231,15 @@ class WorkFlowContainer extends React.Component {
             ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
             : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
       }
+    } else if (moduleName === "BPA") {
+      switch (action) {
+        case "PAY":
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+        case "EDIT":
+          return isAlreadyEdited
+            ? `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+            : `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+      }
     }
   };
 
