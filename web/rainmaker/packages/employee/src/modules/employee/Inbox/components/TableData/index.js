@@ -14,13 +14,12 @@ import filter from "lodash/filter";
 import orderBy from "lodash/orderBy";
 import uniq from "lodash/uniq";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { showSpinner,hideSpinner } from "egov-ui-kit/redux/common/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import Filter from "../Filter";
 import { getLocaleLabels } from "../../../../../ui-utils/commons";
-import { TextField } from "components";
+import TextFieldIcon  from  "egov-ui-kit/components/TextFieldIcon";
 
 
 const getWFstatus = (status) => {
@@ -50,7 +49,8 @@ class TableData extends Component {
   state = {
     businessServiceSla: {},
     searchFilter: {
-      value: ''
+      value: '',
+      typing: false
     },
     filter: {
       localityFilter: {
@@ -84,7 +84,7 @@ class TableData extends Component {
     value: 0,
     tabData: [{ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] }
       , { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }],
-    taskboardData: [{ head: 0, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
+    taskboardData: [{ head: 0, body: "WF_TOTAL_TASK", color: "rgb(171,211,237)", baseColor: "rgb(53,152,219)" },
     { head: 0, body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
     { head: 0, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }],
     taskboardLabel: '',
@@ -93,6 +93,7 @@ class TableData extends Component {
     moduleName: "",
     loaded: false,
     color: "",
+    timeoutForTyping: false
   };
 
   getUniqueList = (list = []) => {
@@ -105,6 +106,9 @@ class TableData extends Component {
     return newList;
   }
   checkMatch = (row, value) => {
+    if(value.length<=2){
+      return true;
+    }
     if (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
       row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
       String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
@@ -118,7 +122,7 @@ class TableData extends Component {
   }
   handleChangeSearch = (value) => {
     this.setState({
-      searchFilter: { value }
+      searchFilter: { value, typing: true }
     })
   }
 
@@ -149,33 +153,40 @@ class TableData extends Component {
     return (milliseconds / (1000 * 60 * 60 * 24));
   }
   applyFilter = (inboxData) => {
-    const { showSpinner,hideSpinner } = this.props;
-    showSpinner();
+    
+    this.showLoading();
     let initialInboxData = inboxData ? cloneDeep(inboxData) : cloneDeep(this.state.initialInboxData);
     const { filter, searchFilter, taskboardLabel } = this.state;
-    if (initialInboxData.length == 2) {
-      initialInboxData.map((row, ind) => {
-        row.rows = row.rows.filter((eachRow) => this.checkRow(eachRow, filter, searchFilter, taskboardLabel))
-      })
-    }
     let ESCALATED_SLA = [];
     let NEARING_SLA = [];
-    initialInboxData[1].rows.map(eachRow => {
-      let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
-      if (eachRow[4].text <= 0) {
-        ESCALATED_SLA.push(eachRow[4].text);
-      }
-      if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
-        NEARING_SLA.push(eachRow[4].text);
-      }
-    })
+
+    if (initialInboxData.length == 2) {
+      initialInboxData.map((row, ind) => {
+        row.rows = row.rows.filter((eachRow) => {
+          let isValid = this.checkRow(eachRow, filter, searchFilter, taskboardLabel);
+          if (isValid && ind == 1) {
+            let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
+            if (eachRow[4].text <= 0) {
+              ESCALATED_SLA.push(eachRow[4].text);
+            }
+            if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
+              NEARING_SLA.push(eachRow[4].text);
+            }
+          }
+          return isValid;
+        }
+
+        )
+      })
+    }
+
     let { taskboardData, tabData } = this.state;
     taskboardData[0].head = initialInboxData[1].rows.length;
     taskboardData[1].head = NEARING_SLA.length;
     taskboardData[2].head = ESCALATED_SLA.length;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
     tabData[1].dynamicArray = [initialInboxData[1].rows.length];
-    hideSpinner()
+    this.hideLoading();
     return {
       inboxData: initialInboxData,
       taskboardData,
@@ -214,7 +225,7 @@ class TableData extends Component {
 
     this.setState({
       searchFilter: {
-        value: ''
+        value: '', typing: false
       }, filter, inboxData: initialInboxData,
       initialInboxData: tempObject
     });
@@ -323,14 +334,14 @@ class TableData extends Component {
   };
 
   componentDidMount = async () => {
-    const { toggleSnackbarAndSetText, prepareFinalObject, showSpinner,hideSpinner } = this.props;
+    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
     const tenantId = getTenantId();
     let { taskboardData, tabData } = this.state;
 
     const inboxData = [{ headers: [], rows: [] }];
     try {
-      showSpinner();
+      this.showLoading();
       this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
@@ -417,7 +428,7 @@ class TableData extends Component {
           }
         }
       });
-      hideSpinner()
+      this.hideLoading()
     } catch (e) {
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
@@ -456,17 +467,41 @@ class TableData extends Component {
       color: baseColor,
     });
   };
-
+  showLoading(){
+    const {prepareFinalObject}=this.props;
+    prepareFinalObject('Loading.isLoading',true);
+  }
+  hideLoading(){
+    const {prepareFinalObject}=this.props;
+    prepareFinalObject('Loading.isLoading',false);
+  }
   render() {
     const { value, moduleName, filter, searchFilter, businessServiceSla } = this.state;
     const { classes, onPopupOpen } = this.props;
-    const { handleChangeFilter, clearFilter, handleChangeSearch } = this;
+    const { handleChangeFilter, clearFilter, handleChangeSearch, resetTyping } = this;
     let { taskboardData, tabData, inboxData } = this.state;
+    
+
     if (this.state.loaded) {
-      const filteredData = this.applyFilter();
-      taskboardData = filteredData.taskboardData;
-      inboxData = filteredData.inboxData;
-      tabData = filteredData.tabData;
+      if (searchFilter.typing) {
+        if (this.state.timeoutForTyping) {
+          clearTimeout(this.state.timeoutForTyping);
+        }
+        this.state.timeoutForTyping = setTimeout(() => {
+          this.setState((state, props) => {
+            let { searchFilter } = state;
+            searchFilter.typing = false;
+            this.setState({ state });
+            ({ ...state })
+          })
+        }, 3000);
+
+      } else {
+        const filteredData = this.applyFilter();
+        taskboardData = filteredData.taskboardData;
+        inboxData = filteredData.inboxData;
+        tabData = filteredData.tabData;
+      }
     } else {
       const { InboxData } = this.props;
       if (InboxData) {
@@ -475,20 +510,22 @@ class TableData extends Component {
         taskboardData = filteredData.taskboardData;
         inboxData = filteredData.inboxData;
         tabData = filteredData.tabData;
-        this.props.hideSpinner();
+        this.hideLoading();
       }
     }
     return (
-      <div className="col-sm-12">
+      <div className="col-md-12 col-sm-12 col-xs-12">
         <div>
           <div className="row" style={{ marginBottom: '5px', marginLeft: '-20px' }}>
-            <div className="col-md-8">
+            <div className="col-md-8 col-sm-8 col-xs-12">
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
             <div className="col-md-4">
-              <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
-                hintText={getLocaleLabels("CS_INBOX_SEARCH_PLACEHOLDER")}
+              <TextFieldIcon
+              //  floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
+                hintText={getLocaleLabels("CS_INBOX_SEARCH")}
                 value={searchFilter.value}
+                iconPosition="before"
                 className="filter-fields"
                 onChange={(e, value) => {
                   handleChangeSearch(value);
@@ -499,7 +536,7 @@ class TableData extends Component {
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>
         </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
-        <div className="col-sm-12 backgroundWhite">
+        <div className="col-sm-12 col-xs-12 backgroundWhite">
           <Tabs
             value={value}
             onChange={this.handleChange}
@@ -525,15 +562,13 @@ const mapStateToProps = (state) => {
   const { screenConfiguration, auth } = state;
   const { userInfo } = auth;
   const { preparedFinalObject } = screenConfiguration;
-  const { InboxData } = preparedFinalObject;
+  const { InboxData ,isLoading} = preparedFinalObject;
 
   return { InboxData, userInfo };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    hideSpinner:()=>dispatch(hideSpinner()),
-    showSpinner: () => dispatch(showSpinner()),
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
   };

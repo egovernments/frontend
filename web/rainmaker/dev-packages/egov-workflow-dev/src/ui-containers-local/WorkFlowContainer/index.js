@@ -383,11 +383,14 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
+
+      const showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
           <TaskStatusContainer ProcessInstances={ProcessInstances} />
         )}
+       {showFooter&& 
         <Footer
           handleFieldChange={prepareFinalObject}
           variant={"contained"}
@@ -396,7 +399,7 @@ class WorkFlowContainer extends React.Component {
           contractData={workflowContract}
           dataPath={dataPath}
           moduleName={moduleName}
-        />
+        />}
       </div>
     );
   }
