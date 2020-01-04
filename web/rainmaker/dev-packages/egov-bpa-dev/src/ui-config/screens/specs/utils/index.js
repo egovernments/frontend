@@ -2511,10 +2511,16 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
   const applicationNumberQueryString = applicationNumber
     ? `&applicationNumber=${applicationNumber}`
     : ``;
+  const tenantId = getQueryArg(window.location.href, "tenantId") ||
+  get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.address.city"
+  );
+  const tenantIdQueryString = tenantId ? `&tenantId=${tenantId}`: ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-bpa/apply?step=${step}${applicationNumberQueryString}`
-      : `/egov-bpa/apply?step=${step}${applicationNumberQueryString}`;
+      ? `/egov-ui-framework/egov-bpa/apply?step=${step}${applicationNumberQueryString}${tenantIdQueryString}`
+      : `/egov-bpa/apply?step=${step}${applicationNumberQueryString}${tenantIdQueryString}`;
   dispatch(setRoute(applyUrl));
 };
 
