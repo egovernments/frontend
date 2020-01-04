@@ -293,7 +293,7 @@ const setSearchResponse = async (
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-    {}
+    "search", []
     );
  
   dispatch(
@@ -406,7 +406,7 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          visible: true,
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
