@@ -348,6 +348,7 @@ class WorkFlowContainer extends React.Component {
         isDocRequired: checkIfDocumentRequired(item.nextState, moduleName)
       };
     });
+    actions=actions.filter(item=>item.buttonLabel!=='INITIATE');
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
