@@ -85,6 +85,8 @@ class WorkFlowContainer extends React.Component {
   getPurposeString = action => {
        
     switch (action) {
+      case "APPLY":
+        return "purpose=apply&status=success";
       case "FORWARD":
         return "purpose=forward&status=success";
       case "MARK":
