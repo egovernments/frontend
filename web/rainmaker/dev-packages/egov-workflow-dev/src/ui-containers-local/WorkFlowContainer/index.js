@@ -149,6 +149,17 @@ class WorkFlowContainer extends React.Component {
         );
       }
     }
+    if(dataPath === "BPA") {
+      let requiredDocuments = data.requiredDocuments;
+      let documents = data.wfDocuments;
+      if(requiredDocuments && data.wfDocuments && requiredDocuments.length > 0 && 
+        data.wfDocuments.length > 0 && requiredDocuments.length <= data.wfDocuments.length) {
+        for(let i = 0; i < requiredDocuments.length; i++) {
+            data.wfDocuments[i].documentType = requiredDocuments[i].code;
+            data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
+        }
+      }
+    }
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"

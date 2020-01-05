@@ -20,7 +20,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { searchBill } from "../utils/index";
+import { searchBill , requiredDocumentsData } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -323,6 +323,7 @@ const setSearchResponse = async (
 
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
+  requiredDocumentsData(state, dispatch);
   // await loadPdfGenerationDataForBpa(applicationNumber, tenantId);
   setDownloadMenu(state, dispatch);
 };
