@@ -10,7 +10,6 @@ import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty"
 import "./index.css";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 class Footer extends React.Component {
   state = {
@@ -54,19 +53,10 @@ class Footer extends React.Component {
   };
 
   openActionDialog = async item => {
-    const { handleFieldChange, setRoute, dataPath, contractData } = this.props;
+    const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
 
     if (dataPath === "BPA") {
-      if (contractData[0] && contractData[0].buttonLabel === "PAY") {
-        let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-        const tenantId = get(
-          state,
-          `screenConfiguration.preparedFinalObject.BPA.tenantId`
-        );
-          item.buttonUrl = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=BPA`
-      }
-      
       handleFieldChange(`${dataPath}.comment`, "");
       handleFieldChange(`${dataPath}.assignee`, "");
     } else {
