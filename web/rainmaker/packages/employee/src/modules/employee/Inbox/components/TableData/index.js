@@ -198,6 +198,16 @@ class TableData extends Component {
         )
       })
     }
+    
+    if (initialInboxData.length == 2) {
+      initialInboxData.map((row, ind) => {
+        row.rows = row.rows.filter((eachRow) => {
+          let isValid = this.checkSLA(taskboardLabel,eachRow);
+          return isValid;
+        }
+        )
+      })
+    }
 
 
 
