@@ -663,6 +663,7 @@ export const footerReview = (
       ];
       break;
     case "APPLIED":
+    case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
@@ -862,6 +863,7 @@ export const downloadPrintContainer = (
       ];
       break;
     case "APPLIED":
+    case "CITIZENACTIONREQUIRED":  
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
@@ -898,7 +900,7 @@ export const downloadPrintContainer = (
               label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "180px" , color : "#FE7A51" } },
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -912,7 +914,7 @@ export const downloadPrintContainer = (
               label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "150px" , color : "#FE7A51" } },
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
           }
