@@ -2511,10 +2511,16 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
   const applicationNumberQueryString = applicationNumber
     ? `&applicationNumber=${applicationNumber}`
     : ``;
+  const tenantId = getQueryArg(window.location.href, "tenantId") ||
+  get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.address.city"
+  );
+  const tenantIdQueryString = tenantId ? `&tenantId=${tenantId}`: ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-bpa/apply?step=${step}${applicationNumberQueryString}`
-      : `/egov-bpa/apply?step=${step}${applicationNumberQueryString}`;
+      ? `/egov-ui-framework/egov-bpa/apply?step=${step}${applicationNumberQueryString}${tenantIdQueryString}`
+      : `/egov-bpa/apply?step=${step}${applicationNumberQueryString}${tenantIdQueryString}`;
   dispatch(setRoute(applyUrl));
 };
 
@@ -2776,7 +2782,7 @@ const riskType = (state, dispatch) => {
 };
 
 export const calculationType = (state, dispatch) => {
-  const calculation = get(
+  const calcType = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.BPA.CalculationType"
   );
@@ -2793,26 +2799,33 @@ export const calculationType = (state, dispatch) => {
     "BPA.serviceType"
   );
   let amount;
+  let calcFeeData = [];
   if (serviceType) {
-    let filterOneCalculation = [], filterTwoCalculation = [];
-    calculation.forEach(type => {
-      if( (appType === type.applicationType || type.applicationType === "ALL") && type.feeType === "ApplicationFee"){
-        filterOneCalculation.push(type);
+    calcType.forEach(type => {
+      // if(bpa.action == null || bpa.action == "INITIATE"){
+      // bpa.feeType = "ApplicationFee";
+      // }
+      if ((type.applicationType == appType || type.applicationType === "ALL") && (type.feeType == "ApplicationFee")) {
+        if (type.serviceType == serviceType || type.serviceType === "ALL") {
+          if (type.riskType == riskType || type.riskType === "ALL") {
+            calcFeeData.push(type);
+          }
+        }
       }
-    });
+    })
+    let calcReqData = [];
+    if (calcFeeData.length > 1) {
+      calcFeeData.forEach(type => {
+        if (type.riskType == riskType) {
+          calcReqData.push(type);
+        }
+      })
+      dispatch(prepareFinalObject("BPAs[0].appfee", calcReqData[0].amount));
+    }
+    else {
+      dispatch(prepareFinalObject("BPAs[0].appfee", calcFeeData[0].amount));
 
-    filterTwoCalculation.forEach(type => {
-      if((serviceType === type.serviceType || type.serviceType === "ALL")){
-        filterTwoCalculation.push(type);
-      }
-    });
-
-    filterOneCalculation.forEach(type => {
-      if((riskType === type.riskType || type.riskType === "ALL")){
-        amount = type.amount;
-      }
-    });
-    dispatch(prepareFinalObject("BPAs[0].appfee", amount));
+    }
   }
 }
 
@@ -2950,7 +2963,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
         value: tenantId
       },
       {
-        key: "consumerCode",
+        key: "consumerCodes",
         value: applicationNumber
       }
     ];
@@ -2958,7 +2971,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      "/collection-services/payments/_search",
       "",
       queryObject
     );
@@ -3294,6 +3307,8 @@ export const getBpaTextToLocalMapping = label => {
       );
       case "INPROGRESS":
       return getLocaleLabels("Inprogress", "NOC_INPROGRESS", localisationLabels);
+      case "PENDING_APPL_FEE":
+      return getLocaleLabels("Pedding Application Fee", "PENDING_APPL_FEE", localisationLabels);
   }
 };
 
@@ -3582,3 +3597,86 @@ export const getMdmsDataForBpa = async queryObject => {
     return {};
   }
 };
+
+export const requiredDocumentsData = async (state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: 'pb',
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "DocumentType"
+            }
+          ]
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [
+            {
+              name: "DocTypeMapping"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+
+    let commonDocTypes = payload.MdmsRes["common-masters"].DocumentType;
+
+    const applicationNumber = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const queryObject = [
+      { key: "businessIds", value: applicationNumber },
+      { key: "tenantId", value: tenantId }
+    ];
+      const wfPayload = await httpRequest(
+        "post",
+        "egov-workflow-v2/egov-wf/process/_search",
+        "",
+        queryObject
+      );
+    const wfState = wfPayload.ProcessInstances[0];
+     let requiredDocuments = [];
+    if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
+      let documents = payload.MdmsRes.BPA.DocTypeMapping;
+      let requiredDocTypes;
+      documents.forEach( doc => {
+        if(doc.WFState === wfState.state.state){
+          requiredDocTypes = doc.docTypes;
+        }
+      });
+      if(requiredDocTypes) {
+        requiredDocTypes.forEach(docType => {
+          if(docType.required) {
+            commonDocTypes.forEach(cmDocType => {
+             if(cmDocType.code.indexOf(docType.code) !== -1 ) {
+              requiredDocuments.push(cmDocType);
+             }
+            })
+          }
+        })
+      }
+    }
+
+    if(!requiredDocuments.length) {
+      requiredDocuments = commonDocTypes;
+    }
+    dispatch(prepareFinalObject("BPA.requiredDocuments", requiredDocuments));
+  } catch (e) {
+    console.log(e);
+  }
+}
