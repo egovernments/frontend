@@ -18,9 +18,10 @@ const styles = theme => ({
 const TaskDialog = props => {
   const { open, onClose, history } = props;
   let fullscreen = false;
-  if (window.innerWidth <= 768) {
-    fullscreen = true;
-  }
+  // Fullscreen covering full mobile screen making it impossible to close dialog. Hence commenting out below line
+  // if (window.innerWidth <= 768) {
+  //   fullscreen = true;
+  // }
   return (
     <Dialog
       fullScreen={fullscreen}
