@@ -19,7 +19,7 @@ export default class MdmsAPI extends API {
         super.processResponse(res);
         if (res) {            
             res = getMDMSData(res.MdmsRes.tenant.tenants);
-            this.mdmsData = res
+            this.mdmsData = res;
             return true
         }
         return false

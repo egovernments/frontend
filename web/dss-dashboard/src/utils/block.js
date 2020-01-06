@@ -266,6 +266,7 @@ const addPages = (elem, cityLogo) => {
 }
 
 export const printDocument = (cityLogo, name) => {
+    cityLogo = (cityLogo)?cityLogo.replace('https:','http:'):cityLogo;
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
         //     let compon = document.getElementById("printFtable")

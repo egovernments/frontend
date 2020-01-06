@@ -276,7 +276,7 @@ class Dashboard extends Component {
       </div>
 
       {
-        _.chain(this.props.dashboardConfigData).first().get("id").value() === 'overview' ? <Home></Home> :
+        _.chain(this.props.dashboardConfigData).first().get("id").value() === 'overview' ? <Home page={this.state.page}></Home> :
        ( !this.state.dontShowHeader ?
           <div>
             <div className={classes.mobile} style={{ paddingRight: '24px' }}>

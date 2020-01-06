@@ -1,3 +1,5 @@
+import { isMobile } from 'react-device-detect';
+
 const styles = theme => ({
     root: {
         padding: '12px',
@@ -38,7 +40,7 @@ const styles = theme => ({
         fontFamily: 'Roboto',
         fontSize: '20px',
         fontWeight: '500',
-        padding: '5px',
+        padding: isMobile ? '15px 5px 5px 15px' : '5px',
         margin: '0px'
     },
     value: {
