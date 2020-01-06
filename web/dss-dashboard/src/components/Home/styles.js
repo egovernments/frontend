@@ -34,7 +34,7 @@ const styles = theme => ({
         fontFamily: 'Roboto',
         fontSize: '20px',
         fontWeight: '500',
-        margin: '18px'
+        margin: '10px 18px 0px 18px'
     },
     paperTitle: {
         fontFamily: 'Roboto',

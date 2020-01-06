@@ -247,7 +247,7 @@ class CustomizedShare extends Component {
                     <SVG style={{ marginRight: '10px' }}>
                         {/* className={StyledMenuItem.CloseButton} */}
                     </SVG>
-                    Share
+                    {this.props.strings['DSS_SHARE'] || 'DSS_SHARE'}
                 </Button>
                 <StyledMenu
                     id="customized-menu"
@@ -299,7 +299,7 @@ class CustomizedShare extends Component {
                     <SVG src={share} style={{ marginRight: '10px' }} >
                         {/* className={StyledMenuItem.CloseButton} */}
                     </SVG>
-                    <div style={{ fontFamily: 'Roboto', fontSize: '12px', fontWeight: '500', fontStretch: 'normal', fontStyle: 'normal', linHeight: 'normal', letterSpacing: 'normal', color: '#5b5b5b' }}>Share</div>
+                    <div style={{ fontFamily: 'Roboto', fontSize: '12px', fontWeight: '500', fontStretch: 'normal', fontStyle: 'normal', linHeight: 'normal', letterSpacing: 'normal', color: '#5b5b5b' }}>{this.props.strings['DSS_SHARE'] || 'DSS_SHARE'}</div>
                 </Button>
                 <StyledMenu
                     id="customized-menu"
@@ -325,7 +325,8 @@ const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
     s3File: state.s3File,
     s3Image: state.s3Image,
-    globalFilter: state.globalFilter
+    globalFilter: state.globalFilter,
+    strings:state.lang
 });
 
 const mapDispatchToProps = dispatch => {

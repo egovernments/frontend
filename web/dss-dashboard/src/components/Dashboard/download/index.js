@@ -109,7 +109,7 @@ export function CustomizedMenus(props) {
 
     }
     // console.log(props)
-    return (
+    return (        
         <div>
             <Button style={{ borderRadius: '2px', border: 'solid 1px #5b5b5b', backgroundColor: "rgba(255, 255, 255, 0)", height: '32px' }}
                 aria-controls="customized-menu"
@@ -121,7 +121,7 @@ export function CustomizedMenus(props) {
                 <SVG src={download} style={{ marginRight: '10px' }} className={StyledMenuItem.CloseButton}>
 
                 </SVG>
-                <div style={{ fontFamily: 'Roboto', fontSize: '12px', fontWeight: '500', fontStretch: 'normal', fontStyle: 'normal', linHeight: 'normal', letterSpacing: 'normal', color: '#5b5b5b' }}>Download</div>
+                <div style={{ fontFamily: 'Roboto', fontSize: '12px', fontWeight: '500', fontStretch: 'normal', fontStyle: 'normal', linHeight: 'normal', letterSpacing: 'normal', color: '#5b5b5b' }}>{props.strings['DSS_DOWNLOAD'] || 'DSS_DOWNLOAD'}</div>
 
 
             </Button>
@@ -152,7 +152,8 @@ export function CustomizedMenus(props) {
 
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
-    globalFilter: state.globalFilter
+    globalFilter: state.globalFilter,
+    strings: state.lang
 });
 
 const mapDispatchToProps = dispatch => {

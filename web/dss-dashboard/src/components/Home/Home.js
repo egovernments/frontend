@@ -69,7 +69,7 @@ class Home extends React.Component {
                         <Paper style={{ padding: '15px', backgroundColor: 'rgba(33, 150, 243, 0.24)' }}>
                             <Grid container spacing={24}>
 
-                                <Grid item xs={12} sm={12} md={1} lg={1} xl={1} style={{ vertical: 'bottom', horizontal: 'center' }}>
+                                <Grid item xs={12} sm={12} md={2} lg={1} xl={1} style={{ vertical: 'bottom', horizontal: 'center' }}>
                                     <Paper className={classes.iconPaper}>
                                         <div >
                                             <Icons type={data.name}></Icons>
@@ -78,7 +78,7 @@ class Home extends React.Component {
                                     </Paper>
                                 </Grid>
 
-                                <Grid item xs={12} sm={12} md={11} lg={11} xl={11} className={classes.grid}>
+                                <Grid item xs={12} sm={12} md={10} lg={11} xl={11} className={classes.grid}>
                                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                                         <div style={{ textAlign: 'left', color: 'black' }}>
                                             {/* <h3 style={{ padding: '5px', margin: '0px' }}>{strings[data.name] || data.name}</h3> */}
@@ -108,7 +108,7 @@ class Home extends React.Component {
         }
         else {
             return (
-                <Grid item xs={12} sm={12} md={6} lg={4} xl={4} className={classes.root} >
+                <Grid item xs={12} sm={12} md={4} lg={4} xl={4} className={classes.root} >
 
                     <Card color="blue" bgColor={bgColor} page={pageId || 'overview'}>
                         <CardHeader color="rose" icon page={pageId || 'overview'}>

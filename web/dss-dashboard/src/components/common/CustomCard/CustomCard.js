@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import getChartOptions from '../../../actions/getChartOptions';
 import ChartsAPI from '../../../actions/charts/chartsAPI'
+import NFormatter from '../numberFormater';
 
 class CustomCard extends React.Component {
     constructor(props) {
@@ -48,7 +49,11 @@ class CustomCard extends React.Component {
 
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        <Typography className={classes.value}>{data.value ? (Number.isInteger(data.value) ? data.value : (data.value).toFixed(2)) : 0}</Typography>
+                        <Typography className={classes.value}>
+                            <NFormatter value={data.value} nType={data.valueSymbol} />
+
+                            {/* {data.value ? (Number.isInteger(data.value) ? data.value : (data.value).toFixed(2)) : 0} */}
+                        </Typography>
                     </Grid>
 
                 </Grid>

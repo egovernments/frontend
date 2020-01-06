@@ -108,6 +108,7 @@ const getImageData = (dataUrl) => {
 }
 
 const addPages = (elem, cityLogo) => {
+    console.log(cityLogo)
     return new Promise((resolve, reject) => {
         if (isMobile) {
             html2canvas(document.getElementById('divToPrint'), {
@@ -169,7 +170,9 @@ const addPages = (elem, cityLogo) => {
                 .then(function (dataUrl) {
                     return getImageData(dataUrl).then(function (hw) {
                         if (cityLogo) {
+                            console.log('-----------------processing logo-------------------')
                             base64Img.requestBase64(cityLogo, function (err, res, body) {
+                                console.log('-------------processing body-----------------')
                                 if(err){
                                     console.log('--------------------',err)
                                 }
@@ -286,6 +289,7 @@ export const printDocument = (cityLogo, name) => {
     // });
 }
 export const printDocumentShare = (cityLogo) => {
+    cityLogo = (cityLogo)?cityLogo.replace('https:','http:'):cityLogo;
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
         //     let compon = document.getElementById("printFtable")

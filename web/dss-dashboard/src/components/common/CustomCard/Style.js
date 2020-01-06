@@ -18,7 +18,7 @@ const styles = theme => ({
     subTitle: {
         textAlign: 'left',
         fontFamily: 'Roboto',
-        fontSize: '16px',
+        fontSize: '14px',
         fontWeight: '400',
         color: 'rgba(0, 0, 0, 0.87)'
     },

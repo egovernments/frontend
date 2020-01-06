@@ -252,7 +252,7 @@ class Dashboard extends Component {
     return (<div id="divToPrint" className={classes.dashboard}>
       <div className={classes.actions}>
         <span className={classes.pageHeader}>
-          {dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name}
+          {this.props.strings[dashboardName] || dashboardName}
         </span>
 
         {isMobile && <div id="divNotToPrint" data-html2canvas-ignore="true" className={[classes.desktop, classes.posit].join(' ')}>

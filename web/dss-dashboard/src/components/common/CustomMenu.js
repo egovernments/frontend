@@ -331,7 +331,7 @@ class CustomizedMenus extends Component {
                             <SVG src={download} style={{ marginRight: '10px' }}>
                             </SVG>
                         </ListItemIcon>
-                        <ListItemText primary="Download" />
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD'] || 'DSS_DOWNLOAD'} />
                         {this.state.open ? <IconExpandLess /> : <IconExpandMore />}
                     </StyledMenuItem>
                     <Collapse in={this.state.open} timeout="auto" unmountOnExit>
@@ -358,7 +358,7 @@ class CustomizedMenus extends Component {
 
                             </SVG>
                         </ListItemIcon>
-                        <ListItemText primary="Share" />
+                        <ListItemText primary={this.props.strings['DSS_SHARE'] || 'DSS_SHARE'} />
                         {this.state.shareOpen ? <IconExpandLess /> : <IconExpandMore />}
                     </StyledMenuItem>
                     <Collapse in={this.state.shareOpen} timeout="auto" unmountOnExit>
@@ -402,7 +402,8 @@ const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
     s3FileMobile: state.s3FileMobile,
     s3ImageMobile: state.s3ImageMobile,
-    globalFilter: state.globalFilter
+    globalFilter: state.globalFilter,
+    strings:state.lang
 });
 
 const mapDispatchToProps = dispatch => {

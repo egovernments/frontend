@@ -95,7 +95,7 @@ class PerformanceChart extends React.Component {
 
     if (data.length > 3) {
       return (<div className={classes.bottomDiv}>
-        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} value={codekey} text={strings["DSS_VIEW_ALL"] || "View all"} handleClick={this.handleClick.bind(this)} />        
+        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} value={codekey} text={strings["DSS_VIEW_ALL"] || "DSS_VIEW_ALL"} handleClick={this.handleClick.bind(this)} />        
       </div>)
     } else {
       return null;

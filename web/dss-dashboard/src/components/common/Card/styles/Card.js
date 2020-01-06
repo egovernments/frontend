@@ -37,12 +37,12 @@ import {
     },
     '@media (max-width: 3000px)': {
       card: {
-          minHeight: '187px',
+          minHeight: '205px',
       }
   },
   '@media (max-width:823px)': {
       card: {
-        minHeight: '187px',
+        minHeight: '205px',
       }
   },
   };
