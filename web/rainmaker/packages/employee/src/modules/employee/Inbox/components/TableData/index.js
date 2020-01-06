@@ -539,7 +539,7 @@ class TableData extends Component {
             </div> */}
             <div className="icon-hidden filter-icon col-xs-2" onClick={()=>{
               this.setState({showFilter:!this.state.showFilter})
-              console.log("clicked")}
+              //console.log("clicked")}
               }>
             <FilterListIcon />
             </div>
