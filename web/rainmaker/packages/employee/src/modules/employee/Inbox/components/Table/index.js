@@ -202,7 +202,7 @@ class InboxData extends React.Component {
           </Table>
         </Hidden>
         <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
-        <div class="flex">
+        <div class="sort-icon-flex">
         <div className="sort-btn-mob">
         
         {sortOrder === "asc" && (
