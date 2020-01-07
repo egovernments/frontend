@@ -72,7 +72,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                     style: "receipt-logo-header"
                   },
                   {
-                    text: "Trade License Payment Receipt (Citizen Copy)",
+                    text: "Trade License Payment Receipt",
                     style: "receipt-logo-sub-header"
                   }
                 ],
