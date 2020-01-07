@@ -56,7 +56,7 @@ class UiTableHead extends Component {
                     onClick={this.createSortHandler(column.id)}
                   >
 
-                    {column.label + (column.numeric === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')}
+                    {column.label + (column.colType === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')}
                   </TableSortLabel>
                     :
                     <span>{column.label}</span>

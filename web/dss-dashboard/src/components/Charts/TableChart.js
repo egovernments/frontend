@@ -184,7 +184,7 @@ class TableChart extends Component {
         if(k.name != "S.N."){
           let yes = v < 0;
           let isNumeric = _.toLower(k.symbol) === 'amount' || _.toLower(k.symbol) === "number" || _.toLower(k.symbol) === "percentage";
-          return { id: k.name, numeric: isNumeric, stickyHeader: yes, disablePadding: false, label: k.name }
+          return { id: k.name, numeric: isNumeric, stickyHeader: yes, disablePadding: false, label: k.name, colType: k.symbol }
         }
       }).value();
       // small hack but need to remove from backend.
