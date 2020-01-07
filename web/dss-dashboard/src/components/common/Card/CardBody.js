@@ -20,9 +20,9 @@ export default function CardBody(props) {
 
   return (
     <div className={cardBodyClasses} {...rest}>
-      <a href={url} style={{ textDecoration: 'none',cursor: 'pointer',cursor: 'hand' }}>
+      {/* <a href={url} style={{ textDecoration: 'none',cursor: 'pointer',cursor: 'hand' }}> */}
         {children}
-      </a>
+      {/* </a> */}
 
     </div>
   );

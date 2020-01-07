@@ -10,7 +10,7 @@ const useStyles = makeStyles(styles);
 
 export default function Card(props) {
   const classes = useStyles();
-  const { className, children, color, bgColor, plain, profile, chart, page,...rest } = props;
+  const { className, children, color, bgColor, plain, profile, chart, page, ...rest } = props;
   const cardClasses = classNames({
     [classes.card]: true,
     [classes[color + "Card"]]: color,
@@ -21,10 +21,14 @@ export default function Card(props) {
   });
   let url = Config.DEMO_API_URL + Config.APP_NAME + page
   return (
-    <div className={cardClasses} {...rest} style={{backgroundColor:bgColor}}>
-      {/* <a href={url} style={{textDecoration: 'none'}}> */}
-        {children}
-        {/* </a> */}
+    <div>
+      <a href={url} style={{ textDecoration: 'none' }}>
+        <div className={cardClasses} {...rest} style={{ backgroundColor: bgColor }}>
+
+          {children}
+
+        </div>
+      </a>
     </div>
   );
 }

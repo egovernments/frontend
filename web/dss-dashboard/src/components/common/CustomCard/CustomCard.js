@@ -10,6 +10,7 @@ import _ from 'lodash';
 import getChartOptions from '../../../actions/getChartOptions';
 import ChartsAPI from '../../../actions/charts/chartsAPI'
 import NFormatter from '../numberFormater';
+import { isMobile } from "react-device-detect";
 
 class CustomCard extends React.Component {
     constructor(props) {
@@ -46,7 +47,7 @@ class CustomCard extends React.Component {
                 <Grid container spacing={24}>
 
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        <div style={{minHeight: type === 'module' ? '50px' : '0px'}}>
+                        <div style={{minHeight: type === 'module' ? ( isMobile ? '0px' : '50px') : '0px'}}>
                         <Typography className={classes.subTitle}>{label}</Typography>
                         </div>
 
