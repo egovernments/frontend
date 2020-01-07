@@ -50,11 +50,14 @@ const screenConfig = {
               {
                 label: "TL_COMMON_TABLE_COL_STATUS",
                 jsonPath: "status",
-                prefix: "WF_ARCHITECT_"
               },
               {
                 label: "BPA_COMMON_SLA",
                 jsonPath: "sla",
+              },
+              {
+                label: "BPA_PERMIT_NUMBER",
+                jsonPath: "permitOrderNo",
               }
             ],
             moduleName: "BPAREG",
