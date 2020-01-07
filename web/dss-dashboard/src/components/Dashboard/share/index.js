@@ -203,33 +203,36 @@ class CustomizedShare extends Component {
             let image = ''
             let fileId = this.props.s3File.files && Array.isArray(this.props.s3File.files) && this.props.s3File.files.length > 0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId
             console.log(fileId)
-            console.log(this.props.s3Image[fileId])            
+            console.log(this.props.s3Image[fileId])
 
             // let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length > 0 && this.props.s3Image.fileStoreIds[0].url
             let file = this.props.s3Image && this.props.s3Image[fileId]
             console.log(file)
-            if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-                var n = file.lastIndexOf("https");
-                image = file.substr(n, file.length)
-                console.log(image)
-            } else {
-                image = file
-                console.log(image)
+            if (file) {
+                if ((file.match(new RegExp("https", "g")) || []).length > 1) {
+                    var n = file.lastIndexOf("https");
+                    image = file.substr(n, file.length)
+                    console.log(image)
+                } else {
+                    image = file
+                    console.log(image)
 
+                }
+
+                var fakeLink = document.createElement('a');
+                if (image && this.state.type === 'whatsapp') {
+                    fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
+                    fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+                    fakeLink.setAttribute('target', '_blank');
+                    fakeLink.click();
+                }
+                if (image && this.state.type === 'email') {
+                    fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
+                    fakeLink.setAttribute('target', '_top');
+                    fakeLink.click();
+                }
             }
 
-            var fakeLink = document.createElement('a');
-            if (image && this.state.type === 'whatsapp') {
-                fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
-                fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-                fakeLink.setAttribute('target', '_blank');
-                fakeLink.click();
-            }
-            if (image && this.state.type === 'email') {
-                fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
-                fakeLink.setAttribute('target', '_top');
-                fakeLink.click();
-            }
         }
 
     }
@@ -326,7 +329,7 @@ const mapStateToProps = state => ({
     s3File: state.s3File,
     s3Image: state.s3Image,
     globalFilter: state.globalFilter,
-    strings:state.lang
+    strings: state.lang
 });
 
 const mapDispatchToProps = dispatch => {

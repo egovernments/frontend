@@ -28,7 +28,7 @@ class CustomCard extends React.Component {
     }
 
     render() {
-        const { classes, strings } = this.props;
+        const { classes, strings, type } = this.props;
 
         let codekey = _.chain(this.props).get('chartData').get("id").value();
         let data = _.chain(this.props).get("chartsGData").get(codekey).get("data").map((d, i) => {
@@ -40,12 +40,15 @@ class CustomCard extends React.Component {
             }
         }).first().value() || null;
         if (data) {
+            let label = data.label ? (strings[data.label] ? strings[data.label] : data.label) : ''
             return (
 
                 <Grid container spacing={24}>
 
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        <Typography className={classes.subTitle}>{data.label ? (strings[data.label] ? strings[data.label] : data.label) : ''}</Typography>
+                        <div style={{minHeight: type === 'module' ? '50px' : '0px'}}>
+                        <Typography className={classes.subTitle}>{label}</Typography>
+                        </div>
 
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

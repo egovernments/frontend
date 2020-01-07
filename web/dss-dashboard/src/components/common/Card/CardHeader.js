@@ -21,7 +21,7 @@ export default function CardHeader(props) {
   let url = Config.DEMO_API_URL + Config.APP_NAME + page
   return (
     <div className={cardHeaderClasses} {...rest}>
-      <a href={url} style={{ textDecoration: 'none' }}>
+      <a href={url} style={{ textDecoration: 'none',cursor: 'pointer',cursor: 'hand' }}>
         {children}
       </a>
     </div>

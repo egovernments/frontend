@@ -13,7 +13,7 @@ const styles = theme => ({
         fontSize: '16px',
         fontWeight: '500',
         color: '#fe7a51',
-        padding: '12px !important'
+        padding: '0px 12px 12px 12px !important'
     },
     title: {
         textAlign: 'left',
@@ -40,7 +40,7 @@ const styles = theme => ({
         fontFamily: 'Roboto',
         fontSize: '20px',
         fontWeight: '500',
-        padding: isMobile ? '15px 5px 5px 15px' : '5px',
+        padding: isMobile ? '15px 5px 5px 15px' : '0px 5px 5px 5px',
         margin: '0px'
     },
     value: {
@@ -68,9 +68,14 @@ const styles = theme => ({
         verticalAlign: 'middle',
         paddingTop: '20px'
     },
-    // grid: {
-    //     paddingLeft: '15px'
-    // },
+    paperContainer: {
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row'  
+    },
+    paperValues: {
+        width: '100%', 
+        paddingLeft: isMobile ? '0px' : '10px'
+    },
     '@media (max-width: 3000px)': {
         root: {
             padding: '0px 12px 0px 12px !important',

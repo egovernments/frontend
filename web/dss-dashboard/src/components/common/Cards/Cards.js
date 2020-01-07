@@ -111,22 +111,27 @@ class Cards extends Component {
           openWhatsapp: false
         })
         let image = ''
-        let file = this.props.s3ImageCard && this.props.s3ImageCard.fileStoreIds && Array.isArray(this.props.s3ImageCard.fileStoreIds) && this.props.s3ImageCard.fileStoreIds.length > 0 && this.props.s3ImageCard.fileStoreIds[0].url
-        if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-          var n = file.lastIndexOf("https");
-          image = file.substr(n, file.length)
+        let fileId = this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId
 
-        } else {
-          image = file
+        let file = this.props.s3ImageCard && this.props.s3ImageCard[fileId]
+        if (file) {
+          if ((file.match(new RegExp("https", "g")) || []).length > 1) {
+            var n = file.lastIndexOf("https");
+            image = file.substr(n, file.length)
+
+          } else {
+            image = file
+          }
+
+          if (image && this.state.type === 'whatsapp') {
+            var fakeLink = document.createElement('a');
+            fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
+            fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+            fakeLink.setAttribute('target', '_blank');
+            fakeLink.click();
+          }
         }
 
-        if (image && this.state.type === 'whatsapp') {
-          var fakeLink = document.createElement('a');
-          fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
-          fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-          fakeLink.setAttribute('target', '_blank');
-          fakeLink.click();
-        }
 
       }
 

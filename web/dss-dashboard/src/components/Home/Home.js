@@ -65,41 +65,38 @@ class Home extends React.Component {
             let url = Config.DEMO_API_URL + Config.APP_NAME + pageId
             return (
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.paper} style={{ paddingBottom: '5px' }}>
-                    <a href={url} style={{ textDecoration: 'none' }}>
+                    <a href={url} style={{ textDecoration: 'none',cursor: 'pointer',cursor: 'hand' }}>
                         <Paper style={{ padding: '15px', backgroundColor: 'rgba(33, 150, 243, 0.24)' }}>
-                            <Grid container spacing={24}>
-
-                                <Grid item xs={12} sm={12} md={2} lg={1} xl={1} style={{ vertical: 'bottom', horizontal: 'center' }}>
+                            <div className={classes.paperContainer}>
+                                <div>
                                     <Paper className={classes.iconPaper}>
                                         <div >
                                             <Icons type={data.name}></Icons>
-
                                         </div>
                                     </Paper>
-                                </Grid>
+                                </div>
+                                <div className={classes.paperValues}>
+                                    <Grid container spacing={24}>
+                                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                            <div style={{ textAlign: 'left', color: 'black' }}>
+                                                {/* <h3 style={{ padding: '5px', margin: '0px' }}>{strings[data.name] || data.name}</h3> */}
+                                                <Typography className={classes.paperTitle}>{strings[data.name] || data.name}</Typography>
 
-                                <Grid item xs={12} sm={12} md={10} lg={11} xl={11} className={classes.grid}>
-                                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                        <div style={{ textAlign: 'left', color: 'black' }}>
-                                            {/* <h3 style={{ padding: '5px', margin: '0px' }}>{strings[data.name] || data.name}</h3> */}
-                                            <Typography className={classes.paperTitle}>{strings[data.name] || data.name}</Typography>
-
-                                        </div>
-                                    </Grid>
-
-                                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                        <Grid container spacing={24}>
-
-                                            {
-                                                data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters}></CustomCard></Grid>
-                                                })
-                                            }
+                                            </div>
                                         </Grid>
-
+                                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                            <Grid container spacing={24}>
+                                                {
+                                                    data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
+                                                        return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview"></CustomCard></Grid>
+                                                    })
+                                                }
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </Grid>
+
+                                </div>
+                            </div>
 
                         </Paper>
                     </a>
@@ -123,7 +120,8 @@ class Home extends React.Component {
                             <Grid container spacing={24}>
                                 {
                                     data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-                                        return <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters}></CustomCard></Grid>
+                                        return <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.customCard}>
+                                            <CustomCard key={d.id} chartData={d} filters={filters} type="module"></CustomCard></Grid>
                                     })
                                 }
                             </Grid>
