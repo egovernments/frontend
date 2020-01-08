@@ -6,7 +6,6 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import axios from "axios";
 
-
 const style = {
   bodyBox: {
     marginLeft: 16,
