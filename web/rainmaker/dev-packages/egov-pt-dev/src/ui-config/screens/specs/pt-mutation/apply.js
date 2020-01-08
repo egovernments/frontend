@@ -75,6 +75,14 @@ const applicationNumberContainer = () => {
   else return {};
 };
 
+onst getConsumerID = () => {
+  let mutationUrl = window.location.href;
+  let exp=new RegExp("[A-Z]{2,}\-[0-9]{3,}\-[0-9]{6,}");
+  let consumerId = mutationUrl.match(exp);
+  return consumerId[0];
+
+};
+
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Transfer of Ownership (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
@@ -86,13 +94,13 @@ export const header = getCommonContainer({
     moduleName: "egov-pt",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: "NA",
+      number: getConsumerID(),
       label: {
         labelValue: "Application No.",
         labelKey: "PT_MUTATION_APPLICATION_NO"
     }
     },
-    visible: false
+    visible: true
   }
 });
 
