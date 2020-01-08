@@ -6,7 +6,6 @@ const hintBaseStyle = {
   fontSize: "16px",
   letterSpacing: "0.7px",
   color: "rgba(0, 0, 0, 0.3799999952316284)",
-  top:"5px"
 };
 
 const floatingLabelBaseStyle = {

@@ -553,6 +553,7 @@ class TableData extends Component {
             </div>
             <div className="col-md-4 col-sm-4 col-xs-10 search-bar">
               <TextFieldIcon
+              hintStyle={{top:'6px'}}
                 hintText={getLocaleLabels("","CS_INBOX_SEARCH",localizationLabels)}
                 value={searchFilter.value}
                 iconPosition="before"
