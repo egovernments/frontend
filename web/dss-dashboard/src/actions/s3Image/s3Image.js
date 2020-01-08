@@ -16,8 +16,6 @@ export default class S3ImageAPI extends API {
     processResponse(res) {
         super.processResponse(res);
         if (res) {
-            debugger
-            console.log(res)
             this.s3Image = res;
             return true
         }

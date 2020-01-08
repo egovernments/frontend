@@ -28,7 +28,6 @@ import UiTable from '../common/UiTable/UiTable';
 import Home from '../Home/Home'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 
-// let page = 'home';
 class Dashboard extends Component {
 
   constructor(props) {
@@ -64,7 +63,7 @@ class Dashboard extends Component {
         dontShowHeader: false
       })
     }
-    this.props.APITransport(dashboardApi, overview ? 'overview' : this.state.page);
+    this.props.APITransport(dashboardApi, overview ? 'home' : this.state.page);
   }
 
   componentDidMount() {
@@ -275,7 +274,7 @@ class Dashboard extends Component {
       </div>
 
       {
-        _.chain(this.props.dashboardConfigData).first().get("id").value() === 'overview' ? <Home page={this.state.page}></Home> :
+        _.chain(this.props.dashboardConfigData).first().get("id").value() === 'home' ? <Home page={this.state.page}></Home> :
        ( !this.state.dontShowHeader ?
           <div>
             <div className={classes.mobile} style={{ paddingRight: '24px' }}>

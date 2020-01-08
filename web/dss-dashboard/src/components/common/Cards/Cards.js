@@ -180,9 +180,12 @@ class Cards extends Component {
             fakeLink.click();
           }
           if (image && this.state.type === 'email') {
+            console.log(image) 
+            var fakeLink = document.createElement('a');
             fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
             fakeLink.setAttribute('target', '_top');
             fakeLink.click();
+            
           }
         }
 
