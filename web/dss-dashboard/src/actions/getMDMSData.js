@@ -1,13 +1,8 @@
 import _ from 'lodash';
-import axios from 'axios';
-import CONFIGS from '../config/configs';
 
 export default function getMDMSData(tenants){
 let tempDRRsObj = {},tempDDRs=[],tenantId = "",tenantLogo ={};
 _.each(tenants,(v,k) => {
-    //console.log(te)
-    //console.log(v.city.ddrName);
-    //console.log(v.logoId);
 
     if(v.code)
         tenantLogo[v.code] = v.logoId;

@@ -19,7 +19,7 @@ class ExportToExel extends React.Component {
     }
 
     render() {
-        let { classes, data } = this.props;
+        let { data } = this.props;
         return (<ActionButtons buttonType="download"
             text="Download"
             disableed={data && Object.keys(data).length == 0}

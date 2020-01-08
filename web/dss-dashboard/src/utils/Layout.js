@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AppRouter from './AppRouter';
 import Spinner from '../components/common/Spinner';
-import SideBar from '../components/common/sidebar'
+// import SideBar from '../components/common/sidebar'
 import { isMobile } from 'react-device-detect';
 
 const styles = (theme) => ({

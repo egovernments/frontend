@@ -343,17 +343,17 @@ class GlobalFilter extends Component {
                         if (this.props.hideDepart && ro.label == "Services") {
                             return (<div></div>);
 
-                        }else if(ro.label == "DDRs"){
+                        }else if(ro.label == "DDRs" || ro.label == "ULBS"){
                             return (
                                 <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
-                                    <div className={classes.filterHead}>{ro.label}</div>
+                                    <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
                                     {this.renderComponents(mdmsData)}
                                 </div>
                             );
                         }else{
                             return (
                                 <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
-                                    <div className={classes.filterHead}>{ro.label}</div>
+                                    <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
                                     {this.renderComponents(ro)}
                                 </div>
                             );
@@ -366,9 +366,9 @@ class GlobalFilter extends Component {
 
                     {/* {isMobile && this.renderFilters()}s */}
 
-                    <div id="divNotToPrint" className={classes.actions} style={{maxWidth:'150px',marginTop:'7px'}}>
-                        <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "CLEAR"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
-                        <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                    <div id="divNotToPrint" className={classes.actions} style={{maxWidth:300,marginTop:'7px'}}>
+                        <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                        <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
                     </div>
                 </div>
 

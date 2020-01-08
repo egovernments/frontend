@@ -26,7 +26,6 @@ import FilterTable from '../Dashboard/download/filterTable';
 import { downloadAsImage, printDocumentShare, printDocument } from '../../utils/block';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
-import { handlePdfShareEmail, handleImageShareEmail, handleWhatsAppImageShare, handleWhatsAppPdfShare } from '../../utils/Share'
 import domtoimage from 'dom-to-image';
 import Variables from '../../styles/variables'
 import FileUploadAPI from '../../actions/fileUpload/fileUpload'

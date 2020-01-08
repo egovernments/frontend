@@ -1,9 +1,6 @@
 import React from "react";
-import Language from "@material-ui/icons/Language";
-import _ from 'lodash';
 import PropertyTaxIcon from '../../../images/property-tax.svg'
 import DashBoardIcon from '../../../images/dashboards.svg'
-import HomeIcon from '../../../images/home.svg'
 import ComplaintsIcon from '../../../images/complaints.svg'
 import TradeIcon from '../../../images/trade-license.svg'
 import Style from './Styles'
@@ -43,7 +40,6 @@ class Icon extends React.Component {
     }
 
     render() {
-        let { classes, strings } = this.props;
         return (
             <div>{this.renderIcons(this.props.type)}</div>
         )

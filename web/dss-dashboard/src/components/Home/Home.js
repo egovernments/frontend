@@ -12,7 +12,6 @@ import CardHeader from "../common/Card/CardHeader.js";
 import CardIcon from "../common/Card/CardIcon.js";
 import CustomCard from '../common/CustomCard/CustomCard'
 import Paper from '@material-ui/core/Paper';
-import { isMobile } from 'react-device-detect';
 import Variables from '../../styles/variables'
 import Icons from '../common/Icon/Icon'
 import Config from '../../config/configs'

@@ -8,7 +8,6 @@ import getChartOptions from '../../actions/getChartOptions';
 import ChartsAPI from '../../actions/charts/chartsAPI'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Dialogs from '../common/Dialogs/Dialogs';
 import APITransport from '../../actions/apitransport/apitransport';
 import ActionButtons from '../common/inputs/ActionButtons';
 import Cards from '../common/Cards/Cards';
@@ -52,9 +51,8 @@ class PerformanceChart extends React.Component {
     })
   }
   renderCard(data) {
-    // console.log(data);
     if (data && data.length > 0) {
-      let { order } = this.props;
+      // let { order } = this.props;
       let columnData = [];
       columnData.push({ id: 'rank', numeric: true, stickyHeader: false, disablePadding: false, label: 'Rank' })
       columnData.push({ id: 'ULBs', numeric: true, stickyHeader: false, disablePadding: false, label: 'ULBs' })

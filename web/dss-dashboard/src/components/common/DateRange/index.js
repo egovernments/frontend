@@ -46,8 +46,6 @@ class DateRange extends React.Component {
     // this.fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   }
   handleCancel = () => {
-    let { onClose } = this.props;
-
     this.props.onClose();
   };
 
@@ -175,7 +173,6 @@ class DateRange extends React.Component {
     // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
     let { classes, onClose, selected, value: valueProp, open } = this.props;
-    let cardStyle = {}
     return (
       <Dialog
         // fullScreen={}

@@ -25,7 +25,6 @@ import ChartsAPI from '../../actions/charts/chartsAPI';
 import { Typography } from '@material-ui/core';
 import Cards from '../common/Cards/Cards';
 import UiTable from '../common/UiTable/UiTable';
-import moment from 'moment';
 import Home from '../Home/Home'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 
@@ -179,7 +178,7 @@ class Dashboard extends Component {
         <UiTable
           data={newData}
           columnData={columnData}
-          needHash={true}
+          needHash={false}
           orderBy={"rank"}
           order={(_.get(newData[0], 'rank') === 1 || false) ? 'asc' : 'desc'}
           tableType='ULB'
