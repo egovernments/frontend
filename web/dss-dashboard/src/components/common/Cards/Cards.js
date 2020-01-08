@@ -27,6 +27,16 @@ import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
 import APITransport from '../../../actions/apitransport/apitransport'
 import S3ImageAPI from '../../../actions/s3Image/s3Image';
 import constants from '../../../actions/constants'
+import Collapse from '@material-ui/core/Collapse'
+import List from '@material-ui/core/List'
+import Divider from '@material-ui/core/Divider';
+import download from '../../../images/download.svg';
+import Variables from '../../../styles/variables'
+import IconExpandLess from '@material-ui/icons/ExpandLess'
+import IconExpandMore from '@material-ui/icons/ExpandMore'
+import Button from '@material-ui/core/Button';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import WhatsappIcon from '@material-ui/icons/WhatsApp';
 
 const cardStyle = {
   backgroundColor: variables.widget_background,
@@ -35,11 +45,51 @@ const cardStyle = {
   width: '100%'
 }
 
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+})(props => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'left',
+    }}
+    PaperProps={{
+      style: {
+        left: '100%',
+        // transform: 'translateX(-77%) translateY(32%)',
+      }
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+
+const StyledMenuItem = withStyles(theme => ({
+  root: {
+    '&:focus': {
+      backgroundColor: '#fff',
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: '#5b5b5b',
+      },
+    },
+  },
+}))(MenuItem);
+
 class Cards extends Component {
   constructor(props) {
     super(props);
     this.clickEvent = this.clickEvent.bind(this);
-    this.state = { anchorEl: null }
+    this.state = {
+      anchorEl: null,
+      open: false,
+    }
     this.instance = this;
   }
   clickEvent(event) {
@@ -54,14 +104,11 @@ class Cards extends Component {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
-  componentWillReceiveProps(nextProps) {
-    // console.log("Card=>>>>>",nextProps.GFilterData,this.props.GFilterData);
-  }
 
   downloadAsImage = () => {
     let { strings, title } = this.props;
     let div = document.getElementById('card' + this.props.id);
-    // this.props.APITransport(true)
+    this.props.APITrans(true)
     domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
       .then(function (dataUrl) {
         var link = document.createElement('a');
@@ -69,18 +116,19 @@ class Cards extends Component {
         link.href = dataUrl;
         link.click();
         this.setState({ anchorEl: null });
-        // this.props.APITransport(false)
+        this.props.APITrans(false)
       }.bind(this))
   }
 
-  shareAsImage = () => {
+  shareAsImage = (shareType) => {
+    debugger
     let { strings, title } = this.props;
     let div = document.getElementById('card' + this.props.id);
     var ts = Math.round((new Date()).getTime() / 1000);
     var APITransport = this.props.APITransport
 
     this.setState({
-      type: 'whatsapp'
+      type: shareType
     })
 
     domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
@@ -122,6 +170,7 @@ class Cards extends Component {
           } else {
             image = file
           }
+        this.setState({ anchorEl: null });
 
           if (image && this.state.type === 'whatsapp') {
             var fakeLink = document.createElement('a');
@@ -130,8 +179,12 @@ class Cards extends Component {
             fakeLink.setAttribute('target', '_blank');
             fakeLink.click();
           }
+          if (image && this.state.type === 'email') {
+            fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
+            fakeLink.setAttribute('target', '_top');
+            fakeLink.click();
+          }
         }
-
 
       }
 
@@ -142,6 +195,7 @@ class Cards extends Component {
   isMobileOrTablet = () => {
     return (/(android|iphone|ipad|mobile)/i.test(navigator.userAgent));
   }
+
   dataURItoBlob = (dataURI) => {
     var binary = atob(dataURI.split(',')[1]);
     var array = [];
@@ -151,55 +205,72 @@ class Cards extends Component {
     return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
   }
 
+  handleMenuClick = event => {
+    this.setState({
+      open: !this.state.open
+    })
+  };
+
+  handleClick2 = event => {
+    this.setState({
+      shareOpen: !this.state.shareOpen
+    })
+  };
+
+  handleClose = () => {
+    this.setState({
+      anchorEl: null
+    })
+  };
   renderMenues() {
     const { classes, title } = this.props;
     let { strings } = this.props;
     return (<div className={[classes.actionMenues, classes.fullw].join(' ')}>
       <ActionButtons text={strings["DSS_MORE_ACTIONS"] || "More Actions"} handleClick={this.handleClick} buttonType="info" target="info"></ActionButtons>
-      {/* <Button 
-        aria-controls="customized-menu"
-        aria-haspopup="true"
-        variant="contained"
-        color="primary"
-        onClick={this.handleClick}
-      >
-        Open Menu
-      </Button> */}
-      <Menu
+
+      <StyledMenu
         id="customized-menu"
         anchorEl={this.state.anchorEl}
-        // PaperProps={{
-        //   style: {
-        //     left: '100%',
-        //     // transform: 'translateX(-77%) translateY(32%)',
-        //   }
-        // }}
-        MenuListProps={{
-          style: {
-            padding: 5,
-          },
-        }}
         keepMounted
         open={Boolean(this.state.anchorEl)}
         onClose={this.handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-
       >
-        <MenuItem onClick={this.downloadAsImage.bind(this)} className={classes.menuItem}>
+
+        <StyledMenuItem button onClick={this.downloadAsImage}>
           <ListItemIcon className={classes.itemIcon}>
             <CloudDownloadSharp />
           </ListItemIcon>
-          <ListItemText primary={strings["DSS_IMAGE"] || "Image"} />
-        </MenuItem>
-        <MenuItem onClick={this.shareAsImage.bind(this)} className={classes.menuItem}>
+          <ListItemText primary={strings["DSS_IMAGE"] || "DSS_IMAGE"} />
+        </StyledMenuItem>
+
+
+        <StyledMenuItem button onClick={this.handleMenuClick}>
           <ListItemIcon className={classes.itemIcon}>
             <SVG src={share} style={{ marginRight: '10px' }} >
             </SVG>
           </ListItemIcon>
           <ListItemText primary={strings["DSS_MOBILE_SHARE"] || "Share"} />
-        </MenuItem>
-      </Menu>
+          {this.state.open ? <IconExpandLess /> : <IconExpandMore />}
+        </StyledMenuItem>
+
+        <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+          <Divider />
+          <List component="div" disablePadding>
+            <StyledMenuItem button onClick={() => this.shareAsImage('email')}>
+              <ListItemIcon>
+                <DraftsIcon style={{ color: Variables.email }} />
+              </ListItemIcon>
+              <ListItemText primary="Image" />
+            </StyledMenuItem>
+            <StyledMenuItem button onClick={() => this.shareAsImage('whatsapp')}>
+              <ListItemIcon>
+                <WhatsappIcon style={{ color: Variables.whatsApp }} />
+              </ListItemIcon>
+              <ListItemText primary="Image" />
+            </StyledMenuItem>
+          </List>
+        </Collapse>
+      </StyledMenu>
     </div>)
   }
 
@@ -207,10 +278,8 @@ class Cards extends Component {
     let { strings } = this.props;
     const { classes, needInfo, id, title, fullW, noUnit } = this.props;
     let newClass = fullW ? classes.full : classes.redused;
-    // console.log('noUnit',noUnit, title);
 
     return (
-      // this.props.cardStyle || cardStyle
       <Card id={'card' + id} style={this.props.cardStyle || cardStyle} classes={{ root: newClass }}>
         <div className={classes.headRoot}>
           {title && <CardHeader classes={{ title: classes.title, root: classes.cardheader }} title={(strings[title] || title) + (!noUnit ? '' : (' (In ' + this.props.GFilterData['Denomination'] + ')'))} onClick={(event) => this.clickEvent(event)}
