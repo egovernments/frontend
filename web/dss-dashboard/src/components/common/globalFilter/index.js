@@ -343,7 +343,7 @@ class GlobalFilter extends Component {
                         if (this.props.hideDepart && ro.label == "Services") {
                             return (<div></div>);
 
-                        }else if(ro.label == "DDRs" || ro.label == "ULBS"){
+                        }else if(ro.label == "DDRs"){
                             return (
                                 <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
                                     <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
