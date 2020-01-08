@@ -42,8 +42,8 @@ export default function NFormatter(props) {
                 }
             case "number":
             case "Number":
-                const Nformatter = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });
-                return Nformatter.format(props.value);
+                const Nformatter = new Intl.NumberFormat('en-IN');
+                return Nformatter.format(Math.round(props.value));
             case "percentage":
             case "Percentage":
                 const Pformatter = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });
