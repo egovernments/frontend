@@ -21,7 +21,7 @@ export const callPGService = async (state, dispatch) => {
   let callbackUrl = `${
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
-      : 'https://uttarakhand-uat.egovernments.org/citizen'
+      : 'https://bihar-uat.egovernments.org/citizen'
   }/egov-common/paymentRedirectPage`;
 
   const { screenConfiguration = {} } = state;
