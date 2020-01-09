@@ -131,7 +131,7 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
 };
 
 export const loadReceiptData = async response => {
