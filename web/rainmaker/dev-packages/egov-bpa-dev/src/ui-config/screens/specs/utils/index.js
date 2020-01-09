@@ -2545,6 +2545,18 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     state.screenConfiguration.preparedFinalObject,
     "BPA.address.city"
   );
+  const ownershipCategory = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.ownershipCategory"
+  );
+  if(ownershipCategory) {
+    let ownerShipMajorType =  dispatch(
+      prepareFinalObject(
+        "BPA.ownerShipMajorType",
+        ownershipCategory.split('.')[0]
+      )
+    );
+  }
   const tenantIdQueryString = tenantId ? `&tenantId=${tenantId}`: ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
@@ -3220,6 +3232,12 @@ export const getBpaTextToLocalMapping = label => {
       return getLocaleLabels(
         "Floor Description",
         "BPA_COMMON_TABLE_COL_FLOOR_DES",
+        localisationLabels
+      );
+    case "Level":
+      return getLocaleLabels(
+        "Level",
+        "BPA_COMMON_TABLE_COL_LEVEL",
         localisationLabels
       );
     case "Occupancy/Sub Occupancy":
