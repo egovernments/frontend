@@ -75,13 +75,13 @@ const applicationNumberContainer = () => {
   else return {};
 };
 
-onst getConsumerID = () => {
-  let mutationUrl = window.location.href;
-  let exp=new RegExp("[A-Z]{2,}\-[0-9]{3,}\-[0-9]{6,}");
-  let consumerId = mutationUrl.match(exp);
-  return consumerId[0];
+// const getConsumerID = () => {
+//   let mutationUrl = window.location.href;
+//   let exp=new RegExp("[A-Z]{2,}\-[0-9]{3,}\-[0-9]{6,}");
+//   let consumerId = mutationUrl.match(exp);
+//   return consumerId[0];
 
-};
+// };
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -94,7 +94,7 @@ export const header = getCommonContainer({
     moduleName: "egov-pt",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getConsumerID(),
+      number: getQueryArg(window.location.href, "consumerCode"),
       label: {
         labelValue: "Application No.",
         labelKey: "PT_MUTATION_APPLICATION_NO"
@@ -153,6 +153,35 @@ export const formwizardThirdStep = {
   },
   
   visible: false
+};
+
+const getPropertyData = async (action, state, dispatch) => {
+  let tenantId =getQueryArg(window.location.href,"tenantId");
+  let consumerCode=getQueryArg(window.location.href,"consumerCode");
+    
+  try {
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "ids",
+        value: consumerCode
+      }
+    ];
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/pt-services-v2/property/_search",
+      "_search",
+      queryObject,
+      
+    );
+    dispatch(prepareFinalObject("Properties", payload.Properties));
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 
@@ -320,10 +349,11 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
+    getPropertyData(action,state,dispatch);
 
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "pt-mutation");
-
+    
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
