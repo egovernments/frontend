@@ -8,7 +8,8 @@ const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bann
   return (
     <div>
       <div className={`${className} user-screens-wrapper`}>
-        <div className="banner-image" style={bannerUrl && {backgroundImage:`url(${bannerUrl})`}}>
+        <div className="banner-image" style={bannerUrl && {backgroundImage:`url(${bannerUrl})`, backgroundRepeat: "no-repeat",
+			backgroundPosition: "center center",	backgroundSize: "cover" }}>
           <div className="banner-overlay" />
           <div className="banner-main-content">
             {!hideBackButton && <Icon onClick={() => history.goBack()} className="banner-back-button" action="navigation" name="arrow-back" />}

@@ -193,7 +193,7 @@ export const getBoundaryData = async (
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality",
       "_search",
       queryObject,
       {}
