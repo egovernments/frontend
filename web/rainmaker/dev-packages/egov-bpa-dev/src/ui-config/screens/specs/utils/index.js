@@ -2903,7 +2903,37 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         "&tenantId=" + tenantId,
       {}
     );
-    console.log(payload, "shdfjhsgfjhsgdhfg")
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId,
+      },
+      {
+        key: "edcrNumbers",
+        value: scrutinyNo,
+      }
+    ];
+    const bpaSearch = await httpRequest(
+      "post",
+      "bpa-services/bpa/appl/_search",
+      "",
+      queryObject
+    );
+    let data = bpaSearch.Bpa.map((data, index) => {
+      if(data.edcrNumber === scrutinyNo) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Application Number already exists",
+              labelKey: "APPLICATION_NUMBER_ALREADY_EXISTS"
+            },
+            "error"
+          )
+        );
+      }
+    })
+
     payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
       if (payload.length === 0) {
@@ -3237,7 +3267,8 @@ export const getBpaTextToLocalMapping = label => {
     case "Level":
       return getLocaleLabels(
         "Level",
-        "BPA_COMMON_TABLE_COL_LEVEL",
+        "Level",
+        // "BPA_COMMON_TABLE_COL_LEVEL",
         localisationLabels
       );
     case "Occupancy/Sub Occupancy":
