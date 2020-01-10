@@ -279,7 +279,7 @@ class Dashboard extends Component {
           <div>
             <div className={classes.mobile} style={{ paddingRight: '24px' }}>
               {(this.state.isFilterOpen || !isMobile) &&
-                <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={this.state.page && this.state.page.toLowerCase() !== 'dashboard'} applyFiltersLive={this.applyFiltersLive.bind(this)} />
+                <GlobalFilter applyFilters={this.applyFilter.bind(this)} hideDepart={this.state.page && this.state.page.toLowerCase() !== 'overview'} applyFiltersLive={this.applyFiltersLive.bind(this)} />
               }
             </div>
             <div>

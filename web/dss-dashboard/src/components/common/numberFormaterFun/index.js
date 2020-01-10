@@ -48,8 +48,8 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
             if (!commaSeparated) {
                 return parseInt(value);
             }
-            const Nformatter = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });
-            return Nformatter.format(value);
+            const Nformatter = new Intl.NumberFormat('en-IN');
+            return Nformatter.format(Math.round(value));
         case "percentage":
         case "Percentage":
             const Pformatter = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });

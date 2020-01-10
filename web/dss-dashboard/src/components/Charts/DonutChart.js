@@ -31,15 +31,15 @@ const options = {
 	tooltips: {
 		callbacks: {
 			label: function (tooltipItem, data) {
-				// console.log(data)
 				var dataset = data.datasets[tooltipItem.datasetIndex];
 				var meta = dataset._meta[Object.keys(dataset._meta)[0]];
 				var total = meta.total;
 				var currentValue = dataset.data[tooltipItem.index];
 				var percentage = parseFloat((currentValue / total * 100).toFixed(1));
 				// if (dataset.dataSymbol[tooltipItem.index][0] == 'number' || dataset.dataSymbol[tooltipItem.index][1] == 'Unit') {
-				currentValue = NFormatterFun(currentValue, dataset.dataSymbol[tooltipItem.index][0], dataset.dataSymbol[tooltipItem.index][1], true)
-				// }
+				if (dataset.dataSymbol[tooltipItem.index][0] != 'number') {
+					currentValue = NFormatterFun(currentValue, dataset.dataSymbol[tooltipItem.index][0], dataset.dataSymbol[tooltipItem.index][1], true)
+				}
 				return currentValue + ' (' + percentage + '%)';
 			},
 			title: function (tooltipItem, data) {
@@ -64,7 +64,7 @@ class DonutChart extends React.Component {
 		};
 		var tempdataSet = {
 			label: "",
-			backgroundColor: ["#35a2eb", "#f19c56", "#4c76c7", "#ff6384",],
+			backgroundColor: ["#35a2eb", "#f19c56", "#4c76c7", "#ff6384", '#FFC107', '#009688', '#9C27B0', '#4CAF50'],
 			data: [],
 			dataSymbol: []
 		};
@@ -84,9 +84,9 @@ class DonutChart extends React.Component {
 
 	render() {
 		let { chartData, classes } = this.props;
- 		let _data = this.getData(chartData)
+		let _data = this.getData(chartData)
 		if (_data) {
-			if (isMobile){
+			if (isMobile) {
 				return (
 					<div className={classes.piChart}>
 						<Doughnut
@@ -96,11 +96,11 @@ class DonutChart extends React.Component {
 						/>
 					</div>
 				)
-			}else{
+			} else {
 				return (
 					<div className={classes.piChart}>
 						<Doughnut
-							data={_data}							
+							data={_data}
 							options={options}
 							height={200}
 						/>
