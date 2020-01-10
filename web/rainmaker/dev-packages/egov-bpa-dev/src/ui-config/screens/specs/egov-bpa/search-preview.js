@@ -36,6 +36,7 @@ import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
+import "../egov-bpa/applyResource/index.scss"
 
 const titlebar = getCommonContainer({
     header: getCommonHeader({
