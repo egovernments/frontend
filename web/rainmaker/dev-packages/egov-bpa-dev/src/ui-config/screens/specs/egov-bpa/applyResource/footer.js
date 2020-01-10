@@ -207,10 +207,10 @@ const callBackForNext = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
       []
   );
-
-    let tableData = response.map((item, index) => ({
+    let tableData = response.map((item, index) => (
+      {
       [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail((item.number).toString()) || '-',
-      "Level": (item.number).toString() || "0",
+      [getBpaTextToLocalMapping("Level")]:item.number,     
       [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
       [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
       [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",

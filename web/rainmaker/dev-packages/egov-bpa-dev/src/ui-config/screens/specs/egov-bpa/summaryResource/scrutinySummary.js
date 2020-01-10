@@ -167,8 +167,8 @@ export const scrutinySummary = getCommonGrayCard({
                       jsonPath:
                         "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                         callBack: value => {
-                        let floorNo = ['','Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
-                        if(value && value.number) {
+                        let floorNo = ['', 'Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
+                        if(value) {
                             return `${floorNo[value.number+1]} floor` || "NA";
                         }
                         else {
