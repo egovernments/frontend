@@ -65,7 +65,7 @@ const PermitNumber = Loadable({
 });
 
 const MenuListCompositionForBpa = Loadable({
-  loader: () => import("./BPAMenuButton"),
+  loader: () => import("./MenuListCompositionForBpa"),
   loading: () => <Loading />
 });
 
