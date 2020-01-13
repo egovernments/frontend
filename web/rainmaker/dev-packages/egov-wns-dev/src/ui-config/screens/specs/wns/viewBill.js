@@ -130,7 +130,7 @@ let headerrow = getCommonContainer({
 });
 
 const estimate = getCommonGrayCard({
-  header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }, { style: { marginBottom: 18 } }),
+  header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }),
   estimateSection: getFeesEstimateCard({ sourceJsonPath: "viewBillToolipData" }),
 });
 
