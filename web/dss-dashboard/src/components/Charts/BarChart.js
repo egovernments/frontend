@@ -1,77 +1,130 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import NFormatterFun from '../common/numberFormaterFun';
+import { withStyles } from '@material-ui/core/styles';
+import style from './styles';
+import { isMobile } from 'react-device-detect';
 
 const options = {
-	legend: {
-		display: true,
-		position: 'bottom',
-		labels: {
-			boxWidth: 10
-		}
-	}
+  scales: {
+    xAxes: [{
+        gridLines: {
+            color: "rgba(0, 0, 0, 0)",
+        }
+    }]
+},
+  responsive: true,
+  options: {
+    responsive: true,
+    
+    maintainAspectRatio: true,
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  },
+  legend: {
+    display: true,
+    position: 'bottom',
+    labels: {
+      boxWidth: 10
+    }
+  }
 };
 
-export default class BarChart extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: null /*{
-              labels: ["PT", "TL", "W&S", "NOC"],
-              datasets: [
-                {
-                  label: ["Property Tax", "Trade License", "Water & Sewerage", "No Objection Certificate"],
-                  backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-                  data: [4.2,8,6.30,10]
-                }
-              ]
-            }*/
-		}
-	}
+class BarChart extends React.Component {
 
-	componentWillReceiveProps(nextProps) {
-		// console.log("TableChart", nextProps, this.props);
-	}
-	getAcronym(value) {
-		var matches = value.match(/\b(\w)/g); // ['J','S','O','N']
-		return matches.join(''); // JSON
-	}
-	componentDidMount() {
-		// transformation
-		var chartData = this.props.chartData;
-		var tempData = {
-			labels: [],
-			datasets: []
-		};
-		var tempdataSet = {
-			label: [],
-			backgroundColor: ["#4cc0c0", "#4c76c7", "#ff6384", "#35a2eb"],
-			data: []
-		};
-		for (var key in chartData) {
-			if (key === 'data') {
-				for (var i = 0; i < chartData[key].length; i++) {
-					tempData.labels.push(this.getAcronym(chartData[key][i]['label']));
-					tempdataSet.label.push(chartData[key][i]['label']);
-					tempdataSet.data.push(chartData[key][i]['value']);
-				}
-			}
-		}
-		tempData.datasets.push(tempdataSet);
-		this.setState({ data: tempData })
-	}
+  constructor(props) {
+    super(props);
+  }
+  
+  callforNewData(elems) {
+		// console.log(elems[0]._datasetIndex + ', ' + elems[0]._index);
+		// this.setState({ data: null })
 
-	render() {
-		if (this.state.data) {
-			return (
-				<div>
-					<Bar
-						data={this.state.data}
-						height={200}
-						options={options}
-					/>
-				</div>
-			)
-		}
-		return <div>Loading...</div>
 	}
+  manupulateData(chartData) {
+    // let temp, tempdata;
+    // temp = this.props.chartData;
+    var tempdata = {
+      labels: [],
+      datasets: []
+    };
+    let color = ["#99d4fa", "#179cf4", "#179cf4", "#1d9cf4", "#1sacq4", "#1gvcf4"]; 
+    chartData.map((d, i) => {
+      let tempObj = {
+        label: "",
+        borderColor: color[i],
+        backgroundColor: color[i],
+        fill: false
+      }
+      let tempdataArr = [];
+      let tempdatalabel = [],tempVal='';
+      // let val = NFormatterFun(_.get(d,'headerValue.value'), _.get(d,'headerValue.symbol'), this.props.GFilterData['Denomination'])
+      // tempObj.label = d.headerName + " : " + val;
+      tempObj.label =   d.headerName;
+      d.plots.map((d1, i) => {
+        tempVal = NFormatterFun(d1.value, d1.symbol, this.props.GFilterData['Denomination']);
+        tempVal = (typeof tempVal == 'string')?parseFloat(tempVal.replace(/,/g, '')):tempVal;
+        tempdataArr.push(tempVal);
+        tempdatalabel.push(d1.name);
+      })
+      tempObj.data = tempdataArr;
+      tempdata.labels = tempdatalabel;
+      tempdata.datasets.push(tempObj);
+    })
+    return tempdata;
+  }
+
+  render() { 
+    let { chartData,classes } = this.props;
+    let data = this.manupulateData(chartData);
+    if (data) {
+      if (isMobile){
+            return ( 
+              <div className={classes.lineChart}>
+                <Bar
+                  style={{ fill: 'none'}}
+                  data={data}
+                  options={options}
+                  onElementsClick={this.callforNewData.bind(this)} 
+                  height={350}         
+                >
+                </Bar>
+              </div>
+            )
+      }else{
+        return ( 
+              <div className={classes.lineChart}>
+                <Bar
+                  style={{ fill: 'none'}}
+                  data={data}
+                  options={options}
+                  onElementsClick={this.callforNewData.bind(this)}
+                >
+                </Bar>
+              </div>
+            )
+      }
+    }
+    return <div>Loading...</div>
+  }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    GFilterData: state.GFilterData,
+    chartsGData: state.chartsData
+
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+  }, dispatch)
+}
+export default  withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(BarChart));

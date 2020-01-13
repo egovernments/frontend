@@ -27,6 +27,7 @@ import Cards from '../common/Cards/Cards';
 import UiTable from '../common/UiTable/UiTable';
 import Home from '../Home/Home'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
+import mdmsAPI from '../../actions/mdms/mdms';
 
 class Dashboard extends Component {
 
@@ -78,6 +79,10 @@ class Dashboard extends Component {
       filter: newFilterData
     })
 
+    /* For fetch mdms data for filter */
+    let mdmsApi = new mdmsAPI(20000);
+    this.props.APITransport(mdmsApi); 
+    
     this.callDashboardAPI();
   }
 

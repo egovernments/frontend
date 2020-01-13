@@ -24,7 +24,7 @@ import { Chip } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
 import AutoComplete from '../inputs/MultipleSelect/AutoComplete'
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
-import mdmsAPI from '../../../actions/mdms/mdms';
+
 
 class GlobalFilter extends Component {
     constructor(props) {
@@ -53,9 +53,7 @@ class GlobalFilter extends Component {
         return null;
     }
 
-    componentDidMount(){        
-        let mdmsApi = new mdmsAPI(20000);
-        this.props.APITransport(mdmsApi);        
+    componentDidMount(){     
     }
 
     handleChanges(open, target, value) {

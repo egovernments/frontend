@@ -1,7 +1,7 @@
 import React from 'react';
 import LineChart from './LineChart';
 import BarChart from './BarChart';
-// import PieChart from './PieChart';
+import PieChart from './PieChart';
 import TableChart from './TableChart';
 import _ from 'lodash';
 import getChartOptions from '../../actions/getChartOptions';
@@ -23,29 +23,29 @@ class ChartType extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-                unit: this.props.GFilterData['Denomination']
-            })
-            // this.getRequest(this.props, nextProps.filters, nextProps);
+            unit: this.props.GFilterData['Denomination']
+        })
+        // this.getRequest(this.props, nextProps.filters, nextProps);
     }
 
     callAPI() {
-            let code = this.props.chartData[0]['id'] || "";
-            let requestBody = getChartOptions(code, this.props.filters || {});
+        let code = this.props.chartData[0]['id'] || "";
+        let requestBody = getChartOptions(code, this.props.filters || {});
 
-            let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
-            this.props.APITransport(chartsAPI);
-        }
-        // getData(chartData) {
-        // 	var tempData = {
-        // 		labels: [],
-        // 		datasets: []
-        // 	};
-        // 	var tempdataSet = {
-        // 		label: "",
-        // 		backgroundColor: ["#35a2eb", "#f19c56", "#4c76c7", "#ff6384",],
-        // 		data: [],
-        // 		dataSymbol: []
-        // 	};
+        let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
+        this.props.APITransport(chartsAPI);
+    }
+    // getData(chartData) {
+    // 	var tempData = {
+    // 		labels: [],
+    // 		datasets: []
+    // 	};
+    // 	var tempdataSet = {
+    // 		label: "",
+    // 		backgroundColor: ["#35a2eb", "#f19c56", "#4c76c7", "#ff6384",],
+    // 		data: [],
+    // 		dataSymbol: []
+    // 	};
 
     // 	_.map(chartData, function (k, v) {
     // 		var plots = k['plots'];
@@ -68,39 +68,47 @@ class ChartType extends React.Component {
             // this.state.data = null;
             switch (chartType) {
                 case 'PIE':
-
-                    return <DonutChart chartData = { data }
-                    label = { this.props.label }
-                    unit = { this.state.unit }
-                    GFilterData = { this.props.GFilterData }
-                    dimensions = { this.props.dimensions }
-                    section = { this.props.section }
+                    return <DonutChart chartData={data}
+                        label={this.props.label}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
+                    />
+                case 'DONUT':
+                    return <DonutChart chartData={data}
+                        label={this.props.label}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
                     />
                 case 'LINE':
-                    return <LineChart chartData = { data }
-                    label = { this.props.label }
-                    unit = { this.state.unit }
-                    GFilterData = { this.props.GFilterData }
-                    dimensions = { this.props.dimensions }
-                    section = { this.props.section }
+                    return <LineChart chartData={data}
+                        label={this.props.label}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
                     />
                 case 'BAR':
-                    return <BarChart chartData = { data }
-                    label = { this.props.label }
-                    GFilterData = { this.props.GFilterData }
-                    dimensions = { this.props.dimensions }
-                    section = { this.props.section }
+                    return <BarChart chartData={data}
+                    label={this.props.label}
+                    unit={this.state.unit}
+                    GFilterData={this.props.GFilterData}
+                    dimensions={this.props.dimensions}
+                    section={this.props.section}
                     />
                 case 'TABLE':
-                    return <TableChart chartData = { data }
-                    chartKey = { chartKey }
-                    chartParent = { this.props.chartData }
-                    unit = { this.state.unit }
-                    GFilterData = { this.props.GFilterData }
-                    filters = {this.props.filters}
-                    dimensions = { this.props.dimensions }
-                    section = { this.props.section }
-                    label = { this.props.label }
+                    return <TableChart chartData={data}
+                        chartKey={chartKey}
+                        chartParent={this.props.chartData}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        filters={this.props.filters}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
+                        label={this.props.label}
                     />
                 default:
                     return false;
