@@ -53,6 +53,11 @@ const styles = {
     }
 };
 
+const date = (to) => {
+    let toDate = new Date(to);
+    return toDate.toLocaleString('default', { month: 'short' }) + ' - ' + toDate.getFullYear().toString().substring(2)
+}
+
 function FeesEstimateCard(props) {
     const { classes, estimate } = props;
     let sortedArray = [], totalAmount, dueDate;
@@ -93,7 +98,7 @@ function FeesEstimateCard(props) {
                                         style={styles.taxStyles}
                                         className="tl-application-table-total-value" >
                                         <Typography variant="body2">
-                                            {convertEpochToDate(fee.fromPeriod) + " - " + convertEpochToDate(fee.toPeriod)}
+                                            {date(fee.toPeriod)}
                                         </Typography>
                                     </Grid>
                                 </Grid>
