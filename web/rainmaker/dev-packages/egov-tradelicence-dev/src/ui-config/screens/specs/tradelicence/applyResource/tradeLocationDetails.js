@@ -77,7 +77,7 @@ export const tradeLocationDetails = getCommonCard(
                     .replace(
                       /[.]/g,
                       "_"
-                    )}_REVENUE_${item.code
+                    )}_ADMIN_${item.code
                     .toUpperCase()
                     .replace(/[._:-\s\/]/g, "_")}`
                 });
@@ -100,7 +100,7 @@ export const tradeLocationDetails = getCommonCard(
             );
             const mohallaLocalePrefix = {
               moduleName: action.value,
-              masterName: "REVENUE"
+              masterName: "ADMIN"
             };
             dispatch(
               handleField(
