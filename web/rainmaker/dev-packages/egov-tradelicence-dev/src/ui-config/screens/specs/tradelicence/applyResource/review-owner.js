@@ -228,7 +228,7 @@ export const getReviewOwner = (isEditable = true) => {
                   "Licenses[0].tradeLicenseDetail.additionalDetail.economicStatus",
                 localePrefix: {
                   moduleName: "TradeLicense",
-                  masterName: "EconomicStatus"
+                  masterName: "EconomicalStatus"
                 },
                 callBack: checkValueForNA
               }
