@@ -1064,7 +1064,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: getLocaleLabels("NA", (transformedData.actualAddress.tenantId.replace(".", "_") +
-            "_REVENUE_" +
+            "_ADMIN_" +
             transformedData.actualAddress.locality.code
             ).toUpperCase())
             +
@@ -1491,7 +1491,7 @@ const getACKData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: getLocaleLabels("NA", (transformedData.actualAddress.tenantId.replace(".", "_") +
-            "_REVENUE_" +
+            "_ADMIN_" +
             transformedData.actualAddress.locality.code
             ).toUpperCase())
             +
