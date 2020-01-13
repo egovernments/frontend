@@ -107,6 +107,7 @@ export const getOwnerEmailField = getTextField({
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
 });
 
+
 export const getFatherNameField = getTextField({
   label: {
     labelName: "Father/Spouse Name",
@@ -236,6 +237,86 @@ export const relationType = {
       xs: 12,
       sm: 6
     }
+  })
+};
+export const economicalStatus = {
+  ...getSelectField({
+    label: {
+      labelName: "Economical Status",
+      labelKey: "TL_ECONOMICAL_STATUS_LABEL"
+    },
+    placeholder: {
+      labelName: "Select RELATION Type",
+      labelKey: "TL_ECONOMICAL_STATUS_PLACEHOLDER"
+    },
+    localePrefix: {
+      moduleName: "TradeLicense",
+      masterName: "EconomicalStatus"
+    },
+    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.economicStatus",
+    sourceJsonPath: "applyScreenMdmsData.TradeLicense.EconomicStatus",
+    beforeFieldChange: (action, state, dispatch) => {
+      console.log("=========================>>" + JSON.stringify(action) + "<<==================");
+      if (action.value === "BPL") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
+            "props.required",
+            false
+          )
+        );
+      }
+      if (action.value === "TAXPAYER") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
+            "props.required",
+            false
+          )
+        );
+      }
+      if (action.value === "NONEOFTHEABOVE") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
+            "props.required",
+            false
+          )
+        );
+      }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    }
+
   })
 };
 export const ownerInfoInstitutional = {
@@ -396,6 +477,35 @@ const OwnerInfoCard = {
           })
         },
         getOwnerEmailField,
+        relationType,
+        ownerAddress: getTextField({
+          label: {
+            labelName: "Official Corrospondence Address",
+            labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter Official Corrospondence Address",
+            labelKey: "TL_NEW_OWNER_OFF_ADDR_PLACEHOLDER"
+          },
+          required: true,
+          pattern: getPattern("Address"),
+          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+        }),
+        economicalStatus,
+        bplCard: getTextField({
+          label: {
+            labelName: "BPL Card",
+            labelKey: "TL_NEW_OWNER_BPL_CARD_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter BPL Card no",
+            labelKey: "TL_NEW_OWNER_DETAILS_BPL_PLACEHOLDER"
+          },
+          // required: true,
+          // pattern: getPattern("Address"),
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.bpl"
+
+        }),
         ownerPAN: getTextField({
           label: {
             labelName: "PAN No.",
@@ -405,41 +515,11 @@ const OwnerInfoCard = {
             labelName: "Enter Owner's PAN No.",
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
           },
+          // required: true,
           pattern: getPattern("PAN"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
-        }),
-        ownerAddress: getTextField({
-          label: {
-            labelName: "Correspondence Address",
-            labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Correspondence Address",
-            labelKey: "TL_NEW_OWNER_DETAILS_ADDR_PLACEHOLDER"
-          },
-          required: true,
-          pattern: getPattern("Address"),
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
-        }),
-        relationType
-
-        // OwnerSpecialCategory: getSelectField({
-        //   label: {
-        //     labelName: "Special Owner Category",
-        //     labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
-        //   },
-        //   placeholder: {
-        //     labelName: "Select Special Owner Category",
-        //     labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_PLACEHOLDER"
-        //   },
-        //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-        //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-        //   localePrefix: {
-        //     moduleName: "common-masters",
-        //     masterName: "OwnerType"
-        //   }
-        // })
-      })
+        })
+      }),
     }),
     items: [],
     addItemLabel: {
@@ -497,7 +577,7 @@ export const tradeOwnerDetails = getCommonCard({
               get(
                 state.screenConfiguration.preparedFinalObject,
                 `applyScreenMdmsData.common-masters.OwnerShipCategory.${
-                  action.value
+                action.value
                 }`,
                 []
               )

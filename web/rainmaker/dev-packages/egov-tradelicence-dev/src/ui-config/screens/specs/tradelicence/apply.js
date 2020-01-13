@@ -106,7 +106,9 @@ export const getMdmsData = async (action, state, dispatch) => {
             { name: "AccessoriesCategory" },
             { name: "ApplicationType" },
             { name: "OccupancyType" },
-            { name: "RelationType" }
+            { name: "RelationType" },
+            { name: "MarketType" },
+            { name: "EconomicStatus" }
           ]
         },
         {
@@ -346,7 +348,7 @@ const screenConfig = {
       );
       const mohallaLocalePrefix = {
         moduleName: tenantId,
-        masterName: "REVENUE"
+        masterName: "ADMIN"
       };
       set(
         action.screenConfig,

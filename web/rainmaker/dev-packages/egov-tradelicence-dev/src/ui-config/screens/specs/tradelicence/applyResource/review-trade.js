@@ -331,6 +331,27 @@ export const getReviewTrade = (isEditable = true) => {
             masterName: "OccupancyType"
           }
         }
+      ),
+      reviewMarketType: getLabelWithValue(
+        {
+          labelName: "Market Type",
+          labelKey: "TL_MARKET_TYPE"
+        },
+        {
+          jsonPath:
+            "Licenses[0].tradeLicenseDetail.additionalDetail.marketType",
+          localePrefix: {
+            moduleName: "TradeLicense",
+            masterName: "MarketType"
+          }
+        }
+      ),
+      reviewOrganizationName: getLabelWithValue(
+        {
+          labelName: "Organization Name",
+          labelKey: "TL_COMMON_TABLE_COL_ORG_NAME"
+        },
+        { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"}
       )
     }),
     div1: getDivider(),

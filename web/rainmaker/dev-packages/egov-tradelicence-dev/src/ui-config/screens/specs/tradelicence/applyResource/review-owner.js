@@ -112,7 +112,13 @@ export const reviewOwnerPAN = getLabelWithValue(
   },
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan", callBack: checkValueForNA }
 );
-
+export const reviewBPLCard = getLabelWithValue(
+  {
+    labelName: "BPL Card",
+    labelKey: "TL_NEW_OWNER_DETAILS_BPL_LABEL"
+  },
+  { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.bpl",callBack: checkValueForNA  }
+);
 export const getReviewOwner = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -186,7 +192,6 @@ export const getReviewOwner = (isEditable = true) => {
             reviewOwnerGender,
             reviewOwnerDOB,
             reviewOwnerEmail,
-            reviewOwnerPAN,
             reviewOwnerAddr: getLabelWithValue(
               {
                 labelName: "Corrospondence Address",
@@ -212,7 +217,24 @@ export const getReviewOwner = (isEditable = true) => {
                 },
                 callBack: checkValueForNA
               }
-            )
+            ),
+            economicStatus: getLabelWithValue(
+              {
+                labelName: "Economic Status",
+                labelKey: "TL_NEW_OWNER_DETAILS_ECONOMIC_STATUS_LABEL"
+              },
+              {
+                jsonPath:
+                  "Licenses[0].tradeLicenseDetail.additionalDetail.economicStatus",
+                localePrefix: {
+                  moduleName: "TradeLicense",
+                  masterName: "EconomicStatus"
+                },
+                callBack: checkValueForNA
+              }
+            ),
+            reviewBPLCard,
+            reviewOwnerPAN,
             // reviewOwnerSpecialCat: getLabelWithValue(
             //   {
             //     labelName: "Special Owner Category",
@@ -279,7 +301,6 @@ export const getReviewOwner = (isEditable = true) => {
             reviewRelationship,
             reviewOwnerGender,
             reviewOwnerDOB,
-
             reviewOwnerEmail,
             reviewOwnerAddr: getLabelWithValue(
               {
