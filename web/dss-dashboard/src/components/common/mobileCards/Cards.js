@@ -60,7 +60,6 @@ const StyledMenu = withStyles({
     PaperProps={{
       style: {
         left: '100%',
-        // transform: 'translateX(-77%) translateY(32%)',
       }
     }}
     transformOrigin={{
