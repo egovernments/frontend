@@ -5,8 +5,13 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "./styles/Card";
 import Config from '../../../config/configs'
+import history from '../../../utils/web.history'
 
 const useStyles = makeStyles(styles);
+
+function handleNavigation(page) {
+  history.push(`${process.env.PUBLIC_URL}/`+ page)
+}
 
 export default function Card(props) {
   const classes = useStyles();
@@ -19,16 +24,11 @@ export default function Card(props) {
     [classes.cardChart]: chart,
     [className]: className !== undefined
   });
-  let url = Config.DEMO_API_URL + Config.APP_NAME + page
   return (
-    <div>
-      <a href={url} style={{ textDecoration: 'none' }}>
+    <div onClick={()=> handleNavigation(page)} style={{  cursor: 'pointer' }}>
         <div className={cardClasses} {...rest} style={{ backgroundColor: bgColor }}>
-
           {children}
-
         </div>
-      </a>
     </div>
   );
 }

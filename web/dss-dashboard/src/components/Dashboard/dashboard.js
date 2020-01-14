@@ -64,7 +64,7 @@ class Dashboard extends Component {
         dontShowHeader: false
       })
     }
-    this.props.APITransport(dashboardApi, overview ? 'home' : this.state.page);
+    this.props.APITransport(dashboardApi, this.state.page);
   }
 
   componentDidMount() {
@@ -278,9 +278,8 @@ class Dashboard extends Component {
         </div>}
       </div>
 
-      {
-        _.chain(this.props.dashboardConfigData).first().get("id").value() === 'home' ? <Home page={this.state.page}></Home> :
-       ( !this.state.dontShowHeader ?
+      
+      
           <div>
             <div className={classes.mobile} style={{ paddingRight: '24px' }}>
               {(this.state.isFilterOpen || !isMobile) &&
@@ -293,8 +292,8 @@ class Dashboard extends Component {
               }
             </div>
           </div>
-          : null)
-      }
+          
+      
 
 
     </div>

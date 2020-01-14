@@ -24,9 +24,9 @@ class CustomizedExpansionPanels extends React.Component {
     let rowrender = []
     chartData.map((data, j) =>{
       rowrender.push(
-        <ExpansionPanel>
+        <ExpansionPanel defaultExpanded={(j===0)?true:false} className = {classes.head} style={{ margin: '30px 0px'}}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            {j}            
+            {data.name.replace(/_/g, ' ')}            
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <GenericChart key={j} gFilter={Gfilter} chartData={data} filters={filters} page={page} setViewAll={this.setViewAll.bind(this)}/> 
@@ -39,7 +39,7 @@ class CustomizedExpansionPanels extends React.Component {
   render() { 
     let { classes, chartData, displayName, filters, page,Gfilter,row } = this.props;   
     return (
-      <div>
+      <div style={{padding:'0px 15px'}}>
         { this.renderCards(classes, chartData, displayName, filters, page,Gfilter,row )}
       </div>
     );

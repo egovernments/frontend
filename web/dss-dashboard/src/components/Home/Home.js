@@ -16,14 +16,26 @@ import Variables from '../../styles/variables'
 import Icons from '../common/Icon/Icon'
 import Config from '../../config/configs'
 import getFilterObj from '../../actions/getFilterObj';
+import history from '../../utils/web.history';
+import _ from 'lodash';
+import dashboardAPI from '../../actions/dashboardAPI';
+import { isMobile } from 'react-device-detect';
+import CustomizedMenus from '../Dashboard/download';
+import CustomizedShare from '../Dashboard/share';
+import FilterIcon from '@material-ui/icons/FilterList';
+import Button from '@material-ui/core/Button';
+import Menu from '../common/CustomMenu'
+import getFinancialYearObj from '../../actions/getFinancialYearObj';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            filter: '',
-            page: this.props.page
+            filter: this.props.GFilterData,
+            page: _.get(this.props, 'match.params.pageId'),
+            dontShowHeader: true,
+            dashboardConfigData: []
         };
     }
 
@@ -54,6 +66,18 @@ class Home extends React.Component {
         return color
     }
 
+    handleOnClick() {
+        history.push(`${process.env.PUBLIC_URL}/` + 'overview')
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.dashboardConfigData !== this.props.dashboardConfigData) {
+            this.setState({
+                dashboardConfigData: this.props.dashboardConfigData
+            })
+        }
+    }
+
     renderChart(data, index) {
         let { classes, strings } = this.props;
         let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, this.state.page);
@@ -64,41 +88,39 @@ class Home extends React.Component {
             let url = Config.DEMO_API_URL + Config.APP_NAME + pageId
             return (
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.paper} style={{ paddingBottom: '5px' }}>
-                    <a href={url} style={{ textDecoration: 'none',cursor: 'pointer',cursor: 'hand' }}>
-                        <Paper style={{ padding: '15px', backgroundColor: 'rgba(33, 150, 243, 0.24)' }}>
-                            <div className={classes.paperContainer}>
-                                <div>
-                                    <Paper className={classes.iconPaper}>
-                                        <div >
-                                            <Icons type={data.name}></Icons>
-                                        </div>
-                                    </Paper>
-                                </div>
-                                <div className={classes.paperValues}>
-                                    <Grid container spacing={24}>
-                                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                            <div style={{ textAlign: 'left', color: 'black' }}>
-                                                {/* <h3 style={{ padding: '5px', margin: '0px' }}>{strings[data.name] || data.name}</h3> */}
-                                                <Typography className={classes.paperTitle}>{strings[data.name] || data.name}</Typography>
+                    <Paper style={{ padding: '15px', backgroundColor: 'rgba(33, 150, 243, 0.24)', cursor: 'pointer' }} onClick={() => this.handleOnClick()}>
+                        <div className={classes.paperContainer}>
+                            <div>
+                                <Paper className={classes.iconPaper}>
+                                    <div >
+                                        <Icons type={data.name}></Icons>
+                                    </div>
+                                </Paper>
+                            </div>
+                            <div className={classes.paperValues}>
+                                <Grid container spacing={24}>
+                                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                        <div style={{ textAlign: 'left', color: 'black' }}>
+                                            {/* <h3 style={{ padding: '5px', margin: '0px' }}>{strings[data.name] || data.name}</h3> */}
+                                            <Typography className={classes.paperTitle}>{strings[data.name] || data.name}</Typography>
 
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                            <Grid container spacing={24}>
-                                                {
-                                                    data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-                                                        return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview"></CustomCard></Grid>
-                                                    })
-                                                }
-                                            </Grid>
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                        <Grid container spacing={24}>
+                                            {
+                                                data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
+                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview"></CustomCard></Grid>
+                                                })
+                                            }
                                         </Grid>
                                     </Grid>
+                                </Grid>
 
-                                </div>
                             </div>
+                        </div>
 
-                        </Paper>
-                    </a>
+                    </Paper>
                 </Grid>
             )
         }
@@ -132,14 +154,68 @@ class Home extends React.Component {
 
     }
 
+    callDashboardAPI() {
+        let dashboardApi = new dashboardAPI(20000);
+        let overview = false
+        if (_.toLower(this.state.page) === 'dashboard' || typeof this.state.page == 'undefined') {
+            overview = true
+        } else {
+            this.setState({
+                dontShowHeader: false
+            })
+        }
+        this.props.APITransport(dashboardApi, overview ? 'home' : this.state.page);
+    }
+
+    componentDidMount() {
+        let getFYobj = getFinancialYearObj();
+
+        let newFilterData = this.state.filter
+
+        newFilterData.duration.value.startDate = getFYobj.value.startDate
+        newFilterData.duration.value.endDate = getFYobj.value.endDate
+
+        this.setState({
+            filter: newFilterData
+        })
+        this.callDashboardAPI();
+    }
+
     render() {
         let { classes, strings } = this.props;
-        let { dashboardConfigData } = this.props;
+        let { dashboardConfigData } = this.state;
         let tabsInitData = dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length > 0 && dashboardConfigData[0] ? dashboardConfigData[0] : ''
+        let dashboardName = dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name
 
         return (
-            <Grid container spacing={24}>
+            <Grid container spacing={24} id="divToPrint">
+                <Grid container spacing={24} className={classes.actions}>
 
+                    <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.pageHeader}>
+                        {this.props.strings[dashboardName] || dashboardName}
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={6} lg={6} xl={6} style={{ textAlign: 'right', justifyContent: 'flex-end' }}>
+                        {isMobile && <div id="divNotToPrint" data-html2canvas-ignore="true" className={classes.posit}>
+
+                            <Menu type="download" bgColor="white" color="black" fileHeader="SURE Dashboard" fileName={dashboardName}></Menu>
+                            {!this.state.dontShowHeader &&
+                                <Button className={classes.btn1} data-html2canvas-ignore="true"
+                                    onClick={this.handleFilters.bind(this)}
+                                    fileName={dashboardName}
+                                >
+                                    <FilterIcon></FilterIcon>
+                                </Button>
+                            }
+                        </div>
+                        }
+
+                        {!isMobile && <div id="divNotToPrint" className={classes.acbtn} style={{ display: 'flex', justifyContent: 'flex-end', }}>
+                            <CustomizedMenus key="download" fileName={dashboardName} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard" />
+                            <CustomizedShare key="share" fileName={dashboardName} />
+                        </div>}
+                    </Grid>
+
+                </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <Typography className={classes.filter}>{strings[tabsInitData.title] || tabsInitData.title}</Typography>
                 </Grid>
@@ -169,7 +245,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
-            APITransporter: APITransport,
+            APITransport: APITransport,
         },
         dispatch
     );

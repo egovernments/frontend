@@ -4,6 +4,24 @@ const styles = theme => ({
     root: {
         padding: '12px',
     },
+    pageHeader: {
+        fontFamily: 'Roboto',
+        fontSize: '24px', 
+        fontWeight: '500',
+        flex: 1, 
+        textAlign: 'left',
+    },
+    posit: {
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        marginTop: '3px'
+    },
+    actions: {
+        display:'flex',
+        flexDirection: 'row',
+        margin: '12px 12px 12px 12px !important',
+
+    },
     paper: {
         padding: '18px 12px 30px 12px !important',
     },
@@ -87,6 +105,9 @@ const styles = theme => ({
         customCard: {
             padding: '5px'
         },
+        actions: {
+            margin: '12px 12px 12px 12px !important',
+        }
     },
     // '@media (max-width: 1150px)': {
     //     grid: {
@@ -102,6 +123,9 @@ const styles = theme => ({
         },
         customCard: {
             padding: '15px'
+        },
+        actions: {
+            margin: '10px 5px 10px 5px !important',
         },
 
     },

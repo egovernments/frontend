@@ -121,6 +121,7 @@ class Cards extends Component {
   }
 
   shareAsImage = (shareType) => {
+    debugger
     let { strings, title } = this.props;
     let div = document.getElementById('card' + this.props.id);
     var ts = Math.round((new Date()).getTime() / 1000);
@@ -283,19 +284,7 @@ class Cards extends Component {
 
     return (
       <Card id={'card' + id} style={this.props.cardStyle || cardStyle} classes={{ root: newClass }}>
-        <div className={classes.headRoot}>
-          {title && <CardHeader classes={{ title: classes.title, root: classes.cardheader }} title={(strings[title] || title) + (!noUnit ? '' : (' (In ' + this.props.GFilterData['Denomination'] + ')'))} onClick={(event) => this.clickEvent(event)}
-            action={
-              <div style={{ paddingLeft: '4px' }}>
-                <Tooltip title={strings[title] || title} classes={{ tooltip: classes.lightTooltip }} placement="top">
-                  <InfoIcon style={{ color: '#96989a', verticalAlign: '-webkit-baseline-middle', paddingTop: '3px' }} />
-                </Tooltip>
-              </div>
-            }
-          >
-
-          </CardHeader>
-          }
+        <div className={classes.headRoot}>          
           {/* <div className={classes.fullw}></div> */}
           {needInfo && this.renderMenues()}
         </div>
