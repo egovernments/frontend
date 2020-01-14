@@ -819,7 +819,11 @@ export const tradeDetails = getCommonCard(
             ));
           dispatch(pFO(
             `Licenses[0].validTo`,convertDateToEpoch(endDate,"dayend")
-          ));               
+          )); 
+          dispatch(
+            pFO(
+              `Licenses[0].financialYear`, startDate.split("-")[0] + "-" + endDate.split("-")[0]
+            ));              
         }
 
       },
