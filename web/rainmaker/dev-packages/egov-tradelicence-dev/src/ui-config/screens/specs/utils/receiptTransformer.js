@@ -42,7 +42,7 @@ const epochToDate = et => {
   if (!et) return null;
   var date = new Date(Math.round(Number(et)));
   var formattedDate =
-    (date.getDate()<10? "0"+date.getDate() : date.getDate()) + "/" + ((date.getMonth() + 1)<10? "0"+(date.getMonth() + 1) : (date.getMonth() + 1)) + "/" + date.getFullYear();
+    (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + "/" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "/" + date.getFullYear();
   return formattedDate;
 };
 
@@ -67,7 +67,7 @@ const getMessageFromLocalizationNonTLCodes = code => {
 export const loadUlbLogo = logoUrl => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS");
     var ctx = canvas.getContext("2d");
     canvas.height = this.height;
@@ -109,10 +109,24 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
           response,
           "Licenses[0].tradeLicenseDetail.additionalDetail.occupancyType",
           "NA"
-        ).replace(".","_")
+        ).replace(".", "_")
       )}`
     );
-
+    data.economicalStatus = getMessageFromLocalizationNonTLCodes(
+      `TRADELICENSE_ECONOMICALSTATUS_${nullToNa(
+        get(
+          response,
+          "Licenses[0].tradeLicenseDetail.additionalDetail.economicStatus",
+          "NA"
+        ).replace(".", "_")
+      )}`
+    );
+    data.pan = nullToNa(
+      get(response,"Licenses[0].tradeLicenseDetail.owners[0].pan","NA")
+    );
+    data.bpl = nullToNa(
+       get(response,"Licenses[0].tradeLicenseDetail.additionalDetail.bpl","NA")
+    );
     data.licenseNumber = nullToNa(
       get(response, "Licenses[0].licenseNumber", "NA")
     );
@@ -189,20 +203,20 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         }
         /** End */
 
-        res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory));
+        res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_" + tradeCategory));
 
         res.tradeTypeReceipt.push(
           getMessageFromLocalizationNonTLCodes(
             `TRADELICENSE_TRADETYPE_${tradeType}`
           ) +
-            " / " +
-            getMessageFromLocalizationNonTLCodes(
-              `TRADELICENSE_TRADETYPE_${tradeSubType}`
-            )
+          " / " +
+          getMessageFromLocalizationNonTLCodes(
+            `TRADELICENSE_TRADETYPE_${tradeSubType}`
+          )
         );
         res.tradeTypeCertificate.push(
           getMessageFromLocalizationNonTLCodes(
-            `TRADELICENSE_TRADETYPE_${tradeCode.replace(".","_")}`
+            `TRADELICENSE_TRADETYPE_${tradeCode.replace(".", "_")}`
           )
         );
         return res;
@@ -379,13 +393,13 @@ export const loadMdmsData = async tenantid => {
       .toUpperCase()
       .replace(/[.]/g, "_")}`;
 
-    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(cityKey,localizationLabels).toUpperCase()}`;
+    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(cityKey, localizationLabels).toUpperCase()}`;
 
     /** END */
     data.corporationAddress = get(ulbData, "address", "NA");
     data.corporationContact = get(ulbData, "contactNumber", "NA");
     data.corporationWebsite = get(ulbData, "domainUrl", "NA");
-    data.corporationEmail = get(ulbData, "emailId", "NA"); 
+    data.corporationEmail = get(ulbData, "emailId", "NA");
   }
   store.dispatch(prepareFinalObject("mdmsDataForReceipt", data));
 };
@@ -443,7 +457,7 @@ export const loadEmployeeData = async (uuid, licenseIssueDate) => {
 /** Data used for creation of receipt is generated and stored in local storage here */
 export const loadReceiptGenerationData = (applicationNumber, tenant) => {
   /** Logo loaded and stored in local storage in base64 */
-  
+
   loadApplicationData(applicationNumber, tenant); //PB-TL-2018-09-27-000004
   loadReceiptData(applicationNumber, tenant); //PT-107-001330:AS-2018-08-29-001426     //PT consumerCode
   loadMdmsData(tenant);

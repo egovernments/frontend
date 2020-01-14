@@ -1294,7 +1294,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
 };
 const validateNull = value =>value? value : "NA";
 const getACKData = (transformedData, ulbLogo) => {
-  console.log(transformedData);
+  console.log("======================>>>"+JSON.stringify(transformedData));
   var tlACKData = {
     defaultStyle: {
       font: "Camby"
@@ -1512,7 +1512,57 @@ const getACKData = (transformedData, ulbLogo) => {
             text: transformedData.tradeTypeCertificate
           }
         ]
-      }
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Economical Status",
+              "TL_ECONOMICAL_STATUS_LABEL"
+            )+":"
+          },
+          {
+            width: "*",
+            text: transformedData.economicalStatus
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "PAN No",
+              "TL_NEW_OWNER_DETAILS_PAN_LABEL"
+            )+":"
+          },
+          {
+            width: "*",
+            text: transformedData.pan
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "BPL Card No",
+              "TL_NEW_OWNER_BPL_CARD_LABEL"
+            )+":"
+          },
+          {
+            width: "*",
+            text: transformedData.bpl
+          }
+        ]
+      }         
+        
+      
       // {
       //   style: "tl-certificate-data-2",
       //   columns: [

@@ -262,7 +262,7 @@ export const economicalStatus = {
           handleField(
             "apply",
             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
-            "props.required",
+            "required",
             true
           )
         );
@@ -270,7 +270,7 @@ export const economicalStatus = {
           handleField(
             "apply",
             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
-            "props.required",
+            "required",
             false
           )
         );
@@ -280,7 +280,7 @@ export const economicalStatus = {
           handleField(
             "apply",
             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
-            "props.required",
+            "required",
             true
           )
         );
@@ -288,7 +288,7 @@ export const economicalStatus = {
           handleField(
             "apply",
             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
-            "props.required",
+            "required",
             false
           )
         );
@@ -298,7 +298,7 @@ export const economicalStatus = {
           handleField(
             "apply",
             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
-            "props.required",
+            "required",
             false
           )
         );
@@ -306,7 +306,7 @@ export const economicalStatus = {
           handleField(
             "apply",
             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
-            "props.required",
+            "required",
             false
           )
         );
@@ -501,7 +501,6 @@ const OwnerInfoCard = {
             labelName: "Enter BPL Card no",
             labelKey: "TL_NEW_OWNER_DETAILS_BPL_PLACEHOLDER"
           },
-          // required: true,
           // pattern: getPattern("Address"),
           jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.bpl"
 
@@ -515,7 +514,6 @@ const OwnerInfoCard = {
             labelName: "Enter Owner's PAN No.",
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
           },
-          // required: true,
           pattern: getPattern("PAN"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
         })
