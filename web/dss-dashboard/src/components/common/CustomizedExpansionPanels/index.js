@@ -13,6 +13,10 @@ const styles = theme => ({
   root: {
     textAlign: "center",
     paddingTop: theme.spacing.unit * 20
+  },
+  panelDetail :{
+    display: "initial !important",
+    padding: "0px !important"
   }
 });
 
@@ -26,9 +30,10 @@ class CustomizedExpansionPanels extends React.Component {
       rowrender.push(
         <ExpansionPanel defaultExpanded={(j===0)?true:false} className = {classes.head} style={{ margin: '30px 0px'}}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            {data.name.replace(/_/g, ' ')}            
+            {/*data.name.replace(/_/g, ' ') */}            
+            {data.name}            
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          <ExpansionPanelDetails className={classes.panelDetail}>
             <GenericChart key={j} gFilter={Gfilter} chartData={data} filters={filters} page={page} setViewAll={this.setViewAll.bind(this)}/> 
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -39,7 +44,7 @@ class CustomizedExpansionPanels extends React.Component {
   render() { 
     let { classes, chartData, displayName, filters, page,Gfilter,row } = this.props;   
     return (
-      <div style={{padding:'0px 15px'}}>
+      <div style={{padding:'0px 7px'}}>
         { this.renderCards(classes, chartData, displayName, filters, page,Gfilter,row )}
       </div>
     );

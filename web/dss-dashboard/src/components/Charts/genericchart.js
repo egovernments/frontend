@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/styles';
 import Cards from '../common/Cards/Cards';
 import variables from '../../styles/variables';
 import { isMobile } from 'react-device-detect';
-import mobileCards from '../common/mobileCards/Cards';
+import MCards from '../common/mobileCards/Cards';
 
 class GenericChart extends React.Component {
 
@@ -54,9 +54,9 @@ class GenericChart extends React.Component {
         if(isMobile){
             return (
                 <div>
-                    <mobileCards key={1} id={d.id} name={d.name} cardStyle={{}} needInfo={true} title={d.name} noUnit={d.noUnit || false}>
+                    <MCards key={1} id={d.id} name={d.name} cardStyle={{}} needInfo={true} title={d.name} noUnit={d.noUnit || false}>
                         {this.renderCharts(d, chartData)}
-                    </mobileCards>
+                    </MCards>
                 </div>
             );
         }else{

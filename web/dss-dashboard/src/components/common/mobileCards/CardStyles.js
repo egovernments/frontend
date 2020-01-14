@@ -9,18 +9,6 @@ export const CardStyle = {
         backgroundColor: variables.widget_background,
     },
     cardheader: {
-        paddingBottom: 0,
-        paddingLeft: '20px',
-        paddingTop: '20px',
-        // flex: 6,
-        maxWidth: '100% !important',
-        wordBreak: 'break-all',
-        textAlign: 'left',
-        '& div': {
-            '& span': {
-                fontSize: variables.fs_14,
-            }
-        }
     },
     fullw: {
         flex: 1,
@@ -29,11 +17,10 @@ export const CardStyle = {
     },
     full: {
         width: '100%',
-        margin: '12px !important',
     },
     redused: {
-        maxWidth: '97%',
-        margin: '12px 12px 12px 12px !important',
+        maxWidth: '97%', 
+        boxShadow:'none'       
     },
     cardContent: {
         paddingTop: 5,
@@ -56,7 +43,7 @@ export const CardStyle = {
     actionMenues: {
         display: 'flex',
         paddingRight: '5px',
-        paddingTop: '10px',
+       // paddingTop: '10px',
         // flexDirection:'row-reverce'
     },
     actions: {
