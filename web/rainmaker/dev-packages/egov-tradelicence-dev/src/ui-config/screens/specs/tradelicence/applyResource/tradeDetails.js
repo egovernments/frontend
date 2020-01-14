@@ -789,6 +789,7 @@ export const tradeDetails = getCommonCard(
             labelKey: "TL_NO_OF_YEARS_PLACEHOLDER"
           },
           required: true,
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionDetail.noOfYears",
           data: [
             {
               code: "1",
