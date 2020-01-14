@@ -15,6 +15,7 @@ import {
   getTodaysDateInYMD,
   getFinancialYearDates,
   getNextMonthDateInYMD,
+  convertDateToEpoch,
   setFilteredTradeTypes,
   getUniqueItemsFromArray,
   fillOldLicenseData,
@@ -732,6 +733,36 @@ const accessoriesCard = {
   },
   type: "array"
 };
+// export const getOwnerYear = getSelectField({
+//   label: {
+//     labelName: "Gender",
+//     labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+//   },
+//   placeholder: {
+//     labelName: "Select Gender",
+//     labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
+//   },
+//   required: true,
+//   optionValue: "code",
+//   optionLabel: "label",
+//   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+//   data: [
+//     {
+//       code: "1",
+//       label: 1
+//     },
+//     {
+//       code: "2",
+//       label: 2
+//     },
+//     {
+//       code: "3",
+//       label: 3
+//     }
+//   ]
+// });
+
+
 
 export const tradeDetails = getCommonCard(
   {
@@ -747,25 +778,49 @@ export const tradeDetails = getCommonCard(
       }
     ),
     tradeDetailsConatiner: getCommonContainer({
-      financialYear: {
+      noOfYears: {
         ...getSelectField({
           label: {
             labelName: "Financial Year",
-            labelKey: "TL_FINANCIAL_YEAR_LABEL"
+            labelKey: "TL_NO_OF_YEARS_LABEL"
           },
           placeholder: {
-            labelName: "Select Financial Year",
-            labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
+            labelName: "Select No. Of Years",
+            labelKey: "TL_NO_OF_YEARS_PLACEHOLDER"
           },
           required: true,
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-          jsonPath: "Licenses[0].financialYear",
-          sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
+          data: [
+            {
+              code: "1",
+              label: 1
+            },
+            {
+              code: "2",
+              label: 2
+            },
+            {
+              code: "3",
+              label: 3
+            }
+          ],
           gridDefination: {
             xs: 12,
             sm: 6
           }
-        })
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          let noOfYears = parseInt(action.value)
+          let startDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).startDate
+          let endDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).endDate
+          dispatch(
+            pFO(
+              `Licenses[0].validFrom`,convertDateToEpoch(startDate,"")
+            ));
+          dispatch(pFO(
+            `Licenses[0].validTo`,convertDateToEpoch(endDate,"dayend")
+          ));               
+        }
+
       },
       dummyDiv: {
         uiFramework: "custom-atoms",
@@ -778,6 +833,40 @@ export const tradeDetails = getCommonCard(
         props: {
           disabled: true
         }
+      },
+      fromDate: {
+        ...getDateField({
+          label: { labelName: "from Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
+          placeholder: {
+            labelName: "Trade License From Date",
+            labelKey: "TL_TRADE_LICENSE_FROM_DATE"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          jsonPath: "Licenses[0].validFrom",
+          sourceJsonPath: "Licenses[0].validFrom",
+          callBack: convertEpochToDate,
+          props: {
+            disabled: true
+          }
+        }),
+      },
+      toDate: {
+        ...getDateField({
+          label: { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
+          placeholder: {
+            labelName: "Trade License To Date",
+            labelKey: "TL_TRADE_LICENCEd_TO_DATE"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          jsonPath: "Licenses[0].validTo",
+          sourceJsonPath: "Licenses[0].validTo",
+          callBack: convertEpochToDate,
+          props: {
+            disabled: true
+          }
+        }),
       },
       applicationType: {
         ...getSelectField({
@@ -1151,6 +1240,7 @@ export const tradeDetails = getCommonCard(
           }
         })
       },
+      
       OrganizationName: getTextField({
         label: {
           labelName: "Organization Name",

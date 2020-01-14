@@ -1351,22 +1351,22 @@ export const getNextMonthDateInYMD = () => {
   return date;
 };
 
-export const getFinancialYearDates = (format, et) => {
+export const getFinancialYearDates = (format, et, noOfYears) => {
   /** Return the starting date and ending date (1st April to 31st March)
    *  of the financial year of the given date in ET. If no ET given then
    *  return the dates for the current financial year */
   var date = !et ? new Date() : new Date(et);
   var curMonth = date.getMonth();
   var financialDates = { startDate: "NA", endDate: "NA" };
-  if (curMonth > 3) {
+  if (curMonth > 3 && noOfYears) {
     switch (format) {
       case "dd/mm/yyyy":
         financialDates.startDate = `01/04/${date.getFullYear().toString()}`;
-        financialDates.endDate = `31/03/${(date.getFullYear() + 1).toString()}`;
+        financialDates.endDate = `31/03/${(date.getFullYear() + noOfYears).toString()}`;
         break;
       case "yyyy-mm-dd":
         financialDates.startDate = `${date.getFullYear().toString()}-04-01`;
-        financialDates.endDate = `${(date.getFullYear() + 1).toString()}-03-31`;
+        financialDates.endDate = `${(date.getFullYear() + noOfYears).toString()}-03-31`;
         break;
     }
   } else {
@@ -1375,13 +1375,17 @@ export const getFinancialYearDates = (format, et) => {
         financialDates.startDate = `01/04/${(
           date.getFullYear() - 1
         ).toString()}`;
-        financialDates.endDate = `31/03/${date.getFullYear().toString()}`;
+        financialDates.endDate = `31/03/${(
+          date.getFullYear() - 1 + noOfYears
+        ).toString()}`;
         break;
       case "yyyy-mm-dd":
         financialDates.startDate = `${(
           date.getFullYear() - 1
         ).toString()}-04-01`;
-        financialDates.endDate = `${date.getFullYear().toString()}-03-31`;
+        financialDates.endDate = `${(
+          date.getFullYear() - 1 + noOfYears
+        ).toString()}-03-31`;
         break;
     }
   }
