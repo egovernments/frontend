@@ -7,6 +7,39 @@
   width: 45%;
   margin: 0 auto;
 }
+
+.hl { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+.circle1{
+  display: flex;
+   width: 50px;
+   height:30px;
+  justify-content: center;
+  align-items: center;
+  // margin-left: -33px;
+  border-radius: 50%;
+  // height: 69px;
+  // width: 69px;
+  background-color: white;
+
+}
+.mobWha{
+  display: flex;
+  justify-content: center;
+}
+.iconWha{
+  margin-top: 2px;
+  margin-right: 8px;
+  color:green;
+}
 @media only screen and (min-width: 768px) {
   .cardwidth{
     margin-left: 20%;

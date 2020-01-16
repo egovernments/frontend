@@ -1,13 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Field from "egov-ui-kit/utils/field";
-import { Button, Card, Image } from "components";
+//import Icon from "@material-ui/core/Icon";
+import { Button, Card, Image,Icon} from "components";
+import IconButton from "material-ui/IconButton";
 import Label from "egov-ui-kit/utils/translationNode";
 import { CityPicker } from "modules/common";
 import Hidden from "@material-ui/core/Hidden";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
+
+const iconButtonStyle = {
+  paddingLeft: 0,
+  paddingRight: 0,
+  width: 35,
+};
+
 const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
   const fields = form.fields || {};
   const submit = form.submit;
@@ -48,6 +57,22 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
               startSMSRecevier();
             }}
           />
+        <Hidden mdUp>
+        <div className="hl">
+       <div className ="circle1">
+       <Label  color="black" fontSize= "16px" label="Or"/>
+       </div>
+    </div>
+    <div className="rainmaker-displayInline mobWha">
+      {/* <IconButton style={iconButtonStyle} >
+     
+     </IconButton> */}
+      
+        <Icon action="custom" name="whatsapp" className="iconWha" />
+        <Label bold={true} color="black" fontSize= "14px" label="CONTINUE WITH WHATSAPP"/>
+    </div>
+      
+      </Hidden>
         </div>
       }
     />
