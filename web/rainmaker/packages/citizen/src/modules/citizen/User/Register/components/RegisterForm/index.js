@@ -24,7 +24,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
   return (
     <div className="rainmaker-displayInline">
     <Card
-      className="cardwidth user-screens-card "
+      className="cardwidth user-screens-card"
       textChildren={
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
