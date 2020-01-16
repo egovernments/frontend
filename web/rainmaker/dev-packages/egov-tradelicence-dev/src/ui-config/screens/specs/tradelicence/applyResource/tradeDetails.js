@@ -789,7 +789,7 @@ export const tradeDetails = getCommonCard(
             labelKey: "TL_NO_OF_YEARS_PLACEHOLDER"
           },
           required: true,
-          jsonPath: "Licenses[0].tradeLicenseDetail.additionDetail.noOfYears",
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.noOfYears",
           data: [
             {
               code: "1",
@@ -834,7 +834,7 @@ export const tradeDetails = getCommonCard(
           xs: 12,
           sm: 6
         },
-        visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+        visible: true,
         props: {
           disabled: true
         }

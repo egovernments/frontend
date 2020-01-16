@@ -239,86 +239,86 @@ export const relationType = {
     }
   })
 };
-export const economicalStatus = {
-  ...getSelectField({
-    label: {
-      labelName: "Economical Status",
-      labelKey: "TL_ECONOMICAL_STATUS_LABEL"
-    },
-    placeholder: {
-      labelName: "Select RELATION Type",
-      labelKey: "TL_ECONOMICAL_STATUS_PLACEHOLDER"
-    },
-    localePrefix: {
-      moduleName: "TradeLicense",
-      masterName: "EconomicalStatus"
-    },
-    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.economicStatus",
-    sourceJsonPath: "applyScreenMdmsData.TradeLicense.EconomicStatus",
-    beforeFieldChange: (action, state, dispatch) => {
-      console.log("=========================>>" + JSON.stringify(action) + "<<==================");
-      if (action.value === "BPL") {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
-            "required",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
-            "required",
-            false
-          )
-        );
-      }
-      if (action.value === "TAXPAYER") {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
-            "required",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
-            "required",
-            false
-          )
-        );
-      }
-      if (action.value === "NONEOFTHEABOVE") {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
-            "required",
-            false
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
-            "required",
-            false
-          )
-        );
-      }
-    },
-    gridDefination: {
-      xs: 12,
-      sm: 6
-    }
+// export const economicalStatus = {
+//   ...getSelectField({
+//     label: {
+//       labelName: "Economical Status",
+//       labelKey: "TL_ECONOMICAL_STATUS_LABEL"
+//     },
+//     placeholder: {
+//       labelName: "Select RELATION Type",
+//       labelKey: "TL_ECONOMICAL_STATUS_PLACEHOLDER"
+//     },
+//     localePrefix: {
+//       moduleName: "TradeLicense",
+//       masterName: "EconomicalStatus"
+//     },
+//     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.economicStatus",
+//     sourceJsonPath: "applyScreenMdmsData.TradeLicense.EconomicStatus",
+//     beforeFieldChange: (action, state, dispatch) => {
+//       console.log("=========================>>" + JSON.stringify(action) + "<<==================");
+//       if (action.value === "BPL") {
+//         dispatch(
+//           handleField(
+//             "apply",
+//             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
+//             "required",
+//             true
+//           )
+//         );
+//         dispatch(
+//           handleField(
+//             "apply",
+//             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
+//             "required",
+//             false
+//           )
+//         );
+//       }
+//       if (action.value === "TAXPAYER") {
+//         dispatch(
+//           handleField(
+//             "apply",
+//             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
+//             "required",
+//             true
+//           )
+//         );
+//         dispatch(
+//           handleField(
+//             "apply",
+//             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
+//             "required",
+//             false
+//           )
+//         );
+//       }
+//       if (action.value === "NONEOFTHEABOVE") {
+//         dispatch(
+//           handleField(
+//             "apply",
+//             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.ownerPAN",
+//             "required",
+//             false
+//           )
+//         );
+//         dispatch(
+//           handleField(
+//             "apply",
+//             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.bplCard",
+//             "required",
+//             false
+//           )
+//         );
+//       }
+//     },
+//     gridDefination: {
+//       xs: 12,
+//       sm: 6
+//     }
 
-  })
-};
+//   })
+// };
 export const ownerInfoInstitutional = {
   ...getCommonGrayCard({
     header: getCommonSubHeader(
@@ -491,20 +491,20 @@ const OwnerInfoCard = {
           pattern: getPattern("Address"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
         }),
-        economicalStatus,
-        bplCard: getTextField({
-          label: {
-            labelName: "BPL Card",
-            labelKey: "TL_NEW_OWNER_BPL_CARD_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter BPL Card no",
-            labelKey: "TL_NEW_OWNER_DETAILS_BPL_PLACEHOLDER"
-          },
-          // pattern: getPattern("Address"),
-          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.bpl"
+        // economicalStatus,
+        // bplCard: getTextField({
+        //   label: {
+        //     labelName: "BPL Card",
+        //     labelKey: "TL_NEW_OWNER_BPL_CARD_LABEL"
+        //   },
+        //   placeholder: {
+        //     labelName: "Enter BPL Card no",
+        //     labelKey: "TL_NEW_OWNER_DETAILS_BPL_PLACEHOLDER"
+        //   },
+        //   // pattern: getPattern("Address"),
+        //   jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.bpl"
 
-        }),
+        // }),
         ownerPAN: getTextField({
           label: {
             labelName: "PAN No.",
@@ -514,6 +514,7 @@ const OwnerInfoCard = {
             labelName: "Enter Owner's PAN No.",
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
           },
+          required: true,
           pattern: getPattern("PAN"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
         })

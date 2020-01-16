@@ -199,6 +199,35 @@ export const getReviewTrade = (isEditable = true) => {
       }
     },
     viewOne: getCommonContainer({
+      reviewNoOfYears: getLabelWithValue(
+        {
+          labelName: "No. Of Year",
+          labelKey: "TL_NO_OF_YEARS_LABEL"
+        },
+        {
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.noOfYears",
+        }
+      ),
+      reviewDateFRom: getLabelWithValue(
+        {
+          labelName: "Trade License From Date",
+          labelKey: "TL_COMMON_FROM_DATE_LABEL"
+        },
+        {
+          jsonPath: "Licenses[0].validFrom",
+          callBack: convertEpochToDate
+        }
+      ),
+      reviewDateTo: getLabelWithValue(
+        {
+          labelName: "Trade License To Date",
+          labelKey: "TL_COMMON_TO_DATE_LABEL"
+        },
+        {
+          jsonPath: "Licenses[0].validTo",
+          callBack: convertEpochToDate
+        }
+      ),
       reviewApplicationType: getLabelWithValue(
         {
           labelName: "Application Type",

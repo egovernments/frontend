@@ -1367,6 +1367,55 @@ const getACKData = (transformedData, ulbLogo) => {
         },
         layout: noborder
       },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "Select No.of Years",
+      //         "TL_NO_OF_YEARS_LABEL"
+      //       )+":"
+      //     },
+      //     {
+      //       width: "*",
+      //       text: Licenses[0].tradeLicenseDetail.additionDetail.noOfYears
+      //     }
+      //   ]
+      // },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "Select From Date",
+      //         "TL_TRADE_LICENSE_FROM_DATE"
+      //       )+":"
+      //     },
+      //     {
+      //       width: "*",
+      //       text: Licenses[0].validFrom
+      //     }
+      //   ]
+      // },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "Select To Date",
+      //         "TL_TRADE_LICENSE_TO_DATE"
+      //       )+":"
+      //     },
+      //     {
+      //       width: "*",
+      //       text: Licenses[0].validTo
+      //     }
+      //   ]
+      // },
+
       {
         style: "tl-certificate-data-2",
         columns: [
@@ -1519,13 +1568,13 @@ const getACKData = (transformedData, ulbLogo) => {
           {
             width: 160,
             text: getLocaleLabels(
-              "Economical Status",
-              "TL_ECONOMICAL_STATUS_LABEL"
+              "No.of Years",
+              "TL_NO_OF_YEARS_LABEL"
             )+":"
           },
           {
             width: "*",
-            text: transformedData.economicalStatus
+            text: transformedData.noOfYears
           }
         ]
       },
@@ -1535,32 +1584,67 @@ const getACKData = (transformedData, ulbLogo) => {
           {
             width: 160,
             text: getLocaleLabels(
-              "PAN No",
-              "TL_NEW_OWNER_DETAILS_PAN_LABEL"
+              "License Validity",
+              "TL_LOCALIZATION_LICENSE_VALIDITY"
             )+":"
           },
           {
             width: "*",
-            text: transformedData.pan
+            text:
+              transformedData.licenseValidFromDate +
+              getLocaleLabels("To", "TL_LOCALIZATION_TRADE_LICENSE_TO") +
+              transformedData.licenseExpiryDate
           }
         ]
       },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "BPL Card No",
-              "TL_NEW_OWNER_BPL_CARD_LABEL"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.bpl
-          }
-        ]
-      }         
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "Economical Status",
+      //         "TL_ECONOMICAL_STATUS_LABEL"
+      //       )+":"
+      //     },
+      //     {
+      //       width: "*",
+      //       text: transformedData.economicalStatus
+      //     }
+      //   ]
+      // },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "PAN No",
+      //         "TL_NEW_OWNER_DETAILS_PAN_LABEL"
+      //       )+":"
+      //     },
+      //     {
+      //       width: "*",
+      //       text: transformedData.pan
+      //     }
+      //   ]
+      // },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "BPL Card No",
+      //         "TL_NEW_OWNER_BPL_CARD_LABEL"
+      //       )+":"
+      //     },
+      //     {
+      //       width: "*",
+      //       text: transformedData.bpl
+      //     }
+      //   ]
+      // }         
         
       
       // {
