@@ -10,12 +10,8 @@ import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFo
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import get from "lodash/get";
 import set from "lodash/set";
-import generatePdf from "../utils/receiptPdf";
-import { Icon } from "egov-ui-framework/ui-atoms";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {generatePdfAndDownload} from "./acknowledgementResource/applicationSuccessFooter";
 import {downloadAcknowledgementForm} from "../utils"
 
 const abc=(  state,

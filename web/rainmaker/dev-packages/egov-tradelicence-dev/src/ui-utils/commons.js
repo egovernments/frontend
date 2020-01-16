@@ -19,7 +19,8 @@ import {
   ifUserRoleExists
 } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import store from "redux/store";
+// import store from "redux/store";
+import store from "ui-redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
 import {

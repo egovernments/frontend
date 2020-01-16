@@ -157,7 +157,6 @@ class ResubmitActionContainer extends React.Component {
   render() {
     const {
       prepareFinalObject,
-      onDialogButtonClick,
       dataPath,
     } = this.props;
     const { open, data } = this.props;

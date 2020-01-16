@@ -12,7 +12,6 @@ import {
 import {
   getDetailsForOwner,
   getTodaysDateInYMD,
-  getRadioGroupWithLabel
 } from "../../utils";
 import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";

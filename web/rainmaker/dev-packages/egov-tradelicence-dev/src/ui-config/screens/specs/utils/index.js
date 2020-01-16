@@ -126,55 +126,6 @@ export const getRadioButton = (buttons, jsonPath, defaultValue) => {
   };
 };
 
-export const getRadioGroupWithLabel = (
-  label,
-  labelKey,
-  buttons,
-  jsonPath,
-  defaultValue
-) => {
-  return {
-    uiFramework: "custom-atoms",
-    componentPath: "Container",
-    props: {
-      alignItems: "center"
-    },
-
-    children: {
-      div1: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        children: {
-          div: getLabel({
-            labelName: label,
-            labelKey,
-
-            style: {
-              fontSize: "14px"
-            }
-          }),
-          asteric: getAsteric()
-        }
-      },
-      div2: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 8
-        },
-        children: {
-          div: getRadioButtonGroup(buttons, jsonPath, defaultValue)
-        }
-      }
-    }
-  };
-};
-
 export const getApplicationNoContainer = number => {
   return {
     uiFramework: "custom-atoms-local",
@@ -1189,7 +1140,7 @@ const getBillingSlabData = async (
     } catch (e) {
       dispatch(
         toggleSnackbar(
-          open,
+          true,
           {
             lableName: "Billing Slab error!",
             labelKey: "ERR_BILLING_SLAB_ERROR"
