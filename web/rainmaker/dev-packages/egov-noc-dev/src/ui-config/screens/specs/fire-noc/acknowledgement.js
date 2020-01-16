@@ -2,8 +2,6 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {CloudDownloadIcon} from '@material-ui/icons/CloudDownload';
-import {PrintIcon} from '@material-ui/icons/Print';
 import {
   applicationSuccessFooter,
   paymentSuccessFooter,
@@ -16,8 +14,6 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generatePdf from "../utils/receiptPdf";
-import { Icon } from "egov-ui-framework/ui-atoms";
-// import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import set from "lodash/set";
 import get from "lodash/get";
 import { getCurrentFinancialYear } from "../utils";

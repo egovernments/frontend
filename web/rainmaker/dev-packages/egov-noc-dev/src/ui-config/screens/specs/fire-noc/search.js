@@ -4,7 +4,7 @@ import {
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { NOCApplication } from "./searchResource/fireNocApplication";
-import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
+import { showHideAdhocPopup, getRequiredDocData } from "../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchResults } from "./searchResource/searchResults";
@@ -18,8 +18,7 @@ import set from "lodash/set";
 import get from "lodash/get";
 import {
   prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+ } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");

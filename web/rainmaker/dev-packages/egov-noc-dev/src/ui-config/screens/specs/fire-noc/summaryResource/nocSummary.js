@@ -1,5 +1,4 @@
 import {
-  getBreak,
   getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,

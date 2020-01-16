@@ -3,7 +3,6 @@ import SvgIcon from "@material-ui/core/SvgIcon";
 import "../index.css";
 class FireNocIcon extends React.Component {
   render() {
-    const { classes } = this.props;
     return (
       <SvgIcon
         viewBox="0 -8 35 42"

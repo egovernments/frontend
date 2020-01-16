@@ -3,7 +3,6 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { textToLocalMapping } from "./searchResults";
 import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -14,8 +13,6 @@ export const searchApiCall = async (state, dispatch) => {
       key: "tenantId",
       value: getTenantId()
     }
-    // { key: "limit", value: "10" },
-    // { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,

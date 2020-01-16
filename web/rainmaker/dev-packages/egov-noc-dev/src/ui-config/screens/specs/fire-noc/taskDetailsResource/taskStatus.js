@@ -4,10 +4,7 @@ import {
   getLabel,
   getLabelWithValue,
   getCommonCard,
-  getCommonGrayCard
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-
-const Status = ["Pending for Document Verification","Pending for Field Inspection","Pending for Approval"];
+  } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 export const taskStatus = getCommonCard({
   header: {

@@ -6,7 +6,7 @@ import {
   getCommonSubHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { showHideAdhocPopup, getBill ,createBill} from "../../utils";
+import { showHideAdhocPopup, createBill} from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";

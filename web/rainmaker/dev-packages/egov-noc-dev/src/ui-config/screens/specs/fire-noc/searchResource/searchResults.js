@@ -1,25 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import get from "lodash/get";
 import {
   sortByEpoch,
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
 import {
-  getLocalization,
-  getTenantId
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
-
-const getLocalTextFromCode = localCode => {
-  return JSON.parse(getLocalization("localization_en_IN")).find(
-    item => item.code === localCode
-  );
-};
 
 export const textToLocalMapping = {
   "Application No": getLocaleLabels(

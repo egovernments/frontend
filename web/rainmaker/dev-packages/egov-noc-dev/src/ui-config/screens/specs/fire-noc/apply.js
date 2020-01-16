@@ -17,11 +17,6 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
-import {
-  sampleSearch,
-  sampleSingleSearch,
-  sampleDocUpload
-} from "../../../../ui-utils/sampleResponses";
 import set from "lodash/set";
 import get from "lodash/get";
 import {
@@ -41,25 +36,6 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
-
-const applicationNumberContainer = () => {
-  const applicationNumber = getQueryArg(
-    window.location.href,
-    "applicationNumber"
-  );
-  if (applicationNumber)
-    return {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-noc",
-      componentPath: "ApplicationNoContainer",
-      props: {
-        number: `${applicationNumber}`,
-        visibility: "hidden"
-      },
-      visible: true
-    };
-  else return {};
-};
 
 export const header = getCommonContainer({
   header: getCommonHeader({

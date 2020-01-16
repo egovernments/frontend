@@ -1,13 +1,11 @@
 import axios from "axios";
 import {
-  fetchFromLocalStorage,
-  addQueryArg
+    addQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getAccessToken,
-  getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
