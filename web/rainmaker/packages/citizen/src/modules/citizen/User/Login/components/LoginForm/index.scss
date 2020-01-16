@@ -2,6 +2,95 @@
   display: block;
 
 }
+.hl { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+.circle1{
+  display: flex;
+   width: 50px;
+   height:30px;
+  justify-content: center;
+  align-items: center;
+  // margin-left: -33px;
+  border-radius: 50%;
+  // height: 69px;
+  // width: 69px;
+  background-color: white;
+
+}
+.mobWha{
+  display: flex;
+  justify-content: center;
+}
+.iconWha{
+  margin-top: 2px;
+  margin-right: 8px;
+  color:green !important;
+  fill:green !important;
+}
+@media only screen and (min-width: 768px) {
+  .cardwidth{
+    margin-left: 20%;
+    width: 25%;
+
+  }
+  .vl{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 4%;
+    margin-right: 2%;
+    border-left: 1px solid white;
+    //height: 500px;
+    margin-top:16px;
+    margin-bottom: 16px;
+
+
+  }
+  .circle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     margin-left: -33px;
+    border-radius: 50%;
+    height: 69px;
+    width: 69px;
+    background-color: white;
+
+  }
+  .qrscan{
+    width: 25%;
+    background-color: white;
+    margin-top:16px;
+    margin-bottom: 16px;
+    border-radius: 3px;
+    justify-content: center;
+    align-items: center;
+  }
+  .qrlogo{
+    height: 90% !important;
+    margin-top: 20px;
+
+  }
+  .qrtext{
+  display: flex;
+  justify-content: center;
+ 
+  }
+  .qrImg{
+    display: flex;
+    justify-content: center;
+    min-height: 90%;
+  }
+}
+
 
 // @media only screen and (min-width: 768px) {
 //   .web-user-logo {

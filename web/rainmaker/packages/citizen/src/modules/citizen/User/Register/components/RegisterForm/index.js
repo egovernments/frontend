@@ -9,6 +9,7 @@ import { CityPicker } from "modules/common";
 import Hidden from "@material-ui/core/Hidden";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
+import qrlogo from "egov-ui-kit/assets/images//qrImage.png";
 import "./index.css";
 
 const iconButtonStyle = {
@@ -58,20 +59,17 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
             }}
           />
         <Hidden mdUp>
+          <div>
         <div className="hl">
        <div className ="circle1">
        <Label  color="black" fontSize= "16px" label="Or"/>
        </div>
     </div>
-    <div className="rainmaker-displayInline mobWha">
-      {/* <IconButton style={iconButtonStyle} >
-     
-     </IconButton> */}
-      
+    <div className="rainmaker-displayInline mobWha">      
         <Icon action="custom" name="whatsapp" className="iconWha" />
         <Label bold={true} color="black" fontSize= "14px" label="CONTINUE WITH WHATSAPP"/>
     </div>
-      
+    </div>
       </Hidden>
         </div>
       }
@@ -84,7 +82,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
     </div>
     <div className="qrscan">
       <div className="qrImg">
-       <Image className="qrlogo" source="https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjp_P6X1IfnAhUjzzgGHU9AB1kQjRx6BAgBEAQ&url=https%3A%2F%2Fappadvice.com%2Fapp%2Fqr-code-qr-reader-scanner%2F1180506724&psig=AOvVaw3fHo2gA8TxuCpGZ86ywuWt&ust=1579248181278968" />
+       <Image className="qrlogo" source={`${qrlogo}`} />
        </div>
        <div  className="qrtext">
        <Label  color="black" fontSize= "14px" label="Scan the QR Code to continue with Whatsapp"/>

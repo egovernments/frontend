@@ -1,10 +1,12 @@
 import React from "react";
 import Field from "egov-ui-kit/utils/field";
 import { Link } from "react-router-dom";
-import { Button, Card, Image } from "components";
+import { Button, Card, Image ,Icon} from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
+import Hidden from "@material-ui/core/Hidden";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
+import qrlogo from "egov-ui-kit/assets/images/qrImage.png";
 import "./index.css";
 
 const LoginForm = ({ handleFieldChange, form, logoUrl }) => {
@@ -12,8 +14,9 @@ const LoginForm = ({ handleFieldChange, form, logoUrl }) => {
   const submit = form.submit;
 
   return (
+    <div className="rainmaker-displayInline">
     <Card
-      className="user-screens-card language-selection-card col-sm-offset-4 col-sm-4"
+      className="cardwidth user-screens-card "
       textChildren={
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
@@ -45,9 +48,39 @@ const LoginForm = ({ handleFieldChange, form, logoUrl }) => {
               startSMSRecevier();
             }}
           />
+           <Hidden mdUp>
+          <div>
+        <div className="hl">
+       <div className ="circle1">
+       <Label  color="black" fontSize= "16px" label="Or"/>
+       </div>
+    </div>
+    <div className="rainmaker-displayInline mobWha">      
+        <Icon action="custom" name="whatsapp" className="iconWha" />
+        <Label bold={true} color="black" fontSize= "14px" label="CONTINUE WITH WHATSAPP"/>
+    </div>
+    </div>
+      </Hidden>
         </div>
       }
     />
+      <Hidden smDown>
+     <div className="vl">
+       <div className ="circle">
+       <Label  color="black" fontSize= "16px" label="OR"/>
+       </div>
+    </div>
+    <div className="qrscan">
+      <div className="qrImg">
+       <Image className="qrlogo" source={`${qrlogo}`} />
+       </div>
+       <div  className="qrtext">
+       <Label  color="black" fontSize= "14px" label="Scan the QR Code to continue with Whatsapp"/>
+       </div>
+    </div>
+    </Hidden>
+    </div>
+
   );
 };
 
