@@ -7,3 +7,58 @@
   width: 45%;
   margin: 0 auto;
 }
+@media only screen and (min-width: 768px) {
+  .cardwidth{
+    margin-left: 20%;
+    width: 25%;
+
+  }
+  .vl{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 4%;
+    margin-right: 2%;
+    border-left: 1px solid white;
+    //height: 500px;
+    margin-top:16px;
+    margin-bottom: 16px;
+
+
+  }
+  .circle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     margin-left: -33px;
+    border-radius: 50%;
+    height: 69px;
+    width: 69px;
+    background-color: white;
+
+  }
+  .qrscan{
+    width: 25%;
+    background-color: white;
+    margin-top:16px;
+    margin-bottom: 16px;
+    border-radius: 3px;
+    justify-content: center;
+    align-items: center;
+  }
+  .qrlogo{
+    height: 90% !important;
+    margin-top: 20px;
+
+  }
+  .qrtext{
+  display: flex;
+  justify-content: center;
+ 
+  }
+  .qrImg{
+    display: flex;
+    justify-content: center;
+    min-height: 90%;
+  }
+}
