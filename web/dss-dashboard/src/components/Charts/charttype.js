@@ -9,7 +9,8 @@ import ChartsAPI from '../../actions/charts/chartsAPI'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import APITransport from '../../actions/apitransport/apitransport';
-import DonutChart from './DonutChart'
+import DonutChart from './DonutChart';
+import HorizontalBarChart from './HorizontalBarChart'
 
 class ChartType extends React.Component {
     constructor(props) {
@@ -68,7 +69,7 @@ class ChartType extends React.Component {
             // this.state.data = null;
             switch (chartType) {
                 case 'PIE':
-                    return <DonutChart chartData={data}
+                    return <PieChart chartData={data}
                         label={this.props.label}
                         unit={this.state.unit}
                         GFilterData={this.props.GFilterData}
@@ -93,11 +94,19 @@ class ChartType extends React.Component {
                     />
                 case 'BAR':
                     return <BarChart chartData={data}
-                    label={this.props.label}
-                    unit={this.state.unit}
-                    GFilterData={this.props.GFilterData}
-                    dimensions={this.props.dimensions}
-                    section={this.props.section}
+                        label={this.props.label}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
+                    />
+                case 'HORIZONTALBAR':
+                    return <HorizontalBarChart chartData={data}
+                        label={this.props.label}
+                        unit={this.state.unit}
+                        GFilterData={this.props.GFilterData}
+                        dimensions={this.props.dimensions}
+                        section={this.props.section}
                     />
                 case 'TABLE':
                     return <TableChart chartData={data}

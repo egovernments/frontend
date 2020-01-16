@@ -29,7 +29,7 @@ class GenericChart extends React.Component {
         }
     }
     render() {
-        let { classes, chartData, row } = this.props;
+        let { classes, chartData, displayName, filters, page,Gfilter,row } = this.props;   
         let d = chartData;
         let style = {
             flex: ((row == 0) ? '3' : '1'),
@@ -54,7 +54,7 @@ class GenericChart extends React.Component {
         if(isMobile){
             return (
                 <div>
-                    <MCards key={1} id={d.id} name={d.name} cardStyle={{}} needInfo={true} title={d.name} noUnit={d.noUnit || false}>
+                    <MCards key={1} id={d.id} chartData={chartData} name={d.name} cardStyle={{}} needInfo={true} title={d.name} noUnit={d.noUnit || false}>
                         {this.renderCharts(d, chartData)}
                     </MCards>
                 </div>
@@ -63,7 +63,6 @@ class GenericChart extends React.Component {
             return (
                 <div className={classes.chartRow}>
                     {chartData.vizArray.map((d, i) =>
-                        // cardStyle={i == 1 ? style : style1} 
                         <Cards key={i} id={d.id} name={d.name} cardStyle={i == 1 && row === 0 ? style : style1} needInfo={true} title={d.name} noUnit={d.noUnit || false}>
                             {this.renderCharts(d, chartData)}
                         </Cards>
