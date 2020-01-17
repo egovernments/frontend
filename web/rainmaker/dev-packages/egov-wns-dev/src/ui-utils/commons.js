@@ -154,7 +154,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
 
                 } catch (err) {
                     console.log(err)
-                    response.WaterConnection[i].due = "-"
+                    response.WaterConnection[i].due = "NA"
                 }
             }
             // });
@@ -1128,7 +1128,7 @@ export const getSWMyConnectionResults = async (queryObject, dispatch) => {
 
                 } catch (err) {
                     console.log(err)
-                    response.SewerageConnections[i].due = "-"
+                    response.SewerageConnections[i].due = "NA"
                 }
             }
             // });

@@ -7,8 +7,11 @@ import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import LabelContainer from "../../ui-containers/LabelContainer";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import LabelContainer from "../../ui-containers-local/LabelContainer";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
 const styles = theme => ({
@@ -45,11 +48,11 @@ class LandingPage extends React.Component {
     if (typeof route === "string") {
       setRoute(route);
     } else {
-      if (moduleName === "fire-noc") {
-        prepareFinalObject("FireNOCs", [
-          { "fireNOCDetails.fireNOCType": "NEW" }
-        ]);
-      }
+      // if (moduleName === "fire-noc") {
+      //   prepareFinalObject("FireNOCs", [
+      //     { "fireNOCDetails.fireNOCType": "NEW" }
+      //   ]);
+      // }
       let toggle = get(
         screenConfig[route.screenKey],
         `${route.jsonPath}.props.open`,
@@ -61,6 +64,8 @@ class LandingPage extends React.Component {
 
   render() {
     const { classes, items, applicationCount } = this.props;
+    console.log('applicationCount123')
+    console.log(applicationCount)
     return (
       <Grid container className="landing-page-main-grid">
         {items.map(obj => {
@@ -101,11 +106,17 @@ class LandingPage extends React.Component {
 
 const mapStateToProps = state => {
   const screenConfig = get(state.screenConfiguration, "screenConfig");
-  const moduleName = get(state.screenConfiguration, "moduleName");
+  const moduleName = get(state.screenConfiguration.screenConfig.home, "moduleName");
   const applicationCount = get(
     state.screenConfiguration.preparedFinalObject,
     "myApplicationsCount"
   );
+  // console.log('applicationCount')
+  // console.log(applicationCount)
+  // console.log('moduleName')
+  // console.log(moduleName)
+  // console.log('screenConfig')
+  // console.log(screenConfig)
   return { screenConfig, moduleName, applicationCount };
 };
 
