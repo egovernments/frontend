@@ -8,7 +8,7 @@
   margin: 0 auto;
 }
 @media only screen and (max-width: 768px) {
-.hl { 
+.register-hl-divider { 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,7 +18,7 @@
   margin: 1em 0;
   padding: 0;
 }
-.circle1{
+.register-circle-mobile{
   display: flex;
    width: 50px;
    height:30px;
@@ -31,30 +31,30 @@
   background-color: white;
 
 }
-.mobWha{
+.register-mobile-whatsapp-button{
   display: flex;
   justify-content: center;
 }
-.iconWha{
+.register-mobile-whatsapp-icon{
   margin-top: 2px;
   margin-right: 8px;
   color:green !important;
   fill:green !important;
 }
 
-  .cardwidth{
+  .register-cardwidth{
    
     width: 100%;
 
   }
 }
 @media only screen and (min-width: 768px) {
-  .cardwidth{
+  .register-cardwidth{
     margin-left: 20%;
     width: 25%;
 
   }
-  .vl{
+  .register-vl-divider{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,7 +67,7 @@
 
 
   }
-  .circle{
+  .register-circle-web{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,7 +78,7 @@
     background-color: white;
 
   }
-  .qrscan{
+  .register-qrscan{
     width: 25%;
     background-color: white;
     margin-top:16px;
@@ -87,17 +87,17 @@
     justify-content: center;
     align-items: center;
   }
-  .qrlogo{
+  .register-qrlogo{
     height: 90% !important;
     margin-top: 20px;
 
   }
-  .qrtext{
+  .register-qrtext{
   display: flex;
   justify-content: center;
  
   }
-  .qrImg{
+  .register-qrscan > div{
     display: flex;
     justify-content: center;
     min-height: 90%;

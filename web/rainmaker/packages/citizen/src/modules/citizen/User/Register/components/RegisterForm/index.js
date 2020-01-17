@@ -24,7 +24,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
   return (
     <div className="rainmaker-displayInline">
     <Card
-      className="cardwidth user-screens-card"
+      className="register-cardwidth user-screens-card"
       textChildren={
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
@@ -60,13 +60,13 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
           />
         <Hidden mdUp>
           <div>
-        <div className="hl">
-       <div className ="circle1">
+        <div className="register-hl-divider">
+       <div className ="register-circle-mobile">
        <Label  color="black" fontSize= "16px" label="Or"/>
        </div>
     </div>
-    <div className="rainmaker-displayInline mobWha">      
-        <Icon action="custom" name="whatsapp" className="iconWha" />
+    <div className="rainmaker-displayInline register-mobile-whatsapp-button">      
+        <Icon action="custom" name="whatsapp" className="register-mobile-whatsapp-icon" />
         <Label bold={true} color="black" fontSize= "14px" label="CONTINUE WITH WHATSAPP"/>
     </div>
     </div>
@@ -75,16 +75,15 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
       }
     />
     <Hidden smDown>
-     <div className="vl">
-       <div className ="circle">
+     <div className="register-vl-divider">
+       <div className ="register-circle-web">
        <Label  color="black" fontSize= "16px" label="OR"/>
        </div>
     </div>
-    <div className="qrscan">
-      <div className="qrImg">
-       <Image className="qrlogo" source={`${qrlogo}`} />
-       </div>
-       <div  className="qrtext">
+    <div className="register-qrscan">
+       <Image className="register-qrlogo" source={`${qrlogo}`} />
+      
+       <div  className="register-qrtext">
        <Label  color="black" fontSize= "14px" label="Scan the QR Code to continue with Whatsapp"/>
        </div>
     </div>
