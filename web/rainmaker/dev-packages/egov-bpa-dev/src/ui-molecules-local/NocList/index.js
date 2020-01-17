@@ -204,6 +204,7 @@ class NocList extends Component {
         if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
           let doc = {};
           doc.documentType = documents.dropDownValues.value;
+          doc.fileStoreId = documents.documents[0].fileStoreId;
           doc.fileStore = documents.documents[0].fileStoreId;
           doc.fileName = documents.documents[0].fileName;
           doc.fileUrl = documents.documents[0].fileUrl;

@@ -262,6 +262,14 @@ const setSearchResponse = async (
     let ownerShipMajorType =  dispatch(
       prepareFinalObject( "BPA.ownerShipMajorType", ownershipCategory.split('.')[0] ));
   }
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.bpaDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
+  //     "props.value",
+  //     // `${add.lat}, ${add.lng}`
+  //   )
+  // );
   dispatch(prepareFinalObject("BPA.appdate", appDate));
   calculationType(state, dispatch)
 };
@@ -310,8 +318,8 @@ const screenConfig = {
       );
       dispatch(prepareFinalObject("BPA.applicationType", applicationType));
       // Set Documents Data (TEMP)
-      prepareDocumentsUploadData(state, dispatch);
-      prepareNOCUploadData(state, dispatch);
+      // prepareDocumentsUploadData(state, dispatch);
+      // prepareNOCUploadData(state, dispatch);
     });
 
     // Code to goto a specific step through URL
