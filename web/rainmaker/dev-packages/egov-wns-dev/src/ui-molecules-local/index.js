@@ -32,11 +32,6 @@ const DocumentList = Loadable({
   loading: () => <Loading />
 });
 
-const LandingPage = Loadable({
-  loader: () => import("./LandingPage"),
-  loading: () => <Loading />
-});
-
 // const AutoSelector = Loadable({
 //   loader: () => import("./AutoSelector"),
 //   loading: () => <Loading />
@@ -108,6 +103,5 @@ export {
   PastPaymentsDetails,
   MeterReading,
   MeterReadingEditable,
-  LandingPage
   // PropertyTaxDetails
 };

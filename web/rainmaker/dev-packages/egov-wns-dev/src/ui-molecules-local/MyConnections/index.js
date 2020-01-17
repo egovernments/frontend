@@ -29,8 +29,6 @@ class MyConnections extends React.Component {
 
   render() {
     const { myConnectionResults, classes } = this.props;
-    console.log('myConnectionResults')
-    console.log(myConnectionResults)
     return (
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (

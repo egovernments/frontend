@@ -48,7 +48,7 @@ const waterAndSewerageSearchAndResult = {
             children: {
                 header: header,
                 applyCard: {
-                    uiFramework: "custom-molecules-local",
+                    uiFramework: "custom-molecules",
                     componentPath: "LandingPage",
                     moduleName: "egov-wns",
                     props: {
