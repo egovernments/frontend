@@ -27,6 +27,9 @@ import TLHowItWorks from "../../ui-views/HowItWorks";
 import pgrRoutes from "pgr-citizen/Routes/pgr-routes";
 import ptRoutes from "pt-citizen/Routes/pt-routes";
 
+//Whatsapp Screen 
+import  WhatsAppScreen  from "modules/citizen/WhatsAppScreen";
+
 const routes = [
   {
     path: "user/register",
@@ -172,6 +175,15 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_EVENT_DETAILS",
+    },
+  },
+  {
+    path: "whatsapp-screen",
+    component:  WhatsAppScreen ,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "CS_SEARCH_CITY",
     },
   },
   ...pgrRoutes,
