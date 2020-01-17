@@ -11,7 +11,7 @@ export const fetchData = async (action, state, dispatch) => {
     const water = responseWater.WaterConnection
     const sewerage = responseSewerage.SewerageConnections
     const finalArray = water.concat(sewerage);
-    if (finalArray.length >= 0) { dispatch(prepareFinalObject("myApplicationsCount", finalArray.length)); }
+    if (finalArray !== undefined && finalArray !== null) { dispatch(prepareFinalObject("myApplicationsCount", finalArray.length)); }
   }
   catch (error) { console.log(error); }
 }
