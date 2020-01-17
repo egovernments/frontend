@@ -2,10 +2,7 @@ import React from "react";
 import { Label } from "egov-ui-framework/ui-atoms";
 import get from "lodash/get";
 import { connect } from "react-redux";
-import {
-  transformById,
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 class LabelContainer extends React.Component {
   render() {

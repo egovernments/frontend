@@ -4,7 +4,6 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { Link } from "react-router-dom";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import LabelContainer from "../../ui-containers-local/LabelContainer";
@@ -14,7 +13,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     flexGrow: 1
   },
@@ -40,11 +39,7 @@ class LandingPage extends React.Component {
     const {
       screenConfig,
       handleField,
-      setRoute,
-      moduleName,
-      jsonPath,
-      value
-    } = this.props;
+      setRoute } = this.props;
     if (typeof route === "string") {
       setRoute(route);
     } else {
