@@ -28,9 +28,12 @@ class CustomCard extends React.Component {
         this.callAPI();
     }
 
-    render() {
-        const { classes, strings, type } = this.props;
+   
 
+
+    render() {
+        const { classes, strings, type, chartLabelName } = this.props;
+        
         let codekey = _.chain(this.props).get('chartData').get("id").value();
         let data = _.chain(this.props).get("chartsGData").get(codekey).get("data").map((d, i) => {
             return {
@@ -40,15 +43,17 @@ class CustomCard extends React.Component {
                 "plots": d.plots
             }
         }).first().value() || null;
+
         if (data) {
             let label = data.label ? (strings[data.label] ? strings[data.label] : data.label) : ''
+            console.log("label -- >>> ", label);
+            
             return (
-
                 <Grid container spacing={24}>
-
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        <div style={{minHeight: type === 'module' ? ( isMobile ? '0px' : '50px') : '0px'}}>
-                        <Typography className={classes.subTitle}>{label}</Typography>
+                        <div style={{ minHeight: type === 'module' ? (isMobile ? '0px' : '50px') : '0px' }}>
+                                <Typography className={classes.subTitle}>{label}</Typography>
+                        
                         </div>
 
                     </Grid>

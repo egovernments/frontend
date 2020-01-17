@@ -3,8 +3,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import CollectionChartRow from './CollectionChartRow';
+import { Grid } from '@material-ui/core'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
+
 
 class CollectionChart extends React.Component {
 	constructor(props) {
@@ -13,7 +17,7 @@ class CollectionChart extends React.Component {
 	}
 
 	render() {
-		let {strings, classes} =this.props;
+		let { strings, classes } = this.props;
 		// debugger;
 		// let codekey = _.chain(this.props).get('chartData').first().get("id").value();
 		let data = this.props.chartData.map((d, i) => {
@@ -27,17 +31,36 @@ class CollectionChart extends React.Component {
 			return (
 				<div className={classes.collectionChart}>
 					{
-						data.map((d, i) =>
-							<div className={classes.collection} key={`collection-${i}`}>
+						data.map((d, i) => {
+							console.log("CollectionChart data >> ", d);
+							let precision = 100; // 2 decimals
+							let randomnum = Math.floor(Math.random() * (10 * precision - 1 * precision) + 1 * precision) / (1 * precision);
+
+							return <div className={classes.collection} key={`collection-${i}`}>
 								<div className={classes.collectionRow}>
-									<div className={classes.CollectionLabel}>
-										<span> {strings[d.label] || d.label}</span>
-									</div>
-									<CollectionChartRow key={d.id} chartData={d.charts} filters={this.props.filters} />
+									<Grid container direction="row" alignItems="center">
+										<Grid item sm={6}>
+											<div className={classes.CollectionLabel}>
+												<span> {strings[d.label] || d.label}</span>
+											</div>
+											<span>
+												<CollectionChartRow randomnum={randomnum} key={d.id} chartData={d.charts} filters={this.props.filters} />
+											</span>
+											
+										</Grid>
+
+
+										{/* <Grid item sm={6} style={{ color: "#73bf70" }}>
+											<div><span>
+												<img src={Arrow_Upward} style={{ height: "13px" }} alt="Arrow_Upward" />
+												<img src={Arrow_Downward} style={{ height: "13px" }} alt="Arrow_Upward" />
+											</span><span>{`${randomnum} %`}</span></div>
+										</Grid> */}
+									</Grid>
 								</div>
 
 							</div>
-						)}
+						})}
 				</div>
 			);
 		}

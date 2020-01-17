@@ -39,7 +39,7 @@ class SimpleSelect extends Component {
     }
     render() {
         let { classes, data, selected, noIcon, value } = this.props;
-        return (<div className={classes.list}>
+        return (<div className={classes.list} style={{display:"inline-flex"}}>
                 {!noIcon && <SVG src={department_icon} className={classes.CloseButton} >
                     Close
                 </SVG>}

@@ -27,6 +27,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '../common/CustomMenu'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 
+const new_array_val = []
 class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -37,6 +38,10 @@ class Home extends React.Component {
             dontShowHeader: true,
             dashboardConfigData: []
         };
+    }
+
+    async componentDidMount() {
+        await this.workingOnLabelText()
     }
 
     lightenDarkenColor(col, amt) {
@@ -79,16 +84,18 @@ class Home extends React.Component {
     }
 
     renderChart(data, index) {
+        let { chartLabelName } = this.state;
         let { classes, strings } = this.props;
         let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, this.state.page);
         let bgColor = Variables.colors[index].light
         let iconColor = Variables.colors[index].dark
         let pageId = data && data.ref && data.ref.url
+       
         if (data.vizType.toUpperCase() === 'COLLECTION') {
             let url = Config.DEMO_API_URL + Config.APP_NAME + pageId
             return (
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.paper} style={{ paddingBottom: '5px' }}>
-                    <Paper style={{ padding: '15px', backgroundColor: 'rgba(33, 150, 243, 0.24)', cursor: 'pointer' }} onClick={() => this.handleOnClick()}>
+                    <Paper className={classes.paperStyle} onClick={() => this.handleOnClick()}>
                         <div className={classes.paperContainer}>
                             <div>
                                 <Paper className={classes.iconPaper}>
@@ -141,8 +148,9 @@ class Home extends React.Component {
                             <Grid container spacing={24}>
                                 {
                                     data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
+
                                         return <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.customCard}>
-                                            <CustomCard key={d.id} chartData={d} filters={filters} type="module"></CustomCard></Grid>
+                                            <CustomCard chartLabelName={chartLabelName} key={d.id} chartData={d} filters={filters} type="module"></CustomCard></Grid>
                                     })
                                 }
                             </Grid>
@@ -220,15 +228,16 @@ class Home extends React.Component {
                     <Typography className={classes.filter}>{strings[tabsInitData.title] || tabsInitData.title}</Typography>
                 </Grid>
 
-                {
-                    tabsInitData.visualizations && Array.isArray(tabsInitData.visualizations) && tabsInitData.visualizations.length > 0 && tabsInitData.visualizations.map((k, v) => {
-                        return (
-                            k.vizArray && Array.isArray(k.vizArray) && k.vizArray.length > 0 && k.vizArray.map((data, index) => {
-                                return (this.renderChart(data, index))
+                {/* {tabsInitData.visualizations && Array.isArray(tabsInitData.visualizations) && tabsInitData.visualizations.length > 0 && this.gettingData(tabsInitData.visualizations)} */}
+                {tabsInitData.visualizations && Array.isArray(tabsInitData.visualizations) && tabsInitData.visualizations.length > 0 && tabsInitData.visualizations.map((k, v) => {
+                    return (
+                        k.vizArray && Array.isArray(k.vizArray) && k.vizArray.length > 0 && k.vizArray.map((data, index) => {
+                            // if (data.vizType.toUpperCase() !== 'COLLECTION') { this.gettingData(data) }
+                            return (this.renderChart(data, index))
 
-                            })
-                        )
-                    })}
+                        })
+                    )
+                })}
 
             </Grid>
         )

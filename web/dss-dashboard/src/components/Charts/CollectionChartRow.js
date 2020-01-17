@@ -9,6 +9,15 @@ import { connect } from 'react-redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
+import Arrow_Downward from '../../images/arrows/Arrow_Downward.svg'
+import Arrow_Upward from '../../images/arrows/Arrow_Upward.svg'
+
+const insight_data_val = {
+	"name": "INSIGHTS",
+	"value": "-2% than last month",
+	"indicator": "lower_red",
+	"colorCode": "lower_red"
+}
 
 class CollectionChartRow extends React.Component {
 	constructor(props) {
@@ -40,12 +49,21 @@ class CollectionChartRow extends React.Component {
 				"label": d.headerName,
 				"valueSymbol": d.headerSymbol,
 				"value": d.headerValue,
-				"plots": d.plots
+				"plots": d.plots,
+				"insight_data": d.insight ? d.insight : ''
 			}
 		}).first().value() || null;
+
+		console.log("CollectionChartRow data >>> ", this.props);
+
+
 		if (data) {
+			let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red"?"rgb(229, 77, 65)":"rgb(37, 155, 36)":'';
+			let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red"?Arrow_Downward:Arrow_Upward:'';
+			
+			console.log("insightColor >>> ", insightColor);
 			return (
-				<div className={classes.root}>
+				<div className={classes.root} style={{ width: "max-content" }}>
 					<span className={classes.values}>
 						{/* <span style={{display:this.getRupeeSymbol(this.state.data.valueSymbol),float: 'left'}}>&#x20b9;</span>  */}
 
@@ -53,6 +71,16 @@ class CollectionChartRow extends React.Component {
 	            			this.state.data.value
 						}  */}
 						<NFormatter value={data.value} nType={data.valueSymbol} />
+						{data.insight_data &&
+							<React.Fragment>
+								<span style={{ marginLeft: "6vh" }}>
+									<img src={insightIcon} style={{ height: "16px", color: insightColor}}/>
+									 {/* data.insight_data.colorCode === "lower_red" ? "red" : "green" }} alt="Arrow_Upward" /> */}
+								</span>
+								{/* <span style={{color:"rgb(37, 155, 36)", marginLeft:"1vh"}}>{`${this.props.randomnum} %`}</span> */}
+								<span style={{ color: insightColor, marginLeft: "1vh" }}>{`${data.insight_data.value.toString().split("than last month")[0]}`}</span>
+							</React.Fragment>
+						}
 						{/* {
 	            			this.symbol(this.state.data.valueSymbol)
 	            		} */}

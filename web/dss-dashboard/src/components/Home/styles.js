@@ -1,4 +1,10 @@
 import { isMobile } from 'react-device-detect';
+import variables from '../../styles/variables';
+import {
+    blackColor,
+    whiteColor,
+    hexToRgb
+  } from "../../assets/Home";
 
 const styles = theme => ({
     root: {
@@ -6,9 +12,9 @@ const styles = theme => ({
     },
     pageHeader: {
         fontFamily: 'Roboto',
-        fontSize: '24px', 
+        fontSize: '24px',
         fontWeight: '500',
-        flex: 1, 
+        flex: 1,
         textAlign: 'left',
     },
     posit: {
@@ -17,7 +23,7 @@ const styles = theme => ({
         marginTop: '3px'
     },
     actions: {
-        display:'flex',
+        display: 'flex',
         flexDirection: 'row',
         margin: '12px 12px 12px 12px !important',
 
@@ -88,11 +94,21 @@ const styles = theme => ({
     },
     paperContainer: {
         display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row'  
+        flexDirection: isMobile ? 'column' : 'row'
     },
     paperValues: {
-        width: '100%', 
+        width: '100%',
         paddingLeft: isMobile ? '0px' : '10px'
+    },
+    paperStyle: {
+        padding: '15px', backgroundColor: 'rgba(33, 150, 243, 0.24)', cursor: 'pointer',
+        // transition: theme.transitions.create(['border-color', 'box-shadow']),
+        borderBottom: '0.5px solid rgba(0, 0, 0, 0.04)',
+        boxShadow: "0 1px 4px 0 rgba(" + hexToRgb(blackColor) + ", 0.14)",
+        '&:hover': {
+            boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12)",
+
+        },
     },
     '@media (max-width: 3000px)': {
         root: {

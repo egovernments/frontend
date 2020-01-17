@@ -343,14 +343,14 @@ class GlobalFilter extends Component {
 
                         }else if(ro.label == "DDRs"){
                             return (
-                                <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
+                                <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`} style={{display:"inline-table"}}>
                                     <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
                                     {this.renderComponents(mdmsData)}
                                 </div>
                             );
                         }else{
                             return (
-                                <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`}>
+                                <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`} style={{display:"inline-table"}}>
                                     <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
                                     {this.renderComponents(ro)}
                                 </div>
