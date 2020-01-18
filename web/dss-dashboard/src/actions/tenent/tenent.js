@@ -18,14 +18,15 @@ export default class TenentAPI extends API {
         super.processResponse(res);
         if (res) {
             console.log(res)
-            this.s3File = res;
+            this.tenents = res;
             return true
         }
         return false
     }
 
     getPayload() {
-        return this.mdmsData;
+        console.log(this.tenents)
+        return this.tenents;
     }
 
     getBody() {
