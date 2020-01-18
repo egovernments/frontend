@@ -6,6 +6,7 @@ import { Tooltip } from '@material-ui/core';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import MoreVertIcon  from '@material-ui/icons/MoreVert';
 import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
+import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
 
 class ActionButton extends React.Component {
     constructor(props) {
@@ -82,9 +83,19 @@ class ActionButton extends React.Component {
             return (
                 <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }} placement="top">
                     <div>
-                        <Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a", fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
+                        {text==="DSS_CLEAR_ALL"?
+                        <HighlightOffRoundedIcon
+                        disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${clas}`} onClick={this.handleClick.bind(this)} 
+                        style={{
+                            color:this.state.buttonHovered ? '#FE7A51': "#96989a", 
+                            fontSize:"32px"}}/>
+                            // this.props.fontSize ? this.props.fontSize : ''}}/>
+                    //     <Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a", fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
+                    //     {text}
+                    // </Button>
+                        :<Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a", fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
                             {text}
-                        </Button>
+                        </Button>}
                     </div>
                 </Tooltip>
             );

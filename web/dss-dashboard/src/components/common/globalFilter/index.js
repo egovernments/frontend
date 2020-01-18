@@ -24,19 +24,25 @@ import { Chip } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
 import AutoComplete from '../inputs/MultipleSelect/AutoComplete'
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
-
+import TenentAPI from '../../../actions/tenent/tenent'
+import Constant from '../../../actions/constants'
 
 class GlobalFilter extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             open: false,
             value: getFinancialYearObj(true), //fOR date range
             filterData: this.props.GFilterData,
             title: '',
             dept: "All Services",
-            clear: false
+            clear: false,
+            pageId: _.get(this.props, 'match.params.pageId'),
+            role: this.props.dashboardConfigData && Array.isArray(this.props.dashboardConfigData) && this.props.dashboardConfigData.length > 0 && this.props.dashboardConfigData[0].roleName && this.props.dashboardConfigData[0].roleName,
+            tenents: '',
+            tenentName: '',
+            wards: '',
         }
         this.handleChanges = this.handleChanges.bind(this);
     }
@@ -53,10 +59,105 @@ class GlobalFilter extends Component {
         return null;
     }
 
-    componentDidMount(){     
+    componentDidMount() {
+        console.log('---------------------------------------', this.props.dashboardConfigData)
+        let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+        let req = {
+            "RequestInfo": {
+                "authToken": ""
+            },
+            "MdmsCriteria": {
+                "tenantId": tenent && tenent !== 'null' ? tenent : 'pb',
+                "moduleDetails": [
+                    {
+                        "moduleName": "tenant",
+                        "masterDetails": [
+                            {
+                                "name": "tenants"
+                            }]
+                    }
+                ]
+            }
+        }
+
+        const { TenentTransporter } = this.props
+        let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.TENENTS, req, '');
+        TenentTransporter(tenentAPI);
+    }
+
+    componentDidUpdate(prevProps) {
+        let ulbs = []
+        if (prevProps.tenents != this.props.tenents) {
+            // let tenentIds = _.chain(this.props).get("tenents").get('MdmsRes').get('tenant').get('tenants').map((ulb, index) => {
+            let tenants = _.get(this.props.tenents, 'MdmsRes.tenant.tenants')
+            let nameArray = []
+            let tenentName = []
+            if (tenants && Array.isArray(tenants)) {
+                tenants.map((t) => {
+                    let tenentObj = {}
+                    tenentObj[t.name] = t.code
+                    tenentName.push(t.name)
+                    nameArray.push(tenentObj)
+                })
+
+                this.setState({ tenants: nameArray, tenentName: tenentName })
+            }
+        }
+
+        if (prevProps.wards != this.props.wards) {
+            // let wardData = _.chain(this.props).get("wards").get('MdmsRes').get('egov-location').get('TenantBoundary').first().get('boundary').get('children').first().get('children').map()
+            let tenantsBoundry = _.get(this.props.wards, 'MdmsRes.egov-location.TenantBoundary')
+            let nameArray = []
+
+            let adminBoundary = []
+            let revenueBoundary = []
+            let adminName = []
+            let revenueName = []
+            if (tenantsBoundry && Array.isrray(tenantsBoundry) && tenantsBoundry.length > 0) {
+                tenantsBoundry.map((boundaryData) => {
+                    if (boundaryData['hierarchyType'] && boundaryData['hierarchyType'].code && boundaryData['hierarchyType'].code === 'REVENUE') {
+                        let tenantsBoundryObj = boundaryData['boundary']
+
+                        if (tenantsBoundryObj && tenantsBoundryObj.children && Array.isArray(tenantsBoundryObj.children) && tenantsBoundryObj.children.length > 0) {
+                            let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
+                            if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
+                                tenantsBoundryObjChildren.children.map((children) => {
+                                    let wardObj = {}
+                                    wardObj[children.name] = children.code
+                                    revenueName.push(children.name)
+                                    revenueBoundary.push(wardObj)
+                                })
+                            }
+                        }
+                    } else {
+                        let tenantsBoundryObj = boundaryData['boundary']
+
+                        if (tenantsBoundryObj && tenantsBoundryObj.children && Array.isArray(tenantsBoundryObj.children) && tenantsBoundryObj.children.length > 0) {
+                            let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
+                            if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
+                                tenantsBoundryObjChildren.children.map((children) => {
+                                    let wardObj = {}
+                                    wardObj[children.name] = children.code
+                                    adminName.push(children.name)
+                                    adminBoundary.push(wardObj)
+                                })
+                            }
+                        }
+                    }
+                })
+
+            }
+            if (this.state.pageId === 'ulb-pgr') {
+                this.setState({ wards: adminName, wardsArr: adminBoundary })
+            } else {
+                this.setState({ wards: revenueName, wardsArr: revenueBoundary })
+            }
+
+        }
     }
 
     handleChanges(open, target, value) {
+        console.log('=------------------------------------------', target, value)
         if (target) {
             let newFilterData = this.state.filterData;
             // let tempValue = value;
@@ -78,9 +179,8 @@ class GlobalFilter extends Component {
                 }
                 this.setState({ open: open, filterData: newFilterData });
             }
-
-            console.log([`${target}IsOpen`], !open, [target], value);
             if (typeof this.props.applyFilters === 'function') {
+                console.log(newFilterData)
                 this.props.applyFilters(newFilterData);
 
             }
@@ -90,6 +190,64 @@ class GlobalFilter extends Component {
                 })
             }
 
+        }
+    }
+
+    handleFilterChange(open, target, value) {
+        if (target) {
+
+            if (target === 'ULBS') {
+                let ulbs = []
+                let tenents = this.state.tenants
+                if (Array.isArray(value) && value.length > 0) {
+                    value.map((d, i) => {
+                        if (tenents[d]) {
+                            ulbs.push(tenents[d])
+                        }
+                    })
+                }
+                let req = {
+                    "RequestInfo": {
+                        "authToken": ""
+                    },
+                    "MdmsCriteria": {
+                        "tenantId": ulbs,
+
+                        "moduleDetails": [
+                            {
+                                "moduleName": "egov-location",
+                                "masterDetails": [
+                                    {
+                                        "name": "TenantBoundary"
+                                    }]
+                            }
+                        ]
+                    }
+                }
+
+                const { WardTransporter } = this.props
+                let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.WARD_DATA, req, '');
+                WardTransporter(tenentAPI);
+            }
+
+            let newFilterData = this.state.filterData;
+            newFilterData[target] = value;
+
+            if (target !== 'duration') {
+                this.setState({ [`${target}IsOpen`]: !open, filterData: newFilterData });
+            } else {
+                if (newFilterData.duration.title === 'CUSTOM') {
+                    newFilterData.duration.title = moment.unix(_.get(newFilterData, 'duration.value.startDate')).format('ll')
+
+                        + '-' + moment.unix(_.get(newFilterData, 'duration.value.endDate')).format('ll');
+                }
+                this.setState({ open: open, filterData: newFilterData });
+            }
+
+            if (typeof this.props.applyFilters === 'function') {
+                this.props.applyFilters(newFilterData);
+
+            }
         }
     }
 
@@ -264,6 +422,35 @@ class GlobalFilter extends Component {
         }
     }
 
+    renderUlbFilters(object) {
+        let type = object.type;
+        let label = object.label;
+        console.log(object.label)
+        console.log(this.state.tenentName)
+        console.log(this.state.wards)
+        console.log(this.state.ulbs)
+        switch (type) {
+            case "dropdown":
+                switch (label) {
+                    case "Date Range":
+                        return this.renderDateRange(object.label, object.values);
+                    case "ULBS":
+                        return this.renderAutoComplete(object.label, this.handleFilterChange, this.state.ulbs, this.state.tenentName)
+                    // let tIds = []
+                    // this.state.tenents.map((d,i) => {
+                    //     tIds.push(d.name)
+                    // })
+                    // return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.props.globalFilterData[2].values)
+                    case "Wards":
+                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.ulbs, this.state.wards)
+                }
+                break;
+            case "switch":
+                return this.renderSwitch(object.label, object.values)
+                break;
+        }
+    }
+
     handleOnDelete(target, value) {
         let filterData = this.state.filterData;
 
@@ -332,73 +519,126 @@ class GlobalFilter extends Component {
     }
 
     render() {
-        let { classes, globalFilterData,mdmsData, GFilterData } = this.props;
+        let { classes, globalFilterData, ulbFilter, mdmsData, GFilterData, ulbFilters } = this.props;
         let { strings } = this.props;
-        return (
-            <Cards key="gf" fullW={true}>
-                <div className={classes.mainFilter}>
-                    {globalFilterData.map(ro => {
-                        if (this.props.hideDepart && ro.label == "Services") {
-                            return (<div></div>);
+        let role = this.props.dashboardConfigData && Array.isArray(this.props.dashboardConfigData) && this.props.dashboardConfigData.length > 0 && this.props.dashboardConfigData[0].roleName && this.props.dashboardConfigData[0].roleName
 
-                        }else if(ro.label == "DDRs"){
-                            return (
-                                <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`} style={{display:"inline-table"}}>
-                                    <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
-                                    {this.renderComponents(mdmsData)}
-                                </div>
-                            );
-                        }else{
-                            return (
-                                <div key={ro.label} className={`${classes.filterS} ${"GF_"+ro.label}`} style={{display:"inline-table"}}>
-                                    <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
-                                    {this.renderComponents(ro)}
-                                </div>
-                            );
-                        }
-                    })
-                    }
-                    {/* <div className={`${classes.filterS} ${classes.fullWidth}`}>
+        console.log(role)
+        console.log(this.props.dashboardConfigData)
+        if (role) {
+            if (role !== 'Admin') {
+                console.log('Admin calling')
+                return (
+                    <Cards key="gf" fullW={true}>
+                        <div className={classes.mainFilter}>
 
-                    </div> */}
+                            {globalFilterData.map(ro => {
+                                if (this.props.hideDepart && ro.label == "Services") {
+                                    return (<div></div>);
 
-                    {/* {isMobile && this.renderFilters()}s */}
-
-                    <div id="divNotToPrint" className={classes.actions} style={{maxWidth:300,marginTop:'7px'}}>
-                        <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
-                        <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
-                    </div>
-                </div>
-
-                {/* {!isMobile && this.renderFilters()} */}
-
-                {/* <div className={classes.fVisible}>
-                    {GFilterData && GFilterData.DDRs && GFilterData.DDRs.length > 0 && <div className={classes.fVRow}>
-                        <div className={classes.fTitle}><span style={{ margin: 'auto' }}>Selected DDRs:</span></div>
-                        <div className={classes.mChips}>
-                            {GFilterData.DDRs.map(item => {
-                                let handleOnDelete = this.handleOnDelete.bind(this)
-                                return <Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete(item)}></Chip>
+                                } else if (ro.label == "DDRs") {
+                                    return (
+                                        <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
+                                            <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
+                                            {this.renderComponents(mdmsData)}
+                                        </div>
+                                    );
+                                } else {
+                                    return (
+                                        <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
+                                            <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
+                                            {this.renderComponents(ro)}
+                                        </div>
+                                    );
+                                }
                             })
+                            }
+                            {/* <div className={`${classes.filterS} ${classes.fullWidth}`}>
+    
+                        </div> */}
 
+                            {/* {isMobile && this.renderFilters()}s */}
+
+                            {isMobile ? <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: "inherit", marginTop: '7px' }}>
+                                <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                                <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                            </div>
+                                :
+                                <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: 300, marginTop: '7px' }}>
+                                    <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                                    <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                                </div>
                             }
                         </div>
-                    </div>}
-                    {GFilterData && GFilterData.ULBS && GFilterData.ULBS.length > 0 && <div className={classes.fVRow}>
-                        <div className={classes.fTitle}><span style={{ margin: 'auto' }}>Selected ULBs:</span></div>
-                        <div className={classes.mChips}>
-                            {GFilterData.ULBS.map(item => {
-                                return <div style={{ marginRight: '5px' }}><Chip className={classes.mCustomChip} label={item} color={'gray'}></Chip></div>
+
+                        {/* {!isMobile && this.renderFilters()} */}
+
+                        {/* <div className={classes.fVisible}>
+                        {GFilterData && GFilterData.DDRs && GFilterData.DDRs.length > 0 && <div className={classes.fVRow}>
+                            <div className={classes.fTitle}><span style={{ margin: 'auto' }}>Selected DDRs:</span></div>
+                            <div className={classes.mChips}>
+                                {GFilterData.DDRs.map(item => {
+                                    let handleOnDelete = this.handleOnDelete.bind(this)
+                                    return <Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete(item)}></Chip>
+                                })
+    
+                                }
+                            </div>
+                        </div>}
+                        {GFilterData && GFilterData.ULBS && GFilterData.ULBS.length > 0 && <div className={classes.fVRow}>
+                            <div className={classes.fTitle}><span style={{ margin: 'auto' }}>Selected ULBs:</span></div>
+                            <div className={classes.mChips}>
+                                {GFilterData.ULBS.map(item => {
+                                    return <div style={{ marginRight: '5px' }}><Chip className={classes.mCustomChip} label={item} color={'gray'}></Chip></div>
+                                })
+    
+                                }</div>
+                        </div>
+                        }
+                    </div> */}
+
+                    </Cards>
+                );
+            } else {
+
+                return (
+                    <Cards key="gf" fullW={true}>
+                        <div className={classes.mainFilter}>
+
+
+                            {ulbFilters.map(ro => {
+
+                                return (
+                                    <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
+                                        <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
+                                        {this.renderUlbFilters(ro)}
+                                    </div>
+                                );
                             })
+                            }
 
-                            }</div>
-                    </div>
-                    }
-                </div> */}
+                            {isMobile ? <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: "inherit", marginTop: '7px' }}>
+                                <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                                <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                            </div>
+                                :
+                                <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: 300, marginTop: '7px' }}>
+                                    <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                                    <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                                </div>
+                            }
+                        </div>
 
-            </Cards>
-        );
+                    </Cards>
+                );
+            }
+        }
+        else {
+            return (<div></div>)
+        }
+
     }
+
 }
 
 const mapStateToProps = (state) => {
@@ -406,14 +646,21 @@ const mapStateToProps = (state) => {
         mdmsData: state.mdmsData,
         globalFilterData: state.globalFilter,
         GFilterData: state.GFilterData,
-        strings: state.lang
+        strings: state.lang,
+        tenents: state.tenents,
+        wards: state.wards,
+        dashboardConfigData: state.firstReducer.dashboardConfigData,
+        ulbFilters: state.ulbFilters
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         APITransport: APITransport,
-        updateFilterData: updateGlobalFilterData
+        updateFilterData: updateGlobalFilterData,
+        TenentTransporter: APITransport,
+        WardTransporter: APITransport,
+
     }, dispatch)
 }
 

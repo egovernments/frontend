@@ -13,7 +13,10 @@ const constants = {
     S3_IMAGE: 'S3_IMAGE',
     S3_IMAGE_MOBILE: 'S3_IMAGE_MOBILE',
     S3_IMAGE_CARD: 'S3_IMAGE_CARD',
-    MDMS: 'MDMS'
+    MDMS: 'MDMS',
+    ULBS_FILTER: 'ULBS_FILTER',
+    TENENTS: 'TENENTS',
+    WARD_DATA: 'WARD_DATA'
 }
 
 export default constants

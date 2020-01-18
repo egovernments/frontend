@@ -33,7 +33,7 @@ class ChartType extends React.Component {
         let code = this.props.chartData[0]['id'] || "";
         let requestBody = getChartOptions(code, this.props.filters || {});
 
-        let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
+        let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody && requestBody.dataoption ? requestBody.dataoption : '');
         this.props.APITransport(chartsAPI);
     }
     // getData(chartData) {

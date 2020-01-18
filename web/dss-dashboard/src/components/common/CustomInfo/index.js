@@ -127,7 +127,6 @@ class CustomInfo extends React.Component {
   }
 
   shareAsImage = (shareType,id) => {
-    debugger
     let { strings, title } = this.props;
     let div = document.getElementById('card' + id);
     var ts = Math.round((new Date()).getTime() / 1000);

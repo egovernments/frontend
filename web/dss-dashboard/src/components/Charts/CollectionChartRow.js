@@ -54,14 +54,10 @@ class CollectionChartRow extends React.Component {
 			}
 		}).first().value() || null;
 
-		console.log("CollectionChartRow data >>> ", this.props);
-
-
 		if (data) {
 			let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red"?"rgb(229, 77, 65)":"rgb(37, 155, 36)":'';
 			let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red"?Arrow_Downward:Arrow_Upward:'';
 			
-			console.log("insightColor >>> ", insightColor);
 			return (
 				<div className={classes.root} style={{ width: "max-content" }}>
 					<span className={classes.values}>

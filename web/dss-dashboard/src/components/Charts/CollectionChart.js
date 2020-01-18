@@ -18,7 +18,6 @@ class CollectionChart extends React.Component {
 
 	render() {
 		let { strings, classes } = this.props;
-		// debugger;
 		// let codekey = _.chain(this.props).get('chartData').first().get("id").value();
 		let data = this.props.chartData.map((d, i) => {
 			return {
@@ -32,7 +31,6 @@ class CollectionChart extends React.Component {
 				<div className={classes.collectionChart}>
 					{
 						data.map((d, i) => {
-							console.log("CollectionChart data >> ", d);
 							let precision = 100; // 2 decimals
 							let randomnum = Math.floor(Math.random() * (10 * precision - 1 * precision) + 1 * precision) / (1 * precision);
 
