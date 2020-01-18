@@ -122,7 +122,7 @@ class GlobalFilter extends Component {
                             let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
                             if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
                                 tenantsBoundryObjChildren.children.map((children) => {
-                                    
+
                                     revenueBoundaryObj[children.name] = children.code
                                     revenueName.push(children.name)
                                 })
@@ -158,7 +158,18 @@ class GlobalFilter extends Component {
         if (target) {
             let newFilterData = this.state.filterData;
             // let tempValue = value;
-            newFilterData[target] = value;
+            if (target === 'Wards') {
+                let wardsObj = this.state.wardsArr
+                let wardKeys = []
+                if (value) {
+                    value.map((v) => {
+                        wardKeys.push(wardsObj[v])
+                    })
+                }
+                newFilterData[target] = wardKeys;
+            } else {
+                newFilterData[target] = value;
+            }
             // if(target == 'duration'){
             //      newFilterData[target] = this.getDateFilter(value);
             // }
@@ -422,7 +433,7 @@ class GlobalFilter extends Component {
     renderUlbFilters(object) {
         let type = object.type;
         let label = object.label;
-     
+
         switch (type) {
             case "dropdown":
                 switch (label) {
