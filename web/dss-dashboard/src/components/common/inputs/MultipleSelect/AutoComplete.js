@@ -134,6 +134,7 @@ class CheckboxesTags extends React.Component {
 
     render() {
         const { classes, logo } = this.props;
+        console.log(logo)
         let svgicon;
         if (logo === "DDRs") {
             svgicon = districts_icon;
