@@ -229,7 +229,7 @@ class GlobalFilter extends Component {
             console.log(value)
 
             if (target === 'ULBS') {
-                if(value) {
+                if(value && Array.isArray(value) && value.length>0) {
                     let ulbs = []
                     let tenents = this.state.tenants
                     if (Array.isArray(value) && value.length > 0) {
@@ -556,7 +556,7 @@ class GlobalFilter extends Component {
 
         console.log(role)
         if (role) {
-            if (role !== 'Admin') {
+            if (role === 'Admin') {
                 console.log('Admin calling')
                 return (
                     <Cards key="gf" fullW={true}>
