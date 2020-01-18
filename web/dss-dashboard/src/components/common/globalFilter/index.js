@@ -90,17 +90,15 @@ class GlobalFilter extends Component {
         if (prevProps.tenents != this.props.tenents) {
             // let tenentIds = _.chain(this.props).get("tenents").get('MdmsRes').get('tenant').get('tenants').map((ulb, index) => {
             let tenants = _.get(this.props.tenents, 'MdmsRes.tenant.tenants')
-            let nameArray = []
             let tenentName = []
+            let tenentObj = {}
             if (tenants && Array.isArray(tenants)) {
                 tenants.map((t) => {
-                    let tenentObj = {}
                     tenentObj[t.name] = t.code
                     tenentName.push(t.name)
-                    nameArray.push(tenentObj)
                 })
 
-                this.setState({ tenants: nameArray, tenentName: tenentName })
+                this.setState({ tenants: tenentObj, tenentName: tenentName })
             }
         }
 
@@ -113,6 +111,8 @@ class GlobalFilter extends Component {
             let revenueBoundary = []
             let adminName = []
             let revenueName = []
+            let wardObj = {}
+            let revenueBoundaryObj = {}
             if (tenantsBoundry && Array.isrray(tenantsBoundry) && tenantsBoundry.length > 0) {
                 tenantsBoundry.map((boundaryData) => {
                     if (boundaryData['hierarchyType'] && boundaryData['hierarchyType'].code && boundaryData['hierarchyType'].code === 'REVENUE') {
@@ -122,10 +122,9 @@ class GlobalFilter extends Component {
                             let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
                             if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
                                 tenantsBoundryObjChildren.children.map((children) => {
-                                    let wardObj = {}
-                                    wardObj[children.name] = children.code
+                                    
+                                    revenueBoundaryObj[children.name] = children.code
                                     revenueName.push(children.name)
-                                    revenueBoundary.push(wardObj)
                                 })
                             }
                         }
@@ -136,10 +135,8 @@ class GlobalFilter extends Component {
                             let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
                             if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
                                 tenantsBoundryObjChildren.children.map((children) => {
-                                    let wardObj = {}
                                     wardObj[children.name] = children.code
                                     adminName.push(children.name)
-                                    adminBoundary.push(wardObj)
                                 })
                             }
                         }
@@ -148,9 +145,9 @@ class GlobalFilter extends Component {
 
             }
             if (this.state.pageId === 'ulb-pgr') {
-                this.setState({ wards: adminName, wardsArr: adminBoundary })
+                this.setState({ wards: adminName, wardsArr: wardObj })
             } else {
-                this.setState({ wards: revenueName, wardsArr: revenueBoundary })
+                this.setState({ wards: revenueName, wardsArr: revenueBoundaryObj })
             }
 
         }
@@ -435,7 +432,7 @@ class GlobalFilter extends Component {
                     case "Date Range":
                         return this.renderDateRange(object.label, object.values);
                     case "ULBS":
-                        return this.renderAutoComplete(object.label, this.handleFilterChange, this.state.ulbs, this.state.tenentName)
+                        return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.state.tenentName)
                     // let tIds = []
                     // this.state.tenents.map((d,i) => {
                     //     tIds.push(d.name)
