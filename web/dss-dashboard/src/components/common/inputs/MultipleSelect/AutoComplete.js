@@ -91,6 +91,14 @@ class CheckboxesTags extends React.Component {
         };
     }
 
+    componentDidUpdate(prevProps){
+        if(prevProps.item !== this.props.item){
+            this.setState({
+                item: this.props.item
+            })
+        }
+    }
+
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.defaultValue !== this.props.defaultValue) {
