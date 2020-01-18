@@ -113,7 +113,7 @@ class GlobalFilter extends Component {
             let revenueName = []
             let wardObj = {}
             let revenueBoundaryObj = {}
-            if (tenantsBoundry && Array.isrray(tenantsBoundry) && tenantsBoundry.length > 0) {
+            if (tenantsBoundry && Array.isArray(tenantsBoundry) && tenantsBoundry.length > 0) {
                 tenantsBoundry.map((boundaryData) => {
                     if (boundaryData['hierarchyType'] && boundaryData['hierarchyType'].code && boundaryData['hierarchyType'].code === 'REVENUE') {
                         let tenantsBoundryObj = boundaryData['boundary']
