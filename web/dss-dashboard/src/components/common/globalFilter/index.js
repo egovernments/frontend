@@ -208,7 +208,7 @@ class GlobalFilter extends Component {
                         "authToken": ""
                     },
                     "MdmsCriteria": {
-                        "tenantId": ulbs,
+                        "tenantId": ulbs[ulbs.length - 1],
 
                         "moduleDetails": [
                             {
