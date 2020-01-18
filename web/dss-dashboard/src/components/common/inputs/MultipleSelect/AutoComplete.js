@@ -92,9 +92,9 @@ class CheckboxesTags extends React.Component {
     }
 
     componentDidUpdate(prevProps){
-        if(prevProps.item !== this.props.item){
+        if(prevProps.item !== this.props.item && this.props.item){
             this.setState({
-                item: this.props.item
+                localItems: this.props.item
             })
         }
     }
