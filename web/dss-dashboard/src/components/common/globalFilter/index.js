@@ -60,7 +60,7 @@ class GlobalFilter extends Component {
     }
 
     componentDidMount() {
-        // let tenentCode = `${localStorage.getItem('tenant-id')}` ? `${localStorage.getItem('tenant-id')}` : ''
+        let tenentCode = `${localStorage.getItem('tenant-id')}` ? `${localStorage.getItem('tenant-id')}` : ''
         
         // let req = {
         //     "RequestInfo": {
