@@ -60,54 +60,33 @@ class GlobalFilter extends Component {
     }
 
     componentDidMount() {
-        let tenentCode = `${localStorage.getItem('tenant-id')}` ? `${localStorage.getItem('tenant-id')}` : ''
-        
-        // let req = {
-        //     "RequestInfo": {
-        //         "authToken": ""
-        //     },
-        //     "MdmsCriteria": {
-        //         "tenantId": tenent && tenent !== 'null' ? tenent : 'pb',
-        //         "moduleDetails": [
-        //             {
-        //                 "moduleName": "tenant",
-        //                 "masterDetails": [
-        //                     {
-        //                         "name": "tenants"
-        //                     }]
-        //             }
-        //         ]
-        //     }
-        // }
-
-        // const { TenentTransporter } = this.props
-        // let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.TENENTS, req, '');
-        // TenentTransporter(tenentAPI);
-
-        let tenentName = []
-        let tenentObj = {}
-
-        if(tenentCode && tenentCode !== 'null') {
-            let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[1] : ''
-
-            if(tenent && tenent !== 'null') {
-                let data = tenent[0].toUpperCase() + tenent.slice(1)
-                 tenentObj[data] = tenentCode
-                 tenentName.push(data)
-
-                 console.log(tenentCode)
-                 console.log(tenent)
-                 console.log(data)
-                 console.log(tenentObj)
-                 console.log(tenentName)
-                 this.setState({ tenants: tenentObj, tenentName: tenentName })
-
-             }
+        console.log('---------------------------------------', this.props.dashboardConfigData)
+        let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+        let req = {
+            "RequestInfo": {
+                "authToken": ""
+            },
+            "MdmsCriteria": {
+                "tenantId": tenent && tenent !== 'null' ? tenent : 'pb',
+                "moduleDetails": [
+                    {
+                        "moduleName": "tenant",
+                        "masterDetails": [
+                            {
+                                "name": "tenants"
+                            }]
+                    }
+                ]
+            }
         }
-       
+
+        const { TenentTransporter } = this.props
+        let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.TENENTS, req, '');
+        TenentTransporter(tenentAPI);
     }
 
     componentDidUpdate(prevProps) {
+        let ulbs = []
         if (prevProps.tenents != this.props.tenents) {
             // let tenentIds = _.chain(this.props).get("tenents").get('MdmsRes').get('tenant').get('tenants').map((ulb, index) => {
             let tenants = _.get(this.props.tenents, 'MdmsRes.tenant.tenants')
@@ -462,6 +441,11 @@ class GlobalFilter extends Component {
                         return this.renderDateRange(object.label, object.values);
                     case "ULBS":
                         return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.state.tenentName)
+                    // let tIds = []
+                    // this.state.tenents.map((d,i) => {
+                    //     tIds.push(d.name)
+                    // })
+                    // return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.props.globalFilterData[2].values)
                     case "Wards":
                         console.log('loading wards', this.state)
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.ulbs, this.state.wards)
