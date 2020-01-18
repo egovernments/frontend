@@ -422,10 +422,7 @@ class GlobalFilter extends Component {
     renderUlbFilters(object) {
         let type = object.type;
         let label = object.label;
-        console.log(object.label)
-        console.log(this.state.tenentName)
-        console.log(this.state.wards)
-        console.log(this.state.ulbs)
+     
         switch (type) {
             case "dropdown":
                 switch (label) {
@@ -522,7 +519,6 @@ class GlobalFilter extends Component {
         let role = this.props.dashboardConfigData && Array.isArray(this.props.dashboardConfigData) && this.props.dashboardConfigData.length > 0 && this.props.dashboardConfigData[0].roleName && this.props.dashboardConfigData[0].roleName
 
         console.log(role)
-        console.log(this.props.dashboardConfigData)
         if (role) {
             if (role !== 'Admin') {
                 console.log('Admin calling')
