@@ -383,7 +383,7 @@ class GlobalFilter extends Component {
             target={target}
             open={this.state.multiselectStateIsOpen}
             defaultValue={defaultV}
-            item={data}
+            item={data ? data : []}
             clear={this.state.clear}
             handleClear={this.handleClear.bind(this)}
         />);
@@ -439,6 +439,7 @@ class GlobalFilter extends Component {
                     // })
                     // return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.props.globalFilterData[2].values)
                     case "Wards":
+                        console.log('loading wards', this.state)
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.ulbs, this.state.wards)
                 }
                 break;
