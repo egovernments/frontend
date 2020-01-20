@@ -17,7 +17,6 @@ import set from "lodash/set";
 import get from "lodash/get";
 import map from "lodash/map";
 import { httpRequest } from "../../../../ui-utils";
-import { commonTransform, objectArrayToDropdown } from "../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getEmployeeData } from "./viewResource/functions";
