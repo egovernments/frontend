@@ -183,10 +183,12 @@ class CheckboxesTags extends React.Component {
                                     </React.Fragment>
                                 )}
 
-                                renderTags={(value, getTagProps) =>
-                                    this.state.localItems ? value.map((option, index) => (
+                                renderTags={(value, getTagProps) =>{
+                                    console.log('1')
+                                    return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
                                         <Chip  label={option} {...getTagProps({ index })} />
                                     )) : ''
+                                }
                                 }
                                 
                                 style={(isMobile) ? { minWidth: 200 , maxWidth: 200 } : {}}                                
