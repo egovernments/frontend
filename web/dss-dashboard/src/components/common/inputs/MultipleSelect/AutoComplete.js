@@ -173,7 +173,6 @@ class CheckboxesTags extends React.Component {
                                 options={this.state.localItems}
                                 disableCloseOnSelect
                                 getOptionLabel={option => option}
-                                value = {this.props.defaultValue ? this.props.defaultValue : ''}
                                 renderOption={(option, { selected }) => (
                                     <React.Fragment>
                                         <Checkbox
