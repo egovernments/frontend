@@ -160,7 +160,7 @@ class CheckboxesTags extends React.Component {
 
                 <div className={classes.root}>
 
-                    <FormControl className={classes.formControl} >
+                    <FormControl className={classes.formControl} style={isMobile?{width:"100%"}:{}} >
                         {/* <InputLabel htmlFor="select-multiple-checkbox">{label || 'Select'}</InputLabel> */}
                         <div className={classes.list}>
                             <div>
