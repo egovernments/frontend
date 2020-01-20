@@ -30,7 +30,6 @@ export default class TenentAPI extends API {
     }
 
     getBody() {
-        console.log('-------------------------------------------------',this.body)
         return this.body
         // return {
         //    "RequestInfo": {

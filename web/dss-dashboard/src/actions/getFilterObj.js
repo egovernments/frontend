@@ -1,8 +1,6 @@
 import _ from 'lodash';
 
 export default function getFilterObj(GFilterData, globalFilterData, page) {
-    console.log(GFilterData)
-    console.log(globalFilterData)
     let newGFilterData = _.cloneDeep(GFilterData);
 
     /* Filter Customization */

@@ -95,11 +95,6 @@ class GlobalFilter extends Component {
                  tenentObj[data] = tenentCode
                  tenentName.push(data)
 
-                 console.log(tenentCode)
-                 console.log(tenent)
-                 console.log(data)
-                 console.log(tenentObj)
-                 console.log(tenentName)
                  this.setState({ tenants: tenentObj, tenentName: tenentName })
 
              }
@@ -209,7 +204,6 @@ class GlobalFilter extends Component {
                 this.setState({ open: open, filterData: newFilterData });
             }
             if (typeof this.props.applyFilters === 'function') {
-                console.log(newFilterData)
                 this.props.applyFilters(newFilterData);
 
             }
@@ -225,8 +219,7 @@ class GlobalFilter extends Component {
     handleFilterChange(open, target, value) {
         if (target) {
 
-            console.log(target)
-            console.log(value)
+            console.log(target, '---', value)
 
             if (target === 'ULBS') {
                 if(value && Array.isArray(value) && value.length>0) {
@@ -557,7 +550,7 @@ class GlobalFilter extends Component {
         console.log(role)
         if (role) {
             if (role === 'Admin') {
-                console.log('Admin calling')
+                // console.log('Admin calling')
                 return (
                     <Cards key="gf" fullW={true}>
                         <div className={classes.mainFilter}>

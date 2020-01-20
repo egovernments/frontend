@@ -124,11 +124,14 @@ class CheckboxesTags extends React.Component {
             })
         }
         let { target } = this.props;
+        console.log('-----Target-----', target)
         let newVals = _.compact(values);
         if (newVals.length > 0) {
+            console.log('-----newVals-----', newVals)
             this.setState({ name: newVals });
             this.props.handleSelected(false, target, newVals)
         } else {
+            console.log('-----newVals2-----', newVals)
             this.setState({ name: [] });
             this.props.handleSelected(false, target, [])
         }
