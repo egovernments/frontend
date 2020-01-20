@@ -70,7 +70,8 @@ const titlebar2 = {
     },
     rightContainer:getCommonContainer({
       downloadMenu: {
-        uiFramework: "custom-atoms",
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
         componentPath: "MenuButton",
         props: {
           data: {
