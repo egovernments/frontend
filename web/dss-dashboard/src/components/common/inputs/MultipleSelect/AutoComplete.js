@@ -92,6 +92,8 @@ class CheckboxesTags extends React.Component {
     }
 
     componentDidUpdate(prevProps){
+        console.log('prevProps---',prevProps)
+        console.log('Next props---', this.props)
         if(prevProps.item !== this.props.item && this.props.item){
             this.setState({
                 localItems: this.props.item
@@ -109,6 +111,7 @@ class CheckboxesTags extends React.Component {
     }
 
     handleChange = (event, values) => {
+        console.log('---handle change----',values)
         if (values && Array.isArray(values) && values.length > 0) {
             this.setState({
                 label: ''
@@ -138,7 +141,7 @@ class CheckboxesTags extends React.Component {
         let svgicon;
         if (logo === "DDRs") {
             svgicon = districts_icon;
-        } else if (logo === "ULBS") {
+        } else if (logo === "ULBS" || "Wards") {
             svgicon = ulbs_icon;
         }
 
