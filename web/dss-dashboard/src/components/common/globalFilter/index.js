@@ -220,10 +220,12 @@ class GlobalFilter extends Component {
     }
 
     handleFilterChange(open, target, value) {
+        this.setState({
+            dontShowWard: true
+        })
         if (target) {
 
             if (target === 'ULBS') {
-                console.log(this.state.wardDefValue)
                 if (value && Array.isArray(value) && value.length > 0) {
                     let ulbs = []
                     let tenents = this.state.tenants
@@ -257,11 +259,8 @@ class GlobalFilter extends Component {
                     const { WardTransporter } = this.props
                     let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.WARD_DATA, req, '');
                     WardTransporter(tenentAPI);
-                    this.setState({
-                        dontShowWard: true
-                    })
                 } else {
-                    this.setState({ wards: '' })
+                    this.setState({ wards: '', wardDefValue: null })
                     this.handleChanges(false, 'Wards', null)
                 }
 
@@ -352,8 +351,8 @@ class GlobalFilter extends Component {
                             color: '#000000',
                             margin: '0 0px 0 0',
                             // width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
-                            width: isMobile ? '200px' : '150px'
-                        }}
+                            // width: isMobile ? '200px' : '150px'
+                            width: isMobile ? '100%' : '150px'}}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">
                         //     <SVG src={icondepartment} className={classes.CloseButton}>
@@ -419,7 +418,7 @@ class GlobalFilter extends Component {
         />);
     }
 
-    renderAutoComplete(target, hndlslected, defaultV, data) {
+    renderAutoComplete(target, hndlslected, defaultV, data, type) {
         return (<AutoComplete
             logo={target}
             handleSelected={hndlslected}
@@ -429,6 +428,7 @@ class GlobalFilter extends Component {
             item={data ? data : []}
             clear={this.state.clear}
             handleClear={this.handleClear.bind(this)}
+            type={type}
         />);
     }
 
@@ -447,9 +447,9 @@ class GlobalFilter extends Component {
             case "dropdown":
                 switch (label) {
                     case "ULBS":
-                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.ulbs, object.values)
+                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.ulbs, object.values, '')
                     case "DDRs":
-                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.ddrs, object.values)
+                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.ddrs, object.values, '')
                     case "Services":
                         return this.renderSimpleSelect(object.label, object.values, this.handleChanges)
                     case "Date Range":
@@ -472,12 +472,12 @@ class GlobalFilter extends Component {
                     case "Date Range":
                         return this.renderDateRange(object.label, object.values);
                     case "ULBS":
-                        return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.state.tenentName)
+                        return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.state.tenentName, '')
                     case "Wards":
                         if (this.state.dontShowWard) {
                             return (<div></div>)
                         } else {
-                            return this.renderAutoComplete(object.label, this.handleChanges, this.state.wardDefValue, this.state.wards)
+                            return this.renderAutoComplete(object.label, this.handleChanges, this.state.wardDefValue, this.state.wards, 'Wards')
                         }
                 }
                 break;
@@ -559,7 +559,6 @@ class GlobalFilter extends Component {
         let { strings } = this.props;
         let role = this.props.dashboardConfigData && Array.isArray(this.props.dashboardConfigData) && this.props.dashboardConfigData.length > 0 && this.props.dashboardConfigData[0].roleName && this.props.dashboardConfigData[0].roleName
 
-        console.log(role)
         if (role) {
             if (role === 'Admin') {
                 // console.log('Admin calling')

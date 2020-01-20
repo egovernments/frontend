@@ -192,7 +192,7 @@ class CheckboxesTags extends React.Component {
                                 renderTags={(value, getTagProps) =>{
                                     console.log('1')
                                     return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
-                                        this.props.defaultValue.includes(option) ? <Chip  label={option} {...getTagProps({ index })} /> : <div></div>
+                                        (this.props.defaultValue && this.props.defaultValue.includes(option)) || this.props.type !=='Wards' ? <Chip  label={option} {...getTagProps({ index })} /> : <div></div>
                                     )) : ''
                                 }
                                 }
