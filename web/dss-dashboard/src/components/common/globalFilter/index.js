@@ -219,8 +219,6 @@ class GlobalFilter extends Component {
     handleFilterChange(open, target, value) {
         if (target) {
 
-            console.log(target, '---', value)
-
             if (target === 'ULBS') {
                 if(value && Array.isArray(value) && value.length>0) {
                     let ulbs = []

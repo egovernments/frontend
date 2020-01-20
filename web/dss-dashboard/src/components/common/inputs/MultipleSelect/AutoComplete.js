@@ -100,6 +100,13 @@ class CheckboxesTags extends React.Component {
                 localItems: this.props.item
             })
         }
+
+        if(this.props.item  && Array.isArray(this.props.item) && this.props.item.length == 0) {
+            console.log('-----data is not available-----')
+            this.setState({
+                label: "All " + this.props.target,
+            })
+        }
     }
 
 
@@ -117,13 +124,12 @@ class CheckboxesTags extends React.Component {
             this.setState({
                 label: ''
             })
-        }
-
-        if (values && Array.isArray(values) && values.length <= 0) {
+        } else {
             this.setState({
                 label: 'All ' + this.props.target
             })
         }
+
         let { target } = this.props;
         console.log('-----Target-----', target)
         let newVals = _.compact(values);
@@ -141,7 +147,6 @@ class CheckboxesTags extends React.Component {
 
     render() {
         const { classes, logo } = this.props;
-        console.log(logo)
         let svgicon;
         if (logo === "DDRs") {
             svgicon = districts_icon;
@@ -149,6 +154,7 @@ class CheckboxesTags extends React.Component {
             svgicon = ulbs_icon;
         }
 
+        console.log('----------def value---------',this.state.localItems)
         return (
             <MuiThemeProvider theme={theme}>
 
@@ -171,6 +177,7 @@ class CheckboxesTags extends React.Component {
                                 options={this.state.localItems}
                                 disableCloseOnSelect
                                 getOptionLabel={option => option}
+                                defaultValue = {this.props.localItems}
                                 renderOption={(option, { selected }) => (
                                     <React.Fragment>
                                         <Checkbox
