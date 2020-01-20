@@ -43,6 +43,7 @@ class GlobalFilter extends Component {
             tenents: '',
             tenentName: '',
             wards: '',
+            wardDefValue: []
         }
         this.handleChanges = this.handleChanges.bind(this);
     }
@@ -182,6 +183,7 @@ class GlobalFilter extends Component {
                         wardKeys.push(wardsObj[v])
                     })
                 }
+                this.setState({wardDefValue : value})
                 newFilterData[target] = wardKeys;
             } else {
                 newFilterData[target] = value;
@@ -465,7 +467,7 @@ class GlobalFilter extends Component {
                         return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.state.tenentName)
                     case "Wards":
                         console.log('loading wards', this.state)
-                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.ulbs, this.state.wards)
+                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.wardDefValue, this.state.wards)
                 }
                 break;
             case "switch":

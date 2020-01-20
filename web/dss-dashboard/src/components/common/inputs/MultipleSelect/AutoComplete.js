@@ -101,12 +101,12 @@ class CheckboxesTags extends React.Component {
             })
         }
 
-        // if(this.props.item  && Array.isArray(this.props.item) && this.props.item.length == 0) {
-        //     console.log('-----data is not available-----')
-        //     this.setState({
-        //         label: "All " + this.props.target,
-        //     })
-        // }
+        if((prevProps.item !== this.props.item)  && Array.isArray(this.props.item) && this.props.item.length <= 0) {
+            console.log('-----data is not available-----')
+            this.setState({
+                label: "All " + this.props.target,
+            })
+        }
     }
 
 
@@ -177,7 +177,7 @@ class CheckboxesTags extends React.Component {
                                 options={this.state.localItems}
                                 disableCloseOnSelect
                                 getOptionLabel={option => option}
-                                defaultValue = {this.props.localItems}
+                                defaultValue = {this.props.defaultValue ? this.props.defaultValue : ''}
                                 renderOption={(option, { selected }) => (
                                     <React.Fragment>
                                         <Checkbox
