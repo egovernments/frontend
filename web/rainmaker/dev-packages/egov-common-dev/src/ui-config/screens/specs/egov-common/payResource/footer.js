@@ -20,8 +20,8 @@ export const callPGService = async (state, dispatch) => {
   // const businessService = getQueryArg(window.location.href, "businessService"); businessService
   let callbackUrl = `${
     process.env.NODE_ENV === "production"
-      ? `${window.location.origin}/citizen`
-      : window.location.origin
+      ? `${window.origin}/citizen`
+      : window.origin
   }/egov-common/paymentRedirectPage`;
 
   const { screenConfiguration = {} } = state;
