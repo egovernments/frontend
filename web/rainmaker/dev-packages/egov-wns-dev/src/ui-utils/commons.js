@@ -698,7 +698,7 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
             [],
             mdmsBody
         );
-        console.log(payload.MdmsRes)
+        // console.log(payload.MdmsRes)
         let data = payload.MdmsRes['ws-services-calculation'].MeterStatus.map(ele => {
             return { code: ele }
         })
