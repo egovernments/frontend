@@ -15,6 +15,7 @@ import styles from './Styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import variables from '../../../../styles/variables';
 import { isMobile } from 'react-device-detect';
+import Chip from '@material-ui/core/Chip';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
@@ -99,6 +100,13 @@ class CheckboxesTags extends React.Component {
                 localItems: this.props.item
             })
         }
+
+        if((prevProps.item !== this.props.item)  && Array.isArray(this.props.item) && this.props.item.length <= 0) {
+            console.log('-----data is not available-----')
+            this.setState({
+                label: "All " + this.props.target,
+            })
+        }
     }
 
 
@@ -116,13 +124,12 @@ class CheckboxesTags extends React.Component {
             this.setState({
                 label: ''
             })
-        }
-
-        if (values && Array.isArray(values) && values.length <= 0) {
+        } else {
             this.setState({
                 label: 'All ' + this.props.target
             })
         }
+
         let { target } = this.props;
         console.log('-----Target-----', target)
         let newVals = _.compact(values);
@@ -140,7 +147,6 @@ class CheckboxesTags extends React.Component {
 
     render() {
         const { classes, logo } = this.props;
-        console.log(logo)
         let svgicon;
         if (logo === "DDRs") {
             svgicon = districts_icon;
@@ -148,12 +154,13 @@ class CheckboxesTags extends React.Component {
             svgicon = ulbs_icon;
         }
 
+        console.log('----------def value---------',this.state.localItems)
         return (
             <MuiThemeProvider theme={theme}>
 
                 <div className={classes.root}>
 
-                    <FormControl className={classes.formControl} style={isMobile?{width:"100%"}:''} >
+                    <FormControl className={classes.formControl} >
                         {/* <InputLabel htmlFor="select-multiple-checkbox">{label || 'Select'}</InputLabel> */}
                         <div className={classes.list}>
                             <div>
@@ -170,6 +177,7 @@ class CheckboxesTags extends React.Component {
                                 options={this.state.localItems}
                                 disableCloseOnSelect
                                 getOptionLabel={option => option}
+                                defaultValue = {this.props.defaultValue ? this.props.defaultValue : ''}
                                 renderOption={(option, { selected }) => (
                                     <React.Fragment>
                                         <Checkbox
@@ -181,8 +189,16 @@ class CheckboxesTags extends React.Component {
                                         {option}
                                     </React.Fragment>
                                 )}
-                                // style={(isMobile) ? { minWidth: 200 , maxWidth: 200 } : {}}                                
-                                style={(isMobile) ? { width: "100%", margin:"-6"} : {}}                                
+
+                                renderTags={(value, getTagProps) =>{
+                                    console.log('1')
+                                    return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
+                                        <Chip  label={option} {...getTagProps({ index })} />
+                                    )) : ''
+                                }
+                                }
+                                
+                                style={(isMobile) ? { width: "100%", margin:"-6"} : {}}                                  
                                 renderInput={params => (
                                     <div style={isMobile?{color:'black',margin:"0px -6px 0px 0px"}:{color:'black'}}>
 

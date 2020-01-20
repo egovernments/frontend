@@ -43,8 +43,7 @@ class GlobalFilter extends Component {
             tenents: '',
             tenentName: '',
             wards: '',
-            wardDefValue: [],
-            dontShowWard: false,
+            wardDefValue: []
         }
         this.handleChanges = this.handleChanges.bind(this);
     }
@@ -63,7 +62,7 @@ class GlobalFilter extends Component {
 
     componentDidMount() {
         let tenentCode = `${localStorage.getItem('tenant-id')}` ? `${localStorage.getItem('tenant-id')}` : ''
-
+        
         // let req = {
         //     "RequestInfo": {
         //         "authToken": ""
@@ -89,19 +88,19 @@ class GlobalFilter extends Component {
         let tenentName = []
         let tenentObj = {}
 
-        if (tenentCode && tenentCode !== 'null') {
+        if(tenentCode && tenentCode !== 'null') {
             let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[1] : ''
 
-            if (tenent && tenent !== 'null') {
+            if(tenent && tenent !== 'null') {
                 let data = tenent[0].toUpperCase() + tenent.slice(1)
-                tenentObj[data] = tenentCode
-                tenentName.push(data)
+                 tenentObj[data] = tenentCode
+                 tenentName.push(data)
 
-                this.setState({ tenants: tenentObj, tenentName: tenentName })
+                 this.setState({ tenants: tenentObj, tenentName: tenentName })
 
-            }
+             }
         }
-
+       
     }
 
     componentDidUpdate(prevProps) {
@@ -184,7 +183,7 @@ class GlobalFilter extends Component {
                         wardKeys.push(wardsObj[v])
                     })
                 }
-                this.setState({ wardDefValue: value })
+                this.setState({wardDefValue : value})
                 newFilterData[target] = wardKeys;
             } else {
                 newFilterData[target] = value;
@@ -223,7 +222,7 @@ class GlobalFilter extends Component {
         if (target) {
 
             if (target === 'ULBS') {
-                if (value && Array.isArray(value) && value.length > 0) {
+                if(value && Array.isArray(value) && value.length>0) {
                     let ulbs = []
                     let tenents = this.state.tenants
                     if (Array.isArray(value) && value.length > 0) {
@@ -233,14 +232,14 @@ class GlobalFilter extends Component {
                             }
                         })
                     }
-
+    
                     let req = {
                         "RequestInfo": {
                             "authToken": ""
                         },
                         "MdmsCriteria": {
                             "tenantId": ulbs[ulbs.length - 1],
-
+    
                             "moduleDetails": [
                                 {
                                     "moduleName": "egov-location",
@@ -252,18 +251,15 @@ class GlobalFilter extends Component {
                             ]
                         }
                     }
-
+    
                     const { WardTransporter } = this.props
                     let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.WARD_DATA, req, '');
                     WardTransporter(tenentAPI);
-                    this.setState({
-                        dontShowWard: true
-                    })
                 } else {
-                    this.setState({ wards: '' })
-                    this.handleChanges(false, 'Wards', null)
+                    this.setState({ wards: ''})
+                    this.handleChanges(false, 'Wards',null)
                 }
-
+                
             }
 
             let newFilterData = this.state.filterData;
@@ -285,9 +281,6 @@ class GlobalFilter extends Component {
 
             }
         }
-        this.setState({
-            dontShowWard: false
-        })
     }
 
     clearFilter(value, target) {
@@ -473,11 +466,8 @@ class GlobalFilter extends Component {
                     case "ULBS":
                         return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.state.tenentName)
                     case "Wards":
-                        if (this.state.dontShowWard) {
-                            return (<div></div>)
-                        } else {
-                            return this.renderAutoComplete(object.label, this.handleChanges, this.state.wardDefValue, this.state.wards)
-                        }
+                        console.log('loading wards', this.state)
+                        return this.renderAutoComplete(object.label, this.handleChanges, this.state.wardDefValue, this.state.wards)
                 }
                 break;
             case "switch":
@@ -558,6 +548,7 @@ class GlobalFilter extends Component {
         let { strings } = this.props;
         let role = this.props.dashboardConfigData && Array.isArray(this.props.dashboardConfigData) && this.props.dashboardConfigData.length > 0 && this.props.dashboardConfigData[0].roleName && this.props.dashboardConfigData[0].roleName
 
+        console.log(role)
         if (role) {
             if (role === 'Admin') {
                 // console.log('Admin calling')
