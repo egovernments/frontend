@@ -101,12 +101,12 @@ class CheckboxesTags extends React.Component {
             })
         }
 
-        if(this.props.item  && Array.isArray(this.props.item) && this.props.item.length == 0) {
-            console.log('-----data is not available-----')
-            this.setState({
-                label: "All " + this.props.target,
-            })
-        }
+        // if(this.props.item  && Array.isArray(this.props.item) && this.props.item.length == 0) {
+        //     console.log('-----data is not available-----')
+        //     this.setState({
+        //         label: "All " + this.props.target,
+        //     })
+        // }
     }
 
 
