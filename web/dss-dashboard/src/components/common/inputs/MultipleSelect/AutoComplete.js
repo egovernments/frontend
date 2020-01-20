@@ -15,7 +15,6 @@ import styles from './Styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import variables from '../../../../styles/variables';
 import { isMobile } from 'react-device-detect';
-import Chip from '@material-ui/core/Chip';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
@@ -100,13 +99,6 @@ class CheckboxesTags extends React.Component {
                 localItems: this.props.item
             })
         }
-
-        if((prevProps.item !== this.props.item)  && Array.isArray(this.props.item) && this.props.item.length <= 0) {
-            console.log('-----data is not available-----')
-            this.setState({
-                label: "All " + this.props.target,
-            })
-        }
     }
 
 
@@ -124,17 +116,22 @@ class CheckboxesTags extends React.Component {
             this.setState({
                 label: ''
             })
-        } else {
+        }
+
+        if (values && Array.isArray(values) && values.length <= 0) {
             this.setState({
                 label: 'All ' + this.props.target
             })
         }
-
         let { target } = this.props;
+        console.log('-----Target-----', target)
         let newVals = _.compact(values);
         if (newVals.length > 0) {
+            console.log('-----newVals-----', newVals)
             this.setState({ name: newVals });
+            this.props.handleSelected(false, target, newVals)
         } else {
+            console.log('-----newVals2-----', newVals)
             this.setState({ name: [] });
             this.props.handleSelected(false, target, [])
         }
@@ -143,6 +140,7 @@ class CheckboxesTags extends React.Component {
 
     render() {
         const { classes, logo } = this.props;
+        console.log(logo)
         let svgicon;
         if (logo === "DDRs") {
             svgicon = districts_icon;
@@ -150,13 +148,12 @@ class CheckboxesTags extends React.Component {
             svgicon = ulbs_icon;
         }
 
-        console.log('----------def value---------',this.state.defaultValue)
         return (
             <MuiThemeProvider theme={theme}>
 
                 <div className={classes.root}>
 
-                    <FormControl className={classes.formControl} >
+                    <FormControl className={classes.formControl} style={isMobile?{width:"100%"}:''} >
                         {/* <InputLabel htmlFor="select-multiple-checkbox">{label || 'Select'}</InputLabel> */}
                         <div className={classes.list}>
                             <div>
@@ -167,7 +164,7 @@ class CheckboxesTags extends React.Component {
 
                             <Autocomplete
                                 onChange={this.handleChange.bind(this)}
-
+                                style={isMobile?{width:"100%",margin:"-6"}:''}
                                 multiple
                                 id="checkboxes-tags-demo"
                                 options={this.state.localItems}
@@ -184,25 +181,17 @@ class CheckboxesTags extends React.Component {
                                         {option}
                                     </React.Fragment>
                                 )}
-
-                                renderTags={(value, getTagProps) =>{
-                                    console.log('1')
-                                    return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
-                                        <Chip  label={option} {...getTagProps({ index })} />
-                                    )) : ''
-                                }
-                                }
-                                
-                                style={(isMobile) ? { minWidth: 200 , maxWidth: 200 } : {}}                                
+                                // style={(isMobile) ? { minWidth: 200 , maxWidth: 200 } : {}}                                
+                                style={(isMobile) ? { width: "100%", margin:"-6"} : {}}                                
                                 renderInput={params => (
-                                    <div style={{color:'black'}}>
+                                    <div style={isMobile?{color:'black',margin:"0px -6px 0px 0px"}:{color:'black'}}>
 
                                     <TextField
                                         {...params}
                                         variant="standard"
                                         fullWidth
                                         placeholder={this.state.label}
-                                        style={{ color: 'black' }}
+                                        style={isMobile?{color:'black',margin:"0px -6px 0 0"}:{color:'black'}}
                                         // InputLabelProps={{
                                         //     style: {
                                             

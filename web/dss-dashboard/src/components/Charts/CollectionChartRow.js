@@ -12,12 +12,6 @@ import style from './styles';
 import Arrow_Downward from '../../images/arrows/Arrow_Downward.svg'
 import Arrow_Upward from '../../images/arrows/Arrow_Upward.svg'
 
-const insight_data_val = {
-	"name": "INSIGHTS",
-	"value": "-2% than last month",
-	"indicator": "lower_red",
-	"colorCode": "lower_red"
-}
 
 class CollectionChartRow extends React.Component {
 	constructor(props) {
@@ -71,9 +65,7 @@ class CollectionChartRow extends React.Component {
 							<React.Fragment>
 								<span style={{ marginLeft: "6vh" }}>
 									<img src={insightIcon} style={{ height: "16px", color: insightColor}}/>
-									 {/* data.insight_data.colorCode === "lower_red" ? "red" : "green" }} alt="Arrow_Upward" /> */}
 								</span>
-								{/* <span style={{color:"rgb(37, 155, 36)", marginLeft:"1vh"}}>{`${this.props.randomnum} %`}</span> */}
 								<span style={{ color: insightColor, marginLeft: "1vh" }}>{`${data.insight_data.value.toString().split("than last month")[0]}`}</span>
 							</React.Fragment>
 						}
