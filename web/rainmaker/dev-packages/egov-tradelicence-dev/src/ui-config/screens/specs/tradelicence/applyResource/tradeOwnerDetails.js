@@ -514,7 +514,7 @@ const OwnerInfoCard = {
             labelName: "Enter Owner's PAN No.",
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
           },
-          required: true,
+          // required: true,
           pattern: getPattern("PAN"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
         })
