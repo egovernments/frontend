@@ -5,9 +5,10 @@ import isUndefined from "lodash/isUndefined";
 import AutoComplete from "material-ui/AutoComplete";
 import { withStyles } from "@material-ui/core/styles";
 import Label from "egov-ui-kit/utils/translationNode";
+import { List} from  "egov-ui-kit/components";
+import Input from '@material-ui/core/Input';
 import { connect } from "react-redux";
-import Menu from "material-ui/Menu";
-import MenuItem from "material-ui/MenuItem";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
 import get from "lodash/get";
 import "./index.css";
 
@@ -32,24 +33,39 @@ const styles = (theme) => ({
     fontSize: "16px",
   },
 });
-const menu = [
-    {
-      code: "ACTIVE",
-      label: "BILL_GENIE_ACTIVE_LABEL"
-    },
-    {
-      code: "INACTIVE",
-      label: "BILL_GENIE_PAID_LABEL"
-    },
-    {
-      code: "PAID",
-      label: "BILL_GENIE_INACTIVE_LABEL"
-    }
+const getListItems = items =>
+  items.map((item) => ({
+    primaryText: (
+      <Label
+        label={item.label}
+        fontSize="16px"
+        color="#484848"
+        labelStyle={{ fontWeight: 500 }}
+      />
+    )
+  
+   // route: item.route,
+
+  }));
+const items = [
+  {
+    code: "ACTIVE",
+    label: "Active"
+  },
+  {
+    code: "INACTIVE",
+    label: "Inactive"
+  },
+  {
+    code: "PAID",
+    label: "Paid"
+  }
   ];
 
 class WhatsAppScreen extends React.Component {
   state = {
     searchText: "",
+    data:items,
   };
   getNameById = (id, dropDownData) => {
     //const { dropDownData } = this.props;
@@ -67,6 +83,18 @@ class WhatsAppScreen extends React.Component {
 
   onChangeText = (searchText, dataSource, params) => {
     this.setState({ searchText });
+    //logic to like search on items    
+    const filterData = items.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
+ 
+    
+    this.setState({
+      data:filterData,
+    })
+    if(searchText===""){
+      this.setState({
+        data:items,
+      })
+    }
   };
 
   onSearchClick = (e) => {
@@ -78,10 +106,8 @@ class WhatsAppScreen extends React.Component {
   getTransformedItems = () => {
     //const { menu } = this.props;
     const transformedItems =
-      menu &&
-      menu
-//      .filter((item) => item.url === "url")
-        .map((item, index) => {
+      items &&
+      items.map((item, index) => {
           return {
             label: item.label,
             value: item.code,
@@ -111,7 +137,22 @@ class WhatsAppScreen extends React.Component {
        </div>   
        <div className={`${classes.root} dashboard-search-main-cont`}>
         <Icon action="action" name="search" style={{ marginLeft: 12 }} />
-        <AutoComplete
+        <Input
+        placeholder="Search City"
+        //className={classes.input}
+        inputProps={{
+          'aria-label': 'Description',
+        }}
+        onChange={(e) => {
+          this.onChangeText(e.target.value);
+        //   this.setState({
+        //   searchText:e.target.value,
+        
+        
+        // })
+      }}
+      />
+        {/* <AutoComplete
           hintText={
             <Label
               label="COMMON_SEARCH_SERVICE_INFORMATION"
@@ -125,7 +166,7 @@ class WhatsAppScreen extends React.Component {
             history.push(chosenRequest.value);
           }}
           onUpdateInput={onChangeText}
-          dataSource={getTransformedItems() || []}
+         dataSource={getTransformedItems() || []}
           underlineFocusStyle={{ borderBottom: "none", borderTop: "none" }}
           underlineStyle={{ borderBottom: "none", borderTop: "none" }}
           // listStyle={{ padding: "20px 20px 20px 20px" }}
@@ -134,12 +175,22 @@ class WhatsAppScreen extends React.Component {
           filter={(searchText, key) => {
             return key.toLowerCase().includes(getNameById(searchText) && getNameById(searchText.toLowerCase()));
           }}
-        />
+        /> */}
 
         {/* <Icon action="av" name="mic" style={{ marginRight: 12 }} /> */}
       </div>
-       </div>
        
+       <div className="list-style">
+       <List
+          items={getListItems(this.state.data)}
+          primaryTogglesNestedList={true}
+          onItemClick={(item, index) => {
+            history && history.push(item.route);
+          }}
+          
+      />
+    </div>
+    </div>
        </div>
     );
   }
