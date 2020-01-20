@@ -15,6 +15,7 @@ import styles from './Styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import variables from '../../../../styles/variables';
 import { isMobile } from 'react-device-detect';
+import Chip from '@material-ui/core/Chip';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
@@ -181,6 +182,13 @@ class CheckboxesTags extends React.Component {
                                         {option}
                                     </React.Fragment>
                                 )}
+
+                                renderTags={(value, getTagProps) =>
+                                    this.state.localItems ? value.map((option, index) => (
+                                        <Chip  label={option} {...getTagProps({ index })} />
+                                    )) : ''
+                                }
+                                
                                 style={(isMobile) ? { minWidth: 200 , maxWidth: 200 } : {}}                                
                                 renderInput={params => (
                                     <div style={{color:'black'}}>
