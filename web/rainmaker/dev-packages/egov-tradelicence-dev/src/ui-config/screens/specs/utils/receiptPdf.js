@@ -1147,9 +1147,9 @@ const getCertificateData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text:
-              transformedData.licenseValidity.startDate +
+              transformedData.licenseValidFromDate +
               getLocaleLabels("To", "TL_LOCALIZATION_TRADE_LICENSE_TO") +
-              transformedData.licenseValidity.endDate
+              transformedData.licenseExpiryDate
           }
         ]
       },
