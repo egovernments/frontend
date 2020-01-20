@@ -93,8 +93,8 @@ class CheckboxesTags extends React.Component {
     }
 
     componentDidUpdate(prevProps){
-        console.log('prevProps---',prevProps)
-        console.log('Next props---', this.props)
+        // console.log('prevProps---',prevProps)
+        // console.log('Next props---', this.props)
         if(prevProps.item !== this.props.item && this.props.item){
             this.setState({
                 localItems: this.props.item
@@ -102,7 +102,6 @@ class CheckboxesTags extends React.Component {
         }
 
         if((prevProps.item !== this.props.item)  && Array.isArray(this.props.item) && this.props.item.length <= 0) {
-            console.log('-----data is not available-----')
             this.setState({
                 label: "All " + this.props.target,
             })
@@ -119,7 +118,6 @@ class CheckboxesTags extends React.Component {
     }
 
     handleChange = (event, values) => {
-        console.log('---handle change----',values)
         if (values && Array.isArray(values) && values.length > 0) {
             this.setState({
                 label: ''
@@ -131,14 +129,11 @@ class CheckboxesTags extends React.Component {
         }
 
         let { target } = this.props;
-        console.log('-----Target-----', target)
         let newVals = _.compact(values);
         if (newVals.length > 0) {
-            console.log('-----newVals-----', newVals)
             this.setState({ name: newVals });
             this.props.handleSelected(false, target, newVals)
         } else {
-            console.log('-----newVals2-----', newVals)
             this.setState({ name: [] });
             this.props.handleSelected(false, target, [])
         }
@@ -154,7 +149,8 @@ class CheckboxesTags extends React.Component {
             svgicon = ulbs_icon;
         }
 
-        console.log('----------def value---------',this.state.localItems)
+        console.log('----------------------',this.props)
+        console.log('----------def value---------',this.state)
         return (
             <MuiThemeProvider theme={theme}>
 
