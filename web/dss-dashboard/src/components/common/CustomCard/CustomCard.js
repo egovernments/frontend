@@ -46,14 +46,14 @@ class CustomCard extends React.Component {
 
         if (data) {
             let label1 = data.label ? (strings[data.label] ? strings[data.label] : data.label) : '';
-            let label = label1.length > 11 ? label1.substring(0, 15) + "..." : label1;
+            let label = label1.length > 11 ? label1.substring(0, 9) + "..." : label1;
 
             return (
                 <Grid container spacing={24}>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                         {/* <div style={{ minHeight: type === 'module' ? (isMobile ? '0px' : '50px') : '0px' }}> */}
                         <div>
-                            <Tooltip title={label1} placement="top-start">
+                            <Tooltip title={label1} placement="top">
                                 <Typography className={classes.subTitle}>{label}</Typography>
                             </Tooltip>
                         </div>

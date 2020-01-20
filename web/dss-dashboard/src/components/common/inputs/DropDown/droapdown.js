@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import SVG from 'react-inlinesvg';
 import department_icon from '../../../../images/icon-department.svg';
 import styles from './ButtonDropDownStyles';
+import { isMobile } from 'react-device-detect';
 
 class SimpleSelect extends Component {
     constructor(props) {
@@ -39,6 +40,7 @@ class SimpleSelect extends Component {
     }
     render() {
         let { classes, data, selected, noIcon, value } = this.props;
+        // return (<div className={classes.list} style={isMobile?{width:'200px' ,display:"inline-flex"}:{display:"inline-flex"}}>
         return (<div className={classes.list} style={{display:"inline-flex"}}>
                 {!noIcon && <SVG src={department_icon} className={classes.CloseButton} >
                     Close
