@@ -139,6 +139,8 @@ class WhatsAppScreen extends React.Component {
         <Icon action="action" name="search" style={{ marginLeft: 12 }} />
         <Input
         placeholder="Search City"
+        disableUnderline={true}
+        fullWidth={true}
         //className={classes.input}
         inputProps={{
           'aria-label': 'Description',
@@ -187,6 +189,8 @@ class WhatsAppScreen extends React.Component {
           onItemClick={(item, index) => {
             history && history.push(item.route);
           }}
+          listItemStyle = {{borderBottom:"1px solid grey"}}
+        //  listContainerStyle = {{height:"50px"}}
           
       />
     </div>
