@@ -13,7 +13,6 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
-import printJS from 'print-js';
 import axios from 'axios';
 
 
@@ -502,7 +501,6 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
       }
     }
     else {
-     // printJS(fileRes[fileStoreId])
       var response =await axios.get(fileRes[fileStoreId], {
         //responseType: "blob",
         responseType: "arraybuffer",
