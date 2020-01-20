@@ -223,6 +223,7 @@ class GlobalFilter extends Component {
         if (target) {
 
             if (target === 'ULBS') {
+                console.log(this.state.wardDefValue)
                 if (value && Array.isArray(value) && value.length > 0) {
                     let ulbs = []
                     let tenents = this.state.tenants

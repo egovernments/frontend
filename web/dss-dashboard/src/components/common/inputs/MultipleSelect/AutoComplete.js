@@ -151,6 +151,7 @@ class CheckboxesTags extends React.Component {
 
         console.log('----------------------',this.props)
         console.log('----------def value---------',this.state)
+        console.log(this.props.defaultValue)
         return (
             <MuiThemeProvider theme={theme}>
 
@@ -174,7 +175,7 @@ class CheckboxesTags extends React.Component {
                                 disableCloseOnSelect
                                 getOptionLabel={option => option}
                                 // defaultValue = {this.props.defaultValue ? this.props.defaultValue : ''}
-                                defaultValue = ""
+                                // defaultValue = {["The"]}
                                 
                                 renderOption={(option, { selected }) => (
                                     <React.Fragment>
