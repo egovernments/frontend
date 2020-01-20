@@ -704,8 +704,8 @@ export const footerReview = (
           },
           children: {
             downloadMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
+              uiFramework: "custom-molecules",
+              // moduleName: "egov-tradelicence",
               componentPath: "MenuButton",
               props: {
                 data: {
