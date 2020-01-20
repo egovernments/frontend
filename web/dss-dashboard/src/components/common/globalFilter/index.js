@@ -220,9 +220,6 @@ class GlobalFilter extends Component {
     }
 
     handleFilterChange(open, target, value) {
-        this.setState({
-            dontShowWard: true
-        })
         if (target) {
 
             if (target === 'ULBS') {
@@ -259,6 +256,9 @@ class GlobalFilter extends Component {
                     const { WardTransporter } = this.props
                     let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.WARD_DATA, req, '');
                     WardTransporter(tenentAPI);
+                    this.setState({
+                        dontShowWard: true
+                    })
                 } else {
                     this.setState({ wards: '' })
                     this.handleChanges(false, 'Wards', null)
