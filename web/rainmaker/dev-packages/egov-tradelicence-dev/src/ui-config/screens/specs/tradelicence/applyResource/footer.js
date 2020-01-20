@@ -705,8 +705,7 @@ export const footerReview = (
           children: {
             downloadMenu: {
               uiFramework: "custom-molecules",
-              // moduleName: "egov-tradelicence",
-              componentPath: "MenuButton",
+              componentPath: "DownloadPrintButton",
               props: {
                 data: {
                   label: {
