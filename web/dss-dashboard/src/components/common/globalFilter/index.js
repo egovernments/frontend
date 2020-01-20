@@ -257,6 +257,7 @@ class GlobalFilter extends Component {
                     WardTransporter(tenentAPI);
                 } else {
                     this.setState({ wards: ''})
+                    this.handleChanges(false, 'Wards',null)
                 }
                 
             }
