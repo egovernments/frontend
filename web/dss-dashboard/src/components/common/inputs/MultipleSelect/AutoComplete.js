@@ -131,14 +131,10 @@ class CheckboxesTags extends React.Component {
         }
 
         let { target } = this.props;
-        console.log('-----Target-----', target)
         let newVals = _.compact(values);
         if (newVals.length > 0) {
-            console.log('-----newVals-----', newVals)
             this.setState({ name: newVals });
-            this.props.handleSelected(false, target, newVals)
         } else {
-            console.log('-----newVals2-----', newVals)
             this.setState({ name: [] });
             this.props.handleSelected(false, target, [])
         }
@@ -154,7 +150,7 @@ class CheckboxesTags extends React.Component {
             svgicon = ulbs_icon;
         }
 
-        console.log('----------def value---------',this.state.localItems)
+        console.log('----------def value---------',this.state.defaultValue)
         return (
             <MuiThemeProvider theme={theme}>
 
@@ -177,7 +173,7 @@ class CheckboxesTags extends React.Component {
                                 options={this.state.localItems}
                                 disableCloseOnSelect
                                 getOptionLabel={option => option}
-                                defaultValue = {this.props.defaultValue ? this.props.defaultValue : ''}
+                                value = {this.props.defaultValue ? this.props.defaultValue : ''}
                                 renderOption={(option, { selected }) => (
                                     <React.Fragment>
                                         <Checkbox

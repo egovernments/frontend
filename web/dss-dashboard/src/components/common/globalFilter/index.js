@@ -466,7 +466,6 @@ class GlobalFilter extends Component {
                     case "ULBS":
                         return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.state.tenentName)
                     case "Wards":
-                        console.log('loading wards', this.state)
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.wardDefValue, this.state.wards)
                 }
                 break;
@@ -548,7 +547,6 @@ class GlobalFilter extends Component {
         let { strings } = this.props;
         let role = this.props.dashboardConfigData && Array.isArray(this.props.dashboardConfigData) && this.props.dashboardConfigData.length > 0 && this.props.dashboardConfigData[0].roleName && this.props.dashboardConfigData[0].roleName
 
-        console.log(role)
         if (role) {
             if (role === 'Admin') {
                 // console.log('Admin calling')
