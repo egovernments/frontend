@@ -88,7 +88,7 @@ class CitizenDashboard extends Component {
               </div>
             </div>
           )}
-          {/* {whatsNewEvents && <Notifications notifications={whatsNewEvents} history={history} />} */}
+          {whatsNewEvents && <Notifications notifications={whatsNewEvents} history={history} />} 
         </div>
         <LogoutDialog
           logoutPopupOpen={openDialog}
