@@ -481,6 +481,12 @@ class GlobalFilter extends Component {
                         } else {
                             return this.renderAutoComplete(object.label, this.handleChanges, this.state.wardDefValue, this.state.wards, 'Wards')
                         }
+                    case "Services":
+                        if (this.state.pageId === 'ulb-overview') {
+                            return this.renderSimpleSelect(object.label, object.values, this.handleChanges)
+                        } else {
+                            return <div></div>
+                        }
                 }
                 break;
             case "switch":
@@ -557,7 +563,7 @@ class GlobalFilter extends Component {
     }
 
     render() {
-        let { classes, globalFilterData, ulbFilter, mdmsData, GFilterData, ulbFilters } = this.props;
+        let { classes, globalFilterData, ulbFilter, mdmsData, GFilterData, ulbFilters, ulbOverViewFilters } = this.props;
         let { strings } = this.props;
         let role = this.props.dashboardConfigData && Array.isArray(this.props.dashboardConfigData) && this.props.dashboardConfigData.length > 0 && this.props.dashboardConfigData[0].roleName && this.props.dashboardConfigData[0].roleName
 
@@ -636,40 +642,77 @@ class GlobalFilter extends Component {
                     </Cards>
                 );
             } else {
+                if (this.state.pageId === 'ulb-overview') {
+                    return (
+                        <Cards key="gf" fullW={true}>
+                            <div className={classes.mainFilter}>
 
-                return (
-                    <Cards key="gf" fullW={true}>
-                        <div className={classes.mainFilter}>
 
+                                {ulbOverViewFilters.map(ro => {
 
-                            {ulbFilters.map(ro => {
+                                    return (
+                                        <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
+                                            {(this.state.pageId === 'ulb-overview' && ro.label === 'Wards') ? <div></div> : <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>}
 
-                                return (
-                                    <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
-                                        {(this.state.pageId === 'ulb-overview' && ro.label === 'Wards') ? <div></div> : <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>}
-
-                                        <div>
-                                            {this.renderUlbFilters(ro)}
+                                            <div>
+                                                {this.renderUlbFilters(ro)}
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })
-                            }
+                                    );
+                                })
+                                }
 
-                            {isMobile ? <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: "inherit", marginTop: '7px' }}>
-                                <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
-                                <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
-                            </div>
-                                :
-                                <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: 300, marginTop: '7px' }}>
+                                {isMobile ? <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: "inherit", marginTop: '7px' }}>
                                     <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
                                     <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
                                 </div>
-                            }
-                        </div>
+                                    :
+                                    <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: 300, marginTop: '7px' }}>
+                                        <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                                        <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                                    </div>
+                                }
+                            </div>
 
-                    </Cards>
-                );
+                        </Cards>
+                    );
+                } else {
+                    return (
+                        <Cards key="gf" fullW={true}>
+                            <div className={classes.mainFilter}>
+
+
+                                {ulbFilters.map(ro => {
+
+                                    return (
+                                        <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
+                                            {(this.state.pageId === 'ulb-overview' && ro.label === 'Wards') ? <div></div> : <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>}
+
+                                            <div>
+                                                {this.renderUlbFilters(ro)}
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                                }
+
+                                {isMobile ? <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: "inherit", marginTop: '7px' }}>
+                                    <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                                    <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                                </div>
+                                    :
+                                    <div id="divNotToPrint" className={classes.actions} style={{ maxWidth: 300, marginTop: '7px' }}>
+                                        <ActionButtons buttonType="default" fontSize="16px" text={strings["DSS_CLEAR_ALL"] || "DSS_CLEAR_ALL"} disableed={Object.keys(this.state.filterData).length == 0} clas={classes.clearbtn} handleClick={this.clearFilter.bind(this)} />
+                                        <ActionButtons containedButton={true} buttonType="default" fontSize="16px" text={strings["DSS_APPLY"] || "DSS_APPLY"} clas={classes.clearbtn} handleClick={this.applyFilter.bind(this)} />
+                                    </div>
+                                }
+                            </div>
+
+                        </Cards>
+                    );
+                }
+
+
             }
         }
         else {
@@ -689,7 +732,8 @@ const mapStateToProps = (state) => {
         tenents: state.tenents,
         wards: state.wards,
         dashboardConfigData: state.firstReducer.dashboardConfigData,
-        ulbFilters: state.ulbFilters
+        ulbFilters: state.ulbFilters,
+        ulbOverViewFilters: state.ulbOverViewFilters,
     }
 }
 

@@ -15,6 +15,7 @@ import mdmsData from './mdms/mdms';
 import ulbFilters from './ulbsReducer';
 import tenents from './tenent/tenent';
 import wards from './tenent/ward';
+import ulbOverViewFilters from './ulbOverviewFilter'
 
 export default {
     apistatus: apistatus,
@@ -33,5 +34,6 @@ export default {
     mdmsData: mdmsData,
     ulbFilters: ulbFilters,
     tenents: tenents,
-    wards: wards
+    wards: wards,
+    ulbOverViewFilters: ulbOverViewFilters,
 }
