@@ -337,7 +337,7 @@ class GlobalFilter extends Component {
 
         return (
 
-            <FormControl fullWidth className={classes.formControl} >
+            <FormControl fullWidth className={classes.formControl}>
                 <div className={classes.list}>
                     <SVG src={icondepartment} className={classes.CloseButton}>
 
@@ -352,7 +352,8 @@ class GlobalFilter extends Component {
                             margin: '0 0px 0 0',
                             // width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
                             // width: isMobile ? '200px' : '150px'
-                            width: isMobile ? '100%' : '150px'
+                            //width: isMobile ? '100%' : '150px'
+                            width:'100%'
                         }}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">
