@@ -19,7 +19,20 @@ class CustomCard extends React.Component {
 
     callAPI() {
         let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
-        let requestBody = getChartOptions(code, this.props.filters);
+        let filters = this.props.filters
+        console.log(filters)
+    
+        if(this.props.page.includes('ulb')) {
+          if(!filters['tenantId']) {
+            console.log('=======tenet Id not there Home comp========')
+            let tenentFilter = []
+            tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+            filters['tenantId'] = tenentFilter
+          }
+        }
+        console.log(filters)
+
+        let requestBody = getChartOptions(code, filters);
         let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
         this.props.APITransport(chartsAPI);
     }
@@ -28,11 +41,8 @@ class CustomCard extends React.Component {
         this.callAPI();
     }
 
-
-
-
     render() {
-        const { classes, strings, type, chartLabelName } = this.props;
+        const { classes, strings, type, chartLabelName, page } = this.props;
 
         let codekey = _.chain(this.props).get('chartData').get("id").value();
         let data = _.chain(this.props).get("chartsGData").get(codekey).get("data").map((d, i) => {

@@ -90,7 +90,7 @@ class Home extends React.Component {
         let bgColor = Variables.colors[index].light
         let iconColor = Variables.colors[index].dark
         let pageId = data && data.ref && data.ref.url
-       
+
         if (data.vizType.toUpperCase() === 'COLLECTION') {
             let url = Config.DEMO_API_URL + Config.APP_NAME + pageId
             return (
@@ -117,7 +117,7 @@ class Home extends React.Component {
                                         <Grid container spacing={24}>
                                             {
                                                 data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview"></CustomCard></Grid>
+                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview" page={pageId}></CustomCard></Grid>
                                                 })
                                             }
                                         </Grid>
@@ -150,7 +150,7 @@ class Home extends React.Component {
                                     data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
 
                                         return <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.customCard}>
-                                            <CustomCard chartLabelName={chartLabelName} key={d.id} chartData={d} filters={filters} type="module"></CustomCard></Grid>
+                                            <CustomCard chartLabelName={chartLabelName} key={d.id} chartData={d} filters={filters} type="module" page={pageId}></CustomCard></Grid>
                                     })
                                 }
                             </Grid>

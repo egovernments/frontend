@@ -45,18 +45,22 @@ export default function getFilterObj(GFilterData, globalFilterData, page) {
 
     switch (_.toLower(page)) {
         case 'propertytax':
+        case 'ulb-propertytax':
             filters['modulelevel'] = 'PT';
             break;
         case 'dashboard':
             filters['modulelevel'] = null;
             break;
         case 'tradelicense':
+        case 'ulb-tradelicense':
             filters['modulelevel'] = 'TL';
             break;
         case 'pgr':
+        case 'ulb-pgr':
             filters['modulelevel'] = 'PGR';
             break;
         case 'w&s':
+        case 'ulb-w&s':
             filters['modulelevel'] = 'W&S';
             break;
 
