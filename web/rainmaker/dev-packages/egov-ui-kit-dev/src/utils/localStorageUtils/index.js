@@ -51,18 +51,27 @@ export const clearUserDetails = () => {
 export const localStorageGet = (key, path) => {
   const appName = process.env.REACT_APP_NAME;
   let value = null;
-  if (path) {
-    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
-    value = get(data, path);
-  } else {
-    value = window.localStorage.getItem(appName + "." + key) || null;
+  if(appName){
+    if (path) {
+      const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
+      value = get(data, path);
+    } else {
+      value = window.localStorage.getItem(appName + "." + key) || null;
+    }
+  }else{
+    if (path) {
+      const data = JSON.parse(window.localStorage.getItem(key)) || null;
+      value = get(data, path);
+    } else {
+      value = window.localStorage.getItem(key) || null;
+    }
   }
+  
   return value;
 };
 export const localStorageSet = (key, data, path) => {
   const appName = process.env.REACT_APP_NAME;
   const storedData = window.localStorage.getItem(appName + "." + key);
-
   if (path) {
     set(storedData, path, data);
     window.localStorage.setItem(appName + "." + key, storedData);
