@@ -352,7 +352,8 @@ class GlobalFilter extends Component {
                             margin: '0 0px 0 0',
                             // width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
                             // width: isMobile ? '200px' : '150px'
-                            width: isMobile ? '100%' : '150px'}}
+                            width: isMobile ? '100%' : '150px'
+                        }}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">
                         //     <SVG src={icondepartment} className={classes.CloseButton}>
@@ -474,7 +475,7 @@ class GlobalFilter extends Component {
                     case "ULBS":
                         return this.renderAutoComplete(object.label, this.handleFilterChange.bind(this), this.state.ulbs, this.state.tenentName, '')
                     case "Wards":
-                        if (this.state.dontShowWard) {
+                        if (this.state.pageId === 'ulb-overview') {
                             return (<div></div>)
                         } else {
                             return this.renderAutoComplete(object.label, this.handleChanges, this.state.wardDefValue, this.state.wards, 'Wards')
@@ -644,8 +645,11 @@ class GlobalFilter extends Component {
 
                                 return (
                                     <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
-                                        <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
-                                        {this.renderUlbFilters(ro)}
+                                        {(this.state.pageId === 'ulb-overview' && ro.label === 'Wards') ? <div></div> : <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>}
+
+                                        <div>
+                                            {this.renderUlbFilters(ro)}
+                                        </div>
                                     </div>
                                 );
                             })

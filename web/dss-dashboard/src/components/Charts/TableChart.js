@@ -59,6 +59,17 @@ class TableChart extends Component {
 
     var globalFilters = this.props.filters;
     globalFilters = {...globalFilters,...filters};
+
+    if(this.props.page && this.props.page.includes('ulb')) {
+      if(!globalFilters['tenantId']) {
+        console.log('=======tenet Id not there TableChart comp========')
+        let tenentFilter = []
+        tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+        globalFilters['tenantId'] = tenentFilter
+      }
+    }
+    console.log(globalFilters)
+
     let getAxiosOptions = getChartOptions(visualcode, globalFilters);
     
     if (getAxiosOptions && getAxiosOptions.url) {

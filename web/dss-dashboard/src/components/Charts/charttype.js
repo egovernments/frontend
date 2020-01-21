@@ -133,6 +133,7 @@ class ChartType extends React.Component {
                         dimensions={this.props.dimensions}
                         section={this.props.section}
                         label={this.props.label}
+                        page={this.props.page}
                     />
                 default:
                     return false;
