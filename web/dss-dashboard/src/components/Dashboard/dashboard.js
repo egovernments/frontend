@@ -92,6 +92,17 @@ class Dashboard extends Component {
   callAll() {
     let { chartsData } = this.props;
     let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, this.state.page);
+    console.log(filters)
+
+    if(this.state.page.includes('ulb')) {
+      if(!filters['tenantId']) {
+        console.log('=======tenet Id not there dashboard comp========')
+        let tenentFilter = []
+        tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+        filters['tenentId'] = tenentFilter
+      }
+    }
+    console.log(filters)
     _.each(chartsData, (k, v) => {
       let code = v;
       if (code) {

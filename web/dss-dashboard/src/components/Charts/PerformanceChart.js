@@ -25,7 +25,22 @@ class PerformanceChart extends React.Component {
 
   callAPI() {
     let code = this.props.chartData[0]['id'] ? this.props.chartData[0]['id'] : "";
-    let requestBody = getChartOptions(code, {});
+    console.log('-------------------', this.props.filters)
+    let filters = this.props.filters
+    console.log(filters)
+
+    if (this.props.page.includes('ulb')) {
+      if (!filters['tenantId']) {
+        console.log('=======tenet Id not there perf chart========')
+        let tenentFilter = []
+        tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+        //   tenentFilter.push('pb.amritsar')
+
+        filters['tenentId'] = tenentFilter
+      }
+    }
+    console.log(filters)
+    let requestBody = getChartOptions(code, filters || {});
 
     let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
     this.props.APITransport(chartsAPI);
@@ -37,10 +52,10 @@ class PerformanceChart extends React.Component {
     this.callAPI();
   }
   handleClick(visualCode) {
-     /*this.setState({
-       IsOpen: true
-     })*/
-     this.props.setViewAll(visualCode);
+    /*this.setState({
+      IsOpen: true
+    })*/
+    this.props.setViewAll(visualCode);
     //let codekey = _.chain(this.props).get('chartData').first().get("id").value();
     //this.props.history.push(`/${this.state.page}/${codekey}`)
   }
@@ -87,13 +102,13 @@ class PerformanceChart extends React.Component {
       return null;
     }
   }
-  renderPopup(data,codekey) {
+  renderPopup(data, codekey) {
     const { classes } = this.props;
     let { strings } = this.props;
 
     if (data.length > 3) {
       return (<div className={classes.bottomDiv}>
-        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} value={codekey} text={strings["DSS_VIEW_ALL"] || "DSS_VIEW_ALL"} handleClick={this.handleClick.bind(this)} />        
+        <ActionButtons buttonType={"default"} fontSize={variables.fs_14} value={codekey} text={strings["DSS_VIEW_ALL"] || "DSS_VIEW_ALL"} handleClick={this.handleClick.bind(this)} />
       </div>)
     } else {
       return null;
@@ -138,7 +153,7 @@ class PerformanceChart extends React.Component {
           }
         }
         )}
-        {this.renderPopup(data,codekey)}        
+        {this.renderPopup(data, codekey)}
       </div>
       )
     }

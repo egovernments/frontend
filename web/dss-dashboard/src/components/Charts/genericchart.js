@@ -19,11 +19,11 @@ class GenericChart extends React.Component {
         let filters = this.props.filters;
         switch (d.vizType.toUpperCase()) {
             case 'METRIC-COLLECTION':
-                return <CollectionChart key={d.id} chartData={d.charts} filters={filters} dimensions={d.dimensions} section={chartData.name} />
+                return <CollectionChart key={d.id} chartData={d.charts} filters={filters} dimensions={d.dimensions} section={chartData.name} page={this.props.page}/>
             case 'PERFORMING-METRIC':
-                return <PerformanceChart key={d.id} chartData={d.charts} label={d.name} filters={filters} dimensions={d.dimensions} section={chartData.name} setViewAll={this.setViewAll.bind(this)}/>
+                return <PerformanceChart key={d.id} chartData={d.charts} label={d.name} filters={filters} dimensions={d.dimensions} section={chartData.name} setViewAll={this.setViewAll.bind(this)} page={this.props.page}/>
             case 'CHART':
-                return <ChartType key={d.id} gFilter={this.props.gFilter} chartData={d.charts} label={d.name} filters={filters} dimensions={d.dimensions} section={chartData.name} />
+                return <ChartType key={d.id} gFilter={this.props.gFilter} chartData={d.charts} label={d.name} filters={filters} dimensions={d.dimensions} section={chartData.name} page={this.props.page} />
             default:
                 return <div></div>
         }
@@ -63,7 +63,7 @@ class GenericChart extends React.Component {
             return (
                 <div className={classes.chartRow}>
                     {chartData.vizArray.map((d, i) =>
-                        <Cards key={i} id={d.id} name={d.name} cardStyle={i == 1 && row === 0 ? style : style1} needInfo={true} title={d.name} noUnit={d.noUnit || false}>
+                        <Cards key={i} id={d.id} name={d.name} page={page} cardStyle={i == 1 && row === 0 ? style : style1} needInfo={true} title={d.name} noUnit={d.noUnit || false}>
                             {this.renderCharts(d, chartData)}
                         </Cards>
 

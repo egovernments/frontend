@@ -25,10 +25,27 @@ class CollectionChartRow extends React.Component {
 	componentDidMount() {
 		this.callAPI();
 	}
+
 	callAPI() {
 		let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
 		if (code) {
-			let requestBody = getChartOptions(code, this.props.filters);
+			console.log('-------------------',this.props.filters)
+			let filters = this.props.filters
+			console.log(filters)
+			
+			if(this.props.page.includes('ulb')) {
+				if(!filters['tenantId']) {
+				  console.log('=======tenet Id not there coll chartRow========')
+				  let tenentFilter = []
+				  tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+				//   tenentFilter.push('pb.amritsar')
+
+				  filters['tenentId'] = tenentFilter
+				}
+			  }
+			  console.log(filters)
+			  
+			let requestBody = getChartOptions(code, filters);
 			let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
 			this.props.APITransport(chartsAPI);
 		}

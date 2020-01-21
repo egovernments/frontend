@@ -17,7 +17,7 @@ class CollectionChart extends React.Component {
 	}
 
 	render() {
-		let { strings, classes } = this.props;
+		let { strings, classes, page } = this.props;
 		// let codekey = _.chain(this.props).get('chartData').first().get("id").value();
 		let data = this.props.chartData.map((d, i) => {
 			return {
@@ -42,7 +42,7 @@ class CollectionChart extends React.Component {
 												<span> {strings[d.label] || d.label}</span>
 											</div>
 											<span>
-												<CollectionChartRow randomnum={randomnum} key={d.id} chartData={d.charts} filters={this.props.filters} />
+												<CollectionChartRow randomnum={randomnum} key={d.id} chartData={d.charts} filters={this.props.filters} page={page}/>
 											</span>
 											
 										</Grid>

@@ -93,8 +93,6 @@ class CheckboxesTags extends React.Component {
     }
 
     componentDidUpdate(prevProps){
-        // console.log('prevProps---',prevProps)
-        // console.log('Next props---', this.props)
         if(prevProps.item !== this.props.item && this.props.item){
             this.setState({
                 localItems: this.props.item
@@ -149,9 +147,6 @@ class CheckboxesTags extends React.Component {
             svgicon = ulbs_icon;
         }
 
-        console.log('----------------------',this.props)
-        console.log('----------def value---------',this.state)
-        console.log(this.props.defaultValue)
         return (
             <MuiThemeProvider theme={theme}>
 
