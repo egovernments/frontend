@@ -166,7 +166,8 @@ class CheckboxesTags extends React.Component {
                                 </SVG>
                             </div>
 
-                            <Autocomplete
+                            {
+                                this.props.type === 'Wards' ? <Autocomplete
                                 onChange={this.handleChange.bind(this)}
                                 style={isMobile?{width:"100%",margin:"-6"}:''}
                                 multiple
@@ -174,8 +175,8 @@ class CheckboxesTags extends React.Component {
                                 options={this.state.localItems}
                                 disableCloseOnSelect
                                 getOptionLabel={option => option}
-                                // defaultValue = {this.props.defaultValue ? this.props.defaultValue : ''}
-                                // defaultValue = defaultValue={["The"]}
+                                defaultValue = {this.props.defaultValue ? this.props.defaultValue : []}
+                                value = {this.props.defaultValue ? this.props.defaultValue : []}
                                 
                                 renderOption={(option, { selected }) => (
                                     <React.Fragment>
@@ -216,7 +217,57 @@ class CheckboxesTags extends React.Component {
                                         // // }}
                                     /></div>
                                 )}
-                            />
+                            /> : <Autocomplete
+                            onChange={this.handleChange.bind(this)}
+                            style={isMobile?{width:"100%",margin:"-6"}:''}
+                            multiple
+                            id="checkboxes-tags-demo"
+                            options={this.state.localItems}
+                            disableCloseOnSelect
+                            getOptionLabel={option => option}
+                            // defaultValue = {this.props.defaultValue ? this.props.defaultValue : ''}
+                            // defaultValue = defaultValue={["The"]}
+                            
+                            renderOption={(option, { selected }) => (
+                                <React.Fragment>
+                                    <Checkbox
+                                        icon={icon}
+                                        checkedIcon={checkedIcon}
+                                        style={{ margin: '0px 0px 2px 0px',padding:0,  color:'black' }}
+                                        checked={selected}
+                                    />
+                                    {option}
+                                </React.Fragment>
+                            )}
+
+                            renderTags={(value, getTagProps) =>{
+                                console.log('1')
+                                return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
+                                    (this.props.defaultValue && this.props.defaultValue.includes(option)) || this.props.type !=='Wards' ? <Chip  label={option} {...getTagProps({ index })} /> : <div></div>
+                                )) : ''
+                            }
+                            }
+                            
+                            style={(isMobile) ? { width: "100%", margin:"-6"} : {}}                                  
+                            renderInput={params => (
+                                <div style={isMobile?{color:'black',margin:"0px -6px 0px 0px"}:{color:'black'}}>
+
+                                <TextField
+                                    {...params}
+                                    variant="standard"
+                                    fullWidth
+                                    placeholder={this.state.label}
+                                    style={isMobile?{color:'black',margin:"0px -6px 0 0"}:{color:'black'}}
+                                    // InputLabelProps={{
+                                    //     style: {
+                                        
+                                    //     } }}
+                                    // // InputLabelProps={{
+                                    // //     className: classes.floatingLabelFocusStyle,
+                                    // // }}
+                                /></div>
+                            )}
+                            /> }
                         </div>
                     </FormControl>
 
