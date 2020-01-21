@@ -117,7 +117,7 @@ class Home extends React.Component {
                                         <Grid container spacing={24}>
                                             {
                                                 data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview" page={pageId}></CustomCard></Grid>
+                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview" page={window.location.pathname || ''}></CustomCard></Grid>
                                                 })
                                             }
                                         </Grid>
@@ -150,7 +150,7 @@ class Home extends React.Component {
                                     data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
 
                                         return <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.customCard}>
-                                            <CustomCard chartLabelName={chartLabelName} key={d.id} chartData={d} filters={filters} type="module" page={pageId}></CustomCard></Grid>
+                                            <CustomCard chartLabelName={chartLabelName} key={d.id} chartData={d} filters={filters} type="module" page={window.location.pathname || ''}></CustomCard></Grid>
                                     })
                                 }
                             </Grid>
@@ -172,9 +172,19 @@ class Home extends React.Component {
                 dontShowHeader: false
             })
         }
-        console.log(window.location.pathname); //yields: "/js" (where snippets run)
+        console.log(window.location.pathname); 
         console.log(window.location.href);
-        this.props.APITransport(dashboardApi, overview ? 'home' : this.state.page);
+
+        let path = ''
+        if(window.location.pathname && window.location.pathname.includes('ulb-')) {
+            path = 'ulb-home'
+            console.log("----setting path ul----", path)
+        } else {
+            path = 'home'
+            console.log("----setting path home----", path)
+
+        }
+        this.props.APITransport(dashboardApi, path || 'home');
 
     }
 
