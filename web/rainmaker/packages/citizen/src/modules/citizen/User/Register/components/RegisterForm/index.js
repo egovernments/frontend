@@ -18,7 +18,8 @@ const iconButtonStyle = {
   width: 35,
 };
 
-const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
+const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL}) => {
+  console.log("qwq",qrCodeURL)
   const fields = form.fields || {};
   const submit = form.submit;
   return (
@@ -81,7 +82,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
        </div>
     </div>
     <div className="register-qrscan">
-       <Image className="register-qrlogo" source={`${qrlogo}`} />
+       <Image className="register-qrlogo" source={`${qrCodeURL}`} />
       
        <div  className="register-qrtext">
        <Label  color="black" fontSize= "14px" label="Scan the QR Code to continue with Whatsapp"/>
