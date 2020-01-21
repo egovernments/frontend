@@ -192,12 +192,10 @@ export const basicDetails = getCommonCard({
       },
       jsonPath: "BPA.remarks",
       props:{
-        className:"textfield-enterable-selection"
+        className:"textfield-enterable-selection",
+        multiline: true,
+        rows: "4"
       },
-      // props: {
-      //   multiline: true,
-      //   rows: "4"
-      // },
       gridDefination: {
         xs: 12,
         sm: 12,
