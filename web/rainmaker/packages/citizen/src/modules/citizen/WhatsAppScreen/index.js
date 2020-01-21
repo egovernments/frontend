@@ -49,16 +49,28 @@ const getListItems = items =>
   }));
 const items = [
   {
-    code: "ACTIVE",
-    label: "Active"
+    code: "JODHPUR",
+    label: "Jodhpur"
   },
   {
-    code: "INACTIVE",
-    label: "Inactive"
+    code: "MUMBAI",
+    label: "Mumbai"
   },
   {
-    code: "PAID",
-    label: "Paid"
+    code: "KOLKATA",
+    label: "Kolkata"
+  },
+  {
+    code: "NEWDELHI",
+    label: "New Delhi"
+  },
+  {
+    code: "CHENNAI",
+    label: "Chennai"
+  },
+  {
+    code: "BANGALORE",
+    label: "Bangalore"
   }
   ];
 
@@ -154,32 +166,6 @@ class WhatsAppScreen extends React.Component {
         // })
       }}
       />
-        {/* <AutoComplete
-          hintText={
-            <Label
-              label="COMMON_SEARCH_SERVICE_INFORMATION"
-              color="rgba(0, 0, 0, 0.38)"
-              fontSize={16}
-              // containerStyle={{ marginLeft: 10, paddingBottom: 5 }}
-            />
-          }
-          searchText={searchText}
-          onNewRequest={(chosenRequest, index) => {
-            history.push(chosenRequest.value);
-          }}
-          onUpdateInput={onChangeText}
-         dataSource={getTransformedItems() || []}
-          underlineFocusStyle={{ borderBottom: "none", borderTop: "none" }}
-          underlineStyle={{ borderBottom: "none", borderTop: "none" }}
-          // listStyle={{ padding: "20px 20px 20px 20px" }}
-          menuStyle={{ maxHeight: "150px", maxWidth: "600px", marginTop: 10, backgroundColor: "#fff", overflowY: "auto" }}
-          dataSourceConfig={{ text: "label", value: "value" }}
-          filter={(searchText, key) => {
-            return key.toLowerCase().includes(getNameById(searchText) && getNameById(searchText.toLowerCase()));
-          }}
-        /> */}
-
-        {/* <Icon action="av" name="mic" style={{ marginRight: 12 }} /> */}
       </div>
        
        <div className="list-style">
@@ -187,7 +173,11 @@ class WhatsAppScreen extends React.Component {
           items={getListItems(this.state.data)}
           primaryTogglesNestedList={true}
           onItemClick={(item, index) => {
-            history && history.push(item.route);
+            const weblink="https://api.whatsapp.com/send?phone=919987106368&text="+item.primaryText.props.label
+            window.location.href=weblink 
+          
+            console.log(">>label",item.primaryText.props.label); 
+           // history && history.push(item.route);
           }}
           listItemStyle = {{borderBottom:"1px solid grey"}}
         //  listContainerStyle = {{height:"50px"}}
