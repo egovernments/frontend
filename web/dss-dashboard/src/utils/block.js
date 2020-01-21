@@ -269,7 +269,7 @@ const addPages = (elem, cityLogo) => {
 }
 
 export const printDocument = (cityLogo, name) => {
-    cityLogo = (cityLogo)?cityLogo.replace('https:','http:'):cityLogo;
+    cityLogo = (cityLogo)?cityLogo.replace('https://s3.ap-south-1.amazonaws.com',window.location.origin):cityLogo;
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
         //     let compon = document.getElementById("printFtable")
@@ -289,7 +289,7 @@ export const printDocument = (cityLogo, name) => {
     // });
 }
 export const printDocumentShare = (cityLogo) => {
-    cityLogo = (cityLogo)?cityLogo.replace('https:','http:'):cityLogo;
+    cityLogo = (cityLogo)?cityLogo.replace('https://s3.ap-south-1.amazonaws.com',window.location.origin):cityLogo;
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
         //     let compon = document.getElementById("printFtable")
