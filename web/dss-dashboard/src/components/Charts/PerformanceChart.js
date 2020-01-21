@@ -36,7 +36,7 @@ class PerformanceChart extends React.Component {
         tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
         //   tenentFilter.push('pb.amritsar')
 
-        filters['tenentId'] = tenentFilter
+        filters['tenantId'] = tenentFilter
       }
     }
     console.log(filters)

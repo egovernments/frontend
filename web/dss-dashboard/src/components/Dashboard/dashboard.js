@@ -99,7 +99,7 @@ class Dashboard extends Component {
         console.log('=======tenet Id not there dashboard comp========')
         let tenentFilter = []
         tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
-        filters['tenentId'] = tenentFilter
+        filters['tenantId'] = tenentFilter
       }
     }
     console.log(filters)
