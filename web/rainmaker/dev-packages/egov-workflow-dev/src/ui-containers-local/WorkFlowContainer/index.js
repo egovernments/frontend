@@ -352,8 +352,12 @@ class WorkFlowContainer extends React.Component {
       businessId,
       moduleName
     );
-    editAction.buttonLabel && actions.push(editAction);
+    if( JSON.stringify(JSON.parse(getUserInfo()).roles[0].code)!=='"TL_DOC_VERIFIER"'){
+      editAction.buttonLabel && actions.push(editAction);
+    } 
+    // editAction.buttonLabel && actions.push(editAction);
     return actions;
+    
   };
 
   convertOwnerDobToEpoch = owners => {
