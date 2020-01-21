@@ -66,7 +66,8 @@ class CollectionChartRow extends React.Component {
 								<span style={{ marginLeft: "6vh" }}>
 									<img src={insightIcon} style={{ height: "16px", color: insightColor}}/>
 								</span>
-								<span style={{ color: insightColor, marginLeft: "1vh" }}>{`${data.insight_data.value.toString().split("than last month")[0]}`}</span>
+								{/* <span style={{ color: insightColor, marginLeft: "1vh" }}>{`${data.insight_data.value.toString().split("than last month")[0]}`}</span> */}
+								<span style={{ color: insightColor, marginLeft: "1vh" }}>{`${data.insight_data.value}`}</span>
 							</React.Fragment>
 						}
 						{/* {
