@@ -72,7 +72,16 @@ class Home extends React.Component {
     }
 
     handleOnClick() {
-        history.push(`${process.env.PUBLIC_URL}/` + 'overview')
+        let path = ''
+        if (window.location.pathname && window.location.pathname.includes('ulb-')) {
+            path = 'ulb-overview'
+            console.log("----setting path ul1----", path)
+        } else {
+            path = 'overview'
+            console.log("----setting path home1----", path)
+
+        }
+        history.push(`${process.env.PUBLIC_URL}/` + path)
     }
 
     componentDidUpdate(prevProps) {
@@ -172,11 +181,11 @@ class Home extends React.Component {
                 dontShowHeader: false
             })
         }
-        console.log(window.location.pathname); 
+        console.log(window.location.pathname);
         console.log(window.location.href);
 
         let path = ''
-        if(window.location.pathname && window.location.pathname.includes('ulb-')) {
+        if (window.location.pathname && window.location.pathname.includes('ulb-')) {
             path = 'ulb-home'
             console.log("----setting path ul----", path)
         } else {
