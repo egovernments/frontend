@@ -34,7 +34,7 @@ class CustomizedExpansionPanels extends React.Component {
     let rowrender = []
     chartData.map((data, j) =>{
       rowrender.push(
-        <ExpansionPanel defaultExpanded={(data.isCollapsible)?true:false} className = {classes.head} style={{ margin: '30px 0px'}}>
+        <ExpansionPanel defaultExpanded={(!data.isCollapsible)?true:false} className = {classes.head} style={{ margin: '30px 0px'}}>
           <ExpansionPanelSummary>
           <Grid container>
             <Grid item xs={11}>
