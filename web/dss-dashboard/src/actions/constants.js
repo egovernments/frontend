@@ -16,7 +16,8 @@ const constants = {
     MDMS: 'MDMS',
     ULBS_FILTER: 'ULBS_FILTER',
     TENENTS: 'TENENTS',
-    WARD_DATA: 'WARD_DATA'
+    WARD_DATA: 'WARD_DATA',
+    ULBS_OVERVIEW_FILTER: 'ULBS_OVERVIEW_FILTER'
 }
 
 export default constants

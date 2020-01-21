@@ -39,6 +39,40 @@
             ]
         }
     ],
+    "ulbOverViewFilters": [
+        {
+            "label": "Date Range",
+            "label_locale": "DSS_DATE_RANGE",
+            "type": "dropdown",
+            "values": ""
+        },
+        {
+            "label": "ULBS",
+            "label_locale": "DSS_ULBS",
+            "type": "dropdown",
+            "values": ""
+        },
+        {
+            "label": "Services",
+            "label_locale": "DSS_SERVICES",
+            "type": "dropdown",
+            "values": [
+                "Property Tax",
+                "Trade licence",
+                "PGR"
+            ]
+        },
+        {
+            "label": "Denomination",
+            "label_locale": "DSS_DENOMINATION",
+            "type": "switch",
+            "values": [
+                "Cr",
+                "Lac",
+                "Unit"
+            ]
+        }
+    ],
     "globalFilter": [{
             "label": "Date Range",
             "label_locale": "DSS_DATE_RANGE",
