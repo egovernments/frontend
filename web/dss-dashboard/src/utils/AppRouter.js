@@ -13,13 +13,15 @@ class AppRouter extends Component {
         // return false;
     }
 
-   
+
 
     render() {
         return (
             <Router history={history}>
-                <div style={{width:'100%'}}>
+                <div style={{ width: '100%' }}>
                     <Switch>
+                        <Route exact path={`${process.env.PUBLIC_URL}/home`} component={Home} />
+                        <Route exact path={`${process.env.PUBLIC_URL}/ulb-home`} component={Home} />
                         <Route path={`${process.env.PUBLIC_URL}/:pageId/:viewAll?`} component={Dashboard} />
                         <Route exact path={`${process.env.PUBLIC_URL}/`} component={Home} />
                     </Switch>

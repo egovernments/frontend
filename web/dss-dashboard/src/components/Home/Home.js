@@ -172,7 +172,10 @@ class Home extends React.Component {
                 dontShowHeader: false
             })
         }
+        console.log(window.location.pathname); //yields: "/js" (where snippets run)
+        console.log(window.location.href);
         this.props.APITransport(dashboardApi, overview ? 'home' : this.state.page);
+
     }
 
     componentDidMount() {
