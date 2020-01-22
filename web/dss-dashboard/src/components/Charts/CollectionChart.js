@@ -48,14 +48,6 @@ class CollectionChart extends React.Component {
 
 											
 										</Grid>
-
-
-										{/* <Grid item sm={6} style={{ color: "#73bf70" }}>
-											<div><span>
-												<img src={Arrow_Upward} style={{ height: "13px" }} alt="Arrow_Upward" />
-												<img src={Arrow_Downward} style={{ height: "13px" }} alt="Arrow_Upward" />
-											</span><span>{`${randomnum} %`}</span></div>
-										</Grid> */}
 									</Grid>
 								</div>
 
