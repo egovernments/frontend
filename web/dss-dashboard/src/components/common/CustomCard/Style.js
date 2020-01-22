@@ -27,7 +27,8 @@ const styles = theme => ({
         fontFamily: 'Roboto',
         fontSize: '20px',
         fontWeight: '500',
-        color: 'rgba(0, 0, 0, 0.87)'
+        color: 'rgba(0, 0, 0, 0.87)',
+        marginTop: '5px'
     },
     variant: {
         textAlign: 'left',

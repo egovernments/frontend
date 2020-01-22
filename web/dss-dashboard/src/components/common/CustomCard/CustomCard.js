@@ -56,7 +56,7 @@ class CustomCard extends React.Component {
 
         if (data) {
             let label1 = data.label ? (strings[data.label] ? strings[data.label] : data.label) : '';
-            let label = label1.length > 11 ? label1.substring(0, 15) + "..." : label1;
+            let label = !isMobile && label1.length > 11 ? label1.substring(0, 15) + "..." : label1 
 
             return (
                 <Grid container spacing={24}>
