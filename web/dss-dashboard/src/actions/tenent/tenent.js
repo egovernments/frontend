@@ -17,7 +17,6 @@ export default class TenentAPI extends API {
     processResponse(res) {
         super.processResponse(res);
         if (res) {
-            console.log(res)
             this.tenents = res;
             return true
         }
@@ -25,7 +24,6 @@ export default class TenentAPI extends API {
     }
 
     getPayload() {
-        console.log(this.tenents)
         return this.tenents;
     }
 

@@ -18,9 +18,6 @@ class CollectionChartRow extends React.Component {
 		super(props);
 		this.state = { data: null }
 	}
-	// componentWillReceiveProps(){
-	// 	this.callAPI()
-	// }
 
 	componentDidMount() {
 		this.callAPI();
@@ -29,21 +26,16 @@ class CollectionChartRow extends React.Component {
 	callAPI() {
 		let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
 		if (code) {
-			console.log('-------------------', this.props.filters)
 			let filters = this.props.filters
-			console.log(filters)
 
 			if (this.props.page.includes('ulb')) {
 				if (!filters['tenantId']) {
-					console.log('=======tenet Id not there coll chartRow========')
 					let tenentFilter = []
 					tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
-					//   tenentFilter.push('pb.amritsar')
 
 					filters['tenantId'] = tenentFilter
 				}
 			}
-			console.log(filters)
 
 			let requestBody = getChartOptions(code, filters);
 			let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
@@ -77,7 +69,7 @@ class CollectionChartRow extends React.Component {
 						{data.insight_data &&
 							<React.Fragment>
 								<span style={{ marginLeft: "6vh" }}>
-									<img src={insightIcon} style={{ height: "16px", color: insightColor}}/>
+									<img src={insightIcon} style={{ height: "16px", color: insightColor }} />
 								</span>
 								<span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh" }}>{`${data.insight_data.value}`}</span>
 							</React.Fragment>

@@ -32,20 +32,14 @@ class ChartType extends React.Component {
     callAPI() {
         let code = this.props.chartData[0]['id'] || "";
 
-        console.log('-------------------',this.props.filters)
         let filters = this.props.filters
-        console.log(filters)
         if(this.props.page && this.props.page.includes('ulb')) {
             if(!filters['tenantId']) {
-              console.log('=======tenet Id not there charttyle========')
               let tenentFilter = []
               tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
-            //   tenentFilter.push('pb.amritsar')
-
               filters['tenantId'] = tenentFilter
             }
           }
-          console.log(filters)
 
         let requestBody = getChartOptions(code, filters || {});
         let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody && requestBody.dataoption ? requestBody.dataoption : '');

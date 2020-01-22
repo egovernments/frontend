@@ -68,7 +68,7 @@ class ActionButton extends React.Component {
     // }
 
     renderDefaultButton() {
-        const { classes, text, disabled, clas } = this.props;
+        const { classes, text, disabled, clas, type } = this.props;
         if(this.props.containedButton === true){
             return (
                 <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }} placement="top">
@@ -83,7 +83,7 @@ class ActionButton extends React.Component {
             return (
                 <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }} placement="top">
                     <div>
-                        {text==="DSS_CLEAR_ALL"?
+                        {type==="clearButton"?
                         <HighlightOffRoundedIcon
                         disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${clas}`} onClick={this.handleClick.bind(this)} 
                         style={{
