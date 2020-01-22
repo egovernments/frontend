@@ -105,6 +105,7 @@ class Home extends React.Component {
         if(data){
             if(data.ref && data.url) {
                 pageId = data && data.ref && data.ref.url
+                console.log('------------------------navigating to page',data)
             }
             if(data.moduleLevel) {
                 console.log('-----------------module level-----------',data.moduleLevel)
