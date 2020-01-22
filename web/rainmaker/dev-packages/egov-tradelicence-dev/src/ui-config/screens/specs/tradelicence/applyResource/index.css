@@ -19,7 +19,7 @@
     margin: 0 !important;
     border-radius: none !important; } }
 
-.tl-trade-type div {
+.tl-trade-type div, .tl-structure-type div {
   color: rgba(0, 0, 0, 0.87); }
 
 .applicant-details-error p {
