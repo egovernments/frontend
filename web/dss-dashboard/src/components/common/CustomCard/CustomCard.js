@@ -22,9 +22,13 @@ class CustomCard extends React.Component {
         let filters = this.props.filters
         console.log(filters)
 
+        console.log(this.props.modulelevel)
         if(this.props.modulelevel) {
+            console.log('-----------setting modeule level------------')
             if(!filters['modulelevel']) {
                 filters.modulelevel = this.props.modulelevel
+                console.log(filters)
+
             }
         }
        
@@ -37,7 +41,6 @@ class CustomCard extends React.Component {
             filters['tenantId'] = tenentFilter
           }
         }
-        console.log(filters)
 
         let requestBody = getChartOptions(code, filters);
         let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
