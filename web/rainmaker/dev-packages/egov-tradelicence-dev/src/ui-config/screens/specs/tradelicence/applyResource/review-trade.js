@@ -375,13 +375,13 @@ export const getReviewTrade = (isEditable = true) => {
           }
         }
       ),
-      reviewOrganizationName: getLabelWithValue(
-        {
-          labelName: "Organization Name",
-          labelKey: "TL_COMMON_TABLE_COL_ORG_NAME"
-        },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"}
-      )
+      // reviewOrganizationName: getLabelWithValue(
+      //   {
+      //     labelName: "Organization Name",
+      //     labelKey: "TL_COMMON_TABLE_COL_ORG_NAME"
+      //   },
+      //   { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"}
+      // )
     }),
     div1: getDivider(),
     viewTwo: tradeTypeCard,

@@ -1251,20 +1251,20 @@ export const tradeDetails = getCommonCard(
         })
       },
       
-      OrganizationName: getTextField({
-        label: {
-          labelName: "Organization Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_ORGANISATION_NAME_LABEL"
-        },
-        placeholder: {
-          labelName: "Organization Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_ORG_NAME_PLACEHOLDER"
-        },
-        // required: true,
-        // pattern: getPattern("OrganizationName"),
-        jsonPath:
-            "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
-      }),
+      // OrganizationName: getTextField({
+      //   label: {
+      //     labelName: "Organization Name",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ORGANISATION_NAME_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Organization Name",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ORG_NAME_PLACEHOLDER"
+      //   },
+      //   // required: true,
+      //   // pattern: getPattern("OrganizationName"),
+      //   jsonPath:
+      //       "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
+      // }),
     }),
 
     tradeUnitCard
