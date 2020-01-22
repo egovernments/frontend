@@ -63,26 +63,30 @@ class CollectionChartRow extends React.Component {
 
 			return (
 				<div className={classes.root} style={{ width: "max-content" }}>
-					<span className={classes.values}>
-						{/* <span style={{display:this.getRupeeSymbol(this.state.data.valueSymbol),float: 'left'}}>&#x20b9;</span>  */}
-
-						{/* {
-	            			this.state.data.value
-						}  */}
+					{/* <span className={classes.values}>
+						
 						<NFormatter value={data.value} nType={data.valueSymbol} />
 						{data.insight_data &&
 							<React.Fragment>
 								<span style={{ marginLeft: "6vh" }}>
 									<img src={insightIcon} style={{ height: "16px", color: insightColor }} />
 								</span>
-								{/* <span style={{ color: insightColor, marginLeft: "1vh" }}>{`${data.insight_data.value.toString().split("than last month")[0]}`}</span> */}
 								<span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh" }}>{`${data.insight_data.value}`}</span>
 							</React.Fragment>
 						}
-						{/* {
-	            			this.symbol(this.state.data.valueSymbol)
-	            		} */}
-					</span>
+					</span> */}
+
+					<div style={{ minWidth: "25%", textAlign: "left" }}>
+						<NFormatter value={data.value} nType={data.valueSymbol} />
+					</div>
+					{data.insight_data &&
+						<React.Fragment>
+							<span style={{ marginLeft: "2vh" }}>
+								<img src={insightIcon} style={{ height: "15px", color: insightColor }} />
+							</span>
+							<span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh"  }}>{`${data.insight_data.value}`}</span>
+						</React.Fragment>
+					}
 
 				</div>
 			);

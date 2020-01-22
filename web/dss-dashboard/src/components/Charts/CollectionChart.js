@@ -41,19 +41,13 @@ class CollectionChart extends React.Component {
 											<div className={classes.CollectionLabel}>
 												<span> {strings[d.label] || d.label}</span>
 											</div>
-											<span>
+											{/* <span>
 												<CollectionChartRow randomnum={randomnum} key={d.id} chartData={d.charts} filters={this.props.filters} page={page}/>
-											</span>
+											</span> */}
+												<CollectionChartRow randomnum={randomnum} key={d.id} chartData={d.charts} filters={this.props.filters} page={page}/>
+
 											
 										</Grid>
-
-
-										{/* <Grid item sm={6} style={{ color: "#73bf70" }}>
-											<div><span>
-												<img src={Arrow_Upward} style={{ height: "13px" }} alt="Arrow_Upward" />
-												<img src={Arrow_Downward} style={{ height: "13px" }} alt="Arrow_Upward" />
-											</span><span>{`${randomnum} %`}</span></div>
-										</Grid> */}
 									</Grid>
 								</div>
 
