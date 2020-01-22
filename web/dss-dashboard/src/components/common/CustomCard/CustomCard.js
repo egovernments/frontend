@@ -21,6 +21,13 @@ class CustomCard extends React.Component {
         let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
         let filters = this.props.filters
         console.log(filters)
+
+        if(this.props.modulelevel) {
+            if(!filters['modulelevel']) {
+                filters.modulelevel = this.props.modulelevel
+            }
+        }
+       
     
         if(this.props.page.includes('ulb')) {
           if(!filters['tenantId']) {

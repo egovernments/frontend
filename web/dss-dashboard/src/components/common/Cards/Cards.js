@@ -159,14 +159,12 @@ class Cards extends Component {
         })
         let image = ''
         let fileId = this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId
-        console.log('-----------file----------', this.props.s3FileCard)
-        console.log('-----------file id----------', this.props.s3FileCard.files)
         console.log('-----------s3ImageCard id----------', this.props.s3ImageCard)
-
 
         let file = this.props.s3ImageCard && this.props.s3ImageCard[fileId]
         if (file) {
           if ((file.match(new RegExp("https", "g")) || []).length > 1) {
+            console.log(file)
             var n = file.lastIndexOf("https");
             image = file.substr(n, file.length)
 
