@@ -7,6 +7,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import MoreVertIcon  from '@material-ui/icons/MoreVert';
 import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
 import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
+import { isMobile } from 'react-device-detect';
 
 class ActionButton extends React.Component {
     constructor(props) {
@@ -14,9 +15,6 @@ class ActionButton extends React.Component {
         this.state = {
             buttonHovered: false
         }
-
-    }
-    componentWillReceiveProps(nextProps) {
 
     }
 
@@ -83,7 +81,7 @@ class ActionButton extends React.Component {
             return (
                 <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }} placement="top">
                     <div>
-                        {type==="clearButton"?
+                        {(!isMobile && type==="clearButton") ?
                         <HighlightOffRoundedIcon
                         disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${clas}`} onClick={this.handleClick.bind(this)} 
                         style={{
