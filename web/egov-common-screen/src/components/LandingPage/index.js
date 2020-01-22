@@ -39,7 +39,7 @@ class LandingPage extends React.Component {
 
     componentDidMount() {
         let tenantIdFromPath = ""
-        tenantIdFromPath = document.location.search ? document.location.search.split('=')[1] : "uk";
+        tenantIdFromPath = document.location.search ? document.location.search.split('=')[1] : "bh";
         console.log(tenantIdFromPath, "tenant")
         const RequestInfo = {
             RequestInfo: {
