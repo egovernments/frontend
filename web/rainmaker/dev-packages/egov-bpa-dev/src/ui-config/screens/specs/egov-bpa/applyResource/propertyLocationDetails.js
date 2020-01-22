@@ -19,7 +19,7 @@ export const bpaLocationDetails = getCommonCard(
   {
     header: getCommonTitle(
       {
-        labelName: "BPA Location Details",
+        labelName: "Location Details",
         labelKey: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS"
       },
       {
