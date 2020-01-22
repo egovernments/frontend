@@ -1,3 +1,6 @@
 /* body{
     background: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url("/assets/Punjab-bg-QA.jpg");
 } */
+.common-background{
+    background-size: cover!important;
+}
