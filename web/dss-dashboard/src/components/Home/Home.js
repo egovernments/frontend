@@ -75,10 +75,8 @@ class Home extends React.Component {
         let path = ''
         if (window.location.pathname && window.location.pathname.includes('ulb-')) {
             path = 'ulb-overview'
-            console.log("----setting path ul1----", path)
         } else {
             path = 'overview'
-            console.log("----setting path home1----", path)
 
         }
         history.push(`${process.env.PUBLIC_URL}/` + path)
@@ -101,27 +99,14 @@ class Home extends React.Component {
         let pageId = ''
         let moduleLevel = ''
 
-        console.log('***************************',filters)
         if(data){
-            if(data.ref && data.url) {
-                pageId = data && data.ref && data.ref.url
-                console.log('------------------------navigating to page',data)
+            if(data.ref && data.ref.url) {
+                pageId = data.ref.url
             }
             if(data.moduleLevel) {
-                console.log('-----------------module level-----------',data.moduleLevel)
                 moduleLevel = data.moduleLevel
-
-                if(!filters['modulelevel']) {
-                    console.log('=========================',filters)
-                    filters.modulelevel = data.moduleLevel
-                    console.log(filters)
-    
-                }
             }
         }
-
-
-
         if (data.vizType.toUpperCase() === 'COLLECTION') {
             let url = Config.DEMO_API_URL + Config.APP_NAME + pageId
             return (
@@ -148,7 +133,7 @@ class Home extends React.Component {
                                         <Grid container spacing={24}>
                                             {
                                                 data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview" page={window.location.pathname || ''}></CustomCard></Grid>
+                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} moduleLevel={moduleLevel} chartData={d} filters={filters} type="overview" page={window.location.pathname || ''}></CustomCard></Grid>
                                                 })
                                             }
                                         </Grid>
@@ -166,7 +151,7 @@ class Home extends React.Component {
             return (
                 <Grid item xs={12} sm={12} md={4} lg={4} xl={4} className={classes.root} >
 
-                    <Card color="blue" bgColor={bgColor} page={pageId || 'overview'}>
+                    <Card color="blue" bgColor={bgColor} page={pageId}>
                         <CardHeader color="rose" icon page={pageId || 'overview'}>
                             <CardIcon color="rose" bgColor={iconColor}>
                                 <Icons type={data.name}></Icons>
@@ -181,7 +166,7 @@ class Home extends React.Component {
                                     data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
 
                                         return <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.customCard}>
-                                            <CustomCard chartLabelName={chartLabelName} key={d.id} moduleLevel={data.moduleLevel} chartData={d} filters={filters} type="module" page={window.location.pathname || ''}></CustomCard></Grid>
+                                            <CustomCard chartLabelName={chartLabelName} key={d.id} moduleLevel={moduleLevel} chartData={d} filters={filters} type="module" page={window.location.pathname || ''}></CustomCard></Grid>
                                     })
                                 }
                             </Grid>
