@@ -21,17 +21,6 @@ class CustomCard extends React.Component {
         let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
         let filters = this.props.filters
         console.log(filters)
-
-        console.log(this.props.modulelevel)
-        if(this.props.modulelevel) {
-            console.log('-----------setting modeule level------------')
-            if(!filters['modulelevel']) {
-                filters.modulelevel = this.props.modulelevel
-                console.log(filters)
-
-            }
-        }
-       
     
         if(this.props.page.includes('ulb')) {
           if(!filters['tenantId']) {
@@ -41,12 +30,13 @@ class CustomCard extends React.Component {
             filters['tenantId'] = tenentFilter
           }
         }
+        console.log(filters)
 
         let requestBody = getChartOptions(code, filters);
         let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
         this.props.APITransport(chartsAPI);
     }
-
+       
     componentDidMount() {
         this.callAPI();
     }
