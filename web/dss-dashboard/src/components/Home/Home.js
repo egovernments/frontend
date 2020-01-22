@@ -100,12 +100,14 @@ class Home extends React.Component {
         let iconColor = Variables.colors[index].dark
         let pageId = ''
         let moduleLevel = ''
+        console.log('-----------------module level-----------',data)
 
         if(data){
             if(data.ref && data.url) {
                 pageId = data && data.ref && data.ref.url
             }
             if(data.moduleLevel) {
+                console.log('-----------------module level-----------',data.moduleLevel)
                 moduleLevel = data.moduleLevel
             }
         }
