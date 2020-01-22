@@ -378,6 +378,20 @@ export const ownerInfoInstitutional = {
       getFatherNameField,
       getRelationshipRadioButtonInstitutionalOwner,
       getOwnerGenderField,
+      OrganizationName: getTextField({
+        label: {
+          labelName: "Organization Name",
+          labelKey: "TL_NEW_TRADE_DETAILS_ORGANISATION_NAME_LABEL"
+        },
+        placeholder: {
+          labelName: "Organization Name",
+          labelKey: "TL_NEW_TRADE_DETAILS_ORG_NAME_PLACEHOLDER"
+        },
+        // required: true,
+        // pattern: getPattern("OrganizationName"),
+        jsonPath:
+            "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
+      }),
       ownerDOB: {
         ...getDateField({
           label: {
@@ -400,6 +414,7 @@ export const ownerInfoInstitutional = {
           }
         })
       },
+     
       getOwnerEmailField,
       ownerAddress: getTextField({
         label: {
@@ -518,20 +533,20 @@ const OwnerInfoCard = {
           pattern: getPattern("PAN"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
         }),
-        OrganizationName: getTextField({
-          label: {
-            labelName: "Organization Name",
-            labelKey: "TL_NEW_TRADE_DETAILS_ORGANISATION_NAME_LABEL"
-          },
-          placeholder: {
-            labelName: "Organization Name",
-            labelKey: "TL_NEW_TRADE_DETAILS_ORG_NAME_PLACEHOLDER"
-          },
-          // required: true,
-          // pattern: getPattern("OrganizationName"),
-          jsonPath:
-              "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
-        }),
+        // OrganizationName: getTextField({
+        //   label: {
+        //     labelName: "Organization Name",
+        //     labelKey: "TL_NEW_TRADE_DETAILS_ORGANISATION_NAME_LABEL"
+        //   },
+        //   placeholder: {
+        //     labelName: "Organization Name",
+        //     labelKey: "TL_NEW_TRADE_DETAILS_ORG_NAME_PLACEHOLDER"
+        //   },
+        //   // required: true,
+        //   // pattern: getPattern("OrganizationName"),
+        //   jsonPath:
+        //       "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
+        // }),
       }),
     }),
     items: [],

@@ -235,13 +235,7 @@ export const getReviewOwner = (isEditable = true) => {
             // ),
             // reviewBPLCard,
             reviewOwnerPAN,
-            reviewOrganizationName: getLabelWithValue(
-              {
-                labelName: "Organization Name",
-                labelKey: "TL_COMMON_TABLE_COL_ORG_NAME"
-              },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"}
-            )
+            
             // reviewOwnerSpecialCat: getLabelWithValue(
             //   {
             //     labelName: "Special Owner Category",
@@ -307,6 +301,13 @@ export const getReviewOwner = (isEditable = true) => {
             reviewOwnerFatherName,
             reviewRelationship,
             reviewOwnerGender,
+            reviewOrganizationName: getLabelWithValue(
+              {
+                labelName: "Organization Name",
+                labelKey: "TL_COMMON_TABLE_COL_ORG_NAME"
+              },
+              { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"}
+            ),
             reviewOwnerDOB,
             reviewOwnerEmail,
             reviewOwnerAddr: getLabelWithValue(
