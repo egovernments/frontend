@@ -9,7 +9,7 @@ import logo from "egov-ui-kit/assets/images/logo_black.png";
 import qrlogo from "egov-ui-kit/assets/images/qrImage.png";
 import "./index.css";
 
-const LoginForm = ({ handleFieldChange, form, logoUrl }) => {
+const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL }) => {
   const fields = form.fields || {};
   const submit = form.submit;
 
@@ -71,7 +71,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl }) => {
        </div>
     </div>
     <div className="login-qrscan">
-       <Image className="login-qrlogo" source={`${qrlogo}`} /> 
+       <Image className="login-qrlogo" source={`${qrCodeURL}`} /> 
        <div  className="login-qrtext">
        <Label  color="black" fontSize= "14px" label="Scan the QR Code to continue with Whatsapp"/>
        </div>

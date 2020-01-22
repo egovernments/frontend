@@ -28,7 +28,8 @@ import pgrRoutes from "pgr-citizen/Routes/pgr-routes";
 import ptRoutes from "pt-citizen/Routes/pt-routes";
 
 //Whatsapp Screen 
-import  WhatsAppScreen  from "modules/citizen/WhatsAppScreen";
+import  WhatsAppCity from "modules/citizen/WhatsAppScreen/City";
+import  WhatsAppLocality from "modules/citizen/WhatsAppScreen/Locality";
 
 const routes = [
   {
@@ -178,12 +179,21 @@ const routes = [
     },
   },
   {
-    path: "whatsapp-screen",
-    component:  WhatsAppScreen ,
-    needsAuthentication: true,
+    path: "whatsapp-city",
+    component:  WhatsAppCity ,
+    needsAuthentication: false,
     options: {
       hideFooter: true,
-      title: "CS_SEARCH_CITY",
+      title: "",
+    },
+  },
+  {
+    path: "whatsapp-locality?",
+    component:  WhatsAppLocality ,
+    needsAuthentication: false,
+    options: {
+      hideFooter: true,
+      title: "",
     },
   },
   ...pgrRoutes,

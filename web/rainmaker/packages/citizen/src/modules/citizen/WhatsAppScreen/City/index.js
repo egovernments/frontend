@@ -2,13 +2,11 @@ import React from "react";
 import { Icon } from "components";
 import filter from "lodash/filter";
 import isUndefined from "lodash/isUndefined";
-import AutoComplete from "material-ui/AutoComplete";
 import { withStyles } from "@material-ui/core/styles";
 import Label from "egov-ui-kit/utils/translationNode";
+import { httpRequest } from "egov-ui-kit/utils/api";
 import { List} from  "egov-ui-kit/components";
 import Input from '@material-ui/core/Input';
-import { connect } from "react-redux";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
 import get from "lodash/get";
 import "./index.css";
 
@@ -47,56 +45,76 @@ const getListItems = items =>
    // route: item.route,
 
   }));
-const items = [
-  {
-    code: "JODHPUR",
-    label: "Jodhpur"
-  },
-  {
-    code: "MUMBAI",
-    label: "Mumbai"
-  },
-  {
-    code: "KOLKATA",
-    label: "Kolkata"
-  },
-  {
-    code: "NEWDELHI",
-    label: "New Delhi"
-  },
-  {
-    code: "CHENNAI",
-    label: "Chennai"
-  },
-  {
-    code: "BANGALORE",
-    label: "Bangalore"
-  }
-  ];
 
-class WhatsAppScreen extends React.Component {
+
+
+class WhatsAppCity extends React.Component {
   state = {
     searchText: "",
-    data:items,
-  };
-  getNameById = (id, dropDownData) => {
-    //const { dropDownData } = this.props;
-    const filteredArray = filter(dropDownData, { value: id });
-    return filteredArray.length > 0 ? filteredArray[0].label : id;
+    data:[],
+    citylist:[],
   };
 
-  componentWillReceiveProps(nextProps) {
-    const { dropDownData } = nextProps;
-    let { getNameById } = this;
-    if (!isUndefined(nextProps.value)) {
-      this.setState({ searchText: getNameById(nextProps.value, dropDownData) });
+  getMDMSData = async () => {
+    let mdmsBody = { 
+      
+      MdmsCriteria: {
+        tenantId :"pb",
+        moduleDetails: [
+         {
+            moduleName: "tenant",
+            masterDetails: [
+              {
+                name: "citymodule"
+              }
+            ]
+          },
+        ]
+      }
+    };
+    try {
+      const payload = await httpRequest(
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      return payload;
+    } catch (e) {
+      console.log(e);
     }
-  }
+    };
+  
+//  fetchMDMSData = async () => {
+//       const mdmsRes = await this.getMDMSData();
+//       return mdmsRes;
+//   }
+   
+ componentDidMount = async () => {
+ const cityl=await this.getMDMSData();
+ const citylistCode=   get(cityl, "MdmsRes.tenant.citymodule.0.tenants", []);
+ const citylist= citylistCode.map((item) => {
+  return {
+     code : item.code,
+     label :"TENANT_TENANTS_" + (item.code).toUpperCase().replace(/[.]/g, "_")
+   }
 
-  onChangeText = (searchText, dataSource, params) => {
+
+   // route: item.route,
+
+  })
+    
+  this.setState({
+    citylist:citylist,
+  })
+  };
+  
+  
+  
+  onChangeText = (searchText,citylist, dataSource, params,) => {
     this.setState({ searchText });
     //logic to like search on items    
-    const filterData = items.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
+    const filterData = citylist.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
  
     
     this.setState({
@@ -104,7 +122,7 @@ class WhatsAppScreen extends React.Component {
     })
     if(searchText===""){
       this.setState({
-        data:items,
+        data:citylist,
       })
     }
   };
@@ -115,24 +133,12 @@ class WhatsAppScreen extends React.Component {
     });
   };
 
-  getTransformedItems = () => {
-    //const { menu } = this.props;
-    const transformedItems =
-      items &&
-      items.map((item, index) => {
-          return {
-            label: item.label,
-            value: item.code,
-          };
-        });
-    return transformedItems;
-  };
-
   render() {
     const { classes, history } = this.props;
-    const { searchText } = this.state;
-    const { getNameById, onChangeText, getTransformedItems } = this;
-    
+    const { searchText ,citylist} = this.state;
+      const {  onChangeText,getMDMSData,fetchMDMSData} = this;
+  
+  
     return (
         <div>
        <div className="search-background">
@@ -146,7 +152,8 @@ class WhatsAppScreen extends React.Component {
               containerStyle={{ marginLeft: 17,marginTop:-2 }}
         />
 
-       </div>   
+       </div>  
+       
        <div className={`${classes.root} dashboard-search-main-cont`}>
         <Icon action="action" name="search" style={{ marginLeft: 12 }} />
         <Input
@@ -158,12 +165,8 @@ class WhatsAppScreen extends React.Component {
           'aria-label': 'Description',
         }}
         onChange={(e) => {
-          this.onChangeText(e.target.value);
-        //   this.setState({
-        //   searchText:e.target.value,
-        
-        
-        // })
+          onChangeText(e.target.value,citylist);
+       
       }}
       />
       </div>
@@ -176,7 +179,6 @@ class WhatsAppScreen extends React.Component {
             const weblink="https://api.whatsapp.com/send?phone=919987106368&text="+item.primaryText.props.label
             window.location.href=weblink 
           
-            console.log(">>label",item.primaryText.props.label); 
            // history && history.push(item.route);
           }}
           listItemStyle = {{borderBottom:"1px solid grey"}}
@@ -189,15 +191,8 @@ class WhatsAppScreen extends React.Component {
     );
   }
 }
-// const mapStateToprops = (state) => {
-//   const menu = get(state.app, "menu");
-//   return { menu };
-// };
+
 
 export default withStyles(styles)(
-  connect(
-    null,
-    null
-  )( WhatsAppScreen )
+( WhatsAppCity )
 );
-

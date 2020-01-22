@@ -19,7 +19,6 @@ const iconButtonStyle = {
 };
 
 const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL}) => {
-  console.log("qwq",qrCodeURL)
   const fields = form.fields || {};
   const submit = form.submit;
   return (
