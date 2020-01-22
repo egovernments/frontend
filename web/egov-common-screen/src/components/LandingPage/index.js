@@ -129,7 +129,7 @@ class LandingPage extends React.Component {
                                             <ListItemText
                                                 primary={<span style={{ fontSize: "14px", fontfamily: "inherit",opacity:0.8 }}>एमसेवा नागरिक खाता नागरिकों को शहरी स्थानीय निकाय (नगर पालिका / नगर निगम) द्वारा प्रदान की गई विभिन्न सेवाओं का ऑनलाइन लाभ उठाने में सक्षम बनाता है। शहरी स्थानीय निकाय प्रमुख रूप से व्यापार लाइसेंस, संपत्ति कर और नागरिक शिकायतों आदि से संबंधित सेवाएं प्रदान करते हैं। रजिस्टर / कृपया लॉग इन करने के लिए नीचे क्लिक करें।
                                                 </span>}
-                                                secondary={<span style={{ fontStyle: "italic" }}>A mSewa citizen account enables citizens to avail the various services online rendered by the urban local body (Municipality/ Municipal Corporation). The major services which the local body provides are related to Trade License, Property Tax, and Citizen Grievances etc. Please click below to register/log in.</span>}
+                                                secondary={<span style={{ fontStyle: "italic" }}>A mSeva citizen account enables citizens to avail the various services online rendered by the urban local body (Municipality/ Municipal Corporation). The major services which the local body provides are related to Trade License, Property Tax, and Citizen Grievances etc. Please click below to register/log in.</span>}
                                             />
                                         </ListItem>
                                     </List>
@@ -164,7 +164,7 @@ class LandingPage extends React.Component {
                                         <ListItem style={{ padding: 0 }}>
                                             <ListItemText
                                                 primary={<span style={{ fontSize: "14px", fontfamily: "inherit" , opacity:0.8}}>एमसेवा कर्मचारी खाता शहरी स्थानीय निकाय (नगर पालिका / नगर निगम) के कर्मचारी को दिन-प्रतिदिन की गतिविधियों के लिए सक्षम बनाता है और उसे नागरिकों द्वारा सौंपे गए सेवा अनुरोध की समय पर डिलीवरी सुनिश्चित करता है। कृपया लॉग इन करने के लिए नीचे क्लिक करें।</span>}
-                                                secondary={<span style={{ fontStyle: "italic" }}>A mSewa employee account enables the employee of urban local body (Municipality/ Municipal Corporation) to perform its day to day activities and ensure the timely delivery of services applied by citizen assigned to him/her. Please click below to login.</span>}
+                                                secondary={<span style={{ fontStyle: "italic" }}>A mSeva employee account enables the employee of urban local body (Municipality/ Municipal Corporation) to perform its day to day activities and ensure the timely delivery of services applied by citizen assigned to him/her. Please click below to login.</span>}
                                             />
                                         </ListItem>
                                     </List>
