@@ -29,22 +29,22 @@ class CollectionChartRow extends React.Component {
 	callAPI() {
 		let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
 		if (code) {
-			console.log('-------------------',this.props.filters)
+			console.log('-------------------', this.props.filters)
 			let filters = this.props.filters
 			console.log(filters)
-			
-			if(this.props.page.includes('ulb')) {
-				if(!filters['tenantId']) {
-				  console.log('=======tenet Id not there coll chartRow========')
-				  let tenentFilter = []
-				  tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
-				//   tenentFilter.push('pb.amritsar')
 
-				  filters['tenantId'] = tenentFilter
+			if (this.props.page.includes('ulb')) {
+				if (!filters['tenantId']) {
+					console.log('=======tenet Id not there coll chartRow========')
+					let tenentFilter = []
+					tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+					//   tenentFilter.push('pb.amritsar')
+
+					filters['tenantId'] = tenentFilter
 				}
-			  }
-			  console.log(filters)
-			  
+			}
+			console.log(filters)
+
 			let requestBody = getChartOptions(code, filters);
 			let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
 			this.props.APITransport(chartsAPI);
@@ -66,31 +66,36 @@ class CollectionChartRow extends React.Component {
 		}).first().value() || null;
 
 		if (data) {
-			let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red"?"#e54d42":"#259b24":'';
-			let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red"?Arrow_Downward:Arrow_Upward:'';
-			
+			let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
+			let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
+
 			return (
 				<div className={classes.root} style={{ width: "max-content" }}>
-					<span className={classes.values}>
-						{/* <span style={{display:this.getRupeeSymbol(this.state.data.valueSymbol),float: 'left'}}>&#x20b9;</span>  */}
-
-						{/* {
-	            			this.state.data.value
-						}  */}
+					{/* <span className={classes.values}>
+						
 						<NFormatter value={data.value} nType={data.valueSymbol} />
 						{data.insight_data &&
 							<React.Fragment>
 								<span style={{ marginLeft: "6vh" }}>
 									<img src={insightIcon} style={{ height: "16px", color: insightColor}}/>
 								</span>
-								{/* <span style={{ color: insightColor, marginLeft: "1vh" }}>{`${data.insight_data.value.toString().split("than last month")[0]}`}</span> */}
 								<span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh" }}>{`${data.insight_data.value}`}</span>
 							</React.Fragment>
 						}
-						{/* {
-	            			this.symbol(this.state.data.valueSymbol)
-	            		} */}
-					</span>
+					</span> */}
+
+					<div style={{ minWidth: "25%", textAlign: "left" }}>
+						<NFormatter value={data.value} nType={data.valueSymbol} />
+					</div>
+					{data.insight_data &&
+						<React.Fragment>
+							<span style={{ marginLeft: "2vh" }}>
+								<img src={insightIcon} style={{ height: "15px", color: insightColor }} />
+							</span>
+							{/* <span style={{ color: insightColor, marginLeft: "1vh" }}>{`${data.insight_data.value.toString().split("than last month")[0]}`}</span> */}
+							<span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh"  }}>{`${data.insight_data.value}`}</span>
+						</React.Fragment>
+					}
 
 				</div>
 			);

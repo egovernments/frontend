@@ -41,9 +41,11 @@ class CollectionChart extends React.Component {
 											<div className={classes.CollectionLabel}>
 												<span> {strings[d.label] || d.label}</span>
 											</div>
-											<span>
+											{/* <span>
 												<CollectionChartRow randomnum={randomnum} key={d.id} chartData={d.charts} filters={this.props.filters} page={page}/>
-											</span>
+											</span> */}
+												<CollectionChartRow randomnum={randomnum} key={d.id} chartData={d.charts} filters={this.props.filters} page={page}/>
+
 											
 										</Grid>
 
