@@ -958,7 +958,7 @@ export const prepareDocumentTypeObj = documents => {
       ? documents.reduce((documentsArr, item, ind) => {
         documentsArr.push({
           name: item,
-          required: true,
+          required: item == "TRDSHOPBLDGPRMS" ? false : true,
           jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
           statement: getStatementForDocType(item)
         });
