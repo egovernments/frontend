@@ -98,7 +98,17 @@ class Home extends React.Component {
         let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, this.state.page);
         let bgColor = Variables.colors[index].light
         let iconColor = Variables.colors[index].dark
-        let pageId = data && data.ref && data.ref.url
+        let pageId = ''
+        let moduleLevel = ''
+
+        if(data){
+            if(data.ref && data.url) {
+                pageId = data && data.ref && data.ref.url
+            }
+            if(data.moduleLevel) {
+                moduleLevel = data.moduleLevel
+            }
+        }
 
         if (data.vizType.toUpperCase() === 'COLLECTION') {
             let url = Config.DEMO_API_URL + Config.APP_NAME + pageId
@@ -126,7 +136,7 @@ class Home extends React.Component {
                                         <Grid container spacing={24}>
                                             {
                                                 data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} chartData={d} filters={filters} type="overview" page={window.location.pathname || ''}></CustomCard></Grid>
+                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} moduleLevel={moduleLevel} chartData={d} filters={filters} type="overview" page={window.location.pathname || ''}></CustomCard></Grid>
                                                 })
                                             }
                                         </Grid>
@@ -159,7 +169,7 @@ class Home extends React.Component {
                                     data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
 
                                         return <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.customCard}>
-                                            <CustomCard chartLabelName={chartLabelName} key={d.id} chartData={d} filters={filters} type="module" page={window.location.pathname || ''}></CustomCard></Grid>
+                                            <CustomCard chartLabelName={chartLabelName} key={d.id} moduleLevel={moduleLevel} chartData={d} filters={filters} type="module" page={window.location.pathname || ''}></CustomCard></Grid>
                                     })
                                 }
                             </Grid>
@@ -216,7 +226,6 @@ class Home extends React.Component {
         let { dashboardConfigData } = this.state;
         let tabsInitData = dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length > 0 && dashboardConfigData[0] ? dashboardConfigData[0] : ''
         let dashboardName = dashboardConfigData && Array.isArray(dashboardConfigData) && dashboardConfigData.length >= 0 && dashboardConfigData[0] && dashboardConfigData[0].name && dashboardConfigData[0].name
-
         return (
             <Grid container spacing={24} id="divToPrint">
                 <Grid container spacing={24} className={classes.actions}>
