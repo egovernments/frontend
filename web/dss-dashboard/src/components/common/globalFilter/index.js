@@ -353,7 +353,7 @@ class GlobalFilter extends Component {
                             // width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
                             // width: isMobile ? '200px' : '150px'
                             //width: isMobile ? '100%' : '150px'
-                            width:'100%'
+                            maxWidth:isMobile?'100%':'210px'
                         }}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">
