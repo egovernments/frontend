@@ -62,7 +62,7 @@ class CollectionChartRow extends React.Component {
 			let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
 
 			return (
-				<div className={classes.root} style={{ width: "max-content" }}>
+				<div className={classes.root} style={{ width: "100%" }}>
 					{/* <span className={classes.values}>
 						
 						<NFormatter value={data.value} nType={data.valueSymbol} />
