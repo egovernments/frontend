@@ -14,9 +14,11 @@ const capturePaymentDetails = getCommonGrayCard({
     }
   ),
   tabSection: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-common",
+    // uiFramework: "custom-containers-local",
+    // componentPath: "CustomTabContainer",
+    uiFramework: "custom-containers",
     componentPath: "CustomTabContainer",
+    // moduleName: "egov-common",
     props: {
       // horizontal: {
       //   tabsGrid: { xs: 4, sm: 2, md: 2 },
@@ -28,21 +30,21 @@ const capturePaymentDetails = getCommonGrayCard({
           tabIcon: "Dashboard",
           tabContent: { cash }
         },
-        // {
-        //   tabButton: "COMMON_CHEQUE",
-        //   tabIcon: "Schedule",
-        //   tabContent: { cheque }
-        // },
-        // {
-        //   tabButton: "COMMON_DD",
-        //   tabIcon: "Schedule",
-        //   tabContent: { demandDraft }
-        // },
-        // {
-        //   tabButton: "COMMON_CREDIT_DEBIT_CARD",
-        //   tabIcon: "Schedule",
-        //   tabContent: { card }
-        // }
+        {
+          tabButton: "COMMON_CHEQUE",
+          tabIcon: "Schedule",
+          tabContent: { cheque }
+        },
+        {
+          tabButton: "COMMON_DD",
+          tabIcon: "Schedule",
+          tabContent: { demandDraft }
+        },
+        {
+          tabButton: "COMMON_CREDIT_DEBIT_CARD",
+          tabIcon: "Schedule",
+          tabContent: { card }
+        }
       ]
     },
     type: "array"
