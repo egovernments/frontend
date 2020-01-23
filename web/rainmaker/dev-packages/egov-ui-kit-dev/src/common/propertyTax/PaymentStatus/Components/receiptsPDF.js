@@ -398,13 +398,14 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
           { text: "Commissioner/EO", alignment: "right", color: "#484848", fontSize: 12, bold: true, margin: [0, 30, 0, 30] },
           { text: "Note:", alignment: "left", style: "receipt-footer" },
           {
-            ol: [
-              { text: "Payment received by cheque/demand draft shall be subject to realization.", margin: [0, 0, 0, 5] },
-              { text: "This document is not a proof of Property Ownership and regularization of unauthorized construction.", margin: [0, 0, 0, 5] },
-              { text: "This is a computer generated document, hence requires no signature.", margin: [0, 0, 0, 5] },
-              { text: "Assessment & Payment is subject to verification/Scrutiny by competitive authority.", margin: [0, 0, 0, 5] },
-              { text: "Please deposit property tax dues for earlier years also. Ignore, if already paid.", margin: [0, 0, 0, 5] },
-              { text: "Citizen for Online Payments please refer to the link http://lgpunjab.gov.in/cms/pay-property-tax.php", margin: [0, 0, 0, 5] },
+            text: [
+              { text: "1. Payment received by cheque/demand draft shall be subject to realization. \n"},
+              { text: "2. This document is not a proof of Property Ownership and regularization of unauthorized construction. \n"},
+              { text: "3. This is a computer generated document, hence requires no signature.\n"},
+              { text: "4. Assessment & Payment is subject to verification/Scrutiny by competitive authority. \n"},
+              { text: "5. Please deposit property tax dues for earlier years also. Ignore, if already paid. \n"},
+              { text: "6. Citizen for Online Payments please refer to the link "},
+              {text: "http://lgpunjab.gov.in/cms/pay-property-tax.php \n", bold: true, fontSize: 10, color: 'blue', decoration: 'underline'}
             ],
             alignment: "left",
             style: "receipt-footer",
