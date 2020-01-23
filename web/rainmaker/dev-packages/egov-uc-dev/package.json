@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "license": "egov",
   "private": true,
-  "homepage": "https://mseva-uat.lgpunjab.gov.in/employee-mcs/",
+  "homepage": "https://mseva-uat.lgpunjab.gov.in/",
   "proxy": "https://mseva-uat.lgpunjab.gov.in/",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
