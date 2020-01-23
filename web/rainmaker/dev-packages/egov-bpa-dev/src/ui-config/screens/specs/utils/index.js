@@ -3419,7 +3419,7 @@ export const getBpaTextToLocalMapping = label => {
     case "INPROGRESS":
       return getLocaleLabels("Inprogress", "BPA_INPROGRESS", localisationLabels);
     case "PENDING_APPL_FEE":
-      return getLocaleLabels("Pedding Application Fee", "PENDING_APPL_FEE", localisationLabels);
+      return getLocaleLabels("Pedding Application Fee", "WF_BPA_PENDING_APPL_FEE", localisationLabels);
   }
 };
 
