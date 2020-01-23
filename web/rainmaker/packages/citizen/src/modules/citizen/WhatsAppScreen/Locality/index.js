@@ -33,22 +33,6 @@ const styles = (theme) => ({
     fontSize: "16px",
   },
 });
-const getListItems = items =>
-  items.map((item) => ({
-    primaryText: (
-      <Label
-        label={item.label}
-        fontSize="16px"
-        color="#484848"
-        labelStyle={{ fontWeight: 500 }}
-      />
-    )
-
-    // route: item.route,
-
-  }));
-
-
 
 class WhatsAppLocality extends React.Component {
   state = {
@@ -56,7 +40,22 @@ class WhatsAppLocality extends React.Component {
     data: [],
     localitylist: [],
     cityname: undefined,
+    phone: undefined,
   };
+  getListItems = items =>
+    items.map((item) => ({
+      primaryText: (
+        <Label
+          label={item.label}
+          fontSize="16px"
+          color="#484848"
+          labelStyle={{ fontWeight: 500 }}
+        />
+      )
+
+    }));
+
+
 
   getMDMSData = async () => {
     let mdmsBody = {
@@ -91,29 +90,25 @@ class WhatsAppLocality extends React.Component {
     }
   };
 
-  //  fetchMDMSData = async () => {
-  //       const mdmsRes = await this.getMDMSData();
-  //       return mdmsRes;
-  //   }
 
   componentDidMount = async () => {
     const values = queryString.parse(this.props.location.search)
     const cityname = values.tenantId;
+    const phone = values.phone;
+    this.setState({
+      phone: phone,
+    })
     this.setState({
       cityname: cityname,
     })
 
-    const localityl = await this.getMDMSData();
-    const localityistCode = get(localityl, "MdmsRes.egov-location.TenantBoundary", []);
+    const localitydata = await this.getMDMSData();
+    const localityistCode = get(localitydata, "MdmsRes.egov-location.TenantBoundary", []);
     const localitylist = localityistCode.map((item) => {
       return {
         code: item,
         label: item,
       }
-
-
-      // route: item.route,
-
     })
 
     this.setState({
@@ -139,16 +134,10 @@ class WhatsAppLocality extends React.Component {
     }
   };
 
-  onSearchClick = (e) => {
-    this.setState({
-      searchValue: e.target.value,
-    });
-  };
-
   render() {
-    const { classes, history } = this.props;
-    const { searchText, localitylist } = this.state;
-    const { onChangeText, getMDMSData, fetchMDMSData } = this;
+    const { classes } = this.props;
+    const { localitylist } = this.state;
+    const { onChangeText } = this;
 
 
     return (
@@ -157,7 +146,7 @@ class WhatsAppLocality extends React.Component {
           <div className="header-iconText">
             <Icon id="back-navigator" action="navigation" name="arrow-back" />
             <Label
-              label="Choose locality"
+              label="WHATSAPP_CHOOSE_LOCALITY "
               color="white"
               fontSize={18}
               bold={true}
@@ -169,7 +158,7 @@ class WhatsAppLocality extends React.Component {
           <div className={`${classes.root} dashboard-search-main-cont`}>
             <Icon action="action" name="search" style={{ marginLeft: 12 }} />
             <Input
-              placeholder="Search locality"
+              placeholder="WHATSAPP_SEARCH_LOCALITY"
               disableUnderline={true}
               fullWidth={true}
               //className={classes.input}
@@ -184,22 +173,19 @@ class WhatsAppLocality extends React.Component {
           </div>
         </div>
         <Screen className="whatsappScreen">
-            <List
-              items={getListItems(this.state.data)}
-              primaryTogglesNestedList={true}
-              onItemClick={(item, index) => {
-                const weblink = "https://api.whatsapp.com/send?phone=919987106368&text=" + item.primaryText.props.label
-                window.location.href = weblink
+          <List
+            items={this.getListItems(this.state.data)}
+            primaryTogglesNestedList={true}
+            onItemClick={(item, index) => {
+              const number = this.state.phone || 919987106368;
+              const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + item.primaryText.props.label
+              window.location.href = weblink
+            }}
+            listItemStyle={{ borderBottom: "1px solid grey" }}
+            style={{ marginTop: 66 }}
+          />
 
-                // history && history.push(item.route);
-              }}
-              listItemStyle={{ borderBottom: "1px solid grey" }}
-              style={{ marginTop: 66 }}
-            //  listContainerStyle = {{height:"50px"}}
 
-            />
-
-       
         </Screen >
       </div>
     );

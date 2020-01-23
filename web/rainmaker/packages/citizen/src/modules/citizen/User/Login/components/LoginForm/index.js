@@ -57,7 +57,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL }) => {
     </div>
     <div className="rainmaker-displayInline login-mobile-whatsapp-button"  onClick={()=>{window.location.href="https://api.whatsapp.com/send?phone=919987106368&text=Hello"}} >      
         <Icon action="custom" name="whatsapp" className="login-mobile-whatsapp-icon" />
-        <Label bold={true} color="black" fontSize= "14px" label="CONTINUE WITH WHATSAPP"/>
+        <Label bold={true} color="black" fontSize= "14px" label="WHATSAPP_CONTINUE_MOBILE"/>
     </div>
     </div>
       </Hidden>
@@ -73,7 +73,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL }) => {
     <div className="login-qrscan">
        <Image className="login-qrlogo" source={`${qrCodeURL}`} /> 
        <div  className="login-qrtext">
-       <Label  color="black" fontSize= "14px" label="Scan the QR Code to continue with Whatsapp"/>
+       <Label  color="black" fontSize= "14px" label="WHATSAPP_SCAN_QR_CODE"/>
        </div>
     </div>
     </Hidden>

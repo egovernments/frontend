@@ -33,22 +33,6 @@ const styles = (theme) => ({
     fontSize: "16px",
   },
 });
-const getListItems = items =>
-  items.map((item) => ({
-    primaryText: (
-      <Label
-        label={item.label}
-        fontSize="16px"
-        color="#484848"
-        labelStyle={{ fontWeight: 500 }}
-      />
-    )
-
-    // route: item.route,
-
-  }));
-
-
 
 class WhatsAppCity extends React.Component {
   state = {
@@ -57,7 +41,17 @@ class WhatsAppCity extends React.Component {
     citylist: [],
     phone: undefined,
   };
-
+  getListItems = items =>
+    items.map((item) => ({
+      primaryText: (
+        <Label
+          label={item.label}
+          fontSize="16px"
+          color="#484848"
+          labelStyle={{ fontWeight: 500 }}
+        />
+      )
+    }));
   getMDMSData = async () => {
     let mdmsBody = {
 
@@ -88,11 +82,6 @@ class WhatsAppCity extends React.Component {
     }
   };
 
-  //  fetchMDMSData = async () => {
-  //       const mdmsRes = await this.getMDMSData();
-  //       return mdmsRes;
-  //   }
-
   componentDidMount = async () => {
     const values = queryString.parse(this.props.location.search)
     const phone = values.phone;
@@ -100,8 +89,8 @@ class WhatsAppCity extends React.Component {
       phone: phone,
     })
 
-    const cityl = await this.getMDMSData();
-    const citylistCode = get(cityl, "MdmsRes.tenant.citymodule.0.tenants", []);
+    const citydata = await this.getMDMSData();
+    const citylistCode = get(citydata, "MdmsRes.tenant.citymodule.0.tenants", []);
     const citylist = citylistCode.map((item) => {
       return {
         code: item.code,
@@ -132,16 +121,10 @@ class WhatsAppCity extends React.Component {
     }
   };
 
-  onSearchClick = (e) => {
-    this.setState({
-      searchValue: e.target.value,
-    });
-  };
-
   render() {
-    const { classes, history } = this.props;
-    const { searchText, citylist } = this.state;
-    const { onChangeText, getMDMSData, fetchMDMSData } = this;
+    const { classes } = this.props;
+    const { citylist } = this.state;
+    const { onChangeText } = this;
 
 
     return (
@@ -150,7 +133,7 @@ class WhatsAppCity extends React.Component {
           <div className="header-iconText">
             <Icon id="back-navigator" action="navigation" name="arrow-back" />
             <Label
-              label="Choose City"
+              label="WHATSAPP_CHOOSE_CITY"
               color="white"
               fontSize={18}
               bold={true}
@@ -162,7 +145,7 @@ class WhatsAppCity extends React.Component {
           <div className={`${classes.root} dashboard-search-main-cont`}>
             <Icon action="action" name="search" style={{ marginLeft: 12 }} />
             <Input
-              placeholder="Search City"
+              placeholder="WHATSAPP_SEARCH_CITY"
               disableUnderline={true}
               fullWidth={true}
               //className={classes.input}
@@ -178,7 +161,7 @@ class WhatsAppCity extends React.Component {
         </div>
         <Screen className="whatsappScreen">
           <List
-            items={getListItems(this.state.data)}
+            items={this.getListItems(this.state.data)}
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
               const number = this.state.phone || 919987106368;
@@ -187,11 +170,9 @@ class WhatsAppCity extends React.Component {
 
               const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name
               window.location.href = weblink
-
-              // history && history.push(item.route);
             }}
             listItemStyle={{ borderBottom: "1px solid grey" }}
-          //  listContainerStyle = {{height:"50px"}}
+
 
           />
         </Screen>
