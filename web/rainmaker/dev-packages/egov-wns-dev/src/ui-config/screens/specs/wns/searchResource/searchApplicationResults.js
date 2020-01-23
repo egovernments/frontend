@@ -2,7 +2,6 @@ import React from "react";
 import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
 import './index.css'
 
-
 export const searchApplicationResults = {
   uiFramework: "custom-molecules",
   moduleName: "egov-wns",
@@ -95,8 +94,4 @@ const getApplicationDetails = data => {
 
 const getConnectionDetails = data => {
   window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
-}
-
-const getViewBillDetails = data => {
-  window.location.href = `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }

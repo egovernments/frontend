@@ -26,11 +26,6 @@ export const searchResults = {
         name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
-          // customBodyRender: (value, data) => (
-          //   <Link to={`/wns/connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}>
-          //     {value}
-          //   </Link>
-          // )
           customBodyRender: (value, index) => (
             <div className="linkStyle" onClick={() => getConnectionDetails(index)}>
               <a>{value}</a>
@@ -50,11 +45,6 @@ export const searchResults = {
           customBodyRender: (value, data) => {
             if (data.rowData[4] > 0 && data.rowData[4] !== 0) {
               return (
-                // <Link
-                //   to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}
-                //   style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
-                //   Pay now
-                // </Link>
                 <div className="linkStyle" onClick={() => getViewBillDetails(data)} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
                   <LabelContainer
                     labelKey="CS_COMMON_PAY"

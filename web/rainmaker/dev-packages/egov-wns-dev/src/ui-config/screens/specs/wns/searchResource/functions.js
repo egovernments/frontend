@@ -97,14 +97,14 @@ const renderSearchApplicationTable = async (state, dispatch) => {
   let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "offset", value: "0" }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
+    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
+    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
     state,
     dispatch,
     "search"
@@ -176,6 +176,23 @@ const showConnectionResults = (connections, dispatch) => {
     `${getTextToLocalMapping("Search Results for Water & Sewerage Connections")} (${connections.length})`
   ));
   showHideConnectionTable(true, dispatch);
+}
+
+const showApplicationResults = (connections, dispatch) => {
+  let data = connections.map(item => ({
+    [getTextToLocalMapping("Service")]: item.service,
+    [getTextToLocalMapping("Consumer No")]: item.connectionNo,
+    [getTextToLocalMapping("Owner Name")]: item.name,
+    [getTextToLocalMapping("Application Status")]: item.status,
+    [getTextToLocalMapping("Address")]: item.address,
+    ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
+    ["connectionType"]: item.connectionType
+  }));
+  dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
+  dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.title",
+    `${getTextToLocalMapping("Search Results for Water & Sewerage Application")} (${connections.length})`
+  ));
+  showHideApplicationTable(true, dispatch);
 }
 
 const showApplicationResults = (connections, dispatch) => {
