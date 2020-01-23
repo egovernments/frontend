@@ -188,7 +188,7 @@ const routes = [
     },
   },
   {
-    path: "whatsapp-locality?",
+    path: "whatsapp-locality",
     component:  WhatsAppLocality ,
     needsAuthentication: false,
     options: {

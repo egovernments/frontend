@@ -2,6 +2,7 @@ import React from "react";
 import { Icon } from "components";
 import filter from "lodash/filter";
 import isUndefined from "lodash/isUndefined";
+import { Screen } from "modules/common";
 import { withStyles } from "@material-ui/core/styles";
 import Label from "egov-ui-kit/utils/translationNode";
 import { httpRequest } from "egov-ui-kit/utils/api";
@@ -170,8 +171,8 @@ class WhatsAppCity extends React.Component {
       }}
       />
       </div>
-       
-       <div className="list-style">
+      </div>
+      <Screen className="whatsappScreen">
        <List
           items={getListItems(this.state.data)}
           primaryTogglesNestedList={true}
@@ -185,8 +186,8 @@ class WhatsAppCity extends React.Component {
         //  listContainerStyle = {{height:"50px"}}
           
       />
-    </div>
-    </div>
+    </Screen>
+    
        </div>
     );
   }
