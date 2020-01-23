@@ -37,7 +37,7 @@ class DateRange extends React.Component {
       { key: "2", value: "This Week" },
       { key: "3", value: "This Month" },
       { key: "4", value: "This Quarter" },
-      { key: "5", value: getFinancialYearObj(true)},
+      { key: "5", value: getFinancialYearObj(true) },
       { key: "6", value: "Custom" },
       ],
     }
@@ -133,7 +133,7 @@ class DateRange extends React.Component {
         }
 
       default:
-       return getFinancialYearObj()
+        return getFinancialYearObj()
     }
   }
 
@@ -183,15 +183,12 @@ class DateRange extends React.Component {
         // onEntering={this.handleEntering}
         aria-labelledby="date-range"
         open={open}
-        // style={{ backgroundColor: 'transparent' }}
 
         classes={{ paper: classes.root }}
       // {...other}
       >
-        <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#000000' }}>
-          {/* <h5> */}
+        <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#fe7a51' }}>
           {this.state.title}
-          {/* </h5> */}
         </DialogTitle>
         <DialogContent dividers>
           <div className={classes.fils}>
@@ -219,11 +216,11 @@ class DateRange extends React.Component {
         </DialogContent>
         <DialogActions className={classes.actions}>
           <Button className={classes.cancelbtn} onClick={this.handleCancel.bind(this)}>
-            { this.props.cancelBtn}
-        </Button>
-          <Button className={classes.okbtn} onClick={this.handleOk.bind(this)}>
+            {this.props.cancelBtn}
+          </Button>
+          <Button className={classes.okbtn} variant="contained" elevation={1} onMouseLeave={() => { this.setState({ buttonHovered: false }) }} onMouseEnter={() => { this.setState({ buttonHovered: true }) }} onClick={this.handleOk.bind(this)}>
             {this.props.selectBtn}
-        </Button>
+          </Button>
         </DialogActions>
       </Dialog>
     );

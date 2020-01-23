@@ -5,7 +5,7 @@ const styles = theme => ({
     "#customCalander": {
         // '& div': {
         backgroundColor: 'red'
-            // }
+        // }
     },
 
     root: {
@@ -170,10 +170,6 @@ const styles = theme => ({
         color: '#656565',
     },
     okbtn: {
-        // width: 78,
-        // height: 32,
-        borderRadius: 2,
-        border: 'solid 1px #5b5b5b',
         backgroundColor: 'rgba(255, 255, 255, 0)',
         fontFamily: 'Roboto',
         fontSize: 12,
@@ -182,50 +178,57 @@ const styles = theme => ({
         fontStyle: 'normal',
         lineHeight: 'normal',
         letterSpacing: 'normal',
-        color: '#5b5b5b',
-    },
-    trans: {
-        // '& div > div': {
-        background: 'transparent'
-            // }
-    },
-    '@media (max-width: 1115px)': {
-        root: {
-            top: 0,
-            left: 0,
-
-        },
-        calanderDisplay: {
-            display: 'flex',
-            flexDirection: 'column'
-        },
-        fils: {
-            display: 'flex',
-            flexDirection: 'column'
-        },
-
-    },
-    '@media (max-width: 1000px)': {
-        root: {
-            top: 0,
-            left: 0,
-            width: '100vw',
-            position: 'inherit'
-        },
-        calanderDisplay: {
-            display: 'flex',
-            flexDirection: 'column'
-        },
-        fils: {
-            display: 'flex',
-            flexDirection: 'column'
-        },
-        actions: {
-            display: 'flex',
-            justifyContent: 'center',
-            margin: '10px 0 107px 0'
+        color: 'white',
+        backgroundColor: '#fe7a51',
+        cursor: 'pointer',
+        '&:hover': {
+            boxShadow: theme.shadows[5],
+            backgroundColor: '#FE7A51',
+            color: variables.whiteColor
         }
+    },
+trans: {
+    // '& div > div': {
+    background: 'transparent'
+    // }
+},
+'@media (max-width: 1115px)': {
+    root: {
+        top: 0,
+            left: 0,
+
+        },
+    calanderDisplay: {
+        display: 'flex',
+            flexDirection: 'column'
+    },
+    fils: {
+        display: 'flex',
+            flexDirection: 'column'
+    },
+
+},
+'@media (max-width: 1000px)': {
+    root: {
+        top: 0,
+            left: 0,
+                width: '100vw',
+                    position: 'inherit'
+    },
+    calanderDisplay: {
+        display: 'flex',
+            flexDirection: 'column'
+    },
+    fils: {
+        display: 'flex',
+            flexDirection: 'column'
+    },
+    actions: {
+        display: 'flex',
+            justifyContent: 'center',
+                margin: '10px 0 107px 0'
     }
+}
 })
 
 export default styles
