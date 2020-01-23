@@ -50,19 +50,19 @@ const getListItems = items =>
 
 
 
-class WhatsAppCity extends React.Component {
+class WhatsAppLocality extends React.Component {
   state = {
     searchText: "",
     data: [],
-    citylist: [],
-    cityname: "",
+    localitylist: [],
+    cityname: undefined,
   };
 
   getMDMSData = async () => {
     let mdmsBody = {
 
       MdmsCriteria: {
-        tenantId: "pb.amritsar",
+        tenantId: this.state.cityname || "pb.amritsar",
         moduleDetails: [
           {
             moduleName: "egov-location",
@@ -102,11 +102,10 @@ class WhatsAppCity extends React.Component {
     this.setState({
       cityname: cityname,
     })
-    console.log("cityname", cityname);
 
-    const cityl = await this.getMDMSData();
-    const citylistCode = get(cityl, "MdmsRes.egov-location.TenantBoundary", []);
-    const citylist = citylistCode.map((item) => {
+    const localityl = await this.getMDMSData();
+    const localityistCode = get(localityl, "MdmsRes.egov-location.TenantBoundary", []);
+    const localitylist = localityistCode.map((item) => {
       return {
         code: item,
         label: item,
@@ -118,16 +117,16 @@ class WhatsAppCity extends React.Component {
     })
 
     this.setState({
-      citylist: citylist,
+      localitylist: localitylist,
     })
   };
 
 
 
-  onChangeText = (searchText, citylist, dataSource, params, ) => {
+  onChangeText = (searchText, localitylist, dataSource, params, ) => {
     this.setState({ searchText });
     //logic to like search on items    
-    const filterData = citylist.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
+    const filterData = localitylist.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
 
 
     this.setState({
@@ -135,7 +134,7 @@ class WhatsAppCity extends React.Component {
     })
     if (searchText === "") {
       this.setState({
-        data: citylist,
+        data: localitylist,
       })
     }
   };
@@ -148,7 +147,7 @@ class WhatsAppCity extends React.Component {
 
   render() {
     const { classes, history } = this.props;
-    const { searchText, citylist } = this.state;
+    const { searchText, localitylist } = this.state;
     const { onChangeText, getMDMSData, fetchMDMSData } = this;
 
 
@@ -178,7 +177,7 @@ class WhatsAppCity extends React.Component {
                 'aria-label': 'Description',
               }}
               onChange={(e) => {
-                onChangeText(e.target.value, citylist);
+                onChangeText(e.target.value, localitylist);
 
               }}
             />
@@ -209,5 +208,5 @@ class WhatsAppCity extends React.Component {
 
 
 export default withStyles(styles)(
-  (WhatsAppCity)
+  (WhatsAppLocality)
 );

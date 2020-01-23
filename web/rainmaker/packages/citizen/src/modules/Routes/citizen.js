@@ -179,7 +179,7 @@ const routes = [
     },
   },
   {
-    path: "whatsapp-city",
+    path: "openlink/whatsapp/city",
     component:  WhatsAppCity ,
     needsAuthentication: false,
     options: {
@@ -188,7 +188,7 @@ const routes = [
     },
   },
   {
-    path: "whatsapp-locality",
+    path: "openlink/whatsapp/locality",
     component:  WhatsAppLocality ,
     needsAuthentication: false,
     options: {

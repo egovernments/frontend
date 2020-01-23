@@ -6,16 +6,17 @@ import { Screen } from "modules/common";
 import { withStyles } from "@material-ui/core/styles";
 import Label from "egov-ui-kit/utils/translationNode";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { List} from  "egov-ui-kit/components";
+import { List } from "egov-ui-kit/components";
 import Input from '@material-ui/core/Input';
 import get from "lodash/get";
+import queryString from 'query-string';
 import "./index.css";
 
 const styles = (theme) => ({
   root: {
     padding: "2px 4px",
     // margin: "0px 8px"
-    marginLeft:"8px",
+    marginLeft: "8px",
     position: "fixed",
     top: "50px",
     height: "48px",
@@ -42,8 +43,8 @@ const getListItems = items =>
         labelStyle={{ fontWeight: 500 }}
       />
     )
-  
-   // route: item.route,
+
+    // route: item.route,
 
   }));
 
@@ -52,17 +53,18 @@ const getListItems = items =>
 class WhatsAppCity extends React.Component {
   state = {
     searchText: "",
-    data:[],
-    citylist:[],
+    data: [],
+    citylist: [],
+    phone: undefined,
   };
 
   getMDMSData = async () => {
-    let mdmsBody = { 
-      
+    let mdmsBody = {
+
       MdmsCriteria: {
-        tenantId :"pb",
+        tenantId: "pb",
         moduleDetails: [
-         {
+          {
             moduleName: "tenant",
             masterDetails: [
               {
@@ -84,46 +86,48 @@ class WhatsAppCity extends React.Component {
     } catch (e) {
       console.log(e);
     }
-    };
-  
-//  fetchMDMSData = async () => {
-//       const mdmsRes = await this.getMDMSData();
-//       return mdmsRes;
-//   }
-   
- componentDidMount = async () => {
- const cityl=await this.getMDMSData();
- const citylistCode=   get(cityl, "MdmsRes.tenant.citymodule.0.tenants", []);
- const citylist= citylistCode.map((item) => {
-  return {
-     code : item.code,
-     label :"TENANT_TENANTS_" + (item.code).toUpperCase().replace(/[.]/g, "_")
-   }
-
-
-   // route: item.route,
-
-  })
-    
-  this.setState({
-    citylist:citylist,
-  })
   };
-  
-  
-  
-  onChangeText = (searchText,citylist, dataSource, params,) => {
+
+  //  fetchMDMSData = async () => {
+  //       const mdmsRes = await this.getMDMSData();
+  //       return mdmsRes;
+  //   }
+
+  componentDidMount = async () => {
+    const values = queryString.parse(this.props.location.search)
+    const phone = values.phone;
+    this.setState({
+      phone: phone,
+    })
+
+    const cityl = await this.getMDMSData();
+    const citylistCode = get(cityl, "MdmsRes.tenant.citymodule.0.tenants", []);
+    const citylist = citylistCode.map((item) => {
+      return {
+        code: item.code,
+        label: "TENANT_TENANTS_" + (item.code).toUpperCase().replace(/[.]/g, "_")
+      }
+    })
+
+    this.setState({
+      citylist: citylist,
+    })
+  };
+
+
+
+  onChangeText = (searchText, citylist) => {
     this.setState({ searchText });
     //logic to like search on items    
     const filterData = citylist.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
- 
-    
+
+
     this.setState({
-      data:filterData,
+      data: filterData,
     })
-    if(searchText===""){
+    if (searchText === "") {
       this.setState({
-        data:citylist,
+        data: citylist,
       })
     }
   };
@@ -136,64 +140,68 @@ class WhatsAppCity extends React.Component {
 
   render() {
     const { classes, history } = this.props;
-    const { searchText ,citylist} = this.state;
-      const {  onChangeText,getMDMSData,fetchMDMSData} = this;
-  
-  
+    const { searchText, citylist } = this.state;
+    const { onChangeText, getMDMSData, fetchMDMSData } = this;
+
+
     return (
-        <div>
-       <div className="search-background">
-        <div className="header-iconText">
-        <Icon id="back-navigator" action="navigation" name="arrow-back" />
-        <Label
+      <div>
+        <div className="search-background">
+          <div className="header-iconText">
+            <Icon id="back-navigator" action="navigation" name="arrow-back" />
+            <Label
               label="Choose City"
               color="white"
               fontSize={18}
               bold={true}
-              containerStyle={{ marginLeft: 17,marginTop:-2 }}
-        />
+              containerStyle={{ marginLeft: 17, marginTop: -2 }}
+            />
 
-       </div>  
-       
-       <div className={`${classes.root} dashboard-search-main-cont`}>
-        <Icon action="action" name="search" style={{ marginLeft: 12 }} />
-        <Input
-        placeholder="Search City"
-        disableUnderline={true}
-        fullWidth={true}
-        //className={classes.input}
-        inputProps={{
-          'aria-label': 'Description',
-        }}
-        onChange={(e) => {
-          onChangeText(e.target.value,citylist);
-       
-      }}
-      />
+          </div>
+
+          <div className={`${classes.root} dashboard-search-main-cont`}>
+            <Icon action="action" name="search" style={{ marginLeft: 12 }} />
+            <Input
+              placeholder="Search City"
+              disableUnderline={true}
+              fullWidth={true}
+              //className={classes.input}
+              inputProps={{
+                'aria-label': 'Description',
+              }}
+              onChange={(e) => {
+                onChangeText(e.target.value, citylist);
+
+              }}
+            />
+          </div>
+        </div>
+        <Screen className="whatsappScreen">
+          <List
+            items={getListItems(this.state.data)}
+            primaryTogglesNestedList={true}
+            onItemClick={(item, index) => {
+              const number = this.state.phone || 919987106368;
+              const nameArray = (item.primaryText.props.label).split('_');
+              const name = nameArray[3];
+
+              const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name
+              window.location.href = weblink
+
+              // history && history.push(item.route);
+            }}
+            listItemStyle={{ borderBottom: "1px solid grey" }}
+          //  listContainerStyle = {{height:"50px"}}
+
+          />
+        </Screen>
+
       </div>
-      </div>
-      <Screen className="whatsappScreen">
-       <List
-          items={getListItems(this.state.data)}
-          primaryTogglesNestedList={true}
-          onItemClick={(item, index) => {
-            const weblink="https://api.whatsapp.com/send?phone=919987106368&text="+item.primaryText.props.label
-            window.location.href=weblink 
-          
-           // history && history.push(item.route);
-          }}
-          listItemStyle = {{borderBottom:"1px solid grey"}}
-        //  listContainerStyle = {{height:"50px"}}
-          
-      />
-    </Screen>
-    
-       </div>
     );
   }
 }
 
 
 export default withStyles(styles)(
-( WhatsAppCity )
+  (WhatsAppCity)
 );
