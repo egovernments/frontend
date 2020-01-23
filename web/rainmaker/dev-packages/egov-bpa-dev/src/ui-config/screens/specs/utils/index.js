@@ -3810,8 +3810,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
 
     documentsPreview.push({
       title: getTransformedLocale(doc.documentType),
-      //title: doc.documentType,
-      fileStoreId: doc.fileStore,
+      fileStoreId: doc.fileStoreId,
       linkText: "View"
     });
   });
