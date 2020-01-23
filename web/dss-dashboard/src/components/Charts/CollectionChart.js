@@ -37,7 +37,7 @@ class CollectionChart extends React.Component {
 							return <div className={classes.collection} key={`collection-${i}`}>
 								<div className={classes.collectionRow}>
 									<Grid container direction="row" alignItems="center">
-										<Grid item sm={6}>
+										<Grid item sm={12}>
 											<div className={classes.CollectionLabel}>
 												<span> {strings[d.label] || d.label}</span>
 											</div>
