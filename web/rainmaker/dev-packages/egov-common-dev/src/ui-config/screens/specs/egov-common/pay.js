@@ -76,7 +76,7 @@ const getPaymentCard = () => {
                         ...AmountToBePaid,
                         visible: false
                     },
-                    capturePaymentDetails,
+                    // capturePaymentDetails,
                     g8Details
                     // addPenaltyRebateButton: {
                     //   componentPath: "Button",
