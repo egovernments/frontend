@@ -11,6 +11,7 @@ import getChartOptions from '../../../actions/getChartOptions';
 import ChartsAPI from '../../../actions/charts/chartsAPI'
 import NFormatter from '../numberFormater';
 import { isMobile } from "react-device-detect";
+import { filter } from "bluebird";
 
 class CustomCard extends React.Component {
     constructor(props) {
@@ -21,7 +22,6 @@ class CustomCard extends React.Component {
         let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
         let filters = this.props.filters
         console.log(filters)
-        console.log(this.props.moduleLevel)
     
         if(this.props.page.includes('ulb')) {
           if(!filters['tenantId']) {
@@ -31,10 +31,9 @@ class CustomCard extends React.Component {
             filters['tenantId'] = tenentFilter
           }
         }
-        console.log(filters)
 
         let requestBody = getChartOptions(code, filters);
-        let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
+        let chartsAPI = new ChartsAPI(2000, 'dashboard', code+this.props.moduleLevel, requestBody.dataoption);
         this.props.APITransport(chartsAPI);
     }
        
@@ -44,11 +43,13 @@ class CustomCard extends React.Component {
 
     render() {
         const { classes, strings, type, chartLabelName, page } = this.props;
+        console.log(this.props.chartData)
 
         let codekey = _.chain(this.props).get('chartData').get("id").value();
+        codekey=codekey+ this.props.moduleLevel;
         let data = _.chain(this.props).get("chartsGData").get(codekey).get("data").map((d, i) => {
             return {
-                "label": d.headerName,
+                "label": _.chain(this.props).get('chartData').get("name").value(),
                 "valueSymbol": d.headerSymbol,
                 "value": d.headerValue,
                 "plots": d.plots
