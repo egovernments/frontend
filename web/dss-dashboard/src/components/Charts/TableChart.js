@@ -14,6 +14,7 @@ import NFormatterFun from '../common/numberFormaterFun';
 import getChartOptions from '../../actions/getChartOptions';
 import getFilterObj from '../../actions/getFilterObj';
 import axios from 'axios';
+import { isMobile } from 'react-device-detect';
 
 class TableChart extends Component {
   constructor(props) {
@@ -161,7 +162,7 @@ class TableChart extends Component {
     var row = [];
     for(var i=0; i < chipValue.length;i++){
       if(chipValue[i] && chipValue[i].length >0 ){
-        row.push(<div className="chipWrap"><Chips index={i} label={tabName} value={chipValue[i]} handleClick={this.handleChipClick} /></div>);
+        row.push(<div className="chipWrap" style={isMobile?{margin:"2px 20px"}:{}}><Chips fromScreen="TableChart" index={i} label={tabName} value={chipValue[i]} handleClick={this.handleChipClick} /></div>);
       }
     }
     return row;
@@ -242,11 +243,34 @@ class TableChart extends Component {
               <div className="filLabel">
                 Filters Applied
               </div>              
-              { 
+              {/* { 
                 _.map(this.state.filterList, (k, v) =>  {
                     return this.renderChip(v,k)
                 })
-              }
+              } */}
+
+
+              {/* { 
+                isMobile ? 
+               ( <div class="cutome_label_chip">
+               { _.map(this.state.filterList, (k, v) =>  {
+                  return this.renderChip(v,k)
+              })}</div>):
+              _.map(this.state.filterList, (k, v) =>  {
+                return this.renderChip(v,k)
+            })
+              } */}
+ {_.map(this.state.filterList, (k, v) =>  {
+              if(isMobile){
+                    return(
+                      <div class="cutome_label_chip" style={{display: "inline-grid"}}>
+                      {this.renderChip(v,k)}
+                      </div>
+                    )
+                  }else{
+                    return this.renderChip(v,k)
+                  }
+                })}
             </div>    
           }
           {/* <Table tableData={this.state.data} callBack={this.applyFilter.bind(this)} />               */}
