@@ -65,7 +65,11 @@ class ServiceList extends React.Component {
     }else{
       list = menu && menu.filter((item) => item.url === "card");
     }
-    
+    list && list.map((item)=>{
+      if(item.name === "rainmaker-common-propertytax"){
+        item.navigationURL = "property-tax/search-property";
+      }
+    });
     this.setState({
       actionList: list,
     });
