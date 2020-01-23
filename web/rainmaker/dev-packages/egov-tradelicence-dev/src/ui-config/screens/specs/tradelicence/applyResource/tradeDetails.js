@@ -822,7 +822,7 @@ export const tradeDetails = getCommonCard(
           )); 
           dispatch(
             pFO(
-              `Licenses[0].financialYear`, startDate.split("-")[0] + "-" + endDate.split("-")[0]
+              `Licenses[0].financialYear`, startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length-2)
             ));              
         }
 
