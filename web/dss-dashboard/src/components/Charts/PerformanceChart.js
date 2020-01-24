@@ -27,18 +27,21 @@ class PerformanceChart extends React.Component {
     let code = this.props.chartData[0]['id'] ? this.props.chartData[0]['id'] : "";
     console.log('-------------------', this.props.filters)
     let filters = this.props.filters
-    console.log(filters)
 
-    if (this.props.page.includes('ulb')) {
-      if (!filters['tenantId']) {
-        console.log('=======tenet Id not there perf chart========')
-        let tenentFilter = []
-        tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
-        //   tenentFilter.push('pb.amritsar')
+    let data = filters
+    let val = delete data['tenantId']
+    console.log(val)
 
-        filters['tenantId'] = tenentFilter
-      }
-    }
+    // if (this.props.page.includes('ulb')) {
+      // if (!filters['tenantId']) {
+      //   console.log('=======tenet Id not there perf chart========')
+      //   let tenentFilter = []
+      //   tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+      //   //   tenentFilter.push('pb.amritsar')
+
+      //   filters['tenantId'] = tenentFilter
+      // }
+    // }
     console.log(filters)
     let requestBody = getChartOptions(code, filters || {});
 

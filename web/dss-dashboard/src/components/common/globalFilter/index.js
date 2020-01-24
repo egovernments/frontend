@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import { updateGlobalFilterData } from '../../../actions/globalFilter/GFilterAction';
 import styles from './Style';
 import Cards from '../Cards/Cards'
@@ -123,10 +122,7 @@ class GlobalFilter extends Component {
         if (prevProps.wards != this.props.wards) {
             // let wardData = _.chain(this.props).get("wards").get('MdmsRes').get('egov-location').get('TenantBoundary').first().get('boundary').get('children').first().get('children').map()
             let tenantsBoundry = _.get(this.props.wards, 'MdmsRes.egov-location.TenantBoundary')
-            let nameArray = []
 
-            let adminBoundary = []
-            let revenueBoundary = []
             let adminName = []
             let revenueName = []
             let wardObj = {}
