@@ -77,6 +77,11 @@ export const UCSearchCard = getCommonCard({
   subheader: getCommonSubHeader({
     labelName: "Provide at least one parameter to search for an application",
     labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
+  },
+  {
+    style:{
+      marginBottom: 20
+    }
   }),
   searchContainer: getCommonContainer({
     receiptNumber: getTextField({
