@@ -36,9 +36,10 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
+  const baseRoute = process.env.REACT_APP_NAME  ?  "" : "egov-ui-framework";
   dispatch(
     setRoute(
-      `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+      `${baseRoute}/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
     )
   );
 };

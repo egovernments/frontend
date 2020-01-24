@@ -319,21 +319,6 @@ export const getFooterButtons = queryValue => {
   }
 };
 
-export const onClickNextButton = (
-  applicationNumber,
-  secondNumber,
-  queryValue,
-  tenantId
-) => {
-  switch (queryValue) {
-    case "reject":
-      return `/tradelicence/acknowledgement?purpose=application&status=rejected&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
-    case "cancel":
-      return `/tradelicence/acknowledgement?purpose=application&status=cancelled&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
-    default:
-      return `/tradelicence/acknowledgement?purpose=approve&status=success&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
-  }
-};
 
 export const onClickPreviousButton = (
   queryValue,
