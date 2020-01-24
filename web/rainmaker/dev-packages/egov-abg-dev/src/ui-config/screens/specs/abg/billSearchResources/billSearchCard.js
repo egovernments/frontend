@@ -91,6 +91,10 @@ export const billSearchCard = getCommonCard({
         xs: 12,
         sm: 4
       },
+      localePrefix : {
+        moduleName : "BillingService",
+        masterName : "BusinessService"
+      },
       sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
       beforeFieldChange :(action, state, dispatch) => {
         const labelName = {
