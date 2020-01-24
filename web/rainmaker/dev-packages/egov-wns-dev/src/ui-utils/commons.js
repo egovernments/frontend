@@ -62,7 +62,7 @@ export const getSearchResults = async queryObject => {
             "_search",
             queryObject
         );
-        return response;
+        return findAndReplace(response, null, "NA");
     } catch (error) { console.log(error) }
 };
 
@@ -76,7 +76,7 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
             queryObject
         );
         dispatch(toggleSpinner());
-        return response;
+        return findAndReplace(response, null, "NA");
     } catch (error) {
         dispatch(toggleSpinner());
         console.log(error)
@@ -93,7 +93,7 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
             requestBody
         );
         dispatch(toggleSpinner());
-        return response;
+        return findAndReplace(response, null, "NA");
     } catch (error) {
         dispatch(toggleSpinner());
         store.dispatch(
@@ -115,7 +115,7 @@ export const fetchBill = async (queryObject, dispatch) => {
             queryObject
         );
         dispatch(toggleSpinner());
-        return response;
+        return findAndReplace(response, null, "NA");
     } catch (error) {
         dispatch(toggleSpinner());
         console.log(error)
@@ -154,13 +154,13 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
 
                 } catch (err) {
                     console.log(err)
-                    response.WaterConnection[i].due = "-"
+                    response.WaterConnection[i].due = "NA"
                 }
             }
             // });
         }
         dispatch(toggleSpinner());
-        return response;
+        return findAndReplace(response, null, "NA");
     } catch (error) {
         dispatch(toggleSpinner());
         console.log(error);
@@ -179,7 +179,7 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
             queryObject
         );
         dispatch(toggleSpinner());
-        return response;
+        return findAndReplace(response, null, "NA");
     } catch (error) {
         dispatch(toggleSpinner());
         store.dispatch(
@@ -698,7 +698,7 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
             [],
             mdmsBody
         );
-        console.log(payload.MdmsRes)
+        // console.log(payload.MdmsRes)
         let data = payload.MdmsRes['ws-services-calculation'].MeterStatus.map(ele => {
             return { code: ele }
         })
@@ -726,15 +726,6 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
         }
     };
     try {
-        // let payload = null;
-        // payload = await httpRequest(
-        //     "post",
-        //     "http://192.168.1.68:8094/egov-mdms-service-test/v1/_search",
-        //     "_search",
-        //     [],
-        //     mdmsBody
-        // );
-
         let connectionNo = getQueryArg(window.location.href, "connectionNos");
         let queryObject = [
             {
@@ -744,10 +735,9 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
             { key: "offset", value: "0" },
             { key: "connectionNumber", value: connectionNo }
         ];
-        let res = await getSearchResults(queryObject)
-        console.log(res)
+        const data = await getSearchResults(queryObject)
+        let res = findAndReplace(data, null, "NA")
         let connectionType = res.WaterConnection[0].connectionType
-        console.log(connectionType, "res")
         let payload = {
             "MdmsRes": {
                 "ws-services-masters": {
@@ -793,49 +783,13 @@ export const getMeterReadingData = async (dispatch) => {
         { key: "offset", value: "0" }
     ];
 
-
-    // const mdmsRes = await getMdmsData(dispatch);
-    // let tenants =
-    //   mdmsRes &&
-    //   mdmsRes.MdmsRes &&
-    //   mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-    //     if (item.code === "TL") return true;
-    //   });
-    // dispatch(
-    //   prepareFinalObject(
-    //     "applyScreenMdmsData.common-masters.citiesByModule.TL",
-    //     tenants
-    //   )
-    // );
     try {
         const response = await getConsumptionDetails(queryObject, dispatch);
-        // const response =
-        // {
-        //     "ResponseInfo": {
-        //         "apiId": "",
-        //         "ver": ".",
-        //         "ts": null,
-        //         "resMsgId": "uief87324",
-        //         "msgId": "",
-        //         "status": "successful"
-        //     },
-        //     "meterReadings": [
-        //         {
-        //             "id": "c6326927-0f4c-46ea-b05f-b7bd3a046aca",
-        //             "billingPeriod": "Apr - 2019",
-        //             "meterStatus": "Working",
-        //             "lastReading": 70,
-        //             "lastReadingDate": 1575028112,
-        //             "currentReading": 347,
-        //             "currentReadingDate": 1575028312,
-        //             "connectionNo": "WS/107/2019-20/000022"
-        //         }
-        //     ]
-        // }
-        if (response && response.meterReadings && response.meterReadings.length > 0) {
-            dispatch(prepareFinalObject("consumptionDetails", response.meterReadings));
+        const data = findAndReplace(response, null, "NA");
+        if (data && data.meterReadings && data.meterReadings.length > 0) {
+            dispatch(prepareFinalObject("consumptionDetails", data.meterReadings));
             dispatch(
-                prepareFinalObject("consumptionDetailsCount", response.meterReadings.length)
+                prepareFinalObject("consumptionDetailsCount", data.meterReadings.length)
             );
         }
     } catch (error) {
@@ -855,8 +809,8 @@ export const getPastPaymentsForWater = async (dispatch) => {
             value: "WS"
         },
         {
-            key: "mobileNumber",
-            value: JSON.parse(getUserInfo()).mobileNumber.toString()
+            key: "uuid",
+            value: JSON.parse(getUserInfo()).uuid.toString()
         },
     ];
     try {
@@ -870,7 +824,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
         if (response && response.Payments) {
             dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));
         }
-        return response;
+        return findAndReplace(response, null, "NA");;
     } catch (error) {
         dispatch(toggleSpinner());
         store.dispatch(
@@ -894,9 +848,9 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
             value: "SW"
         },
         {
-            key: "mobileNumber",
-            value: JSON.parse(getUserInfo()).mobileNumber.toString()
-        },
+            key: "uuid",
+            value: JSON.parse(getUserInfo()).uuid.toString()
+        }
     ];
     try {
         const response = await httpRequest(
@@ -909,7 +863,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
         if (response && response.Payments) {
             dispatch(prepareFinalObject("pastPaymentsForSewerage", response.Payments));
         }
-        return response;
+        return findAndReplace(response, null, "NA");;
     } catch (error) {
         dispatch(toggleSpinner());
         store.dispatch(
@@ -1174,13 +1128,13 @@ export const getSWMyConnectionResults = async (queryObject, dispatch) => {
 
                 } catch (err) {
                     console.log(err)
-                    response.SewerageConnections[i].due = "-"
+                    response.SewerageConnections[i].due = "NA"
                 }
             }
             // });
         }
         dispatch(toggleSpinner());
-        return response;
+        return findAndReplace(response, null, "NA");
     } catch (error) {
         dispatch(toggleSpinner());
         console.log(error);
@@ -1226,4 +1180,12 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
     } catch (exception) {
         alert('Some Error Occured while downloading Bill!');
     }
+}
+
+let findAndReplace = (obj, oldValue, newValue) => {
+    Object.keys(obj).forEach(key => {
+        if ((obj[key] instanceof Object) || (obj[key] instanceof Array)) findAndReplace(obj[key], oldValue, newValue)
+        obj[key] = obj[key] === oldValue ? newValue : obj[key]
+    })
+    return obj
 }

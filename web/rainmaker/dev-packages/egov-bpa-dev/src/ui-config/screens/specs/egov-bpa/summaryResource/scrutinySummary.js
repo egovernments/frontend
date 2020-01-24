@@ -90,13 +90,38 @@ export const scrutinySummary = getCommonGrayCard({
             scheama: getCommonGrayCard({
                 blockWiseOccupancyAndUsageDetailscontainer: getCommonContainer({
 
-                    buildingplanscrutinyapplicationnumber: getLabelWithValue(
+                    // buildingplanscrutinyapplicationnumber: getLabelWithValue(
+                    //     {
+                    //         labelName: "Residential",
+                    //         labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "bpa.summary.residential",
+                    //         callBack: checkValueForNA
+                    //     }
+                    // ),
+
+                    occupancyType: getLabelWithValue(
                         {
-                            labelName: "Residential",
-                            labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL"
+                            labelName: "Occupancy Type",
+                            labelKey: "BPA_OCCUPANCY_TYPE"
                         },
                         {
-                            jsonPath: "bpa.summary.residential",
+                            jsonPath: "BPA.occupancyType",
+                            callBack: checkValueForNA
+                        }
+                    ),
+                    subOccupancyType: getLabelWithValue(
+                        {
+                            labelName: "Sub Occupancy Type",
+                            labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+                        },
+                        {
+                            jsonPath: "BPA.subOccupancyType",
+                            localePrefix: {
+                                moduleName: "BPA",
+                                masterName: "SUBOCCUPANCYTYPE"
+                              },
                             callBack: checkValueForNA
                         }
                     )
@@ -105,7 +130,8 @@ export const scrutinySummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            sourceJsonPath: "BPAs[0].BPADetails.blockwiseusagedetails",
+            // sourceJsonPath: "BPAs[0].BPADetails.blockwiseusagedetails",
+            sourceJsonPath: "BPA",            
             prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
@@ -147,7 +173,7 @@ export const scrutinySummary = getCommonGrayCard({
         type: "array"
     },
     proposedBuildingDetails:getHeader({
-        labelName: "Demolition Details",
+        labelName: "Proposed Building Details",
         labelKey: "BPA_APP_DETAILS_PROPOSED_BUILDING_DETAILS_LABEL"
     }),
     break3: getBreak(),

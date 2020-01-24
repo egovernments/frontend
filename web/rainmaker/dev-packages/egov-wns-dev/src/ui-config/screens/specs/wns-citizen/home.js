@@ -14,24 +14,25 @@ const header = getCommonHeader({
 });
 
 const cardItems = [{
-        label: {
-            labelKey: "WS_COMMON_PAY_WS_BILL_HEADER",
-        },
-        icon: < PayWnsBillIcon / > ,
-        route: "search"
+    label: {
+        labelKey: "WS_COMMON_PAY_WS_BILL_HEADER",
     },
-    {
-        label: {
-            labelKey: "WS_MYCONNECTIONS_HEADER",
-        },
-        icon: < MyConnectionsIcon / > ,
-        route: "my-connections"
-    }
+    icon: < PayWnsBillIcon />,
+    route: "search"
+},
+{
+    label: {
+        labelKey: "WS_MYCONNECTIONS_HEADER",
+    },
+    icon: < MyConnectionsIcon />,
+    route: "my-connections"
+}
 ];
 
 const waterAndSewerageSearchAndResult = {
     uiFramework: "material-ui",
     name: "home",
+    moduleName: "egov-wns",
     beforeInitScreen: (action, state, dispatch) => {
         fetchData(action, state, dispatch);
         return action;
@@ -40,14 +41,16 @@ const waterAndSewerageSearchAndResult = {
         div: {
             uiFramework: "custom-atoms",
             componentPath: "Div",
+            moduleName: "egov-wns",
             props: {
-                className: "common-div-css"
+                // className: "common-div-css"
             },
             children: {
                 header: header,
                 applyCard: {
                     uiFramework: "custom-molecules",
                     componentPath: "LandingPage",
+                    moduleName: "egov-wns",
                     props: {
                         items: cardItems,
                         history: {}
@@ -61,6 +64,19 @@ const waterAndSewerageSearchAndResult = {
                         route: "my-connections"
                     }
 
+                },
+                listCard3: {
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
+                    componentPath: "NewConnection",
+                    props: {
+                        route: "apply"
+                    }
+                },
+                listCard1: {
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
+                    componentPath: "MyApplications",
                 },
                 listCard2: {
                     uiFramework: "custom-molecules-local",

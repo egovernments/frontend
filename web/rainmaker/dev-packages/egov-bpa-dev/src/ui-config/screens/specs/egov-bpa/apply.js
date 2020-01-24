@@ -25,7 +25,7 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
+import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import set from "lodash/set";
 import get from "lodash/get";
 import {
@@ -33,10 +33,10 @@ import {
   getSearchResults,
   furnishNocResponse,
   setApplicationNumberBox,
-  prepareNOCUploadData
+  prepareNOCUploadData,
+  getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD } from "../utils";
-import { getTenantMdmsData } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, calculationType, setProposedBuildingData } from "../utils";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "" },
@@ -184,6 +184,15 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "CalculationType"
+            },
+            {
+              name: "OccupancyType"
+            },
+            {
+              name: "SubOccupancyType"
+            },
+            {
+              name: "Usages"
             }
           ]
         }
@@ -222,6 +231,62 @@ const getFirstListFromDotSeparated = list => {
   return list;
 };
 
+const setSearchResponse = async (
+  state,
+  dispatch,
+  applicationNumber,
+  tenantId, action
+) => {
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "applicationNos", value: applicationNumber }
+  ]);
+
+  const edcrNumber = response.Bpa["0"].edcrNumber;
+  const ownershipCategory = response.Bpa["0"].ownershipCategory;
+  const appDate = response.Bpa["0"].auditDetails.createdTime;
+  const latitude = response.Bpa["0"].address.geoLocation.latitude;
+  const longitude = response.Bpa["0"].address.geoLocation.longitude;
+  
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "search", []
+    );
+
+  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0] ));
+
+  if(ownershipCategory) {
+    let ownerShipMajorType =  dispatch(
+      prepareFinalObject( "BPA.ownerShipMajorType", ownershipCategory.split('.')[0] ));
+  }
+  
+ if(latitude && longitude) {
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.bpaDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
+      "props.value",
+      `${latitude}, ${longitude}`
+    )
+  );
+  dispatch(prepareFinalObject(
+    "BPA.address.geoLocation.latitude",
+    latitude
+  ));
+  dispatch(prepareFinalObject(
+    "BPA.address.geoLocation.longitude",
+    longitude
+  ));
+ }
+  dispatch(prepareFinalObject("BPA.appdate", appDate));
+  calculationType(state, dispatch)
+};
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
@@ -238,6 +303,18 @@ const screenConfig = {
     getTenantMdmsData(action, state, dispatch).then(response => {
       dispatch(prepareFinalObject("BPA.address.city", tenantId));
     });
+
+    let isEdit = true;
+    if(step || step == 0) {
+      isEdit = false
+    }
+    if (applicationNumber && isEdit) {
+      setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
+    } else {
+      setProposedBuildingData(state, dispatch);
+      getTodaysDate(action, state, dispatch);
+    }
+
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
@@ -259,10 +336,9 @@ const screenConfig = {
       );
       dispatch(prepareFinalObject("BPA.applicationType", applicationType));
       // Set Documents Data (TEMP)
-      prepareDocumentsUploadData(state, dispatch);
-      prepareNOCUploadData(state, dispatch);
+      // prepareDocumentsUploadData(state, dispatch);
+      // prepareNOCUploadData(state, dispatch);
     });
-    getTodaysDate(action, state, dispatch);
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {

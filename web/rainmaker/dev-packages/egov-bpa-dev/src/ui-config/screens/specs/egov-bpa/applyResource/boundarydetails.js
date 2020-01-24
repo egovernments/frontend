@@ -30,7 +30,8 @@ export const detailsofplot = getCommonCard({
                 required: true,
                 jsonPath: "scrutinyDetails.planDetail.plot.area",
                 props: {
-                    disabled: 'true'
+                    disabled: 'true',
+                    className : "tl-trade-type"
                   },
                   gridDefination: {
                     xs: 12,
@@ -51,7 +52,8 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 props: {
-                    className: "textfield-enterable-selection",
+                    disabled: 'true',
+                    className : "tl-trade-type"
                   },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
@@ -97,7 +99,8 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 props: {
-                    className: "textfield-enterable-selection",
+                    disabled: 'true',
+                    className : "tl-trade-type"
                   },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
@@ -125,7 +128,8 @@ export const detailsofplot = getCommonCard({
                 required: true,
                 props: {
                   required: true,
-                  disabled: true
+                  disabled: true,
+                  className : "tl-trade-type"
                 },
                 gridDefination: {
                     xs: 12,
@@ -133,28 +137,6 @@ export const detailsofplot = getCommonCard({
                     md: 6
                   }
               }),
-        },
-        landRegDetails: {
-            ...getTextField({
-                label: {
-                    labelName: "Land Registration Details",
-                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter Land Registration Details",
-                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_PLACEHOLDER"
-                },
-                props: {
-                    className: "textfield-enterable-selection",
-                  },
-                // // pattern: getPattern("Name") || null,
-                jsonPath: "BPA.registrationDetails",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                  }
-            })
         },
         whetherGovOrQuasi: {
             ...getSelectField({
@@ -192,6 +174,29 @@ export const detailsofplot = getCommonCard({
                     md: 6
                   }
             })
-        }
+        },
+        landRegDetails: {
+            ...getTextField({
+                label: {
+                    labelName: "Land Registration Details",
+                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
+                },
+                placeholder: {
+                    labelName: "Enter Land Registration Details",
+                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_PLACEHOLDER"
+                },
+                props: {
+                    className: "textfield-enterable-selection",
+                    multiline: true,
+                    rows: "4"
+                  },
+                jsonPath: "BPA.registrationDetails",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
+            })
+        },
     })
 });

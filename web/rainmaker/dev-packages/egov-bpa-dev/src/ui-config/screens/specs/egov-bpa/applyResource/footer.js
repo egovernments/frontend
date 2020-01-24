@@ -36,54 +36,60 @@ const moveToReview = (state, dispatch) => {
 
   let validateDocumentField = false;
 
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(
-      documentsFormat[i],
-      "isDocumentTypeRequired"
-    );
-
-    let documents = get(documentsFormat[i], "documents");
-    if (isDocumentRequired) {
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "natureOfNoc.value")) {
-            validateDocumentField = true;
-          }else if (get(documentsFormat[i], "remarks.value")) {
-            validateDocumentField = true;
+  if (documentsFormat && documentsFormat.length > 0) {
+    for (let i = 0; i < documentsFormat.length; i++) {
+      let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+      let isDocumentTypeRequired = get(
+        documentsFormat[i],
+        "isDocumentTypeRequired"
+      );
+  
+      let documents = get(documentsFormat[i], "documents");
+      if (isDocumentRequired) {
+        if (documents && documents.length > 0) {
+          if (isDocumentTypeRequired) {
+            if (get(documentsFormat[i], "natureOfNoc.value")) {
+              validateDocumentField = true;
+            }else if (get(documentsFormat[i], "remarks.value")) {
+              validateDocumentField = true;
+            } else {
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  { labelName: "Please select type of Document!", labelKey: "" },
+                  "warning"
+                )
+              );
+              validateDocumentField = false;
+              break;
+            }
           } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please select type of Document!", labelKey: "" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
+            validateDocumentField = true;
           }
         } else {
-          validateDocumentField = true;
+          dispatch(
+            toggleSnackbar(
+              true,
+              { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+              "warning"
+            )
+          );
+          validateDocumentField = false;
+          break;
         }
       } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
+        validateDocumentField = true;
       }
-    } else {
-      validateDocumentField = true;
     }
-  }
-
-  if (validateDocumentField) {
+  
+    if (validateDocumentField) {
+      setReviewPageRoute(state, dispatch);
+    }
+  } else {
     setReviewPageRoute(state, dispatch);
   }
+
+
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -175,6 +181,7 @@ const getFloorDetail = (index) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  window.scrollTo(0,0);
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
@@ -302,7 +309,7 @@ const callBackForNext = async (state, dispatch) => {
 
     let selectedApplicantType = get(
       state,
-      "screenConfiguration.preparedFinalObject.BPA.ownerShipType",
+      "screenConfiguration.preparedFinalObject.BPA.ownershipCategory",
       "SINGLE"
     );
     if (selectedApplicantType.includes("INSTITUTIONAL")) {
@@ -350,51 +357,53 @@ const callBackForNext = async (state, dispatch) => {
 
     let validateDocumentField = false;
 
-    for (let i = 0; i < documentsFormat.length; i++) {
-      let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-      let isDocumentTypeRequired = get(
-        documentsFormat[i],
-        "isDocumentTypeRequired"
-      );
-
-      let documents = get(documentsFormat[i], "documents");
-      if (isDocumentRequired) {
-        if (documents && documents.length > 0) {
-          if (isDocumentTypeRequired) {
-            if (get(documentsFormat[i], "dropDownValues.value")) {
-              validateDocumentField = true;
+    if (documentsFormat && documentsFormat.length) {
+      for (let i = 0; i < documentsFormat.length; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(
+          documentsFormat[i],
+          "isDocumentTypeRequired"
+        );
+  
+        let documents = get(documentsFormat[i], "documents");
+        if (isDocumentRequired) {
+          if (documents && documents.length > 0) {
+            if (isDocumentTypeRequired) {
+              if (get(documentsFormat[i], "dropDownValues.value")) {
+                validateDocumentField = true;
+              } else {
+                dispatch(
+                  toggleSnackbar(
+                    true,
+                    { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
+                    "warning"
+                  )
+                );
+                validateDocumentField = false;
+                break;
+              }
             } else {
-              dispatch(
-                toggleSnackbar(
-                  true,
-                  { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
-                  "warning"
-                )
-              );
-              validateDocumentField = false;
-              break;
+              validateDocumentField = true;
             }
           } else {
-            validateDocumentField = true;
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
+                "warning"
+              )
+            );
+            validateDocumentField = false;
+            break;
           }
         } else {
-          dispatch(
-            toggleSnackbar(
-              true,
-              { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
-              "warning"
-            )
-          );
-          validateDocumentField = false;
-          break;
+          validateDocumentField = true;
         }
-      } else {
-        validateDocumentField = true;
       }
-    }
-    if (!validateDocumentField) {
-    isFormValid = false;
-    hasFieldToaster = true;
+      if (!validateDocumentField) {
+      isFormValid = false;
+      hasFieldToaster = true;
+      }
     }
   }
 
@@ -434,6 +443,7 @@ const callBackForNext = async (state, dispatch) => {
               dispatch,
               "INITIATE"
             );
+            prepareDocumentsUploadData(state, dispatch);  
             responseStatus = get(response, "status", "");
             responseStatus === "success" && changeStep(state, dispatch);
           } else {
@@ -461,12 +471,13 @@ const callBackForNext = async (state, dispatch) => {
                 labelKey: "ERR_PRIMARY_ONE_OWNER_TOAST"
               };
               dispatch(toggleSnackbar(true, errorMessage, "warning"));
-            } else {
+            } else {                         
               let response = await createUpdateBpaApplication(
                 state,
                 dispatch,
                 "INITIATE"
               );
+              prepareDocumentsUploadData(state, dispatch);  
               responseStatus = get(response, "status", "");
               responseStatus === "success" && changeStep(state, dispatch);
             }

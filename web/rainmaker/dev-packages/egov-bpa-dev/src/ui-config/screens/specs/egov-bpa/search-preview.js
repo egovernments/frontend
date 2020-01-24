@@ -31,6 +31,7 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
+import { estimateSummary } from "./summaryResource/estimateSummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
@@ -69,27 +70,27 @@ const titlebar2 = {
     },
     rightContainer:getCommonContainer({
       downloadMenu: {
-        uiFramework: "custom-atoms",
-        componentPath: "MenuButton",
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: "Download",
+            label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { marginLeft: 10 } },
+            props: { variant: "outlined", style: { height: "60px", color : "#FE7A51", marginRight : 10 }, className: "tl-download-button" },
             menu: []
           }
         }
       },
       printMenu: {
-        uiFramework: "custom-atoms",
-        componentPath: "MenuButton",
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: "Print",
+            label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { marginLeft: 10 } },
+            props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },            
             menu: []
           }
         }
@@ -311,13 +312,7 @@ const setSearchResponse = async (
       edcrRes.edcrDetail[0]
     )
   );
-  if(response && response.Bpa["0"] && response.Bpa["0"].status !== "NOC_VERIFICATION_INPROGRESS") {
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.nocVerificationDetails.visible",
-      false
-    );
-  }
+
   if ( response && response.Bpa["0"] && response.Bpa["0"].permitOrderNo ) {
     dispatch(
       handleField(
@@ -357,10 +352,7 @@ const setSearchResponse = async (
     );
   };
 
-  // prepareDocumentsView(state, dispatch);
-  await requiredDocumentsData(state, dispatch);
-     
-  // await loadPdfGenerationDataForBpa(applicationNumber, tenantId);
+  requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
 };
 
@@ -373,9 +365,6 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    searchBill(dispatch, applicationNumber, tenantId);
-
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
     const queryObject = [
@@ -413,6 +402,16 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.plotAndBoundaryInfoSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
       false
     );
 
@@ -474,8 +473,7 @@ const screenConfig = {
           applicantSummary: applicantSummary,
           plotAndBoundaryInfoSummary: plotAndBoundaryInfoSummary,
           documentsSummary: documentsSummary,
-          nocSummary: nocSummary,
-          nocVerificationDetails : nocVerificationDetails
+          nocSummary: nocSummary
 
         }),
         citizenFooter:
