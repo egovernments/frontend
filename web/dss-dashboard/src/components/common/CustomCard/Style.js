@@ -20,7 +20,10 @@ const styles = theme => ({
         fontFamily: 'Roboto',
         fontSize: '14px',
         fontWeight: '400',
-        color: 'rgba(0, 0, 0, 0.87)'
+        color: 'rgba(0, 0, 0, 0.87)',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     value: {
         textAlign: 'left',
@@ -28,7 +31,10 @@ const styles = theme => ({
         fontSize: '20px',
         fontWeight: '500',
         color: 'rgba(0, 0, 0, 0.87)',
-        marginTop: '5px'
+        marginTop: '5px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     variant: {
         textAlign: 'left',

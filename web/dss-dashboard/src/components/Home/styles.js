@@ -58,14 +58,21 @@ const styles = theme => ({
         fontFamily: 'Roboto',
         fontSize: '20px',
         fontWeight: '500',
-        margin: '10px 18px 0px 18px'
+        margin: '10px 18px 0px 18px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     paperTitle: {
         fontFamily: 'Roboto',
         fontSize: '20px',
         fontWeight: '500',
         padding: isMobile ? '15px 5px 5px 15px' : '0px 5px 5px 5px',
-        margin: '0px'
+        margin: '0px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+       
     },
     value: {
         textAlign: 'left',

@@ -17,7 +17,7 @@ import variables from '../../styles/variables';
 class PerformanceChart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: null, IsOpen: false,page: _.get(this.props, 'match.params.pageId') }
+    this.state = { data: null, IsOpen: false, page: _.get(this.props, 'match.params.pageId') }
   }
   formatPlotValue(value, type) {
     return <NFormatter value={value} nType={type} />
@@ -28,19 +28,18 @@ class PerformanceChart extends React.Component {
     console.log('-------------------', this.props.filters)
     let filters = this.props.filters
 
-    let data = filters
-    let val = delete data['tenantId']
-    console.log(val)
-
+    if (filters && filters['tenantId']) {
+      delete filters.tenantId;
+    }
     // if (this.props.page.includes('ulb')) {
-      // if (!filters['tenantId']) {
-      //   console.log('=======tenet Id not there perf chart========')
-      //   let tenentFilter = []
-      //   tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
-      //   //   tenentFilter.push('pb.amritsar')
+    // if (!filters['tenantId']) {
+    //   console.log('=======tenet Id not there perf chart========')
+    //   let tenentFilter = []
+    //   tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+    //   //   tenentFilter.push('pb.amritsar')
 
-      //   filters['tenantId'] = tenentFilter
-      // }
+    //   filters['tenantId'] = tenentFilter
+    // }
     // }
     console.log(filters)
     let requestBody = getChartOptions(code, filters || {});
