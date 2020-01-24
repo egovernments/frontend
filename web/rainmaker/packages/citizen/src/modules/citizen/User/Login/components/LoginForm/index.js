@@ -9,14 +9,14 @@ import logo from "egov-ui-kit/assets/images/logo_black.png";
 import qrlogo from "egov-ui-kit/assets/images/qrImage.png";
 import "./index.css";
 
-const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL }) => {
+const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }) => {
   const fields = form.fields || {};
   const submit = form.submit;
 
   return (
     <div className="rainmaker-displayInline">
     <Card
-      className="login-cardwidth user-screens-card"
+      className={enableWhatsApp?"login-cardwidth user-screens-card":"login-cardwidthmob col-sm-offset-4 col-sm-4 user-screens-card"}
       textChildren={
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
@@ -48,6 +48,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL }) => {
               startSMSRecevier();
             }}
           />
+          {enableWhatsApp&&
            <Hidden mdUp>
           <div>
         <div className="login-hl-divider">
@@ -61,9 +62,11 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL }) => {
     </div>
     </div>
       </Hidden>
+      }
         </div>
       }
     />
+    {enableWhatsApp&&
       <Hidden smDown>
      <div className="login-vl-divider">
        <div className ="login-circle-web">
@@ -77,6 +80,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL }) => {
        </div>
     </div>
     </Hidden>
+}
     </div>
 
   );

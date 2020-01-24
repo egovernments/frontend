@@ -18,13 +18,13 @@ const iconButtonStyle = {
   width: 35,
 };
 
-const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL}) => {
+const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsApp}) => {
   const fields = form.fields || {};
   const submit = form.submit;
   return (
     <div className="rainmaker-displayInline">
     <Card
-      className="register-cardwidth user-screens-card"
+      className={enableWhatsApp?"register-cardwidth user-screens-card":"col-sm-offset-4 col-sm-4 user-screens-card"}
       textChildren={
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
@@ -58,6 +58,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL}) => {
               startSMSRecevier();
             }}
           />
+          {enableWhatsApp&&
         <Hidden mdUp>
           <div>
         <div className="register-hl-divider">
@@ -71,9 +72,11 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL}) => {
     </div>
     </div>
       </Hidden>
+      }
         </div>
       }
     />
+     {enableWhatsApp&&
     <Hidden smDown>
      <div className="register-vl-divider">
        <div className ="register-circle-web">
@@ -88,6 +91,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL}) => {
        </div>
     </div>
     </Hidden>
+}
     </div>
   );
 };

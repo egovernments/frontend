@@ -9,10 +9,10 @@ const RegisterFormHOC = formHoc({ formKey: "register" })(RegisterForm);
 
 class Register extends Component {
   render() {
-    const { bannerUrl, logoUrl,qrCodeURL } = this.props;
+    const { bannerUrl, logoUrl,qrCodeURL,enableWhatsApp } = this.props;
     return (
       <Banner hideBackButton={true} bannerUrl={bannerUrl} logoUrl={logoUrl}>
-        <RegisterFormHOC logoUrl={logoUrl} qrCodeURL={qrCodeURL}/>
+        <RegisterFormHOC logoUrl={logoUrl} qrCodeURL={qrCodeURL} enableWhatsApp={enableWhatsApp}/>
       </Banner>
     );
   }
@@ -23,7 +23,8 @@ const mapStateToProps = ({ common }) => {
   let bannerUrl = get(stateInfoById, "0.bannerUrl");
   let logoUrl = get(stateInfoById, "0.logoUrl");
   let qrCodeURL = get(stateInfoById, "0.qrCodeURL");
-  return { bannerUrl, logoUrl ,qrCodeURL};
+  let enableWhatsApp=get(stateInfoById,"0.enableWhatsApp");
+  return { bannerUrl, logoUrl ,qrCodeURL,enableWhatsApp};
 };
 
 export default connect(
