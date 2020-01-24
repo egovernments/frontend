@@ -115,6 +115,7 @@ class WorkFlowContainer extends React.Component {
       moduleName,
       updateUrl
     } = this.props;
+    const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
@@ -229,7 +230,8 @@ class WorkFlowContainer extends React.Component {
     }
   };
 
-  getRedirectUrl = (action, businessId, moduleName) => {
+  getRedirectUrl = (action, businessId, moduleName,applicationStatus) => {
+    const tenant = getQueryArg(window.location.href, "tenantId");
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     if (moduleName === "NewTL") {
       switch (action) {
@@ -252,7 +254,8 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "BPA") {
       switch (action) {
         case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+          let bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=${bservice}`;
         case "EDIT":
           return isAlreadyEdited
             ? `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -368,7 +371,7 @@ class WorkFlowContainer extends React.Component {
         buttonLabel: item.action,
         moduleName: data[data.length - 1].businessService,
         isLast: item.action === "PAY" ? true : false,
-        buttonUrl: getRedirectUrl(item.action, businessId, moduleName),
+        buttonUrl: getRedirectUrl(item.action, businessId, moduleName, applicationStatus),
         dialogHeader: getHeaderName(item.action),
         showEmployeeList: !checkIfTerminatedState(item.nextState, moduleName) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, moduleName),

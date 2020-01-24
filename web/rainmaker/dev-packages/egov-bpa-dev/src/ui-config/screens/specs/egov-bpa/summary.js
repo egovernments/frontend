@@ -122,7 +122,9 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
       false
     );
-    generateBillForBPA(dispatch, applicationNumber, tenantId);
+    let bpastatus = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].status") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.status"));
+  let billbService = (( bpastatus=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+    generateBillForBPA(dispatch, applicationNumber, tenantId,billbService);
     prepareNocDocumentsView(state, dispatch);
     prepareDocumentsDetailsView(state, dispatch);
     // setResidentialList(state, dispatch);
