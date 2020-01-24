@@ -250,7 +250,7 @@ class TableChart extends Component {
               } */}
 
 
-              {/* { 
+              { 
                 isMobile ? 
                ( <div class="cutome_label_chip">
                { _.map(this.state.filterList, (k, v) =>  {
@@ -259,8 +259,9 @@ class TableChart extends Component {
               _.map(this.state.filterList, (k, v) =>  {
                 return this.renderChip(v,k)
             })
-              } */}
- {_.map(this.state.filterList, (k, v) =>  {
+              }
+
+ {/* {_.map(this.state.filterList, (k, v) =>  {
               if(isMobile){
                     return(
                       <div class="cutome_label_chip" style={{display: "inline-grid"}}>
@@ -270,7 +271,7 @@ class TableChart extends Component {
                   }else{
                     return this.renderChip(v,k)
                   }
-                })}
+                })} */}
             </div>    
           }
           {/* <Table tableData={this.state.data} callBack={this.applyFilter.bind(this)} />               */}
