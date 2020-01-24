@@ -55,7 +55,6 @@ class WhatsAppLocality extends React.Component {
     const values = queryString.parse(this.props.location.search)
     const cityname = values.tenantId;
     const phone = values.phone;
-    fetchLocalizationLabel(getLocale(), cityname, cityname);
     this.setState({
       phone: phone,
     })
@@ -75,6 +74,7 @@ class WhatsAppLocality extends React.Component {
     this.setState({
       localitylist: localitylist,
     })
+    fetchLocalizationLabel(getLocale(), this.state.cityname, this.state.cityname);
   };
 
 
