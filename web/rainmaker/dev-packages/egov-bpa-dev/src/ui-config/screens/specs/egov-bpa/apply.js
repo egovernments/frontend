@@ -36,7 +36,7 @@ import {
   prepareNOCUploadData,
   getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD, getTenantMdmsData, calculationType } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, calculationType, setProposedBuildingData } from "../utils";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "" },
@@ -248,6 +248,8 @@ const setSearchResponse = async (
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const ownershipCategory = response.Bpa["0"].ownershipCategory;
   const appDate = response.Bpa["0"].auditDetails.createdTime;
+  const latitude = response.Bpa["0"].address.geoLocation.latitude;
+  const longitude = response.Bpa["0"].address.geoLocation.longitude;
   
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
   let edcrRes = await edcrHttpRequest(
@@ -255,21 +257,32 @@ const setSearchResponse = async (
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
     "search", []
     );
- 
+
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0] ));
 
   if(ownershipCategory) {
     let ownerShipMajorType =  dispatch(
       prepareFinalObject( "BPA.ownerShipMajorType", ownershipCategory.split('.')[0] ));
   }
-  // dispatch(
-  //   handleField(
-  //     "apply",
-  //     "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.bpaDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
-  //     "props.value",
-  //     // `${add.lat}, ${add.lng}`
-  //   )
-  // );
+  
+ if(latitude && longitude) {
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.bpaDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
+      "props.value",
+      `${latitude}, ${longitude}`
+    )
+  );
+  dispatch(prepareFinalObject(
+    "BPA.address.geoLocation.latitude",
+    latitude
+  ));
+  dispatch(prepareFinalObject(
+    "BPA.address.geoLocation.longitude",
+    longitude
+  ));
+ }
   dispatch(prepareFinalObject("BPA.appdate", appDate));
   calculationType(state, dispatch)
 };
@@ -291,9 +304,14 @@ const screenConfig = {
       dispatch(prepareFinalObject("BPA.address.city", tenantId));
     });
 
-    if (applicationNumber) {
+    let isEdit = true;
+    if(step || step == 0) {
+      isEdit = false
+    }
+    if (applicationNumber && isEdit) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
+      setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
     }
 

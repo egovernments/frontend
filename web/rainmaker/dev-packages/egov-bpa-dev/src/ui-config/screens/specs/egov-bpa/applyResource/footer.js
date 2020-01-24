@@ -181,6 +181,7 @@ const getFloorDetail = (index) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  window.scrollTo(0,0);
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
@@ -308,7 +309,7 @@ const callBackForNext = async (state, dispatch) => {
 
     let selectedApplicantType = get(
       state,
-      "screenConfiguration.preparedFinalObject.BPA.ownerShipType",
+      "screenConfiguration.preparedFinalObject.BPA.ownershipCategory",
       "SINGLE"
     );
     if (selectedApplicantType.includes("INSTITUTIONAL")) {
