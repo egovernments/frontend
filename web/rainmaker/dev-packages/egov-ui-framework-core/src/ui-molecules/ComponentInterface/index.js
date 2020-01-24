@@ -13,23 +13,24 @@ import { getModuleName } from "./moduleConfig";
 class ComponentInterface extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { module: null };
+    this.state = { module: null ,error: null, errorInfo: null};
   }
+
+  componentDidCatch(error, errorInfo) {	
+    // Catch errors in any components below and re-render with error message	
+    this.setState({	
+      error: error,	
+      errorInfo: errorInfo	
+    })	
+    // You can also log error messages to an error reporting service here	
+  }
+
   componentDidMount() {
     const { componentPath, uiFramework, moduleName } = this.props;
     let LoadableComponent = null;
     const selfRunning =
       process.env.REACT_APP_SELF_RUNNING === "true" ? true : false;
     switch (uiFramework) {
-      // case "carbon":
-      //   LoadableComponent = Loadable({
-      //     loader: () =>
-      //       import("carbon-components-react").then(
-      //         module => module[componentPath]
-      //       ),
-      //     loading: () => <LinearProgress />
-      //   });
-      //   break;
       case "custom-atoms":
         LoadableComponent = Loadable({
           loader: () =>
@@ -114,6 +115,15 @@ class ComponentInterface extends React.Component {
       menu,
       bpaTradeType
     } = this.props;
+
+    if (this.state.errorInfo) {	
+      // Error path	
+      console.error("Egov-ui-framework-error",this.state.error && this.state.error.toString());	
+      console.error("Egov-ui-framework-errorInfo",this.state.errorInfo.componentStack);	
+      console.error("Egov-ui-framework-component-details",this.props);	
+      return null;	
+    }
+    
     if (visible && !isEmpty(roleDefination)) {
       const splitList = get(roleDefination, "rolePath").split(".");
       const localdata = JSON.parse(localStorageGet(splitList[0]));
