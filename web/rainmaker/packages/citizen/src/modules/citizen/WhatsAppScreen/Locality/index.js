@@ -11,6 +11,12 @@ import Input from '@material-ui/core/Input';
 import get from "lodash/get";
 import queryString from 'query-string';
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions"; 
+import { connect } from "react-redux";
+import {
+
+  getLocale
+} from "egov-ui-kit/utils/localStorageUtils";
 // import "./index.css";
 
 const styles = (theme) => ({
@@ -43,38 +49,45 @@ class WhatsAppLocality extends React.Component {
     cityname: undefined,
     phone: undefined,
   };
-   getLocalTextFromCode = localCode => {
-  return JSON.parse(getLocalization("localization_en_IN")).find(
-    item => item.code === localCode
-  );
-};
-  getListItems = items =>
-    items.map((item) => ({
-      primaryText: (
-        <Label
-          label={item.label}
-          fontSize="16px"
-          color="#484848"
-          labelStyle={{ fontWeight: 500 }}
-        />
-      )
 
-    }));
+  componentDidMount = async () => {
+    const { fetchLocalizationLabel } = this.props;
+    const values = queryString.parse(this.props.location.search)
+    const cityname = values.tenantId;
+    const phone = values.phone;
+    fetchLocalizationLabel(getLocale(), cityname, cityname);
+    this.setState({
+      phone: phone,
+    })
+    this.setState({
+      cityname: cityname,
+    })
+
+    const localitydata = await this.getMDMSData(cityname);
+    const localityistCode = get(localitydata, "MdmsRes.egov-location.TenantBoundary", []);
+    const localitylist = localityistCode.map((item) => {
+      return {
+        code: item.name,
+        label: (this.state.cityname || "pb.amritsar").toUpperCase().replace(/[.]/g, "_") + "_ADMIN_" + item.code,
+      }
+    })
+
+    this.setState({
+      localitylist: localitylist,
+    })
+  };
 
 
-
-  getMDMSData = async () => {
+  getMDMSData = async (cityName) => {
     let mdmsBody = {
-
       MdmsCriteria: {
-        tenantId: this.state.cityname || "pb.amritsar",
+        tenantId: cityName || "pb.amritsar",
         moduleDetails: [
           {
             moduleName: "egov-location",
             masterDetails: [
               {
-                name: "TenantBoundary", filter: `[?(@.hierarchyType.code == "ADMIN")].boundary.children.*.children.*.children.*.name`
-
+                name: "TenantBoundary", filter: `[?(@.hierarchyType.code == "ADMIN")].boundary.children.*.children.*.children.*`
               }
             ]
           },
@@ -97,37 +110,30 @@ class WhatsAppLocality extends React.Component {
   };
 
 
-  componentDidMount = async () => {
-    const values = queryString.parse(this.props.location.search)
-    const cityname = values.tenantId;
-    const phone = values.phone;
-    this.setState({
-      phone: phone,
-    })
-    this.setState({
-      cityname: cityname,
-    })
-
-    const localitydata = await this.getMDMSData();
-    const localityistCode = get(localitydata, "MdmsRes.egov-location.TenantBoundary", []);
-    const localitylist = localityistCode.map((item) => {
-      return {
-        code: item,
-        label: item,
-      }
-    })
-
-    this.setState({
-      localitylist: localitylist,
-    })
+  getLocalTextFromCode = localCode => {
+    return JSON.parse(getLocalization("localization_en_IN")).find(
+      item => item.code === localCode
+    );
   };
 
+  getListItems = items =>
+    items.map((item) => ({
+      primaryText: (
+        <Label
+          label={item.label}
+          fontSize="16px"
+          color="#484848"
+          labelStyle={{ fontWeight: 500 }}
+        />
+      )
+
+    }));
 
 
   onChangeText = (searchText, localitylist, dataSource, params, ) => {
     this.setState({ searchText });
     //logic to like search on items    
-    const filterData = localitylist.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
+    const filterData = localitylist.filter(item => get(this.getLocalTextFromCode(item.label),"message",item.label).toLowerCase().includes(searchText.toLowerCase()));
 
 
     this.setState({
@@ -184,7 +190,8 @@ class WhatsAppLocality extends React.Component {
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
               const number = this.state.phone || 919987106368;
-              const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + item.primaryText.props.label
+              const name=get(this.getLocalTextFromCode(item.primaryText.props.label),"message",item.primaryText.props.label);
+              const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name;
               window.location.href = weblink
             }}
             listItemStyle={{ borderBottom: "1px solid grey" }}
@@ -197,8 +204,16 @@ class WhatsAppLocality extends React.Component {
     );
   }
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
+  };
+};
 
 
-export default withStyles(styles)(
+export default withStyles(styles)(connect(
+  null,
+  mapDispatchToProps
+)
   (WhatsAppLocality)
 );
