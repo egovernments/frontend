@@ -10,6 +10,7 @@ import { List } from "egov-ui-kit/components";
 import Input from '@material-ui/core/Input';
 import get from "lodash/get";
 import queryString from 'query-string';
+import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 // import "./index.css";
 
 const styles = (theme) => ({
@@ -42,6 +43,11 @@ class WhatsAppLocality extends React.Component {
     cityname: undefined,
     phone: undefined,
   };
+   getLocalTextFromCode = localCode => {
+  return JSON.parse(getLocalization("localization_en_IN")).find(
+    item => item.code === localCode
+  );
+};
   getListItems = items =>
     items.map((item) => ({
       primaryText: (

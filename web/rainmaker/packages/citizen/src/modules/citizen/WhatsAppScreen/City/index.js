@@ -10,6 +10,7 @@ import { List } from "egov-ui-kit/components";
 import Input from '@material-ui/core/Input';
 import get from "lodash/get";
 import queryString from 'query-string';
+import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const styles = (theme) => ({
@@ -40,6 +41,11 @@ class WhatsAppCity extends React.Component {
     data: [],
     citylist: [],
     phone: undefined,
+  };
+  getLocalTextFromCode = localCode => {
+    return JSON.parse(getLocalization("localization_en_IN")).find(
+      item => item.code === localCode
+    );
   };
   getListItems = items =>
     items.map((item) => ({
@@ -108,7 +114,7 @@ class WhatsAppCity extends React.Component {
   onChangeText = (searchText, citylist) => {
     this.setState({ searchText });
     //logic to like search on items    
-    const filterData = citylist.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
+    const filterData = citylist.filter(item => get(this.getLocalTextFromCode(item.label),"message",item.label).toLowerCase().includes(searchText.toLowerCase()));
 
 
     this.setState({
@@ -165,10 +171,8 @@ class WhatsAppCity extends React.Component {
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
               const number = this.state.phone || 919987106368;
-              const nameArray = (item.primaryText.props.label).split('_');
-              const name = nameArray[3];
-
-              const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name
+              const name=get(this.getLocalTextFromCode(item.primaryText.props.label),"message",item.primaryText.props.label);
+              const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name;
               window.location.href = weblink
             }}
             listItemStyle={{ borderBottom: "1px solid grey" }}
