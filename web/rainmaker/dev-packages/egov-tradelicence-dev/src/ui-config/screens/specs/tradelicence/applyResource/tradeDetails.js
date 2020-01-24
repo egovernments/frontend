@@ -1085,11 +1085,6 @@ export const tradeDetails = getCommonCard(
           },
           required: true,
           jsonPath: "LicensesTemp[0].tradeLicenseDetail.structureType",
-          props: {
-            disabled: true,
-            value: "IMMOVABLE",
-            className: "tl-structure-type"
-          },
           sourceJsonPath:
             "applyScreenMdmsData.common-masters.StructureTypeTransformed"
         }),
