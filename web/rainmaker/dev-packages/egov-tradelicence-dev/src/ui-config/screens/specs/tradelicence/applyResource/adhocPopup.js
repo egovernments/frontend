@@ -78,7 +78,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
       "COUNTER"
     )
   );
-  if (totalAmount) {
+ // if (totalAmount) {
     //set amount paid as total amount from bill - destination changed in CS v1.1
     dispatch(
       prepareFinalObject(
@@ -86,7 +86,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
         totalAmount
       )
     );
-  }
+//  }
 
   showHideAdhocPopup(state, dispatch);
 };
