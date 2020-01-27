@@ -199,7 +199,7 @@ export const chequeDetails = getCommonContainer({
 
 export const cheque = getCommonContainer({
   payeeDetails,
-  // chequeDetails
+  chequeDetails
 });
 
 export const demandDraftDetails = getCommonContainer({
