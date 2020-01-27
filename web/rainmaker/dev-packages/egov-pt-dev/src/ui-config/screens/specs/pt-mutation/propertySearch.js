@@ -4,18 +4,13 @@ import {
     getBreak
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import propertySearchTabs from "./capture-mutation-details";
-  import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-  import { pendingMutationApprovals } from "./searchResource/pendingMutationApprovals";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   // import { progressStatus } from "./searchResource/progressStatus";
-  import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-  import {Tabs} from "egov-ui-kit/components/Tabs";
-  import find from "lodash/find";
+  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import {searchPropertyTable,searchApplicationTable} from "./searchResource/searchResults";
   import { httpRequest } from "../../../../ui-utils";
   import commonConfig from "config/common.js";
-  import YearDialogue from "egov-ui-kit/common/propertyTax/YearDialogue";
   import { adhocPopup } from "./adhocPopup";
   import { showHideAdhocPopup} from "../utils";
 

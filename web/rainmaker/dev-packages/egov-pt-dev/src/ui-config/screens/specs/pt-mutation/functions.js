@@ -2,7 +2,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch } from "../utils/index";
+import { convertDateToEpoch } from "../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields, getTextToLocalMapping } from "../utils/index";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";

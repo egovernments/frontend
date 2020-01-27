@@ -3,7 +3,6 @@ import {
     getTextField,
     getSelectField,
     getCommonContainer,
-    getDateField,
     getPattern,
     getCommonCard,
     getCommonTitle,
@@ -12,15 +11,6 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { propertySearch,applicationSearch } from "./functions";
-  import { httpRequest } from "../../../../ui-utils/api";
-  import {
-    fetchFromLocalStorage,
-    addQueryArg
-  } from "egov-ui-framework/ui-utils/commons";
-  import get from "lodash/get";
-  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
   const resetFields = (state, dispatch) => {
     // dispatch(

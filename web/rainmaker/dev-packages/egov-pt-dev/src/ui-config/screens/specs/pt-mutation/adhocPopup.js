@@ -1,24 +1,13 @@
 import {
-    getCommonHeader,
-    getTextField,
-    getSelectField,
     getCommonContainer,
-    getCommonSubHeader,
-    getLabel,
-    getCommonCard
+    getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { showHideAdhocPopup} from "../utils";
   import get from "lodash/get";
-  import cloneDeep from "lodash/cloneDeep";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import "./index.css";
  // import { createEstimateData } from "../../utils";
-  import {
-    prepareFinalObject,
-    toggleSnackbar
-  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import set from "lodash/set";
   
   const resetFields = (state, dispatch) => {
     showHideAdhocPopup(state,dispatch,"search");
@@ -135,7 +124,7 @@ import {
           ],
           jsonPath: "ReceiptTemp[0].financialYear",
         },
-        type: "array",
+
         
 
         beforeFieldChange: (action, state, dispatch) => {
