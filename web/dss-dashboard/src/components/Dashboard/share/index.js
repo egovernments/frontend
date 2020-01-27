@@ -21,6 +21,7 @@ import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
 import APITransport from '../../../actions/apitransport/apitransport'
 import S3ImageAPI from '../../../actions/s3Image/s3Image';
 import constants from '../../../actions/constants';
+import shortenAPI from '../../../actions/shortenAPI';
 
 const StyledMenu = withStyles({
     paper: {
@@ -218,19 +219,22 @@ class CustomizedShare extends Component {
                     console.log(image)
 
                 }
-
                 var fakeLink = document.createElement('a');
-                if (image && this.state.type === 'whatsapp') {
-                    fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
-                    fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-                    fakeLink.setAttribute('target', '_blank');
-                    fakeLink.click();
-                }
-                if (image && this.state.type === 'email') {
-                    fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
-                    fakeLink.setAttribute('target', '_top');
-                    fakeLink.click();
-                }
+                var type = this.state.type;
+                var isMobileOrTablet = this.isMobileOrTablet();
+                shortenAPI(image,function(err,data){                    
+                    if (image && type === 'whatsapp') {
+                        fakeLink.setAttribute('href', 'https://' + ( isMobileOrTablet ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(data.data));
+                        fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+                        fakeLink.setAttribute('target', '_blank');
+                        fakeLink.click();
+                    }
+                    if (image && type === 'email') {
+                        fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(data.data));
+                        fakeLink.setAttribute('target', '_top');
+                        fakeLink.click();
+                    }
+                })
             }
 
         }
