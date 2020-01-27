@@ -1,8 +1,11 @@
 
 import {
+    getCommonGrayCard,
+    getCommonSubHeader,
+    getCommonContainer,
     getCommonCard
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { searchPropertyDetails, searchApplicationDetails } from "./mutation-methods";
+  import { searchProperty, searchApplication, searchPropertyDetails, searchApplicationDetails } from "./mutation-methods";
  // import "./index.css"
   
   const propertySearchTabs = getCommonCard({
