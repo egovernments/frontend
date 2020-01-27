@@ -64,26 +64,26 @@ const onIconClick = (state, dispatch, index) => {
 };
 
 export const payeeDetails = getCommonContainer({
-  // paidBy: getSelectField({
-  //   label: {
-  //     labelName: "Paid By",
-  //     labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
-  //   },
-  //   placeholder: {
-  //     labelName: "Paid By",
-  //     labelKey: "NOC_PAYMENT_PAID_BY_PLACEHOLDER"
-  //   },
-  //   data: [
-  //     {
-  //       code: "COMMON_OWNER"
-  //     },
-  //     {
-  //       code: "COMMON_OTHER"
-  //     }
-  //   ],
-  //   jsonPath: "ReceiptTemp[0].Bill[0].payer",
-  //   required: true
-  // }),
+  paidBy: getSelectField({
+    label: {
+      labelName: "Paid By",
+      labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
+    },
+    placeholder: {
+      labelName: "Paid By",
+      labelKey: "NOC_PAYMENT_PAID_BY_PLACEHOLDER"
+    },
+    data: [
+      {
+        code: "COMMON_OWNER"
+      },
+      {
+        code: "COMMON_OTHER"
+      }
+    ],
+    jsonPath: "ReceiptTemp[0].Bill[0].payer",
+    required: true
+  }),
   payerName: getTextField({
     label: {
       labelName: "Payer Name",
@@ -130,18 +130,18 @@ export const chequeDetails = getCommonContainer({
     jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
     required: true
   }),
-  // chequeDate: getDateField({
-  //   label: {
-  //     labelName: "Cheque Date",
-  //     labelKey: "NOC_PAYMENT_CHEQUE_DATE_LABEL"
-  //   },
-  //   placeholder: {
-  //     labelName: "dd/mm/yy",
-  //     labelKey: "NOC_PAYMENT_CHEQUE_DATE_PLACEHOLDER"
-  //   },
-  //   required: true,
-  //   jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
-  // }),
+  chequeDate: getDateField({
+    label: {
+      labelName: "Cheque Date",
+      labelKey: "NOC_PAYMENT_CHEQUE_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "dd/mm/yy",
+      labelKey: "NOC_PAYMENT_CHEQUE_DATE_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
+  }),
   chequeIFSC: getTextField({
     label: {
       labelName: "IFSC",
@@ -199,7 +199,7 @@ export const chequeDetails = getCommonContainer({
 
 export const cheque = getCommonContainer({
   payeeDetails,
-  chequeDetails
+  // chequeDetails
 });
 
 export const demandDraftDetails = getCommonContainer({
@@ -216,15 +216,15 @@ export const demandDraftDetails = getCommonContainer({
     //Pattern validation for DD no.
     jsonPath: "ReceiptTemp[0].instrument.transactionNumber"
   }),
-  // ddDate: getDateField({
-  //   label: { labelName: "DD Date", labelKey: "NOC_PAYMENT_DD_DATE_LABEL" },
-  //   placeholder: {
-  //     labelName: "dd/mm/yy",
-  //     labelKey: "NOC_PAYMENT_DD_DATE_PLACEHOLDER"
-  //   },
-  //   required: true,
-  //   jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
-  // }),
+  ddDate: getDateField({
+    label: { labelName: "DD Date", labelKey: "NOC_PAYMENT_DD_DATE_LABEL" },
+    placeholder: {
+      labelName: "dd/mm/yy",
+      labelKey: "NOC_PAYMENT_DD_DATE_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
+  }),
   ddIFSC: getTextField({
     label: {
       labelName: "IFSC",

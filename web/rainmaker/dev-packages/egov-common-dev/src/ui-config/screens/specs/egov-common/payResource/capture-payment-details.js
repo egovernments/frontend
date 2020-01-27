@@ -35,16 +35,16 @@ const capturePaymentDetails = getCommonGrayCard({
           tabIcon: "Schedule",
           tabContent: { cheque }
         },
-        {
-          tabButton: "COMMON_DD",
-          tabIcon: "Schedule",
-          tabContent: { demandDraft }
-        },
-        {
-          tabButton: "COMMON_CREDIT_DEBIT_CARD",
-          tabIcon: "Schedule",
-          tabContent: { card }
-        }
+        // {
+        //   tabButton: "COMMON_DD",
+        //   tabIcon: "Schedule",
+        //   tabContent: { demandDraft }
+        // },
+        // {
+        //   tabButton: "COMMON_CREDIT_DEBIT_CARD",
+        //   tabIcon: "Schedule",
+        //   tabContent: { card }
+        // }
       ]
     },
     type: "array"
