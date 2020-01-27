@@ -123,7 +123,7 @@ class ShowField extends Component {
         extend: "excel",
         text: "XLS",
         filename: _this.state.reportName,
-        title: reportTitle,
+        title: reportName.match(/[A-Z][a-z]+|[0-9]+/g).join(" "),
         messageTop: tabLabel,
         footer: true,
         className: "report-excel-button",
