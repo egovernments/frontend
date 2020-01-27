@@ -97,23 +97,23 @@ export const payeeDetails = getCommonContainer({
     required: true
   }),
   // payerMobileNo: getTextField({
-    label: {
-      labelName: "Payer Mobile No.",
-      labelKey: "NOC_PAYMENT_PAYER_MOB_LABEL"
-    },
-    placeholder: {
-      labelName: "Enter Payer Mobile No.",
-      labelKey: "NOC_PAYMENT_PAYER_MOB_PLACEHOLDER"
-    },
-    jsonPath: "ReceiptTemp[0].Bill[0].payerMobileNumber",
-    pattern: getPattern("MobileNo"),
-    errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-    iconObj: {
-      position: "start",
-      label: "+91 |"
-    },
-    required: true
-  })
+  //   label: {
+  //     labelName: "Payer Mobile No.",
+  //     labelKey: "NOC_PAYMENT_PAYER_MOB_LABEL"
+  //   },
+  //   placeholder: {
+  //     labelName: "Enter Payer Mobile No.",
+  //     labelKey: "NOC_PAYMENT_PAYER_MOB_PLACEHOLDER"
+  //   },
+  //   jsonPath: "ReceiptTemp[0].Bill[0].payerMobileNumber",
+  //   pattern: getPattern("MobileNo"),
+  //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+  //   iconObj: {
+  //     position: "start",
+  //     label: "+91 |"
+  //   },
+  //   required: true
+  // })
 });
 
 export const chequeDetails = getCommonContainer({
