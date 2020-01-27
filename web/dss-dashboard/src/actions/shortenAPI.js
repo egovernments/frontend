@@ -5,7 +5,7 @@ export default function shortenAPI( url,callback ) {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'                
             };
-  const reqUrl = "https://egov-micro-dev.egovernments.org/egov-url-shortening/shortener";
+  const reqUrl = CONFIGS.BASE_URL+CONFIGS.SHORTEN_URL;
   const reqBody = { url : url}  
   const request = axios.post(reqUrl,reqBody,reqHeaders)
     .then( response => {
