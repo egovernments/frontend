@@ -128,7 +128,7 @@ export const searchApiCall = async (state, dispatch) => {
       let data = response.map(item => ({
         [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
         [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-        [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        [getTextToLocalMapping("Service Type")]: getLocaleLabels("Service Type",`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
         [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
         [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
