@@ -60,7 +60,8 @@ class CustomizedShare extends Component {
         super(props);
         this.state = {
             anchorEl: null,
-            logo: this.props.globalFilter[1]['tentantLogo'][`${localStorage.getItem('tenant-id')}`]
+            logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
+            pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
             // logo: this.props.globalFilter[1]['tentantLogo']['pb.abohar']
 
         }
@@ -110,7 +111,7 @@ class CustomizedShare extends Component {
         })
         var APITransport = this.props.APITransport
         var ts = Math.round((new Date()).getTime() / 1000);
-        printDocumentShare(this.state.logo).then(function (pdfO) {
+        printDocumentShare(this.state.logo,this.state.pdfHeader).then(function (pdfO) {
             // setAnchorEl(null);
             let blobFile = pdfO.output('blob')
             blobFile.name = 'dss' + ts + '.pdf'
@@ -152,7 +153,7 @@ class CustomizedShare extends Component {
         })
         var APITransport = this.props.APITransport
 
-        printDocumentShare(this.state.logo).then(function (pdfO) {
+        printDocumentShare(this.state.logo,this.state.pdfHeader).then(function (pdfO) {
             // setAnchorEl(null);
             var ts = Math.round((new Date()).getTime() / 1000);
             let blobFile = pdfO.output('blob')
@@ -337,7 +338,7 @@ const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
     s3File: state.s3File,
     s3Image: state.s3Image,
-    globalFilter: state.globalFilter,
+    mdmsData: state.mdmsData,
     strings: state.lang
 });
 

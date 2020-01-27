@@ -88,7 +88,7 @@ export function CustomizedMenus(props) {
 
     const downloadPDF = () => {
         props.APITrans(true);
-        printDocument(props.globalFilter[1]['tentantLogo'][`${localStorage.getItem('tenant-id')}`], props.fileName || 'DSS').then(function (pdfO) {
+        printDocument(props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],props.mdmsData['tenantName']+" "+props.mdmsData['corpName'], props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             setAnchorEl(null);
@@ -152,7 +152,7 @@ export function CustomizedMenus(props) {
 
 const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
-    globalFilter: state.globalFilter,
+    mdmsData: state.mdmsData,
     strings: state.lang
 });
 
