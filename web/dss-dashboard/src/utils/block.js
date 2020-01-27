@@ -107,6 +107,11 @@ const getImageData = (dataUrl) => {
     });
 }
 
+const getHeader = () => {
+    let header = "AMRITSAR MUNICIPAL CORPORATION"
+    return header
+}
+
 const addPages = (elem, cityLogo) => {
     console.log(cityLogo)
     return new Promise((resolve, reject) => {
@@ -126,9 +131,15 @@ const addPages = (elem, cityLogo) => {
                         base64Img.requestBase64(cityLogo, function (err, res, body) {
                             let iheight = hw.imgWidth * hw.iRatio;
                             let isLogoRequired = true;
+                            let isHeaderRequired = true;
                             let pdf = new jsPDF("p", "pt", [iheight - 80, hw.imgWidth - 80]);
                             if (isLogoRequired) {
                                 pdf.addImage(logo, 'PNG', (hw.imgWidth - 80 - 63), 5, 58, 48)
+                            }
+                            if(isHeaderRequired) {
+                                pdf.setFontSize(14);
+                                pdf.setFontStyle("Roboto");
+                                pdf.text(getHeader(),60,30,0,0,0)
                             }
                             if (body) {
                                 pdf.addImage(body, 'PNG', 5, 5, 50, 48)
@@ -143,10 +154,19 @@ const addPages = (elem, cityLogo) => {
                     } else {
                             let iheight = hw.imgWidth * hw.iRatio;
                             let isLogoRequired = true;
+                            let isHeaderRequired = true;
+
                             let pdf = new jsPDF("p", "pt", [iheight - 80, hw.imgWidth - 80]);
+                           
+                            if(isHeaderRequired) {
+                                pdf.setFontSize(14);
+                                pdf.setFontStyle("Roboto");
+                                pdf.text(getHeader(),5,30,0,0,0)
+                            }
                             if (isLogoRequired) {
                                 pdf.addImage(logo, 'PNG', (hw.imgWidth - 80 - 63), 5, 58, 48)
                             }
+                           
                             if (dataUrl) {
                                 pdf.addImage(dataUrl, 'JPG', 0, 55, hw.imgWidth - 50, 0);
     
@@ -190,8 +210,16 @@ const addPages = (elem, cityLogo) => {
                                 var doc = new jsPDF('p', 'mm', 'a4');
                                 var position = 10;
                                 let isLogoRequired = true;
+                                let isHeaderRequired = true;
+
                                 if(body) {
                                     doc.addImage(body, 'PNG', 1, 1, 10, 8);
+                                }
+                                if(isHeaderRequired) {
+                                    doc.setFontSize(7);
+                                    doc.setFontStyle("Roboto");
+                                    // doc.setFontType("bold");
+                                    doc.text(getHeader(),13,6,0,0,0)
                                 }
                                 if (isLogoRequired) {
                                     doc.addImage(logo, 'PNG', 194, 1, 15, 8);
@@ -228,6 +256,14 @@ const addPages = (elem, cityLogo) => {
                             var doc = new jsPDF('p', 'mm', 'a4');
                             var position = 10; // give some top padding to first page
                             let isLogoRequired = true;
+                            let isHeaderRequired = true;
+                            
+                            if(isHeaderRequired) {
+                                doc.setFontSize(7);
+                                doc.setFontStyle("Roboto");
+                                // doc.setFontType("bold");
+                                doc.text(getHeader(),13,6,0,0,0)
+                            }
                             if (isLogoRequired) {
                                 doc.addImage(logo, 'PNG', 194, 1, 15, 8);
                             }
