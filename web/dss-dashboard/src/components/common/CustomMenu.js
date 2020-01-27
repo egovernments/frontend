@@ -76,7 +76,8 @@ class CustomizedMenus extends Component {
             anchorEl: null,
             open: false,
             shareOpen: false,
-            logo: this.props.globalFilter[1]['tentantLogo'][`${localStorage.getItem('tenant-id')}`]
+            logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
+            pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
             //  logo: this.props.globalFilter[1]['tentantLogo']['pb.banur']
 
         }
@@ -138,7 +139,7 @@ class CustomizedMenus extends Component {
 
     downloadPDF = () => {
         // this.props.APITrans(true)
-        printDocument(this.state.logo, this.props.fileName || 'DSS').then(function (pdfO) {
+        printDocument(this.state.logo,this.state.pdfHeader, this.props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             // setAnchorEl(null);
@@ -164,7 +165,7 @@ class CustomizedMenus extends Component {
             type: 'whatsapp'
         })
         var APITransport = this.props.APITransport
-        printDocumentShare(this.state.logo).then(function (pdfO) {
+        printDocumentShare(this.state.logo,this.state.pdfHeader).then(function (pdfO) {
             // setAnchorEl(null);
             console.log(APITransport)
             try {
@@ -205,7 +206,7 @@ class CustomizedMenus extends Component {
         })
         var APITransport = this.props.APITransport
 
-        printDocumentShare(this.state.logo).then(function (pdfO) {
+        printDocumentShare(this.state.logo,this.state.pdfHeader).then(function (pdfO) {
             // setAnchorEl(null);
             try {
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_MOBILE, pdfO.output('blob'));
@@ -416,7 +417,7 @@ const mapStateToProps = state => ({
     GFilterData: state.GFilterData,
     s3FileMobile: state.s3FileMobile,
     s3ImageMobile: state.s3ImageMobile,
-    globalFilter: state.globalFilter,
+    mdmsData: state.mdmsData,
     strings: state.lang
 });
 

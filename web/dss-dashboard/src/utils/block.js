@@ -112,7 +112,7 @@ const getHeader = () => {
     return header
 }
 
-const addPages = (elem, cityLogo) => {
+const addPages = (elem, cityLogo,pdfHeader) => {
     console.log(cityLogo)
     return new Promise((resolve, reject) => {
         if (isMobile) {
@@ -139,7 +139,7 @@ const addPages = (elem, cityLogo) => {
                             if(isHeaderRequired) {
                                 pdf.setFontSize(14);
                                 pdf.setFontStyle("Roboto");
-                                pdf.text(getHeader(),60,30,0,0,0)
+                                pdf.text(pdfHeader,60,30,0,0,0)
                             }
                             if (body) {
                                 pdf.addImage(body, 'PNG', 5, 5, 50, 48)
@@ -161,7 +161,7 @@ const addPages = (elem, cityLogo) => {
                             if(isHeaderRequired) {
                                 pdf.setFontSize(14);
                                 pdf.setFontStyle("Roboto");
-                                pdf.text(getHeader(),5,30,0,0,0)
+                                pdf.text(pdfHeader,5,30,0,0,0)
                             }
                             if (isLogoRequired) {
                                 pdf.addImage(logo, 'PNG', (hw.imgWidth - 80 - 63), 5, 58, 48)
@@ -219,7 +219,7 @@ const addPages = (elem, cityLogo) => {
                                     doc.setFontSize(7);
                                     doc.setFontStyle("Roboto");
                                     // doc.setFontType("bold");
-                                    doc.text(getHeader(),13,6,0,0,0)
+                                    doc.text(pdfHeader,13,6,0,0,0)
                                 }
                                 if (isLogoRequired) {
                                     doc.addImage(logo, 'PNG', 194, 1, 15, 8);
@@ -262,7 +262,7 @@ const addPages = (elem, cityLogo) => {
                                 doc.setFontSize(7);
                                 doc.setFontStyle("Roboto");
                                 // doc.setFontType("bold");
-                                doc.text(getHeader(),13,6,0,0,0)
+                                doc.text(pdfHeader,13,6,0,0,0)
                             }
                             if (isLogoRequired) {
                                 doc.addImage(logo, 'PNG', 194, 1, 15, 8);
@@ -304,7 +304,7 @@ const addPages = (elem, cityLogo) => {
     })
 }
 
-export const printDocument = (cityLogo, name) => {
+export const printDocument = (cityLogo,pdfHeader, name) => {
     cityLogo = (cityLogo)?cityLogo.replace('https://s3.ap-south-1.amazonaws.com',window.location.origin):cityLogo;
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
@@ -313,7 +313,7 @@ export const printDocument = (cityLogo, name) => {
         let elems = document.getElementById('divToPrint');
         // Fix Graphics Output by scaling PDF and html2canvas output to 2
 
-        return addPages(elems, cityLogo).then(function (response) {
+        return addPages(elems, cityLogo,pdfHeader).then(function (response) {
             response.save(name || 'DSS');
             return resolve(response);
 
@@ -324,7 +324,7 @@ export const printDocument = (cityLogo, name) => {
     })
     // });
 }
-export const printDocumentShare = (cityLogo) => {
+export const printDocumentShare = (cityLogo,pdfHeader) => {
     cityLogo = (cityLogo)?cityLogo.replace('https://s3.ap-south-1.amazonaws.com',window.location.origin):cityLogo;
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
@@ -333,7 +333,7 @@ export const printDocumentShare = (cityLogo) => {
         let elems = document.getElementById('divToPrint');
         // Fix Graphics Output by scaling PDF and html2canvas output to 2
 
-        return addPages(elems, cityLogo).then(function (response) {
+        return addPages(elems, cityLogo,pdfHeader).then(function (response) {
             // response.save();
             return resolve(response);
 
