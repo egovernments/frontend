@@ -1,8 +1,5 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
-import get from "lodash/get";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
   sortByEpoch,
   getEpochForDate,
