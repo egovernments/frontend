@@ -5,7 +5,7 @@ export default function shortenAPI( url,callback ) {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'                
             };
-  const reqUrl = CONFIGS.BASE_URL+CONFIGS.SHORTEN_URL;
+  const reqUrl = CONFIGS.SHORTEN_URL;
   const reqBody = { url : url}  
   const request = axios.post(reqUrl,reqBody,reqHeaders)
     .then( response => {
