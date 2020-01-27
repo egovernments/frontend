@@ -87,7 +87,7 @@ export const applicationSearch= async (state,dispatch)=>{
       )
     );
   } 
-  if (isSearchBoxFirstRowValid  && isownerCityRowValid && !(ispropertyTaxUniqueIdRowValid || isexistingPropertyIdRowValid || isexistingPropertyIdRowValid || ispropertyTaxApplicationNoRowValid)){
+  if (isSearchBoxFirstRowValid  && isownerCityRowValid && !(ispropertyTaxUniqueIdRowValid || isexistingPropertyIdRowValid || isownerMobNoRowValid || ispropertyTaxApplicationNoRowValid)){
       dispatch(
         toggleSnackbar(
           true,

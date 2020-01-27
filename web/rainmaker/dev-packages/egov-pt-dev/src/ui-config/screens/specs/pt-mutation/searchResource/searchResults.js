@@ -263,18 +263,16 @@ const onPropertyTabClick = (rowData,dispatch) => {
 };
 
 const onApplicationTabClick = (rowData,dispatch) => {
-  switch (rowData[5]) {
-    case "INITIATED":
+  if (rowData[5]==="INITIATED") {
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
       }`;
-      break;
-    default:
+  }
+    else{
      // window.location.href = `search-preview?applicationNumber=${
       window.location.pathname=`property-tax/property/${rowData[1]}/${rowData[6]}`;
       //dispatch(setRoute(`/property-tax/property/${rowData[0]}/${rowData[6]}`));
     //   rowData[0]
     // }&tenantId=${rowData[6]}`; 
-      break;
   }
 };

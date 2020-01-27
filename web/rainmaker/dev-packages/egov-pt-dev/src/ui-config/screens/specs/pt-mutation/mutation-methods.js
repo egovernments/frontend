@@ -3,7 +3,6 @@ import {
     getTextField,
     getSelectField,
     getCommonContainer,
-    getDateField,
     getPattern,
     getCommonCard,
     getCommonTitle,
