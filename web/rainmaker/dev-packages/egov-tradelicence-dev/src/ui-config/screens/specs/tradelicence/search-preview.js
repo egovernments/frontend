@@ -19,7 +19,7 @@ import {
   getDialogButton
 } from "../utils";
 
-import { footerReview, downloadPrintContainer } from "./applyResource/footer";
+import { footerReview,footerTLR, downloadPrintContainer } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -174,7 +174,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-
+   
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
@@ -277,10 +277,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applicationNumber,
       tenantId
     );
+    
+    const footerr=footerTLR(status)
 
+    
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
-      : set(action, "screenConfig.components.div.children.footer", {});
+      : set(action, "screenConfig.components.div.children.footer", footerr);
 
     // const userRoles = JSON.parse(getUserInfo()).roles;
     //   userRoles.map((userRole)=>{
@@ -553,7 +556,6 @@ const screenConfig = {
           }
         },
         tradeReviewDetails
-        //footer
       }
     },
     breakUpDialog: {

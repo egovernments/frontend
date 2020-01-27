@@ -579,6 +579,70 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
+export const footerTLR =(status)=> getCommonApplyFooter({
+  //visible:getButtonVisibility(status, "APPROVE"),
+  editButton: {
+     componentPath: "Button",
+     props: {
+       variant: "outlined",
+       color: "primary",
+       style: {
+         minWidth: "180px",
+         height: "48px",
+         marginRight: "16px",
+         borderRadius: "inherit"
+       }
+     },
+     children: {
+       previousButtonIcon: {
+         uiFramework: "custom-atoms",
+         componentPath: "Icon",
+         props: {
+           iconName: "keyboard_arrow_left"
+         }
+       },
+       previousButtonLabel: getLabel({
+         labelName: "Edit",
+         labelKey: "TL_COMMON_BUTTON_EDIT"
+       })
+     },
+     onClickDefination: {
+       // action: "condition",
+       // callBack: callBackForPrevious
+     },
+     visible:getButtonVisibility(status, "APPROVED"),
+   },
+   submitButton: {
+     componentPath: "Button",
+     props: {
+       variant: "contained",
+       color: "primary",
+       style: {
+         minWidth: "180px",
+         height: "48px",
+         marginRight: "45px",
+         borderRadius: "inherit"
+       }
+     },
+     children: {
+       nextButtonLabel: getLabel({
+         labelName: "Submit",
+         labelKey: "TL_COMMON_BUTTON_SUBMIT"
+       }),
+       nextButtonIcon: {
+         uiFramework: "custom-atoms",
+         componentPath: "Icon",
+         props: {
+           iconName: "keyboard_arrow_right"
+         }
+       }
+     },
+     onClickDefination: {
+      
+     },
+     visible:getButtonVisibility(status, "APPROVED"),
+   },
+ });
 
 export const footerReview = (
   action,
@@ -591,6 +655,7 @@ export const footerReview = (
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
+  // let renewalMenu=[];
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
@@ -653,6 +718,26 @@ export const footerReview = (
     },
     leftIcon: "assignment"
   };
+  // let editObject = {
+  //   label: { labelName: "Edit", labelKey: "TL_EDIT" },
+  //   link: () => {
+  //     const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+  //     const documents = LicensesTemp[0].reviewDocData;
+  //     set(Licenses[0],"additionalDetails.documents",documents)
+  //     downloadAcknowledgementForm(Licenses,'print');
+  //   },
+  //   leftIcon: "assignment"
+  // };
+  // let submitObject = {
+  //   label: { labelName: "Submit", labelKey: "TL_SUBMIT" },
+  //   link: () => {
+  //     const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+  //     const documents = LicensesTemp[0].reviewDocData;
+  //     set(Licenses[0],"additionalDetails.documents",documents)
+  //     downloadAcknowledgementForm(Licenses,'print');
+  //   },
+  //   leftIcon: "assignment"
+  // };
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -665,6 +750,10 @@ export const footerReview = (
         receiptPrintObject,
         applicationPrintObject
       ];
+      // renewalMenu=[
+      //   editObject,
+      //   submitObject
+      // ]
       break;
     case "APPLIED":
     case "CITIZENACTIONREQUIRED":
@@ -731,7 +820,22 @@ export const footerReview = (
                   menu: printMenu
                 }
               }
-            }
+            },
+            // renewalMenu: {
+            //   uiFramework: "custom-atoms-local",
+            //   moduleName: "egov-tradelicence",
+            //   componentPath: "MenuButton",
+            //   props: {
+            //     data: {
+            //       label: {
+            //         labelName:"Renewal",labelKey:"TL_Renewal"},
+            //       leftIcon: "print",
+            //       rightIcon: "arrow_drop_down",
+            //       props: { variant: "outlined", style: { marginLeft: 10 } },
+            //       menu: renewalMenu
+            //     }
+            //   }
+            // } 
           },
           gridDefination: {
             xs: 12,
@@ -770,13 +874,74 @@ export const footerReview = (
                 roles: ["TL_CEMP", "CITIZEN"]
               }
             },
+            editButton: {
+              componentPath: "Button",
+              props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "16px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                previousButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "keyboard_arrow_left"
+                  }
+                },
+                previousButtonLabel: getLabel({
+                  labelName: "Edit",
+                  labelKey: "TL_COMMON_BUTTON_EDIT"
+                })
+              },
+              onClickDefination: {
+                // action: "condition",
+                // callBack: callBackForPrevious
+              },
+              visible:getButtonVisibility(status, "APPROVED"),
+            },
+            submitButton: {
+              componentPath: "Button",
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "45px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                nextButtonLabel: getLabel({
+                  labelName: "Submit",
+                  labelKey: "TL_COMMON_BUTTON_SUBMIT"
+                }),
+                nextButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "keyboard_arrow_right"
+                  }
+                }
+              },
+              onClickDefination: {
+               
+              },
+              visible:getButtonVisibility(status, "APPROVED"),
+            },
            
           },
           gridDefination: {
             xs: 12,
             sm: 6
           }
-        }
+        },     
       }
     }
   });

@@ -444,6 +444,7 @@ export const getButtonVisibility = (status, button) => {
   if (status === "pending_approval" && button === "APPROVE") return true;
   if (status === "pending_approval" && button === "REJECT") return true;
   if (status === "approved" && button === "CANCEL TRADE LICENSE") return true;
+  if (status === "APPROVED" && button === "APPROVED") return true;
   return false;
 };
 
