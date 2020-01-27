@@ -230,9 +230,10 @@ class WorkFlowContainer extends React.Component {
     }
   };
 
-  getRedirectUrl = (action, businessId, moduleName,applicationStatus) => {
+  getRedirectUrl = (action, businessId, moduleName) => {
     const tenant = getQueryArg(window.location.href, "tenantId");
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
+    const { applicationStatus } = this.props;
     if (moduleName === "NewTL") {
       switch (action) {
         case "PAY":
@@ -371,7 +372,7 @@ class WorkFlowContainer extends React.Component {
         buttonLabel: item.action,
         moduleName: data[data.length - 1].businessService,
         isLast: item.action === "PAY" ? true : false,
-        buttonUrl: getRedirectUrl(item.action, businessId, moduleName, applicationStatus),
+        buttonUrl: getRedirectUrl(item.action, businessId, moduleName),
         dialogHeader: getHeaderName(item.action),
         showEmployeeList: !checkIfTerminatedState(item.nextState, moduleName) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, moduleName),
