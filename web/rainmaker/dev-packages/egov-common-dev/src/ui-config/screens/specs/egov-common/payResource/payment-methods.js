@@ -64,26 +64,26 @@ const onIconClick = (state, dispatch, index) => {
 };
 
 export const payeeDetails = getCommonContainer({
-  paidBy: getSelectField({
-    label: {
-      labelName: "Paid By",
-      labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
-    },
-    placeholder: {
-      labelName: "Paid By",
-      labelKey: "NOC_PAYMENT_PAID_BY_PLACEHOLDER"
-    },
-    data: [
-      {
-        code: "COMMON_OWNER"
-      },
-      {
-        code: "COMMON_OTHER"
-      }
-    ],
-    jsonPath: "ReceiptTemp[0].Bill[0].payer",
-    required: true
-  }),
+  // paidBy: getSelectField({
+  //   label: {
+  //     labelName: "Paid By",
+  //     labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
+  //   },
+  //   placeholder: {
+  //     labelName: "Paid By",
+  //     labelKey: "NOC_PAYMENT_PAID_BY_PLACEHOLDER"
+  //   },
+  //   data: [
+  //     {
+  //       code: "COMMON_OWNER"
+  //     },
+  //     {
+  //       code: "COMMON_OTHER"
+  //     }
+  //   ],
+  //   jsonPath: "ReceiptTemp[0].Bill[0].payer",
+  //   required: true
+  // }),
   payerName: getTextField({
     label: {
       labelName: "Payer Name",
@@ -96,7 +96,7 @@ export const payeeDetails = getCommonContainer({
     jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
     required: true
   }),
-  payerMobileNo: getTextField({
+  // payerMobileNo: getTextField({
     label: {
       labelName: "Payer Mobile No.",
       labelKey: "NOC_PAYMENT_PAYER_MOB_LABEL"
@@ -198,8 +198,8 @@ export const chequeDetails = getCommonContainer({
 });
 
 export const cheque = getCommonContainer({
-  // payeeDetails,
-  chequeDetails
+  payeeDetails,
+  // chequeDetails
 });
 
 export const demandDraftDetails = getCommonContainer({
@@ -281,8 +281,8 @@ export const demandDraftDetails = getCommonContainer({
 });
 
 export const demandDraft = getCommonContainer({
-  // payeeDetails,
-  demandDraftDetails
+  payeeDetails,
+  // demandDraftDetails
 });
 
 export const cardDetails = getCommonContainer({
@@ -329,10 +329,10 @@ export const cardDetails = getCommonContainer({
 });
 
 export const card = getCommonContainer({
-  // payeeDetails,
-  cardDetails
+  payeeDetails,
+  // cardDetails
 });
 
 export const cash = getCommonContainer({
-  // payeeDetails
+  payeeDetails
 });
