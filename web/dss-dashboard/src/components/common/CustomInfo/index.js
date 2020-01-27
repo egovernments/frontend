@@ -33,6 +33,7 @@ import Button from '@material-ui/core/Button';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import shortenAPI from '../../../actions/shortenAPI';
+import removeImageExtension from '../../../actions/removeImageExtension';
 
 const styles = theme => ({
   root: {
@@ -172,15 +173,19 @@ class CustomInfo extends React.Component {
          var type = this.state.type;
          var isMobileOrTablet = this.isMobileOrTablet();
          var fakeLink = document.createElement('a');
-         shortenAPI(image,function(err,data){ 
+         image = removeImageExtension(image);
+         shortenAPI(image,function(err,data){
+            if(data){
+              image = data.data;
+            } 
             if (image && type === 'whatsapp') {              
-              fakeLink.setAttribute('href', 'https://' + (isMobileOrTablet ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(data.data));
+              fakeLink.setAttribute('href', 'https://' + (isMobileOrTablet ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
               fakeLink.setAttribute('data-action', 'share/whatsapp/share');
               fakeLink.setAttribute('target', '_blank');
               fakeLink.click();
             }
             if (image && type === 'email') {              
-              fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(data.data));
+              fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
               fakeLink.setAttribute('target', '_top');
               fakeLink.click();              
             }

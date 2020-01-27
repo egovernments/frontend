@@ -33,6 +33,7 @@ import APITransport from '../../actions/apitransport/apitransport'
 import S3ImageAPI from '../../actions/s3Image/s3Image';
 import constants from '../../actions/constants';
 import shortenAPI from '../../actions/shortenAPI';
+import removeImageExtension from '../../actions/removeImageExtension';
 
 const pdf = new jsPDF("p", "mm", "a1");
 pdf.scaleFactor = 3;
@@ -287,15 +288,19 @@ class CustomizedMenus extends Component {
                 var fakeLink = document.createElement('a');
                 var type = this.state.type;
                 var isMobileOrTablet = this.isMobileOrTablet();
-                shortenAPI(image,function(err,data){ 
+                image = removeImageExtension(image);
+                 shortenAPI(image,function(err,data){
+                    if(data){
+                      image = data.data;
+                    }
                     if (image && type === 'whatsapp') {
-                        fakeLink.setAttribute('href', 'https://' + (isMobileOrTablet ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(data.data));
+                        fakeLink.setAttribute('href', 'https://' + (isMobileOrTablet ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
                         fakeLink.setAttribute('data-action', 'share/whatsapp/share');
                         fakeLink.setAttribute('target', '_blank');
                         fakeLink.click();
                     }
                     if (image && type === 'email') {
-                        fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(data.data));
+                        fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
                         fakeLink.setAttribute('target', '_top');
 
                         fakeLink.click();
