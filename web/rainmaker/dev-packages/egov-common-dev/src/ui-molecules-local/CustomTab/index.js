@@ -24,9 +24,9 @@ class NavPills extends React.Component {
     };
   }
   handleChange = (event, active) => {
-    const {handleClick}=this.props;
+    const { handleClick } = this.props;
     this.setState({ active });
-    handleClick(active)
+    handleClick(active);
   };
   handleChangeIndex = index => {
     this.setState({ active: index });
@@ -45,10 +45,12 @@ class NavPills extends React.Component {
         {tabs.map((prop, key) => {
           return (
             <Tab
-            label={<LabelContainer
-              labelName={prop.tabButton}
-              labelKey={prop.tabButton}
-            />}
+              label={
+                <LabelContainer
+                  labelName={prop.tabButton}
+                  labelKey={prop.tabButton}
+                />
+              }
               key={key}
               classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
             />
@@ -58,19 +60,14 @@ class NavPills extends React.Component {
     );
     const tabContent = (
       <div className={classes.contentWrapper}>
-        <SwipeableViews
-          axis={direction === "rtl" ? "x-reverse" : "x"}
-          index={this.state.active}
-          onChangeIndex={this.handleChangeIndex}
-        >
-          {tabs.map((prop, key) => {
-            return (
-              <div className={classes.tabContent} key={key}>
-                {prop.tabContent}
-              </div>
-            );
-          })}
-        </SwipeableViews>
+        {tabs.map((prop, key) => {
+          return this.state.active===key? (
+            <div className={classes.tabContent} key={key} >
+              {prop.tabContent}
+            </div>
+          ):null;
+        })}
+
       </div>
     );
     return horizontal !== undefined ? (
@@ -126,3 +123,39 @@ NavPills.propTypes = {
 };
 
 export default withStyles(navPillsStyle)(NavPills);
+
+// {/*  <Tabs
+//     classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+//     value={this.state.active}
+//     onChange={this.handleChange}
+//     centered={alignCenter}
+//     scrollable
+//     scrollButtons="off"
+//   >
+//     {tabs.map((prop, key) => {
+//       return (
+//         <Tab
+//         label={<LabelContainer
+//           labelName={prop.tabButton}
+//           labelKey={prop.tabButton}
+//         />}
+//           key={key}
+//           classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+//         />
+//       );
+//     })}
+//   </Tabs>*/}
+
+// {/*<SwipeableViews
+//   axis={direction === "rtl" ? "x-reverse" : "x"}
+//   index={this.state.active}
+//   onChangeIndex={this.handleChangeIndex}
+// >
+//   {tabs.map((prop, key) => {
+//     return (
+//       <div className={classes.tabContent} key={key}>
+//         {prop.tabContent}
+//       </div>
+//     );
+//   })}
+// </SwipeableViews>*/}
