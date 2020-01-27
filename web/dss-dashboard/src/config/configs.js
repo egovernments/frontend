@@ -17,6 +17,7 @@ const configs = {
     'FILE_UPLOAD':'/filestore/v1/files',
     'FETCH_FILE':'/filestore/v1/files/url',
     'MDMS': '/egov-mdms-service/v1/_search',
-    'SHORTEN_URL':'/egov-url-shortening/shortener'
+    'SHORTEN_URL':'/egov-url-shortening/shortener',
+    'DOC_EXTENSION':['_small','_medium','_large']
 }
 export default configs;
