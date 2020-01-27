@@ -1993,7 +1993,9 @@ const getAllBillingSlabs = async (tenantId,queryObj=[]) => {
   return payload;
 };
 
-export const getAllDataFromBillingSlab = async (tenantId, dispatch,queryObj=[]) => {
+export const getAllDataFromBillingSlab = async (tenantId, dispatch,queryObj=[{
+  key:"applicationType",value:"APPLICATIONTYPE.NEW"
+}]) => {
   const payload = await getAllBillingSlabs(tenantId,queryObj);
   const processedData =
     payload.billingSlab &&
