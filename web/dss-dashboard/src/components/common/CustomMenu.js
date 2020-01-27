@@ -34,6 +34,7 @@ import S3ImageAPI from '../../actions/s3Image/s3Image';
 import constants from '../../actions/constants';
 import shortenAPI from '../../actions/shortenAPI';
 import removeImageExtension from '../../actions/removeImageExtension';
+import getPDFHeaderDetails from '../../actions/getPDFHeaderDetails';
 
 const pdf = new jsPDF("p", "mm", "a1");
 pdf.scaleFactor = 3;
@@ -76,8 +77,8 @@ class CustomizedMenus extends Component {
             anchorEl: null,
             open: false,
             shareOpen: false,
-            logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
-            pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
+            //logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
+            //pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
             //  logo: this.props.globalFilter[1]['tentantLogo']['pb.banur']
 
         }
@@ -139,7 +140,8 @@ class CustomizedMenus extends Component {
 
     downloadPDF = () => {
         // this.props.APITrans(true)
-        printDocument(this.state.logo,this.state.pdfHeader, this.props.fileName || 'DSS').then(function (pdfO) {
+        let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
+        printDocument(pdfDetails.logo,pdfDetails.headerText, this.props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             // setAnchorEl(null);
@@ -165,7 +167,8 @@ class CustomizedMenus extends Component {
             type: 'whatsapp'
         })
         var APITransport = this.props.APITransport
-        printDocumentShare(this.state.logo,this.state.pdfHeader).then(function (pdfO) {
+        let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
+        printDocumentShare(pdfDetails.logo,pdfDetails.headerText).then(function (pdfO) {
             // setAnchorEl(null);
             console.log(APITransport)
             try {
@@ -205,9 +208,8 @@ class CustomizedMenus extends Component {
             type: 'email'
         })
         var APITransport = this.props.APITransport
-
-        printDocumentShare(this.state.logo,this.state.pdfHeader).then(function (pdfO) {
-            // setAnchorEl(null);
+        let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
+        printDocumentShare(pdfDetails.logo,pdfDetails.headerText).then(function (pdfO) {            
             try {
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_MOBILE, pdfO.output('blob'));
                 APITransport(fileUploadAPI)

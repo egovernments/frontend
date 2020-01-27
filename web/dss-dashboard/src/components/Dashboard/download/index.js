@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { APIStatus } from '../../../actions/apiStatus'
 import { downloadAsImage, printDocument } from '../../../utils/block';
+import getPDFHeaderDetails from '../../../actions/getPDFHeaderDetails';
 
 
 const pdf = new jsPDF("p", "mm", "a1");
@@ -87,8 +88,9 @@ export function CustomizedMenus(props) {
     }
 
     const downloadPDF = () => {
-        props.APITrans(true);
-        printDocument(props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],props.mdmsData['tenantName']+" "+props.mdmsData['corpName'], props.fileName || 'DSS').then(function (pdfO) {
+        props.APITrans(true);        
+        let pdfDetails = getPDFHeaderDetails(props.mdmsData);
+        printDocument(pdfDetails.logo,pdfDetails.headerText, props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             setAnchorEl(null);

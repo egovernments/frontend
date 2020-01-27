@@ -23,6 +23,7 @@ import S3ImageAPI from '../../../actions/s3Image/s3Image';
 import constants from '../../../actions/constants';
 import shortenAPI from '../../../actions/shortenAPI';
 import removeImageExtension from '../../../actions/removeImageExtension';
+import getPDFHeaderDetails from '../../../actions/getPDFHeaderDetails';
 
 const StyledMenu = withStyles({
     paper: {
@@ -60,8 +61,8 @@ class CustomizedShare extends Component {
         super(props);
         this.state = {
             anchorEl: null,
-            logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
-            pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
+            //logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
+            //pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
             // logo: this.props.globalFilter[1]['tentantLogo']['pb.abohar']
 
         }
@@ -84,8 +85,7 @@ class CustomizedShare extends Component {
         this.setState({
             anchorEl: null
         })
-    };
-
+    };    
     renderTable = () => {
         return renderToString(<FilterTable data={this.props.GFilterData} name={this.props.fileHeader || "Dashboard"} />)
     }
@@ -111,7 +111,8 @@ class CustomizedShare extends Component {
         })
         var APITransport = this.props.APITransport
         var ts = Math.round((new Date()).getTime() / 1000);
-        printDocumentShare(this.state.logo,this.state.pdfHeader).then(function (pdfO) {
+        let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
+        printDocumentShare(pdfDetails.logo,pdfDetails.headerText).then(function (pdfO) {
             // setAnchorEl(null);
             let blobFile = pdfO.output('blob')
             blobFile.name = 'dss' + ts + '.pdf'
@@ -152,8 +153,8 @@ class CustomizedShare extends Component {
             type: 'email'
         })
         var APITransport = this.props.APITransport
-
-        printDocumentShare(this.state.logo,this.state.pdfHeader).then(function (pdfO) {
+        let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
+        printDocumentShare(pdfDetails.logo,pdfDetails.headerText).then(function (pdfO) {
             // setAnchorEl(null);
             var ts = Math.round((new Date()).getTime() / 1000);
             let blobFile = pdfO.output('blob')
