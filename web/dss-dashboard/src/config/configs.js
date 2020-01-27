@@ -16,6 +16,7 @@ const configs = {
     'APP_NAME': '/dashboard/',
     'FILE_UPLOAD':'/filestore/v1/files',
     'FETCH_FILE':'/filestore/v1/files/url',
-    'MDMS': '/egov-mdms-service/v1/_search'
+    'MDMS': '/egov-mdms-service/v1/_search',
+    'SHORTEN_URL':'/egov-url-shortening/shortener'
 }
 export default configs;

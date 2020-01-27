@@ -1,14 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails
-} from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { withStyles } from "@material-ui/core/styles";
-import GenericChart from '../../Charts/genericchart';
-
 import variables from '../../../styles/variables';
 import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
 
@@ -40,6 +32,7 @@ import IconExpandMore from '@material-ui/icons/ExpandMore'
 import Button from '@material-ui/core/Button';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
+import shortenAPI from '../../../actions/shortenAPI';
 
 const styles = theme => ({
   root: {
@@ -176,22 +169,22 @@ class CustomInfo extends React.Component {
             image = file
           }
         this.setState({ anchorEl: null });
-
-          if (image && this.state.type === 'whatsapp') {
-            var fakeLink = document.createElement('a');
-            fakeLink.setAttribute('href', 'https://' + (this.isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
-            fakeLink.setAttribute('data-action', 'share/whatsapp/share');
-            fakeLink.setAttribute('target', '_blank');
-            fakeLink.click();
-          }
-          if (image && this.state.type === 'email') {
-            console.log(image) 
-            var fakeLink = document.createElement('a');
-            fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
-            fakeLink.setAttribute('target', '_top');
-            fakeLink.click();
-            
-          }
+         var type = this.state.type;
+         var isMobileOrTablet = this.isMobileOrTablet();
+         var fakeLink = document.createElement('a');
+         shortenAPI(image,function(err,data){ 
+            if (image && type === 'whatsapp') {              
+              fakeLink.setAttribute('href', 'https://' + (isMobileOrTablet ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(data.data));
+              fakeLink.setAttribute('data-action', 'share/whatsapp/share');
+              fakeLink.setAttribute('target', '_blank');
+              fakeLink.click();
+            }
+            if (image && type === 'email') {              
+              fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(data.data));
+              fakeLink.setAttribute('target', '_top');
+              fakeLink.click();              
+            }
+          })
         }
 
       }
