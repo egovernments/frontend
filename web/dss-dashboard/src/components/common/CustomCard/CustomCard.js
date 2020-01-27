@@ -10,8 +10,6 @@ import _ from 'lodash';
 import getChartOptions from '../../../actions/getChartOptions';
 import ChartsAPI from '../../../actions/charts/chartsAPI'
 import NFormatter from '../numberFormater';
-import { isMobile } from "react-device-detect";
-import { filter } from "bluebird";
 
 class CustomCard extends React.Component {
     constructor(props) {
@@ -42,7 +40,7 @@ class CustomCard extends React.Component {
     }
 
     render() {
-        const { classes, strings, type, chartLabelName, page } = this.props;
+        const { classes, strings } = this.props;
         console.log(this.props.chartData)
 
         let codekey = _.chain(this.props).get('chartData').get("id").value();

@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import CustomCalendar from './customCalander/cCalander';
 
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import SwitchButton from '../switchButtons/switchButtons';
@@ -17,13 +16,9 @@ import getFinancialYearObj from '../../../actions/getFinancialYearObj';
 // import { MediaQuery } from '@material-ui/core';
 // import { useTheme } from '@material-ui/core/styles';
 
-
 const year = (new Date()).getFullYear();
 
 class DateRange extends React.Component {
-  // The first commit of Material-UI
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -50,11 +45,9 @@ class DateRange extends React.Component {
   };
 
   handleOk = () => {
-    // console.log(this.state);
     let { handleSelectedOk } = this.props;
     handleSelectedOk(false, 'duration', this.getDateFilter(this.state.value))
     // this.props.handleApplyFilter(this.state.value)
-
   };
 
   getDuration(startDate, endDate) {

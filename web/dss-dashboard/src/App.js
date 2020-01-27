@@ -158,7 +158,6 @@ let dataL = {
     "DSS_PROPERTY_TAX": "Property Tax",
     "DSS_TRADE_LICENCE": "Trade License",
     "DSS_COMPLAINS": 'Complaints',
-    "DSS_PGR_TOTAL_COMPLAINTS": "Total Complaints",
     "DSS_OVERVIEW_DASHBOARD": "Overview",
     "DSS_HOME_DASHBOARD": "State Urban Real-Time Executive (SURE) Dashboard",
     "DSS_PROPERTY_TAX_DASHBOARD": "Property Tax (SURE) Dashboard",

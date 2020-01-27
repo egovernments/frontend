@@ -87,7 +87,7 @@ class CustomizedShare extends Component {
         return renderToString(<FilterTable data={this.props.GFilterData} name={this.props.fileHeader || "Dashboard"} />)
     }
     filterFunc = function (node) {
-        if (node.id == 'divNotToPrint') return false;
+        if (node.id === 'divNotToPrint') return false;
         return true;
     };
 
@@ -193,13 +193,13 @@ class CustomizedShare extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.s3File != this.props.s3File) {
+        if (prevProps.s3File !== this.props.s3File) {
             const { S3Transporter } = this.props
             let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE, this.props.s3File.files && Array.isArray(this.props.s3File.files) && this.props.s3File.files.length > 0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId);
             S3Transporter(s3ImageAPI)
         }
 
-        if (prevProps.s3Image != this.props.s3Image) {
+        if (prevProps.s3Image !== this.props.s3Image) {
             let image = ''
             let fileId = this.props.s3File.files && Array.isArray(this.props.s3File.files) && this.props.s3File.files.length > 0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId
             console.log(fileId)

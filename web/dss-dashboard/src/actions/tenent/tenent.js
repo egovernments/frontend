@@ -1,5 +1,4 @@
 import API from '../apis/api';
-import C from '../constants';
 import CONFIGS from '../../config/configs';
 
 export default class TenentAPI extends API {
@@ -29,27 +28,12 @@ export default class TenentAPI extends API {
 
     getBody() {
         return this.body
-        // return {
-        //    "RequestInfo": {
-        //        "authToken": ""
-        //    },
-        //    "MdmsCriteria": {
-        //        "tenantId": "pb",
-        //        "moduleDetails": [
-        //         {
-        //         "moduleName": "tenant",
-        //         "masterDetails": [
-        //         {
-        //         "name": "tenants"
-        //         }]
-        //         }
-        //        ]
-        //    }
-        // }
     }
+
     getChartKey() {
         return this.codeKey;
     }
+    
     apiEndPoint() {
         return CONFIGS.MDMS 
     }

@@ -67,28 +67,6 @@ class CheckboxesTags extends React.Component {
             name: this.props.defaultValue || [],
             search: '',
             localItems: this.props.item || [],
-            options: [
-                {
-                    text: "USA",
-                    value: "1"
-                },
-                {
-                    text: "Germany",
-                    value: "2"
-                },
-                {
-                    text: "France",
-                    value: "3"
-                },
-                {
-                    text: "Poland",
-                    value: "4"
-                },
-                {
-                    text: "Japan",
-                    value: "5"
-                }
-            ]
         };
     }
 
@@ -186,7 +164,6 @@ class CheckboxesTags extends React.Component {
                                 )}
 
                                 renderTags={(value, getTagProps) =>{
-                                    console.log('1')
                                     return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
                                         (this.props.defaultValue && this.props.defaultValue.includes(option)) || this.props.type !=='Wards' ? <Chip  label={option} {...getTagProps({ index })} /> : <div></div>
                                     )) : ''
@@ -203,13 +180,6 @@ class CheckboxesTags extends React.Component {
                                         fullWidth
                                         placeholder={this.state.label}
                                         style={isMobile?{color:'black',margin:"0px -6px 0 0"}:{color:'black'}}
-                                        // InputLabelProps={{
-                                        //     style: {
-                                            
-                                        //     } }}
-                                        // // InputLabelProps={{
-                                        // //     className: classes.floatingLabelFocusStyle,
-                                        // // }}
                                     /></div>
                                 )}
                             /> : <Autocomplete
@@ -220,8 +190,6 @@ class CheckboxesTags extends React.Component {
                             options={this.state.localItems}
                             disableCloseOnSelect
                             getOptionLabel={option => option}
-                            // defaultValue = {this.props.defaultValue ? this.props.defaultValue : ''}
-                            // defaultValue = defaultValue={["The"]}
                             
                             renderOption={(option, { selected }) => (
                                 <React.Fragment>
