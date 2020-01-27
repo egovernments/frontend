@@ -45,7 +45,7 @@ class Cards extends Component {
 
           </CardHeader>
           }
-          <div className={[classes.actionMenues, classes.fullw].join(' ')}><CustomInfo data={this.props} /></div>
+          {needInfo && <div className={[classes.actionMenues, classes.fullw].join(' ')}><CustomInfo data={this.props} /></div>}
         </div>
         <CardContent classes={{ root: classes.cardContent }}>
           <Typography component="div">
