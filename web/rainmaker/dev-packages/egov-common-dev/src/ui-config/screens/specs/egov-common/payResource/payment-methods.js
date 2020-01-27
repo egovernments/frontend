@@ -198,7 +198,7 @@ export const chequeDetails = getCommonContainer({
 });
 
 export const cheque = getCommonContainer({
-  payeeDetails,
+  // payeeDetails,
   chequeDetails
 });
 
@@ -281,7 +281,7 @@ export const demandDraftDetails = getCommonContainer({
 });
 
 export const demandDraft = getCommonContainer({
-  payeeDetails,
+  // payeeDetails,
   demandDraftDetails
 });
 
@@ -329,10 +329,10 @@ export const cardDetails = getCommonContainer({
 });
 
 export const card = getCommonContainer({
-  payeeDetails,
+  // payeeDetails,
   cardDetails
 });
 
 export const cash = getCommonContainer({
-  payeeDetails
+  // payeeDetails
 });
