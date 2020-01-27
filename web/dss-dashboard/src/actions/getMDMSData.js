@@ -20,7 +20,7 @@ _.each(tenants,(v,k) => {
 })
 
 
-let localVal = JSON.parse(localStorage.getItem("localization_en_IN"));
+let localVal = JSON.parse(localStorage.getItem("localization_"+localStorage.getItem("locale") ) );
 for(var i=0; i<localVal.length;i++){    
      if(localVal[i].code === "ULBGRADE_MC1"){ 
         //console.log(localVal[i]["code"],localVal[i]['message']);
