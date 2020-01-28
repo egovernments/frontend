@@ -8,7 +8,7 @@ import Screen from "egov-ui-kit/common/common/Screen";
 import { Icon, BreadCrumbs } from "egov-ui-kit/components";
 import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-
+import WorkFlowContainer from "egov-workflow/ui-containers-local/WorkFlowContainer";
 import { fetchProperties, getSingleAssesmentandStatus, fetchTotalBillAmount, fetchReceipt } from "egov-ui-kit/redux/properties/actions";
 import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
 import isEqual from "lodash/isEqual";
@@ -119,7 +119,7 @@ class ApplicationPreview extends Component {
     ]);
 
     const { search } = location;
-    const propertyId = getQueryValue(search, "applicationNumber");
+    const propertyId = getQueryValue(search, "propertyId");
     const tenantId = getQueryValue(search, "tenantId");
     fetchProperties([
       { key: "ids", value: propertyId },
@@ -129,13 +129,16 @@ class ApplicationPreview extends Component {
   render() {
     const { location } = this.props;
   const { search } = location;
-    const propertyId = getQueryValue(search, "applicationNumber");
+    const propertyId = getQueryValue(search, "propertyId");
     const { generalMDMSDataById, properties } = this.props;
     return <div>
        <Screen className={""}>
         <PTHeader header='PT_APPLICATION_TITLE' subHeaderTitle='PT_PROPERTY_PTUID' subHeaderValue={propertyId} />
       <div className="form-without-button-cont-generic" >
         <div>
+        <WorkFlowContainer  dataPath={"FireNOCs"}
+            moduleName={"FIRENOC"} 
+            updateUrl={"/firenoc-services/v1/_update"}></WorkFlowContainer>
           <Card
             textChildren={
               <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
@@ -157,7 +160,7 @@ const mapStateToProps = (state, ownProps) => {
   const { propertiesById, loading, } = state.properties || {};
   const { location } = ownProps;
   const { search } = location;
-  const propertyId = getQueryValue(search, "applicationNumber");
+  const propertyId = getQueryValue(search, "propertyId");
 
   const properties = propertiesById[propertyId] || {};
   return {
