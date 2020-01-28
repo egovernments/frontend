@@ -30,8 +30,7 @@ class Cards extends Component {
     this.instance = this;
   }
   render() {
-    let { strings } = this.props;
-    const { classes, needInfo, id, title, fullW, noUnit } = this.props;
+    const { classes, id, fullW } = this.props;
     let newClass = fullW ? classes.full : classes.redused;
 
     return (

@@ -164,8 +164,9 @@ class DateRange extends React.Component {
   }
   render() {
     // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+    // let { classes, onClose, selected, value: valueProp, open } = this.props;
 
-    let { classes, onClose, selected, value: valueProp, open } = this.props;
+    let { classes, open } = this.props;
     return (
       <Dialog
         // fullScreen={}

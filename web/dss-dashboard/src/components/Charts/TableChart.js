@@ -12,7 +12,6 @@ import { bindActionCreators } from 'redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import NFormatterFun from '../common/numberFormaterFun';
 import getChartOptions from '../../actions/getChartOptions';
-import getFilterObj from '../../actions/getFilterObj';
 import axios from 'axios';
 import { isMobile } from 'react-device-detect';
 
@@ -179,7 +178,7 @@ class TableChart extends Component {
 
   render() {
     let { classes, chartData, chartKey, chartsData, strings, chartParent } = this.props;
-    let drillCode, visualcode, tabFilterKey,tabName,drilfilters;
+    let drillCode, visualcode, tabName,drilfilters;
     if (this.props && chartData) {
       if (this.state.data) {
         chartData = this.state.data.data;

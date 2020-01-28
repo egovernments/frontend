@@ -138,7 +138,7 @@ class CustomInfo extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.s3FileCard != this.props.s3FileCard) {
+    if (prevProps.s3FileCard !== this.props.s3FileCard) {
       const { S3Trans } = this.props
       let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE_CARD, this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId);
       S3Trans(s3ImageAPI)
@@ -147,7 +147,7 @@ class CustomInfo extends React.Component {
       })
     }
 
-    if (prevProps.s3ImageCard != this.props.s3ImageCard) {
+    if (prevProps.s3ImageCard !== this.props.s3ImageCard) {
       if (this.state.openWhatsapp) {
         this.setState({
           openWhatsapp: false
@@ -276,7 +276,7 @@ class CustomInfo extends React.Component {
   }
 
   render() { 
-    let { classes, data } = this.props;   
+    let { data } = this.props;   
     return (
       <div style={{padding:'0px 7px'}}>
         {this.renderMenues(data.id,data.name)}

@@ -1,10 +1,8 @@
 import React from "react";
-// nodejs library that concatenates classes
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "./styles/Card";
-import Config from '../../../config/configs'
 import history from '../../../utils/web.history'
 
 const useStyles = makeStyles(styles);

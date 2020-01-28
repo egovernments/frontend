@@ -6,7 +6,7 @@ _.each(tenants,(v,k) => {
 
     if(v.code)
         tenantLogo[v.code] = v.logoId;
-    if(v.code == localStorage.getItem('tenant-id'))
+    if(v.code === localStorage.getItem('tenant-id'))
         tenantName = v.name;
     if(v.city.ddrName){     
         tenantId = v.code;
@@ -23,15 +23,10 @@ _.each(tenants,(v,k) => {
 let localVal = JSON.parse(localStorage.getItem("localization_"+localStorage.getItem("locale") ) );
 for(var i=0; i<localVal.length;i++){    
      if(localVal[i].code === "ULBGRADE_MC1"){ 
-        //console.log(localVal[i]["code"],localVal[i]['message']);
         corpName = localVal[i]['message'];
         break;        
     } 
 }
-//console.log(responseData.MdmsRes.tenant.tenants);
-//console.log(tempDRRsObj);
-//console.log(tempDDRs);
-//console.log(tenantLogo);
 return {
     label: "DDRs",
     type: "dropdown",

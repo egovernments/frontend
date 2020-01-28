@@ -12,7 +12,8 @@ class UiTableHead extends Component {
   };
 
   render() {
-    const { classes, onSelectAllClick, Globfilter, order, orderBy, numSelected, rowCount, columnData, needHash, needCheckBox } = this.props;
+    // const { classes, onSelectAllClick, Globfilter, order, orderBy, numSelected, rowCount, columnData, needHash, needCheckBox } = this.props;
+    const { classes, Globfilter, order, orderBy, columnData, needHash } = this.props;
     return (
       <TableHead className={classes.root}>
         <TableRow>

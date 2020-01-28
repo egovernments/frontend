@@ -4,11 +4,8 @@ import { connect } from 'react-redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import CollectionChartRow from './CollectionChartRow';
 import { Grid } from '@material-ui/core'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
-
 
 class CollectionChart extends React.Component {
 	constructor(props) {
@@ -18,7 +15,6 @@ class CollectionChart extends React.Component {
 
 	render() {
 		let { strings, classes, page } = this.props;
-		// let codekey = _.chain(this.props).get('chartData').first().get("id").value();
 		let data = this.props.chartData.map((d, i) => {
 			return {
 				"label": d.name,

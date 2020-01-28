@@ -107,11 +107,6 @@ const getImageData = (dataUrl) => {
     });
 }
 
-const getHeader = () => {
-    let header = "AMRITSAR MUNICIPAL CORPORATION"
-    return header
-}
-
 const addPages = (elem, cityLogo,pdfHeader) => {
     console.log(cityLogo)
     return new Promise((resolve, reject) => {

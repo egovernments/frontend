@@ -1,8 +1,6 @@
 import { isMobile } from 'react-device-detect';
-import variables from '../../styles/variables';
 import {
     blackColor,
-    whiteColor,
     hexToRgb
   } from "../../assets/Home";
 
