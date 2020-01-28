@@ -29,6 +29,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     [],
     { Licenses: TLRequestBody }
   );
+  const paid= get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0].paidBy");
 
   // clear data from form
 
@@ -37,6 +38,13 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     "LicensesTemp[0].estimateCardData",
     dispatch,
     window.location.href
+  );
+
+  dispatch(
+    prepareFinalObject(
+      "ReceiptTemp[0].Bill[0].paidBy",
+      paid
+    )
   );
 
   //get deep copy of bill in redux - merge new bill after adhoc
@@ -78,7 +86,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
       "COUNTER"
     )
   );
-  if (totalAmount) {
+ // if (totalAmount) {
     //set amount paid as total amount from bill - destination changed in CS v1.1
     dispatch(
       prepareFinalObject(
@@ -86,7 +94,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
         totalAmount
       )
     );
-  }
+//  }
 
   showHideAdhocPopup(state, dispatch);
 };
