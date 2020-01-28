@@ -33,7 +33,7 @@ export default class S3ImageAPI extends API {
         return this.codeKey;
     }
     apiEndPoint() {
-        return CONFIGS.FETCH_FILE + "?tenantId=pb.amritsar&fileStoreIds=" + this.body
+        return CONFIGS.FETCH_FILE + "?tenantId="+`${localStorage.getItem('tenant-id')}`+"&fileStoreIds=" + this.body
     }
 
     getHeaders() {
