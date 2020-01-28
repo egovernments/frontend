@@ -21,6 +21,7 @@ import "./index.css";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import AssessmentInfo from "../Property/components/AssessmentInfo";
 import OwnerInfo from "../Property/components/OwnerInfo";
+import PTHeader from "../../common/PTHeader";
 
 
 const innerDivStyle = {
@@ -131,17 +132,9 @@ class ApplicationPreview extends Component {
     const propertyId = getQueryValue(search, "applicationNumber");
     const { generalMDMSDataById, properties } = this.props;
     return <div>
-       <Screen className={clsName}>
-        <PTHeader header='PT_APPLICATION_TITTLE' subHeaderTitle='PT_PROPERTY_PTUID' subHeaderValue={propertyId} />
+       <Screen className={""}>
+        <PTHeader header='PT_APPLICATION_TITLE' subHeaderTitle='PT_PROPERTY_PTUID' subHeaderValue={propertyId} />
       <div className="form-without-button-cont-generic" >
-        {/* <Label
-          label={"PT_APPLICATION_TITTLE"}
-          containerStyle={{ padding: "24px 0px 24px 0", marginLeft: "16px" }}
-          dark={true}
-          bold={true}
-          labelStyle={{ letterSpacing: 0 }}
-          fontSize={"20px"}
-        /> */}
         <div>
           <Card
             textChildren={
