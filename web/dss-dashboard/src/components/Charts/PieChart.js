@@ -6,6 +6,8 @@ import NFormatterFun from '../common/numberFormaterFun';
 import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
+import CONFIG from '../../config/configs';
+
 
 const options = {
 	responsive: true,
@@ -63,7 +65,7 @@ class PieChart extends React.Component {
 		};
 		var tempdataSet = {
 			label: "",
-			backgroundColor: ["#35a2eb", "#f19c56", "#4c76c7", "#ff6384",],
+			backgroundColor: CONFIG.CHART_COLOR_CODE,
 			data: [],
 			dataSymbol: []
 		};

@@ -7,6 +7,8 @@ import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
 import { isMobile } from 'react-device-detect';
+import CONFIG from '../../config/configs';
+
 
 const options = {
 	responsive: true,
@@ -64,7 +66,7 @@ class DonutChart extends React.Component {
 		};
 		var tempdataSet = {
 			label: "",
-			backgroundColor: ["#35a2eb", "#f19c56", "#4c76c7", "#ff6384", '#FFC107', '#009688', '#9C27B0', '#4CAF50'],
+			backgroundColor: CONFIG.CHART_COLOR_CODE,
 			data: [],
 			dataSymbol: []
 		};

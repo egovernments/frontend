@@ -6,6 +6,7 @@ import NFormatterFun from '../common/numberFormaterFun';
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
 import { isMobile } from 'react-device-detect';
+import CONFIG from '../../config/configs';
 
 const options = {
   scales: {
@@ -55,7 +56,7 @@ class BarChart extends React.Component {
       labels: [],
       datasets: []
     };
-    let color = ["#99d4fa", "#179cf4", "#179cf4", "#1d9cf4", "#1sacq4", "#1gvcf4"]; 
+    let color = CONFIG.CHART_COLOR_CODE;
     chartData.map((d, i) => {
       let tempObj = {
         label: "",
