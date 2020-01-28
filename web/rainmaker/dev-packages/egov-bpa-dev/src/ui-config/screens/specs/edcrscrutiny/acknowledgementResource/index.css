@@ -23,15 +23,3 @@
       width: 100%;
     }
   }
-  
-#menu-list-grow :hover {
-    background-color: rgba(0, 0, 0, 0.08) !important;
-  }
-#menu-list-grow ul :hover {
-    background-color: rgba(0, 0, 0, 0) !important;
-  }
-#menu-list-grow ul li {
-    padding-right: 8px !important;
-    padding-left: 8px !important;
-    width: 155px !important;
-  }
