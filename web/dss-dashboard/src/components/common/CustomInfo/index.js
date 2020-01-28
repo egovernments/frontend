@@ -122,7 +122,8 @@ class CustomInfo extends React.Component {
     var APITransport = this.props.APITransport
 
     this.setState({
-      type: shareType
+      type: shareType,
+      cardId: id
     })
 
     domtoimage.toJpeg(div, { quality: 0.95, bgcolor: 'white' })
@@ -138,12 +139,13 @@ class CustomInfo extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.s3FileCard !== this.props.s3FileCard) {
+    if (prevProps.s3FileCard !== this.props.s3FileCard && this.state.cardId) {
       const { S3Trans } = this.props
       let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE_CARD, this.props.s3FileCard.files && Array.isArray(this.props.s3FileCard.files) && this.props.s3FileCard.files.length > 0 && this.props.s3FileCard.files[0] && this.props.s3FileCard.files[0].fileStoreId);
       S3Trans(s3ImageAPI)
       this.setState({
-        openWhatsapp: true
+        openWhatsapp: true,
+        cardId: null
       })
     }
 
