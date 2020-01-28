@@ -253,7 +253,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "REJECTED":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      downloadMenu = [certificateDownloadObject];
       printMenu = [];
       break;
     case "CANCELLED":
