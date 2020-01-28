@@ -243,12 +243,7 @@ class WorkFlowContainer extends React.Component {
 
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
-    const tenant = getQueryArg(window.location.href, "tenantId");    
-    const { ProcessInstances } = this.props;
-    let applicationStatus;
-    if ( ProcessInstances && ProcessInstances.length > 0 ) {
-        applicationStatus = get( ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus" );
-    }
+    const tenant = getQueryArg(window.location.href, "tenantId");
 
     if (moduleName === "NewTL") {
       switch (action) {
@@ -269,6 +264,11 @@ class WorkFlowContainer extends React.Component {
             : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
       }
     } else if (moduleName === "BPA") {
+      const { ProcessInstances } = this.props;
+      let applicationStatus;
+      if ( ProcessInstances && ProcessInstances.length > 0 ) {
+          applicationStatus = get( ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus" );
+      }
       switch (action) {
         case "PAY":
           let bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
