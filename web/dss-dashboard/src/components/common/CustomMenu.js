@@ -121,7 +121,7 @@ class CustomizedMenus extends Component {
 
     downloadImage = () => {
         this.props.APITrans(true)
-        downloadAsImage(this.props.fileName).then(function (success) {
+        downloadAsImage(this.props.strings[this.props.fileName] || this.props.fileName).then(function (success) {
             this.props.APITrans(false)
             // setAnchorEl(null);
         }.bind(this)).catch(function (err) {
@@ -141,7 +141,7 @@ class CustomizedMenus extends Component {
     downloadPDF = () => {
         // this.props.APITrans(true)
         let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
-        printDocument(pdfDetails.logo,pdfDetails.headerText, this.props.fileName || 'DSS').then(function (pdfO) {
+        printDocument(pdfDetails.logo,pdfDetails.headerText, this.props.strings[this.props.fileName] || this.props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             // setAnchorEl(null);
