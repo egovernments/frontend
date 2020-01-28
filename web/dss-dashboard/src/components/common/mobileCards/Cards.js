@@ -5,38 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import variables from '../../../styles/variables';
-import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
 
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import { CardStyle as style } from './CardStyles';
-import ActionButtons from '../inputs/ActionButtons';
-import domtoimage from 'dom-to-image';
-import CardHeader from '@material-ui/core/CardHeader'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import share from '../../../images/share.svg';
-import SVG from 'react-inlinesvg';
 import { APIStatus } from '../../../actions/apiStatus'
-import InfoIcon from '@material-ui/icons/Info';
-import { Tooltip } from '@material-ui/core';
-import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
 import APITransport from '../../../actions/apitransport/apitransport'
-import S3ImageAPI from '../../../actions/s3Image/s3Image';
-import constants from '../../../actions/constants'
-import Collapse from '@material-ui/core/Collapse'
-import List from '@material-ui/core/List'
-import Divider from '@material-ui/core/Divider';
-import download from '../../../images/download.svg';
-import Variables from '../../../styles/variables'
-import IconExpandLess from '@material-ui/icons/ExpandLess'
-import IconExpandMore from '@material-ui/icons/ExpandMore'
-import Button from '@material-ui/core/Button';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import WhatsappIcon from '@material-ui/icons/WhatsApp';
 
 const cardStyle = {
   backgroundColor: variables.widget_background,
@@ -44,42 +19,6 @@ const cardStyle = {
   margin: '12px 12px 12px 12px !important',
   width: '100%'
 }
-
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-})(props => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'left',
-    }}
-    PaperProps={{
-      style: {
-        left: '100%',
-      }
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
-));
-
-const StyledMenuItem = withStyles(theme => ({
-  root: {
-    '&:focus': {
-      backgroundColor: '#fff',
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: '#5b5b5b',
-      },
-    },
-  },
-}))(MenuItem);
 
 class Cards extends Component {
   constructor(props) {

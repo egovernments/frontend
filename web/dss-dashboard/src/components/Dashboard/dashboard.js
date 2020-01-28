@@ -25,7 +25,6 @@ import ChartsAPI from '../../actions/charts/chartsAPI';
 import { Typography } from '@material-ui/core';
 import Cards from '../common/Cards/Cards';
 import UiTable from '../common/UiTable/UiTable';
-import Home from '../Home/Home'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 import mdmsAPI from '../../actions/mdms/mdms';
 

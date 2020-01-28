@@ -14,7 +14,6 @@ import CustomCard from '../common/CustomCard/CustomCard'
 import Paper from '@material-ui/core/Paper';
 import Variables from '../../styles/variables'
 import Icons from '../common/Icon/Icon'
-import Config from '../../config/configs'
 import getFilterObj from '../../actions/getFilterObj';
 import history from '../../utils/web.history';
 import _ from 'lodash';
@@ -27,7 +26,6 @@ import Button from '@material-ui/core/Button';
 import Menu from '../common/CustomMenu'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 
-const new_array_val = []
 class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -112,7 +110,6 @@ class Home extends React.Component {
             }
         }
         if (data.vizType.toUpperCase() === 'COLLECTION') {
-            let url = Config.DEMO_API_URL + Config.APP_NAME + pageId
             return (
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.paper} style={{ paddingBottom: '5px' }}>
                     <Paper className={classes.paperStyle} onClick={() => this.handleOnClick()}>

@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import SVG from 'react-inlinesvg';
 import department_icon from '../../../../images/icon-department.svg';
 import styles from './ButtonDropDownStyles';
-import { isMobile } from 'react-device-detect';
 
 class SimpleSelect extends Component {
     constructor(props) {

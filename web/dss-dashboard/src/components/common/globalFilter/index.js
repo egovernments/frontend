@@ -50,11 +50,11 @@ class GlobalFilter extends Component {
 
     /**need to be dynamic */
     getdepartFilter(value) {
-        if (value == 'Property Tax') {
+        if (value === 'Property Tax') {
             return 'PT'
-        } else if (value == 'Trade licence') {
+        } else if (value === 'Trade licence') {
             return 'TL'
-        } else if (value == 'PGR') {
+        } else if (value === 'PGR') {
             return 'PGR'
         }
         return null;
@@ -104,7 +104,7 @@ class GlobalFilter extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.tenents != this.props.tenents) {
+        if (prevProps.tenents !== this.props.tenents) {
             // let tenentIds = _.chain(this.props).get("tenents").get('MdmsRes').get('tenant').get('tenants').map((ulb, index) => {
             let tenants = _.get(this.props.tenents, 'MdmsRes.tenant.tenants')
             let tenentName = []
@@ -119,7 +119,7 @@ class GlobalFilter extends Component {
             }
         }
 
-        if (prevProps.wards != this.props.wards) {
+        if (prevProps.wards !== this.props.wards) {
             // let wardData = _.chain(this.props).get("wards").get('MdmsRes').get('egov-location').get('TenantBoundary').first().get('boundary').get('children').first().get('children').map()
             let tenantsBoundry = _.get(this.props.wards, 'MdmsRes.egov-location.TenantBoundary')
 
@@ -189,7 +189,7 @@ class GlobalFilter extends Component {
             //      newFilterData[target] = this.getDateFilter(value);
             // }
 
-            if (target == 'Services') {
+            if (target === 'Services') {
                 newFilterData[target] = this.getdepartFilter(value);
             }
             if (target !== 'duration') {

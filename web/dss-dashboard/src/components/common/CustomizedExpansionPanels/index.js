@@ -5,7 +5,6 @@ import {
   ExpansionPanelSummary,
   ExpansionPanelDetails
 } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { withStyles } from "@material-ui/core/styles";
 import GenericChart from '../../Charts/genericchart';
 import CustomInfo from '../CustomInfo';

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import variables from '../../../styles/variables';
 import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
 
 import Menu from '@material-ui/core/Menu';
@@ -16,8 +15,6 @@ import { withRouter } from 'react-router-dom';
 import share from '../../../images/share.svg';
 import SVG from 'react-inlinesvg';
 import { APIStatus } from '../../../actions/apiStatus'
-import InfoIcon from '@material-ui/icons/Info';
-import { Tooltip } from '@material-ui/core';
 import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
 import APITransport from '../../../actions/apitransport/apitransport'
 import S3ImageAPI from '../../../actions/s3Image/s3Image';
@@ -25,11 +22,9 @@ import constants from '../../../actions/constants'
 import Collapse from '@material-ui/core/Collapse'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider';
-import download from '../../../images/download.svg';
 import Variables from '../../../styles/variables'
 import IconExpandLess from '@material-ui/icons/ExpandLess'
 import IconExpandMore from '@material-ui/icons/ExpandMore'
-import Button from '@material-ui/core/Button';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
 import shortenAPI from '../../../actions/shortenAPI';
