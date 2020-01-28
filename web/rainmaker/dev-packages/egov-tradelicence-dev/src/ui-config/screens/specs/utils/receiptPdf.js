@@ -1448,19 +1448,38 @@ const getACKData = (transformedData, ulbLogo) => {
           }
         ]
       },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "Financial Year",
+      //         "TL_LOCALIZATION_FINANCIAL_YEAR"
+      //       )+":"
+      //     },
+      //     {
+      //       width: "*",
+      //       text: transformedData.financialYear
+      //     }
+      //   ]
+      // },
       {
         style: "tl-certificate-data-2",
         columns: [
           {
             width: 160,
             text: getLocaleLabels(
-              "Financial Year",
-              "TL_LOCALIZATION_FINANCIAL_YEAR"
+              "License Validity",
+              "TL_LOCALIZATION_LICENSE_VALIDITY"
             )+":"
           },
           {
             width: "*",
-            text: transformedData.financialYear
+            text:
+              transformedData.licenseValidity.startDate +
+              getLocaleLabels("To", "TL_LOCALIZATION_TRADE_LICENSE_TO") +
+              transformedData.licenseValidity.endDate
           }
         ]
       },
@@ -1578,25 +1597,7 @@ const getACKData = (transformedData, ulbLogo) => {
           }
         ]
       },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "License Validity",
-              "TL_LOCALIZATION_LICENSE_VALIDITY"
-            )+":"
-          },
-          {
-            width: "*",
-            text:
-              transformedData.licenseValidity.startDate +
-              getLocaleLabels("To", "TL_LOCALIZATION_TRADE_LICENSE_TO") +
-              transformedData.licenseValidity.endDate
-          }
-        ]
-      },
+      
       // {
       //   style: "tl-certificate-data-2",
       //   columns: [
