@@ -743,7 +743,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
     ],
     styles: {
       "tl-head": {
-        fillColor: "#F2F2F2",
+        fillColor: "#b8bfcc",
         margin: [-41, -41, -41, 0]
       },
       "pt-reciept-citizen-header": {
@@ -826,54 +826,27 @@ const getCertificateData = (transformedData, ulbLogo) => {
     },
     content: [
       {
+        style: "tl-head",
         table: {
-          widths: ["*"],
+          widths: [60, "*"],
           body: [
             [
               {
+                image: ulbLogo,
+                width: 50,
+                height: 61.25,
+                margin: [5, 0, 0, 0]//left top right bottom
+              },
+              {
                 stack: [
-                  {
-                    image: ulbLogo,
-                    width: 50,
-                    height: 61.25,
-                    alignment: "center"
-                  },
                   {
                     text: getCorporationName(
                       transformedData.corporationName,
                       transformedData.actualAddress
                     ),
                     style: "receipt-logo-header",
-                    margin: [0, 10, 0, 0]
+                    //margin: [50, 0, 0, 0]//left top right bottom
                     // font:"Roboto"
-                  },
-                  {
-                    text:
-                      getLocaleLabels(
-                        "Address :",
-                        "TL_LOCALIZATION_CORPORATION_ADDRESS"
-                      ) +" : "+
-                      validateNull(transformedData.corporationAddress)+
-                      "\n" +
-                      getLocaleLabels(
-                        "Contact : ",
-                        "TL_LOCALIZATION_CORPORATION_CONTACT"
-                      ) +" : "+
-                      validateNull(transformedData.corporationContact)+
-                      "\n" +
-                      getLocaleLabels(
-                        "Website : ",
-                        "TL_LOCALIZATION_CORPORATION_WEBSITE"
-                      )+" : "+
-                      validateNull(transformedData.corporationWebsite) +
-                      "\n" +
-                      getLocaleLabels(
-                        "Email : ",
-                        "TL_LOCALIZATION_CORPORATION_EMAIL"
-                      ) +" : "+
-                      validateNull(transformedData.corporationEmail),
-                    style: "receipt-logo-sub-text",
-                    margin: [0, 2, 0, 0]
                   },
                   {
                     text: getLocaleLabels(
@@ -881,16 +854,16 @@ const getCertificateData = (transformedData, ulbLogo) => {
                       "TL_LOCALIZATION_TRADE_LICENSE_CERTIFICATE"
                     ),
                     style: "receipt-logo-sub-header",
-                    margin: [0, 15, 0, 0]
+                  
                   }
                 ],
                 alignment: "center",
-                margin: [0, 0, 0, 0]
+                margin: [40, 10, 0, 0]
               }
             ]
           ]
         },
-        layout: noborder
+        layout: {}
       },
       {
         style: "tl-certificate-data",
@@ -1199,6 +1172,9 @@ const getCertificateData = (transformedData, ulbLogo) => {
       }
     ], //define all the styles here
     styles: {
+      "tl-head": {
+        fillColor: "#b8bfcc"
+      },
       "pt-reciept-citizen-header": {
         fontSize: 14,
         margin: [0, 24, 0, 0], //left top right bottom
@@ -1249,23 +1225,20 @@ const getCertificateData = (transformedData, ulbLogo) => {
       },
       "receipt-logo-header": {
         color: "#1E1E1E",
-
         fontSize: 18,
         bold: true,
         letterSpacing: 0.74
       },
       "receipt-logo-sub-text": {
         color: "#656565",
-
         fontSize: 14,
         letterSpacing: 0.74
       },
       "receipt-logo-sub-header": {
         color: "#1E1E1E",
-
-        fontSize: 16,
+        fontSize: 13,
         letterSpacing: 1.6,
-        bold: true
+        //bold: true
       },
       "receipt-footer": {
         color: "#484848",
@@ -1750,8 +1723,7 @@ const getACKData = (transformedData, ulbLogo) => {
       },
       "receipt-logo-header": {
         color: "#1E1E1E",
-
-        fontSize: 18,
+        fontSize: 16,
         bold: true,
         letterSpacing: 0.74
       },
