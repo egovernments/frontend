@@ -203,10 +203,10 @@ class DocumentList extends Component {
                         </Icon>
                       </div>
                     ) : (
-                      <div className={classes.documentIcon}>
-                        <span>{key + 1}</span>
-                      </div>
-                    )}
+                        <div className={classes.documentIcon}>
+                          <span>{key + 1}</span>
+                        </div>
+                      )}
                   </Grid>
                   <Grid item={true} xs={6} sm={6} align="left">
                     <LabelContainer
@@ -217,20 +217,22 @@ class DocumentList extends Component {
                     {document.required && (
                       <sup style={{ color: "#E54D42" }}>*</sup>
                     )}
-                    <Typography variant="caption">
-                      <LabelContainer
-                        labelName={document.statement}
-                        labelKey={document.statement}
-                      />
+                    {
+                      document.statement && <Typography variant="caption">
+                        <LabelContainer
+                          labelName={document.statement}
+                          labelKey={document.statement}
+                        />
                       {/* {document.statement} */}
-                    </Typography>
-                    <Typography variant="caption">
-                      <LabelContainer
-                        labelName={description.labelName}
-                        labelKey={description.labelKey}
-                      />
-                      {/* {description} */}
-                    </Typography>
+                      </Typography>
+                    }
+                      <Typography variant="caption">
+                        <LabelContainer
+                          labelName={description.labelName}
+                          labelKey={description.labelKey}
+                        />
+                        {/* {description} */}
+                      </Typography>
                   </Grid>
                   <Grid item={true} xs={12} sm={5} align="right">
                     <UploadSingleFile
