@@ -217,13 +217,15 @@ class DocumentList extends Component {
                     {document.required && (
                       <sup style={{ color: "#E54D42" }}>*</sup>
                     )}
-                       <Typography variant="caption">
+                    {
+                      document.statement && <Typography variant="caption">
                         <LabelContainer
                           labelName={document.statement}
                           labelKey={document.statement}
                         />
                       {/* {document.statement} */}
                       </Typography>
+                    }
                       <Typography variant="caption">
                         <LabelContainer
                           labelName={description.labelName}
