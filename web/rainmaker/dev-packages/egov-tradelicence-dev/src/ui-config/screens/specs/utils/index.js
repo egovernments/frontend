@@ -943,10 +943,12 @@ export const getEmployeeDataFromUuid = async queryObject => {
 
 const getStatementForDocType = docType => {
   switch (docType) {
-    case "OWNERIDPROOF":
+    case "IDPROOF":
       return "Allowed documents are Aadhar Card / Voter ID Card / Driving License";
-    case "OWNERSHIPPROOF":
+    case "RLAPO":
       return "Allowed documents are Rent Deed / Lease Doc / Property Registry / General or Special Power of Attorney";
+    case "TRDSHOPBLDGPRMS":
+      return "Allowed documents are image of trade shop premises";
     default:
       return "";
   }
@@ -960,7 +962,7 @@ export const prepareDocumentTypeObj = documents => {
           name: item,
           required: item == "TRDSHOPBLDGPRMS" ? false : true,
           jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-          statement: getStatementForDocType(item)
+          //statement: getStatementForDocType(item)
         });
         return documentsArr;
       }, [])
@@ -994,7 +996,7 @@ const getToolTipInfo = (taxHead, LicenseData) => {
 };
 
 const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
-  if (Bill ) {
+  if (Bill) {
     const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
       return {
         name: {
@@ -1236,23 +1238,23 @@ export const createEstimateData = async (
   //     : payload.billResponse &&
   //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
   //   : [];
-const fetchBillResponse=await getBill(getBillQueryObj);
+  const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : fetchBillResponse&&fetchBillResponse.Bill&&fetchBillResponse.Bill[0];
+    : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
   let estimateData = payload
     ? isPAID
-      ?payload&&payload.Payments&&payload.Payments.length>0&& getEstimateData(payload.Payments[0].paymentDetails[0].bill, isPAID, LicenseData)
-      : payload&&
-        getEstimateData(payload, false, LicenseData)
+      ? payload && payload.Payments && payload.Payments.length > 0 && getEstimateData(payload.Payments[0].paymentDetails[0].bill, isPAID, LicenseData)
+      : payload &&
+      getEstimateData(payload, false, LicenseData)
     : [];
-    estimateData=estimateData||[];
+  estimateData = estimateData || [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
-  if(payload){
-    const getBillResponse=await calculateBill(getBillQueryObj);
+  if (payload) {
+    const getBillResponse = await calculateBill(getBillQueryObj);
     getBillResponse &&
-    getBillResponse.billingSlabIds &&
+      getBillResponse.billingSlabIds &&
       getBillingSlabData(dispatch, getBillResponse.billingSlabIds, tenantId, accessories);
   }
 
@@ -1982,7 +1984,7 @@ export const getDialogButton = (name, key, screenKey) => {
   };
 };
 
-const getAllBillingSlabs = async (tenantId,queryObj=[]) => {
+const getAllBillingSlabs = async (tenantId, queryObj = []) => {
   let payload = await httpRequest(
     "post",
     `/tl-calculator/billingslab/_search?tenantId=${tenantId}`,
@@ -1993,10 +1995,10 @@ const getAllBillingSlabs = async (tenantId,queryObj=[]) => {
   return payload;
 };
 
-export const getAllDataFromBillingSlab = async (tenantId, dispatch,queryObj=[{
-  key:"applicationType",value:"APPLICATIONTYPE.NEW"
+export const getAllDataFromBillingSlab = async (tenantId, dispatch, queryObj = [{
+  key: "applicationType", value: "APPLICATIONTYPE.NEW"
 }]) => {
-  const payload = await getAllBillingSlabs(tenantId,queryObj);
+  const payload = await getAllBillingSlabs(tenantId, queryObj);
   const processedData =
     payload.billingSlab &&
     payload.billingSlab.reduce(
