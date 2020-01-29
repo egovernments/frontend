@@ -40,12 +40,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     window.location.href
   );
 
-  dispatch(
-    prepareFinalObject(
-      "ReceiptTemp[0].Bill[0].paidBy",
-      paid
-    )
-  );
+  
 
   //get deep copy of bill in redux - merge new bill after adhoc
   const billInRedux = cloneDeep(
@@ -56,6 +51,14 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   //merge bill in Receipt obj
   billPayload &&
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
+
+
+    dispatch(
+      prepareFinalObject(
+        "ReceiptTemp[0].Bill[0].paidBy",
+        paid
+      )
+    );
 
   //set amount paid as total amount from bill
   billPayload &&
