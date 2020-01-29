@@ -40,13 +40,6 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     window.location.href
   );
 
-  dispatch(
-    prepareFinalObject(
-      "ReceiptTemp[0].Bill[0].paidBy",
-      paid
-    )
-  );
-
   //get deep copy of bill in redux - merge new bill after adhoc
   const billInRedux = cloneDeep(
     get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
