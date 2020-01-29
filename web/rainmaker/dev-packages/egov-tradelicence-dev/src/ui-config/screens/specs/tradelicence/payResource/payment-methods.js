@@ -83,7 +83,7 @@ export const payeeDetails = getCommonContainer({
         label: "TL_PAYMENT_BY_OTHERS"
       }
     ],
-    jsonPath: "ReceiptTemp[0].Bill[0].payer",
+    jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
     required: true
   }),
   payerName: getTextField({
@@ -95,7 +95,7 @@ export const payeeDetails = getCommonContainer({
       labelName: "Enter Payer Name",
       labelKey: "TL_PAYMENT_PAYER_NAME_PLACEHOLDER"
     },
-    jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
+    jsonPath: "ReceiptTemp[0].Bill[0].payer",
     required: true
   }),
   payerMobileNo: getTextField({
