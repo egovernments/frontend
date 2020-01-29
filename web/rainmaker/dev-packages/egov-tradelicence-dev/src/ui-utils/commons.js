@@ -432,7 +432,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //   action = "APPLY";
       // }
       set(queryObject[0], "action", action);
-      const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
+      const isEditFlow = getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "renew";
       !isEditFlow &&
         (await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject

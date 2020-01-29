@@ -579,7 +579,7 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
-export const footerTLR =(status)=> getCommonApplyFooter({
+export const footerTLR =(status,dispatch,applicationNumber,tenantId)=> getCommonApplyFooter({
   //visible:getButtonVisibility(status, "APPROVE"),
   editButton: {
      componentPath: "Button",
@@ -607,8 +607,17 @@ export const footerTLR =(status)=> getCommonApplyFooter({
        })
      },
      onClickDefination: {
-       // action: "condition",
-       // callBack: callBackForPrevious
+      action: "condition",
+      callBack: () => {
+        dispatch(
+          setRoute(
+           // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+           `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=renew`
+          )
+        );
+      },
+      
+      
      },
      visible:getButtonVisibility(status, "APPROVED"),
    },
@@ -896,12 +905,20 @@ export const footerReview = (
                 },
                 previousButtonLabel: getLabel({
                   labelName: "Edit",
-                  labelKey: "TL_COMMON_BUTTON_EDIT"
+                  labelKey: "TL_RENEWAL_BUTTON_EDIT"
                 })
               },
               onClickDefination: {
-                // action: "condition",
-                // callBack: callBackForPrevious
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=edit`
+                    )
+                  );
+                },
+                
               },
               visible:getButtonVisibility(status, "APPROVED"),
             },
@@ -920,7 +937,7 @@ export const footerReview = (
               children: {
                 nextButtonLabel: getLabel({
                   labelName: "Submit",
-                  labelKey: "TL_COMMON_BUTTON_SUBMIT"
+                  labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
                 }),
                 nextButtonIcon: {
                   uiFramework: "custom-atoms",

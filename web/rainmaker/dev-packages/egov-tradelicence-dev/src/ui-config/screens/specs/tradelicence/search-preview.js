@@ -278,7 +278,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       tenantId
     );
     
-    const footerr=footerTLR(status)
+    const footerr=footerTLR(status,dispatch,applicationNumber,tenantId)
 
     
     process.env.REACT_APP_NAME === "Citizen"
