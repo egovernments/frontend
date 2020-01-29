@@ -32,32 +32,45 @@ export const propertyHeader= getCommonSubHeader({
   labelName:"Property Details"
 })
 
-export const propertyID= getTextField({
-  label: {
-      // labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL"
-      labelName:"Property ID"
-  },
-  placeholder: {
-      // labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_PLACEHOLDER"
-      labelName:"Enter Property ID"
-  },
-  gridDefination: {
-      xs: 12,
-      sm: 6
-  },
-  required: true,
-  title: {
-    value: "Fill the form by searching your old approved trade license",
-    // key: "TL_OLD_TL_NO"
-  },
-  infoIcon: "info_circle",
-  pattern: /^[a-zA-Z0-9-]*$/i,
-  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-  jsonPath: "searchScreen.oldConnectionNumber",
-  
-  
- 
-});
+export const propertyID = getCommonContainer({
+  propertyID: getTextField({
+    label: { labelKey: "WS_PROPERTY_ID_LABEL" },
+    placeholder: { labelKey: "WS_PROPERTY_ID_PLACEHOLDER" },
+    gridDefination: { xs: 12, sm: 6, md: 6 },
+    required: true,
+    title: {
+      value: "Fill the form by searching your old approved trade license",
+      // key: "TL_OLD_TL_NO"
+    },
+    pattern: /^[a-zA-Z0-9-]*$/i,
+    errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    jsonPath: "searchScreen.oldConnectionNumber",
+  }),
+  searchButton: {
+    componentPath: "Button",
+    gridDefination: { xs: 12, sm: 6, md: 6 },
+    props: {
+      variant: "contained",
+      style: {
+        color: "white",
+        margin: "8px",
+        backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+        borderRadius: "2px",
+        width: "30%",
+        height: "32px"
+      }
+    },
+    children: {
+      buttonLabel: getLabel({
+        labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
+      })
+    },
+    // onClickDefination: {
+    //   action: "condition",
+    //   callBack: searchApiCall
+    // }
+  }
+})
 
 const propertyDetails = getCommonContainer({
   propertyType: getLabelWithValue(
