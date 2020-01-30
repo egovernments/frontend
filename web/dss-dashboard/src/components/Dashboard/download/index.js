@@ -74,7 +74,7 @@ export function CustomizedMenus(props) {
 
     const downloadImage = () => {
         props.APITrans(true)
-        downloadAsImage(props.fileName || 'dashboard').then(function (success) {
+        downloadAsImage(props.strings[props.fileName] || props.fileName || 'dashboard').then(function (success) {
             props.APITrans(false);
             setAnchorEl(null);
         }.bind(this)).catch(function (err) {
@@ -90,7 +90,7 @@ export function CustomizedMenus(props) {
     const downloadPDF = () => {
         props.APITrans(true);        
         let pdfDetails = getPDFHeaderDetails(props.mdmsData);
-        printDocument(pdfDetails.logo,pdfDetails.headerText, props.fileName || 'DSS').then(function (pdfO) {
+        printDocument(pdfDetails.logo,pdfDetails.headerText, props.strings[props.fileName] || props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
             // element.parentNode.removeChild(element);
             setAnchorEl(null);

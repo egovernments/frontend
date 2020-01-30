@@ -5,6 +5,7 @@ import {
   ExpansionPanelSummary,
   ExpansionPanelDetails
 } from "@material-ui/core";
+import { connect } from 'react-redux';
 import { withStyles } from "@material-ui/core/styles";
 import GenericChart from '../../Charts/genericchart';
 import CustomInfo from '../CustomInfo';
@@ -30,14 +31,14 @@ class CustomizedExpansionPanels extends React.Component {
     //alert("I'm not expanding!");
   }
   renderCards = (classes, chartData, displayName, filters, page,Gfilter,row ) =>{ 
-    let rowrender = []
+    let rowrender = [],strings = this.props.strings
     chartData.map((data, j) =>{
       rowrender.push(
         <ExpansionPanel defaultExpanded={(!data.isCollapsible)?true:false} className = {classes.head} style={{ margin: '30px 0px'}}>
           <ExpansionPanelSummary>
           <Grid container>
             <Grid item xs={11}>
-              <div style={{textAlign:'left', wordWrap: 'break-word',wordBreak:'break-word'}}>{data.name}  </div>
+              <div style={{textAlign:'left', wordWrap: 'break-word',wordBreak:'break-word'}}>{strings[data.name]||data.name} </div>
             </Grid>
             <Grid item xs={1}>
               <div onClick={this.onEditClick}><CustomInfo data={data} /></div>
@@ -68,4 +69,8 @@ CustomizedExpansionPanels.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CustomizedExpansionPanels);
+const mapStateToProps = (state) => ({
+  strings: state.lang
+  });
+
+export default withStyles(styles)(connect(mapStateToProps)(CustomizedExpansionPanels));
