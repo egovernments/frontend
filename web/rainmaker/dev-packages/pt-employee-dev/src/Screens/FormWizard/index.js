@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Card } from "components";
 import WizardComponent from "./components/WizardComponent";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {
@@ -287,7 +288,7 @@ class FormWizard extends Component {
         },
         () => {
           {
-            if (activeTab >= 3 && !isCompletePayment) {
+            if (activeTab >= 4 && !isCompletePayment) {
               this.estimate().then(estimateResponse => {
                 if (estimateResponse) {
                   this.setState({
@@ -302,7 +303,7 @@ class FormWizard extends Component {
                 }
               });
             }
-            if (activeTab === 4) this.pay();
+            if (activeTab === 5) this.pay();
           }
         }
       );
@@ -549,6 +550,12 @@ class FormWizard extends Component {
           </div>
         );
       case 3:
+        return (<div>
+          <Card  textChildren={ <h2>Document upload Tab</h2>}>
+           
+            </Card>
+          </div>);
+      case 4:
         return (
           <div className="review-pay-tab">
             <ReviewForm
@@ -568,14 +575,14 @@ class FormWizard extends Component {
           </div>
         );
 
-      case 4:
+      case 5:
 
         return (
           <div>
             <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_ASSESSMENT_NO" messageHeader={this.getMessageHeader()} message={this.getMessage()} receiptNo={assessedPropertyDetails['Properties'][0]['propertyDetails'][0]['assessmentNumber']} />
           </div>
         );
-      case 5:
+      case 6:
 
         return (
           <div>
@@ -600,7 +607,7 @@ class FormWizard extends Component {
 
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div>
             <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader='PT_PROPERTY_PAYMENT_SUCCESS' message='PT_PROPERTY_PAYMENT_NOTIFICATION' receiptNo='PT-107-017574' />
@@ -617,13 +624,13 @@ class FormWizard extends Component {
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
 
     let buttonLabel = "PT_COMMONS_NEXT";
-    if (index == 3) {
+    if (index == 4) {
       isAssesment ? buttonLabel = 'PT_ASSESS_PROPERTY' : (isReassesment ? buttonLabel = "PT_UPDATE_ASSESSMENT" : buttonLabel = "PT_ADD_ASSESS_PROPERTY");
-    } else if (index == 4) {
-      buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 5) {
-      buttonLabel = 'PT_GENERATE_RECEIPT'
+      buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 6) {
+      buttonLabel = 'PT_GENERATE_RECEIPT'
+    } else if (index == 7) {
       buttonLabel = 'PT_DOWNLOAD_RECEIPT'
     }
 
@@ -953,14 +960,21 @@ class FormWizard extends Component {
 
         break;
       case 3:
-        if (estimation[0].totalAmount < 0) {
+        window.scrollTo(0, 0);
+        this.setState({
+          selected: index,
+          formValidIndexArray: [...formValidIndexArray, selected]
+        });
+        // createAndUpdate(index);
+      case 4:
+        if (estimation&&estimation.length&&estimation.length>1&&estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
           window.scrollTo(0, 0);
           createAndUpdate(index);
         }
         break;
-      case 4:
+      case 5:
           const { assessedPropertyDetails = {} } = this.state;
           const { Properties = [] } = assessedPropertyDetails;
           let propertyId = '';
@@ -977,10 +991,10 @@ class FormWizard extends Component {
         //     formValidIndexArray: [...formValidIndexArray, selected]
         //   });
         break;
-      case 5:
+      case 6:
         onPayButtonClick();
         break;
-      case 6:
+      case 7:
         pay();
         break;
     }
