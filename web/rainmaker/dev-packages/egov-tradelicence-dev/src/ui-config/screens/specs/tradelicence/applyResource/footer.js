@@ -602,8 +602,8 @@ export const footerTLR =(status,dispatch,applicationNumber,tenantId)=> getCommon
          }
        },
        previousButtonLabel: getLabel({
-         labelName: "Edit",
-         labelKey: "TL_COMMON_BUTTON_EDIT"
+         labelName: "Edit for Renewal",
+         labelKey: "TL_RENEWAL_BUTTON_EDIT"
        })
      },
      onClickDefination: {
@@ -635,8 +635,8 @@ export const footerTLR =(status,dispatch,applicationNumber,tenantId)=> getCommon
      },
      children: {
        nextButtonLabel: getLabel({
-         labelName: "Submit",
-         labelKey: "TL_COMMON_BUTTON_SUBMIT"
+         labelName: "Submit for Renewal",
+         labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
        }),
        nextButtonIcon: {
          uiFramework: "custom-atoms",
@@ -904,7 +904,7 @@ export const footerReview = (
                   }
                 },
                 previousButtonLabel: getLabel({
-                  labelName: "Edit",
+                  labelName: "Edit for Renewal",
                   labelKey: "TL_RENEWAL_BUTTON_EDIT"
                 })
               },
@@ -936,7 +936,7 @@ export const footerReview = (
               },
               children: {
                 nextButtonLabel: getLabel({
-                  labelName: "Submit",
+                  labelName: "Submit for Renewal",
                   labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
                 }),
                 nextButtonIcon: {

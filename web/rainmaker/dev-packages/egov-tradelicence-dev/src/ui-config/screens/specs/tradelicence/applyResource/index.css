@@ -49,7 +49,3 @@
   .tl-print-button {
     margin-left: 10px;
     width: 150px; } }
-
-.finyear {
-  cursor: "not-allowed !important";
-  pointer-events: all !important; }
