@@ -1,9 +1,0 @@
-.nav-pills .nav-link.active{
-    background-color: rgb(244, 247, 251);
-    border-bottom: 3px solid #fe7a51;
-}
-
-/* css file */
-.disable-link {
-    pointer-events: none;
-  }

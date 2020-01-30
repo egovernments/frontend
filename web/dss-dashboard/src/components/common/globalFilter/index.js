@@ -25,6 +25,7 @@ import AutoComplete from '../inputs/MultipleSelect/AutoComplete'
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
 import TenentAPI from '../../../actions/tenent/tenent'
 import Constant from '../../../actions/constants'
+import CONFIG from '../../../config/configs'
 
 class GlobalFilter extends Component {
     constructor(props) {
@@ -200,7 +201,7 @@ class GlobalFilter extends Component {
             // }
 
             if (target === 'Services') {
-                newFilterData[target] = this.getdepartFilter(value);
+                newFilterData[target] = value;
             }
             if (target !== 'duration') {
                 this.setState({ [`${target}IsOpen`]: !open, filterData: newFilterData });
@@ -459,7 +460,7 @@ class GlobalFilter extends Component {
                     case "DDRs":
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.ddrs, object.values, '')
                     case "Services":
-                        return this.renderSimpleSelect(object.label, object.values, this.handleChanges)
+                        return this.renderSimpleSelect(object.label, CONFIG.SERVICES, this.handleChanges)
                     case "Date Range":
                         return this.renderDateRange(object.label, object.values);
                 }
@@ -591,7 +592,14 @@ class GlobalFilter extends Component {
                                             {this.renderComponents(mdmsData)}
                                         </div>
                                     );
-                                } else {
+                                } else if (ro.label == "ULBS") {
+                                    return (
+                                        <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
+                                            <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
+                                            {this.renderComponents(mdmsData || mdmsData.ULBS)}
+                                        </div>
+                                    );
+                                }else {
                                     return (
                                         <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
                                             <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
