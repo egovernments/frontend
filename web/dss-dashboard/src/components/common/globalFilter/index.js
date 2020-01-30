@@ -585,18 +585,18 @@ class GlobalFilter extends Component {
                                 if (this.props.hideDepart && ro.label == "Services") {
                                     return (<div></div>);
 
-                                } else if (ro.label == "DDRs") {
+                                } else if (ro.label == "DDRs" && !_.isEmpty(mdmsData, true)) {
                                     return (
                                         <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
                                             <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
                                             {this.renderComponents(mdmsData)}
                                         </div>
                                     );
-                                } else if (ro.label == "ULBS") {
+                                } else if (ro.label == "ULBS" && !_.isEmpty(mdmsData, true) && mdmsData.ULBS) {
                                     return (
                                         <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
                                             <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
-                                            {this.renderComponents(mdmsData || mdmsData.ULBS)}
+                                            {this.renderComponents(mdmsData.ULBS)}
                                         </div>
                                     );
                                 }else {
