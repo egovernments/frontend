@@ -22,6 +22,7 @@ import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResou
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { documentList } from "./applyResource/documentList";
+import { summaryScreen } from "./search-preview";
 import { httpRequest } from "../../../../ui-utils";
 import { updatePFOforSearchResults, getBoundaryData } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -186,7 +187,7 @@ export const formwizardFourthStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form4" },
-  children: { connectionDetails },
+  children: { summaryScreen },
   visible: false
 };
 
@@ -234,7 +235,7 @@ const screenConfig = {
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
-      props: { className: "common-div-css" },
+      props: { className: "common-div-css search-preview" },
       children: {
         headerDiv: {
           uiFramework: "custom-atoms",

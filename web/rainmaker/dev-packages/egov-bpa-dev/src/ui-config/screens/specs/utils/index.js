@@ -2192,6 +2192,11 @@ export const setLicenseeSubTypeDropdownData = async (
   //     null
   //   )
   // );
+  const licenceType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+  );
+  if(licenceType){
   dispatch(
     handleField(
       "apply",
@@ -2200,6 +2205,7 @@ export const setLicenseeSubTypeDropdownData = async (
       null
     )
   );
+}
 
   const selectedTradeType = actionValue;
   let filterdTradeTypes = [];
@@ -2940,6 +2946,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       "",
       queryObject
     );
+    let isData = true;
     let data = bpaSearch.Bpa.map((data, index) => {
       if(data.edcrNumber === scrutinyNo) {
         dispatch(
@@ -2952,9 +2959,11 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             "error"
           )
         );
+        isData = false;
       }
     })
 
+    if (isData) {
     payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
       if (payload.length === 0) {
@@ -3017,6 +3026,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           );
         }
       }
+    }
     }
   } catch (e) {
     dispatch(

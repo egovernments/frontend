@@ -27,9 +27,9 @@ import { changeStep } from "../viewBillResource/footer";
 // const properyDetailsHeader = getCommonSubHeader({
 //   labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
 // });
-export const propertyHeader= getCommonSubHeader({
+export const propertyHeader = getCommonSubHeader({
   labelKey: "WS_COMMON_PROP_DETAIL",
-  labelName:"Property Details"
+  labelName: "Property Details"
 })
 
 export const propertyID = getCommonContainer({
@@ -79,7 +79,7 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath:
-      "WaterConnection[0].property.propertyTypeData"
+        "WaterConnection[0].property.propertyTypeData"
     }
   ),
   propertyUsageType: getLabelWithValue(
@@ -91,7 +91,7 @@ const propertyDetails = getCommonContainer({
   propertySubUsageType: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL",
-      labelName:"Property Sub Usage Type"
+      labelName: "Property Sub Usage Type"
     },
     { jsonPath: "WaterConnection[0].property.usageCategory" }
   ),
@@ -106,7 +106,7 @@ const propertyDetails = getCommonContainer({
   numberOfFloors: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL",
-      labelName:"Number Of Floors"
+      labelName: "Number Of Floors"
     },
     { jsonPath: "WaterConnection[0].property.usageCategory" }
   ),
