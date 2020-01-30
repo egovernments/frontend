@@ -120,8 +120,7 @@ class GlobalFilter extends Component {
                         tenentObj[t.name] = t.code
                         tenentName.push(t.name)
                         console.log(tenentName)
-                        console.log(tenentObj)
-                        console.log(data)
+                        console.log(tenentObj)                       
                     }
 
                 })
