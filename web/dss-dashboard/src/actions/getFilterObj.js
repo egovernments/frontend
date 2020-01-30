@@ -1,5 +1,5 @@
 import _ from 'lodash';
-
+import CONFIG from '../config/configs';
 export default function getFilterObj(GFilterData, globalFilterData, page) {
     let newGFilterData = _.cloneDeep(GFilterData);
 
@@ -42,7 +42,17 @@ export default function getFilterObj(GFilterData, globalFilterData, page) {
         _.set(filters, 'duration.title', title)
         _.set(filters, 'duration.interval', interval)
     }
-
+    if(page){
+        let dashKey ='';
+        for(var i=0; i<CONFIG.MODULE_LEVEL.length;i++){
+            dashKey = Object.keys(CONFIG.MODULE_LEVEL[i])[0];
+            if(dashKey.toLowerCase() == page.toLowerCase() || 'ulb-'+dashKey == page.toLowerCase()){
+                filters['modulelevel'] = CONFIG.MODULE_LEVEL[i][dashKey];
+                break;
+            }
+        }
+    }
+    /*
     switch (_.toLower(page)) {
         case 'propertytax':
         case 'ulb-propertytax':
@@ -59,12 +69,12 @@ export default function getFilterObj(GFilterData, globalFilterData, page) {
         case 'ulb-pgr':
             filters['modulelevel'] = 'PGR';
             break;
-        case 'w&s':
-        case 'ulb-w&s':
+        case 'ws':
+        case 'ulb-ws':
             filters['modulelevel'] = 'W&S';
             break;
 
-    }
+    }*/
     if (newGFilterData && newGFilterData['Services'] && newGFilterData['Services'].length > 0) {
         filters['modulelevel'] = newGFilterData['Services'];
     }
