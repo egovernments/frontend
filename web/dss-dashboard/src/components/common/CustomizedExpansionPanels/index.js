@@ -41,7 +41,7 @@ class CustomizedExpansionPanels extends React.Component {
               <div style={{textAlign:'left', wordWrap: 'break-word',wordBreak:'break-word'}}>{data.name}  </div>
             </Grid>
             <Grid item xs={1}>
-              <div onClick={this.onEditClick}><CustomInfo data={strings[data]||data} /></div>
+              <div onClick={this.onEditClick}><CustomInfo data={strings[data.name]||data.name} /></div>
             </Grid>
           </Grid>
                       
