@@ -36,9 +36,9 @@ export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-        labelKey: `WS_APPLY_NEW_CONNECTION_HEADER ${process.env.REACT_APP_NAME === "Citizen" ? "(" + getCurrentFinancialYear() + ")" : ""}`,
-        dynamicArray: [getCurrentFinancialYear()],
-        labelKey: "WS_APPLY_NEW_CONNECTION_HEADER"
+        // labelKey: `WS_APPLY_NEW_CONNECTION_HEADER ${process.env.REACT_APP_NAME === "Citizen" ? "(" + getCurrentFinancialYear() + ")" : ""}`,
+        // dynamicArray: [getCurrentFinancialYear()],
+        labelKey: process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
       })
       :
       {},
