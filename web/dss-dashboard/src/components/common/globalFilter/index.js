@@ -87,23 +87,21 @@ class GlobalFilter extends Component {
         let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.TENENTS, req, '');
         TenentTransporter(tenentAPI);
 
-        let tenentName = []
-        let tenentObj = {}
+        // let tenentName = []
+        // let tenentObj = {}
 
-        if (tenentCode && tenentCode !== 'null') {
-            let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[1] : ''
+        // if (tenentCode && tenentCode !== 'null') {
+        //     let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[1] : ''
 
-            if (tenent && tenent !== 'null') {
-                let data = tenent[0].toUpperCase() + tenent.slice(1)
-                tenentObj[data] = tenentCode
-                tenentName.push(data)
+        //     if (tenent && tenent !== 'null') {
+        //         let data = tenent[0].toUpperCase() + tenent.slice(1)
+        //         tenentObj[data] = tenentCode
+        //         tenentName.push(data)
 
-                this.setState({ tenants: tenentObj, tenentName: tenentName })
-                console.log(tenentName)
-                console.log(tenentObj)
-                console.log(data)
-            }
-        }
+        //         this.setState({ tenants: tenentObj, tenentName: tenentName })
+               
+        //     }
+        // }
 
     }
 
@@ -116,8 +114,16 @@ class GlobalFilter extends Component {
             let tenentObj = {}
             if (tenants && Array.isArray(tenants)) {
                 tenants.map((t) => {
-                    tenentObj[t.name] = t.code
-                    tenentName.push(t.name)
+                    console.log(t.code)
+                    console.log(t.name)
+                    if(t.code === `${localStorage.getItem('tenant-id')}`) {
+                        tenentObj[t.name] = t.code
+                        tenentName.push(t.name)
+                        console.log(tenentName)
+                        console.log(tenentObj)
+                        console.log(data)
+                    }
+
                 })
 
                 this.setState({ tenants: tenentObj, tenentName: tenentName })
