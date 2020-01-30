@@ -1792,15 +1792,41 @@ export const getDocList = (state, dispatch) => {
   });
 
   // selectedTypes[0] &&
-  //
+  
+  let selectedTypes1 = [[{
+    "code": "GOODS.RETAIL.TST-82",
+    "uom": null,
+   "applicationDocument" : [
+  {
+  "applicationType" : "NEW",
+  "documentList" : ["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"]
+  },
+  {
+  "applicationType" : "RENEWAL",
+  "documentList" : ["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO", "OLDLICENCENO"]
+  }
+],
+    "verificationDocument": [],
+    "active": true,
+    "type": "TL"
+  }]];
   let applicationDocArray = [];
+  console.log(">>>>>>s",selectedTypes)
+  console.log(">>>>>>s",selectedTypes1)
 
-  selectedTypes.forEach(tradeSubTypeDoc => {
+  selectedTypes1.forEach(tradeSubTypeDoc => {
+   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "renew" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
+   console.log("yhi dekhna hai",applicationarrayTemp)
     applicationDocArray = [
       ...applicationDocArray,
-      ...tradeSubTypeDoc[0].applicationDocument
+      ...applicationarrayTemp 
+     // ...tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList
+    //  ...tradeSubTypeDoc[0].applicationDocument
+ // getQueryArg(window.location.href , "action") === "renew" ? {...tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList} : {...tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList},
     ];
   });
+
+  console.log("yeahhb1",applicationDocArray)
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
