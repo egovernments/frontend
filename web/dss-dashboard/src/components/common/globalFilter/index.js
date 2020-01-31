@@ -148,7 +148,7 @@ class GlobalFilter extends Component {
                             if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
                                 tenantsBoundryObjChildren.children.map((children) => {
 
-                                    revenueBoundaryObj[children.name] = children.code
+                                    revenueBoundaryObj[children.name] = children.name
                                     revenueName.push(children.name)
                                 })
                             }
@@ -160,7 +160,7 @@ class GlobalFilter extends Component {
                             let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
                             if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
                                 tenantsBoundryObjChildren.children.map((children) => {
-                                    wardObj[children.name] = children.code
+                                    wardObj[children.name] = children.name
                                     adminName.push(children.name)
                                 })
                             }
