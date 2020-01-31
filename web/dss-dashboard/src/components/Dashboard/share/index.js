@@ -225,9 +225,9 @@ class CustomizedShare extends Component {
                             }
                         })
                     }
-                    var n = file.lastIndexOf("https");
-                    image = file.substr(n, file.length-1)
-                    console.log(image)
+                    // var n = file.lastIndexOf("https");
+                    // image = file.substr(n, file.length-1)
+                    // console.log(image)
                 } else {
                     image = file
                     console.log(image)
