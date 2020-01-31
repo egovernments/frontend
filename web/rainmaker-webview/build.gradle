@@ -93,7 +93,7 @@ android {
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
-			resValue "string", "app_name", "UAT mSeva-Punjab"
+			resValue "string", "app_name", "UAT mSeva-Bihar"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 			signingConfig signingConfigs.Citizen
 
@@ -106,7 +106,7 @@ android {
 			//UAT
 			//buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/citizen/user/register"'
 
-			buildConfigField 'String', 'url', '"https://uttarakhand-uat.egovernments.org/citizen/user/register"'
+			buildConfigField 'String', 'url', '"https://bihar-uat.egovernments.org/common/"'
 
 		}
 		EmployeeUAT {
