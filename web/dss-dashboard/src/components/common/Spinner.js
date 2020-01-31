@@ -25,7 +25,7 @@ class CircularIndeterminate extends React.Component {
                         position: 'relative',
                         textAlign: 'center',
                         top: '40%',
-                        color:"black"
+                        color:"#fe7a51"
                     }} />
                 </div>
                 }
