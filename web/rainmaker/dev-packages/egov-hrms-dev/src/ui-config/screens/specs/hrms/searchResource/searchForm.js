@@ -173,6 +173,24 @@ export const searchForm = getCommonCard({
         moduleName: "common-masters",
         masterName: "Designation"
       }
+    }),
+     mobileNumber: getTextField({
+      label: {
+        labelName: "Mobile No",
+        labelKey: "HR_MOB_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Mobile No",
+        labelKey: "HR_MOB_NO_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: getPattern("MobileNo"),
+      errorMessage: "ERR_HRMS_INVALID_MOB_NO",
+      jsonPath: "searchScreen.phone"
     })
   }),
 
