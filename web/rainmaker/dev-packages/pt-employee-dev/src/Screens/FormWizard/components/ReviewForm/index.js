@@ -73,13 +73,21 @@ class ReviewForm extends Component {
     let { showRebateBox } = this.state;
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
     const { generalMDMSDataById = {} } = this.props;
-    
+
     return (
       <div>
         <Card
           textChildren={
             <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-              {estimationDetails&&estimationDetails.length>0&&<PropertyTaxDetailsCard
+              <div>
+                <Label
+                  labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                  label={'PT_APPLICATION_SUMMARY'}
+                  fontSize="20px"
+                />
+
+              </div>
+              {estimationDetails && estimationDetails.length > 0 && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 addRebateBox={addRebateBox}
