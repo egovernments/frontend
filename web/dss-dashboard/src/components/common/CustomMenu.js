@@ -140,6 +140,7 @@ class CustomizedMenus extends Component {
 
     downloadPDF = () => {
         // this.props.APITrans(true)
+        console.log('*****************************',this.props.mdmsData)
         let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
         printDocument(pdfDetails.logo,pdfDetails.headerText, this.props.strings[this.props.fileName] || this.props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")

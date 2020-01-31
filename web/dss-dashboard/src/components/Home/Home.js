@@ -25,6 +25,7 @@ import FilterIcon from '@material-ui/icons/FilterList';
 import Button from '@material-ui/core/Button';
 import Menu from '../common/CustomMenu'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
+import mdmsAPI from '../../actions/mdms/mdms';
 
 class Home extends React.Component {
     constructor(props) {
@@ -97,14 +98,14 @@ class Home extends React.Component {
         let pageId = ''
         let moduleLevel = ''
 
-        if(data){
-            if(data.ref && data.ref.url) {
+        if (data) {
+            if (data.ref && data.ref.url) {
                 pageId = data.ref.url
             }
             console.log(data.moduleLevel)
-            if(data.moduleLevel) {
+            if (data.moduleLevel) {
                 moduleLevel = data.moduleLevel
-                if(!filters['modulelevel']) {
+                if (!filters['modulelevel']) {
                     filters.modulelevel = data.moduleLevel
                 }
             }
@@ -216,6 +217,10 @@ class Home extends React.Component {
         this.setState({
             filter: newFilterData
         })
+
+        let mdmsApi = new mdmsAPI(20000);
+        this.props.APITransport(mdmsApi);
+
         this.callDashboardAPI();
     }
 
