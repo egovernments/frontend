@@ -5,6 +5,8 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
+import store from "ui-redux/store";
+import {setRoute} from "egov-ui-kit/redux/app/actions";
 import {
   getLocalization,
   getTenantId
@@ -119,6 +121,7 @@ export const searchPropertyTable = {
   componentPath: "Table",
   visible: false,
   props: {
+    className:"propertyTab",
     // data: [],
     columns: [
       getTextToLocalMapping("Property Tax Unique Id"),
@@ -184,6 +187,7 @@ export const searchApplicationTable = {
   componentPath: "Table",
   visible: false,
   props: {
+    className:"appTab",
     // data: [],
     columns: [
       getTextToLocalMapping("Application No"),
@@ -254,8 +258,8 @@ const onPropertyTabClick = (rowData,dispatch) => {
       break;
     default:
      // window.location.href = `search-preview?applicationNumber=${
-      window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
-      //dispatch(setRoute(`/property-tax/property/${rowData[0]}/${rowData[6]}`));
+     // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
+      store.dispatch(setRoute(`/property-tax/property/${rowData[0]}/${rowData[6]}`));
     //   rowData[0]
     // }&tenantId=${rowData[6]}`; 
       break;
@@ -264,15 +268,12 @@ const onPropertyTabClick = (rowData,dispatch) => {
 
 const onApplicationTabClick = (rowData,dispatch) => {
   if (rowData[5]==="INITIATED") {
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+      window.location.href = `apply?applicationNumber=${rowData[1]}&tenantId=${
         rowData[6]
       }`;
   }
     else{
-     // window.location.href = `search-preview?applicationNumber=${
-      window.location.pathname=`property-tax/property/${rowData[1]}/${rowData[6]}`;
-      //dispatch(setRoute(`/property-tax/property/${rowData[0]}/${rowData[6]}`));
-    //   rowData[0]
-    // }&tenantId=${rowData[6]}`; 
+      // store.dispatch(setRoute(`/property-tax/property/${rowData[1]}/${rowData[6]}`));
+      store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1]}&applicationNumber=PB-FN-2019-07-11-002180&tenantId=${rowData[6]}`));
   }
 };
