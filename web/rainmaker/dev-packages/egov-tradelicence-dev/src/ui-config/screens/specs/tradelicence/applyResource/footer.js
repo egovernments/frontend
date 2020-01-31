@@ -579,7 +579,7 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
-export const footerTLR =(status,dispatch,applicationNumber,tenantId)=> getCommonApplyFooter({
+export const footerTLR =(status,dispatch,applicationNumber,tenantId,financialYear)=> getCommonApplyFooter({
   //visible:getButtonVisibility(status, "APPROVE"),
   editButton: {
      componentPath: "Button",
@@ -647,6 +647,15 @@ export const footerTLR =(status,dispatch,applicationNumber,tenantId)=> getCommon
        }
      },
      onClickDefination: {
+      action: "condition",
+      callBack: () => {
+        dispatch(
+          setRoute(
+           // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+           `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}`
+          )
+        );
+      },
       
      },
      visible:getButtonVisibility(status, "APPROVED"),
@@ -659,7 +668,8 @@ export const footerReview = (
   dispatch,
   status,
   applicationNumber,
-  tenantId
+  tenantId,
+  financialYear
 ) => {
   /** MenuButton data based on status */
   let downloadMenu = [];
@@ -948,6 +958,15 @@ export const footerReview = (
                 }
               },
               onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}`
+                    )
+                  );
+                },
                
               },
               visible:getButtonVisibility(status, "APPROVED"),

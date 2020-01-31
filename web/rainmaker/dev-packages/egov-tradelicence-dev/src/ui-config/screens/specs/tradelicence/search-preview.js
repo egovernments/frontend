@@ -174,6 +174,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
+    
+    const financialYear = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
+    );
    
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
@@ -275,10 +280,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       dispatch,
       status,
       applicationNumber,
-      tenantId
+      tenantId,
+      financialYear
     );
     
-    const footerr=footerTLR(status,dispatch,applicationNumber,tenantId)
+    const footerr=footerTLR(status,dispatch,applicationNumber,tenantId,financialYear)
 
     
     process.env.REACT_APP_NAME === "Citizen"
@@ -428,7 +434,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    const status = getQueryArg(window.location.href, "status");
+    // const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
@@ -437,16 +443,20 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
     );
-    if (status !== "pending_payment") {
-      set(
-        action.screenConfig,
-        "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
-        false
-      );
-    }
+    const status = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].status"
+    );
+    // if (status !== "pending_payment") {
+    //   set(
+    //     action.screenConfig,
+    //     "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
+    //     false
+    //   );
+    // }
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
+      { key: "businessServices", value: status === "APROVED" ? "RenewTL" :  "NewTL" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
