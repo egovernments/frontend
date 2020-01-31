@@ -215,7 +215,7 @@ class CustomizedShare extends Component {
             if (file) {
                 if ((file.match(new RegExp("https", "g")) || []).length > 1) {
                     var n = file.lastIndexOf("https");
-                    image = file.substr(n, file.length)
+                    image = file.substr(n, 0)
                     console.log(image)
                 } else {
                     image = file
