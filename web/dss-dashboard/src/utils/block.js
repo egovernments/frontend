@@ -300,6 +300,7 @@ const addPages = (elem, cityLogo,pdfHeader) => {
 }
 
 export const printDocument = (cityLogo,pdfHeader, name) => {
+    console.log('----------city Logo-----------',cityLogo)
     cityLogo = (cityLogo)?cityLogo.replace('https://s3.ap-south-1.amazonaws.com',window.location.origin):cityLogo;
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {
