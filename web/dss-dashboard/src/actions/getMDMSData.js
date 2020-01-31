@@ -1,11 +1,13 @@
 import _ from 'lodash';
 
 export default function getMDMSData(tenants){
-let tempDRRsObj = {},tempDDRs=[],tenantId = "",tenantLogo ={},tenantName='',corpName = '';
+let tempDRRsObj = {},tempDDRs=[],tempULBS=[],tenantId = "",tenantLogo ={},tenantName='',corpName = '';
 _.each(tenants,(v,k) => {
 
-    if(v.code)
+    if(v.code){
         tenantLogo[v.code] = v.logoId;
+        tempULBS.push(v.name);
+    }
     if(v.code === localStorage.getItem('tenant-id'))
         tenantName = v.name;
     if(v.city.ddrName){     
@@ -34,6 +36,12 @@ return {
     master : tempDRRsObj,
     tentantLogo : tenantLogo,
     tenantName : tenantName,
-    corpName : corpName
+    corpName : corpName,
+    ULBS :{
+        label: "ULBS",
+        label_locale: "DSS_ULBS",
+        type: "dropdown",
+        values : tempULBS
+    }
 }
 };
