@@ -92,7 +92,7 @@ class Home extends React.Component {
     renderChart(data, index) {
         let { chartLabelName } = this.state;
         let { classes, strings } = this.props;
-        let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, this.state.page);
+        let filters = getFilterObj(this.props.GFilterData, this.props.mdmsData, this.state.page);
         let bgColor = Variables.colors[index].light
         let iconColor = Variables.colors[index].dark
         let pageId = ''
@@ -281,7 +281,7 @@ class Home extends React.Component {
 const mapStateToProps = state => ({
     strings: state.lang,
     dashboardConfigData: state.firstReducer.dashboardConfigData,
-    globalFilterData: state.globalFilter,
+    mdmsData: state.mdmsData,
     GFilterData: state.GFilterData
 });
 

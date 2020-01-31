@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-import CONFOGS from '../config/configs';
+import CONFIGS from '../config/configs';
 import C from './constants';
 
 export const changeTheName = () => dispatch => {
@@ -18,7 +18,7 @@ export const receiveDashBoardConfigData = (data) => dispatch => {
 
 export const loadDashboardConfigData = () => dispatch => {
     //dispatch(requestPosts(subreddit))
-    return fetch(CONFOGS.DEMO_API_URL + '/dbC_50b45a596a96780b3757')
+    return fetch(CONFIGS.API_URL + '/dbC_50b45a596a96780b3757')
         .then(response => {
             return response.json();
         }).then(data => {

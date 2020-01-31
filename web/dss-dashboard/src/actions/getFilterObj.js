@@ -1,17 +1,17 @@
 import _ from 'lodash';
 import CONFIG from '../config/configs';
-export default function getFilterObj(GFilterData, globalFilterData, page) {
+export default function getFilterObj(GFilterData, mdmsData, page) {
     let newGFilterData = _.cloneDeep(GFilterData);
 
     /* Filter Customization */
     let tempValue = [],
         filters = {};
     if (newGFilterData) {
-        if (newGFilterData['DDRs'] && newGFilterData['DDRs'].length > 0) {
+        if (!_.isEmpty(mdmsData, true) &&  newGFilterData['DDRs'] && newGFilterData['DDRs'].length > 0) {
             let tvalue = newGFilterData['DDRs'];
             let tempDDR = []
             for (var i = 0; i < tvalue.length; i++) {
-                tempDDR = globalFilterData[1]['master'][tvalue[i]];
+                tempDDR = mdmsData['master'][tvalue[i]];
                 for (var j = 0; j < tempDDR.length; j++) {
                     tempValue.push(tempDDR[j]);
                 }

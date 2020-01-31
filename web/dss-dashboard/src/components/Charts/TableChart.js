@@ -41,7 +41,7 @@ class TableChart extends Component {
         if(filterList[v] && filterList[v].length >0){
           tempFL = filterList[v][filterList[v].length - 1];
             if(tempFL[2]['column'] == 'DDRs'){
-              let tempDDR = this.props.globalFilterData[1]['master'][tempFL[4]];
+              let tempDDR = this.props.mdmsData['master'][tempFL[4]];
                   for (var j = 0; j < tempDDR.length; j++) {
                     ttest.push(tempDDR[j]);
                   }
@@ -307,7 +307,7 @@ const mapStateToProps = (state) => {
     dncData: state.DemandAndCollectionData,
     GFilterData: state.GFilterData,
     chartsData: state.chartsData,
-    globalFilterData:state.globalFilter,
+    mdmsData:state.mdmsData,
     strings: state.lang
   }
 }

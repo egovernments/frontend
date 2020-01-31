@@ -90,7 +90,7 @@ class Dashboard extends Component {
   }
   callAll() {
     let { chartsData } = this.props;
-    let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, this.state.page);
+    let filters = getFilterObj(this.props.GFilterData, this.props.mdmsData, this.state.page);
 
     if(this.state.page.includes('ulb')) {
       if(!filters['tenantId']) {
@@ -311,7 +311,7 @@ class Dashboard extends Component {
 const mapStateToProps = (state) => {
   return {
     dashboardConfigData: state.firstReducer.dashboardConfigData,
-    globalFilterData: state.globalFilter,
+    mdmsData: state.mdmsData,
     GFilterData: state.GFilterData,
     chartsData: state.chartsData,
     strings: state.lang
