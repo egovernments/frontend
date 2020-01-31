@@ -29,7 +29,7 @@ class PageLayout extends Component {
     }
     render() {
         let { classes, chartRowData, displayName, page } = this.props;
-        let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, page);
+        let filters = getFilterObj(this.props.GFilterData, this.props.mdmsData, page);
         if(isMobile){
            chartRowData = this.getMobilechartRowData(chartRowData);
             return (
@@ -53,7 +53,7 @@ class PageLayout extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        globalFilterData: state.globalFilter,
+        mdmsData:state.mdmsData,
         GFilterData: state.GFilterData
     }
 }
