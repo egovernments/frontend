@@ -162,6 +162,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+console.log(state);
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
@@ -174,6 +175,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: status === "APPROVED" ? "RenewTL" :  "NewTL" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     
     const financialYear = get(
       state,
@@ -191,7 +197,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         dispatch
       );
     }
-
+  
+    
     const statusCont = {
       word1: {
         ...getCommonTitle(
@@ -304,10 +311,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
+     
 
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
   }
+ 
 };
 
 let titleText = "";
@@ -453,13 +462,9 @@ const screenConfig = {
     //     "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
     //     false
     //   );
-    // }
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: status === "APROVED" ? "RenewTL" :  "NewTL" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    // }  
     beforeInitFn(action, state, dispatch, applicationNumber);
+   
     return action;
   },
 
