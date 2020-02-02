@@ -35,7 +35,9 @@ export default class FIlterAPI extends API {
     }
 
     apiEndPoint(page) {
-        return `${super.apiEndPoint()}/v1/_get?masterName=tenants&moduleName=tenant&tenantId=pb`
+        let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+
+        return `${super.apiEndPoint()}/v1/_get?masterName=tenants&moduleName=tenant&tenantId=` + tenent
     }
 
     getHeaders() {

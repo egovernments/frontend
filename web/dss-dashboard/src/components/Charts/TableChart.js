@@ -117,7 +117,9 @@ class TableChart extends Component {
     let tempValue = rowData[drilfilters.column];
     // need to change now its hack.
     if(drilfilters.column != 'DDRs' && drilfilters.key == 'tenantId' && tempValue.split('.').length == 1){
-      tempValue = 'pb.'+tempValue.toLowerCase();
+      let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+
+      tempValue = tenent + '.'+tempValue.toLowerCase();
     }
     tabName = tabName.toUpperCase();
     let tempArr = [visualcode,drillCode,drilfilters,tabName,tempValue];
