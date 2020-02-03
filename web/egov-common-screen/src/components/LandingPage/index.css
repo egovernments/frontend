@@ -28,9 +28,10 @@
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
         height: 220px!important;
     }
-    .LandingPage-btn-105{
+    .LandingPage-btn-105,
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing > a{
         width: 40%!important;
-        padding: 2.5% 0%!important;
+        padding: 4.5% 5%!important;
     }
    
 }
@@ -46,17 +47,17 @@
         height: 420px!important;
     }
    .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing{
-        padding-top: 45px!important;
+        padding-top: 32px!important;
     }
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing{
-        padding-top: 45px!important; 
+        padding-top: 32px!important; 
     }
     #common-container > div:nth-child(1) > div > img{
         width:100%;
     }
     .LandingPage-btn-105{
-        width: 40%;
-        padding: 4.5% 5%;
+        width: 40%!important;
+        padding: 4.5% 5%!important;
     }
 }
 @media only screen and (max-width: 375px) {
