@@ -16,7 +16,8 @@
     }
 }
 @media only screen and (max-width: 978px) {
-    .LandingPage-root-104{
+    
+    .LandingPage-root-104, #common-container{
         overflow: scroll!important;
         padding: 15px!important;
     }
@@ -34,7 +35,7 @@
    
 }
 @media only screen and (max-width: 578px) {
-    .LandingPage-root-104{
+    .LandingPage-root-104,#common-container{
         overflow: scroll!important;
         padding: 15px!important;
     }
@@ -59,6 +60,10 @@
     }
 }
 @media only screen and (max-width: 375px) {
+    .LandingPage-root-104,#common-container{
+        overflow: scroll!important;
+        padding: 15px!important;
+    }
    .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root{
         height: 320px!important;
     }
