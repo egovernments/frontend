@@ -4,29 +4,15 @@
 .common-background{
     background-size: cover!important;
 }
-@media only screen and (max-width: 578px) {
-    .LandingPage-root-104{
-        overflow: scroll!important;
-        padding: 15px!important;
-    }
-    .MuiCard-root{
-        height: 450px!important;
-    }
+
+@media only screen and (max-width: 1200px) {
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div,
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
         height: 420px!important;
     }
-    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing{
-        padding-top: 80px!important;
-    }
-    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing{
-        padding-top: 50px!important; 
-    }
-    #common-container > div:nth-child(1) > div > img{
-        width:100%;
-    }
-    .LandingPage-btn-105{
-        width: 40%;
-        padding: 4.6% 5%;
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root,
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
+        height: 295px!important;
     }
 }
 @media only screen and (max-width: 978px) {
@@ -36,6 +22,55 @@
     }
     #common-container > div:nth-child(1) > div > img{
         width:100%;
+    }
+    .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root,
+    .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
+        height: 220px!important;
+    }
+    .LandingPage-btn-105{
+        width: 40%!important;
+        padding: 2.5% 0%!important;
+    }
+   
+}
+@media only screen and (max-width: 578px) {
+    .LandingPage-root-104{
+        overflow: scroll!important;
+        padding: 15px!important;
+    }
+    .MuiCard-root{
+        height: 450px!important;
+    }
+    .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 420px!important;
+    }
+   .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing{
+        padding-top: 45px!important;
+    }
+    .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing{
+        padding-top: 45px!important; 
+    }
+    #common-container > div:nth-child(1) > div > img{
+        width:100%;
+    }
+    .LandingPage-btn-105{
+        width: 40%;
+        padding: 4.5% 5%;
+    }
+}
+@media only screen and (max-width: 375px) {
+   .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root{
+        height: 320px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div,
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 500px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
+        height: 345px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing{
+        padding-top: 111px!important;
     }
 }
 
