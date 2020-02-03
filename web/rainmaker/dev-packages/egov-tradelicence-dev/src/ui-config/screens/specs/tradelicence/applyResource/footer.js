@@ -687,10 +687,6 @@ export const footerReview = (
         receiptPrintObject,
         applicationPrintObject
       ];
-      // renewalMenu=[
-      //   editObject,
-      //   submitObject
-      // ]
       break;
     case "APPLIED":
     case "CITIZENACTIONREQUIRED":
@@ -758,21 +754,6 @@ export const footerReview = (
                 }
               }
             },
-            // renewalMenu: {
-            //   uiFramework: "custom-atoms-local",
-            //   moduleName: "egov-tradelicence",
-            //   componentPath: "MenuButton",
-            //   props: {
-            //     data: {
-            //       label: {
-            //         labelName:"Renewal",labelKey:"TL_Renewal"},
-            //       leftIcon: "print",
-            //       rightIcon: "arrow_drop_down",
-            //       props: { variant: "outlined", style: { marginLeft: 10 } },
-            //       menu: renewalMenu
-            //     }
-            //   }
-            // } 
           },
           gridDefination: {
             xs: 12,
@@ -810,7 +791,85 @@ export const footerReview = (
                 rolePath: "user-info.roles",
                 roles: ["TL_CEMP", "CITIZEN"]
               }
-            },      
+            },  
+            editButton: {
+              componentPath: "Button",
+              props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "16px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                previousButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "keyboard_arrow_left"
+                  }
+                },
+                previousButtonLabel: getLabel({
+                  labelName: "Edit for Renewal",
+                  labelKey: "TL_RENEWAL_BUTTON_EDIT"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=edit`
+                    )
+                  );
+                },
+
+              },
+              visible:getButtonVisibility(status, "APPROVED"),
+            },
+            submitButton: {
+              componentPath: "Button",
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "45px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                nextButtonLabel: getLabel({
+                  labelName: "Submit for Renewal",
+                  labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
+                }),
+                nextButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "keyboard_arrow_right"
+                  }
+                }
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}`
+                    )
+                  );
+                },
+
+              },
+              visible:getButtonVisibility(status, "APPROVED"),
+            },    
           },
           gridDefination: {
             xs: 12,
