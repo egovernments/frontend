@@ -389,6 +389,50 @@ const getReceiptData = (transformedData, ulbLogo) => {
         },
         layout: tableborder
       },
+      { text: "PENALTY/REBATE REASON WITH COMMENTS", style: "pt-reciept-citizen-subheader" },
+      {
+        style: "pt-reciept-citizen-table",
+        table: {
+          widths: receiptTableWidth,
+          body: [
+            [
+              {
+                text: "Penalty Reason",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              { text: transformedData.adhocPenaltyReason, border: borderValue },
+              {
+                text: "Rebate Reason",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.adhocRebateReason,
+                border: borderValue
+              }
+            ],
+            [
+              {
+                text: "Penalty Comment",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              { text: transformedData.adhocPenaltyComment, border: borderValue },
+              {
+                text: "Rebate Comment",
+                border: borderKey,
+                style: "receipt-table-key"
+              },
+              {
+                text: transformedData.adhocRebateComment,
+                border: borderValue
+              }
+            ]
+          ]
+        },
+        layout: tableborder
+      },
       { text: "PAYMENT INFORMATION", style: "pt-reciept-citizen-subheader" },
       {
         style: "pt-reciept-citizen-table",
