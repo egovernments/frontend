@@ -7,7 +7,7 @@ import {
   getLocalization,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar ,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -241,16 +241,61 @@ const getAllFileStoreIds = async ProcessInstances => {
 };
 
 
-const getFileUrl = (linkText) => {
+export const getFileUrl = (linkText="") => {
   const linkList = linkText.split(",");
   let fileURL = '';
-  linkList.map(link => {
+  linkList&&linkList.map(link => {
     if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
       fileURL = link;
     }
   })
   return fileURL;
 }
+
+export const setDocuments = async (
+  payload,
+  sourceJsonPath,
+  destJsonPath,
+  dispatch,
+  businessService
+) => {
+  const uploadedDocData = get(payload, sourceJsonPath);
+
+  const fileStoreIds =
+    uploadedDocData &&
+    uploadedDocData
+      .map(item => {
+        return item.fileStoreId;
+      })
+      .join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  const reviewDocData =
+    uploadedDocData &&
+    uploadedDocData.map((item, index) => {
+      return {
+        title: `${businessService}_${item.documentType}` || "",
+        link:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            getFileUrl(fileUrlPayload[item.fileStoreId])) ||
+          "",
+        linkText: "View",
+        name:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            decodeURIComponent(
+              getFileUrl(fileUrlPayload[item.fileStoreId])
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`
+      };
+    });
+  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
+};
 
 
 export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
