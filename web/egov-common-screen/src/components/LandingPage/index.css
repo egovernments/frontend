@@ -4,7 +4,7 @@
 .common-background{
     background-size: cover!important;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 578px) {
     .LandingPage-root-104{
         overflow: scroll!important;
         padding: 15px!important;
@@ -24,6 +24,18 @@
     #common-container > div:nth-child(1) > div > img{
         width:100%;
     }
+    .LandingPage-btn-105{
+        width: 40%;
+        padding: 4.5% 5%;
+    }
 }
-
+@media only screen and (max-width: 978px) {
+    .LandingPage-root-104{
+        overflow: scroll!important;
+        padding: 15px!important;
+    }
+    #common-container > div:nth-child(1) > div > img{
+        width:100%;
+    }
+}
 
