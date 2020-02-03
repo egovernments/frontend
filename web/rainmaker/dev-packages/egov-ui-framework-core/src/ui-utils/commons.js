@@ -200,7 +200,7 @@ export const getLocaleLabels = (label, labelKey, localizationLabels) => {
 };
 
 export const replaceStrInPath = (inputString, search, replacement) => {
-  String.prototype.replaceAll = function(search, replacement) {
+  String.prototype.replaceAll = function (search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, "g"), replacement);
   };
@@ -240,6 +240,19 @@ const getAllFileStoreIds = async ProcessInstances => {
   );
 };
 
+
+const getFileUrl = (linkText) => {
+  const linkList = linkText.split(",");
+  let fileURL = '';
+  linkList.map(link => {
+    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
+      fileURL = link;
+    }
+  })
+  return fileURL;
+}
+
+
 export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
   const fileStoreIdByAction = await getAllFileStoreIds(ProcessInstances);
   const fileUrlPayload = await getFileUrlFromAPI(
@@ -250,11 +263,10 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
     if (item.documents && item.documents.length > 0) {
       item.documents.forEach(i => {
         if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
-          i.link = fileUrlPayload[i.fileStoreId].split(",")[0];
+          i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
           i.title = `TL_${i.documentType}`;
           i.name = decodeURIComponent(
-            fileUrlPayload[i.fileStoreId]
-              .split(",")[0]
+            getFileUrl(fileUrlPayload[i.fileStoreId])
               .split("?")[0]
               .split("/")
               .pop()
