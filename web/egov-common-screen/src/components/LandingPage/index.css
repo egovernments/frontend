@@ -4,3 +4,26 @@
 .common-background{
     background-size: cover!important;
 }
+@media only screen and (max-width: 600px) {
+    .LandingPage-root-104{
+        overflow: scroll!important;
+        padding: 15px!important;
+    }
+    .MuiCard-root{
+        height: 450px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 420px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing{
+        padding-top: 80px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing{
+        padding-top: 50px!important; 
+    }
+    #common-container > div:nth-child(1) > div > img{
+        width:100%;
+    }
+}
+
+

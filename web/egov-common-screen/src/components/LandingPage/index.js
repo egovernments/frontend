@@ -95,7 +95,7 @@ class LandingPage extends React.Component {
                 height: '100%',
                 background: `linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(${backgroundUrl}) no-repeat center`,
             }}>
-                <Grid container className={classes.root}>
+                <Grid container className={classes.root} id="common-container">
 
                     <Grid container style={{ marginBottom: "10px" }}>
                         <Grid item md={12} style={{ textAlign: "center" }}>
