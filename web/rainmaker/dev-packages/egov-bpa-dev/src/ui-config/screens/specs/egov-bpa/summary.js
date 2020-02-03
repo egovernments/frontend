@@ -4,7 +4,7 @@ import {
   getCommonHeader,
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField, } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrlFromAPI,
   getQueryArg,
@@ -23,6 +23,8 @@ import { footer } from "./summaryResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { generateBillForBPA } from "../utils/index";
+import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
+import { getAppSearchResults } from "../../../../ui-utils/commons";
 
 import { setResidentialList } from "../egov-bpa/searchResource/functions";
 
@@ -40,6 +42,37 @@ const header = getCommonContainer({
     }
   },
 });
+const setSearchResponse = async (
+  state,
+  dispatch,
+  applicationNumber,
+  tenantId, action
+) => {
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "applicationNos", value: applicationNumber }
+  ]);
+
+  const edcrNumber = response.Bpa["0"].edcrNumber;
+  const status = response.Bpa["0"].status;
+
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+    let edcrRes = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+      "search", []
+      );
+
+  dispatch(
+    prepareFinalObject(
+      `scrutinyDetails`,
+      edcrRes.edcrDetail[0]
+    )
+  );
+};
 
 const prepareDocumentsDetailsView = async (state, dispatch) => {
   let documentsPreview = [];
@@ -101,7 +134,7 @@ const screenConfig = {
   name: "summary",
   beforeInitScreen: (action, state, dispatch) => {
     let applicationNumber =
-      // getQueryArg(window.location.href, "applicationNumber") ||
+      getQueryArg(window.location.href, "applicationNumber") ||
       get(
         state.screenConfiguration.preparedFinalObject,
         "BPA.applicationNo"
@@ -112,6 +145,10 @@ const screenConfig = {
         state.screenConfiguration.preparedFinalObject,
         "BPA.address.city"
       );
+    let edcrNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.edcrNumber");
+    if (!edcrNumber) {
+      setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
+    } 
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
@@ -122,6 +159,41 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
       false
     );
+    let bpaStatus = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
+    if ((bpaStatus && bpaStatus === "INITIATED")) {
+      set(
+        action,
+        "screenConfig.components.div.children.footer.children.submitButton.visible",
+        false
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.footer.children.sendToCitizen.visible",
+        true
+      );
+    } else if ((bpaStatus && bpaStatus === "INPROGRESS")) {
+      set(
+        action,
+        "screenConfig.components.div.children.footer.children.submitButton.visible",
+        true
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.footer.children.sendToCitizen.visible",
+        false
+      );
+    } else {
+      set(
+        action,
+        "screenConfig.components.div.children.footer.children.submitButton.visible",
+        false
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.footer.children.sendToCitizen.visible",
+        false
+      );
+    }
     generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
     prepareNocDocumentsView(state, dispatch);
     prepareDocumentsDetailsView(state, dispatch);

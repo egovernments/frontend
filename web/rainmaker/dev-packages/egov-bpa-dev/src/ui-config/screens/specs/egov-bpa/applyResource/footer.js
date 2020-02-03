@@ -420,7 +420,7 @@ const callBackForNext = async (state, dispatch) => {
       }
       if (activeStep === 3) {
         // getMdmsData(state, dispatch);
-        // prepareDocumentsUploadData(state, dispatch);
+        // prepareDocumentsUploadData(state, dispatch); 
       }
       if (activeStep === 2) {
         let checkingOwner = get(
@@ -541,13 +541,6 @@ const callBackForNext = async (state, dispatch) => {
             labelName:
               "Please fill all mandatory fields for Plot & Boundary Details, then proceed!",
             labelKey: "Please fill all mandatory fields for Plot & Boundary Details, then proceed!"
-          };
-          break;
-        case 4:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Plot & Boundary Info Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
           };
           break;
       }
