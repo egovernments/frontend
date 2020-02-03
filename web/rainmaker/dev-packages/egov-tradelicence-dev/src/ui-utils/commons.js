@@ -378,8 +378,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
     if (queryObject[0].applicationNumber) {
       //call update
-      if((getQueryArg(window.location.href, "action") === "renew") )
-      set(queryObject[0], "applicationType", "RENEWAL");
+      if((getQueryArg(window.location.href, "action") === "renew") ){
+        set(queryObject[0], "applicationType", "RENEWAL");
+        set(queryObject[0], "workflowCode", "directRenewal");
+      }
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
@@ -434,7 +436,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //   action = "APPLY";
       // }
       set(queryObject[0], "action", action);
-      const isEditFlow = getQueryArg(window.location.href, "action") === "edit" || getQueryArg(window.location.href, "action") === "renew";
+      const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       !isEditFlow &&
         (await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject

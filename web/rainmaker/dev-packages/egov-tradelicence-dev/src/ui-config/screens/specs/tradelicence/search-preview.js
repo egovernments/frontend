@@ -19,7 +19,7 @@ import {
   getDialogButton
 } from "../utils";
 
-import { footerReview,footerTLR, downloadPrintContainer } from "./applyResource/footer";
+import { footerReview, downloadPrintContainer } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -175,11 +175,6 @@ console.log(state);
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: status === "APPROVED" ? "RenewTL" :  "NewTL" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     
     const financialYear = get(
       state,
@@ -291,12 +286,9 @@ console.log(state);
       financialYear
     );
     
-    const footerr=footerTLR(status,dispatch,applicationNumber,tenantId,financialYear)
-
-    
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
-      : set(action, "screenConfig.components.div.children.footer", footerr);
+      : set(action, "screenConfig.components.div.children.footer", {});
 
     // const userRoles = JSON.parse(getUserInfo()).roles;
     //   userRoles.map((userRole)=>{
@@ -456,6 +448,11 @@ const screenConfig = {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: "NewTL" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     // if (status !== "pending_payment") {
     //   set(
     //     action.screenConfig,

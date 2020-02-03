@@ -116,9 +116,30 @@ class Footer extends React.Component {
       handleFieldChange,
       onDialogButtonClick,
       dataPath,
-      moduleName
+      moduleName,
+      state,
+      dispatch
     } = this.props;
     const { open, data, employeeList } = this.state;
+    const status = get(
+      state,
+      `screenConfiguration.preparedFinalObject.Licenses.0.status`
+    );
+    const applicationNumber = get(
+      state,
+      `screenConfiguration.preparedFinalObject.Licenses.0.applicationNumber`
+    );
+    const tenantId= get(
+      state,
+      `screenConfiguration.preparedFinalObject.Licenses.0.tenantId`
+    );
+    const financialYear= get(
+      state,
+      `screenConfiguration.preparedFinalObject.Licenses.0.financialYear`
+    );
+
+    console.log("state",status)
+    console.log("statet",contractData)
     const downloadMenu =
       contractData &&
       contractData.map(item => {
@@ -131,6 +152,44 @@ class Footer extends React.Component {
           }
         };
       });
+      if(status=== "APPROVED"&&moduleName==="NewTL"){
+        
+        const editButton={
+          label:"Edit",
+          labelKey:"WF_TL_RENEWAL_BUTTON_EDIT",
+          link:()=>{  this.props.setRoute(
+           // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+           `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=renew`
+          );
+      
+      }}
+      downloadMenu && downloadMenu.push(editButton);
+        const submitButton={
+          label:"Submit",
+          labelKey:"WF_TL_RENEWAL_BUTTON_SUBMIT",
+          link:()=>{  this.props.setRoute(
+           // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+           `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}`
+          );
+      
+      }}
+      downloadMenu&&   downloadMenu.push(submitButton);
+
+        // const RenewalData = function(label, labelkey, link) {
+        //   return {
+        //   label:label,
+        //   labelkey:labelkey,
+        //   link:()=>{
+        //     this.openActionDialog(link)
+        //   }
+        //   };
+        // };
+        
+      
+        // downloadMenu.push(new RenewalData ("Edit","WF_TL_RENEWAL_BUTTON"));  
+      
+      }
+      
     const buttonItems = {
       label: { labelName : "Take Action", labelKey : "WF_TAKE_ACTION"},
       rightIcon: "arrow_drop_down",
