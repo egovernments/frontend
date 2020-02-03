@@ -965,6 +965,7 @@ class FormWizard extends Component {
           selected: index,
           formValidIndexArray: [...formValidIndexArray, selected]
         });
+        break;
         // createAndUpdate(index);
       case 4:
         if (estimation&&estimation.length&&estimation.length>1&&estimation[0].totalAmount < 0) {
@@ -1277,6 +1278,8 @@ class FormWizard extends Component {
           "Properties[0].propertyDetails[0].financialYear",
           financialYearFromQuery
         );
+      }else{
+        return;
       }
       if (selectedownerShipCategoryType === "SINGLEOWNER") {
         set(

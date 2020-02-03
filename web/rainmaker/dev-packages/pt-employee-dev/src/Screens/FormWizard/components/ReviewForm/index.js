@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Card, Dialog } from "components";
+import { Icon, Card, Dialog,Label } from "components";
 import AddRebateExemption from "./components/addRebateBox";
 import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
 import CalculationDetails from "./components/CalculationDetails";

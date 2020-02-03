@@ -1209,6 +1209,8 @@ class FormWizard extends Component {
           "Properties[0].propertyDetails[0].financialYear",
           financialYearFromQuery
         );
+      }else{
+        return;
       }
       if (selectedownerShipCategoryType === "SINGLEOWNER") {
         set(
