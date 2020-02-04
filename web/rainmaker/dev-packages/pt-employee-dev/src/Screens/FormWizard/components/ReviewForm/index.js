@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Icon, Card, Dialog,Label } from "components";
+import { Icon, Card, Dialog } from "components";
+import Label from "egov-ui-kit/utils/translationNode";
 import AddRebateExemption from "./components/addRebateBox";
 import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
 import CalculationDetails from "./components/CalculationDetails";
