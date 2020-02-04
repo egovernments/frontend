@@ -215,6 +215,7 @@ export const UCSearchCard = getCommonCard({
         style: {
           color: "#FE7A51",
           // backgroundColor: "#FE7A51",
+          marginBottom:10,
           border: "#FE7A51 solid 1px",
           borderRadius: "2px",
           width: window.innerWidth > 480 ? "80%" : "100%",
