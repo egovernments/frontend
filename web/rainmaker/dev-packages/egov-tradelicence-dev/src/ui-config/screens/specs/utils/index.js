@@ -1811,25 +1811,20 @@ export const getDocList = (state, dispatch) => {
     "type": "TL"
   }]];
   let applicationDocArray = [];
-  console.log(">>>>>>s",selectedTypes)
-  console.log(">>>>>>s",selectedTypes1)
-
   selectedTypes1.forEach(tradeSubTypeDoc => {
    const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "renew" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
-   console.log("yhi dekhna hai",applicationarrayTemp)
+   
     applicationDocArray = [
       ...applicationDocArray,
       ...applicationarrayTemp 
-     // ...tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList
-    //  ...tradeSubTypeDoc[0].applicationDocument
- // getQueryArg(window.location.href , "action") === "renew" ? {...tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList} : {...tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList},
     ];
   });
 
-  console.log("yeahhb1",applicationDocArray)
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
+
+  
   applicationDocArray = applicationDocArray.filter(onlyUnique);
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
@@ -1844,17 +1839,20 @@ export const getDocList = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     []
-  );
+  );  
   let applicationDocsReArranged =
     applicationDocs &&
     applicationDocs.length &&
-    applicationDocument.map(item => {
+    applicationDocument.reduce((acc,item) => {
       const index = applicationDocs.findIndex(
         i => i.documentType === item.name
       );
-      return applicationDocs[index];
-    });
-  applicationDocsReArranged &&
+      if(index >- 1){
+        acc.push(applicationDocs[index])
+      }       
+      return acc;
+    },[])
+    applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
