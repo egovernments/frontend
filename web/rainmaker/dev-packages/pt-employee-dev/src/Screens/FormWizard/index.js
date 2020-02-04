@@ -968,11 +968,25 @@ class FormWizard extends Component {
         break;
         // createAndUpdate(index);
       case 4:
+        let { assessedPropertyDetails1 = {} } = this.state;
+        const { Properties1 = [] } = assessedPropertyDetails1;
+        let propertyId1 = '';
+        let tenantId1 = '';
+        for (let pty of Properties1) {
+          propertyId1 = pty.propertyId1;
+          tenantId1 = pty.tenantId1;
+        }
         if (estimation&&estimation.length&&estimation.length>1&&estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
           window.scrollTo(0, 0);
-          createAndUpdate(index);
+          if(propertyId1!=''){
+            this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
+          }else{
+            this.props.history.push(`pt-acknowledgment?purpose=apply&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
+          }
+          // createAndUpdate(index);
+          // pt-acknowledgment?purpose=apply&status=success&applicationNumber=PB-TL-2019-12-20-003743&FY=2019-20&tenantId=pb.amritsar
         }
         break;
       case 5:
