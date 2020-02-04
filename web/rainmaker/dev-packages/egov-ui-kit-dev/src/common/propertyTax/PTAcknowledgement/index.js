@@ -97,6 +97,10 @@ class PTAcknowledgement extends React.Component {
     let downloadButton={menu:[],onClick:"",visibility:false};
     let printButton={menu:[],onClick:"",visibility:false};
     let statusIcon={};
+    let  ptIDLabel={
+      labelName: "Poperty ID",
+      labelKey: "PT_PROPERTY_ID",
+    }
 
     if (purpose === "apply" && status === "success") {
       
@@ -106,6 +110,7 @@ class PTAcknowledgement extends React.Component {
         labelKey: "PT_NEW_PROPERTY",
         dynamicArray: [financialYear]
       };
+     
       ptMsg={
         labelName: "New Property Application Submitted Successfully",
         labelKey: "PT_NEW_PROPERTY_SUCCESS_MSG",
@@ -279,7 +284,7 @@ class PTAcknowledgement extends React.Component {
                     style={{ fontSize: "16px", fontWeight: "400", color: "rgba(0, 0, 0, 0.6)" }}
                   >
                     <span>
-                      <Label label="Poperty ID" fontSize="16px" fontWeight="400" color="rgba(0, 0, 0, 0.6)" />
+                      <Label label={ptIDLabel.labelKey} fontSize="16px" fontWeight="400" color="rgba(0, 0, 0, 0.6)" />
                     </span>
                   </h1>
                   <h1
