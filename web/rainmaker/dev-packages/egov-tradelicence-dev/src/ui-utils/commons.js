@@ -352,7 +352,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //call update
       if((getQueryArg(window.location.href, "action") === "editRenewal") ){
         set(queryObject[0], "applicationType", "RENEWAL");
-        set(queryObject[0], "workflowCode", "directRenewal");
+        set(queryObject[0], "workflowCode", "editRenewal");
       }
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
