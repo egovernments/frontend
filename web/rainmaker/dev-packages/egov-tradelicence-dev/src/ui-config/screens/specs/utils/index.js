@@ -1793,25 +1793,8 @@ export const getDocList = (state, dispatch) => {
 
   // selectedTypes[0] &&
   
-  let selectedTypes1 = [[{
-    "code": "GOODS.RETAIL.TST-82",
-    "uom": null,
-   "applicationDocument" : [
-  {
-  "applicationType" : "NEW",
-  "documentList" : ["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"]
-  },
-  {
-  "applicationType" : "RENEWAL",
-  "documentList" : ["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO", "OLDLICENCENO"]
-  }
-],
-    "verificationDocument": [],
-    "active": true,
-    "type": "TL"
-  }]];
   let applicationDocArray = [];
-  selectedTypes1.forEach(tradeSubTypeDoc => {
+  selectedTypes.forEach(tradeSubTypeDoc => {
    const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "renew" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
    
     applicationDocArray = [
