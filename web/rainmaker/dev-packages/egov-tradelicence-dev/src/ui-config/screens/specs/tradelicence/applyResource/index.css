@@ -1,5 +1,5 @@
 @media only screen and (max-width: 768px) {
-  .apply-wizard-footer {
+  #custom-atoms-footer {
     text-align: right!important;
     background: #fff!important;
     
