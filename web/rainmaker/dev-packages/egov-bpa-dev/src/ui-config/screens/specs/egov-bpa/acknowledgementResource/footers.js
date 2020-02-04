@@ -62,6 +62,10 @@ export const applicationSuccessFooter = (
   let status = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].status") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.status"));
   let billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   let purpose = getQueryArg(window.location.href, "purpose");
+  let isTrue = false;
+  if(purpose == "APPLY") {
+    isTrue = true;
+  }
   return getCommonApplyFooter({
     gotoHome: {
       componentPath: "Button",
@@ -200,7 +204,7 @@ export const applicationSuccessFooter = (
         roles: ["CITIZEN"],
         action: "PAY"
       },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? ( (purpose !== "CITIZEN_APPROVAL_INPROCESS") || (purpose !== "SEND_TO_ARCHITECT") ) : false
+      visible: process.env.REACT_APP_NAME === "Citizen" ? isTrue : false
     }
   });
 };

@@ -309,13 +309,10 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
 
   let bpaDetails = get (state.screenConfiguration.preparedFinalObject, "BPA");
   let uploadedDocs = bpaDetails.documents;
-
- if(uploadedDocs && uploadedDocs.length > 0) {
-  let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
-  let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
- }
   
   if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
     uploadedDocs.forEach(upDoc => {
       bpaDocs.forEach(bpaDoc => {
         let bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
