@@ -692,7 +692,7 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }else if (purpose === "renew" && status === "success") {
+  }else if ((purpose === "editRenewalal" || purpose === "directRenewal") && status === "success") {
     return {
       header: getCommonHeader({
         labelName: `Application for Trade License Renewal ${financialYearText}`,

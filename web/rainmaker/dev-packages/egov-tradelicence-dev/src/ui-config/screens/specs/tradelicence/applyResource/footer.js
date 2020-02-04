@@ -353,7 +353,6 @@ export const changeStep = (
   mode = "next",
   defaultActiveStep = -1
 ) => {
-  const isRenewal = getQueryArg(window.location.href , "renew")
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
@@ -368,13 +367,7 @@ export const changeStep = (
       );
       activeStep = isDocsUploaded ? 3 : 2;
     } else {
-      if(isRenewal){
-        if(activeStep == 1){
-          // const upadtedApplication = "";
-          // prepareFinalObject(state , "")
-        }
-      }
-      activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
+        activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
   } else {
     activeStep = defaultActiveStep;

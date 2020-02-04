@@ -805,7 +805,7 @@ export const tradeOwnerDetails = getCommonCard({
     },
     
   },
-  {style:getQueryArg(window.location.href, "action") === "renew"? {"pointer-events":"none"}:{}}
+  {style:getQueryArg(window.location.href, "action") === "editRenewal"? {"pointer-events":"none"}:{}}
   ),
   
   OwnerInfoCard,

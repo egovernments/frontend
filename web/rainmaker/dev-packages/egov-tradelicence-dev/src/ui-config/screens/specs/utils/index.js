@@ -1794,8 +1794,8 @@ export const getDocList = (state, dispatch) => {
   // selectedTypes[0] &&
   
   let applicationDocArray = [];
-  selectedTypes.forEach(tradeSubTypeDoc => {
-   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "renew" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
+  selectedTypes1.forEach(tradeSubTypeDoc => {
+   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "editRenewal" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
    
     applicationDocArray = [
       ...applicationDocArray,
@@ -1806,8 +1806,6 @@ export const getDocList = (state, dispatch) => {
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
-
-  
   applicationDocArray = applicationDocArray.filter(onlyUnique);
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
