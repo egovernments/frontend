@@ -1,7 +1,7 @@
 @media only screen and (max-width: 768px) {
   .apply-wizard-footer {
     text-align: right!important;
-    background: #fff;
+    background: #fff!important;
     
   }
   .apply-wizard-footer #material-ui-nextButton{
