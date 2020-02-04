@@ -166,6 +166,7 @@ const routes = [
     needsAuthentication: true,
     options: {
       hideFooter: false,
+      hideTitle: true,
       // hideBackButton: true,
       // title: "PT_ACKNOWLEDGEMENT"
     }
