@@ -6,6 +6,10 @@
 }
 
 @media only screen and (max-width: 1200px) {
+    .LandingPage-btn-105,#login-button{
+        width: 40%!important;
+        padding: 3.5% 0%!important;
+    }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div,
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
         height: 420px!important;
@@ -28,8 +32,7 @@
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
         height: 220px!important;
     }
-    .LandingPage-btn-105,
-    #login-button{
+    .LandingPage-btn-105,#login-button{
         width: 40%!important;
         padding: 3.5% 0%!important;
     }
@@ -60,6 +63,7 @@
         padding: 4.5% 5%!important;
     }
 }
+
 @media only screen and (max-width: 375px) {
     .LandingPage-root-104,#common-container{
         overflow: scroll!important;
@@ -77,6 +81,13 @@
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing{
         padding-top: 111px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing{
+        padding-top: 68px!important;
+    }
+    .LandingPage-btn-105, #login-button {
+        width: 40%!important;
+        padding: 3.5% 7%!important;
     }
 }
 
