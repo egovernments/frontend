@@ -1,3 +1,18 @@
+@media only screen and (max-width: 768px) {
+  .apply-wizard-footer {
+    text-align: right!important;
+    background: #fff;
+    
+  }
+  .apply-wizard-footer #material-ui-nextButton{
+    margin-right: 15px!important;
+  }
+  .apply-wizard-footer #material-ui-previousButton{
+    margin-right: 0px!important;
+  }
+}
+
+
 @media only screen and (max-width: 551px) {
   .apply-wizard-footer {
     background-color: #ffffff;
