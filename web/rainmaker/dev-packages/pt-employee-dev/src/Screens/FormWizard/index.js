@@ -968,19 +968,23 @@ class FormWizard extends Component {
         break;
         // createAndUpdate(index);
       case 4:
-        let { assessedPropertyDetails1 = {} } = this.state;
-        const { Properties1 = [] } = assessedPropertyDetails1;
+        let { assessedPropertyDetails:asd = {} } = this.state;
+        const { Properties:pts = [] } = asd;
+        let { search:search1 } = this.props.location;
+
+        
+        let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
         let propertyId1 = '';
         let tenantId1 = '';
-        for (let pty of Properties1) {
-          propertyId1 = pty.propertyId1;
-          tenantId1 = pty.tenantId1;
+        for (let pty of pts) {
+          propertyId1 = pty.propertyId;
+          tenantId1 = pty.tenantId;
         }
         if (estimation&&estimation.length&&estimation.length>1&&estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
           window.scrollTo(0, 0);
-          if(propertyId1!=''){
+          if(isAssesment1){
             this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
           }else{
             this.props.history.push(`pt-acknowledgment?purpose=apply&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
