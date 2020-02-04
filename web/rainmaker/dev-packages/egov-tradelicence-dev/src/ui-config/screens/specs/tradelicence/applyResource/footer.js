@@ -829,7 +829,7 @@ export const footerReview = (
                   dispatch(
                     setRoute(
                      // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-                     `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=edit`
+                     `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
                     )
                   );
                 },
@@ -868,7 +868,7 @@ export const footerReview = (
                   dispatch(
                     setRoute(
                      // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-                     `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}&action=directRenewal`
                     )
                   );
                 },

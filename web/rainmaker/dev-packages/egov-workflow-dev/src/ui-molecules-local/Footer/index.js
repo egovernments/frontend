@@ -159,7 +159,7 @@ class Footer extends React.Component {
           labelKey:"WF_TL_RENEWAL_BUTTON_EDIT",
           link:()=>{  this.props.setRoute(
            // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-           `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=renew`
+           `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
           );
       
       }}
@@ -169,7 +169,7 @@ class Footer extends React.Component {
           labelKey:"WF_TL_RENEWAL_BUTTON_SUBMIT",
           link:()=>{  this.props.setRoute(
            // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-           `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}`
+           `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}&action=directRenewal`
           );
       
       }}
