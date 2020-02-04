@@ -43,4 +43,7 @@
   .wf-footer-button{
     min-width: 200px;
     }
+    .wf-footer-container{
+      justify-content: flex-end!important;
+    }
 }
