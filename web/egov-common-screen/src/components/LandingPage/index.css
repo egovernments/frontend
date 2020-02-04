@@ -22,17 +22,16 @@
         padding: 15px!important;
     }
     #common-container > div:nth-child(1) > div > img{
-        width:100%;
+        width:270px!important;
     }
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root,
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
         height: 220px!important;
     }
     .LandingPage-btn-105,
-    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing > a,
-    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing > a{
+    #login-button{
         width: 40%!important;
-        padding: 4.5% 5%!important;
+        padding: 3.5% 0%!important;
     }
    
 }
@@ -53,9 +52,9 @@
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing{
         padding-top: 32px!important; 
     }
-    #common-container > div:nth-child(1) > div > img{
+    /* #common-container > div:nth-child(1) > div > img{
         width:100%;
-    }
+    } */
     .LandingPage-btn-105{
         width: 40%!important;
         padding: 4.5% 5%!important;

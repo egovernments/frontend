@@ -136,7 +136,7 @@ class LandingPage extends React.Component {
 
                                 </CardContent>
                                 <CardActions  style={{ padding: "16px"}}>
-                                    <a href="/citizen" className={classes.btn}>
+                                    <a href="/citizen" className={classes.btn} id="login-button">
                                         लॉग इन / LOGIN
                                       </a>
                                 </CardActions>
@@ -170,7 +170,7 @@ class LandingPage extends React.Component {
                                     </List>
                                 </CardContent>
                                 <CardActions style={{ padding: "16px"}} >
-                                    <a href="/employee" className={classes.btn} >लॉग इन / LOGIN
+                                    <a href="/employee" className={classes.btn} id="login-button">लॉग इन / LOGIN
                              </a>
                                 </CardActions>
                             </Card>
