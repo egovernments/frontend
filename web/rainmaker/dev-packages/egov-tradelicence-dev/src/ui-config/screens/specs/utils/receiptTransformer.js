@@ -250,8 +250,19 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       value: consumerCode
     }
   ];
+   let queryObject1 = [
+    { key: "tenantId", value: tenant },
+    { key: "applicationNumber", value: consumerCode }
+  ];
   let response = await getReceiptData(queryObject);
-
+  let resp = await getSearchResults(queryObject1);
+  if (resp && resp.Licenses && resp.Licenses.length > 0) {
+    data.adhocPenaltyReason = getMessageFromLocalization(nullToNa(get(resp, "Licenses[0].tradeLicenseDetail.adhocPenaltyReason", "NA")));
+    data.adhocPenaltyComment = nullToNa(get(resp, "Licenses[0].tradeLicenseDetail.additionalDetail.penaltyComments", "NA"));
+    data.adhocRebateReason = getMessageFromLocalization(nullToNa(get(resp, "Licenses[0].tradeLicenseDetail.adhocExemptionReason", "NA")));
+    data.adhocRebateComment = nullToNa(get(resp, "Licenses[0].tradeLicenseDetail.additionalDetail.rebateComments", "NA"));
+ 
+  }
   if (response && response.Receipt && response.Receipt.length > 0) {
     data.receiptNumber = nullToNa(
       get(response, "Receipt[0].Bill[0].billDetails[0].receiptNumber", "NA")
