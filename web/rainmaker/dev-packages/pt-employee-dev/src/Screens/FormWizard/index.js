@@ -6,6 +6,7 @@ import {
   updateForms,
   handleFieldChange
 } from "egov-ui-kit/redux/form/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
@@ -957,7 +958,8 @@ class FormWizard extends Component {
           alert('Property Tax amount cannot be Negative!');
         } else {
           window.scrollTo(0, 0);
-          createAndUpdate(index);
+         // createAndUpdate(index);
+         this.assessProperty();
         }
         break;
       case 4:
@@ -1539,6 +1541,49 @@ class FormWizard extends Component {
       alert(e);
     }
   };
+
+  assessProperty=async()=>{
+    let propertyMethodAction= '_create';
+    const propertyId = getQueryArg(
+     window.location.href,
+     "propertyId"
+   );
+   const financialYear = getQueryArg(window.location.href, "FY");
+   const tenant = getQueryArg(window.location.href, "tenantId");
+    let assessment={
+     "tenantId": tenant,
+     "propertyId": propertyId,
+     "financialYear": financialYear,
+     "assessmentDate": new Date().getTime(),
+     "source": "MUNICIPAL_RECORDS",
+     "channel": "CFC_COUNTER",
+     "status": "ACTIVE"
+     
+    }
+   try {
+     
+     
+     let assessPropertyResponse = await httpRequest(
+       `property-services/assessment/${propertyMethodAction}`,
+       `${propertyMethodAction}`,
+       [],
+       {
+         Assessment: assessment
+       }
+     );
+     store.dispatch(
+       setRoute(
+         `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+         
+       )
+     );
+ 
+   } catch (e) {
+     hideSpinner();
+     this.setState({ nextButtonEnabled: true });
+     alert(e);
+   }
+  }
 
   pay = async () => {
     const { callPGService, callDraft } = this;

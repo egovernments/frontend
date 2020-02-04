@@ -98,4 +98,18 @@
    .button-container{
      right:0px !important;
    }
+   .mainContainer {
+     margin-top: 25% !important;
+     display: block !important;
+     div:nth-child(1){
+       div{
+         span{
+           line-height: 2 !important;
+         }
+       }
+     }
+   }
+   .printDownloadButton{
+     padding-left: 0px !important;
+   }
   }

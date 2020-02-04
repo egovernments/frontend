@@ -207,7 +207,7 @@ class PTAcknowledgement extends React.Component {
         <Label
           label={ptHeader&&ptHeader.labelKey}
           color="rgba(0, 0, 0, 0.87)"
-          fontSize="24px"
+          fontSize="22px"
           fontWeight="400"
           fontFamily="Roboto"
           dynamicArray={ptHeader.dynamicArray}
