@@ -46,19 +46,19 @@ class TotalDues extends React.Component {
           className="totaldues-tooltip-icon"
           val={data}
           icon={"info_circle"}
-          style={{ position: "absolute", left: "75%", padding: "4px", width: "30px", display: "inline-flex", top: "0px" }}
+          style={{ position: "absolute", left: "160px",  top: "30px" }}
         />
         <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
         </div>
         {totalBillAmountDue > 0 && (
           <div className="col-xs-6 col-sm-3 flex-child-button">
-            <TotalDuesButton
+            {/* <TotalDuesButton
               labelText="PT_TOTALDUES_VIEW"
               onClickAction={() => {
                 this.onClickAction(consumerCode, tenantId);
                 window.open(this.state.url);
               }}
-            />
+            /> */}
           </div>
         )}
         {totalBillAmountDue > 0 && (
