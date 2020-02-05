@@ -190,16 +190,12 @@ class Home extends React.Component {
                 dontShowHeader: false
             })
         }
-        console.log(window.location.pathname);
-        console.log(window.location.href);
 
         let path = ''
         if (window.location.pathname && window.location.pathname.includes('ulb-')) {
             path = 'ulb-home'
-            console.log("----setting path ul----", path)
         } else {
             path = 'home'
-            console.log("----setting path home----", path)
 
         }
         this.props.APITransport(dashboardApi, path || 'home');

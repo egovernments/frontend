@@ -44,7 +44,6 @@ class Dashboard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('dashboard fired', _.get(nextProps, 'match.params.viewAll'))
     let newUrl = _.get(nextProps, 'match.params.viewAll');
     if (newUrl && this.state.viewAll !== newUrl) {
       this.setState({

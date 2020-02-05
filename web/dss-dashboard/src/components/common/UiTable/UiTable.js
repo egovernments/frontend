@@ -216,7 +216,6 @@ class EnhancedTable extends React.Component {
     this.setState({ rowsPerPage: event.target.value, page: 0 });
     // const { order, orderBy, page } = this.state
     // let rowsPerPage = event.target.value
-    // // console.log(rowsPerPage, order, orderBy, page)
 
     // this.setState({ rowsPerPage: rowsPerPage }, state => {
     //   if (typeof this.props.callAPI === 'function') {

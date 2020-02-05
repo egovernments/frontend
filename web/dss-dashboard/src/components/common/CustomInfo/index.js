@@ -161,7 +161,6 @@ class CustomInfo extends React.Component {
         if (file) {
           if ((file.match(new RegExp("https", "g")) || []).length > 1) {
             var fileArr =  file.split(',');
-                    console.log(fileArr)
                     if(fileArr && fileArr.length>0) {                        
                       image = removeImageExtension(fileArr);
                     }

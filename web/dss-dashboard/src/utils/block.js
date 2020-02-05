@@ -108,7 +108,6 @@ const getImageData = (dataUrl) => {
 }
 
 const addPages = (elem, cityLogo,pdfHeader) => {
-    console.log(cityLogo)
     return new Promise((resolve, reject) => {
         if (isMobile) {
             html2canvas(document.getElementById('divToPrint'), {
@@ -185,14 +184,9 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                 .then(function (dataUrl) {
                     return getImageData(dataUrl).then(function (hw) {
                         if (cityLogo) {
-                            console.log('-----------------processing logo-------------------')
                             base64Img.requestBase64(cityLogo, function (err, res, body) {
-                                console.log('-------------processing body-----------------')
                                 if(err){
                                     console.log('--------------------',err)
-                                }
-                                if(body) {
-                                    console.log('--------------------',body)
                                 }
 
                                 var imgWidth = 210;
@@ -233,7 +227,6 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                                     }
                                     doc.addPage();
                                     doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 1, imgHeight);
-                                    console.log(heightLeft)
                                     index++;
                                     heightLeft -= pageHeight;
                                 }
@@ -300,7 +293,6 @@ const addPages = (elem, cityLogo,pdfHeader) => {
 }
 
 export const printDocument = (cityLogo,pdfHeader, name) => {
-    console.log('----------city Logo-----------',cityLogo)
     cityLogo = (cityLogo)?cityLogo.replace('https://s3.ap-south-1.amazonaws.com',window.location.origin):cityLogo;
     return new Promise(function (resolve, reject) {
         // getFilters(table).then(function(params) {

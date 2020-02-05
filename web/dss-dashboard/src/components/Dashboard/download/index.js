@@ -110,7 +110,6 @@ export function CustomizedMenus(props) {
         }.bind(this))
 
     }
-    // console.log(props)
     return (        
         <div>
             <Button style={{ borderRadius: '2px', border: 'solid 1px #5b5b5b', backgroundColor: "rgba(255, 255, 255, 0)", height: '32px' }}

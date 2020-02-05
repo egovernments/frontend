@@ -98,7 +98,6 @@ class CustomizedShare extends Component {
         var binary = atob(dataURI.split(',')[1]);
         var array = [];
         var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-        console.log(mimeString)
         for (var i = 0; i < binary.length; i++) {
             array.push(binary.charCodeAt(i));
         }
@@ -206,27 +205,20 @@ class CustomizedShare extends Component {
         if (prevProps.s3Image !== this.props.s3Image) {
             let image = ''
             let fileId = this.props.s3File.files && Array.isArray(this.props.s3File.files) && this.props.s3File.files.length > 0 && this.props.s3File.files[0] && this.props.s3File.files[0].fileStoreId
-            console.log(fileId)
-            console.log(this.props.s3Image[fileId])
 
             // let file = this.props.s3Image && this.props.s3Image.fileStoreIds && Array.isArray(this.props.s3Image.fileStoreIds) && this.props.s3Image.fileStoreIds.length > 0 && this.props.s3Image.fileStoreIds[0].url
             let file = this.props.s3Image && this.props.s3Image[fileId]
-            console.log(file)
             if (file) {
                 if ((file.match(new RegExp("https", "g")) || []).length > 1) {
                     var fileArr =  file.split(',');
-                    console.log(fileArr)
 
                     if(fileArr && fileArr.length>0) {
                        image = removeImageExtension(fileArr);
                     }
                     // var n = file.lastIndexOf("https");
                     // image = file.substr(n, file.length-1)
-                    // console.log(image)
                 } else {
                     image = file
-                    console.log(image)
-
                 }
                 var fakeLink = document.createElement('a');
                 var type = this.state.type;
