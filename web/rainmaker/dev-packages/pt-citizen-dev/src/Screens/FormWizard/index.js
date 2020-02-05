@@ -283,7 +283,7 @@ class FormWizard extends Component {
         },
         () => {
           {
-            if (activeTab === 4 && !isCompletePayment) {
+            if (activeTab >= 4 && !isCompletePayment) {
               this.estimate().then(estimateResponse => {
                 if (estimateResponse) {
                   this.setState({
