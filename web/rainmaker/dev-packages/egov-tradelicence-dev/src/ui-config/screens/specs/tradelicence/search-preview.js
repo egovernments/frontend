@@ -152,25 +152,16 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
-  //Fetch Bill and populate estimate card
-  // const code = get(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: tenantId }];
-  // // getBoundaryData(action, state, dispatch, queryObj, code);
+ 
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
-console.log(state);
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
 
-    // const status = getTransformedStatus(
-    //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
-    // );
+    
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
@@ -307,6 +298,12 @@ console.log(state);
 
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
+    const businessService = get(state.screenConfiguration.preparedFinalObject , "Licenses[0].workflowCode")
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: businessService ? businessService :  "NewTL" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   }
  
 };
@@ -443,25 +440,8 @@ const screenConfig = {
       action.screenConfig,
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
-    );
-    const status = get(
-      state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].status"
-    );
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    // if (status !== "pending_payment") {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
-    //     false
-    //   );
-    // }  
-    beforeInitFn(action, state, dispatch, applicationNumber);
-   
+    ); 
+    beforeInitFn(action, state, dispatch, applicationNumber);  
     return action;
   },
 

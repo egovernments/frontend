@@ -146,6 +146,10 @@ class Footer extends React.Component {
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].status`
     );
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].applicationType`
+    );
     const applicationNumber = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].applicationNumber`
@@ -171,7 +175,7 @@ class Footer extends React.Component {
           }
         };
       });
-    if (status === "APPROVED" && moduleName === "NewTL") {
+    if (status === "APPROVED" && applicationType !=="RENEWAL" &&  moduleName === "NewTL") {
       const editButton = {
         label: "Edit",
         labelKey: "WF_TL_RENEWAL_BUTTON_EDIT",

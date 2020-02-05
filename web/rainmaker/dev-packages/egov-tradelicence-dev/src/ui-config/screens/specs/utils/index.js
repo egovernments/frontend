@@ -1202,13 +1202,13 @@ const getBillingSlabData = async (
   }
 };
 
-const isApplicationPaid = currentStatus => {
-  let isPAID = false;
+const isApplicationPaid = (currentStatus,workflowCode) => {
+let isPAID = false;
 if(currentStatus==="CITIZENACTIONREQUIRED"){
   return isPAID;
 }
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
-    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
     const states = tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === currentStatus) {
@@ -1236,6 +1236,7 @@ export const createEstimateData = async (
   href = {},
   getFromReceipt
 ) => {
+  const workflowCode = get(LicenseData , "workflowCode") ? get(LicenseData , "workflowCode") : "NewTL"
   const applicationNo =
     get(LicenseData, "applicationNumber") ||
     getQueryArg(href, "applicationNumber");
@@ -1265,7 +1266,7 @@ export const createEstimateData = async (
     }
   ];
   const currentStatus = LicenseData.status;
-  const isPAID = isApplicationPaid(currentStatus);
+  const isPAID = isApplicationPaid(currentStatus,workflowCode);
   const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
