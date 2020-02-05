@@ -45,6 +45,7 @@ class GlobalFilter extends Component {
             wards: '',
             wardDefValue: [],
             dontShowWard: false,
+            tenentList: []
         }
         this.handleChanges = this.handleChanges.bind(this);
     }
@@ -64,7 +65,23 @@ class GlobalFilter extends Component {
     componentDidMount() {
         let tenentCode = `${localStorage.getItem('tenant-id')}` ? `${localStorage.getItem('tenant-id')}` : ''
 
-        console.log('---------------------------------------', this.props.dashboardConfigData)
+        // let userInfo = JSON.parse(`${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : '');
+        let userInfo = `${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : ''
+       
+        let tenentList = []
+        if (userInfo && userInfo['roles'] && Array.isArray(userInfo['roles']) && userInfo['roles'].length > 0) {
+            userInfo['roles'].map(role => {
+                if (!tenentList.includes(role.tenantId)) {
+                    tenentList.push(role.tenantId)
+                }
+            })
+            this.setState({ tenentList: tenentList })
+        } else {
+            tenentList.push(tenentCode)
+            this.setState({ tenentList: tenentList })
+        }
+
+
         let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
         let req = {
             "RequestInfo": {
@@ -100,7 +117,7 @@ class GlobalFilter extends Component {
         //         tenentName.push(data)
 
         //         this.setState({ tenants: tenentObj, tenentName: tenentName })
-               
+
         //     }
         // }
 
@@ -108,25 +125,35 @@ class GlobalFilter extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.tenents !== this.props.tenents) {
-            console.log('--------------------------------',this.props.tenents)
             // let tenentIds = _.chain(this.props).get("tenents").get('MdmsRes').get('tenant').get('tenants').map((ulb, index) => {
             let tenants = _.get(this.props.tenents, 'MdmsRes.tenant.tenants')
             let tenentName = []
             let tenentObj = {}
-            if (tenants && Array.isArray(tenants)) {
-                tenants.map((t) => {
-                    console.log(t.code)
-                    console.log(t.name)
-                    if(t.code === `${localStorage.getItem('tenant-id')}`) {
-                        tenentObj[t.name] = t.code
-                        tenentName.push(t.name)
-                        console.log(tenentName)
-                        console.log(tenentObj)                       
+            // if (tenants && Array.isArray(tenants)) {
+            //     tenants.map((t) => {
+            //         if (t.code === `${localStorage.getItem('tenant-id')}`) {
+            //             tenentObj[t.name] = t.code
+            //             tenentName.push(t.name)
+            //         }
+
+            //     })
+
+            //     this.setState({ tenants: tenentObj, tenentName: tenentName })
+            // }
+
+
+            if (this.state.tenentList && Array.isArray(this.state.tenentList) && this.state.tenentList.length > 0) {
+                this.state.tenentList.map(tenentVal => {
+                    if (tenants && Array.isArray(tenants) && tenants.length > 0) {
+                        tenants.map((t) => {
+                            if (tenentVal === t.code) {
+                                tenentObj[t.name] = t.code
+                                tenentName.push(t.name)
+                            }
+                        })
+                        this.setState({ tenants: tenentObj, tenentName: tenentName })
                     }
-
                 })
-
-                this.setState({ tenants: tenentObj, tenentName: tenentName })
             }
         }
 
@@ -179,7 +206,6 @@ class GlobalFilter extends Component {
     }
 
     handleChanges(open, target, value) {
-        console.log('=------------------------------------------', target, value)
         if (target) {
             let newFilterData = this.state.filterData;
             // let tempValue = value;
@@ -360,7 +386,7 @@ class GlobalFilter extends Component {
                             // width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
                             // width: isMobile ? '200px' : '150px'
                             //width: isMobile ? '100%' : '150px'
-                            maxWidth:isMobile?'100%':'210px'
+                            maxWidth: isMobile ? '100%' : '210px'
                         }}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">
@@ -576,7 +602,6 @@ class GlobalFilter extends Component {
 
         if (role) {
             if (role === 'Admin') {
-                // console.log('Admin calling')
                 return (
                     <Cards key="gf" fullW={true}>
                         <div className={classes.mainFilter}>
@@ -599,7 +624,7 @@ class GlobalFilter extends Component {
                                             {this.renderComponents(mdmsData.ULBS)}
                                         </div>
                                     );
-                                }else {
+                                } else {
                                     return (
                                         <div key={ro.label} className={`${classes.filterS} ${"GF_" + ro.label}`}>
                                             <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>
