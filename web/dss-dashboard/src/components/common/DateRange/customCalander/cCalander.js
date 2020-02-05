@@ -193,7 +193,7 @@ class CustomCalendar extends React.Component {
             <table className={classes.root}>
                 <thead className={classes.tableHead}>
                     <tr>
-                        <th colSpan="4">Select a Yeah</th>
+                        <th colSpan="4">Select a Year</th>
                     </tr>
                 </thead>
                 <tbody>{yearlist}</tbody>
