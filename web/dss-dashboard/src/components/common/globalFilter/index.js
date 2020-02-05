@@ -65,8 +65,8 @@ class GlobalFilter extends Component {
     componentDidMount() {
         let tenentCode = `${localStorage.getItem('tenant-id')}` ? `${localStorage.getItem('tenant-id')}` : ''
 
-        // let userInfo = JSON.parse(`${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : '');
-        let userInfo = `${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : ''
+        let userInfo = JSON.parse(`${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : '');
+        // let userInfo = `${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : ''
        
         let tenentList = []
         if (userInfo && userInfo['roles'] && Array.isArray(userInfo['roles']) && userInfo['roles'].length > 0) {
