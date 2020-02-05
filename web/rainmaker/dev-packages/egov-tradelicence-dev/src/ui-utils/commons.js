@@ -350,7 +350,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
     if (queryObject[0].applicationNumber) {
       //call update
-      if((getQueryArg(window.location.href, "action") === "editRenewal") ){
+      const isEditRenewal = getQueryArg(window.location.href, "action") === "editRenewal";
+      if(isEditRenewal ){
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
       }
@@ -374,26 +375,32 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       );
 
       let action = "INITIATE";
+      //Code for edit flow
+
       if (
         queryObject[0].tradeLicenseDetail &&
         queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
-        if (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "editRenewal") {
+
+
+        if (getQueryArg(window.location.href, "action") === "edit"|| isEditRenewal) {
         } else if (activeIndex === 1) {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
-      if(activeIndex ===3 && getQueryArg(window.location.href, "action") === "editRenewal")
-      action="APPLY";
-      set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
-      const isEditRenewal = getQueryArg(window.location.href, "action") === "editRenewal";
       let updateResponse = [];
       if(!isEditFlow){
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
       }
+      //Renewal flow
+
+      if(activeIndex === 3 && isEditRenewal){
+        action="APPLY";
+      }        
+      set(queryObject[0], "action", action);
 
       let updatedApplicationNo  = "";
       let updatedTenant = "";

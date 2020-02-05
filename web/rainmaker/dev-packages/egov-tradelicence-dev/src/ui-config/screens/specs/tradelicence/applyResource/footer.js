@@ -307,7 +307,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch);
+    isFormValid = await applyTradeLicense(state, dispatch,activeStep);
     if (isFormValid) {
       moveToSuccess(LicenseData, dispatch);
     }

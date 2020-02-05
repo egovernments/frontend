@@ -441,6 +441,11 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
     ); 
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: "NewTL" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);  
     return action;
   },
@@ -476,39 +481,6 @@ const screenConfig = {
                 sm: 4,
                 align: "right"
               },
-              // children:
-              //   process.env.REACT_APP_NAME === "Employee"
-              //     ? {}
-              //     : {
-              //       word1: {
-              //         ...getCommonTitle(
-              //           {
-              //             jsonPath: "Licenses[0].headerSideText.word1"
-              //           },
-              //           {
-              //             style: {
-              //               marginRight: "10px",
-              //               color: "rgba(0, 0, 0, 0.6000000238418579)"
-              //             }
-              //           }
-              //         )
-              //       },
-              //       word2: {
-              //         ...getCommonTitle({
-              //           jsonPath: "Licenses[0].headerSideText.word2"
-              //         })
-              //       },
-              //       cancelledLabel: {
-              //         ...getCommonHeader(
-              //           {
-              //             labelName: "Cancelled",
-              //             labelKey: "TL_COMMON_STATUS_CANC"
-              //           },
-              //           { variant: "body1", style: { color: "#E54D42" } }
-              //         ),
-              //         visible: false
-              //       }
-              //     }
             }
           }
         },
