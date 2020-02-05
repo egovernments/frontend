@@ -379,36 +379,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
         if (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "editRenewal") {
-          // const removedDocs = get(
-          //   state.screenConfiguration.preparedFinalObject,
-          //   "LicensesTemp[0].removedDocs",
-          //   []
-          // );
-          // set(queryObject[0], "tradeLicenseDetail.applicationDocuments", [
-          //   ...get(
-          //     state.screenConfiguration.prepareFinalObject,
-          //     "Licenses[0].tradeLicenseDetail.applicationDocuments",
-          //     []
-          //   ),
-          //   ...removedDocs
-          // ]);
         } else if (activeIndex === 1) {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
       if(activeIndex !=1 && getQueryArg(window.location.href, "action") === "editRenewal")
       action="APPLY";
-      // else if (
-      //   queryObject[0].tradeLicenseDetail &&
-      //   queryObject[0].tradeLicenseDetail.applicationDocuments &&
-      //   activeIndex === 1
-      // ) {
-      // } else if (
-      //   queryObject[0].tradeLicenseDetail &&
-      //   queryObject[0].tradeLicenseDetail.applicationDocuments
-      // ) {
-      //   action = "APPLY";
-      // }
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       const isEditRenewal = getQueryArg(window.location.href, "action") === "editRenewal";
@@ -424,14 +400,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       if(isEditRenewal && updateResponse && get(updateResponse , "Licenses[0]")){
         updatedApplicationNo =  get(updateResponse.Licenses[0] , "applicationNumber") ;
         updatedTenant = get(updateResponse.Licenses[0] , "tenantId");
+        const workflowCode = get(updateResponse.Licenses[0] , "workflowCode");
+        const bsQueryObject = [
+          { key: "tenantId", value: tenantId },
+          { key: "businessServices", value: workflowCode ? workflowCode :  "NewTL" }
+        ];
+        setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
       }else{
         updatedApplicationNo = queryObject[0].applicationNumber;
         updatedTenant = queryObject[0].tenantId;
       }
-      // !isEditFlow &&
-      //   (await httpRequest("post", "/tl-services/v1/_update", "", [], {
-      //     Licenses: queryObject
-      //   }));
       let searchQueryObject = [
         { key: "tenantId", value: updatedTenant },
         { key: "applicationNumber", value: updatedApplicationNo }

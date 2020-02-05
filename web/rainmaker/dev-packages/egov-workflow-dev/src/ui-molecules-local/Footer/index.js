@@ -182,7 +182,7 @@ class Footer extends React.Component {
     if (status === "APPROVED" && applicationType !=="RENEWAL" &&  moduleName === "NewTL") {
       const editButton = {
         label: "Edit",
-        labelKey: "WF_TL_RENEWAL_BUTTON_EDIT",
+        labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
         link: () => {
           this.props.setRoute(
             `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
@@ -192,7 +192,7 @@ class Footer extends React.Component {
       downloadMenu && downloadMenu.push(editButton);
       const submitButton = {
         label: "Submit",
-        labelKey: "WF_TL_RENEWAL_BUTTON_SUBMIT",
+        labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
         link: () => {
           this.renewTradelicence(applicationNumber, financialYear, tenantId);
         }
