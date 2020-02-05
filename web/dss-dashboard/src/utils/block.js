@@ -142,7 +142,6 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                                 pdf.addImage(dataUrl, 'JPG', 0, 55, hw.imgWidth - 50, 0);
     
                             }
-                            // pdf.save()
                             return resolve(pdf)
                         });
                     } else {
@@ -186,7 +185,7 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                         if (cityLogo) {
                             base64Img.requestBase64(cityLogo, function (err, res, body) {
                                 if(err){
-                                    console.log('--------------------',err)
+                                    console.log(err)
                                 }
 
                                 var imgWidth = 210;
@@ -207,7 +206,6 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                                 if(isHeaderRequired) {
                                     doc.setFontSize(7);
                                     doc.setFontStyle("Roboto");
-                                    // doc.setFontType("bold");
                                     doc.text(pdfHeader,13,6,0,0,0)
                                 }
                                 if (isLogoRequired) {
@@ -223,7 +221,7 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                                     if (index == 1) {
                                         position = -pageHeight * index + 10
                                     } else {
-                                        position = -pageHeight * index; // top padding for other pages
+                                        position = -pageHeight * index;
                                     }
                                     doc.addPage();
                                     doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 1, imgHeight);
@@ -242,21 +240,19 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                             var imgHeight = image.height * imgWidth / image.width;
                             var heightLeft = imgHeight;
                             var doc = new jsPDF('p', 'mm', 'a4');
-                            var position = 10; // give some top padding to first page
+                            var position = 10;
                             let isLogoRequired = true;
                             let isHeaderRequired = true;
                             
                             if(isHeaderRequired) {
                                 doc.setFontSize(7);
                                 doc.setFontStyle("Roboto");
-                                // doc.setFontType("bold");
                                 doc.text(pdfHeader,13,6,0,0,0)
                             }
                             if (isLogoRequired) {
                                 doc.addImage(logo, 'PNG', 194, 1, 15, 8);
                             }
 
-                            // doc.addImage(dataUrl, 'PNG', position, imgWidth, imgHeight);
                             if (dataUrl) {
                                 doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 2, imgHeight);
                             }
@@ -266,7 +262,7 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                                 if (index == 1) {
                                     position = -pageHeight * index + 10
                                 } else {
-                                    position = -pageHeight * index; // top padding for other pages
+                                    position = -pageHeight * index;
                                 }
                                 doc.addPage();
                                 doc.addImage(dataUrl, 'PNG', 1, position, imgWidth - 1, imgHeight);
@@ -275,9 +271,6 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                             }
                             return resolve(doc)
                         }
-
-
-
 
                     }.bind(this)).catch((err) => {
                         console.log(err);
@@ -299,7 +292,6 @@ export const printDocument = (cityLogo,pdfHeader, name) => {
         //     let compon = document.getElementById("printFtable")
         //         // let elems = document.querySelectorAll('.elemClass');
         let elems = document.getElementById('divToPrint');
-        // Fix Graphics Output by scaling PDF and html2canvas output to 2
 
         return addPages(elems, cityLogo,pdfHeader).then(function (response) {
             response.save(name || 'DSS');
@@ -310,19 +302,13 @@ export const printDocument = (cityLogo,pdfHeader, name) => {
             return reject(false);
         })
     })
-    // });
 }
 export const printDocumentShare = (cityLogo,pdfHeader) => {
     cityLogo = (cityLogo)?cityLogo.replace('https://s3.ap-south-1.amazonaws.com',window.location.origin):cityLogo;
     return new Promise(function (resolve, reject) {
-        // getFilters(table).then(function(params) {
-        //     let compon = document.getElementById("printFtable")
-        //         // let elems = document.querySelectorAll('.elemClass');
         let elems = document.getElementById('divToPrint');
-        // Fix Graphics Output by scaling PDF and html2canvas output to 2
 
         return addPages(elems, cityLogo,pdfHeader).then(function (response) {
-            // response.save();
             return resolve(response);
 
         }.bind(this)).catch(function (error) {
@@ -330,5 +316,4 @@ export const printDocumentShare = (cityLogo,pdfHeader) => {
             return reject(false);
         })
     })
-    // });
 }
