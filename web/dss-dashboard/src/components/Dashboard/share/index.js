@@ -214,16 +214,11 @@ class CustomizedShare extends Component {
             console.log(file)
             if (file) {
                 if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-                    var fileArr =  file.split(',https');
+                    var fileArr =  file.split(',');
                     console.log(fileArr)
 
                     if(fileArr && fileArr.length>0) {
-                        fileArr.map(fileData => {
-                            if(!fileData.includes('small.jpeg') && !fileData.includes('medium.jpeg') && !fileData.includes('large.jpeg')) {
-                                image = fileData
-                                console.log('---------------------------image----------------------',image)
-                            }
-                        })
+                       image = removeImageExtension(fileArr);
                     }
                     // var n = file.lastIndexOf("https");
                     // image = file.substr(n, file.length-1)
@@ -236,7 +231,6 @@ class CustomizedShare extends Component {
                 var fakeLink = document.createElement('a');
                 var type = this.state.type;
                 var isMobileOrTablet = this.isMobileOrTablet();
-                image = removeImageExtension(image);
                 shortenAPI(image,function(err,data){
                     if(data){
                       image = data.data;
