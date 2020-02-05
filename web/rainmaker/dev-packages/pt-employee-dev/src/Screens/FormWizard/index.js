@@ -7,6 +7,7 @@ import {
   updateForms,
   handleFieldChange
 } from "egov-ui-kit/redux/form/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
@@ -987,12 +988,15 @@ class FormWizard extends Component {
         } else {
           window.scrollTo(0, 0);
           if(isAssesment1){
-            this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
+            this.assessProperty();
+            // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
           }else{
             this.props.history.push(`pt-acknowledgment?purpose=apply&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
           }
           // createAndUpdate(index);
           // pt-acknowledgment?purpose=apply&status=success&applicationNumber=PB-TL-2019-12-20-003743&FY=2019-20&tenantId=pb.amritsar
+         // createAndUpdate(index);
+        
         }
         break;
       case 5:
@@ -1576,6 +1580,49 @@ class FormWizard extends Component {
       alert(e);
     }
   };
+
+  assessProperty=async()=>{
+    let propertyMethodAction= '_create';
+    const propertyId = getQueryArg(
+     window.location.href,
+     "propertyId"
+   );
+   const financialYear = getQueryArg(window.location.href, "FY");
+   const tenant = getQueryArg(window.location.href, "tenantId");
+    let assessment={
+     "tenantId": tenant,
+     "propertyId": propertyId,
+     "financialYear": financialYear,
+     "assessmentDate": new Date().getTime(),
+     "source": "MUNICIPAL_RECORDS",
+     "channel": "CFC_COUNTER",
+     "status": "ACTIVE"
+     
+    }
+   try {
+     
+     
+     let assessPropertyResponse = await httpRequest(
+       `property-services/assessment/${propertyMethodAction}`,
+       `${propertyMethodAction}`,
+       [],
+       {
+         Assessment: assessment
+       }
+     );
+     store.dispatch(
+       setRoute(
+         `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+         
+       )
+     );
+ 
+   } catch (e) {
+     hideSpinner();
+     this.setState({ nextButtonEnabled: true });
+     alert(e);
+   }
+  }
 
   pay = async () => {
     const { callPGService, callDraft } = this;

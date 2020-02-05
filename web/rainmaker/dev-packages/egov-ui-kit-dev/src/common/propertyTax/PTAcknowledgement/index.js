@@ -207,7 +207,7 @@ class PTAcknowledgement extends React.Component {
         <Label
           label={ptHeader&&ptHeader.labelKey}
           color="rgba(0, 0, 0, 0.87)"
-          fontSize="24px"
+          fontSize="22px"
           fontWeight="400"
           fontFamily="Roboto"
           dynamicArray={ptHeader.dynamicArray}
@@ -220,14 +220,14 @@ class PTAcknowledgement extends React.Component {
                     labelName:"Download",labelKey:"TL_DOWNLOAD"},
                   leftIcon: "cloud_download",
                   rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
+                  props: { variant: "outlined", style: { marginLeft: 10,color:"#FE7A51" } },
                   menu: downloadButton.menu
                 }}/>}
        {printButton&&printButton.visibility&& <DownloadPrintButton data={{label: {
                     llabelName:"Print",labelKey:"TL_PRINT"},
                     leftIcon: "print",
                     rightIcon: "arrow_drop_down",
-                    props: { variant: "outlined", style: { marginLeft: 10 } },
+                    props: { variant: "outlined", style: { marginLeft: 10 ,color:"#FE7A51"} },
                     menu: printButton.menu
                 }}/>  }      
         </div>
@@ -256,6 +256,7 @@ class PTAcknowledgement extends React.Component {
                     <span id="custom-containers-key">
                       {" "}
                       <Label
+                        className="ptMsg"
                         label={ptMsg.labelKey}
                         color="rgba(0, 0, 0, 0.87)"
                         fontSize="24px"
