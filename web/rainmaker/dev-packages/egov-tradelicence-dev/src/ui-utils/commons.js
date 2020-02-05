@@ -388,6 +388,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
+      
+      if(activeIndex === 3 && isEditRenewal){
+        action="APPLY";
+      }        
+      set(queryObject[0], "action", action);
+
+
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if(!isEditFlow){
@@ -397,11 +404,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       }
       //Renewal flow
 
-      if(activeIndex === 3 && isEditRenewal){
-        action="APPLY";
-      }        
-      set(queryObject[0], "action", action);
-
+      
       let updatedApplicationNo  = "";
       let updatedTenant = "";
       if(isEditRenewal && updateResponse && get(updateResponse , "Licenses[0]")){

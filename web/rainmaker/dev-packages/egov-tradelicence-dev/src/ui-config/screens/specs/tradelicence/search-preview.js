@@ -5,7 +5,10 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
@@ -114,9 +117,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   set(payload, "Licenses[0].headerSideText", headerSideText);
   set(payload, "Licenses[0].assignee", []);
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+    "."
+  )[0] === "INDIVIDUAL"
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
@@ -152,7 +155,6 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
- 
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
@@ -160,18 +162,29 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
+    const businessService = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].workflowCode"
+    );
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      {
+        key: "businessServices",
+        value: businessService ? businessService : "NewTL"
+      }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
-    
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-    
+
     const financialYear = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
     );
-   
+
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
@@ -183,8 +196,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         dispatch
       );
     }
-  
-    
+
     const statusCont = {
       word1: {
         ...getCommonTitle(
@@ -226,8 +238,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     );
 
     process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", statusCont)
-      : set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", printCont);
+      ? set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          statusCont
+        )
+      : set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          printCont
+        );
 
     // Get approval details based on status and set it in screenconfig
 
@@ -276,7 +296,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       tenantId,
       financialYear
     );
-    
+
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
@@ -294,18 +314,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
-     
 
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
-    const businessService = get(state.screenConfiguration.preparedFinalObject , "Licenses[0].workflowCode")
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: businessService ? businessService :  "NewTL" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   }
- 
 };
 
 let titleText = "";
@@ -440,13 +452,13 @@ const screenConfig = {
       action.screenConfig,
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
-    ); 
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    beforeInitFn(action, state, dispatch, applicationNumber);  
+    );
+    // const queryObject = [
+    //   { key: "tenantId", value: tenantId },
+    //   { key: "businessServices", value: "NewTL" }
+    // ];
+    // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
 
@@ -480,7 +492,7 @@ const screenConfig = {
                 xs: 12,
                 sm: 4,
                 align: "right"
-              },
+              }
             }
           }
         },
