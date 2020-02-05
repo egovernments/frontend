@@ -160,14 +160,12 @@ class CustomInfo extends React.Component {
         let file = this.props.s3ImageCard && this.props.s3ImageCard[fileId]
         if (file) {
           if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-            var fileArr =  file.split(',https');
-                    console.log(fileArr)
+            var fileArr =  file.split(',');
 
                     if(fileArr && fileArr.length>0) {
                         fileArr.map(fileData => {
                             if(!fileData.includes('small.jpeg') && !fileData.includes('medium.jpeg') && !fileData.includes('large.jpeg')) {
                                 image = fileData
-                                console.log('---------------------------image----------------------',image)
                             }
                         })
                     }
