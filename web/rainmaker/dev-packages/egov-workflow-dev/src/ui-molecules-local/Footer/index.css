@@ -43,7 +43,11 @@
   .wf-footer-button{
     min-width: 200px;
     }
-    .wf-footer-container{
-      justify-content: flex-end!important;
-    }
+   
+}
+@media only screen and (max-width: 768px) {
+  .wf-footer-container{
+    justify-content: flex-end!important;
+    text-align: right!important;
+  }
 }

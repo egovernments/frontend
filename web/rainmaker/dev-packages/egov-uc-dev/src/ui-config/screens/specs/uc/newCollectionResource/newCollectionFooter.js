@@ -14,7 +14,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
-
+import "./index.css";
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/pay" : "/inbox";
@@ -26,7 +26,7 @@ const getCommonApplyFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "apply-wizard-footer  uc-footer"
     },
     children
   };
@@ -41,7 +41,8 @@ export const newCollectionFooter = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        
       }
     },
     children: {
