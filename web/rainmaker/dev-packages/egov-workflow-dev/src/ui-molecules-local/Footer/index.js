@@ -123,11 +123,15 @@ class Footer extends React.Component {
     set(licences[0], "workflowCode", wfCode);
     set(licences[0], "applicationType", "RENEWAL");
 
-    await httpRequest("post", "/tl-services/v1/_update", "", [], {
+  const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
       Licenses: licences
     })
+     const applicationNumberNew = get(
+      response,
+      `Licenses[0].applicationNumber`
+    );
     setRoute(
-      `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+      `/tradelicence/acknowledgement?purpose=editRenewal&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
     );
   };
 

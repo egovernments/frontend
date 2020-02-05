@@ -378,7 +378,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         queryObject[0].tradeLicenseDetail &&
         queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
-        if (getQueryArg(window.location.href, "action") === "edit") {
+        if (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "editRenewal") {
           // const removedDocs = get(
           //   state.screenConfiguration.preparedFinalObject,
           //   "LicensesTemp[0].removedDocs",
@@ -396,6 +396,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
+      if(activeIndex ===3 && getQueryArg(window.location.href, "action") === "editRenewal")
+      action="APPLY";
       // else if (
       //   queryObject[0].tradeLicenseDetail &&
       //   queryObject[0].tradeLicenseDetail.applicationDocuments &&

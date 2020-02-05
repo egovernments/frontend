@@ -1784,7 +1784,7 @@ export const getDocList = (state, dispatch) => {
     "applyScreenMdmsData.TradeLicense.MdmsTradeType"
   );
   let selectedTypes = [];
-  tradeSubTypes.forEach(tradeSubType => {
+  tradeSubTypes && tradeSubTypes.forEach(tradeSubType => {
     selectedTypes.push(
       filter(tradeSubCategories, {
         code: tradeSubType.tradeType
@@ -1793,7 +1793,7 @@ export const getDocList = (state, dispatch) => {
   });
   
   let applicationDocArray = [];
-  selectedTypes.forEach(tradeSubTypeDoc => {
+  selectedTypes && selectedTypes.forEach(tradeSubTypeDoc => {
    const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "editRenewal" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
    
     applicationDocArray = [

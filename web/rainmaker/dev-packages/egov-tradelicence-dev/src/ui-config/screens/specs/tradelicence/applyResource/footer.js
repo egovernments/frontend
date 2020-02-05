@@ -18,6 +18,7 @@ import {
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   toggleSnackbar,
   prepareFinalObject
@@ -578,6 +579,28 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
+export const renewTradelicence = async (applicationNumber, financialYear, tenantId,state,dispatch) => {
+  const licences = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Licenses`
+  );
+  const wfCode = "directRenewal";
+  set(licences[0], "action", "INITIATE");
+  set(licences[0], "workflowCode", wfCode);
+  set(licences[0], "applicationType", "RENEWAL");
+
+const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
+    Licenses: licences
+  })
+   const applicationNumberNew = get(
+    response,
+    `Licenses[0].applicationNumber`
+  );
+  dispatch(
+  setRoute(
+    `/tradelicence/acknowledgement?purpose=editRenewal&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+  ));
+};
 
 export const footerReview = (
   action,
@@ -822,7 +845,7 @@ export const footerReview = (
                   dispatch(
                     setRoute(
                      // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-                     `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
+                     `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
                     )
                   );
                 },
@@ -858,12 +881,7 @@ export const footerReview = (
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  dispatch(
-                    setRoute(
-                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-                     `/tradelicence/acknowledgement?purpose=renew&status=success&applicationNumber=${applicationNumber}&FY=${financialYear}&tenantId=${tenantId}&action=directRenewal`
-                    )
-                  );
+                  renewTradelicence(applicationNumber, financialYear, tenantId,state,dispatch);
                 },
 
               },
