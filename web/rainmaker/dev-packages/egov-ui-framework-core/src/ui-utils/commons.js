@@ -7,7 +7,7 @@ import {
   getLocalization,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -273,6 +273,7 @@ export const setBusinessServiceDataToLocalStorage = async (
   dispatch
 ) => {
   try {
+    dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
       "egov-workflow-v2/egov-wf/businessservice/_search",
@@ -300,7 +301,9 @@ export const setBusinessServiceDataToLocalStorage = async (
         )
       );
     }
+    dispatch(toggleSpinner());
   } catch (e) {
+    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
