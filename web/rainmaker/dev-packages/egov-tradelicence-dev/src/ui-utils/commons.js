@@ -396,7 +396,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
-      if(activeIndex ===3 && getQueryArg(window.location.href, "action") === "editRenewal")
+      if(activeIndex !=1 && getQueryArg(window.location.href, "action") === "editRenewal")
       action="APPLY";
       // else if (
       //   queryObject[0].tradeLicenseDetail &&
