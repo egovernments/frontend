@@ -76,6 +76,9 @@ import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/C
 import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
 
+import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
+import { removeForm } from "egov-ui-kit/redux/form/actions";
+import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
 
 class FormWizard extends Component {
   state = {
@@ -338,11 +341,12 @@ class FormWizard extends Component {
       renderCustomTitleForPt,
       showSpinner,
       hideSpinner,
-      fetchGeneralMDMSData
+      fetchGeneralMDMSData,history
     } = this.props;
     let { search } = location;
     showSpinner();
     const { selected } = this.state;
+    let { resetForm } = this;
     const isReasses = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
     const propertyId = getQueryValue(search, "propertyId");
     const isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
@@ -350,7 +354,9 @@ class FormWizard extends Component {
     const draftUuid = getQueryValue(search, "uuid");
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
-
+      this.unlisten = history.listen((location, action) => {
+        resetForm();
+      });
     if (assessmentId) {
       fetchGeneralMDMSData(
         null,
@@ -725,7 +731,18 @@ class FormWizard extends Component {
   }
 
 
-
+  resetForm = () => {
+    const {
+      form,
+      removeForm,
+      prepareFormDataAction,
+      prepareFinalObject
+    } = this.props;
+    resetFormWizard(form, removeForm);
+    prepareFormDataAction("Properties", []);
+   
+    this.onTabClick(0);
+  };
 
   onTabClick = index => {
     const { formValidIndexArray, selected } = this.state;
@@ -2077,7 +2094,11 @@ const mapDispatchToProps = dispatch => {
     updatePrepareFormDataFromDraft: prepareFormData =>
       dispatch(updatePrepareFormDataFromDraft(prepareFormData)),
     handleFieldChange: (formKey, fieldKey, value) =>
-      dispatch(handleFieldChange(formKey, fieldKey, value))
+      dispatch(handleFieldChange(formKey, fieldKey, value)),
+      prepareFormDataAction: (path, value) =>
+      dispatch(prepareFormDataAction(path, value)),
+      removeForm: formkey => dispatch(removeForm(formkey)),
+     
   };
 };
 
