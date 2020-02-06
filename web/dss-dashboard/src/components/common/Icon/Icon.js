@@ -15,7 +15,6 @@ class Icon extends React.Component {
     }
 
     renderIcons(type) {
-        // console.log(type.toLowerCase())
         let { classes } = this.props;
 
         switch (type.toLowerCase()) {

@@ -32,15 +32,12 @@ const options = {
 	tooltips: {
 		callbacks: {
 			label: function (tooltipItem, data) {
-				// console.log(data)
 				var dataset = data.datasets[tooltipItem.datasetIndex];
 				var meta = dataset._meta[Object.keys(dataset._meta)[0]];
 				var total = meta.total;
 				var currentValue = dataset.data[tooltipItem.index];
 				var percentage = parseFloat((currentValue / total * 100).toFixed(1));
-				// if (dataset.dataSymbol[tooltipItem.index][0] == 'number' || dataset.dataSymbol[tooltipItem.index][1] == 'Unit') {
 				currentValue = NFormatterFun(currentValue, dataset.dataSymbol[tooltipItem.index][0], dataset.dataSymbol[tooltipItem.index][1], true)
-				// }
 				return currentValue + ' (' + percentage + '%)';
 			},
 			title: function (tooltipItem, data) {

@@ -70,14 +70,7 @@ class Home extends React.Component {
         return color
     }
 
-    handleOnClick() {
-        let path = ''
-        if (window.location.pathname && window.location.pathname.includes('ulb-')) {
-            path = 'ulb-overview'
-        } else {
-            path = 'overview'
-
-        }
+    handleOnClick(path) {
         history.push(`${process.env.PUBLIC_URL}/` + path)
     }
 
@@ -113,7 +106,7 @@ class Home extends React.Component {
         if (data.vizType.toUpperCase() === 'COLLECTION') {
             return (
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.paper} style={{ paddingBottom: '5px' }}>
-                    <Paper className={classes.paperStyle} onClick={() => this.handleOnClick()}>
+                    <Paper className={classes.paperStyle} onClick={() => this.handleOnClick(pageId)}>
                         <div className={classes.paperContainer}>
                             <div>
                                 <Paper className={classes.iconPaper}>
@@ -190,16 +183,12 @@ class Home extends React.Component {
                 dontShowHeader: false
             })
         }
-        console.log(window.location.pathname);
-        console.log(window.location.href);
 
         let path = ''
         if (window.location.pathname && window.location.pathname.includes('ulb-')) {
             path = 'ulb-home'
-            console.log("----setting path ul----", path)
         } else {
             path = 'home'
-            console.log("----setting path home----", path)
 
         }
         this.props.APITransport(dashboardApi, path || 'home');

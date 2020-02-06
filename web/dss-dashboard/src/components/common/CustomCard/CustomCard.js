@@ -19,11 +19,9 @@ class CustomCard extends React.Component {
     callAPI() {
         let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
         let filters = this.props.filters
-        console.log(filters)
     
         if(this.props.page.includes('ulb')) {
           if(!filters['tenantId']) {
-            console.log('=======tenet Id not there Home comp========')
             let tenentFilter = []
             tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
             filters['tenantId'] = tenentFilter
@@ -41,7 +39,6 @@ class CustomCard extends React.Component {
 
     render() {
         const { classes, strings } = this.props;
-        console.log(this.props.chartData)
 
         let codekey = _.chain(this.props).get('chartData').get("id").value();
         codekey=codekey+ this.props.moduleLevel;

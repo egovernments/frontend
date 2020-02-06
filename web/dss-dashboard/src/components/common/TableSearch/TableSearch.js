@@ -36,7 +36,6 @@ class TableSearch extends Component {
         var newlist = _.filter(list, item => {
             var isFound = false;
             _.forOwn(item, (kk, vv) => {
-                // console.log(kk, vv);
                 if (_.chain(pair).get('column').eq(vv)) {
                     if ((kk || '').toString().toLowerCase().indexOf(_.get(pair, 'val').toLowerCase()) !== -1) {
                         isFound = true
@@ -79,8 +78,6 @@ class TableSearch extends Component {
                     'none'
                 )
             );
-
-        // console.log('result', result);
 
         switch (result) {
             case "column":

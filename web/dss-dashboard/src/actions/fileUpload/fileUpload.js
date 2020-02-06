@@ -15,7 +15,6 @@ export default class FileUploadAPI extends API {
     processResponse(res) {
         super.processResponse(res);
         if (res) {
-            console.log(res)
             this.s3File = res;
             return true
         }

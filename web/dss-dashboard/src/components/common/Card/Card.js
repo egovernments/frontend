@@ -8,7 +8,6 @@ import history from '../../../utils/web.history'
 const useStyles = makeStyles(styles);
 
 function handleNavigation(page) {
-  console.log("------------------navigating to---------------",page)
   history.push(`${process.env.PUBLIC_URL}/`+ page)
 }
 

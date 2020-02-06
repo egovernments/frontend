@@ -140,7 +140,6 @@ class CustomizedMenus extends Component {
 
     downloadPDF = () => {
         // this.props.APITrans(true)
-        console.log('*****************************',this.props.mdmsData)
         let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
         printDocument(pdfDetails.logo,pdfDetails.headerText, this.props.strings[this.props.fileName] || this.props.fileName || 'DSS').then(function (pdfO) {
             // let element = document.getElementById("printFtable")
@@ -171,7 +170,6 @@ class CustomizedMenus extends Component {
         let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
         printDocumentShare(pdfDetails.logo,pdfDetails.headerText).then(function (pdfO) {
             // setAnchorEl(null);
-            console.log(APITransport)
             try {
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_MOBILE, pdfO.output('blob'));
                 APITransport(fileUploadAPI)
@@ -259,40 +257,28 @@ class CustomizedMenus extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.props.s3FileMobile)
-        console.log(this.props.s3ImageMobile)
-
         if (prevProps.s3FileMobile != this.props.s3FileMobile) {
-            console.log(prevProps.s3FileMobile)
-            console.log(this.props.s3FileMobile)
             const { S3Transporter } = this.props
             let s3ImageAPI = new S3ImageAPI(2000, 'dashboard', constants.S3_IMAGE_MOBILE, this.props.s3FileMobile.files && Array.isArray(this.props.s3FileMobile.files) && this.props.s3FileMobile.files.length > 0 && this.props.s3FileMobile.files[0] && this.props.s3FileMobile.files[0].fileStoreId);
             S3Transporter(s3ImageAPI)
         }
 
         if (prevProps.s3ImageMobile != this.props.s3ImageMobile) {
-            console.log("------calling email and whatsapp api-------")
             let image = ''
             let fileId = this.props.s3FileMobile.files && Array.isArray(this.props.s3FileMobile.files) && this.props.s3FileMobile.files.length > 0 && this.props.s3FileMobile.files[0] && this.props.s3FileMobile.files[0].fileStoreId
 
             let file = this.props.s3ImageMobile && this.props.s3ImageMobile[fileId]
-            console.log(file)
 
             if (file) {
                 if ((file.match(new RegExp("https", "g")) || []).length > 1) {
                     var fileArr =  file.split(',');
-                    console.log(fileArr)
 
                     if(fileArr && fileArr.length>0) {
                         image = removeImageExtension(fileArr);
                     }
-                    // var n = file.lastIndexOf("https");
-                    // image = file.substr(n, file.length-1)
-                    // console.log(image)
 
                 } else {
                     image = file
-                    console.log(image)
                 }
 
                 var fakeLink = document.createElement('a');

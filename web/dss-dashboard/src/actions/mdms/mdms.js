@@ -31,7 +31,6 @@ export default class MdmsAPI extends API {
 
     getBody() {
         let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
-        console.log(tenent)
         return {
            "RequestInfo": {
                "authToken": ""

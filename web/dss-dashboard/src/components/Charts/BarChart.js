@@ -45,13 +45,10 @@ class BarChart extends React.Component {
   }
   
   callforNewData(elems) {
-		// console.log(elems[0]._datasetIndex + ', ' + elems[0]._index);
 		// this.setState({ data: null })
 
 	}
   manupulateData(chartData) {
-    // let temp, tempdata;
-    // temp = this.props.chartData;
     var tempdata = {
       labels: [],
       datasets: []
