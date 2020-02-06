@@ -260,6 +260,51 @@ export const getSWMyApplicationResults = async (dispatch) => {
 
 };
 
+export const getPropertyResults = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/property-services/property/_search",
+            "_search",
+            queryObject
+        );
+
+        // if (response.WaterConnection.length > 0) {
+        //     for (let i = 0; i < response.WaterConnection.length; i++) {
+        //         response.WaterConnection[i].service = "Water"
+        //         try {
+        //             const data = await httpRequest(
+        //                 "post",
+        //                 `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
+        //                 "_fetchbill",
+        //                 // queryObject
+        //             );
+        //             if (data && data !== undefined) {
+        //                 if (data.Bill !== undefined && data.Bill.length > 0) {
+        //                     response.WaterConnection[i].due = data.Bill[0].totalAmount
+        //                 }
+
+        //             } else {
+        //                 response.WaterConnection[i].due = 0
+        //             }
+
+        //         } catch (err) {
+        //             console.log(err)
+        //             response.WaterConnection[i].due = "NA"
+        //         }
+        //     }
+        //     // });
+        // }
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
 
 
 
