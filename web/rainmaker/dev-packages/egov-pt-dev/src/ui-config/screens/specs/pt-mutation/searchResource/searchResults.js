@@ -124,7 +124,22 @@ export const searchPropertyTable = {
     className:"propertyTab",
     // data: [],
     columns: [
-      getTextToLocalMapping("Property Tax Unique Id"),
+      {
+        name:getTextToLocalMapping("Property Tax Unique Id"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span
+            style={
+              { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
+            }
+            
+            >
+              {value}
+            </span>
+          )
+        }
+        },
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Guardian Name"),
       getTextToLocalMapping("Existing Property Id"),
@@ -190,8 +205,38 @@ export const searchApplicationTable = {
     className:"appTab",
     // data: [],
     columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("Property Tax Unique Id"),
+      {
+        name:getTextToLocalMapping("Application No"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span
+            style={
+              { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
+            }
+            
+            >
+              {value}
+            </span>
+          )
+        }
+        },
+      {
+      name:getTextToLocalMapping("Property Tax Unique Id"),
+      options: {
+        filter: false,
+        customBodyRender: value => (
+          <span
+          style={
+            { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
+          }
+          
+          >
+            {value}
+          </span>
+        )
+      }
+      },
       getTextToLocalMapping("Application Type"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Address"),
@@ -267,6 +312,7 @@ const onPropertyTabClick = (rowData,dispatch) => {
 };
 
 const onApplicationTabClick = (rowData,dispatch) => {
+ 
   if (rowData[5]==="INITIATED") {
       window.location.href = `apply?applicationNumber=${rowData[1]}&tenantId=${
         rowData[6]
@@ -274,6 +320,6 @@ const onApplicationTabClick = (rowData,dispatch) => {
   }
     else{
       // store.dispatch(setRoute(`/property-tax/property/${rowData[1]}/${rowData[6]}`));
-      store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1]}&applicationNumber=PB-FN-2019-07-11-002180&tenantId=${rowData[6]}`));
+      store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=PB-FN-2019-07-11-002180&tenantId=${rowData[6]}`));
   }
 };
