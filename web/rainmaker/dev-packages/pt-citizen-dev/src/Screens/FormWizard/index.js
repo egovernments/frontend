@@ -13,7 +13,7 @@ import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import Property from "egov-ui-kit/common/propertyTax/Property";
-
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
@@ -771,6 +771,7 @@ class FormWizard extends Component {
   };
 
   assessProperty = async (action) => {
+    const {hideSpinner}=this.props;
     let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
     const propertyId = getQueryArg(
       window.location.href,
@@ -814,7 +815,7 @@ class FormWizard extends Component {
   }
 
   createProperty = async (Properties, action) => {
-    const { documentsUploadRedux } = this.props;
+    const { documentsUploadRedux ,hidespinner} = this.props;
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
     try {
@@ -1283,7 +1284,9 @@ class FormWizard extends Component {
           financialYearFromQuery
         );
       } else {
+        toggleSpinner();
         return;
+        
       }
       if (selectedownerShipCategoryType === "SINGLEOWNER") {
         set(
@@ -1854,6 +1857,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(handleFieldChange(formKey, fieldKey, value)),
     prepareFormDataAction: (path, value) =>
       dispatch(prepareFormDataAction(path, value)),
+      hideSpinner: () => dispatch(hideSpinner()),
     removeForm: formkey => dispatch(removeForm(formkey)),
   };
 };
