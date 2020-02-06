@@ -29,8 +29,6 @@ import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
-import { nocSummary } from "./summaryResource/nocSummary";
-import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
@@ -536,10 +534,7 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
-          plotAndBoundaryInfoSummary: plotAndBoundaryInfoSummary,
-          documentsSummary: documentsSummary,
-          nocSummary: nocSummary
-
+          documentsSummary: documentsSummary
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : (ifUserRoleExists("CEMP") ? citizenFooter : {})
       }

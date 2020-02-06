@@ -38,14 +38,14 @@ import {
 } from "../../../../ui-utils/commons";
 import { getTodaysDateInYYYMMDD, getTenantMdmsData, calculationType, setProposedBuildingData } from "../utils";
 import jp from "jsonpath";
+import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 
 export const stepsData = [
-  { labelName: "Basic Details", labelKey: "" },
-  { labelName: "Scrutiny Details", labelKey: "" },
-  { labelName: "Owner Info", labelKey: "" },
-  { labelName: "Plot & Boundary Info", labelKey: "" },
-  { labelName: "Document Details", labelKey: "" },
-  { labelName: "NOC Details", labelKey: "" }
+  { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
+  { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
+  { labelName: "Owner Info", labelKey: "BPA_STEPPER_OWNER_INFO_HEADER" },
+  { labelName: "Document and NOC details", labelKey: "BPA_STEPPER_DOCUMENT_NOC_DETAILS_HEADER" },
+  { labelName: "Application Summary", labelKey: "BPA_STEPPER_SUMMARY_HEADER" }
 ];
 
 export const stepper = getStepperObject(
@@ -78,7 +78,8 @@ export const formwizardFirstStep = {
   },
   children: {
     basicDetails,
-    bpaLocationDetails
+    bpaLocationDetails,
+    detailsofplot
   }
 };
 
@@ -116,7 +117,7 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    detailsofplot
+    documentDetails
   },
   visible: false
 };
@@ -128,19 +129,7 @@ export const formwizardFifthStep = {
     id: "apply_form4"
   },
   children: {
-    documentDetails
-  },
-  visible: false
-};
-
-export const formwizardSixthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form4"
-  },
-  children: {
-    statusOfNocDetails
+    bpaSummaryDetails
   },
   visible: false
 };
@@ -411,10 +400,9 @@ const screenConfig = {
         "formwizardSecondStep",
         "formwizardThirdStep",
         "formwizardFourthStep",
-        "formwizardFifthStep",
-        "formwizardSixthStep"
+        "formwizardFifthStep"
       ];
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 5; i++) {
         set(
           action.screenConfig,
           `components.div.children.${formWizardNames[i]}.visible`,
@@ -456,7 +444,6 @@ const screenConfig = {
         formwizardThirdStep,
         formwizardFourthStep,
         formwizardFifthStep,
-        formwizardSixthStep,
         footer
       }
     }
