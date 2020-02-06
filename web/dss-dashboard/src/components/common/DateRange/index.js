@@ -17,23 +17,26 @@ import getFinancialYearObj from '../../../actions/getFinancialYearObj';
 // import { useTheme } from '@material-ui/core/styles';
 
 const year = (new Date()).getFullYear();
-
+let fYearObj = getFinancialYearObj('',true)
 class DateRange extends React.Component {
   constructor(props) {
-    super(props);
+    super(props);    
     this.state = {
       currentDate: new Date(),
       fromDate: '',
       toDate: '',
       value: null,
+      default:5,
       title: this.props.title1,
+      fYearObj:fYearObj,      
       dateRanges: Array.from(new Array(20), (x, i) => i + year - 10),
       buttons: [{ key: "1", value: "Today" },
       { key: "2", value: "This Week" },
       { key: "3", value: "This Month" },
       { key: "4", value: "This Quarter" },
-      { key: "5", value: getFinancialYearObj(true) },
-      { key: "6", value: "Custom" },
+      { key: "5", value: fYearObj[0].title},
+      { key: "6", value: fYearObj[1].title},
+      { key: "7", value: "Custom" },
       ],
     }
     // const theme = useTheme();
@@ -126,8 +129,19 @@ class DateRange extends React.Component {
         }
 
       default:
-        return getFinancialYearObj()
+        return this.getFinancialYearObj(value)
     }
+  }
+
+  getFinancialYearObj(value){
+      let fYearObj = this.state.fYearObj, returnObj;
+      for(var i=0; i<fYearObj.length;i++){
+        if(fYearObj[i] && fYearObj[i].title == value){
+          returnObj = fYearObj[i];
+          break;
+        } 
+      }
+      return returnObj;
   }
 
   /**
@@ -188,8 +202,8 @@ class DateRange extends React.Component {
           <div className={classes.fils}>
             <SwitchButton
               data={this.state.buttons}
-              selected={this.state.value || this.state.buttons[4].value}
-              type="normal" target={"duration"}
+              selected={this.state.value ||  this.state.buttons[this.state.default].value}
+              type="normal" target={"duration"} 
               handleSelected={this.handleChanges.bind(this)}>
             </SwitchButton>
           </div>
