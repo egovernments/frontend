@@ -291,7 +291,7 @@ class TableChart extends Component {
               needSearch
               needHash={true}
               needExport
-              excelName={this.props.label || "DSS"}
+              excelName={strings[this.props.label] || this.props.label || "DSS"}
             // toggleSideDrawer={this.handleInfoClick.bind(this)}
             // editInfo={this.handleEditClick.bind(this)}
             // deleteCenter={this.setdeleteCenter.bind(this)}

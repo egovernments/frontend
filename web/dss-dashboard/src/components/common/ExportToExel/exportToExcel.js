@@ -33,14 +33,15 @@ function s2ab(s) {
 }
 
 export default (data, name, needseprate) => {
+    let sname = name.length > 30 ? name.substring(0, 28) + "..." : name 
     import ('xlsx').then(XLSX => {
         const wb = new Workbook()
         let ws = null;
         if (!needseprate) {
             ws = XLSX.utils.json_to_sheet(data)
 
-            wb.SheetNames.push(name || '')
-            wb.Sheets[name || ''] = ws
+            wb.SheetNames.push(sname || '')
+            wb.Sheets[sname || ''] = ws
         } else {
             for (var i = 0; i < Object.keys(data).length; i++) {
                 ws = XLSX.utils.json_to_sheet(data[Object.keys(data)[i]])
@@ -60,6 +61,6 @@ export default (data, name, needseprate) => {
             type: 'application/octet-stream'
         }))
 
-        download(url, `${name}.xlsx`)
+        download(url, `${sname}.xlsx`)
     })
 }
