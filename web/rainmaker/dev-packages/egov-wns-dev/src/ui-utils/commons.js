@@ -173,12 +173,10 @@ export const getMyApplicationResults = async (dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/ws-services/wc/_search?applicationNumber=WS_AP/1013/2019-20/000136&tenantId=pb.amritsar",
+            "/ws-services/wc/_search?applicationNumber=WS_AP/1013/2019-20/000136&tenantId=pb.amritsar",
             "_search",
             // queryObject
         );
-
-        console.log("apiresponse",response)
 
         // if (response.WaterConnection.length > 0) {
         //     for (let i = 0; i < response.WaterConnection.length; i++) {
@@ -220,7 +218,7 @@ export const getSWMyApplicationResults = async (dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "http://172.17.25.34:8090/ws-services/wc/_search?applicationNumber=WS_AP/1013/2019-20/000136&tenantId=pb.amritsar",
+            "/ws-services/wc/_search?applicationNumber=WS_AP/1013/2019-20/000136&tenantId=pb.amritsar",
             // "/sw-services/swc/_search",
             "_search",
             // queryObject
@@ -260,15 +258,17 @@ export const getSWMyApplicationResults = async (dispatch) => {
 
 };
 
-export const getPropertyResults = async (queryObject, dispatch) => {
+export const getPropertyResults = async (dispatch) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
-            "/property-services/property/_search",
+            "/property-services/property/_search?tenantId=pb.amritsar&propertyIds=PB-PT-2020-02-05-019183",
             "_search",
-            queryObject
+            // queryObject
         );
+
+        console.log("apiresponse",response)
 
         // if (response.WaterConnection.length > 0) {
         //     for (let i = 0; i < response.WaterConnection.length; i++) {
