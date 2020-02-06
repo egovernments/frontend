@@ -169,7 +169,7 @@ class FormWizard extends Component {
         };
       } else {
         let searchPropertyResponse = await httpRequest(
-          "pt-services-v2/property/_search",
+          "property-services/property/_search",
           "_search",
           [
             {
@@ -177,7 +177,7 @@ class FormWizard extends Component {
               value: tenantId
             },
             {
-              key: "ids",
+              key: "propertyIds",
               value: getQueryValue(search, "propertyId") //"PT-107-001278",
             }
           ]
