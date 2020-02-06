@@ -3,111 +3,195 @@ import {
   getCommonSubHeader,
   getCommonContainer,
   getLabelWithValue,
-  getLabel
+  getLabel,
+  getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDate } from "../../utils";
 
-import { changeStep } from "./footer";
-
-export const reviewownershipType = getLabelWithValue(
-  {
-    labelName: "Type of ownership",
-    labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-    localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerShipCategory"
+const getHeader = label => {
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-wns",
+    componentPath: "DividerWithLabel",
+    props: {
+      className: "hr-generic-divider-label",
+      labelProps: {},
+      dividerProps: {},
+      label
     },
-    callBack: value => {
-      return value.split(".")[0];
-    }
-  }
-);
-export const reviewsubOwnership = getLabelWithValue(
+    type: "array"
+  };
+};
+
+const connectionDetailsHeader = getHeader({
+  labelKey: "WS_COMMON_CONNECTION_DETAILS"
+});
+
+const connectionChargeDetailsHeader = getHeader({
+  labelKey: "WS_COMMON_PLUMBER_DETAILS"
+});
+
+const roadCuttingChargesHeader = getHeader({
+  labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+});
+
+const activationDetailsHeader = getHeader({
+  labelKey: "WS_ACTIVATION_DETAILS"
+});
+
+export const reviewConnectionType = getLabelWithValue(
   {
-    labelName: "Type of sub-ownership",
-    labelKey: "TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP"
+    labelName: "Connection Type",
+    labelKey: "WS_SERV_DETAIL_CONN_TYPE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-    localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerShipCategory"
-    }
+    // callBack: value => {
+    //   return value.split(".")[0];
+    // }
   }
 );
-export const reviewOwnerFatherName = getLabelWithValue(
+export const reviewNumberOfTaps = getLabelWithValue(
   {
-    labelName: "Father/Husband's Name",
-    labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
+    labelName: "No. of Taps",
+    labelKey: "WS_SERV_DETAIL_NO_OF_TAPS"
+  },
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+  }
+);
+export const reviewWaterSource = getLabelWithValue(
+  {
+    labelName: "Water Source",
+    labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
   }
 );
-export const reviewRelationship = getLabelWithValue(
+export const reviewWaterSubSource = getLabelWithValue(
   {
-    labelName: "Relationship",
-    labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
+    labelName: "Water Sub Source",
+    labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-    localePrefix: {
-      moduleName: "COMMON",
-      masterName: "RELATION"
-    },
-
   }
 );
-export const reviewOwnerGender = getLabelWithValue(
+export const reviewPipeSize = getLabelWithValue(
   {
-    labelName: "Gender",
-    labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+    labelName: "Pipe Size (in inches)",
+    labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-    localePrefix: {
-      moduleName: "COMMON",
-      masterName: "GENDER"
-    }
   }
 );
 
-export const reviewOwnerDOB = getLabelWithValue(
+export const reviewBillingType = getLabelWithValue(
   {
-    labelName: "Date of Birth",
-    labelKey: "TL_EMP_APPLICATION_DOB"
+    labelName: "Billing Type",
+    labelKey: "WS_ADDN_DETAILS_BILLING_TYPE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-    callBack: convertEpochToDate
+    // callBack: convertEpochToDate
   }
 );
 
-export const reviewOwnerPhoneNo = getLabelWithValue(
+export const reviewWaterClosets = getLabelWithValue(
   {
-    labelName: "Mobile No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
+    labelName: "No. of Water Closets",
+    labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
+  },
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
+    // callBack: convertEpochToDate
+  }
+);
+
+export const reviewPlumberProvidedBy = getLabelWithValue(
+  {
+    labelName: "Plumber Provided By",
+    labelKey: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
   }
 );
-export const reviewOwnerEmail = getLabelWithValue(
+export const reviewPlumberLicenseNo = getLabelWithValue(
   {
-    labelName: "Email",
-    labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
+    labelName: "Plumber License No.",
+    labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
   }
 );
-export const reviewOwnerPAN = getLabelWithValue(
+export const reviewPlumberName = getLabelWithValue(
   {
-    labelName: "PAN No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
+    labelName: "Plumber Name",
+    labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
+  },
+  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+);
+
+export const reviewPlumberMobileNo = getLabelWithValue(
+  {
+    labelName: "Plumber Mobile No.",
+    labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
+  },
+  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+);
+
+export const reviewRoadType = getLabelWithValue(
+  {
+    labelName: "Road Type",
+    labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+  },
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
+    // callBack: convertEpochToDate
+  }
+);
+
+export const reviewArea = getLabelWithValue(
+  {
+    labelName: "Area (in sq ft)",
+    labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+  },
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
+  }
+);
+export const reviewConnectionExecutionDate = getLabelWithValue(
+  {
+    labelName: "Connection Execution Date",
+    labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE"
+  },
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
+  }
+);
+export const reviewMeterId = getLabelWithValue(
+  {
+    labelName: "Meter ID",
+    labelKey: "WS_SERV_DETAIL_METER_ID"
+  },
+  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+);
+
+export const reviewMeterInstallationDate = getLabelWithValue(
+  {
+    labelName: "Meter Installation Date",
+    labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE"
+  },
+  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+);
+
+export const reviewInitialMeterReading = getLabelWithValue(
+  {
+    labelName: "Initial Meter Reading",
+    labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
   },
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
@@ -127,8 +211,8 @@ export const getReviewOwner = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Owner Details",
-            labelKey: "TL_COMMON_OWN_DETAILS"
+            labelName: "Additional Details ( To be filled by Municipal Employee)",
+            labelKey: "WS_COMMON_ADDN_DETAILS"
           })
         },
         editSection: {
@@ -164,123 +248,44 @@ export const getReviewOwner = (isEditable = true) => {
         }
       }
     },
-    multiOwner: {
-      uiFramework: "custom-containers",
-      componentPath: "MultiItem",
-      props: {
-        scheama: getCommonGrayCard({
-          viewFive: getCommonContainer({
-            reviewownershipType,
-            reviewsubOwnership,
-            reviewOwnerPhoneNo,
-            reviewOwnerName: getLabelWithValue(
-              {
-                labelName: "Name",
-                labelKey: "TL_NEW_OWNER_DETAILS_NAME_LABEL"
-              },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
-            ),
-            reviewOwnerFatherName,
-            reviewRelationship,
-            reviewOwnerGender,
-            reviewOwnerDOB,
-            reviewOwnerEmail,
-            reviewOwnerPAN,
-            reviewOwnerAddr: getLabelWithValue(
-              {
-                labelName: "Corrospondence Address",
-                labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
-              }
-            ),
-            reviewOwnerSpecialCat: getLabelWithValue(
-              {
-                labelName: "Special Owner Category",
-                labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
-              },
-              {
-                jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-                localePrefix: {
-                  moduleName: "common-masters",
-                  masterName: "OwnerType"
-                }
-              }
-            )
-          })
-        }),
-
-        items: [],
-        hasAddItem: false,
-        sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
-        prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
-        afterPrefixJsonPath: "children.value.children.key"
-      },
-      type: "array"
-    },
-    multiOwnerInstitutional: {
-      uiFramework: "custom-containers",
-      componentPath: "MultiItem",
-      props: {
-        scheama: getCommonGrayCard({
-          viewFive: getCommonContainer({
-            reviewownershipType,
-            reviewsubOwnership,
-            reviewOwnerPhoneNo,
-            reviewoffTelephone: getLabelWithValue(
-              {
-                labelName: "Official Telephone No.",
-                labelKey: "TL_NEW_OWNER_PHONE_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber"
-              }
-            ),
-            reviewOwnerName: getLabelWithValue(
-              {
-                labelName: "Name of the Authorised Person",
-                labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
-              },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
-            ),
-            reviewDesignation: getLabelWithValue(
-              {
-                labelName: "Designation",
-                labelKey: "TL_NEW_OWNER_DESIG_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.institution.designation"
-              }
-            ),
-            reviewOwnerFatherName,
-            reviewRelationship,
-            reviewOwnerGender,
-            reviewOwnerDOB,
-
-            reviewOwnerEmail,
-            reviewOwnerAddr: getLabelWithValue(
-              {
-                labelName: "Official Corrospondence Address",
-                labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
-              }
-            )
-          })
-        }),
-
-        items: [],
-        hasAddItem: false,
-        sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
-        prefixSourceJsonPath: "children.cardContent.children.viewFive.children"
-      },
-      type: "array"
-    }
-  });
+    // viewOne: propertyDetails,
+    // viewTwo: propertyLocationDetails
+    viewFive: connectionDetailsHeader,
+    viewSix: connectionDetails,
+    viewSeven: connectionChargeDetailsHeader,
+    viewEight: connectionChargeDetails,
+    viewNine: roadCuttingChargesHeader,
+    viewTen: roadCuttingCharges,
+    viewEleven: activationDetailsHeader,
+    viewTwelve: activationDetails
+  })
 };
+
+const connectionDetails = getCommonContainer({
+  reviewConnectionType,
+  reviewNumberOfTaps,
+  reviewWaterSource,
+  reviewWaterSubSource,
+  reviewPipeSize,
+  reviewBillingType,
+  reviewWaterClosets
+});
+
+const connectionChargeDetails = getCommonContainer({
+  reviewPlumberProvidedBy,
+  reviewPlumberLicenseNo,
+  reviewPlumberName,
+  reviewPlumberMobileNo
+});
+
+const roadCuttingCharges = getCommonContainer({
+  reviewRoadType,
+  reviewArea
+});
+
+const activationDetails = getCommonContainer({
+  reviewConnectionExecutionDate,
+  reviewMeterId,
+  reviewMeterInstallationDate,
+  reviewInitialMeterReading
+});

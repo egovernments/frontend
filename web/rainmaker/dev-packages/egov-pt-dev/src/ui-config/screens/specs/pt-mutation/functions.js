@@ -15,6 +15,14 @@ export const applicationSearch= async (state,dispatch)=>{
   searchApiCall(state,dispatch,1)
 }
 
+const getAddress=(item)=>{
+  let doorNo=item.address.doorNo!=null? (item.address.doorNo+","):'';
+  let buildingName=item.address.buildingName!=null?(item.address.buildingName+"," ) :'';
+  let street=item.address.street!=null ? (item.address.street+","):'';
+  let city=item.address.city!=null? (item.address.city):'';
+  return (doorNo + buildingName + street + city);
+}
+
  const searchApiCall = async (state, dispatch,index) => {
   showHideTable(false, dispatch,0);
   showHideTable(false, dispatch,1);
@@ -141,7 +149,21 @@ export const applicationSearch= async (state,dispatch)=>{
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "daystart")
           });
-        } else if (key === "toDate") {
+        } else if(key === "tenantId") {
+          // queryObject.push({
+          //   key: key,
+          //   value: convertDateToEpoch(searchScreenObject[key], "dayend")
+          // });
+
+        }
+        else if (key === "ids") {
+          queryObject.push({
+            key:"propertyIds",
+            value: searchScreenObject[key].trim()
+          });
+        }
+        
+        else if (key === "toDate") {
           queryObject.push({
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
@@ -165,13 +187,13 @@ export const applicationSearch= async (state,dispatch)=>{
       let propertyData = response.Properties.map(item => ({
         [getTextToLocalMapping("Property Tax Unique Id")]:
           item.propertyId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.propertyDetails[0].owners[0].name || "-",
+        [getTextToLocalMapping("Owner Name")]: item.owners[0].name || "-",
         [getTextToLocalMapping("Guardian Name")]:
-          item.propertyDetails[0].owners[0].fatherOrHusbandName || "-",
+          item.owners[0].fatherOrHusbandName || "-",
         [getTextToLocalMapping("Existing Property Id")]:  
         item.oldPropertyId || "-",
         [getTextToLocalMapping("Address")]:
-        item.propertyDetails[0].owners[0].permanentAddress || "-",
+        getAddress(item) || "-",
         tenantId: item.tenantId,
         [getTextToLocalMapping("Status")]: item.status || "-"
       }));
@@ -185,9 +207,9 @@ export const applicationSearch= async (state,dispatch)=>{
         [getTextToLocalMapping("Application Type")]:
           item.applicationNo || "PT",
         [getTextToLocalMapping("Owner Name")]:  
-        item.propertyDetails[0].owners[0].name || "-",
+        item.owners[0].name || "-",
         [getTextToLocalMapping("Address")]:
-        item.propertyDetails[0].owners[0].permanentAddress || "-",
+        getAddress(item) || "-",
         tenantId: item.tenantId,
         [getTextToLocalMapping("Status")]: item.status || "-"
       }));

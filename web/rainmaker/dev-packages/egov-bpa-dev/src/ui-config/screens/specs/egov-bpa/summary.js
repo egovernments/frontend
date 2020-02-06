@@ -7,6 +7,7 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrlFromAPI,
+  getFileUrl,
   getQueryArg,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
@@ -122,7 +123,7 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
       false
     );
-    generateBillForBPA(dispatch, applicationNumber, tenantId);
+    generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
     prepareNocDocumentsView(state, dispatch);
     prepareDocumentsDetailsView(state, dispatch);
     // setResidentialList(state, dispatch);
