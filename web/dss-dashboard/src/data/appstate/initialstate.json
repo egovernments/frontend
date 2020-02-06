@@ -59,7 +59,8 @@
             "values": [
                 "Property Tax",
                 "Trade licence",
-                "PGR"
+                "PGR",
+                "Water & Sewerage"
             ]
         },
         {
@@ -799,7 +800,8 @@
             "values": [
                 "Property Tax",
                 "Trade licence",
-                "PGR"
+                "PGR",
+                "Water & Sewerage"
             ]
         },
         {
