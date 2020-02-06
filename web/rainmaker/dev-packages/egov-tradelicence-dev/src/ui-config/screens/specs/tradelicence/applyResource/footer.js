@@ -957,10 +957,13 @@ export const downloadPrintContainer = (
               label: "Download",
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10 } },
+              props: { variant: "outlined", style: { marginLeft: 10,zIndex:9999 } },
               menu: downloadMenu
             }
           }
+        },
+        style :{
+          zIndex:9999
         }
       },
       // gridDefination: {

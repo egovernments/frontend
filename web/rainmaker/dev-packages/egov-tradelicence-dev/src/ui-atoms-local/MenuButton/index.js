@@ -11,7 +11,7 @@ import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { withStyles } from "@material-ui/core/styles";
 //import Icon from "@material-ui/core/Icon";
 import Icon from "egov-ui-framework/ui-atoms/Icon";
-
+import "./index.css"
 const styles = theme => ({
   root: {
     display: "flex"
@@ -65,12 +65,13 @@ class MenuListComposition extends React.Component {
             aria-haspopup="true"
             onClick={this.handleToggle}
             {...data.props}
+            
           >
             <Icon className={classes.leftIcon} iconName={data.leftIcon} />
             {data.label}
             <Icon className={classes.rightIcon} iconName={data.rightIcon} />
           </Button>
-          <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+          <Popper className="menu-list-item"open={open} anchorEl={this.anchorEl} transition disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow
                 {...TransitionProps}
@@ -82,11 +83,11 @@ class MenuListComposition extends React.Component {
               >
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
-                    <MenuList>
+                    <MenuList className="menu-list-item">
                       {data.menu.map((item, key) => {
                         const { labelName, labelKey } = item.label;
                         return (
-                          <MenuItem key={key} onClick={item.link}>
+                          <MenuItem key={key} onClick={item.link }>
                             <Icon
                               className={classes.leftIcon}
                               iconName={item.leftIcon}
