@@ -67,7 +67,7 @@ class GlobalFilter extends Component {
 
         let userInfo = JSON.parse(`${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : '');
         // let userInfo = `${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : ''
-       
+
         let tenentList = []
         if (userInfo && userInfo['roles'] && Array.isArray(userInfo['roles']) && userInfo['roles'].length > 0) {
             userInfo['roles'].map(role => {
@@ -171,26 +171,40 @@ class GlobalFilter extends Component {
                         let tenantsBoundryObj = boundaryData['boundary']
 
                         if (tenantsBoundryObj && tenantsBoundryObj.children && Array.isArray(tenantsBoundryObj.children) && tenantsBoundryObj.children.length > 0) {
-                            let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
-                            if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
-                                tenantsBoundryObjChildren.children.map((children) => {
+                            // let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
 
-                                    revenueBoundaryObj[children.name] = children.name
-                                    revenueName.push(children.name)
-                                })
-                            }
+                            tenantsBoundryObj.children.map(tenantsBoundryObjChildren => {
+                                if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
+                                    tenantsBoundryObjChildren.children.map((children) => {
+
+                                        revenueBoundaryObj[children.name] = children.name
+                                        revenueName.push(children.name)
+                                    })
+                                }
+                            })
+
+
+
                         }
                     } else {
                         let tenantsBoundryObj = boundaryData['boundary']
 
                         if (tenantsBoundryObj && tenantsBoundryObj.children && Array.isArray(tenantsBoundryObj.children) && tenantsBoundryObj.children.length > 0) {
-                            let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
-                            if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
-                                tenantsBoundryObjChildren.children.map((children) => {
-                                    wardObj[children.name] = children.name
-                                    adminName.push(children.name)
-                                })
-                            }
+                            // let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
+                            
+                            tenantsBoundryObj.children.map(tenantsBoundryObjChildren => {
+
+                                if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
+                                    tenantsBoundryObjChildren.children.map((children) => {
+                                        wardObj[children.name] = children.name
+                                        adminName.push(children.name)
+                                    })
+                                }
+
+                            })
+                           
+
+
                         }
                     }
                 })
