@@ -153,7 +153,7 @@ class FormWizard extends Component {
             get(res, "id", "") === draftId
         );
       } else {
-        const searchPropertyResponse = await httpRequest(
+        let searchPropertyResponse = await httpRequest(
           "property-services/property/_search",
           "_search",
           [

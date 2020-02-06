@@ -163,7 +163,7 @@ class FormWizard extends Component {
           }
         };
       } else {
-        const searchPropertyResponse = await httpRequest(
+        let searchPropertyResponse = await httpRequest(
           "property-services/property/_search",
           "_search",
           [
