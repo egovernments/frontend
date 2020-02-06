@@ -536,7 +536,7 @@ const screenConfig = {
           applicantSummary: applicantSummary,
           documentsSummary: documentsSummary
         }),
-        citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : (ifUserRoleExists("CEMP") ? citizenFooter : {})
+        citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     }
   }
