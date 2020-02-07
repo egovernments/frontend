@@ -517,16 +517,11 @@ export const changeStep = (
     activeStep = defaultActiveStep;
   }
 
-  let bpaStatus = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
-  let isSubmitButtonVisible = false, isSendToCitizenButtonVisible = false;
-  if ((bpaStatus && bpaStatus === "INITIATED")) {
-      isSendToCitizenButtonVisible = activeStep === 4 ? true : false;
-  } else {
-      isSubmitButtonVisible = activeStep === 4 ? true : false;
-  }
-
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = activeStep < 4 ? true : false;
+  const isSendToCitizenButtonVisible = activeStep === 4 ? true : false;
+  const isSubmitButtonVisible = activeStep === 4 ? true : false;
+
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -747,6 +742,10 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: submitBpaApplication
     },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action : "APPLY"
+    },
     visible: false
   },
   sendToCitizen: {
@@ -776,6 +775,10 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: updateBpaApplication
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action : "SEND_TO_CITIZEN"
     },
     visible: false
   }
