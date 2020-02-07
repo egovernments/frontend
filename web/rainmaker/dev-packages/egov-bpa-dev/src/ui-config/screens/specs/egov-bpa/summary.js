@@ -121,6 +121,7 @@ const prepareNocDocumentsView = async (state, dispatch) => {
     });
     dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   };
+}
   
   
   const prepareNocDocumentsView = async (state, dispatch) => {
