@@ -192,7 +192,7 @@ const convertBuiltUpAreaToSqFt = (builtUpArea) => {
 export const getTargetPropertiesDetails = (propertyDetails, self) => {
   const { search } = self.props.location;
   const assessmentNumber = getQueryValue(search, "assessmentId");
-  const selectedPropertyDetails = propertyDetails.filter((item) => item.assessmentNumber === assessmentNumber);
+  const selectedPropertyDetails = propertyDetails;
   // return the latest proeprty details of the selected year
   const lastIndex = 0;
   if (selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
@@ -434,7 +434,6 @@ export const getHeaderLabel = (selected, role) => {
           containerStyle={{ marginTop: 12 }}
           fontSize="16px"
           color="#484848"
-          label={role === "citizen" ? "PT_FORM4_HEADER_MESSAGE" : "PT_EMP_FORM4_HEADER_MESSAGE"}
         />
       );
     case 4:
@@ -483,7 +482,7 @@ export const normalizePropertyDetails = (properties, self) => {
   var sumOfUnitArea = 0;
   units.forEach((unit) => {
     let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
-    unit.unitArea = Math.round(unitAreaInSqYd * 1000) / 1000;
+    unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
     sumOfUnitArea += unit.unitArea;
   });
   if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {

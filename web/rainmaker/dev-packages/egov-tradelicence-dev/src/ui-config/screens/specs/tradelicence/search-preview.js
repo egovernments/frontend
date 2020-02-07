@@ -5,11 +5,14 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,setDocuments
 } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -36,50 +39,6 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
 
-const setDocuments = async (
-  payload,
-  sourceJsonPath,
-  destJsonPath,
-  dispatch
-) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
-
-  const fileStoreIds =
-    uploadedDocData &&
-    uploadedDocData
-      .map(item => {
-        return item.fileStoreId;
-      })
-      .join(",");
-  const fileUrlPayload =
-    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-  const reviewDocData =
-    uploadedDocData &&
-    uploadedDocData.map((item, index) => {
-      return {
-        title: `TL_${item.documentType}` || "",
-        link:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            fileUrlPayload[item.fileStoreId].split(",")[0]) ||
-          "",
-        linkText: "View",
-        name:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            decodeURIComponent(
-              fileUrlPayload[item.fileStoreId]
-                .split(",")[0]
-                .split("?")[0]
-                .split("/")
-                .pop()
-                .slice(13)
-            )) ||
-          `Document - ${index + 1}`
-      };
-    });
-  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
-};
 
 const getTradeTypeSubtypeDetails = payload => {
   const tradeUnitsFromApi = get(
@@ -114,9 +73,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   set(payload, "Licenses[0].headerSideText", headerSideText);
   set(payload, "Licenses[0].assignee", []);
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+    "."
+  )[0] === "INDIVIDUAL"
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
@@ -131,7 +90,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     "LicensesTemp[0].reviewDocData",
-    dispatch
+    dispatch,'TL'
   );
 
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
@@ -152,13 +111,6 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
-  //Fetch Bill and populate estimate card
-  // const code = get(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: tenantId }];
-  // // getBoundaryData(action, state, dispatch, queryObj, code);
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
@@ -166,13 +118,27 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
+    const businessService = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].workflowCode"
+    );
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      {
+        key: "businessServices",
+        value: businessService ? businessService : "NewTL"
+      }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
-    // const status = getTransformedStatus(
-    //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
-    // );
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
+    );
+
+    const financialYear = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
     );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
@@ -183,7 +149,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         data,
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
         "LicensesTemp[0].reviewDocData",
-        dispatch
+        dispatch,'TL'
       );
     }
 
@@ -228,8 +194,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     );
 
     process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", statusCont)
-      : set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", printCont);
+      ? set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          statusCont
+        )
+      : set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          printCont
+        );
 
     // Get approval details based on status and set it in screenconfig
 
@@ -249,7 +223,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           data,
           "Licenses[0].tradeLicenseDetail.verificationDocuments",
           "LicensesTemp[0].verifyDocData",
-          dispatch
+          dispatch,'TL'
         );
       } else {
         dispatch(
@@ -275,7 +249,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       dispatch,
       status,
       applicationNumber,
-      tenantId
+      tenantId,
+      financialYear
     );
 
     process.env.REACT_APP_NAME === "Citizen"
@@ -425,7 +400,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    const status = getQueryArg(window.location.href, "status");
+    // const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
@@ -434,18 +409,11 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
     );
-    if (status !== "pending_payment") {
-      set(
-        action.screenConfig,
-        "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
-        false
-      );
-    }
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    // const queryObject = [
+    //   { key: "tenantId", value: tenantId },
+    //   { key: "businessServices", value: "NewTL" }
+    // ];
+    // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
@@ -480,40 +448,7 @@ const screenConfig = {
                 xs: 12,
                 sm: 4,
                 align: "right"
-              },
-              // children:
-              //   process.env.REACT_APP_NAME === "Employee"
-              //     ? {}
-              //     : {
-              //       word1: {
-              //         ...getCommonTitle(
-              //           {
-              //             jsonPath: "Licenses[0].headerSideText.word1"
-              //           },
-              //           {
-              //             style: {
-              //               marginRight: "10px",
-              //               color: "rgba(0, 0, 0, 0.6000000238418579)"
-              //             }
-              //           }
-              //         )
-              //       },
-              //       word2: {
-              //         ...getCommonTitle({
-              //           jsonPath: "Licenses[0].headerSideText.word2"
-              //         })
-              //       },
-              //       cancelledLabel: {
-              //         ...getCommonHeader(
-              //           {
-              //             labelName: "Cancelled",
-              //             labelKey: "TL_COMMON_STATUS_CANC"
-              //           },
-              //           { variant: "body1", style: { color: "#E54D42" } }
-              //         ),
-              //         visible: false
-              //       }
-              //     }
+              }
             }
           }
         },
@@ -553,7 +488,6 @@ const screenConfig = {
           }
         },
         tradeReviewDetails
-        //footer
       }
     },
     breakUpDialog: {

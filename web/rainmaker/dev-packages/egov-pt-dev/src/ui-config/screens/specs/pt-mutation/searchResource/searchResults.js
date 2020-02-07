@@ -124,7 +124,22 @@ export const searchPropertyTable = {
     className:"propertyTab",
     // data: [],
     columns: [
-      getTextToLocalMapping("Property Tax Unique Id"),
+      {
+        name:getTextToLocalMapping("Property Tax Unique Id"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span
+            style={
+              { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
+            }
+            
+            >
+              {value}
+            </span>
+          )
+        }
+        },
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Guardian Name"),
       getTextToLocalMapping("Existing Property Id"),
@@ -197,7 +212,7 @@ export const searchApplicationTable = {
           customBodyRender: value => (
             <span
             style={
-              { color: "#337ab7",cursor:"pointer" }
+              { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
             }
             
             >
@@ -213,7 +228,7 @@ export const searchApplicationTable = {
         customBodyRender: value => (
           <span
           style={
-            { color: "#337ab7",cursor:"pointer" }
+            { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
           }
           
           >
@@ -289,7 +304,7 @@ const onPropertyTabClick = (rowData,dispatch) => {
     default:
      // window.location.href = `search-preview?applicationNumber=${
      // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
-      store.dispatch(setRoute(`/property-tax/property/${rowData[0]}/${rowData[6]}`));
+      store.dispatch(setRoute(`/property-tax/property/${rowData[0].props.children}/${rowData[6]}`));
     //   rowData[0]
     // }&tenantId=${rowData[6]}`; 
       break;

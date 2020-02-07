@@ -149,7 +149,21 @@ const getAddress=(item)=>{
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "daystart")
           });
-        } else if (key === "toDate") {
+        } else if(key === "tenantId") {
+          // queryObject.push({
+          //   key: key,
+          //   value: convertDateToEpoch(searchScreenObject[key], "dayend")
+          // });
+
+        }
+        else if (key === "ids") {
+          queryObject.push({
+            key:"propertyIds",
+            value: searchScreenObject[key].trim()
+          });
+        }
+        
+        else if (key === "toDate") {
           queryObject.push({
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
@@ -173,9 +187,9 @@ const getAddress=(item)=>{
       let propertyData = response.Properties.map(item => ({
         [getTextToLocalMapping("Property Tax Unique Id")]:
           item.propertyId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.propertyDetails[0].owners[0].name || "-",
+        [getTextToLocalMapping("Owner Name")]: item.owners[0].name || "-",
         [getTextToLocalMapping("Guardian Name")]:
-          item.propertyDetails[0].owners[0].fatherOrHusbandName || "-",
+          item.owners[0].fatherOrHusbandName || "-",
         [getTextToLocalMapping("Existing Property Id")]:  
         item.oldPropertyId || "-",
         [getTextToLocalMapping("Address")]:
@@ -193,7 +207,7 @@ const getAddress=(item)=>{
         [getTextToLocalMapping("Application Type")]:
           item.applicationNo || "PT",
         [getTextToLocalMapping("Owner Name")]:  
-        item.propertyDetails[0].owners[0].name || "-",
+        item.owners[0].name || "-",
         [getTextToLocalMapping("Address")]:
         getAddress(item) || "-",
         tenantId: item.tenantId,

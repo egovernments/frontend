@@ -19,7 +19,7 @@ import { connectionDetails } from "./applyResource/tradeReviewDetails";
 import { getPropertyIDDetails, propertyID, propertyHeader } from "./applyResource/propertyDetails";
 import { getPropertyDetails } from "./applyResource/property-locationDetails";
 import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResource/ownerDetails";
-import {additionDetails} from "./applyResource/additionalDetails";
+import { additionDetails } from "./applyResource/additionalDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { documentList } from "./applyResource/documentList";
@@ -149,6 +149,7 @@ export const getData = async (action, state, dispatch) => {
     }
   }
 };
+
 const propertyDetail = getPropertyDetails();
 const propertyIDDetails = getPropertyIDDetails();
 const ownerDetail = getOwnerDetails();
@@ -180,7 +181,7 @@ export const formwizardThirdStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form3" },
-  children: {additionDetails},
+  children: { additionDetails },
   visible: false
 };
 
@@ -197,6 +198,18 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    set(action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails.visible",
+      false
+    );
+    set(action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.Details.visible",
+      false
+    );
+    set(action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
+      false
+    );
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {

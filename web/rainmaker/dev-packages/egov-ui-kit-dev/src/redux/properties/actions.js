@@ -8,6 +8,9 @@ import FileSaver from 'file-saver';
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import {  getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
+
 const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
@@ -290,8 +293,34 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-        const payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty);
-        dispatch(propertyFetchComplete(payloadProperty));
+        let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty);
+        payloadProperty=getCreatePropertyResponse(payloadProperty);
+        if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents){
+          let fileStoreId = "";
+          payloadProperty.Properties[0].documentsUploaded = [];
+          payloadProperty.Properties[0].documents.map(doc=>{
+              fileStoreId = fileStoreId + doc.fileStoreId + ","
+          });
+          fileStoreId = fileStoreId.slice(0, fileStoreId.length-1);
+          getFileUrlFromAPI(fileStoreId).then(fileUrl=>{
+            if(fileUrl && fileUrl.fileStoreIds) {
+              fileUrl.fileStoreIds.map((file, key)=>{
+                payloadProperty.Properties[0].documentsUploaded.push({
+                  "title": payloadProperty.Properties[0].documents[key].documentType,
+                  "link" : getFileUrl(file.fileUrl),
+                  "linkText": "View",
+                  "name" : payloadProperty.Properties[0].documents[key].documentType
+                })
+              });
+            }
+            console.log("fileUrl", fileUrl);
+            console.log(payloadProperty.Properties[0].documents);
+            dispatch(propertyFetchComplete(payloadProperty));
+          });
+        } else {
+          dispatch(propertyFetchComplete(payloadProperty));
+        }
+        
       } catch (error) {
         dispatch(propertyFetchError(error.message));
       }
