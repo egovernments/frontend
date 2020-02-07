@@ -183,7 +183,7 @@ export const convertToOldPTObject = (newObject) => {
 
   propertyDetails.institution = newProperty.institution;
   propertyDetails.tenantId = newProperty.tenantId;
-  propertyDetails.citizenInfo = newProperty.owners;
+  propertyDetails.citizenInfo = newProperty.owners[0];
   propertyDetails.source = newProperty.source;
   propertyDetails.status = newProperty.status;
   propertyDetails.usage = null;
@@ -257,8 +257,8 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;
 
-  property["propertyDetails"] = propertyDetails;
-  Properties[0] = property;
+  property["propertyDetails"] = [propertyDetails];
+  Properties[0] = {...newProperty,...property};
 
   return Properties;
 };
