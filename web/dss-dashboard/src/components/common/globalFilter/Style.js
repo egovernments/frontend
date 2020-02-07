@@ -29,7 +29,7 @@ const styles = theme => ({
         display: 'flex',
         flex: 1,
         /* flex: 0; */
-        margin: '5px 0 0 0',
+        margin: isMobile ? '8px 0 0 0' : '5px 0 0 0',
         // width: '190px',
         flexDirection: 'column'
     },

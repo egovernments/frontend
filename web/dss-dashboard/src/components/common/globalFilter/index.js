@@ -397,9 +397,7 @@ class GlobalFilter extends Component {
                         style={{
                             color: '#000000',
                             margin: '0 0px 0 0',
-                            // width: _.get(this.state, "filterData.duration.title") ? '200px' : '200px'
-                            // width: isMobile ? '200px' : '150px'
-                            //width: isMobile ? '100%' : '150px'
+                            width:isMobile ? '100%' : '',
                             maxWidth: isMobile ? '100%' : '210px'
                         }}
                         // onChange={handleChange('amount')}
