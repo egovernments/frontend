@@ -10,6 +10,7 @@ import formHoc from "egov-ui-kit/hocs/form";
 import EditIcon from "./components/EditIcon";
 import {getQueryValue,
   } from "egov-ui-kit/utils/PTCommon";
+import { convertToArray } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
@@ -135,7 +136,8 @@ const mapStateToProps = (state, ownProps) => {
   const { common = {}, screenConfiguration } = state;
   const { generalMDMSDataById } = common || {};
   const { preparedFinalObject} = screenConfiguration;
-  const { documentsUploadRedux } = preparedFinalObject;
+  let { documentsUploadRedux } = preparedFinalObject;
+  documentsUploadRedux = convertToArray(documentsUploadRedux);
   return {
     ownProps,
     generalMDMSDataById,
