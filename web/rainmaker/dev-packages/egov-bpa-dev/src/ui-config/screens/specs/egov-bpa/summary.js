@@ -123,34 +123,6 @@ const prepareNocDocumentsView = async (state, dispatch) => {
   };
 }
   
-  
-  const prepareNocDocumentsView = async (state, dispatch) => {
-    let documentsPreview = [];
-    let reduxDocuments = get(
-      state,
-      "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux",
-      {}
-    );
-    jp.query(reduxDocuments, "$.*").forEach(doc => {
-      if (doc.documents && doc.documents.length > 0) {
-        documentsPreview.push({
-          title: getTransformedLocale(doc.documentCode),
-          name: doc.documents[0].fileName,
-          fileStoreId: doc.documents[0].fileStoreId,
-          linkText: "View"
-        });
-      }
-    });
-    let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-    let fileUrls =
-      fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : [];
-    documentsPreview = documentsPreview.map(doc => {
-      doc["link"] = fileUrls[doc.fileStoreId];
-      return doc;
-    });
-    dispatch(prepareFinalObject("nocDocumentsPreview", documentsPreview));
-  };
-  
   const screenConfig = {
     uiFramework: "material-ui",
     name: "summary",
