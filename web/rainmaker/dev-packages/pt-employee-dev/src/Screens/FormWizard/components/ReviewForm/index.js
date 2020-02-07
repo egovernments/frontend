@@ -137,7 +137,6 @@ const mapStateToProps = (state, ownProps) => {
   const { generalMDMSDataById } = common || {};
   const { preparedFinalObject} = screenConfiguration;
   let { documentsUploadRedux } = preparedFinalObject;
-
   documentsUploadRedux = convertToArray(documentsUploadRedux);
   return {
     ownProps,
