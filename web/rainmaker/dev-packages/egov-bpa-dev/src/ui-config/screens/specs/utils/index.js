@@ -2778,6 +2778,13 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
           if(ownershipCategory && ownershipCategory == "INDIVIDUAL.SINGLEOWNER") {
             userInfo.isPrimaryOwner = true;
           }
+          let relationship = get(
+            state.screenConfiguration.preparedFinalObject,
+            `BPA.owners[${cardIndex}].relationship`
+          );
+          if(relationship) {
+            userInfo.relationship = relationship;
+          }
           
           currOwnersArr[cardIndex] = userInfo;
           dispatch(prepareFinalObject(`BPA.owners`, currOwnersArr));
