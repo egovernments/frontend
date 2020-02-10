@@ -1,7 +1,8 @@
 @media only screen and (max-width: 768px) {
   #custom-atoms-footer {
     text-align: right !important;
-    background: #fff !important; }
+    background: #fff !important;
+    z-index: 9999 !important; }
   .apply-wizard-footer #material-ui-nextButton {
     margin-right: 32px !important; }
   .apply-wizard-footer #material-ui-previousButton {
