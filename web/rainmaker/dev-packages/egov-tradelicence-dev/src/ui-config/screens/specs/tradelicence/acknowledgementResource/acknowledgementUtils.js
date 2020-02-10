@@ -4,11 +4,10 @@ import {
   getCommonParagraph,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import "./index.css"
 const style = {
   bodyBox: {
-    marginLeft: 16,
-    flex: 2
+    marginLeft: 16
   },
   tailText: {
     color: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -16,11 +15,11 @@ const style = {
     fontWeight: 400
   },
   tailNumber: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 500
   },
   tailBox: {
-    textAlign: "right",
+    textAlign: "center",
     justifyContent: "center",
     flex: 1
   },

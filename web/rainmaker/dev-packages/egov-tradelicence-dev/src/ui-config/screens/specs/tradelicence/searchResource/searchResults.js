@@ -4,7 +4,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-
+import "./index.css"
 export const searchResults = {
   uiFramework: "custom-molecules",
   // moduleName: "egov-tradelicence",

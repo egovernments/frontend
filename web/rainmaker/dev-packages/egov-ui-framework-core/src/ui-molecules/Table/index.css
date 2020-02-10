@@ -17,9 +17,12 @@ table tbody  tr  td {
 
 @media only screen and (max-width: 960px) {
   table tbody tr td {
-    width: 50% !important;
+    width: 38%!important;
     padding:4px 8px 4px 10px !important;
-    font-size: 14px !important;
+    font-size: 12px !important;
     height: 27px !important;
+  }
+  td{
+    border: none!important;
   }
 }
