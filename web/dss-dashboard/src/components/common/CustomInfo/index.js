@@ -164,8 +164,6 @@ class CustomInfo extends React.Component {
                     if(fileArr && fileArr.length>0) {                        
                       image = removeImageExtension(fileArr);
                     }
-            // var n = file.lastIndexOf("https");
-            // image = file.substr(n, file.length-1)
 
           } else {
             image = file
