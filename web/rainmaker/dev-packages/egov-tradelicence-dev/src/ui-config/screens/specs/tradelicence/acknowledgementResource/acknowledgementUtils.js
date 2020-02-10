@@ -7,7 +7,8 @@ import {
 import "./index.css"
 const style = {
   bodyBox: {
-    marginLeft: 16
+    marginLeft: 16,
+   // flex: 2
   },
   tailText: {
     color: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -19,7 +20,7 @@ const style = {
     fontWeight: 500
   },
   tailBox: {
-    textAlign: "center",
+    textAlign: "right",
     justifyContent: "center",
     flex: 1
   },
