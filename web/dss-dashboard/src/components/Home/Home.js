@@ -95,7 +95,6 @@ class Home extends React.Component {
             if (data.ref && data.ref.url) {
                 pageId = data.ref.url
             }
-            console.log(data.moduleLevel)
             if (data.moduleLevel) {
                 moduleLevel = data.moduleLevel
                 if (!filters['modulelevel']) {

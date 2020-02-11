@@ -77,7 +77,7 @@ class CustomCard extends React.Component {
                 </Grid>
             )
         }
-        return <div>Loading...</div>
+        return <div className={classes.loader}>Loading...</div>
     }
 }
 

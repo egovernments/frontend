@@ -42,6 +42,9 @@ const styles = theme => ({
         fontSize: '16px',
         fontWeight: '400',
         color: '#259b24'
+    },
+    loader: {
+        textAlign: 'left'
     }
 });
 
