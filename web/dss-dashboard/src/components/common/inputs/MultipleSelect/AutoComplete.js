@@ -145,7 +145,7 @@ class CheckboxesTags extends React.Component {
                                 style={isMobile?{width:"100%",margin:"-6"}:''}
                                 multiple
                                 id="checkboxes-tags-demo"
-                                options={this.state.localItems}
+                                options={this.state.localItems.sort()}
                                 disableCloseOnSelect
                                 getOptionLabel={option => option}
                                 defaultValue = {this.props.defaultValue ? this.props.defaultValue : []}
@@ -187,7 +187,7 @@ class CheckboxesTags extends React.Component {
                             style={isMobile?{width:"100%",margin:"-6"}:''}
                             multiple
                             id="checkboxes-tags-demo"
-                            options={this.state.localItems}
+                            options={this.state.localItems.sort()}
                             disableCloseOnSelect
                             getOptionLabel={option => option}
                             
