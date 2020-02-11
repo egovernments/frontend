@@ -1,4 +1,6 @@
 //import variables from '../../../../styles/variables';
+import { isMobile } from 'react-device-detect';
+
 const styles = theme => ({
 
     buttonDisplay: {
@@ -35,6 +37,7 @@ const styles = theme => ({
         // minWidth: '200'
     },
     list: {
+        width: isMobile ? '100%' : '90% !important',
         // display: 'flex',
         '& div': {
             flex: 1,
