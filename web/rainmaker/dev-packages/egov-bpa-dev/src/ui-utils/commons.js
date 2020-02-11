@@ -149,6 +149,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
   let documnts = [];
  if(documentsUpdalod) {
+   debugger;
   Object.keys(documentsUpdalod).forEach(function(key) {
     documnts.push(documentsUpdalod[key])
   });
@@ -169,18 +170,22 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   if (documnts && documnts.length > 0) {
     documnts.forEach(documents => {
     if(documents && documents.documents){
-      let doc = {};
-      if(documents.dropDownValues) {
-      doc.documentType = documents.dropDownValues.value;
-      }
-      doc.fileStoreId = documents.documents[0].fileStoreId;
-      doc.fileStore = documents.documents[0].fileStoreId;
-      doc.fileName = documents.documents[0].fileName;
-      doc.fileUrl = documents.documents[0].fileUrl;
-      if(doc.id) {
-        doc.id = documents.documents[0].id;
-      }
-      requiredDocuments.push(doc);
+      documents.documents.forEach(docItem =>{
+
+        let doc = {};
+        if(documents.dropDownValues) {
+        doc.documentType = documents.dropDownValues.value;
+        }
+        doc.fileStoreId = docItem.fileStoreId;
+        doc.fileStore = docItem.fileStoreId;
+        doc.fileName = docItem.fileName;
+        doc.fileUrl = docItem.fileUrl;
+        if(doc.id) {
+          doc.id = docItem.id;
+        }
+        requiredDocuments.push(doc);
+      });
+      
     }
   })
 }

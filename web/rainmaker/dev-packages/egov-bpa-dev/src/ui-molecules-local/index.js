@@ -44,6 +44,11 @@ const UploadSingleFile = Loadable({
   loading: () => <Loading />
 });
 
+const UploadMultipleFile = Loadable({
+  loader: () => import("./UploadMultipleFile"),
+  loading: () => <Loading />
+});
+
 const Table = Loadable({
   loader: () => import("./Table"),
   loading: () => <Loading />
@@ -93,6 +98,7 @@ export {
   NocList,
   Table,
   UploadSingleFile,
+  UploadMultipleFile,
   DividerWithLabel,
   BpaFeesEstimateCard
 };
