@@ -608,7 +608,7 @@ const getReceiptData = transformedData => {
             ],
             [
               {
-                text: "G8 Receipt No.",
+                text: "Manual G8 Receipt No.",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
@@ -617,7 +617,7 @@ const getReceiptData = transformedData => {
                 border: [false, true, true, true]
               },
               {
-                text: "G8 Receipt Date",
+                text: "Manual G8 Receipt Date",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
@@ -915,7 +915,7 @@ const getReceiptData = transformedData => {
             ],
             [
               {
-                text: "G8 Receipt No.",
+                text: "Manual G8 Receipt No.",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
@@ -924,7 +924,7 @@ const getReceiptData = transformedData => {
                 border: [false, true, true, true]
               },
               {
-                text: "G8 Receipt Date",
+                text: "Manual G8 Receipt Date",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
