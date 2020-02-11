@@ -142,12 +142,12 @@ class DocumentList extends Component {
 
   componentDidMount = () => {
     const {
-      documentsList,
+      ptDocumentsList,
       documentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
     let index = 0;
-    documentsList.forEach(docType => {
+    ptDocumentsList.forEach(docType => {
       docType.cards &&
         docType.cards.forEach(card => {
           if (card.subCards) {
@@ -325,12 +325,12 @@ class DocumentList extends Component {
   };
 
   render() {
-    const { classes, documentsList } = this.props;
+    const { classes, ptDocumentsList } = this.props;
     let index = 0;
     return (
       <div>
-        {documentsList &&
-          documentsList.map(container => {
+        {ptDocumentsList &&
+          ptDocumentsList.map(container => {
             return (
               <div>
                 <Label fontSize="20px"
