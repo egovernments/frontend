@@ -18,14 +18,15 @@ const TaskDialog = props => {
   const { open, onClose, history } = props;
   let fullscreen = false;
   if (window.innerWidth <= 768) {
-    fullscreen = true;
+    //fullscreen = true;
   }
   return (
     <Dialog
-      fullScreen={fullscreen}
+      //fullScreen={fullscreen}
       open={open}
       onClose={onClose}
       maxWidth={false}
+      
     >
       <DialogContent
         children={
