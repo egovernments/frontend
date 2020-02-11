@@ -3752,6 +3752,9 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
           masterDetails: [
             {
               name: "DocTypeMapping"
+            },
+            {
+              name: "CheckList"
             }
           ]
         }
@@ -3798,12 +3801,119 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         }
       });
     };
-    prepareDocumentsView(state, dispatch, action, appState)
+    prepareDocumentsView(state, dispatch, action, appState);
+    let checkList = get()
+    if(payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+      let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
+      prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs);
+    }
   } catch (e) {
     console.log(e);
   }
 }
+const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInfoDocs) => {
+  let documentsDropDownValues = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
 
+  let appState = get(
+    state.screenConfiguration.preparedFinalObject, "BPA.status",
+    []
+  )
+
+  let bpaAppDetails = get ( state.screenConfiguration.preparedFinalObject, "BPA", {});
+
+  let fieldInfo = []
+  fieldInfoDocs.forEach(doc => {
+    if(doc.WFState == appState && doc.RiskType === bpaAppDetails.riskType && doc.ServiceType === bpaAppDetails.serviceType && doc.applicationType === bpaAppDetails.applicationType) { 
+      fieldInfo.push(doc.docTypes);
+    }
+  });
+
+  let fieldreqDocuments = fieldInfo.docTypes;
+  let applyFieldinspectionQstns = fieldInfo.questions;
+  let checklistSelect = [];
+
+  if (applyFieldinspectionQstns && applyFieldinspectionQstns.length > 0) {
+    checklistSelect = [
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[0], label: applyFieldinspectionQstns[0].fieldType.split("/")[0] },
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[1], label: applyFieldinspectionQstns[0].fieldType.split("/")[1] },
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[2], label: applyFieldinspectionQstns[0].fieldType.split("/")[2] }
+    ];
+
+    const FieldinspectionQstns = applyFieldinspectionQstns.map(v => ({
+      code: v.question, title: v.question, cards: [{
+        name: v.question, code: v.question, required: true, dropDownValues: {
+          label: "Select", required: true, menu: checklistSelect
+        }
+      }]
+    }));
+    
+    dispatch(prepareFinalObject("FieldinspectionQstns", FieldinspectionQstns));    
+  }
+
+  if(fieldreqDocuments && fieldreqDocuments.length > 0) {
+    let documentsList = [];
+    fieldreqDocuments.forEach(doc => {
+    let code = doc.code;
+    doc.dropDownValues = [];
+    documentsDropDownValues.forEach(value => {
+      let values = value.code.slice(0, code.length);
+      if (code === values) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc); 
+  });
+  const docList = documentsList.filter((el) => {
+    return fieldreqDocuments.some((f) => {
+      return f.code === el.code;
+    });
+  });
+  const bpaDocuments = docList;
+  let documentsContract = [];
+  let tempDoc = {};
+
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["code"] = doc.code.split(".")[0];
+    card["title"] = doc.code.split(".")[0];
+    card["cards"] = [];
+    tempDoc[doc.code.split(".")[0]] = card;
+  });
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropDownValues) {
+      let dropDownValues = {};
+      dropDownValues.label = "Select Documents";
+      dropDownValues.required = doc.required;
+      dropDownValues.menu = doc.dropDownValues.filter(item => {
+        return item.active;
+      });
+      dropDownValues.menu = dropDownValues.menu.map(item => {
+        return { code: item.code, label: item.code };
+      });
+      card["dropDownValues"] = dropDownValues;
+    }
+    tempDoc[doc.code.split(".")[0]].cards.push(card);
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+  let applyFieldinspectionDocument = [];
+    documentsContract.forEach(doc => {
+      applyFieldinspectionDocument.push(doc);      
+    });
+  dispatch(prepareFinalObject("nocDocumentsContract", applyFieldinspectionDocument));  
+  }
+}
 const prepareDocumentsView = async (state, dispatch, action, appState) => {
   let documentsPreview = [];
 

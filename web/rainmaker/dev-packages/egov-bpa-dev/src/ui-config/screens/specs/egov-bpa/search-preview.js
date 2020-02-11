@@ -31,6 +31,7 @@ import { basicSummary } from "./summaryResource/basicSummary"
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
+import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
@@ -531,6 +532,7 @@ const screenConfig = {
         },
         body: getCommonCard({
           // estimateSummary: estimateSummary,
+          fieldinspectionSummary: fieldinspectionSummary,
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
