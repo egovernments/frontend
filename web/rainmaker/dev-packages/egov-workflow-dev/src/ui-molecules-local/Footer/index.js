@@ -130,8 +130,12 @@ class Footer extends React.Component {
       response,
       `Licenses[0].applicationNumber`
     );
+    const licenseNumber = get(
+      response,
+      `Licenses[0].licenseNumber`
+    );
     setRoute(
-      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${applicationNumberNew}&licenseNumber=${licenseNumber}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
     );
   };
 
@@ -166,6 +170,10 @@ class Footer extends React.Component {
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].financialYear`
     );
+    const licenseNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].licenseNumber`
+    );
 
     const downloadMenu =
       contractData &&
@@ -185,7 +193,7 @@ class Footer extends React.Component {
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
         link: () => {
           this.props.setRoute(
-            `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+            `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
           );
         }
       };
