@@ -1657,32 +1657,13 @@ export const updateDropDowns = async (
 };
 
 export const getDocList = (state, dispatch) => {
-  const tradeSubTypes = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.tradeUnits"
-  );
-
-  const tradeSubCategories = get(
-    state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.MdmsTradeType"
-  );
-  let selectedTypes = [];
-  tradeSubTypes.forEach(tradeSubType => {
-    selectedTypes.push(
-      filter(tradeSubCategories, {
-        code: tradeSubType.tradeType
-      })
-    );
-  });
-
-  // selectedTypes[0] &&
-  //
+  const documentList = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.Documents");
   let applicationDocArray = [];
 
-  selectedTypes.forEach(tradeSubTypeDoc => {
+  documentList.forEach(doc => {
     applicationDocArray = [
       ...applicationDocArray,
-      ...tradeSubTypeDoc[0].applicationDocument
+      ...doc[0].applicationDocument
     ];
   });
   function onlyUnique(value, index, self) {
@@ -2344,12 +2325,12 @@ export const getTextToLocalMapping = label => {
         "WS_COMMON_TABLE_COL_ADDRESS",
         localisationLabels
       );
-    
+
     case "Application Status":
       return getLocaleLabels(
         "Application Status",
         "WS_COMMON_TABLE_COL_APPLICATION_STATUS"
-      ) 
+      )
     // case "Connection Type":
     //   return getLocaleLabels(
     //     "Connection Type",

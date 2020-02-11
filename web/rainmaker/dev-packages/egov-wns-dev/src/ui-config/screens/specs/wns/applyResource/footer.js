@@ -88,50 +88,12 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
+    getDocList(state, dispatch);
     const data = get(state.screenConfiguration, "preparedFinalObject");
     setOwnerShipDropDownFieldChange(state, dispatch, data);
-
-    const isTradeDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
-      state,
-      dispatch
-    );
-    const isTradeLocationValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
-      state,
-      dispatch
-    );
-    let accessoriesJsonPath =
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.accessoriesCard.props.items";
-    let accessories = get(
-      state.screenConfiguration.screenConfig.apply,
-      accessoriesJsonPath,
-      []
-    );
-    let isAccessoriesValid = true;
-    for (var i = 0; i < accessories.length; i++) {
-      if ((accessories[i].isDeleted === undefined || accessories[i].isDeleted !== false) &&
-        !validateFields(`${accessoriesJsonPath}[${i}].item${i}.children.cardContent.children.accessoriesCardContainer.children`, state, dispatch))
-        isAccessoriesValid = false;
-    }
-
-    let tradeUnitJsonPath =
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items";
-    let tradeUnits = get(state.screenConfiguration.screenConfig.apply, tradeUnitJsonPath, []);
-    let isTradeUnitValid = true;
-    for (var j = 0; j < tradeUnits.length; j++) {
-      if ((tradeUnits[j].isDeleted === undefined || tradeUnits[j].isDeleted !== false) &&
-        !validateFields(`${tradeUnitJsonPath}[${j}].item${j}.children.cardContent.children.tradeUnitCardContainer.children`, state, dispatch))
-        isTradeUnitValid = false;
-    }
-    if (!isTradeDetailsValid || !isTradeLocationValid || !isAccessoriesValid || !isTradeUnitValid) {
-      isFormValid = true;
-    }
   }
 
   if (activeStep === 1) {
-    // await getDocList(state, dispatch);
-
     let isOwnerShipValid = validateFields(
       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
       state,

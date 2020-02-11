@@ -15,7 +15,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import store from "redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getQueryArg, getFileUrlFromAPI ,getFileUrl} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
     setBusinessServiceDataToLocalStorage,
@@ -268,7 +268,7 @@ export const getPropertyResults = async (queryObject, dispatch) => {
             queryObject
         );
 
-        console.log("apiresponse",response)
+        console.log("apiresponse", response)
 
         // if (response.WaterConnection.length > 0) {
         //     for (let i = 0; i < response.WaterConnection.length; i++) {
@@ -562,15 +562,9 @@ const getMultipleOwners = owners => {
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     try {
-        let queryObject = JSON.parse(
-            JSON.stringify(
-                get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
-            )
+        let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "Licenses", []))
         );
-        let documents = get(
-            queryObject[0],
-            "tradeLicenseDetail.applicationDocuments"
-        );
+        let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");
         set(
             queryObject[0],
             "validFrom",
@@ -658,27 +652,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
                     set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
                 } else action = "APPLY";
             }
-            // else if (
-            //   queryObject[0].tradeLicenseDetail &&
-            //   queryObject[0].tradeLicenseDetail.applicationDocuments &&
-            //   activeIndex === 1
-            // ) {
-            // } else if (
-            //   queryObject[0].tradeLicenseDetail &&
-            //   queryObject[0].tradeLicenseDetail.applicationDocuments
-            // ) {
-            //   action = "APPLY";
-            // }
             set(queryObject[0], "action", action);
             const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
             !isEditFlow &&
-                (await httpRequest("post", "/tl-services/v1/_update", "", [], {
-                    Licenses: queryObject
-                }));
-            let searchQueryObject = [
-                { key: "tenantId", value: queryObject[0].tenantId },
-                { key: "applicationNumber", value: queryObject[0].applicationNumber }
-            ];
+                (await httpRequest("post", "/ws-services/ws/_update", "", [], { Licenses: queryObject }));
+            let searchQueryObject = [{ key: "tenantId", value: queryObject[0].tenantId }, { key: "applicationNumber", value: queryObject[0].applicationNumber }];
             let searchResponse = await getSearchResults(searchQueryObject);
             if (isEditFlow) {
                 searchResponse = { Licenses: queryObject };

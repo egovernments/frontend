@@ -4,7 +4,8 @@ import {
   getCommonCard,
   getCommonContainer,
   getCommonTitle,
-  getCommonParagraph
+  getCommonParagraph,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -54,44 +55,95 @@ export const header = getCommonContainer({
 
 export const tradeDocumentDetails = getCommonCard({
   header: getCommonTitle(
-    { labelName: "Required Documents", labelKey: "TL_NEW-UPLOAD-DOCS_HEADER" },
-    { style: { marginBottom: 18 } }
+    {
+      labelName: "Required Documents",
+      labelKey: "WS_DOCUMENT_DETAILS_HEADER"
+    },
+    {
+      style: {
+        marginBottom: 18
+      }
+    }
   ),
-  paragraph: getCommonParagraph({
+  subText: getCommonParagraph({
     labelName:
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
+    labelKey: "WS_DOCUMENT_DETAILS_SUBTEXT"
   }),
-  documentList
+  break: getBreak(),
+  documentList: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "DocumentListContainer",
+    props: {
+      documents: [
+        {
+          name: "Identity Proof ",
+          required: true,
+          jsonPath: "applyScreen.documents.identityProof",
+          selector: {
+            inputLabel: "Select Document",
+            menuItems: [{ value: "AADHAAR", label: "Aadhaar Card" }, { value: "VOTERID", label: "Voter ID Card" }, { value: "DRIVING", label: "Driving License" }]
+          }
+        },
+        {
+          name: "Address Proof ",
+          required: true,
+          jsonPath: "applyScreen.documents.addressProof",
+          selector: {
+            inputLabel: "Select Document",
+            menuItems: [{ value: "ELECTRICITYBILL", label: "Electricity Bill" }, { value: "DL", label: "Driving License" }, { value: "VOTERID", label: "Voter ID Card" }]
+          }
+        },
+        {
+          name: "Building Plan/ Completion Certificate",
+          jsonPath: "applyScreen.documents.completionCertificate"
+        },
+        {
+          name: "Electicity Bill",
+          jsonPath: "applyScreen.documents.electricityBill"
+        },
+        {
+          name: "Property Tax Reciept",
+          jsonPath: "applyScreen.documents.ptReciept"
+        },
+        {
+          name: "Plumber Report/ Drawing",
+          jsonPath: "applyScreen.documents.plumberReport"
+        }
+      ],
+      buttonLabel: {
+        labelName: "UPLOAD FILE",
+        labelKey: "WS_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+      },
+      // description: "Only .jpg and .pdf files. 6MB max file size.",
+      inputProps: {
+        accept: "image/*, .pdf, .png, .jpeg"
+      },
+      maxFileSize: 6000
+    },
+    type: "array"
+  }
 });
 
-export const getMdmsData = async (action, state, dispatch) => {
+const getMdmsData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
-        { moduleName: "egov-wns", masterDetails: [{ name: "TradeType" }, { name: "AccessoriesCategory" }, { name: "ApplicationType" }] },
-        { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }, { name: "DocumentType" }, { name: "UOM" }] },
+        { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
+        { moduleName: "egov-location", masterDetails: [{ name: "TenantBoundary" }] },
         { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
-        { moduleName: "egf-master", masterDetails: [{ name: "FinancialYear" }] }
+        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }] },
+        { moduleName: "ws-services-masters", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
   try {
     let payload = null;
     payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-    set(payload, "MdmsRes.TradeLicense.MdmsTradeType", get(payload, "MdmsRes.TradeLicense.TradeType", []));
-    payload = commonTransform(payload, "MdmsRes.TradeLicense.TradeType");
-    payload = commonTransform(payload, "MdmsRes.common-masters.OwnerShipCategory");
-    set(payload, "MdmsRes.common-masters.OwnerShipCategoryTransformed", objectToDropdown(get(payload, "MdmsRes.common-masters.OwnerShipCategory", [])));
-    const localities = get(state.screenConfiguration, "preparedFinalObject.applyScreenMdmsData.tenant.localities", []);
-    if (localities && localities.length > 0) { payload.MdmsRes.tenant.localities = localities; }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    let financialYearData = get(payload, "MdmsRes.egf-master.FinancialYear", []).filter(item => item.module === "TL" && item.active === true);
-    set(payload, "MdmsRes.egf-master.FinancialYear", financialYearData);
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) { console.log(e); }
 };
 
 export const getData = async (action, state, dispatch) => {
