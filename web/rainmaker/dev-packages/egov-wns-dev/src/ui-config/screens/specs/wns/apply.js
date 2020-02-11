@@ -161,12 +161,7 @@ export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: {
-    IDDetails,
-    Details,
-    ownerDetails,
-    OwnerInfoCard,
-  }
+  children: { IDDetails, Details, ownerDetails, OwnerInfoCard }
 };
 
 export const formwizardSecondStep = {
@@ -210,6 +205,27 @@ const screenConfig = {
       "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
       false
     );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.visible",
+      true
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.visible",
+      true
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.visible",
+      false
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.visible",
+      false
+    );
+
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {

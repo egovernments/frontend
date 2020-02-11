@@ -39,10 +39,129 @@ const styles = {
 };
 
 class CheckboxLabels extends React.Component {
-  handleChange = event => {
-    const { screenKey, componentJsonpath, onFieldChange, onChange } = this.props;
-    onChange ? onChange(event) : onFieldChange(screenKey, componentJsonpath, "props.value", event.target.value);
+  state = { checkedSewerage: false, checkedWater: true }
+
+  handleWater = name => event => {
+    const { jsonPathWater, approveCheck, onFieldChange } = this.props;
+    this.setState({ [name]: event.target.checked }, () => {
+      if (this.state.checkedWater) {
+        onFieldChange(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
+          "visible",
+          true
+        );
+        onFieldChange(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
+          "visible",
+          true
+        );
+        if (this.state.checkedSewerage) {
+          onFieldChange(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
+            "visible",
+            true
+          );
+          onFieldChange(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
+            "visible",
+            true
+          );
+        } else {
+          onFieldChange(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
+            "visible",
+            false
+          );
+          onFieldChange(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
+            "visible",
+            false
+          );
+        }
+      } else {
+        onFieldChange(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
+          "visible",
+          false
+        );
+        onFieldChange(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
+          "visible",
+          false
+        );
+      }
+      approveCheck(jsonPathWater, this.state.checkedG)
+    });
   };
+
+  handleSewerage = name => event => {
+    const { jsonPathSewerage, approveCheck, onFieldChange } = this.props;
+    this.setState({ [name]: event.target.checked }, () => {
+      if (this.state.checkedSewerage) {
+        onFieldChange(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
+          "visible",
+          true
+        );
+        onFieldChange(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
+          "visible",
+          true
+        );
+        if (!this.state.checkedWater) {
+          onFieldChange(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
+            "visible",
+            false
+          );
+          onFieldChange(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
+            "visible",
+            false
+          );
+        } else {
+          onFieldChange(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
+            "visible",
+            true
+          );
+          onFieldChange(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
+            "visible",
+            true
+          );
+        }
+      } else {
+        onFieldChange(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
+          "visible",
+          false
+        );
+        onFieldChange(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
+          "visible",
+          false
+        );
+      }
+      approveCheck(jsonPathSewerage, this.state.checkedSewerage)
+    });
+  }
 
   render() {
     const { classes, label, buttons, defaultValue, value, fieldValue, required } = this.props;
@@ -51,22 +170,31 @@ class CheckboxLabels extends React.Component {
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl} required={required}>
           <FormLabel className={classes.formLabel}>
-            {label && label.key && (<LabelContainer className={classes.formLabel} labelName={label.name} labelKey={label.key} />)}
+            <LabelContainer className={classes.formLabel} labelKey="WS_APPLY_FOR" />
           </FormLabel>
-          <FormGroup aria-label="Gender" name="gender1" className={classes.group} value={value || fieldValue || defaultValue} onChange={this.handleChange}>
-            {buttons && buttons.map((button, index) => {
-              return (
-                <FormControlLabel
-                  disabled={button.disabled ? true : false}
-                  key={index}
-                  classes={{ label: "checkbox-button-label" }}
-                  value={button.value}
-                  control={<Checkbox classes={{ root: classes.radioRoot, checked: classes.checked }} color="primary" />}
-                  label={<LabelContainer labelName={button.labelName} labelKey={button.labelKey} />}
-                />
-              );
-            })
-            }
+          <FormGroup row>
+            <FormControlLabel
+              classes={{ label: "checkbox-button-label" }}
+              control={
+                <Checkbox
+                  checked={this.state.checkedWater}
+                  onChange={this.handleWater("checkedWater")}
+                  classes={{ root: classes.radioRoot, checked: classes.checked }}
+                  color="primary"
+                />}
+              label={<LabelContainer labelKey="WS_APPLY_WATER" />}
+            />
+            <FormControlLabel
+              classes={{ label: "checkbox-button-label" }}
+              control={
+                <Checkbox
+                  checked={this.state.checkedSewerage}
+                  onChange={this.handleSewerage("checkedSewerage")}
+                  classes={{ root: classes.radioRoot, checked: classes.checked }}
+                  color="primary"
+                />}
+              label={<LabelContainer labelKey="WS_APPLY_SEWERAGE" />}
+            />
           </FormGroup>
         </FormControl>
       </div>
@@ -75,22 +203,16 @@ class CheckboxLabels extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-  let fieldValue = "";
   const { screenConfiguration } = state;
-  const { jsonPath } = ownprops;
+  const { jsonPathWater, jsonPathSewerage } = ownprops;
   const { preparedFinalObject } = screenConfiguration;
-  if (jsonPath) fieldValue = get(preparedFinalObject, jsonPath);
-  return { preparedFinalObject, jsonPath, fieldValue };
+  return { preparedFinalObject, jsonPathWater, jsonPathSewerage };
 };
 
 const mapDispatchToProps = dispatch => {
   return { approveCheck: (jsonPath, value) => { dispatch(prepareFinalObject(jsonPath, value)); } };
 };
 
-CheckboxLabels.propTypes = {
-  classes: PropTypes.object.isRequired
-};
+CheckboxLabels.propTypes = { classes: PropTypes.object.isRequired };
 
-export default withStyles(styles)(
-  connect(mapStateToProps, mapDispatchToProps)(CheckboxLabels)
-);
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(CheckboxLabels));
