@@ -6,7 +6,7 @@ import pdfFonts from "./vfs_fonts";
 // pdfMakeCustom.vfs = pdfFonts.vfs;
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { from } from "rxjs";
-
+import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons"
 // pdfMakeCustom.fonts = {
 //   Camby:{
 //           normal: 'Cambay-Regular.ttf',
@@ -1837,18 +1837,22 @@ const generateReceipt = async (state, dispatch, type) => {
       let certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data &&
         //  pdfMakeCustom.createPdf(certificate_data).download("tl_certificate.pdf");
-        pdfMakeCustom.createPdf(certificate_data).open();
+       // pdfMakeCustom.createPdf(certificate_data).open();
+       downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
       break;
     case "certificate_print":
       certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data && pdfMakeCustom.createPdf(certificate_data).print();
+      //downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
       break;
     case "receipt_download":
       let receipt_data = getReceiptData(transformedData, ulbLogo);
 
       receipt_data &&
         //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
-        pdfMakeCustom.createPdf(receipt_data).open();
+        //pdfMakeCustom.createPdf(receipt_data).open();
+        downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
+
       break;
     case "receipt_print":
       receipt_data = getReceiptData(transformedData, ulbLogo);
