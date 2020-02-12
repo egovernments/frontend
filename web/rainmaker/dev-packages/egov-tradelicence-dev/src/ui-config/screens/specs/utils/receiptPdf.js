@@ -1836,23 +1836,21 @@ const generateReceipt = async (state, dispatch, type) => {
     case "certificate_download":
       let certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data &&
-        //  pdfMakeCustom.createPdf(certificate_data).download("tl_certificate.pdf");
+        //  pdfMakeCustom.createPdf(certificate_data)
+        //  .download("tl_certificate.pdf");
        // pdfMakeCustom.createPdf(certificate_data).open();
-       downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
+       downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(certificate_data), `tl_certificate.pdf`);
       break;
     case "certificate_print":
       certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data && pdfMakeCustom.createPdf(certificate_data).print();
-      //downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
       break;
     case "receipt_download":
       let receipt_data = getReceiptData(transformedData, ulbLogo);
 
       receipt_data &&
         //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
-        //pdfMakeCustom.createPdf(receipt_data).open();
-        downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
-
+        pdfMakeCustom.createPdf(receipt_data).open();
       break;
     case "receipt_print":
       receipt_data = getReceiptData(transformedData, ulbLogo);
@@ -1862,8 +1860,9 @@ const generateReceipt = async (state, dispatch, type) => {
       let ack_data = getACKData(transformedData, ulbLogo);
 
       ack_data &&
-        //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
-        pdfMakeCustom.createPdf(ack_data).open();
+       // pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
+        //pdfMakeCustom.createPdf(ack_data).open();
+        downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(ack_data), `tl_receipt.pdf`);
       break;
     default:
       break;

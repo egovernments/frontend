@@ -38,7 +38,6 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
-import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons"
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -643,11 +642,4 @@ const screenConfig = {
     }
   }
 };
-if (doNotDownloadReceipt !== true)
-  {
-    //if (localStorageGet("rd-propertyId")==details.propertyId && localStorageGet("rd-assessmentNumber")==details.propertyDetails[0].assessmentNumber) {
-      downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
-      // receiptPDF.download(`${details.ReceiptNo}.pdf`);
-    //}
-  }
 export default screenConfig;
