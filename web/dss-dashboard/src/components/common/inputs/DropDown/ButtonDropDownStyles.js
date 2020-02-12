@@ -1,6 +1,4 @@
 //import variables from '../../../../styles/variables';
-import { isMobile } from 'react-device-detect';
-
 const styles = theme => ({
 
     buttonDisplay: {
@@ -33,18 +31,14 @@ const styles = theme => ({
         border: 'none'
     },
     ddl: {
-        // display: 'flex',
-        minWidth: isMobile ? '100%' : '150',
-        maxWidth: isMobile ? '100%' : '210',
+        display: 'flex',
+        // minWidth: '200'
     },
     list: {
-        // width: isMobile ? '100%' : '90% !important',
         // display: 'flex',
         '& div': {
             flex: 1,
             minWidth:120,
-            maxWidth: isMobile ? '100%' :'180px',
-            marginRight: isMobile ? '100%' :'10px'
             // top: -4
         }
     },
@@ -59,37 +53,18 @@ const styles = theme => ({
         list: {
         // display: 'flex',
         '& div': {
-             minWidth: isMobile ? '100%' : 70,
-             maxWidth: isMobile ? '100%' : '80px'
+             minWidth:177,
             }
-        },
-        ddl: {
-            maxWidth: '150'
         }
     },
-    '@media (min-width: 900px)' :{
+    '@media (min-width: 900px) and (max-width:1300px)':{
         list: {
         // display: 'flex',
         '& div': {
-             minWidth:isMobile ? '100%' : 70,
+             minWidth:95,
             }
-        },
-        ddl: {
-            maxWidth: isMobile ? '100%' :'150'
         }
-    },
-    '@media (max-width: 3000px)': {
-        list: {
-            '& div': {
-                 minWidth:isMobile ? '100%' : 70,
-                 maxWidth:isMobile ? '100%' :'200px'
-                }
-            },
-            ddl: {
-                maxWidth: '150'
-            }
-    },
-   
+    }
 });
 
 export default styles;

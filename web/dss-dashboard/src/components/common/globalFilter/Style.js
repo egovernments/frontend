@@ -99,32 +99,18 @@ const styles = theme => ({
                 width:'210px !important'
             }
 
-        },
-        dateFilter: {
-            maxWidth: isMobile ? '100%' : '150px'
-        }
-    },
-    '@media (max-width: 1367px)':{
-        dateFilter: {
-            maxWidth: isMobile ? '100%' : '150px'
         }
     },
     '@media (max-width: 1293px)': {
         mainFilter: {
             display: 'flex',
             flexDirection: 'row',
-        },
-        dateFilter: {
-            maxWidth: isMobile ? '100%' : '150px'
         }
     },
     '@media (max-width: 1024px)': {
         mainFilter: {
             display: 'flex',
             flexDirection: 'column',
-        },
-        dateFilter: {
-            maxWidth: isMobile ? '100%' : '150px'
         }
     },
     '@media (max-width: 768px)': {
@@ -138,8 +124,7 @@ const styles = theme => ({
         mainFilter: {
             display: 'flex',
             flexDirection: 'column',
-        },
-       
+        }
     },
 })
 

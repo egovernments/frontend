@@ -394,7 +394,6 @@ class GlobalFilter extends Component {
                         // disableUnderline={true}
                         id="adornment-amount"
                         value={(_.get(this.state, "filterData.duration.title") || this.state.value)}
-                       
                         className={classes.dateFilter}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">
