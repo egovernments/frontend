@@ -6,6 +6,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
+import {getNextFinancialYearForRenewal} from "../../ui-utils/commons"
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -111,27 +112,34 @@ class Footer extends React.Component {
     });
   };
 
-  renewTradelicence = async (applicationNumber, financialYear, tenantId) => {
+  renewTradelicence = async (financialYear, tenantId) => {
     const {setRoute , state} = this.props;
     const licences = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses`
     );
-    
+
+    const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
+
     const wfCode = "DIRECTRENEWAL";
     set(licences[0], "action", "INITIATE");
     set(licences[0], "workflowCode", wfCode);
     set(licences[0], "applicationType", "RENEWAL");
+    set(licences[0],"financialYear" ,nextFinancialYear);
 
   const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
       Licenses: licences
     })
-     const applicationNumberNew = get(
+     const renewedapplicationNo = get(
       response,
       `Licenses[0].applicationNumber`
     );
+    const licenseNumber = get(
+      response,
+      `Licenses[0].licenseNumber`
+    );
     setRoute(
-      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
     );
   };
 
@@ -166,6 +174,10 @@ class Footer extends React.Component {
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].financialYear`
     );
+    const licenseNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].licenseNumber`
+    );
 
     const downloadMenu =
       contractData &&
@@ -185,7 +197,7 @@ class Footer extends React.Component {
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
         link: () => {
           this.props.setRoute(
-            `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+            `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
           );
         }
       };
@@ -194,7 +206,7 @@ class Footer extends React.Component {
         label: "Submit",
         labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
         link: () => {
-          this.renewTradelicence(applicationNumber, financialYear, tenantId);
+          this.renewTradelicence(financialYear, tenantId);
         }
       };
       downloadMenu && downloadMenu.push(submitButton);
