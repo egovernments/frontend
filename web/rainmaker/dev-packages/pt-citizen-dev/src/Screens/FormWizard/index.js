@@ -82,7 +82,7 @@ import "./index.css";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
-import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
 
 
@@ -186,7 +186,14 @@ class FormWizard extends Component {
           ]
         );
         searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
-        this.props.prepareFinalObject("newProperties",searchPropertyResponse.newProperties);
+        await prefillPTDocuments(
+          searchPropertyResponse,
+          "Properties[0].documents",
+          "documentsUploadRedux",
+          store.dispatch, 'PT'
+        );
+        // prepareFinalObject("documentsUploadRedux",{} );
+        this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
         let propertyResponse = {
           ...searchPropertyResponse,
           Properties: [
@@ -774,7 +781,7 @@ class FormWizard extends Component {
   };
 
   assessProperty = async (action) => {
-    const {hideSpinner}=this.props;
+    const { hideSpinner } = this.props;
     let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
     const propertyId = getQueryArg(
       window.location.href,
@@ -786,15 +793,12 @@ class FormWizard extends Component {
       "tenantId": tenant,
       "propertyId": propertyId,
       "financialYear": financialYear,
-      "assessmentDate": new Date().getTime(),
+      "assessmentDate": new Date().getTime() - 60000,
       "source": "MUNICIPAL_RECORDS",
       "channel": "CFC_COUNTER",
       "status": "ACTIVE"
-
     }
     try {
-
-
       let assessPropertyResponse = await httpRequest(
         `property-services/assessment/${propertyMethodAction}`,
         `${propertyMethodAction}`,
@@ -806,7 +810,6 @@ class FormWizard extends Component {
       store.dispatch(
         setRoute(
           `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
-
         )
       );
 
@@ -824,8 +827,8 @@ class FormWizard extends Component {
   }
 
   createProperty = async (Properties, action) => {
-    const { documentsUploadRedux ,hidespinner,newProperties} = this.props;
-    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux,newProperties);
+    const { documentsUploadRedux, hidespinner, newProperties } = this.props;
+    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
     try {
       const propertyResponse = await httpRequest(
@@ -1081,20 +1084,22 @@ class FormWizard extends Component {
 
         break;
       case 3:
-        const uploadedDocs = get(this.props, "documentsUploadRedux");
-        let temp = 0;
+        let maxDocuments=0;
         if (uploadedDocs) {
           let docsArray = [];
           Object.keys(uploadedDocs).map(key => {
             docsArray.push(uploadedDocs[key]);
           })
           docsArray.map(docs => {
+            if(docs&&docs.isDocumentRequired){
+              maxDocuments++;
+            }
             if (docs && docs.isDocumentRequired && docs.documents && docs.dropdown) {
               temp++;
             }
           });
         }
-        if (!uploadedDocs || temp < 3) {
+        if (!uploadedDocs || temp < maxDocuments) {
           alert("Please upload all the required documents and documents type.")
         } else {
           this.setState(
@@ -1301,7 +1306,7 @@ class FormWizard extends Component {
       } else {
         toggleSpinner();
         return;
-        
+
       }
       if (selectedownerShipCategoryType === "SINGLEOWNER") {
         set(
@@ -1579,7 +1584,7 @@ class FormWizard extends Component {
     } = this.props;
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
-    prepareFinalObject("documentsUploadRedux",{} );
+    prepareFinalObject("documentsUploadRedux", {});
     this.onTabClick(0);
   };
 
@@ -1834,14 +1839,14 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux ,newProperties=[]} = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [] } = preparedFinalObject;
   return {
     form,
     prepareFormData: common.prepareFormData,
     currentTenantId,
     common,
     app,
-    documentsUploadRedux,newProperties
+    documentsUploadRedux, newProperties
   };
 };
 
@@ -1872,10 +1877,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(handleFieldChange(formKey, fieldKey, value)),
     prepareFormDataAction: (path, value) =>
       dispatch(prepareFormDataAction(path, value)),
-      hideSpinner: () => dispatch(hideSpinner()),
+    hideSpinner: () => dispatch(hideSpinner()),
     removeForm: formkey => dispatch(removeForm(formkey)),
     prepareFinalObject: (jsonPath, value) =>
-    dispatch(prepareFinalObject(jsonPath, value))   
+      dispatch(prepareFinalObject(jsonPath, value))
   };
 };
 
