@@ -1019,7 +1019,7 @@ class FormWizard extends Component {
         const { Properties: pts = [] } = asd;
         let { search: search1 } = this.props.location;
 
-
+let isReassesment = Boolean(getQueryValue(search1, "isReassesment").replace('false', ''));
         let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
         let propertyId1 = '';
         let tenantId1 = '';
@@ -1035,7 +1035,10 @@ class FormWizard extends Component {
             // this.assessProperty();
             createAndUpdate(index, 'assess');
             // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
-          } else {
+          } 
+          else if(isReassesment){
+            createAndUpdate(index, 're-assess');
+          }else {
             createAndUpdate(index, 'create');
           }
           // createAndUpdate(index);
@@ -1633,22 +1636,37 @@ class FormWizard extends Component {
           Assessment: assessment
         }
       );
+      if(action === "re-assess"){
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+          )
+        );
+      }else{
       store.dispatch(
         setRoute(
           `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
         )
-      );
+      );}
 
     } catch (e) {
       hideSpinner();
       //  this.setState({ nextButtonEnabled: true });
       //  alert(e);
+      if(action==="assess"){
       store.dispatch(
         setRoute(
           `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
 
         )
-      );
+      );}
+      else{
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=reassessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+
+        )
+      );}
     }
   }
 
