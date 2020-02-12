@@ -87,24 +87,44 @@ const styles = theme => ({
         textAlign: 'right',
         color: '#96989a'
     },
+    dateFilter: {
+        color: '#000000',
+        margin: '0 0px 0 0',
+        width:isMobile ? '100%' : '',
+        maxWidth: isMobile ? '100%' : '210px'
+    },
     '@media (min-width: 1367px)':{
         list: {
             '& div': {
                 width:'210px !important'
             }
 
+        },
+        dateFilter: {
+            maxWidth: isMobile ? '100%' : '150px'
+        }
+    },
+    '@media (max-width: 1367px)':{
+        dateFilter: {
+            maxWidth: isMobile ? '100%' : '150px'
         }
     },
     '@media (max-width: 1293px)': {
         mainFilter: {
             display: 'flex',
             flexDirection: 'row',
+        },
+        dateFilter: {
+            maxWidth: isMobile ? '100%' : '150px'
         }
     },
     '@media (max-width: 1024px)': {
         mainFilter: {
             display: 'flex',
             flexDirection: 'column',
+        },
+        dateFilter: {
+            maxWidth: isMobile ? '100%' : '150px'
         }
     },
     '@media (max-width: 768px)': {
@@ -118,7 +138,8 @@ const styles = theme => ({
         mainFilter: {
             display: 'flex',
             flexDirection: 'column',
-        }
+        },
+       
     },
 })
 

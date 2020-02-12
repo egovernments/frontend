@@ -394,12 +394,8 @@ class GlobalFilter extends Component {
                         // disableUnderline={true}
                         id="adornment-amount"
                         value={(_.get(this.state, "filterData.duration.title") || this.state.value)}
-                        style={{
-                            color: '#000000',
-                            margin: '0 0px 0 0',
-                            width:isMobile ? '100%' : '',
-                            maxWidth: isMobile ? '100%' : '210px'
-                        }}
+                       
+                        className={classes.dateFilter}
                         // onChange={handleChange('amount')}
                         //     startAdornment={<InputAdornment position="start">
                         //     <SVG src={icondepartment} className={classes.CloseButton}>

@@ -84,9 +84,6 @@ class Dashboard extends Component {
     this.callDashboardAPI();
   }
 
-  share() {
-
-  }
   callAll() {
     let { chartsData } = this.props;
     let filters = getFilterObj(this.props.GFilterData, this.props.mdmsData, this.state.page);
@@ -150,7 +147,6 @@ class Dashboard extends Component {
 
   renderViewAll() {
     let { classes, strings } = this.props;
-    // let codekey = _.chain(this.props).get('chartData').first().get("id").value();
     let data = _.chain(this.props).get("chartsData").get(this.state.viewAll).get('data').map((d, i) => {
       let plot = d.plots[0];
       let label = _.chain(plot.name).split('.').join("_").toUpper().value();
@@ -180,7 +176,7 @@ class Dashboard extends Component {
 
 
       return (<Cards>
-        <Card style={{ overflow: 'initial' }}>
+        <Card style={{ overflow: 'initial'}}>
           <div className={classes.heading} onClick={this.goback.bind(this)}>
             <ArrowBack /> <span style={{ marginTop: 'auto', marginBottom: 'auto' }}>Back</span>
           </div>
@@ -280,7 +276,7 @@ class Dashboard extends Component {
 
         {!isMobile && <div id="divNotToPrint" className={classes.acbtn}>
           <CustomizedMenus key="download" fileName={dashboardName} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard" />
-          <CustomizedShare key="share" fileName={dashboardName} PDFDownloads={this.share.bind(this)} />
+          <CustomizedShare key="share" fileName={dashboardName} />
         </div>}
       </div>
 
