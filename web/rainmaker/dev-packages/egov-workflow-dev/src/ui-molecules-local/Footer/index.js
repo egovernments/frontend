@@ -209,7 +209,7 @@ class Footer extends React.Component {
         };
       });
       if(moduleName === "NewTL"){
-        console.log("responseLength",responseLength)
+       
     if (status === "APPROVED" && applicationType !=="RENEWAL"&& responseLength===1) {
       const editButton = {
         label: "Edit",
