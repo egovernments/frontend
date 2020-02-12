@@ -4006,8 +4006,8 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
       linkText: "View"
     });
   });
-  // let appDocumentsPreview = await documentMaping(state, dispatch, action, documentsPreview);
-  // dispatch(prepareFinalObject("documentDetailsPreview", appDocumentsPreview));
+  let appDocumentsPreview = await documentMaping(state, dispatch, action, documentsPreview);
+  dispatch(prepareFinalObject("documentDetailsPreview", appDocumentsPreview));
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   if(isEmployee) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
