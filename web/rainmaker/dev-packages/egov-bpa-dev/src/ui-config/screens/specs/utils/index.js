@@ -2195,7 +2195,7 @@ export const setLicenseeSubTypeDropdownData = async (
   // );
   const licenceType = get(
     state.screenConfiguration.preparedFinalObject,
-    "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+    "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
   );
   if(licenceType){
   dispatch(
@@ -2465,8 +2465,8 @@ export const getTextToLocalMapping = label => {
       "Pending for Document Verification",
       "WF_BPA_PENDING_APPL_FEE_PAYMENT",
       localisationLabels
-  ); 
-      
+  );
+
     default:
       return getLocaleLabels(label, label, localisationLabels);
   }
@@ -2786,7 +2786,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
           if(relationship) {
             userInfo.relationship = relationship;
           }
-          
+
           currOwnersArr[cardIndex] = userInfo;
           dispatch(prepareFinalObject(`BPA.owners`, currOwnersArr));
         }
@@ -2843,7 +2843,7 @@ const riskType = (state, dispatch) => {
       (plotArea > riskType[0].fromPlotArea) ||
       (buildingHeight >= riskType[0].fromBuildingHeight)) {
       scrutinyRiskType = "HIGH"
-    } 
+    }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
@@ -3811,6 +3811,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     console.log(e);
   }
 }
+
 const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInfoDocs, appWfState) => {
   let documentsDropDownValues = get(
     state,
@@ -4011,7 +4012,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   if(isEmployee) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
-  }  
+  }
 };
 
 export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments) => {
@@ -4033,7 +4034,7 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
 
   let documents = []
   applicationDocuments.forEach(doc => {
-    if(doc.WFState == appState && doc.RiskType === bpaAppDetails.riskType && doc.ServiceType === bpaAppDetails.serviceType && doc.applicationType === bpaAppDetails.applicationType) { 
+    if(doc.WFState == appState && doc.RiskType === bpaAppDetails.riskType && doc.ServiceType === bpaAppDetails.serviceType && doc.applicationType === bpaAppDetails.applicationType) {
       documents.push(doc.docTypes)
     }
   });
@@ -4223,14 +4224,14 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
     if ( serviceCode === "BPA.NC_APP_FEE") {
       payments.push(paymentPayload.Payments[1]);
     }
-  
+
     if (serviceCode === "BPA.NC_SAN_FEE" ) {
       payments.push(paymentPayload.Payments[0]);
     }
   } else {
     payments.push(paymentPayload.Payments[0]);
   }
- 
+
 
   let res = await httpRequest(
     "post",
@@ -4271,7 +4272,7 @@ export const setProposedBuildingData = async (state, dispatch) => {
         [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
         [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
       }));
-      
+
     dispatch(
       handleField(
         "apply",
