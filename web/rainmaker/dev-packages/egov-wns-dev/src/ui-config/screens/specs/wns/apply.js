@@ -26,7 +26,7 @@ import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { documentList } from "./applyResource/documentList";
 import { summaryScreen } from "./search-preview";
 import { httpRequest } from "../../../../ui-utils";
-import { updatePFOforSearchResults, getBoundaryData } from "../../../../ui-utils/commons";
+import { updatePFOforSearchResults, getBoundaryData, prepareDocumentsUploadData } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
@@ -126,13 +126,12 @@ export const tradeDocumentDetails = getCommonCard({
   }
 });
 
-const getMdmsData = async (action, state, dispatch) => {
+export const getMdmsData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
-        { moduleName: "egov-location", masterDetails: [{ name: "TenantBoundary" }] },
         { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }] },
         { moduleName: "ws-services-masters", masterDetails: [{ name: "Documents" }] }
@@ -283,33 +282,8 @@ const screenConfig = {
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);
-      let props = get(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-        {}
-      );
-      props.value = tenantId;
-      props.disabled = true;
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-        props
-      );
-      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.address.city", tenantId));
-      const mohallaLocalePrefix = { moduleName: tenantId, masterName: "REVENUE" };
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla.props.localePrefix",
-        mohallaLocalePrefix
-      );
-      //hardcoding license type to permanent
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
-        "PERMANENT"
-      );
     });
-
+    prepareDocumentsUploadData(state, dispatch);
     return action;
   },
 

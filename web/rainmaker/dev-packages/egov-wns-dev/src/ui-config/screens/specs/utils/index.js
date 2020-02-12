@@ -1658,18 +1658,10 @@ export const updateDropDowns = async (
 
 export const getDocList = (state, dispatch) => {
   const documentList = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.Documents");
-  let applicationDocArray = [];
-
-  documentList.forEach(doc => {
-    applicationDocArray = [
-      ...applicationDocArray,
-      ...doc[0].applicationDocument
-    ];
-  });
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
-  applicationDocArray = applicationDocArray.filter(onlyUnique);
+  let applicationDocArray = documentList.filter(onlyUnique);
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
     prepareFinalObject(

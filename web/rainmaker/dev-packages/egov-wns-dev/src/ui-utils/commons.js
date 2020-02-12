@@ -15,7 +15,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import store from "redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getQueryArg, getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, getFileUrl, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
     setBusinessServiceDataToLocalStorage,
@@ -558,6 +558,55 @@ const getMultipleOwners = owners => {
         }, []);
 
     return mergedOwners;
+};
+
+export const prepareDocumentsUploadData = (state, dispatch) => {
+    let documents = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.Documents",
+        []
+    );
+    documents = documents.filter(item => {
+        return item.active;
+    });
+    console.log('documents')
+    console.log(documents)
+    let documentsContract = [];
+    let tempDoc = {};
+    documents.forEach(doc => {
+        let card = {};
+        card["code"] = doc.documentType;
+        card["title"] = doc.documentType;
+        card["cards"] = [];
+        tempDoc[doc.documentType] = card;
+    });
+
+    documents.forEach(doc => {
+        // Handle the case for multiple muildings
+        let card = {};
+        card["name"] = doc.code;
+        card["code"] = doc.code;
+        card["required"] = doc.required ? true : false;
+        if (doc.hasDropdown && doc.dropdownData) {
+            let dropdown = {};
+            dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+            dropdown.required = true;
+            dropdown.menu = doc.dropdownData.filter(item => {
+                return item.active;
+            });
+            dropdown.menu = dropdown.menu.map(item => {
+                return { code: item.code, label: getTransformedLocale(item.code) };
+            });
+            card["dropdown"] = dropdown;
+        }
+        tempDoc[doc.documentType].cards.push(card);
+    });
+
+    Object.keys(tempDoc).forEach(key => {
+        documentsContract.push(tempDoc[key]);
+    });
+
+    dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
