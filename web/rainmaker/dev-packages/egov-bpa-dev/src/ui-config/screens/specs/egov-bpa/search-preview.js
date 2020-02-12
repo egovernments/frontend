@@ -39,6 +39,7 @@ import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { fieldSummary } from "./summaryResource/fieldSummary";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -478,6 +479,16 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
+      false
+    );
 
     return action;
   },
@@ -532,6 +543,7 @@ const screenConfig = {
         },
         body: getCommonCard({
           // estimateSummary: estimateSummary,
+          fieldSummary: fieldSummary,
           fieldinspectionSummary: fieldinspectionSummary,
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,

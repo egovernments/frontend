@@ -196,43 +196,49 @@ class CheckList extends Component {
       });
     }
     prepareFinalObject("checkListUploaRedux", {});
-    let requiredDocuments = [];
+    let requiredDocuments = [], finalQstn = [];
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
-        if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
-          let doc = {};
-          doc.documentType = documents.dropDownValues.value;
-          doc.fileStoreId = documents.documents[0].fileStoreId;
-          doc.fileStore = documents.documents[0].fileStoreId;
-          doc.fileName = documents.documents[0].fileName;
-          doc.fileUrl = documents.documents[0].fileUrl;
-          if (doc.id) {
-            doc.id = documents.documents[0].id;
-          }
-          if (bpaDetails.documents) {
-            bpaDetails.documents.push(doc);
-          } else {
-            bpaDetails.documents = [doc];
-          }
-        }
-      });
+        if (documents && documents.remarks && documents.dropDownValues && documents.dropDownValues.value) {
+          let qstns = {}, finalDocs = [];
+          qstns.remarks = documents.remarks;
+          qstns.question = documents.question;
+          qstns.value = documents.dropDownValues.value;
 
-      if(bpaDetails.documents && bpaDetails.documents.length > 0) {
-        var resArr = [];
-      bpaDetails.documents.forEach(function (item) {
-        var i = resArr.findIndex(x => x.documentType == item.documentType);
-        if (i <= -1) {
-          resArr.push(item);
+          if(bpaDetails.additionalDetails) {
+            if(bpaDetails.additionalDetails.fieldinspection_pending && bpaDetails.additionalDetails.fieldinspection_pending[0]) {
+              if(bpaDetails.additionalDetails.fieldinspection_pending[0].questions) {
+                finalQstn.push(qstns);
+                bpaDetails.additionalDetails.fieldinspection_pending[0].questions = finalQstn
+              } else {
+                bpaDetails.additionalDetails.fieldinspection_pending.push({"questions" : qstns,"docs" : []});
+              }
+            }
+          } else {
+            bpaDetails.additionalDetails = [];
+            let documnt = [], fiDocs = [], details;
+            documnt[0] = {}; 
+            documnt[0].questions = [];
+            documnt[0].docs = [];
+            documnt[0].questions.push(qstns);
+            fiDocs.push({
+              "questions" : documnt[0].questions,
+              "docs" : []
+            });
+            details = { "fieldinspection_pending" : fiDocs};
+            finalDocs.push(details);
+            finalDocs = finalDocs[0];
+            bpaDetails.additionalDetails = finalDocs
+          }
         }
       });
-      bpaDetails.documents = resArr;
-      prepareFinalObject("BPA",  bpaDetails.documents);
+      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].question) {
+        prepareFinalObject("BPA",  bpaDetails.additionalDetails.fieldinspection_pending[0].question);
       }
     }
   }
 
   distinct = (value, index, self) => {
-    console.log(value, index, self, "ljkewjlkwelkewlkrjwlkej")
     return self.indexOf(value) === index
  };
 

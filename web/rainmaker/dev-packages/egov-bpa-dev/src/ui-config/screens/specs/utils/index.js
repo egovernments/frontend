@@ -3790,6 +3790,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       );
     const wfState = wfPayload.ProcessInstances[0];
     let appState;
+    const appWfState = wfState.state.state;
 
      let requiredDocuments, appDocuments = [];
     if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
@@ -3802,16 +3803,15 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       });
     };
     prepareDocumentsView(state, dispatch, action, appState);
-    let checkList = get()
-    if(payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+    if(wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
       let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
-      prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs);
+      prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
   } catch (e) {
     console.log(e);
   }
 }
-const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInfoDocs) => {
+const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInfoDocs, appWfState) => {
   let documentsDropDownValues = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
@@ -3826,14 +3826,19 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
   let bpaAppDetails = get ( state.screenConfiguration.preparedFinalObject, "BPA", {});
 
   let fieldInfo = []
-  fieldInfoDocs.forEach(doc => {
-    if(doc.WFState == appState && doc.RiskType === bpaAppDetails.riskType && doc.ServiceType === bpaAppDetails.serviceType && doc.applicationType === bpaAppDetails.applicationType) { 
-      fieldInfo.push(doc.docTypes);
+  fieldInfoDocs.forEach(wfDoc => {
+    if(wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) { 
+      fieldInfo.push({"docTypes" : wfDoc.docTypes, "questions" : wfDoc.questions });
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
+        true
+      );
     }
   });
 
-  let fieldreqDocuments = fieldInfo.docTypes;
-  let applyFieldinspectionQstns = fieldInfo.questions;
+  let fieldreqDocuments = fieldInfo[0].docTypes;
+  let applyFieldinspectionQstns = fieldInfo[0].questions;
   let checklistSelect = [];
 
   if (applyFieldinspectionQstns && applyFieldinspectionQstns.length > 0) {
@@ -3914,6 +3919,30 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
   dispatch(prepareFinalObject("nocDocumentsContract", applyFieldinspectionDocument));  
   }
 }
+const documentMaping = async (state, dispatch, action,documentsPreview) => {
+  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+  documentsPreview = documentsPreview.map((doc, index) => {
+    doc["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
+      "";
+    doc["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          getFileUrl(fileUrls[doc.fileStoreId])
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+      return doc;
+  });
+  return documentsPreview;
+}
 const prepareDocumentsView = async (state, dispatch, action, appState) => {
   let documentsPreview = [];
 
@@ -3940,6 +3969,34 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
     ...otherDocuments
   ];
 
+    let additionalDetail = JSON.parse(BPA.additionalDetails), 
+    fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
+    if(additionalDetail) {
+      fieldInspectionDetails = additionalDetail["fieldinspection_pending"][0]
+      fieldInspectionDocs = fieldInspectionDetails.docs;
+      fieldInspectionsQstions = fieldInspectionDetails.questions;
+    }
+  
+    if(fieldInspectionDocs && fieldInspectionDocs.length > 0 && fieldInspectionsQstions && fieldInspectionsQstions.length > 0) {
+      let fiDocumentsPreview = [];
+      fieldInspectionDocs.forEach(fiDoc => {
+        fiDocumentsPreview.push({
+          title: getTransformedLocale(fiDoc.documentType),
+          fileStoreId: fiDoc.fileStoreId,
+          linkText: "View"
+        });
+      })
+      
+      let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+        true
+      );
+      dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
+      dispatch(prepareFinalObject("fieldInspectionCheckListDetailsPreview", fieldInspectionsQstions)); 
+    }
+
   allDocuments.forEach(doc => {
     uploadedAppDocuments.push(doc);
 
@@ -3949,29 +4006,8 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
       linkText: "View"
     });
   });
-  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-  let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-  documentsPreview = documentsPreview.map((doc, index) => {
-    doc["link"] =
-      (fileUrls &&
-        fileUrls[doc.fileStoreId] &&
-        getFileUrl(fileUrls[doc.fileStoreId])) ||
-      "";
-    doc["name"] =
-      (fileUrls[doc.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[doc.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
-      `Document - ${index + 1}`;
-      return doc;
-    
-  });
-  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+  // let appDocumentsPreview = await documentMaping(state, dispatch, action, documentsPreview);
+  // dispatch(prepareFinalObject("documentDetailsPreview", appDocumentsPreview));
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   if(isEmployee) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);

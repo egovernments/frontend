@@ -200,11 +200,11 @@ class NocList extends Component {
     }
 
     prepareFinalObject("nocDocumentsUploadRedux", {});
-    let requiredDocuments = [];
+    let requiredDocuments = [], finalQstn = [];
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
         if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
-          let doc = {};
+          let doc = {}, finalDocs = [];
           doc.documentType = documents.dropDownValues.value;
           doc.fileStoreId = documents.documents[0].fileStoreId;
           doc.fileStore = documents.documents[0].fileStoreId;
@@ -213,30 +213,41 @@ class NocList extends Component {
           if (doc.id) {
             doc.id = documents.documents[0].id;
           }
-          if (bpaDetails.documents) {
-            bpaDetails.documents.push(doc);
+          if(bpaDetails.additionalDetails) {
+            if(bpaDetails.additionalDetails.fieldinspection_pending && bpaDetails.additionalDetails.fieldinspection_pending[0]) {
+              if(bpaDetails.additionalDetails.fieldinspection_pending[0].docs) {
+                finalQstn.push(doc);
+                bpaDetails.additionalDetails.fieldinspection_pending[0].docs = finalQstn
+              } else {
+                bpaDetails.additionalDetails.fieldinspection_pending.push({"docs" : doc, "question" : []})
+              }
+            }
           } else {
-            bpaDetails.documents = [doc];
+            bpaDetails.additionalDetails = [];
+            let documnt = [], fiDocs = [], details;
+            documnt[0] = {}; 
+            documnt[0].docs = [];
+            documnt[0].questions = [];
+            documnt[0].docs.push(doc);
+            fiDocs.push({
+              "docs" : documnt[0].docs,
+              "questions" : []
+            })
+            details = { "fieldinspection_pending" : fiDocs};
+            finalDocs.push(details);
+            finalDocs = finalDocs[0];
+            bpaDetails.additionalDetails = finalDocs
           }
         }
       });
-
-      if(bpaDetails.documents && bpaDetails.documents.length > 0) {
-        var resArr = [];
-      bpaDetails.documents.forEach(function (item) {
-        var i = resArr.findIndex(x => x.documentType == item.documentType);
-        if (i <= -1) {
-          resArr.push(item);
-        }
-      });
-      bpaDetails.documents = resArr;
-      prepareFinalObject("BPA",  bpaDetails.documents);
+  
+      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].docs) {
+        prepareFinalObject("BPA",  bpaDetails.additionalDetails["fieldinspection_pending"][0].docs);
       }
     }
   }
 
   distinct = (value, index, self) => {
-    console.log(value, index, self, "ljkewjlkwelkewlkrjwlkej")
     return self.indexOf(value) === index
  };
 
