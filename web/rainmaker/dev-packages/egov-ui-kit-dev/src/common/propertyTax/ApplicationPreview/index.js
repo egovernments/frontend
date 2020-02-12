@@ -22,6 +22,7 @@ import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import AssessmentInfo from "../Property/components/AssessmentInfo";
 import OwnerInfo from "../Property/components/OwnerInfo";
 import PTHeader from "../../common/PTHeader";
+import DocumentsInfo from "../Property/components/DocumentsInfo";
 
 
 const innerDivStyle = {
@@ -127,7 +128,7 @@ class ApplicationPreview extends Component {
     ]);
   };
   render() {
-    const { location } = this.props;
+    const { location,documentsUploaded } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const { generalMDMSDataById, properties } = this.props;
@@ -145,6 +146,7 @@ class ApplicationPreview extends Component {
                   <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                   <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
                   <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></OwnerInfo>
+                  <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                 </div>
               }
             />
@@ -163,9 +165,10 @@ const mapStateToProps = (state, ownProps) => {
   const propertyId = getQueryValue(search, "propertyId");
 
   const properties = propertiesById[propertyId] || {};
+  const { documentsUploaded } = properties || [];
   return {
     ownProps,
-    generalMDMSDataById, properties
+    generalMDMSDataById, properties,documentsUploaded
   };
 };
 
