@@ -57,7 +57,10 @@ export const header = getCommonContainer({
               : ""
           }`,
           dynamicArray: [getCurrentFinancialYear()],
-          labelKey:
+          labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ?
+          process.env.REACT_APP_NAME === "Citizen"
+          ? "TL_COMMON_APPL_RENEWAL_LICENSE"
+          : "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR" :
             process.env.REACT_APP_NAME === "Citizen"
               ? "TL_COMMON_APPL_NEW_LICENSE"
               : "TL_COMMON_APPL_NEW_LICENSE_YEAR"
@@ -189,6 +192,7 @@ export const getData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
+ 
   if (applicationNo) {
     //Edit/Update Flow ----
     const applicationType = get(
@@ -196,7 +200,9 @@ export const getData = async (action, state, dispatch) => {
       "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
       null
     );
-    getQueryArg(window.location.href, "action") !== "edit" &&
+    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
+
+    if(getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal ){
       dispatch(
         prepareFinalObject("Licenses", [
           {
@@ -210,9 +216,10 @@ export const getData = async (action, state, dispatch) => {
           }
         ])
       );
+    }
     // dispatch(prepareFinalObject("LicensesTemp", []));
-
     await updatePFOforSearchResults(action, state, dispatch, applicationNo);
+   
     if (!queryValue) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,

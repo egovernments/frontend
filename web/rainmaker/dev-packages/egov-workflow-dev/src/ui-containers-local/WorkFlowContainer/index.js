@@ -244,42 +244,30 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-
-    if (moduleName === "NewTL") {
-      switch (action) {
-        case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
-    } else if (moduleName === "FIRENOC") {
-      switch (action) {
-        case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
-    } else if (moduleName === "BPA") {
-      const { ProcessInstances } = this.props;
-      let applicationStatus;
-      if ( ProcessInstances && ProcessInstances.length > 0 ) {
-          applicationStatus = get( ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus" );
-      }
-      switch (action) {
-        case "PAY":
-          let bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=${bservice}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
+    const { ProcessInstances } = this.props;
+    let applicationStatus;
+    if ( ProcessInstances && ProcessInstances.length > 0 ) {
+        applicationStatus = get( ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus" );
+    }
+    let baseUrl = "";
+    let bservice = "";
+    if(moduleName === "FIRENOC"){
+      baseUrl = "fire-noc";
+    }else if(moduleName === "BPA"){
+      baseUrl = "egov-bpa";
+      bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
+    }else{
+      baseUrl = "tradelicence";
+    }
+    const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+    switch (action) {
+      case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
+      case "EDIT" : return isAlreadyEdited
+            ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+            : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
     }
   };
+
 
   getHeaderName = action => {
     return {
@@ -318,7 +306,7 @@ class WorkFlowContainer extends React.Component {
   checkIfTerminatedState = (nextStateUUID, moduleName) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
-    );
+    );    
     const data = find(businessServiceData, { businessService: moduleName });
     const nextState = find(data.states, { uuid: nextStateUUID });
     return nextState.isTerminateState;
@@ -371,6 +359,7 @@ class WorkFlowContainer extends React.Component {
       checkIfDocumentRequired,
       getEmployeeRoles
     } = this;
+    let businessService = moduleName === data[0].businessService ? moduleName  : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = [];
     
@@ -388,18 +377,18 @@ class WorkFlowContainer extends React.Component {
         buttonLabel: item.action,
         moduleName: data[data.length - 1].businessService,
         isLast: item.action === "PAY" ? true : false,
-        buttonUrl: getRedirectUrl(item.action, businessId, moduleName),
+        buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: !checkIfTerminatedState(item.nextState, moduleName) && item.action !== "SENDBACKTOCITIZEN",
-        roles: getEmployeeRoles(item.nextState, item.currentState, moduleName),
-        isDocRequired: checkIfDocumentRequired(item.nextState, moduleName)
+        showEmployeeList: !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
+        isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
     });
     actions=actions.filter(item=>item.buttonLabel!=='INITIATE');
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
-      moduleName
+      businessService
     );
     editAction.buttonLabel && actions.push(editAction);
     return actions;
