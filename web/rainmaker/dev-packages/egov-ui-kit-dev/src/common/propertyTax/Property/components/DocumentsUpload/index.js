@@ -6,6 +6,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { httpRequest } from "../../../../../utils/api";
 import get from "lodash/get";
 import {fetchDocuments} from "egov-ui-kit/redux/mdms/actions";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 class DocumentsUpload extends Component {
   
@@ -71,14 +72,22 @@ class DocumentsUpload extends Component {
     // } catch (e) {
     //   console.log(e);
     // }
-    fetchDocuments(tenantId);
+   let respo=await this.props.fetchDocuments(tenantId);
+   const { Documents=[] } = this.props;
+    if(respo){
+      
+    }
   };
   componentDidMount(){
     this.getMdmsData();
   }
   render() {
+    const{Documents,documentsContract}=this.props;
+    if(Documents.length>0&&documentsContract.length==0){
+      this.prepareDocumentsUploadData(Documents);
+    }
     const listProps = {
-      documents:this.props.documentsContract,
+      documents:documentsContract,
       
       buttonLabel: {
         labelName: "UPLOAD FILE",
@@ -95,11 +104,16 @@ class DocumentsUpload extends Component {
   }
 }
 const mapStateToProps = state => {
-  const { screenConfiguration } = state;
+  const { screenConfiguration,mdms } = state;
+  
   const { preparedFinalObject={} } = screenConfiguration;
-  const {applyScreenMdmsData={},documentsContract=[]} =preparedFinalObject;
+  const {documentsContract=[]} =preparedFinalObject;
+ const {applyScreenMdmsData={}}= mdms;
   const {PropertyTax={}}=applyScreenMdmsData;
   const {Documents=[]}=PropertyTax;
+
+
+
   return { Documents,documentsContract};
 };
 const mapDispatchToProps = (dispatch) => {
