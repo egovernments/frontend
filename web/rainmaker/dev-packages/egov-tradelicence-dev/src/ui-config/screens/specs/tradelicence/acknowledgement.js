@@ -694,11 +694,23 @@ const getAcknowledgementCard = (
     };
   }else if ((purpose === "EDITRENEWAL" || purpose === "DIRECTRENEWAL") && status === "success") {
     return {
-      header: getCommonHeader({
+
+      header: getCommonContainer({
+       Commonheader: getCommonHeader({
         labelName: `Application for Trade License Renewal ${financialYearText}`,
         labelKey: "TL_APPLICATION_TRADE_LICENSE_RENEWAL",
         dynamicArray: [financialYearText]
       }),
+      licenseNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number: "NA"
+        },
+        visible: true 
+      }
+    }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
