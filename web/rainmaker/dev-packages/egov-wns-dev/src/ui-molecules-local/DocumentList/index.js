@@ -199,14 +199,7 @@ class DocumentList extends Component {
     prepareFinalObject("documentsUploadRedux", {
       ...documentsUploadRedux,
       [uploadedDocIndex]: {
-        ...documentsUploadRedux[uploadedDocIndex],
-        documents: [
-          {
-            fileName: file.name,
-            fileStoreId,
-            fileUrl: Object.values(fileUrl)[0]
-          }
-        ]
+        ...documentsUploadRedux[uploadedDocIndex], documents: [{ fileName: file.name, fileStoreId, fileUrl: Object.values(fileUrl)[0] }]
       }
     });
   };
@@ -244,10 +237,10 @@ class DocumentList extends Component {
               </Icon>
             </div>
           ) : (
-            <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-          )}
+              <div className={classes.documentIcon}>
+                <span>{key + 1}</span>
+              </div>
+            )}
         </Grid>
         <Grid
           item={true}

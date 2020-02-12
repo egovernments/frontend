@@ -53,17 +53,10 @@ export const header = getCommonContainer({
   }
 });
 
-export const tradeDocumentDetails = getCommonCard({
+export const documentDetails = getCommonCard({
   header: getCommonTitle(
-    {
-      labelName: "Required Documents",
-      labelKey: "WS_DOCUMENT_DETAILS_HEADER"
-    },
-    {
-      style: {
-        marginBottom: 18
-      }
-    }
+    { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
+    { style: { marginBottom: 18 } }
   ),
   subText: getCommonParagraph({
     labelName:
@@ -87,7 +80,7 @@ export const tradeDocumentDetails = getCommonCard({
           }
         },
         {
-          name: "Address Proof ",
+          name: "Address Proof",
           required: true,
           jsonPath: "applyScreen.documents.addressProof",
           selector: {
@@ -133,8 +126,11 @@ export const getMdmsData = async (action, state, dispatch) => {
       moduleDetails: [
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
         { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
-        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }] },
-        { moduleName: "ws-services-masters", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" }] },
+        {
+          moduleName: "ws-services-masters",
+          masterDetails: [{ name: "Documents" }, { name: "waterSubSource" }, { name: "waterSource" }, { name: "connectionType" }, { name: "pipeSize" }]
+        }
       ]
     }
   };
@@ -219,7 +215,7 @@ export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form2" },
-  children: { tradeDocumentDetails },
+  children: { documentDetails },
   visible: false
 };
 

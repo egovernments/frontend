@@ -9,8 +9,8 @@ import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
 import "./index.css";
+import { toggleWater, toggleSewerage } from './toggleFeilds';
 
 const styles = {
   root: {
@@ -45,60 +45,11 @@ class CheckboxLabels extends React.Component {
     const { jsonPathWater, approveCheck, onFieldChange } = this.props;
     this.setState({ [name]: event.target.checked }, () => {
       if (this.state.checkedWater) {
-        onFieldChange(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
-          "visible",
-          true
-        );
-        onFieldChange(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
-          "visible",
-          true
-        );
-        if (this.state.checkedSewerage) {
-          onFieldChange(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
-            "visible",
-            true
-          );
-          onFieldChange(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
-            "visible",
-            true
-          );
-        } else {
-          onFieldChange(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
-            "visible",
-            false
-          );
-          onFieldChange(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
-            "visible",
-            false
-          );
-        }
-      } else {
-        onFieldChange(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
-          "visible",
-          false
-        );
-        onFieldChange(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
-          "visible",
-          false
-        );
-      }
-      approveCheck(jsonPathWater, this.state.checkedG)
+        toggleWater(onFieldChange, true);
+        if (this.state.checkedSewerage) { toggleSewerage(onFieldChange, true); }
+        else { toggleSewerage(onFieldChange, false); }
+      } else { toggleWater(onFieldChange, false); }
+      approveCheck(jsonPathWater, this.state.checkedWater)
     });
   };
 
@@ -106,65 +57,16 @@ class CheckboxLabels extends React.Component {
     const { jsonPathSewerage, approveCheck, onFieldChange } = this.props;
     this.setState({ [name]: event.target.checked }, () => {
       if (this.state.checkedSewerage) {
-        onFieldChange(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
-          "visible",
-          true
-        );
-        onFieldChange(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
-          "visible",
-          true
-        );
-        if (!this.state.checkedWater) {
-          onFieldChange(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
-            "visible",
-            false
-          );
-          onFieldChange(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
-            "visible",
-            false
-          );
-        } else {
-          onFieldChange(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
-            "visible",
-            true
-          );
-          onFieldChange(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
-            "visible",
-            true
-          );
-        }
-      } else {
-        onFieldChange(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
-          "visible",
-          false
-        );
-        onFieldChange(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
-          "visible",
-          false
-        );
-      }
+        toggleSewerage(onFieldChange, true);
+        if (this.state.checkedWater) { toggleWater(onFieldChange, true); }
+        else { toggleWater(onFieldChange, false); }
+      } else { toggleSewerage(onFieldChange, false); }
       approveCheck(jsonPathSewerage, this.state.checkedSewerage)
     });
   }
 
   render() {
-    const { classes, label, buttons, defaultValue, value, fieldValue, required } = this.props;
+    const { classes, required } = this.props;
 
     return (
       <div className={classes.root}>

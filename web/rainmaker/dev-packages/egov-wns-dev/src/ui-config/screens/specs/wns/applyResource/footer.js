@@ -11,7 +11,8 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateNocApplication,
-  prepareDocumentsUploadData
+  prepareDocumentsUploadData,
+  applyForWaterOrSewerage
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -117,16 +118,34 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
-  let activeStep = get(
-    state.screenConfiguration.screenConfig["apply"],
-    "components.div.children.stepper.props.activeStep",
-    0
-  );
+  let isFormValid = false;
+  let hasFieldToaster = false;
+  let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
+  if (activeStep === 0) {
+    let validateForm = validateFields(
+      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
+      state,
+      dispatch
+    );
+    let validatePropertyLocationDetails = validateFields(
+      "components.div.children.formwizardFirstStep.children.Details.children.cardContent.children.propertyDetail.children.viewFour.children",
+      state,
+      dispatch
+    );
+    let validatePropertyDetails = validateFields(
+      "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails.children.viewTwo.children",
+      state,
+      dispatch
+    );
+
+    if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
+      isFormValid = true;
+    }
+    await applyForWaterOrSewerage(state, dispatch, activeStep);
+  }
 
   prepareDocumentsUploadData(state, dispatch);
   // console.log(activeStep);
-  let isFormValid = true;
-  let hasFieldToaster = false;
 
   if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
