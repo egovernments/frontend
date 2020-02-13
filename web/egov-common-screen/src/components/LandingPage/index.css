@@ -120,7 +120,7 @@
     }
      #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing
     {
-        padding: 185px 16px 16px 16px!important;
+        padding: 195px 16px 16px 16px!important;
     }
     #login-citizen{
         padding: 135px 16px 16px 16px!important;
@@ -164,5 +164,21 @@
     }
     #login-citizen{
         padding: 175px 16px 16px 16px!important;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div{
+        height: 500px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 450px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing
+    {
+        padding: 244px 16px 16px 16px!important;
+    }
+    #login-citizen{
+        padding: 195px 16px 16px 16px!important;
     }
 }
