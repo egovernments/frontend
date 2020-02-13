@@ -133,9 +133,9 @@ android {
 			//UAT
 //			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee/user/login"'
 
-// 			buildConfigField 'String', 'url', '"https://uttarakhand-uat.egovernments.org/employee/user/login"'
+// 			buildConfigField 'String', 'url', '"https://bihar-uat.egovernments.org/employee/user/login"'
 
-//			buildConfigField 'String', 'url', '"https://fcfc7467.ngrok.io"'
+			buildConfigField 'String', 'url', '"https://abd2be9f.ngrok.io"'
 
 		}
 	}
