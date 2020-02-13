@@ -39,7 +39,7 @@ import {
           },
           ...getCommonSubHeader({
             labelName: "Field Inspection",
-            // labelKey: "BPA_BASIC_DETAILS_TITLE"
+            labelKey: "BPA_FIELD_INSPECTION_DETAILS_TITLE"
           })
         },
         editSection: {
@@ -60,7 +60,7 @@ import {
     },
     bpaCheckListContainer: getHeader({
       labelName: "Check List",
-      // labelKey: "BPA_BASIC_DETAILS_TITLE"
+      labelKey: "BPA_CHECK_LIST_DETAILS"
     }),
     break1: getBreak(),
     questions: {
@@ -82,7 +82,7 @@ import {
       },
     BlockWiseOccupancyAndUsageDetails: getHeader({
       labelName: "Documents",
-      labelKey: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS"
+      labelKey: "BPA_FIELD_INSPECTION_DOCUMENTS"
     }),
     break2: getBreak(),
     documentList: {
