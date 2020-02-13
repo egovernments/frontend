@@ -102,7 +102,7 @@ const ucSearchAndResult = {
                 style: {
                   color: "white",
                   borderRadius: "2px",
-                  width: "250px",
+                  // width: "250px",
                   height: "48px"
                 }
               },
