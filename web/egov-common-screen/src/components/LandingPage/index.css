@@ -14,20 +14,49 @@
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
         height: 420px!important;
     }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing,
+    #login-citizen
+    {
+        padding: 52px 16px 16px 16px!important;
+    }
+
+    /* #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div,
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 420px!important;
+    }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root,
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
         height: 295px!important;
-    }
+    } */
 }
-@media only screen and (max-width: 978px) {
-    
-    .LandingPage-root-104, #common-container{
+@media only screen and (max-width: 959px) {
+    .LandingPage-btn-105,#login-button{
+        width: 30%!important;
+        padding: 3.0% 3%!important;
+    }
+     .LandingPage-root-104, #common-container{
         overflow: scroll!important;
         padding: 15px!important;
     }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root,
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
+        height:200px!important;
+    }
+    
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div,
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 350px!important;
+    }
+  
     #common-container > div:nth-child(1) > div > img{
         width:270px!important;
     }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing,
+    #login-citizen
+    {
+        padding: 40px 16px 16px 16px!important;
+    }
+      /*
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root,
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
         height: 220px!important;
@@ -35,59 +64,105 @@
     .LandingPage-btn-105,#login-button{
         width: 40%!important;
         padding: 3.5% 0%!important;
-    }
+    } */
    
 }
 @media only screen and (max-width: 578px) {
-    .LandingPage-root-104,#common-container{
-        overflow: scroll!important;
-        padding: 15px!important;
-    }
-    .MuiCard-root{
-        height: 450px!important;
-    }
-    .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
-        height: 420px!important;
-    }
-   .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing{
-        padding-top: 32px!important;
-    }
-    .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing{
-        padding-top: 32px!important; 
-    }
-    /* #common-container > div:nth-child(1) > div > img{
-        width:100%;
-    } */
     .LandingPage-btn-105{
         width: 40%!important;
-        padding: 4.5% 5%!important;
+        padding: 3.5% 5%!important;
+    }
+    #common-container >
+     div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > 
+     div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing,
+     #login-citizen
+    {
+        padding: 55px 16px 16px 16px!important;
     }
 }
-
-@media only screen and (max-width: 375px) {
-    .LandingPage-root-104,#common-container{
-        overflow: scroll!important;
-        padding: 15px!important;
-    }
-   .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root{
-        height: 320px!important;
+@media only screen and (max-width: 550px) {
+    .LandingPage-btn-105{
+        width: 40%!important;
+        padding: 3.5% 5%!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div,
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
-        height: 500px!important;
+        height: 390px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing,
+    #login-citizen
+    {
+        padding: 100px 16px 16px 16px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root,
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
+        height:175px!important;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing,
+    #login-citizen
+    {
+        padding: 125px 16px 16px 16px!important;
+    }
+}
+@media only screen and (max-width: 420px) {
+    .LandingPage-root-104,#common-container{
+        overflow: scroll!important;
+        padding: 15px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div{
+        height: 455px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 405px!important;
+    }
+     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing
+    {
+        padding: 185px 16px 16px 16px!important;
+    }
+    #login-citizen{
+        padding: 135px 16px 16px 16px!important;
+    }
+   /* .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardContent-root{
+        height: 200px!important;
+    } */
+    /* #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div {
+        height: 450px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing{
+        padding-top: 100px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div{
+        height: 480px!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardContent-root{
-        height: 345px!important;
+        height: 330px!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.MuiCardActions-spacing{
         padding-top: 111px!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div > div.MuiCardActions-root.MuiCardActions-spacing{
-        padding-top: 68px!important;
-    }
+        padding-top: 36px!important;
+    } */
     .LandingPage-btn-105, #login-button {
         width: 40%!important;
-        padding: 3.5% 7%!important;
     }
 }
 
+@media only screen and (max-width: 360px) {
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div{
+        height: 480px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 430px!important;
+    }
+     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing
+    {
+        padding: 222px 16px 16px 16px!important;
+    }
+    #login-citizen{
+        padding: 175px 16px 16px 16px!important;
+    }
+}
