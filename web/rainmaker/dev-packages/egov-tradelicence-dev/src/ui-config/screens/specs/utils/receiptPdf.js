@@ -6,7 +6,8 @@ import pdfFonts from "./vfs_fonts";
 // pdfMakeCustom.vfs = pdfFonts.vfs;
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { from } from "rxjs";
-import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons"
+import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons";
+import { logo } from "egov-ui-kit/assets/images/biharLogo.png";
 // pdfMakeCustom.fonts = {
 //   Camby:{
 //           normal: 'Cambay-Regular.ttf',
@@ -135,8 +136,13 @@ const getReceiptData = (transformedData, ulbLogo) => {
           widths: [50, "*", 100],
           body: [
             [
-              {
+              ulbLogo ? {
                 image: ulbLogo,
+                width: 50,
+                height: 61.25,
+                margin: [41, 12, 10, 10]
+              }:{
+                image: logo,
                 width: 50,
                 height: 61.25,
                 margin: [41, 12, 10, 10]
