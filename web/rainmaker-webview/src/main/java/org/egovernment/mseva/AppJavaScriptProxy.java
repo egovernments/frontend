@@ -83,7 +83,7 @@ public class AppJavaScriptProxy  {
 			.setContentTitle("File Downloaded")
 			.setSmallIcon(R.drawable.ic_notification)
 			.setLargeIcon(BitmapFactory.decodeResource(this.activity.getApplicationContext().getResources(),
-				R.mipmap.ic_launcher))
+				R.mipmap.ic_launcher_web))
 			.setContentText(file.getName());
 
 

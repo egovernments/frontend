@@ -43,13 +43,13 @@ android {
 
 	signingConfigs {
 		Citizen {
-			keyAlias 'mseva.punjab.citizen'
+			keyAlias 'mseva.bihar.citizen'
 			keyPassword 'egov123'
 			storeFile file('keystore/citizen/keystore')
 			storePassword 'egov123'
 		}
 		Employee {
-			keyAlias 'mseva.punjab.employee'
+			keyAlias 'mseva.bihar.employee'
 			keyPassword 'egov123'
 			storeFile file('keystore/employee/keystore')
 			storePassword 'egov123'
@@ -94,7 +94,7 @@ android {
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "UAT mSeva-Bihar"
-			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_web"
 			signingConfig signingConfigs.Citizen
 
 			// QA

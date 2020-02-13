@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         //Coloring the "recent apps" tab header; doing it onResume, as an insurance
         if (Build.VERSION.SDK_INT >= 23) {
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_web);
             ActivityManager.TaskDescription taskDesc = null;
             taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getColor(R.color.colorPrimary));
             MainActivity.this.setTaskDescription(taskDesc);
