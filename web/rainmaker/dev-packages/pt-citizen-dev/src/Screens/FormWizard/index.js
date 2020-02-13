@@ -1143,6 +1143,8 @@ if(assessments.Assessments.length>0){
 
         break;
       case 3:
+        const uploadedDocs = get(this.props, "documentsUploadRedux");
+        let temp=0;
         let maxDocuments=0;
         if (uploadedDocs) {
           let docsArray = [];
