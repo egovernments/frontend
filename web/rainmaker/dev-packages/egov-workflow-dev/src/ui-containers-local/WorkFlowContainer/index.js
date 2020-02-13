@@ -216,13 +216,18 @@ class WorkFlowContainer extends React.Component {
 
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
-    let data = get(preparedFinalObject, dataPath, []);
+    let data = {};
     
-    if (dataPath !== "BPA") {
+    if (dataPath == "BPA" || dataPath == "Assessment") {
+      
+      data = get(preparedFinalObject, dataPath, {})
+    }else{
+      data=get(preparedFinalObject, dataPath, [])
       data = data[0];
     }
     //setting the action to send in RequestInfo
     let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
+    appendToPath = dataPath === "Assessment" ? "workflow." : "";
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
