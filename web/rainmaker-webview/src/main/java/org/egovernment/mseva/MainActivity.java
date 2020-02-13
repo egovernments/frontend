@@ -244,7 +244,9 @@ public class MainActivity extends AppCompatActivity {
 
 		webView = (WebView) findViewById(R.id.webview);
 //		webView.addJavascriptInterface(proxy, "mSewaApp");
-		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
+//		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
+		webView.addJavascriptInterface(new WebAppInterface(this), "mSewaApp");
+
 
 		String versionName = "";
 		int versionCode = 0;
