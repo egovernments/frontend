@@ -1,1 +1,0 @@
-[{"outputType":{"type":"MERGED_MANIFESTS"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":13,"versionName":"1.0.14","enabled":true,"outputFile":"CitizenProdDebug_1.0.14_21Jan2020_11:25:24.apk","fullName":"CitizenProdDebug","baseName":"CitizenProd-debug"},"path":"AndroidManifest.xml","properties":{"packageId":"org.egovernment.mseva.citizen","split":"","minSdkVersion":"19"}}]

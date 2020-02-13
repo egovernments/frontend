@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<WebView
+		android:id="@+id/webview"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+
+	</WebView>
+
+<!--	<Button-->
+<!--		android:id="@+id/pay"-->
+<!--		android:layout_width="wrap_content"-->
+<!--		android:layout_height="wrap_content"-->
+<!--		android:layout_x="126dp"-->
+<!--		android:layout_y="351dp"-->
+<!--		android:text="Pay" />-->
+</RelativeLayout>
