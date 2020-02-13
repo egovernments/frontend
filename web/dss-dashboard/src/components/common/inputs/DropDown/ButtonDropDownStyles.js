@@ -1,4 +1,4 @@
-//import variables from '../../../../styles/variables';
+import variables from '../../../../styles/variables';
 const styles = theme => ({
 
     buttonDisplay: {
@@ -38,7 +38,7 @@ const styles = theme => ({
         // display: 'flex',
         '& div': {
             flex: 1,
-            minWidth:120,
+            minWidth:180,
             // top: -4
         }
     },
