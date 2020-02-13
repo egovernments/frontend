@@ -906,7 +906,7 @@ if(assessments.Assessments.length>0){
           const tenantId = propertyResponse.Properties[0].tenantId;
           // Navigate to success page
           if ((action === "assess") || (action === "re-assess")) {
-            this.assessProperty(action);
+           
             this.assessProperty(action,propertyResponse.Properties);
           } else {
             this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
