@@ -26,17 +26,8 @@ class CollectionChartRow extends React.Component {
 	callAPI() {
 		let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
 		if (code) {
-			let filters = this.props.filters
-
-			if (this.props.page.includes('ulb')) {
-				if (!filters['tenantId']) {
-					let tenentFilter = []
-					tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
-
-					filters['tenantId'] = tenentFilter
-				}
-			}
-			if(code == 'todaysCollection'){
+			let filters = _.cloneDeep(this.props.filters)
+			if(code == 'todaysCollection'){			   
 	           filters['duration'] = {
 	            title: "TODAY",
 	            value: {
@@ -45,7 +36,18 @@ class CollectionChartRow extends React.Component {
 	              interval: 'day'
 	            }
 	          }
+	        }else{
+	        	filters = this.props.filters
 	        }
+
+			if (this.props.page.includes('ulb')) {
+				if (!filters['tenantId']) {
+					let tenentFilter = []
+					tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+
+					filters['tenantId'] = tenentFilter
+				}
+			}			
 			let requestBody = getChartOptions(code, filters);
 			let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
 			this.props.APITransport(chartsAPI);

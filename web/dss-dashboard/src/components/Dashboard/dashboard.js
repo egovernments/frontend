@@ -88,6 +88,7 @@ class Dashboard extends Component {
   callAll() {
     let { chartsData } = this.props;
     let filters = getFilterObj(this.props.GFilterData, this.props.mdmsData, this.state.page);
+    let filters1;
 
     if(this.state.page.includes('ulb')) {
       if(!filters['tenantId']) {
@@ -97,10 +98,11 @@ class Dashboard extends Component {
       }
     }
     _.each(chartsData, (k, v) => {
-      let code = v;
+      let code = v,requestBody;
       if (code) {
         if(code == 'todaysCollection'){
-           filters['duration'] = {
+           filters1 = _.cloneDeep(filters)
+           filters1['duration'] = {
             title: "TODAY",
             value: {
               startDate: moment().startOf('day').unix(),
@@ -108,8 +110,11 @@ class Dashboard extends Component {
               interval: 'day'
             }
           }
+          requestBody = getChartOptions(code, filters1);
+        }else{
+          requestBody = getChartOptions(code, filters);
         }
-        let requestBody = getChartOptions(code, filters);
+        
         let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
         this.props.APITransport(chartsAPI)
       }
