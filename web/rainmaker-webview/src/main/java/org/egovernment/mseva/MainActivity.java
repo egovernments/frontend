@@ -86,12 +86,16 @@ public class MainActivity extends AppCompatActivity {
 	public static String HOST	= getHost(URL);
 	static final int SEND_PYAMENT_INFORMATION = 2;
 
+	String ShowOrHideWebViewInitialUse = "show";
 	//Careful with these variable names if altering
     private WebView webView;
 
     private String asw_cam_message;
     private ValueCallback<Uri> asw_file_message;
     private ValueCallback<Uri[]> asw_file_path;
+
+    //progress bar
+	private ProgressBar spinner;
 
 
     // permissions code
@@ -239,6 +243,8 @@ public class MainActivity extends AppCompatActivity {
 				WebView.setWebContentsDebuggingEnabled(true);
 			}
 		}
+
+		spinner = (ProgressBar)findViewById(R.id.progressBar);
 
         //Move this to Javascript Proxy
 
@@ -484,11 +490,18 @@ public class MainActivity extends AppCompatActivity {
     //Setting activity layout visibility
 	private class CustomWebView extends WebViewClient {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-
+			// only make it invisible the FIRST time the app is run
+			if (ShowOrHideWebViewInitialUse.equals("show")) {
+				webView.setVisibility(webView.INVISIBLE);
+			}
         }
 
         public void onPageFinished(WebView view, String url) {
 			loadView("javascript:window.localStorage.setItem('isPOSmachine',true)",false);
+			ShowOrHideWebViewInitialUse = "hide";
+			spinner.setVisibility(View.GONE);
+			view.setVisibility(webView.VISIBLE);
+			super.onPageFinished(view, url);
         }
         //For android below API 23
 		@SuppressWarnings("deprecation")
