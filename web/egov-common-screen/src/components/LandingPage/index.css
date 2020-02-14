@@ -169,14 +169,14 @@
 
 @media only screen and (max-width: 320px) {
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div{
-        height: 500px!important;
+        height: 520px!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
         height: 450px!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing
     {
-        padding: 244px 16px 16px 16px!important;
+        padding: 263px 16px 16px 16px!important;
     }
     #login-citizen{
         padding: 195px 16px 16px 16px!important;
