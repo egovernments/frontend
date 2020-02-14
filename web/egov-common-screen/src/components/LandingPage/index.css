@@ -113,10 +113,10 @@
         padding: 15px!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div{
-        height: 455px!important;
+        height: 465px!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
-        height: 405px!important;
+        height: 420px!important;
     }
      #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing
     {
@@ -180,5 +180,8 @@
     }
     #login-citizen{
         padding: 225px 16px 16px 16px!important;
+    }
+    .LandingPage-btn-105, #login-button {
+        width: 50%!important;
     }
 }
