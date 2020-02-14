@@ -228,12 +228,12 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
       value: tenant
     },
     {
-      key: "applicationNumber",
+      key: "propertyIds",
       value: applicationNumber
     }
   ];
   const response = await getSearchResults(queryObject);
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
 
 const screenConfig = {
