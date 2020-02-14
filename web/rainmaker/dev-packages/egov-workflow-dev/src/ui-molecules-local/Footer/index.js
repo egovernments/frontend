@@ -20,23 +20,6 @@ class Footer extends React.Component {
     employeeList: [],
     //responseLength: 0
   };
-  // componentDidMount = async () => {
-  //   const {state}=this.props;
-  //   const tenantId = get(
-  //     state.screenConfiguration.preparedFinalObject,
-  //     `Licenses[0].tenantId`
-  //   );
-  //   const licenseNumber = get(
-  //     state.screenConfiguration.preparedFinalObject,
-  //     `Licenses[0].licenseNumber`
-  //   );
-  //   const response = await getSearchResults(tenantId,licenseNumber);
-  //   const responses=get(response,`Licenses`,[])
-  //    const responseLength=responses.length 
-  //   this.setState({
-  //     responseLength: responseLength,
-  //   })
-  // };
 
   getDownloadData = () => {
     const { dataPath, state } = this.props;
