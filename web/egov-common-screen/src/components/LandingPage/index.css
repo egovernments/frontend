@@ -104,8 +104,13 @@
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing,
     #login-citizen
     {
-        padding: 125px 16px 16px 16px!important;
+        padding: 135px 16px 16px 16px!important;
     }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div,
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 400px!important;
+    }
+   
 }
 @media only screen and (max-width: 420px) {
     .LandingPage-root-104,#common-container{
