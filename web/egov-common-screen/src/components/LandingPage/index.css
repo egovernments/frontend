@@ -85,9 +85,11 @@
         width: 40%!important;
         padding: 3.5% 5%!important;
     }
-    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div,
-    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div{
         height: 390px!important;
+    }
+    #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(3) > div{
+        height: 400px!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div > div.MuiCardActions-root.login-citizen.MuiCardActions-spacing,
     #login-citizen
