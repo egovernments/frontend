@@ -136,13 +136,8 @@ const getReceiptData = (transformedData, ulbLogo) => {
           widths: [50, "*", 100],
           body: [
             [
-              ulbLogo ? {
+              {
                 image: ulbLogo,
-                width: 50,
-                height: 61.25,
-                margin: [41, 12, 10, 10]
-              }:{
-                image: logo,
                 width: 50,
                 height: 61.25,
                 margin: [41, 12, 10, 10]
@@ -1814,7 +1809,11 @@ const generateReceipt = async (state, dispatch, type) => {
     state.screenConfiguration.preparedFinalObject,
     "base64UlbLogo",
     ""
-  );
+  ) ? _.get(
+    state.screenConfiguration.preparedFinalObject,
+    "base64UlbLogo",
+    ""
+  ) : logo;
   if (_.isEmpty(data1)) {
     console.log("Error in application data");
     return;
