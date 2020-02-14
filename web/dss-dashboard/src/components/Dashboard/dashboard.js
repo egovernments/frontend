@@ -27,6 +27,7 @@ import Cards from '../common/Cards/Cards';
 import UiTable from '../common/UiTable/UiTable';
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 import mdmsAPI from '../../actions/mdms/mdms';
+import moment from 'moment';
 
 class Dashboard extends Component {
 
@@ -98,6 +99,16 @@ class Dashboard extends Component {
     _.each(chartsData, (k, v) => {
       let code = v;
       if (code) {
+        if(code == 'todaysCollection'){
+           filters['duration'] = {
+            title: "TODAY",
+            value: {
+              startDate: moment().startOf('day').unix(),
+              endDate: moment().endOf('day').unix(),
+              interval: 'day'
+            }
+          }
+        }
         let requestBody = getChartOptions(code, filters);
         let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
         this.props.APITransport(chartsAPI)

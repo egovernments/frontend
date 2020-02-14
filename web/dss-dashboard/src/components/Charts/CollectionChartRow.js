@@ -11,7 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
 import Arrow_Downward from '../../images/arrows/Arrow_Downward.svg'
 import Arrow_Upward from '../../images/arrows/Arrow_Upward.svg'
-
+import moment from 'moment';
 
 class CollectionChartRow extends React.Component {
 	constructor(props) {
@@ -36,7 +36,16 @@ class CollectionChartRow extends React.Component {
 					filters['tenantId'] = tenentFilter
 				}
 			}
-
+			if(code == 'todaysCollection'){
+	           filters['duration'] = {
+	            title: "TODAY",
+	            value: {
+	              startDate: moment().startOf('day').unix(),
+	              endDate: moment().endOf('day').unix(),
+	              interval: 'day'
+	            }
+	          }
+	        }
 			let requestBody = getChartOptions(code, filters);
 			let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody.dataoption);
 			this.props.APITransport(chartsAPI);
