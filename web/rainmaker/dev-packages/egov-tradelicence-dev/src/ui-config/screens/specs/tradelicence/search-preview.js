@@ -243,6 +243,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
+ 
     const footer = footerReview(
       action,
       state,
@@ -270,7 +271,26 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
-
+      const licenseNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        `Licenses[0].licenseNumber`
+      );
+      let queryObjectSearch = [
+        {
+          key: "tenantId",
+          value: tenantId 
+        },
+        { key: "offset", value: "0" },
+        { key: "licenseNumbers", value: licenseNumber}
+      ];
+       const payload = await getSearchResults(queryObjectSearch);
+       const length = payload && payload.Licenses.length > 0 ? get(payload,`Licenses`,[]).length : 0;
+       set(
+        state,
+        "screenConfiguration.preparedFinalObject.licenseCount",
+        length
+      );
+       
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
   }

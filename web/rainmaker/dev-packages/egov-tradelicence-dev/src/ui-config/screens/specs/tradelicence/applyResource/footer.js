@@ -3,7 +3,7 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { download } from "egov-common/ui-utils/commons";
-import { applyTradeLicense,getSearchResults } from "../../../../../ui-utils/commons";
+import { applyTradeLicense} from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -596,23 +596,6 @@ export const footer = getCommonApplyFooter({
   }
 });
 
-export const renewSearchLicense=async(tenantId,licenseNumber)=>{
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId 
-    },
-    { key: "offset", value: "0" },
-    { key: "licenseNumbers", value: licenseNumber}
-  ];
-  const response = await getSearchResults(queryObject);
-  const responses=get(response,`Licenses`,[])
-     const responseLength=responses.length 
-     if(responseLength===1)
-     return true;
-     else
-     return false;
-}
 
 export const renewTradelicence = async (applicationNumber, financialYear, tenantId,state,dispatch) => {
   const licences = get(
@@ -654,6 +637,11 @@ export const footerReview = (
   let downloadMenu = [];
   let printMenu = [];
   let licenseNumber= get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
+  const responseLength = get(
+    state.screenConfiguration.preparedFinalObject,
+    `licenseCount`,
+    1
+  );
   // let renewalMenu=[];
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
@@ -891,7 +879,7 @@ export const footerReview = (
                 },
 
               },
-              visible:getButtonVisibility(status, "APPROVED")&&renewSearchLicense,
+              visible:getButtonVisibility(status, "APPROVED")&&(responseLength === 1 ),
             },
             submitButton: {
               componentPath: "Button",
@@ -925,7 +913,7 @@ export const footerReview = (
                 },
 
               },
-              visible:getButtonVisibility(status, "APPROVED")&&renewSearchLicense,
+              visible:getButtonVisibility(status, "APPROVED")&&(responseLength === 1 ),
             },    
             makePayment: {
               componentPath: "Button",

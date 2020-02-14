@@ -18,25 +18,25 @@ class Footer extends React.Component {
     open: false,
     data: {},
     employeeList: [],
-    responseLength: 0
+    //responseLength: 0
   };
-  componentDidMount = async () => {
-    const {state}=this.props;
-    const tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].tenantId`
-    );
-    const licenseNumber = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].licenseNumber`
-    );
-    const response = await getSearchResults(tenantId,licenseNumber);
-    const responses=get(response,`Licenses`,[])
-     const responseLength=responses.length 
-    this.setState({
-      responseLength: responseLength,
-    })
-  };
+  // componentDidMount = async () => {
+  //   const {state}=this.props;
+  //   const tenantId = get(
+  //     state.screenConfiguration.preparedFinalObject,
+  //     `Licenses[0].tenantId`
+  //   );
+  //   const licenseNumber = get(
+  //     state.screenConfiguration.preparedFinalObject,
+  //     `Licenses[0].licenseNumber`
+  //   );
+  //   const response = await getSearchResults(tenantId,licenseNumber);
+  //   const responses=get(response,`Licenses`,[])
+  //    const responseLength=responses.length 
+  //   this.setState({
+  //     responseLength: responseLength,
+  //   })
+  // };
 
   getDownloadData = () => {
     const { dataPath, state } = this.props;
@@ -170,7 +170,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
-    const { open, data, employeeList,responseLength } = this.state;
+    const { open, data, employeeList } = this.state;
     const status = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].status`
@@ -209,7 +209,11 @@ class Footer extends React.Component {
         };
       });
       if(moduleName === "NewTL"){
-       
+        const responseLength = get(
+          state.screenConfiguration.preparedFinalObject,
+          `licenseCount`,
+          1
+        );
     if (status === "APPROVED" && applicationType !=="RENEWAL"&& responseLength===1) {
       const editButton = {
         label: "Edit",
