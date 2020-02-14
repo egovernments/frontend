@@ -927,11 +927,12 @@ export const footerReview = (
                 },
 
               },
-              roleDefination: {
-                rolePath: "user-info.roles",
-                action: "PAY"
-              },
-              visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+              // roleDefination: {
+              //   rolePath: "user-info.roles",
+              //   roles:["CITIZEN"],
+              //   action: "PAY"
+              // },
+              visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
             }
           },
           gridDefination: {
