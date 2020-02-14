@@ -3,7 +3,7 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { download } from "egov-common/ui-utils/commons";
-import { applyTradeLicense } from "../../../../../ui-utils/commons";
+import { applyTradeLicense,getSearchResults } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -595,6 +595,25 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
+
+export const renewSearchLicense=async(tenantId,licenseNumber)=>{
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId 
+    },
+    { key: "offset", value: "0" },
+    { key: "licenseNumbers", value: licenseNumber}
+  ];
+  const response = await getSearchResults(queryObject);
+  const responses=get(response,`Licenses`,[])
+     const responseLength=responses.length 
+     if(responseLength===1)
+     return true;
+     else
+     return false;
+}
+
 export const renewTradelicence = async (applicationNumber, financialYear, tenantId,state,dispatch) => {
   const licences = get(
     state.screenConfiguration.preparedFinalObject,
@@ -872,7 +891,7 @@ export const footerReview = (
                 },
 
               },
-              visible:getButtonVisibility(status, "APPROVED"),
+              visible:getButtonVisibility(status, "APPROVED")&&renewSearchLicense,
             },
             submitButton: {
               componentPath: "Button",
@@ -906,8 +925,39 @@ export const footerReview = (
                 },
 
               },
-              visible:getButtonVisibility(status, "APPROVED"),
+              visible:getButtonVisibility(status, "APPROVED")&&renewSearchLicense,
             },    
+            makePayment: {
+              componentPath: "Button",
+              props: {
+                variant: "contained",
+                color: "primary",
+                className: "framework-responsive-button"
+              },
+              children: {
+                submitButtonLabel: getLabel({
+                  labelName: "MAKE PAYMENT",
+                  labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}`
+                    )
+                  );
+                },
+
+              },
+              roleDefination: {
+                rolePath: "user-info.roles",
+                action: "PAY"
+              },
+              visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+            }
           },
           gridDefination: {
             xs: 12,

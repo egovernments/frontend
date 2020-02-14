@@ -584,6 +584,7 @@ class FormWizard extends Component {
             termsAccepted={termsAccepted}
             termsError={termsError}
             calculationScreenData={this.state.calculationScreenData}
+            getEstimates={this.getEstimates}
           />
         </div>)
       case 5:
@@ -780,12 +781,39 @@ class FormWizard extends Component {
     this.createProperty(properties, action);
   };
 
+  getAssessmentDetails=async()=>{
+    try{
+      const tenantId = getQueryArg(window.location.href, "tenantId");
+      const assessmentId = getQueryArg(
+        window.location.href,
+        "assessmentId"
+      );
+      let searchPropertyResponse = await httpRequest(
+        `property-services/assessment/_search?assessmentNumbers=${assessmentId}`,
+        "_search",
+        [],
+        {
+          
+        }
+      );
+      return searchPropertyResponse;
+    }catch(e){
+      console.log(e.message);
+      
+    }
+    
+  }
+
   assessProperty = async (action) => {
     const { hideSpinner } = this.props;
     let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
     const propertyId = getQueryArg(
       window.location.href,
       "propertyId"
+    );
+    const assessmentId = getQueryArg(
+      window.location.href,
+      "assessmentId"
     );
     const financialYear = getQueryArg(window.location.href, "FY");
     const tenant = getQueryArg(window.location.href, "tenantId");
@@ -798,6 +826,21 @@ class FormWizard extends Component {
       "channel": "CFC_COUNTER",
       "status": "ACTIVE"
     }
+    if(action==="re-assess"){
+      let assessments= await this.getAssessmentDetails();
+if(assessments.Assessments.length>0){
+      let assessmentResponse=assessments.Assessments[0];
+  assessment=assessmentResponse;
+  assessment.assessmentDate=new Date().getTime() - 60000;
+}
+
+      // assessment.auditDetails={...Properties[0].auditDetails};
+      // assessment.unitUsageList=Properties[0].units.map(unit=>{
+      //   return {unitId:unit.id,occupancyDate:unit.occupancyDate}
+      // });
+      // assessment.assessmentNumber=assessmentId;
+
+    }
     try {
       let assessPropertyResponse = await httpRequest(
         `property-services/assessment/${propertyMethodAction}`,
@@ -807,20 +850,36 @@ class FormWizard extends Component {
           Assessment: assessment
         }
       );
+      if(action === "re-assess"){
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+          )
+        );
+      }
+      else{
       store.dispatch(
         setRoute(
           `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
         )
-      );
+      );}
 
     } catch (e) {
       hideSpinner();
+      if(action==="assess"){
       store.dispatch(
         setRoute(
-          `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+          `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
 
         )
-      );
+      );}
+      else{
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=reassessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+  
+          )
+        );}
       // this.setState({ nextButtonEnabled: true });
       // alert(e);
     }
@@ -848,7 +907,8 @@ class FormWizard extends Component {
           const tenantId = propertyResponse.Properties[0].tenantId;
           // Navigate to success page
           if ((action === "assess") || (action === "re-assess")) {
-            this.assessProperty(action);
+           
+            this.assessProperty(action,propertyResponse.Properties);
           } else {
             this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
           }
@@ -1084,6 +1144,8 @@ class FormWizard extends Component {
 
         break;
       case 3:
+        const uploadedDocs = get(this.props, "documentsUploadRedux");
+        let temp=0;
         let maxDocuments=0;
         if (uploadedDocs) {
           let docsArray = [];
@@ -1111,6 +1173,7 @@ class FormWizard extends Component {
         break;
       case 4:
         let { search: search1 } = this.props.location;
+        let isReassesment = Boolean(getQueryValue(search1, "isReassesment").replace('false', ''));
         let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
         if (estimation && estimation.length && estimation.length > 1 && estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
@@ -1119,7 +1182,10 @@ class FormWizard extends Component {
           if (isAssesment1) {
             createAndUpdate(index, 'assess');
             // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
-          } else {
+          } else if(isReassesment){
+            createAndUpdate(index, 're-assess');
+          }
+          else {
             createAndUpdate(index, 'create');
           }
         }
@@ -1276,152 +1342,70 @@ class FormWizard extends Component {
     }
   };
 
-  estimate = async () => {
-    // utils
-    let { toggleSpinner, form, common, location } = this.props;
-    let { search } = location;
-    let prepareFormData = { ...this.props.prepareFormData };
-    toggleSpinner();
-    if (
-      get(
-        prepareFormData,
-        "Properties[0].propertyDetails[0].institution",
-        undefined
-      )
-    )
-      delete prepareFormData.Properties[0].propertyDetails[0].institution;
-    const financialYearFromQuery = getFinancialYearFromQuery();
-    const selectedownerShipCategoryType = get(
-      form,
-      "ownershipType.fields.typeOfOwnership.value",
-      ""
-    );
-    try {
-      if (financialYearFromQuery) {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].financialYear",
-          financialYearFromQuery
-        );
-      } else {
-        toggleSpinner();
-        return;
-
-      }
-      if (selectedownerShipCategoryType === "SINGLEOWNER") {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          getSingleOwnerInfo(this)
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(
-            common,
-            `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
-            "INDIVIDUAL"
-          )
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          selectedownerShipCategoryType
-        );
-      }
-      if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          getMultipleOwnerInfo(this)
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(
-            common,
-            `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
-            "INDIVIDUAL"
-          )
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          selectedownerShipCategoryType
-        );
-      }
-      if (
-        selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
-        -1
-      ) {
-        const { instiObj, ownerArray } = getInstituteInfo(this);
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          ownerArray
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].institution",
-          instiObj
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(form, "ownershipType.fields.typeOfOwnership.value", "")
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          get(form, "institutionDetails.fields.type.value", "")
-        );
-      }
-      const propertyDetails = normalizePropertyDetails(
-        prepareFormData.Properties,
-        this
-      );
-      let estimateResponse = await httpRequest(
-        "pt-calculator-v2/propertytax/_estimate",
-        "_estimate",
-        [],
-        {
-          CalculationCriteria: [
-            {
-              assessmentYear: financialYearFromQuery,
-              tenantId:
-                prepareFormData.Properties[0] &&
-                prepareFormData.Properties[0].tenantId,
-              property: propertyDetails[0]
-            }
-          ]
+  getEstimates = async () =>{
+    let { search: search1 } = this.props.location;
+    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+    if(isAssesment1){
+      this.estimate().then(estimateResponse => {
+        if (estimateResponse) {
+          window.scrollTo(0, 0);
+          this.setState({
+            estimation: estimateResponse && estimateResponse.Calculation,
+            totalAmountToBePaid: 1, // What is this?
+            valueSelected: "Full_Amount"
+          });
         }
-      );
-      //For calculation screen
-      const tenantId =
-        prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
-      const calculationScreenData = await getCalculationScreenData(
-        get(estimateResponse, "Calculation[0].billingSlabIds", []),
-        tenantId,
-        this
-      );
-      this.setState({ calculationScreenData: calculationScreenData.data });
-
-      toggleSpinner();
-      return estimateResponse;
-    } catch (e) {
-      toggleSpinner();
-      if (e.message) {
-        alert(e.message);
-      } else
-        this.props.toggleSnackbarAndSetText(
-          true,
-          {
-            labelName: "Error calculating tax!",
-            labelKey: "ERR_ERROR_CALCULATING_TAX"
-          },
-          true
-        );
+      });
     }
+  }
+
+  estimate = async () => {
+    let { toggleSpinner, location } = this.props;
+    let { search: search1 } = location;
+    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+    if(isAssesment1){
+      let prepareFormData = { ...this.props.prepareFormData };
+      toggleSpinner();
+      const financialYearFromQuery = getFinancialYearFromQuery();
+      try {
+        const financeYear = {financialYear:financialYearFromQuery};
+        const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
+        let estimateResponse = await httpRequest(
+          "pt-calculator-v2/propertytax/v2/_estimate",
+          "_estimate",
+          [],
+          {
+            Assessment: assessmentPayload
+          }
+        );
+        //For calculation screen
+        const tenantId =
+          prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
+        const calculationScreenData = await getCalculationScreenData(
+          get(estimateResponse, "Calculation[0].billingSlabIds", []),
+          tenantId,
+          this
+        );
+        this.setState({ calculationScreenData: calculationScreenData.data });
+  
+        toggleSpinner();
+        return estimateResponse;
+      } catch (e) {
+        toggleSpinner();
+        if (e.message) {
+          alert(e.message);
+        } else
+          this.props.toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "Error calculating tax!",
+              labelKey: "ERR_ERROR_CALCULATING_TAX"
+            },
+            true
+          );
+      }
+    }
+    
   };
 
   pay = async () => {

@@ -958,8 +958,9 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
 }
 
 export const downloadCertificateForm = (Licenses,mode='download') => {
+ const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";
   const queryStr = [
-    { key: "key", value: "tlcertificate" },
+    { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
     { key: "tenantId", value: "pb" }
   ]
   const DOWNLOADRECEIPT = {
@@ -1032,8 +1033,8 @@ const getToolTipInfo = (taxHead, LicenseData) => {
   }
 };
 
-const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
-  if (Bill) {
+const getEstimateData = (ResponseData, isPaid, LicenseData) => {
+  if (ResponseData) {
     const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
       return {
         name: {
@@ -1047,16 +1048,17 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
         }
       };
     });
-    const { billAccountDetails } = Bill.billDetails[0];
+    const { billAccountDetails } = ResponseData.billDetails[0];
     const transformedData = billAccountDetails.reduce((result, item) => {
-      if (getFromReceipt) {
+      if (isPaid) {
         item.accountDescription &&
           result.push({
             name: {
               labelName: item.accountDescription.split("-")[0],
               labelKey: item.accountDescription.split("-")[0]
             },
-            value: getTaxValue(item),
+            // value: getTaxValue(item),\
+            value : get(ResponseData , "totalAmount"),
             info: getToolTipInfo(
               item.accountDescription.split("-")[0],
               LicenseData
@@ -1071,6 +1073,20 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
                 )
               }
           });
+          item.taxHeadCode &&
+          result.push({
+            name: {
+              labelName: item.taxHeadCode,
+              labelKey: item.taxHeadCode
+            },
+            // value: getTaxValue(item),
+            value : get(ResponseData , "totalAmount"),
+            info: getToolTipInfo(item.taxHeadCode, LicenseData) && {
+              value: getToolTipInfo(item.taxHeadCode, LicenseData),
+              key: getToolTipInfo(item.taxHeadCode, LicenseData)
+            }
+          });
+
       } else {
         item.taxHeadCode &&
           result.push({
@@ -1078,13 +1094,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               labelName: item.taxHeadCode,
               labelKey: item.taxHeadCode
             },
-            value: getTaxValue(item),
+            // value: getTaxValue(item),
+            value : get(ResponseData , "totalAmount"),
             info: getToolTipInfo(item.taxHeadCode, LicenseData) && {
               value: getToolTipInfo(item.taxHeadCode, LicenseData),
               key: getToolTipInfo(item.taxHeadCode, LicenseData)
             }
           });
       }
+
       return result;
     }, []);
     return [
@@ -1209,7 +1227,7 @@ if(currentStatus==="CITIZENACTIONREQUIRED"){
 }
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
-    const states = tlBusinessService[0].states;
+    const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === currentStatus) {
         break;
@@ -1271,6 +1289,7 @@ export const createEstimateData = async (
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
+
   let estimateData = payload
     ? isPAID
       ? payload &&
@@ -1284,6 +1303,11 @@ export const createEstimateData = async (
       : payload && getEstimateData(payload, false, LicenseData)
     : [];
   estimateData = estimateData || [];
+  set(
+    estimateData,
+    "payStatus",
+    isPAID
+  );
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
   if (payload) {

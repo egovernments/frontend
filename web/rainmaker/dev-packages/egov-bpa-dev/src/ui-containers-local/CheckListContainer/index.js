@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { DocumentList } from "../../ui-molecules-local";
+import { CheckList } from "../../ui-molecules-local";
 import { connect } from "react-redux";
 import get from "lodash/get";
 
@@ -14,21 +14,30 @@ const styles = theme => ({
   }
 });
 
-class DocumentListContainer extends Component {
+class CheckListContainer extends Component {
   render() {
     const { ...rest } = this.props;
-    return <DocumentList {...rest} />;
+    return <CheckList {...rest} />;
   }
 }
 
 const mapStateToProps = state => {
-  let documentsList = get(state, "screenConfiguration.preparedFinalObject.documentsContract", []);
-  return { documentsList };
+  let documentsList = get(
+    state,
+    "screenConfiguration.preparedFinalObject.FieldinspectionQstns",
+    []
+  );
+  let bpaDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    []
+  )
+  return { documentsList, bpaDetails };
 };
 
 export default withStyles(styles)(
   connect(
     mapStateToProps,
     null
-  )(DocumentListContainer)
+  )(CheckListContainer)
 );
