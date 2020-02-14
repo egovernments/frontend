@@ -133,7 +133,9 @@ class ApplicationPreview extends Component {
       const payload = await httpRequest(applicationType.endpoint.GET.URL, applicationType.endpoint.GET.ACTION, applicationType.queryParams
       );
 
-      const assessment=payload['Assessments']&&payload['Assessments'].length>0&&payload['Assessments'][0];
+      const responseObject=payload[applicationType.responsePath]&&payload[applicationType.responsePath].length>0&&payload[applicationType.responsePath][0];
+      if(!responseObject.workflow){
+
       
       let workflow={
         "id": null,
@@ -144,7 +146,7 @@ class ApplicationPreview extends Component {
         "businessService": applicationType.moduleName,
         "businessId": getQueryArg(
           window.location.href,
-          "assessmentNumber"
+          "applicationNumber"
         ),
         "action": "",
         "moduleName": "PT",
@@ -153,8 +155,9 @@ class ApplicationPreview extends Component {
         "documents": null,
         "assignes": null
     }
-    assessment.workflow=workflow;
-      this.props.prepareFinalObject(applicationType.dataPath, payload['Assessments']&&assessment)
+    responseObject.workflow=workflow;
+  }
+      this.props.prepareFinalObject(applicationType.dataPath, payload[applicationType.responsePath]&&responseObject)
     } catch (e) {
       console.log(e);
 
@@ -185,6 +188,7 @@ getApplicationType=()=>{
   let applicationObject={}
 if(applicationType=="assessment"){
   applicationObject.dataPath="Assessment";
+  applicationObject.responsePath="Assessments";
   applicationObject.moduleName="ASMT";
   applicationObject.updateUrl="/property-services/assessment/_update";
   
@@ -208,7 +212,8 @@ if(applicationType=="assessment"){
   applicationObject.endpoint=FETCHASSESSMENTS;
 
 }else if(applicationType=="property"){
-  applicationObject.dataPath="Properties";
+  applicationObject.responsePath="Properties";
+  applicationObject.dataPath="Property";
   applicationObject.moduleName="PT.CREATE";
   applicationObject.updateUrl="/property-services/property/_update";
 

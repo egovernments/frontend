@@ -218,7 +218,7 @@ class WorkFlowContainer extends React.Component {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
     
-    if (dataPath == "BPA" || dataPath == "Assessment") {
+    if (dataPath == "BPA" || dataPath == "Assessment"||dataPath == "Property") {
       
       data = get(preparedFinalObject, dataPath, {})
     }else{
@@ -226,8 +226,16 @@ class WorkFlowContainer extends React.Component {
       data = data[0];
     }
     //setting the action to send in RequestInfo
-    let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
-    appendToPath = dataPath === "Assessment" ? "workflow." : "";
+    let appendToPath = ""
+    if(dataPath === "FireNOCs"){
+      appendToPath ="fireNOCDetails."
+    }else if(dataPath === "Assessment"||dataPath === "Property"  ){
+      appendToPath ="workflow."
+    }else{
+      appendToPath = ""
+    }
+
+    
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
