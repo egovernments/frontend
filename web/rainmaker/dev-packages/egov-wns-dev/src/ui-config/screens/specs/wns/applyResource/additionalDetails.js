@@ -73,7 +73,6 @@ const getPlumberRadioButton = {
   uiFramework: "custom-containers",
   componentPath: "RadioGroupContainer",
   gridDefination: { xs: 12, sm: 12 },
-  jsonPath: "applyScreen.plumberDetails",
   props: {
     label: { key: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY" },
     buttons: [
@@ -272,7 +271,6 @@ export const additionDetails = getCommonCard({
           labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
         },
         required: false,
-        jsonPath: "applyScreen.status",
         sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
         gridDefination: {
           xs: 12,
@@ -311,7 +309,6 @@ export const additionDetails = getCommonCard({
         //   labelName: "Select From Date",
         //   labelKey: "WS_FROM_DATE_PLACEHOLDER"
         // },
-        jsonPath: "applyScreen.fromDate",
         gridDefination: {
           xs: 12,
           sm: 6
@@ -343,7 +340,6 @@ export const additionDetails = getCommonCard({
         //   labelName: "Select From Date",
         //   labelKey: "WS_FROM_DATE_PLACEHOLDER"
         // },
-        jsonPath: "applyScreen.fromDate",
         gridDefination: {
           xs: 12,
           sm: 6
