@@ -1,10 +1,10 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-framework/ui-utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import {
   getCommonCard,
@@ -301,7 +301,7 @@ export const getEmployeeName = async queryObject => {
   }
 };
 
-export const setServiceCategory = (businessServiceData, dispatch) => {
+export const setServiceCategory = (businessServiceData, dispatch,screenKey="applyScreenMdmsData") => {
   let nestedServiceData = {};
   businessServiceData.forEach(item => {
     if (item.code && item.code.indexOf(".") > 0) {
@@ -325,8 +325,19 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
       set(nestedServiceData, `${item.code}`, item);
     }
   });
+  dispatch(
+    prepareFinalObject(
+      `${screenKey}.nestedServiceData`,
+      nestedServiceData
+    )
+  );
   let serviceCategories = Object.values(nestedServiceData).filter(
     item => item.code
   );
-  return serviceCategories;
+  dispatch(
+    prepareFinalObject(
+      `${screenKey}.serviceCategories`,
+      serviceCategories
+    )
+  );
 };

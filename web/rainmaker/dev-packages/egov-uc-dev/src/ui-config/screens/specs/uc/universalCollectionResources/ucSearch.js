@@ -121,7 +121,7 @@ export const UCSearchCard = getCommonCard({
           xs: 12,
           sm: 4
         },
-        sourceJsonPath: "searchScreenMdmsData.serviceCategory",
+        sourceJsonPath: "searchScreenMdmsData.serviceCategories",
         props: {
           menuPortalTarget:document.querySelector('body'),
           setDataInField: true,
@@ -131,8 +131,8 @@ export const UCSearchCard = getCommonCard({
       }),
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
-          state.screenConfiguration,
-          "preparedFinalObject.searchScreenMdmsData.serviceCategory"
+          state.screenConfiguration.preparedFinalObject,
+          "searchScreenMdmsData.serviceCategories"
         );
         const selectedCategory = serviceCategory.find(
           item => item.code === action.value

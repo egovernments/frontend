@@ -5,15 +5,15 @@ import * as mainRouteConstants from "./route-names";
 
 const Loading = () => <LoadingIndicator/>;
 
-const Landing = Loadable({
-  loader: () => import('ui-views/Landing'),
-  loading: Loading,
-});
-
-const Playground = Loadable({
-  loader: () => import('ui-views/Playground'),
-  loading: Loading,
-});
+// const Landing = Loadable({
+//   loader: () => import('ui-views/Landing'),
+//   loading: Loading,
+// });
+//
+// const Playground = Loadable({
+//   loader: () => import('ui-views/Playground'),
+//   loading: Loading,
+// });
 
 const ScreenInterface=Loadable({
   loader:()=>import ('ui-views/ScreenInterface'),
@@ -21,18 +21,18 @@ const ScreenInterface=Loadable({
 })
 
 const mainRoutes = [
-  {
-    path: mainRouteConstants.LANDING,
-    component: Landing
-  },
+  // {
+  //   path: mainRouteConstants.LANDING,
+  //   component: Landing
+  // },
   {
     path:mainRouteConstants.SCREEN_INTERFACE,
     component:ScreenInterface
   },
-  {
-    path: mainRouteConstants.PLAYGROUND,
-    component: Playground
-  },
+  // {
+  //   path: mainRouteConstants.PLAYGROUND,
+  //   component: Playground
+  // },
   {
     isRedirect:true,
     to:mainRouteConstants.REDIRECT

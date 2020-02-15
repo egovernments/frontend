@@ -2,11 +2,24 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "recompose";
-import MainRoutes from "ui-routes";
+// import MainRoutes from "ui-routes";
 //import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
-import Div from "egov-ui-framework/ui-atoms/HtmlElements/Div";
+// import Div from "egov-ui-framework/ui-atoms/HtmlElements/Div";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import "./index.scss";
+
+import Loadable from "react-loadable";
+import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
+const Loading = () => <LinearProgress />;
+
+const MainRoutes = Loadable({
+  loader: () => import("ui-routes"),
+  loading: () => <Loading />
+});
+const Div = Loadable({
+  loader: () => import("egov-ui-framework/ui-atoms/HtmlElements/Div"),
+  loading: () => <Loading />
+});
 
 class App extends React.Component {
   componentWillReceiveProps(nextProps) {
@@ -15,7 +28,7 @@ class App extends React.Component {
     if (nextRoute && currentRoute !== nextRoute) {
       history.push(nextRoute);
       setRoute("");
-      window.parent.postMessage(`/employee-tradelicence${nextRoute}`, "*");
+      window.parent.postMessage(`/employee-uc${nextRoute}`, "*");
     }
   }
 

@@ -4,9 +4,10 @@ import set from "lodash/set";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertDateToEpoch } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
 import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
@@ -105,6 +106,7 @@ const processDemand = (state, dispatch) => {
 };
 
 const createDemand = async (state, dispatch) => {
+  dispatch(toggleSpinner());
   let demands = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
@@ -158,8 +160,10 @@ const createDemand = async (state, dispatch) => {
       } else {
         alert("Empty response!!");
       }
+      dispatch(toggleSpinner());
     } catch (e) {
       console.log(e.message);
+      dispatch(toggleSpinner());
       dispatch(
         toggleSnackbar(
           true,
@@ -171,6 +175,9 @@ const createDemand = async (state, dispatch) => {
         )
       );
     }
+  }
+  else {
+      dispatch(toggleSpinner());
   }
 };
 
@@ -208,7 +215,11 @@ const generateBill = async (
           businessService
         )
       );
-      dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
+      const path =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `/egov-ui-framework/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`
+          : `/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`;
+      dispatch(setRoute(`${path}`));
     }
   } catch (e) {
     console.log(e);

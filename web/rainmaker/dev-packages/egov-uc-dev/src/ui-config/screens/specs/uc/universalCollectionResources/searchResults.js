@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import get from "lodash/get";
 import { sortByEpoch, getEpochForDate } from "../../utils";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
 import { generateReciept } from "../../utils/recieptPdf";
 import {
   getTransformedLocalStorgaeLabels,
@@ -52,7 +52,7 @@ export const textToLocalMapping = {
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+  // moduleName: "egov-uc",
   componentPath: "Table",
   visible: false,
   props: {

@@ -7,7 +7,7 @@ import {
   localStorageGet,
   getLocalization,
   getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
+} from "./localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
@@ -514,6 +514,8 @@ export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
     });
   }
 }
+
+
 
 if (window)
 {

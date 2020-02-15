@@ -6,7 +6,7 @@ import { getMdmsData } from "../utils";
 import {
   getLocalization,
   getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
+} from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
   getUlbGradeLabel,
   getTranslatedLabel,
@@ -14,7 +14,7 @@ import {
   getTransformedLocale,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 
 function convertNumberToWords(amount) {

@@ -1,20 +1,47 @@
 import * as authType from "./actionTypes";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  setTenantId,
+  getAccessToken,
+  setUserInfo,
+  setAccessToken,
+  setRefreshToken,
+  localStorageSet,
+  localStorageGet,
+  clearUserDetails,
+} from "../../ui-utils/localStorageUtils";
 
 export const authenticating = () => {
   return { type: authType.AUTHENTICATING };
 };
 
-export const authenticated = (payload = {}) => {
-  //its depends on where your storing token
-  const token = localStorageGet(
-    "CognitoIdentityServiceProvider.34l3gjbtidmeo10omi969ftoi5.07f4204e-c40e-438a-964e-a0442048e626.accessToken"
-  );
-  return { type: authType.AUTHENTICATED, token };
+
+// temp fix
+const fixUserDob = (user = {}) => {
+  const dob = user.dob;
+  let transformeddob = null;
+  if (dob && dob !== null) {
+    let date = new Date(dob);
+    transformeddob = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+    user = { ...user, dob: transformeddob };
+  }
+  return user;
 };
 
-export const authenticationFailed = () => {
-  return { type: authType.AUTHENTICATION_FAILED };
+export const authenticated = (payload = {}) => {
+  const userInfo = fixUserDob(payload["UserRequest"]);
+  const accessToken = payload.access_token;
+  const refreshToken = payload.refresh_token;
+  const expiresIn = payload.expires_in;
+  const lastLoginTime = new Date().getTime();
+
+  setUserInfo(JSON.stringify(userInfo));
+  setAccessToken(accessToken);
+  setRefreshToken(refreshToken);
+  setTenantId(userInfo.tenantId);
+  localStorageSet("expires-in", expiresIn);
+  localStorageSet("last-login-time", lastLoginTime);
+
+  return { type: authType.AUTHENTICATED, userInfo, accessToken };
 };
 
 export const logout = () => {

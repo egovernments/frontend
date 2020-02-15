@@ -377,11 +377,11 @@ const callBackForPay = async (state, dispatch) => {
       dispatch(prepareFinalObject("receiptSearchResponse", response));
       dispatch(prepareFinalObject("Demands[0].hasReceipt", true));
       // moveToSuccess(href, dispatch, receiptNumber);
-      dispatch(
-        setRoute(
-          `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
-        )
-      );
+      const path =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `/egov-ui-framework/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
+          : `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`;
+      dispatch(setRoute(`${path}`));
       dispatch(toggleSpinner());
     } catch (e) {
       dispatch(toggleSpinner());
@@ -431,5 +431,9 @@ const goBack = (state, dispatch) => {
     const serviceCategory = get(demand, "businessService");
     // const businessService = get(demand[0], "businessService")
   }
-  dispatch(setRoute(`/uc/newCollection`));
+  const path =
+    process.env.REACT_APP_SELF_RUNNING === "true"
+      ? `/egov-ui-framework/uc/newCollection`
+      : `/uc/newCollection`;
+  dispatch(setRoute(`${path}`));
 };

@@ -8,7 +8,7 @@ import {
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
