@@ -1,19 +1,17 @@
 import isEmpty from "lodash/isEmpty";
 import { httpRequest, uploadFile } from "./api.js";
 import cloneDeep from "lodash/cloneDeep";
-/* import {
+// import store from "ui-redux/store";
+import {
   localStorageSet,
   localStorageGet,
   getLocalization,
   getLocale
-} from "egov-ui-kit/utils/localStorageUtils"; */
-import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from "./localStorageUtils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
-import get from "lodash/get";
 import set from "lodash/set";
-//import commonConfig from "config/common.js";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import commonConfig from "config/common.js";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -22,7 +20,9 @@ export const addComponentJsonpath = (components, jsonPath = "components") => {
         components[
           componentKey
         ].componentJsonpath = `${jsonPath}.${componentKey}`;
-        const childJsonpath = `${components[componentKey].componentJsonpath}.children`;
+        const childJsonpath = `${
+          components[componentKey].componentJsonpath
+        }.children`;
         addComponentJsonpath(components[componentKey].children, childJsonpath);
       } else {
         components[
@@ -33,8 +33,6 @@ export const addComponentJsonpath = (components, jsonPath = "components") => {
   }
   return components;
 };
-
-
 
 export const getQueryArg = (url, name) => {
   if (!url) url = window.location.href;
@@ -80,15 +78,6 @@ export const persistInLocalStorage = obj => {
     const objValue = obj[objKey];
     localStorageSet(objKey, objValue);
   }, this);
-};
-
-export const ifUserRoleExists = role => {
-  let userInfo = JSON.parse(getUserInfo());
-  const roles = get(userInfo, "roles");
-  const roleCodes = roles ? roles.map(role => role.code) : [];
-  if (roleCodes.indexOf(role) > -1) {
-    return true;
-  } else return false;
 };
 
 export const fetchFromLocalStorage = key => {
@@ -202,16 +191,16 @@ export const getLocaleLabels = (label, labelKey, localizationLabels) => {
 };
 
 export const replaceStrInPath = (inputString, search, replacement) => {
-  String.prototype.replaceAll = function (search, replacement) {
+  String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, "g"), replacement);
   };
   return inputString.replaceAll(search, replacement);
 };
 
-export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
+export const getFileUrlFromAPI = async fileStoreId => {
   const queryObject = [
-    { key: "tenantId", value: tenantId||commonConfig.tenantId },
+    { key: "tenantId", value: commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -242,64 +231,6 @@ const getAllFileStoreIds = async ProcessInstances => {
   );
 };
 
-
-export const getFileUrl = (linkText="") => {
-  const linkList = linkText.split(",");
-  let fileURL = '';
-  linkList&&linkList.map(link => {
-    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
-      fileURL = link;
-    }
-  })
-  return fileURL;
-}
-
-export const setDocuments = async (
-  payload,
-  sourceJsonPath,
-  destJsonPath,
-  dispatch,
-  businessService
-) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
-
-  const fileStoreIds =
-    uploadedDocData &&
-    uploadedDocData
-      .map(item => {
-        return item.fileStoreId;
-      })
-      .join(",");
-  const fileUrlPayload =
-    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-  const reviewDocData =
-    uploadedDocData &&
-    uploadedDocData.map((item, index) => {
-      return {
-        title: `${businessService}_${item.documentType}` || "",
-        link:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            getFileUrl(fileUrlPayload[item.fileStoreId])) ||
-          "",
-        linkText: "View",
-        name:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            decodeURIComponent(
-              getFileUrl(fileUrlPayload[item.fileStoreId])
-                .split("?")[0]
-                .split("/")
-                .pop()
-                .slice(13)
-            )) ||
-          `Document - ${index + 1}`
-      };
-    });
-  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
-};
-
-
 export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
   const fileStoreIdByAction = await getAllFileStoreIds(ProcessInstances);
   const fileUrlPayload = await getFileUrlFromAPI(
@@ -309,18 +240,17 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
   processInstances.map(item => {
     if (item.documents && item.documents.length > 0) {
       item.documents.forEach(i => {
-        if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
-          i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
-          i.title = `TL_${i.documentType}`;
-          i.name = decodeURIComponent(
-            getFileUrl(fileUrlPayload[i.fileStoreId])
-              .split("?")[0]
-              .split("/")
-              .pop()
-              .slice(13)
-          );
-          i.linkText = "View";
-        }
+        i.link = fileUrlPayload[i.fileStoreId].split(",")[0];
+        i.title = `TL_${i.documentType}`;
+        i.name = decodeURIComponent(
+          fileUrlPayload[i.fileStoreId]
+            .split(",")[0]
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        );
+        i.linkText = "View";
       });
     }
   });
@@ -332,7 +262,6 @@ export const setBusinessServiceDataToLocalStorage = async (
   dispatch
 ) => {
   try {
-    dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
       "egov-workflow-v2/egov-wf/businessservice/_search",
@@ -346,7 +275,7 @@ export const setBusinessServiceDataToLocalStorage = async (
     ) {
       localStorageSet(
         "businessServiceData",
-        JSON.stringify(get(payload, "BusinessServices"))
+        JSON.stringify(_.get(payload, "BusinessServices"))
       );
     } else {
       dispatch(
@@ -360,9 +289,7 @@ export const setBusinessServiceDataToLocalStorage = async (
         )
       );
     }
-    dispatch(toggleSpinner());
   } catch (e) {
-    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
@@ -435,7 +362,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 //localizations
 export const getTransformedLocale = label => {
-  return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+  return label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
 export const appendModulePrefix = (value, localePrefix) => {
@@ -549,47 +476,9 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const validateFields = (
-  objectJsonPath,
-  state,
-  dispatch,
-  screen = "apply"
-) => {
-  const fields = get(
-    state.screenConfiguration.screenConfig[screen],
-    objectJsonPath,
-    {}
-  );
-  let isFormValid = true;
-  for (var variable in fields) {
-    if (fields.hasOwnProperty(variable)) {
-      if (
-        fields[variable] &&
-        fields[variable].props &&
-        (fields[variable].props.disabled === undefined ||
-          !fields[variable].props.disabled) &&
-        !validate(
-          screen,
-          {
-            ...fields[variable],
-            value: get(
-              state.screenConfiguration.preparedFinalObject,
-              fields[variable].jsonPath
-            )
-          },
-          dispatch,
-          true
-        )
-      ) {
-        isFormValid = false;
-      }
-    }
-  }
-  return isFormValid;
-};
-
 export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
-  if (typeof mSewaApp === "undefined") {
+  if (typeof mSewaApp === "undefined")
+  {
     // we are running in browser
     receiptPDF.download(filename);
   } else {
@@ -598,198 +487,39 @@ export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
       mSewaApp.downloadBase64File(data, filename);
     });
   }
-};
-
-if (window) {
-  window.downloadPDFFileUsingBase64 = downloadPDFFileUsingBase64;
 }
-// Get user data from uuid API call
-export const getUserDataFromUuid = async bodyObject => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/user/_search",
-      "",
-      [],
-      bodyObject
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-    return {};
-  }
-};
 
-export const getCommonPayUrl = (dispatch, applicationNo, tenantId ,businessService) => {
-  const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
-  dispatch(setRoute(url));
-};
-
-export const getTodaysDateInYMD = () => {
-  let date = new Date();
-  let month = date.getMonth() + 1;
-  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  date = `${date.getFullYear()}-${month}-${day}`;
-  return date;
-};
-
-
-//GET methods
-export const getAccessToken = () => {
-  return localStorageGet(`token`);
-};
-export const getUserInfo = () => {
-  return localStorageGet("user-info");
-};
-export const getTenantId = () => {
-  return localStorageGet("tenant-id");
-};
-export const getLocalization = (key) => {
-  return localStorage.getItem(key);
-};
-export const getLocale = () => {
-  return localStorage.getItem("locale");
-};
-
-//SET methods
-export const setUserInfo = (userInfo) => {
-  localStorageSet("user-info", userInfo, null);
-};
-export const setAccessToken = (token) => {
-  localStorageSet("token", token, null);
-};
-export const setRefreshToken = (refreshToken) => {
-  localStorageSet("refresh-token", refreshToken, null);
-};
-export const setTenantId = (tenantId) => {
-  localStorageSet("tenant-id", tenantId, null);
-};
-export const setLocale = (locale) => {
-  localStorageSet("locale", locale);
-};
-export const setReturnUrl = (url) => {
-  localStorageSet("returnUrl", url);
-};
-
-//Remove Items (LOGOUT)
-export const clearUserDetails = () => {
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith(appName)) {
-      window.localStorage.removeItem(key);
-    }
-  });
-};
-//Role specific get-set Methods
-export const localStorageGet = (key, path) => {
-  const appName = process.env.REACT_APP_NAME;
-  let value = null;
-  if (path) {
-    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
-    value = get(data, path);
-  } 
-  else if(key==="businessServiceData")
+export const openPDFFileUsingBase64 = (receiptPDF, filename) => {
+  if (typeof mSewaApp === "undefined")
   {
-    value = window.localStorage.getItem(key) || null;
-
-  }
-  else {
-    value = window.localStorage.getItem(appName + "." + key) || null;
-  }
-  return value;
-};
-export const localStorageSet = (key, data, path) => {
-  const appName = process.env.REACT_APP_NAME;
-  const storedData = window.localStorage.getItem(appName + "." + key);
-
-  if (path) {
-    set(storedData, path, data);
-    window.localStorage.setItem(appName + "." + key, storedData);
-    window.localStorage.setItem(key, storedData);
+    // we are running in browser
+    receiptPDF.open();
   } else {
-    window.localStorage.setItem(appName + "." + key, data);
-    window.localStorage.setItem(key, data);
+    // we are running under webview
+    receiptPDF.getBase64(data => {
+      mSewaApp.downloadBase64File(data, filename);
+    });
   }
-};
-//Remove Item
-export const lSRemoveItem = (key) => {
-  const appName = process.env.REACT_APP_NAME;
-  window.localStorage.removeItem(appName + "." + key);
-};
-
-
-export const commonConfig = {
-  MAP_API_KEY: globalConfigExists() ? window.globalConfigs.getConfig("GMAPS_API_KEY") : process.env.REACT_APP_GMAPS_API_KEY,
-  tenantId: globalConfigExists() ? window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID") : process.env.REACT_APP_DEFAULT_TENANT_ID,
-  forgotPasswordTenant: "pb.amritsar",
-};
-
-function globalConfigExists() {
-  return typeof window.globalConfigs !== "undefined" && typeof window.globalConfigs.getConfig === "function";
 }
 
-/* export const transformById = (payload, id) => {
-  return (
-    payload &&
-    payload.reduce((result, item) => {
-      if (!item.hasOwnProperty("active") || (item.hasOwnProperty("active") && item.active)) {
-        result[item[id]] = {
-          ...item,
-        };
-      }
-
-      return result;
-    }, {})
-  );
-}; */
-
-
-export const getTransformedDropdown = (MDMSdata, dataKeys) => {
-  dataKeys.forEach(dataKey=>{
-    if (MDMSdata && MDMSdata.hasOwnProperty(dataKey)) {
-      let keys = MDMSdata[dataKey] && Object.keys(MDMSdata[dataKey]);
-      let tempObj = {};
-      if(keys && keys.length > 0){
-        if(dataKey !== "UsageCategory"){
-          MDMSdata[dataKey] = getSingleCodeObject(dataKey, tempObj, MDMSdata, keys);
-        } else {
-          MDMSdata = {...MDMSdata, ...getUsageCategory(dataKey, tempObj, MDMSdata, keys)};
-        }
-      }
-    }
-  });
-  return MDMSdata;
-  }  
-
-  export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
-    keys.forEach(key=>{
-      let splittedKey = key.split(".");
-      tempObj[splittedKey[splittedKey.length-1]] = MDMSdata[dataKey][key];
-      tempObj[splittedKey[splittedKey.length-1]].code = splittedKey[splittedKey.length-1];
-    })
-    return tempObj;
-  }
-  
-  export const getUsageCategory = (dataKey, tempObj, MDMSdata, keys) => {
-    keys.forEach(key=>{
-      let splittedKey = key.split(".");
-      let categoryCode = splittedKey.pop();
-      if(splittedKey.length === 0) {
-        tempObj["UsageCategoryMajor"] = {...tempObj["UsageCategoryMajor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
-      } else if (splittedKey.length === 1) {
-        tempObj["UsageCategoryMinor"] = {...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMajor", splittedKey[splittedKey.length-1])};
-      } else if (splittedKey.length === 2) {
-        tempObj["UsageCategorySubMinor"] = {...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMinor", splittedKey[splittedKey.length-1])};
-      } else if (splittedKey.length === 3) {
-        tempObj["UsageCategoryDetail"] = {...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length-1])};
-      }
+export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
+  if (typeof mSewaApp === "undefined")
+  {
+    // we are running in browser
+    receiptPDF.print();
+  } else {
+    // we are running under webview
+    receiptPDF.getBase64(data => {
+      mSewaApp.downloadBase64File(data, filename);
     });
-    return tempObj;
   }
+}
 
-  export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key, parentKey, parentKeyValue) => {
-    let tempObj = {}
-    tempObj[categoryCode] = MDMSdata[dataKey][key];
-    tempObj[categoryCode].code = categoryCode;
-    tempObj[categoryCode][parentKey] = parentKeyValue;
-    return tempObj;
-  }
+
+
+if (window)
+{
+  window.downloadPDFFileUsingBase64 = downloadPDFFileUsingBase64
+  window.printPDFFileUsingBase64 = printPDFFileUsingBase64;
+  window.openPDFFileUsingBase64 = openPDFFileUsingBase64;
+}

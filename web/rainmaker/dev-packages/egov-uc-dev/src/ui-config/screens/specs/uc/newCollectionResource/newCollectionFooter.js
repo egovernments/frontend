@@ -4,17 +4,15 @@ import set from "lodash/set";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertDateToEpoch } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
 import { validateFields } from "../../utils";
-import { getTenantId } from "../../../../../ui-utils/commons";
-
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
-import commonConfig from "egov-ui-framework/ui-utils/commons";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -80,7 +78,7 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
   });
 };
 
-const processDemand = async (state, dispatch) => {
+const processDemand = (state, dispatch) => {
   const isFormValid = validateFields(
     "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
     state,
@@ -88,44 +86,11 @@ const processDemand = async (state, dispatch) => {
     "newCollection"
   );
   if (isFormValid) {
-    try {
-      const mobileNumber = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Demands[0].mobileNumber"
-      );
-      let payload = await httpRequest(
-        "post",
-        `/user/_search?tenantId=${commonConfig.tenantId}`,
-        "_search",
-        [],
-        {
-          tenantId: commonConfig.tenantId,
-          userName: mobileNumber
-        }
-      );
-      if (payload ) {
-        const uuid = get(payload , "user[0].uuid");
-        dispatch(prepareFinalObject("Demands[0].payer.uuid"));
-        await createDemand(state, dispatch);
-        allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
-          "Demands[0].taxPeriodFrom",
-          "Demands[0].taxPeriodTo"
-        ]);
-        const applicationNumber = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Demands[0].consumerCode"
-        );
-        const tenantId = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Demands[0].tenantId"
-        );
-        const businessService = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Demands[0].serviceType"
-        );
-        getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
-      }
-    } catch (error) {}
+    createDemand(state, dispatch);
+    allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
+      "Demands[0].taxPeriodFrom",
+      "Demands[0].taxPeriodTo"
+    ]);
   } else {
     dispatch(
       toggleSnackbar(
@@ -134,22 +99,19 @@ const processDemand = async (state, dispatch) => {
           labelName: "Please fill the required fields.",
           labelKey: "UC_REQUIRED_FIELDS_ERROR_MSG"
         },
-        "info"
+        "error"
       )
     );
   }
 };
 
 const createDemand = async (state, dispatch) => {
+  dispatch(toggleSpinner());
   let demands = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
     )
   );
-// Making payer object as null if it is empty object, later will changge in component.
-// if(Object.keys(demands[0].payer).length === 0) {
-//   demands[0].payer = null;
-// }
   set(demands[0], "consumerType", demands[0].businessService);
   demands[0].demandDetails &&
     demands[0].demandDetails.forEach(item => {
@@ -167,9 +129,6 @@ const createDemand = async (state, dispatch) => {
   set(demands[0], "taxPeriodTo", convertDateToEpoch(demands[0].taxPeriodTo));
   const mobileNumber = demands[0].mobileNumber;
   const consumerName = demands[0].consumerName;
-
-  set(demands[0], "payer.mobileNumber", mobileNumber);
-  set(demands[0], "payer.name", consumerName);
   //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
   const taxPeriodValid = isTaxPeriodValid(dispatch, demands[0], state);
 
@@ -186,7 +145,7 @@ const createDemand = async (state, dispatch) => {
         Demands: demands
       });
       if (payload.Demands.length > 0) {
-        //const consumerCode = get(payload, "Demands[0].consumerCode");
+        const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
         set(payload, "Demands[0].mobileNumber", mobileNumber);
         set(payload, "Demands[0].consumerName", consumerName);
@@ -197,12 +156,14 @@ const createDemand = async (state, dispatch) => {
           businessService.split(".")[0]
         );
         dispatch(prepareFinalObject("Demands", payload.Demands));
-        //await generateBill(consumerCode, tenantId, businessService, dispatch);
+        await generateBill(consumerCode, tenantId, businessService, dispatch);
       } else {
         alert("Empty response!!");
       }
+      dispatch(toggleSpinner());
     } catch (e) {
       console.log(e.message);
+      dispatch(toggleSpinner());
       dispatch(
         toggleSnackbar(
           true,
@@ -214,6 +175,9 @@ const createDemand = async (state, dispatch) => {
         )
       );
     }
+  }
+  else {
+      dispatch(toggleSpinner());
   }
 };
 
@@ -251,7 +215,11 @@ const generateBill = async (
           businessService
         )
       );
-      dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
+      const path =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `/egov-ui-framework/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`
+          : `/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`;
+      dispatch(setRoute(`${path}`));
     }
   } catch (e) {
     console.log(e);
