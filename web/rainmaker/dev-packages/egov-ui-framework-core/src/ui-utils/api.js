@@ -1,12 +1,13 @@
 import axios from "axios";
 import { fetchFromLocalStorage, addQueryArg, getDateInEpoch } from "./commons";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner } from "../ui-redux/screen-configuration/actions";
 import store from "../ui-redux/store";
 import {
   getAccessToken,
   getTenantId,
   getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
+} from "./localStorageUtils";
+import commonConfig from "config/common.js";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -95,19 +96,42 @@ export const httpRequest = async (
   throw new Error(apiError);
 };
 
-export const loginRequest = async (username = null, password = null) => {
+export const loginRequest = async (username = null, password = null, refreshToken = "", grantType = "password", tenantId = "", userType) => {
+  tenantId = tenantId ? tenantId : commonConfig.tenantId;
+  const loginInstance = axios.create({
+    baseURL: window.location.origin,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0",
+    },
+  });
+
   let apiError = "Api Error";
+  var params = new URLSearchParams();
+  username && params.append("username", username);
+  password && params.append("password", password);
+  refreshToken && params.append("refresh_token", refreshToken);
+  params.append("grant_type", grantType);
+  params.append("scope", "read");
+  params.append("tenantId", tenantId);
+  userType && params.append("userType", userType);
+
   try {
-    // api call for login
-    alert("Logged in");
-    return;
-  } catch (e) {
-    apiError = e.message;
-    // alert(e.message);
+    const response = await loginInstance.post("/user/oauth/token", params);
+    const responseStatus = parseInt(response.status, 10);
+    if (responseStatus === 200 || responseStatus === 201) {
+      return response.data;
+    }
+  } catch (error) {
+    const { data, status } = error.response;
+    if (status === 400) {
+      apiError = (data.hasOwnProperty("error_description") && data.error_description) || apiError;
+    }
   }
 
   throw new Error(apiError);
 };
+
 
 export const logoutRequest = async () => {
   let apiError = "Api Error";

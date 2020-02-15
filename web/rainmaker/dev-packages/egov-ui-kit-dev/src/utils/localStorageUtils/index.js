@@ -1,5 +1,3 @@
-
-
 const appName = process.env.REACT_APP_NAME;
 
 //GET methods
@@ -52,16 +50,10 @@ export const localStorageGet = (key, path) => {
   const appName = process.env.REACT_APP_NAME;
   let value = null;
   if (path) {
-    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
+    const data = JSON.parse(window.localStorage.getItem(appName?appName + "." + key:key)) || null;
     value = get(data, path);
-  } 
-  else if(key==="businessServiceData")
-  {
-    value = window.localStorage.getItem(key) || null;
-
-  }
-  else {
-    value = window.localStorage.getItem(appName + "." + key) || null;
+  } else {
+    value = window.localStorage.getItem(appName?appName + "." + key:key) || null;
   }
   return value;
 };
@@ -72,7 +64,7 @@ export const localStorageSet = (key, data, path) => {
   if (path) {
     set(storedData, path, data);
     window.localStorage.setItem(appName + "." + key, storedData);
-    window.localStorage.setItem(key, storedData);
+    window.localStorage.setItem( key, storedData);
   } else {
     window.localStorage.setItem(appName + "." + key, data);
     window.localStorage.setItem(key, data);

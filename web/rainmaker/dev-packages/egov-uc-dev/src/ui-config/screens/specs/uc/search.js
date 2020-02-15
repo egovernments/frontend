@@ -9,14 +9,11 @@ import { setServiceCategory } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { searchResults } from "./universalCollectionResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest} from "../../../../ui-utils";
-import { getTenantId } from "../../../../ui-utils/commons";
-
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-//import { getTenantId } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 
-const tenantId = "pb.punjab"
-console.log("prasad getTenantId", tenantId);
+const tenantId = getTenantId();
 const header = getCommonHeader({
   labelName: "Universal Collection",
   labelKey: "UC_COMMON_HEADER_SEARCH"
@@ -40,15 +37,7 @@ const getMDMSData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" }
           ]
-        },
-        {
-          moduleName: "common-masters",
-          masterDetails: [
-            {
-              name: "uiCommonPay"
-            }
-          ]
-        },
+        }
       ]
     }
   };
@@ -60,12 +49,19 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     setServiceCategory(
       get(payload, "MdmsRes.BillingService.BusinessService", []),
-      dispatch
-    ); 
-    dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
-    } catch (e) {
+      dispatch,
+      "searchScreenMdmsData"
+    );
+    // dispatch(
+    //   prepareFinalObject(
+    //     "searchScreenMdmsData.serviceCategory",
+    //     serviceCategories
+    //   )
+    // );
+  } catch (e) {
     console.log(e);
     alert("Billing service data fetch failed");
   }

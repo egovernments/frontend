@@ -7,10 +7,6 @@ const TestMolecules = Loadable({
   loader: () => import("./TestMolecules"),
   loading: () => <Loading />
 });
-const RadioButtonsGroup = Loadable({
-  loader: () => import("./RadioGroup"),
-  loading: () => <Loading />
-});
 
 const Tooltip = Loadable({
   loader: () => import("./Tooltip"),
@@ -22,10 +18,6 @@ const CustomTab = Loadable({
   loading: () => <Loading />
 });
 
-const UploadSingleFile = Loadable({
-  loader: () => import("./UploadSingleFile"),
-  loading: () => <Loading />
-});
 
 const DividerWithLabel = Loadable({
   loader: () => import("./DividerWithLabel"),
@@ -39,10 +31,8 @@ const FeesEstimateCard = Loadable({
 
 export {
   TestMolecules,
-  RadioButtonsGroup,
   Tooltip,
   CustomTab,
-  UploadSingleFile,
   FeesEstimateCard,
   DividerWithLabel
 };
