@@ -499,3 +499,18 @@ export const getPattern = type => {
       return /^[0-9]{15}$/i;
   }
 };
+
+export const getMdmsData = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "egov-mdms-service/v1/_get",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   getTranslatedLabel,
   transformById
-} from "../../ui-config/screens/specs/utils/index";
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {

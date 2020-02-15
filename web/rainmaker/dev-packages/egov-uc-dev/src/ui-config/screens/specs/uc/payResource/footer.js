@@ -1,9 +1,8 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { ifUserRoleExists } from "../../utils";
+import { ifUserRoleExists,convertDateToEpoch ,validateFields} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getSelectedTabIndex } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertDateToEpoch, validateFields } from "../../utils";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   toggleSnackbar,

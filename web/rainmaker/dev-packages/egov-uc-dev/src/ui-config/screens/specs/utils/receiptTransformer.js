@@ -1,8 +1,7 @@
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
-import { getEmployeeName } from "../utils/index";
-import { getMdmsData } from "../utils";
+import { getEmployeeName,getMdmsData } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getLocalization,
   getLocale

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import get from "lodash/get";
-import { httpRequest } from "../../ui-utils/api";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { withRouter } from "react-router";
 
 class PaymentRedirect extends Component {

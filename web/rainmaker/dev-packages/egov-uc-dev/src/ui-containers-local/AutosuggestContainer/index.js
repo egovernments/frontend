@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { AutoSuggest } from "../../ui-atoms-local";
-import { findItemInArrayOfObject } from "../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   transformById,
-  getLocaleLabels
+  getLocaleLabels,
+  findItemInArrayOfObject
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";

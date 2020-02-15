@@ -9,7 +9,7 @@ import { UCSearchCard } from "./receiptsResources/ucSearch";
 //import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchResult } from "./receiptsResources/searchResult";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 

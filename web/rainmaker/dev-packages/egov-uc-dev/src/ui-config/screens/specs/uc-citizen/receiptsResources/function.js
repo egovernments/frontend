@@ -3,11 +3,10 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
+import { getSearchResults } from "egov-ui-framework/ui-utils/commons";
+import { convertEpochToDate, convertDateToEpoch ,validateFields} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResult";
-import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
   getLocaleLabels,

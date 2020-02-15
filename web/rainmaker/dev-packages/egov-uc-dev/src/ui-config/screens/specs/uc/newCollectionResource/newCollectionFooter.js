@@ -1,12 +1,9 @@
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel,convertDateToEpoch,ifUserRoleExists,validateFields } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertDateToEpoch } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { ifUserRoleExists } from "../../utils";
-import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
   handleScreenConfigurationFieldChange as handleField,

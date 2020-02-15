@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import get from "lodash/get";
-import { sortByEpoch, getEpochForDate } from "../../utils";
+import { sortByEpoch, getEpochForDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
 import { generateReciept } from "../../utils/recieptPdf";
 import {

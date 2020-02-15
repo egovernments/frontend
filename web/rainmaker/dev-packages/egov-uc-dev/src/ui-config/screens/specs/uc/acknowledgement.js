@@ -7,7 +7,7 @@ import {
 } from "./acknowledgementResource/acknowledgementFooter";
 import set from "lodash/set";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const getAcknowledgementCard = (
