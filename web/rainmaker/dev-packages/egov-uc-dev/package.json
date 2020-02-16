@@ -45,12 +45,14 @@
     "style-loader": "^0.21.0"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build-css": "node-sass-chokidar src/ -o src/",
-    "transpile": "yarn run build-css && babel src -d ../../packages/egov-uc --copy-files",
-    "build": "react-scripts build",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build-js": "react-scripts build",
+    "build": "npm-run-all build-css build-js",
+    "prettier": "prettier --write \"src/**/*.js\"",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "prebuild":"yarn run transpile"
+    "eject": "react-scripts eject"
   }
 }
