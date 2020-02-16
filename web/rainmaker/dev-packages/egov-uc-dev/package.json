@@ -47,9 +47,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build-css": "node-sass-chokidar src/ -o src/",
-    "transpile": "npm run build-css && babel src -d ../../packages/egov-uc --copy-files",
+    "transpile": "yarn run build-css && babel src -d ../../packages/egov-uc --copy-files",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prebuild":"yarn run transpile"
   }
 }
