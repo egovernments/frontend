@@ -1,7 +1,7 @@
 import {
   getCommonCard,
   getTextField,
-  getSelectField,
+  // getSelectField,
   getCommonContainer
   // getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";

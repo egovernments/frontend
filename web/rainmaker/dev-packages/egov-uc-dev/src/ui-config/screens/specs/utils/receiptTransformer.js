@@ -17,7 +17,7 @@ import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 
 function convertNumberToWords(amount) {
-  var words = new Array();
+  var words = [];
   words[0] = '';
   words[1] = 'One';
   words[2] = 'Two';
@@ -52,44 +52,45 @@ function convertNumberToWords(amount) {
   var n_length = number.length;
   var words_string = "";
   if (n_length <= 9) {
-      var n_array = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
-      var received_n_array = new Array();
+      var n_array = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+      var received_n_array = [];
       for (var i = 0; i < n_length; i++) {
           received_n_array[i] = number.substr(i, 1);
       }
-      for (var i = 9 - n_length, j = 0; i < 9; i++, j++) {
+      var j;
+      for (i = 9 - n_length, j = 0; i < 9; i++, j++) {
           n_array[i] = received_n_array[j];
       }
-      for (var i = 0, j = 1; i < 9; i++, j++) {
-          if (i == 0 || i == 2 || i == 4 || i == 7) {
-              if (n_array[i] == 1) {
-                  n_array[j] = 10 + parseInt(n_array[j]);
+      for (i = 0, j = 1; i < 9; i++, j++) {
+          if (i ===0 || i ===2 || i ===4 || i ===7) {
+              if (n_array[i] ===1) {
+                  n_array[j] = 10 + parseInt(n_array[j], 10);
                   n_array[i] = 0;
               }
           }
       }
       var value = "";
-      for (var i = 0; i < 9; i++) {
-          if (i == 0 || i == 2 || i == 4 || i == 7) {
+      for (i = 0; i < 9; i++) {
+          if (i ===0 || i ===2 || i ===4 || i ===7) {
               value = n_array[i] * 10;
           } else {
               value = n_array[i];
           }
-          if (value != 0) {
+          if (value !== 0) {
               words_string += words[value] + " ";
           }
-          if ((i == 1 && value != 0) || (i == 0 && value != 0 && n_array[i + 1] == 0)) {
+          if ((i ===1 && value !== 0) || (i ===0 && value !== 0 && n_array[i + 1] ===0)) {
               words_string += "Crores ";
           }
-          if ((i == 3 && value != 0) || (i == 2 && value != 0 && n_array[i + 1] == 0)) {
+          if ((i ===3 && value !== 0) || (i ===2 && value !== 0 && n_array[i + 1] ===0)) {
               words_string += "Lakhs ";
           }
-          if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
+          if ((i ===5 && value !== 0) || (i ===4 && value !== 0 && n_array[i + 1] ===0)) {
               words_string += "Thousand ";
           }
-          if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
+          if (i ===6 && value !== 0 && (n_array[i + 1] !== 0 && n_array[i + 2] !== 0)) {
               words_string += "Hundred and ";
-          } else if (i == 6 && value != 0) {
+          } else if (i ===6 && value !== 0) {
               words_string += "Hundred ";
           }
       }
@@ -102,9 +103,9 @@ function convertNumberToWords(amount) {
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
 
-const ifNotNull = value => {
-  return !["", "NA", "null", null].includes(value);
-};
+// const ifNotNull = value => {
+//   return !["", "NA", "null", null].includes(value);
+// };
 
 const nullToNa = value => {
   return ["", "NA", "null", null].includes(value) ? "None" : value;
@@ -254,7 +255,7 @@ export const loadMdmsData = async tenantid => {
     response.MdmsRes.tenant.tenants.length > 0
   ) {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
-      return item.code == tenantid;
+      return item.code === tenantid;
     });
     /** START Corporation name generation logic */
     // let ulbGrade = get(ulbData, "city.ulbGrade", "NA");

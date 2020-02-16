@@ -1,6 +1,6 @@
 import { getLabel ,validateFields} from "egov-ui-framework/ui-config/screens/specs/utils";
-import get from "lodash/get";
-import set from "lodash/set";
+// import get from "lodash/get";
+// import set from "lodash/set";
 import { loginRequest } from "egov-ui-framework/ui-utils/api";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { authenticated } from "egov-ui-framework/ui-redux/auth/actions";

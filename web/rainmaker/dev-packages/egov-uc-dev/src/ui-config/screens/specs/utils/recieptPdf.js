@@ -9,7 +9,6 @@ import {
   loadUlbLogo,
   loadMdmsData
 } from "./receiptTransformer";
-import { loadReceiptGenerationData } from "./receiptTransformer";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const receiptTableWidth = ["*", "*", "*", "*"];
@@ -113,7 +112,7 @@ const getCitizenReceipetData = transformedData => {
               }
             ],
             alignment: "left"
-            
+
           },
           {
             text: [
@@ -1173,7 +1172,7 @@ export const generateReciept = async rowData => {
 
     openPDFFileUsingBase64(pdfData, `${transformedData.receiptNumber}.pdf`)
   }
-   
+
 };
 
 //Generates PDF for Citizen Reciept
@@ -1227,10 +1226,10 @@ export const generateCitizenReciept = async rowData => {
           transformedData: transformedData
         })
       }
-  
+
       pdfDataCitizen = pdfMake.createPdf(citizenReceipt_data)
-  
+
       openPDFFileUsingBase64(pdfDataCitizen, `${transformedData.receiptNumber}.pdf`)
     }
-  
+
   };

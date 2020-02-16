@@ -2,17 +2,17 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import { loginDetailsCard } from "./loginResource/loginDetails";
 import { loginFooter } from "./loginResource/loginFooter";
 import { prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
+// import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import commonConfig from "config/common.js";
-import get from "lodash/get";
-import set from "lodash/set";
+// import get from "lodash/get";
+// import set from "lodash/set";
 
 const header = getCommonHeader({
   labelName: "Login",
   labelKey: "CORE_COMMON_LOGIN"
 });
-const tenantId = getTenantId();
+// const tenantId = getTenantId();
 
 const getData = async (action, state, dispatch) => {
   let requestBody = {

@@ -195,7 +195,7 @@ export const footer = getCommonApplyFooter({
 });
 
 const callBackForPay = async (state, dispatch) => {
-  const { href } = window.location;
+  // const { href } = window.location;
   let isFormValid = true;
 
   // --- Validation related -----//
@@ -426,8 +426,8 @@ const goBack = (state, dispatch) => {
   );
   const demandId = demand.id || null;
   if (demandId) {
-    const serviceType = get(demand, "serviceType");
-    const serviceCategory = get(demand, "businessService");
+    // const serviceType = get(demand, "serviceType");
+    // const serviceCategory = get(demand, "businessService");
     // const businessService = get(demand[0], "businessService")
   }
   const path =

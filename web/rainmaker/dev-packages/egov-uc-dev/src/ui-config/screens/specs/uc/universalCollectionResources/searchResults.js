@@ -1,18 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import get from "lodash/get";
 import { sortByEpoch, getEpochForDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
+// import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
 import { generateReciept } from "../../utils/recieptPdf";
 import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
-const getLocalTextFromCode = localCode => {
-  return JSON.parse(getLocalization("localization_en_IN")).find(
-    item => item.code === localCode
-  );
-};
+// const getLocalTextFromCode = localCode => {
+//   return JSON.parse(getLocalization("localization_en_IN")).find(
+//     item => item.code === localCode
+//   );
+// };
 
 export const textToLocalMapping = {
   "Receipt No.": getLocaleLabels(
@@ -104,12 +104,5 @@ export const searchResults = {
         return { data: finalData, currentOrder: !order ? "asc" : "desc" };
       }
     }
-  }
-};
-
-const onRowClick = rowData => {
-  switch (rowData[get(textToLocalMapping, "")]) {
-    default:
-      return `/uc/search`;
   }
 };

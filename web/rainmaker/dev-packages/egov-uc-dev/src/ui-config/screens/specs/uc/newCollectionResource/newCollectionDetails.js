@@ -16,18 +16,18 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import {
-  getTransformedLocalStorgaeLabels,
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
+// import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+// import {
+//   getTransformedLocalStorgaeLabels,
+//   getLocaleLabels
+// } from "egov-ui-framework/ui-utils/commons";
 import {setServiceCategory} from "../../utils"
-import set from "lodash/set";
+// import set from "lodash/set";
 import get from "lodash/get";
 
-const hasButton = getQueryArg(window.location.href, "hasButton");
-let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
+// const hasButton = getQueryArg(window.location.href, "hasButton");
+// let enableButton = true;
+// enableButton = hasButton && hasButton === "false" ? false : true;
 const tenantId = getTenantId();
 
 export const newCollectionDetailsCard = getCommonCard(
@@ -251,7 +251,7 @@ export const newCollectionDetailsCard = getCommonCard(
                 );
                 //Set tax head fields if there is no service type available
                 if (!demandId && serviceData[action.value]) {
-                  const taxHeads = setTaxHeadFields(action, state, dispatch);
+                   setTaxHeadFields(action, state, dispatch);
                 }
               }
             }
@@ -326,7 +326,7 @@ export const newCollectionDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Demands[0].taxPeriodTo"
         }),
-        dummyDiv: {
+        dummyDivTwo: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
           gridDefination: {
@@ -380,11 +380,11 @@ export const newCollectionDetailsCard = getCommonCard(
 );
 
 const setTaxHeadFields = (action, state, dispatch) => {
-  const serviceData = get(
-    state.screenConfiguration,
-    "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
-    {}
-  );
+  // const serviceData = get(
+  //   state.screenConfiguration,
+  //   "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
+  //   {}
+  // );
   const taxHeadMasters = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.BillingService.TaxHeadMaster",

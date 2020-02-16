@@ -6,7 +6,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
-  handleScreenConfigurationFieldChange as handleField,
+  // handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -239,11 +239,11 @@ const createEstimateData = billObject => {
 };
 
 const isTaxPeriodValid = (dispatch, demand, state) => {
-  const taxPeriods = get(
-    state.screenConfiguration,
-    "preparedFinalObject.applyScreenMdmsData.BillingService.TaxPeriod",
-    []
-  );
+  // const taxPeriods = get(
+  //   state.screenConfiguration,
+  //   "preparedFinalObject.applyScreenMdmsData.BillingService.TaxPeriod",
+  //   []
+  // );
   const selectedFrom = new Date(demand.taxPeriodFrom);
   const selectedTo = new Date(demand.taxPeriodTo);
   if (selectedFrom <= selectedTo) {
@@ -263,29 +263,29 @@ const isTaxPeriodValid = (dispatch, demand, state) => {
   }
 
   //Validation against MDMS Tax periods not required as of now.
-  let found =
-    taxPeriods.length > 0 &&
-    taxPeriods.find(item => {
-      const fromDate = new Date(item.fromDate);
-      const toDate = new Date(item.toDate);
-      return (
-        item.service === demand.businessService &&
-        fromDate <= selectedFrom &&
-        toDate >= selectedTo
-      );
-    });
-  if (found) return true;
-  else {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please select the right tax period",
-          labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
-        },
-        "warning"
-      )
-    );
-    return false;
-  }
+  // let found =
+  //   taxPeriods.length > 0 &&
+  //   taxPeriods.find(item => {
+  //     const fromDate = new Date(item.fromDate);
+  //     const toDate = new Date(item.toDate);
+  //     return (
+  //       item.service === demand.businessService &&
+  //       fromDate <= selectedFrom &&
+  //       toDate >= selectedTo
+  //     );
+  //   });
+  // if (found) return true;
+  // else {
+  //   dispatch(
+  //     toggleSnackbar(
+  //       true,
+  //       {
+  //         labelName: "Please select the right tax period",
+  //         labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
+  //       },
+  //       "warning"
+  //     )
+  //   );
+  //   return false;
+  // }
 };
