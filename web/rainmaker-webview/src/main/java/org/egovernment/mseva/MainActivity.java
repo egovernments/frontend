@@ -286,14 +286,24 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 			CookieManager cookieManager = CookieManager.getInstance();
 			cookieManager.setAcceptThirdPartyCookies(webView, true);
         } else if (Build.VERSION.SDK_INT >= 19) {
+			getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
         else {
+			getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
         webView.setVerticalScrollBarEnabled(false);

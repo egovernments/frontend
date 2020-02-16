@@ -135,7 +135,7 @@ android {
 
 // 			buildConfigField 'String', 'url', '"https://bihar-uat.egovernments.org"'
 
-			buildConfigField 'String', 'url', '"https://70b25467.ngrok.io"'
+			buildConfigField 'String', 'url', '"https://b24975d6.ngrok.io"'
 
 //			buildConfigField 'String', 'url', '"https://www.facebook.com"'
 
