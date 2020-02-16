@@ -2,7 +2,8 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import { loginDetailsCard } from "./loginResource/loginDetails";
 import { loginFooter } from "./loginResource/loginFooter";
 import { prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-// import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
+// import {setRoute} from "egov-ui-framework/ui-redux/app/actions";
+// import { getAccessToken } from "egov-ui-framework/ui-utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import commonConfig from "config/common.js";
 // import get from "lodash/get";
@@ -50,6 +51,14 @@ const login = {
   uiFramework: "material-ui",
   name: "login",
   beforeInitScreen: (action, state, dispatch) => {
+    // if (getAccessToken()) {
+    //   const path =
+    //     process.env.REACT_APP_SELF_RUNNING === "true"
+    //       ? `/egov-ui-framework/uc/search`
+    //       : `/uc/search`;
+    //   dispatch(setRoute(`${path}`));
+    //   return;
+    // }
     getData(action, state, dispatch);
     return action;
   },

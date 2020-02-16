@@ -552,6 +552,11 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   }
 };
 
+export const transformLocalizationLabels = (localizationLabels) => {
+  let labelsById = transformById(localizationLabels, "code");
+  return labelsById;
+};
+
 
 
 if (window)

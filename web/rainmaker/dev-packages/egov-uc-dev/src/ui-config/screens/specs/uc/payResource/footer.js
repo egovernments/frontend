@@ -111,19 +111,19 @@ export const footer = getCommonApplyFooter({
         const paymentData={
           instrumentType:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].instrument.instrumentType.name"
+            "ReceiptTemp[0].instrument.amount"
           ),
           paymentAmount:get(
             state.screenConfiguration.preparedFinalObject,
-            "AmountPaid"
+            "ReceiptTemp[0].instrument.instrumentType.name"
           ),
           customerName:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].payerName"
+            "ReceiptTemp[0].Bill[0].paidBy"
           ),
           customerMobile:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].mobileNumber"
+            "ReceiptTemp[0].Bill[0].payerMobileNumber"
           ),
           message:"Pos payment",
           emailId:get(
@@ -136,23 +136,29 @@ export const footer = getCommonApplyFooter({
           ),
           billNumber:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].billNumber"
+            "ReceiptTemp[0].Bill[0].billDetails[0].billNumber"
           ),
           consumerCode:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].consumerCode"
+            "ReceiptTemp[0].Bill[0].billDetails[0].consumerCode"
           ),
           businessService:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].businessService"
+            "ReceiptTemp[0].Bill[0].billDetails[0].businessService"
           ),
           collectorName:"",
           collectorId:"",
-          instrumentDate:"",
-          instrumentNumber:""
+          instrumentDate:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentDate"
+          ),
+          instrumentNumber:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentNumber"
+          )
         }
         try {
-          window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
+          window.mSewaApp && window.mSewaApp.sendPaymentData("paymentData",JSON.stringify(paymentData));
         } catch (e) {
           console.log(e);
         }
