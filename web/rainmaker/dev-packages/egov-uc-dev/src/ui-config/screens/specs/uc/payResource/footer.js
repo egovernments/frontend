@@ -111,11 +111,11 @@ export const footer = getCommonApplyFooter({
         const paymentData={
           instrumentType:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].instrument.amount"
+            "ReceiptTemp[0].instrument.instrumentType.name"
           ),
           paymentAmount:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].instrument.instrumentType.name"
+            "ReceiptTemp[0].instrument.amount"
           ),
           customerName:get(
             state.screenConfiguration.preparedFinalObject,
