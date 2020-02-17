@@ -69,7 +69,7 @@
 }
 @media only screen and (max-width: 578px) {
     .LandingPage-btn-105{
-        width: 100%!important;
+        width: 40%!important;
         padding: 3.5% 5%!important;
     }
     #common-container >
@@ -81,7 +81,7 @@
     }
 }
 @media only screen and (max-width: 550px) {
-    .LandingPage-btn-105, #login-button{
+    .LandingPage-btn-105{
         width: 100%!important;
         padding: 3.5% 5%!important;
     }
