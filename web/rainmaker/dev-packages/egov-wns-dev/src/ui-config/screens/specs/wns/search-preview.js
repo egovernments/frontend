@@ -11,12 +11,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getQueryArg, setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import {
-  createEstimateData,
-  setMultiOwnerForSV,
-  setValidToFromVisibilityForSV,
-  getDialogButton
-} from "../utils";
+import { createEstimateData, getDialogButton } from "../utils";
 
 import { footerReview } from "./applyResource/footer";
 import {
@@ -33,30 +28,9 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
 
-
-
-// const getTradeTypeSubtypeDetails = payload => {
-//   const tradeUnitsFromApi = get(
-//     payload,
-//     "Licenses[0].tradeLicenseDetail.tradeUnits",
-//     []
-//   );
-//   const tradeUnitDetails = [];
-//   tradeUnitsFromApi.forEach(tradeUnit => {
-//     const { tradeType } = tradeUnit;
-//     const tradeDetails = tradeType.split(".");
-//     tradeUnitDetails.push({
-//       trade: get(tradeDetails, "[0]", ""),
-//       tradeType: get(tradeDetails, "[1]", ""),
-//       tradeSubType: get(tradeDetails, "[2]", "")
-//     });
-//   });
-//   return tradeUnitDetails;
-// };
-
-const searchResults = async (action, state, dispatch, applicationNo) => {
+const searchResults = async (action, state, dispatch, applicationNumber) => {
   let queryObject = [
-    { key: "tenantId", value:tenantId },
+    { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ];
   let payload = await getSearchResults(queryObject);
@@ -70,44 +44,12 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   );
   set(payload, "WaterConnection[0].headerSideText", headerSideText);
 
-  // get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory") &&
-  //   get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory").split(
-  //     "."
-  //   )[0] === "INDIVIDUAL"
-  //   ? setMultiOwnerForSV(action, true)
-  //   : setMultiOwnerForSV(action, false);
-
-  // if (get(payload, "Licenses[0].licenseType")) {
-  //   setValidToFromVisibilityForSV(
-  //     action,
-  //     get(payload, "Licenses[0].licenseType")
-  //   );
-  // }
-
-  // await setDocuments(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.applicationDocuments",
-  //   "LicensesTemp[0].reviewDocData",
-  //   dispatch,'TL'
-  // );
   let sts = getTransformedStatus(get(payload, "WaterConnection[0].applicationStatus"));
   payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-  // payload &&
-  //   dispatch(
-  //     prepareFinalObject(
-  //       "LicensesTemp[0].tradeDetailsResponse",
-  //       getTradeTypeSubtypeDetails(payload)
-  //     )
-  //   );
-  const WaterData = payload.WaterConnection[0];
-  const fetchFromReceipt = sts !== "pending_payment";
-  createEstimateData(
-    WaterData,
-    "LicensesTemp[0].estimateCardData",
-    dispatch,
-    {},
-    fetchFromReceipt
-  );
+
+  // const WaterData = payload.WaterConnection[0];
+  // const fetchFromReceipt = sts !== "pending_payment";
+  // createEstimateData(WaterData, "LicensesTemp[0].estimateCardData", dispatch, {}, fetchFromReceipt);
   // Fetch Bill and populate estimate card
   // const code = get(
   //   payload,
@@ -317,11 +259,11 @@ export const taskDetails = getCommonCard({
   reviewOwnerDetails
 });
 
-export const summaryScreen = getCommonCard({ 
-  reviewConnectionDetails, 
-  reviewDocumentDetails, 
+export const summaryScreen = getCommonCard({
+  reviewConnectionDetails,
+  reviewDocumentDetails,
   reviewOwnerDetails
- })
+})
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -420,7 +362,7 @@ const screenConfig = {
           props: {
             dataPath: "WaterConnection",
             moduleName: "NewWS1",
-            updateUrl: "/ws-services/wc/_update" 
+            updateUrl: "/ws-services/wc/_update"
           }
         },
         actionDialog: {
@@ -451,16 +393,16 @@ const screenConfig = {
         // footer
       }
     },
-    // breakUpDialog: {
-    //   uiFramework: "custom-containers-local",
-    //   moduleName: "egov-wns",
-    //   componentPath: "ViewBreakupContainer",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "md",
-    //     screenKey: "search-preview"
-    //   }
-    // }
+    breakUpDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "ViewBreakupContainer",
+      props: {
+        open: false,
+        maxWidth: "md",
+        screenKey: "search-preview"
+      }
+    }
   }
 };
 
