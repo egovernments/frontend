@@ -1,3 +1,4 @@
+import {uniqBy} from "lodash/uniqBy";
 import {
   getCommonCard,
   getCommonContainer,
@@ -18,6 +19,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import set from "lodash/set";
+import { object } from "prop-types";
 
 const showHideMapPopup = (state, dispatch) => {
   let toggle = get(
@@ -233,21 +235,55 @@ export const propertyLocationDetails = getCommonCard(
             "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
             []
           );
-          const newDistrictData=[];
-          const cityname=[];
-          for(var i=0;i<districtData.length;i++)
+          const newDistrictData =districtData.map((item)=>{
+            return {
+              name:item.city.districtName,
+              code:item.code
+            }
+
+          });
+          const fireStationsList = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+            []
+          );
+          const newdata=[];
+          for(var i=0;i< fireStationsList.length;i++)
           {
-            if (districtData[i].city.districtName)
+            for(var j=0;j<newDistrictData.length;j++)
             {
-              cityname.push({
-                code: districtData[i].city.districtName
-              });
+              if(newDistrictData[j].code==fireStationsList[i].baseTenantId)
+              {
+                
+                newdata.push({
+                  code:newDistrictData[j].name
+                })
+              }
             }
           }
+          const unqdata=newdata.filter( (ele, ind) => ind === newdata.findIndex( elem => elem.code === ele.code));
+          dispatch(
+            prepareFinalObject(
+              "FireNOCs[0].fireNOCDetails.firestationId",
+              null
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+              null
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+              null
+            )
+          );
           dispatch(
             prepareFinalObject(
               "applyScreenMdmsData.tenant.District",
-              cityname
+              unqdata
             )
           );
           dispatch(
@@ -255,12 +291,42 @@ export const propertyLocationDetails = getCommonCard(
               "apply",
               "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.district",
               "props.data",
-              cityname
+              unqdata
             )
           );
             
           }
           else{
+            dispatch(
+              prepareFinalObject(
+                "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+                null
+              )
+            );
+            dispatch(
+              prepareFinalObject(
+                "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+                null
+              )
+            );
+            dispatch(
+              prepareFinalObject(
+                "FireNOCs[0].fireNOCDetails.propertyDetails.district",
+                null
+              )
+            );
+            dispatch(
+              prepareFinalObject(
+                "FireNOCs[0].fireNOCDetails.propertyDetails.subDistrict",
+                null
+              )
+            );
+            dispatch(
+              prepareFinalObject(
+                "FireNOCs[0].fireNOCDetails.firestationId",
+                null
+              )
+            );
             dispatch(
               handleField(
                 "apply",
@@ -297,14 +363,6 @@ export const propertyLocationDetails = getCommonCard(
               handleField(
                 "apply",
                 "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.subDistrict",
-                "visible",
-                false
-              )
-            );
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyFirestation",
                 "visible",
                 false
               )
@@ -359,26 +417,36 @@ export const propertyLocationDetails = getCommonCard(
               "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
               []
             );
-            let fireStations = fireStationsList.filter(firestation => {
-              return firestation.baseTenantId === "pb.sangrur";
+            const districtData= get(
+              state.screenConfiguration,
+              "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
+              []
+            );
+            let districtlist = districtData.filter((districtlists)=>{
+             
+                return districtlists.city.districtName===action.value
+              
             });
-            let subdistrictList = fireStations.filter(subdistrictdata =>{
-              return subdistrictdata.subDistrict
-            });
-            let subdistricts=[];
-            for(var i=0;i<subdistrictList.length;i++){
-              let subdistrictarry=subdistrictList[i].subDistrict;
-              for(var j=0;j<subdistrictarry.length;j++){
-                subdistricts.push({code:subdistrictarry[j]});
-
+            const subDistrictLists=[];
+            const firestationtenantidlist=[];
+            for(var i=0;i<districtlist.length;i++)
+            {
+              const fireStations = fireStationsList.filter(firestation => {
+                return firestation.baseTenantId===districtlist[i].code;
+              });
+              if(fireStations[0]){
+              firestationtenantidlist.push({code:fireStations[0].baseTenantId});
+              for(var j=0;j<fireStations[0].subDistrict.length;j++){
+                  subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
               }
+            }
             }
             dispatch(
               handleField(
                 "apply",
                 "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.subDistrict",
                 "props.data",
-                subdistricts
+                subDistrictLists
               )
             );
 
@@ -412,22 +480,33 @@ export const propertyLocationDetails = getCommonCard(
               "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
               []
             );
+            
             let fireStations = fireStationsList.filter(firestation => {
-              return firestation.baseTenantId === "pb.sangrur";
+              return firestation.subDistrict 
             });
-            let subdistrictList = fireStations.filter(subdistrictdata =>{
-              return subdistrictdata.subDistrict
-            });
-            let firesation=[];
-            for(var i=0;i<subdistrictList.length;i++){
-              let subdistrictarry=subdistrictList[i].subDistrict;
-              for(var j=0;j<subdistrictarry.length;j++){
-                if(subdistrictarry[j]===action.value)
-                {
-                  firesation.push({code:subdistrictList[i].code});
-                  break;
-                }
+            const firesation =[];
+            for(var i=0;i<fireStations.length;i++)
+            {
+              for(var j=0;j<fireStations[i].subDistrict.length;j++)
+              {
+                if(fireStations[i].subDistrict[j]==action.value)
+              {
+                firesation.push({code:fireStations[i].code});
+                dispatch(
+                  prepareFinalObject(
+                    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+                    fireStations[i].baseTenantId
+                  )
+                );
+                dispatch(
+                  prepareFinalObject(
+                    "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+                    "SC1"
+                  )
+                );
+                break;
               }
+              } 
             }
             dispatch(
               handleField(
@@ -526,7 +605,7 @@ export const propertyLocationDetails = getCommonCard(
                 return result;
               }, []);
 
-            console.log("-------------->",mohallaData);
+            
 
             dispatch(
               prepareFinalObject(
