@@ -3,7 +3,8 @@ import {
   getCommonCard,
   getCommonTitle,
   getCommonGrayCard,
-  getCommonContainer
+  getCommonContainer,
+  getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -46,7 +47,6 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
 
   let sts = getTransformedStatus(get(payload, "WaterConnection[0].applicationStatus"));
   payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-
   // const WaterData = payload.WaterConnection[0];
   // const fetchFromReceipt = sts !== "pending_payment";
   // createEstimateData(WaterData, "LicensesTemp[0].estimateCardData", dispatch, {}, fetchFromReceipt);
@@ -211,9 +211,20 @@ const headerrow = getCommonContainer({
 });
 
 const estimate = getCommonGrayCard({
+  header: getCommonSubHeader({ labelKey: "WS_TASK_DETAILS_FEE_ESTIMATE" }),
   estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "LicensesTemp[0].estimateCardData"
-  })
+    sourceJsonPath: "LicensesTemp[0].estimateCardData",
+  }),
+  buttonView: getDialogButton(
+    "VIEW BREAKUP",
+    "WS_PAYMENT_VIEW_BREAKUP",
+    "search-preview"
+  ),
+  buttonAdd: getDialogButton(
+    "ADD REBATE/PENALTY",
+    "WS_PAYMENT_ADD_REBATE_PENALTY",
+    "search-preview"
+  ),
 });
 
 export const reviewConnectionDetails = getReviewConnectionDetails(false);
@@ -249,11 +260,6 @@ const setActionItems = (action, object) => {
 export const taskDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "WS_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
   reviewConnectionDetails,
   reviewDocumentDetails,
   reviewOwnerDetails
