@@ -260,7 +260,7 @@ const getAcknowledgementCard = (
       )
     };
   }else if (purpose === "approve" && status === "success") {
-    loadReceiptGenerationData(applicationNumber, tenant);
+    // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -290,7 +290,7 @@ const getAcknowledgementCard = (
       gotoHomeFooter
     };
   } else if (purpose === "sendback" && status === "success") {
-    loadReceiptGenerationData(applicationNumber, tenant);
+    // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -320,7 +320,7 @@ const getAcknowledgementCard = (
       gotoHomeFooter
     };
   }else if (purpose === "sendbacktocitizen" && status === "success") {
-    loadReceiptGenerationData(applicationNumber, tenant);
+    // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
