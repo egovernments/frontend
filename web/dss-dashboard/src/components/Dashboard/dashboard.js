@@ -103,12 +103,10 @@ class Dashboard extends Component {
         if(code == 'todaysCollection'){
            filters1 = _.cloneDeep(filters)
            filters1['duration'] = {
-            title: "TODAY",
-            value: {
-              startDate: moment().startOf('day').unix(),
-              endDate: moment().endOf('day').unix(),
+              title: "TODAY",
+              startDate: (moment().startOf('day').unix()) * 1000,
+              endDate: (moment().endOf('day').unix()) * 1000,
               interval: 'day'
-            }
           }
           requestBody = getChartOptions(code, filters1);
         }else{

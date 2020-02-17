@@ -30,11 +30,9 @@ class CollectionChartRow extends React.Component {
 			if(code == 'todaysCollection'){			   
 	           filters['duration'] = {
 	            title: "TODAY",
-	            value: {
-	              startDate: moment().startOf('day').unix(),
-	              endDate: moment().endOf('day').unix(),
-	              interval: 'day'
-	            }
+                startDate: (moment().startOf('day').unix()) * 1000,
+                endDate: (moment().endOf('day').unix()) * 1000,
+                interval: 'day'
 	          }
 	        }else{
 	        	filters = this.props.filters
