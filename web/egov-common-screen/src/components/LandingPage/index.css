@@ -69,7 +69,7 @@
 }
 @media only screen and (max-width: 578px) {
     .LandingPage-btn-105{
-        width: 40%!important;
+        width: 100%!important;
         padding: 3.5% 5%!important;
     }
     #common-container >
@@ -81,8 +81,8 @@
     }
 }
 @media only screen and (max-width: 550px) {
-    .LandingPage-btn-105{
-        width: 40%!important;
+    .LandingPage-btn-105, #login-button{
+        width: 100%!important;
         padding: 3.5% 5%!important;
     }
     #common-container > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div:nth-child(2) > div{
@@ -154,7 +154,7 @@
         padding-top: 36px!important;
     } */
     .LandingPage-btn-105, #login-button {
-        width: 40%!important;
+        width: 100%!important;
     }
 }
 
@@ -189,6 +189,6 @@
         padding: 225px 16px 16px 16px!important;
     }
     .LandingPage-btn-105, #login-button {
-        width: 50%!important;
+        width: 100%!important;
     }
 }
