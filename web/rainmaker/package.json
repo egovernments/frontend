@@ -13,7 +13,7 @@
     "prod:citizen": "yarn run go_citizen && cd packages/citizen && yarn run build",
     "prod:employee": "yarn run go_employee && cd packages/employee && yarn run build",
     "dev:employee-mcs": "yarn run build-css-employee-mcs && cd dev-packages/egov-uc-dev &&  yarn start",
-    "prod:employee-mcs": "yarn run go_employee && cd dev-packages/egov-uc-dev && yarn run build",
+    "prod:employee-mcs": "yarn run go_employee_mcs && cd dev-packages/egov-uc-dev && yarn run build",
     "transpile-citizen-modules": "run-p pgr-citizen pt-citizen",
     "transpile-employee-modules": "run-p pgr-employee pt-employee egov-hrms",
     "transpile-common-modules": "run-p egov-ui-kit egov-ui-framework egov-workflow egov-tradelicence egov-uc",
@@ -58,7 +58,7 @@
     "egov-hrms": "babel dev-packages/egov-hrms-dev/src --out-dir packages/lib/egov-hrms --copy-files",
     "go": "yarn && yarn run build-css-employee && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules && yarn run transpile-employee-modules && lerna bootstrap",
     "go_employee": "yarn && yarn run build-css-employee  && yarn run build-css-common && yarn run transpile-common-modules  && yarn run transpile-employee-modules && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore pgr-citizen --ignore pt-citizen  --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev",
-    "go_employee_mcs": "yarn && yarn run build-css-common-mcs && yarn run transpile-common-modules-mcs && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore rainmaker-employee --ignore pgr-citizen --ignore pgr-employee --ignore pt-citizen --ignore pt-employee --ignore egov-workflow --ignore egov-tradelicence --ignore egov-workflow --ignore egov-ui-kit  --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev",
+    "go_employee_mcs": "yarn && yarn run build-css-common-mcs && lerna bootstrap --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore rainmaker-employee --ignore pgr-citizen --ignore pgr-employee --ignore pt-citizen --ignore pt-employee --ignore egov-workflow --ignore egov-tradelicence --ignore egov-workflow --ignore egov-ui-kit  --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev",
     "go_citizen": "yarn  && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules  && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-employee --ignore pgr-employee --ignore pt-employee --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-hrms"
   },
   "devDependencies": {
@@ -73,10 +73,8 @@
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
-    "@material-ui/icons": "^3.0.2",
     "node-sass": "^4.11.0",
     "node-sass-chokidar": "^1.3.4",
-    "npm-run-all": "^4.1.5",
-    "react-scripts": "^1.1.4"
+    "npm-run-all": "^4.1.5"
   }
 }

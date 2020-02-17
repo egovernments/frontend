@@ -32,7 +32,7 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "url-search-params-polyfill": "^5.0.0"
+    "url-search-params-polyfill": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -45,14 +45,11 @@
     "style-loader": "^0.21.0"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build-js": "react-scripts build",
-    "build": "npm-run-all build-css build-js",
-    "prettier": "prettier --write \"src/**/*.js\"",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "react-scripts start",
+	  "build-css": "node-sass-chokidar src/ -o src/",
+	  "transpile": "npm run build-css && babel src -d ../../packages/egov-tradelicence --copy-files",
+	  "build": "react-scripts build",
+	  "test": "react-scripts test --env=jsdom",
+	  "eject": "react-scripts eject"
   }
 }
