@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import TaskStatusContainer from "../TaskStatusContainer";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { Footer } from "../../ui-molecules-local";
 import {
   getQueryArg,
@@ -183,6 +184,15 @@ class WorkFlowContainer extends React.Component {
 
       if (payload) {
         let path = "";
+
+        if(moduleName === "PT.CREATE"){
+          this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
+            label
+          )}&applicationNumber=${ get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
+          return;
+        }
+
+
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
@@ -472,7 +482,8 @@ const mapDispacthToProps = dispatch => {
     prepareFinalObject: (path, value) =>
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
-      dispatch(toggleSnackbar(open, message, variant))
+      dispatch(toggleSnackbar(open, message, variant)),
+      setRoute: route => dispatch(setRoute(route))
   };
 };
 
