@@ -14,4 +14,5 @@ ENV WEB_DIR=/var/web/employee-mcs
 RUN mkdir -p ${WEB_DIR}
 
 COPY --from=build /app/dev-packages/employee-mcs/build ${WEB_DIR}/
+
 COPY --from=build /app/docker/employee-mcs/nginx.conf /etc/nginx/conf.d/default.conf
