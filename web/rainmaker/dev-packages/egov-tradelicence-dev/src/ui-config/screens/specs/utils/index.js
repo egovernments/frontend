@@ -445,6 +445,7 @@ export const getButtonVisibility = (status, button) => {
   if (status === "pending_approval" && button === "REJECT") return true;
   if (status === "approved" && button === "CANCEL TRADE LICENSE") return true;
   if (status === "APPROVED" && button === "APPROVED") return true;
+  if (status === "PENDINGPAYMENT" && button === "PENDINGPAYMENT") return true;
   return false;
 };
 
@@ -1225,7 +1226,9 @@ let isPAID = false;
 if(currentStatus==="CITIZENACTIONREQUIRED"){
   return isPAID;
 }
-  if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
+const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+
+  if (!isEmpty(businessServiceData)) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
     const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
@@ -1803,6 +1806,8 @@ export const getDocList = (state, dispatch) => {
     "Licenses[0].tradeLicenseDetail.tradeUnits"
   );
 
+  const applicationType = get(state.screenConfiguration.preparedFinalObject ,"Licenses[0].applicationType" );
+
   const tradeSubCategories = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.TradeLicense.MdmsTradeType"
@@ -1818,7 +1823,7 @@ export const getDocList = (state, dispatch) => {
   
   let applicationDocArray = [];
   selectedTypes && selectedTypes.forEach(tradeSubTypeDoc => {
-   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
+   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "EDITRENEWAL" || applicationType==="RENEWAL" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
    
     applicationDocArray = [
       ...applicationDocArray,

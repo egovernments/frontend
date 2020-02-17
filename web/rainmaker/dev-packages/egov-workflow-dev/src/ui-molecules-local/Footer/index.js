@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { ActionDialog } from "../";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
@@ -18,24 +19,7 @@ class Footer extends React.Component {
     open: false,
     data: {},
     employeeList: [],
-    responseLength: 0
-  };
-  componentDidMount = async () => {
-    const {state}=this.props;
-    const tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].tenantId`
-    );
-    const licenseNumber = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].licenseNumber`
-    );
-    const response = await getSearchResults(tenantId,licenseNumber);
-    const responses=get(response,`Licenses`,[])
-     const responseLength=responses.length 
-    this.setState({
-      responseLength: responseLength,
-    })
+    //responseLength: 0
   };
 
   getDownloadData = () => {
@@ -170,7 +154,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
-    const { open, data, employeeList,responseLength } = this.state;
+    const { open, data, employeeList } = this.state;
     const status = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].status`
@@ -209,8 +193,17 @@ class Footer extends React.Component {
         };
       });
       if(moduleName === "NewTL"){
-       
-    if (status === "APPROVED" && applicationType !=="RENEWAL"&& responseLength===1) {
+        const responseLength = get(
+          state.screenConfiguration.preparedFinalObject,
+          `licenseCount`,
+          1
+        );
+      const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
+          if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
+          return true;
+        })
+       const rolecheck= rolearray.length>0? true: false;
+    if (status === "APPROVED" && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
       const editButton = {
         label: "Edit",
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
