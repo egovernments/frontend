@@ -9,10 +9,12 @@ import { getCommonApplyFooter, validateFields } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 import {
   createUpdateNocApplication,
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
+import store from "ui-redux/store";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const setReviewPageRoute = (state, dispatch) => {
@@ -88,7 +90,7 @@ const moveToReview = (state, dispatch) => {
 const getMdmsData = async (state, dispatch) => {
   let tenantId = get(
     state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+    "Properties[0].tenantId"
   );
   let mdmsBody = {
     MdmsCriteria: {
@@ -118,6 +120,65 @@ const getMdmsData = async (state, dispatch) => {
     console.log(e);
   }
 };
+
+const callBackForApply=async(state,dispatch)=>{
+  
+  let tenantId =getQueryArg(window.location.href,"tenantId");
+  let consumerCode=getQueryArg(window.location.href,"consumerCode");
+  let propertyPayload = get(
+    state,"screenConfiguration.preparedFinalObject.Properties[0]");
+    propertyPayload.workflow={"businessService": "PT.MUTATION",
+    "businessId": "PB-AC-2020-02-04-018568", 
+    "action": "OPEN",
+    "moduleName": "PT"
+},
+propertyPayload.additionalDetails.documentDate=1581490792377;
+propertyPayload.owners[0].status="INACTIVE";
+propertyPayload.ownersTemp[0].status="ACTIVE";
+propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
+
+  try {
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "propertyIds",
+        value: consumerCode
+      }
+    ];
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/property-services/property/_update",
+      "_update",
+      queryObject,
+      {Property: propertyPayload}
+      
+    );
+    // dispatch(prepareFinalObject("Properties", payload.Properties));
+    // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
+    if(payload){
+      store.dispatch(
+        setRoute(
+          `pt-mutation/acknowledgement?purpose=apply&status=success&applicationNumber=${consumerCode}&tenantId=${tenantId}
+          `
+        )
+      );
+    }
+    else{
+      store.dispatch(
+        setRoute(
+          `pt-mutation/acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
+          `
+        )
+      );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
@@ -255,8 +316,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 3 ? true : false;
-  const isPayButtonVisible = activeStep === 3 ? true : false;
+  const isNextButtonVisible = activeStep < 2 ? true : false;
+  const isPayButtonVisible = activeStep === 2 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -269,7 +330,7 @@ export const changeStep = (
       value: isPreviousButtonVisible
     },
     {
-      path: "components.div.children.footer.children.payButton",
+      path: "components.div.children.footer.children.nextButton",
       property: "visible",
       value: isNextButtonVisible
     },
@@ -451,7 +512,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForNext
+      callBack: callBackForApply
     },
     visible: false
   }
