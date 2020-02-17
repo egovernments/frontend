@@ -18,11 +18,11 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+    "screenConfiguration.preparedFinalObject.Properties[0].tenantId"
   );
   const applicationNumber = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
+    "screenConfiguration.preparedFinalObject.Properties[0].acknowldgementNumber"
   );
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
@@ -30,8 +30,59 @@ const setReviewPageRoute = (state, dispatch) => {
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
- 
-    setReviewPageRoute(state, dispatch);
+  const documentsFormat = Object.values(
+    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+  );
+
+  let validateDocumentField = false;
+
+  for (let i = 0; i < documentsFormat.length; i++) {
+    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+    let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
+
+    let documents = get(documentsFormat[i], "documents");
+    if (isDocumentRequired) {
+      if (documents && documents.length > 0) {
+        if (isDocumentTypeRequired) {
+          if (get(documentsFormat[i], "dropdown.value")) {
+            validateDocumentField = true;
+          } else {
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Please select type of Document!", labelKey: "" },
+                "warning"
+              )
+            );
+            validateDocumentField = false;
+            break;
+          }
+        } else {
+          validateDocumentField = true;
+        }
+      } else {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+            "warning"
+          )
+        );
+        validateDocumentField = false;
+        break;
+      }
+    } else {
+      validateDocumentField = true;
+    }
+  }
+
+  if (validateDocumentField) {
+    return true;
+    // setReviewPageRoute(state, dispatch);
+  }
+  else{
+    return false;
+  }
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -127,26 +178,30 @@ let isTransfereeDetailsCardValid=isSingleOwnerValid||isMutilpleOwnerValid||isIns
     }
   }
 
-  if (activeStep === 2) {
-    moveToReview(state, dispatch);
+  if (activeStep === 1) {
+    isFormValid=moveToReview(state, dispatch);
   }
+ if(activeStep===2){
 
-  if (activeStep !== 3) {
+ }
+  if (activeStep !== 2) {
     if (isFormValid) {
-      let responseStatus = "success";
-      if (activeStep === 1) {
+      
+      if (activeStep === 0) {
         prepareDocumentsUploadData(state, dispatch);
       }
-      if (activeStep === 2) {
+      if (activeStep === 1) {
         getMdmsData(state, dispatch);
-        let response = await createUpdateNocApplication(
-          state,
-          dispatch,
-          "INITIATE"
-        );
-        responseStatus = get(response, "status", "");
+      
+ 
+        // let response = await createUpdateNocApplication(
+        //   state,
+        //   dispatch,
+        //   "INITIATE"
+        // );
+        // responseStatus = get(response, "status", "");
       }
-      responseStatus === "success" && changeStep(state, dispatch);
+      !hasFieldToaster&&changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
         labelName: "Please fill all mandatory fields and upload the documents!",
@@ -214,7 +269,7 @@ export const changeStep = (
       value: isPreviousButtonVisible
     },
     {
-      path: "components.div.children.footer.children.nextButton",
+      path: "components.div.children.footer.children.payButton",
       property: "visible",
       value: isNextButtonVisible
     },
