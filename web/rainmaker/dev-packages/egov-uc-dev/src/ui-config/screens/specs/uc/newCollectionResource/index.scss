@@ -1,7 +1,9 @@
 
 
 @media only screen and (max-width: 768px) {
-    .uc-footer{
-        text-align: right !important;
+    
+    #material-ui-nextButton,
+    .apply-wizard-footer button{
+        width: 100%!important;
     }
 }
