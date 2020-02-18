@@ -1669,7 +1669,7 @@ if(!propertiesEdited){
 }else{
        try {
         const workflow={
-          "businessService": "PT.MUTATION",
+          "businessService": "PT.CREATE",
           "action": this.getBusinessServiceNextAction('PT.CREATE',null),
           "moduleName": "PT"
       }
