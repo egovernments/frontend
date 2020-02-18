@@ -31,7 +31,7 @@ export default function NFormatter(props) {
                         if (props.value <= 9999999) {
                             return `${Rformatter.format(props.value || 0)}`
                         } else {
-                            let value = Rformatter.format((props.value).toFixed(2) || 0).replace('₹ ', '');
+                            let value = Rformatter.format((props.value).toFixed(2) || 0).replace('₹ ', '').replace('₹','');
                             var right = value.substring(value.length - 12, value.length);
                             var left = value.substring(0, value.length - 12).replace(',', '');
                             let newVal = '₹ ' + (left ? (left + ',') : '') + right;
