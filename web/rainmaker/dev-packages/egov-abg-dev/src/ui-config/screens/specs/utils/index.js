@@ -34,14 +34,16 @@ export const transformById = (payload, id) => {
   );
 };
 
-export const getMdmsData = async queryObject => {
+export const getMdmsData = async  requestBody=> {
   try {
     const response = await httpRequest(
       "post",
       "egov-mdms-service/v1/_search",
-      "",
-      queryObject
+      "_search",
+      [],
+      requestBody
     );
+   
     return response;
   } catch (error) {
     console.log(error);
