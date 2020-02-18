@@ -34,7 +34,7 @@ export const fetchLocalizationLabel = (locale, module="", tenantId="") => {
         ]);
       //let resultArray = [...payload1.messages, ...payload2.messages];
 
-      let resultArray = [...payload.messages];
+      let resultArray = payload.messages || [];
       // let resultArray = [...payload1.messages];
       // if (payload2 && payload2.messages) {
       //   resultArray = [...resultArray, ...payload2.messages];
