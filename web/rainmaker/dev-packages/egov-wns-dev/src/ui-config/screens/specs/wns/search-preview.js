@@ -458,16 +458,16 @@ const screenConfig = {
         // footer
       }
     },
-    // breakUpDialog: {
-    //   uiFramework: "custom-containers-local",
-    //   moduleName: "egov-wns",
-    //   componentPath: "ViewBreakupContainer",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "md",
-    //     screenKey: "search-preview"
-    //   }
-    // }
+    breakUpDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "ViewBreakupContainer",
+      props: {
+        open: false,
+        maxWidth: "md",
+        screenKey: "search-preview"
+      }
+    }
   }
 };
 
