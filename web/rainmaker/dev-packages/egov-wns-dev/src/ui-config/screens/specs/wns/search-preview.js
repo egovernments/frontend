@@ -32,8 +32,7 @@ import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-const service = "WATER"
-
+let service = getQueryArg(window.location.href, "service");
 let headerSideText = { word1: "", word2: "" };
 
 
