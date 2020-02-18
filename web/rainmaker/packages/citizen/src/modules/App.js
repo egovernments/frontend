@@ -94,8 +94,9 @@ class App extends Component {
       setRoute("");
     }
     const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("whitelisted");
+    const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
 
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !location.pathname.includes("privacy-policy") && !isWithoutAuthSelfRedirect) {
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isPrivacyPolicy && !isWithoutAuthSelfRedirect) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }
