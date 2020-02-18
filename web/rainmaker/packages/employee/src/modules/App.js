@@ -78,7 +78,7 @@ class App extends Component {
       history.push(nextRoute);
       setRoute("");
     }
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated) {
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !location.pathname.includes("privacy-policy")) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }

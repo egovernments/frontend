@@ -95,7 +95,7 @@ class App extends Component {
     }
     const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("whitelisted");
 
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect) {
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !location.pathname.includes("privacy-policy") && !isWithoutAuthSelfRedirect) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }
