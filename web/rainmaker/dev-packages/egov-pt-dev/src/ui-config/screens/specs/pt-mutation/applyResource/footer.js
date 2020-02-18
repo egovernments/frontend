@@ -135,6 +135,7 @@ const callBackForApply=async(state,dispatch)=>{
 propertyPayload.additionalDetails.documentDate=1581490792377;
 propertyPayload.owners[0].status="INACTIVE";
 propertyPayload.ownersTemp[0].status="ACTIVE";
+propertyPayload.ownersTemp[0].type=propertyPayload.ownershipCategoryTemp;
 propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
 
   try {
@@ -162,7 +163,7 @@ propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
     if(payload){
       store.dispatch(
         setRoute(
-          `pt-mutation/acknowledgement?purpose=apply&status=success&applicationNumber=${consumerCode}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=success&applicationNumber=${consumerCode}&tenantId=${tenantId}
           `
         )
       );
