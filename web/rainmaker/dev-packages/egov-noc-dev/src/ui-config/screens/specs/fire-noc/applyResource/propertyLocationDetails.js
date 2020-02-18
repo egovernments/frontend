@@ -152,35 +152,35 @@ export const propertyLocationDetails = getCommonCard(
       area: {
         ...getSelectField({
           label: {
-            labelName: "area",
-            labelKey: "area"
+            labelName: "Area Type",
+            labelKey: "NOC_AREA_TYPE_LABEL"
           },
           placeholder: {
-            labelName: "area",
-            labelKey: "area"
+            labelName: "Select Area Type",
+            labelKey: "NOC_AREA_TYPE_PLACEHOLDER"
           },
           data: [
             {
               code: "Urban",
-              label: "TL_PAYMENT_BY_OWNER"
+              label: "NOC_AREA_TYPE_URBAN"
             },
             {
               code: "Rural",
-              label: "TL_PAYMENT_BY_OTHERS"
+              label: "NOC_AREA_TYPE_RURAL"
             }
           ],
-          jsonPath: "FireNOCs[0].fireNOCDetails.areatype",
+          jsonPath: "FireNOCs[0].fireNOCDetails.areaType",
           required: true
         }),
         beforeFieldChange: async (action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.areatype",
+              "FireNOCs[0].fireNOCDetails.areaType",
               action.value
             )
           );
           if(action.value=='Rural'){
-            // if(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.district){
+            // if(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1){
             //   dispatch(
             //     handleField(
             //       "apply",
@@ -254,12 +254,12 @@ export const propertyLocationDetails = getCommonCard(
                 false
               )
             );
-          const districtData= get(
+          const districtList= get(
             state.screenConfiguration,
             "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
             []
           );
-          const newDistrictData =districtData.map((item)=>{
+          const districtTenantMap =districtList.map((item)=>{
             return {
               name:item.city.districtName,
               code:item.code
@@ -271,21 +271,21 @@ export const propertyLocationDetails = getCommonCard(
             "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
             []
           );
-          const newdata=[];
+          const districtlist=[];
           for(var i=0;i< fireStationsList.length;i++)
           {
-            for(var j=0;j<newDistrictData.length;j++)
+            for(var j=0;j<districtTenantMap.length;j++)
             {
-              if(newDistrictData[j].code==fireStationsList[i].baseTenantId)
+              if(districtTenantMap[j].code==fireStationsList[i].baseTenantId)
               {
                 
-                newdata.push({
-                  code:newDistrictData[j].name
+                districtlist.push({
+                  code:districtTenantMap[j].name
                 })
               }
             }
           }
-          const unqdata=newdata.filter( (ele, ind) => ind === newdata.findIndex( elem => elem.code === ele.code));
+          const unqDistrictList=districtlist.filter( (ele, ind) => ind === districtlist.findIndex( elem => elem.code === ele.code));
           dispatch(
             prepareFinalObject(
               "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
@@ -303,18 +303,13 @@ export const propertyLocationDetails = getCommonCard(
               "apply",
               "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.district",
               "props.data",
-              unqdata
+              unqDistrictList
             )
           );
             
           }
           else{
-            dispatch(
-              prepareFinalObject(
-                "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
-                null
-              )
-            );
+            
             dispatch(
               prepareFinalObject(
                 "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
@@ -323,22 +318,17 @@ export const propertyLocationDetails = getCommonCard(
             );
             dispatch(
               prepareFinalObject(
-                "FireNOCs[0].fireNOCDetails.propertyDetails.address.district",
+                "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
                 null
               )
             );
             dispatch(
               prepareFinalObject(
-                "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+                "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2",
                 null
               )
             );
-            dispatch(
-              prepareFinalObject(
-                "FireNOCs[0].fireNOCDetails.firestationId",
-                null
-              )
-            );
+            
             dispatch(
               handleField(
                 "apply",
@@ -400,19 +390,19 @@ export const propertyLocationDetails = getCommonCard(
       },
       district: {
         ...getSelectField({
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.district",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
           // sourceJsonPath: "applyScreenMdmsData.tenant.District",
           required: true,
           visible: false,
           label: {
-            labelName: "District",
-            labelKey: "District"
+            labelName: "District Name",
+            labelKey: "NOC_DISTRICT_LABEL"
           },
           placeholder: {
-            labelName: "District",
-            labelKey: "District"
+            labelName: "Select District",
+            labelKey: "NOC_DISTRICT_PLACEHOLDER"
           },
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.district",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
           // sourceJsonPath: "applyScreenMdmsData.tenant.District",
           required: true,
           fullwidth: true,
@@ -424,7 +414,7 @@ export const propertyLocationDetails = getCommonCard(
         beforeFieldChange: async (action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.propertyDetails.address.district",
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
               action.value
             )
           );
@@ -473,14 +463,14 @@ export const propertyLocationDetails = getCommonCard(
       subDistrict: {
         ...getSelectField({
           label: {
-            labelName: "subDistrict",
-            labelKey: "subDistrict"
+            labelName: "sub District Name",
+            labelKey: "NOC_SUB_DISTRICT_LABEL"
           },
           placeholder: {
-            labelName: "subDistrict",
-            labelKey: "subDistrict"
+            labelName: "Select Sub District",
+            labelKey: "NOC_SUB_DISTRICT_PLACEHOLDER"
           },
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2",
           required: true,
           visible: false,
           props: {
@@ -491,7 +481,7 @@ export const propertyLocationDetails = getCommonCard(
         beforeFieldChange: async (action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2",
               action.value
             )
           );
@@ -734,29 +724,29 @@ export const propertyLocationDetails = getCommonCard(
       propertyVillageName: getTextField({
         label: {
           labelName: "Village Name",
-          labelKey: "Village Name"
+          labelKey: "NOC_PROPERTY_DETAILS_VILL_NAME_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Village Name",
-          labelKey: "Enter Village Name"
+          labelKey: "NOC_PROPERTY_DETAILS_VILL_NAME_PLACEHOLDER"
         },
         visible:false,
         jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.village"
       }),
       propertyLandmark: getTextField({
         label: {
-          labelName: "Land Mark",
-          labelKey: "land mark"
+          labelName: "Landmark Name",
+          labelKey: "NOC_PROPERTY_DETAILS_LANDMARK_NAME_LABEL"
         },
         placeholder: {
-          labelName: "Enter Land Mark",
-          labelKey: "enter the Land Mark"
+          labelName: "Enter Landmark",
+          labelKey: "NOC_PROPERTY_DETAILS_LANDMARK_NAME_PLACEHOLDER"
         },
         visible: true,
-        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.landMark"
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.landmark"
       }),
       propertyMohalla: {
         uiFramework: "custom-containers",
