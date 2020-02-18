@@ -101,6 +101,27 @@ const propertyDetails = {
 
 const propertyLocationDetails = getCommonGrayCard({
   propertyLocationContainer: getCommonContainer({
+    areaType: getLabelWithValue(
+      {
+        labelName: "Area Type",
+        labelKey: "NOC_AREA_TYPE_LABEL"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.areaType" }
+    ),
+    district: getLabelWithValue(
+      {
+        labelName: "District Name",
+        labelKey: "NOC_DISTRICT_LABEL"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1" }
+    ),
+    subDistrict: getLabelWithValue(
+      {
+        labelName: "sub District Name",
+        labelKey: "NOC_SUB_DISTRICT_LABEL"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2" }
+    ),
     propertyId: getLabelWithValue(
       {
         labelName: "Property ID",
@@ -108,6 +129,7 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId" }
     ),
+
     city: getLabelWithValue(
       {
         labelName: "City",
@@ -144,6 +166,20 @@ const propertyLocationDetails = getCommonGrayCard({
         labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street" }
+    ),
+    villageName: getLabelWithValue(
+      {
+        labelName: "Village Name",
+        labelKey: "NOC_PROPERTY_DETAILS_VILL_NAME_LABEL"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.village" }
+    ),
+    landMarkName: getLabelWithValue(
+      {
+        labelName: "Landmark Name",
+        labelKey: "NOC_PROPERTY_DETAILS_LANDMARK_NAME_LABEL"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.landmark" }
     ),
     mohalla: getLabelWithValue(
       {
