@@ -52,6 +52,8 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 export const getSearchResults = async (queryObject, dispatch) => {
   try {
+    
+    
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
@@ -73,10 +75,10 @@ export const getSearchResults = async (queryObject, dispatch) => {
   }
 };
 
-export const createUpdateNocApplication = async (state, dispatch, status) => {
+export const createUpdatePTApplication = async (state, dispatch, status) => {
   let nocId = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].id"
+    "screenConfiguration.preparedFinalObject.Properties[0].id"
   );
   let method = nocId ? "UPDATE" : "CREATE";
   try {
