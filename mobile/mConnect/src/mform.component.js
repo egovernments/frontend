@@ -8,85 +8,76 @@ import {
   TouchableHighlight,
   Picker,
 } from 'react-native';
-import {getValfromStorage} from './storage.helper';
+import {getValfromStorage, setValToStorage} from './storage.helper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {getServices} from './mform.helper';
 
-export const MCScreen = () => {
-  const [mform, setMform] = React.useState({
-    RequestInfo: {
-      apiId: 'Mihy',
-      ver: '.01',
-      action: '',
-      did: '1',
-      key: '',
-      msgId: '20170310130900|en_IN',
-      requesterId: '',
-      authToken: '78577d3c-5c59-4f38-8c97-e314e0a9770e',
-    },
-    Demands: [
+export const MCScreen = props => {
+  const [demand, setDemand] = React.useState({
+    tenantId: 'TODO',
+    consumerCode: 'TODO',
+    serviceType: 'TODO',
+    businessService: '',
+    demandDetails: [
       {
-        tenantId: 'TODO',
-        consumerCode: 'TODO',
-        serviceType: 'TODO',
-        businessService: 'TODO',
-        demandDetails: [
-          {
-            taxHeadMasterCode: 'TODO',
-            collectionAmount: 0,
-            taxAmount: '1000',
-          },
-          {
-            taxHeadMasterCode: 'TODO',
-            collectionAmount: 0,
-            taxAmount: '1000',
-          },
-          {
-            taxHeadMasterCode: 'TODO',
-            collectionAmount: 0,
-            taxAmount: '100',
-          },
-          {
-            taxHeadMasterCode: 'TODO',
-            collectionAmount: 0,
-            taxAmount: '100',
-          },
-        ],
-        mobileNumber: 'TODO',
-        consumerName: 'TODO',
-        taxPeriodFrom: 'TODO',
-        taxPeriodTo: 'TODO',
-        additionalDetails: {comment: 'TODO'},
-        payer: {uuid: 'TODO'},
-        consumerType: 'TODO',
+        taxHeadMasterCode: 'TODO',
+        collectionAmount: 0,
+        taxAmount: '1000',
+      },
+      {
+        taxHeadMasterCode: 'TODO',
+        collectionAmount: 0,
+        taxAmount: '1000',
+      },
+      {
+        taxHeadMasterCode: 'TODO',
+        collectionAmount: 0,
+        taxAmount: '100',
+      },
+      {
+        taxHeadMasterCode: 'TODO',
+        collectionAmount: 0,
+        taxAmount: '100',
       },
     ],
+    mobileNumber: 'TODO',
+    consumerName: 'TODO',
+    taxPeriodFrom: 'TODO',
+    taxPeriodTo: 'TODO',
+    additionalDetails: {comment: 'TODO'},
+    payer: {uuid: 'TODO'},
+    consumerType: 'TODO',
   });
 
-  const [serviceTypes, setServiceTypes] = React.useState();
+  const [serviceTypes, setServiceTypes] = React.useState([]);
+  const [serviceCategories, setserviceCategories] = React.useState([]);
+
   const [user, setUser] = React.useState();
   React.useEffect(() => {
     getValfromStorage('@User').then(val => {
       setUser(val);
       getServices(val).then(services => {
-        setServiceTypes(services.serviceCategory);
+        console.log('services', services);
+        setServiceTypes(services.serviceTypes);
+        setserviceCategories(services.serviceCategory);
       });
     });
   }, []);
 
+  const onLogout = () => {
+    setValToStorage('@User', '').then(() => {
+      props.navigation.navigate('LoginScreen');
+    });
+  };
+
   const renderList = list => {
-    console.log(this.state.tenants);
-    return list
-      ? list.map(tenant => {
-          return (
-            <Picker.Item
-              label={tenant.name}
-              value={tenant.code}
-              key={tenant.code}
-            />
-          );
-        })
-      : [];
+    console.log('list', list);
+
+    if (list) {
+      return list.map(val => {
+        return <Picker.Item label={val.name} value={val.code} key={val.code} />;
+      });
+    }
   };
 
   return (
@@ -123,23 +114,39 @@ export const MCScreen = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputs}
+          <Picker
+            selectedValue={demand.businessService}
             placeholder="Service Category"
-            secureTextEntry={true}
-            underlineColorAndroid="transparent"
-            onChangeText={password => this.setState({password})}
-          />
+            style={styles.inputs}
+            onValueChange={businessService =>
+              setDemand({
+                ...demand,
+                businessService,
+              })
+            }>
+            <Picker.Item label="select Service Category" value="" key="" />
+            {renderList(serviceCategories)}
+          </Picker>
         </View>
 
         <View style={styles.inputContainer}>
-          <TextInput
-            //value={this.state.username}
+          <Picker
+            selectedValue={demand.serviceType}
             style={styles.inputs}
-            placeholder="Service Type"
-            underlineColorAndroid="transparent"
-            onChangeText={username => this.setState({username})}
-          />
+            onValueChange={serviceType =>
+              setDemand({
+                ...demand,
+                serviceType,
+              })
+            }>
+            <Picker.Item label="select Service Type" value="" key="" />
+            {console.log('businessService', demand.businessService)}
+            {renderList(
+              demand.businessService
+                ? serviceTypes[demand.businessService]
+                : [],
+            )}
+          </Picker>
         </View>
 
         <View style={styles.inputContainer}>
@@ -235,7 +242,12 @@ export const MCScreen = () => {
         <TouchableHighlight
           style={[styles.buttonContainer, styles.loginButton]}
           onPress={() => this.onLogin()}>
-          <Text style={styles.loginText}>Login</Text>
+          <Text style={styles.loginText}>Submit</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={[styles.buttonContainer, styles.loginButton]}
+          onPress={() => onLogout()}>
+          <Text style={styles.loginText}>Logout</Text>
         </TouchableHighlight>
       </View>
     </ScrollView>

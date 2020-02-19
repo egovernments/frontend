@@ -28,7 +28,7 @@ export class LoginScreen extends Component {
   }
 
   onLogin = () => {
-    fetch('https://uttarakhand-dev.egovernments.org/user/oauth/token', {
+    fetch('https://mseva-uat.lgpunjab.gov.in/user/oauth/token', {
       credentials: 'include',
       headers: {
         accept: 'application/json, text/plain, */*',
@@ -41,7 +41,7 @@ export class LoginScreen extends Component {
         'sec-fetch-mode': 'cors',
         'sec-fetch-site': 'same-origin',
       },
-      referrer: 'https://uttarakhand-dev.egovernments.org/employee/user/login',
+      referrer: 'https://mseva-uat.lgpunjab.gov.in/employee/user/login',
       referrerPolicy: 'no-referrer-when-downgrade',
       body:
         'username=' +

@@ -1,7 +1,7 @@
 export async function getTenants() {
   try {
     let response = await fetch(
-      'https://uttarakhand-dev.egovernments.org/egov-mdms-service/v1/_search?tenantId=uk',
+      'https://mseva-uat.lgpunjab.gov.in/egov-mdms-service/v1/_search?tenantId=uk',
       {
         credentials: 'include',
         headers: {
@@ -15,7 +15,7 @@ export async function getTenants() {
           'sec-fetch-site': 'same-origin',
         },
         referrer:
-          'https://uttarakhand-dev.egovernments.org/employee/language-selection',
+          'https://mseva-uat.lgpunjab.gov.in/employee/language-selection',
         referrerPolicy: 'no-referrer-when-downgrade',
         body: JSON.stringify({
           RequestInfo: {
@@ -29,7 +29,7 @@ export async function getTenants() {
             authToken: null,
           },
           MdmsCriteria: {
-            tenantId: 'uk',
+            tenantId: 'pb',
             moduleDetails: [
               {
                 moduleName: 'tenant',

@@ -1,9 +1,7 @@
 export async function getServices(token) {
   try {
-    console.log('responseJson ');
-
     let response = await fetch(
-      'https://uttarakhand-dev.egovernments.org/egov-mdms-service/v1/_search?tenantId=uk',
+      'https://mseva-uat.lgpunjab.gov.in/egov-mdms-service/v1/_search?tenantId=bh',
       {
         credentials: 'include',
         headers: {
@@ -17,7 +15,7 @@ export async function getServices(token) {
           'sec-fetch-site': 'same-origin',
         },
         referrer:
-          'https://uttarakhand-dev.egovernments.org/employee/language-selection',
+          'https://mseva-uat.lgpunjab.gov.in/employee/language-selection',
         referrerPolicy: 'no-referrer-when-downgrade',
         body: JSON.stringify({
           RequestInfo: {
@@ -31,7 +29,7 @@ export async function getServices(token) {
             authToken: null,
           },
           MdmsCriteria: {
-            tenantId: 'uk',
+            tenantId: 'pb',
             moduleDetails: [
               {
                 moduleName: 'BillingService',
@@ -54,30 +52,31 @@ export async function getServices(token) {
 
     const result = {
       serviceCategory: [],
+      serviceTypes: {},
       taxHeadMaster: responseJson.MdmsRes.BillingService.TaxHeadMaster,
       taxPeriod: responseJson.MdmsRes.BillingService.TaxPeriod,
     };
 
-    console.log('responseJson ', JSON.stringify(responseJson));
+    const tempArray = [];
     // Sorting and adding types to services
     await responseJson.MdmsRes.BillingService.BusinessService.forEach(
       service => {
-        if (!result.serviceCategory.includes(service.code.split('.')[0])) {
-          const tempServiceCategory = {
+        if (!tempArray.includes(service.code.split('.')[0])) {
+          tempArray.push(service.code.split('.')[0]);
+          result.serviceCategory.push({
             code: service.code.split('.')[0],
             name: service.businessService.split('.')[0],
-          };
+          });
           if (service.code.split('.')[1]) {
-            tempServiceCategory.types = [
+            result.serviceTypes[service.code.split('.')[0]] = [
               {
                 code: service.code.split('.')[1],
                 name: service.businessService.split('.')[1],
               },
             ];
           }
-          result.serviceCategory.push(tempServiceCategory);
-        } else if (result.serviceCategory[service.code.split('.')[0]].types) {
-          result.serviceCategory[service.code.split('.')[0]].types.push({
+        } else if (result.serviceTypes[service.code.split('.')[0]]) {
+          result.serviceTypes[service.code.split('.')[0]].push({
             code: service.code.split('.')[1],
             name: service.businessService.split('.')[1],
           });
@@ -85,7 +84,7 @@ export async function getServices(token) {
       },
     );
 
-    return responseJson.MdmsRes.BillingService;
+    return result;
   } catch (error) {
     console.error('Error while getting services', error.message);
   }

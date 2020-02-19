@@ -20,13 +20,13 @@ export function HomeNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {!user && (
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{title: 'Login'}}
-          />
-        )}
+        <Stack.Screen name="auth" component={LoginScreen} />
+
+        <Stack.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+          options={{title: 'Login'}}
+        />
 
         <Stack.Screen
           name="MCScreen"
