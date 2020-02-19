@@ -689,7 +689,7 @@ const applyForWater = async (state, dispatch, activeIndex) => {
         let applicationNo = get(state.screenConfiguration.prepareFinalObject, "WaterConnection[0].applicationNo")
         if (applicationNo !== undefined && applicationNo !== null) {
             let action = "edit";
-            let queryObjectForUpdate = get(state.screenConfiguration.prepareFinalObject, "WaterConnection[0]")
+            let queryObjectForUpdate = get(state.screenConfiguration.prepareFinalObject, "WaterConnection[0]");
             set(queryObjectForUpdate, "tenantId", tenantId);
             if (queryObjectForUpdate && queryObjectForUpdate.documents) {
                 if (getQueryArg(window.location.href, "action") === "edit") {
