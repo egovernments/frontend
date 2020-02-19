@@ -59,7 +59,7 @@ class DonutChart extends React.Component {
 			data: null
 		}
 	}
-	getData(chartData) {
+	getData(strings,chartData) {
 		var tempData = {
 			labels: [],
 			datasets: []
@@ -74,7 +74,7 @@ class DonutChart extends React.Component {
 		_.map(chartData, function (k, v) {
 			var plots = k['plots'];
 			for (var i = 0; i < plots.length; i++) {
-				tempData.labels.push(plots[i]['name']);
+				tempData.labels.push(strings[plots[i]['name']] || plots[i]['name']);
 				// tempdataSet.data.push(NFormatterFun(plots[i]['value'], plots[i]['symbol'], this.props.GFilterData['Denomination']));
 				tempdataSet.data.push(plots[i]['value'])
 				tempdataSet.dataSymbol.push([plots[i]['symbol'], this.props.GFilterData['Denomination']]);
@@ -85,8 +85,8 @@ class DonutChart extends React.Component {
 	}
 
 	render() {
-		let { chartData, classes } = this.props;
-		let _data = this.getData(chartData)
+		let { chartData, classes,strings } = this.props;
+		let _data = this.getData(strings,chartData)
 		if (_data) {
 			if (isMobile) {
 				return (
@@ -117,7 +117,7 @@ class DonutChart extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		GFilterData: state.GFilterData,
-
+		strings: state.lang
 	}
 }
 const mapDispatchToProps = dispatch => {

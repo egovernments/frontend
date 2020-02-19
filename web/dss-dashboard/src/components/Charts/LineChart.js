@@ -48,7 +48,7 @@ class LineChart extends React.Component {
 		// this.setState({ data: null })
   }
   
-  manupulateData(chartData) {
+  manupulateData(strings,chartData) {
     // let temp, tempdata;
     // temp = this.props.chartData;
     var tempdata = {
@@ -72,7 +72,7 @@ class LineChart extends React.Component {
         tempVal = NFormatterFun(d1.value, d1.symbol, this.props.GFilterData['Denomination']);
         tempVal = (typeof tempVal == 'string')?parseFloat(tempVal.replace(/,/g, '')):tempVal;
         tempdataArr.push(tempVal);
-        tempdatalabel.push(d1.name);
+        tempdatalabel.push(strings[d1.name] || d1.name);
       })
       tempObj.data = tempdataArr;
       tempdata.labels = tempdatalabel;
@@ -82,8 +82,8 @@ class LineChart extends React.Component {
   }
 
   render() { 
-    let { chartData,classes } = this.props;
-    let data = this.manupulateData(chartData);
+    let { chartData,classes,strings } = this.props;
+    let data = this.manupulateData(strings,chartData);
     if (data) {
       if (isMobile){
             return ( 
@@ -119,8 +119,8 @@ class LineChart extends React.Component {
 const mapStateToProps = (state) => {
   return {
     GFilterData: state.GFilterData,
-    chartsGData: state.chartsData
-
+    chartsGData: state.chartsData,
+    strings: state.lang
   }
 }
 const mapDispatchToProps = dispatch => {
