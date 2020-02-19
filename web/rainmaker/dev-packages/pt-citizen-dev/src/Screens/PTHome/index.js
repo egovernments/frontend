@@ -66,7 +66,6 @@ class PTHome extends Component {
         icon: (
           <Icon style={iconStyle} action="custom" name="home-city-outline" />
         ),
-
         route: "/property-tax/assess-pay/search-property"
       },
       {
@@ -74,7 +73,13 @@ class PTHome extends Component {
         icon: <Icon style={iconStyle} action="custom" name="home-account" />,
         dynamicArray: [numProperties],
         route: "/property-tax/my-properties"
-      }
+      },
+      //{
+      //  label: "PT_MUTATION_MY_APPLICATIONS",
+      //  icon: <Icon style={iconStyle} action="custom" name="home-account" />,
+      //  dynamicArray: [numProperties],
+      //  route: "/pt-mutation/my-applications"
+      //}Disabling mutation for UK dev
     ];
   };
 

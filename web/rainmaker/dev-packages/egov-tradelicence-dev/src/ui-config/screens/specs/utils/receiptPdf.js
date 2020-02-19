@@ -6,8 +6,7 @@ import pdfFonts from "./vfs_fonts";
 // pdfMakeCustom.vfs = pdfFonts.vfs;
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { from } from "rxjs";
-import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons";
-import { logo } from "egov-ui-kit/assets/images/biharLogo.png";
+import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons"
 // pdfMakeCustom.fonts = {
 //   Camby:{
 //           normal: 'Cambay-Regular.ttf',
@@ -406,7 +405,9 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 border: borderKey,
                 style: "receipt-table-key"
               },
-              { text: transformedData.doorNo, border: borderValue },
+              { text: transformedData.doorNo, 
+                border: borderValue 
+              },
               {
                 text: getLocaleLabels(
                   "Building Name",
@@ -867,100 +868,126 @@ const getCertificateData = (transformedData, ulbLogo) => {
         layout: {}
       },
       {
-        style: "tl-certificate-data",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Trade License Number",
-              "TL_LOCALIZATION_TRADE_LICENSE_NO"
-            )+":"
+        style: "noctable",
+          table: {
+            widths: [
+              "70%",
+              "30%"             
+            ],
+            body: [
+              [
+                {
+                stack:[
+                    {
+                      style: "tl-certificate-data",
+                      columns: [
+                        {
+                          width: 160,
+                          text: getLocaleLabels(
+                            "Trade License Number",
+                            "TL_LOCALIZATION_TRADE_LICENSE_NO"
+                          )+":"
+                        },
+                        {
+                          width: "*",
+                          text: transformedData.licenseNumber
+                        }
+                      ]
+                    },  
+                    {
+                      style: "tl-certificate-data-2",
+                      columns: [
+                        {
+                          width: 160,
+                          text: getLocaleLabels(
+                            "Trade License Number",
+                            "TL_LOCALIZATION_OLD_LICENSE_NO"
+                          )+":"
+                        },
+                        {
+                          width: "*",
+                          text: transformedData.oldLicenseNumber
+                        }
+                      ]
+                    },    
+                    {
+                      style: "tl-certificate-data-2",
+                      columns: [
+                        {
+                          width: 160,
+                          text: getLocaleLabels(
+                            "Application Number",
+                            "TL_LOCALIZATION_APPLICATION_NO"
+                          )+":"
+                        },
+                        {
+                          width: "*",
+                          text: transformedData.applicationNumber
+                        }
+                      ]
+                    },
+                    {
+                      style: "tl-certificate-data-2",
+                      columns: [
+                        {
+                          width: 160,
+                          text: getLocaleLabels(
+                            "Application Type",
+                            "TL_LOCALIZATION_APPLICATION_TYPE"
+                          )+":"
+                        },
+                        {
+                          width: "*",
+                          text: getLocaleLabels("NA", "TRADELICENSE_APPLICATIONTYPE_"+transformedData.applicationType.replace(".","_").toUpperCase())
+                        }
+                      ]
+                    },
+                    {
+                      style: "tl-certificate-data-2",
+                      columns: [
+                        {
+                          width: 160,
+                          text: getLocaleLabels(
+                            "Receipt Number",
+                            "TL_LOCALIZATION_RECIEPT_NO"
+                          )+":"
+                        },
+                        {
+                          width: "*",
+                          text: transformedData.receiptNumber
+                        }
+                      ]
+                    },
+                    {
+                      style: "tl-certificate-data-2",
+                      columns: [
+                        {
+                          width: 160,
+                          text: getLocaleLabels(
+                            "Financial Year",
+                            "TL_LOCALIZATION_FINANCIAL_YEAR"
+                          )+":"
+                        },
+                        {
+                          width: "*",
+                          text: transformedData.financialYear
+                        }
+                      ]
+                    }
+                    
+                  ],
+                },
+                transformedData.ownerPhoto?{
+                  image: transformedData.ownerPhoto,
+                  width: 100,
+                  height: 100,
+                  alignment: "right",
+                  margin: [0, 12, 0, 0]
+                }:{}
+              ]   
+            ]    
           },
-          {
-            width: "*",
-            text: transformedData.licenseNumber
-          }
-        ]
-      },  
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Trade License Number",
-              "TL_LOCALIZATION_OLD_LICENSE_NO"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.oldLicenseNumber
-          }
-        ]
-      },    
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Application Number",
-              "TL_LOCALIZATION_APPLICATION_NO"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.applicationNumber
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Application Type",
-              "TL_LOCALIZATION_APPLICATION_TYPE"
-            )+":"
-          },
-          {
-            width: "*",
-            text: getLocaleLabels("NA", "TRADELICENSE_APPLICATIONTYPE_"+transformedData.applicationType.replace(".","_").toUpperCase())
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Receipt Number",
-              "TL_LOCALIZATION_RECIEPT_NO"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.receiptNumber
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Financial Year",
-              "TL_LOCALIZATION_FINANCIAL_YEAR"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.financialYear
-          }
-        ]
+        layout: noborder
       },
       {
         style: "tl-certificate-data-2",
@@ -1173,8 +1200,15 @@ const getCertificateData = (transformedData, ulbLogo) => {
       }
     ], //define all the styles here
     styles: {
-      "tl-head": {
-        fillColor: "#b8bfcc"
+      "noctable": {
+        fontSize: 10,
+        color: "#000000", 
+        margin: [
+          0,
+          0,
+          0,
+          0
+        ]
       },
       "pt-reciept-citizen-header": {
         fontSize: 14,
@@ -1841,10 +1875,9 @@ const generateReceipt = async (state, dispatch, type) => {
     case "certificate_download":
       let certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data &&
-        //  pdfMakeCustom.createPdf(certificate_data)
-        //  .download("tl_certificate.pdf");
-       // pdfMakeCustom.createPdf(certificate_data).open();
-       downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(certificate_data), `tl_certificate.pdf`);
+        //  pdfMakeCustom.createPdf(certificate_data).download("tl_certificate.pdf");
+        //pdfMakeCustom.createPdf(certificate_data).open();
+        downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(certificate_data), `tl_certificate.pdf`);
       break;
     case "certificate_print":
       certificate_data = getCertificateData(transformedData, ulbLogo);
@@ -1868,6 +1901,9 @@ const generateReceipt = async (state, dispatch, type) => {
        // pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
         //pdfMakeCustom.createPdf(ack_data).open();
         downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(ack_data), `tl_application.pdf`);
+        //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
+       // pdfMakeCustom.createPdf(ack_data).open();
+       downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(ack_data), `tl_receipt.pdf`);
       break;
     default:
       break;

@@ -9,7 +9,7 @@ import {
 import generateReceipt from "../utils/receiptPdf";
 import get from "lodash/get";
 import set from "lodash/set";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField ,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import {
@@ -17,7 +17,6 @@ import {
   setBusinessServiceDataToLocalStorage,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
@@ -36,7 +35,7 @@ import {
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
-import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import { loadReceiptGenerationData, getOwnerPhoto } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -63,6 +62,9 @@ const setDocuments = async (
   const reviewDocData =
     uploadedDocData &&
     uploadedDocData.map((item, index) => {
+      if(item.documentType == "OWNERPHOTO"){
+          getOwnerPhoto(fileUrlPayload[item.fileStoreId].split(",")[0])
+      }
       return {
         title: `TL_${item.documentType}` || "",
         link:
@@ -120,6 +122,26 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   );
   set(payload, "Licenses[0].headerSideText", headerSideText);
 
+  let rebateAmount = get(payload, "Licenses[0].tradeLicenseDetail.adhocExemption");
+
+  if(rebateAmount && rebateAmount < 0){
+    set(payload, "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
+  }
+  // set(payload, "Licenses[0].assignee", []);
+  // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
+  //   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+  //     "."
+  //   )[0] === "INDIVIDUAL"
+  //   ? setMultiOwnerForSV(action, true)
+  //   : setMultiOwnerForSV(action, false);
+  //
+  // if (get(payload, "Licenses[0].licenseType")) {
+  //   setValidToFromVisibilityForSV(
+  //     action,
+  //     get(payload, "Licenses[0].licenseType")
+  //   );
+  // }
+
   // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
   // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
   //   "."
@@ -140,6 +162,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     "LicensesTemp[0].reviewDocData",
     dispatch
   );
+
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   payload &&
@@ -305,7 +328,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         false
       );
     }
-    
+
     const footer = footerReview(
       action,
       state,
@@ -454,7 +477,7 @@ const setActionItems = (action, object) => {
       labelKey: get(object, "titleKey")
     })
   );
-  set( 
+  set(
     action,
     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.visible",
     get(object, "titleVisibility")
@@ -469,11 +492,11 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
+  // viewBreakupButton: getDialogButton(
+  //   "VIEW BREAKUP",
+  //   "TL_PAYMENT_VIEW_BREAKUP",
+  //   "search-preview"
+  // ),
   addPenaltyRebateButton: {
     componentPath: "Button",
     props: {
@@ -526,7 +549,7 @@ const screenConfig = {
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
+      { key: "businessServices", value: "NewTL" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
@@ -606,11 +629,44 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update"
+            updateUrl: "/tl-services/v1/_update",
+            beforeSubmitHook:
+              (data) =>{
+                 let rebateAmount = data[0].tradeLicenseDetail.adhocExemption;
+                 if(rebateAmount && rebateAmount > 0){
+                   data = set(data, "[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
+                 }
+                 return data;
+              }
+
+          }
+        },
+        actionDialog: {
+          uiFramework: "custom-containers-local",
+          componentPath: "ResubmitActionContainer",
+          moduleName: "egov-tradelicence",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+          props: {
+            open: true,
+            dataPath: "Licenses",
+            moduleName: "NewTL",
+            updateUrl: "/tl-services/v1/_update",
+            data: {
+              buttonLabel: "RESUBMIT",
+              moduleName: "NewTL",
+              isLast: false,
+              dialogHeader: {
+                labelName: "RESUBMIT Application",
+                labelKey: "WF_RESUBMIT_APPLICATION"
+              },
+              showEmployeeList: false,
+              roles: "CITIZEN",
+              isDocRequired: false
+            }
           }
         },
         tradeReviewDetails

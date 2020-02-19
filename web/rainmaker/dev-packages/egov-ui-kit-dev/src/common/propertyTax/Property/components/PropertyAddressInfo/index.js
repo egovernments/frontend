@@ -12,7 +12,7 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 const getAddressItems = (properties, loadMdmsData) => {
 
-  const { address, propertyDetails } = properties;
+  const { address, propertyDetails,tenantId } = properties;
 
   const { additionalDetails } = Boolean(propertyDetails) && propertyDetails[0]
   return (
@@ -20,7 +20,7 @@ const getAddressItems = (properties, loadMdmsData) => {
 
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),
-        value: address.city || "NA",
+        value: tenantId && getTranslatedLabel(("TENANT_TENANTS_" + tenantId.replace('.', '_')).toUpperCase(), localizationLabelsData) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_HOUSE_NO", localizationLabelsData),
@@ -52,7 +52,11 @@ const getAddressItems = (properties, loadMdmsData) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: address.locality.name || "NA",
+        value: getTranslatedLabel((
+          tenantId.replace(".", "_") +
+          "_REVENUE_" +
+          address.locality.code
+        ).toUpperCase(), localizationLabelsData) || "NA",
       }
     ]
   );

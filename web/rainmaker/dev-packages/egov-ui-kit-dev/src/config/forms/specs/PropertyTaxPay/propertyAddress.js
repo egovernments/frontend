@@ -85,6 +85,24 @@ const formConfig = {
                   {
                     name: "UsageCategorySubMinor",
                   },
+                  {
+                    name: "ConstructionType",
+                  },
+                  {
+                    name: "Rebate",
+                  },
+                  {
+                    name: "Interest",
+                  },
+                  {
+                    name: "FireCess",
+                  },
+                  {
+                    name: "RoadType",
+                  },
+                  {
+                    name: "Thana",
+                  }
                 ],
               },
             ],
@@ -104,8 +122,23 @@ const formConfig = {
             "UsageCategoryMajor",
             "UsageCategoryMinor",
             "UsageCategorySubMinor",
+            "ConstructionType",
+            "Rebate",
+            "Penalty",
+            "Interest",
+            "FireCess",
+            "RoadType",
+            "Thana"
           ])
         );
+
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       },
     },
     dummy: {
@@ -160,10 +193,10 @@ const formConfig = {
     },
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
+      type: "textfield",
       className: "pt-old-pid-text-field",
       text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
@@ -218,6 +251,8 @@ const formConfig = {
       });
       console.log("thanaData------->>>",thanaData)
       dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
+      dispatch(setFieldProperty("propertyAddress", "roadType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
 
       const PT = citiesByModule && citiesByModule.PT;
       if (PT) {

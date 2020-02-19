@@ -275,11 +275,11 @@ export const getSelectedCombination = (form, formKey, fieldKeys) => {
 };
 
 export const getSingleOwnerInfo = (self) => {
-  const { ownerInfo } = self.props.form;
+  const { ownerInfo={} } = self.props.form;
   const ownerObj = {
     documents: [{}],
   };
-  Object.keys(ownerInfo.fields).map((field) => {
+  ownerInfo && ownerInfo.fields && Object.keys(ownerInfo.fields).map((field) => {
     const jsonPath = ownerInfo.fields[field].jsonPath;
     if (jsonPath.toLowerCase().indexOf("document") !== -1) {
       ownerObj.documents[0][jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
@@ -400,7 +400,6 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
 };
 
 export const getHeaderLabel = (selected, role) => {
-  console.log("sle;;;;",selected);
   switch (selected) {
     case 0:
       return (
@@ -473,16 +472,22 @@ export const normalizePropertyDetails = (properties, self) => {
   const isReassesment = !!getQueryValue(search, "isReassesment");
   const propertyId = getQueryValue(search, "propertyId");
   const units =
-    propertyDetails[0] && propertyDetails[0].units
+    propertyDetails[0] && propertyDetails[0].propertyType==="VACANT"?null:(propertyDetails[0].units
       ? propertyDetails[0].units.filter((item, ind) => {
           return item !== null;
         })
-      : [];
+      : []);
   if (isReassesment && propertyId) {
     property.propertyId = propertyId;
   }
   var sumOfUnitArea = 0;
-  units.forEach((unit) => {
+  units && units.forEach((unit) => {
+    if (unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown=="true") {
+      unit.unitArea=parseInt(unit.additionalDetails.roomsArea)+parseInt(unit.additionalDetails.commonArea)+parseInt(unit.additionalDetails.garageArea)+parseInt(unit.additionalDetails.bathroomArea)
+    }
+    // if (unit.constructionYear) {
+    //   unit.constructionYear=new Date(unit.constructionYear).getTime();
+    // }
     let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
     unit.unitArea = Math.round(unitAreaInSqYd * 1000) / 1000;
     sumOfUnitArea += unit.unitArea;
@@ -518,7 +523,7 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
       }, 0);
       const plotSizeInFt = parseFloat(plotDetails.fields.plotSize.value) * 9;
       if (unitTotal > plotSizeInFt) {
-        alert(`Total area of floor ${floorNo} has exceeded the plot size`);
+        alert(`Total area/Covered area of floor ${floorNo} has exceeded the plot size`);
         isValid = false;
       }
     }
@@ -527,12 +532,27 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
 };
 
 export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
-  let { basicInformation, plotDetails, floorDetails_0 } = self.props.form;
+  let { basicInformation, plotDetails, floorDetails_0 ,prepareFormData={}} = self.props.form;
   if (plotDetails && floorDetails_0 && floorDetails_0.fields.builtArea) {
     let uom = plotDetails.fields && plotDetails.fields.measuringUnit && plotDetails.fields.measuringUnit.value;
     floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
   }
-
+if(basicInformation&&!basicInformation.fields.datePicker.value){
+if(prepareFormData.Properties&&prepareFormData.Properties.length>0&&get(prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.constructionYear',null)){
+  basicInformation.fields.datePicker.value=prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear;
+}
+}
+if(plotDetails){
+  for(let i=0;i<get(plotDetails,'fields.floorCount.value',0);i++){
+   for(let j=0;j<get(self.props.prepareFormData,`Properties[0].propertyDetails[0].units.length`,0);j++){
+    let floorDetails_0_unit_0=get(self.props,`form.floorDetails_${i}_unit_${j}.fields.constructionType`,null);
+    if(floorDetails_0_unit_0&&!floorDetails_0_unit_0.value){
+      let val=get(self.props.prepareFormData,`Properties[0].propertyDetails[0].units[${j}].constructionType`,'');
+      set(self.props.form, `floorDetails_${i}_unit_${j}.fields.constructionType.value`,val );
+    }
+   }
+  }
+}
   if (basicInformation && basicInformation.fields.typeOfUsage.value && basicInformation.fields.typeOfBuilding.value) {
     let pathFormKeyObject = getPlotAndFloorFormConfigPath(basicInformation.fields.typeOfUsage.value, basicInformation.fields.typeOfBuilding.value);
     return !isEmpty(pathFormKeyObject) ? (

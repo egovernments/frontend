@@ -4,6 +4,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import {getFinalData} from "egov-ui-kit/utils/localStorageUtils";
+import { prepareFormData as setData } from "egov-ui-kit/redux/common/actions";
+
 
 
 
@@ -60,7 +62,7 @@ const formConfig = {
       floatingLabelText: "PT_FORM3_CORRESPONDENCE_ADDRESS",
       hintText: "PT_FORM3_CORRESPONDENCE_ADDRESS_PLACEHOLDER",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,256}$/,
+      // pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,256}$/,
       errorMessage: "PT_ADDRESS_ERROR_MESSAGE",
     },
     ownerRelationship: {
@@ -231,11 +233,12 @@ const formConfig = {
 
     try {
       let state = store.getState();
+      const {common={}}=state;
+      const {prepareFormData={}}=common;
       const OwnerTypes = get(state, `common.generalMDMSDataById.OwnerType`);
       const finalData=getFinalData();
-      console.log("finalData:",finalData);
       const finalYear=finalData[0].financialYear;
-      console.log("financialYear:",finalYear);
+
       // let financialYearFromQuery = window.location.search.split("FY=")[1];
       // financialYearFromQuery = financialYearFromQuery.split("&")[0];
       const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);
@@ -243,6 +246,10 @@ const formConfig = {
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
       if (ownerShipType === "SINGLEOWNER") {
         set(action, "form.fields.ownerGender.value", get(state, "form.ownerInfo.fields.ownerGender.value", "Male"));
+      }
+      if (!get(prepareFormData,"Properties[0].propertyDetails[0].owners[0].ownerType")) {
+          dispatch(setData("Properties[0].propertyDetails[0].owners[0].ownerType", "NONE"));
+          set(action, "form.fields.ownerCategory.value", "NONE");
       }
       return action;
     } catch (e) {

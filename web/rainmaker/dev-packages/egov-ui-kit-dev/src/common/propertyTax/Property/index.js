@@ -20,8 +20,7 @@ import commonConfig from "config/common.js";
 import { Button, Card } from "components";
 import "./index.css";
 import PTHeader from "../../common/PTHeader";
-
-
+import { setRoute } from "egov-ui-kit/redux/app/actions";
 const innerDivStyle = {
   padding: "0",
   // borderBottom: "1px solid #e0e0e0",
@@ -98,6 +97,24 @@ class Property extends Component {
               {
                 name: "SubOwnerShipCategory",
               },
+              {
+                name: "ConstructionType",
+              },
+              {
+                name: "Rebate",
+              },
+              {
+                name: "Interest",
+              },
+              {
+                name: "FireCess",
+              },
+              {
+                name: "RoadType",
+              },
+              {
+                name: "Thana",
+              }
             ],
           },
         ],
@@ -114,7 +131,21 @@ class Property extends Component {
       "OwnerType",
       "UsageCategoryDetail",
       "SubOwnerShipCategory",
+      "ConstructionType",
+      "Rebate",
+      "Penalty",
+      "Interest",
+      "FireCess",
+      "RoadType",
+      "Thana"
     ]);
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      commonConfig.tenantId
+    );
     fetchProperties([
       { key: "ids", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
@@ -156,6 +187,18 @@ class Property extends Component {
       urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
     });
   };
+  editDemand= () =>{
+
+    const { latestPropertyDetails, propertyId,setRoute, tenantId } = this.props;
+    const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    if(process.env.REACT_APP_NAME !='citizen'){
+    setRoute(`/property-tax/assessment-form-dataentry?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=false&mode=editDemand&propertyId=${propertyId}&tenantId=${tenantId}`);
+  }
+    // this.setState({
+    //   dialogueOpen: true,
+    //   urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
+    // });
+  }
 
   getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
     let assessmentList = [];
@@ -268,7 +311,7 @@ class Property extends Component {
   };
 
   render() {
-    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr, totalBillAmountDue, loadMdmsData } = this.props;
+    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr, totalBillAmountDue, loadMdmsData,propertyDetails,Payments=[]} = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
     let urlArray = [];
@@ -280,6 +323,16 @@ class Property extends Component {
     let clsName = appName === "Citizen" ? "screen-with-bredcrumb" : "";
     if (receiptsByYr) {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
+    }
+    let button;
+    if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <= 0){
+    button =
+    <Button
+      onClick={() => this.editDemand()}
+      label={<Label buttonLabel={true} label="PT_EDIT_DEMAND" fontSize="16px" />}
+      primary={true}
+      style={{ lineHeight: "auto", minWidth: "inherit" }}
+    />
     }
     return (
       <Screen className={clsName}>
@@ -298,7 +351,7 @@ class Property extends Component {
             loadMdmsData={loadMdmsData}
           />
         }
-        <div
+        {/* <div
           id="tax-wizard-buttons"
           className="wizard-footer col-sm-12"
           style={{ textAlign: "right" }}
@@ -311,8 +364,17 @@ class Property extends Component {
               style={{ lineHeight: "auto", minWidth: "inherit" }}
             />
             </div>
+        </div> */}
+       <div
+          id="tax-wizard-buttons"
+          className="wizard-footer col-sm-12"
+          style={{ textAlign: "right" }}
+        >
+          <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
+          {button}
+            </div>
         </div>
-        {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
+        {/* {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />} */}
       </Screen>
     );
   }
@@ -512,9 +574,9 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
 };
 
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
-  const isInstitution =
-    latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-  const { institution, owners: ownerDetails } = latestPropertyDetails || {};
+  const isInstitution =latestPropertyDetails.ownershipCategory && !latestPropertyDetails.ownershipCategory.includes("INDIVIDUAL");
+    // latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
+  const { institution={}, owners: ownerDetails } = latestPropertyDetails || {};
   return (
     ownerDetails && [
       {
@@ -538,7 +600,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
               isInstitution
                 ? {
                   key: getTranslatedLabel("PT_OWNERSHIP_INFO_DESIGNATION", localizationLabelsData),
-                  value: institution.designation || "NA",
+                  value: institution && institution.designation || "NA",
                 }
                 : {
                   key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", localizationLabelsData),
@@ -624,7 +686,7 @@ const mapStateToProps = (state, ownProps) => {
   const { urls, localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById, loadMdmsData } = state.common || {};
-  const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue } = state.properties || {};
+  const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue,Payments } = state.properties || {};
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
@@ -656,6 +718,8 @@ const mapStateToProps = (state, ownProps) => {
   const completedAssessments = getCompletedTransformedItems(pendingAssessments, cities, localizationLabels, propertyId);
   // const completedAssessments = getCompletedTransformedItems(singleAssessmentByStatus, cities, localizationLabels);
   const sortedAssessments = completedAssessments && orderby(completedAssessments, ["epocDate"], ["desc"]);
+  const properties= !propertiesById[propertyId] ? {}: propertiesById[propertyId];
+  const propertyDetails=properties.propertyDetails;
   return {
     urls,
     propertyItems,
@@ -669,14 +733,25 @@ const mapStateToProps = (state, ownProps) => {
     receiptsByYr,
     localization,
     totalBillAmountDue,
-    loadMdmsData
+    loadMdmsData,
+    propertyDetails,Payments
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     addBreadCrumbs: (url) => dispatch(addBreadCrumbs(url)),
-    fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
+    fetchGeneralMDMSData: (
+      requestBody,
+      moduleName,
+      masterName,
+      key,
+      tenantId
+    ) =>
+      dispatch(
+        fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
+      ),
+      setRoute: route => dispatch(setRoute(route)),
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
     getSingleAssesmentandStatus: (queryObj) => dispatch(getSingleAssesmentandStatus(queryObj)),
     fetchTotalBillAmount: (fetchBillQueryObject) => dispatch(fetchTotalBillAmount(fetchBillQueryObject)),

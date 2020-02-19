@@ -76,6 +76,10 @@ import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementC
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import DemandCollection from "egov-ui-kit/common/propertyTax/DemandCollection";
+import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
+import { removeForm } from "egov-ui-kit/redux/form/actions";
+import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 class FormWizardDataEntry extends Component {
   state = {
@@ -105,7 +109,8 @@ class FormWizardDataEntry extends Component {
     calculationScreenData: [],
     assessedPropertyDetails: {},
     imageUrl: "",
-    finlYear: ""
+    finlYear: "",
+    editDemand: false
   };
 
   updateTotalAmount = (value, isFullPayment, errorText) => {
@@ -121,7 +126,9 @@ class FormWizardDataEntry extends Component {
     const {
       fetchMDMDDocumentTypeSuccess,
       updatePrepareFormDataFromDraft,
-      location
+      location,
+      generalMDMSDataById,
+      prepareFinalObject
     } = this.props;
     const { search } = location;
     const financialYearFromQuery = getFinancialYearFromQuery();
@@ -168,15 +175,104 @@ class FormWizardDataEntry extends Component {
             }
           ]
         );
+
+        const demandPropertyResponse = await httpRequest(
+          "billing-service/demand/_search",
+          "_get",
+          [
+            {
+              key: "tenantId",
+              value: tenantId
+            },
+            {
+              key: "consumerCode",
+              value: getQueryValue(search, "propertyId")
+            }
+          ]
+        );
+        {
+          demandPropertyResponse.length != []
+            ? prepareFinalObject(
+                "DemandPropertiesResponse",
+                demandPropertyResponse
+              )
+            : [];
+        }
+        const { generalMDMSDataById } = this.props;
+        let finalYear = "";
+        const demands =
+          (demandPropertyResponse &&
+            demandPropertyResponse.Demands.sort(function(a, b) {
+              return b.taxPeriodFrom - a.taxPeriodFrom;
+            })) ||
+          [];
+        let demandResponse = demands.forEach((demand, yearKey) => {
+          //add order for the taxt head and do the oerdering
+          if (demand.demandDetails) {
+            demand.demandDetails = demand.demandDetails
+              .map(demandDetail => {
+                return {
+                  ...demandDetail,
+                  order: get(
+                    generalMDMSDataById,
+                    `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,
+                    -1
+                  )
+                };
+              })
+              .sort(function(a, b) {
+                return a.order - b.order;
+              });
+          } else {
+            demand.demandDetails = [];
+          }
+          return demand.demandDetails.forEach((demandData, demandKey) => {
+            if (demandData.order > -1) {
+              let yearkeys = Object.keys(generalMDMSDataById.TaxPeriod).forEach(
+                (item, i) => {
+                  if (
+                    generalMDMSDataById.TaxPeriod[item].fromDate ===
+                    demand.taxPeriodFrom
+                  ) {
+                    finalYear =
+                      generalMDMSDataById.TaxPeriod[item].financialYear;
+                  }
+                }
+              );
+              prepareFinalObject(
+                `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`,
+                demandData.taxHeadMasterCode
+              ),
+                prepareFinalObject(
+                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_DEMAND`,
+                  `${demandData.taxAmount}`
+                ),
+                prepareFinalObject(
+                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
+                  `${demandData.collectionAmount}`
+                );
+            }
+          });
+        });
         if (
           searchPropertyResponse.Properties[0].propertyDetails &&
           searchPropertyResponse.Properties[0].propertyDetails.length > 0
         ) {
-          searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
-            item.units = sortBy(
-              item.units,
-              unit => parseInt(unit.floorNo) || -99999
+          if (
+            get(
+              searchPropertyResponse,
+              "Properties[0].propertyDetails[0].additionalDetails.constructionYear",
+              null
+            )
+          ) {
+            searchPropertyResponse.Properties[0].propertyDetails[0].additionalDetails.constructionYear = new Date(
+              searchPropertyResponse.Properties[0].propertyDetails[0].additionalDetails.constructionYear
             );
+          }
+          searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
+            item.units =
+              item.units &&
+              sortBy(item.units, unit => parseInt(unit.floorNo) || -99999);
           });
         }
         // console.log(searchPropertyResponse);
@@ -294,21 +390,21 @@ class FormWizardDataEntry extends Component {
         },
         () => {
           {
-            if (activeTab >= 3 && !isCompletePayment) {
-              this.estimate().then(estimateResponse => {
-                if (estimateResponse) {
-                  this.setState({
-                    estimation:
-                      estimateResponse && estimateResponse.Calculation,
-                    totalAmountToBePaid: get(
-                      estimateResponse,
-                      "Calculation[0].totalAmount",
-                      0
-                    )
-                  });
-                }
-              });
-            }
+            // if (activeTab >= 3 && !isCompletePayment) {
+            //   this.estimate().then(estimateResponse => {
+            //     if (estimateResponse) {
+            //       this.setState({
+            //         estimation:
+            //           estimateResponse && estimateResponse.Calculation,
+            //         totalAmountToBePaid: get(
+            //           estimateResponse,
+            //           "Calculation[0].totalAmount",
+            //           0
+            //         )
+            //       });
+            //     }
+            //   });
+            // }
             if (activeTab === 4) this.pay();
           }
         }
@@ -319,6 +415,9 @@ class FormWizardDataEntry extends Component {
   };
 
   componentWillReceiveProps = nextprops => {
+    // if (nextProps.match.params.reportName !== this.props.match.params.reportName) {
+    //   this.resetForm();
+    // }
     if (!isEqual(nextprops, this.props)) {
       let inputType = document.getElementsByTagName("input");
       for (let input in inputType) {
@@ -339,9 +438,15 @@ class FormWizardDataEntry extends Component {
       renderCustomTitleForPt,
       showSpinner,
       hideSpinner,
-      fetchGeneralMDMSData
+      fetchGeneralMDMSData,
+      history
     } = this.props;
     let { search } = location;
+    let { resetForm } = this;
+
+    this.unlisten = history.listen((location, action) => {
+      resetForm();
+    });
 
     showSpinner();
     const { selected, finlYear } = this.state;
@@ -353,9 +458,10 @@ class FormWizardDataEntry extends Component {
     const isReassesment = Boolean(
       getQueryValue(search, "isReassesment").replace("false", "")
     );
-    const tenantId = getQueryValue(search, "tenantId");
+    const tenantId = getQueryValue(search, "tenantId") || getTenantId();
     const draftUuid = getQueryValue(search, "uuid");
-    const tenantId1 = getTenantId() || "uk";
+    // const tenantId1 = getTenantId() || "uk";
+
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
 
@@ -386,6 +492,14 @@ class FormWizardDataEntry extends Component {
         "",
         tenantId
       );
+      fetchGeneralMDMSData(
+        null,
+        "BillingService",
+        ["TaxPeriod", "TaxHeadMaster"],
+        "",
+        tenantId
+      );
+
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
 
       if (selected > 2) {
@@ -401,14 +515,10 @@ class FormWizardDataEntry extends Component {
           }.bind(this)
         );
       }
+    } else {
+      resetForm();
     }
-    fetchGeneralMDMSData(
-      null,
-      "BillingService",
-      ["TaxPeriod", "TaxHeadMaster"],
-      "",
-      tenantId1
-    );
+
     const { ownerInfoArr } = this.state;
 
     if (ownerInfoArr.length < 2) {
@@ -436,6 +546,10 @@ class FormWizardDataEntry extends Component {
     hideSpinner();
   };
 
+  componentWillUnmount() {
+    this.unlisten();
+  }
+
   handleRemoveOwner = (index, formKey) => {
     const { ownerInfoArr } = this.state;
     const updatedOwnerArr = [...ownerInfoArr];
@@ -457,39 +571,81 @@ class FormWizardDataEntry extends Component {
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
     const isReviewPage = selected === 4;
-    switch (ownerType) {
-      case "SINGLEOWNER":
-        return <OwnerInfoHOC disabled={isReviewPage} />;
-      case "MULTIPLEOWNERS":
-        return (
-          <MultipleOwnerInfoHOC
-            addOwner={() => {
-              addOwner(false, OwnerInformation, this);
-            }}
-            handleRemoveOwner={this.handleRemoveOwner}
-            ownerDetails={this.state.ownerInfoArr}
+    if (ownerType && ownerType.includes("SINGLEOWNER")) {
+      return <OwnerInfoHOC disabled={isReviewPage} />;
+    } else if (ownerType && ownerType.includes("MULTIPLEOWNERS")) {
+      return (
+        <MultipleOwnerInfoHOC
+          addOwner={() => {
+            addOwner(false, OwnerInformation, this);
+          }}
+          handleRemoveOwner={this.handleRemoveOwner}
+          ownerDetails={this.state.ownerInfoArr}
+          disabled={isReviewPage}
+        />
+      );
+    } else {
+      return (
+        <div>
+          <InstitutionHOC disabled={isReviewPage} />
+          <InstitutionAuthorityHOC
+            cardTitle={
+              <Label
+                label="PT_DETAILS_OF_AUTHORISED_PERSON"
+                defaultLabel="Details of authorised person"
+              />
+            }
             disabled={isReviewPage}
           />
-        );
-      case "INSTITUTIONALPRIVATE":
-      case "INSTITUTIONALGOVERNMENT":
-        return (
-          <div>
-            <InstitutionHOC disabled={isReviewPage} />
-            <InstitutionAuthorityHOC
-              cardTitle={
-                <Label
-                  label="PT_DETAILS_OF_AUTHORISED_PERSON"
-                  defaultLabel="Details of authorised person"
-                />
-              }
-              disabled={isReviewPage}
-            />
-          </div>
-        );
-      default:
-        return null;
+        </div>
+      );
     }
+    // switch (ownerType) {
+    //   case "SINGLEOWNER":
+    //     return <OwnerInfoHOC disabled={isReviewPage} />;
+    //   case "MULTIPLEOWNERS":
+    //     return (
+    //       <MultipleOwnerInfoHOC
+    //         addOwner={() => {
+    //           addOwner(false, OwnerInformation, this);
+    //         }}
+    //         handleRemoveOwner={this.handleRemoveOwner}
+    //         ownerDetails={this.state.ownerInfoArr}
+    //         disabled={isReviewPage}
+    //       />
+    //     );
+    //   // case "INSTITUTIONALPRIVATE":
+    //   // case "INSTITUTIONALGOVERNMENT":
+    //   //   return (
+    //   //     <div>
+    //   //       <InstitutionHOC disabled={isReviewPage} />
+    //   //       <InstitutionAuthorityHOC
+    //   //         cardTitle={
+    //   //           <Label
+    //   //             label="PT_DETAILS_OF_AUTHORISED_PERSON"
+    //   //             defaultLabel="Details of authorised person"
+    //   //           />
+    //   //         }
+    //   //         disabled={isReviewPage}
+    //   //       />
+    //   //     </div>
+    //   //   );
+    //   default:
+    //      return (
+    //       <div>
+    //         <InstitutionHOC disabled={isReviewPage} />
+    //         <InstitutionAuthorityHOC
+    //           cardTitle={
+    //             <Label
+    //               label="PT_DETAILS_OF_AUTHORISED_PERSON"
+    //               defaultLabel="Details of authorised person"
+    //             />
+    //           }
+    //           disabled={isReviewPage}
+    //         />
+    //       </div>
+    //     );;
+    // }
   };
 
   updateEstimate = () => {
@@ -585,7 +741,11 @@ class FormWizardDataEntry extends Component {
         return (
           <div className="review-pay-tab">
             <ReviewForm
-              properties={this.props["prepareFormData"]["Properties"][0]}
+              properties={get(
+                this.props["prepareFormData"],
+                "Properties[0]",
+                []
+              )}
               onTabClick={this.onTabClick}
               updateIndex={this.updateIndex}
               stepZero={this.renderStepperContent(0, fromReviewPage)}
@@ -747,7 +907,9 @@ class FormWizardDataEntry extends Component {
       case 0:
       case 1:
       case 2:
-        headerObj.subHeaderValue = propertyId;
+        isReassesment === false
+          ? (headerObj.subHeaderValue = "")
+          : (headerObj.subHeaderValue = propertyId);
         // headerObj.headerValue = "(" + assessmentYear + ")";
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
@@ -760,7 +922,9 @@ class FormWizardDataEntry extends Component {
             (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         break;
       case 3:
-        headerObj.subHeaderValue = propertyId;
+        isReassesment === false
+          ? (headerObj.subHeaderValue = "")
+          : (headerObj.subHeaderValue = propertyId);
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
@@ -770,7 +934,9 @@ class FormWizardDataEntry extends Component {
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 4:
-        headerObj.subHeaderValue = propertyId;
+        isReassesment === false
+          ? (headerObj.subHeaderValue = "")
+          : (headerObj.subHeaderValue = propertyId);
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
@@ -828,7 +994,13 @@ class FormWizardDataEntry extends Component {
       financialYearFromQuery,
       estimation
     } = this.state;
-    const { setRoute, displayFormErrorsAction, form } = this.props;
+    const {
+      setRoute,
+      displayFormErrorsAction,
+      form,
+      history,
+      prepareFormData = {}
+    } = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -943,6 +1115,11 @@ class FormWizardDataEntry extends Component {
           );
           break;
         }
+        let { Properties: finalProperty } = prepareFormData;
+        const ownershipCategory = get(
+          finalProperty,
+          "[0]propertyDetails[0].ownershipCategory"
+        );
         const { ownershipType } = form;
         const estimateCall = () => {
           // estimate().then(estimateResponse => {
@@ -966,7 +1143,7 @@ class FormWizardDataEntry extends Component {
               ownershipType,
               "fields.typeOfOwnership.value"
             );
-            if (ownershipTypeSelected === "SINGLEOWNER") {
+            if (ownershipTypeSelected.includes("SINGLEOWNER")) {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
@@ -982,7 +1159,7 @@ class FormWizardDataEntry extends Component {
               } else {
                 displayFormErrorsAction("ownerInfo");
               }
-            } else if (ownershipTypeSelected === "MULTIPLEOWNERS") {
+            } else if (ownershipTypeSelected.includes("MULTIPLEOWNERS")) {
               let ownerValidation = true;
               for (const variable in form) {
                 if (variable.search("ownerInfo_") !== -1) {
@@ -1005,8 +1182,7 @@ class FormWizardDataEntry extends Component {
                 );
               }
             } else if (
-              ownershipTypeSelected.toUpperCase().indexOf("INSTITUTIONAL") !==
-              -1
+              ownershipTypeSelected.toUpperCase().includes("INSTITUTIONAL")
             ) {
               const { institutionDetails, institutionAuthority } = form;
               const isInstitutionDetailsFormValid = validateForm(
@@ -1042,88 +1218,221 @@ class FormWizardDataEntry extends Component {
         }
         break;
       case 3:
-        const { DemandProperties } = this.props;
+        let {
+          DemandProperties = [],
+          prepareFinalObject,
+          generalMDMSDataById = {}
+        } = this.props;
+        const demand = get(
+          DemandProperties,
+          "[0].propertyDetails[0].demand",
+          []
+        );
+        let errorCode = "FINE";
+        let previousKey = -1;
+        let previousYear = "";
+        let demandLength = demand.length;
+        let arrayOfEmptyYears = [];
 
-        if (!DemandProperties) {
+        const callToggleSnackbar = (labelKey, labelName) => {
           this.props.toggleSnackbarAndSetText(
             true,
             {
-              labelName:
-                "Please enter at least one year of demand and collection !",
-              labelKey: "ERR01_DEMAND_ENTER_THE_DATA"
+              labelName,
+              labelKey
             },
             "error"
           );
-          break;
-        }
-        const { demand } = DemandProperties[0].propertyDetails[0];
-        let errorLine = "";
-        let lastDemand;
-        let yearData = true;
-        if (demand) {
-          if (!demand[0]) {
-            this.props.toggleSnackbarAndSetText(
-              true,
-              {
-                labelName:
-                  "Please enter the latest year of demand and collection !",
-                labelKey: "ERR02_DEMAND_ENTER_THE_DATA"
-              },
-              "error"
+        };
+
+        const checkPtTaxWithRebate = (
+          taxHead,
+          demandAmount,
+          taxDetails = [],
+          getTotalRebateAmount = false
+        ) => {
+          const rebateHeadObject = get(
+            generalMDMSDataById,
+            `TaxHeadMaster.${taxHead}`,
+            {}
+          );
+          if (rebateHeadObject.code === "PT_TAX") {
+            let rebateHeads = [];
+            Object.keys(get(generalMDMSDataById, `TaxHeadMaster`, {})).forEach(
+              key => {
+                const object = get(
+                  generalMDMSDataById,
+                  `TaxHeadMaster.${key}`,
+                  {}
+                );
+                if (object.legacy && object.category === "REBATE") {
+                  rebateHeads.push(object);
+                }
+              }
             );
-            break;
-          }
-          const currentYear = demand.forEach((data, key) => {
-            return Object.keys(data.demand).forEach((data1, key1) => {
-              return Object.keys(data.demand[data1]).forEach((data2, key2) => {
-                lastDemand = data.demand[data1][data2].PT_DEMAND;
+            let rebateAmount = 0;
+            rebateHeads.forEach((rebateHead, i) => {
+              taxDetails.forEach((taxRebate, i) => {
                 if (
-                  parseInt(data.demand[data1][data2].PT_DEMAND) <
-                  parseInt(data.demand[data1][data2].PT_COLLECTED)
+                  taxRebate.PT_TAXHEAD === rebateHead.code &&
+                  taxRebate.PT_DEMAND
                 ) {
-                  return (errorLine = errorLine.concat(
-                    `${key2 + 1}:the taxHead of ${
-                      data.demand[data1][data2].PT_TAXHEAD
-                    } demand ${
-                      data.demand[data1][data2].PT_DEMAND
-                    } of the year ${data1} is must be greater than the collection ${
-                      data.demand[data1][data2].PT_COLLECTED
-                    }.\n`
-                  ));
+                  rebateAmount = rebateAmount + parseInt(taxRebate.PT_DEMAND);
                 }
               });
             });
-          });
-          if (lastDemand != "") {
-            yearData =
-              demand.filter(data => data != undefined).length === demand.length;
+            return getTotalRebateAmount
+              ? rebateAmount
+              : demandAmount + rebateAmount;
+          } else {
+            return demandAmount;
           }
-        }
-        if (errorLine.length > 0) {
-          this.props.toggleSnackbarAndSetText(
-            true,
-            {
-              labelName: `The error is ${errorLine}`,
-              labelKey: "ERR03_DEMAND_ENTER_THE_DATA"
-            },
-            "error"
+        };
+
+        const checkRebate = taxHead => {
+          const rebateHeads = get(
+            generalMDMSDataById,
+            `TaxHeadMaster.${taxHead}`,
+            {}
           );
-          break;
-        } else if (!yearData) {
-          this.props.toggleSnackbarAndSetText(
-            true,
-            {
-              labelName: "The demand entry is not sequential",
-              labelKey: "ERR04_DEMAND_ENTER_THE_DATA"
-            },
-            "error"
-          );
-          break;
+          if (rebateHeads.legacy && rebateHeads.category === "REBATE") {
+            return false;
+          } else {
+            return true;
+          }
+        };
+
+        if (!demandLength) {
+          errorCode = "ERR01_DEMAND_ENTER_THE_DATA";
         } else {
-          this.setState({
-            selected: index,
-            formValidIndexArray: [...formValidIndexArray, selected]
+          if (!demand[0]) {
+            errorCode = "ERR02_DEMAND_ENTER_THE_DATA";
+          }
+          demand.forEach((data, key) => {
+            data &&
+              Object.keys(data.demand).forEach((data1, key1) => {
+                // let currentYearTaxHeadLength=Object.keys(data.demand[data1]).length;
+                let currentYearEnteredValueLength = 0;
+                let hasPropertyTax = false;
+                let propertyTaxAmount = 0;
+                let totalRebateAmount = 0;
+                // let previousYear=data1;
+                Object.keys(data.demand[data1]).forEach((data2, key2) => {
+                  if (
+                    !data.demand[data1][data2].PT_DEMAND &&
+                    data.demand[data1][data2].PT_COLLECTED &&
+                    parseInt(data.demand[data1][data2].PT_COLLECTED)
+                  ) {
+                    errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
+                  }
+                  if (data.demand[data1][data2].PT_DEMAND) {
+                    currentYearEnteredValueLength++;
+                    if (previousKey != -1) {
+                      if (key - previousKey > 1) {
+                        errorCode = "ERR04_DEMAND_ENTER_THE_DATA";
+                      }
+                    }
+                    if (data.demand[data1][data2].PT_TAXHEAD === "PT_TAX") {
+                      hasPropertyTax = true;
+                      propertyTaxAmount = data.demand[data1][data2].PT_DEMAND;
+                      totalRebateAmount = checkPtTaxWithRebate(
+                        data.demand[data1][data2].PT_TAXHEAD,
+                        parseInt(data.demand[data1][data2].PT_DEMAND),
+                        data.demand[data1],
+                        true
+                      );
+                    }
+                    if (
+                      checkRebate(data.demand[data1][data2].PT_TAXHEAD) &&
+                      data.demand[data1][data2].PT_COLLECTED &&
+                      parseInt(data.demand[data1][data2].PT_COLLECTED) &&
+                      checkPtTaxWithRebate(
+                        data.demand[data1][data2].PT_TAXHEAD,
+                        parseInt(data.demand[data1][data2].PT_DEMAND),
+                        data.demand[data1]
+                      ) !== parseInt(data.demand[data1][data2].PT_COLLECTED)
+                    ) {
+                      errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
+                    }
+                    // if (!previousYear ||previousYear!=data1) {
+                    if (key2 == 0) {
+                      previousKey = key;
+                    }
+
+                    // }
+                  }
+                });
+                if (!currentYearEnteredValueLength) {
+                  arrayOfEmptyYears.push(key);
+                }
+                else {
+                  if (!hasPropertyTax) {
+                    errorCode = "ERR05_DEMAND_ENTER_THE_DATA";
+                  } else if (parseInt(propertyTaxAmount) < totalRebateAmount) {
+                    errorCode = "ERR06_DEMAND_ENTER_THE_DATA";
+                  }
+                }
+              });
           });
+        }
+
+        arrayOfEmptyYears.forEach((item, i) => {
+          set(DemandProperties, `[0].propertyDetails[0].demand[${item}]`, null);
+        });
+
+        if (arrayOfEmptyYears.length === demand.length) {
+          errorCode = "ERR01_DEMAND_ENTER_THE_DATA";
+        }
+
+        if (arrayOfEmptyYears.indexOf(0) != -1) {
+          errorCode = "ERR02_DEMAND_ENTER_THE_DATA";
+        }
+
+        switch (errorCode) {
+          case "ERR01_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR01_DEMAND_ENTER_THE_DATA",
+              "Please enter at least one year of demand and collection !"
+            );
+            break;
+          case "ERR02_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR02_DEMAND_ENTER_THE_DATA",
+              "Please enter the latest year of demand and collection !"
+            );
+            break;
+          case "ERR04_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR04_DEMAND_ENTER_THE_DATA",
+              "The demand entry is not sequential !"
+            );
+            break;
+          case "ERR03_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR03_DEMAND_ENTER_THE_DATA",
+              "The entered collection should not greater than demand amount for any year !"
+            );
+            break;
+          case "ERR05_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR05_DEMAND_ENTER_THE_DATA",
+              "The property tax amount is mandatory for given financial year !"
+            );
+            break;
+          case "ERR06_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR06_DEMAND_ENTER_THE_DATA",
+              "The entered rebate should not greater than property tax amount for any year !"
+            );
+            break;
+          default:
+            if (arrayOfEmptyYears.length > 0) {
+              prepareFinalObject("DemandProperties", DemandProperties);
+            }
+            this.setState({
+              selected: index,
+              formValidIndexArray: [...formValidIndexArray, selected]
+            });
         }
         break;
       case 4:
@@ -1139,16 +1448,16 @@ class FormWizardDataEntry extends Component {
         break;
       case 5:
         const { assessedPropertyDetails = {} } = this.state;
-        const { Properties = [] } = assessedPropertyDetails;
+        let { Properties = [] } = assessedPropertyDetails;
         let propertyId = "";
         let tenantId = "";
         for (let pty of Properties) {
           propertyId = pty.propertyId;
           tenantId = pty.tenantId;
         }
-        let url1 = "property-tax/search-property";
-        window.location.href = `${window.origin}/${url1}`;
-        // this.props.history.push(`/property-tax/`);
+        // let url1 = "property-tax/search-property";
+        // window.location.href = `${window.origin}/${url1}`;
+        history.push(`/`);
         // this.setState(
         //   {
         //     selected: index,
@@ -1563,8 +1872,18 @@ class FormWizardDataEntry extends Component {
   createAndUpdate = async index => {
     const { selected, formValidIndexArray } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
-    let { form, common, location, hideSpinner, DemandProperties } = this.props;
+    let {
+      form,
+      common,
+      location,
+      showSpinner,
+      hideSpinner,
+      DemandProperties,
+      DemandPropertiesResponse = [],
+      generalMDMSDataById
+    } = this.props;
     const { search } = location;
+    let { resetForm } = this;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
     const propertyMethodAction = !!propertyId ? "_update" : "_create";
@@ -1599,7 +1918,7 @@ class FormWizardDataEntry extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType.includes("SINGLEOWNER")) {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1619,9 +1938,15 @@ class FormWizardDataEntry extends Component {
         "Properties[0].propertyDetails[0].subOwnershipCategory",
         selectedownerShipCategoryType
       );
-    }
-
-    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+        get(
+          prepareFormData,
+          "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+        )
+      );
+    } else if (selectedownerShipCategoryType.includes("MULTIPLEOWNERS")) {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1641,21 +1966,15 @@ class FormWizardDataEntry extends Component {
         "Properties[0].propertyDetails[0].subOwnershipCategory",
         selectedownerShipCategoryType
       );
-    }
-
-    set(
-      prepareFormData,
-      "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
-      get(
+      set(
         prepareFormData,
-        "Properties[0].propertyDetails[0].owners[0].mobileNumber"
-      )
-    );
-
-    if (
-      selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
-      -1
-    ) {
+        "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+        get(
+          prepareFormData,
+          "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+        )
+      );
+    } else {
       const { instiObj, ownerArray } = getInstituteInfo(this);
       set(
         prepareFormData,
@@ -1686,8 +2005,23 @@ class FormWizardDataEntry extends Component {
           get(form, "institutionAuthority.fields.telephone.value", null)
         )
       );
+      let phoneNo = get(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].citizenInfo.mobileNumber"
+      );
+      if (!phoneNo) {
+        set(
+          prepareFormData,
+          "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+          get(
+            prepareFormData,
+            "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+          )
+        );
+      }
     }
     try {
+      showSpinner();
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].citizenInfo.name",
@@ -1700,22 +2034,23 @@ class FormWizardDataEntry extends Component {
 
       const finalyears = getFinalData();
       const finalPropertyData = [];
-      const financialYer = DemandProperties[0].propertyDetails[0].demand.map(
-        (propertyData, index) => {
+      const propertyDetails = DemandProperties[0].propertyDetails;
+      const demandsData = propertyDetails[0].demand;
+      demandsData.forEach((propertyData, index) => {
+        if (propertyData) {
           let yeardatas = Object.keys(propertyData.demand).map(
             (yeardata, ind) => yeardata
           )[0];
           finalPropertyData.push({
-            financialYear: yeardatas,
             ...properties[0].propertyDetails[0],
-            additionalDetails: null,
-            institution: null,
+            financialYear: yeardatas,
             source: "LEGACY_RECORD",
             assessmentDate: new Date().getTime()
           });
         }
-      );
+      });
       properties[0].propertyDetails = finalPropertyData;
+
       let createPropertyResponse = await httpRequest(
         `pt-services-v2/property/${propertyMethodAction}`,
         `${propertyMethodAction}`,
@@ -1726,51 +2061,113 @@ class FormWizardDataEntry extends Component {
       );
       const demandData = [];
       const demandDetails = [];
-      const demandDetails1 = [];
-      const finaldemand = DemandProperties[0].propertyDetails[0].demand.map(
-        (demand, index) => {
-          return Object.keys(demand.demand).map((data, key) => {
-            return (
-              demand.demand[data].map((demandValue, ind) => {
+      let datas = getFinalData() || [];
+      let currentYearData = [];
+      let fromDate;
+      let toDate;
+      let demandResponse = DemandPropertiesResponse
+        ? DemandPropertiesResponse.Demands
+          ? DemandPropertiesResponse.Demands.reverse()
+          : []
+        : [];
+      const demandObject = {};
+      let finaYr = "";
+      const dmdObj = {};
+      demandResponse.map(obj => {
+        let generalmdms = Object.keys(generalMDMSDataById.TaxPeriod).map(
+          (years, keys) => {
+            if (
+              generalMDMSDataById.TaxPeriod[years].fromDate ===
+              obj.taxPeriodFrom
+            ) {
+              finaYr = generalMDMSDataById.TaxPeriod[years].financialYear;
+            }
+          }
+        );
+        // demandObject[finaYr]={...obj};
+        demandObject[obj.taxPeriodFrom] = { ...obj };
+        dmdObj[finaYr] = { ...obj };
+      });
+      demandsData.forEach((demand, index) => {
+        demand &&
+          Object.keys(demand.demand).forEach((dataYear, key) => {
+            const demandDetails1 = [];
+            const dR = dmdObj[dataYear] || {};
+            demand.demand &&
+              demand.demand[dataYear].map((demandValue, ind) => {
+                currentYearData = datas.filter(
+                  data => data.financialYear == dataYear
+                );
+                fromDate =
+                  currentYearData.length > 0 ? currentYearData[0].fromDate : 0;
+                toDate =
+                  currentYearData.length > 0 ? currentYearData[0].toDate : 0;
+                // const demandResponse=demandResponse.map((demandResponse,responseKey)=>{
+                //   demandResponse.
+                // })
                 demandDetails1.push({
+                  ...get(dR, `demandDetails[${ind}]`, {}),
                   taxHeadMasterCode: demandValue.PT_TAXHEAD,
                   taxAmount: parseInt(
                     demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
                   ),
                   collectionAmount: parseInt(
-                    demandValue.PT_COLLECTED == undefined ||
-                      demandValue.PT_COLLECTED == ""
-                      ? 0
-                      : demandValue.PT_COLLECTED
+                    demandValue.PT_COLLECTED != ""
+                      ? demandValue.PT_COLLECTED
+                      : 0
                   )
                 });
               }),
               demandData.push({
+                ...dR,
                 tenantId: getTenantId(),
                 consumerCode: get(
                   createPropertyResponse,
                   "Properties[0].propertyId"
                 ),
-                consumerType: "BUILTUP",
+                consumerType: get(
+                  createPropertyResponse,
+                  "Properties[0].propertyDetails[0].propertyType"
+                ),
                 businessService: "PT",
-                taxPeriodFrom: new Date().getTime(),
-                taxPeriodTo: new Date().getTime(),
+                taxPeriodFrom: fromDate,
+                taxPeriodTo: toDate,
                 payer: {
+                  ...get(dR, "payer", {}),
                   uuid: get(
                     createPropertyResponse,
                     "Properties[0].propertyDetails[0].owners[0].uuid"
                   )
                 },
                 demandDetails: demandDetails1
-              })
-            );
+              });
           });
-        }
-      );
+      });
+
+      // if(propertyMethodAction=== "_update"){
+      //   demandData.map(obj=>{
+      //
+      //     if(demandObject[obj.taxPeriodFrom]!={}){
+      //       obj={...demandObject[obj.taxPeriodFrom],...obj}
+      //     }
+      //   })
+      // }
+
       let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,
         `${propertyMethodAction}`,
-        [],
+        propertyMethodAction == "create"
+          ? []
+          : [
+              {
+                key: "tenantId",
+                value: getTenantId()
+              },
+              {
+                key: "consumerCode",
+                value: getQueryValue(search, "propertyId")
+              }
+            ],
         {
           Demands: demandData
         }
@@ -1778,9 +2175,39 @@ class FormWizardDataEntry extends Component {
       this.setState({
         assessedPropertyDetails: createPropertyResponse,
         assessedDemandDetails: createDemandResponse,
-        selected: index,
+        // selected: index,
         formValidIndexArray: [...formValidIndexArray, selected]
       });
+      hideSpinner();
+      const callToggleBarSnackbar = (labelKey, labelName, status = "error") => {
+        this.props.toggleSnackbarAndSetText(
+          true,
+          {
+            labelName,
+            labelKey
+          },
+          status
+        );
+        resetForm();
+      };
+      switch (propertyMethodAction) {
+        case "_update":
+          this.setState({
+            selected: index
+          });
+          break;
+        case "_create":
+          this.setState({
+            selected: index
+          });
+          // callToggleBarSnackbar(
+          //   "PT_PROPERTY_CREATED_SUCCESSFULLY",
+          //   "PropertyTax Created Successfully",
+          //   "success"
+          // );
+          break;
+        default:
+      }
     } catch (e) {
       hideSpinner();
       this.setState({ nextButtonEnabled: true });
@@ -1889,10 +2316,7 @@ class FormWizardDataEntry extends Component {
       )
     );
 
-    if (
-      selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
-      -1
-    ) {
+    if (selectedownerShipCategoryType.toLowerCase().includes("institutional")) {
       const { instiObj, ownerArray } = getInstituteInfo(this);
       set(
         prepareFormData,
@@ -2040,9 +2464,17 @@ class FormWizardDataEntry extends Component {
     }
   };
   componentDidUpdate() {
-    const { selected, formValidIndexArray } = this.state;
+    const { selected, formValidIndexArray, editDemand } = this.state;
     const { location } = this.props;
     const { search } = location;
+    const mode = getQueryValue(search, "mode");
+    if (mode == "editDemand" && selected == 3 && editDemand == false) {
+      this.setState({
+        editDemand: true,
+        selected: 4,
+        formValidIndexArray: [...formValidIndexArray, 3]
+      });
+    }
     let proceedToPayment = Boolean(
       getQueryValue(search, "proceedToPayment").replace("false", "")
     );
@@ -2098,6 +2530,19 @@ class FormWizardDataEntry extends Component {
       generalMDMSDataById,
       imageUrl
     );
+  };
+
+  resetForm = () => {
+    const {
+      form,
+      removeForm,
+      prepareFormDataAction,
+      prepareFinalObject
+    } = this.props;
+    resetFormWizard(form, removeForm);
+    prepareFormDataAction("Properties", []);
+    prepareFinalObject("DemandProperties", []);
+    this.onTabClick(0);
   };
 
   render() {
@@ -2181,10 +2626,12 @@ const mapStateToProps = state => {
     taxData.push(taxDataInfo[key]);
   });
   let yeardata1 = yeardata.filter(yearKey => yearKey.service === "PT");
-  let taxdata1 = taxData.filter(
-    tax => tax.service === "PT" && tax.legacy == true
-  );
-
+  let taxdata1 =
+    taxData.filter(tax => tax.service === "PT" && tax.legacy == true) || [];
+  taxdata1.length > 0 &&
+    taxdata1.sort(function(a, b) {
+      return a.order - b.order;
+    });
   const finalData = Object.keys(yeardata1).map((data, key) => {
     yeardata1[data]["taxHead"] = [...taxdata1];
     return yeardata[data];
@@ -2196,7 +2643,8 @@ const mapStateToProps = state => {
   }
   let { preparedFinalObject = {} } = screenConfiguration;
   preparedFinalObject = { ...preparedFinalObject };
-  const { DemandProperties } = preparedFinalObject || {};
+  const { DemandProperties, DemandPropertiesResponse } =
+    preparedFinalObject || {};
   return {
     form,
     currentTenantId,
@@ -2205,7 +2653,8 @@ const mapStateToProps = state => {
     finalData,
     app,
     generalMDMSDataById,
-    DemandProperties
+    DemandProperties,
+    DemandPropertiesResponse
   };
 };
 
@@ -2236,7 +2685,12 @@ const mapDispatchToProps = dispatch => {
     updatePrepareFormDataFromDraft: prepareFormData =>
       dispatch(updatePrepareFormDataFromDraft(prepareFormData)),
     handleFieldChange: (formKey, fieldKey, value) =>
-      dispatch(handleFieldChange(formKey, fieldKey, value))
+      dispatch(handleFieldChange(formKey, fieldKey, value)),
+    removeForm: formkey => dispatch(removeForm(formkey)),
+    prepareFormDataAction: (path, value) =>
+      dispatch(prepareFormDataAction(path, value)),
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
   };
 };
 
@@ -2244,28 +2698,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(FormWizardDataEntry);
-
-// getGeneralData=()=>{
-//   let {fetchGeneralMDMSData,location,finalData}=this.props;
-//   let { search } = location;
-//   const {tenantId}=this.state;
-//   console.log("location:",location);
-//     const tenantId1 =getTenantId() || "uk";
-//     console.log("tenantId:;",tenantId,"tenantId1:",tenantId1);
-//   fetchGeneralMDMSData(
-//     null,
-//     "BillingService",
-//     ["TaxPeriod", "TaxHeadMaster"],
-//     "",
-//     tenantId1
-//   );
-// }
-// //
-// case 4:
-//   if (estimation[0].totalAmount < 0) {
-//     alert("Property Tax amount cannot be Negative!");
-//   } else {
-//     window.scrollTo(0, 0);
-//     createAndUpdate(index);
-//   }
-//   break;

@@ -197,7 +197,6 @@ export const getData = async (action, state, dispatch) => {
     "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
     null
   );
-
   if (applicationNo) {
     //Edit/Update Flow ----
     getQueryArg(window.location.href, "action") !== "edit" &&

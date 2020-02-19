@@ -4,17 +4,19 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
-import FileSaver from 'file-saver';
+import set from "lodash/set";
+import FileSaver from "file-saver";
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-const FileDownload = require('js-file-download');
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+const FileDownload = require("js-file-download");
 const reset_property_reset = () => {
   return {
     type: actionTypes.RESET_PROPERTY_STATE,
   };
 };
-
 
 const propertyFetchPending = () => {
   return {
@@ -42,7 +44,6 @@ const fetchBillError = (error) => {
   };
 };
 
-
 const fetchReceiptPending = () => {
   return {
     type: actionTypes.PROPERTY_FETCH_RECEIPT_PENDING,
@@ -63,9 +64,6 @@ const fetchReceiptError = (error) => {
   };
 };
 
-
-
-
 const downloadReceiptPending = () => {
   return {
     type: actionTypes.PROPERTY_DOWNLOAD_RECEIPT_PENDING,
@@ -85,7 +83,6 @@ const downloadReceiptError = (error) => {
     error,
   };
 };
-
 
 const draftFetchPending = () => {
   return {
@@ -235,9 +232,7 @@ const fetchMohalla = (queryObj) => {
 
 const setMohallaInRedux = (dispatch, state, draftResponse) => {
   const tenantId = get(draftResponse, "drafts[0].tenantId");
-  const {
-    drafts
-  } = draftResponse || {};
+  const { drafts } = draftResponse || {};
   const mohallaCodes =
     drafts &&
     drafts.reduce((result, current) => {
@@ -253,22 +248,23 @@ const setMohallaInRedux = (dispatch, state, draftResponse) => {
       return result;
     }, {});
   const queryObj = Object.keys(mohallaCodes).map((item) => {
-    return [{
-      key: "tenantId",
-      value: item,
-    },
-    {
-      key: "hierarchyTypeCode",
-      value: "REVENUE"
-    },
-    {
-      key: "boundaryType",
-      value: "Locality"
-    },
-    {
-      key: "codes",
-      value: mohallaCodes[item].join(",")
-    },
+    return [
+      {
+        key: "tenantId",
+        value: item,
+      },
+      {
+        key: "hierarchyTypeCode",
+        value: "REVENUE",
+      },
+      {
+        key: "boundaryType",
+        value: "Locality",
+      },
+      {
+        key: "codes",
+        value: mohallaCodes[item].join(","),
+      },
     ];
   });
   dispatch(fetchMohalla(queryObj));
@@ -291,6 +287,25 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
       dispatch(propertyFetchPending());
       try {
         const payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION, queryObjectproperty);
+        payloadProperty.Properties = payloadProperty.Properties.map((property) => {
+          return {
+            ...property,
+            propertyDetails: property.propertyDetails.map((details) => {
+              return {
+                ...details,
+                buildUpArea:details.buildUpArea?Math.round(details.buildUpArea * 9):null,
+                units:
+                  details.units &&
+                  details.units.map((unit) => {
+                    return {
+                      ...unit,
+                      unitArea: Math.round(unit.unitArea * 9),
+                    };
+                  }),
+              };
+            }),
+          };
+        });
         dispatch(propertyFetchComplete(payloadProperty));
       } catch (error) {
         dispatch(propertyFetchError(error.message));
@@ -324,7 +339,7 @@ export const fetchReceipts = (queryObj) => {
     dispatch(ReceiptFetchPending());
     try {
       const payloadReceipts = await httpRequest(RECEIPT.GET.URL, RECEIPT.GET.ACTION, queryObj, {}, [], {
-        ts: 0
+        ts: 0,
       });
       dispatch(ReceiptFetchComplete(payloadReceipts));
     } catch (error) {
@@ -348,37 +363,38 @@ const getStatusAndAmount = (receiptArrayItem) => {
   return receiptTransformed;
 };
 const getFinancialYear = (fromDate, toDate) => {
-  let financialYear = '';
-  financialYear = (new Date(fromDate).getFullYear()) + '-' + String(new Date(toDate).getFullYear()).slice(2);
+  let financialYear = "";
+  financialYear = new Date(fromDate).getFullYear() + "-" + String(new Date(toDate).getFullYear()).slice(2);
   return financialYear;
-}
+};
 const getYearlyAssessments = (propertiesArray = []) => {
   let yearlyAssessments = [];
-  propertiesArray && propertiesArray.map((property) => {
-    if (yearlyAssessments.length == 0) {
-      yearlyAssessments[0] = [property];
-    } else {
-      let bool = true;
-      for (let pty of yearlyAssessments) {
-        if (pty[0].financialYear == property.financialYear) {
-          pty.push(property)
-          bool = false;
+  propertiesArray &&
+    propertiesArray.map((property) => {
+      if (yearlyAssessments.length == 0) {
+        yearlyAssessments[0] = [property];
+      } else {
+        let bool = true;
+        for (let pty of yearlyAssessments) {
+          if (pty[0].financialYear == property.financialYear) {
+            pty.push(property);
+            bool = false;
+          }
+        }
+        if (bool) {
+          yearlyAssessments.push([property]);
         }
       }
-      if (bool) {
-        yearlyAssessments.push([property]);
-      }
-    }
-  })
+    });
   for (let eachYrAssessments of yearlyAssessments) {
     eachYrAssessments.sort((x, y) => y.receiptDate - x.receiptDate);
   }
   yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
   return yearlyAssessments;
-}
+};
 const mergeReceiptsInProperty = (receiptsArray, propertyObj) => {
   const transformedPropertyObj = {
-    ...propertyObj
+    ...propertyObj,
   };
   Object.keys(receiptsArray).forEach((item) => {
     if (transformedPropertyObj.hasOwnProperty(item)) {
@@ -453,11 +469,12 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
       const payloadReceipts = await httpRequest(
         RECEIPT.GET.URL,
         RECEIPT.GET.ACTION,
-        [{ key: "consumerCode", value: commaSeperatedCC.split(':')[0] }],
+        [{ key: "consumerCode", value: commaSeperatedCC.split(":")[0] }],
         {},
-        [], {
-        ts: 0,
-      },
+        [],
+        {
+          ts: 0,
+        },
         true
       );
       const receiptbyId = transformById(payloadReceipts["Receipt"], "transactionId");
@@ -487,7 +504,7 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
           });
           return acc;
         }, {});
-      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), { receiptDetailsArray }]
+      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), { receiptDetailsArray }];
       dispatch(AssessmentStatusFetchComplete(arr));
     } catch (error) {
       dispatch(AssessmentStatusFetchError(error.message));
@@ -520,7 +537,7 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
       const payloadReceipts = await httpRequest(
         RECEIPT.GET.URL,
         RECEIPT.GET.ACTION,
-        [{ key: "consumerCode", value: finalcc.split(':')[0] }],
+        [{ key: "consumerCode", value: finalcc.split(":")[0] }],
         {},
         [],
         {
@@ -557,12 +574,12 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
             fromPeriod: curr.Bill[0].billDetails[0].fromPeriod,
             toPeriod: curr.Bill[0].billDetails[0].toPeriod,
             receiptDate: curr.Bill[0].billDetails[0].receiptDate,
-            financialYear: getFinancialYear(curr.Bill[0].billDetails[0].fromPeriod, curr.Bill[0].billDetails[0].toPeriod)
+            financialYear: getFinancialYear(curr.Bill[0].billDetails[0].fromPeriod, curr.Bill[0].billDetails[0].toPeriod),
           });
           return acc;
         }, {});
       let receiptDetailsArray = receiptDetailArray && getYearlyAssessments(receiptDetailArray[finalcc]);
-      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), { receiptDetailsArray }]
+      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), { receiptDetailsArray }];
       dispatch(SingleAssessmentStatusFetchComplete(arr));
     } catch (error) {
       dispatch(SingleAssessmentStatusFetchError(error.message));
@@ -578,16 +595,12 @@ export const fetchTotalBillAmount = (fetchBillQueryObject) => {
         const payloadProperty = await httpRequest(FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, fetchBillQueryObject);
         dispatch(fetchBillComplete(payloadProperty));
       } catch (error) {
-        dispatch(toggleSnackbarAndSetText(
-          true,
-          { labelName: error.message, labelKey: error.message },
-          "error"
-        ))
+        dispatch(toggleSnackbarAndSetText(true, { labelName: error.message, labelKey: error.message }, "error"));
         dispatch(fetchBillError(error.message));
       }
     }
-  }
-}
+  };
+};
 export const fetchReceipt = (fetchReceiptQueryObject) => {
   return async (dispatch) => {
     if (fetchReceiptQueryObject) {
@@ -599,26 +612,96 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
         dispatch(fetchReceiptError(error.message));
       }
     }
-  }
-}
+  };
+};
 const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
-  const queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "fileStoreIds", value: fileStoreId }
-  ];
+  const queryObject = [{ key: "tenantId", value: tenantId }, { key: "fileStoreIds", value: fileStoreId }];
   try {
-    const fileUrl = await httpRequest(
-      "/filestore/v1/files/url",
-      "",
-      queryObject,
-      {},
-      [], {}, false, true
-    );
+    const fileUrl = await httpRequest("/filestore/v1/files/url", "", queryObject, {}, [], {}, false, true);
     return fileUrl;
   } catch (e) {
     console.log(e);
   }
 };
+
+let getModifiedPayment = (payments) =>{
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let swatchatha=0;
+  let currentDate=convertDateToEpoch(new Date());
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = Math.round((tax+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
+
+  return payments;
+}
 
 export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
@@ -626,12 +709,10 @@ export const downloadReceipt = (receiptQueryString) => {
       dispatch(downloadReceiptPending());
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
-        let queryStr = {};         
-        if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT'){
-          queryStr = [
-          { key: "key", value: "consolidatedreceipt" },
-          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-        ]
+        let queryStr = {};
+        if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === "PT") {
+          payloadReceiptDetails.Payments=getModifiedPayment(payloadReceiptDetails.Payments);
+          queryStr = [{ key: "key", value: "consolidatedreceipt" }, { key: "tenantId", value: receiptQueryString[1].value.split(".")[0] }];
         }
         else if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL'){
           queryStr = [
@@ -646,18 +727,22 @@ export const downloadReceipt = (receiptQueryString) => {
           ]
         }
 
-        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-          .then(res => {
-            getFileUrlFromAPI(res.filestoreIds[0], receiptQueryString[1].value.split('.')[0]).then((fileRes) => {
-              var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-              win.focus();
-            });
-
+        httpRequest(
+          DOWNLOADRECEIPT.GET.URL,
+          DOWNLOADRECEIPT.GET.ACTION,
+          queryStr,
+          { Payments: payloadReceiptDetails.Payments },
+          { Accept: "application/json" },
+          { responseType: "arraybuffer" }
+        ).then((res) => {
+          getFileUrlFromAPI(res.filestoreIds[0], receiptQueryString[1].value.split(".")[0]).then((fileRes) => {
+            var win = window.open(fileRes[res.filestoreIds[0]], "_blank");
+            win.focus();
           });
-
+        });
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
       }
     }
-  }
-}
+  };
+};

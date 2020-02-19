@@ -79,6 +79,20 @@ export const loadUlbLogo = logoUrl => {
   img.src = logoUrl;
 };
 
+export const getOwnerPhoto = ownerPhotoURL => {
+  var img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.onload = function() {
+    var canvas = document.createElement("CANVAS");
+    var ctx = canvas.getContext("2d");
+    canvas.height = this.height;
+    canvas.width = this.width;
+    ctx.drawImage(this, 0, 0);
+    store.dispatch(prepareFinalObject("applicationDataForReceipt.ownerPhoto", canvas.toDataURL()));
+    canvas = null;
+  };
+  img.src = ownerPhotoURL;
+}
 export const loadApplicationData = async (applicationNumber, tenant) => {
   let data = {};
   let queryObject = [
@@ -187,7 +201,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       "Licenses[0].tradeLicenseDetail.tradeUnits",
       null
     );
-
+    
     const transformedTradeData = tradeUnitsFromResponse.reduce(
       (res, curr) => {
         let tradeCategory = "NA";
@@ -233,7 +247,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         tradeTypeCertificate: []
       }
     );
-
+     
     data.tradeCategory = transformedTradeData.tradeCategory.join(", ");
     data.tradeTypeReceipt = transformedTradeData.tradeTypeReceipt.join(", ");
     data.tradeTypeCertificate = transformedTradeData.tradeTypeCertificate.join(
@@ -365,21 +379,36 @@ export const loadMdmsData = async tenantid => {
   );
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: `${tenantid}`
-    },
-    {
-      key: "moduleName",
-      value: "tenant"
-    },
-    {
-      key: "masterName",
-      value: "tenants"
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantid,
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        }
+      ]
     }
-  ];
-  let response = await getMdmsData(queryObject);
+  };
+  // let queryObject = [
+  //   {
+  //     key: "tenantId",
+  //     value: `${tenantid}`
+  //   },
+  //   {
+  //     key: "moduleName",
+  //     value: "tenant"
+  //   },
+  //   {
+  //     key: "masterName",
+  //     value: "tenants"
+  //   }
+  // ];
+  let response = await getMdmsData(mdmsBody);
 
   if (
     response &&

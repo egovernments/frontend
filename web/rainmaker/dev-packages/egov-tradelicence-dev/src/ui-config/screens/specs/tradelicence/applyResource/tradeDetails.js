@@ -678,7 +678,6 @@ const accessoriesCard = {
             pattern: getPattern("UOMValue"),
             props: {
               disabled: true,
-              setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue"
             },
             required: true,

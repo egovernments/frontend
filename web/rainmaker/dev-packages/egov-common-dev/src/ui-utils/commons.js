@@ -14,6 +14,7 @@ import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import printJS from 'print-js';
+import axios from 'axios';
 
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
@@ -492,8 +493,8 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
-  getFileUrlFromAPI(fileStoreId).then((fileRes) => {
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
+  getFileUrlFromAPI(fileStoreId).then(async(fileRes) => {
     if (mode === 'download') {
       var win = window.open(fileRes[fileStoreId], '_blank');
       if(win){
@@ -501,11 +502,108 @@ const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
       }
     }
     else {
-      printJS(fileRes[fileStoreId])
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+
     }
   });
 }
 
+let getModifiedPayment = (payments) =>{
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let swatchatha=0;
+  let currentDate=convertDateToEpoch(new Date());
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = Math.round((tax+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
+
+  return payments;
+}
 
 export const download = (receiptQueryString, mode = "download") => {
   const FETCHRECEIPT = {
@@ -524,6 +622,7 @@ export const download = (receiptQueryString, mode = "download") => {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       let queryStr = {};
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT'){
+       payloadReceiptDetails.Payments=getModifiedPayment(payloadReceiptDetails.Payments);
        queryStr = [
         { key: "key", value: "consolidatedreceipt" },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
@@ -560,4 +659,31 @@ export const download = (receiptQueryString, mode = "download") => {
   } catch (exception) {
     alert('Some Error Occured while downloading Receipt!');
   }
+}
+
+
+export const downloadBill = async (consumerCode ,tenantId) => {
+  const searchCriteria = {
+    consumerCode ,
+    tenantId
+  }
+  const FETCHBILL={
+    GET:{
+      URL:"egov-searcher/bill-genie/billswithaddranduser/_get",
+      ACTION: "_get",
+    }
+  }
+  const DOWNLOADRECEIPT = {
+      GET: {
+          URL: "/pdf-service/v1/_create",
+          ACTION: "_get",
+      },
+  };
+  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const queryStr = [
+            { key: "key", value: "consolidatedbill" },
+            { key: "tenantId", value: "pb" }
+        ]
+  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
 }

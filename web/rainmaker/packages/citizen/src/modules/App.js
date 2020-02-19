@@ -5,6 +5,7 @@ import { Toast } from "components";
 import { addBodyClass } from "egov-ui-kit/utils/commons";
 import { fetchCurrentLocation, fetchLocalizationLabel, toggleSnackbarAndSetText, setRoute, setPreviousRoute } from "egov-ui-kit/redux/app/actions";
 import { fetchMDMSData } from "egov-ui-kit/redux/common/actions";
+import { logout } from "egov-ui-kit/redux/auth/actions";
 import Router from "./Router";
 import commonConfig from "config/common";
 import redirectionLink from "egov-ui-kit/config/smsRedirectionLinks";
@@ -15,6 +16,7 @@ import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";
 import "./app.css";
+import get from "lodash/get"
 
 class App extends Component {
   constructor(props) {
@@ -76,14 +78,29 @@ class App extends Component {
   };
 
   handleSMSLinks = () => {
-    const { authenticated, setPreviousRoute, setRoute } = this.props;
+    const { authenticated, setPreviousRoute, setRoute, userInfo,logout } = this.props;
     const { href } = window.location;
-    if (!authenticated) {
+    const mobileNumber = getQueryArg(href,"mobileNo");
+    const citizenMobileNo = get(userInfo, "mobileNumber");
+
+    if(authenticated){
+      if(mobileNumber === citizenMobileNo){
+        setRoute(redirectionLink(href));
+      }else{
+        logout()
+        setRoute("/user/otp?smsLink=true");
+       // setPreviousRoute(redirectionLink(href));
+      } 
+    }else{
       setRoute("/user/otp?smsLink=true");
       setPreviousRoute(redirectionLink(href));
-    } else {
-      setRoute(redirectionLink(href));
     }
+    // if (!authenticated) {
+    //   setRoute("/user/otp?smsLink=true");
+    //   setPreviousRoute(redirectionLink(href));
+    // } else {
+    //   setRoute(redirectionLink(href));
+    // }
   };
 
   componentWillReceiveProps(nextProps) {
@@ -93,10 +110,10 @@ class App extends Component {
       history.push(nextRoute);
       setRoute("");
     }
-    const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("whitelisted");
+    const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("openlink");
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
 
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isPrivacyPolicy && !isWithoutAuthSelfRedirect) {
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }
@@ -115,7 +132,7 @@ class App extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { app, auth, common } = state;
-  const { authenticated } = auth || false;
+  const { authenticated,userInfo,token } = auth || false;
   const { route, toast } = app;
   const { spinner } = common;
   const { stateInfoById } = common || [];
@@ -139,6 +156,8 @@ const mapStateToProps = (state, ownProps) => {
     hasLocalisation,
     defaultUrl,
     authenticated,
+    userInfo,
+    token
   };
 };
 
@@ -151,6 +170,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchCurrentLocation: () => dispatch(fetchCurrentLocation()),
     setRoute: (route) => dispatch(setRoute(route)),
     setPreviousRoute: (route) => dispatch(setPreviousRoute(route)),
+    logout: () => dispatch(logout())
   };
 };
 

@@ -2,7 +2,7 @@ import { sortDropdown } from "egov-ui-kit/utils/PTCommon";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import { removeForm ,setFieldProperty} from "egov-ui-kit/redux/form/actions";
 import { removeFormKey } from "./utils/removeFloors";
-import { prepareDropDownData } from "./utils/reusableFields";
+import { prepareDropDownData,floorUtilFunction} from "./utils/reusableFields";
 import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
@@ -63,13 +63,26 @@ const formConfig = {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertyType", field.value));
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertySubType", null));
         }
+        if (field.value==="VACANT") {
+          dispatch(setFieldProperty("basicInformation", "datePicker", "hideField", true));
+        }
+        else {
+          dispatch(setFieldProperty("basicInformation", "datePicker", "hideField", false));
+        }
+        if (field.value==="INDEPENDENTPROPERTY") {
+          dispatch(prepareFormData("Properties[0].propertyDetails[0].units[0].floorNo", 1));
+          floorUtilFunction({field:{value:1}, dispatch, state});
+        }
+        else {
+          localStorageSet("previousFloorNo", -1);
+        }
       },
       dropDownData: [],
     },
 
     datePicker:{
       id:"constructionyear",
-      jsonPath: "Properties[0].propertyDetails[0].units[0].constructionYear",
+      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.constructionYear",
       type:"date",
       className:"constructionYearLabel",
       floatingLabelText: "PT_ASSESMENT_INFO_CONSTRUCTION_DATE",
@@ -78,7 +91,7 @@ const formConfig = {
       fullWidth:true,
       required:true,
       hintText:"PT_COMMONS_SELECT_PLACEHOLDER",
-      disabled:false,
+      disabled:false
     }
   },
   action: "",
@@ -97,6 +110,13 @@ const formConfig = {
       masterOne = get(state, "common.generalMDMSDataById.PropertyType");
       masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
+      const propertyType=get(state,"common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+      if (propertyType && propertyType==="VACANT") {
+        set(action, "form.fields.datePicker.hideField", true);
+      }
+      else {
+        set(action, "form.fields.datePicker.hideField", false);
+      }
       return action;
     } catch (e) {
       console.log(e);

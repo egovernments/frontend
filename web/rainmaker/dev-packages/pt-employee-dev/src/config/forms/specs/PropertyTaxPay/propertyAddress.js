@@ -106,6 +106,24 @@ const formConfig = {
                   },
                   {
                     name: "UsageCategorySubMinor"
+                  },
+                  {
+                    name: "ConstructionType",
+                  },
+                  {
+                    name: "Rebate",
+                  },
+                  {
+                    name: "Interest",
+                  },
+                  {
+                    name: "FireCess",
+                  },
+                  {
+                    name: "RoadType",
+                  },
+                  {
+                    name: "Thana",
                   }
                 ]
               }
@@ -125,9 +143,23 @@ const formConfig = {
             "UsageCategoryDetail",
             "UsageCategoryMajor",
             "UsageCategoryMinor",
-            "UsageCategorySubMinor"
+            "UsageCategorySubMinor",
+            "ConstructionType",
+            "Rebate",
+            "Penalty",
+            "Interest",
+            "FireCess",
+            "RoadType",
+            "Thana"
           ])
         );
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       }
     },
     ...dummy,
@@ -141,10 +173,10 @@ const formConfig = {
     ...thana,
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
+      type: "textfield",
       className: "pt-old-pid-text-field",
       text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",

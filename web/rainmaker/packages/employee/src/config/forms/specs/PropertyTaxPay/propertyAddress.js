@@ -62,42 +62,60 @@ const formConfig = {
                 moduleName: "PropertyTax",
                 masterDetails: [
                   {
-                    name: "Floor",
+                    name: "Floor"
                   },
                   {
-                    name: "OccupancyType",
+                    name: "OccupancyType"
                   },
                   {
-                    name: "OwnerShipCategory",
+                    name: "OwnerShipCategory"
                   },
                   {
-                    name: "OwnerType",
+                    name: "OwnerType"
                   },
                   {
-                    name: "PropertySubType",
+                    name: "PropertySubType"
                   },
                   {
-                    name: "PropertyType",
+                    name: "PropertyType"
                   },
                   {
-                    name: "SubOwnerShipCategory",
+                    name: "SubOwnerShipCategory"
                   },
                   {
-                    name: "UsageCategoryDetail",
+                    name: "UsageCategoryDetail"
                   },
                   {
-                    name: "UsageCategoryMajor",
+                    name: "UsageCategoryMajor"
                   },
                   {
-                    name: "UsageCategoryMinor",
+                    name: "UsageCategoryMinor"
                   },
                   {
-                    name: "UsageCategorySubMinor",
+                    name: "UsageCategorySubMinor"
                   },
-                ],
-              },
-            ],
-          },
+                  {
+                    name: "ConstructionType",
+                  },
+                  {
+                    name: "Rebate",
+                  },
+                  {
+                    name: "Interest",
+                  },
+                  {
+                    name: "FireCess",
+                  },
+                  {
+                    name: "RoadType",
+                  },
+                  {
+                    name: "Thana",
+                  }
+                ]
+              }
+            ]
+          }
         };
 
         dispatch(
@@ -113,8 +131,22 @@ const formConfig = {
             "UsageCategoryMajor",
             "UsageCategoryMinor",
             "UsageCategorySubMinor",
+            "ConstructionType",
+            "Rebate",
+            "Penalty",
+            "Interest",
+            "FireCess",
+            "RoadType",
+            "Thana"
           ])
         );
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       },
       beforeFieldChange: ({ action, dispatch, state }) => {
         if (get(state, "common.prepareFormData.PropertiesTemp[0].address.city") !== action.value) {
@@ -132,10 +164,10 @@ const formConfig = {
     ...pincode,
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
+      type: "textfield",
       className: "pt-old-pid-text-field",
       text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
@@ -190,6 +222,8 @@ const formConfig = {
       });
       console.log("thanaData------->>>",thanaData)
       dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
+      dispatch(setFieldProperty("propertyAddress", "roadType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
 
     const { PT } = citiesByModule || {};
     if (PT) {

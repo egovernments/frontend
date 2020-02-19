@@ -217,35 +217,33 @@ class DocumentList extends Component {
                     {document.required && (
                       <sup style={{ color: "#E54D42" }}>*</sup>
                     )}
-                    {
-                      document.statement && <Typography variant="caption">
-                        <LabelContainer
-                          labelName={document.statement}
-                          labelKey={document.statement}
-                        />
-                      {/* {document.statement} */}
-                      </Typography>
-                    }
-                      <Typography variant="caption">
-                        <LabelContainer
-                          labelName={description.labelName}
-                          labelKey={description.labelKey}
-                        />
-                        {/* {description} */}
-                      </Typography>
+                    {/* <Typography variant="caption">
+                      <LabelContainer
+                        labelName={document.statement}
+                        labelKey={document.statement}
+                      />
+                      
+                    </Typography> */}
+                    <Typography variant="caption">
+                      <LabelContainer
+                        labelName={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelName : description.labelName}
+                        labelKey={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelKey : description.labelKey}
+                      />
+                      {/* {description} */}
+                    </Typography>
                   </Grid>
                   <Grid item={true} xs={12} sm={5} align="right">
                     <UploadSingleFile
                       classes={this.props.classes}
                       id={`upload-button-${key}`}
                       handleFileUpload={e =>
-                        handleFileUpload(e, this.handleDocument, this.props)
+                        handleFileUpload(e, this.handleDocument, this.props, document.name)
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
                       removeDocument={() => this.removeDocument(key)}
                       documents={this.state.uploadedDocuments[key]}
                       onButtonClick={() => this.onUploadClick(key)}
-                      inputProps={this.props.inputProps}
+                      inputProps={document.name == "OWNERPHOTO" ? this.props.imageProps : this.props.inputProps}
                       buttonLabel={this.props.buttonLabel}
                     />
                   </Grid>
