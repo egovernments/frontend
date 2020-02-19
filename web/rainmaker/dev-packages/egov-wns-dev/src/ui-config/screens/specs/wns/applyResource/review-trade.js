@@ -5,6 +5,7 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 
 const getHeader = label => {
   return {
@@ -88,7 +89,7 @@ export const getReviewConnectionDetails = (isEditable = true) => {
     viewOne: getPropertyDetails,
     viewTwo: propertyLocationDetails,
     viewThree: propertyOwnerDetails,
-    viewFour: connectionDetails,
+    viewFour: getConnectionDetails(),
   });
 };
 
@@ -330,58 +331,3 @@ const propertyOwnerDetails = {
   type: "array"
 }
 
-const connectionDetails = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "common-div-css search-preview",
-    scheama: getCommonGrayCard({
-      div4: connectionDetailsHeader,
-      connectionDetailsFeilds: getCommonContainer({
-        taskApplicationType: getLabelWithValue(
-          {
-            labelKey: "WS_APPLY_FOR"
-          },
-          {
-            jsonPath: "WaterConnection[0].service",
-          }
-        ),
-        taskOldConsumerNumber: getLabelWithValue(
-          {
-            labelKey: "WS_TASK_DETAILS_OLD_CONSUMER_NO"
-          },
-          { jsonPath: "WaterConnection[0].oldConnectionNo" }
-        ),
-        taskNumberOfTapsPropsed: getLabelWithValue(
-          {
-            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
-          },
-          {
-            jsonPath: "WaterConnection[0].proposedTaps",
-          }
-        ),
-        taskPipeSizeProposed: getLabelWithValue(
-          {
-            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
-          },
-          { jsonPath: "WaterConnection[0].proposedPipeSize" }
-        ),
-        // taskNoOfClosets: getLabelWithValue(
-        //   {
-        //     labelName: "No. of water closets proposed",
-        //     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS"
-        //   },
-        //   { jsonPath: "WaterConnection[0].pipeSize" }
-        // ),
-      })
-    }),
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "WaterConnection[0]",
-    prefixSourceJsonPath:
-      "children.cardContent.children.getConnectionContainer.children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
-};
