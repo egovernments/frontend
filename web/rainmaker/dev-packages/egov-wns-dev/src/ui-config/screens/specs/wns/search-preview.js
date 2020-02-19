@@ -466,7 +466,7 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: "md",
-        screenKey: "search-preview"
+        screenKey: "search-preview",
       }
     }
   }
