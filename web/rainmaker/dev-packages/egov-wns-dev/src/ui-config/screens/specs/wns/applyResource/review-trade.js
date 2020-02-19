@@ -31,10 +31,6 @@ export const propertyLocationDetailsHeader = getHeader({
   labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
 });
 
-export const propertyOwnerDetailsHeader = getHeader({
-  labelKey: "WS_COMMON_PROP_OWN_DETAIL"
-});
-
 export const connectionDetailsHeader = getHeader({
   labelKey: "WS_COMMON_CONNECTION_DETAILS"
 });
