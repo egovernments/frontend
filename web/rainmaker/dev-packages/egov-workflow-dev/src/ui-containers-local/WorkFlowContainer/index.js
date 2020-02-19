@@ -93,6 +93,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=forward&status=success";
       case "MARK":
         return "purpose=mark&status=success";
+      case "VERIFY":
+        return "purpose=verify&status=success";
       case "REJECT":
         return "purpose=application&status=rejected";
       case "CANCEL":
@@ -185,7 +187,7 @@ class WorkFlowContainer extends React.Component {
       if (payload) {
         let path = "";
 
-        if(moduleName === "PT.CREATE"){
+        if(moduleName == "PT.CREATE"||moduleName == "ASMT"){
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
           )}&applicationNumber=${ get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
