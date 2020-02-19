@@ -2,18 +2,6 @@ import { prepareFormData, getTenantForLatLng } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
-const updateComplaintStatus = (state, form) => {
-  const formData = prepareFormData(form);
-  const serviceRequestId = decodeURIComponent(window.location.pathname.split("/").pop());
-  const complaint = state.complaints.byId[serviceRequestId];
-  if (!formData.services) {
-    formData.services = [];
-    formData.services[0] = complaint;
-  } else {
-    formData.services[0] = { ...formData.services[0], ...complaint };
-  }
-  return formData;
-};
 
 const filterObjByKey = (obj, predicate) => {
   return Object.keys(obj)
@@ -23,40 +11,7 @@ const filterObjByKey = (obj, predicate) => {
 
 const transformer = (formKey, form = {}, state = {}) => {
   const transformers = {
-    assignComplaint: () => {
-      const formData = prepareFormData(form);
-      const serviceRequestId = decodeURIComponent(window.location.pathname.split("/").pop());
-      const serviceData = state.complaints.byId[serviceRequestId];
-      var filteredServiceData = filterObjByKey(serviceData, (key) => key !== "actions");
-      if (!formData.services) formData.services = [];
-      formData.services[0] = filteredServiceData;
-      return formData;
-    },
 
-    comment: () => {
-      const formData = prepareFormData(form);
-      const serviceRequestId = decodeURIComponent(window.location.pathname.split("/").pop());
-      const serviceData = state.complaints.byId[serviceRequestId];
-      var filteredServiceData = filterObjByKey(serviceData, (key) => key !== "actions");
-      if (!formData.services) formData.services = [];
-      formData.services[0] = filteredServiceData;
-      return formData;
-    },
-    requestReassign: () => {
-      return updateComplaintStatus(state, form);
-    },
-    reopenComplaint: () => {
-      return updateComplaintStatus(state, form);
-    },
-    feedback: () => {
-      return updateComplaintStatus(state, form);
-    },
-    rejectComplaint: () => {
-      return updateComplaintStatus(state, form);
-    },
-    complaintResolved: () => {
-      return updateComplaintStatus(state, form);
-    },
     profile: () => {
       const { fields } = form;
       let { userInfo: user } = state.auth;
@@ -130,31 +85,6 @@ const transformer = (formKey, form = {}, state = {}) => {
       formData.tenantId = tenantId;
       formData.username = username;
       formData.type = type;
-      return formData;
-    },
-    complaint: async () => {
-      const formData = prepareFormData(form);
-      const userInfo = getUserInfo();
-      let userRole = null;
-      try {
-        const { phone } = form.fields;
-        userRole = JSON.parse(userInfo).roles[0].code;
-        formData.services[0].source = userRole === "CSR" ? "ivr" : "";
-        formData.services[0].phone = phone.value;
-      } catch (error) {}
-
-      try {
-        const { latitude, longitude, city } = form.fields;
-        let tenantId = "";
-        if (latitude.value) {
-          tenantId = await getTenantForLatLng(latitude.value, longitude.value);
-        } else {
-          tenantId = city.value && city.value;
-        }
-        formData.services[0].tenantId = tenantId;
-      } catch (error) {
-        throw new Error(error.message);
-      }
       return formData;
     },
   };

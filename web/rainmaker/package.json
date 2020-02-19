@@ -10,8 +10,10 @@
     "reset": "yarn run clean && yarn i",
     "dev:citizen": "yarn run build-css-citizen && cd packages/citizen && yarn start",
     "dev:employee": "yarn run build-css-employee && cd packages/employee && set PORT=3006 && yarn start",
+    "dev:employee2": "cd packages/employee2 && set PORT=3009 && yarn start",
     "prod:citizen": "yarn run go_citizen && cd packages/citizen && yarn run build",
     "prod:employee": "yarn run go_employee && cd packages/employee && yarn run build",
+    "transpile-employee-wrapper": "run-p egov-ui-kit egov-ui-framework",
     "transpile-citizen-modules": "run-p pgr-citizen pt-citizen egov-noc egov-abg",
     "transpile-common-modules": "run-p egov-ui-kit egov-ui-framework egov-workflow egov-tradelicence egov-uc egov-pt egov-boilerplate egov-common egov-bpa egov-wns",
     "transpile-employee-modules": "run-p pgr-employee pt-employee egov-hrms egov-noc egov-abg",
@@ -68,6 +70,7 @@
     "egov-wns": "babel dev-packages/egov-wns-dev/src --out-dir packages/lib/egov-wns --copy-files",
     "go": "yarn && yarn run build-css-employee && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules && yarn run transpile-employee-modules && lerna bootstrap",
     "go_employee": "yarn && yarn run build-css-employee  && yarn run build-css-common && yarn run transpile-common-modules  && yarn run transpile-employee-modules && lerna bootstrap  --ignore egov-ui-framework-core --ignore egov-ui-kit-dev --ignore RNativeApp --ignore rainmaker-citizen --ignore pgr-citizen --ignore pt-citizen  --ignore egov-hrms-dev  --ignore egov-tradelicence-dev --ignore egov-uc-dev --ignore egov-pt-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-abg-dev --ignore egov-noc-dev --ignore egov-boilerplate-dev --ignore egov-common-dev --ignore egov-bpa-dev --ignore egov-wns-dev",
+    "go_employee2": "yarn && yarn run build-css-egov-ui-kit && yarn run transpile-employee-wrapper  && lerna bootstrap  --ignore egov-ui-framework-core --ignore egov-ui-kit-dev --ignore RNativeApp --ignore rainmaker-citizen --ignore pgr-citizen --ignore pt-citizen  --ignore egov-hrms-dev  --ignore egov-tradelicence-dev --ignore egov-uc-dev --ignore egov-pt-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-abg-dev --ignore egov-noc-dev --ignore egov-boilerplate-dev --ignore egov-common-dev --ignore egov-bpa-dev --ignore egov-wns-dev",    
     "go_citizen": "yarn  && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules  && lerna bootstrap  --ignore egov-ui-framework-core --ignore egov-ui-kit-dev --ignore RNativeApp --ignore rainmaker-employee --ignore pgr-employee --ignore pt-employee --ignore egov-hrms-dev  --ignore egov-tradelicence-dev --ignore egov-uc-dev --ignore egov-pt-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-abg-dev --ignore egov-noc-dev --ignore egov-boilerplate-dev --ignore egov-common-dev --ignore egov-bpa-dev --ignore egov-wns-dev --ignore egov-hrms  "
   },
   "devDependencies": {
