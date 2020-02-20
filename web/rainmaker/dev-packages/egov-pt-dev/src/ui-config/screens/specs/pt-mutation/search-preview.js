@@ -143,42 +143,42 @@ const setDownloadMenu = (state, dispatch) => {
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
       generatePdf(state, dispatch, "certificate_download");
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
       generatePdf(state, dispatch, "certificate_print");
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
     link: () => {
       generatePdf(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
     link: () => {
       generatePdf(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
+    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
     link: () => {
       generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
+    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
     link: () => {
       generatePdf(state, dispatch, "application_print");
     },
@@ -215,7 +215,7 @@ const setDownloadMenu = (state, dispatch) => {
   dispatch(
     handleField(
       "search-preview",
-      "components.div.children.headerDiv.children.header.children.downloadMenu",
+      "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.downloadMenu",
       "props.data.menu",
       downloadMenu
     )
@@ -223,7 +223,7 @@ const setDownloadMenu = (state, dispatch) => {
   dispatch(
     handleField(
       "search-preview",
-      "components.div.children.headerDiv.children.header.children.printMenu",
+      "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.printMenu",
       "props.data.menu",
       printMenu
     )
