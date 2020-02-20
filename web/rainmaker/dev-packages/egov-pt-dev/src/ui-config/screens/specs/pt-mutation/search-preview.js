@@ -26,10 +26,12 @@ import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import {
-  transferorSummary,transferorInstitutionSummary
+  transferorSummary,
+  transferorInstitutionSummary
 } from "./summaryResource/transferorSummary";
 import {
-  transfereeSummary,transfereeInstitutionSummary
+  transfereeSummary,
+  transfereeInstitutionSummary
 } from "./summaryResource/transfereeSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
@@ -47,53 +49,12 @@ const titlebar = getCommonContainer({
     props: {
       number: getQueryArg(window.location.href, "applicationNumber"),
       label: {
-          labelValue: "Application No.",
-          labelKey: "PT_MUTATION_APPLICATION_NO"
+        labelValue: "Application No.",
+        labelKey: "PT_MUTATION_APPLICATION_NO"
       }
-  }
-  },
-    rightdiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        style: { textAlign: "right", display: "flex" }
-      },
-      children: {
-        downloadMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
-               leftIcon: "cloud_download",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
-              menu: []
-            }
-          }
-        },
-        printMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
-              leftIcon: "print",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
-              menu: []
-            }
-          }
-        }
-
-      },
-      // gridDefination: {
-      //   xs: 12,
-      //   sm: 6
-      // }
     }
+  }
+      
   
   // downloadMenu: {
   //   uiFramework: "custom-atoms",
@@ -123,63 +84,7 @@ const titlebar = getCommonContainer({
   // }
 });
 
-const prepareDocumentsView = async (state, dispatch) => {
-  let documentsPreview = [];
 
-  // Get all documents from response
-  let firenoc = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0]",
-    {}
-  );
-  let buildingDocuments = jp.query(
-    firenoc,
-    "$.fireNOCDetails.buildings.*.applicationDocuments.*"
-  );
-  let applicantDocuments = jp.query(
-    firenoc,
-    "$.fireNOCDetails.applicantDetails.additionalDetail.documents.*"
-  );
-  let otherDocuments = jp.query(
-    firenoc,
-    "$.fireNOCDetails.additionalDetail.documents.*"
-  );
-  let allDocuments = [
-    ...buildingDocuments,
-    ...applicantDocuments,
-    ...otherDocuments
-  ];
-
-  allDocuments.forEach(doc => {
-    documentsPreview.push({
-      title: getTransformedLocale(doc.documentType),
-      fileStoreId: doc.fileStoreId,
-      linkText: "View"
-    });
-  });
-  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-  let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-  documentsPreview = documentsPreview.map((doc, index) => {
-    doc["link"] =
-      (fileUrls &&
-        fileUrls[doc.fileStoreId] &&
-        getFileUrl(fileUrls[doc.fileStoreId])) ||
-      "";
-    doc["name"] =
-      (fileUrls[doc.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[doc.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
-      `Document - ${index + 1}`;
-    return doc;
-  });
-  dispatch(prepareFinalObject("documentsPreview", documentsPreview));
-};
 
 const prepareUoms = (state, dispatch) => {
   let buildings = get(
@@ -208,9 +113,7 @@ const prepareUoms = (state, dispatch) => {
           labelKey: `NOC_PROPERTY_DETAILS_${item.code}_LABEL`
         },
         {
-          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${
-            item.code
-          }`
+          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${item.code}`
         }
       );
 
@@ -328,6 +231,43 @@ const setDownloadMenu = (state, dispatch) => {
   /** END */
 };
 
+const prepareDocumentsView = async (state, dispatch) => {
+  let documentsPreview = [];
+
+  let allDocuments = 
+    state.screenConfiguration.preparedFinalObject.Property.documents;
+
+  allDocuments.forEach(doc => {
+    documentsPreview.push({
+      title: getTransformedLocale(doc.documentType),
+      fileStoreId: doc.fileStoreId,
+      linkText: "View"
+    });
+  });
+  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+  documentsPreview = documentsPreview.map((doc, index) => {
+    doc["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
+      "";
+    doc["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          getFileUrl(fileUrls[doc.fileStoreId])
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+    return doc;
+  });
+  dispatch(prepareFinalObject("documentsUploadRedux", documentsPreview));
+};
+
 const setSearchResponse = async (
   state,
   dispatch,
@@ -342,32 +282,42 @@ const setSearchResponse = async (
     { key: "acknowledgementIds", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
-  const properties=get(response, "Properties", []);
-  let property=properties&&properties.length>0&&properties[0]||{};
+  const properties = get(response, "Properties", []);
+  let property = (properties && properties.length > 0 && properties[0]) || {};
 
+  if (!property.workflow) {
+    let workflow = {
+      id: null,
+      tenantId: getQueryArg(window.location.href, "tenantId"),
+      businessService: "PT.MUTATION",
+      businessId: getQueryArg(window.location.href, "applicationNumber"),
+      action: "",
+      moduleName: "PT",
+      state: null,
+      comment: null,
+      documents: null,
+      assignes: null
+    };
+    property.workflow = workflow;
+  }
 
-  if(!property.workflow){
-    let workflow={
-      "id": null,
-      "tenantId":  getQueryArg(
-        window.location.href,
-        "tenantId"
-      ),
-      "businessService":"PT.MUTATION",
-      "businessId": getQueryArg(
-        window.location.href,
-        "applicationNumber"
-      ),
-      "action": "",
-      "moduleName": "PT",
-      "state": null,
-      "comment": null,
-      "documents": null,
-      "assignes": null
+  if (property && property.owners && property.owners.length > 1) {
+    let ownersTemp = [];
+    let owners = [];
+    property.owners.map(owner => {
+      if (owner.status == "INACTIVE") {
+        ownersTemp.push(owner);
+      } else {
+        owners.push(owner);
+      }
+    });
+
+    property.owners = owners;
+    property.ownersTemp = ownersTemp;
   }
-  property.workflow=workflow;
-  }
-  dispatch(prepareFinalObject("Property",property));
+
+  dispatch(prepareFinalObject("Property", property));
+  dispatch(prepareFinalObject("documentsUploadRedux",property.documents));
 
   // Set Institution/Applicant info card visibility
   if (
@@ -531,7 +481,7 @@ const screenConfig = {
           // transferorInstitutionSummary:transferorInstitutionSummary,
           transfereeSummary: transfereeSummary,
           // transfereeInstitutionSummary: transfereeInstitutionSummary,
-          registrationSummary:registrationSummary,
+          registrationSummary: registrationSummary,
           documentsSummary: documentsSummary
         }),
         citizenFooter:
