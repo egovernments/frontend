@@ -34,6 +34,7 @@ import {
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import {registrationSummary} from'./summaryResource/registrationSummary';
+import { downloadPrintContainer } from "./functions";
 const titlebar = getCommonContainer({
   header: getCommonHeader({
     labelName: "Application Details",
@@ -51,6 +52,49 @@ const titlebar = getCommonContainer({
       }
   }
   },
+    rightdiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+        downloadMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+               leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              menu: []
+            }
+          }
+        },
+        printMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              menu: []
+            }
+          }
+        }
+
+      },
+      // gridDefination: {
+      //   xs: 12,
+      //   sm: 6
+      // }
+    }
+  
   // downloadMenu: {
   //   uiFramework: "custom-atoms",
   //   componentPath: "MenuButton",
@@ -188,10 +232,11 @@ const prepareUoms = (state, dispatch) => {
 
 const setDownloadMenu = (state, dispatch) => {
   /** MenuButton data based on status */
-  let status = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
-  );
+  // let status = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
+  // );
+  let status="APPROVED";
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -264,22 +309,22 @@ const setDownloadMenu = (state, dispatch) => {
     default:
       break;
   }
-  // dispatch(
-  //   handleField(
-  //     "search-preview",
-  //     "components.div.children.headerDiv.children.header.children.downloadMenu",
-  //     "props.data.menu",
-  //     downloadMenu
-  //   )
-  // );
-  // dispatch(
-  //   handleField(
-  //     "search-preview",
-  //     "components.div.children.headerDiv.children.header.children.printMenu",
-  //     "props.data.menu",
-  //     printMenu
-  //   )
-  // );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header.children.downloadMenu",
+      "props.data.menu",
+      downloadMenu
+    )
+  );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header.children.printMenu",
+      "props.data.menu",
+      printMenu
+    )
+  );
   /** END */
 };
 
@@ -418,6 +463,20 @@ const screenConfig = {
     //   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
     //   false
     // );
+    const printCont = downloadPrintContainer(
+      action,
+      state,
+      dispatch,
+      status,
+      applicationNumber,
+      tenantId
+    );
+
+    set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          printCont
+        );
 
     return action;
   },
@@ -429,16 +488,29 @@ const screenConfig = {
         className: "common-div-css"
       },
       children: {
-        headerDiv: {
+        headerDiv:{
           uiFramework: "custom-atoms",
           componentPath: "Container",
           children: {
-            header: {
+            header1: {
               gridDefination: {
                 xs: 12,
-                sm: 10
+                sm: 8
               },
-              ...titlebar
+             ...titlebar
+            },
+            helpSection: {
+              uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end" }
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                align: "right"
+              }
             }
           }
         },
