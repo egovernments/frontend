@@ -185,7 +185,7 @@ class EnhancedTable extends React.Component {
                 ? 'right' : 'left'}
               component='td' scope='row' data-title={d}>
               {
-                d === this.props.column ? <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d]}</span> : n[d]
+                d === this.props.column ? <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span> : (typeof n[d] === 'object')?n[d][1]:n[d]
 
               }
 

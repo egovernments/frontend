@@ -115,12 +115,13 @@ class TableChart extends Component {
 
   applyFilter = (visualcode, drillCode, drilfilters,tabName,rowData, event) => {
     let tempValue = rowData[drilfilters.column];
+    tempValue = (typeof tempValue === 'object')?tempValue[0]:tempValue;
     // need to change now its hack.
-    if(drilfilters.column != 'DDRs' && drilfilters.key == 'tenantId' && tempValue.split('.').length == 1){
+    /*if(drilfilters.column != 'DDRs' && drilfilters.key == 'tenantId' && tempValue.split('.').length == 1){
       let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
 
       tempValue = tenent + '.'+tempValue.toLowerCase();
-    }
+    }*/
     tabName = tabName.toUpperCase();
     let tempArr = [visualcode,drillCode,drilfilters,tabName,tempValue];
     let filterList = this.state.filterList;
@@ -219,7 +220,7 @@ class TableChart extends Component {
               if (!text) {
                 text = a.label;
               }
-              return { [a.name]: text }
+              return { [a.name]: [a.label,text] }
             } else {
               let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
               // console.log(typeof(val))
