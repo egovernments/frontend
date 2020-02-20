@@ -175,8 +175,8 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Institution Details",
-          labelKey: "PT_INSTITUTION_DETAILS_HEADER"
+          labelName: "Transferee Details",
+          labelKey: "PT_INSTITUTION_TRANSFEREE_DETAILS_HEADER"
         })
       },
       editSection: {
@@ -248,24 +248,36 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         // }
       }
     ),
-    
-    telephoneNumber: getLabelWithValue(
+    institutionOwnershipType: getLabelWithValue(
       {
-        labelName: "Official Telephone No.",
-        labelKey: "PT_OWNERSHIP_INFO_TEL_NO"
+        labelName: "Type Of Ownership",
+        labelKey: "PT_INSTI_OWNERSHIP_TYPE"
       },
       {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber"
+        jsonPath: "Property.ownershipCategory",
+        // callBack: value => {
+        //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+        // }
       }
     ),
+   
     authorizedPersonName: getLabelWithValue(
       {
         labelName: "Name of Authorized Person",
         labelKey: "PT_OWNERSHIP_INFO_NAME_OF_AUTH"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+        jsonPath: "Property.institutionTemp.name"
+      }
+    ),
+    landlineNumber: getLabelWithValue(
+      {
+        labelName: "Telephone No.",
+        labelKey: "PT_OWNERSHIP_INFO_TEL_NO"
+      },
+      {
+        jsonPath:
+          "Property.institutionTemp.landlineNumber"
       }
     ),
     
@@ -276,19 +288,10 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+          "Property.institutionTemp.mobileNumber"
       }
     ),
-    authorizedEmail: getLabelWithValue(
-      {
-        labelName: "Email of Authorized Person",
-        labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
-      }
-    ),
+    
     officialAddress: getLabelWithValue(
       {
         labelName: "Official Correspondence Address",
@@ -296,7 +299,7 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"
+          "Property.institutionTemp.correspondenceAddress"
       }
     )
   })
