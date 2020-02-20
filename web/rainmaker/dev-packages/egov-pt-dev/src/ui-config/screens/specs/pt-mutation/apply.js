@@ -115,7 +115,7 @@ export const formwizardFirstStep = {
   },
   children: {
     transferorDetails,
-    //transferorInstitutionSummary,
+    transferorInstitutionSummary,
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -143,9 +143,9 @@ export const formwizardThirdStep = {
   children:{
     summary:getCommonCard({  
       transferorSummary: transferorSummary,
-      // transferorInstitutionSummary:transferorInstitutionSummary,
+       transferorInstitutionSummary:transferorInstitutionSummary,
       transfereeSummary: transfereeSummary,
-     //  transfereeInstitutionSummary: transfereeInstitutionSummary,
+       transfereeInstitutionSummary: transfereeInstitutionSummary,
       mutationSummary:mutationSummary,
       registrationSummary:registrationSummary,
       documentsSummary: documentsSummary ,

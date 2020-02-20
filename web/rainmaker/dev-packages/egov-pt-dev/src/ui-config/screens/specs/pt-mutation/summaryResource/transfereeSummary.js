@@ -215,28 +215,40 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
     }
   },
   body: getCommonContainer({
-    institutionType: getLabelWithValue(
-      {
-        labelName: "Institution Type",
-        labelKey: "PT_OWNERSHIP_INFO_NAME_INSTI"
-      },
-      {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-        callBack: value => {
-          return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-        }
-      }
-    ),
     institutionName: getLabelWithValue(
       {
         labelName: "Name of Institution",
-        labelKey: "PT_OWNERSHIP_INFO_TYPE_INSTI"
+        labelKey: "PT_OWNERSHIP_INSTI_NAME"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName"
+          "Property.institutionTemp.institutionName"
       }
     ),
+    designation: getLabelWithValue(
+      {
+        labelName: "Designation",
+        labelKey: "PT_OWNERSHIP_INFO_DESIGNATION"
+      },
+      {
+        jsonPath:
+          "Property.institutionTemp.designation"
+      }
+    ),
+
+    institutionType: getLabelWithValue(
+      {
+        labelName: "Type Of Institution",
+        labelKey: "PT_OWNERSHIP_INSTI_TYPE"
+      },
+      {
+        jsonPath: "Property.institutionTemp.institutionName",
+        // callBack: value => {
+        //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+        // }
+      }
+    ),
+    
     telephoneNumber: getLabelWithValue(
       {
         labelName: "Official Telephone No.",
@@ -256,16 +268,7 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
       }
     ),
-    designation: getLabelWithValue(
-      {
-        labelName: "Designation in Institution",
-        labelKey: "PT_OWNERSHIP_INFO_DESIGNATION"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation"
-      }
-    ),
+    
     mobileNumber: getLabelWithValue(
       {
         labelName: "Mobile No. of Authorized Person",
