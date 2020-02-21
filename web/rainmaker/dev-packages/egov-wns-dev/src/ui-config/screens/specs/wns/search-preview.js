@@ -146,12 +146,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         true
       );
 
-      if (get(data, "Licenses[0].tradeLicenseDetail.verificationDocuments")) {
+      if (get(data, "WaterConnection[0].documents")) {
         await setDocuments(
           data,
-          "Licenses[0].tradeLicenseDetail.verificationDocuments",
+          "WaterConnection[0].documents",
           "LicensesTemp[0].verifyDocData",
-          dispatch, 'TL'
+          dispatch, 'NewWS1'
         );
       } else {
         dispatch(
@@ -290,7 +290,7 @@ export const reviewConnectionDetails = getReviewConnectionDetails(false);
 
 export const reviewOwnerDetails = getReviewOwner(false);
 
-export const reviewDocumentDetails = getReviewDocuments(false, false);
+export const reviewDocumentDetails = getReviewDocuments(false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -478,7 +478,16 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
   let viewBillTooltip = [], estimate;
   if (service === "WATER") {
     let payload = await getSearchResults(queryObjForSearch);
-    payload.WaterConnection[0].service = service
+    payload.WaterConnection[0].service = service;
+
+    // to set documents 
+    await setDocuments(
+      payload,
+      "WaterConnection[0].documents",
+      "DocumentsData",
+      dispatch, "WS"
+    );
+
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
@@ -517,7 +526,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     }
   }
   // if (estimate.Calculation.length > 0) {
-    createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
+  createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
   // }
 };
 
