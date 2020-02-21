@@ -76,7 +76,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].name" || "Property.owners[0].name"
+              "Property.owners[0].name" || "Property.owners[0].name"
             }
           ), ownerFatherHusbandName: getLabelWithValue(
             {
@@ -85,7 +85,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].fatherOrHusbandName" || "Property.owners[0].fatherOrHusbandName"
+              "Property.owners[0].fatherOrHusbandName" || "Property.owners[0].fatherOrHusbandName"
             }
           ),  ownerGender: getLabelWithValue(
             {
@@ -94,7 +94,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].gender" || "Property.owners[0].gender"
+              "Property.owners[0].gender" || "Property.owners[0].gender"
             }
           ), ownerType: getLabelWithValue(
             {
@@ -103,7 +103,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].ownershipCategory" || "Property.owners[0].ownerType"
+              "Property.ownershipCategory" || "Property.owners[0].ownerType"
             }
           ),
           mobileNo: getLabelWithValue(
@@ -113,7 +113,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].mobileNumber" || "Property.owners[0].mobileNumber"
+              "Property.owners[0].mobileNumber" || "Property.owners[0].mobileNumber"
             }
           ),  ownerEmail: getLabelWithValue(
             {
@@ -122,7 +122,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].emailId" || "Property.owners[0].emailId"
+              "Property.owners[0].emailId" || "Property.owners[0].emailId"
             }
           ),       
           ownerDob: getLabelWithValue(
@@ -132,7 +132,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].ownerType" || "Property.owners[0].ownerType",
+              "Property.owners[0].ownerType" || "Property.owners[0].ownerType",
               // callBack: value => {
               //   return convertEpochToDate(value);
               // }
@@ -145,7 +145,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].permanentAddress" || "Property.owners[0].permanentAddress"
+              "Property.owners[0].permanentAddress" || "Property.owners[0].permanentAddress"
             }
           )
         })
@@ -153,7 +153,7 @@ export const transferorSummary = getCommonGrayCard({
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "Properties[0].owners",
+      sourceJsonPath: "Property.owners",
       prefixSourceJsonPath:
         "children.cardContent.children.ownerContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -175,8 +175,8 @@ export const transferorInstitutionSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Institution Details",
-          labelKey: "PT_INSTITUTION_DETAILS_HEADER"
+          labelName: "Transferor Details",
+          labelKey: "PT_INSTITUTION_TRANSFEROR_DETAILS_HEADER"
         })
       },
       editSection: {
@@ -193,17 +193,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
           align: "right"
         },
         children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
+          
         },
         onClickDefination: {
           action: "condition",
@@ -215,36 +205,52 @@ export const transferorInstitutionSummary = getCommonGrayCard({
     }
   },
   body: getCommonContainer({
+    institutionName: getLabelWithValue(
+      {
+        labelName: "Name of Institution",
+        labelKey: "PT_OWNERSHIP_INSTI_NAME"
+      },
+      {
+        jsonPath:
+        "Property.institution.name"
+      }
+    ),
+    
+
+    designation: getLabelWithValue(
+      {
+        labelName: "Designation in Institution",
+        labelKey: "PT_OWNERSHIP_INFO_DESIGNATION"
+      },
+      {
+        jsonPath:
+          "Property.institution.designation"
+      }
+    ),
+
     institutionType: getLabelWithValue(
       {
         labelName: "Institution Type",
-        labelKey: "PT_OWNERSHIP_INFO_NAME_INSTI"
+        labelKey: "PT_OWNERSHIP_INSTI_TYPE"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        jsonPath: "Property.institution.type",
         callBack: value => {
           return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
         }
       }
     ),
-    institutionName: getLabelWithValue(
+
+    institutionOwnershipType: getLabelWithValue(
       {
-        labelName: "Name of Institution",
-        labelKey: "PT_OWNERSHIP_INFO_TYPE_INSTI"
+        labelName: "Type Of Ownership",
+        labelKey: "PT_INSTI_OWNERSHIP_TYPE"
       },
       {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName"
-      }
-    ),
-    telephoneNumber: getLabelWithValue(
-      {
-        labelName: "Official Telephone No.",
-        labelKey: "PT_OWNERSHIP_INFO_TEL_NO"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber"
+        jsonPath: "Property.ownershipCategory",
+        // callBack: value => {
+        //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+        // }
       }
     ),
     authorizedPersonName: getLabelWithValue(
@@ -253,19 +259,22 @@ export const transferorInstitutionSummary = getCommonGrayCard({
         labelKey: "PT_OWNERSHIP_INFO_NAME_OF_AUTH"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+        jsonPath: "Property.institution.nameOfAuthorizedPerson"
       }
     ),
-    designation: getLabelWithValue(
+    
+    
+    telephoneNumber: getLabelWithValue(
       {
-        labelName: "Designation in Institution",
-        labelKey: "PT_OWNERSHIP_INFO_DESIGNATION"
+        labelName: "Official Telephone No.",
+        labelKey: "PT_OWNERSHIP_INFO_TEL_NO"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation"
+          "Property.owners[0].altContactNumber"
       }
     ),
+    
     mobileNumber: getLabelWithValue(
       {
         labelName: "Mobile No. of Authorized Person",
@@ -273,17 +282,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
-      }
-    ),
-    authorizedEmail: getLabelWithValue(
-      {
-        labelName: "Email of Authorized Person",
-        labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+          "Property.owners[0].mobileNumber"
       }
     ),
     officialAddress: getLabelWithValue(
@@ -293,8 +292,19 @@ export const transferorInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"
+          "Property.owners[0].correspondenceAddress"
       }
     )
+    // authorizedEmail: getLabelWithValue(
+    //   {
+    //     labelName: "Email of Authorized Person",
+    //     labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
+    //   },
+    //   {
+    //     jsonPath:
+    //       "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+    //   }
+    // )
+    
   })
 });

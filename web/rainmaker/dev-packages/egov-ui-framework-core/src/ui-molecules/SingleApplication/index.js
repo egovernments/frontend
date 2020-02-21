@@ -14,6 +14,7 @@ import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import orderBy from "lodash/orderBy";
 const styles = {
   card: {
@@ -44,8 +45,8 @@ class SingleApplication extends React.Component {
     }
   };
 
-  onCardClick =  (item) => {
-    const { moduleName } = this.props;
+  onCardClick = async (item) => {
+    const { moduleName, toggleSnackbar } = this.props;
     if (moduleName === "TL") {
       const wfCode = get(item, "workflowCode");
       const businessServiceQueryObject = [
@@ -79,7 +80,6 @@ class SingleApplication extends React.Component {
         }
       } else {
         switch (item.status) {
-          case "Inprogress":
           case "Initiated":
             return `/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
           default:
@@ -87,11 +87,21 @@ class SingleApplication extends React.Component {
         }        
       }
     } else if (moduleName === "PT-MUTATION") {
-      switch (item.status) {
-        case "INITIATED":
-          return `/pt-mutation/apply?propertyId=${item.propertyId}&tenantId=${item.tenantId}`;
-        default:
-          return `/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`;
+      if(item.acknowldgementNumber){
+        const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId)
+        console.log("businessService-----", businessService);
+        if(businessService){
+          navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
+        }else{
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Business service returns empty response!",
+              labelKey: "Business service returns empty response!",
+            },
+            "error"
+          );
+        }
       }
     }
   };
