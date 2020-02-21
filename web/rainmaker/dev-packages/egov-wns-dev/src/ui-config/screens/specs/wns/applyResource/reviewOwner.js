@@ -111,32 +111,36 @@ export const reviewWaterClosets = getLabelWithValue(
 
 export const reviewPlumberProvidedBy = getLabelWithValue(
   {
+    labelName: "Plumber Provided By",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
   },
   {
-    jsonPath: "WaterConnection[0].plumberInfo[0].name"
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
   }
 );
 export const reviewPlumberLicenseNo = getLabelWithValue(
   {
+    labelName: "Plumber License No.",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
   },
   {
-    jsonPath: "WaterConnection[0].plumberInfo[0].licenseNo"
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
   }
 );
 export const reviewPlumberName = getLabelWithValue(
   {
+    labelName: "Plumber Name",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
   },
-  { jsonPath: "WaterConnection[0].plumberInfo[0].name" }
+  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
 
 export const reviewPlumberMobileNo = getLabelWithValue(
   {
+    labelName: "Plumber Mobile No.",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
   },
-  { jsonPath: "WaterConnection[0].plumberInfo[0].mobileNumber" }
+  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
 
 export const reviewRoadType = getLabelWithValue(
@@ -192,7 +196,7 @@ export const reviewInitialMeterReading = getLabelWithValue(
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
 
-export const getReviewOwner = (isEditable = true) => {
+export const reviewOwner = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",

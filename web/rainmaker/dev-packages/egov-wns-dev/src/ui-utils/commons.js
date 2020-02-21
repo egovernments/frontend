@@ -26,6 +26,23 @@ import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
 
+export const pushTheDocsUploadedToRedux = (state, dispatch) => {
+    let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
+    let uploadedDocs = [];
+    if (reduxDocuments !== null && reduxDocuments !== undefined) {
+        Object.keys(reduxDocuments).forEach(key => {
+            if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
+                reduxDocuments[key].documents.forEach(element => {
+                    element.documentType = reduxDocuments[key].documentType;
+                    element.documentCode = reduxDocuments[key].documentCode;
+                    element.status = "ACTIVE"
+                });
+                uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
+                dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
+            }
+        });
+    }
+}
 export const updateTradeDetails = async requestBody => {
     try {
         const payload = await httpRequest(
@@ -391,7 +408,7 @@ export const updatePFOforSearchResults = async (
 
     setApplicationNumberBox(state, dispatch);
 
-    createOwnersBackup(dispatch, payload);
+    // createOwnersBackup(dispatch, payload);
 };
 
 export const getBoundaryData = async (
@@ -657,7 +674,6 @@ export const applyForWaterOrSewerage = async (state, dispatch, status) => {
         proposedTaps: parseInt(queryObject.proposedTaps)
     }
     queryObject = { ...queryObject, ...parsedObject }
-    queryObject.property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties[0]"), "NA", null)));
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
@@ -836,7 +852,7 @@ const setApplicationNumberBox = (state, dispatch) => {
     }
 };
 
-const handleApplicationNumberDisplay = (dispatch, applicationNumber) => {
+export const handleApplicationNumberDisplay = (dispatch, applicationNumber) => {
     dispatch(handleField("apply", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "visible", true));
     dispatch(handleField("apply", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "props.number", applicationNumber));
 }
@@ -1403,3 +1419,50 @@ export const findAndReplace = (obj, oldValue, newValue) => {
     })
     return obj
 }
+
+// api call to calculate water estimate
+export const waterEstimateCalculation = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "ws-calculator/waterCalculator/_estimate",
+            "_estimate",
+            [],
+
+            {
+                isconnectionCalculation: false,
+                CalculationCriteria: queryObject
+            }
+        );
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
+// api call to calculate sewerage estimate
+export const swEstimateCalculation = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "sw-calculator/sewerageCalculator/_estimate",
+            "_estimate",
+            [],
+            {
+                isconnectionCalculation: false,
+                CalculationCriteria: queryObject
+            }
+        );
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
