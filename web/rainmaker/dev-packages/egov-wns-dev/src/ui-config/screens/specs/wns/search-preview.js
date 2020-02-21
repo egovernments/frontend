@@ -255,7 +255,6 @@ const setStatusBasedValue = status => {
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Task Details",
     labelKey: "WS_TASK_DETAILS"
   }),
   applicationNumber: {
@@ -481,12 +480,14 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     payload.WaterConnection[0].service = service;
 
     // to set documents 
-    await setDocuments(
-      payload,
-      "WaterConnection[0].documents",
-      "DocumentsData",
-      dispatch, "WS"
-    );
+    if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
+      await setDocuments(
+        payload,
+        "WaterConnection[0].documents",
+        "DocumentsData",
+        dispatch, "WS"
+      );
+    }
 
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
@@ -525,9 +526,9 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
       }
     }
   }
-  // if (estimate.Calculation.length > 0) {
-  createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
-  // }
+  if (estimate.Calculation.length > 0) {
+    createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
+  }
 };
 
 const processBills = async (data, viewBillTooltip, dispatch) => {
