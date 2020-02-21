@@ -130,30 +130,21 @@ export const togglePlumberFeilds = (onFieldChange, value) => {
   );
 }
 
-export const togglePropertyFeilds = (dispatch, value) => {
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails",
-      "visible",
-      value
-    )
+export const togglePropertyFeilds = (action, value) => {
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails.visible",
+    value
   );
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.Details.visible",
-      "visible",
-      value
-    )
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.Details.visible",
+    value
   );
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
-      "visible",
-      value
-    )
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
+    value
   );
 }
 

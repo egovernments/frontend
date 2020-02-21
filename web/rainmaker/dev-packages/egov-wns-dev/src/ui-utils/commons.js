@@ -4,24 +4,25 @@ import {
     getCheckBoxJsonpath,
     getSafetyNormsJson,
     getHygeneLevelJson,
-    getLocalityHarmedJson} from "../ui-config/screens/specs/utils";
+    getLocalityHarmedJson
+} from "../ui-config/screens/specs/utils";
 import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTranslatedLabel, updateDropDowns, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getQueryArg, getFileUrlFromAPI, getFileUrl, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, getFileUrl, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
 
-export const pushTheDocsUploadedToRedux = (state, dispatch) => {
+export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
-        Object.keys(reduxDocuments).forEach(key => {
+        Object.keys(reduxDocuments).forEach(async key => {
             if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
                 reduxDocuments[key].documents.forEach(element => {
                     element.documentType = reduxDocuments[key].documentCode;
@@ -30,6 +31,8 @@ export const pushTheDocsUploadedToRedux = (state, dispatch) => {
                 });
                 uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
                 dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
+                let docs = get(state, "screenConfiguration.preparedFinalObject");
+                await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
                 dispatch(prepareFinalObject("applyScreen", applyScreenObject));
             }
@@ -580,6 +583,7 @@ const applyForWater = async (state, dispatch, status, method, queryObject) => {
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
         } else {
             set(queryObject, "action", "INITIATE")
+            queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
         }
@@ -608,6 +612,7 @@ const applyForSewerage = async (state, dispatch, status, method, queryObject) =>
             dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnection));
         } else {
             set(queryObject, "action", "INITIATE");
+            queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
         }
@@ -651,6 +656,7 @@ const applyForBothWaterAndSewerage = async (state, dispatch, status, method, que
         } else {
             try {
                 set(queryObject, "action", "INITIATE");
+                queryObject = findAndReplace(queryObject, "NA", null);
                 response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: queryObject });
                 const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
                 dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));

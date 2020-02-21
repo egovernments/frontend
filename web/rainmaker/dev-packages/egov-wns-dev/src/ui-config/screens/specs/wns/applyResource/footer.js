@@ -1,6 +1,6 @@
 import {
   dispatchMultipleFieldChangeAction,
-  getLabel
+  getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -10,7 +10,6 @@ import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
-  createUpdateNocApplication,
   prepareDocumentsUploadData,
   applyForWaterOrSewerage,
   pushTheDocsUploadedToRedux,
@@ -161,9 +160,11 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-    pushTheDocsUploadedToRedux(state, dispatch);
+    await pushTheDocsUploadedToRedux(state, dispatch);
   }
-
+  let payload = get(state.screenConfiguration.preparedFinalObject, "applyScreen", {});
+  console.log('payload')
+  console.log(payload)
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
     if (getQueryArg(window.location.href, "action") === "edit") {
       setReviewPageRoute(state, dispatch);
@@ -274,7 +275,6 @@ const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormVa
       let SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
       let combinedArray = WaterConnection.concat(SewerageConnection)
       if (combinedArray) { moveToSuccess(combinedArray, dispatch) }
-      responseStatus = get(combinedArray, "status", "");
     }
   } else if (hasFieldToaster) {
     let errorMessage = {
@@ -312,7 +312,6 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
       let response = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
       if (response) { moveToSuccess(combinedArray, dispatch) }
-      responseStatus = get(response, "status", "");
     }
   } else if (hasFieldToaster) {
     let errorMessage = {
@@ -350,7 +349,6 @@ const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatc
       let response = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].applicationStatus")
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
       if (response) { moveToSuccess(combinedArray, dispatch) }
-      responseStatus = get(response, "status", "");
     }
   } else if (hasFieldToaster) {
     let errorMessage = {
