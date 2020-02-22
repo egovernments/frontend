@@ -346,7 +346,7 @@ const setSearchResponse = async (
 
   dispatch(prepareFinalObject("Property", property));
   dispatch(prepareFinalObject("documentsUploadRedux",property.documents));
-
+  prepareDocumentsView(state, dispatch);
   // Set Institution/Applicant info card visibility
   if (
     get(
@@ -374,7 +374,6 @@ const setSearchResponse = async (
     );
   }
 
-  prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
   setDownloadMenu(state, dispatch,tenantId,applicationNumber);
