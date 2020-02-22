@@ -1,15 +1,10 @@
 import { httpRequest } from "./api";
 import {
     convertDateToEpoch,
-    getCurrentFinancialYear,
     getCheckBoxJsonpath,
     getSafetyNormsJson,
     getHygeneLevelJson,
-    getLocalityHarmedJson,
-    setFilteredTradeTypes,
-    getTradeTypeDropdownData
-} from "../ui-config/screens/specs/utils";
-import jp from "jsonpath";
+    getLocalityHarmedJson} from "../ui-config/screens/specs/utils";
 import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTranslatedLabel, updateDropDowns, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -18,10 +13,6 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { getQueryArg, getFileUrlFromAPI, getFileUrl, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {
-    setBusinessServiceDataToLocalStorage,
-    getMultiUnits
-} from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
@@ -33,12 +24,14 @@ export const pushTheDocsUploadedToRedux = (state, dispatch) => {
         Object.keys(reduxDocuments).forEach(key => {
             if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
                 reduxDocuments[key].documents.forEach(element => {
-                    element.documentType = reduxDocuments[key].documentType;
-                    element.documentCode = reduxDocuments[key].documentCode;
+                    element.documentType = reduxDocuments[key].documentCode;
+                    element.documentCode = reduxDocuments[key].documentType;
                     element.status = "ACTIVE"
                 });
                 uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
                 dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
+                let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
+                dispatch(prepareFinalObject("applyScreen", applyScreenObject));
             }
         });
     }
@@ -408,7 +401,7 @@ export const updatePFOforSearchResults = async (
 
     setApplicationNumberBox(state, dispatch);
 
-    createOwnersBackup(dispatch, payload);
+    // createOwnersBackup(dispatch, payload);
 };
 
 export const getBoundaryData = async (
@@ -416,9 +409,7 @@ export const getBoundaryData = async (
     state,
     dispatch,
     queryObject,
-    code,
-    componentPath
-) => {
+    code) => {
     try {
         let payload = await httpRequest(
             "post",
@@ -486,56 +477,6 @@ export const getBoundaryData = async (
     }
 };
 
-// const getMultipleAccessories = licenses => {
-//   let accessories = get(licenses, "tradeLicenseDetail.accessories");
-//   let mergedAccessories =
-//     accessories &&
-//     accessories.reduce((result, item) => {
-//       if (item && item !== null && item.hasOwnProperty("accessoryCategory")) {
-//         if (item.hasOwnProperty("id")) {
-//           if (item.hasOwnProperty("active") && item.active) {
-//             if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
-//               set(item, "active", false);
-//               result.push(item);
-//             } else {
-//               result.push(item);
-//             }
-//           }
-//         } else {
-//           if (!item.hasOwnProperty("isDeleted")) {
-//             result.push(item);
-//           }
-//         }
-//       }
-//       return result;
-//     }, []);
-
-//   return mergedAccessories;
-// };
-
-const getMultipleOwners = owners => {
-    let mergedOwners =
-        owners &&
-        owners.reduce((result, item) => {
-            if (item && item !== null && item.hasOwnProperty("mobileNumber")) {
-                if (item.hasOwnProperty("active") && item.active) {
-                    if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
-                        set(item, "active", false);
-                        result.push(item);
-                    } else {
-                        result.push(item);
-                    }
-                } else {
-                    if (!item.hasOwnProperty("isDeleted")) {
-                        result.push(item);
-                    }
-                }
-            }
-            return result;
-        }, []);
-
-    return mergedOwners;
-};
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
     let documents = get(
@@ -546,8 +487,6 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     documents = documents.filter(item => {
         return item.active;
     });
-    console.log('documents')
-    console.log(documents)
     let documentsContract = [];
     let tempDoc = {};
     documents.forEach(doc => {
@@ -586,86 +525,14 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 
-const handleDeletedCards = (jsonObject, jsonPath, key) => {
-    let originalArray = get(jsonObject, jsonPath, []);
-    let modifiedArray = originalArray.filter(element => { return element.hasOwnProperty(key) || !element.hasOwnProperty("isDeleted"); });
-    modifiedArray = modifiedArray.map(element => {
-        if (element.hasOwnProperty("isDeleted")) { element["isActive"] = false; }
-        return element;
-    });
-    set(jsonObject, jsonPath, modifiedArray);
-};
-
-export const createUpdateNocApplication = async (state, dispatch, status) => {
-    let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo");
-    let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].applicationNo");
-    let method = (waterId || sewerId) ? "UPDATE" : "CREATE";
-    try {
-        let payload = get(state.screenConfiguration.preparedFinalObject, "applyScreen", {});
-        const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
-        set(payload[0], "tenantId", tenantId);
-        set(payload[0], "applyScreen.action", status);
-
-        // Get uploaded documents from redux
-        let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
-
-        handleDeletedCards(payload[0], "applyScreen.documents", "id");
-
-        // Set owners & other documents
-        let ownerDocuments = [];
-        let otherDocuments = [];
-        jp.query(reduxDocuments, "$.*").forEach(doc => {
-            if (doc.documents && doc.documents.length > 0) {
-                if (doc.documentType === "OWNER") {
-                    ownerDocuments = [...ownerDocuments, {
-                        tenantId: tenantId,
-                        documentType: doc.documentSubCode ? doc.documentSubCode : doc.documentCode,
-                        fileStoreId: doc.documents[0].fileStoreId
-                    }];
-                } else if (!doc.documentSubCode) {
-                    // SKIP BUILDING PLAN DOCS
-                    otherDocuments = [...otherDocuments, {
-                        tenantId: tenantId,
-                        documentType: doc.documentCode,
-                        fileStoreId: doc.documents[0].fileStoreId
-                    }];
-                }
-            }
-        });
-
-        set(payload, "ownerDocuments", ownerDocuments);
-        set(payload, "otherDocuments", otherDocuments);
-
-        let response;
-        if (method === "CREATE") {
-            response = await httpRequest("post", "/firenoc-services/v1/_create", "", [], { FireNOCs: payload });
-            dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
-            setApplicationNumberBox(state, dispatch);
-        } else if (method === "UPDATE") {
-            response = await httpRequest("post", "/firenoc-services/v1/_update", "", [], { FireNOCs: payload });
-            dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
-        }
-
-        return { status: "success", message: response };
-    } catch (error) {
-        dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
-
-        let fireNocData = get(state, "screenConfiguration.preparedFinalObject.FireNOCs", []);
-        fireNocData = furnishNocResponse({ FireNOCs: fireNocData });
-        dispatch(prepareFinalObject("FireNOCs", fireNocData.FireNOCs));
-
-        return { status: "failure", message: error };
-    }
-};
-
 export const applyForWaterOrSewerage = async (state, dispatch, status) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
     let parsedObject = {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
-        meterInstallationDate: convertDateToEpoch(new Date(queryObject.meterInstallationDate)),
-        connectionExecutionDate: convertDateToEpoch(new Date(queryObject.connectionExecutionDate)),
+        meterInstallationDate: queryObject.meterInstallationDate !== null ? convertDateToEpoch(queryObject.meterInstallationDate) : "NA",
+        connectionExecutionDate: queryObject.connectionExecutionDate !== null ? convertDateToEpoch(queryObject.connectionExecutionDate) : "NA",
         proposedWaterClosets: parseInt(queryObject.proposedWaterClosets),
         proposedToilets: parseInt(queryObject.proposedToilets),
         noOfTaps: parseInt(queryObject.noOfTaps),
@@ -674,15 +541,14 @@ export const applyForWaterOrSewerage = async (state, dispatch, status) => {
         proposedTaps: parseInt(queryObject.proposedTaps)
     }
     queryObject = { ...queryObject, ...parsedObject }
-    queryObject.property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties[0]"), "NA", null)));
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
         Object.keys(reduxDocuments).forEach(key => {
             if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
                 reduxDocuments[key].documents.forEach(element => {
-                    element.documentType = reduxDocuments[key].documentType;
-                    element.documentCode = reduxDocuments[key].documentCode;
+                    element.documentType = reduxDocuments[key].documentCode;
+                    element.documentCode = reduxDocuments[key].documentType;
                 });
                 uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
                 dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
@@ -801,19 +667,6 @@ const applyForBothWaterAndSewerage = async (state, dispatch, status, method, que
     }
 }
 
-const convertOwnerDobToEpoch = owners => {
-    let updatedOwners =
-        owners &&
-        owners
-            .map(owner => {
-                return {
-                    ...owner,
-                    dob: owner && owner !== null && convertDateToEpoch(owner.dob, "dayend")
-                };
-            })
-            .filter(item => item && item !== null);
-    return updatedOwners;
-};
 
 export const getImageUrlByFile = file => {
     return new Promise(resolve => {
@@ -853,7 +706,7 @@ const setApplicationNumberBox = (state, dispatch) => {
     }
 };
 
-const handleApplicationNumberDisplay = (dispatch, applicationNumber) => {
+export const handleApplicationNumberDisplay = (dispatch, applicationNumber) => {
     dispatch(handleField("apply", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "visible", true));
     dispatch(handleField("apply", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "props.number", applicationNumber));
 }
@@ -941,21 +794,6 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
     }
 };
 export const getMdmsDataForAutopopulated = async (dispatch) => {
-    let mdmsBody = {
-        MdmsCriteria: {
-            tenantId: commonConfig.tenantId,
-            moduleDetails: [
-                {
-                    moduleName: "ws-services-masters",
-                    masterDetails: [
-                        {
-                            name: "billingPeriod"
-                        }
-                    ]
-                },
-            ]
-        }
-    };
     try {
         let connectionNo = getQueryArg(window.location.href, "connectionNos");
         let queryObject = [
@@ -1420,3 +1258,50 @@ export const findAndReplace = (obj, oldValue, newValue) => {
     })
     return obj
 }
+
+// api call to calculate water estimate
+export const waterEstimateCalculation = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "ws-calculator/waterCalculator/_estimate",
+            "_estimate",
+            [],
+
+            {
+                isconnectionCalculation: false,
+                CalculationCriteria: queryObject
+            }
+        );
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
+// api call to calculate sewerage estimate
+export const swEstimateCalculation = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "sw-calculator/sewerageCalculator/_estimate",
+            "_estimate",
+            [],
+            {
+                isconnectionCalculation: false,
+                CalculationCriteria: queryObject
+            }
+        );
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};

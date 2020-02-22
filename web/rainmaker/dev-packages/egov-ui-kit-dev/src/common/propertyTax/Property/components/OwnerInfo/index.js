@@ -94,7 +94,7 @@ class OwnerInfo extends Component {
   getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
     const isInstitution =
       latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-    const { institution={}, owners: ownerDetails = [] } = latestPropertyDetails || {};
+    const { institution={}, owners: ownerDetails = [], subOwnershipCategory , ownershipCategory } = latestPropertyDetails || {};
     let owner = [];
     if (ownerDetails && ownerDetails.length > 0) {
       owner = ownerDetails[0];
@@ -152,14 +152,13 @@ class OwnerInfo extends Component {
                 }
               : {
                   key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
-                  value:
-                    (institution &&
-                      institution.type &&
-                      generalMDMSDataById &&
-                      generalMDMSDataById["SubOwnerShipCategory"] &&
-                      generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory]&&
-                      generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
-                    "NA",
+                  value: getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`) || getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`)
+                    // (institution &&
+                    //   institution.type &&
+                    //   generalMDMSDataById &&
+                    //   generalMDMSDataById["SubOwnerShipCategory"] &&
+                    //   generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
+                    // "NA",
                 },
             isInstitution
               ? {
@@ -258,7 +257,7 @@ class OwnerInfo extends Component {
                   {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
                   {/* Transfer ownership button and View History button */}
                   {(viewHistory || ownershipTransfer) && (
-                    <div className="header-button-container">
+                    <div  id= "pt-header-button-container" className="header-button-container">
                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
                       <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
                     </div>

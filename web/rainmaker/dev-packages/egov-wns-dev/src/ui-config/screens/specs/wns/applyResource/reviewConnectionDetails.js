@@ -104,7 +104,7 @@ const propertyLocationDetails = {
           },
           {
             jsonPath:
-              "Properties[0].address.city"
+              "applyScreen.property.address.city"
           }
         ),
         reviewDoorOrHouseNumber: getLabelWithValue(
@@ -112,35 +112,35 @@ const propertyLocationDetails = {
             labelName: "Door/House No.",
             labelKey: "WS_PROP_DETAIL_DHNO"
           },
-          { jsonPath: "Properties[0].address.doorNo" }
+          { jsonPath: "applyScreen.property.address.doorNo" }
         ),
         reviewBuildingOrColonyName: getLabelWithValue(
           {
             labelName: "Building/Colony Name",
             labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
           },
-          { jsonPath: "Properties[0].address.buildingName" }
+          { jsonPath: "applyScreen.property.address.buildingName" }
         ),
         reviewStreetName: getLabelWithValue(
           {
             labelName: "Street Name",
             labelKey: "WS_PROP_DETAIL_STREET_NAME"
           },
-          { jsonPath: "Properties[0].address.street" }
+          { jsonPath: "applyScreen.property.address.street" }
         ),
         reviewLocalityOrMohalla: getLabelWithValue(
           {
             labelName: "Locality/Mohalla",
             labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
           },
-          { jsonPath: "Properties[0].address.locality.name" }
+          { jsonPath: "applyScreen.property.address.locality.name" }
         ),
         reviewPincode: getLabelWithValue(
           {
             labelName: "Pincode",
             labelKey: "WS_PROP_DETAIL_PINCODE"
           },
-          { jsonPath: "Properties[0].address.pincode" }
+          { jsonPath: "applyScreen.property.address.pincode" }
         ),
       })
     }),
@@ -148,7 +148,7 @@ const propertyLocationDetails = {
     items: [],
     hasAddItem: false,
     isReviewPage: true,
-    sourceJsonPath: "Properties[0].address",
+    sourceJsonPath: "applyScreen.property.address",
     prefixSourceJsonPath:
       "children.cardContent.children.propertyLocationDetailsContainer.children",
     afterPrefixJsonPath: "children.value.children.key"
@@ -170,7 +170,7 @@ const getPropertyDetails = {
             labelKey: "WS_PROPERTY_ID_LABEL"
           },
           {
-            jsonPath: "Properties[0].propertyId",
+            jsonPath: "applyScreen.property.propertyId",
             // callBack: value => {
             //   return value.split(".")[0];
             // }
@@ -182,7 +182,7 @@ const getPropertyDetails = {
             labelKey: "WS_PROPERTY_TYPE_LABEL"
           },
           {
-            jsonPath: "Properties[0].propertyType",
+            jsonPath: "applyScreen.property.propertyType",
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -194,7 +194,7 @@ const getPropertyDetails = {
             labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
           },
           {
-            jsonPath: "Properties[0].usageCategory"
+            jsonPath: "applyScreen.property.usageCategory"
           }
         ),
 
@@ -210,21 +210,21 @@ const getPropertyDetails = {
             labelName: "Plot Size (in sq metres)",
             labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
           },
-          { jsonPath: "Properties[0].landArea" }
+          { jsonPath: "applyScreen.property.landArea" }
         ),
         reviewNumberOfFloors: getLabelWithValue(
           {
             labelName: "Number Of Floors",
             labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
           },
-          { jsonPath: "Properties[0].noOfFloors" }
+          { jsonPath: "applyScreen.property.noOfFloors" }
         ),
         rainwaterHarvestingFacility: getLabelWithValue(
           {
             labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
             labelName: "Rain Water Harvesting Facility"
           },
-          { jsonPath: "WaterConnection[0].rainWaterHarvesting" }
+          { jsonPath: "applyScreen.rainWaterHarvesting" }
         )
       })
     }),
@@ -247,7 +247,7 @@ export const mobileNumber = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
   },
-  { jsonPath: "Properties[0].owners[0].mobileNumber" }
+  { jsonPath: "applyScreen.property.owners[0].mobileNumber" }
 )
 
 export const name = getLabelWithValue(
@@ -256,7 +256,7 @@ export const name = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
   },
   {
-    jsonPath: "Properties[0].owners[0].name"
+    jsonPath: "applyScreen.property.owners[0].name"
   }
 )
 
@@ -265,7 +265,7 @@ export const email = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
   },
   {
-    jsonPath: "Properties[0].owners[0].emailId"
+    jsonPath: "applyScreen.property.owners[0].emailId"
   }
 )
 
@@ -274,7 +274,7 @@ export const gender = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
   },
   {
-    jsonPath: "Properties[0].owners[0].gender",
+    jsonPath: "applyScreen.property.owners[0].gender",
     localePrefix: {
       moduleName: "COMMON",
       masterName: "GENDER"
@@ -286,28 +286,28 @@ export const dateOfBirth = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_DOB_LABEL"
   },
-  { jsonPath: "Properties[0].owners[0].dob" }
+  { jsonPath: "applyScreen.property.owners[0].dob" }
 )
 
 export const fatherName = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
   },
-  { jsonPath: "Properties[0].owners[0].fatherOrHusbandName" }
+  { jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName" }
 )
 
 export const relationship = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
   },
-  { jsonPath: "Properties[0].owners[0].relationship" }
+  { jsonPath: "applyScreen.property.owners[0].relationship" }
 )
 
 export const correspondenceAddress = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_CROSADD"
   },
-  { jsonPath: "Properties[0].owners[0].correspondenceAddress" }
+  { jsonPath: "applyScreen.property.owners[0].correspondenceAddress" }
 )
 
 export const specialApplicantCategory = getLabelWithValue(
@@ -316,7 +316,7 @@ export const specialApplicantCategory = getLabelWithValue(
   },
   {
     jsonPath:
-      "Properties[0].owners."
+      "applyScreen.property.owners."
   }
 )
 
@@ -342,7 +342,7 @@ const propertyOwnerDetails = () => {
       }),
       items: [],
       hasAddItem: false,
-      sourceJsonPath: "Properties[0].owners",
+      sourceJsonPath: "applyScreen.property.owners",
       prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
@@ -359,40 +359,37 @@ export const taskApplicationType = getLabelWithValue(
     labelKey: "WS_APPLY_FOR"
   },
   {
-    jsonPath: "WaterConnection[0].service",
-  })
-
-export const taskOldConsumerNumber = getLabelWithValue(
-  {
-    labelKey: "WS_TASK_DETAILS_OLD_CONSUMER_NO"
-  },
-  { jsonPath: "WaterConnection[0].oldConnectionNo" })
+    jsonPath: "applyScreen.service",
+  }
+);
 
 export const taskNumberOfTapsPropsed = getLabelWithValue(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
   },
   {
-    jsonPath: "WaterConnection[0].proposedTaps",
+    jsonPath: "applyScreen.proposedTaps",
   })
 export const taskPipeSizeProposed = getLabelWithValue(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
   },
-  { jsonPath: "WaterConnection[0].proposedPipeSize" })
+  { jsonPath: "applyScreen.proposedPipeSize" })
 
 export const taskNoOfClosets = getLabelWithValue(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
   },
-  { jsonPath: "WaterConnection[0].proposedWaterClosets" }
+  { jsonPath: "applyScreen.proposedWaterClosets" }
 );
 
 export const taskNoOfToilets = getLabelWithValue(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
   },
-  { jsonPath: "WaterConnection[0].proposedToilets" }
+  {
+    jsonPath: "applyScreen.proposedToilets"
+  }
 );
 
 
@@ -409,7 +406,7 @@ const getConnectionDetails = () => {
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "WaterConnection[0]",
+      sourceJsonPath: "applyScreen",
       prefixSourceJsonPath:
         "children.cardContent.children.getConnectionContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -421,7 +418,6 @@ const getConnectionDetails = () => {
 export const renderService = () => {
   return getCommonContainer({
     taskApplicationType,
-    taskOldConsumerNumber,
     taskNumberOfTapsPropsed,
     taskPipeSizeProposed,
     taskNoOfClosets,
