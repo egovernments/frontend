@@ -50,10 +50,10 @@ export const transfereeSummary = getCommonGrayCard({
               iconName: "edit"
             }
           },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
+          // buttonLabel: getLabel({
+          //   labelName: "Edit",
+          //   labelKey: "PT_EDIT"
+          // })
         },
         // onClickDefination: {
         //   action: "condition",
