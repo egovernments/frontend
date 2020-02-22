@@ -51,12 +51,12 @@ export const documentsSummary = getCommonGrayCard({
             labelKey: "PT_EDIT"
           })
         },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 1);
-          }
-        }
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 1);
+        //   }
+        // }
       }
     }
   },

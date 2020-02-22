@@ -99,12 +99,12 @@ export const mutationSummary = getCommonGrayCard({
             labelKey: "PT_EDIT"
           })
         },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
-          }
-        }
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 0);
+        //   }
+        // }
       }
     }
   },
