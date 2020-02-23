@@ -227,6 +227,8 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("applyScreen.water", true));
+    dispatch(prepareFinalObject("applyScreen.sewerage", false));
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
       togglePropertyFeilds(action, true);
@@ -243,8 +245,6 @@ const screenConfig = {
       }
     } else {
       togglePropertyFeilds(action, false)
-      dispatch(prepareFinalObject("applyScreen.water", true));
-      dispatch(prepareFinalObject("applyScreen.sewerage", false));
       if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
         toggleWaterFeilds(action, true);
         toggleSewerageFeilds(action, true);

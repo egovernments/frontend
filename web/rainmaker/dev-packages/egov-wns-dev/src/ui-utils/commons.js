@@ -528,7 +528,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 
-export const applyForWaterOrSewerage = async (state, dispatch, status) => {
+export const applyForWaterOrSewerage = async (state, dispatch) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
@@ -559,23 +559,26 @@ export const applyForWaterOrSewerage = async (state, dispatch, status) => {
         });
     }
     if (get(state, "screenConfiguration.preparedFinalObject.applyScreen.water") && get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")) {
-        await applyForBothWaterAndSewerage(state, dispatch, status, method, queryObject);
+        let response = await applyForBothWaterAndSewerage(state, dispatch, method, queryObject);
+        return response;
     } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-        await applyForSewerage(state, dispatch, status, method, queryObject);
+        let response = await applyForSewerage(state, dispatch, method, queryObject);
+        return response;
     } else {
-        await applyForWater(state, dispatch, status, method, queryObject);
+        let response = await applyForWater(state, dispatch, method, queryObject);
+        return response;
     }
 }
 
-const applyForWater = async (state, dispatch, status, method, queryObject) => {
+const applyForWater = async (state, dispatch, method, queryObject) => {
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
         if (method === "UPDATE") {
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
             set(queryObjectForUpdate, "tenantId", tenantId);
-            set(queryObjectForUpdate, "action", status);
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
+            set(queryObjectForUpdate, "action", "SUBMIT_APPLICATION");
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
@@ -586,9 +589,9 @@ const applyForWater = async (state, dispatch, status, method, queryObject) => {
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
+            setApplicationNumberBox(state, dispatch);
         }
-        setApplicationNumberBox(state, dispatch);
-        return { status: "success", message: response };
+        return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
         console.log(error);
@@ -596,28 +599,29 @@ const applyForWater = async (state, dispatch, status, method, queryObject) => {
     }
 }
 
-const applyForSewerage = async (state, dispatch, status, method, queryObject) => {
+const applyForSewerage = async (state, dispatch, method, queryObject) => {
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
         set(queryObject, "tenantId", tenantId);
         if (method === "UPDATE") {
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
-            set(queryObjectForUpdate, "action", status);
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
+            set(queryObjectForUpdate, "action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdate, "connectionType", "Non Metered");
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
-            let searchResponse = await getSearchResultsForSewerage(searchQueryObject);
-            dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnection));
+            let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
+            dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
         } else {
             set(queryObject, "action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
+            setApplicationNumberBox(state, dispatch);
         }
-        setApplicationNumberBox(state, dispatch);
-        return { status: "success", message: response };
+        return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
         console.log(error);
@@ -625,20 +629,21 @@ const applyForSewerage = async (state, dispatch, status, method, queryObject) =>
     }
 }
 
-const applyForBothWaterAndSewerage = async (state, dispatch, status, method, queryObject) => {
+const applyForBothWaterAndSewerage = async (state, dispatch, method, queryObject) => {
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
         set(queryObject, "tenantId", tenantId);
         if (method === "UPDATE") {
-            set(queryObjectForUpdateWater, "action", status);
-            set(queryObjectForUpdateSewerage, "action", status);
+            let queryObjectForUpdateWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
+            let queryObjectForUpdateSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
             queryObjectForUpdateWater = { ...queryObjectForUpdateWater, ...queryObject }
             queryObjectForUpdateWater = findAndReplace(queryObjectForUpdateWater, "NA", null);
             queryObjectForUpdateSewerage = { ...queryObjectForUpdateSewerage, ...queryObject }
             queryObjectForUpdateSewerage = findAndReplace(queryObjectForUpdateSewerage, "NA", null);
-            let queryObjectForUpdateWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
-            let queryObjectForUpdateSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnections[0]");
+            set(queryObjectForUpdateWater, "action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdateSewerage, "action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdateSewerage, "connectionType", "Non Metered");
             (await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater }) &&
                 await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage }));
             let searchQueryObjectWater = [
@@ -650,22 +655,19 @@ const applyForBothWaterAndSewerage = async (state, dispatch, status, method, que
                 { key: "applicationNumber", value: queryObjectForUpdateSewerage.applicationNo }
             ];
             let searchResponse = await getSearchResults(searchQueryObjectWater);
-            let sewerageResponse = await getSearchResultsForSewerage(searchQueryObjectSewerage);
-            dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnections[0]));
-            dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections[0]));
+            let sewerageResponse = await getSearchResultsForSewerage(searchQueryObjectSewerage, dispatch);
+            dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
+            dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
         } else {
-            try {
-                set(queryObject, "action", "INITIATE");
-                queryObject = findAndReplace(queryObject, "NA", null);
-                response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: queryObject });
-                const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
-                dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
-                dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
-            } catch (error) { console.log(error) }
+            set(queryObject, "action", "INITIATE");
+            queryObject = findAndReplace(queryObject, "NA", null);
+            response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: queryObject });
+            const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
+            dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
         }
-        /** Application no. box setting */
         setApplicationNumberBox(state, dispatch);
-        return { status: "success", message: response };
+        return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
         console.log(error);

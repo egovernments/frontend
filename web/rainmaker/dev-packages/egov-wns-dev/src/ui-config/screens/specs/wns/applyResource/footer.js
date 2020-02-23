@@ -100,9 +100,9 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
-  let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (activeStep === 0) {
     let validateForm = validateFields(
       "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
@@ -123,26 +123,27 @@ const callBackForNext = async (state, dispatch) => {
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
     // }
-    if (getQueryArg(window.location.href, "action") === "edit") {
-      let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-      const uploadedDocData = application.documents;
-      const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
-        return {
-          title: `WS_${item.documentType}`,
-          link: item.fileUrl && item.fileUrl.split(",")[0],
-          linkText: "View",
-          name: item.fileName
-        };
-      });
-      dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
-      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
-      dispatch(prepareFinalObject("applyScreen", applyScreenObject));
-    } else {
-      await applyForWaterOrSewerage(state, dispatch, "INITIATE");
+    if (isFormValid) {
+      if (getQueryArg(window.location.href, "action") === "edit") {
+        let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+        const uploadedDocData = application.documents;
+        const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
+          return {
+            title: `WS_${item.documentType}`,
+            link: item.fileUrl && item.fileUrl.split(",")[0],
+            linkText: "View",
+            name: item.fileName
+          };
+        });
+        dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
+        let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
+        dispatch(prepareFinalObject("applyScreen", applyScreenObject));
+      } else {
+        isFormValid = await applyForWaterOrSewerage(state, dispatch);
+      }
     }
+    prepareDocumentsUploadData(state, dispatch);
   }
-
-  prepareDocumentsUploadData(state, dispatch);
   // console.log(activeStep);
 
   if (activeStep === 1) {
@@ -156,15 +157,13 @@ const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    if (!isSinglePropertyCardValid || !isPropertyLocationCardValid) {
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
+    // if (!isSinglePropertyCardValid || !isPropertyLocationCardValid) {
+    //   isFormValid = false;
+    //   hasFieldToaster = true;
+    // }
+    isFormValid = true;
     await pushTheDocsUploadedToRedux(state, dispatch);
   }
-  let payload = get(state.screenConfiguration.preparedFinalObject, "applyScreen", {});
-  console.log('payload')
-  console.log(payload)
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
     if (getQueryArg(window.location.href, "action") === "edit") {
       setReviewPageRoute(state, dispatch);
@@ -185,30 +184,25 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
-    if (!isApplicantTypeCardValid || !isSingleApplicantCardValid || !isInstitutionCardValid) {
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
+    // if (!isApplicantTypeCardValid || !isSingleApplicantCardValid || !isInstitutionCardValid) {
+    //   isFormValid = false;
+    //   hasFieldToaster = true;
+    // }
+    isFormValid = true;
   }
-
-  // if (process.env.REACT_APP_NAME !== "Citizen" && activeStep === 2) {
-  //   moveToReview(state, dispatch);
-  // } else if (activeStep === 2) {
-  //   moveToReview(state, dispatch);
-  // }
-
   if (activeStep === 3) {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) {
-      await acknoledgementForBothWaterAndSewerage(state, activeStep, isFormValid, dispatch);
+      isFormValid = await acknoledgementForBothWaterAndSewerage(state, activeStep, isFormValid, dispatch);
     } else if (waterId) {
-      await acknoledgementForWater(state, activeStep, isFormValid, dispatch);
+      isFormValid = await acknoledgementForWater(state, activeStep, isFormValid, dispatch);
     } else {
-      await acknoledgementForSewerage(state, activeStep, isFormValid, dispatch);
+      isFormValid = await acknoledgementForSewerage(state, activeStep, isFormValid, dispatch);
     }
     // responseStatus === "success" && changeStep(activeStep, state, dispatch);
-  } else if (activeStep !== 3) {
+  }
+  if (activeStep !== 3) {
     if (isFormValid) {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
@@ -266,16 +260,17 @@ const moveToSuccess = (combinedArray, dispatch) => {
 
 const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormValid, dispatch) => {
   if (isFormValid) {
-    if (activeStep === 1) {
+    if (activeStep === 0) {
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {
-      await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      isFormValid = await applyForWaterOrSewerage(state, dispatch);
       let WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
       let SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
       let combinedArray = WaterConnection.concat(SewerageConnection)
-      if (combinedArray) { moveToSuccess(combinedArray, dispatch) }
+      if (isFormValid) { moveToSuccess(combinedArray, dispatch) }
     }
+    return isFormValid;
   } else if (hasFieldToaster) {
     let errorMessage = {
       labelName: "Please fill all mandatory fields and upload the documents!",
@@ -299,20 +294,21 @@ const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormVa
     }
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
+  return !isFormValid;
 }
 
 const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) => {
   if (isFormValid) {
-    if (activeStep === 1) {
+    if (activeStep === 0) {
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {
       getMdmsData(state, dispatch);
-      await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
-      let response = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
+      isFormValid = await applyForWaterOrSewerage(state, dispatch);
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
-      if (response) { moveToSuccess(combinedArray, dispatch) }
+      if (isFormValid) { moveToSuccess(combinedArray, dispatch) }
     }
+    return true;
   } else if (hasFieldToaster) {
     let errorMessage = {
       labelName: "Please fill all mandatory fields and upload the documents!",
@@ -336,6 +332,7 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
     }
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
+  return false;
 }
 
 const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatch) => {
@@ -345,11 +342,11 @@ const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatc
     }
     if (activeStep === 3) {
       getMdmsData(state, dispatch);
-      await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
-      let response = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].applicationStatus")
+      isFormValid = await applyForWaterOrSewerage(state, dispatch);
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
-      if (response) { moveToSuccess(combinedArray, dispatch) }
+      if (isFormValid) { moveToSuccess(combinedArray, dispatch) }
     }
+    return true;
   } else if (hasFieldToaster) {
     let errorMessage = {
       labelName: "Please fill all mandatory fields and upload the documents!",
@@ -373,6 +370,7 @@ const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatc
     }
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
+  return false;
 }
 
 export const changeStep = (
