@@ -74,7 +74,11 @@ class OwnerInfo extends Component {
     const { properties } = this.props;
     const { propertyId, tenantId } = properties;
     if(this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory"){
-      this.props.history.push(`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`);
+      if(properties.status=="INWORKFLOW"){
+        alert('Property is in Workflow ...')
+      }else{
+        this.props.history.push(`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`);
+      }
     } else if (dialogName === "viewHistory") {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
       
@@ -87,10 +91,24 @@ class OwnerInfo extends Component {
     this.setState({ [dialogName]: false });
   };
 
+  checkDocument = (owner) => {
+    if(owner){
+      if(owner.document && owner.document.documentType && owner.document.documentUid){
+        return owner.document;
+      } else if (owner.documents && owner.documents.length > 0 && owner.documents[0].documentType && owner.documents[0].documentUid) {
+        return owner.documents[0];
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
     const isInstitution =
       latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-    const { institution={}, owners: ownerDetails = [] } = latestPropertyDetails || {};
+    const { institution={}, owners: ownerDetails = [], subOwnershipCategory , ownershipCategory } = latestPropertyDetails || {};
     let owner = [];
     if (ownerDetails && ownerDetails.length > 0) {
       owner = ownerDetails[0];
@@ -126,6 +144,7 @@ class OwnerInfo extends Component {
                       institution.type &&
                       generalMDMSDataById &&
                       generalMDMSDataById["SubOwnerShipCategory"] &&
+                      generalMDMSDataById["SubOwnerShipCategory"][institution.type]&&
                       generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
                     "NA",
                 }
@@ -141,18 +160,19 @@ class OwnerInfo extends Component {
                       institution.type &&
                       generalMDMSDataById &&
                       generalMDMSDataById["OwnerShipCategory"] &&
+                      generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory]&&
                       generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
                     "NA",
                 }
               : {
                   key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
-                  value:
-                    (institution &&
-                      institution.type &&
-                      generalMDMSDataById &&
-                      generalMDMSDataById["SubOwnerShipCategory"] &&
-                      generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
-                    "NA",
+                  value: getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`) || getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`)
+                    // (institution &&
+                    //   institution.type &&
+                    //   generalMDMSDataById &&
+                    //   generalMDMSDataById["SubOwnerShipCategory"] &&
+                    //   generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
+                    // "NA",
                 },
             isInstitution
               ? {
@@ -184,6 +204,7 @@ class OwnerInfo extends Component {
                       owner.ownerType &&
                       generalMDMSDataById &&
                       generalMDMSDataById["OwnerType"] &&
+                      generalMDMSDataById["OwnerType"][owner.ownerType]&&
                       generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
                     "NA",
                 },
@@ -196,20 +217,21 @@ class OwnerInfo extends Component {
                   key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
                   value: owner.permanentAddress || "NA",
                 },
-                isInstitution
+                this.checkDocument(owner) && (isInstitution
                   ? {
                     }
                   : {
                       key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_TYPE", localizationLabelsData),
-                      value:owner&&owner.documents&&owner.documents.length>0&&owner.documents[0].documentType? getTranslatedLabel("PT_"+(owner.documents[0].documentType).toUpperCase(),localizationLabelsData) || "NA" : "NA",
-                    },
-                    isInstitution
+                      value: getTranslatedLabel("PT_"+(this.checkDocument(owner).documentType).toUpperCase(),localizationLabelsData) || "NA",
+                    }),
+                    this.checkDocument(owner) && (isInstitution
                   ? {
                     }
                   : {
                       key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_ID", localizationLabelsData),
-                      value:owner&&owner.documents&&owner.documents.length>0&&owner.documents[0].documentType? owner.documents[0].documentUid || "NA":"NA",
-                    },
+                      value: this.checkDocument(owner).documentUid || "NA",
+                    }
+                  )
           ],
         };
       })
