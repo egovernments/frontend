@@ -7,10 +7,12 @@ import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
+import store from "ui-redux/store";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import isUndefined from "lodash/isUndefined";
 import {
   getCommonCard,
@@ -216,7 +218,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`
       : `/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`;
-  dispatch(setRoute(applyUrl));
+  store.dispatch(setRoute(applyUrl));
 };
 
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
@@ -839,3 +841,85 @@ export const getTextToLocalMapping = label => {
 export const checkValueForNA = value => {
   return value ? value : "NA";
 };
+export const fetchBill = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getpayments = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/collection-services/payments/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const downloadCertificateForm = (Properties,pdfcode,tenantId,mode='download') => {
+  const queryStr = [
+    { key: "key", value:pdfcode },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+
+export const downloadReceitForm = (Payments,pdfcode,tenantId,mode='download') => {
+  const queryStr = [
+    { key: "key", value:pdfcode },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
