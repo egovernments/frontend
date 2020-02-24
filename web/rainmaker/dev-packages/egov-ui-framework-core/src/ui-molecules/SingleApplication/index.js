@@ -14,7 +14,7 @@ import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
+import { epochToDate, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import orderBy from "lodash/orderBy";
 const styles = {
   card: {
@@ -46,7 +46,7 @@ class SingleApplication extends React.Component {
   };
 
   onCardClick = async (item) => {
-    const { moduleName, toggleSnackbar } = this.props;
+    const { moduleName, toggleSnackbar, setRoute } = this.props;
     if (moduleName === "TL") {
       const wfCode = get(item, "workflowCode");
       const businessServiceQueryObject = [
@@ -59,31 +59,31 @@ class SingleApplication extends React.Component {
       this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
-          return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         default:
-          return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
       }
     } else if (moduleName === "FIRENOC") {
       switch (item.fireNOCDetails.status) {
         case "INITIATED":
-          return `/fire-noc/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/fire-noc/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`);
         default:
-          return `/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`);
       }
     } else if (moduleName === "BPAREG") {
       if (item.serviceType === "BPAREG") {
         switch (item.status) {
           case "INITIATED":
-            return `/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+            setRoute(`/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
           default:
-            return `/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+            setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }
       } else {
         switch (item.status) {
           case "Initiated":
-            return `/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+            setRoute(`/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
           default:
-            return `/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+            setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }        
       }
     } else if (moduleName === "PT-MUTATION") {
@@ -91,7 +91,14 @@ class SingleApplication extends React.Component {
         const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId)
         console.log("businessService-----", businessService);
         if(businessService){
-          navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
+          // navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
+          if (businessService == 'PT.MUTATION') {
+            setRoute("/pt-mutation/search-preview?applicationNumber=" + item.acknowldgementNumber + "&propertyId=" + item.propertyId + "&tenantId=" + item.tenantId);
+          } else if (businessService == 'PT.CREATE') {
+            setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=property");
+          } else {
+            console.log('Navigation Error');
+          }
         }else{
           toggleSnackbar(
             true,
@@ -133,7 +140,7 @@ class SingleApplication extends React.Component {
         content.suffix
       }`;
     } else {
-      LabelKey = `${get(item, content.jsonPath,"")}`;
+      LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath,""))}` : `${get(item, content.jsonPath,"")}`;
     }
     return LabelKey;
   };
@@ -206,7 +213,7 @@ class SingleApplication extends React.Component {
                     {/* <Link to={this.onCardClick(item)}> */}
                       <div style={{cursor:"pointer"}} onClick = {()=>{
                         const url = this.onCardClick(item);
-                        setRoute(url);
+                        // setRoute(url);
                         }}>
                         <Label
                           labelKey={ item.status==="APPROVED"&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}

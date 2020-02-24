@@ -20,10 +20,8 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
-import { httpRequest } from "../../../../ui-utils/api";
-import { searchBill } from "../utils/index";
+import { getSearchResults, generatePdfFromDiv } from "../../../../ui-utils/commons";
+import { searchBill, getReceiptData, getpayments, downloadCertificateForm, downloadReceitForm } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -37,7 +35,7 @@ import {
 } from "./summaryResource/transfereeSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
-import {registrationSummary} from'./summaryResource/registrationSummary';
+import { registrationSummary } from './summaryResource/registrationSummary';
 import { downloadPrintContainer } from "./functions";
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -56,8 +54,8 @@ const titlebar = getCommonContainer({
       }
     }
   }
-      
-  
+
+
   // downloadMenu: {
   //   uiFramework: "custom-atoms",
   //   componentPath: "MenuButton",
@@ -85,34 +83,6 @@ const titlebar = getCommonContainer({
   //   }
   // }
 });
-
-export const downloadCertificateForm = (Properties,tenantId,mode='download') => {
-  const queryStr = [
-    { key: "key", value:"ptmutationcertificate" },
-    { key: "tenantId", value: tenantId }
-  ]
-  const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
-  try {
-    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-      .then(res => {
-        res.filestoreIds[0]
-        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-          res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,tenantId,mode)
-          })
-        } else {
-          console.log("Error In Acknowledgement form Download");
-        }
-      });
-  } catch (exception) {
-    alert('Some Error Occured while downloading Acknowledgement form!');
-  }
-}
 
 const prepareUoms = (state, dispatch) => {
   let buildings = get(
@@ -161,59 +131,58 @@ const prepareUoms = (state, dispatch) => {
 //   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
 // };
 
-const setDownloadMenu = (state, dispatch,tenantId,applicationNumber) => {
+const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   /** MenuButton data based on status */
-  // let status = get(
-  //   state,
-  //   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
-  // );
-  let status="APPROVED";
+  let status = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Property.status"
+  );
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId);
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId);
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId,'print');
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, 'print');
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_download");
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_print");
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, 'print');
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download" ,applicationNumber )
+      generatePdfFromDiv("download", applicationNumber)
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print" , applicationNumber)
+      generatePdfFromDiv("print", applicationNumber)
     },
     leftIcon: "assignment"
   };
   switch (status) {
-    case "APPROVED":
+    case "ACTIVE":
       downloadMenu = [
         certificateDownloadObject,
         receiptDownloadObject,
@@ -225,17 +194,9 @@ const setDownloadMenu = (state, dispatch,tenantId,applicationNumber) => {
         applicationPrintObject
       ];
       break;
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+    case "INWORKFLOW":
+      downloadMenu = [certificateDownloadObject, applicationDownloadObject];
+      printMenu = [certificatePrintObject, applicationPrintObject];
       break;
     default:
       break;
@@ -262,10 +223,10 @@ const setDownloadMenu = (state, dispatch,tenantId,applicationNumber) => {
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
 
-  let allDocuments = 
+  let allDocuments =
     state.screenConfiguration.preparedFinalObject.Property.documents;
 
-    allDocuments&& allDocuments.forEach(doc => {
+  allDocuments && allDocuments.forEach(doc => {
     documentsPreview.push({
       title: getTransformedLocale(doc.documentType),
       fileStoreId: doc.fileStoreId,
@@ -345,8 +306,8 @@ const setSearchResponse = async (
   }
 
   dispatch(prepareFinalObject("Property", property));
-  dispatch(prepareFinalObject("documentsUploadRedux",property.documents));
-
+  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  prepareDocumentsView(state, dispatch);
   // Set Institution/Applicant info card visibility
   if (
     get(
@@ -374,23 +335,36 @@ const setSearchResponse = async (
     );
   }
 
-  prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
-  setDownloadMenu(state, dispatch,tenantId,applicationNumber);
+  setDownloadMenu(state, dispatch, tenantId, applicationNumber);
 };
-export const setData=async(state,dispatch,applicationNumber,tenantId)=>{
+export const setData = async (state, dispatch, applicationNumber, tenantId) => {
   const response = await getSearchResults([
-     {
-       key: "tenantId",
-       value: tenantId
-     },
-     { key: "acknowledgementIds", value: applicationNumber }
-   ]);
-   
-   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
- 
- }
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "acknowledgementIds", value: applicationNumber }
+  ]);
+
+  dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+  let queryObj = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "consumerCodes",
+      value: applicationNumber
+    }
+  ];
+
+  const responsePayments = await getpayments(queryObj)
+  dispatch(prepareFinalObject("Payments", get(responsePayments, "Payments", [])));
+
+
+}
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -403,17 +377,23 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
-
+    let businessServicesData = JSON.parse(localStorage.getItem('businessServiceData'));
+    let loadBusinessServiceData = true;
+    if (businessServicesData && businessServicesData.length > 0) {
+      businessServicesData.map(businessService => {
+        if (businessService.businessService == "PT.MUTATION") {
+          loadBusinessServiceData = false;
+        }
+      })
+    }
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
-
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "PT.MUTATION" }
+      // { key: "businessServices", value: "PT.MUTATION" }
     ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
+    loadBusinessServiceData && setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     // Hide edit buttons
-    setData(state,dispatch,applicationNumber,tenantId);
+    setData(state, dispatch, applicationNumber, tenantId);
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
@@ -464,10 +444,10 @@ const screenConfig = {
     );
 
     set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          printCont
-        );
+      action,
+      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+      printCont
+    );
 
     return action;
   },
@@ -479,7 +459,7 @@ const screenConfig = {
         className: "common-div-css"
       },
       children: {
-        headerDiv:{
+        headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
           children: {
@@ -488,7 +468,7 @@ const screenConfig = {
                 xs: 12,
                 sm: 8
               },
-             ...titlebar
+              ...titlebar
             },
             helpSection: {
               uiFramework: "custom-atoms",
