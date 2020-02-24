@@ -75,7 +75,11 @@ class OwnerInfo extends Component {
     const { propertyId, tenantId } = properties;
     if(this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory"){
       if(properties.status=="INWORKFLOW"){
-        alert('Property is in Workflow ...')
+        this.props.toggleSnackbarAndSetText(
+          true,
+          { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+          "error"
+        );
       }else{
         let link=`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`;
 
@@ -190,12 +194,13 @@ class OwnerInfo extends Component {
                   key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
                   value: owner.mobileNumber || "NA",
                 },
+            isInstitution && owner.altContactNumber && 
                 {
                   key: isInstitution  ? getTranslatedLabel("PT_OWNERSHIP_INFO_TEL_NO", localizationLabelsData) : "",
                   value: isInstitution ? owner.altContactNumber || "NA" :"",
                 },
-               {
-                    key: owner.emailId ? getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData) : "",
+                {
+                    key: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData),
                     value: owner.emailId ? owner.emailId || "NA" : "",
                },
             isInstitution
