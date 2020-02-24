@@ -89,7 +89,7 @@ class ActionDialog extends React.Component {
       let tenantId = getQueryArg(window.location.href, "tenantId");
       let comment = get(bpaDetails, "comment");
       set(bpaDetails, "action", applicationAction);
-      if(comment) {
+      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE")) {
         let response = await httpRequest(
           "post",
           "bpa-services/bpa/appl/_update",
