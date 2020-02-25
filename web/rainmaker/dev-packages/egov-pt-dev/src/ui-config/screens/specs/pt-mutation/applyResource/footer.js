@@ -133,11 +133,11 @@ const callBackForApply = async (state, dispatch) => {
     "action": "OPEN",
     "moduleName": "PT"
   },
-  propertyPayload.owners.map(owner=>{
-    owner.status="INACTIVE";
-    
-  }) 
-   propertyPayload.additionalDetails.documentDate = 1581490792377;
+    propertyPayload.owners.map(owner => {
+      owner.status = "INACTIVE";
+
+    })
+  propertyPayload.additionalDetails.documentDate = 1581490792377;
 
   if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
@@ -149,11 +149,11 @@ const callBackForApply = async (state, dispatch) => {
   }
   else {
     // 
-    propertyPayload.ownersTemp.map(owner=>{
-      owner.status="ACTIVE";
+    propertyPayload.ownersTemp.map(owner => {
+      owner.status = "ACTIVE";
       owner.ownerType = propertyPayload.ownershipCategoryTemp;
-    }) 
-   
+    })
+
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
   }
@@ -348,11 +348,11 @@ const callBackForNext = async (state, dispatch) => {
           break;
       }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    }else if(errorMsg){
-     let  errorMes = {
+    } else if (errorMsg) {
+      let errorMes = {
         labelName:
           "Duplicate Applicant Details",
-        labelKey:errorMsg
+        labelKey: errorMsg
       };
       dispatch(toggleSnackbar(true, errorMes, "warning"));
     }
