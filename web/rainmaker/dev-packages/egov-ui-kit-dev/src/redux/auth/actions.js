@@ -137,9 +137,14 @@ export const logout = () => {
         const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
       } else {
         clearUserDetails();
+        if(process.env === "Development"){
         process.env.REACT_APP_NAME === "Citizen"
           ? window.location.replace(`${window.basename}/user/register`)
           : window.location.replace(`${window.basename}/user/login`);
+        }
+        else {
+           window.location.replace(`${window.origin}/common`)
+        }
         return;
       }
     } catch (error) {
