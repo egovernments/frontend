@@ -121,6 +121,7 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
+    console.log(101, data);
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
         const removedDocs = get(
@@ -172,7 +173,11 @@ class WorkFlowContainer extends React.Component {
         }
       }
     }
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+    if (moduleName === "NewWS1") {
+      data = data[0];
+    }
+    if (moduleName === "NewSW1") {
+      dataPath = "SewerageConnection";
       data = data[0];
     }
     const applicationNumber = getQueryArg(
@@ -206,6 +211,12 @@ class WorkFlowContainer extends React.Component {
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
+
+        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+          window.location.href = `acknowledgement?${this.getPurposeString(
+            label
+          )}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+        }
       }
     } catch (e) {
       if (moduleName === "BPA") {
