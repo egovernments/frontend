@@ -84,6 +84,11 @@ const BpaFeesEstimateCard = Loadable({
   loading: () => <Loading />
 });
 
+const CheckList = Loadable({
+  loader: () => import("./CheckList"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -100,5 +105,6 @@ export {
   UploadSingleFile,
   UploadMultipleFile,
   DividerWithLabel,
-  BpaFeesEstimateCard
+  BpaFeesEstimateCard,
+  CheckList
 };

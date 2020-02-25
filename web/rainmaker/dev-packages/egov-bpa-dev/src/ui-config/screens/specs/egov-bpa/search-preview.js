@@ -31,6 +31,7 @@ import { basicSummary } from "./summaryResource/basicSummary"
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
+import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
@@ -38,6 +39,7 @@ import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { fieldSummary } from "./summaryResource/fieldSummary";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -58,7 +60,7 @@ const titlebar = getCommonContainer({
       moduleName: "egov-bpa",
       componentPath: "ApplicationNoContainer",
       props: {
-        number: getQueryArg(window.location.href, "applicationNumber")
+        number: ""
       }
     },
 });
@@ -308,57 +310,43 @@ const setSearchResponse = async (
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const status = response.Bpa["0"].status;
 
-  if ((status && status === "PENDING_APPL_FEE") || (status && status === "PENDING_SANC_FEE_PAYMENT")) {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.citizenFooter",
-        "visible",
-        true
-      )
-    ),
+  if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
+    let userInfo = JSON.parse(getUserInfo()),
+    roles = get(userInfo, "roles"),
+    owners = get(response.Bpa["0"], "owners"),
+    archtect = "BPA_ARCHITECT",
+    isTrue = false, isOwner = true;
+    if(roles && roles.length > 0) {
+      roles.forEach(role => {
+        if(role.code === archtect) {
+          isTrue = true;
+        }
+      })
+    }
+
+    if(isTrue && owners && owners.length > 0) {
+      owners.forEach(owner => {
+        if(owner.uuid === userInfo.uuid) {
+          if(owner.roles && owner.roles.length > 0 ) {
+            owner.roles.forEach(owrRole => {
+              if(owrRole.code === archtect) {
+                isOwner = false;
+              }
+            })
+          }
+        }
+      })
+    }
+    if(isTrue && isOwner) {
       dispatch(
         handleField(
           "search-preview",
-          "components.div.children.citizenFooter.children.sendToArch",
-          "visible",
-          false
-        )
-      ),
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.citizenFooter.children.approve",
-          "visible",
-          false
-        )
-      )
-  } else if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.citizenFooter",
-        "visible",
-        true
-      )
-    ),
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.citizenFooter.children.makePayment",
+          "components.div.children.citizenFooter",
           "visible",
           false
         )
       )
-  } else {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.citizenFooter",
-        "visible",
-        false
-      )
-    )
+    }
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
@@ -395,6 +383,15 @@ const setSearchResponse = async (
     )
   )
   }
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "props.number",
+      applicationNumber
+    )
+  );
 
   // Set Institution/Applicant info card visibility
   if (
@@ -477,6 +474,16 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
+      false
+    );
 
     return action;
   },
@@ -531,6 +538,8 @@ const screenConfig = {
         },
         body: getCommonCard({
           // estimateSummary: estimateSummary,
+          fieldSummary: fieldSummary,
+          fieldinspectionSummary: fieldinspectionSummary,
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,

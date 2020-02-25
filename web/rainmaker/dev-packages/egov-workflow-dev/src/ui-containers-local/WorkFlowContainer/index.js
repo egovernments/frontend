@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import TaskStatusContainer from "../TaskStatusContainer";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { Footer } from "../../ui-molecules-local";
 import {
   getQueryArg,
@@ -92,6 +93,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=forward&status=success";
       case "MARK":
         return "purpose=mark&status=success";
+      case "VERIFY":
+        return "purpose=verify&status=success";
       case "REJECT":
         return "purpose=application&status=rejected";
       case "CANCEL":
@@ -183,6 +186,15 @@ class WorkFlowContainer extends React.Component {
 
       if (payload) {
         let path = "";
+
+        if(moduleName == "PT.CREATE"||moduleName == "ASMT"){
+          this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
+            label
+          )}&moduleName=${moduleName}&applicationNumber=${ get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
+          return;
+        }
+
+
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
@@ -216,13 +228,26 @@ class WorkFlowContainer extends React.Component {
 
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
-    let data = get(preparedFinalObject, dataPath, []);
+    let data = {};
     
-    if (dataPath !== "BPA") {
+    if (dataPath == "BPA" || dataPath == "Assessment"||dataPath == "Property") {
+      
+      data = get(preparedFinalObject, dataPath, {})
+    }else{
+      data=get(preparedFinalObject, dataPath, [])
       data = data[0];
     }
     //setting the action to send in RequestInfo
-    let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
+    let appendToPath = ""
+    if(dataPath === "FireNOCs"){
+      appendToPath ="fireNOCDetails."
+    }else if(dataPath === "Assessment"||dataPath === "Property"  ){
+      appendToPath ="workflow."
+    }else{
+      appendToPath = ""
+    }
+
+    
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
@@ -242,6 +267,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   getRedirectUrl = (action, businessId, moduleName) => {
+    console.log("modulenamewater",moduleName);
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances } = this.props;
@@ -256,6 +282,8 @@ class WorkFlowContainer extends React.Component {
     }else if(moduleName === "BPA"){
       baseUrl = "egov-bpa";
       bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
+    }else if(moduleName === "NewWS1"||moduleName === "NewSW1"){
+      baseUrl="wns"
     }else{
       baseUrl = "tradelicence";
     }
@@ -307,9 +335,11 @@ class WorkFlowContainer extends React.Component {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );    
-    const data = find(businessServiceData, { businessService: moduleName });
-    const nextState = find(data.states, { uuid: nextStateUUID });
-    return nextState.isTerminateState;
+    const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
+    // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
+
+    const isLastState = data ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
+    return isLastState;
   };
 
   checkIfDocumentRequired = (nextStateUUID, moduleName) => {
@@ -456,7 +486,8 @@ const mapDispacthToProps = dispatch => {
     prepareFinalObject: (path, value) =>
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
-      dispatch(toggleSnackbar(open, message, variant))
+      dispatch(toggleSnackbar(open, message, variant)),
+      setRoute: route => dispatch(setRoute(route))
   };
 };
 

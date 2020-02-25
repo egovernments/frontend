@@ -9,8 +9,9 @@ import {
     getCommonParagraph,
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import { handleScreenConfigurationFieldChange as handleField ,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { propertySearch,applicationSearch } from "./functions";
+  
   
   export const resetFields = (state, dispatch) => {
     // dispatch(
@@ -69,6 +70,23 @@ import {
         ""
       )
     );
+    dispatch(prepareFinalObject(
+      "searchScreen.acknowledgementIds",
+      ''
+    ))
+    dispatch(prepareFinalObject(
+      "searchScreen.ids",
+      ''
+    ))
+    dispatch(prepareFinalObject(
+      "searchScreen.mobileNumber",
+      ''
+    ))
+    dispatch(prepareFinalObject(
+      "searchScreen.oldpropertyids",
+      ''
+    ))
+    
   };
 
   
@@ -265,7 +283,7 @@ import {
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_INVALID_APPLICATION_NO",
-            jsonPath: "searchScreen.ptApplicationNumber"
+            jsonPath: "searchScreen.acknowledgementIds"
           }), 
       ownerMobNoProp: getTextField({
         label: {

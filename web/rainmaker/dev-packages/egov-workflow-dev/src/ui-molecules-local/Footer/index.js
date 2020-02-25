@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { ActionDialog } from "../";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
-import {getNextFinancialYearForRenewal} from "../../ui-utils/commons"
+import {getNextFinancialYearForRenewal,getSearchResults} from "../../ui-utils/commons"
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -17,7 +18,8 @@ class Footer extends React.Component {
   state = {
     open: false,
     data: {},
-    employeeList: []
+    employeeList: [],
+    //responseLength: 0
   };
 
   getDownloadData = () => {
@@ -142,7 +144,6 @@ class Footer extends React.Component {
       `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
     );
   };
-
   render() {
     const {
       contractData,
@@ -191,7 +192,18 @@ class Footer extends React.Component {
           }
         };
       });
-    if (status === "APPROVED" && applicationType !=="RENEWAL" &&  moduleName === "NewTL") {
+      if(moduleName === "NewTL"){
+        const responseLength = get(
+          state.screenConfiguration.preparedFinalObject,
+          `licenseCount`,
+          1
+        );
+      const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
+          if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
+          return true;
+        })
+       const rolecheck= rolearray.length>0? true: false;
+    if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
       const editButton = {
         label: "Edit",
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
@@ -211,7 +223,7 @@ class Footer extends React.Component {
       };
       downloadMenu && downloadMenu.push(submitButton);
     }
-
+  }
 
     
     const buttonItems = {

@@ -3,14 +3,15 @@ import {
   getCommonCard,
   getCommonTitle,
   getCommonGrayCard,
-  getCommonContainer
+  getCommonContainer,
+  getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg,setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults, getSearchResultsForSewerage, waterEstimateCalculation, getDescriptionFromMDMS, findAndReplace, swEstimateCalculation } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
   setMultiOwnerForSV,
@@ -31,9 +32,11 @@ import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+let service = getQueryArg(window.location.href, "service");
 let headerSideText = { word1: "", word2: "" };
 
-
+const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
+const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update"
 
 // const getTradeTypeSubtypeDetails = payload => {
 //   const tradeUnitsFromApi = get(
@@ -54,68 +57,63 @@ let headerSideText = { word1: "", word2: "" };
 //   return tradeUnitDetails;
 // };
 
-const searchResults = async (action, state, dispatch, applicationNo) => {
-  let queryObject = [
-    { key: "tenantId", value: "pb.amritsar" },
-    { key: "applicationNumber", value: "WS_AP/1013/2019-20/060213" }
-  ];
-  let payload = await getSearchResults(queryObject);
+//---------------- existing Code -------------------- //
+// const searchResults = async (action, state, dispatch, applicationNo) => {
+//   let queryObject = [
+//     { key: "tenantId", value: tenantId },
+//     { key: "applicationNumber", value: applicationNumber }
+//   ];
+//   let payload = await getSearchResults(queryObject);
 
 
-  console.log("payloaddata",payload)
+//   console.log("payloaddata", payload)
 
-  headerSideText = getHeaderSideText(
-    get(payload, "WaterConnection[0].applicationStatus"),
-    get(payload, "WaterConnection[0].applicationNo")
-  );
-  set(payload, "WaterConnection[0].headerSideText", headerSideText);
+//   headerSideText = getHeaderSideText(
+//     get(payload, "WaterConnection[0].applicationStatus"),
+//     get(payload, "WaterConnection[0].applicationNo")
+//   );
+//   set(payload, "WaterConnection[0].headerSideText", headerSideText);
 
-  // get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory") &&
-  //   get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory").split(
-  //     "."
-  //   )[0] === "INDIVIDUAL"
-  //   ? setMultiOwnerForSV(action, true)
-  //   : setMultiOwnerForSV(action, false);
+//   // get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory") &&
+//   //   get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory").split(
+//   //     "."
+//   //   )[0] === "INDIVIDUAL"
+//   //   ? setMultiOwnerForSV(action, true)
+//   //   : setMultiOwnerForSV(action, false);
 
-  // if (get(payload, "Licenses[0].licenseType")) {
-  //   setValidToFromVisibilityForSV(
-  //     action,
-  //     get(payload, "Licenses[0].licenseType")
-  //   );
-  // }
+//   // if (get(payload, "Licenses[0].licenseType")) {
+//   //   setValidToFromVisibilityForSV(
+//   //     action,
+//   //     get(payload, "Licenses[0].licenseType")
+//   //   );
+//   // }
 
-  // await setDocuments(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.applicationDocuments",
-  //   "LicensesTemp[0].reviewDocData",
-  //   dispatch,'TL'
-  // );
-  let sts = getTransformedStatus(get(payload, "WaterConnection[0].applicationStatus"));
-  payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-  // payload &&
-  //   dispatch(
-  //     prepareFinalObject(
-  //       "LicensesTemp[0].tradeDetailsResponse",
-  //       getTradeTypeSubtypeDetails(payload)
-  //     )
-  //   );
-  const WaterData = payload.WaterConnection[0];
-  const fetchFromReceipt = sts !== "pending_payment";
-  createEstimateData(
-    WaterData,
-    "LicensesTemp[0].estimateCardData",
-    dispatch,
-    {},
-    fetchFromReceipt
-  );
-  // Fetch Bill and populate estimate card
-  // const code = get(
-  //   payload,
-  //   "WaterConnection[0].property.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: "pb.amritsar" }];
-  // getBoundaryData(action, state, dispatch, queryObj, code);
-};
+//   // await setDocuments(
+//   //   payload,
+//   //   "Licenses[0].tradeLicenseDetail.applicationDocuments",
+//   //   "LicensesTemp[0].reviewDocData",
+//   //   dispatch,'TL'
+//   // );
+//   let sts = getTransformedStatus(get(payload, "WaterConnection[0].applicationStatus"));
+//   payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+//   // payload &&
+//   //   dispatch(
+//   //     prepareFinalObject(
+//   //       "LicensesTemp[0].tradeDetailsResponse",
+//   //       getTradeTypeSubtypeDetails(payload)
+//   //     )
+//   //   );
+//   const WaterData = payload.WaterConnection[0];
+//   // const fetchFromReceipt = sts !== "pending_payment";
+//   createEstimateData(WaterData, "LicensesTemp[0].estimateCardData", dispatch, {}, {});
+//   // Fetch Bill and populate estimate card
+//   // const code = get(
+//   //   payload,
+//   //   "WaterConnection[0].property.address.locality.code"
+//   // );
+//   // const queryObj = [{ key: "tenantId", value: "pb.amritsar" }];
+//   // getBoundaryData(action, state, dispatch, queryObj, code);
+// };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
@@ -148,12 +146,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         true
       );
 
-      if (get(data, "Licenses[0].tradeLicenseDetail.verificationDocuments")) {
+      if (get(data, "WaterConnection[0].documents")) {
         await setDocuments(
           data,
-          "Licenses[0].tradeLicenseDetail.verificationDocuments",
+          "WaterConnection[0].documents",
           "LicensesTemp[0].verifyDocData",
-          dispatch,'TL'
+          dispatch, 'NewWS1'
         );
       } else {
         dispatch(
@@ -195,6 +193,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
   }
+
+
 };
 
 let titleText = "";
@@ -255,8 +255,7 @@ const setStatusBasedValue = status => {
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Task Details",
-    labelKey: "WNS_TASK_DETAILS"
+    labelKey: "WS_TASK_DETAILS"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -269,16 +268,28 @@ const headerrow = getCommonContainer({
 });
 
 const estimate = getCommonGrayCard({
+  header: getCommonSubHeader({ labelKey: "WS_TASK_DETAILS_FEE_ESTIMATE" }),
   estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "LicensesTemp[0].estimateCardData"
-  })
+    sourceJsonPath: "viewBillToolipData",
+    isCardrequired: true
+  }),
+  buttonView: getDialogButton(
+    "VIEW BREAKUP",
+    "WS_PAYMENT_VIEW_BREAKUP",
+    "search-preview"
+  ),
+  buttonAdd: getDialogButton(
+    "ADD REBATE/PENALTY",
+    "WS_PAYMENT_ADD_REBATE_PENALTY",
+    "search-preview"
+  ),
 });
 
 export const reviewConnectionDetails = getReviewConnectionDetails(false);
 
 export const reviewOwnerDetails = getReviewOwner(false);
 
-export const reviewDocumentDetails = getReviewDocuments(false, false);
+export const reviewDocumentDetails = getReviewDocuments(false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -307,19 +318,19 @@ const setActionItems = (action, object) => {
 export const taskDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "WS_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-    ),
   reviewConnectionDetails,
   reviewDocumentDetails,
-  reviewOwnerDetails,
+  reviewOwnerDetails
 });
 
-export const summaryScreen = getCommonCard({ reviewConnectionDetails, reviewDocumentDetails, reviewOwnerDetails, })
+export const summaryScreen = getCommonCard({
+  reviewConnectionDetails,
+  reviewDocumentDetails,
+  reviewOwnerDetails
+})
 
 const screenConfig = {
+
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
@@ -327,13 +338,13 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
-    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number", "WS/1013/2019-20/060956");
-    if (status !== "pending_payment") {
-      set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
-    }
+    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number", applicationNumber);
+    // if (status !== "pending_payment") {
+    //   set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
+    // }
     const queryObject = [
-      { key: "tenantId", value: "pb.amritsar" },
-      { key: "businessServices", value: "NewWS1" }
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: serviceModuleName }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
     // response.then(data=>console.log("applyresource",data));
@@ -372,39 +383,6 @@ const screenConfig = {
                 sm: 4,
                 align: "right"
               },
-              // children:
-              //   process.env.REACT_APP_NAME === "Employee"
-              //     ? {}
-              //     : {
-              //       word1: {
-              //         ...getCommonTitle(
-              //           {
-              //             jsonPath: "Licenses[0].headerSideText.word1"
-              //           },
-              //           {
-              //             style: {
-              //               marginRight: "10px",
-              //               color: "rgba(0, 0, 0, 0.6000000238418579)"
-              //             }
-              //           }
-              //         )
-              //       },
-              //       word2: {
-              //         ...getCommonTitle({
-              //           jsonPath: "Licenses[0].headerSideText.word2"
-              //         })
-              //       },
-              //       cancelledLabel: {
-              //         ...getCommonHeader(
-              //           {
-              //             labelName: "Cancelled",
-              //             labelKey: "WS_COMMON_STATUS_CANC"
-              //           },
-              //           { variant: "body1", style: { color: "#E54D42" } }
-              //         ),
-              //         visible: false
-              //       }
-              //     }
             }
           }
         },
@@ -415,8 +393,8 @@ const screenConfig = {
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "WaterConnection",
-            moduleName: "NewWS1",
-            updateUrl: "/ws-services/v1/_update"
+            moduleName: serviceModuleName,
+            updateUrl: serviceUrl
           }
         },
         actionDialog: {
@@ -427,15 +405,15 @@ const screenConfig = {
           props: {
             open: true,
             dataPath: "WaterConnection",
-            moduleName: "NewWS1",
-            updateUrl: "/ws-services/v1/_update",
+            moduleName: serviceModuleName,
+            updateUrl: serviceUrl,
             data: {
-              buttonLabel: "RESUBMIT",
-              moduleName: "NewWS1",
+              buttonLabel: "SUBMIT_APPLICATION",
+              moduleName: serviceModuleName,
               isLast: false,
               dialogHeader: {
-                labelName: "RESUBMIT Application",
-                labelKey: "WF_RESUBMIT_APPLICATION"
+                // labelName: "RESUBMIT Application",
+                labelKey: "WF_SUBMIT_APPLICATION"
               },
               showEmployeeList: false,
               roles: "CITIZEN",
@@ -444,7 +422,6 @@ const screenConfig = {
           }
         },
         taskDetails,
-        // footer
       }
     },
     breakUpDialog: {
@@ -454,10 +431,98 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: "md",
-        screenKey: "search-preview"
+        screenKey: "search-preview",
       }
     }
   }
 };
+
+//----------------- search code (feb17)---------------------- //
+const searchResults = async (action, state, dispatch, applicationNumber) => {
+  let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
+  let viewBillTooltip = [], estimate;
+  if (service === "WATER") {
+    let payload = await getSearchResults(queryObjForSearch);
+    payload.WaterConnection[0].service = service;
+
+    // to set documents 
+    if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
+      await setDocuments(
+        payload,
+        "WaterConnection[0].documents",
+        "DocumentsData",
+        dispatch, "WS"
+      );
+    }
+
+    const convPayload = findAndReplace(payload, "NA", null)
+    let queryObjectForEst = [{
+      applicationNo: applicationNumber,
+      tenantId: tenantId,
+      waterConnection: convPayload.WaterConnection[0]
+    }]
+    if (payload !== undefined && payload !== null) {
+      dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+    }
+    estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
+    if (estimate !== null && estimate !== undefined) {
+      if (estimate.Calculation.length > 0) {
+        await processBills(estimate, viewBillTooltip, dispatch);
+        dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
+      }
+    }
+  } else if (service === "SEWERAGE") {
+    let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
+    payload.SewerageConnections[0].service = service;
+    if (payload !== undefined && payload !== null) {
+      dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
+    }
+    const convPayload = findAndReplace(payload, "NA", null)
+    let queryObjectForEst = [{
+      applicationNo: applicationNumber,
+      tenantId: tenantId,
+      sewerageConnection: convPayload.SewerageConnections[0]
+    }]
+    estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
+    let viewBillTooltip = []
+    if (estimate !== null && estimate !== undefined) {
+      if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
+        await processBills(estimate, viewBillTooltip, dispatch);
+        dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
+      }
+    }
+  }
+  if (estimate !== null && estimate !== undefined) {
+    createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
+  }
+};
+
+const processBills = async (data, viewBillTooltip, dispatch) => {
+  let des, obj, groupBillDetails = [];
+  data.Calculation[0].taxHeadEstimates.forEach(async element => {
+    let cessKey = element.taxHeadCode
+    let body;
+    if (service === "WATER") {
+      body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+    } else {
+      body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+    }
+    let res = await getDescriptionFromMDMS(body, dispatch)
+    if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
+      if (service === "WATER") { des = res.MdmsRes["ws-services-calculation"]; }
+      else { des = res.MdmsRes["sw-services-calculation"]; }
+      if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
+        groupBillDetails.push({ key: cessKey, value: des[cessKey][0].description, amount: element.estimateAmount, order: element.order })
+      } else {
+        groupBillDetails.push({ key: cessKey, value: 'Please put some description in mdms for this Key', amount: element.estimateAmount, category: element.category })
+      }
+    }
+  })
+  obj = { bill: groupBillDetails }
+  viewBillTooltip.push(obj);
+  const dataArray = [{ total: data.Calculation[0].totalAmount }]
+  const finalArray = [{ description: viewBillTooltip, data: dataArray }]
+  dispatch(prepareFinalObject("viewBillToolipData", finalArray));
+}
 
 export default screenConfig;

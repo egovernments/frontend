@@ -139,13 +139,13 @@ class WhatsAppLocality extends React.Component {
       <div>
         <div className="search-background">
           <div className="header-iconText">
-            <Icon id="back-navigator" action="navigation" name="arrow-back" />
+            {/* <Icon id="back-navigator" action="navigation" name="arrow-back" /> */}
             <Label
               label="CHOOSE LOCALITY"
               color="white"
               fontSize={18}
               bold={true}
-              containerStyle={{ marginLeft: 17, marginTop: -2 }}
+              containerStyle={{ marginLeft: 30, marginTop: -2 }}
             />
 
           </div>
@@ -153,7 +153,7 @@ class WhatsAppLocality extends React.Component {
           <div className={`${classes.root} dashboard-search-main-cont`}>
             <Icon action="action" name="search" style={{ marginLeft: 12 }} />
             <Input
-              placeholder="Search Locality"
+              placeholder="Start typing to search your Locality"
               disableUnderline={true}
               fullWidth={true}
               //className={classes.input}
@@ -172,7 +172,7 @@ class WhatsAppLocality extends React.Component {
             items={this.getListItems(this.state.data)}
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
-              const number = this.state.phone || 919987106368;
+              const number = this.state.phone || 918744960111;
               const name=item.primaryText.props.label;
               const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name;
               window.location.href = weblink

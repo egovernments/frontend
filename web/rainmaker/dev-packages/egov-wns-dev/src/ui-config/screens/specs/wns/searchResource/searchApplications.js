@@ -61,6 +61,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationType",
+      "props.value",
+      ""
+    )
+  );
 };
 
 export const searchApplications = getCommonCard({
@@ -99,7 +107,7 @@ export const searchApplications = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: /^[a-zA-Z0-9-_/]*$/i,
       errorMessage: "ERR_INVALID_APPLICATION_NO",
       jsonPath: "searchScreen.applicationNumber"
     }),
@@ -124,6 +132,14 @@ export const searchApplications = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.mobileNumber"
     }),
+    applicationType: getSelectField({
+      label: { labelName: "To Date", labelKey: "WS_APPLICATION_TYPE_LABEL" },
+      placeholder: { labelName: "Select to Date", labelKey: "WS_COMMON_APPLICATION_TYPE_PLACEHOLDER" },
+      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+      jsonPath: "searchScreen.appType",
+      gridDefination: { xs: 12, sm: 4 },
+      required: false
+    }),
     applicationstatus: getSelectField({
       label: {
         labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
@@ -132,15 +148,14 @@ export const searchApplications = getCommonCard({
         labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
       },
       required: false,
-      jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationstatus",
       gridDefination: {
         xs: 12,
         sm: 4
       },
       required: false,
       errorMessage: "ERR_INVALID_BILLING_PERIOD",
-      jsonPath: "searchScreen.status"
+      jsonPath: "searchScreen.appStatus"
     }),
 
     fromDate: getDateField({
@@ -173,6 +188,14 @@ export const searchApplications = getCommonCard({
       },
       pattern: getPattern("Date"),
       errorMessage: "ERR_INVALID_DATE",
+      required: false
+    }),
+    applicationType: getSelectField({
+      label: { labelName: "To Date", labelKey: "WS_APPLICATION_TYPE_LABEL" },
+      placeholder: { labelName: "Select to Date", labelKey: "WS_COMMON_APPLICATION_TYPE_PLACEHOLDER" },
+      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+      jsonPath: "searchScreen.appType",
+      gridDefination: { xs: 12, sm: 4 },
       required: false
     })
   }),

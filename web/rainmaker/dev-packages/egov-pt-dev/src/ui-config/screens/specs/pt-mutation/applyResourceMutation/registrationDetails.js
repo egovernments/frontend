@@ -33,22 +33,55 @@ export const registrationDetails = getCommonCard(
         }
       ),
       registrationDetailsContainer: getCommonContainer({ 
-        transferReason: getSelectField({
+        // transferReason: getSelectField({
+        //   label: {
+        //     labelName: "Reason For Transfer",
+        //     labelKey: "PT_MUTATION_TRANSFER_REASON"
+        //   },
+        //   placeholder: {
+        //     labelName: "Select Reason for Transfer",
+        //     labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
+        //   },
+        //   required:true,
+        //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
+        //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+        //   localePrefix: {
+        //     moduleName: "common-masters",
+        //     masterName: "OwnerType"
+        //   }
+        // }),
+        transferReason: getTextField({
           label: {
-            labelName: "Reason For Transfer",
+            labelName: "Reason for Transfer",
             labelKey: "PT_MUTATION_TRANSFER_REASON"
+          },
+          props:{
+            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Select Reason for Transfer",
             labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
           },
           required:true,
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-          sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerType"
-          }
+          pattern: getPattern("Address"),
+          jsonPath: "Property.additionalDetails.reasonForTransfer"
+        }),
+
+        marketValue: getTextField({
+          label: {
+            labelName: "Market Value",
+            labelKey: "PT_MUTATION_MARKET_VALUE"
+          },
+          props:{
+            className:"applicant-details-error"
+          },
+          placeholder: {
+            labelName: "Enter Market Value",
+            labelKey: "PT_MUTATION_MARKET_VALUE_PLACEHOLDER"
+          },
+          required:true,
+          pattern: getPattern("DocumentNo"),
+        jsonPath: "Property.additionalDetails.marketValue"
         }),
         documentNumber: getTextField({
           label: {
@@ -63,8 +96,8 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_DOCUMENT_NO_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
-    //      jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+          pattern: getPattern("DocumentNo"),
+          jsonPath: "Property.additionalDetails.documentNumber"
         }),
           documentIssueDateField :getDateField({
           label: { labelName: "Document Issue Date", labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE" },
@@ -74,7 +107,7 @@ export const registrationDetails = getCommonCard(
           },
           required: true,
           pattern: getPattern("Date"),
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
+          jsonPath: "Property.additionalDetails.documentDate",
           // props: {
           //   inputProps: {
           //     max: getTodaysDateInYMD()
@@ -94,8 +127,8 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_DOCUMENT_VALUE_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
-     //     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+          pattern: getPattern("DocumentNo"),
+        jsonPath: "Property.additionalDetails.documentValue",
         }),
         remarks: getTextField({
           label: {
@@ -110,7 +143,7 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_REMARKS"
           },
           pattern: getPattern("Address"),
-         // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+          jsonPath: "Property.additionalDetails.remarks",
         }),
       })
     }) ; 

@@ -15,6 +15,7 @@ import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/compone
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
 import DocumentsInfo from "egov-ui-kit/common/propertyTax/Property/components/DocumentsInfo";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 import "./index.css";
@@ -36,6 +37,9 @@ class ReviewForm extends Component {
     calculationDetails: false,
   };
 
+  componentDidMount() {
+    this.props.getEstimates();
+  }
   handleOptionsChange = (event, value) => {
     this.setState({ valueSelected: value });
   };
@@ -69,6 +73,7 @@ class ReviewForm extends Component {
 
   onEditButtonClick = (index) => {
     let { onTabClick } = this.props;
+    this.props.prepareFinalObject("propertiesEdited", true);
     onTabClick(index);
   };
 
@@ -101,7 +106,7 @@ class ReviewForm extends Component {
               />}
               <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
-              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
+              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} ></OwnerInfo>
               <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></DocumentsInfo>
             </div>
           }
@@ -146,6 +151,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
+  prepareFinalObject: (jsonPath, value) =>
+  dispatch(prepareFinalObject(jsonPath, value)),
 });
 export default connect(
   mapStateToProps,

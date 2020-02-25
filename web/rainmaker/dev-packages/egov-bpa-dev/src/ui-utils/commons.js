@@ -45,6 +45,16 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
   set(jsonObject, jsonPath, modifiedArray);
 };
 
+export const convertEchToDate = dateEpoch => {
+  const dateFromApi = new Date(dateEpoch);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${year}-${month}-${day}`;
+};
+
 export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
@@ -231,8 +241,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
     let wfDocuments;
     if (method === "UPDATE") {
-      documents = payload.documents;
-      documents = requiredDocuments;
+      if (status === "APPLY") {
+        documents = payload.documents
+      } else {
+        documents = payload.documents;
+        documents = requiredDocuments;
+      }
       set(payload, "documents", documents);
       set(payload, "wfDocuments", null);
     } else if( method === 'CREATE') {
@@ -748,7 +762,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
-        dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+        let stakeHolderDetails = searchResponse.Licenses;
+        if(stakeHolderDetails && stakeHolderDetails[0] && stakeHolderDetails[0].tradeLicenseDetail) {
+          let owners = stakeHolderDetails[0].tradeLicenseDetail.owners;
+          let dob = convertEchToDate(owners[0].dob);
+          stakeHolderDetails[0].tradeLicenseDetail.owners[0].dob = dob;
+        } 
+        dispatch(prepareFinalObject("Licenses", stakeHolderDetails));
         await setDocsForEditFlow(state, dispatch);
       }
       const updatedtradeUnits = get(
@@ -777,7 +797,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       dispatch(toggleSpinner());
       if (!response) {
       }
-      dispatch(prepareFinalObject("Licenses", response.Licenses));
+      let stakeHolderDetails = response.Licenses;
+      if(stakeHolderDetails && stakeHolderDetails[0] && stakeHolderDetails[0].tradeLicenseDetail) {
+        let owners = stakeHolderDetails[0].tradeLicenseDetail.owners;
+        let dob = convertEchToDate(owners[0].dob);
+        stakeHolderDetails[0].tradeLicenseDetail.owners[0].dob = dob;
+      } 
+      dispatch(prepareFinalObject("Licenses", stakeHolderDetails));
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */

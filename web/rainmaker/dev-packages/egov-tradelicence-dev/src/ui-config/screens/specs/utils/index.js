@@ -445,6 +445,8 @@ export const getButtonVisibility = (status, button) => {
   if (status === "pending_approval" && button === "REJECT") return true;
   if (status === "approved" && button === "CANCEL TRADE LICENSE") return true;
   if (status === "APPROVED" && button === "APPROVED") return true;
+  if (status === "EXPIRED" && button === "EXPIRED") return true;
+  if (status === "PENDINGPAYMENT" && button === "PENDINGPAYMENT") return true;
   return false;
 };
 
@@ -958,8 +960,9 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
 }
 
 export const downloadCertificateForm = (Licenses,mode='download') => {
+ const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";
   const queryStr = [
-    { key: "key", value: "tlcertificate" },
+    { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
     { key: "tenantId", value: "pb" }
   ]
   const DOWNLOADRECEIPT = {
@@ -1032,8 +1035,8 @@ const getToolTipInfo = (taxHead, LicenseData) => {
   }
 };
 
-const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
-  if (Bill) {
+const getEstimateData = (ResponseData, isPaid, LicenseData) => {
+  if (ResponseData) {
     const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
       return {
         name: {
@@ -1047,16 +1050,17 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
         }
       };
     });
-    const { billAccountDetails } = Bill.billDetails[0];
+    const { billAccountDetails } = ResponseData.billDetails[0];
     const transformedData = billAccountDetails.reduce((result, item) => {
-      if (getFromReceipt) {
+      if (isPaid) {
         item.accountDescription &&
           result.push({
             name: {
               labelName: item.accountDescription.split("-")[0],
               labelKey: item.accountDescription.split("-")[0]
             },
-            value: getTaxValue(item),
+            // value: getTaxValue(item),\
+            value : get(ResponseData , "totalAmount"),
             info: getToolTipInfo(
               item.accountDescription.split("-")[0],
               LicenseData
@@ -1071,6 +1075,20 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
                 )
               }
           });
+          item.taxHeadCode &&
+          result.push({
+            name: {
+              labelName: item.taxHeadCode,
+              labelKey: item.taxHeadCode
+            },
+            // value: getTaxValue(item),
+            value : get(ResponseData , "totalAmount"),
+            info: getToolTipInfo(item.taxHeadCode, LicenseData) && {
+              value: getToolTipInfo(item.taxHeadCode, LicenseData),
+              key: getToolTipInfo(item.taxHeadCode, LicenseData)
+            }
+          });
+
       } else {
         item.taxHeadCode &&
           result.push({
@@ -1078,13 +1096,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               labelName: item.taxHeadCode,
               labelKey: item.taxHeadCode
             },
-            value: getTaxValue(item),
+            // value: getTaxValue(item),
+            value : get(ResponseData , "totalAmount"),
             info: getToolTipInfo(item.taxHeadCode, LicenseData) && {
               value: getToolTipInfo(item.taxHeadCode, LicenseData),
               key: getToolTipInfo(item.taxHeadCode, LicenseData)
             }
           });
       }
+
       return result;
     }, []);
     return [
@@ -1207,9 +1227,11 @@ let isPAID = false;
 if(currentStatus==="CITIZENACTIONREQUIRED"){
   return isPAID;
 }
-  if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
+const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+
+  if (!isEmpty(businessServiceData)) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
-    const states = tlBusinessService[0].states;
+    const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === currentStatus) {
         break;
@@ -1271,6 +1293,7 @@ export const createEstimateData = async (
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
+
   let estimateData = payload
     ? isPAID
       ? payload &&
@@ -1284,6 +1307,11 @@ export const createEstimateData = async (
       : payload && getEstimateData(payload, false, LicenseData)
     : [];
   estimateData = estimateData || [];
+  set(
+    estimateData,
+    "payStatus",
+    isPAID
+  );
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
   if (payload) {
@@ -1312,13 +1340,20 @@ export const getCurrentFinancialYear = () => {
   var fiscalYr = "";
   if (curMonth >= 3) {
     var nextYr1 = (today.getFullYear() + 1).toString();
-    fiscalYr = today.getFullYear().toString() + "-" + nextYr1;
+    var nextYr1format=nextYr1.substring(2,4);
+    fiscalYr = today.getFullYear().toString() + "-" + nextYr1format;
   } else {
     var nextYr2 = today.getFullYear().toString();
-    fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2;
+    var nextYr2format=nextYr2.substring(2,4);
+    fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2format;
   }
   return fiscalYr;
 };
+
+export const getnextFinancialYear = (year) => {
+  const nextFY=   year.substring(0, 2) + (parseInt(year.substring(2 ,4)) + 1)  + year.substring(4, 5) + (parseInt(year.substring(5 ,7)) + 1) ;
+   return nextFY;
+ };
 
 export const validateFields = (
   objectJsonPath,
@@ -1779,6 +1814,8 @@ export const getDocList = (state, dispatch) => {
     "Licenses[0].tradeLicenseDetail.tradeUnits"
   );
 
+  const applicationType = get(state.screenConfiguration.preparedFinalObject ,"Licenses[0].applicationType" );
+
   const tradeSubCategories = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.TradeLicense.MdmsTradeType"
@@ -1794,7 +1831,7 @@ export const getDocList = (state, dispatch) => {
   
   let applicationDocArray = [];
   selectedTypes && selectedTypes.forEach(tradeSubTypeDoc => {
-   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
+   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "EDITRENEWAL" || applicationType==="RENEWAL" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
    
     applicationDocArray = [
       ...applicationDocArray,

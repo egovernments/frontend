@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import formHoc from "egov-ui-kit/hocs/form";
+import { httpRequest } from "egov-ui-kit/utils/api";
 import Label from "egov-ui-kit/utils/translationNode";
 import YearDialogue from "../common/YearDialogue";
 import { Screen, SingleProperty } from "modules/common";
@@ -24,7 +25,7 @@ import {
   localStorageGet,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
+import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import "./index.css";
 
 const PropertySearchFormHOC = formHoc({
@@ -32,6 +33,14 @@ const PropertySearchFormHOC = formHoc({
   path: "PropertyTaxPay",
   isCoreConfiguration: true
 })(SearchPropertyForm);
+
+const linkStyle = {
+  height: 20,
+  lineHeight: "auto",
+  minWidth: "inherit",
+  cursor: "pointer",
+  textDecoration: "underline"
+};
 
 class SearchProperty extends Component {
   constructor(props) {
@@ -69,7 +78,7 @@ class SearchProperty extends Component {
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
-    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
+    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !applicationNumber.value) {
       this.props.toggleSnackbarAndSetText(
         true,
         {
@@ -93,31 +102,42 @@ class SearchProperty extends Component {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
       if (applicationNumber.value) {
-        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
+        queryParams.push({ key: "acknowledgementIds", value: applicationNumber.value });
       }
       this.setState({
         searchResult: tableData
       });
-      this.props.fetchProperties(queryParams);
+      this.props.fetchProperties(queryParams, "citizen_search");
       this.setState({ showTable: true });
     }
   };
 
+
+  onApplicationClick = async (applicationNo, tenantId, propertyId) => {
+    const businessService = await getApplicationType(applicationNo, tenantId);
+    navigateToApplication(businessService, this.props.history, applicationNo, tenantId, propertyId);
+  }
+
+  getApplicationLink = (applicationNo, tenantId, propertyId) => {
+    return (
+      <a
+        style={linkStyle}
+        onClick={() => this.onApplicationClick(applicationNo, tenantId, propertyId)}
+      >
+        {applicationNo}
+      </a>
+    );
+  }
+
   getLink = (userType, history, id, tenantId) => {
     return (
       <a
-        style={{
-          height: 20,
-          lineHeight: "auto",
-          minWidth: "inherit",
-          cursor: "pointer",
-          textDecoration: "underline"
-        }}
+        style={linkStyle}
         onClick={
           userType === "CITIZEN"
             ? e => {
               history.push(
-                `/property-tax/my-properties/property/${id}/${tenantId}?isMutationApplication=true`
+                `/property-tax/my-properties/property/${id}/${tenantId}`
               );
             }
             : e => {
@@ -131,7 +151,16 @@ class SearchProperty extends Component {
       </a>
     );
   }
-
+  getStatusColor = (status) => {
+    switch (status) {
+      case 'INWORKFLOW':
+        return status = <span style={{ color: "red" }}>{status}</span>
+      case 'ACTIVE':
+        return status = <span style={{ color: "green" }}>{status}</span>
+      default:
+        return status;
+    }
+  }
   extractTableData = properties => {
     const { history } = this.props;
     const userType = JSON.parse(getUserInfo()).type;
@@ -148,20 +177,19 @@ class SearchProperty extends Component {
       if (!applicationNo) applicationNo = property.acknowldgementNumber;
       if (!date) date = getDateFromEpoch(property.auditDetails.createdTime);
       applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
-      const latestAssessment = getLatestPropertyDetails(propertyDetails);
-      let name = latestAssessment.owners[0].name;
+      // const latestAssessment = getLatestPropertyDetails(propertyDetails);
+      let name = property.owners[0].name;
       // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
       // let assessmentNo = latestAssessment.assessmentNumber;
       // const uuid = get(latestAssessment, "citizenInfo.uuid");
 
       let item = {
-        // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
-        applicationNo: <a>{applicationNo}</a>,
+        applicationNo: this.getApplicationLink(applicationNo, tenantId, propertyId),
         propertyId: this.getLink(userType, history, propertyId, tenantId),
         applicationType: applicationType,
         name: name,
         date: date,
-        status: status
+        status: this.getStatusColor(status)
       };
       tableData.push(item);
       return tableData;
@@ -177,8 +205,12 @@ class SearchProperty extends Component {
     // this.setState({
     //   dialogueOpen: true
     // });
-    const { history } = this.props;
-    history.push('/property-tax/assessment-form');
+    // const { history } = this.props;
+    // history.push('/property-tax/assessment-form');
+
+    let link = `/property-tax/assessment-form`;
+    let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+    window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
   };
 
   render() {
@@ -316,7 +348,7 @@ const mapDispatchToProps = dispatch => {
   return {
     addBreadCrumbs: url => dispatch(addBreadCrumbs(url)),
     displayFormErrors: formKey => dispatch(displayFormErrors(formKey)),
-    fetchProperties: queryObject => dispatch(fetchProperties(queryObject)),
+    fetchProperties: (queryObject, searchType) => dispatch(fetchProperties(queryObject, searchType)),
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     resetForm: formKey => dispatch(resetForm(formKey)),

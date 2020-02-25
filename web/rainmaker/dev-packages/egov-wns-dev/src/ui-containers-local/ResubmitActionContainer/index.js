@@ -116,11 +116,10 @@ class ResubmitActionContainer extends React.Component {
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = get(preparedFinalObject, dataPath, []);
-
     if (dataPath !== "BPA") {
       data = data[0];
     }
-  
+
     //setting the action to send in RequestInfo
     let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
     set(data, `${appendToPath}action`, label);
@@ -161,7 +160,6 @@ class ResubmitActionContainer extends React.Component {
       dataPath,
     } = this.props;
     const { open, data } = this.props;
-
     return (
       <div className="apply-wizard-footer" id="custom-atoms-footer">
         <ActionDialog

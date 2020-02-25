@@ -7,10 +7,12 @@ import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
+import store from "ui-redux/store";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import isUndefined from "lodash/isUndefined";
 import {
   getCommonCard,
@@ -203,24 +205,33 @@ export const getFinancialYearDates = (format, et) => {
 export const gotoApplyWithStep = (state, dispatch, step) => {
   const applicationNumber = getQueryArg(
     window.location.href,
-    "applicationNumber"
+    "consumerCode"
   );
   const tenantId = getQueryArg(
     window.location.href,
     "tenantId"
   );
   const applicationNumberQueryString = applicationNumber
-    ? `&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+    ? `consumerCode=${applicationNumber}&tenantId=${tenantId}`
     : ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/pt-mutation/apply?step=${step}${applicationNumberQueryString}`
-      : `/pt-mutation/apply?step=${step}${applicationNumberQueryString}`;
-  dispatch(setRoute(applyUrl));
+      ? `/egov-ui-framework/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`
+      : `/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`;
+  store.dispatch(setRoute(applyUrl));
 };
 
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
-  dispatch(setRoute(`/property-tax/assessment-form`));
+
+
+  let link = `/property-tax/assessment-form`;
+  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+  window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
+
+
+  // dispatch(setRoute(`/property-tax/assessment-form`));
+
+
   // let toggle = get(
   //   state.screenConfiguration.screenConfig[screenKey],
   //   "components.adhocDialog.props.open",
@@ -680,7 +691,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       tenantId: tenantId,
       moduleDetails: [
         {
-          moduleName: "FireNoc",
+          moduleName: "PropertyTax",
           masterDetails: [{ name: "Documents" }]
         }
       ]
@@ -711,20 +722,20 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-      case "Application No":
-        return getLocaleLabels(
-          "Application No.",
-          "PT_COMMON_TABLE_COL_APP_NO",
-          localisationLabels
-        );
+    case "Application No":
+      return getLocaleLabels(
+        "Application No.",
+        "PT_COMMON_TABLE_COL_APP_NO",
+        localisationLabels
+      );
 
-        case "Application Type":
-          return getLocaleLabels(
-            "Application Type",
-            "PT_COMMON_TABLE_COL_APP_TYPE",
-            localisationLabels
-          );
-  
+    case "Application Type":
+      return getLocaleLabels(
+        "Application Type",
+        "PT_COMMON_TABLE_COL_APP_TYPE",
+        localisationLabels
+      );
+
     case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
@@ -807,13 +818,13 @@ export const getTextToLocalMapping = label => {
         "PT_HOME_PROPERTY_RESULTS_TABLE_HEADING",
         localisationLabels
       );
-      
-      case "Search Results for Property Application":
+
+    case "Search Results for Property Application":
       return getLocaleLabels(
         "Search Results for Property Application",
         "PT_HOME_APPLICATION_RESULTS_TABLE_HEADING",
         localisationLabels
-      );  
+      );
 
     case "MY_APPLICATIONS":
       return getLocaleLabels(
@@ -821,5 +832,103 @@ export const getTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+    case "INWORKFLOW":
+      return getLocaleLabels(
+        "In Workflow",
+        "INWORKFLOW",
+        localisationLabels
+      );
+    default:
+      return getLocaleLabels(
+        label,
+        label,
+        localisationLabels
+      );
   }
 };
+
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
+};
+export const fetchBill = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getpayments = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/collection-services/payments/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'download') => {
+  const queryStr = [
+    { key: "key", value: pdfcode },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+
+export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download') => {
+  const queryStr = [
+    { key: "key", value: pdfcode },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
