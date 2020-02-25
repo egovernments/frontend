@@ -450,9 +450,12 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
-
-      let showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
-      
+     let showFooter;
+      if(moduleName==='NewWS1'||moduleName==='NewSW1'){
+         showFooter=process.env.REACT_APP_NAME === "Citizen" ? true : false;
+      }else{
+         showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
+      }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
