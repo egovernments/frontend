@@ -133,8 +133,11 @@ const callBackForApply = async (state, dispatch) => {
     "action": "OPEN",
     "moduleName": "PT"
   },
-    propertyPayload.owners[0].status = "INACTIVE";
-  propertyPayload.additionalDetails.documentDate = 1581490792377;
+  propertyPayload.owners.map(owner=>{
+    owner.status="INACTIVE";
+    
+  }) 
+   propertyPayload.additionalDetails.documentDate = 1581490792377;
 
   if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
@@ -145,8 +148,12 @@ const callBackForApply = async (state, dispatch) => {
     delete propertyPayload.institutionTemp;
   }
   else {
-    propertyPayload.ownersTemp[0].status = "ACTIVE";
-    propertyPayload.ownersTemp[0].type = propertyPayload.ownershipCategoryTemp;
+    // 
+    propertyPayload.ownersTemp.map(owner=>{
+      owner.status="ACTIVE";
+      owner.ownerType = propertyPayload.ownershipCategoryTemp;
+    }) 
+   
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
   }
