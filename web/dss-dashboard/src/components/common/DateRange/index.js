@@ -122,8 +122,8 @@ class DateRange extends React.Component {
         return {
           title: "CUSTOM",
           value: {
-            startDate: moment(this.state.from || new Date(), "DD/MM/YYYY").unix(),
-            endDate: moment(this.state.to || new Date(), "DD/MM/YYYY").unix(),
+            startDate: moment(this.state.from || new Date(), "DD/MM/YYYY").startOf('day').unix(),
+            endDate: moment(this.state.to || new Date(), "DD/MM/YYYY").endOf('day').unix(),
             interval: duration1
           }
         }
@@ -210,13 +210,13 @@ class DateRange extends React.Component {
           {this.state.value === 'Custom' &&
             <div className={classes.calanderDisplay}>
               <div className={classes.calanderclass}>
-                <CustomCalendar key="from" selectCDate={this.selectCDate.bind(this, 'from')} />
+                <CustomCalendar key="from" position="from" selectCDate={this.selectCDate.bind(this, 'from')} />
               </div>
               <div className={classes.to}>
                 <span>to</span>
               </div>
               <div className={classes.calanderclass}>
-                <CustomCalendar key="to" selectCDate={this.selectCDate.bind(this, 'to')} />
+                <CustomCalendar key="to" position="to" selectCDate={this.selectCDate.bind(this, 'to')} />
               </div>
             </div>
           }

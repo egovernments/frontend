@@ -247,9 +247,11 @@ class GlobalFilter extends Component {
                 this.setState({ [`${target}IsOpen`]: !open, filterData: newFilterData });
             } else {
                 if (newFilterData.duration.title === 'CUSTOM') {
-                    newFilterData.duration.title = moment.unix(_.get(newFilterData, 'duration.value.startDate')).format('ll')
+                    var formatL = moment.localeData().longDateFormat('ll');
+                    var formatYearlessL = formatL.replace(/YYYY/g,'YY');
+                    newFilterData.duration.title = moment.unix(_.get(newFilterData, 'duration.value.startDate')).format(formatYearlessL)
 
-                        + '-' + moment.unix(_.get(newFilterData, 'duration.value.endDate')).format('ll');
+                        + ' - ' + moment.unix(_.get(newFilterData, 'duration.value.endDate')).format(formatYearlessL);
                 }
                 this.setState({ open: open, filterData: newFilterData });
             }
@@ -320,9 +322,11 @@ class GlobalFilter extends Component {
                 this.setState({ [`${target}IsOpen`]: !open, filterData: newFilterData });
             } else {
                 if (newFilterData.duration.title === 'CUSTOM') {
-                    newFilterData.duration.title = moment.unix(_.get(newFilterData, 'duration.value.startDate')).format('ll')
+                    var formatL = moment.localeData().longDateFormat('ll');
+                    var formatYearlessL = formatL.replace(/YYYY/g,'YY');
+                    newFilterData.duration.title = moment.unix(_.get(newFilterData, 'duration.value.startDate')).format(formatYearlessL)
 
-                        + '-' + moment.unix(_.get(newFilterData, 'duration.value.endDate')).format('ll');
+                        + '-' + moment.unix(_.get(newFilterData, 'duration.value.endDate')).format(formatYearlessL);
                 }
                 this.setState({ open: open, filterData: newFilterData });
             }
