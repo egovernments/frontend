@@ -15,7 +15,7 @@ import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadSingleFile } from "../../ui-molecules-local";
+import { UploadMultipleFile } from "../../ui-molecules-local";
 import Typography from "@material-ui/core/Typography";
 
 const themeStyles = theme => ({
@@ -134,6 +134,7 @@ class BpaDocumentList extends Component {
       prepareFinalObject
     } = this.props;
     let index = 0;
+    debugger;
     documentsList.forEach(docType => {
       docType.cards &&
         docType.cards.forEach(card => {
@@ -241,21 +242,38 @@ class BpaDocumentList extends Component {
   };
 
   handleDocument = async (file, fileStoreId) => {
+    debugger;
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    let appDocumentList = {
-      ...documentDetailsUploadRedux,
-      [uploadedDocIndex]: {
-        ...documentDetailsUploadRedux[uploadedDocIndex],
-        documents: [
-          {
-            fileName: file.name,
-            fileStoreId,
-            fileUrl: Object.values(fileUrl)[0]
-          }
-        ]
+    let appDocumentList = {};
+    debugger;
+    if(documentDetailsUploadRedux[uploadedDocIndex] && 
+      documentDetailsUploadRedux[uploadedDocIndex].documents){
+
+      documentDetailsUploadRedux[uploadedDocIndex].documents.push({
+        fileName: file.name,
+        fileStoreId,
+        fileUrl: Object.values(fileUrl)[0]
+      });
+      appDocumentList ={
+        ...documentDetailsUploadRedux
+      };
+
+    }else{
+      appDocumentList ={
+        ...documentDetailsUploadRedux,
+        [uploadedDocIndex]: {
+          ...documentDetailsUploadRedux[uploadedDocIndex],
+          documents: [
+            {
+              fileName: file.name,
+              fileStoreId,
+              fileUrl: Object.values(fileUrl)[0]
+            }
+          ]
+        }
       }
     }
 
@@ -268,10 +286,10 @@ class BpaDocumentList extends Component {
       }
   };
 
-  removeDocument = remDocIndex => {
+  removeDocument = (remDocIndex,docIndex) => {
     const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `documentDetailsUploadRedux.${remDocIndex}.documents`,
+      `documentDetailsUploadRedux.${remDocIndex}.documents.${docIndex}`,
       undefined
     );
     this.forceUpdate();
@@ -296,6 +314,7 @@ class BpaDocumentList extends Component {
   };
 
   getUploadCard = (card, key) => {
+    debugger;
     const { classes, documentDetailsUploadRedux } = this.props;
     let jsonPath = `documentDetailsUploadRedux[${key}].dropDownValues.value`;
     return (
@@ -354,7 +373,7 @@ class BpaDocumentList extends Component {
           md={3}
           className={classes.fileUploadDiv}
         >
-          <UploadSingleFile
+          <UploadMultipleFile
             classes={this.props.classes}
             handleFileUpload={e =>
               handleFileUpload(e, this.handleDocument, this.props)
@@ -364,7 +383,7 @@ class BpaDocumentList extends Component {
                 ? true
                 : false
             }
-            removeDocument={() => this.removeDocument(key)}
+            removeDocument={(docIndex) => this.removeDocument(key,docIndex)}
             documents={
               documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
             }
@@ -379,6 +398,7 @@ class BpaDocumentList extends Component {
   };
 
   render() {
+    debugger;
     const { classes, documentsList } = this.props;
     let index = 0;
     return (

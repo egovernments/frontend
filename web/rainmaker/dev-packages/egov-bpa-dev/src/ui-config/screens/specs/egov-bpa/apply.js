@@ -315,14 +315,25 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           `Document - ${index + 1}`;
           bpaDoc.dropDownValues = {};
           bpaDoc.dropDownValues.value =  upDoc.documentType;
-          bpaDoc.documents = [
-            {
-              fileName : name,
-              fileStoreId : upDoc.fileStoreId,
-              fileUrl : url,
-              id : upDoc.id
-            }
-          ]
+          if(bpaDoc.documents ){
+            bpaDoc.documents.push([
+              {
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                id : upDoc.id
+              }
+            ]);
+          }else{
+            bpaDoc.documents =[
+              {
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                id : upDoc.id
+              }
+            ];
+          }
         }
       })
     })
