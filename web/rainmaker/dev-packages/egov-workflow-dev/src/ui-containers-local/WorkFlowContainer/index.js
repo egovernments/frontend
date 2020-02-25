@@ -173,7 +173,7 @@ class WorkFlowContainer extends React.Component {
         }
       }
     }
-    if (moduleName === "NewWS1") {
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       data = data[0];
     }
     if (moduleName === "NewSW1") {
