@@ -139,7 +139,8 @@ export const logout = () => {
           process.env.REACT_APP_NAME === "Citizen"
           ? window.location.replace(`${window.basename}/user/register`)
           : window.location.replace(`${window.basename}/user/login`);
-        }else {
+        }
+        else {
           window.location.replace(window.origin + "/common");
         }
       } else {
