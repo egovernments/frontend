@@ -151,7 +151,7 @@ const getMdmsData = async (action, state, dispatch) => {
   ) || getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb', //tenantId,
+      tenantId: tenantId,
       moduleDetails: [
         {
           moduleName: "common-masters",
