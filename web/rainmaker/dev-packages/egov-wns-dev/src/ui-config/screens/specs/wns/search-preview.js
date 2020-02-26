@@ -36,7 +36,8 @@ let service = getQueryArg(window.location.href, "service");
 let headerSideText = { word1: "", word2: "" };
 
 const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
-const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update"
+const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+const servicePath = serviceModuleName === "NewWS1" ? "WaterConnection" : "SewerageConnection"
 
 
 //---------------- existing Code -------------------- //
@@ -361,7 +362,7 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "WaterConnection",
+            dataPath: servicePath,
             moduleName: serviceModuleName,
             updateUrl: serviceUrl
           }
@@ -373,7 +374,7 @@ const screenConfig = {
           visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
           props: {
             open: true,
-            dataPath: "WaterConnection",
+            dataPath: servicePath,
             moduleName: serviceModuleName,
             updateUrl: serviceUrl,
             data: {
@@ -413,6 +414,10 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
   if (service === "WATER") {
     let payload = await getSearchResults(queryObjForSearch);
     payload.WaterConnection[0].service = service;
+
+    // if (payload.WaterConnection[0].meterInstallationDate === 0) {
+    //   payload.WaterConnection[0].meterInstallationDate = 'NA';
+    // }
 
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
