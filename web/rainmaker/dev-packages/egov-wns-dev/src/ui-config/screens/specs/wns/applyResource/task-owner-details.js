@@ -109,49 +109,48 @@ export const propertyOwnerDetails = () => {
             uiFramework: "custom-atoms",
             componentPath: "Container",
             props: {
-                className: "common-div-css search-preview",
-                style: {
-                    padding: 0
-                }
-
+                style: { marginBottom: "10px" }
             },
-            // header: {
-            //     gridDefination: {
-            //         xs: 12,
-            //         sm: 10
-            //     },
-            // div3: propertyOwnerDetailsHeader,
-            ...getHeader({
-                labelKey: "WS_OWN_DETAIL_HEADER_INFO"
-            })
-            // },
-        },
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getHeader({
+                        labelKey: "WS_OWN_DETAIL_HEADER_INFO"
+                    })
+                    // },
+                },
 
-        multiOwner: {
-            uiFramework: "custom-containers",
-            componentPath: "MultiItem",
-            props: {
-                scheama: getCommonGrayCard({
-                    viewFive: getCommonContainer({
-                        mobileNumber,
-                        name,
-                        gender,
-                        dateOfBirth,
-                        email,
-                        fatherName,
-                        relationship,
-                        correspondenceAddress,
-                        specialApplicantCategory
-                    }),
-                }),
-                items: [],
-                hasAddItem: false,
-                sourceJsonPath: "WaterConnection[0].property.owners",
-                prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
-                afterPrefixJsonPath: "children.value.children.key"
-            },
-            type: "array"
-        },
+                multiOwner: {
+                    uiFramework: "custom-containers",
+                    componentPath: "MultiItem",
+                    props: {
+                        className: "common-div-css search-preview",
+                        scheama: getCommonGrayCard({
+                            viewFive: getCommonContainer({
+                                mobileNumber,
+                                name,
+                                gender,
+                                dateOfBirth,
+                                email,
+                                fatherName,
+                                relationship,
+                                correspondenceAddress,
+                                specialApplicantCategory
+                            }),
+                        }),
+                        items: [],
+                        hasAddItem: false,
+                        sourceJsonPath: "WaterConnection[0].property.owners",
+                        prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
+                        afterPrefixJsonPath: "children.value.children.key"
+                    },
+                    type: "array"
+                },
+            }
+        }
     });
 }
 
