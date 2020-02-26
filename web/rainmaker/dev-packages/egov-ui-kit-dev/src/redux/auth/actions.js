@@ -136,14 +136,14 @@ export const logout = () => {
       const authToken = getAccessToken();
       if (authToken) {
         const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
-        
-        if(process.env.NODE_ENV==="development"){
+        if(process.env.NODE_ENV === "production"){
+          
+          window.location.replace(window.origin + "/common");
+        }
+        else{
           process.env.REACT_APP_NAME === "Citizen"
           ? window.location.replace(`${window.basename}/user/register`)
           : window.location.replace(`${window.basename}/user/login`);
-        }
-        else if (process.env.NODE_ENV === "production"){
-          window.location.replace(window.origin + "/common");
         }
       } else {
         clearUserDetails();
