@@ -161,6 +161,6 @@ export const logout = () => {
     // let userRole=get(userInfo,"roles[0].code");
     clearUserDetails();
     // window.location.replace(`${window.basename}/user/login`)
-    window.location.replace(`${window.basename}/user/login`);
+    //window.location.replace(`${window.basename}/user/login`);
   };
 };
