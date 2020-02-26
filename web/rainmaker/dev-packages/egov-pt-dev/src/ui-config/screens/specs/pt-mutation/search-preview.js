@@ -36,6 +36,7 @@ import {
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
+import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 import { downloadPrintContainer } from "./functions";
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -195,8 +196,8 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
       ];
       break;
     case "INWORKFLOW":
-      downloadMenu = [certificateDownloadObject, applicationDownloadObject];
-      printMenu = [certificatePrintObject, applicationPrintObject];
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
       break;
     default:
       break;
@@ -502,6 +503,7 @@ const screenConfig = {
           // transferorInstitutionSummary:transferorInstitutionSummary,
           transfereeSummary: transfereeSummary,
           // transfereeInstitutionSummary: transfereeInstitutionSummary,
+          mutationSummary:mutationSummary,
           registrationSummary: registrationSummary,
           documentsSummary: documentsSummary
         }),

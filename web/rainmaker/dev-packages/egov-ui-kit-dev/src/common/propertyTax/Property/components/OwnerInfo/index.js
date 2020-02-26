@@ -40,7 +40,15 @@ class OwnerInfo extends Component {
     });
     return itemKey;
   }
-
+  getUniqueList = (list = []) => {
+    let newList = [];
+    list.map(element => {
+      if (!JSON.stringify(newList).includes(JSON.stringify(element.acknowldgementNumber))) {
+        newList.push(element);
+      }
+    })
+    return newList;
+  }
   getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
       const queryObject = [
         { key: "propertyIds", value: propertyId },
@@ -55,11 +63,16 @@ class OwnerInfo extends Component {
           queryObject
         );
         if (payload && payload.Properties.length > 0) {
-          payload.Properties.map((item)=>{
-            const lastModifiedDate = convertEpochToDate(item.auditDetails.lastModifiedTime);
+
+
+          payload.Properties=this.getUniqueList(payload.Properties);
+          payload.Properties.map((item)=>{          
+            // let lastModifiedDate = convertEpochToDate(item.auditDetails.lastModifiedTime);
+            let lastModifiedDate = item.auditDetails.lastModifiedTime;
             if(!ownershipInfo[lastModifiedDate]){
               ownershipInfo[lastModifiedDate] = [];
             }
+            item.owners=item.owners.filter(owner=>owner.status== "ACTIVE")
             ownershipInfo[lastModifiedDate].push(...this.transformData(item.owners))
           });
           this.setState({ [dialogName]: true, ownershipInfo });
@@ -75,7 +88,11 @@ class OwnerInfo extends Component {
     const { propertyId, tenantId } = properties;
     if(this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory"){
       if(properties.status=="INWORKFLOW"){
-        alert('Property is in Workflow ...')
+        this.props.toggleSnackbarAndSetText(
+          true,
+          { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+          "error"
+        );
       }else{
         let link=`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`;
 
@@ -190,15 +207,15 @@ class OwnerInfo extends Component {
                   key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
                   value: owner.mobileNumber || "NA",
                 },
-            isInstitution
-              ? {
-                  key: getTranslatedLabel("PT_OWNERSHIP_INFO_TEL_NO", localizationLabelsData),
-                  value: owner.altContactNumber || "NA",
-                }
-              : {
-                  key: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData),
-                  value: owner.emailId || "NA",
+            isInstitution && owner.altContactNumber && 
+                {
+                  key: isInstitution  ? getTranslatedLabel("PT_OWNERSHIP_INFO_TEL_NO", localizationLabelsData) : "",
+                  value: isInstitution ? owner.altContactNumber || "NA" :"",
                 },
+                {
+                    key: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData),
+                    value: owner.emailId ? owner.emailId || "NA" : "",
+               },
             isInstitution
               ? {
                   key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),

@@ -445,6 +445,7 @@ export const getButtonVisibility = (status, button) => {
   if (status === "pending_approval" && button === "REJECT") return true;
   if (status === "approved" && button === "CANCEL TRADE LICENSE") return true;
   if (status === "APPROVED" && button === "APPROVED") return true;
+  if (status === "EXPIRED" && button === "EXPIRED") return true;
   if (status === "PENDINGPAYMENT" && button === "PENDINGPAYMENT") return true;
   return false;
 };
@@ -1036,19 +1037,19 @@ const getToolTipInfo = (taxHead, LicenseData) => {
 
 const getEstimateData = (ResponseData, isPaid, LicenseData) => {
   if (ResponseData) {
-    const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
-      return {
-        name: {
-          labelName: item,
-          labelKey: item
-        },
-        value: null,
-        info: getToolTipInfo(item, LicenseData) && {
-          value: getToolTipInfo(item, LicenseData),
-          key: getToolTipInfo(item, LicenseData)
-        }
-      };
-    });
+    // const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
+    //   return {
+    //     name: {
+    //       labelName: item,
+    //       labelKey: item
+    //     },
+    //     value: null,
+    //     info: getToolTipInfo(item, LicenseData) && {
+    //       value: getToolTipInfo(item, LicenseData),
+    //       key: getToolTipInfo(item, LicenseData)
+    //     }
+    //   };
+    // });
     const { billAccountDetails } = ResponseData.billDetails[0];
     const transformedData = billAccountDetails.reduce((result, item) => {
       if (isPaid) {
@@ -1058,8 +1059,8 @@ const getEstimateData = (ResponseData, isPaid, LicenseData) => {
               labelName: item.accountDescription.split("-")[0],
               labelKey: item.accountDescription.split("-")[0]
             },
-            // value: getTaxValue(item),\
-            value : get(ResponseData , "totalAmount"),
+            // value: getTaxValue(item)            
+            value : item.amount,
             info: getToolTipInfo(
               item.accountDescription.split("-")[0],
               LicenseData
@@ -1081,13 +1082,12 @@ const getEstimateData = (ResponseData, isPaid, LicenseData) => {
               labelKey: item.taxHeadCode
             },
             // value: getTaxValue(item),
-            value : get(ResponseData , "totalAmount"),
+            value : item.amount,
             info: getToolTipInfo(item.taxHeadCode, LicenseData) && {
               value: getToolTipInfo(item.taxHeadCode, LicenseData),
               key: getToolTipInfo(item.taxHeadCode, LicenseData)
             }
           });
-
       } else {
         item.taxHeadCode &&
           result.push({
@@ -1095,8 +1095,9 @@ const getEstimateData = (ResponseData, isPaid, LicenseData) => {
               labelName: item.taxHeadCode,
               labelKey: item.taxHeadCode
             },
+            value : item.amount,
             // value: getTaxValue(item),
-            value : get(ResponseData , "totalAmount"),
+            // value : get(ResponseData , "totalAmount"),
             info: getToolTipInfo(item.taxHeadCode, LicenseData) && {
               value: getToolTipInfo(item.taxHeadCode, LicenseData),
               key: getToolTipInfo(item.taxHeadCode, LicenseData)
@@ -1109,7 +1110,7 @@ const getEstimateData = (ResponseData, isPaid, LicenseData) => {
     return [
       ...transformedData.filter(item => item.name.labelKey === "TL_TAX"),
       ...transformedData.filter(item => item.name.labelKey !== "TL_TAX"),
-      ...extraData
+      // ...extraData
     ];
   }
 };

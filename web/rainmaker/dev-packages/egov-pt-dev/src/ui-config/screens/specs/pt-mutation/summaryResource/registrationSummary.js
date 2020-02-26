@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
 import { checkValueForNA } from "../../utils";
+import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 
 const registrationDetails =  getCommonGrayCard({
   propertyLocationContainer:getCommonContainer({
@@ -52,7 +53,9 @@ const registrationDetails =  getCommonGrayCard({
       {
         jsonPath:
           "Property.additionalDetails.documentDate",
-          callBack: checkValueForNA
+          callBack: value => {
+            return convertEpochToDate(value);
+          }
       }
     ), documentValue: getLabelWithValue(
       {
@@ -110,19 +113,19 @@ export const registrationSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
+        // children: {
+        //   editIcon: {
+        //     uiFramework: "custom-atoms",
+        //     componentPath: "Icon",
+        //     props: {
+        //       iconName: "edit"
+        //     }
+        //   },
           // buttonLabel: getLabel({
           //   labelName: "Edit",
           //   labelKey: "PT_EDIT"
           // })
-        },
+       // },
         // onClickDefination: {
         //   action: "condition",
         //   callBack: (state, dispatch) => {
