@@ -179,21 +179,46 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   if (documnts && documnts.length > 0) {
     documnts.forEach(documents => {
     if(documents && documents.documents){
-      let doc = {};
-      if(documents.dropDownValues) {
-      doc.documentType = documents.dropDownValues.value;
-      }
-      doc.fileStoreId = documents.documents[0].fileStoreId;
-      doc.fileStore = documents.documents[0].fileStoreId;
-      doc.fileName = documents.documents[0].fileName;
-      doc.fileUrl = documents.documents[0].fileUrl;
-      if(doc.id) {
-        doc.id = documents.documents[0].id;
-      }
-      requiredDocuments.push(doc);
+      documents.documents.forEach(docItem =>{
+
+        let doc = {};
+        if(documents.dropDownValues) {
+        doc.documentType = documents.dropDownValues.value;
+        }
+        doc.fileStoreId = docItem.fileStoreId;
+        doc.fileStore = docItem.fileStoreId;
+        doc.fileName = docItem.fileName;
+        doc.fileUrl = docItem.fileUrl;
+        if(docItem.id) {
+          doc.id = docItem.id;
+        }
+        requiredDocuments.push(doc);
+      });
+      
     }
   })
 }
+
+  let uploadeDocumnts = [];
+  if (documentsUpdalod) {
+    Object.keys(documentsUpdalod).forEach(function(key) {
+      uploadeDocumnts.push(documentsUpdalod[key])
+    });
+  }
+  if (uploadeDocumnts && uploadeDocumnts.length > 0) {
+    uploadeDocumnts.forEach(upDoc => {
+      let value;
+      if (upDoc && upDoc.dropDownValues && upDoc.dropDownValues.value)
+        value = upDoc.dropDownValues.value;
+      if (upDoc.previewdocuments && upDoc.previewdocuments.length > 0) {
+        upDoc.previewdocuments.forEach(indDoc => {
+          if (!indDoc.documentType)
+            indDoc.documentType = value;
+          requiredDocuments.push(indDoc);
+        })
+      }
+    })
+  }
 
   let comparingPreviuosDoc = [];
   let BPAUploadeddocuments = get(
@@ -360,7 +385,12 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     let card = {};
     card["name"] = doc.code;
     card["code"] = doc.code;
-    card["required"] = doc.required ? true : false;
+    if(bpaDetails && bpaDetails.documents && bpaDetails.documents.length > 0) {
+      card["required"] = false;
+    }
+    else {
+    card["required"] = doc.required ? true : false;      
+    }
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
       dropDownValues.label = "Select Documents";
@@ -472,7 +502,6 @@ export const prepareNOCUploadData = (state, dispatch) => {
 };
 
 export const prepareOwnershipType = response => {
-  console.log(response);
   // Handle applicant ownership dependent dropdowns
   let ownershipCategory = get(response, "BPA.ownerShipType");
   set(

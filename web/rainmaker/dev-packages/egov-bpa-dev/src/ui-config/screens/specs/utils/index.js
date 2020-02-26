@@ -4075,7 +4075,17 @@ if(tempDoc) {
 
     let result;
     if (documentsDocTypes && documentsDocTypes.length > 0) {
-      result = documentsCodes.filter(comparer(documentsDocTypes));
+
+        documentsCodes.map( docs => {
+          documentsDocTypes.map( doc => {
+          if(docs === doc) {
+            documentsContract[0].cards.map( items => {
+              if(items && items.code === doc) items.required = false;
+            })
+          }
+        })
+      })
+      result = documentsCodes;      
     } else {
       result = documentsCodes;
     }

@@ -115,13 +115,15 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
   );
   jp.query(reduxDocuments, "$.*").forEach(doc => {
     if (doc.documents && doc.documents.length > 0) {
-      documentsPreview.push({
-        title: getTransformedLocale(doc.documentCode),
-        name: doc.documents[0].fileName,
-        fileStoreId: doc.documents[0].fileStoreId,
-        linkText: "View",
-        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
-      });
+        doc.documents.forEach(docDetail =>{
+          documentsPreview.push({
+            title: getTransformedLocale(doc.documentCode),
+            name: doc.documents[0].fileName,
+            fileStoreId: doc.documents[0].fileStoreId,
+            linkText: "View",
+            link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
+          });
+        });
     }
   });
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
