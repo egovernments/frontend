@@ -144,7 +144,7 @@ class UserSettings extends Component {
           title={"CORE_CHANGE_TENANT"}
           body={"CORE_CHANGE_TENANT_DESCRIPTION"}
         />
-        { /* Commenting for 10 dec release
+        {
         process.env.REACT_APP_NAME === "Employee" && (
           <DropDown
             onChange={this.onTenantChange}
@@ -156,7 +156,7 @@ class UserSettings extends Component {
             underlineStyle={{ borderBottom: "none" }}
           />
         )
-        */}
+        }
         {hasLocalisation && (
           <DropDown
             onChange={this.onLanguageChange}
