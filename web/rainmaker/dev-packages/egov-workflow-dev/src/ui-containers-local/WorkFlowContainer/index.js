@@ -121,7 +121,11 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
-    console.log(101, data);
+    const applicationNumber = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
+
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
         const removedDocs = get(
@@ -178,12 +182,8 @@ class WorkFlowContainer extends React.Component {
     }
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
-      data = data[0];
     }
-    const applicationNumber = getQueryArg(
-      window.location.href,
-      "applicationNumber"
-    );
+
     try {
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
@@ -194,6 +194,7 @@ class WorkFlowContainer extends React.Component {
       });
 
       if (payload) {
+
         let path = "";
 
         if (moduleName == "PT.CREATE" || moduleName == "ASMT") {
@@ -217,6 +218,7 @@ class WorkFlowContainer extends React.Component {
             label
           )}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
         }
+
       }
     } catch (e) {
       if (moduleName === "BPA") {
