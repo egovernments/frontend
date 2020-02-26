@@ -118,19 +118,13 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
         doc.documents.forEach(docDetail =>{
           documentsPreview.push({
             title: getTransformedLocale(doc.documentCode),
-            name: docDetail.fileName,
-            fileStoreId: docDetail.fileStoreId,
-            linkText: "View"
+            name: doc.documents[0].fileName,
+            fileStoreId: doc.documents[0].fileStoreId,
+            linkText: "View",
+            link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
           });
         });
     }
-  });
-  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-  let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : [];
-  documentsPreview = documentsPreview.map(doc => {
-    doc["link"] = fileUrls[doc.fileStoreId];
-    return doc;
   });
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
 };

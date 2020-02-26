@@ -4,8 +4,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 const header = getCommonHeader(
   {
     labelName: "My Applications",
-    labelKey: "PT_MUTATION_MY_APPLICATIONS",
-    dynamicArray: [0]
+    labelKey: "PT_MUTATION_MY_APPLICATION_HEADER",
   },
   {
     classes: {
@@ -41,7 +40,10 @@ const screenConfig = {
                 label: "PT_MUTATION_PID",
                 jsonPath: "propertyId"
               },
-             
+              {
+                label: "PT_MUTATION_APPLICATIONTYPE",
+                jsonPath: "creationReason"
+              },
               {
                 label: "PT_MUTATION_CREATION_DATE",
                 jsonPath: "auditDetails.createdTime"
