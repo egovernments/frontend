@@ -23,7 +23,7 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import {
   sampleSearch,
@@ -253,11 +253,7 @@ const getPropertyData = async (action, state, dispatch) => {
 
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-    ) || getTenantId();
+  let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -269,7 +265,7 @@ const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "firenoc",
           masterDetails: [{ name: "BuildingType" }, { name: "FireStations" }]
-        },
+        },      
         {
           moduleName: "egov-location",
           masterDetails: [
@@ -304,6 +300,32 @@ const getMdmsData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
+
+const getMdmsTransferReasonData = async (action, state, dispatch) => {
+  let tenantId ='pb'
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        { moduleName: "PropertyTax", masterDetails: [ { name: "ReasonForTransfer" }] }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("ReasonForTransfer", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 
 const getFirstListFromDotSeparated = list => {
   list = list.map(item => {
@@ -461,7 +483,8 @@ const screenConfig = {
       prepareDocumentsUploadData(state, dispatch);
     });
 
-    // Search in case of EDIT flow
+getMdmsTransferReasonData(action, state, dispatch);
+    // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
     // Code to goto a specific step through URL

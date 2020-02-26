@@ -82,6 +82,7 @@ class SingleApplication extends React.Component {
         switch (item.status) {
           case "Initiated":
             setRoute(`/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+            break;
           default:
             setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }        
@@ -216,7 +217,7 @@ class SingleApplication extends React.Component {
                         // setRoute(url);
                         }}>
                         <Label
-                          labelKey={ item.status==="APPROVED"&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
+                          labelKey={ (item.status==="APPROVED"||item.status==="EXPIRED")&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
                           textTransform={"uppercase"}
                           style={{
                             color: "#fe7a51",

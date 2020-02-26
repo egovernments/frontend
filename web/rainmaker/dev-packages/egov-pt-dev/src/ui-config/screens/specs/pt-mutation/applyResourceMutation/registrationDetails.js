@@ -33,39 +33,45 @@ export const registrationDetails = getCommonCard(
         }
       ),
       registrationDetailsContainer: getCommonContainer({ 
-        // transferReason: getSelectField({
-        //   label: {
-        //     labelName: "Reason For Transfer",
-        //     labelKey: "PT_MUTATION_TRANSFER_REASON"
-        //   },
-        //   placeholder: {
-        //     labelName: "Select Reason for Transfer",
-        //     labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
-        //   },
-        //   required:true,
-        //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-        //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-        //   localePrefix: {
-        //     moduleName: "common-masters",
-        //     masterName: "OwnerType"
-        //   }
-        // }),
-        transferReason: getTextField({
+        transferReason: getSelectField({
           label: {
             labelName: "Reason for Transfer",
             labelKey: "PT_MUTATION_TRANSFER_REASON"
-          },
-          props:{
-            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Select Reason for Transfer",
             labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
-          jsonPath: "Property.additionalDetails.reasonForTransfer"
+          jsonPath:
+          "Property.additionalDetails.reasonForTransfer",
+          localePrefix: {
+            moduleName: "PropertyTax",
+            masterName: "ReasonForTransfer"
+          },
+          sourceJsonPath: "ReasonForTransfer.PropertyTax.ReasonForTransfer",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          }
         }),
+        // transferReason: getTextField({
+        //   label: {
+        //     labelName: "Reason for Transfer",
+        //     labelKey: "PT_MUTATION_TRANSFER_REASON"
+        //   },
+        //   props:{
+        //     className:"applicant-details-error"
+        //   },
+        //   placeholder: {
+        //     labelName: "Select Reason for Transfer",
+        //     labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
+        //   },
+        //   required:true,
+        //   pattern: getPattern("Address"),
+        //   jsonPath: "Property.additionalDetails.reasonForTransfer"
+        // }),
 
         marketValue: getTextField({
           label: {
@@ -80,7 +86,7 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_MARKET_VALUE_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
+          pattern: getPattern("DocumentNo"),
         jsonPath: "Property.additionalDetails.marketValue"
         }),
         documentNumber: getTextField({
@@ -96,7 +102,7 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_DOCUMENT_NO_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
+          pattern: getPattern("DocumentNo"),
           jsonPath: "Property.additionalDetails.documentNumber"
         }),
           documentIssueDateField :getDateField({
@@ -127,7 +133,7 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_DOCUMENT_VALUE_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
+          pattern: getPattern("DocumentNo"),
         jsonPath: "Property.additionalDetails.documentValue",
         }),
         remarks: getTextField({
@@ -142,7 +148,7 @@ export const registrationDetails = getCommonCard(
             labelName: "Enter Remarks if any",
             labelKey: "PT_MUTATION_REMARKS"
           },
-          pattern: getPattern("Address"),
+          //pattern: getPattern("Address"),
           jsonPath: "Property.additionalDetails.remarks",
         }),
       })

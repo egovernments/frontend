@@ -27,6 +27,16 @@ class ApplicationHistory extends Component {
         };
     }
 
+    getUniqueList = (list = []) => {
+        let newList = [];
+        list.map(element => {
+          if (!JSON.stringify(newList).includes(JSON.stringify(element.acknowldgementNumber))) {
+            newList.push(element);
+          }
+        })
+        return newList;
+      }
+
     getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
         const queryObject = [
           { key: "propertyIds", value: propertyId },
@@ -41,6 +51,7 @@ class ApplicationHistory extends Component {
             queryObject
           );
           if (payload && payload.Properties.length > 0) {
+            payload.Properties=this.getUniqueList(payload.Properties);
             return payload.Properties;
           }
         } catch (e) {
@@ -60,7 +71,7 @@ class ApplicationHistory extends Component {
                             <div>
                             {getFullRow("PT_PROPERTY_APPLICATION_NO", item.acknowldgementNumber ? item.acknowldgementNumber : "NA", 12)}
                             {getFullRow("PT_PROPERTY_ID_NO", item.propertyId ? item.propertyId : "NA", 12)}
-                            {getFullRow("PT_MUTATION_APPLICATION_TYPE", item.workflow && item.workflow.businessService ? item.workflow.businessService : "NA", 12)}
+                            {getFullRow("PT_MUTATION_APPLICATION_TYPE", item.creationReason  ? item.creationReason : "NA", 12)}
                             {getFullRow("PT_MUTATION_CREATION_DATE", item.auditDetails && item.auditDetails.createdTime ? convertEpochToDate(item.auditDetails.createdTime) : "NA", 12)}
                             {getFullRow("PT_MUTATION_STATUS", item.status ? item.status : "NA", 12)}
 

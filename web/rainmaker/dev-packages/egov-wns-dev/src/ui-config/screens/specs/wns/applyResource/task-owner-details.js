@@ -1,11 +1,9 @@
 import {
     getCommonGrayCard,
-    getCommonSubHeader,
     getCommonContainer,
     getLabelWithValue,
-    getCommonHeader,
-    getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertEpochToDate } from "../../utils";
 
 const getHeader = label => {
     return {
@@ -69,7 +67,10 @@ export const dateOfBirth = getLabelWithValue(
     {
         labelKey: "WS_OWN_DETAIL_DOB_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.owners[0].dob" }
+    {
+        jsonPath: "WaterConnection[0].property.owners[0].dob",
+        callBack: convertEpochToDate
+    }
 )
 
 export const fatherName = getLabelWithValue(
@@ -104,53 +105,46 @@ export const specialApplicantCategory = getLabelWithValue(
 )
 
 export const propertyOwnerDetails = () => {
-    return getCommonContainer({
+    return getCommonGrayCard({
         headerDiv: {
             uiFramework: "custom-atoms",
             componentPath: "Container",
             props: {
-                style: { marginBottom: "10px" }
+                className: "common-div-css search-preview",
             },
-            children: {
-                header: {
-                    gridDefination: {
-                        xs: 12,
-                        sm: 10
-                    },
-                    ...getHeader({
-                        labelKey: "WS_OWN_DETAIL_HEADER_INFO"
-                    })
-                    // },
-                },
+            // div3: propertyOwnerDetailsHeader,
+            ...getHeader({
+                labelKey: "WS_TASK_PROP_OWN_HEADER"
+            })
+            // },
+        },
 
-                multiOwner: {
-                    uiFramework: "custom-containers",
-                    componentPath: "MultiItem",
-                    props: {
-                        className: "common-div-css search-preview",
-                        scheama: getCommonGrayCard({
-                            viewFive: getCommonContainer({
-                                mobileNumber,
-                                name,
-                                gender,
-                                dateOfBirth,
-                                email,
-                                fatherName,
-                                relationship,
-                                correspondenceAddress,
-                                specialApplicantCategory
-                            }),
-                        }),
-                        items: [],
-                        hasAddItem: false,
-                        sourceJsonPath: "WaterConnection[0].property.owners",
-                        prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
-                        afterPrefixJsonPath: "children.value.children.key"
-                    },
-                    type: "array"
-                },
-            }
-        }
+        multiOwner: {
+            uiFramework: "custom-containers",
+            componentPath: "MultiItem",
+            props: {
+                className: "common-div-css search-preview",
+                scheama: getCommonGrayCard({
+                    viewFive: getCommonContainer({
+                        mobileNumber,
+                        name,
+                        gender,
+                        dateOfBirth,
+                        email,
+                        fatherName,
+                        relationship,
+                        correspondenceAddress,
+                        specialApplicantCategory
+                    }),
+                }),
+                items: [],
+                hasAddItem: false,
+                sourceJsonPath: "WaterConnection[0].property.owners",
+                prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
+                afterPrefixJsonPath: "children.value.children.key"
+            },
+            type: "array"
+        },
     });
 }
 
