@@ -13,6 +13,7 @@ const formConfig = {
     },
     password: {
       id: "employee-password",
+      autoComplete:'off',
       jsonPath: "employee.password",
       required: true,
       type: "password",

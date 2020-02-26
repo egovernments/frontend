@@ -131,10 +131,20 @@ export const sendOTP = (intent) => {
 
 export const logout = () => {
   return async () => {
+    console.log("=========================="+process.env.NODE_ENV);
     try {
       const authToken = getAccessToken();
       if (authToken) {
         const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
+        if(process.env.NODE_ENV === "production"){
+          
+          window.location.replace(window.origin + "/common");
+        }
+        else{
+          process.env.REACT_APP_NAME === "Citizen"
+          ? window.location.replace(`${window.basename}/user/register`)
+          : window.location.replace(`${window.basename}/user/login`);
+        }
       } else {
         clearUserDetails();
         process.env.REACT_APP_NAME === "Citizen"
@@ -151,6 +161,6 @@ export const logout = () => {
     // let userRole=get(userInfo,"roles[0].code");
     clearUserDetails();
     // window.location.replace(`${window.basename}/user/login`)
-    window.location.replace(`${window.basename}/user/login`);
+    //window.location.replace(`${window.basename}/user/login`);
   };
 };

@@ -388,7 +388,7 @@ const callBackForPay = async (state, dispatch) => {
       finalReceiptData.instrument.transactionNumber;
     ReceiptBodyNew.Payment["instrumentNumber"] =
       finalReceiptData.instrument.instrumentNumber;
-    if (ReceiptBodyNew.Payment.paymentMode === "Cheque") {
+    if (ReceiptBodyNew.Payment.paymentMode === "Cheque" ||ReceiptBodyNew.Payment.paymentMode === "DD") {
       ReceiptBodyNew.Payment["instrumentDate"] =
         finalReceiptData.instrument.instrumentDate;
     }
