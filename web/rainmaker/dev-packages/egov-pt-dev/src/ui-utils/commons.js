@@ -6,6 +6,9 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -52,10 +55,12 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 export const getSearchResults = async (queryObject, dispatch) => {
   try {
+    
+    
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/firenoc-services/v1/_search",
+      "/property-services/property/_search",
       "",
       queryObject
     );
@@ -73,10 +78,10 @@ export const getSearchResults = async (queryObject, dispatch) => {
   }
 };
 
-export const createUpdateNocApplication = async (state, dispatch, status) => {
+export const createUpdatePTApplication = async (state, dispatch, status) => {
   let nocId = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].id"
+    "screenConfiguration.preparedFinalObject.Properties[0].id"
   );
   let method = nocId ? "UPDATE" : "CREATE";
   try {
@@ -295,8 +300,9 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  let documents = get(DATA,
-    "Documents",
+  let documents = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.Documents",
     []
   );
   documents = documents.filter(item => {
@@ -314,32 +320,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
   documents.forEach(doc => {
     // Handle the case for multiple muildings
-    if (
-      doc.code === "BUILDING.BUILDING_PLAN" &&
-      doc.hasMultipleRows &&
-      doc.options
-    ) {
-      let buildingsData = get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-        []
-      );
-
-      buildingsData.forEach(building => {
-        let card = {};
-        card["name"] = building.name;
-        card["code"] = doc.code;
-        card["hasSubCards"] = true;
-        card["subCards"] = [];
-        doc.options.forEach(subDoc => {
-          let subCard = {};
-          subCard["name"] = subDoc.code;
-          subCard["required"] = subDoc.required ? true : false;
-          card.subCards.push(subCard);
-        });
-        tempDoc[doc.documentType].cards.push(card);
-      });
-    } else {
+   
       let card = {};
       card["name"] = doc.code;
       card["code"] = doc.code;
@@ -357,7 +338,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
         card["dropdown"] = dropdown;
       }
       tempDoc[doc.documentType].cards.push(card);
-    }
+    
   });
 
   Object.keys(tempDoc).forEach(key => {
@@ -488,4 +469,30 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
       )
     );
   }
+};
+export const generatePdfFromDiv = (action, applicationNumber) => {
+  let target = document.querySelector("#material-ui-cardContent");
+  html2canvas(target).then(canvas => {
+    var data = canvas.toDataURL();
+    var imgWidth = 200;
+    var pageHeight = 295;
+    var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    var heightLeft = imgHeight;
+    var doc = new jsPDF("p", "mm");
+    var position = 0;
+    doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      doc.addPage();
+      doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+    if (action === "download") {
+      doc.save(`preview-${applicationNumber}.pdf`);
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    }
+  });
 };
