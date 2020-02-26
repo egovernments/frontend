@@ -142,7 +142,7 @@ export const logout = () => {
           ? window.location.replace(`${window.basename}/user/register`)
           : window.location.replace(`${window.basename}/user/login`);
         }
-        else {
+        else if (process.env.NODE_ENV === "production"){
           window.location.replace(window.origin + "/common");
         }
       } else {
