@@ -2714,7 +2714,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: getTenantId(), //"pb",
           userName: `${ownerNo}`
         }
       );
