@@ -68,7 +68,9 @@
   padding-bottom: 5px;
   cursor: pointer;
 }
-
+.inbox-cell-text  a{
+  color: rgb(254, 122, 81)!important;
+}
 .inbox-cell-subtext {
   color: rgba(0, 0, 0, 0.6);
   font-size: 14px;
