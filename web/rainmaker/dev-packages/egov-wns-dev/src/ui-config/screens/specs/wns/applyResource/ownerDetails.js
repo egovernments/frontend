@@ -103,7 +103,7 @@ import {
       labelName: "Special Applicant Category",
       labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress" }
+    { jsonPath: "applyScreen.property.owners[0].ownerType" }
   )
   
   export const getOwnerDetails = (isEditable = true) => {
@@ -179,7 +179,7 @@ import {
           }),
           items: [],
           hasAddItem: false,
-          // sourceJsonPath: "WaterConnection[0].property.owners",
+          sourceJsonPath: "WaterConnection[0].property.owners",
           prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
           afterPrefixJsonPath: "children.value.children.key"
         },

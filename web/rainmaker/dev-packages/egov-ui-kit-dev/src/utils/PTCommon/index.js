@@ -103,7 +103,7 @@ export const getRowData=(property,history)=>{
         
     applicationNo: getApplicationLink(property.acknowldgementNumber, property.tenantId, property.propertyId,history),
     propertyId: getLink(userType, history, property.propertyId, property.tenantId),
-    applicationType: "PT",
+    applicationType: property.creationReason,
     name: property.owners[0].name,
     date: date,
     status: getStatusColor(property.status)
@@ -458,8 +458,8 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
 };
 
 
-export const generatePdfFromDiv = (action, applicationNumber) => {
-  let target = document.querySelector("#property-review-form");
+export const generatePdfFromDiv = (action, applicationNumber,divIdName) => {
+  let target = document.querySelector(divIdName);
 
   html2canvas(target, {
     onclone: function (clonedDoc) {
