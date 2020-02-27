@@ -194,42 +194,46 @@ class TableChart extends Component {
       visualcode = visualcode ? visualcode : chartsData[this.props.chartKey]['visualizationCode'];
       tabName = tabName ? tabName : chartParent[0]['tabName'];
       drilfilters = drilfilters? drilfilters : chartsData[this.props.chartKey]['filter'][0];
-      let columnData = _.chain(chartData).first().get("plots").map((k, v) => {
+
+      let colSortRow ={};
+      let columnData = _.chain(chartData).first().get("plots").map((k, v) => {        
         if(k.name != "S.N."){
+          colSortRow[k.name] = '';
           let yes = v < 0;
-          let isNumeric = _.toLower(k.symbol) === 'amount' || _.toLower(k.symbol) === "number" || _.toLower(k.symbol) === "percentage";
-          return { id: k.name, numeric: isNumeric, stickyHeader: yes, disablePadding: false, label: k.name, colType: k.symbol }
+          let isNumeric = _.toLower(k.symbol) === 'amount' || _.toLower(k.symbol) === "number" || _.toLower(k.symbol) === "percentage";          
+          return { id: k.name, numeric: isNumeric, stickyHeader: yes, disablePadding: false, label: k.name, colType: k.symbol }          
         }
       }).value();
       // small hack but need to remove from backend.
-      columnData.splice(0, 1);
-      
-      let newData = _.chain(chartData).map((rowData) => {
-      if(rowData){        
-        return _.defaults(..._.map(rowData.plots, a => {
-          if(a.name != "S.N."){
-            if (a.symbol.toUpperCase() === 'TEXT') {
-
-              let label = _.chain(a.label).split('.').join("_").toUpper().value();
-              let text = null;
-              try {
-                text = strings["TENANT_TENANTS_" + label]
-              } catch{
-                text = a.label;
+      columnData.splice(0, 1);      
+      let newData = [],resData = chartData.data;
+      if(resData){
+        for (var i=0; i<resData.length; i++){
+          let newrowData = _.cloneDeep(colSortRow)
+          _.map(resData[i]['plots'], a => {            
+              if(a.name != "S.N."){
+                if (a.symbol.toUpperCase() === 'TEXT') {
+                  let label = _.chain(a.label).split('.').join("_").toUpper().value();
+                  let text = null;
+                  try {
+                    text = strings["TENANT_TENANTS_" + label]
+                  } catch{
+                    text = a.label;
+                  }
+                  if (!text) {
+                    text = a.label;
+                  }
+                  newrowData[a.name] = [a.label,text]
+              } else {
+                  let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
+                  // console.log(typeof(val))
+                  newrowData[a.name] = val
               }
-              if (!text) {
-                text = a.label;
-              }
-              return { [a.name]: [a.label,text] }
-            } else {
-              let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
-              // console.log(typeof(val))
-              return { [a.name]: val }
             }
-          }
-        }));
+          });
+          newData.push(newrowData)
+        }
       }
-      }).value();
       return (
         <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="tableHeading">
