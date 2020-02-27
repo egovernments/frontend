@@ -260,7 +260,7 @@ class PTAcknowledgement extends React.Component {
         labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
         labelKey: "PT_PROPERTY_ASSESSMENT_SUCCESS_SUB_MSG",
       };
-      Button1 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: true };
+      Button1 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
       Button2 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
@@ -318,7 +318,7 @@ class PTAcknowledgement extends React.Component {
         labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
         labelKey: "PT_PROPERTY_RE_ASSESSMENT_SUCCESS_SUB_MSG",
       };
-      Button1 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: true };
+      Button1 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
       Button2 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
       // downloadButton={menu:downloadMenu,visibility:false} ;
       // printButton={menu:printMenu,visibility:false} ;
@@ -455,7 +455,6 @@ class PTAcknowledgement extends React.Component {
                     </h1>
                   </div>
                   <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
-
                     <div className="button-container col-xs-12 col-md-4 col-lg-2 property-info-access-btn first-button" style={{ float: "right", right: "20px", width: "auto" }}>
                       {Button1 && Button1.visibility && <Button
                         onClick={Button1.buttonClick}
@@ -486,7 +485,6 @@ class PTAcknowledgement extends React.Component {
 const mapStateToProps = state => {
   const { screenConfiguration, common, app, properties } = state || {};
   const { propertiesById } = properties;
-
   return {
     propertiesById,
     common,
