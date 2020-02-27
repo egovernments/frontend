@@ -206,11 +206,11 @@ class TableChart extends Component {
       }).value();
       // small hack but need to remove from backend.
       columnData.splice(0, 1);      
-      let newData = [],resData = chartData.data;
-      if(resData){
-        for (var i=0; i<resData.length; i++){
+      let newData = [];
+      if(chartData){
+        for (var i=0; i<chartData.length; i++){
           let newrowData = _.cloneDeep(colSortRow)
-          _.map(resData[i]['plots'], a => {            
+          _.map(chartData[i]['plots'], a => {            
               if(a.name != "S.N."){
                 if (a.symbol.toUpperCase() === 'TEXT') {
                   let label = _.chain(a.label).split('.').join("_").toUpper().value();
