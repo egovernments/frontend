@@ -20,7 +20,7 @@ const instance = axios.create({
 });
 
 const edcrInstance = axios.create({
-  baseURL: "https://state-bihar-micro-dev.egovernments.org", // "https://bihar-micro-dev.egovernments.org",
+  baseURL: "https://state-bihar-uat.egovernments.org", // "https://bihar-micro-dev.egovernments.org",
   headers: {
     "Content-Type": "application/json"
   }
