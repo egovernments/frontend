@@ -61,8 +61,19 @@ export const LicenseeCard = getCommonCard({
             state.screenConfiguration.preparedFinalObject,
             "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
           );
-          if (action.value !== previousValue)
+          if (action.value !== previousValue) {
             await setLicenseeSubTypeDropdownData(action.value, state, dispatch);
+            if(counsilForArchNo) {
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
+                  "props.value",
+                  ""
+                )
+              );
+              }
+          }
 
           if (action.value == "ARCHITECT") {
             dispatch(
@@ -89,17 +100,6 @@ export const LicenseeCard = getCommonCard({
                 true
               )
             );
-            
-            if(counsilForArchNo) {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
-                "props.value",
-                ""
-              )
-            );
-            }
           } else {
             dispatch(
               handleField(
