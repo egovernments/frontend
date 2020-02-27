@@ -682,6 +682,15 @@ export const resetFields = (state, dispatch) => {
     )
   );
 };
+export const getTodaysDateInYMD = () => {
+  let date = new Date();
+  //date = date.valueOf();
+  let month = date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()}-${month}-${day}`;
+  // date = epochToYmdDate(date);
+  return date;
+};
 
 export const getRequiredDocData = async (action, state, dispatch) => {
   let tenantId =
