@@ -219,12 +219,12 @@ const getPropertyData = async (action, state, dispatch) => {
       set(
         action.screenConfig,
         "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
-        {}
+        {display: "none"}
       );
       set(
         action.screenConfig,
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.props.style",
-      {display: "none"}
+      {}
       );
     }else{
       // set(
