@@ -63,11 +63,18 @@ export const fetchLocalizationLabel = (locale, module, tenantId) => {
         resultArray = [...resultArray, ...payload2.messages];
       }
       dispatch(setLocalizationLabels(locale, resultArray));
+      localeChangeLableEvent();
     } catch (error) {
       console.log(error);
     }
   };
 };
+
+function localeChangeLableEvent() {
+  var event = new CustomEvent("loacaleChangeEvent");
+  window.dispatchEvent(event);
+}
+
 const setActionItems = (payload) => {
   return {
     type: actionTypes.FETCH_ACTIONMENU,
