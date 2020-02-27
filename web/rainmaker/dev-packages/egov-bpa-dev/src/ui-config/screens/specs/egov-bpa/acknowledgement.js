@@ -247,12 +247,7 @@ const getAcknowledgementCard = (
               labelName:
                 "A notification regarding BPA Approval has been sent to building owner at registered Mobile No.",
               labelKey: "BPA_APPROVAL_CHECKLIST_MESSAGE_SUB"
-            },
-            tailText: {
-              labelName: "BPA No.",
-              labelKey: "BPA_HOME_SEARCH_RESULTS_BPA_NO_LABEL"
-            },
-            number: secondNumber
+            }
           })
         }
       },

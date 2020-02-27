@@ -3630,7 +3630,7 @@ export const getMdmsDataForBpa = async queryObject => {
 export const requiredDocumentsData = async (state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getTenantId(), //'pb',
       moduleDetails: [
         {
           moduleName: "common-masters",
