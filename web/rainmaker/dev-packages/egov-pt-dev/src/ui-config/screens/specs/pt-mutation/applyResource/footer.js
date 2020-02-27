@@ -138,29 +138,29 @@ const callBackForApply = async (state, dispatch) => {
 
     })
   propertyPayload.additionalDetails.documentDate = 1581490792377;
-  if(propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")){
+  if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
       owner.ownerType = 'NONE';
     })
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
-  }else if(propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")){
+  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
       owner.ownerType = 'NONE';
     })
-    propertyPayload.institution=null;
+    propertyPayload.institution = null;
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
-  }else if(propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")){
-    propertyPayload.owners[0].altContactNumber=propertyPayload.institutionTemp.landlineNumber;
+  } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+    propertyPayload.owners[0].altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institution = {};
-    propertyPayload.institution.nameOfAuthorizedPerson=propertyPayload.institutionTemp.name;
-    propertyPayload.institution.name=propertyPayload.institutionTemp.institutionName;
-    propertyPayload.institution.designation=propertyPayload.institutionTemp.designation;
-    propertyPayload.institution.tenantId=tenantId;
-    propertyPayload.institution.type=propertyPayload.ownershipCategoryTemp.split('.')[1];
+    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId = tenantId;
+    propertyPayload.institution.type = propertyPayload.ownershipCategoryTemp.split('.')[1];
 
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
@@ -168,13 +168,13 @@ const callBackForApply = async (state, dispatch) => {
     // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     delete propertyPayload.institutionTemp;
-  }else if(propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")){
+  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
     propertyPayload.institution = {};
-    propertyPayload.institution.nameOfAuthorizedPerson=propertyPayload.institutionTemp.name;
-    propertyPayload.institution.name=propertyPayload.institutionTemp.institutionName;
-    propertyPayload.institution.designation=propertyPayload.institutionTemp.designation;
-    propertyPayload.institution.tenantId=tenantId;
-    propertyPayload.institution.type=propertyPayload.ownershipCategoryTemp.split('.')[1];
+    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId = tenantId;
+    propertyPayload.institution.type = propertyPayload.ownershipCategoryTemp.split('.')[1];
 
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
@@ -238,11 +238,11 @@ const callBackForApply = async (state, dispatch) => {
 
 const validateMobileNumber = (state) => {
   let err = false;
-  let ownershipCategoryTemp=get(state, 'screenConfiguration.preparedFinalObject.Property.ownershipCategoryTemp');
-  
-  
-  if(ownershipCategoryTemp.includes('INSTITUTIONAL')){
-    const newOwners = [get(state, 'screenConfiguration.preparedFinalObject.Property.institutionTemp',{})];
+  let ownershipCategoryTemp = get(state, 'screenConfiguration.preparedFinalObject.Property.ownershipCategoryTemp');
+
+
+  if (ownershipCategoryTemp.includes('INSTITUTIONAL')) {
+    const newOwners = [get(state, 'screenConfiguration.preparedFinalObject.Property.institutionTemp', {})];
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
     const names = owners.map(owner => {
       return owner.name
@@ -260,7 +260,7 @@ const validateMobileNumber = (state) => {
         err = "OWNER_NUMBER_SAME";
       }
     })
-  }else{
+  } else {
 
     const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
@@ -283,8 +283,8 @@ const validateMobileNumber = (state) => {
 
 
   }
-  
-  
+
+
 
   return err;
 }
@@ -359,6 +359,37 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep === 1) {
     isFormValid = moveToReview(state, dispatch);
+
+
+    const ownershipCategoryTemp = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Property.ownershipCategoryTemp",
+      ''
+    );
+
+
+    if (ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+      const institutionTemp = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.institutionTemp",
+        ''
+      );
+      let temp = {};
+      temp = { ...institutionTemp }
+      temp.name = institutionTemp.institutionName;
+      temp.fatherOrHusbandName = institutionTemp.name;
+
+      const ownerTemp = [temp];
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersTemp",
+          ownerTemp
+        )
+      );
+
+
+    }
+
   }
   if (activeStep === 2) {
 
