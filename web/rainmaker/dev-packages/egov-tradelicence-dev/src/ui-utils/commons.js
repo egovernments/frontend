@@ -433,6 +433,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           if (i > renewalDocuments.length) {
             renewalDocuments.push(documents[i-1])
           }
+          else{
+             if(!documents[i-1].hasOwnProperty("id")){
+             renewalDocuments[i-1].active=false;
+             renewalDocuments.push(documents[i-1])
+             }
+          }
         }
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
