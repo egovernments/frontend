@@ -295,7 +295,7 @@ const setSearchResponse = async (
     let ownersTemp = [];
     let owners = [];
     property.owners.map(owner => {
-      if (owner.status == "INACTIVE") {
+      if (owner.status == "ACTIVE") {
         ownersTemp.push(owner);
       } else {
         owners.push(owner);

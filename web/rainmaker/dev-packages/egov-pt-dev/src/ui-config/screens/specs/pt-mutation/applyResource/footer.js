@@ -212,24 +212,53 @@ const callBackForApply = async (state, dispatch) => {
 
 const validateMobileNumber = (state) => {
   let err = false;
-  const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
-  const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
-  const names = owners.map(owner => {
-    return owner.name
-  })
-  const mobileNumbers = owners.map(owner => {
-    return owner.mobileNumber
-  })
-  newOwners.map(owner => {
-    if (names.includes(owner.name)) {
-      err = "OWNER_NAME_SAME";
-    }
-  })
-  newOwners.map(owner => {
-    if (mobileNumbers.includes(owner.mobileNumber)) {
-      err = "OWNER_NUMBER_SAME";
-    }
-  })
+  let ownershipCategoryTemp=get(state, 'screenConfiguration.preparedFinalObject.Property.ownershipCategoryTemp');
+  
+  
+  if(ownershipCategoryTemp.includes('INSTITUTIONAL')){
+    const newOwners = [get(state, 'screenConfiguration.preparedFinalObject.Property.institutionTemp',{})];
+    const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
+    const names = owners.map(owner => {
+      return owner.name
+    })
+    const mobileNumbers = owners.map(owner => {
+      return owner.mobileNumber
+    })
+    newOwners.map(owner => {
+      if (names.includes(owner.name)) {
+        err = "OWNER_NAME_SAME";
+      }
+    })
+    newOwners.map(owner => {
+      if (mobileNumbers.includes(owner.mobileNumber)) {
+        err = "OWNER_NUMBER_SAME";
+      }
+    })
+  }else{
+
+    const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
+    const names = owners.map(owner => {
+      return owner.name
+    })
+    const mobileNumbers = owners.map(owner => {
+      return owner.mobileNumber
+    })
+
+    newOwners.map(owner => {
+      if (names.includes(owner.name)) {
+        err = "OWNER_NAME_SAME";
+      }
+      if (mobileNumbers.includes(owner.mobileNumber)) {
+        err = "OWNER_NUMBER_SAME";
+      }
+    })
+
+
+
+  }
+  
+  
 
   return err;
 }
