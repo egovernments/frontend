@@ -138,24 +138,50 @@ const callBackForApply = async (state, dispatch) => {
 
     })
   propertyPayload.additionalDetails.documentDate = 1581490792377;
+  if(propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")){
+    propertyPayload.ownersTemp.map(owner => {
+      owner.status = "ACTIVE";
+      owner.ownerType = 'NONE';
+    })
+    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
+    delete propertyPayload.ownersTemp;
+  }else if(propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")){
+    propertyPayload.ownersTemp.map(owner => {
+      owner.status = "ACTIVE";
+      owner.ownerType = 'NONE';
+    })
+    propertyPayload.institution=null;
+    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
+    delete propertyPayload.ownersTemp;
+  }else if(propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")){
+    propertyPayload.owners[0].altContactNumber=propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.institution = {};
+    propertyPayload.institution.nameOfAuthorizedPerson=propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name=propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation=propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId=tenantId;
+    propertyPayload.institution.type=propertyPayload.ownershipCategoryTemp.split('.')[1];
 
-  if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
     propertyPayload.institutionTemp.status = "ACTIVE";
     // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     delete propertyPayload.institutionTemp;
-  }
-  else {
-    // 
-    propertyPayload.ownersTemp.map(owner => {
-      owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
-    })
+  }else if(propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")){
+    propertyPayload.institution = {};
+    propertyPayload.institution.nameOfAuthorizedPerson=propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name=propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation=propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId=tenantId;
+    propertyPayload.institution.type=propertyPayload.ownershipCategoryTemp.split('.')[1];
 
-    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
-    delete propertyPayload.ownersTemp;
+    propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.institutionTemp.ownerType = "NONE";
+    propertyPayload.institutionTemp.status = "ACTIVE";
+    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
+    propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
+    delete propertyPayload.institutionTemp;
   }
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
