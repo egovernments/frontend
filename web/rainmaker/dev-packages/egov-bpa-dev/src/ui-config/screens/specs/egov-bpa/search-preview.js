@@ -50,7 +50,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-bpa",
     componentPath: "PermitNumber",
     props: {
-      number: getQueryArg(window.location.href, "permitNumber") 
+      // number: getQueryArg(window.location.href, "permitNumber") 
     }
   },
   downloadMenu: {
@@ -339,6 +339,25 @@ const setSearchResponse = async (
         false
       )
     );
+  }
+  if ( response && response.Bpa["0"] && response.Bpa["0"].permitOrderNo ) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.headerDiv.children.header.children.permitNumber",
+        "props.number",
+        response.Bpa["0"].permitOrderNo
+      )
+    );
+  } else {
+    dispatch(
+      handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header.children.permitNumber",
+      "visible",
+      false
+    )
+  )
   }
 
   prepareDocumentsView(state, dispatch);
