@@ -16,6 +16,7 @@ import {
 } from "../../../../../ui-utils/commons";
 import store from "ui-redux/store";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
@@ -137,7 +138,11 @@ const callBackForApply = async (state, dispatch) => {
       owner.status = "INACTIVE";
 
     })
-  propertyPayload.additionalDetails.documentDate = 1581490792377;
+
+
+  propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
+    propertyPayload.additionalDetails.documentDate);
+
   if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
