@@ -13,6 +13,7 @@ import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import get from "lodash/get";
 import set from "lodash/set";
 
+const labelKeyValue=""
 const getAcknowledgementCard = (
   state,
   dispatch,
@@ -24,8 +25,7 @@ const getAcknowledgementCard = (
   secondNumber,
   tenant
 ) => {
-  console.log('applicationNumberSewerage, applicationNumberWater')
-  console.log(applicationNumberSewerage, applicationNumberWater)
+
   if (purpose === "apply" && status === "success" && applicationNumberWater && applicationNumberSewerage) {
     return {
       header: getCommonHeader({
@@ -178,9 +178,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "WS_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: `Application for New Water and Sewerage Connection`,
+          labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -204,11 +203,11 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName:
-                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+                "A notification regarding Approval connection has been sent to registered Mobile No.",
               labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Trade License No.",
+              labelName: "Application No.",
               labelKey: "WS_HOME_SEARCH_RESULTS_WS_NO_LABEL"
             },
             number: secondNumber
@@ -222,9 +221,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "WS_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: `Application for New Water and Sewerage Connection`,
+          labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -243,14 +241,14 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application is sent back Successfully",
+              labelName: "Application is sent back to citizen Successfully",
               labelKey: "WS_SENDBACK_CHECKLIST_MESSAGE_HEAD"
             },
-            // body: {
-            //   labelName:
-            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-            //   labelKey: "WS_SENDBACK_CHECKLIST_MESSAGE_SUB"
-            // },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to registered Mobile No.",
+              labelKey: "WS_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            },
             tailText: {
               labelName: "Trade License No.",
               labelKey: "WS_HOME_SEARCH_RESULTS_WS_NO_LABEL"
@@ -265,9 +263,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "WS_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: `Application for New Water and Sewerage Connection`,
+          labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -286,12 +283,12 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Trade License Application Rejected",
+              labelName: "Application Rejected",
               labelKey: "WS_APPROVAL_REJ_MESSAGE_HEAD"
             },
             body: {
               labelName:
-                "A notification regarding Trade License Rejection has been sent to trade owner at registered Mobile No.",
+                "A notification regarding Application Rejection has been sent to registered Mobile No.",
               labelKey: "WS_APPROVAL_REJ_MESSAGE_SUBHEAD"
             }
           })
@@ -304,7 +301,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "WS_TRADE_APPLICATION",
+          labelKey: "TL_TRADE_APPLICATION",
           dynamicArray: [financialYearText]
         }),
         applicationNumber: {
@@ -330,11 +327,11 @@ const getAcknowledgementCard = (
             body: {
               labelName:
                 "A notification regarding Trade License cancellation has been sent to trade owner at registered Mobile No.",
-              labelKey: "WS_WS_CANCELLED_MESSAGE_SUBHEAD"
+              labelKey: "TL_TL_CANCELLED_MESSAGE_SUBHEAD"
             },
             tailText: {
               labelName: "Trade License No.",
-              labelKey: "WS_HOME_SEARCH_RESULTS_WS_NO_LABEL"
+              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
             },
             number: secondNumber
           })
@@ -348,7 +345,7 @@ const getAcknowledgementCard = (
         header: getCommonHeader({
           labelName: `Trade License Application ${financialYearText}`,
           dynamicArray: [financialYearText],
-          labelKey: "WS_TRADE_APPLICATION"
+          labelKey: "TL_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -368,12 +365,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Payment has failed!",
-              labelKey: "WS_PAYMENT_FAILED"
+              labelKey: "TL_PAYMENT_FAILED"
             },
             body: {
               labelName:
                 "A notification regarding payment failure has been sent to the trade owner and applicant.",
-              labelKey: "WS_PAYMENT_NOTIFICATION"
+              labelKey: "TL_PAYMENT_NOTIFICATION"
             }
           })
         }
@@ -415,9 +412,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "forward" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Trade License ${financialYearText}`,
-        labelKey: "WS_APPLICATION_TRADE_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: `Application for New Water and Sewerage Connection`,
+        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -432,8 +428,8 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName:
-                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-              labelKey: "WS_APPLICATION_FORWARD_SUCCESS"
+                "A notification regarding above application status has been sent to registered Mobile No.",
+              labelKey: "WS_APPLICATION_FORWARD_SUCCESS_SUBHEAD"
             },
             tailText: {
               labelName: "Application No.",
@@ -463,6 +459,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
+    // const service = getQueryArg(window.location.href, "service");
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
     const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");

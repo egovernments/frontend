@@ -108,6 +108,14 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendbacktocitizen&status=success";
       case "SUBMIT_APPLICATION":
         return "purpose=apply&status=success";
+        case "SEND_BACK_TO_CITIZEN":
+        return "purpose=sendback&status=success";
+        case "VERIFY_AND_FORWARD":
+        return "purpose=forward&status=success";
+        case "SEND_BACK_FOR_DOCUMENT_VERIFICATION":
+        return "purpose=sendback&status=success";
+        case "APPROVE_FOR_CONNECTION":
+        return "purpose=approve&status=success";
     }
   };
 
@@ -180,6 +188,19 @@ class WorkFlowContainer extends React.Component {
 
     if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       data = data[0];
+      data.assignees=[];
+      if(data.assignee){
+        data.assignee.forEach(assigne=>{
+          data.assignees.push({
+            uuid:assigne
+          })
+        })
+      }
+      data.processInstance={
+        documents:data.wfDocuments,
+        assignes:data.assignees,
+        comment:data.comment
+      }
     }
 
     if (moduleName === "NewSW1") {
