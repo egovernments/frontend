@@ -25,7 +25,7 @@ const setReviewPageRoute = (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -218,7 +218,10 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
 
   if (activeStep === 1) {
-    if (moveToReview(state, dispatch)) { isFormValid = true; hasFieldToaster = false; }
+    if (moveToReview(state, dispatch)) {
+      let applyFeild = get(state, "screenConfiguration.preparedFinalObject.applyScreen", {});
+      dispatch(prepareFinalObject("applyObject", applyFeild));;
+      isFormValid = true; hasFieldToaster = false; }
     else { isFormValid = false; hasFieldToaster = true; }
     await pushTheDocsUploadedToRedux(state, dispatch);
   }
