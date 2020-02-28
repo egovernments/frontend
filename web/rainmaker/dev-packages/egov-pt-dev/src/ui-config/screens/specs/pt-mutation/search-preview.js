@@ -512,9 +512,7 @@ const screenConfig = {
           mutationSummary:mutationSummary,
           registrationSummary: registrationSummary,
           documentsSummary: documentsSummary
-        }),
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+        })
       }
     }
   }
