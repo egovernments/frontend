@@ -141,29 +141,6 @@ const commonApplicantInformation = () => {
       //     disabled: true
       //   }
       // },
-      
-      applicantEmail: getTextField({
-        label: {
-          labelName: "Email",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Email",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_PLACEHOLDER"
-        },
-        pattern: getPattern("Email"),
-        errorMessage: "Invalid Email",
-        jsonPath:
-          "Property.ownersTemp[0].emailId",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props:{
-          className:"applicant-details-error"
-        }
-      }),
       guardianName: getTextField({
         label: {
           labelName: "Guardian's Name",
@@ -248,6 +225,29 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
+      applicantEmail: getTextField({
+        label: {
+          labelName: "Email",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Email",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_PLACEHOLDER"
+        },
+        pattern: getPattern("Email"),
+        errorMessage: "Invalid Email",
+        jsonPath:
+          "Property.ownersTemp[0].emailId",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props:{
+          className:"applicant-details-error"
+        }
+      }),
+
       applicantAddress: getTextField({
         label: {
           labelName: "Correspondence Address",
@@ -275,6 +275,55 @@ const commonApplicantInformation = () => {
   });
 };
 
+const institutionTypeInformation = () => {
+  return getCommonCard(
+    {
+      institutionTypeDetailsContainer: getCommonContainer({ 
+
+        privateInstitutionNameDetails: getTextField({
+          label: {
+            labelName: "Institution Name",
+            labelKey: "PT_MUTATION_INSTITUTION_NAME"
+          },
+          props:{
+            className:"applicant-details-error"
+          },
+          placeholder: {
+            labelName: "Enter Institution Name",
+            labelKey: "PT_MUTATION_INSTITUTION_NAME_PLACEHOLDER"
+          },
+          required:true,
+         // pattern: getPattern("Name"),
+          jsonPath: "Property.institutionTemp.institutionName"
+        }),    
+
+        privateInstitutionTypeDetails: getSelectField({
+          label: {
+            labelName: "Institution Type",
+            labelKey: "PT_MUTATION_INSTITUTION_TYPE"
+          },
+          placeholder: {
+            labelName: "Enter Institution Type",
+            labelKey: "PT_MUTATION_INSTITUTION_TYPE_PLACEHOLDER"
+          },
+          required:true,
+          jsonPath:
+          "Property.additionalDetails.reasonForTransfer",
+          localePrefix: {
+            moduleName: "PropertyTax",
+            masterName: "ReasonForTransfer"
+          },
+          required:true,
+          jsonPath: "Property.institutionTemp.institutionType",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          }
+        }),    
+        
+      }),
+    }) }; 
 const institutionInformation = () => {
   return getCommonCard(
     {
@@ -289,25 +338,7 @@ const institutionInformation = () => {
           }
         }
       ),
-      institutionTypeDetailsContainer: getCommonContainer({ 
-        
-        privateInstitutionNameDetails: getTextField({
-          label: {
-            labelName: "Name",
-            labelKey: "PT_MUTATION_INSTITUTION_NAME"
-          },
-          props:{
-            className:"applicant-details-error"
-          },
-          placeholder: {
-            labelName: "Enter Name",
-            labelKey: "PT_MUTATION_INSTITUTION_NAME_PLACEHOLDER"
-          },
-          required:true,
-          pattern: getPattern("Name"),
-          jsonPath: "Property.institutionTemp.institutionName"
-        }),
-      }),
+      
 
       institutionDetailsContainer: getCommonContainer({ 
         
@@ -479,23 +510,27 @@ export const transfereeDetails = getCommonCard({
           "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer"
           let institutionContainerJsonPath =
           "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
+          let institutionTypeContainerJsonPath="components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer"
          
           if (action.value.includes("SINGLEOWNER")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, true);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, false);
-            // showComponent(dispatch, applicantSubtypeJsonPath, false);
+            showComponent(dispatch, institutionTypeContainerJsonPath, false);
+            
           } else if (action.value.includes("INSTITUTIONAL")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, true);
-            // showComponent(dispatch, applicantSubtypeJsonPath, true);
+            showComponent(dispatch, institutionTypeContainerJsonPath, true);
+           
           }
           else if (action.value.includes("MULTIPLEOWNERS")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, true);
             showComponent(dispatch, institutionContainerJsonPath, false);
-            // showComponent(dispatch, applicantSubtypeJsonPath, true);
+            showComponent(dispatch, institutionTypeContainerJsonPath, false);
+            
           }
         },
       },
@@ -544,6 +579,7 @@ export const transfereeDetails = getCommonCard({
         }
       },
       children: {
+        institutionType: institutionTypeInformation(),
         institutionInfo: institutionInformation()
       }
     }
