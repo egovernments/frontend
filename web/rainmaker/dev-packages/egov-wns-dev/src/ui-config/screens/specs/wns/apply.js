@@ -57,7 +57,7 @@ export const header = getCommonContainer({
 
 export const reviewConnDetails = reviewConnectionDetails();
 
-export const reviewOwnerDetails = reviewOwner();
+export const reviewOwnerDetails = reviewOwner(process.env.REACT_APP_NAME !== "Citizen");
 
 export const reviewDocumentDetails = reviewDocuments();
 

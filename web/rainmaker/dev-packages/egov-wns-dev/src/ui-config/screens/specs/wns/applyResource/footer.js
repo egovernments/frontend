@@ -9,11 +9,14 @@ import { getCommonApplyFooter, validateFields } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import {
   prepareDocumentsUploadData,
   applyForWaterOrSewerage,
   pushTheDocsUploadedToRedux,
-  findAndReplace
+  findAndReplace,
+  applyForSewerage,
+  applyForWater
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -112,22 +115,24 @@ const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    if (isFormValid) {
-      if (getQueryArg(window.location.href, "action") === "edit") {
-        let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-        const uploadedDocData = application.documents;
-        const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
-          return {
-            title: `WS_${item.documentType}`,
-            link: item.fileUrl && item.fileUrl.split(",")[0],
-            linkText: "View",
-            name: item.fileName
-          };
-        });
-        dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
-        let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
-        dispatch(prepareFinalObject("applyScreen", applyScreenObject));
-      }
+    // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
+    //   isFormValid = await appl;
+    // }
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      const uploadedDocData = application.documents;
+      const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
+        return {
+          title: `WS_${item.documentType}`,
+          link: item.fileUrl && item.fileUrl.split(",")[0],
+          linkText: "View",
+          name: item.fileName
+        };
+      });
+      dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
+      dispatch(prepareFinalObject("applyScreen", applyScreenObject));
+    } else {
       const water = get(
         state.screenConfiguration.preparedFinalObject,
         "applyScreen.water"
@@ -182,8 +187,30 @@ const callBackForNext = async (state, dispatch) => {
           hasFieldToaster = true;
         }
       }
+      let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
+      let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
+      let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
+      let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
       if (isFormValid) {
-        await applyForWaterOrSewerage(state, dispatch);
+        if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
+          if (waterChecked && sewerChecked) {
+            if (sewerData && sewerData.length > 0) { await applyForWater(state, dispatch); }
+            if (waterData && waterData.length > 0) { await applyForSewerage(state, dispatch); }
+          } else if (sewerChecked) { await applyForSewerage(state, dispatch); }
+          else { await applyForWater(state, dispatch); }
+        } else {
+          let propertyData = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property", {});
+          if (process.env.REACT_APP_NAME === "Citizen") {
+            if (JSON.parse(getUserInfo()).mobileNumber === propertyData.owners[0].mobileNumber) {
+              isFormValid = await applyForWaterOrSewerage(state, dispatch);
+            } else {
+              isFormValid = false;
+              dispatch(toggleSnackbar(true, { labelKey: "WS_DOES_NOT_OWN_PROPERTY" }, "warning"))
+            }
+          } else {
+            isFormValid = await applyForWaterOrSewerage(state, dispatch);
+          }
+        }
       }
     }
     prepareDocumentsUploadData(state, dispatch);
@@ -421,6 +448,8 @@ export const changeStep = (
   if (defaultActiveStep === -1) {
     if (activeStep === 1 && mode === "next") {
       activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
+    } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) {
+      activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
@@ -485,15 +514,13 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     case 2:
-      if (process.env.REACT_APP_NAME === "Employee") {
-        dispatchMultipleFieldChangeAction(
-          "apply",
-          getActionDefinationForStepper(
-            "components.div.children.formwizardThirdStep"
-          ),
-          dispatch
-        );
-      }
+      dispatchMultipleFieldChangeAction(
+        "apply",
+        getActionDefinationForStepper(
+          "components.div.children.formwizardThirdStep"
+        ),
+        dispatch
+      );
       break;
     default:
       dispatchMultipleFieldChangeAction(
@@ -522,6 +549,15 @@ export const renderStepsCitizen = (activeStep, dispatch) => {
         "apply",
         getActionDefinationForStepper(
           "components.div.children.formwizardSecondStep"
+        ),
+        dispatch
+      );
+      break;
+    case 2:
+      dispatchMultipleFieldChangeAction(
+        "apply",
+        getActionDefinationForStepper(
+          "components.div.children.formwizardFourthStep"
         ),
         dispatch
       );
@@ -616,7 +652,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "NOC_COMMON_BUTTON_PREV_STEP"
+        labelKey: "WS_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -639,7 +675,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "NOC_COMMON_BUTTON_NXT_STEP"
+        labelKey: "WS_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -668,7 +704,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "NOC_COMMON_BUTTON_SUBMIT"
+        labelKey: "WS_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",
