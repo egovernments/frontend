@@ -21,7 +21,7 @@ export const propertySearchApiCall = async (state, dispatch) => {
     try {
       let response = await getPropertyResults(queryObject, dispatch);
       dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
-      if (response.Properties.length > 0 && response.Properties[0]) {
+      if (response && response.Properties.length > 0) {
         showHideFields(dispatch, true);
       } else {
         showHideFields(dispatch, false);
