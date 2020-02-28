@@ -25,7 +25,7 @@ const setReviewPageRoute = (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited=true`;
+  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -75,9 +75,7 @@ const moveToReview = (state, dispatch) => {
     }
   }
 
-  if (validateDocumentField) {
-    setReviewPageRoute(state, dispatch);
-  }
+  return validateDocumentField;
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -107,11 +105,6 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
   if (activeStep === 0) {
-    let validateForm = validateFields(
-      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
-      state,
-      dispatch
-    );
     let validatePropertyLocationDetails = validateFields(
       "components.div.children.formwizardFirstStep.children.Details.children.cardContent.children.propertyDetail.children.viewFour.children",
       state,
@@ -139,83 +132,84 @@ const callBackForNext = async (state, dispatch) => {
       dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
       dispatch(prepareFinalObject("applyScreen", applyScreenObject));
-    }
-    const water = get(
-      state.screenConfiguration.preparedFinalObject,
-      "applyScreen.water"
-    );
-    const sewerage = get(
-      state.screenConfiguration.preparedFinalObject,
-      "applyScreen.sewerage"
-    );
-    let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
-    if (water && sewerage) {
-      if (
-        (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-        (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-        (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-        (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
-        (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "") &&
-        (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
-        (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
-      ) {
-        isFormValid = true;
-        hasFieldToaster = false;
-      } else {
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
-    } else if (water) {
-      if (
-        (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-        (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-        (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-        (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
-        (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "")
-      ) {
-        isFormValid = true;
-        hasFieldToaster = false;
-      } else {
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
     } else {
-      if (
-        (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-        (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-        (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-        (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
-        (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
-      ) {
-        isFormValid = true;
-        hasFieldToaster = false;
-      } else {
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
-    }
-    let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
-    let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
-    let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
-    let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
-    if (isFormValid) {
-      if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
-        if (waterChecked && sewerChecked) {
-          if (sewerData && sewerData.length > 0) { await applyForWater(state, dispatch); }
-          if (waterData && waterData.length > 0) { await applyForSewerage(state, dispatch); }
-        } else if (sewerChecked) { await applyForSewerage(state, dispatch); }
-        else { await applyForWater(state, dispatch); }
-      } else {
-        let propertyData = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property", {});
-        if (process.env.REACT_APP_NAME === "Citizen") {
-          if (JSON.parse(getUserInfo()).mobileNumber === propertyData.owners[0].mobileNumber) {
-            isFormValid = await applyForWaterOrSewerage(state, dispatch);
-          } else {
-            isFormValid = false;
-            dispatch(toggleSnackbar(true, { labelKey: "WS_DOES_OWN_PROPERTY" }, "warning"))
-          }
+      const water = get(
+        state.screenConfiguration.preparedFinalObject,
+        "applyScreen.water"
+      );
+      const sewerage = get(
+        state.screenConfiguration.preparedFinalObject,
+        "applyScreen.sewerage"
+      );
+      let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
+      if (water && sewerage) {
+        if (
+          (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
+          (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
+          (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
+          (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
+          (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "") &&
+          (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
+          (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
+        ) {
+          isFormValid = true;
+          hasFieldToaster = false;
         } else {
-          isFormValid = await applyForWaterOrSewerage(state, dispatch);
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+      } else if (water) {
+        if (
+          (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
+          (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
+          (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
+          (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
+          (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "")
+        ) {
+          isFormValid = true;
+          hasFieldToaster = false;
+        } else {
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+      } else {
+        if (
+          (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
+          (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
+          (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
+          (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
+          (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
+        ) {
+          isFormValid = true;
+          hasFieldToaster = false;
+        } else {
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+      }
+      let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
+      let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
+      let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
+      let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
+      if (isFormValid) {
+        if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
+          if (waterChecked && sewerChecked) {
+            if (sewerData && sewerData.length > 0) { await applyForWater(state, dispatch); }
+            if (waterData && waterData.length > 0) { await applyForSewerage(state, dispatch); }
+          } else if (sewerChecked) { await applyForSewerage(state, dispatch); }
+          else { await applyForWater(state, dispatch); }
+        } else {
+          let propertyData = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property", {});
+          if (process.env.REACT_APP_NAME === "Citizen") {
+            if (JSON.parse(getUserInfo()).mobileNumber === propertyData.owners[0].mobileNumber) {
+              isFormValid = await applyForWaterOrSewerage(state, dispatch);
+            } else {
+              isFormValid = false;
+              dispatch(toggleSnackbar(true, { labelKey: "WS_DOES_NOT_OWN_PROPERTY" }, "warning"))
+            }
+          } else {
+            isFormValid = await applyForWaterOrSewerage(state, dispatch);
+          }
         }
       }
     }
@@ -224,21 +218,8 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
 
   if (activeStep === 1) {
-    let isPropertyLocationCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
-      state,
-      dispatch
-    );
-    let isSinglePropertyCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children",
-      state,
-      dispatch
-    );
-    // if (!isSinglePropertyCardValid || !isPropertyLocationCardValid) {
-    //   isFormValid = false;
-    //   hasFieldToaster = true;
-    // }
-    isFormValid = true;
+    if (moveToReview(state, dispatch)) { isFormValid = true; hasFieldToaster = false; }
+    else { isFormValid = false; hasFieldToaster = true; }
     await pushTheDocsUploadedToRedux(state, dispatch);
   }
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
@@ -284,15 +265,15 @@ const callBackForNext = async (state, dispatch) => {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
-        labelName: "Please fill all mandatory fields and upload the documents!",
-        labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
+        labelName: "Please fill all mandatory fields!",
+        labelKey: "WS_FILL_MANDATORY_FIELDS"
       };
       switch (activeStep) {
         case 1:
           errorMessage = {
             labelName:
-              "Please check the Missing/Invalid field for Property Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
+              "Please upload all Mandatory Document!",
+            labelKey: "WS_UPLOAD_MANDATORY_DOCUMENTS"
           };
           break;
         case 2:
@@ -354,6 +335,13 @@ const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormVa
       labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
     };
     switch (activeStep) {
+      case 0:
+        errorMessage = {
+          labelName:
+            "Please check the Missing/Invalid field for Property Details, then proceed!",
+          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
+        };
+        break;
       case 1:
         errorMessage = {
           labelName:
@@ -460,6 +448,8 @@ export const changeStep = (
   if (defaultActiveStep === -1) {
     if (activeStep === 1 && mode === "next") {
       activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
+    } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) {
+      activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
@@ -524,15 +514,13 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     case 2:
-      if (process.env.REACT_APP_NAME === "Employee") {
-        dispatchMultipleFieldChangeAction(
-          "apply",
-          getActionDefinationForStepper(
-            "components.div.children.formwizardThirdStep"
-          ),
-          dispatch
-        );
-      }
+      dispatchMultipleFieldChangeAction(
+        "apply",
+        getActionDefinationForStepper(
+          "components.div.children.formwizardThirdStep"
+        ),
+        dispatch
+      );
       break;
     default:
       dispatchMultipleFieldChangeAction(
@@ -561,6 +549,15 @@ export const renderStepsCitizen = (activeStep, dispatch) => {
         "apply",
         getActionDefinationForStepper(
           "components.div.children.formwizardSecondStep"
+        ),
+        dispatch
+      );
+      break;
+    case 2:
+      dispatchMultipleFieldChangeAction(
+        "apply",
+        getActionDefinationForStepper(
+          "components.div.children.formwizardFourthStep"
         ),
         dispatch
       );
