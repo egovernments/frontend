@@ -31,6 +31,8 @@ import {
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
 
+
+
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
