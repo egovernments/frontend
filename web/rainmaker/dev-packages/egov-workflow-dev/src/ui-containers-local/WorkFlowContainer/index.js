@@ -108,13 +108,13 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendbacktocitizen&status=success";
       case "SUBMIT_APPLICATION":
         return "purpose=apply&status=success";
-        case "SEND_BACK_TO_CITIZEN":
+      case "SEND_BACK_TO_CITIZEN":
         return "purpose=sendback&status=success";
-        case "VERIFY_AND_FORWARD":
+      case "VERIFY_AND_FORWARD":
         return "purpose=forward&status=success";
-        case "SEND_BACK_FOR_DOCUMENT_VERIFICATION":
+      case "SEND_BACK_FOR_DOCUMENT_VERIFICATION":
         return "purpose=sendback&status=success";
-        case "APPROVE_FOR_CONNECTION":
+      case "APPROVE_FOR_CONNECTION":
         return "purpose=approve&status=success";
     }
   };
@@ -188,18 +188,18 @@ class WorkFlowContainer extends React.Component {
 
     if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       data = data[0];
-      data.assignees=[];
-      if(data.assignee){
-        data.assignee.forEach(assigne=>{
+      data.assignees = [];
+      if (data.assignee) {
+        data.assignee.forEach(assigne => {
           data.assignees.push({
-            uuid:assigne
+            uuid: assigne
           })
         })
       }
-      data.processInstance={
-        documents:data.wfDocuments,
-        assignes:data.assignees,
-        comment:data.comment
+      data.processInstance = {
+        documents: data.wfDocuments,
+        assignes: data.assignees,
+        comment: data.comment
       }
     }
 
@@ -219,13 +219,13 @@ class WorkFlowContainer extends React.Component {
       if (payload) {
         let path = "";
 
-        if (moduleName == "PT.CREATE" ) {
+        if (moduleName == "PT.CREATE") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
           )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
           return;
         }
-        if ( moduleName == "ASMT") {
+        if (moduleName == "ASMT") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
           )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Assessments[0].assessmentNumber', "")}&tenantId=${get(payload, 'Assessments[0].tenantId', "")}`);
@@ -492,12 +492,18 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
-     let showFooter;
-      if(moduleName==='NewWS1'||moduleName==='NewSW1'){
-         showFooter=true;
-      }else{
-         showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
-      }
+    let showFooter;
+    if (moduleName === 'NewWS1' || moduleName === 'NewSW1') {
+      showFooter = true;
+    } else if (moduleName == "PT.CREATE") {
+      showFooter = true;
+    } else if (moduleName == "ASMT") {
+      showFooter = true;
+    } else if (moduleName == "PT.MUTATION") {
+      showFooter = true;
+    } else {
+      showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
