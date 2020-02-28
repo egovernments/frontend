@@ -366,13 +366,33 @@ const callBackForNext = async (state, dispatch) => {
     isFormValid = moveToReview(state, dispatch);
 
 
+    const ownershipCategory = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Property.ownershipCategory",
+      ''
+    );
     const ownershipCategoryTemp = get(
       state.screenConfiguration.preparedFinalObject,
       "Property.ownershipCategoryTemp",
       ''
     );
 
+    if (ownershipCategory.includes("INSTITUTIONAL")) {
 
+    }
+    else{
+      const owner = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.owners",
+        []
+      );
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersInit",
+          owner
+        )
+      );
+    }
     if (ownershipCategoryTemp.includes("INSTITUTIONAL")) {
       const institutionTemp = get(
         state.screenConfiguration.preparedFinalObject,

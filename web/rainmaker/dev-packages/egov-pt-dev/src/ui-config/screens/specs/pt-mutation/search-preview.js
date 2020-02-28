@@ -302,7 +302,7 @@ const setSearchResponse = async (
       }
     });
 
-    property.owners = owners;
+    property.ownersInit = owners;
     property.ownersTemp = ownersTemp;
   }
 

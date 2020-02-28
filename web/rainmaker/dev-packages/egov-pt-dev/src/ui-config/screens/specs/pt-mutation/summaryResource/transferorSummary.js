@@ -87,7 +87,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].fatherOrHusbandName",
+              "Property.ownersInit[0].fatherOrHusbandName",
               callBack: checkValueForNA
             }
           ),  ownerGender: getLabelWithValue(
@@ -97,7 +97,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].gender",
+              "Property.ownersInit[0].gender",
               callBack: checkValueForNA
             }
           ), ownerType: getLabelWithValue(
@@ -118,7 +118,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].mobileNumber" ,
+              "Property.ownersInit[0].mobileNumber" ,
               callBack: checkValueForNA
             }
           ),  ownerEmail: getLabelWithValue(
@@ -128,7 +128,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].emailId",
+              "Property.ownersInit[0].emailId",
               callBack: checkValueForNA
             }
           ),       
@@ -139,7 +139,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].ownerType" ,
+              "Property.ownersInit[0].ownerType" ,
               callBack: checkValueForNA
               // callBack: value => {
               //   return convertEpochToDate(value);
@@ -153,7 +153,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].permanentAddress" ,
+              "Property.ownersInit[0].permanentAddress" ,
               callBack: checkValueForNA
             }
           )
@@ -285,7 +285,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.owners[0].altContactNumber",
+          "Property.ownersInit[0].altContactNumber",
           callBack: checkValueForNA
       }
     ),
@@ -297,7 +297,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.owners[0].mobileNumber",
+          "Property.ownersInit[0].mobileNumber",
           callBack: checkValueForNA
       }
     ),
@@ -308,7 +308,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.owners[0].correspondenceAddress",
+          "Property.ownersInit[0].correspondenceAddress",
           callBack: checkValueForNA
       }
     )
