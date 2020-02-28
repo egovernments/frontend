@@ -378,7 +378,17 @@ const callBackForNext = async (state, dispatch) => {
     );
 
     if (ownershipCategory.includes("INSTITUTIONAL")) {
-
+      const owner = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.owners",
+        []
+      );
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersInit",
+          owner
+        )
+      );
     }
     else{
       const owner = get(
