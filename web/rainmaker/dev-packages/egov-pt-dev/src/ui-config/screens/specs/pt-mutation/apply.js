@@ -295,6 +295,15 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+
+    let OwnerShipCategory=get(
+      payload,
+      "MdmsRes.common-masters.OwnerShipCategory"
+    )
+    OwnerShipCategory = OwnerShipCategory.map(category=>category.code.split(".")[0]);
+    OwnerShipCategory=OwnerShipCategory.filter((v,i,a)=>a.indexOf(v)===i)
+    OwnerShipCategory = OwnerShipCategory.map(val=>{return{code:val,active:true}});
+    payload.MdmsRes['common-masters'].OwnerShipCategory=OwnerShipCategory;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
