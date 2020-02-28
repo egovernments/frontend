@@ -289,6 +289,7 @@ const setSearchResponse = async (
       assignes: null
     };
     property.workflow = workflow;
+   
   }
 
   if (property && property.owners && property.owners.length > 1) {
@@ -301,11 +302,11 @@ const setSearchResponse = async (
         owners.push(owner);
       }
     });
-
+    
     property.ownersInit = owners;
     property.ownersTemp = ownersTemp;
   }
-
+  property.ownershipCategoryTemp=  property.ownershipCategory;
   dispatch(prepareFinalObject("Property", property));
   dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   prepareDocumentsView(state, dispatch);
