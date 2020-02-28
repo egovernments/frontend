@@ -77,7 +77,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].name",
+              "Property.ownersInit[0].name",
               callBack: checkValueForNA
             }
           ), ownerFatherHusbandName: getLabelWithValue(
@@ -162,7 +162,7 @@ export const transferorSummary = getCommonGrayCard({
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "Property.owners",
+      sourceJsonPath: "Property.ownersInit",
       prefixSourceJsonPath:
         "children.cardContent.children.ownerContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
