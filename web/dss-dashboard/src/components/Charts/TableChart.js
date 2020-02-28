@@ -210,28 +210,30 @@ class TableChart extends Component {
       if(chartData){
         for (var i=0; i<chartData.length; i++){
           let newrowData = _.cloneDeep(colSortRow)
-          _.map(chartData[i]['plots'], a => {            
-              if(a.name != "S.N."){
-                if (a.symbol.toUpperCase() === 'TEXT') {
-                  let label = _.chain(a.label).split('.').join("_").toUpper().value();
-                  let text = null;
-                  try {
-                    text = strings["TENANT_TENANTS_" + label]
-                  } catch{
-                    text = a.label;
+          if(chartData[i] && chartData[i]['plots']){
+              _.map(chartData[i]['plots'], a => {            
+                  if(a.name != "S.N."){
+                    if (a.symbol.toUpperCase() === 'TEXT') {
+                      let label = _.chain(a.label).split('.').join("_").toUpper().value();
+                      let text = null;
+                      try {
+                        text = strings["TENANT_TENANTS_" + label]
+                      } catch{
+                        text = a.label;
+                      }
+                      if (!text) {
+                        text = a.label;
+                      }
+                      newrowData[a.name] = [a.label,text]
+                  } else {
+                      let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
+                      // console.log(typeof(val))
+                      newrowData[a.name] = val
                   }
-                  if (!text) {
-                    text = a.label;
-                  }
-                  newrowData[a.name] = [a.label,text]
-              } else {
-                  let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
-                  // console.log(typeof(val))
-                  newrowData[a.name] = val
-              }
-            }
-          });
-          newData.push(newrowData)
+                }
+              });
+            newData.push(newrowData)
+          }
         }
       }
       return (
