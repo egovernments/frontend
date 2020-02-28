@@ -1,8 +1,22 @@
 import React from "react";
-import RenderScreen from "../RenderScreen";
-import { SnackbarContainer } from "../../ui-containers";
-import { LoadingIndicator } from "../../ui-molecules";
+import Loadable from 'react-loadable';
+import LoadingIndicator from '../LoadingIndicator';
+// import RenderScreen from "../RenderScreen";
+// import { SnackbarContainer } from "../../ui-containers";
+// import { LoadingIndicator } from "../../ui-molecules";
 import "./index.css";
+const Loading = () => <LoadingIndicator/>;
+
+
+const RenderScreen=Loadable({
+  loader:()=>import ('../RenderScreen'),
+  loading:Loading
+})
+
+const SnackbarContainer=Loadable({
+  loader:()=>import ('../../ui-containers/SnackbarContainer'),
+  loading:Loading
+})
 
 class CommonView extends React.Component {
   constructor(props) {
