@@ -29,6 +29,7 @@ import { citizenFooter } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
 import { documentsSummary } from "./summaryResource/documentsSummary";
+import { declarationSummary } from "./summaryResource/declarationSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
@@ -310,6 +311,25 @@ const setSearchResponse = async (
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const status = response.Bpa["0"].status;
 
+  if (status && status == "INPROGRESS") {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.firstStakeholder",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.secondStakeholder",
+        "visible",
+        true
+      )
+    )
+  }
+
   if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
     let userInfo = JSON.parse(getUserInfo()),
     roles = get(userInfo, "roles"),
@@ -347,6 +367,14 @@ const setSearchResponse = async (
         )
       )
     }
+    dispatch(
+      handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.citizen",
+      "visible",
+      true
+    )
+  )
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
@@ -581,7 +609,8 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
-          documentsSummary: documentsSummary
+          documentsSummary: documentsSummary,
+          declarationSummary: declarationSummary
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }

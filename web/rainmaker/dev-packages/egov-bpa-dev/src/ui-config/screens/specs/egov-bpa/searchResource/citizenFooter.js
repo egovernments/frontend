@@ -5,7 +5,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { createUpdateBpaApplication, submitBpaApplication } from "../../../../../ui-utils/commons";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
+  prepareFinalObject,
+  toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -33,12 +34,15 @@ export const bpaMakePayment = async (state, dispatch) => {
 
 export const updateBpaApplication = async (state, dispatch, action) => {
   let bpaStatus = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
-  let bpaAction;
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");  
+  let bpaAction, isArchitect = false, isCitizen = false;
   if(action && action.componentJsonpath === "components.div.children.citizenFooter.children.sendToArch") {
-    bpaAction = "SEND_TO_ARCHITECT"
+    bpaAction = "SEND_TO_ARCHITECT",
+    isArchitect = true;
   }
   if(action && action.componentJsonpath === "components.div.children.citizenFooter.children.approve") {
-    bpaAction = "APPROVE"
+    bpaAction = "APPROVE",
+    isCitizen = true;
   }
 
   let toggle = get(
@@ -46,13 +50,20 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     "components.div.children.sendToArchPickerDialog.props.open",
     false
   );
-  dispatch(
-    handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
-  );
-  dispatch(
-    handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
-  );
-  
+  if((isDeclared && isCitizen ) || (isArchitect)){
+    dispatch(
+      handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
+    );
+    dispatch(
+      handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
+    );
+  } else {
+    let errorMessage = {
+      labelName: "Please confirm the declaration!",
+      labelKey: "BPA_DECLARATION_COMMON_LABEL"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning")); 
+  }
 };
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
