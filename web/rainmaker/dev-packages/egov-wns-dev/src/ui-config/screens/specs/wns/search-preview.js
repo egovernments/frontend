@@ -478,11 +478,6 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     payload = await getSearchResults(queryObjForSearch);
     payload.WaterConnection[0].service = service;
 
-    // to set documents 
-    if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
-      setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
-    }
-
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
@@ -492,7 +487,10 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
     }
-
+    // to set documents 
+    if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
+      setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
+    }
     estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
     if (estimate !== null && estimate !== undefined) {
       if (estimate.Calculation.length > 0) {
