@@ -161,7 +161,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           name: element.property.owners[0].name,
           applicationStatus: element.applicationStatus,
           address: element.property.address.street,
-          connectionType: element.service,
+          service: element.service,
+          connectionType: element.connectionType
         })
       }
       showApplicationResults(finalArray, dispatch)
@@ -200,12 +201,13 @@ const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     [getTextToLocalMapping("Consumer No")]: item.connectionNo,
     [getTextToLocalMapping("Application No")]: item.applicationNo,
-    [getTextToLocalMapping("Application Type")]: item.connectionType === "WATER" ? "New Water Connection" : "New Sewerage Connection",
+    [getTextToLocalMapping("Application Type")]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
     [getTextToLocalMapping("Owner Name")]: item.name,
     [getTextToLocalMapping("Application Status")]: item.applicationStatus,
     [getTextToLocalMapping("Address")]: item.address,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
-    ["service"]: item.connectionType
+    ["service"]: item.service,
+    ["connectionType"]: item.connectionType,
   }));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.title",
