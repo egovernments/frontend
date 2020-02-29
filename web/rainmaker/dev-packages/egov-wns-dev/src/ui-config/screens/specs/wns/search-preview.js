@@ -16,7 +16,8 @@ import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton
+  getDialogButton,
+  convertDateToEpoch
 } from "../utils";
 import { footerReview } from "./applyResource/footer";
 import { downloadPrintContainer } from "../wns/acknowledgement";
@@ -103,12 +104,19 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
-      let statePath = state.screenConfiguration.preparedFinalObject;
-      dispatch(prepareFinalObject("WaterConnection[0]", statePath.applyScreen));
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen"), "NA", null);
+      let parsedObject = parserFunction(applyScreenObject);
+      dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
 
       // to set documents 
-      if (statePath.applyScreen.documents !== undefined && statePath.applyScreen.documents !== null) {
-        setWSDocuments(statePath, dispatch);
+      if (applyScreenObject.documents !== undefined && applyScreenObject.documents !== null) {
+        setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
+        // await setDocuments(
+        //   state.screenConfiguration.preparedFinalObject,
+        //   "WaterConnection[0].documents",
+        //   "DocumentsData",
+        //   dispatch, "WS"
+        // );
       }
     }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
@@ -371,7 +379,6 @@ const screenConfig = {
       printCont
     );
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
-    // response.then(data=>console.log("applyresource",data));
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
@@ -432,12 +439,13 @@ const screenConfig = {
             moduleName: serviceModuleName,
             updateUrl: serviceUrl,
             data: {
-              buttonLabel: "SUBMIT_APPLICATION",
+              buttonLabel: "RESUBMIT",
               moduleName: serviceModuleName,
               isLast: false,
               dialogHeader: {
-                // labelName: "RESUBMIT Application",
-                labelKey: "WF_SUBMIT_APPLICATION"
+                labelName: "RESUBMIT Application",
+                labelKey: "WF_RESUBMIT_APPLICATION"
+
               },
               showEmployeeList: false,
               roles: "CITIZEN",
@@ -472,7 +480,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
 
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
-      setWSDocuments(payload, dispatch);
+      setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
     }
 
     const convPayload = findAndReplace(payload, "NA", null)
@@ -506,7 +514,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
 
     // to set documents 
     if (payload.SewerageConnections[0].documents !== null && payload.SewerageConnections[0].documents !== "NA") {
-      setWSDocuments(payload, dispatch);
+      setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
     }
 
     const convPayload = findAndReplace(payload, "NA", null)
@@ -530,6 +538,25 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
   }
 };
+
+const parserFunction = (obj) => {
+  let parsedObject = {
+    roadCuttingArea: parseInt(obj.roadCuttingArea),
+    meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),
+    connectionExecutionDate: convertDateToEpoch(obj.connectionExecutionDate),
+    proposedWaterClosets: parseInt(obj.proposedWaterClosets),
+    proposedToilets: parseInt(obj.proposedToilets),
+    roadCuttingArea: parseInt(obj.roadCuttingArea),
+    meterId: parseInt(obj.meterId),
+    initialMeterReading: parseInt(obj.initialMeterReading),
+    noOfTaps: parseInt(obj.noOfTaps),
+    proposedWaterClosets: parseInt(obj.proposedWaterClosets),
+    proposedToilets: parseInt(obj.proposedToilets),
+    proposedTaps: parseInt(obj.proposedTaps)
+  }
+  obj = { ...obj, ...parsedObject }
+  return obj;
+}
 
 const processBills = async (data, viewBillTooltip, dispatch) => {
   let des, obj, groupBillDetails = [];
