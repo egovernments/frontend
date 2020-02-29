@@ -101,6 +101,7 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  window.scrollTo(0, 0);
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
@@ -226,6 +227,7 @@ const callBackForNext = async (state, dispatch) => {
     await pushTheDocsUploadedToRedux(state, dispatch);
   }
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
+    window.scrollTo(0, 0);
     if (getQueryArg(window.location.href, "action") === "edit") {
       setReviewPageRoute(state, dispatch);
     }
@@ -405,7 +407,7 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
 
 const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatch) => {
   if (isFormValid) {
-    if (activeStep === 1) {
+    if (activeStep === 0) {
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {

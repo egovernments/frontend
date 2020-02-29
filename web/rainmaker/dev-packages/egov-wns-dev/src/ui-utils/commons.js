@@ -18,8 +18,19 @@ import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
 
-export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
+export const pushTheDocsUploadedToRedux = async (applicationNo, state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
+    let existingDocs = [];
+    if (applicationNo.includes("WS")) {
+        existingDocs = get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", []);
+        if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
+        dispatch(prepareFinalObject("WaterConnection[0].documents", existingDocs));
+        dispatch(prepareFinalObject())
+    } else {
+        existingDocs = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", []);
+        if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
+        dispatch(prepareFinalObject("SewerageConnection[0].documents", existingDocs));
+    }
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
         Object.keys(reduxDocuments).forEach(async key => {
@@ -29,7 +40,7 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                     element.documentCode = reduxDocuments[key].documentType;
                     element.status = "ACTIVE"
                 });
-                uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
+                uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents).concat(existingDocs);
                 dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
                 let docs = get(state, "screenConfiguration.preparedFinalObject");
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
@@ -532,14 +543,16 @@ const parserFunction = (state) => {
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
     let parsedObject = {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
-        meterInstallationDate: queryObject.meterInstallationDate !== null ? convertDateToEpoch(queryObject.meterInstallationDate) : "NA",
-        connectionExecutionDate: queryObject.connectionExecutionDate !== null ? convertDateToEpoch(queryObject.connectionExecutionDate) : "NA",
+        meterInstallationDate: convertDateToEpoch(queryObject.meterInstallationDate),
+        connectionExecutionDate: convertDateToEpoch(queryObject.connectionExecutionDate),
         proposedWaterClosets: parseInt(queryObject.proposedWaterClosets),
         proposedToilets: parseInt(queryObject.proposedToilets),
         noOfTaps: parseInt(queryObject.noOfTaps),
-        proposedWaterClosets: parseInt(queryObject.proposedWaterClosets),
-        proposedToilets: parseInt(queryObject.proposedToilets),
-        proposedTaps: parseInt(queryObject.proposedTaps)
+        waterClosets: parseInt(queryObject.waterClosets),
+        noOfToilets: parseInt(queryObject.noOfToilets),
+        proposedTaps: parseInt(queryObject.proposedTaps),
+        meterId: parseInt(queryObject.meterId),
+        initialMeterReading: parseInt(queryObject.initialMeterReading),
     }
     queryObject = { ...queryObject, ...parsedObject }
     return queryObject;
