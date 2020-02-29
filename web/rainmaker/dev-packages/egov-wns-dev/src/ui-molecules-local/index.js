@@ -98,10 +98,11 @@ const ActionDialog = Loadable({
   loading: () => <Loading />
 })
 
-// const PropertyTaxDetails = Loadable({
-//   loader: () => import("./PropertyTaxDetails"),
-//   loading: () => <Loading />
-// })
+const FeesEstimateOverviewCard = Loadable({
+  loader: () => import("./FeeEstimateOverviewCard"),
+  loading: () => <Loading />
+});
+
 
 export {
   TestMolecules,
@@ -122,7 +123,8 @@ export {
   MeterReadingEditable,
   NewConnection,
   MyApplications,
-  Applications
+  Applications,
+  FeesEstimateOverviewCard
 
   // PropertyTaxDetails
 };

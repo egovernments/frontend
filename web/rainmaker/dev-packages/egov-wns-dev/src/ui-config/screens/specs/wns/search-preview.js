@@ -21,7 +21,7 @@ import {
 import { footerReview } from "./applyResource/footer";
 import { downloadPrintContainer } from "../wns/acknowledgement";
 import {
-  getFeesEstimateCard,
+  getFeesEstimateOverviewCard,
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
@@ -281,9 +281,9 @@ const headerrow = getCommonContainer({
 
 const estimate = getCommonGrayCard({
   header: getCommonSubHeader({ labelKey: "WS_TASK_DETAILS_FEE_ESTIMATE" }),
-  estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "viewBillToolipData",
-    isCardrequired: true
+  estimateSection: getFeesEstimateOverviewCard({
+    sourceJsonPath: "dataCalculation",
+    // isCardrequired: true
   }),
   buttonView: getDialogButton(
     "VIEW BREAKUP",
@@ -489,6 +489,10 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     if (estimate !== null && estimate !== undefined) {
       if (estimate.Calculation.length > 0) {
         await processBills(estimate, viewBillTooltip, dispatch);
+
+        // viewBreakUp 
+        estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
@@ -516,6 +520,8 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     if (estimate !== null && estimate !== undefined) {
       if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
         await processBills(estimate, viewBillTooltip, dispatch);
+        // viewBreakUp 
+        estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
