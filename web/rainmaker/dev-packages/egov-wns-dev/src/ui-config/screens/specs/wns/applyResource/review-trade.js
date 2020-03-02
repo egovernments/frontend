@@ -90,9 +90,8 @@ export const getReviewConnectionDetails = (isEditable = true) => {
     },
     viewOne: getPropertyDetails,
     viewTwo: propertyLocationDetails,
-    // viewThree: propertyOwnerDetails(),
-    viewFour: getConnectionDetails(),
-    viewFive: ownerDetails()
+    viewThree: ownerDetails(),
+    viewFour: getConnectionDetails()
   });
 };
 
