@@ -300,10 +300,22 @@ const getMdmsData = async (action, state, dispatch) => {
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
     )
-    OwnerShipCategory = OwnerShipCategory.map(category=>category.code.split(".")[0]);
+    let institutions=[]
+    OwnerShipCategory = OwnerShipCategory.map(category=>{
+      if(category.code.includes("INDIVIDUAL")){
+        return category.code;
+      }
+      else{
+        let code=category.code.split(".");
+        institutions.push({code:code[1],parent:code[0],active:true});
+       return code[0] ;
+      }
+      });
     OwnerShipCategory=OwnerShipCategory.filter((v,i,a)=>a.indexOf(v)===i)
     OwnerShipCategory = OwnerShipCategory.map(val=>{return{code:val,active:true}});
+    payload.MdmsRes['common-masters'].Institutions=institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory=OwnerShipCategory;
+    
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -348,31 +360,7 @@ const getFirstListFromDotSeparated = list => {
   return list;
 };
 
-const setCardsIfMultipleBuildings = (state, dispatch) => {
-  if (
-    get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings"
-    ) === "MULTIPLE"
-  ) {
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer",
-        "props.style",
-        { display: "none" }
-      )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer",
-        "props.style",
-        {}
-      )
-    );
-  }
-};
+
 
 export const prepareEditFlow = async (
   state,

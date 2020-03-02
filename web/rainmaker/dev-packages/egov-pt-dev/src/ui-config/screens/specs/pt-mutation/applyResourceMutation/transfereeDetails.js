@@ -308,13 +308,13 @@ const institutionTypeInformation = () => {
           },
           required:true,
           jsonPath:
-          "Property.additionalDetails.reasonForTransfer",
+          "Property.institutionTemp.institutionType",
           localePrefix: {
-            moduleName: "PropertyTax",
-            masterName: "ReasonForTransfer"
+            moduleName: "common-masters",
+            masterName: "OwnerShipCategory"
           },
           required:true,
-          jsonPath: "Property.institutionTemp.institutionType",
+          sourceJsonPath: "applyScreenMdmsData.common-masters.Institutions",
           gridDefination: {
             xs: 12,
             sm: 12,
@@ -498,7 +498,17 @@ export const transfereeDetails = getCommonCard({
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
-          let path = action.componentJsonpath.replace();
+          let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails"
+          let applicantType = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.Institutions",
+            []
+          );
+          let applicantSubType = applicantType.filter(item => {
+            return item.active && item.parent.startsWith(action.value);
+          });
+          dispatch(handleField("apply", path, "props.data", applicantSubType));
+        
           // let applicantType = get(
           //   state,
           //   "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
