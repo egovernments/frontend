@@ -310,6 +310,17 @@ const setSearchResponse = async (
 
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const status = response.Bpa["0"].status;
+  const riskType = response.Bpa["0"].riskType;
+  let businessServicesValue = "BPA";
+  if (riskType === "LOW") {
+    businessServicesValue = "BPA_LOW";
+  }
+
+  const queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "businessServices", value: businessServicesValue }
+  ];
+  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   if (status && status == "INPROGRESS") {
     dispatch(

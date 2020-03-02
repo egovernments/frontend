@@ -177,7 +177,8 @@ export const fetchData = async (
         ),
         tenantId: get(element, "tenantId", null),
         modifiedTime: modifiedTime,
-        sortNumber: 1
+        sortNumber: 1,
+        type: element.riskType
       })});
     }
 
