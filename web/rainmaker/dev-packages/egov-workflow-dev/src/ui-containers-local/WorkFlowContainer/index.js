@@ -243,7 +243,7 @@ class WorkFlowContainer extends React.Component {
         const licenseNumber = get(payload, path, "");
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
-        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
+        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
 
         if (moduleName === "NewWS1" || moduleName === "NewSW1") {
           window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
