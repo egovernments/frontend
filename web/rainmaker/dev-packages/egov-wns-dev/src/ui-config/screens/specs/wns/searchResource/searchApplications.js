@@ -73,7 +73,7 @@ const resetFields = (state, dispatch) => {
 
 export const searchApplications = getCommonCard({
   subHeader: getCommonTitle({
-    labelKey: "WS_SEARCH_CONNECTION_HEADER"
+    labelKey: "WS_SEARCH_APPLICATION_SUB_HEADER"
   }),
   subParagraph: getCommonParagraph({
     labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
