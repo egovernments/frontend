@@ -337,53 +337,55 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
   } catch (e) {
     alert(e);
   }
-
-  if (!draftRequest.draft.id) {
-    draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
-    draftRequest.draft.draftRecord = {
-      selectedTabIndex: selected + 1,
-      prepareFormData,
-    };
-    try {
-      let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
-      const draftInfo = draftResponse.drafts[0];
-
-      updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
-    } catch (e) {
-      alert(e);
-    }
-  } else {
-    const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
-    draftRequest.draft = {
-      ...draftRequest.draft,
-      assessmentNumber: assessmentNo,
-      tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
-      draftRecord: {
-        ...draftRequest.draft.draftRecord,
-        selectedTabIndex: assessmentNumber ? selected : selected + 1,
-        assessmentNumber: assessmentNo,
-        prepareFormData,
-      },
-      prepareFormData,
-    };
-    try {
-      if (selected === 3) {
-        draftRequest = {
-          ...draftRequest,
-          draft: {
-            ...draftRequest.draft,
-            isActive: false,
-          },
+  if(process.env.REACT_APP_NAME === "Citizen")
+  {
+    if (!draftRequest.draft.id) {
+        draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
+        draftRequest.draft.draftRecord = {
+          selectedTabIndex: selected + 1,
+          prepareFormData,
         };
+        try {
+          let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
+          const draftInfo = draftResponse.drafts[0];  
+          updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
+        } catch (e) {
+          alert(e);
+        }
+      } else {
+        const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
+        draftRequest.draft = {
+          ...draftRequest.draft,
+          assessmentNumber: assessmentNo,
+          tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
+          draftRecord: {
+            ...draftRequest.draft.draftRecord,
+            selectedTabIndex: assessmentNumber ? selected : selected + 1,
+            assessmentNumber: assessmentNo,
+            prepareFormData,
+          },
+          prepareFormData,
+        };
+        try {
+          if (selected === 3) {
+            draftRequest = {
+              ...draftRequest,
+              draft: {
+                ...draftRequest.draft,
+                isActive: false,
+              },
+            };
+          }
+          let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
+          const draftInfo = draftResponse.drafts[0];  
+          updateDraftinLocalStorage(draftInfo, "", self);
+        } catch (e) {
+          alert(e);
+        }
       }
-      let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
-      const draftInfo = draftResponse.drafts[0];
+  } 
 
-      updateDraftinLocalStorage(draftInfo, "", self);
-    } catch (e) {
-      alert(e);
-    }
-  }
+  
 };
 
 export const updateTotalAmount = (value, isFullPayment, errorText) => {

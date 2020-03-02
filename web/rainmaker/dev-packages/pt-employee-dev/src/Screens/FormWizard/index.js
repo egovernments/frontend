@@ -137,28 +137,7 @@ class FormWizard extends Component {
     getImportantDates(this);
     try {
       let currentDraft;
-      if (!isReassesment) {
-        let draftsResponse = await httpRequest(
-          "pt-services-v2/drafts/_search",
-          "_search",
-          [
-            {
-              key: isReassesment ? "assessmentNumber" : "id",
-              value: draftId
-            },
-            {
-              key: "tenantId",
-              value: getQueryValue(search, "tenantId")
-            }
-          ],
-          draftRequest
-        );
-        currentDraft = draftsResponse.drafts.find(
-          res =>
-            get(res, "assessmentNumber", "") === draftId ||
-            get(res, "id", "") === draftId
-        );
-      } else {
+     
         let searchPropertyResponse = await httpRequest(
           "property-services/property/_search",
           "_search",
@@ -213,12 +192,7 @@ class FormWizard extends Component {
             prepareFormData: propertyResponse //prepareFormData2,
           }
         };
-      }
-
-      if (!currentDraft) {
-        throw new Error("draft not found");
-      }
-
+     
       this.setState({
         draftByIDResponse: currentDraft
       });
@@ -1585,11 +1559,7 @@ class FormWizard extends Component {
       "assessmentDate": new Date().getTime() - 60000,
       "source": "MUNICIPAL_RECORDS",
       "channel": "CFC_COUNTER",
-      "status": "ACTIVE"
     }
-
-    console.log(Properties);
-
     if (action === "re-assess") {
       let assessments = await this.getAssessmentDetails();
       if (assessments.Assessments.length > 0) {
