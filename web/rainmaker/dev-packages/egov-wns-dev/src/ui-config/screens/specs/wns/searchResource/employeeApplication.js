@@ -31,10 +31,10 @@ const resetFields = (state, dispatch) => {
 
 export const wnsApplication = getCommonCard({
   subHeader: getCommonTitle({
-    labelKey: "WS_SEARCH_CONNECTION_HEADER"
+    labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
   }),
   subParagraph: getCommonParagraph({
-    labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
   }),
   wnsApplicationContainer: getCommonContainer({
     consumerNo: getTextField({
