@@ -117,7 +117,8 @@ class WorkFlowContainer extends React.Component {
       preparedFinalObject,
       dataPath,
       moduleName,
-      updateUrl
+      updateUrl,
+      beforeSubmitHook
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
@@ -187,6 +188,9 @@ class WorkFlowContainer extends React.Component {
     }
 
     try {
+      if(beforeSubmitHook){
+        data=beforeSubmitHook(data);
+      }
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
