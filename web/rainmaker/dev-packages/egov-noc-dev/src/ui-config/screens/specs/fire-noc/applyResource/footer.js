@@ -93,7 +93,7 @@ const getMdmsData = async (state, dispatch) => {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "fireNoc", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };

@@ -503,10 +503,11 @@ export const propertyLocationDetails = getCommonCard(
                 if(fireStations[i].subDistrict[j]==action.value)
               {
                 firesation.push({code:fireStations[i].code});
+                console.log("789546221525552452",getTenantId());
                 dispatch(
                   prepareFinalObject(
                     "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-                    fireStations[i].baseTenantId
+                    getTenantId()
                   )
                 );
                 dispatch(
