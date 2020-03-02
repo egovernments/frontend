@@ -91,7 +91,7 @@ export const getReviewConnectionDetails = (isEditable = true) => {
     viewOne: getPropertyDetails,
     viewTwo: propertyLocationDetails,
     viewThree: ownerDetails(),
-    viewFour: getConnectionDetails(),
+    viewFour: getConnectionDetails()
   });
 };
 
