@@ -823,11 +823,7 @@ class FormWizard extends Component {
       "assessmentDate": new Date().getTime() - 60000,
       "source": "MUNICIPAL_RECORDS",
       "channel": "CFC_COUNTER",
-      "status": "ACTIVE"
     }
-
-    console.log(Properties);
-
     if (action === "re-assess") {
       let assessments = await this.getAssessmentDetails();
       if (assessments.Assessments.length > 0) {
