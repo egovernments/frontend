@@ -18,18 +18,21 @@ import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
 
-export const pushTheDocsUploadedToRedux = async (applicationNo, state, dispatch) => {
+export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let existingDocs = [];
-    if (applicationNo.includes("WS")) {
-        existingDocs = get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", []);
-        if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
-        dispatch(prepareFinalObject("WaterConnection[0].documents", existingDocs));
-        dispatch(prepareFinalObject())
-    } else {
-        existingDocs = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", []);
-        if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
-        dispatch(prepareFinalObject("SewerageConnection[0].documents", existingDocs));
+    if (getQueryArg(window.location.href, "applicationNumber")) {
+        let applicationNo = getQueryArg(window.location.href, "applicationNumber");
+        if (applicationNo.includes("WS")) {
+            existingDocs = get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", []);
+            if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
+            dispatch(prepareFinalObject("WaterConnection[0].documents", existingDocs));
+            dispatch(prepareFinalObject())
+        } else {
+            existingDocs = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", []);
+            if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
+            dispatch(prepareFinalObject("SewerageConnection[0].documents", existingDocs));
+        }
     }
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
