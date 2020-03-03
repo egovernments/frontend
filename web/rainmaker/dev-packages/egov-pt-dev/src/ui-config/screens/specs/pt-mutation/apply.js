@@ -115,7 +115,7 @@ export const formwizardFirstStep = {
   },
   children: {
     transferorDetails,
-    transferorInstitutionSummary,
+    transferorInstitutionDetails:transferorInstitutionSummary,
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -180,6 +180,19 @@ const getPropertyData = async (action, state, dispatch) => {
       queryObject,
       
     );
+    
+  if (payload&&payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+    
+    let owners = [];
+    payload.Properties[0].owners.map(owner => {
+      if (owner.status == "ACTIVE") {
+        owners.push(owner);
+      } 
+    });
+    
+    
+    payload.Properties[0].ownersInit = owners;
+  }
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
 
     if (
@@ -215,6 +228,11 @@ const getPropertyData = async (action, state, dispatch) => {
         action.screenConfig,
         "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
         { display: "none" }
+      );
+      set(
+        action.screenConfig,
+       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary",
+        {}
       );
       set(
         action.screenConfig,

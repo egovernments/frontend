@@ -292,7 +292,7 @@ const setSearchResponse = async (
    
   }
 
-  if (property && property.owners && property.owners.length > 1) {
+  if (property && property.owners && property.owners.length > 0) {
     let ownersTemp = [];
     let owners = [];
     property.owners.map(owner => {
