@@ -20,7 +20,6 @@ import { getWFConfig } from "./workflowRedirectionConfig";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import ImportExportIcon from "@material-ui/icons/ImportExport";
 import "./index.css";
-import ImportExportIcon from "@material-ui/icons/ImportExport";
 import get from "lodash/get"
 
 class InboxData extends React.Component {

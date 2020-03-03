@@ -1,19 +1,7 @@
-@media only screen and (max-width: 768px) {
-    .home-footer {
-     min-width: 360px !important;
-    }
+@media only screen and (min-width: 768px) {
+  .home-footer {
+    min-width: 200px !important; } }
 
-    .ack-body, .ack-tail {
-      display: contents;
-      text-align: center;
-    }
-  
-   
-  }
-  @media only screen and (min-width: 768px) {
-    .home-footer {
-     min-width: 200px !important;
-    }
-  
-   
-  }
+@media only screen and (max-width: 1200px) {
+  #custom-atoms-body, #custom-atoms-tail {
+    text-align: center !important; } }
