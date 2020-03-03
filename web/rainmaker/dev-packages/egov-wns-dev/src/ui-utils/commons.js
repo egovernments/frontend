@@ -18,29 +18,43 @@ import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
 
-export const pushTheDocsUploadedToRedux = async (applicationNo, state, dispatch) => {
+export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let existingDocs = [];
-    if (applicationNo.includes("WS")) {
-        existingDocs = get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", []);
-        if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
-        dispatch(prepareFinalObject("WaterConnection[0].documents", existingDocs));
-        dispatch(prepareFinalObject())
-    } else {
-        existingDocs = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", []);
-        if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
-        dispatch(prepareFinalObject("SewerageConnection[0].documents", existingDocs));
+    if (getQueryArg(window.location.href, "applicationNumber")) {
+        let applicationNo = getQueryArg(window.location.href, "applicationNumber");
+        if (applicationNo.includes("WS")) {
+            existingDocs = get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", []);
+            if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
+            dispatch(prepareFinalObject("WaterConnection[0].documents", existingDocs));
+            dispatch(prepareFinalObject())
+        } else {
+            existingDocs = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", []);
+            if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
+            dispatch(prepareFinalObject("SewerageConnection[0].documents", existingDocs));
+        }
     }
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
         Object.keys(reduxDocuments).forEach(async key => {
             if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
                 reduxDocuments[key].documents.forEach(element => {
-                    element.documentType = reduxDocuments[key].documentCode;
+                    if (reduxDocuments[key].dropdown !== undefined && reduxDocuments[key].dropdown.value !== null) {
+                        element.documentType = reduxDocuments[key].dropdown.value;
+                    } else {
+                        element.documentType = reduxDocuments[key].documentCode;
+                    }
                     element.documentCode = reduxDocuments[key].documentType;
-                    element.status = "ACTIVE"
+                    element.status = "ACTIVE";
                 });
                 uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents).concat(existingDocs);
+                let docArrayFromFileStore = await setDocsForEditFlow(state);
+                uploadedDocs.forEach(obj => {
+                    let element = obj.fileStoreId;
+                    Object.keys(docArrayFromFileStore).forEach(resp => {
+                        docArrayFromFileStore[resp].forEach(arr => { if (arr.fileStoreId === element) { obj.fileName = arr.fileName; } })
+                    })
+                })
                 dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
                 let docs = get(state, "screenConfiguration.preparedFinalObject");
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
@@ -326,43 +340,6 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
     }
 };
 
-const setDocsForEditFlow = async (state, dispatch) => {
-    const applicationDocuments = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].tradeLicenseDetail.applicationDocuments", []
-    );
-    let uploadedDocuments = {};
-    let fileStoreIds =
-        applicationDocuments &&
-        applicationDocuments.map(item => item.fileStoreId).join(",");
-    const fileUrlPayload =
-        fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-    applicationDocuments &&
-        applicationDocuments.forEach((item, index) => {
-            uploadedDocuments[index] = [{
-                fileName:
-                    (fileUrlPayload &&
-                        fileUrlPayload[item.fileStoreId] &&
-                        decodeURIComponent(
-                            getFileUrl(fileUrlPayload[item.fileStoreId])
-                                .split("?")[0]
-                                .split("/")
-                                .pop()
-                                .slice(13)
-                        )) ||
-                    `Document - ${index + 1}`,
-                fileStoreId: item.fileStoreId,
-                fileUrl: Object.values(fileUrlPayload)[index],
-                documentType: item.documentType,
-                tenantId: item.tenantId,
-                id: item.id
-            }];
-        });
-    dispatch(
-        prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
-    );
-};
-
 export const updatePFOforSearchResults = async (
     action,
     state,
@@ -384,7 +361,7 @@ export const updatePFOforSearchResults = async (
             WaterConnection: get(state.screenConfiguration.preparedFinalObject, "WaterConnection")
         };
     getQueryArg(window.location.href, "action") === "edit" &&
-        (await setDocsForEditFlow(state, dispatch));
+        (await setDocsForEditFlow(state));
     if (payload) {
         dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
     }
@@ -558,6 +535,86 @@ const parserFunction = (state) => {
     return queryObject;
 }
 
+export const setDocsForEditFlow = async (state) => {
+    const applicationDocuments = get(state.screenConfiguration.preparedFinalObject, "applyScreen.documents", []);
+    let uploadedDocuments = {};
+    let fileStoreIds = applicationDocuments && applicationDocuments.map(item => item.fileStoreId).join(",");
+    const fileUrlPayload = fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+    if (fileUrlPayload !== undefined && fileUrlPayload !== null) {
+        applicationDocuments && applicationDocuments.forEach((item, index) => {
+            uploadedDocuments[index] = [{
+                fileName: (fileUrlPayload && fileUrlPayload[item.fileStoreId] &&
+                    decodeURIComponent(
+                        getFileUrl(fileUrlPayload[item.fileStoreId])
+                            .split("?")[0]
+                            .split("/")
+                            .pop()
+                            .slice(13)
+                    )) || `Document - ${index + 1}`,
+                fileStoreId: item.fileStoreId,
+                fileUrl: Object.values(fileUrlPayload)[index]
+            }];
+        });
+    }
+    return uploadedDocuments;
+};
+
+export const setWSDocuments = async (payload, sourceJsonPath, destJsonPath, dispatch, businessService) => {
+    const uploadedDocData = get(payload, sourceJsonPath);
+    const fileStoreIds =
+        uploadedDocData &&
+        uploadedDocData
+            .map((item) => {
+                return item.fileStoreId;
+            })
+            .join(",");
+    const fileUrlPayload = fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+    const reviewDocData =
+        uploadedDocData &&
+        uploadedDocData.map((item, index) => {
+            return {
+                title: `${businessService}_${item.documentType}`.replace(".", "_") || "",
+                link: (fileUrlPayload && fileUrlPayload[item.fileStoreId] && getFileUrl(fileUrlPayload[item.fileStoreId])) || "",
+                linkText: "View",
+                name:
+                    (fileUrlPayload &&
+                        fileUrlPayload[item.fileStoreId] &&
+                        decodeURIComponent(
+                            getFileUrl(fileUrlPayload[item.fileStoreId])
+                                .split("?")[0]
+                                .split("/")
+                                .pop()
+                                .slice(13)
+                        )) ||
+                    `Document - ${index + 1}`,
+            };
+        });
+    return reviewDocData;
+};
+
+export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
+    let documentsUploadRedux = {};
+    // const uploadedDocData = get(payload, sourceJsonPath);
+    let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "displayDocs", dispatch, "WS");
+    documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
+        let docUploadRedux = {};
+        docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: payload.applyScreen.documents[key].fileStoreId }] };
+        let splittedString = payload.applyScreen.documents[key].documentType.split(".");
+        if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+        else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+        else { docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; }
+        docUploadRedux[key].isDocumentRequired = true;
+        docUploadRedux[key].isDocumentTypeRequired = true;
+        return docUploadRedux;
+    });
+    let docs = {};
+    for (let i = 0; i < documentsUploadRedux.length; i++) {
+        docs[i] = documentsUploadRedux[i][i];
+    }
+    dispatch(prepareFinalObject("documentsUploadRedux", docs));
+    dispatch(prepareFinalObject(destJsonPath, docs));
+};
+
 export const applyForWaterOrSewerage = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
@@ -565,8 +622,13 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
         Object.keys(reduxDocuments).forEach(key => {
             if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
                 reduxDocuments[key].documents.forEach(element => {
-                    element.documentType = reduxDocuments[key].documentCode;
+                    if (reduxDocuments[key].dropdown !== undefined && reduxDocuments[key].dropdown.value !== null) {
+                        element.documentType = reduxDocuments[key].dropdown.value;
+                    } else {
+                        element.documentType = reduxDocuments[key].documentCode;
+                    }
                     element.documentCode = reduxDocuments[key].documentType;
+                    element.status = "ACTIVE";
                 });
                 uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
                 dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
