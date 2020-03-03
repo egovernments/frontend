@@ -2737,7 +2737,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: getTenantId(), //"pb",
           userName: `${ownerNo}`
         }
       );
@@ -3690,7 +3690,7 @@ export const getMdmsDataForBpa = async queryObject => {
 export const requiredDocumentsData = async (state, dispatch, action) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",
