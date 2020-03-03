@@ -19,15 +19,15 @@ import set from "lodash/set";
 
 const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   const TLRequestBody = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "WaterConnection")
+    get(state.screenConfiguration.preparedFinalObject, "Licenses")
   );
   set(TLRequestBody[0], "action", "ADHOC");
   const TLpayload = await httpRequest(
     "post",
-    "/ws-services/wc/_update",
+    "/tl-services/v1/_update",
     "",
     [],
-    { WaterConnection: TLRequestBody }
+    { Licenses: TLRequestBody }
   );
 
   // clear data from form
@@ -94,11 +94,11 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
 const updateAdhoc = (state, dispatch) => {
   const adhocAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "WaterConnection[0].adhocDetails.adhocPenalty"
+    "Licenses[0].tradeLicenseDetail.adhocPenalty"
   );
   const rebateAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "WaterConnection[0].adhocDetails.adhocExemption"
+    "Licenses[0].tradeLicenseDetail.adhocExemption"
   );
   if (adhocAmount || rebateAmount) {
     const totalAmount = get(
@@ -164,7 +164,8 @@ export const adhocPopup = getCommonContainer({
         children: {
           div: getCommonHeader(
             {
-              labelKey: "WS_ADD_HOC_CHARGES_POPUP_HEAD"
+              labelName: "Add Adhoc Penalty/Rebate",
+              labelKey: "TL_ADD_HOC_CHARGES_POPUP_HEAD"
             },
             {
               style: {
@@ -219,7 +220,8 @@ export const adhocPopup = getCommonContainer({
     {
       subheader: getCommonSubHeader(
         {
-          labelKey: "WS_ADD_HOC_CHARGES_POPUP_SUB_FIRST"
+          labelName: "Adhoc Penalty",
+          labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_FIRST"
         },
         {
           style: {
@@ -230,24 +232,28 @@ export const adhocPopup = getCommonContainer({
       penaltyAmountAndReasonContainer: getCommonContainer({
         penaltyAmount: getTextField({
           label: {
-            labelKey: "WS_ADD_HOC_CHARGES_POPUP_PEN_AMT_LABEL"
+            labelName: "Adhoc Penalty Amount",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_PEN_AMT_LABEL"
           },
           placeholder: {
-            labelKey: "WS_ADD_HOC_CHARGES_POPUP_PEN_AMT_PLACEHOLDER"
+            labelName: "Enter Adhoc Charge Amount",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_PEN_AMT_PLACEHOLDER"
           },
           props: {
             style: {
               width: "90%"
             }
           },
-          jsonPath: "WaterConnection[0].additionalDetails.adhocPenalty"
+          jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenalty"
         }),
         penaltyReason: getSelectField({
           label: {
-            labelKey: "WS_PAYMENT_PENALTY_REASON"
+            labelName: "Reason for Adhoc Penalty",
+            labelKey: "TL_PAYMENT_PENALTY_REASON"
           },
           placeholder: {
-            labelKey: "WS_PAYMENT_PENALTY_REASON_SELECT"
+            labelName: "Select reason for Adhoc Penalty",
+            labelKey: "TL_PAYMENT_PENALTY_REASON_SELECT"
           },
           props: {
             style: {
@@ -256,27 +262,29 @@ export const adhocPopup = getCommonContainer({
           },
           data: [
             {
-              code: "WS_ADHOC_PENDING_DUES"
+              code: "TL_ADHOC_PENDING_DUES"
             },
             {
-              code: "WS_ADHOC_MISCALCULATION"
+              code: "TL_ADHOC_MISCALCULATION"
             },
             {
-              code: "WS_ADHOC_ONE_TIME_PENALTY"
+              code: "TL_ADHOC_ONE_TIME_PENALTY"
             },
             {
-              code: "WS_ADHOC_OTHER"
+              code: "TL_ADHOC_OTHER"
             }
           ],
-          jsonPath: "WaterConnection[0].additionalDetails.adhocPenaltyReason"
+          jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
         })
       }),
       commentsField: getTextField({
         label: {
-          labelKey: "WS_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+          labelName: "Enter Comments",
+          labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
         },
         placeholder: {
-          labelKey: "WS_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+          labelName: "Enter Comments",
+          labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
         },
         gridDefination: {
           xs: 12,
@@ -287,7 +295,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
-        jsonPath: "WaterConnection[0].additionalDetails.adhocPenaltyComment"
+        jsonPath: "Licenses[0].tradeLicenseDetail.penaltyComments"
       })
     },
     {
@@ -300,7 +308,8 @@ export const adhocPopup = getCommonContainer({
     {
       subHeader: getCommonSubHeader(
         {
-          labelKey: "WS_ADD_HOC_CHARGES_POPUP_SUB_SEC"
+          labelName: "Adhoc Rebate",
+          labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_SEC"
         },
         {
           style: {
@@ -311,24 +320,28 @@ export const adhocPopup = getCommonContainer({
       rebateAmountAndReasonContainer: getCommonContainer({
         rebateAmount: getTextField({
           label: {
-            labelKey: "WS_ADD_HOC_CHARGES_POPUP_RBT_AMT_LABEL"
+            labelName: "Adhoc Rebate Amount",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_LABEL"
           },
           placeholder: {
-            labelKey: "WS_ADD_HOC_CHARGES_POPUP_RBT_AMT_PLACEHOLDER"
+            labelName: "Enter Adhoc Rebate Amount",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_PLACEHOLDER"
           },
           props: {
             style: {
               width: "90%"
             }
           },
-          jsonPath: "WaterConnection[0].additionalDetails.adhocRebate"
+          jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
         }),
         rebateReason: getSelectField({
           label: {
-            labelKey: "WS_PAYMENT_REBATE_REASON"
+            labelName: "Reason for Adhoc Rebate",
+            labelKey: "TL_PAYMENT_REBATE_REASON"
           },
           placeholder: {
-            labelKey: "WS_PAYMENT_REBATE_REASON_SELECT"
+            labelName: "Select Reason for Adhoc Rebate",
+            labelKey: "TL_PAYMENT_REBATE_REASON_SELECT"
           },
           props: {
             style: {
@@ -337,26 +350,28 @@ export const adhocPopup = getCommonContainer({
           },
           data: [
             {
-              code: "WS_REBATE_ADVANCED_PAID"
+              code: "TL_REBATE_ADVANCED_PAID"
             },
             {
-              code: "WS_REBATE_BY_COMMISSIONER"
+              code: "TL_REBATE_BY_COMMISSIONER"
             },
             {
-              code: "WS_REBATE_ADDITIONAL_AMOUNT_CHARGED"
+              code: "TL_REBATE_ADDITIONAL_AMOUNT_CAHNGED"
             },
             {
-              code: "WS_ADHOC_OTHER"
+              code: "TL_ADHOC_OTHER"
             }
           ],
-          jsonPath: "WaterConnection[0].additionalDetails.adhocRebateReason"
+          jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
         }),
         rebateCommentsField: getTextField({
           label: {
-            labelKey: "WS_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+            labelName: "Enter Comments",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
           },
           placeholder: {
-            labelKey: "WS_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+            labelName: "Enter Comments",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
           },
           gridDefination: {
             xs: 12,
@@ -367,7 +382,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
-          jsonPath: "WaterConnection[0].additionalDetails.adhocRebateComment"
+          jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
         })
       })
     },
@@ -400,7 +415,8 @@ export const adhocPopup = getCommonContainer({
         },
         children: {
           previousButtonLabel: getLabel({
-            labelKey: "WS_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
+            labelName: "CANCEL",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
           })
         },
         onClickDefination: {
@@ -420,7 +436,8 @@ export const adhocPopup = getCommonContainer({
         },
         children: {
           previousButtonLabel: getLabel({
-            labelKey: "WS_ADD_HOC_CHARGES_POPUP_BUTTON_ADD"
+            labelName: "ADD",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_ADD"
           })
         },
         onClickDefination: {

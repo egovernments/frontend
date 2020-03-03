@@ -4,8 +4,7 @@ import {
   getCommonTitle,
   getCommonGrayCard,
   getCommonContainer,
-  getCommonSubHeader,
-  getLabel
+  getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -18,8 +17,7 @@ import {
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
   getDialogButton,
-  convertDateToEpoch,
-  showHideAdhocPopup
+  convertDateToEpoch
 } from "../utils";
 import { footerReview } from "./applyResource/footer";
 import { downloadPrintContainer } from "../wns/acknowledgement";
@@ -32,8 +30,6 @@ import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import { adhocPopup } from "./applyResource/adhocPopup";
-
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -302,22 +298,11 @@ const estimate = getCommonGrayCard({
     "WS_PAYMENT_VIEW_BREAKUP",
     "search-preview"
   ),
-  addPenaltyRebateButton: {
-    componentPath: "Button",
-    props: {
-      color: "primary",
-      style: {}
-    },
-    children: {
-      previousButtonLabel: getLabel({
-        labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: showHideAdhocPopup
-    }
-  },
+  buttonAdd: getDialogButton(
+    "ADD REBATE/PENALTY",
+    "WS_PAYMENT_ADD_REBATE_PENALTY",
+    "search-preview"
+  ),
 });
 
 export const reviewConnectionDetails = getReviewConnectionDetails(false);
@@ -480,20 +465,7 @@ const screenConfig = {
         maxWidth: "md",
         screenKey: "search-preview",
       }
-    },
-    adhocDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-wns",
-      componentPath: "DialogContainer",
-      props: {
-        open: false,
-        maxWidth: "sm",
-        screenKey: "pay"
-      },
-      children: {
-        popup: adhocPopup
-      }
-    },
+    }
   }
 };
 
