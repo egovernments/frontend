@@ -60,14 +60,13 @@ class NavPills extends React.Component {
     );
     const tabContent = (
       <div className={classes.contentWrapper}>
-        {tabs.map((prop, key) => {
+         {tabs.map((prop, key) => {
           return this.state.active===key? (
             <div className={classes.tabContent} key={key} >
               {prop.tabContent}
             </div>
           ):null;
         })}
-
       </div>
     );
     return horizontal !== undefined ? (

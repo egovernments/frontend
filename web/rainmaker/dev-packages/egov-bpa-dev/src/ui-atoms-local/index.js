@@ -64,6 +64,16 @@ const PermitNumber = Loadable({
   loading: () => <Loading />
 });
 
+const MenuListCompositionForBpa = Loadable({
+  loader: () => import("./MenuListCompositionForBpa"),
+  loading: () => <Loading />
+});
+
+const PermitListCondition = Loadable({
+  loader: () => import("./PermitListCondition"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   AutoSuggest,
@@ -76,5 +86,7 @@ export {
   Asteric,
   MenuButton,
   TradeLicenseIcon,
-  PermitNumber
+  PermitNumber,
+  MenuListCompositionForBpa,
+  PermitListCondition
 };

@@ -1,10 +1,15 @@
-import get from "lodash/get";
-import set from "lodash/set";
-import uniqBy from "lodash/uniqBy";
-import sortBy from "lodash/sortBy";
-import isUndefined from "lodash/isUndefined";
-import cloneDeep from "lodash/cloneDeep";
 import { getPlotAndFloorFormConfigPath } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/assessInfoFormManager";
+import { getApplicationType, getDateFromEpoch, navigateToApplication } from "egov-ui-kit/utils/commons";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import isUndefined from "lodash/isUndefined";
+import set from "lodash/set";
+import sortBy from "lodash/sortBy";
+import uniqBy from "lodash/uniqBy";
+import React from "react";
 
 export const resetFormWizard = (form, removeForm) => {
   const formKeys = form && Object.keys(form);
@@ -32,15 +37,86 @@ export const resetFormWizard = (form, removeForm) => {
   });
 };
 
+const onApplicationClick = async (applicationNo, tenantId, propertyId, history, creationReason) => {
+  const businessService = await getApplicationType(applicationNo, tenantId, creationReason);
+  navigateToApplication(businessService, history, applicationNo, tenantId, propertyId);
+}
+const linkStyle = {
+  height: 20,
+  lineHeight: "auto",
+  minWidth: "inherit",
+  cursor: "pointer",
+  textDecoration: "underline"
+};
 
-export const getFormattedDate = (date)=>{
-  const dateArray=new Date(date).toString().split(' ');
-  if(dateArray.length>0){
-    return dateArray[2]+'-'+dateArray[1]+'-'+dateArray[3];
+const getApplicationLink = (applicationNo, tenantId, propertyId, history, creationReason) => {
+  return (
+    <a
+      style={linkStyle}
+      onClick={() => onApplicationClick(applicationNo, tenantId, propertyId, history, creationReason)}
+    >
+      {applicationNo}
+    </a>
+  );
+}
+
+const getLink = (userType, history, id, tenantId) => {
+  return (
+    <a
+      style={linkStyle}
+      onClick={
+        userType === "CITIZEN"
+          ? e => {
+            history.push(
+              `/property-tax/my-properties/property/${id}/${tenantId}`
+            );
+          }
+          : e => {
+            history.push(
+              `/property-tax/property/${id}/${tenantId}`
+            );
+          }
+      }
+    >
+      {id}
+    </a>
+  );
+}
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'INWORKFLOW':
+      return status = <span style={{ color: "red" }}>{status}</span>
+    case 'ACTIVE':
+      return status = <span style={{ color: "green" }}>{status}</span>
+    default:
+      return status;
   }
- else{
-   return 'dd-mmm-yyyy';
- }
+}
+
+export const getRowData = (property, history) => {
+  let date = getDateFromEpoch(property.auditDetails.createdTime);
+  const userType = JSON.parse(getUserInfo()).type;
+  return {
+
+    applicationNo: getApplicationLink(property.acknowldgementNumber, property.tenantId, property.propertyId, history, property.creationReason),
+    propertyId: getLink(userType, history, property.propertyId, property.tenantId),
+    applicationType: property.creationReason,
+    name: property.owners[0].name,
+    date: date,
+    status: getStatusColor(property.status)
+
+  }
+}
+
+export const getFormattedDate = (date) => {
+  const dateArray = new Date(date).toString().split(' ');
+  if (dateArray.length > 0) {
+    return dateArray[2] + '-' + dateArray[1] + '-' + dateArray[3];
+  }
+  else {
+    return 'dd-mmm-yyyy';
+  }
 }
 
 
@@ -372,4 +448,43 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
   let jP = jsonpath.split(".");
   jP.pop();
   return jP.join(".") + "." + toReplaceWith;
+};
+
+
+export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
+  let target = document.querySelector(divIdName);
+
+  html2canvas(target, {
+    onclone: function (clonedDoc) {
+      if (clonedDoc.getElementById("pdf-header")) {
+        clonedDoc.getElementById("pdf-header").style.display = "block";
+      }
+      if (clonedDoc.getElementById("property-assess-form")) {
+        clonedDoc.getElementById("property-assess-form").style.display = "none";
+      }
+      if (clonedDoc.getElementById("pt-header-button-container")) {
+        clonedDoc.getElementById("pt-header-button-container").style.display = "none";
+      }
+      if (clonedDoc.getElementById("pt-flex-child-button")) {
+        clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
+      }
+
+    }
+  }).then(canvas => {
+    var data = canvas.toDataURL();
+    var imgWidth = 200;
+    var pageHeight = 295;
+    var imgHeight = pageHeight - 80;
+    var doc = new jsPDF("p", "mm");
+    var position = 0;
+
+    doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
+
+    if (action === "download") {
+      doc.save(`preview-${applicationNumber}.pdf`);
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    }
+  });
 };

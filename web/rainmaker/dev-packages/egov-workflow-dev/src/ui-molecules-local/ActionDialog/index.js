@@ -111,9 +111,12 @@ class ActionDialog extends React.Component {
       dataPath = `${dataPath}[0].fireNOCDetails`
     } else if (dataPath === "BPA") {
       dataPath = `${dataPath}`;
+    } else if (dataPath === "Assessment"||dataPath === "Property") {
+      dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
     }
+
 if(buttonLabel=="APPLY"){
   open=!open;
   onButtonClick(buttonLabel, isDocRequired);

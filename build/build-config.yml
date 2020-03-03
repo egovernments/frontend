@@ -21,7 +21,14 @@ config:
       dockerfile: web/rainmaker/docker/employee/Dockerfile
       image-name: employee
 
+-   name: builds/frontend/employee-mcs
+    build:
+    - work-dir: web/rainmaker/
+      dockerfile: web/rainmaker/docker/employee-mcs/Dockerfile
+      image-name: employee-mcs
+
 -   name: builds/frontend/ui-uploader
+
     build:
     - work-dir: web/ui-uploader/
       image-name: ui-uploader

@@ -77,6 +77,7 @@ class App extends Component {
       history.push(nextRoute);
       setRoute("");
     }
+
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
 
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {

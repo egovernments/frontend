@@ -20,7 +20,7 @@ const instance = axios.create({
 });
 
 const edcrInstance = axios.create({
-  baseURL: "https://state-bihar-uat.egovernments.org", // "https://bihar-micro-dev.egovernments.org",
+  baseURL: "https://egov-dcr-galaxy.egovernments.org",
   headers: {
     "Content-Type": "application/json"
   }
@@ -151,7 +151,7 @@ export const edcrHttpRequest = async (
   customRequestInfo = {}
 ) => {
   store.dispatch(toggleSpinner());
-  let apiError = "Api Error";
+  let apiError = "No Record Found";
 
   if (headers)
     edcrInstance.defaults = Object.assign(edcrInstance.defaults, {

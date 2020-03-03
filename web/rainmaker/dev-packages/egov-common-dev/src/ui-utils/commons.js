@@ -493,8 +493,8 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
-  getFileUrlFromAPI(fileStoreId).then(async(fileRes) => {
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
     if (mode === 'download') {
       var win = window.open(fileRes[fileStoreId], '_blank');
       if(win){
@@ -521,7 +521,7 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
           myWindow.print();
         });
       }
-
+    
     }
   });
 }
@@ -687,3 +687,4 @@ export const downloadBill = async (consumerCode ,tenantId) => {
   const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
   downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
 }
+

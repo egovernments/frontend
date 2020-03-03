@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import TaskStatusContainer from "../TaskStatusContainer";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { Footer } from "../../ui-molecules-local";
 import {
   getQueryArg,
@@ -92,6 +93,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=forward&status=success";
       case "MARK":
         return "purpose=mark&status=success";
+      case "VERIFY":
+        return "purpose=verify&status=success";
       case "REJECT":
         return "purpose=application&status=rejected";
       case "CANCEL":
@@ -104,6 +107,21 @@ class WorkFlowContainer extends React.Component {
         return "purpose=refer&status=success";
       case "SENDBACKTOCITIZEN":
         return "purpose=sendbacktocitizen&status=success";
+      case "SUBMIT_APPLICATION":
+        return "purpose=apply&status=success";
+        case "RESUBMIT_APPLICATION":
+        return "purpose=forward&status=success";
+      case "SEND_BACK_TO_CITIZEN":
+        return "purpose=sendback&status=success";
+      case "VERIFY_AND_FORWARD":
+        return "purpose=forward&status=success";
+      case "SEND_BACK_FOR_DOCUMENT_VERIFICATION":
+        case "SEND_BACK_FOR_FIELD_INSPECTION":
+        return "purpose=sendback&status=success";
+      case "APPROVE_FOR_CONNECTION":
+        return "purpose=approve&status=success";
+        case "ACTIVATE_CONNECTION":
+        return "purpose=activate&status=success";
     }
   };
 
@@ -116,6 +134,7 @@ class WorkFlowContainer extends React.Component {
       updateUrl,
       beforeSubmitHook
     } = this.props;
+    const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
@@ -153,21 +172,48 @@ class WorkFlowContainer extends React.Component {
         );
       }
     }
-    if(dataPath === "BPA") {
-      let requiredDocuments = data.requiredDocuments;
-      let documents = data.wfDocuments;
-      if(requiredDocuments && data.wfDocuments && requiredDocuments.length > 0 && 
-        data.wfDocuments.length > 0 && requiredDocuments.length <= data.wfDocuments.length) {
-        for(let i = 0; i < requiredDocuments.length; i++) {
-            data.wfDocuments[i].documentType = requiredDocuments[i].code;
-            data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
+    if (dataPath === "BPA") {
+      data.assignees = [];
+      if (data.assignee) {
+        data.assignee.forEach(assigne => {
+          data.assignees.push({
+            uuid: assigne
+          });
+        });
+      }
+      if (data.wfDocuments) {
+        for (let i = 0; i < data.wfDocuments.length; i++) {
+          data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
         }
       }
     }
+
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
+
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      data = data[0];
+      data.assignees = [];
+      if (data.assignee) {
+        data.assignee.forEach(assigne => {
+          data.assignees.push({
+            uuid: assigne
+          })
+        })
+      }
+      data.processInstance = {
+        documents: data.wfDocuments,
+        assignes: data.assignees,
+        comment: data.comment
+      }
+    }
+
+    if (moduleName === "NewSW1") {
+      dataPath = "SewerageConnection";
+    }
+
     try {
       if(beforeSubmitHook){
         data=beforeSubmitHook(data);
@@ -182,6 +228,20 @@ class WorkFlowContainer extends React.Component {
 
       if (payload) {
         let path = "";
+
+        if (moduleName == "PT.CREATE") {
+          this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
+            label
+          )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
+          return;
+        }
+        if (moduleName == "ASMT") {
+          this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
+            label
+          )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Assessments[0].assessmentNumber', "")}&tenantId=${get(payload, 'Assessments[0].tenantId', "")}`);
+          return;
+        }
+
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
@@ -189,28 +249,57 @@ class WorkFlowContainer extends React.Component {
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
+
+        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+        }
+
       }
     } catch (e) {
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Workflow update error!",
-          labelKey: "ERR_WF_UPDATE_ERROR"
-        },
-        "error"
-      );
+      if (moduleName === "BPA") {
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Documents Required",
+            labelKey: e.message
+          },
+          "error"
+        );
+      } else {
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Workflow update error!",
+            labelKey: "ERR_WF_UPDATE_ERROR"
+          },
+          "error"
+        );
+      }
     }
   };
 
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
-    let data = get(preparedFinalObject, dataPath, []);
-    
-    if (dataPath !== "BPA") {
+    let data = {};
+
+    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property") {
+
+      data = get(preparedFinalObject, dataPath, {})
+    } else {
+      data = get(preparedFinalObject, dataPath, [])
       data = data[0];
     }
     //setting the action to send in RequestInfo
-    let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
+    let appendToPath = ""
+    if (dataPath === "FireNOCs") {
+      appendToPath = "fireNOCDetails."
+    } else if (dataPath === "Assessment" || dataPath === "Property") {
+      appendToPath = "workflow."
+    } else {
+      appendToPath = ""
+    }
+
+
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
@@ -230,36 +319,35 @@ class WorkFlowContainer extends React.Component {
   };
 
   getRedirectUrl = (action, businessId, moduleName) => {
+    console.log("modulenamewater", moduleName);
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
-    if (moduleName === "NewTL") {
-      switch (action) {
-        case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
-    } else if (moduleName === "FIRENOC") {
-      switch (action) {
-        case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
+    const tenant = getQueryArg(window.location.href, "tenantId");
+    const { ProcessInstances } = this.props;
+    let applicationStatus;
+    if (ProcessInstances && ProcessInstances.length > 0) {
+      applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
+    }
+    let baseUrl = "";
+    let bservice = "";
+    if (moduleName === "FIRENOC") {
+      baseUrl = "fire-noc";
     } else if (moduleName === "BPA") {
-      switch (action) {
-        case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
+      baseUrl = "egov-bpa";
+      bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+    } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      baseUrl = "wns"
+    } else {
+      baseUrl = "tradelicence";
+    }
+    const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+    switch (action) {
+      case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
+      case "EDIT": return isAlreadyEdited
+        ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
     }
   };
+
 
   getHeaderName = action => {
     return {
@@ -299,9 +387,11 @@ class WorkFlowContainer extends React.Component {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: moduleName });
-    const nextState = find(data.states, { uuid: nextStateUUID });
-    return nextState.isTerminateState;
+    const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
+    // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
+
+    const isLastState = data ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
+    return isLastState;
   };
 
   checkIfDocumentRequired = (nextStateUUID, moduleName) => {
@@ -351,12 +441,13 @@ class WorkFlowContainer extends React.Component {
       checkIfDocumentRequired,
       getEmployeeRoles
     } = this;
+    let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = [];
-    
-      filteredActions = get(data[data.length - 1], "nextActions", []).filter(
-        item => item.action != "ADHOC"
-      );
+
+    filteredActions = get(data[data.length - 1], "nextActions", []).filter(
+      item => item.action != "ADHOC"
+    );
     let applicationStatus = get(
       data[data.length - 1],
       "state.applicationStatus"
@@ -368,18 +459,18 @@ class WorkFlowContainer extends React.Component {
         buttonLabel: item.action,
         moduleName: data[data.length - 1].businessService,
         isLast: item.action === "PAY" ? true : false,
-        buttonUrl: getRedirectUrl(item.action, businessId, moduleName),
+        buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: !checkIfTerminatedState(item.nextState, moduleName) && item.action !== "SENDBACKTOCITIZEN",
-        roles: getEmployeeRoles(item.nextState, item.currentState, moduleName),
-        isDocRequired: checkIfDocumentRequired(item.nextState, moduleName)
+        showEmployeeList: !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
+        isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
     });
-    actions=actions.filter(item=>item.buttonLabel!=='INITIATE');
+    actions = actions.filter(item => item.buttonLabel !== 'INITIATE');
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
-      moduleName
+      businessService
     );
     if( JSON.stringify(JSON.parse(getUserInfo()).roles[0].code)!=='"TL_DOC_VERIFIER"'){
       editAction.buttonLabel && actions.push(editAction);
@@ -415,28 +506,33 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
-
-      let showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
-      
-      if(dataPath === "BPA"){
-        showFooter = true;
-      }
-
+    let showFooter;
+    if (moduleName === 'NewWS1' || moduleName === 'NewSW1') {
+      showFooter = true;
+    } else if (moduleName == "PT.CREATE") {
+      showFooter = true;
+    } else if (moduleName == "ASMT") {
+      showFooter = true;
+    } else if (moduleName == "PT.MUTATION") {
+      showFooter = true;
+    } else {
+      showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
           <TaskStatusContainer ProcessInstances={ProcessInstances} />
         )}
-       {showFooter&& 
-        <Footer
-          handleFieldChange={prepareFinalObject}
-          variant={"contained"}
-          color={"primary"}
-          onDialogButtonClick={this.createWorkFLow}
-          contractData={workflowContract}
-          dataPath={dataPath}
-          moduleName={moduleName}
-        />}
+        {showFooter &&
+          <Footer
+            handleFieldChange={prepareFinalObject}
+            variant={"contained"}
+            color={"primary"}
+            onDialogButtonClick={this.createWorkFLow}
+            contractData={workflowContract}
+            dataPath={dataPath}
+            moduleName={moduleName}
+          />}
       </div>
     );
   }
@@ -455,7 +551,8 @@ const mapDispacthToProps = dispatch => {
     prepareFinalObject: (path, value) =>
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
-      dispatch(toggleSnackbar(open, message, variant))
+      dispatch(toggleSnackbar(open, message, variant)),
+    setRoute: route => dispatch(setRoute(route))
   };
 };
 

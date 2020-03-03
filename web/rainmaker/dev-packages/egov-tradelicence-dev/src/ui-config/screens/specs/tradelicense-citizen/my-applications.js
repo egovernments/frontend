@@ -33,6 +33,10 @@ const screenConfig = {
           props: {
             contents: [
               {
+                label: "TL_COMMON_TABLE_COL_APP_TYPE",
+                jsonPath: "applicationType"
+              },
+              {
                 label: "TL_COMMON_TABLE_COL_TRD_NAME",
                 jsonPath: "tradeName"
               },
@@ -47,10 +51,6 @@ const screenConfig = {
               {
                 label: "TL_COMMON_TABLE_COL_LIC_NO",
                 jsonPath: "licenseNumber"
-              },
-              {
-                label: "TL_COMMON_TABLE_COL_ULB_CODE",
-                jsonPath: "tradeLicenseDetail.address.city"
               },
               {
                 label: "TL_COMMON_TABLE_COL_STATUS",

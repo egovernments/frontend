@@ -37,23 +37,18 @@ const formConfig = {
     let state = store.getState();
     const { dispatch } = store;
     const ownerDetails = getOwnerDetails(state);
-    const selectedOwnerShip=get(state, "common.prepareFormData.Properties[0].propertyDetails[0].ownershipCategory");
-    const ownerShipValue=selectedOwnerShip?selectedOwnerShip:ownerDetails[0].value;
-    const currentOwnershipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", ownerShipValue);
-    set(action, "form.fields.typeOfOwnership.dropDownData", ownerDetails);
-    set(action, "form.fields.typeOfOwnership.value", currentOwnershipType);
-    dispatch(
-      prepareFormData(
-        "Properties[0].propertyDetails[0].ownershipCategory",
-        get(state, `common.generalMDMSDataById.SubOwnerShipCategory[${currentOwnershipType}].ownerShipCategory`)
-      )
-    );
-    dispatch(prepareFormData("Properties[0].propertyDetails[0].subOwnershipCategory", currentOwnershipType));
-
-    if (currentOwnershipType.toUpperCase().includes("INSTITUTIONAL")) {
-      dispatch(prepareFormData("Properties[0].propertyDetails[0].subOwnershipCategory", null));
+    if(ownerDetails && ownerDetails.length){
+      const currentOwnershipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", ownerDetails[0].value);
+      set(action, "form.fields.typeOfOwnership.dropDownData", ownerDetails);
+      set(action, "form.fields.typeOfOwnership.value", currentOwnershipType);
+      dispatch(prepareFormData("Properties[0].propertyDetails[0].subOwnershipCategory", ownerDetails[0].value));
+      dispatch(
+        prepareFormData(
+          "Properties[0].propertyDetails[0].ownershipCategory",
+          get(state, `common.generalMDMSDataById.SubOwnerShipCategory[${ownerDetails[0].value}]`).ownerShipCategory
+        )
+      );
     }
-
     return action;
   },
   action: "",

@@ -84,49 +84,6 @@ const formConfig = {
       value: "",
       pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i
     },
-    mohalla: {
-      id: "mohalla",
-      jsonPath: "",
-      type: "singleValueList",
-      floatingLabelText: "PT_PROPERTY_DETAILS_MOHALLA",
-      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
-      fullWidth: true,
-      toolTip: true,
-      toolTipMessage: "PT_MOHALLA_TOOLTIP_MESSAGE",
-      labelsFromLocalisation: true,
-      boundary: true,
-      numcols: 4,
-      errorMessage: "PT_PROPERTY_DETAILS_MOHALLA_ERRORMSG",
-      dataFetchConfig: {
-        url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-        action: "",
-        queryParams: [],
-        requestBody: {},
-        isDependent: true,
-        hierarchyType: "REVENUE",
-      },
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      value: "",
-      updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
-        const { value } = sourceField;
-
-        if (value) {
-          dispatch(setFieldProperty("searchProperty", "houseNumber", "disabled", false));
-        }
-      }
-    },
-    houseNumber: {
-      id: "house-number",
-      jsonPath: "",
-      type: "textfield",
-      floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
-      hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
-      numcols: 4,
-      errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
-      value: "",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      maxLength: 64
-    },
     applicationNumber: {
       id: "application-number",
       jsonPath: "",

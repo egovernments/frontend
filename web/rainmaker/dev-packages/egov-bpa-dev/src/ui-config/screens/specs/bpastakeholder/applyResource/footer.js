@@ -14,7 +14,7 @@ import {
   createEstimateData
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 import { setTenantId, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 import {
@@ -108,6 +108,46 @@ export const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
+    const licenseType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+      ""
+    );
+    if(licenseType && licenseType != "BUILDER.CLASSA") {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.declarationSummary.children.header.children.body.children.checkbox",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.declarationSummary.children.header.children.body.children.checkbox2",
+          "visible",
+          true
+        )
+      );
+    } else {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.declarationSummary.children.header.children.body.children.checkbox2",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.declarationSummary.children.header.children.body.children.checkbox",
+          "visible",
+          true
+        )
+      );
+    }
 
     if (
       !isLicenseeCOAValid ||
@@ -167,6 +207,21 @@ export const callBackForNext = async (state, dispatch) => {
       let tenantIdInLocastorage = getTenantId();
       if (!tenantIdInLocastorage)
         setTenantId(process.env.REACT_APP_DEFAULT_TENANT_ID);
+        const appNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber", {});
+        const LicenseData = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Licenses[0]",
+          {}
+        );
+        if (appNumber && LicenseData){
+          createEstimateData(
+            LicenseData,
+            "LicensesTemp[0].estimateCardData",
+            dispatch,
+            {},
+            true
+          ); //get bill and populate estimate card
+        }
     }
   }
 
@@ -226,9 +281,21 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch, 2);
-    if (isFormValid) {
+    const isDeclared = get(
+      state.screenConfiguration.preparedFinalObject,
+      "LicensesTemp.isDeclared"
+    );
+    
+    if (isDeclared) {
+      isFormValid = await applyTradeLicense(state, dispatch, 2);
       moveToSuccess(LicenseData, dispatch);
+    }
+    else {
+      let errorMessage = {
+        labelName: "Please confirm the declaration!",
+        labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));      
     }
   }
   if (activeStep !== 3) {

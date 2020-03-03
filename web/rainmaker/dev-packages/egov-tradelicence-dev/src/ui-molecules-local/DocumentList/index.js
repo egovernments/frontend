@@ -5,13 +5,13 @@ import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import {
-  handleFileUpload,
   getFileUrlFromAPI,
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import { handleFileUpload } from "../../ui-utils/commons"
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
@@ -20,7 +20,8 @@ const styles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
     padding: "16px",
-    marginBottom: "16px"
+    marginBottom: "16px",
+    wordBreak : "break-word"
   },
   documentIcon: {
     backgroundColor: "#FFFFFF",
@@ -84,6 +85,7 @@ class DocumentList extends Component {
       let simplified = Object.values(uploadedDocuments).map(item => item[0]);
       let uploadedDocumentsArranged = documents.reduce((acc, item, ind) => {
         const index = simplified.findIndex(i => i.documentType === item.name);
+        // !isUndefined(index) && (acc[ind] = [simplified[index]]);
         index > -1 && (acc[ind] = [simplified[index]]);
         return acc;
       }, {});
@@ -151,7 +153,7 @@ class DocumentList extends Component {
     let { uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, preparedFinalObject } = this.props;
     const jsonPath = documents[remDocIndex].jsonPath;
-    getQueryArg(window.location.href, "action") === "edit" &&
+   (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" )&&
       uploadedDocuments[remDocIndex][0].id &&
       prepareFinalObject("LicensesTemp[0].removedDocs", [
         ...get(preparedFinalObject, "LicensesTemp[0].removedDocs", []),
@@ -182,12 +184,15 @@ class DocumentList extends Component {
     }
   };
   render() {
-    const { classes, documents, documentTypePrefix, description } = this.props;
+    const { classes, documents, documentTypePrefix, description ,imageDescription ,inputProps } = this.props;
+    
     const { uploadedIndex } = this.state;
+    console.log("prpsssss",uploadedIndex);
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&
           documents.map((document, key) => {
+            const currentDocumentProps =  inputProps.filter(item => item.type === document.name);
             return (
               <div
                 key={key}
@@ -229,7 +234,6 @@ class DocumentList extends Component {
                         labelName={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelName : description.labelName}
                         labelKey={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelKey : description.labelKey}
                       />
-                      {/* {description} */}
                     </Typography>
                   </Grid>
                   <Grid item={true} xs={12} sm={5} align="right">
@@ -245,6 +249,7 @@ class DocumentList extends Component {
                       onButtonClick={() => this.onUploadClick(key)}
                       inputProps={document.name == "OWNERPHOTO" ? this.props.imageProps : this.props.inputProps}
                       buttonLabel={this.props.buttonLabel}
+                      inputProps={currentDocumentProps[0].formatProps}
                     />
                   </Grid>
                 </Grid>
@@ -259,21 +264,6 @@ class DocumentList extends Component {
 DocumentList.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
-// const mapStateToProps = state => {
-//   const { screenConfiguration } = state;
-// const documents = get(
-//   screenConfiguration.preparedFinalObject,
-//   "LicensesTemp[0].applicationDocuments",
-//   []
-// );
-// const tenantId = get(
-//   screenConfiguration.preparedFinalObject,
-//   "LicensesTemp[0].tenantId",
-//   ""
-// );
-//   return { screenConfiguration };
-// };
 
 const mapDispatchToProps = dispatch => {
   return {
