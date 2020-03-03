@@ -2,11 +2,21 @@ import React from "react";
 import { Button, TextField, Card, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
+import { CountdownTimer } from "egov-ui-framework/ui-atoms/index";
 import "./index.css";
 
 const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl}) => {
   const fields = form.fields || {};
   const submit = form.submit;
+
+
+  const completed = () => {
+    console.log('Timer has completed')
+  }
+  const tick =(leftTime) => {
+  //  console.log(leftTime);
+  }
+
 
   return (
     <Card
@@ -43,6 +53,7 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl}) => {
             <span style={{ cursor: "pointer" }} onClick={() => resendOTP()}>
               <Label id="otp-resend" className="otp-resend" label="CORE_OTP_RESEND" />
             </span>
+            <CountdownTimer timeLeft={300000} completeCallback={completed} tickCallback={tick} />
           </div>
           <Button {...submit} primary={true} fullWidth={true} />
         </div>
