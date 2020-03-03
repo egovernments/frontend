@@ -19,8 +19,9 @@ const getAddress = (item) => {
   let doorNo = item.address.doorNo != null ? (item.address.doorNo + ",") : '';
   let buildingName = item.address.buildingName != null ? (item.address.buildingName + ",") : '';
   let street = item.address.street != null ? (item.address.street + ",") : '';
+  let mohalla = item.address.locality.name ? (item.address.locality.name + ",") : '';
   let city = item.address.city != null ? (item.address.city) : '';
-  return (doorNo + buildingName + street + city);
+  return (doorNo + buildingName + street + mohalla + city);
 }
 
 const searchApiCall = async (state, dispatch, index) => {
