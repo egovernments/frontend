@@ -24,7 +24,7 @@ export const searchResults = {
           filter: false,
           customBodyRender: value => (
             <span>
-              {getTextToLocalMapping(value)}
+              {getLocaleLabels(value,value)}
             </span>
           )
         }
@@ -35,11 +35,9 @@ export const searchResults = {
           filter: false,
           customBodyRender: value => (
             <span
-              style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
-              }
+              style={value.includes("APPROVED") ? { color: "green" } : { color: "red" }}
             >
-              {getTextToLocalMapping(value)}
+              {getLocaleLabels(value,value)}
             </span>
           )
         }
