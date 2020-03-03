@@ -476,9 +476,9 @@ class PTAcknowledgement extends React.Component {
                       id="material-ui-paragraph"
                       style={{ fontSize: "24px", fontWeight: "500" }}
                     >
-                      <span>
+                      {ptIDLabel.visibility&& <span>
                         <Label label={secondNumber} fontSize="24px" color="rgba(0, 0, 0, 0.87)" fontWeight="500" />
-                      </span>
+                      </span>}
                     </h1>
                   </div>
                   <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
