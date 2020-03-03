@@ -306,42 +306,42 @@ export const downloadPrintContainer = (
   let downloadMenu = [];
   let printMenu = [];
   let ptMutationCertificateDownloadObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "book"
   };
   let ptMutationCertificatePrintObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
       console.log("clicked");
 
@@ -396,7 +396,7 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "DOWNLOAD", labelKey: "PT_DOWNLOAD" },
+              label: { labelName: "DOWNLOAD", labelKey: "MT_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-download-button" },
@@ -410,7 +410,7 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "PRINT", labelKey: "PT_PRINT" },
+              label: { labelName: "PRINT", labelKey: "MT_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-print-button" },
