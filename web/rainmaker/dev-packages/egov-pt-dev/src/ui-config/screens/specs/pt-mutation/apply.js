@@ -115,7 +115,7 @@ export const formwizardFirstStep = {
   },
   children: {
     transferorDetails,
-    transferorInstitutionDetails:transferorInstitutionSummary,
+    transferorInstitutionDetails:{...transferorInstitutionSummary},
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -222,27 +222,27 @@ const getPropertyData = async (action, state, dispatch) => {
       set(
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-        { display: "none" }
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
-        { display: "none" }
-      );
-      set(
-        action.screenConfig,
-       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary",
-        {}
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
         {display: "none"}
       );
       set(
         action.screenConfig,
-      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.props.style",
-      {}
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
+        {display: "none"}
+      );
+      set(
+        action.screenConfig,
+       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        {}
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.props.style",
+        {}
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary.props.style",
+        {display: "none"}
       );
     }else{
       // set(
@@ -252,13 +252,14 @@ const getPropertyData = async (action, state, dispatch) => {
       // );
       set(
         action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        "components.div.children.formwizardFirstStep.children.transferorInstitutionDetails.props.style",
         { display: "none" }
       );
     
       set(
         action.screenConfig,
         "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary.props.style",
+        
         { display: "none" }
       );
     }
