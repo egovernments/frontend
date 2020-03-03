@@ -110,6 +110,15 @@ export const reviewWaterClosets = getLabelWithValue(
     jsonPath: "WaterConnection[0].noOfWaterClosets",
   }
 );
+export const reviewNoOfToilets = getLabelWithValue(
+  {
+    labelName: "No. of Toilets",
+    labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS"
+  },
+  {
+    jsonPath: "WaterConnection[0].noOfToilets",
+  }
+);
 
 export const reviewPlumberProvidedBy = getLabelWithValue(
   {
@@ -271,7 +280,8 @@ const connectionDetails = getCommonContainer({
   reviewWaterSubSource,
   reviewPipeSize,
   // reviewBillingType,
-  reviewWaterClosets
+  reviewWaterClosets,
+  reviewNoOfToilets
 });
 
 const connectionChargeDetails = getCommonContainer({
@@ -297,6 +307,6 @@ export const renderService = () => {
   if (service === "WATER") {
     return getCommonContainer({ reviewConnectionType, reviewNumberOfTaps, reviewWaterSource, reviewWaterSubSource, reviewPipeSize });
   } else if (service === "SEWERAGE") {
-    return getCommonContainer({ reviewConnectionType, reviewWaterClosets })
+    return getCommonContainer({ reviewConnectionType, reviewWaterClosets,reviewNoOfToilets })
   }
 }

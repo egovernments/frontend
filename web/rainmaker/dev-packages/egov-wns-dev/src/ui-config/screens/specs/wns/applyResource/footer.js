@@ -25,7 +25,7 @@ const setReviewPageRoute = (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -101,6 +101,7 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  window.scrollTo(0, 0);
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
@@ -218,11 +219,15 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
 
   if (activeStep === 1) {
-    if (moveToReview(state, dispatch)) { isFormValid = true; hasFieldToaster = false; }
+    if (moveToReview(state, dispatch)) {
+      let applyFeild = get(state, "screenConfiguration.preparedFinalObject.applyScreen", {});
+      dispatch(prepareFinalObject("applyObject", applyFeild));;
+      isFormValid = true; hasFieldToaster = false; }
     else { isFormValid = false; hasFieldToaster = true; }
     await pushTheDocsUploadedToRedux(state, dispatch);
   }
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
+    window.scrollTo(0, 0);
     if (getQueryArg(window.location.href, "action") === "edit") {
       setReviewPageRoute(state, dispatch);
     }
@@ -402,7 +407,7 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
 
 const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatch) => {
   if (isFormValid) {
-    if (activeStep === 1) {
+    if (activeStep === 0) {
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {

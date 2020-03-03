@@ -701,7 +701,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       moduleDetails: [
         {
           moduleName: "PropertyTax",
-          masterDetails: [{ name: "Documents" }]
+          masterDetails: [{ name: "MutationDocuments" }]
         }
       ]
     }

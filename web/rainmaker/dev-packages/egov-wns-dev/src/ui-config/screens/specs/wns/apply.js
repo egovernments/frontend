@@ -184,6 +184,8 @@ export const getData = async (action, state, dispatch) => {
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
       let combinedArray = waterConnections.concat(sewerageConnections);
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
+      let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
+      dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
     }
   }
 };

@@ -99,8 +99,7 @@ export const specialApplicantCategory = getLabelWithValue(
         labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
     },
     {
-        jsonPath:
-            "WaterConnection[0].property.owners."
+        jsonPath:"WaterConnection[0].property.owners[0].name"
     }
 )
 
@@ -119,6 +118,15 @@ export const propertyOwnerDetails = () => {
             componentPath: "MultiItem",
             props: {
                 scheama: getCommonContainer({
+                    reviewOwnerAddr: getLabelWithValue(
+                        {
+                            labelName: "Corrospondence Address",
+                            labelKey: "WS_OWN_DETAIL_CROSADD"
+                        },
+                        {
+                            jsonPath: "WaterConnection[0].property.owners[0].name",
+                        }
+                    ),
                     mobileNumber,
                     name,
                     gender,
@@ -132,7 +140,7 @@ export const propertyOwnerDetails = () => {
                 items: [],
                 hasAddItem: false,
                 sourceJsonPath: "WaterConnection[0].property.owners",
-                prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
+                prefixSourceJsonPath: "children.cardContent.children.scheama.children",
                 afterPrefixJsonPath: "children.value.children.key"
             },
             type: "array"

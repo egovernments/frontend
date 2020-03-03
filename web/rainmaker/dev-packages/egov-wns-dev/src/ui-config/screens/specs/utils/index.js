@@ -432,6 +432,19 @@ const style = {
   }
 };
 
+export const getFeesEstimateOverviewCard = props => {
+  const { sourceJsonPath, ...rest } = props;
+  return {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "EstimateOverviewCardContainer",
+    props: {
+      sourceJsonPath,
+      ...rest
+    }
+  };
+};
+
 export const getIconStyle = key => {
   return style[key];
 };

@@ -316,19 +316,19 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     );
 
  
-    const footer = footerReview(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId,
-      financialYear
-    );
+    // const footer = footerReview(
+    //   action,
+    //   state,
+    //   dispatch,
+    //   status,
+    //   applicationNumber,
+    //   tenantId,
+    //   financialYear
+    // );
 
-    process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.footer", footer)
-      : set(action, "screenConfig.components.div.children.footer", {});
+    // process.env.REACT_APP_NAME === "Citizen"
+    //   ? set(action, "screenConfig.components.div.children.footer", footer)
+    //   : set(action, "screenConfig.components.div.children.footer", {});
 
     if (status === "cancelled")
       set(
@@ -511,30 +511,30 @@ const screenConfig = {
             updateUrl: "/tl-services/v1/_update"
           }
         },
-        actionDialog: {
-          uiFramework: "custom-containers-local",
-          componentPath: "ResubmitActionContainer",
-          moduleName: "egov-tradelicence",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
-          props: {
-            open: true,
-            dataPath: "Licenses",
-            moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update",
-            data: {
-              buttonLabel: "RESUBMIT",
-              moduleName: "NewTL",
-              isLast: false,
-              dialogHeader: {
-                labelName: "RESUBMIT Application",
-                labelKey: "WF_RESUBMIT_APPLICATION"
-              },
-              showEmployeeList: false,
-              roles: "CITIZEN",
-              isDocRequired: false
-            }
-          }
-        },
+        // actionDialog: {
+        //   uiFramework: "custom-containers-local",
+        //   componentPath: "ResubmitActionContainer",
+        //   moduleName: "egov-tradelicence",
+        //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+        //   props: {
+        //     open: true,
+        //     dataPath: "Licenses",
+        //     moduleName: "NewTL",
+        //     updateUrl: "/tl-services/v1/_update",
+        //     data: {
+        //       buttonLabel: "RESUBMIT",
+        //       moduleName: "NewTL",
+        //       isLast: false,
+        //       dialogHeader: {
+        //         labelName: "RESUBMIT Application",
+        //         labelKey: "WF_RESUBMIT_APPLICATION"
+        //       },
+        //       showEmployeeList: false,
+        //       roles: "CITIZEN",
+        //       isDocRequired: false
+        //     }
+        //   }
+        // },
         tradeReviewDetails
       }
     },

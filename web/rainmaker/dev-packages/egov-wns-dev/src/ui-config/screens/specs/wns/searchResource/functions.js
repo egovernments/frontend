@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, fetchBill, getSearchResultsForSewerage } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
+import { convertEpochToDate,convertDateToEpoch, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -59,6 +59,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
       }
     }
     try {
+      
       let getSearchResult = getSearchResults(queryObject)
       let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
@@ -161,7 +162,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           name: element.property.owners[0].name,
           applicationStatus: element.applicationStatus,
           address: element.property.address.street,
-          connectionType: element.service,
+          service: element.service,
+          connectionType: element.connectionType
         })
       }
       showApplicationResults(finalArray, dispatch)
@@ -200,12 +202,13 @@ const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     [getTextToLocalMapping("Consumer No")]: item.connectionNo,
     [getTextToLocalMapping("Application No")]: item.applicationNo,
-    [getTextToLocalMapping("Application Type")]: item.connectionType === "WATER" ? "New Water Connection" : "New Sewerage Connection",
+    [getTextToLocalMapping("Application Type")]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
     [getTextToLocalMapping("Owner Name")]: item.name,
     [getTextToLocalMapping("Application Status")]: item.applicationStatus,
     [getTextToLocalMapping("Address")]: item.address,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
-    ["service"]: item.connectionType
+    ["service"]: item.service,
+    ["connectionType"]: item.connectionType,
   }));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.title",
