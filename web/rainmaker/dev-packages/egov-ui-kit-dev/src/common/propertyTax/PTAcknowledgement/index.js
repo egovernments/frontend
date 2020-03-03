@@ -302,7 +302,7 @@ class PTAcknowledgement extends React.Component {
       ptIDLabel = {
         labelName: "Poperty ID",
         labelKey: "PT_PROPERTY_ID",
-        visibility: true
+        visibility: false
       };
       statusIcon = {
         icon: "close",
