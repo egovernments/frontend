@@ -148,14 +148,14 @@ export const searchApplications = getCommonCard({
         labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
       },
       required: false,
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationstatus",
+      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationStatus",
       gridDefination: {
         xs: 12,
         sm: 4
       },
       required: false,
       errorMessage: "ERR_INVALID_BILLING_PERIOD",
-      jsonPath: "searchScreen.appStatus"
+      jsonPath: "searchScreen.applicationStatus"
     }),
 
     fromDate: getDateField({
