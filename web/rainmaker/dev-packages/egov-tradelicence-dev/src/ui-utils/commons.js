@@ -420,11 +420,33 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
-      if(isRenewal){
-        // set(queryObject[0] , "applicationNumber" , "");
-        action = "INITIATE"
+      // if(isRenewal){
+      //   // set(queryObject[0] , "applicationNumber" , "");
+      //   action = "INITIATE"
+      //   }
+        if (isRenewal) {
+          action = "APPLY";
+          let renewalSearchQueryObject = [
+            { key: "tenantId", value: queryObject[0].tenantId },
+            { key: "applicationNumber", value: queryObject[0].applicationNumber }
+          ];
+          const renewalResponse = await getSearchResults(renewalSearchQueryObject);
+          const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
+          // for (let i = 1; i <= documents.length; i++) {
+          //   if (i > renewalDocuments.length) {
+          //     renewalDocuments.push(documents[i-1])
+          //   }
+          //   else{
+          //      if(!documents[i-1].hasOwnProperty("id")){
+          //      renewalDocuments[i-1].active=false;
+          //      renewalDocuments.push(documents[i-1])
+          //      }
+          //   }
+          // }
+          dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
+          set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
+  
         }
-    
       // else if (
       //   queryObject[0].tradeLicenseDetail &&
       //   queryObject[0].tradeLicenseDetail.applicationDocuments &&

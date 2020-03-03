@@ -35,6 +35,7 @@ import {
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
@@ -256,6 +257,7 @@ export const getData = async (action, state, dispatch) => {
           false
         )
       );
+
     }
   }
 };
@@ -336,6 +338,8 @@ const screenConfig = {
           tenantId
         )
       );
+      const isRenewal= get(state.screenConfiguration.preparedFinalObject,"LicensesTemp[0].renewal")?true:false;
+      isRenewal && dispatch(toggleSpinner());
       const mohallaLocalePrefix = {
         moduleName: tenantId,
         masterName: "REVENUE"
