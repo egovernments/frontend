@@ -121,12 +121,16 @@ export const additionDetails = getCommonCard({
           errorMessage: "ERR_INVALID_BILLING_PERIOD",
           jsonPath: "applyScreen.connectionType"
         }),
-        beforeFieldChange: async (action, state, dispatch) => {
-          let connType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+        afterFieldChange: async (action, state, dispatch) => {
+          let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
           console.log('connType');
           console.log(connType);
-          if (connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") { showHideFeilds(dispatch, false); }
-          else { showHideFeilds(dispatch, true); }
+          if (connType=== undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
+             showHideFeilds(dispatch, false); 
+            }
+          else { 
+            showHideFeilds(dispatch, true);
+           }
         }
       },
 
