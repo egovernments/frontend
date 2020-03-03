@@ -97,7 +97,7 @@ const getMdmsData = async (state, dispatch) => {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] }
       ]
     }
   };
@@ -113,7 +113,7 @@ const getMdmsData = async (state, dispatch) => {
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.PropertyTax.Documents",
-        payload.MdmsRes.PropertyTax.Documents
+        payload.MdmsRes.PropertyTax.MutationDocuments
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -128,6 +128,8 @@ const callBackForApply = async (state, dispatch) => {
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
+    let documentsUploadRedux = get(
+      state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
   propertyPayload.workflow = {
     "businessService": "PT.MUTATION",
     tenantId,
@@ -190,6 +192,14 @@ const callBackForApply = async (state, dispatch) => {
   }
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
+  propertyPayload.documents=Object.values(documentsUploadRedux).map(o=>{
+    return {
+    documentType: o.documentCode,
+    fileStoreId: o.documents[0].fileStoreId,
+    documentUid: o.documents[0].fileStoreId,
+    auditDetails: null,
+    status: "ACTIVE"}
+    })
 
   try {
     let queryObject = [
@@ -217,7 +227,7 @@ const callBackForApply = async (state, dispatch) => {
     if (payload) {
       store.dispatch(
         setRoute(
-          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${tenantId}
           `
         )
       );

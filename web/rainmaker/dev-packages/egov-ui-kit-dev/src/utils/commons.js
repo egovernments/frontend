@@ -802,6 +802,8 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
         return 'PT.MUTATION';
       } else if (creationReason == 'CREATE') {
         return 'PT.CREATE';
+      }else if (creationReason == 'UPDATE') {
+        return 'PT.CREATE';
       }
       else {
         return 'NA';

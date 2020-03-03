@@ -243,7 +243,7 @@ class WorkFlowContainer extends React.Component {
         const licenseNumber = get(payload, path, "");
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
-        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
+        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
 
         if (moduleName === "NewWS1" || moduleName === "NewSW1") {
           window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
@@ -264,8 +264,8 @@ class WorkFlowContainer extends React.Component {
         toggleSnackbar(
           true,
           {
-            labelName: "Workflow update error!",
-            labelKey: "ERR_WF_UPDATE_ERROR"
+            labelName: "Please fill all the mandatory fields!",
+            labelKey: e.message
           },
           "error"
         );
@@ -497,18 +497,18 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
-    let showFooter;
-    if (moduleName === 'NewWS1' || moduleName === 'NewSW1') {
-      showFooter = true;
-    } else if (moduleName == "PT.CREATE") {
-      showFooter = true;
-    } else if (moduleName == "ASMT") {
-      showFooter = true;
-    } else if (moduleName == "PT.MUTATION") {
-      showFooter = true;
-    } else {
-      showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    }
+    let showFooter = true;
+    // if (moduleName === 'NewWS1' || moduleName === 'NewSW1') {
+    //   showFooter = true;
+    // } else if (moduleName == "PT.CREATE") {
+    //   showFooter = true;
+    // } else if (moduleName == "ASMT") {
+    //   showFooter = true;
+    // } else if (moduleName == "PT.MUTATION") {
+    //   showFooter = true;
+    // } else {
+    //   showFooter = process.env.REACT_APP_NAME === "Citizen" ? true : true;
+    // }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (

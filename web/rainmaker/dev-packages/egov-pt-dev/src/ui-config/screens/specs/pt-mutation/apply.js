@@ -282,7 +282,7 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] }
       ]
     }
   };
