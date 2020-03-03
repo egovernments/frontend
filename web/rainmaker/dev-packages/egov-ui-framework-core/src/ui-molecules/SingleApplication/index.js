@@ -17,7 +17,6 @@ import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import Label from "../../ui-containers/LabelContainer";
 import "./index.css";
 import { handleScreenConfigurationFieldChange as handleField } from "../../ui-redux/screen-configuration/actions";
-import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 const styles = {
   card: {
     marginLeft: 8,

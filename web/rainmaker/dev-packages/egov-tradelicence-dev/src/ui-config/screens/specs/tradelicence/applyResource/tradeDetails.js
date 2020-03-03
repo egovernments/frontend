@@ -32,7 +32,6 @@ import filter from "lodash/filter";
 import { convertEpochToDate } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getAllDataFromBillingSlab } from "../../utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons"
 
 
 const tradeUnitCard = {

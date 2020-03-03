@@ -13,13 +13,9 @@ import { handleScreenConfigurationFieldChange as handleField ,prepareFinalObject
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
-  getFileUrlFromAPI,setDocuments
+  getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -46,6 +42,13 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
 
+const setDocuments = async (
+  payload,
+  sourceJsonPath,
+  destJsonPath,
+  dispatch
+) => {
+  const uploadedDocData = get(payload, sourceJsonPath);
 
   const fileStoreIds =
     uploadedDocData &&

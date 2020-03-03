@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Card,Grid } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const locale = getLocale() || "en_IN";
-const localizationLabelsData = initLocalizationLabels(locale);
+// const localizationLabelsData = initLocalizationLabels(locale);
 
 class PropertyInfoCard extends Component {
   render() {
