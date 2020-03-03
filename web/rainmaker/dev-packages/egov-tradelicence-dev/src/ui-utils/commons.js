@@ -84,7 +84,7 @@ export const getSearchResults = async queryObject => {
   }
 };
 
-const setDocsForEditFlow = async (state, dispatch) => {
+export const setDocsForEditFlow = async (state, dispatch) => {
   const applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -141,12 +141,13 @@ export const updatePFOforSearchResults = async (
     { key: "applicationNumber", value: queryValue }
   ];
   const isPreviouslyEdited = getQueryArg(window.location.href, "edited");
+  const isRenewal= get(state.screenConfiguration.preparedFinalObject,"LicensesTemp[0].renewal")?true:false;
   const payload = !isPreviouslyEdited
     ? await getSearchResults(queryObject)
     : {
         Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
       };
-  getQueryArg(window.location.href, "action") === "edit" &&
+  (getQueryArg(window.location.href, "action") === "edit"||isRenewal)&&
     (await setDocsForEditFlow(state, dispatch));
   if (payload) {
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
@@ -342,6 +343,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       "validTo",
       convertDateToEpoch(queryObject[0].validTo, "dayend")
     );
+    const isRenewal= get(state.screenConfiguration.preparedFinalObject,"LicensesTemp[0].renewal")?true:false;
     if (queryObject[0] && queryObject[0].commencementDate) {
       queryObject[0].commencementDate = convertDateToEpoch(
         queryObject[0].commencementDate,
@@ -400,7 +402,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         queryObject[0].tradeLicenseDetail &&
         queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
-        if (getQueryArg(window.location.href, "action") === "edit") {
+        if (getQueryArg(window.location.href, "action") === "edit"||isRenewal) {
           // const removedDocs = get(
           //   state.screenConfiguration.preparedFinalObject,
           //   "LicensesTemp[0].removedDocs",
@@ -418,6 +420,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
+      if(isRenewal){
+        // set(queryObject[0] , "applicationNumber" , "");
+        action = "INITIATE"
+        }
+    
       // else if (
       //   queryObject[0].tradeLicenseDetail &&
       //   queryObject[0].tradeLicenseDetail.applicationDocuments &&
@@ -476,8 +483,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
       set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);
       set(queryObject[0], "action", "INITIATE");
-      //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
-      if (!queryObject[0].applicationNumber)
+
+      if(isRenewal){
+       // set(queryObject[0] , "applicationNumber" , "");
+         set(queryObject[0] , "licenseNumber" , "");
+         set(queryObject[0] , "status" , "");
+         setDocsForEditFlow(state,dispatch);
+       }
+
+       //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
+      if (!queryObject[0].applicationNumber && !isRenewal)
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
       const response = await httpRequest(
         "post",

@@ -247,7 +247,6 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-
       dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
       dispatch(
         handleField(
