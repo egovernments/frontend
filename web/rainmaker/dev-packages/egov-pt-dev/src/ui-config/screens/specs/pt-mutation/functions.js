@@ -206,7 +206,7 @@ const searchApiCall = async (state, dispatch, index) => {
           item || "-",
         [getTextToLocalMapping("Property Tax Unique Id")]: item || "-",
         [getTextToLocalMapping("Application Type")]:
-          item.creationReason || "NA",
+        item.creationReason ? getTextToLocalMapping("PT."+item.creationReason) : "NA",
         [getTextToLocalMapping("Owner Name")]:
           item.owners[0].name || "-",
         [getTextToLocalMapping("Address")]:
