@@ -217,7 +217,7 @@ const callBackForApply = async (state, dispatch) => {
     if (payload) {
       store.dispatch(
         setRoute(
-          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${tenantId}
           `
         )
       );
