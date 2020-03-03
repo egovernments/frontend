@@ -57,7 +57,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumberWater,
             tailTextOne: {
-              labelName: "Water Application No.",
+              labelName: "Sewerage Application No.",
               labelKey: "WS_ACKNO_SEW_APP_NO_LABEL"
             },
             newNumber: applicationNumberSewerage,
@@ -103,8 +103,8 @@ const getAcknowledgementCard = (
               labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Water Application No.",
-              labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -205,10 +205,10 @@ const getAcknowledgementCard = (
               labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Application No.",
-              labelKey: "WS_HOME_SEARCH_RESULTS_WS_NO_LABEL"
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
@@ -248,10 +248,10 @@ const getAcknowledgementCard = (
               labelKey: "WS_SENDBACK_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Trade License No.",
-              labelKey: "WS_HOME_SEARCH_RESULTS_WS_NO_LABEL"
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
@@ -431,7 +431,39 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "activate" && status === "success") {
+    return {
+      header: getCommonHeader({
+        labelName: `Application for New Water and Sewerage Connection`,
+        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Connection Activated Successfully ",
+              labelKey: "WS_ACTIVATE_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to registered Mobile No.",
+              labelKey: "WS_CONNECTION_ACTIVATE_SUCCESS_SUBHEAD"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -559,7 +591,7 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+              label: { labelName: "DOWNLOAD", labelKey: "WS_COMMON_BUTTON_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-download-button" },
@@ -573,10 +605,10 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+              label: { labelName: "PRINT", labelKey: "WS_COMMON_BUTTON_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginLeft:"15px" }, className: "tl-print-button" },
               menu: printMenu
             }
           }

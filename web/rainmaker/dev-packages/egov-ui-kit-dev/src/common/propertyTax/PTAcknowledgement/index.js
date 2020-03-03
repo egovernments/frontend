@@ -14,10 +14,14 @@ import { generatePdfAndDownload } from "../../../utils/PTCommon";
 import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import "./index.css";
+import { httpRequest } from "egov-ui-kit/utils/api";
 
 class PTAcknowledgement extends React.Component {
   state = {
-    propertyId: ""
+    propertyId: "",
+    fetchBill:false,
+    fetchingBill:false,
+    showPay:false
   };
 
   componentDidMount = () => {
@@ -78,7 +82,28 @@ class PTAcknowledgement extends React.Component {
     }
     AcknowledgementReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, null);
   }
-
+  getFetchBillResponse = async (propertyId, tenantId) => { 
+    let showPay=false;
+    let fetchBill=true; 
+    this.setState({fetchingBill:true});  
+    const queryObject = [
+      { key: "consumerCode", value: propertyId },
+      { key: "tenantId", value: tenantId }
+    ];
+    try {
+      const payload = await httpRequest(
+        "billing-service/bill/v2/_fetchbill",
+        "_search",
+        queryObject
+      );
+      if (payload && payload.Bill.length > 0) {
+      showPay=true;
+      }
+      this.setState({showPay,fetchBill})
+    } catch (e) {
+      console.log(e);
+    }
+}
   render() {
     const { acknowledgeType = "success", messageHeader = "", message = "", receiptHeader = "PT_APPLICATION_NO_LABEL", receiptNo = "" } = this.props;
     const purpose = getQueryArg(window.location.href, "purpose");
@@ -95,7 +120,9 @@ class PTAcknowledgement extends React.Component {
     ) || '';
     let downloadMenu = [];
     let printMenu = [];
-
+if(purpose=='assessment'&&!this.state.fetchBill&&!this.state.showPay&&!this.state.fetchingBill){
+this.getFetchBillResponse(propertyId,tenantId)
+}
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
@@ -260,7 +287,7 @@ class PTAcknowledgement extends React.Component {
         labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
         labelKey: "PT_PROPERTY_ASSESSMENT_SUCCESS_SUB_MSG",
       };
-      Button1 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
+      Button1 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: this.state.showPay };
       Button2 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
@@ -485,6 +512,7 @@ class PTAcknowledgement extends React.Component {
 const mapStateToProps = state => {
   const { screenConfiguration, common, app, properties } = state || {};
   const { propertiesById } = properties;
+  const purpose = getQueryArg(window.location.href, "purpose");
   return {
     propertiesById,
     common,

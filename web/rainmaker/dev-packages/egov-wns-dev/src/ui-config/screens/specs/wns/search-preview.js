@@ -16,12 +16,13 @@ import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton
+  getDialogButton,
+  convertDateToEpoch
 } from "../utils";
 import { footerReview } from "./applyResource/footer";
 import { downloadPrintContainer } from "../wns/acknowledgement";
 import {
-  getFeesEstimateCard,
+  getFeesEstimateOverviewCard,
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
@@ -103,12 +104,19 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
-      let statePath = state.screenConfiguration.preparedFinalObject;
-      dispatch(prepareFinalObject("WaterConnection[0]", statePath.applyScreen));
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen"), "NA", null);
+      let parsedObject = parserFunction(applyScreenObject);
+      dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
 
       // to set documents 
-      if (statePath.applyScreen.documents !== undefined && statePath.applyScreen.documents !== null) {
-        setWSDocuments(statePath, dispatch);
+      if (applyScreenObject.documents !== undefined && applyScreenObject.documents !== null) {
+        setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
+        // await setDocuments(
+        //   state.screenConfiguration.preparedFinalObject,
+        //   "WaterConnection[0].documents",
+        //   "DocumentsData",
+        //   dispatch, "WS"
+        // );
       }
     }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
@@ -281,9 +289,9 @@ const headerrow = getCommonContainer({
 
 const estimate = getCommonGrayCard({
   header: getCommonSubHeader({ labelKey: "WS_TASK_DETAILS_FEE_ESTIMATE" }),
-  estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "viewBillToolipData",
-    isCardrequired: true
+  estimateSection: getFeesEstimateOverviewCard({
+    sourceJsonPath: "dataCalculation",
+    // isCardrequired: true
   }),
   buttonView: getDialogButton(
     "VIEW BREAKUP",
@@ -371,7 +379,6 @@ const screenConfig = {
       printCont
     );
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
-    // response.then(data=>console.log("applyresource",data));
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
@@ -432,12 +439,13 @@ const screenConfig = {
             moduleName: serviceModuleName,
             updateUrl: serviceUrl,
             data: {
-              buttonLabel: "SUBMIT_APPLICATION",
+              buttonLabel: "RESUBMIT",
               moduleName: serviceModuleName,
               isLast: false,
               dialogHeader: {
-                // labelName: "RESUBMIT Application",
-                labelKey: "WF_SUBMIT_APPLICATION"
+                labelName: "RESUBMIT Application",
+                labelKey: "WF_RESUBMIT_APPLICATION"
+
               },
               showEmployeeList: false,
               roles: "CITIZEN",
@@ -470,11 +478,6 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     payload = await getSearchResults(queryObjForSearch);
     payload.WaterConnection[0].service = service;
 
-    // to set documents 
-    if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
-      setWSDocuments(payload, dispatch);
-    }
-
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
@@ -484,11 +487,18 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
     }
-
+    // to set documents 
+    if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
+      setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
+    }
     estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
     if (estimate !== null && estimate !== undefined) {
       if (estimate.Calculation.length > 0) {
         await processBills(estimate, viewBillTooltip, dispatch);
+
+        // viewBreakUp 
+        estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
@@ -502,7 +512,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
 
     // to set documents 
     if (payload.SewerageConnections[0].documents !== null && payload.SewerageConnections[0].documents !== "NA") {
-      setWSDocuments(payload, dispatch);
+      setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
     }
 
     const convPayload = findAndReplace(payload, "NA", null)
@@ -516,6 +526,8 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     if (estimate !== null && estimate !== undefined) {
       if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
         await processBills(estimate, viewBillTooltip, dispatch);
+        // viewBreakUp 
+        estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
@@ -524,6 +536,25 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
   }
 };
+
+const parserFunction = (obj) => {
+  let parsedObject = {
+    roadCuttingArea: parseInt(obj.roadCuttingArea),
+    meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),
+    connectionExecutionDate: convertDateToEpoch(obj.connectionExecutionDate),
+    proposedWaterClosets: parseInt(obj.proposedWaterClosets),
+    proposedToilets: parseInt(obj.proposedToilets),
+    roadCuttingArea: parseInt(obj.roadCuttingArea),
+    meterId: parseInt(obj.meterId),
+    initialMeterReading: parseInt(obj.initialMeterReading),
+    noOfTaps: parseInt(obj.noOfTaps),
+    proposedWaterClosets: parseInt(obj.proposedWaterClosets),
+    proposedToilets: parseInt(obj.proposedToilets),
+    proposedTaps: parseInt(obj.proposedTaps)
+  }
+  obj = { ...obj, ...parsedObject }
+  return obj;
+}
 
 const processBills = async (data, viewBillTooltip, dispatch) => {
   let des, obj, groupBillDetails = [];

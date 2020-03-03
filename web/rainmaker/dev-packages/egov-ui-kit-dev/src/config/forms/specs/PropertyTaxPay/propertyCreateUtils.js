@@ -10,7 +10,6 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     ...properties[0].propertyDetails[0],
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-    status: "ACTIVE",
   };
   if (properties[0].owners && properties[0].owners.length) {
     properties[0].owners.map((obj) => {
@@ -96,7 +95,6 @@ export const createAssessmentPayload = (properties, propertyPayload) => {
     propertyId: properties.propertyId,
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-    status: "ACTIVE",
   };
 
   return Assessment;

@@ -147,7 +147,6 @@ export const updatePFOforSearchResults = async (
   state,
   dispatch,
   queryValue,
-  queryValuePurpose,
   tenantId
 ) => {
   let queryObject = [
@@ -197,13 +196,7 @@ export const updatePFOforSearchResults = async (
     );
   setDocsForEditFlow(state, dispatch);
   updateDropDowns(payload, action, state, dispatch, queryValue);
-  if (queryValuePurpose !== "cancel") {
-    set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
-    set(payload, getHygeneLevelJson(queryValuePurpose), "yes");
-    set(payload, getLocalityHarmedJson(queryValuePurpose), "No");
-  }
-  set(payload, getCheckBoxJsonpath(queryValuePurpose), true);
-
+ 
   setApplicationNumberBox(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
@@ -375,7 +368,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     set(queryObject[0], "tenantId", tenantId);
     set(queryObject[0], "workflowCode", "NewTL");
     set(queryObject[0], "applicationType", "NEW");
-
     if (queryObject[0].applicationNumber) {
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";

@@ -141,42 +141,42 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId);
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, 'print');
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, 'print');
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
       generatePdfFromDiv("download", applicationNumber)
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
       generatePdfFromDiv("print", applicationNumber)
     },

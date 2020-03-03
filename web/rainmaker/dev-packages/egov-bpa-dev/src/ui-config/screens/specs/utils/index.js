@@ -3756,12 +3756,51 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       });
     };
     prepareDocumentsView(state, dispatch, action, appState);
+    let permitList = get (state.screenConfiguration.preparedFinalObject, "BPA.additionalDetails.pendingapproval");
+    if(permitList && permitList.length > 0) {
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
+        true
+      );
+      dispatch(prepareFinalObject("permitList", permitList));
+    }
     if(wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
       let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
       prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
+    if(wfState.state.state == "PENDINGAPPROVAL" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+      let checkListConditions = payload.MdmsRes.BPA.CheckList;
+      prepareapprovalQstns(state, dispatch, action, checkListConditions, appWfState);
+    }
   } catch (e) {
     console.log(e);
+  }
+}
+
+const prepareapprovalQstns = async (state, dispatch, action, checkListConditions, appWfState) => {
+  let bpaAppDetails = get ( state.screenConfiguration.preparedFinalObject, "BPA", {});
+  let approvalQuastions  = [];
+  checkListConditions.forEach(wfDoc => {
+    if(wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) { 
+      approvalQuastions = wfDoc.conditions;
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.permitConditions.visible",
+        true
+      );
+    }
+  });
+  let approvalConditions = approvalQuastions;
+  let approvalConditionsWithValue = [];
+  approvalConditions.forEach(condtn => {
+    approvalConditionsWithValue.push({
+      condition : condtn,
+      conditionValue : false
+    })
+  })
+  if(approvalConditions && approvalConditions.length > 0){
+    dispatch(prepareFinalObject("permitConditions", approvalConditionsWithValue)); 
   }
 }
 
@@ -4236,4 +4275,42 @@ export const setProposedBuildingData = async (state, dispatch) => {
     );
     return tableData;
   }
+}
+
+export const getConditionsInPermitList = async (action, state, dispatch) => {
+  let permitConditions = get(
+    state,
+    "screenConfiguration.preparedFinalObject.permitTemp",
+    []
+  );
+  let addedConditions = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.tempAdded",
+    []
+  );
+  let additionalDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.additionalDetails",
+    {}
+  );
+
+  let permitDetails = [], finalPermitList = [];
+
+  if(permitConditions && permitConditions.length > 0) {
+    permitConditions.forEach(cndtn => {
+      finalPermitList.push(cndtn);
+    })
+  }
+  
+  if(addedConditions && addedConditions.length > 0) {
+    addedConditions.forEach(cndtn => {
+     if(additionalDetails && additionalDetails.pendingapproval && additionalDetails.pendingapproval.length > 0){
+      if(cndtn && cndtn.isDeleted !== false) {
+        finalPermitList.push(cndtn.conditions);
+      }
+     }
+    })
+  }
+  
+  dispatch(prepareFinalObject( "BPA.additionalDetails.pendingapproval" ,finalPermitList));
 }
