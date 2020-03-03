@@ -1363,9 +1363,10 @@ class FormWizard extends Component {
   };
 
   getEstimates = async () => {
-    let { search: search1 } = this.props.location;
-    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
-    if (isAssesment1) {
+    let { search } = this.props.location;
+    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    if (isAssesment || isReassesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
           window.scrollTo(0, 0);
@@ -1381,9 +1382,10 @@ class FormWizard extends Component {
 
   estimate = async () => {
     let { showSpinner, location ,hideSpinner} = this.props;
-    let { search: search1 } = location;
-    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
-    if (isAssesment1) {
+    let { search } = location;
+    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    if (isAssesment || isReassesment) {
       let prepareFormData = { ...this.props.prepareFormData };
       showSpinner();
       const financialYearFromQuery = getFinancialYearFromQuery();
