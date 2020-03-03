@@ -379,7 +379,7 @@ class WnsHowItWorks extends Component {
     const { urls, history } = this.props;
     return (
       <Screen className="screen-with-bredcrumb">
-        <BreadCrumbs url={urls} history={history} />
+        <BreadCrumbs url={urls} history={history} label="COMMON_HOW_IT_WORKS"/>
         <div className="form-without-button-cont-generic">
           <Card
             className="how-it-works-card"
