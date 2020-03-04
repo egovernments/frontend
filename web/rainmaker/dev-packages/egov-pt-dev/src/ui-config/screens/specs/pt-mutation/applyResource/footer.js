@@ -167,7 +167,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
     propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
     propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type = propertyPayload.ownershipCategoryTemp.split('.')[1];
+    propertyPayload.institution.type =  propertyPayload.institutionTemp.institutionType;
 
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
@@ -181,7 +181,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
     propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
     propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type = propertyPayload.ownershipCategoryTemp.split('.')[1];
+    propertyPayload.institution.type =  propertyPayload.institutionTemp.institutionType;
 
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";

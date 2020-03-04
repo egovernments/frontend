@@ -114,8 +114,8 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    transferorDetails,
-    transferorInstitutionSummary,
+    transferorDetails: {...transferorSummary},
+    transferorInstitutionDetails:{...transferorInstitutionSummary},
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -180,6 +180,19 @@ const getPropertyData = async (action, state, dispatch) => {
       queryObject,
       
     );
+    
+  if (payload&&payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+    
+    let owners = [];
+    payload.Properties[0].owners.map(owner => {
+      if (owner.status == "ACTIVE") {
+        owners.push(owner);
+      } 
+    });
+    
+    
+    payload.Properties[0].ownersInit = owners;
+  }
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
 
     if (
@@ -209,22 +222,27 @@ const getPropertyData = async (action, state, dispatch) => {
       set(
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-        { display: "none" }
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
-        { display: "none" }
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
         {display: "none"}
       );
       set(
         action.screenConfig,
-      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.props.style",
-      {}
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
+        {display: "none"}
+      );
+      set(
+        action.screenConfig,
+       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        {}
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.props.style",
+        {}
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary.props.style",
+        {display: "none"}
       );
     }else{
       // set(
@@ -234,13 +252,14 @@ const getPropertyData = async (action, state, dispatch) => {
       // );
       set(
         action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        "components.div.children.formwizardFirstStep.children.transferorInstitutionDetails.props.style",
         { display: "none" }
       );
     
       set(
         action.screenConfig,
         "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary.props.style",
+        
         { display: "none" }
       );
     }
@@ -295,6 +314,27 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+
+    let OwnerShipCategory=get(
+      payload,
+      "MdmsRes.common-masters.OwnerShipCategory"
+    )
+    let institutions=[]
+    OwnerShipCategory = OwnerShipCategory.map(category=>{
+      if(category.code.includes("INDIVIDUAL")){
+        return category.code;
+      }
+      else{
+        let code=category.code.split(".");
+        institutions.push({code:code[1],parent:code[0],active:true});
+       return code[0] ;
+      }
+      });
+    OwnerShipCategory=OwnerShipCategory.filter((v,i,a)=>a.indexOf(v)===i)
+    OwnerShipCategory = OwnerShipCategory.map(val=>{return{code:val,active:true}});
+    payload.MdmsRes['common-masters'].Institutions=institutions;
+    payload.MdmsRes['common-masters'].OwnerShipCategory=OwnerShipCategory;
+    
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -339,31 +379,7 @@ const getFirstListFromDotSeparated = list => {
   return list;
 };
 
-const setCardsIfMultipleBuildings = (state, dispatch) => {
-  if (
-    get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings"
-    ) === "MULTIPLE"
-  ) {
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer",
-        "props.style",
-        { display: "none" }
-      )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer",
-        "props.style",
-        {}
-      )
-    );
-  }
-};
+
 
 export const prepareEditFlow = async (
   state,
