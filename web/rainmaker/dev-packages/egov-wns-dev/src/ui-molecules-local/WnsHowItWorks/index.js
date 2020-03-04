@@ -153,58 +153,6 @@ class WnsHowItWorks extends Component {
             </p>
           </div>
 
-          <div className="col-sm-4" style={videoCardStyle}>
-            <iframe
-              allowFullScreen="allowFullScreen"
-              frameBorder="0"
-              src="https://www.youtube.com/embed/uF_G9dk_GBY?rel=0"
-            />
-            <h4>
-              <Label label="CS_HOWITWORKS_ASSESSMENTS_INCOMPLETE" />
-            </h4>
-            <p>
-              <Label label="CS_HOWITWORKS_ASSESSMENTS_INCOMPLETE_DISCRIPTION" />
-            </p>
-          </div>
-          <div className="col-sm-4" style={videoCardStyle}>
-            <iframe
-              allowFullScreen="allowFullScreen"
-              frameBorder="0"
-              src="https://www.youtube.com/embed/8V1k-v93BRg?rel=0"
-            />
-            <h4>
-              <Label label="CS_HOWITWORKS_FULL_PAY" />
-            </h4>
-            <p>
-              <Label label="CS_HOWITWORKS_FULL_PAY_DISCRIPTION" />
-            </p>
-          </div>
-          <div className="col-sm-4" style={videoCardStyle}>
-            <iframe
-              allowFullScreen="allowFullScreen"
-              frameBorder="0"
-              src="https://www.youtube.com/embed/gw7bS_-7aM8?rel=0"
-            />
-            <h4>
-              <Label label="CS_HOWITWORKS_PROPERTY_PARTIAL_PAYMENT" />
-            </h4>
-            <p>
-              <Label label="CS_HOWITWORKS_PROPERTY_PARTIAL_PAYMENT_DISCRIPTION" />
-            </p>
-          </div>
-          <div className="col-sm-4" style={videoCardStyle}>
-            <iframe
-              allowFullScreen="allowFullScreen"
-              frameBorder="0"
-              src="https://www.youtube.com/embed/fVRd6ylStdY?rel=0"
-            />
-            <h4>
-              <Label label="CS_HOWITWORKS_PROPERTY_ASS" />
-            </h4>
-            <p>
-              <Label label="CS_HOWITWORKS_PROPERTY_ASS_DISCRIPTION" />
-            </p>
-          </div>
         </div>
 
         <div className="row" style={{ paddingTop: "10px" }}>
@@ -255,59 +203,6 @@ class WnsHowItWorks extends Component {
             </p>
           </div>
 
-          <div className="col-sm-4">
-            <iframe
-              allowFullScreen="allowFullScreen"
-              frameBorder="0"
-              src="https://www.youtube.com/embed/r6k7_J7jkYc"
-            />
-            <h4>
-              <Label label="CS_HOWITWORKS_PROPERTY_FULL_PAYMENT1" />
-            </h4>
-            <p>
-              <Label label="CS_HOWITWORKS_PROPERTY_FULL_PAYMENT1_DISCRIPTION" />
-            </p>
-          </div>
-          <div className="col-sm-4">
-            <iframe
-              allowFullScreen="allowFullScreen"
-              frameBorder="0"
-              src="https://www.youtube.com/embed/oQu4qDNWP7I"
-            />
-            <h4>
-              <Label label="CS_HOWITWORKS_PROPERTY_PARTIAL1_PAY" />
-            </h4>
-            <p>
-              <Label label="CS_HOWITWORKS_PROPERTY_EXPLAIN" />
-            </p>
-          </div>
-          <div className="col-sm-4">
-            <iframe
-              allowFullScreen="allowFullScreen"
-              frameBorder="0"
-              src="https://www.youtube.com/embed/3s6GtEWmf00"
-            />
-            <h4>
-              <Label label="CS_HOWITWORKS_PROPERTY_COMPLETE_ASS" />
-            </h4>
-            <p>
-              <Label label="CS_HOWITWORKS_PROPERTY_COMPLETE_ASS_VIDEO" />
-            </p>
-          </div>
-
-          <div className="col-sm-4">
-            <iframe
-              allowFullScreen="allowFullScreen"
-              frameBorder="0"
-              src="https://www.youtube.com/embed/mKLsORPO1o8"
-            />
-            <h4>
-              <Label label="CS_HOWITWORKS_PROPERTY_INCOMP_ASS" />
-            </h4>
-            <p>
-              <Label label="CS_HOWITWORKS_PROPERTY_INCOMP_ASS_VIDEO" />
-            </p>
-          </div>
         </div>
 
         <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
