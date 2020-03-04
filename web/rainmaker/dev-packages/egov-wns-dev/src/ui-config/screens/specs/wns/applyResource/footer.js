@@ -43,7 +43,7 @@ const moveToReview = (state, dispatch) => {
     if (isDocumentRequired) {
       if (documents && documents.length > 0) {
         if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "dropdown.value")) {
+          if (get(documentsFormat[i], "dropdown.value") !== null) {
             validateDocumentField = true;
           } else {
             dispatch(
@@ -222,7 +222,8 @@ const callBackForNext = async (state, dispatch) => {
     if (moveToReview(state, dispatch)) {
       let applyFeild = get(state, "screenConfiguration.preparedFinalObject.applyScreen", {});
       dispatch(prepareFinalObject("applyObject", applyFeild));;
-      isFormValid = true; hasFieldToaster = false; }
+      isFormValid = true; hasFieldToaster = false;
+    }
     else { isFormValid = false; hasFieldToaster = true; }
     await pushTheDocsUploadedToRedux(state, dispatch);
   }

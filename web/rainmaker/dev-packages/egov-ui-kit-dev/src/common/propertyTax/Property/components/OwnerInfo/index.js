@@ -180,12 +180,7 @@ class OwnerInfo extends Component {
               ? {
                   key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
                   value:
-                    (institution &&
-                      institution.type &&
-                      generalMDMSDataById &&
-                      generalMDMSDataById["OwnerShipCategory"] &&
-                      generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory]&&
-                      generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
+                  getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`)||
                     "NA",
                 }
               : {

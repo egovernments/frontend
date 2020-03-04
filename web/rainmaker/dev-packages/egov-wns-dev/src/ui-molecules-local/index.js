@@ -79,6 +79,11 @@ const PastPayments = Loadable({
   loading: () => <Loading />
 });
 
+const WnsHowItWorks = Loadable({
+  loader: () => import("./WnsHowItWorks"),
+  loading: () => <Loading />
+});
+
 const PastPaymentsDetails = Loadable({
   loader: () => import("./PastPaymentsDetails"),
   loading: () => <Loading />
@@ -124,6 +129,7 @@ export {
   NewConnection,
   MyApplications,
   Applications,
+  WnsHowItWorks,
   FeesEstimateOverviewCard
 
   // PropertyTaxDetails
