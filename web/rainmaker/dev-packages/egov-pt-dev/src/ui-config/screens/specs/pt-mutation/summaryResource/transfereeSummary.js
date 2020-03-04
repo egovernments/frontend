@@ -42,25 +42,7 @@ export const transfereeSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        // children: {
-        //   editIcon: {
-        //     uiFramework: "custom-atoms",
-        //     componentPath: "Icon",
-        //     props: {
-        //       iconName: "edit"
-        //     }
-        //   },
-          // buttonLabel: getLabel({
-          //   labelName: "Edit",
-          //   labelKey: "PT_EDIT"
-          // })
-        // },
-        // onClickDefination: {
-        //   action: "condition",
-        //   callBack: (state, dispatch) => {
-        //     gotoApplyWithStep(state, dispatch, 0);
-        //   }
-        // }
+      
       }
     }
   },
@@ -203,17 +185,7 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
           align: "right"
         },
         children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
+        
         },
         // onClickDefination: {
         //   action: "condition",
@@ -267,7 +239,7 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         labelKey: "PT_INSTI_OWNERSHIP_TYPE"
       },
       {
-        jsonPath: "Property.ownershipCategory",
+        jsonPath: "Property.ownershipCategoryTemp",
         callBack: checkValueForNA
         // callBack: value => {
         //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
