@@ -18,22 +18,25 @@ import {
 import set from "lodash/set";
 
 const getEstimateDataAfterAdhoc = async (state, dispatch) => {
-  const TLRequestBody = cloneDeep(
+  const WSRequestBody = cloneDeep(
     get(state.screenConfiguration.preparedFinalObject, "WaterConnection")
   );
-  set(TLRequestBody[0], "action", "ADHOC");
-  const TLpayload = await httpRequest(
+  let serviceUrl = WSRequestBody[0].service === "WATER" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+  console.log(serviceUrl);
+
+  set(WSRequestBody[0], "action", "ADHOC");
+  const WSpayload = await httpRequest(
     "post",
     "/ws-services/wc/_update",
     "",
     [],
-    { WaterConnection: TLRequestBody }
+    { WaterConnection: WSRequestBody }
   );
 
   // clear data from form
 
   const billPayload = await createEstimateData(
-    TLpayload.Licenses[0],
+    WSpayload.Licenses[0],
     "LicensesTemp[0].estimateCardData",
     dispatch,
     window.location.href
@@ -94,24 +97,23 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
 const updateAdhoc = (state, dispatch) => {
   const adhocAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "WaterConnection[0].adhocDetails.adhocPenalty"
+    "WaterConnection[0].additionalDetails.adhocPenalty"
   );
   const rebateAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "WaterConnection[0].adhocDetails.adhocExemption"
+    "WaterConnection[0].additionalDetails.adhocRebate"
   );
   if (adhocAmount || rebateAmount) {
     const totalAmount = get(
       state.screenConfiguration.preparedFinalObject,
-      "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
+      "dataCalculation.totalAmount"
     );
     if (rebateAmount && rebateAmount > totalAmount) {
       dispatch(
         toggleSnackbar(
           true,
           {
-            labelName: "Rebate should be less than or equal to total amount!",
-            labelKey: "ERR_REBATE_GREATER_THAN_AMOUNT"
+            labelKey: "ERR_WS_REBATE_GREATER_THAN_AMOUNT"
           },
           "warning"
         )
@@ -125,7 +127,7 @@ const updateAdhoc = (state, dispatch) => {
         true,
         {
           labelName: "Enter at least one field",
-          labelKey: "ERR_ENTER_ATLEAST_ONE_FIELD"
+          labelKey: "ERR_WS_ENTER_ATLEAST_ONE_FIELD"
         },
         "warning"
       )
@@ -238,9 +240,10 @@ export const adhocPopup = getCommonContainer({
           props: {
             style: {
               width: "90%"
-            }
+            },
+            type: "number"
           },
-          jsonPath: "WaterConnection[0].additionalDetails.adhocPenalty"
+          jsonPath: "WaterConnection[0].additionalDetails.adhocPenalty",
         }),
         penaltyReason: getSelectField({
           label: {
@@ -319,9 +322,10 @@ export const adhocPopup = getCommonContainer({
           props: {
             style: {
               width: "90%"
-            }
+            },
+            type: "number"
           },
-          jsonPath: "WaterConnection[0].additionalDetails.adhocRebate"
+          jsonPath: "WaterConnection[0].additionalDetails.adhocRebate",
         }),
         rebateReason: getSelectField({
           label: {
