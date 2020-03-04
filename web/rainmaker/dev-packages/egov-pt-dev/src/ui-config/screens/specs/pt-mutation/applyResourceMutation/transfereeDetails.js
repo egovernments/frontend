@@ -520,7 +520,9 @@ export const transfereeDetails = getCommonCard({
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
-          let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails"
+          let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
+
+
           let applicantType = get(
             state,
             "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.Institutions",
@@ -542,19 +544,26 @@ export const transfereeDetails = getCommonCard({
           "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer"
           let institutionContainerJsonPath =
           "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
-          let institutionTypeContainerJsonPath="components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer"
+          let institutionTypeContainerJsonPath="components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
+          let singleMultipleOwnerPath="components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary";
+          let institutionPath="components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary";
          
           if (action.value.includes("SINGLEOWNER")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, true);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, false);
             showComponent(dispatch, institutionTypeContainerJsonPath, false);
+            showComponent(dispatch, singleMultipleOwnerPath, true);
+            showComponent(dispatch, institutionPath, false);
             
           } else if (action.value.includes("INSTITUTIONAL")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, true);
             showComponent(dispatch, institutionTypeContainerJsonPath, true);
+            showComponent(dispatch, singleMultipleOwnerPath, false);
+            showComponent(dispatch, institutionPath, true);
+            
            
           }
           else if (action.value.includes("MULTIPLEOWNERS")) {
@@ -562,6 +571,9 @@ export const transfereeDetails = getCommonCard({
             showComponent(dispatch, multipleApplicantContainerJsonPath, true);
             showComponent(dispatch, institutionContainerJsonPath, false);
             showComponent(dispatch, institutionTypeContainerJsonPath, false);
+            showComponent(dispatch, singleMultipleOwnerPath, true);
+            showComponent(dispatch, institutionPath, false);
+            
             
           }
         },

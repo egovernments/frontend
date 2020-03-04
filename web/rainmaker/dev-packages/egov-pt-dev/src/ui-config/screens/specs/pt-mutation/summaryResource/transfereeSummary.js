@@ -184,9 +184,19 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        children: {
-        
-        },
+        // children: {
+        //   editIcon: {
+        //     uiFramework: "custom-atoms",
+        //     componentPath: "Icon",
+        //     props: {
+        //       iconName: "edit"
+        //     }
+        //   },
+        //   buttonLabel: getLabel({
+        //     labelName: "Edit",
+        //     labelKey: "PT_EDIT"
+        //   })
+        // },
         // onClickDefination: {
         //   action: "condition",
         //   callBack: (state, dispatch) => {

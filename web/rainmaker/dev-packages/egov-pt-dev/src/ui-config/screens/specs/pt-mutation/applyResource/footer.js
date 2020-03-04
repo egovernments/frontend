@@ -329,8 +329,14 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
+    let isInstitutionTypeValid=validateFields(
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
+       state,
+      dispatch
+    );
 
-    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || isInstitutionValid;
+
+    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || (isInstitutionValid && isInstitutionTypeValid);
 
     let isApplicantTypeValid = validateFields(
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
