@@ -335,6 +335,12 @@ class WorkFlowContainer extends React.Component {
       }
     } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       baseUrl = "wns"
+      if(moduleName === "NewWS1"){
+        bservice="WS.ONE_TIME_FEE"
+      }else{
+        bservice="SW.ONE_TIME_FEE"
+      }
+      
     } else {
       baseUrl = process.env.REACT_APP_NAME==="Citizen" ? "tradelicense-citizen" : "tradelicence";
     }
@@ -513,6 +519,9 @@ class WorkFlowContainer extends React.Component {
     // } else {
     //   showFooter = process.env.REACT_APP_NAME === "Citizen" ? true : true;
     // }
+    if(moduleName === 'BPA' || moduleName === 'BPA_LOW') {
+      showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (

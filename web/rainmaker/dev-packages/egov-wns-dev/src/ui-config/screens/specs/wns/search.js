@@ -12,8 +12,10 @@ const header = getCommonHeader({
 });
 
 const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-  dispatch(prepareFinalObject("LicensesTemp", []));
+  dispatch(prepareFinalObject("WaterConnection", []));
+  dispatch(prepareFinalObject("SewerageConnection", []));
+  dispatch(prepareFinalObject("applyScreen", {}));
+  dispatch(prepareFinalObject("searchScreen", {}));
   dispatch(setRoute("/wns/apply"));
 };
 
