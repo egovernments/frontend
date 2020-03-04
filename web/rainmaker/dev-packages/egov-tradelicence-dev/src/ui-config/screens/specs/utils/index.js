@@ -3,7 +3,7 @@ import {
   getTextField,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -2171,10 +2171,33 @@ export const getTradeTypeDropdownData = tradeTypes => {
 };
 
 export const fillOldLicenseData = async (state, dispatch) => {
+const oldLicenseNumber =get(state.screenConfiguration.preparedFinalObject,"Licenses[0].oldLicenseNumber")
+const tenantId= get(state.screenConfiguration.preparedFinalObject,"Licenses[0].tradeLicenseDetail.address.tenantId")||getTenantId();
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "applicationNumber", value: oldLicenseNumber }
+  ];
+  let response = await getSearchResults(queryObject);
+if(response.Licenses.length<1){
+  dispatch(toggleSpinner());
+ dispatch(
+   toggleSnackbar(
+     true,
+     {
+       labelName:
+         "Entered Application Number Does not exist",
+       labelKey: "PUNJAB_TL_RENEWAL_OLD_APPLICATION_NOT_MSG"
+     },
+     "warning"
+   )
+ );
+}
+else{
   dispatch(
     initScreen(
       "apply",
       get(state.screenConfiguration, "screenConfig.apply", {})
     )
   );
+}
 };
