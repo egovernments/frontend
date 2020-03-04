@@ -20,20 +20,6 @@ import printJS from 'print-js';
 
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
-    let existingDocs = [];
-    if (getQueryArg(window.location.href, "applicationNumber")) {
-        let applicationNo = getQueryArg(window.location.href, "applicationNumber");
-        if (applicationNo.includes("WS")) {
-            existingDocs = get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", []);
-            if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
-            dispatch(prepareFinalObject("WaterConnection[0].documents", existingDocs));
-            dispatch(prepareFinalObject())
-        } else {
-            existingDocs = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", []);
-            if (existingDocs.length > 0) { existingDocs.forEach(ele => ele.status = "INACTIVE"); }
-            dispatch(prepareFinalObject("SewerageConnection[0].documents", existingDocs));
-        }
-    }
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
         Object.keys(reduxDocuments).forEach(async key => {
@@ -47,7 +33,7 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                     element.documentCode = reduxDocuments[key].documentType;
                     element.status = "ACTIVE";
                 });
-                uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents).concat(existingDocs);
+                uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
                 let docArrayFromFileStore = await setDocsForEditFlow(state);
                 uploadedDocs.forEach(obj => {
                     let element = obj.fileStoreId;
@@ -616,25 +602,6 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
 };
 
 export const applyForWaterOrSewerage = async (state, dispatch) => {
-    let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
-    let uploadedDocs = [];
-    if (reduxDocuments !== null && reduxDocuments !== undefined) {
-        Object.keys(reduxDocuments).forEach(key => {
-            if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
-                reduxDocuments[key].documents.forEach(element => {
-                    if (reduxDocuments[key].dropdown !== undefined && reduxDocuments[key].dropdown.value !== null) {
-                        element.documentType = reduxDocuments[key].dropdown.value;
-                    } else {
-                        element.documentType = reduxDocuments[key].documentCode;
-                    }
-                    element.documentCode = reduxDocuments[key].documentType;
-                    element.status = "ACTIVE";
-                });
-                uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
-                dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
-            }
-        });
-    }
     if (get(state, "screenConfiguration.preparedFinalObject.applyScreen.water") && get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")) {
         let response = await applyForBothWaterAndSewerage(state, dispatch);
         return response;
