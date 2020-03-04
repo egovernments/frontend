@@ -11,8 +11,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
-  setBusinessServiceDataToLocalStorage,
-  getFileUrlFromAPI,setDocuments
+  setBusinessServiceDataToLocalStorage,setDocuments
 } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -21,8 +20,7 @@ import {
   setValidToFromVisibilityForSV,
   getDialogButton
 } from "../utils";
-
-import { footerReview, downloadPrintContainer,footerReviewTop  } from "./applyResource/footer";
+import { downloadPrintContainer,footerReviewTop  } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -34,6 +32,8 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import get from "lodash/get";
 import set from "lodash/set";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale} from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -228,8 +228,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       financialYear
     );
 
-
-    process.env.REACT_APP_NAME === "Citizen"
+    if(status !== "INITIATED"){
+      process.env.REACT_APP_NAME === "Citizen"
       ? set(
           action,
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
@@ -240,6 +240,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
           printCont
         );
+    }   
 
     // Get approval details based on status and set it in screenconfig
 
@@ -454,6 +455,8 @@ const screenConfig = {
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     //To set the application no. at the  top
     set(
       action.screenConfig,
