@@ -194,7 +194,7 @@ const getHeader=(applicationNumber,moduleName)=>{
       return getCommonContainer({
         header: getCommonHeader({
           labelName: `Application for Transfer of Ownership`, 
-          labelKey: "PT_APPLICATION HEADER"
+          labelKey: "PT_APPLICATION_HEADER"
         }),
       })
     

@@ -361,7 +361,7 @@ const institutionInformation = () => {
               labelKey: "PT_MUTATION_AUTHORISED_LANDLINE_PLACEHOLDER"
             },
             required:true,
-            pattern: getPattern("MobileNo"),
+            pattern: getPattern("Landline"),
             jsonPath: "Property.institutionTemp.landlineNumber"
           }),
           authorisedEmail: getTextField({
