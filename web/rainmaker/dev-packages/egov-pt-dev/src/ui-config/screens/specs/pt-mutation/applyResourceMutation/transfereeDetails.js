@@ -213,6 +213,40 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
+      // specialCategoryDocument: getTextField({
+      //   label: {
+      //     labelName: "Document Id No.",
+      //     labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_NO_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Document Id No.",
+      //     labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_PLACEHOLDER"
+      //   },
+      //   pattern: getPattern("Address"),
+      //   required:true,
+      //   // errorMessage: "Invalid Address",
+      //   jsonPath:
+      //     "Property.ownersTemp[0].categoryDocumentNo",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   },
+      //   props:{
+      //     className:"applicant-details-error"
+      //   },
+      //   beforeFieldChange:(action, state, dispatch) => {
+      //     const categoryDocumentJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocument";
+      //     if(action.value === "NONE"){
+      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.display", false));
+      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.value", ""));
+      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.helperText", ""));
+      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.error", false));
+      //     }else{
+      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.disabled", false));
+      //     }
+      //   }
+      // }),
       applicantEmail: getTextField({
         label: {
           labelName: "Email",
@@ -392,7 +426,7 @@ const institutionInformation = () => {
               labelKey: "PT_MUTATION_AUTHORISED_LANDLINE_PLACEHOLDER"
             },
             required:true,
-            pattern: getPattern("MobileNo"),
+            pattern: getPattern("Landline"),
             jsonPath: "Property.institutionTemp.landlineNumber"
           }),
           authorisedEmail: getTextField({
