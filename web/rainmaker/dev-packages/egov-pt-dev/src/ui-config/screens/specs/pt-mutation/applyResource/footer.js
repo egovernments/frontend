@@ -265,11 +265,11 @@ const validateMobileNumber = (state) => {
     const mobileNumbers = owners.map(owner => {
       return owner.mobileNumber
     })
-    newOwners.map(owner => {
-      if (names.includes(owner.name)) {
-        err = "OWNER_NAME_SAME";
-      }
-    })
+    // newOwners.map(owner => {
+    //   if (names.includes(owner.name)) {
+    //     err = "OWNER_NAME_SAME";
+    //   }
+    // })
     newOwners.map(owner => {
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
@@ -287,16 +287,13 @@ const validateMobileNumber = (state) => {
     })
 
     newOwners.map(owner => {
-      if (names.includes(owner.name)) {
-        err = "OWNER_NAME_SAME";
-      }
+      // if (names.includes(owner.name)) {
+      //   err = "OWNER_NAME_SAME";
+      // }
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
       }
     })
-
-
-
   }
 
 

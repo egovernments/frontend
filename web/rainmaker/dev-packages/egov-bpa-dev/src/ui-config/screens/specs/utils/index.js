@@ -2845,14 +2845,14 @@ const riskType = (state, dispatch) => {
       (buildingHeight >= riskType[0].fromBuildingHeight)) {
       scrutinyRiskType = "HIGH"
     }
-  if(scrutinyRiskType === "LOW"){
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "BPA_LOW" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-  }
+  // if(scrutinyRiskType === "LOW"){
+  //   const tenantId = getQueryArg(window.location.href, "tenantId");
+  //   const queryObject = [
+  //     { key: "tenantId", value: tenantId },
+  //     { key: "businessServices", value: "BPA_LOW" }
+  //   ];
+  //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  // }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 

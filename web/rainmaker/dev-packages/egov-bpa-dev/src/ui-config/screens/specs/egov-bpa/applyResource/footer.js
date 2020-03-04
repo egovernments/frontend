@@ -787,10 +787,10 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: updateBpaApplication
     },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action : "SEND_TO_CITIZEN"
-    },
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action : "SEND_TO_CITIZEN"
+    // },
     visible: false
   }
 });
