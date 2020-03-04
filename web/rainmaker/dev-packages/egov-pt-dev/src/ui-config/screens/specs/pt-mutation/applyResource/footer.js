@@ -420,7 +420,7 @@ const callBackForNext = async (state, dispatch) => {
       temp = { ...institutionTemp }
       temp.name = institutionTemp.institutionName;
       temp.fatherOrHusbandName = institutionTemp.name;
-
+      temp.permanentAddress = institutionTemp.correspondenceAddress;
       const ownerTemp = [temp];
       dispatch(
         prepareFinalObject(
