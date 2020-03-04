@@ -513,6 +513,9 @@ class WorkFlowContainer extends React.Component {
     // } else {
     //   showFooter = process.env.REACT_APP_NAME === "Citizen" ? true : true;
     // }
+    if(moduleName === 'BPA' || moduleName === 'BPA_LOW') {
+      showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (

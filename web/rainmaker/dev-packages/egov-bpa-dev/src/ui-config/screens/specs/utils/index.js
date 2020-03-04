@@ -2738,7 +2738,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: getTenantId(),
           userName: `${ownerNo}`
         }
       );
@@ -3104,7 +3104,7 @@ export const generateBillForBPA = async (dispatch, applicationNumber, tenantId, 
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: businessService }
+        { key: "businessService", value: businessService }
       ];
       const payload = await createBill(queryObj,dispatch);
       if (payload && payload.Bill[0]) {
@@ -3699,7 +3699,7 @@ export const getMdmsDataForBpa = async queryObject => {
 export const requiredDocumentsData = async (state, dispatch, action) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",
