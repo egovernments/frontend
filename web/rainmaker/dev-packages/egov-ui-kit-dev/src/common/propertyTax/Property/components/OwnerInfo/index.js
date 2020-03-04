@@ -93,7 +93,7 @@ class OwnerInfo extends Component {
     const { properties } = this.props;
     const { propertyId, tenantId } = properties;
     if (this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory") {
-      if (properties.status == "INWORKFLOW") {
+      if (properties.status != "ACTIVE") {
         this.props.toggleSnackbarAndSetText(
           true,
           { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
