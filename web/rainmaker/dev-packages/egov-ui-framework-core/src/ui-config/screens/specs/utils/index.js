@@ -501,6 +501,8 @@ export const getPattern = type => {
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
+    case "Landline":
+        return /^[0-9]{11}$/i;
     case "PropertyID":
       return /^[a-zA-z0-9\s\\/\-]$/i;
     case "ElectricityConnNo":
