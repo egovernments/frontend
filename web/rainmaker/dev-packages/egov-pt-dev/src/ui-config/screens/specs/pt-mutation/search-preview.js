@@ -297,10 +297,10 @@ const setSearchResponse = async (
     let owners = [];
     property.owners.map(owner => {
       if (owner.status == "ACTIVE") {
-        owners.push(owner);
-
-      } else {
+      
         ownersTemp.push(owner);
+      } else {
+        owners.push(owner);
       }
     });
 
