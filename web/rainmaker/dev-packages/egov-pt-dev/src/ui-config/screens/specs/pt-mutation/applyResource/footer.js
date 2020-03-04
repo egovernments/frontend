@@ -263,7 +263,9 @@ const validateMobileNumber = (state) => {
       return owner.name
     })
     const mobileNumbers = owners.map(owner => {
-      return owner.mobileNumber
+      if(owner.status== "ACTIVE"){
+        return owner.mobileNumber;
+      } 
     })
     // newOwners.map(owner => {
     //   if (names.includes(owner.name)) {
@@ -287,9 +289,7 @@ const validateMobileNumber = (state) => {
     })
 
     newOwners.map(owner => {
-      // if (names.includes(owner.name)) {
-      //   err = "OWNER_NAME_SAME";
-      // }
+
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
       }
@@ -426,7 +426,7 @@ const callBackForNext = async (state, dispatch) => {
       temp = { ...institutionTemp }
       temp.name = institutionTemp.institutionName;
       temp.fatherOrHusbandName = institutionTemp.name;
-
+      temp.permanentAddress = institutionTemp.correspondenceAddress;
       const ownerTemp = [temp];
       dispatch(
         prepareFinalObject(
