@@ -281,14 +281,16 @@ const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_TASK_DETAILS"
   }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-wns",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: applicationNumber
+  applicationLicence: getCommonContainer({
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-wns",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: applicationNumber
+      }
     }
-  }
+  })
 });
 
 const estimate = getCommonGrayCard({
