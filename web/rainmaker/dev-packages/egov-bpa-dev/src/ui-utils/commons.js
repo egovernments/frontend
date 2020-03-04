@@ -189,7 +189,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         doc.fileStore = docItem.fileStoreId;
         doc.fileName = docItem.fileName;
         doc.fileUrl = docItem.fileUrl;
-        if(docItem.id) {
+        if(doc.id) {
           doc.id = docItem.id;
         }
         requiredDocuments.push(doc);
@@ -232,7 +232,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     BPAUploadeddocuments.forEach(upDoc => {
       requiredDocuments.forEach(doc => {
         if(upDoc && doc && upDoc.documentType && doc.documentType && upDoc.documentType === doc.documentType) {
-          doc.id = upDoc.id;
+          // doc.id = upDoc.id;
           bpaComparingDocuments.push(doc);
         }
       })

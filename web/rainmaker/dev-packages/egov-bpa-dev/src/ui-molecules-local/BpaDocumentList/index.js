@@ -18,7 +18,10 @@ import { connect } from "react-redux";
 import { UploadMultipleFile } from "../../ui-molecules-local";
 import Typography from "@material-ui/core/Typography";
 import { UploadedDocument } from "egov-ui-framework/ui-atoms";
-import { MultiDownloadCard } from "egov-ui-framework/ui-molecules";
+import  MultiDownloadCard  from "../MultiDownloadCard";
+import {
+  localStorageGet,
+} from "egov-ui-kit/utils/localStorageUtils";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -125,14 +128,16 @@ const requiredIcon = (
 
 class BpaDocumentList extends Component {
   state = {
-    uploadedDocIndex: 0
+    uploadedDocIndex: 0,
+    createdBy: ''
   };
 
   componentDidMount = () => {
     const {
       documentsList, 
       documentDetailsUploadRedux = {}, 
-      prepareFinalObject
+      prepareFinalObject,
+      bpaDetails
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
@@ -189,6 +194,9 @@ class BpaDocumentList extends Component {
       });
     });
     prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
+    if(bpaDetails && bpaDetails.auditDetails && bpaDetails.auditDetails.createdBy) {
+    this.getUserDataFromUuid()     
+  }      
   };
 
   prepareDocumentsInEmployee = async (appDocumentList, bpaDetails, documentDetailsPreview, prepareFinalObject) => {
@@ -307,44 +315,83 @@ class BpaDocumentList extends Component {
     }
   };
 
+  getUserDataFromUuid() {
+    const userInfo = JSON.parse(
+      localStorageGet("user-info")
+    );
+    if(userInfo && userInfo.roles && userInfo.roles.length > 1) {
+      let roles = [];
+      for( let i = 0; i < userInfo.roles.length; i++) {
+        roles.push(userInfo.roles[i].name);
+      };
+      if(roles.includes("Citizen")) {
+        roles.map( role => {
+          role && role === "BPA Architect" && (
+            this.setState({
+              createdBy: role
+            })
+          )
+        })
+      }
+      else if(roles.includes("Employee")) {
+        roles.map( role => {
+          role && role === "BPA Services Approver" || role === "BPA Services verifier" && (
+            this.setState({
+              createdBy: role
+            })
+          )
+        })
+      }
+    }    
+  }
+
   getUploadCard = (card, key) => {
-    const {classes, documentDetailsUploadRedux, documentDetailsPreview, verifierDocDetailsUpload, ...rest} = this.props;
+    const {classes, documentDetailsUploadRedux, documentDetailsPreview, bpaDetails, verifierDocDetailsUpload, ...rest} = this.props;
     let jsonPath = `documentDetailsUploadRedux[${key}].dropDownValues.value`;
     let documents;
     let data = [];
     let verifierData = [];
     {
-      documentDetailsUploadRedux[key] && documentDetailsUploadRedux && documentDetailsUploadRedux[key].previewdocuments && (
+      documentDetailsUploadRedux[key] && documentDetailsUploadRedux && documentDetailsUploadRedux[key].previewdocuments && ( 
       documentDetailsUploadRedux[key].previewdocuments.map((docs, documentIndex) => {
-        data.push(docs);
+        bpaDetails.documents.map( doc => {
+          if(doc && docs && doc.fileStoreId === docs.fileStoreId) {
+          docs.wfState = doc.wfState,
+          docs.createdBy = this.state.createdBy,
+          data.push(docs);    
+          }      
+        })
       })
       );
       documentDetailsPreview.map(docItem => {
+        bpaDetails.documents.map( doc => {        
       if(card.code === "APPL.BUILDING_DIAGRAM") {
         if (docItem.title === "BPD_SECP_SECP" || docItem.title === "BPD_EP_EP" || docItem.title === "BPD_FP_FP") {
+          docItem.wfState = doc.wfState,
+          docItem.createdBy = this.state.createdBy,          
           verifierData.push(docItem);
         }
       }
       else if (card.code === "NOC.FIRE") {
         if (docItem.title === "NOC_FIRE_CERTIFICATE") {
+          docItem.wfState = doc.wfState,
+          docItem.createdBy = this.state.createdBy,
           verifierData.push(docItem);          
         }
       }
       else if (card.code === "NOC.AIRPORT") {
         if(docItem.title === "NOC_AIRPORT_CERTIFICATE") {
+          docItem.wfState = doc.wfState,
+          docItem.createdBy = this.state.createdBy,
           verifierData.push(docItem);                    
         }
       }
       })
-    }
+    })
+    } 
     return (
       <React.Fragment>      
-        <Grid
-      item={true}
-      xs={8}
-      sm={5}
-      md={6}
-      >     
+        <Grid>    
       <div>     
       {
         data && data.length > 0 ? (

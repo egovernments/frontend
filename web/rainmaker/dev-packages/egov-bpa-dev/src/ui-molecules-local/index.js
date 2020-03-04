@@ -94,6 +94,11 @@ const ActionDialog = Loadable({
   loading: () => <Loading />
 });
 
+const MultiDownloadCard = Loadable({
+  loader: () => import("./MultiDownloadCard"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -112,5 +117,6 @@ export {
   DividerWithLabel,
   BpaFeesEstimateCard,
   CheckList,
-  ActionDialog
+  ActionDialog,
+  MultiDownloadCard
 };
