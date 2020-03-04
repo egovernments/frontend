@@ -36,25 +36,29 @@ export const stepperData = () => {
 export const stepper = getStepperObject({ props: { activeStep: 0 } }, stepperData());
 
 export const header = getCommonContainer({
-  header: getCommonHeader({
-    labelKey: process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
+  headerDiv: getCommonContainer({
+    header: getCommonHeader({
+      labelKey: process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
+    })
   }),
-  application: getCommonContainer({
-    applicationNumberWater: {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-wns",
-      componentPath: "ApplicationNoContainer",
-      props: { number: "NA" },
-      visible: false
-    },
-    applicationNumberSewerage: {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-wns",
-      componentPath: "ApplicationNoContainer",
-      props: { number: "NA" },
-      visible: false
-    }
-  })
+  // wsApplication: getCommonContainer({
+  applicationNumberWater: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ApplicationNoContainer",
+    props: { number: "NA" },
+    visible: false
+  },
+  // }),
+  // swApplication: getCommonContainer({
+  applicationNumberSewerage: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ApplicationNoContainer",
+    props: { number: "NA" },
+    visible: false
+  }
+  // })
 });
 
 export const reviewConnDetails = reviewConnectionDetails();
