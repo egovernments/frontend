@@ -1,7 +1,7 @@
 
 import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
-import { getApplicationType } from "egov-ui-kit/utils/commons";
+// import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { getApplicationType,setRoute } from "egov-ui-kit/utils/commons";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import React from "react";
 import store from "ui-redux/store";
@@ -308,41 +308,32 @@ const onPropertyTabClick = (rowData, dispatch) => {
     default:
       // window.location.href = `search-preview?applicationNumber=${
       // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
-      store.dispatch(setRoute(`/property-tax/property/${rowData[0].props.children}/${rowData[6]}`));
+      navigate(`/property-tax/property/${rowData[0].props.children}/${rowData[6]}`);
       //   rowData[0]
       // }&tenantId=${rowData[6]}`; 
       break;
   }
 };
 
-const onApplicationTabClick = async (rowData, dispatch) => {
-
-  const businessService = await getApplicationType(rowData[7] && rowData[7].acknowldgementNumber, rowData[6]);
-  if (businessService == 'PT.MUTATION') {
-    // store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&propertyId=${rowData[1].props.children}&tenantId=${rowData[6]}`));
-  } else if (businessService == 'PT.CREATE') {
-    // store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
-  } else {
-    // store.dispatch(setRoute(`/property-tax/property/${rowData[1].props.children}/${rowData[6]}`));
-  }
-
-}
 
 const applicationNumberClick = async (item) => {
 
   const businessService = await getApplicationType(item && item.acknowldgementNumber, item.tenantId, item.creationReason);
   if (businessService == 'PT.MUTATION') {
-    store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`));
+    navigate(`/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`);
   } else if (businessService == 'PT.CREATE') {
-    store.dispatch(setRoute(`/property-tax/application-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}&type=property`));
+    navigate(`/property-tax/application-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}&type=property`);
   } else {
-    store.dispatch(setRoute(`/property-tax/property/${item.propertyId}/${item.tenantId}`));
+    navigate(`/property-tax/property/${item.propertyId}/${item.tenantId}`);
   }
 
 }
 
 const propertyIdClick = (item) => {
+  navigate(`/property-tax/property/${item.propertyId}/${item.tenantId}`);
+}
 
-  store.dispatch(setRoute(`/property-tax/property/${item.propertyId}/${item.tenantId}`));
-
+const navigate=(url)=>{
+  // store.dispatch(setRoute(url));
+  setRoute(url);
 }
