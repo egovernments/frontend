@@ -29,7 +29,8 @@ import {
   getTransformedLocalStorgaeLabels,
   getTransformedLocale,
   getFileUrl,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,
+  setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
@@ -2844,6 +2845,14 @@ const riskType = (state, dispatch) => {
       (buildingHeight >= riskType[0].fromBuildingHeight)) {
       scrutinyRiskType = "HIGH"
     }
+  if(scrutinyRiskType === "LOW"){
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: "BPA_LOW" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
