@@ -777,7 +777,7 @@ export const footerReview = (
               },
               onClickDefination: {
                 action: "page_change",
-                path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}`
+                path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=BPAREG`
                 //path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
               },
               roleDefination: {
