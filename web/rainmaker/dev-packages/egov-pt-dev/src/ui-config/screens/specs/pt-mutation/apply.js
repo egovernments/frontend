@@ -234,16 +234,7 @@ const getPropertyData = async (action, state, dispatch) => {
        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
         {}
       );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.props.style",
-        {}
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary.props.style",
-        {display: "none"}
-      );
+      
     }else{
       // set(
       //   action.screenConfig,
@@ -253,13 +244,6 @@ const getPropertyData = async (action, state, dispatch) => {
       set(
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.transferorInstitutionDetails.props.style",
-        { display: "none" }
-      );
-    
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary.props.style",
-        
         { display: "none" }
       );
     }
