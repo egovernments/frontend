@@ -242,11 +242,19 @@ export const formwizardFourthStep = {
   visible: false
 };
 
+const pageReset = (dispatch) => {
+  dispatch(prepareFinalObject("WaterConnection", []));
+  dispatch(prepareFinalObject("SewerageConnection", []));
+  dispatch(prepareFinalObject("applyScreen", {}));
+  dispatch(prepareFinalObject("searchScreen", {}));
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    pageReset(dispatch);
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
