@@ -24,28 +24,45 @@ class OwnerInfo extends Component {
     ownershipInfo: {}
   };
 
-  transformData = (data, key) => {
+  transformData = (property) => {
+    const {owners, institution, ownershipCategory} = property;
     let itemKey = [];
-    data.map(item => {
-      let owner = {
-        "PT_OWNER_NAME": item.name || "NA",
-        "PT_GUARDIANS_NAME": item.fatherOrHusbandName || "NA",
-        "PT_GENDER": item.gender || "NA",
-        "PT_OWNERSHIP_INFO_DOB": convertEpochToDate(item.dob) || "NA",
-        "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
-        "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "NA",
-        "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY": item.ownerType || "NA",
-        "PT_OWNERSHIP_INFO_CORR_ADDR": item.permanentAddress || "NA",
-      };
-      const document = this.checkDocument(item);
-      if (document) {
-        owner['PT_OWNERSHIP_DOCUMENT_TYPE'] = getTranslatedLabel("PT_" + (document.documentType).toUpperCase(), localizationLabelsData);
-        owner['PT_OWNERSHIP_DOCUMENT_ID'] = document.documentUid;
+    owners.map(item => {
+      let owner = {};
+      if(institution){
+        owner = {
+          "PT_OWNERSHIP_INFO_NAME_INSTI":institution.name || "NA",
+          "PT_OWNERSHIP_INFO_DESIGNATION": institution.designation || "NA",
+          "PT_OWNERSHIP_INFO_TYPE_INSTI": institution.type || "NA",
+          "PT_FORM3_OWNERSHIP_TYPE": getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory.split(".")[0]}`) || "NA",
+          "PT_OWNERSHIP_INFO_NAME_OF_AUTH": institution.nameOfAuthorizedPerson || "NA",
+          "PT_OWNERSHIP_INFO_TEL_NO": item.altContactNumber || "NA",
+          "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "NA",
+          "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
+          "PT_OWNERSHIP_INFO_CORR_ADDR": item.correspondenceAddress || "NA"
+        }
+      }else{
+        owner = {
+          "PT_OWNER_NAME": item.name || "NA",
+          "PT_GUARDIANS_NAME": item.fatherOrHusbandName || "NA",
+          "PT_GENDER": item.gender || "NA",
+          "PT_OWNERSHIP_INFO_DOB": convertEpochToDate(item.dob) || "NA",
+          "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
+          "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "NA",
+          "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY": item.ownerType || "NA",
+          "PT_OWNERSHIP_INFO_CORR_ADDR": item.permanentAddress || "NA",
+        };
+        const document = this.checkDocument(item);
+        if (document) {
+          owner['PT_OWNERSHIP_DOCUMENT_TYPE'] = getTranslatedLabel("PT_" + (document.documentType).toUpperCase(), localizationLabelsData);
+          owner['PT_OWNERSHIP_DOCUMENT_ID'] = document.documentUid;
+        }
       }
       itemKey.push(owner);
     });
     return itemKey;
   }
+
   getUniqueList = (list = []) => {
     let newList = [];
     list.map(element => {
@@ -79,7 +96,7 @@ class OwnerInfo extends Component {
             ownershipInfo[lastModifiedDate] = [];
           }
           item.owners = item.owners.filter(owner => owner.status == "ACTIVE")
-          ownershipInfo[lastModifiedDate].push(...this.transformData(item.owners))
+          ownershipInfo[lastModifiedDate].push(...this.transformData(item))
         });
         this.setState({ [dialogName]: true, ownershipInfo });
         return true;
