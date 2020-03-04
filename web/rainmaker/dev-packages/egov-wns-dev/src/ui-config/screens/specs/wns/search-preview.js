@@ -281,7 +281,7 @@ const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_TASK_DETAILS"
   }),
-  applicationLicence: getCommonContainer({
+  application: getCommonContainer({
     applicationNumber: {
       uiFramework: "custom-atoms-local",
       moduleName: "egov-wns",
