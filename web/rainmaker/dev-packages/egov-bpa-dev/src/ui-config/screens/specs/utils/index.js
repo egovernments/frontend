@@ -29,7 +29,8 @@ import {
   getTransformedLocalStorgaeLabels,
   getTransformedLocale,
   getFileUrl,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,
+  setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
@@ -2737,7 +2738,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: getTenantId(),
           userName: `${ownerNo}`
         }
       );
@@ -2844,6 +2845,14 @@ const riskType = (state, dispatch) => {
       (buildingHeight >= riskType[0].fromBuildingHeight)) {
       scrutinyRiskType = "HIGH"
     }
+  if(scrutinyRiskType === "LOW"){
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: "BPA_LOW" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
@@ -3095,7 +3104,7 @@ export const generateBillForBPA = async (dispatch, applicationNumber, tenantId, 
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: businessService }
+        { key: "businessService", value: businessService }
       ];
       const payload = await createBill(queryObj,dispatch);
       if (payload && payload.Bill[0]) {
@@ -3690,7 +3699,7 @@ export const getMdmsDataForBpa = async queryObject => {
 export const requiredDocumentsData = async (state, dispatch, action) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",

@@ -145,8 +145,15 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       }
     }
     try {
-      let getSearchResult = getSearchResults(queryObject)
-      let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      let getSearchResult, getSearchResultForSewerage;
+      if(searchScreenObject.appType==="New Water connection"){
+         getSearchResult = getSearchResults(queryObject)
+      }else if(searchScreenObject.appType==="New Sewerage Connection"){
+         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      }else{
+        getSearchResult = getSearchResults(queryObject),
+        getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      }
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
       try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }

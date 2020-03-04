@@ -25,7 +25,7 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -130,7 +130,12 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
 const getSummaryRequiredDetails = async (state, dispatch) => {
   const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
+  let businessService = "BPA.NC_APP_FEE"
+  if(riskType === "LOW") {
+    businessService = "BPA.LOW_RISK_PERMIT_FEE"
+  }
+  generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
   prepareDocumentsDetailsView(state, dispatch);
   dispatch(
     handleField(

@@ -102,22 +102,10 @@ const commonApplicantInformation = () => {
           value: "Please search profile linked to the mobile no.",
           key: "PT_MUTATION_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
         },
-        infoIcon: "info_circle",
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath:
           "Property.ownersTemp[0].mobileNumber",
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch, fieldInfo) => {
-              getDetailsForOwner(state, dispatch, fieldInfo);
-            }
-          }
-        },
         // props: {
         //   style: {
         //     maxWidth: "450px"

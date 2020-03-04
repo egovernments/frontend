@@ -4,6 +4,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
+import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",

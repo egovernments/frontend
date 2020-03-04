@@ -17,7 +17,14 @@ import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResou
 import { additionDetails } from "./applyResource/additionalDetails";
 import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { httpRequest } from "../../../../ui-utils";
-import { prepareDocumentsUploadData, getSearchResultsForSewerage, getSearchResults, handleApplicationNumberDisplay, findAndReplace } from "../../../../ui-utils/commons";
+import {
+  prepareDocumentsUploadData,
+  getSearchResultsForSewerage,
+  getSearchResults,
+  handleApplicationNumberDisplay,
+  findAndReplace,
+  prefillDocuments
+} from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
@@ -186,6 +193,12 @@ export const getData = async (action, state, dispatch) => {
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
+      let docs = get(state, "screenConfiguration.preparedFinalObject");
+      await prefillDocuments(
+        docs,
+        "displayDocs",
+        dispatch
+      );
     }
   }
 };

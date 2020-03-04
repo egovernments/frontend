@@ -778,15 +778,26 @@ export const getTotalAmountDue = (payload) => {
   return payload && payload.Bill && payload.Bill.length > 0 && payload.Bill[0].totalAmount ? payload.Bill[0].totalAmount : 0;
 }
 
+
+
+export const setRoute = (link) => {
+  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+  window.location.href =
+    process.env.NODE_ENV === "production"
+      ? moduleName + link
+      : link;
+}
+
+
 export const navigateToApplication = (businessService, propsHistory, applicationNo, tenantId, propertyId) => {
   if (businessService == 'PT.MUTATION') {
-    propsHistory.push(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
+    setRoute(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
   } else if (businessService == 'PT.CREATE') {
-    propsHistory.push(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
+    setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
   } else {
-    process.env.REACT_APP_NAME === "Citizen"?
-     propsHistory.push(`/property-tax/my-properties/property/${propertyId}/${tenantId}`)
-     :propsHistory.push(`/property-tax/property/${propertyId}/${tenantId}`)
+    process.env.REACT_APP_NAME === "Citizen" ?
+      setRoute(`/property-tax/my-properties/property/${propertyId}/${tenantId}`)
+      : setRoute(`/property-tax/property/${propertyId}/${tenantId}`)
   }
 }
 
@@ -802,7 +813,7 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
         return 'PT.MUTATION';
       } else if (creationReason == 'CREATE') {
         return 'PT.CREATE';
-      }else if (creationReason == 'UPDATE') {
+      } else if (creationReason == 'UPDATE') {
         return 'PT.CREATE';
       }
       else {
