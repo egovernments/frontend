@@ -221,11 +221,8 @@ class DocumentList extends Component {
   };
 
   getUploadCard = (card, key) => {
-    let { classes, documentsUploadRedux } = this.props;
-    let jsonPath = "";
-    if (!_.isEmpty(documentsUploadRedux) && documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value) {
-      jsonPath = `documentsUploadRedux[${key}].dropdown.value`;
-    }
+    let { classes, documentsUploadRedux, uploadedDocsInRedux } = this.props;
+    let jsonPath = `documentsUploadRedux[${key}].dropdown.value`;
 
     return (
       <Grid container={true}>
