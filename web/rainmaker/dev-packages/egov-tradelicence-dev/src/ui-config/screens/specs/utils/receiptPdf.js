@@ -40,7 +40,7 @@ let accessoriesTable = ["24%", "76%"];
 const getReceiptData = (transformedData, ulbLogo) => {
   let owners = transformedData.owners.map(owner => [
     {
-      text: "Owner Name",
+      text: "Trade Owner Name",
       border: [true, true, false, true],
       style: "receipt-table-key"
     },
