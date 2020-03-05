@@ -16,6 +16,9 @@ const styles = theme => ({
   },
   container: {
     paddingBottom: 10
+  },
+  rightAlign: {
+    textAlign: "right"
   }
 });
 
@@ -42,9 +45,9 @@ const getMultiItem = (billingslabData, classes, style) => {
             }}
           />
         </Grid>
-        <Grid sm={2}>
+        <Grid sm={2} className={classes.rightAlign}>
           <Label
-            label={`Rs ${item.estimateAmount}`}
+            label={`${item.estimateAmount}`}
             style={{
               color: "rgba(0, 0, 0, 0.8700000047683716)",
               fontSize: "14px",
@@ -88,7 +91,7 @@ class ViewBreakupContainer extends React.Component {
             }
           />
         </Grid>
-        <Grid sm={2}>
+        <Grid sm={2} className={classes.rightAlign}>
           <LabelContainer
             labelName={`Rs ${total}`}
             style={
@@ -139,7 +142,7 @@ class ViewBreakupContainer extends React.Component {
         fullWidth={true}
         children={[
           serviceTotal > 0 || appTotal > 0 ? (
-            <div style={{ padding: "16px" }}>
+            <div style={{ padding: "26px" }}>
               <div
                 onClick={handleClose}
                 style={{ float: "right", cursor: "pointer" }}
