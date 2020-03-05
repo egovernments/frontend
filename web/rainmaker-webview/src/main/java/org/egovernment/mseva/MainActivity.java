@@ -440,7 +440,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onPageFinished(WebView view, String url) {
-			loadView("javascript:window.localStorage.setItem('isPOSmachine',true)",false);
+        	//removed pos related javascript
+//			loadView("javascript:window.localStorage.setItem('isPOSmachine',true)",false);
 			ShowOrHideWebViewInitialUse = "hide";
 			spinner.setVisibility(View.GONE);
 			view.setVisibility(webView.VISIBLE);
