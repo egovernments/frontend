@@ -3,6 +3,7 @@ import {
   getCommonCard,
   getCommonContainer,
   getCommonGrayCard,
+  getCommonCardWithNoShadow,
   getCommonSubHeader,
   getLabel,
   getLabelWithValue,
@@ -12,7 +13,7 @@ import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
 
-export const transferorSummary = getCommonGrayCard({
+export const transferorSummary = getCommonCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -69,7 +70,7 @@ export const transferorSummary = getCommonGrayCard({
     componentPath: "MultiItem",
     props: {
       className: "owner-summary",
-      scheama: getCommonGrayCard({
+      scheama: getCommonCardWithNoShadow({
         ownerContainer: getCommonContainer({
           ownerName: getLabelWithValue(
             {
@@ -172,7 +173,7 @@ export const transferorSummary = getCommonGrayCard({
   }
 });
 
-export const transferorInstitutionSummary = getCommonGrayCard({
+export const transferorInstitutionSummary = getCommonCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",

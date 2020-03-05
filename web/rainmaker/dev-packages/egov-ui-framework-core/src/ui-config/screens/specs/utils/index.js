@@ -150,6 +150,15 @@ export const getCommonGrayCard = children => {
     }
   });
 };
+export const getCommonCardWithNoShadow = children => {
+  return getCommonCard(children, {
+    style: {
+      boxShadow: "none",
+      borderRadius: 0,
+      overflow: "visible"
+    }
+  });
+};
 
 export const getBreak = (props = {}) => {
   return {

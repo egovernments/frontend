@@ -15,6 +15,9 @@ import {mutationDetails
    import {
     transferorSummary,transferorInstitutionSummary
   } from "./summaryResource/transferorSummary";
+  import {
+    transferorSummary as ts1 ,transferorInstitutionSummary as ti1
+  } from "./summaryResource/transferorSummary1";
 import { propertyDetails } from "./applyResource/propertyDetails";
 import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 
@@ -106,7 +109,6 @@ export const header = getCommonContainer({
 });
 
 
-
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
@@ -114,8 +116,8 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    transferorDetails: {...transferorSummary},
-    transferorInstitutionDetails:{...transferorInstitutionSummary},
+    transferorDetails: {...ts1},
+    transferorInstitutionDetails:{...ti1},
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -142,8 +144,8 @@ export const formwizardThirdStep = {
   },
   children:{
     summary:getCommonCard({  
-      transferorSummary: transferorSummary,
-       transferorInstitutionSummary:transferorInstitutionSummary,
+      transferorSummary: {...transferorSummary},
+       transferorInstitutionSummary:{...transferorInstitutionSummary},
       transfereeSummary: transfereeSummary,
        transfereeInstitutionSummary: transfereeInstitutionSummary,
       mutationSummary:mutationSummary,
@@ -230,17 +232,22 @@ const getPropertyData = async (action, state, dispatch) => {
         "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
         {display: "none"}
       );
-      set(
-        action.screenConfig,
-       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
-        {}
-      );
-      
+      // set(
+      //   action.screenConfig,
+      //  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+      //   {background:'grey'}
+      // );
+  
     }else{
       // set(
       //   action.screenConfig,
       //   "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
       //   { display: "none" }
+      // );
+      // set(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+      //   {background:'white'}
       // );
       set(
         action.screenConfig,
