@@ -29,7 +29,8 @@ import {
   getTransformedLocalStorgaeLabels,
   getTransformedLocale,
   getFileUrl,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,
+  setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
@@ -2737,7 +2738,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: getTenantId(),
           userName: `${ownerNo}`
         }
       );
@@ -2844,6 +2845,14 @@ const riskType = (state, dispatch) => {
       (buildingHeight >= riskType[0].fromBuildingHeight)) {
       scrutinyRiskType = "HIGH"
     }
+  // if(scrutinyRiskType === "LOW"){
+  //   const tenantId = getQueryArg(window.location.href, "tenantId");
+  //   const queryObject = [
+  //     { key: "tenantId", value: tenantId },
+  //     { key: "businessServices", value: "BPA_LOW" }
+  //   ];
+  //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  // }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
@@ -2854,6 +2863,36 @@ export const residentialType = (state, dispatch) => {
   );
   if(resType) {
     dispatch(prepareFinalObject("BPA.occupancyType", resType));
+  }
+}
+
+export const licenceType = async(state, dispatch) => {
+  let tradeTypes = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.TradeType", []
+    );
+  let userInfo = JSON.parse(getUserInfo());
+  let roles = userInfo.roles;
+  let numberOfRoles = [];
+  roles.forEach(role => {
+    numberOfRoles.push(role.code.split('_')[1]);
+  })
+  let tradeTypesCode = []; 
+  tradeTypes.forEach(type =>{
+    tradeTypesCode.push(type.code.split('.')[0]);
+  });
+  let filteredRoles = [];
+  numberOfRoles.forEach(fRole => {
+    tradeTypesCode.forEach(fcode => {
+      if(fRole === fcode){
+        filteredRoles.push({code: fRole});
+      }
+    })
+  });
+  if(filteredRoles && filteredRoles.length > 1){
+    dispatch(
+      prepareFinalObject(`applyScreenMdmsData.licenceTypes`, filteredRoles)
+    );
   }
 }
 
@@ -2972,6 +3011,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
           await riskType(state, dispatch);
           await residentialType(state, dispatch);
+          await licenceType(state, dispatch);
         } else {
           dispatch(
             toggleSnackbar(
@@ -3095,7 +3135,7 @@ export const generateBillForBPA = async (dispatch, applicationNumber, tenantId, 
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: businessService }
+        { key: "businessService", value: businessService }
       ];
       const payload = await createBill(queryObj,dispatch);
       if (payload && payload.Bill[0]) {
@@ -3690,7 +3730,7 @@ export const getMdmsDataForBpa = async queryObject => {
 export const requiredDocumentsData = async (state, dispatch, action) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -3756,12 +3796,51 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       });
     };
     prepareDocumentsView(state, dispatch, action, appState);
+    let permitList = get (state.screenConfiguration.preparedFinalObject, "BPA.additionalDetails.pendingapproval");
+    if(permitList && permitList.length > 0) {
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
+        true
+      );
+      dispatch(prepareFinalObject("permitList", permitList));
+    }
     if(wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
       let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
       prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
+    if(wfState.state.state == "PENDINGAPPROVAL" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+      let checkListConditions = payload.MdmsRes.BPA.CheckList;
+      prepareapprovalQstns(state, dispatch, action, checkListConditions, appWfState);
+    }
   } catch (e) {
     console.log(e);
+  }
+}
+
+const prepareapprovalQstns = async (state, dispatch, action, checkListConditions, appWfState) => {
+  let bpaAppDetails = get ( state.screenConfiguration.preparedFinalObject, "BPA", {});
+  let approvalQuastions  = [];
+  checkListConditions.forEach(wfDoc => {
+    if(wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) { 
+      approvalQuastions = wfDoc.conditions;
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.permitConditions.visible",
+        true
+      );
+    }
+  });
+  let approvalConditions = approvalQuastions;
+  let approvalConditionsWithValue = [];
+  approvalConditions.forEach(condtn => {
+    approvalConditionsWithValue.push({
+      condition : condtn,
+      conditionValue : false
+    })
+  })
+  if(approvalConditions && approvalConditions.length > 0){
+    dispatch(prepareFinalObject("permitConditions", approvalConditionsWithValue)); 
   }
 }
 
@@ -4236,4 +4315,42 @@ export const setProposedBuildingData = async (state, dispatch) => {
     );
     return tableData;
   }
+}
+
+export const getConditionsInPermitList = async (action, state, dispatch) => {
+  let permitConditions = get(
+    state,
+    "screenConfiguration.preparedFinalObject.permitTemp",
+    []
+  );
+  let addedConditions = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.tempAdded",
+    []
+  );
+  let additionalDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.additionalDetails",
+    {}
+  );
+
+  let permitDetails = [], finalPermitList = [];
+
+  if(permitConditions && permitConditions.length > 0) {
+    permitConditions.forEach(cndtn => {
+      finalPermitList.push(cndtn);
+    })
+  }
+  
+  if(addedConditions && addedConditions.length > 0) {
+    addedConditions.forEach(cndtn => {
+     if(additionalDetails && additionalDetails.pendingapproval && additionalDetails.pendingapproval.length > 0){
+      if(cndtn && cndtn.isDeleted !== false) {
+        finalPermitList.push(cndtn.conditions);
+      }
+     }
+    })
+  }
+  
+  dispatch(prepareFinalObject( "BPA.additionalDetails.pendingapproval" ,finalPermitList));
 }

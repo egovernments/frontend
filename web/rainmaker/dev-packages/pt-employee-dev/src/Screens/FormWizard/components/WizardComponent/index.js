@@ -65,7 +65,7 @@ const WizardComponent = ({
           { selected != 5 && selected != 4 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
-              selected - 1 === -1 ? history.push("/property-tax") : onTabClick(selected - 1);
+              selected - 1 === -1 ? history.push("/pt-mutation/propertySearch") : onTabClick(selected - 1);
             }}
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
             buttonStyle={{ border: "1px solid #fe7a51" }}

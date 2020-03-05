@@ -121,12 +121,16 @@ export const additionDetails = getCommonCard({
           errorMessage: "ERR_INVALID_BILLING_PERIOD",
           jsonPath: "applyScreen.connectionType"
         }),
-        beforeFieldChange: async (action, state, dispatch) => {
-          let connType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+        afterFieldChange: async (action, state, dispatch) => {
+          let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
           console.log('connType');
           console.log(connType);
-          if (connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") { showHideFeilds(dispatch, false); }
-          else { showHideFeilds(dispatch, true); }
+          if (connType === undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
+            showHideFeilds(dispatch, false);
+          }
+          else {
+            showHideFeilds(dispatch, true);
+          }
         }
       },
 
@@ -134,7 +138,9 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" },
         placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "applyScreen.noOfTaps"
+        jsonPath: "applyScreen.noOfTaps",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
 
       waterSourceType: {
@@ -177,20 +183,26 @@ export const additionDetails = getCommonCard({
         placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
         sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
-        jsonPath: "applyScreen.pipeSize"
+        jsonPath: "applyScreen.pipeSize",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
 
       waterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "applyScreen.waterClosets"
+        jsonPath: "applyScreen.waterClosets",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
       noOfToilets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "applyScreen.noOfToilets"
+        jsonPath: "applyScreen.noOfToilets",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       })
     }),
   }),

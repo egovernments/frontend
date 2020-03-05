@@ -25,7 +25,13 @@ const getCommonApplyFooter = children => {
 
 export const bpaMakePayment = async (state, dispatch) => {
   let status = get(state.screenConfiguration.preparedFinalObject, "BPA.status");
-  let billbService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+  let riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
+  let billbService
+  if(riskType === "LOW") {
+    billbService = "BPA.LOW_RISK_PERMIT_FEE"
+  } else {
+    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+  }
   const makePaymentUrl = process.env.REACT_APP_SELF_RUNNING === "true"
     ? `/egov-ui-framework/egov-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`
     : `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`;

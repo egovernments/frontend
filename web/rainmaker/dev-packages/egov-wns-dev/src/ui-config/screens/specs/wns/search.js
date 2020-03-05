@@ -12,8 +12,10 @@ const header = getCommonHeader({
 });
 
 const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-  dispatch(prepareFinalObject("LicensesTemp", []));
+  dispatch(prepareFinalObject("WaterConnection", []));
+  dispatch(prepareFinalObject("SewerageConnection", []));
+  dispatch(prepareFinalObject("applyScreen", {}));
+  dispatch(prepareFinalObject("searchScreen", {}));
   dispatch(setRoute("/wns/apply"));
 };
 
@@ -30,7 +32,8 @@ const employeeSearchResults = {
     dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
     if (states && states.length > 0) {
       const status = states.map((item, index) => { return { code: item.state } });
-      dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.status", status.filter(item => item.code != null)));
+      const applicationStatus=status.filter(item => item.code != null);
+      dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
     }
 
     return action;

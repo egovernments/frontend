@@ -1,4 +1,4 @@
-import { getCommonCard, getCommonSubHeader, getTextField, getSelectField, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getPattern, getCommonSubHeader, getTextField, getSelectField, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 // export const getGenderRadioButton = {
 //   uiFramework: "custom-containers",
@@ -46,7 +46,9 @@ export const OwnerInfoCard = getCommonCard({
       gridDefination: { xs: 12, sm: 6 },
       required: true,
       sourceJsonPath: "applyScreen.proposedTaps",
-      jsonPath: "applyScreen.proposedTaps"
+      jsonPath: "applyScreen.proposedTaps",
+      pattern: /^[0-9]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     }),
 
     pipeSize: getSelectField({
@@ -64,7 +66,9 @@ export const OwnerInfoCard = getCommonCard({
       gridDefination: { xs: 12, sm: 6 },
       required: true,
       sourceJsonPath: "applyScreen.proposedWaterClosets",
-      jsonPath: "applyScreen.proposedWaterClosets"
+      jsonPath: "applyScreen.proposedWaterClosets",
+      pattern: /^[0-9]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     }),
 
     numberOfToilets: getTextField({
@@ -73,7 +77,9 @@ export const OwnerInfoCard = getCommonCard({
       required: true,
       gridDefination: { xs: 12, sm: 6 },
       sourceJsonPath: "applyScreen.proposedToilets",
-      jsonPath: "applyScreen.proposedToilets"
+      jsonPath: "applyScreen.proposedToilets",
+      pattern: /^[0-9]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     })
   })
 });

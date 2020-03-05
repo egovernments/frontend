@@ -141,42 +141,42 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId);
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, 'print');
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, 'print');
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
       generatePdfFromDiv("download", applicationNumber)
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
       generatePdfFromDiv("print", applicationNumber)
     },
@@ -289,53 +289,85 @@ const setSearchResponse = async (
       assignes: null
     };
     property.workflow = workflow;
-   
+
   }
 
-  if (property && property.owners && property.owners.length > 1) {
+  if (property && property.owners && property.owners.length > 0) {
     let ownersTemp = [];
     let owners = [];
     property.owners.map(owner => {
       if (owner.status == "ACTIVE") {
+      
         ownersTemp.push(owner);
       } else {
         owners.push(owner);
       }
     });
-    
+
     property.ownersInit = owners;
     property.ownersTemp = ownersTemp;
   }
-  property.ownershipCategoryTemp=  property.ownershipCategory;
-  dispatch(prepareFinalObject("Property", property));
-  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
-  prepareDocumentsView(state, dispatch);
+  property.ownershipCategoryTemp = property.ownershipCategory;
+  property.ownershipCategory = 'NA';
   // Set Institution/Applicant info card visibility
   if (
     get(
       response,
-      "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+      "Properties[0].ownershipCategory",
       ""
     ).startsWith("INSTITUTION")
   ) {
+    property.institutionTemp = property.institution;
+
     dispatch(
       handleField(
         "search-preview",
-        "components.div.children.body.children.cardContent.children.applicantSummary",
+        "components.div.children.body.children.cardContent.children.transfereeSummary",
         "visible",
         false
       )
     );
   } else {
+
     dispatch(
       handleField(
         "search-preview",
-        "components.div.children.body.children.cardContent.children.institutionSummary",
+        "components.div.children.body.children.cardContent.children.transfereeInstitutionSummary",
         "visible",
         false
       )
     );
   }
+
+  if (get(property, 'ownersInit[0].altContactNumber', 0)) {
+    property.institution = {};
+    property.institution.nameOfAuthorizedPerson = get(property, 'ownersInit[0].name', '');
+
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorSummary",
+        "visible",
+        false
+      )
+    );
+
+  } else {
+
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorInstitutionSummary",
+        "visible",
+        false
+      )
+    );
+  }
+
+
+  dispatch(prepareFinalObject("Property", property));
+  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  prepareDocumentsView(state, dispatch);
 
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
@@ -499,17 +531,17 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          pdfHeader:{
+          pdfHeader: {
             uiFramework: "custom-atoms-local",
             moduleName: "egov-pt",
-            componentPath: "pdfHeader"            
+            componentPath: "pdfHeader"
           },
           propertySummary: propertySummary,
           transferorSummary: transferorSummary,
-          // transferorInstitutionSummary:transferorInstitutionSummary,
+          transferorInstitutionSummary: transferorInstitutionSummary,
           transfereeSummary: transfereeSummary,
-          // transfereeInstitutionSummary: transfereeInstitutionSummary,
-          mutationSummary:mutationSummary,
+          transfereeInstitutionSummary: transfereeInstitutionSummary,
+          mutationSummary: mutationSummary,
           registrationSummary: registrationSummary,
           documentsSummary: documentsSummary
         })

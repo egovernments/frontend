@@ -27,7 +27,7 @@ export const getCommonApplyFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "pt-apply-wizard-footer"
     },
     children
   };
@@ -701,7 +701,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       moduleDetails: [
         {
           moduleName: "PropertyTax",
-          masterDetails: [{ name: "Documents" }]
+          masterDetails: [{ name: "MutationDocuments" }]
         }
       ]
     }

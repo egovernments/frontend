@@ -1,22 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Field from "egov-ui-kit/utils/field";
-//import Icon from "@material-ui/core/Icon";
 import { Button, Card, Image,Icon} from "components";
-import IconButton from "material-ui/IconButton";
 import Label from "egov-ui-kit/utils/translationNode";
 import { CityPicker } from "modules/common";
 import Hidden from "@material-ui/core/Hidden";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
-import qrlogo from "egov-ui-kit/assets/images//qrImage.png";
 import "./index.css";
 
-const iconButtonStyle = {
-  paddingLeft: 0,
-  paddingRight: 0,
-  width: 35,
-};
 
 const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsApp}) => {
   const fields = form.fields || {};

@@ -36,6 +36,8 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
+import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
+import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
 import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
@@ -310,6 +312,17 @@ const setSearchResponse = async (
 
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const status = response.Bpa["0"].status;
+  const riskType = response.Bpa["0"].riskType;
+  let businessServicesValue = "BPA";
+  if (riskType === "LOW") {
+    businessServicesValue = "BPA_LOW";
+  }
+
+  const queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "businessServices", value: businessServicesValue }
+  ];
+  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   if (status && status == "INPROGRESS") {
     dispatch(
@@ -512,6 +525,16 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.permitConditions.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
+      false
+    );
 
     return action;
   },
@@ -610,7 +633,9 @@ const screenConfig = {
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
           documentsSummary: documentsSummary,
-          declarationSummary: declarationSummary
+          declarationSummary: declarationSummary,
+          permitConditions: permitConditions,
+          permitListSummary : permitListSummary
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
