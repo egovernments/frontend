@@ -2889,6 +2889,10 @@ export const licenceType = async(state, dispatch) => {
       }
     })
   });
+  function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+  let unique = filteredRoles.filter( onlyUnique );
   if(filteredRoles && filteredRoles.length > 1){
     dispatch(
       prepareFinalObject(`applyScreenMdmsData.licenceTypes`, filteredRoles)

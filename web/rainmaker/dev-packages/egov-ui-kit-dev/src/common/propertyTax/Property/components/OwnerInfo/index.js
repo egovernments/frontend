@@ -25,13 +25,13 @@ class OwnerInfo extends Component {
   };
 
   transformData = (property) => {
-    const {owners, institution, ownershipCategory} = property;
+    const { owners, institution, ownershipCategory } = property;
     let itemKey = [];
     owners.map(item => {
       let owner = {};
-      if(institution){
+      if (institution) {
         owner = {
-          "PT_OWNERSHIP_INFO_NAME_INSTI":institution.name || "NA",
+          "PT_OWNERSHIP_INFO_NAME_INSTI": institution.name || "NA",
           "PT_OWNERSHIP_INFO_DESIGNATION": institution.designation || "NA",
           "PT_OWNERSHIP_INFO_TYPE_INSTI": institution.type || "NA",
           "PT_FORM3_OWNERSHIP_TYPE": getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory.split(".")[0]}`) || "NA",
@@ -41,7 +41,7 @@ class OwnerInfo extends Component {
           "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
           "PT_OWNERSHIP_INFO_CORR_ADDR": item.correspondenceAddress || "NA"
         }
-      }else{
+      } else {
         owner = {
           "PT_OWNER_NAME": item.name || "NA",
           "PT_GUARDIANS_NAME": item.fatherOrHusbandName || "NA",
@@ -201,9 +201,9 @@ class OwnerInfo extends Component {
               },
             isInstitution
               ? {
-                key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
-                value:
-                  getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`) ||
+
+                key: getTranslatedLabel("PT_OWNERSHIP_INFO_TEL_NO", localizationLabelsData),
+                value: owner.altContactNumber ||
                   "NA",
               }
               : {
@@ -225,11 +225,6 @@ class OwnerInfo extends Component {
                 key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
                 value: owner.mobileNumber || "NA",
               },
-            isInstitution && owner.altContactNumber &&
-            {
-              key: isInstitution ? getTranslatedLabel("PT_OWNERSHIP_INFO_TEL_NO", localizationLabelsData) : "",
-              value: isInstitution ? owner.altContactNumber || "NA" : "",
-            },
             {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData),
               value: owner.emailId ? owner.emailId || "NA" : "",
