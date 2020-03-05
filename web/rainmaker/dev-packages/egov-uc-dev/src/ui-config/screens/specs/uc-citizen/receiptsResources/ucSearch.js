@@ -9,7 +9,7 @@ import {
   getCommonHeader,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+// import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchApiCall } from "./function";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -17,11 +17,11 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 
-const hasButton = getQueryArg(window.location.href, "hasButton");
-//const hasApproval = getQueryArg(window.location.href, "hasApproval");
-let enableButton = true;
-//enableInbox = hasApproval && hasApproval === "false" ? false : true;
-enableButton = hasButton && hasButton === "false" ? false : true;
+// const hasButton = getQueryArg(window.location.href, "hasButton");
+// //const hasApproval = getQueryArg(window.location.href, "hasApproval");
+// let enableButton = true;
+// //enableInbox = hasApproval && hasApproval === "false" ? false : true;
+// enableButton = hasButton && hasButton === "false" ? false : true;
 
 const resetFields = (state, dispatch) => {
   dispatch(

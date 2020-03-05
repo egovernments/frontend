@@ -1,13 +1,25 @@
 import * as actionTypes from "./actionTypes";
+import { getLocale, localStorageSet } from "../../ui-utils/localStorageUtils";
+import { initLocalizationLabels } from "./utils";
+const locale = getLocale() || "en_IN";
+const localizationLabels = initLocalizationLabels(locale);
 
 const initialState = {
   name: "MIHY",
   route: "",
-  previousRoute: ""
+  previousRoute: "",
+  locale,
+  localizationLabels
 };
 
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.ADD_LOCALIZATION:
+      return {
+        ...state,
+        locale: action.locale,
+        localizationLabels: action.localizationLabels,
+      };
     case actionTypes.SET_ROUTE:
       return {
         ...state,

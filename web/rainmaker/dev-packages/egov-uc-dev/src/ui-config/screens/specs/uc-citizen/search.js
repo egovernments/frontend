@@ -1,6 +1,6 @@
 import {
   getCommonHeader,
-  getLabel,
+  // getLabel,
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
@@ -9,9 +9,9 @@ import { UCSearchCard } from "./receiptsResources/ucSearch";
 //import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchResult } from "./receiptsResources/searchResult";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+// import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -19,9 +19,9 @@ const header = getCommonHeader({
   labelKey: "UC_RECEIPT"
 });
 
-const hasButton = getQueryArg(window.location.href, "hasButton");
-let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
+// const hasButton = getQueryArg(window.location.href, "hasButton");
+// let enableButton = true;
+// enableButton = hasButton && hasButton === "false" ? false : true;
 
 const getData = async (action, state, dispatch) => {
   await getMDMSData(action, state, dispatch);

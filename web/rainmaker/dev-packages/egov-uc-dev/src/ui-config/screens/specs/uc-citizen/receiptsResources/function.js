@@ -3,18 +3,17 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
+import { getSearchResults } from "egov-ui-framework/ui-utils/commons";
+import { convertEpochToDate, convertDateToEpoch ,validateFields} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResult";
-import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
   getLocaleLabels,
   transformById,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -54,7 +53,7 @@ export const searchApiCall = async (state, dispatch) => {
       )
     );
   } else if (
-    Object.keys(searchScreenObject).length == 0 ||
+    Object.keys(searchScreenObject).length === 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
     dispatch(

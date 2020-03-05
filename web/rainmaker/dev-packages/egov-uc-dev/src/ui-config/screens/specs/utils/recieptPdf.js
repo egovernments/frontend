@@ -9,7 +9,6 @@ import {
   loadUlbLogo,
   loadMdmsData
 } from "./receiptTransformer";
-import { loadReceiptGenerationData } from "./receiptTransformer";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const receiptTableWidth = ["*", "*", "*", "*"];
@@ -113,7 +112,7 @@ const getCitizenReceipetData = transformedData => {
               }
             ],
             alignment: "left"
-            
+
           },
           {
             text: [
@@ -608,7 +607,7 @@ const getReceiptData = transformedData => {
             ],
             [
               {
-                text: "G8 Receipt No.",
+                text: "Manual G8 Receipt No.",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
@@ -617,7 +616,7 @@ const getReceiptData = transformedData => {
                 border: [false, true, true, true]
               },
               {
-                text: "G8 Receipt Date",
+                text: "Manual G8 Receipt Date",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
@@ -915,7 +914,7 @@ const getReceiptData = transformedData => {
             ],
             [
               {
-                text: "G8 Receipt No.",
+                text: "Manual G8 Receipt No.",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
@@ -924,7 +923,7 @@ const getReceiptData = transformedData => {
                 border: [false, true, true, true]
               },
               {
-                text: "G8 Receipt Date",
+                text: "Manual G8 Receipt Date",
                 border: [true, true, false, true],
                 style: "receipt-table-key"
               },
@@ -1173,7 +1172,7 @@ export const generateReciept = async rowData => {
 
     openPDFFileUsingBase64(pdfData, `${transformedData.receiptNumber}.pdf`)
   }
-   
+
 };
 
 //Generates PDF for Citizen Reciept
@@ -1227,10 +1226,10 @@ export const generateCitizenReciept = async rowData => {
           transformedData: transformedData
         })
       }
-  
+
       pdfDataCitizen = pdfMake.createPdf(citizenReceipt_data)
-  
+
       openPDFFileUsingBase64(pdfDataCitizen, `${transformedData.receiptNumber}.pdf`)
     }
-  
+
   };

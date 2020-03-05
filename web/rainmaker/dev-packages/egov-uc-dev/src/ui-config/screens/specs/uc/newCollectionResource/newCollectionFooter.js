@@ -1,14 +1,12 @@
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel,convertDateToEpoch,ifUserRoleExists,validateFields } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertDateToEpoch } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { ifUserRoleExists } from "../../utils";
-import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
-  handleScreenConfigurationFieldChange as handleField,
+  // handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -105,6 +103,7 @@ const processDemand = (state, dispatch) => {
 };
 
 const createDemand = async (state, dispatch) => {
+  dispatch(toggleSpinner());
   let demands = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
@@ -158,8 +157,10 @@ const createDemand = async (state, dispatch) => {
       } else {
         alert("Empty response!!");
       }
+      dispatch(toggleSpinner());
     } catch (e) {
       console.log(e.message);
+      dispatch(toggleSpinner());
       dispatch(
         toggleSnackbar(
           true,
@@ -171,6 +172,9 @@ const createDemand = async (state, dispatch) => {
         )
       );
     }
+  }
+  else {
+      dispatch(toggleSpinner());
   }
 };
 
@@ -208,7 +212,11 @@ const generateBill = async (
           businessService
         )
       );
-      dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
+      const path =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `/egov-ui-framework/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`
+          : `/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`;
+      dispatch(setRoute(`${path}`));
     }
   } catch (e) {
     console.log(e);
@@ -231,11 +239,11 @@ const createEstimateData = billObject => {
 };
 
 const isTaxPeriodValid = (dispatch, demand, state) => {
-  const taxPeriods = get(
-    state.screenConfiguration,
-    "preparedFinalObject.applyScreenMdmsData.BillingService.TaxPeriod",
-    []
-  );
+  // const taxPeriods = get(
+  //   state.screenConfiguration,
+  //   "preparedFinalObject.applyScreenMdmsData.BillingService.TaxPeriod",
+  //   []
+  // );
   const selectedFrom = new Date(demand.taxPeriodFrom);
   const selectedTo = new Date(demand.taxPeriodTo);
   if (selectedFrom <= selectedTo) {
@@ -255,29 +263,29 @@ const isTaxPeriodValid = (dispatch, demand, state) => {
   }
 
   //Validation against MDMS Tax periods not required as of now.
-  let found =
-    taxPeriods.length > 0 &&
-    taxPeriods.find(item => {
-      const fromDate = new Date(item.fromDate);
-      const toDate = new Date(item.toDate);
-      return (
-        item.service === demand.businessService &&
-        fromDate <= selectedFrom &&
-        toDate >= selectedTo
-      );
-    });
-  if (found) return true;
-  else {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please select the right tax period",
-          labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
-        },
-        "warning"
-      )
-    );
-    return false;
-  }
+  // let found =
+  //   taxPeriods.length > 0 &&
+  //   taxPeriods.find(item => {
+  //     const fromDate = new Date(item.fromDate);
+  //     const toDate = new Date(item.toDate);
+  //     return (
+  //       item.service === demand.businessService &&
+  //       fromDate <= selectedFrom &&
+  //       toDate >= selectedTo
+  //     );
+  //   });
+  // if (found) return true;
+  // else {
+  //   dispatch(
+  //     toggleSnackbar(
+  //       true,
+  //       {
+  //         labelName: "Please select the right tax period",
+  //         labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
+  //       },
+  //       "warning"
+  //     )
+  //   );
+  //   return false;
+  // }
 };

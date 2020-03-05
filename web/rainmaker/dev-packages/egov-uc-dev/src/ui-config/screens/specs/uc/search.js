@@ -9,9 +9,9 @@ import { setServiceCategory } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { searchResults } from "./universalCollectionResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -50,16 +50,17 @@ const getMDMSData = async (action, state, dispatch) => {
       mdmsBody
     );
     // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    let serviceCategories = setServiceCategory(
+    setServiceCategory(
       get(payload, "MdmsRes.BillingService.BusinessService", []),
-      dispatch
+      dispatch,
+      "searchScreenMdmsData"
     );
-    dispatch(
-      prepareFinalObject(
-        "searchScreenMdmsData.serviceCategory",
-        serviceCategories
-      )
-    );
+    // dispatch(
+    //   prepareFinalObject(
+    //     "searchScreenMdmsData.serviceCategory",
+    //     serviceCategories
+    //   )
+    // );
   } catch (e) {
     console.log(e);
     alert("Billing service data fetch failed");

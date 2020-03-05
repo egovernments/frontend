@@ -36,6 +36,7 @@ const screenConfig = {
       dispatch(prepareFinalObject("Demands", [{hasReceipt:true}]));
       }
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    // const consumerCode = getQueryArg(window.location.href, "consumerCode");
     const amount = get(
       state.screenConfiguration,
       "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0].totalAmount",

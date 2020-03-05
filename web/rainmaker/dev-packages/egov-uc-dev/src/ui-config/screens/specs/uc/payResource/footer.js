@@ -1,9 +1,8 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { ifUserRoleExists } from "../../utils";
+import { ifUserRoleExists,convertDateToEpoch ,validateFields} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getSelectedTabIndex } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertDateToEpoch, validateFields } from "../../utils";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   toggleSnackbar,
@@ -116,15 +115,15 @@ export const footer = getCommonApplyFooter({
           ),
           paymentAmount:get(
             state.screenConfiguration.preparedFinalObject,
-            "AmountPaid"
+            "ReceiptTemp[0].instrument.amount"
           ),
           customerName:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].payerName"
+            "ReceiptTemp[0].Bill[0].paidBy"
           ),
           customerMobile:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].mobileNumber"
+            "ReceiptTemp[0].Bill[0].payerMobileNumber"
           ),
           message:"Pos payment",
           emailId:get(
@@ -137,23 +136,29 @@ export const footer = getCommonApplyFooter({
           ),
           billNumber:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].billNumber"
+            "ReceiptTemp[0].Bill[0].billDetails[0].billNumber"
           ),
           consumerCode:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].consumerCode"
+            "ReceiptTemp[0].Bill[0].billDetails[0].consumerCode"
           ),
           businessService:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].businessService"
+            "ReceiptTemp[0].Bill[0].billDetails[0].businessService"
           ),
           collectorName:"",
           collectorId:"",
-          instrumentDate:"",
-          instrumentNumber:""
+          instrumentDate:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentDate"
+          ),
+          instrumentNumber:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentNumber"
+          )
         }
         try {
-          window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
+          window.mSewaApp && window.mSewaApp.sendPaymentData("paymentData",JSON.stringify(paymentData));
         } catch (e) {
           console.log(e);
         }
@@ -196,7 +201,7 @@ export const footer = getCommonApplyFooter({
 });
 
 const callBackForPay = async (state, dispatch) => {
-  const { href } = window.location;
+  // const { href } = window.location;
   let isFormValid = true;
 
   // --- Validation related -----//
@@ -377,11 +382,11 @@ const callBackForPay = async (state, dispatch) => {
       dispatch(prepareFinalObject("receiptSearchResponse", response));
       dispatch(prepareFinalObject("Demands[0].hasReceipt", true));
       // moveToSuccess(href, dispatch, receiptNumber);
-      dispatch(
-        setRoute(
-          `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
-        )
-      );
+      const path =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `/egov-ui-framework/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
+          : `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`;
+      dispatch(setRoute(`${path}`));
       dispatch(toggleSpinner());
     } catch (e) {
       dispatch(toggleSpinner());
@@ -427,9 +432,13 @@ const goBack = (state, dispatch) => {
   );
   const demandId = demand.id || null;
   if (demandId) {
-    const serviceType = get(demand, "serviceType");
-    const serviceCategory = get(demand, "businessService");
+    // const serviceType = get(demand, "serviceType");
+    // const serviceCategory = get(demand, "businessService");
     // const businessService = get(demand[0], "businessService")
   }
-  dispatch(setRoute(`/uc/newCollection`));
+  const path =
+    process.env.REACT_APP_SELF_RUNNING === "true"
+      ? `/egov-ui-framework/uc/newCollection`
+      : `/uc/newCollection`;
+  dispatch(setRoute(`${path}`));
 };

@@ -1,6 +1,14 @@
 import React from "react";
 import { screenHoc } from "egov-ui-framework/ui-hocs";
+import Loadable from "react-loadable";
+import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 import CommonView from "egov-ui-framework/ui-molecules/CommonView";
+const Loading = () => <LinearProgress />;
+
+// const CommonView = Loadable({
+//   loader: () => import("egov-ui-framework/ui-molecules/CommonView"),
+//   loading: () => <Loading />
+// });
 
 class ScreenInterface extends React.Component {
   constructor(props) {
