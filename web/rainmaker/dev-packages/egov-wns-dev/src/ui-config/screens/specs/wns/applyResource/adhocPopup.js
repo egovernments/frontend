@@ -64,7 +64,6 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   );
 
   // clear data from form
-  console.log(1011, WSpayload)
   const billPayload = await createEstimateData(
     WSpayload.Calculation[0],
     "LicensesTemp[0].estimateCardData",
