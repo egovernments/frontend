@@ -192,6 +192,7 @@ const getPropertyData = async (action, state, dispatch) => {
     
     
     payload.Properties[0].ownersInit = owners;
+    payload.Properties[0].ownershipCategoryInit=payload.Properties[0].ownershipCategory;
   }
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
 
