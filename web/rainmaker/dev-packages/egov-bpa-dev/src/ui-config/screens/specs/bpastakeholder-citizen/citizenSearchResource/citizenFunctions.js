@@ -48,7 +48,7 @@ export const fetchData = async (
     mdmsRes &&
     mdmsRes.MdmsRes &&
     mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-      if (item.code === "TL") return true;
+      if (item.code === "BPAAPPLY") return true;
     });
   dispatch(
     prepareFinalObject(

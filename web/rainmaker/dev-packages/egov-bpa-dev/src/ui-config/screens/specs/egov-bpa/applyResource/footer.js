@@ -106,6 +106,24 @@ const getFloorDetail = (index) => {
   }
 };
 
+export const showApplyLicencePicker = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
+  );
+  dispatch(
+    handleField(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.div.children.selectButton",
+      "visible",
+      false
+    )
+  )
+};
+
 const prepareDocumentsDetailsView = async (state, dispatch) => {
   let documentsPreview = [];
   let reduxDocuments = get(
@@ -472,7 +490,19 @@ const callBackForNext = async (state, dispatch) => {
             };
             dispatch(toggleSnackbar(true, errorMessage, "warning")); 
           }else{
-            responseStatus === "success" && changeStep(state, dispatch);
+            let licenceType = get(
+              state.screenConfiguration.preparedFinalObject , 
+              "applyScreenMdmsData.licenceTypes", []
+              );
+            let bpaStatus = get(
+              state.screenConfiguration.preparedFinalObject,
+              "BPA.status", ""
+            )
+            if(licenceType && licenceType.length > 1 && !bpaStatus) {
+              showApplyLicencePicker(state, dispatch, activeStep);
+            } else {
+              responseStatus === "success" && changeStep(state, dispatch);
+            }
           }
         }else{
           responseStatus === "success" && changeStep(state, dispatch);
