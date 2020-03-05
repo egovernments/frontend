@@ -2866,6 +2866,36 @@ export const residentialType = (state, dispatch) => {
   }
 }
 
+export const licenceType = async(state, dispatch) => {
+  let tradeTypes = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.TradeType", []
+    );
+  let userInfo = JSON.parse(getUserInfo());
+  let roles = userInfo.roles;
+  let numberOfRoles = [];
+  roles.forEach(role => {
+    numberOfRoles.push(role.code.split('_')[1]);
+  })
+  let tradeTypesCode = []; 
+  tradeTypes.forEach(type =>{
+    tradeTypesCode.push(type.code.split('.')[0]);
+  });
+  let filteredRoles = [];
+  numberOfRoles.forEach(fRole => {
+    tradeTypesCode.forEach(fcode => {
+      if(fRole === fcode){
+        filteredRoles.push({code: fRole});
+      }
+    })
+  });
+  if(filteredRoles && filteredRoles.length > 1){
+    dispatch(
+      prepareFinalObject(`applyScreenMdmsData.licenceTypes`, filteredRoles)
+    );
+  }
+}
+
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
   try {
     const scrutinyNo = get(
@@ -2981,6 +3011,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
           await riskType(state, dispatch);
           await residentialType(state, dispatch);
+          await licenceType(state, dispatch);
         } else {
           dispatch(
             toggleSnackbar(
