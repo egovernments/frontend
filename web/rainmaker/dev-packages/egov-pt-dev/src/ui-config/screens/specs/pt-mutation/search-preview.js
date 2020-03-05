@@ -308,7 +308,7 @@ const setSearchResponse = async (
     property.ownersTemp = ownersTemp;
   }
   property.ownershipCategoryTemp = property.ownershipCategory;
-  property.ownershipCategory = 'NA';
+  property.ownershipCategoryInit = 'NA';
   // Set Institution/Applicant info card visibility
   if (
     get(

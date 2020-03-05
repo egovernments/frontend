@@ -11,7 +11,10 @@ export const fetchData = async (action, state, dispatch) => {
     const water = responseWater.WaterConnection
     const sewerage = responseSewerage.SewerageConnections
     const finalArray = water.concat(sewerage);
-    if (finalArray !== undefined && finalArray !== null) { dispatch(prepareFinalObject("myApplicationsCount", finalArray.length)); }
+    if (finalArray !== undefined && finalArray !== null) {
+        const myConnectionsResult=finalArray.filter(item => item.connectionNo !== "NA" && item.connectionNo !== null);  
+      dispatch(prepareFinalObject("myApplicationsCount", myConnectionsResult.length));
+     }
   }
   catch (error) { console.log(error); }
 }

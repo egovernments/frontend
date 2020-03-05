@@ -128,8 +128,8 @@ const callBackForApply = async (state, dispatch) => {
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
-    let documentsUploadRedux = get(
-      state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
+  let documentsUploadRedux = get(
+    state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
   propertyPayload.workflow = {
     "businessService": "PT.MUTATION",
     tenantId,
@@ -167,7 +167,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
     propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
     propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type =  propertyPayload.institutionTemp.institutionType;
+    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
 
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
@@ -181,7 +181,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
     propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
     propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type =  propertyPayload.institutionTemp.institutionType;
+    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
 
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
@@ -192,14 +192,15 @@ const callBackForApply = async (state, dispatch) => {
   }
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
-  propertyPayload.documents=Object.values(documentsUploadRedux).map(o=>{
+  propertyPayload.documents = Object.values(documentsUploadRedux).map(o => {
     return {
-    documentType: o.documentCode,
-    fileStoreId: o.documents[0].fileStoreId,
-    documentUid: o.documents[0].fileStoreId,
-    auditDetails: null,
-    status: "ACTIVE"}
-    })
+      documentType: o.documentCode,
+      fileStoreId: o.documents[0].fileStoreId,
+      documentUid: o.documents[0].fileStoreId,
+      auditDetails: null,
+      status: "ACTIVE"
+    }
+  })
 
   try {
     let queryObject = [
@@ -263,9 +264,9 @@ const validateMobileNumber = (state) => {
       return owner.name
     })
     const mobileNumbers = owners.map(owner => {
-      if(owner.status== "ACTIVE"){
+      if (owner.status == "ACTIVE") {
         return owner.mobileNumber;
-      } 
+      }
     })
     // newOwners.map(owner => {
     //   if (names.includes(owner.name)) {
@@ -329,9 +330,9 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
-    let isInstitutionTypeValid=validateFields(
+    let isInstitutionTypeValid = validateFields(
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
-       state,
+      state,
       dispatch
     );
 
@@ -403,7 +404,7 @@ const callBackForNext = async (state, dispatch) => {
         )
       );
     }
-    else{
+    else {
       const owner = get(
         state.screenConfiguration.preparedFinalObject,
         "Property.owners",
