@@ -80,7 +80,8 @@ const commonApplicantInformation = () => {
             }
           ],
           
-          required: true
+          required: true,
+        errorMessage: "Required",  
         },
         required: true,
         type: "array"
@@ -183,7 +184,30 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
-      specialApplicantCategory: getSelectField({
+      applicantEmail: getTextField({
+        label: {
+          labelName: "Email",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Email",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_PLACEHOLDER"
+        },
+        pattern: getPattern("Email"),
+        errorMessage: "Invalid Email",
+        jsonPath:
+          "Property.ownersTemp[0].emailId",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props:{
+          className:"applicant-details-error"
+        }
+      }),
+      
+      specialApplicantCategory: {...getSelectField({
         label: {
           labelName: "Special Applicant Category",
           labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_APPLICANT_CATEGORY_LABEL"
@@ -213,62 +237,15 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
-      // specialCategoryDocument: getTextField({
-      //   label: {
-      //     labelName: "Document Id No.",
-      //     labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_NO_LABEL"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Document Id No.",
-      //     labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_PLACEHOLDER"
-      //   },
-      //   pattern: getPattern("Address"),
-      //   required:true,
-      //   // errorMessage: "Invalid Address",
-      //   jsonPath:
-      //     "Property.ownersTemp[0].categoryDocumentNo",
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 12,
-      //     md: 6
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   beforeFieldChange:(action, state, dispatch) => {
-      //     const categoryDocumentJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocument";
-      //     if(action.value === "NONE"){
-      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.display", false));
-      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.value", ""));
-      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.helperText", ""));
-      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.error", false));
-      //     }else{
-      //       dispatch(handleField("apply", categoryDocumentJsonPath, "props.disabled", false));
-      //     }
-      //   }
-      // }),
-      applicantEmail: getTextField({
-        label: {
-          labelName: "Email",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Email",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_EMAIL_PLACEHOLDER"
-        },
-        pattern: getPattern("Email"),
-        errorMessage: "Invalid Email",
-        jsonPath:
-          "Property.ownersTemp[0].emailId",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props:{
-          className:"applicant-details-error"
+      beforeFieldChange:(action, state, dispatch) => {
+        const categoryDocumentJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocument";
+        if(action.value === "NONE" || action.value===" "){
+          showComponent(dispatch, categoryDocumentJsonPath, false);
+        }else{
+          showComponent(dispatch, categoryDocumentJsonPath, true);
         }
-      }),
+      },
+    },
 
       applicantAddress: getTextField({
         label: {
@@ -291,6 +268,33 @@ const commonApplicantInformation = () => {
         },
         props:{
           className:"applicant-details-error"
+        }
+      }),
+      specialCategoryDocument: getTextField({
+        label: {
+          labelName: "Document Id No.",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_NO_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Document Id No.",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        required:true,
+        // errorMessage: "Invalid Address",
+        jsonPath:
+          "Property.ownersTemp[0].documents[0].documentUid",
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 12,
+        //   md: 6
+        // },
+        props:{
+          className:"applicant-details-error",
+          style:{
+            display:"none"
+          },
+          
         }
       }),
     })
