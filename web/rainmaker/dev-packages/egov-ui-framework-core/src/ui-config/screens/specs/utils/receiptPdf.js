@@ -292,7 +292,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
         },
         layout: tableborder
       },
-      { text: "OWNERSHIP INFORMATION", style: "pt-reciept-citizen-subheader" },
+      { text: "TRADE OWNERSHIP INFORMATION", style: "pt-reciept-citizen-subheader" },
       {
         style: "pt-reciept-citizen-table",
         table: {
