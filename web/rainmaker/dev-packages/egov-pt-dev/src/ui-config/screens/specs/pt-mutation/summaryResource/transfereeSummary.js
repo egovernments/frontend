@@ -147,7 +147,7 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               //jsonPath:"Property.ownersTemp[0].documents[0].documentUid",
-              jsonPath:"Property.ownersTemp[0].permanentAddress",
+              jsonPath:"Property.ownersTemp[0].documentUid",
                 callBack: checkValueForNA
             }
           )

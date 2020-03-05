@@ -226,6 +226,7 @@ const commonApplicantInformation = () => {
         //     code: "B"
         //   }
         // ],
+        required:true,
         localePrefix: {
           moduleName: "common-masters",
           masterName: "OwnerType"
@@ -239,10 +240,19 @@ const commonApplicantInformation = () => {
       }),
       beforeFieldChange:(action, state, dispatch) => {
         const categoryDocumentJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocument";
+  
+        const categoryDocumentThirdStepJsonPath="components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.items[0].item0.children.cardContent.children.ownerContainer.children.ownerDocumentId";
+
         if(action.value === "NONE" || action.value===" "){
           showComponent(dispatch, categoryDocumentJsonPath, false);
+          dispatch(handleField("apply", categoryDocumentJsonPath, "required", false));
+          dispatch(handleField("apply", categoryDocumentJsonPath, "props.value", ""));
+          // dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "props.style.display","none"));
+
+          
         }else{
           showComponent(dispatch, categoryDocumentJsonPath, true);
+          // dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "props.style.display","block"));
         }
       },
     },
@@ -283,7 +293,7 @@ const commonApplicantInformation = () => {
         required:true,
         // errorMessage: "Invalid Address",
         jsonPath:
-          "Property.ownersTemp[0].documents[0].documentUid",
+          "Property.ownersTemp[0].documentUid",
         // gridDefination: {
         //   xs: 12,
         //   sm: 12,
