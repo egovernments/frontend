@@ -88,7 +88,7 @@ android {
 			signingConfig signingConfigs.Employee
 
 			// Production
-			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/employee/user/login"'
+			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/employee-mcs"'
 		}
 		CitizenUAT {
 			minSdkVersion 19
