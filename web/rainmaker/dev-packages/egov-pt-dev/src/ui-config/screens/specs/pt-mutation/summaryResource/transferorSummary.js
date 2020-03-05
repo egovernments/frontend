@@ -107,7 +107,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.ownershipCategory",
+              "Property.ownershipCategoryInit",
               callBack: checkValueForNA
             }
           ),
@@ -262,7 +262,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
         labelKey: "PT_INSTI_OWNERSHIP_TYPE"
       },
       {
-        jsonPath: "Property.ownershipCategory",
+        jsonPath: "Property.ownershipCategoryInit",
         callBack: checkValueForNA
         // callBack: value => {
         //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;

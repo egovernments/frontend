@@ -59,7 +59,6 @@ const renderSearchConnectionTable = async (state, dispatch) => {
       }
     }
     try {
-      
       let getSearchResult = getSearchResults(queryObject)
       let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
@@ -78,10 +77,21 @@ const renderSearchConnectionTable = async (state, dispatch) => {
           queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
         }
         let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
-        billResults ? billResults.Bill.map(bill => {
-          finalArray.push({
-            due: bill.totalAmount,
-            dueDate: bill.billDetails[0].expiryDate,
+        if(element.connectionNo!=="NA" && element.connectionNo!== null){
+          billResults ? billResults.Bill.map(bill => {
+            finalArray.push({
+              due: bill.totalAmount,
+              dueDate: bill.billDetails[0].expiryDate,
+              service: element.service,
+              connectionNo: element.connectionNo,
+              name: element.property.owners[0].name,
+              status: element.status,
+              address: element.property.address.street,
+              connectionType: element.connectionType
+            })
+          }) : finalArray.push({
+            due: 'NA',
+            dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
             name: element.property.owners[0].name,
@@ -89,16 +99,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             address: element.property.address.street,
             connectionType: element.connectionType
           })
-        }) : finalArray.push({
-          due: 'NA',
-          dueDate: 'NA',
-          service: element.service,
-          connectionNo: element.connectionNo,
-          name: element.property.owners[0].name,
-          status: element.status,
-          address: element.property.address.street,
-          connectionType: element.connectionType
-        })
+        }
+        
       }
       showConnectionResults(finalArray, dispatch)
     } catch (err) { console.log(err) }
@@ -146,10 +148,11 @@ const renderSearchApplicationTable = async (state, dispatch) => {
     }
     try {
       let getSearchResult, getSearchResultForSewerage;
-      if(searchScreenObject.appType==="New Water connection"){
-         getSearchResult = getSearchResults(queryObject)
-      }else if(searchScreenObject.appType==="New Sewerage Connection"){
-         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      let queryObjForAppType= [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "offset", value: "0" }];
+      if(searchScreenObject.applicationType==="New Water connection") {
+         getSearchResult = getSearchResults(queryObjForAppType)
+      }else if(searchScreenObject.applicationType==="New Sewerage Connection"){
+         getSearchResultForSewerage = getSearchResultsForSewerage(queryObjForAppType, dispatch)
       }else{
         getSearchResult = getSearchResults(queryObject),
         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
