@@ -838,7 +838,7 @@ class FormWizard extends Component {
             billId: get(getBill, "Bill[0].id"),
             consumerCode: get(getBill, "Bill[0].billDetails[0].consumerCode"),
             productInfo: "Property Tax Payment",
-            gateway: "AXIS",
+            gateway: "DEFAULT",
             callbackUrl
           }
         };
