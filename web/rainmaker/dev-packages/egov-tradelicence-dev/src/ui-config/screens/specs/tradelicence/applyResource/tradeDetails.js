@@ -769,9 +769,6 @@ export const tradeDetails = getCommonCard({
         required: true,
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
-         props:{
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
-        },
         gridDefination: {
           xs: 12,
           sm: 6
@@ -850,9 +847,6 @@ export const tradeDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 6
-      },
-      props:{
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
       },
       iconObj: {
         iconName: "search",
@@ -941,8 +935,7 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_LABEL"
       },
       props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        className:"applicant-details-error"
       }, 
       placeholder: {
         labelName: "Example Diljit Da Dhaba",
@@ -966,7 +959,6 @@ export const tradeDetails = getCommonCard({
         pattern: getPattern("Date"),
         jsonPath: "Licenses[0].validFrom",
         props: {
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           className:"applicant-details-error",
           inputProps: {
             min: getTodaysDateInYMD(),
@@ -987,7 +979,6 @@ export const tradeDetails = getCommonCard({
         pattern: getPattern("Date"),
         jsonPath: "Licenses[0].validTo",
         props: {
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           inputProps: {
             min: getNextMonthDateInYMD(),
             max: getFinancialYearDates("yyyy-mm-dd").endDate
@@ -1007,8 +998,7 @@ export const tradeDetails = getCommonCard({
           labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_PLACEHOLDER"
         },
         props:{
-          className:"applicant-details-error",
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          className:"applicant-details-error"
         },
         localePrefix: {
           moduleName: "common-masters",
@@ -1045,7 +1035,6 @@ export const tradeDetails = getCommonCard({
           labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
         },
         props:{
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           className:"applicant-details-error"
         },
         placeholder: {
@@ -1088,8 +1077,7 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
       },
       props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false
+        className:"applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Trade Commencement Date",
@@ -1105,8 +1093,7 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
       },
       props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        className:"applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Trade GST No.",
@@ -1121,8 +1108,7 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
       },
       props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        className:"applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Operatonal Area in Sq Ft",
@@ -1137,8 +1123,7 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
       },
       props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        className:"applicant-details-error"
       },
       placeholder: {
         labelName: "Enter No. Of Employee",
@@ -1148,7 +1133,7 @@ export const tradeDetails = getCommonCard({
       jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
     })
   },
-  {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},
+  {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}}
   ),
   tradeUnitCard,
   accessoriesCard
