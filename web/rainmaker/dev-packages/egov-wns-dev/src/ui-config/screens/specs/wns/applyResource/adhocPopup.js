@@ -16,27 +16,57 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+const tenantId = getQueryArg(window.location.href, "tenantId");
 
 const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   const WSRequestBody = cloneDeep(
     get(state.screenConfiguration.preparedFinalObject, "WaterConnection")
   );
-  let serviceUrl = WSRequestBody[0].service === "WATER" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
-  console.log(serviceUrl);
+
+  // to parse penalty and rebate amount
+  if (WSRequestBody[0].additionalDetails !== undefined && WSRequestBody[0].additionalDetails.length !== 0) {
+    if (WSRequestBody[0].additionalDetails.hasOwnProperty('adhocPenalty') === true) {
+      WSRequestBody[0].additionalDetails.adhocPenalty = parseInt(WSRequestBody[0].additionalDetails.adhocPenalty);
+    }
+
+    if (WSRequestBody[0].additionalDetails.hasOwnProperty('adhocRebate') === true) {
+      WSRequestBody[0].additionalDetails.adhocRebate = parseInt(WSRequestBody[0].additionalDetails.adhocRebate);
+    }
+  }
 
   set(WSRequestBody[0], "action", "ADHOC");
+
+  let querObj = [{
+    applicationNo: WSRequestBody[0].applicationNo,
+    tenantId: tenantId,
+  }]
+
+  let serviceUrl;
+  if (WSRequestBody[0].service === "WATER") {
+    serviceUrl = "ws-calculator/waterCalculator/_estimate";
+    querObj[0].waterConnection = WSRequestBody[0];
+  } else {
+    serviceUrl = "sw-calculator/sewerageCalculator/_estimate"
+    querObj[0].sewerageConnection = WSRequestBody[0];
+  }
+
   const WSpayload = await httpRequest(
     "post",
-    "/ws-services/wc/_update",
+    serviceUrl,
     "",
     [],
-    { WaterConnection: WSRequestBody }
+    {
+      isconnectionCalculation: false,
+      CalculationCriteria: querObj
+    }
   );
 
   // clear data from form
-
+  console.log(1011, WSpayload)
   const billPayload = await createEstimateData(
-    WSpayload.Licenses[0],
+    WSpayload.Calculation[0],
     "LicensesTemp[0].estimateCardData",
     dispatch,
     window.location.href
