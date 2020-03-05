@@ -48,7 +48,7 @@ export const header = getCommonContainer({
       labelKey: process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
     })
   }),
-  // wsApplication: getCommonContainer({
+
   applicationNumberWater: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
@@ -56,8 +56,7 @@ export const header = getCommonContainer({
     props: { number: "NA" },
     visible: false
   },
-  // }),
-  // swApplication: getCommonContainer({
+ 
   applicationNumberSewerage: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
@@ -65,7 +64,7 @@ export const header = getCommonContainer({
     props: { number: "NA" },
     visible: false
   }
-  // })
+
 });
 
 export const reviewConnDetails = reviewConnectionDetails();
