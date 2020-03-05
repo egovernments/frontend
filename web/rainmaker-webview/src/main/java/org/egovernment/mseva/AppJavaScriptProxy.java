@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -24,12 +25,16 @@ import android.Manifest;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
 
@@ -38,7 +43,17 @@ import static android.content.ContentValues.TAG;
  */
 
 public class AppJavaScriptProxy  {
+	static final int SEND_PYAMENT_INFORMATION = 2;
 	private Activity activity = null;
+	Context mContext;
+	HashMap<String, JSONObject> mObjectsFromJS = new HashMap<String, JSONObject>();
+
+	/**
+	 * Instantiate the interface and set the context
+	 */
+	AppJavaScriptProxy(Context c) {
+		mContext = c;
+	}
 
 	public AppJavaScriptProxy(MainActivity activity) {
 		this.activity = activity;
@@ -130,6 +145,33 @@ public class AppJavaScriptProxy  {
 		os.flush();
 
 		createFileDownloadedNotification(dwldsPath, contentType);
+	}
+
+	public void showToast(Context mContext,String message){
+		Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+	}
+	/**
+	 * Show a toast from the web page
+	 */
+	@JavascriptInterface
+	public void sendPaymentData(String name, String stringifiedJSON)  {
+		this.showToast(this.activity,"Opening POS supporting payment app");
+		//call call back function with paymentDataMap
+		try {
+			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
+			sendPaymentIntent.setType("text/plain");
+			sendPaymentIntent.setClassName("ritika.com.myapplication", "ritika.com.myapplication.MainActivity");
+			sendPaymentIntent.putExtra(name,stringifiedJSON);
+			this.activity.startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
+
+		}
+		catch (ActivityNotFoundException ex) {
+			ex.printStackTrace();
+			Toast.makeText(mContext, "Supporting application is not installed!", Toast.LENGTH_SHORT).show();
+
+			Log.e("Main", "Second application is not installed!");
+		}
+
 	}
 
 }

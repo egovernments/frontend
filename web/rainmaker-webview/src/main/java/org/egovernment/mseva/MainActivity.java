@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 						//call javascript bridge to update the status
 						loadView("javascript:window.posOnFailure()",false);
 					}
+					return;
 				}
 
             }
@@ -180,48 +181,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-	public class WebAppInterface {
-		Context mContext;
-		HashMap<String, JSONObject> mObjectsFromJS = new HashMap<String, JSONObject>();
 
-		/**
-		 * Instantiate the interface and set the context
-		 */
-		WebAppInterface(Context c) {
-			mContext = c;
-		}
-
-		/**
-		 * Show a toast from the web page
-		 */
-		@JavascriptInterface
-		public void sendPaymentData(String name, String stringifiedJSON) throws JSONException {
-//			mObjectsFromJS.put(name, new JSONObject(stringifiedJSON));
-//			JSONObject paymentData = mObjectsFromJS.get("paymentData");
-			Toast.makeText(mContext, "Opening pos app", Toast.LENGTH_SHORT).show();
-			//call call back function with paymentDataMap
-			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
-			sendPaymentIntent.setType("text/plain");
-			sendPaymentIntent.setClassName("ritika.com.myapplication", "ritika.com.myapplication.MainActivity");
-			//it should be come from web applicaiton
-//			sendPaymentIntent.putExtra("instrumentType", (String) (mObjectsFromJS.get("paymentData").has("instrumentType")?mObjectsFromJS.get("paymentData").get("instrumentType").toString():""));
-//			sendPaymentIntent.putExtra("paymentAmount", (String) (mObjectsFromJS.get("paymentData").has("paymentAmount")?mObjectsFromJS.get("paymentData").get("paymentAmount").toString():""));
-//			sendPaymentIntent.putExtra("customerName", (String) (mObjectsFromJS.get("paymentData").has("customerName")?mObjectsFromJS.get("paymentData").get("customerName").toString():""));
-//			sendPaymentIntent.putExtra("customerMobile", (String) (mObjectsFromJS.get("paymentData").has("customerMobile")?mObjectsFromJS.get("paymentData").get("customerMobile").toString():""));
-//			sendPaymentIntent.putExtra("message", (String) (mObjectsFromJS.get("paymentData").has("message")?mObjectsFromJS.get("paymentData").get("message").toString():""));
-//			sendPaymentIntent.putExtra("emailId", (String) (mObjectsFromJS.get("paymentData").has("emailId")?mObjectsFromJS.get("paymentData").get("emailId").toString():""));
-//			sendPaymentIntent.putExtra("billNumber", (String) (mObjectsFromJS.get("paymentData").has("billNumber")?mObjectsFromJS.get("paymentData").get("billNumber").toString():""));
-//			sendPaymentIntent.putExtra("consumerCode", (String) (mObjectsFromJS.get("paymentData").has("consumerCode")?mObjectsFromJS.get("paymentData").get("consumerCode").toString():""));
-//			sendPaymentIntent.putExtra("businessService", (String) (mObjectsFromJS.get("paymentData").has("businessService")?mObjectsFromJS.get("paymentData").get("businessService").toString():""));
-//			sendPaymentIntent.putExtra("collectorName", (String) (mObjectsFromJS.get("paymentData").has("collectorName")?mObjectsFromJS.get("paymentData").get("collectorName").toString():""));
-//			sendPaymentIntent.putExtra("collectorId", (String) (mObjectsFromJS.get("paymentData").has("collectorId")?mObjectsFromJS.get("paymentData").get("collectorId").toString():""));
-//			sendPaymentIntent.putExtra("instrumentDate", (String) (mObjectsFromJS.get("paymentData").has("instrumentDate")?mObjectsFromJS.get("paymentData").get("instrumentDate").toString():""));
-//			sendPaymentIntent.putExtra("instrumentNumber", (String) (mObjectsFromJS.get("paymentData").has("instrumentNumber")?mObjectsFromJS.get("paymentData").get("instrumentNumber").toString():""));
-			sendPaymentIntent.putExtra(name,stringifiedJSON);
-			startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
-		}
-
-	}
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
@@ -249,9 +209,7 @@ public class MainActivity extends AppCompatActivity {
         //Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
-//		webView.addJavascriptInterface(proxy, "mSewaApp");
-//		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
-		webView.addJavascriptInterface(new WebAppInterface(this), "mSewaApp");
+		webView.addJavascriptInterface(proxy, "mSewaApp");
 
 
 		String versionName = "";
@@ -447,31 +405,6 @@ public class MainActivity extends AppCompatActivity {
             */
             loadView(path,false);
         }
-
-//		Button pay = (Button) findViewById(R.id.pay);
-//		pay.setOnClickListener(new View.OnClickListener() {
-//			public void onClick(View v)  {
-//				Toast.makeText(getBaseContext(), "Paying!" , Toast.LENGTH_SHORT ).show();
-//				Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
-//				sendPaymentIntent.setClassName("com.example.pospocapp", "com.example.pospocapp.MainActivity");
-//				//it should be come from web applicaiton
-//				sendPaymentIntent.putExtra("instrumentType","CASH");
-//				sendPaymentIntent.putExtra("paymentAmount","CASH");
-//				sendPaymentIntent.putExtra("customerName","Murali M");
-//				sendPaymentIntent.putExtra("customerMobile","6360807028");
-//				sendPaymentIntent.putExtra("message","Payment details");
-//				sendPaymentIntent.putExtra("emailId","murali.m@goodworklabs.com");
-//				sendPaymentIntent.putExtra("billNumber","12123");
-//				sendPaymentIntent.putExtra("consumerCode","12132");
-//				sendPaymentIntent.putExtra("businessService","PT");
-//				sendPaymentIntent.putExtra("collectorName","Murali");
-//				sendPaymentIntent.putExtra("collectorId","12132");
-//				sendPaymentIntent.putExtra("instrumentDate","12123123123");
-//				sendPaymentIntent.putExtra("instrumentNumber","12132");
-//				startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
-//			}
-//		});
-
     }
 
 
