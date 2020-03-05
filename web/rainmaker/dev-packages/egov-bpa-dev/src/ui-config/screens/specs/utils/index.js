@@ -29,7 +29,8 @@ import {
   getTransformedLocalStorgaeLabels,
   getTransformedLocale,
   getFileUrl,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,
+  setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
@@ -2737,7 +2738,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: getTenantId(),
           userName: `${ownerNo}`
         }
       );
@@ -2844,6 +2845,14 @@ const riskType = (state, dispatch) => {
       (buildingHeight >= riskType[0].fromBuildingHeight)) {
       scrutinyRiskType = "HIGH"
     }
+  // if(scrutinyRiskType === "LOW"){
+  //   const tenantId = getQueryArg(window.location.href, "tenantId");
+  //   const queryObject = [
+  //     { key: "tenantId", value: tenantId },
+  //     { key: "businessServices", value: "BPA_LOW" }
+  //   ];
+  //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  // }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
@@ -2854,6 +2863,36 @@ export const residentialType = (state, dispatch) => {
   );
   if(resType) {
     dispatch(prepareFinalObject("BPA.occupancyType", resType));
+  }
+}
+
+export const licenceType = async(state, dispatch) => {
+  let tradeTypes = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.TradeType", []
+    );
+  let userInfo = JSON.parse(getUserInfo());
+  let roles = userInfo.roles;
+  let numberOfRoles = [];
+  roles.forEach(role => {
+    numberOfRoles.push(role.code.split('_')[1]);
+  })
+  let tradeTypesCode = []; 
+  tradeTypes.forEach(type =>{
+    tradeTypesCode.push(type.code.split('.')[0]);
+  });
+  let filteredRoles = [];
+  numberOfRoles.forEach(fRole => {
+    tradeTypesCode.forEach(fcode => {
+      if(fRole === fcode){
+        filteredRoles.push({code: fRole});
+      }
+    })
+  });
+  if(filteredRoles && filteredRoles.length > 1){
+    dispatch(
+      prepareFinalObject(`applyScreenMdmsData.licenceTypes`, filteredRoles)
+    );
   }
 }
 
@@ -2972,6 +3011,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
           await riskType(state, dispatch);
           await residentialType(state, dispatch);
+          await licenceType(state, dispatch);
         } else {
           dispatch(
             toggleSnackbar(
@@ -3095,7 +3135,7 @@ export const generateBillForBPA = async (dispatch, applicationNumber, tenantId, 
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: businessService }
+        { key: "businessService", value: businessService }
       ];
       const payload = await createBill(queryObj,dispatch);
       if (payload && payload.Bill[0]) {
@@ -3690,7 +3730,7 @@ export const getMdmsDataForBpa = async queryObject => {
 export const requiredDocumentsData = async (state, dispatch, action) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",

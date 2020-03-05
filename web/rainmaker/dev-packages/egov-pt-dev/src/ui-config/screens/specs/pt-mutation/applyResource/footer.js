@@ -167,7 +167,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
     propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
     propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type = propertyPayload.ownershipCategoryTemp.split('.')[1];
+    propertyPayload.institution.type =  propertyPayload.institutionTemp.institutionType;
 
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
@@ -181,7 +181,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
     propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
     propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type = propertyPayload.ownershipCategoryTemp.split('.')[1];
+    propertyPayload.institution.type =  propertyPayload.institutionTemp.institutionType;
 
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
@@ -263,13 +263,15 @@ const validateMobileNumber = (state) => {
       return owner.name
     })
     const mobileNumbers = owners.map(owner => {
-      return owner.mobileNumber
+      if(owner.status== "ACTIVE"){
+        return owner.mobileNumber;
+      } 
     })
-    newOwners.map(owner => {
-      if (names.includes(owner.name)) {
-        err = "OWNER_NAME_SAME";
-      }
-    })
+    // newOwners.map(owner => {
+    //   if (names.includes(owner.name)) {
+    //     err = "OWNER_NAME_SAME";
+    //   }
+    // })
     newOwners.map(owner => {
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
@@ -287,16 +289,11 @@ const validateMobileNumber = (state) => {
     })
 
     newOwners.map(owner => {
-      if (names.includes(owner.name)) {
-        err = "OWNER_NAME_SAME";
-      }
+
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
       }
     })
-
-
-
   }
 
 
@@ -332,8 +329,14 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
+    let isInstitutionTypeValid=validateFields(
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
+       state,
+      dispatch
+    );
 
-    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || isInstitutionValid;
+
+    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || (isInstitutionValid && isInstitutionTypeValid);
 
     let isApplicantTypeValid = validateFields(
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
@@ -423,7 +426,7 @@ const callBackForNext = async (state, dispatch) => {
       temp = { ...institutionTemp }
       temp.name = institutionTemp.institutionName;
       temp.fatherOrHusbandName = institutionTemp.name;
-
+      temp.permanentAddress = institutionTemp.correspondenceAddress;
       const ownerTemp = [temp];
       dispatch(
         prepareFinalObject(
