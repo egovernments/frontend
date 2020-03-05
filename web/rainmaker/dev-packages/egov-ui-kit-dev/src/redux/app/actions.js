@@ -179,23 +179,23 @@ export const fetchUiCommonConstants = () => {
   };
 };
 
-// export const setNotificationCount = (count) => {
-//   return {
-//     type: actionTypes.GET_NOTIFICATION_COUNT,
-//     count,
-//   };
-// };
+export const setNotificationCount = (count) => {
+  return {
+    type: actionTypes.GET_NOTIFICATION_COUNT,
+    count,
+  };
+};
 
-// export const getNotificationCount = (queryObject, requestBody) => {
-//   return async (dispatch, getState) => {
-//     try {
-//       const payload = await httpRequest(EVENTSCOUNT.GET.URL, EVENTSCOUNT.GET.ACTION, queryObject, requestBody);
-//       dispatch(setNotificationCount(payload.unreadCount));
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// };
+export const getNotificationCount = (queryObject, requestBody) => {
+  return async (dispatch, getState) => {
+    try {
+      const payload = await httpRequest(EVENTSCOUNT.GET.URL, EVENTSCOUNT.GET.ACTION, queryObject, requestBody);
+      dispatch(setNotificationCount(payload.unreadCount));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 
 export const setNotificationsComplete = (payload) => {
   return {
@@ -216,15 +216,15 @@ const setNotificationsError = () => {
   };
 };
 
-// export const getNotifications = (queryObject, requestBody) => {
-//   return async (dispatch, getState) => {
-//     dispatch(setNotificationsPending());
-//     try {
-//       const payload = await httpRequest(NOTIFICATIONS.GET.URL, NOTIFICATIONS.GET.ACTION, queryObject, requestBody);
-//       const transformedEvents = await getTransformedNotifications(payload.events);
-//       dispatch(setNotificationsComplete(transformedEvents));
-//     } catch (error) {
-//       dispatch(setNotificationsError(error.message));
-//     }
-//   };
-// };
+export const getNotifications = (queryObject, requestBody) => {
+  return async (dispatch, getState) => {
+    dispatch(setNotificationsPending());
+    try {
+      const payload = await httpRequest(NOTIFICATIONS.GET.URL, NOTIFICATIONS.GET.ACTION, queryObject, requestBody);
+      const transformedEvents = await getTransformedNotifications(payload.events);
+      dispatch(setNotificationsComplete(transformedEvents));
+    } catch (error) {
+      dispatch(setNotificationsError(error.message));
+    }
+  };
+};
