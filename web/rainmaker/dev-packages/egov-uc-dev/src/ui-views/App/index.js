@@ -76,7 +76,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { authenticated,classes ,setRoute} = this.props;
+    const { authenticated,classes ,setRoute,spinner} = this.props;
     const childProps = {
       isAuthenticated: authenticated
     };
@@ -106,7 +106,7 @@ class App extends React.Component {
           </Toolbar>
         </AppBar>
         <MainRoutes childProps={childProps} />
-        {/* {spinner && <LoadingIndicator/>} */}
+        {spinner && <LoadingIndicator/>}
       </Div>
     );
   }

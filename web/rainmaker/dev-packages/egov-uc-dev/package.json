@@ -32,7 +32,8 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "url-search-params-polyfill": "^3.0.0"
+    "url-search-params-polyfill": "^3.0.0",
+    "react-json-view": "^1.19.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
