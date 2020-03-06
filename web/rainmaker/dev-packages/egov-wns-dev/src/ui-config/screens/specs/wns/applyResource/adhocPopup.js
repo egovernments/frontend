@@ -32,7 +32,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     }
 
     if (WSRequestBody[0].additionalDetails.hasOwnProperty('adhocRebate') === true) {
-      WSRequestBody[0].additionalDetails.adhocRepabate = parseFloat(WSRequestBody[0].additionalDetails.adhocRebate);
+      WSRequestBody[0].additionalDetails.adhocRebate = parseFloat(WSRequestBody[0].additionalDetails.adhocRebate);
     }
   }
 
