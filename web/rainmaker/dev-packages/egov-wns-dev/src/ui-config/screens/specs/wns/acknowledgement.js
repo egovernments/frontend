@@ -239,7 +239,7 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application is sent back to citizen Successfully",
+              labelName: "Application is sent back Successfully",
               labelKey: "WS_SENDBACK_CHECKLIST_MESSAGE_HEAD"
             },
             body: {

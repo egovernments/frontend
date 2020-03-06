@@ -148,11 +148,10 @@ const renderSearchApplicationTable = async (state, dispatch) => {
     }
     try {
       let getSearchResult, getSearchResultForSewerage;
-      let queryObjForAppType= [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "offset", value: "0" }];
       if(searchScreenObject.applicationType==="New Water connection") {
-         getSearchResult = getSearchResults(queryObjForAppType)
+         getSearchResult = getSearchResults(queryObject)
       }else if(searchScreenObject.applicationType==="New Sewerage Connection"){
-         getSearchResultForSewerage = getSearchResultsForSewerage(queryObjForAppType, dispatch)
+         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       }else{
         getSearchResult = getSearchResults(queryObject),
         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
