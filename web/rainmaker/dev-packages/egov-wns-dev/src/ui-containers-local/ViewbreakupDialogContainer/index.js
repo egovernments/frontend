@@ -34,7 +34,7 @@ const getMultiItem = (billingslabData, classes, style) => {
   return billingslabData.map((item, index) => {
     return (
       <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={10}>
+        <Grid sm={9}>
           <LabelContainer
             labelKey={item.taxHeadCode}
             style={{
@@ -45,7 +45,7 @@ const getMultiItem = (billingslabData, classes, style) => {
             }}
           />
         </Grid>
-        <Grid sm={2} className={classes.rightAlign}>
+        <Grid sm={3} className={classes.rightAlign}>
           <Label
             label={`${item.estimateAmount}`}
             style={{
@@ -75,7 +75,7 @@ class ViewBreakupContainer extends React.Component {
   getGridItem = (total, classes, style) => {
     return (
       <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={10}>
+        <Grid sm={9}>
           <LabelContainer
             labelName={"Total"}
             labelKey={"PT_FORM4_TOTAL"}
@@ -91,7 +91,7 @@ class ViewBreakupContainer extends React.Component {
             }
           />
         </Grid>
-        <Grid sm={2} className={classes.rightAlign}>
+        <Grid sm={3} className={classes.rightAlign}>
           <LabelContainer
             labelName={`Rs ${total}`}
             style={
