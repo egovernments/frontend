@@ -195,7 +195,18 @@ class TableChart extends Component {
       tabName = tabName ? tabName : chartParent[0]['tabName'];
       drilfilters = drilfilters? drilfilters : chartsData[this.props.chartKey]['filter'][0];
 
+      
+
+
       let colSortRow ={};
+      for(var i=0; i<chartData.length; i++){
+        if(!chartData[i]){
+          if(chartData[i+1]){
+            chartData.splice(0,i+1);
+            break;  
+          }          
+        }
+      }
       let columnData = _.chain(chartData).first().get("plots").map((k, v) => {        
         if(k.name != "S.N."){
           colSortRow[k.name] = '';
