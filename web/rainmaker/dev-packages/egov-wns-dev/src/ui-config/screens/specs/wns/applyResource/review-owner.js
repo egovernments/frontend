@@ -204,7 +204,7 @@ export const reviewInitialMeterReading = getLabelWithValue(
     labelName: "Initial Meter Reading",
     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
   },
-  // { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  { jsonPath: "WaterConnection[0].initialMeterReading" }
 );
 
 export const getReviewOwner = (isEditable = true) => {
