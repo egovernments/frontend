@@ -2889,9 +2889,13 @@ export const licenceType = async(state, dispatch) => {
       }
     })
   });
-  if(filteredRoles && filteredRoles.length > 1){
+  function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+  let unique = filteredRoles.filter( onlyUnique );
+  if(unique && unique.length > 1){
     dispatch(
-      prepareFinalObject(`applyScreenMdmsData.licenceTypes`, filteredRoles)
+      prepareFinalObject(`applyScreenMdmsData.licenceTypes`, unique)
     );
   }
 }

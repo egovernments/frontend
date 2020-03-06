@@ -77,8 +77,7 @@ export const detailsofplot = getCommonCard({
                 props: {
                     className: "textfield-enterable-selection",
                   },
-                // required: true,
-                // // pattern: getPattern("Name") || null,
+                required: true,
                 jsonPath: "BPA.holdingNo",
                 gridDefination: {
                     xs: 12,
@@ -110,6 +109,73 @@ export const detailsofplot = getCommonCard({
                     md: 6
                   }
             })
+        },
+        reSurveyPlotNo : {
+            ...getTextField({
+                label: {
+                    labelName: "Re-Survey/Plot No(CS)",
+                    labelKey: "BPA_BOUNDARY_RE_SURVEY_PLOT_LABEL"
+                },
+                placeholder: {
+                    labelName: "Enter Re-Survey/Plot No(CS)",
+                    labelKey: "BPA_BOUNDARY_RE_SURVEY_PLOT_PLACEHOLDER"
+                  },
+                jsonPath: "BPA.additionalDetails.ReSurveyPlotNo",
+                props: {
+                    className : "tl-trade-type"
+                  },
+                  gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
+            })
+        },
+        townPlanningScheme: {
+            ...getSelectField({
+                label: {
+                  labelName: "Town Planning Scheme",
+                  labelKey: "BPA_TOWN_PLANING_SCHEME_LABEL"
+                },
+                optionLabel: "name",
+                placeholder: { 
+                    labelName: "Select Town Planning Scheme", 
+                    labelKey: "BPA_TOWN_PLANING_SCHEME_PLACEHOLDER" 
+                },
+                sourceJsonPath: "applyScreenMdmsData.BPA.townPlanningScheme",
+                jsonPath: "BPA.additionalDetails.townPlanningScheme",
+                props: {
+                  className : "tl-trade-type"
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
+              }),
+        },
+        proposedLandUse: {
+            ...getSelectField({
+                label: {
+                  labelName: "Proposed land use",
+                  labelKey: "BPA_PROPOSED_LAND_USE_LABEL"
+                },
+                optionLabel: "name",
+                placeholder: { 
+                    labelName: "Select Proposed land use", 
+                    labelKey: "BPA_PROPOSED_LAND_USE_PLACEHOLDER" 
+                },
+                sourceJsonPath: "applyScreenMdmsData.BPA.Proposedlanduse",
+                jsonPath: "BPA.additionalDetails.proposedLandUse",
+                props: {
+                  className : "tl-trade-type"
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
+              }),
         },
         cityTown: {
             ...getSelectField({

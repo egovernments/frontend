@@ -178,7 +178,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
         pattern: getPattern("Amount"),
         required: true,
         jsonPath:
-          "BPA.additionalDetail.annualExpectedExpenditure",
+          "BPA.additionalDetails.annualExpectedExpenditure",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -192,10 +192,15 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
         jsonPath: "BPA.additionalDetail.isPrimaryOwner",
         props: {
           label: {
-            labelName: "is Charitable TrustBuilding ?",
+            labelName: "Is Charitable TrustBuilding ?",
             labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
           },
-          jsonPath: "BPA.additionalDetail.isCharitableTrustBuilding"
+          jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
         },
         type: "array"
       },
@@ -209,7 +214,12 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             labelName: "Is Affordable Housing Scheme ?",
             labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
           },
-          jsonPath: "BPA.additionalDetail.isAffordableHousingScheme"
+          jsonPath: "BPA.additionalDetails.isAffordableHousingScheme"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
         },
         type: "array"
       }

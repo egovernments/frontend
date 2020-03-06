@@ -187,7 +187,7 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     let isDetailsofplotCardValid = validateFields(
-      "components.div.children.formwizardFourthStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
+      "components.div.children.formwizardFirstStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
       state,
       dispatch
     );
@@ -231,10 +231,10 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.blockWiseContainer.children",
+      "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.applicantTypeSelection.children",
       state, 
       dispatch
-    )
+    );
     let isDemolitiondetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.demolitiondetails.children.cardContent.children.demolitionDetailsContainer.children",
       state,

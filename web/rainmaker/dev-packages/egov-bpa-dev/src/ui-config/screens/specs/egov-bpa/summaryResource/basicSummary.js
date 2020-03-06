@@ -318,6 +318,36 @@ export const basicSummary = getCommonGrayCard({
                         callBack: checkValueForNA
                     }
                 ),
+                reSurveyPlotNo: getLabelWithValue(
+                  {
+                      labelName: "Re-Survey/Plot No(CS)",
+                      labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
+                  },
+                  {
+                      jsonPath: "BPA.additionalDetails.ReSurveyPlotNo",
+                      callBack: checkValueForNA
+                  }
+                ),
+                townPlanningScheme: getLabelWithValue(
+                  {
+                      labelName: "Town Planning Scheme",
+                      labelKey: "BPA_TOWN_PLANING_SCHEME_LABEL"
+                  },
+                  {
+                      jsonPath: "BPA.additionalDetails.townPlanningScheme",
+                      callBack: checkValueForNA
+                  }
+                ),
+                proposedLandUse: getLabelWithValue(
+                  {
+                      labelName: "Proposed land use",
+                      labelKey: "BPA_PROPOSED_LAND_USE_LABEL"
+                  },
+                  {
+                      jsonPath: "BPA.additionalDetails.proposedLandUse",
+                      callBack: checkValueForNA
+                  }
+                ),
                 landRegDetails: getLabelWithValue(
                     {
                         labelName: "Land Registration Details",

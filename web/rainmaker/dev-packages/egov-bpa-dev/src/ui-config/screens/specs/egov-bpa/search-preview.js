@@ -192,6 +192,10 @@ const setDownloadMenu = (action, state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
+  let riskType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.riskType"
+  );
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -237,45 +241,74 @@ const setDownloadMenu = (action, state, dispatch) => {
     },
     leftIcon: "assignment"
   };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        certificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [];
-      break;
-    case "DOC_VERIFICATION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "FIELDINSPECTION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "NOC_VERIFICATION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "APPROVAL_INPROGRESS" : 
-    downloadMenu = [certificateDownloadObject];
-     break;
-    case "PENDING_SANC_FEE_PAYMENT" :
-    downloadMenu = [certificateDownloadObject];
-    break;
-    printMenu = [];
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
+  let paymentReceiptDownload = {
+    label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
+    link: () => {
+      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE");
+    },
+    leftIcon: "book"
+  };
+  if (riskType === "LOW") {
+    switch (status) {
+      case "APPROVED":
+        // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+        // break;
+      case "DOC_VERIFICATION_INPROGRESS":
+        // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+        // break;
+      case "FIELDINSPECTION_INPROGRESS":
+        // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+        // break;
+      case "NOC_VERIFICATION_INPROGRESS":
+        // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+        // break;
+      case "APPROVAL_INPROGRESS":
+        downloadMenu = [certificateDownloadObject, applicationDownloadObject];
+        break;
+      default:
+        break;
+    }
+  } else {
+    switch (status) {
+      case "APPROVED":
+        downloadMenu = [
+          certificateDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [];
+        break;
+      case "DOC_VERIFICATION_INPROGRESS" :
       downloadMenu = [certificateDownloadObject];
+        break;
+      case "FIELDINSPECTION_INPROGRESS" :
+      downloadMenu = [certificateDownloadObject];
+        break;
+      case "NOC_VERIFICATION_INPROGRESS" :
+      downloadMenu = [certificateDownloadObject];
+        break;
+      case "APPROVAL_INPROGRESS" : 
+      downloadMenu = [certificateDownloadObject];
+       break;
+      case "PENDING_SANC_FEE_PAYMENT" :
+      downloadMenu = [certificateDownloadObject];
+      break;
       printMenu = [];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [];
-      break;
-    default:
-      break;
+      case "DOCUMENTVERIFY":
+      case "FIELDINSPECTION":
+      case "PENDINGAPPROVAL":
+      case "REJECTED":
+        downloadMenu = [certificateDownloadObject];
+        printMenu = [];
+        break;
+      case "CANCELLED":
+      case "PENDINGPAYMENT":
+        downloadMenu = [applicationDownloadObject];
+        printMenu = [];
+        break;
+      default:
+        break;
+    }
   }
   dispatch(
     handleField(
