@@ -25,13 +25,14 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
         Object.keys(reduxDocuments).forEach(async key => {
             if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
                 reduxDocuments[key].documents.forEach(element => {
-                    if (reduxDocuments[key].dropdown !== undefined && reduxDocuments[key].dropdown.value !== null) {
+                    if (reduxDocuments[key].dropdown !== undefined) {
                         element.documentType = reduxDocuments[key].dropdown.value;
                     } else {
-                        element.documentType = reduxDocuments[key].documentCode;
+                        element.documentType = reduxDocuments[key].documentType;
                     }
-                    element.documentCode = reduxDocuments[key].documentType;
+                    element.documentCode = reduxDocuments[key].documentCode;
                     element.status = "ACTIVE";
+                    element.id = reduxDocuments[key].id;
                 });
                 uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
                 let docArrayFromFileStore = await setDocsForEditFlow(state);
@@ -589,6 +590,7 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
         if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
         else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
         else { docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; }
+        docUploadRedux[key].id = payload.applyScreen.documents[key].id;
         docUploadRedux[key].isDocumentRequired = true;
         docUploadRedux[key].isDocumentTypeRequired = true;
         return docUploadRedux;
