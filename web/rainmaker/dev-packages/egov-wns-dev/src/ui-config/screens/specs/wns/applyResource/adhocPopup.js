@@ -28,14 +28,15 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   // to parse penalty and rebate amount
   if (WSRequestBody[0].additionalDetails !== undefined && WSRequestBody[0].additionalDetails.length !== 0) {
     if (WSRequestBody[0].additionalDetails.hasOwnProperty('adhocPenalty') === true) {
-      WSRequestBody[0].additionalDetails.adhocPenalty = parseInt(WSRequestBody[0].additionalDetails.adhocPenalty);
+      WSRequestBody[0].additionalDetails.adhocPenalty = parseFloat(WSRequestBody[0].additionalDetails.adhocPenalty);
     }
 
     if (WSRequestBody[0].additionalDetails.hasOwnProperty('adhocRebate') === true) {
-      WSRequestBody[0].additionalDetails.adhocRebate = parseInt(WSRequestBody[0].additionalDetails.adhocRebate);
+      WSRequestBody[0].additionalDetails.adhocRepabate = parseFloat(WSRequestBody[0].additionalDetails.adhocRebate);
     }
   }
 
+  dispatch(prepareFinalObject("WaterConnection[0]", WSRequestBody[0]));
   set(WSRequestBody[0], "action", "ADHOC");
 
   let querObj = [{
@@ -63,64 +64,16 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     }
   );
 
-  // clear data from form
+  WSpayload.Calculation[0].billSlabData = _.groupBy(WSpayload.Calculation[0].taxHeadEstimates, 'category');
+
   const billPayload = await createEstimateData(
     WSpayload.Calculation[0],
-    "LicensesTemp[0].estimateCardData",
+    "dataCalculation",
     dispatch,
-    window.location.href
+    window.location.href,
+    showHideAdhocPopup(state, dispatch),
   );
 
-  //get deep copy of bill in redux - merge new bill after adhoc
-  const billInRedux = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
-  );
-  const mergedBillObj = { ...billInRedux, ...billPayload.billResponse.Bill[0] };
-
-  //merge bill in Receipt obj
-  billPayload &&
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
-
-  //set amount paid as total amount from bill
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].billDetails[0].amountPaid",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
-
-  //set total amount in instrument
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].instrument.amount",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
-
-  //Collection Type Added in CS v1.1
-  const totalAmount = get(
-    billPayload,
-    "billResponse.Bill[0].billDetails[0].totalAmount"
-  );
-  dispatch(
-    prepareFinalObject(
-      "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
-      "COUNTER"
-    )
-  );
-  if (totalAmount) {
-    //set amount paid as total amount from bill - destination changed in CS v1.1
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
-        totalAmount
-      )
-    );
-  }
-
-  showHideAdhocPopup(state, dispatch);
 };
 
 const updateAdhoc = (state, dispatch) => {
@@ -165,10 +118,6 @@ const updateAdhoc = (state, dispatch) => {
 };
 
 export const adhocPopup = getCommonContainer({
-  // header: getCommonHeader({
-  //   labelName: "Add Adhoc Penalty/Rebate",
-  //   labelKey: "TL_ADD_HOC_CHARGES_POPUP_HEAD"
-  // }),
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
