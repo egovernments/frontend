@@ -4008,7 +4008,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
 
     let additionalDetail = BPA.additionalDetails, 
     fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
-    if(additionalDetail) {
+    if(additionalDetail && additionalDetail["fieldinspection_pending"] && additionalDetail["fieldinspection_pending"].length > 0) {
       fieldInspectionDetails = additionalDetail["fieldinspection_pending"][0]
       fieldInspectionDocs = fieldInspectionDetails.docs;
       fieldInspectionsQstions = fieldInspectionDetails.questions;
