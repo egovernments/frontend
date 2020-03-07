@@ -1,5 +1,4 @@
-import { getBreak, getCommonContainer, getCommonGrayCard, getCommonSubHeader, getLabel, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
-//   import { gotoApplyWithStep } from "../../utils/index";
+import { getBreak, getCommonTitle, getCommonContainer, getCommonGrayCard, getCommonSubHeader, getLabel, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 
 const declarationDetails = getCommonContainer({
@@ -36,6 +35,18 @@ const declarationDetails = getCommonContainer({
 });
 
 export const declarationSummary = getCommonContainer({
+  headers: getCommonTitle(
+    {
+      labelName: "Declaration",
+      labelKey: "BPA_DECLARATION_TITLE"
+    },
+    {
+      style: {
+        marginBottom: 10,
+        marginTop: 18
+      }
+    }
+  ),
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
