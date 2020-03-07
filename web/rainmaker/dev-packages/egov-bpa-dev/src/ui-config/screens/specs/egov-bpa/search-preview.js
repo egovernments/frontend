@@ -88,7 +88,7 @@ const titlebar2 = {
         componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+            label: {labelName : "DOWNLOAD" , labelKey :"BPA_DOWNLOAD"},
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", style: { height: "60px", color : "#FE7A51", marginRight : 10 }, className: "tl-download-button" },
@@ -101,7 +101,7 @@ const titlebar2 = {
         componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+            label: {labelName : "PRINT" , labelKey :"BPA_PRINT"},
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },            
@@ -192,6 +192,10 @@ const setDownloadMenu = (action, state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
+  let riskType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.riskType"
+  );
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -237,45 +241,66 @@ const setDownloadMenu = (action, state, dispatch) => {
     },
     leftIcon: "assignment"
   };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        certificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [];
-      break;
-    case "DOC_VERIFICATION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "FIELDINSPECTION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "NOC_VERIFICATION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "APPROVAL_INPROGRESS" : 
-    downloadMenu = [certificateDownloadObject];
-     break;
-    case "PENDING_SANC_FEE_PAYMENT" :
-    downloadMenu = [certificateDownloadObject];
-    break;
-    printMenu = [];
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
+  let paymentReceiptDownload = {
+    label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
+    link: () => {
+      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE");
+    },
+    leftIcon: "book"
+  };
+  if (riskType === "LOW") {
+    switch (status) {
+      case "APPROVED":
+      case "DOC_VERIFICATION_INPROGRESS":
+      case "FIELDINSPECTION_INPROGRESS":
+      case "NOC_VERIFICATION_INPROGRESS":
+      case "APPROVAL_INPROGRESS":
+        downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+        break;
+      default:
+        break;
+    }
+  } else {
+    switch (status) {
+      case "APPROVED":
+        downloadMenu = [
+          certificateDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [];
+        break;
+      case "DOC_VERIFICATION_INPROGRESS" :
       downloadMenu = [certificateDownloadObject];
+        break;
+      case "FIELDINSPECTION_INPROGRESS" :
+      downloadMenu = [certificateDownloadObject];
+        break;
+      case "NOC_VERIFICATION_INPROGRESS" :
+      downloadMenu = [certificateDownloadObject];
+        break;
+      case "APPROVAL_INPROGRESS" : 
+      downloadMenu = [certificateDownloadObject];
+       break;
+      case "PENDING_SANC_FEE_PAYMENT" :
+      downloadMenu = [certificateDownloadObject];
+      break;
       printMenu = [];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [];
-      break;
-    default:
-      break;
+      case "DOCUMENTVERIFY":
+      case "FIELDINSPECTION":
+      case "PENDINGAPPROVAL":
+      case "REJECTED":
+        downloadMenu = [certificateDownloadObject];
+        printMenu = [];
+        break;
+      case "CANCELLED":
+      case "PENDINGPAYMENT":
+        downloadMenu = [applicationDownloadObject];
+        printMenu = [];
+        break;
+      default:
+        break;
+    }
   }
   dispatch(
     handleField(
