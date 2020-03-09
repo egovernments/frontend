@@ -4214,6 +4214,27 @@ if(tempDoc) {
   }
 };
 
+
+export const revocationPdfDownload = async(action, state, dispatch) => {
+  let bpaDetails = get (
+    state.screenConfiguration.preparedFinalObject, "BPA"
+  );
+  let res = await httpRequest(
+    "post",
+    `pdf-service/v1/_createnosave?key=bpa-revocation&tenantId=${bpaDetails.tenantId}`,
+    "",
+    [],
+    { Bpa: [bpaDetails] }
+  );
+
+  let fileStoreId = res.filestoreIds[0];
+  let pdfDownload = await httpRequest (
+    "get",
+    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
+  );
+  window.open(pdfDownload[fileStoreId]);
+}
+
 export const permitOrderNoDownload = async(action, state, dispatch) => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"

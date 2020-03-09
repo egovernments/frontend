@@ -38,7 +38,7 @@ import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
 import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
-import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
+import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -248,6 +248,15 @@ const setDownloadMenu = (action, state, dispatch) => {
     },
     leftIcon: "book"
   };
+  let revocationPdfDownlaod = {
+    label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
+    link: () => {
+      revocationPdfDownload(action, state, dispatch);
+      generatePdf(state, dispatch, "application_download");
+    },
+    leftIcon: "assignment"
+  };
+
   if (riskType === "LOW") {
     switch (status) {
       case "APPROVED":
@@ -263,13 +272,15 @@ const setDownloadMenu = (action, state, dispatch) => {
         // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
         // break;
       case "APPROVAL_INPROGRESS":
-        downloadMenu = [certificateDownloadObject, applicationDownloadObject];
+        downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
         break;
       default:
         break;
     }
   } else {
     switch (status) {
+      case "REVOCATED":
+        downloadMenu = [revocationPdfDownlaod];
       case "APPROVED":
         downloadMenu = [
           certificateDownloadObject,
