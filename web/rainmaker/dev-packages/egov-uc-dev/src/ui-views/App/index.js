@@ -19,8 +19,11 @@ import {
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getLocale,
-  getAccessToken
+  getAccessToken,
+  getTenantId
 } from "egov-ui-framework/ui-utils/localStorageUtils";
+
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 import "./index.scss";
 
@@ -80,6 +83,7 @@ class App extends React.Component {
     const childProps = {
       isAuthenticated: authenticated
     };
+    const tenantId = getTenantId();
     return (
       <Div className="App">
         <AppBar position="static">
@@ -93,7 +97,7 @@ class App extends React.Component {
               <MenuIcon />
             </IconButton>*/}
             <Typography variant="h6" className={classes.title}>
-              MCS
+              <div style={{display:"flex"}}>{`MCS`}&nbsp;{getAccessToken() && tenantId &&<div className="rainmaker-displayInline"><LabelContainer labelKey={`TENANT_TENANTS_${tenantId.toUpperCase().replace(/[.]/g, "_")}`}/></div>}</div>
             </Typography>
             {getAccessToken() && <Button color="inherit" onClick={(e)=>{
               window.localStorage.clear()
