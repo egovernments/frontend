@@ -4225,7 +4225,7 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
     bpaDetails.edcrNumber +
       "&tenantId=" + bpaDetails.tenantId,"search", []
   );
-
+  let detailsOfBpa = bpaDetails;
   bpaDetails.edcrDetail = payload.edcrDetail;
   let Bpa = bpaDetails;
   let res = await httpRequest(
@@ -4242,6 +4242,20 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
   window.open(pdfDownload[fileStoreId]);
+
+  let BPARequest = await httpRequest(
+    "post",
+    `bpa-services/bpa/appl/_permitorderedcr`,
+    "",
+    [],
+    { BPA : detailsOfBpa }
+  );
+  const url = window.URL.createObjectURL(new Blob([BPARequest]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'file.pdf');
+  document.body.appendChild(link);
+  link.click();
 }
 
 export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) => {

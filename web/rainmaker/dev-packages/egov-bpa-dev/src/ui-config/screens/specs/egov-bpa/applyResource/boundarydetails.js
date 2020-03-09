@@ -120,7 +120,7 @@ export const detailsofplot = getCommonCard({
                     labelName: "Enter Re-Survey/Plot No(CS)",
                     labelKey: "BPA_BOUNDARY_RE_SURVEY_PLOT_PLACEHOLDER"
                   },
-                jsonPath: "BPA.additionalDetails.ReSurveyPlotNo",
+                jsonPath: "BPA.additionalDetails.reSurveyPlotNo",
                 props: {
                     className : "tl-trade-type"
                   },
@@ -137,12 +137,12 @@ export const detailsofplot = getCommonCard({
                   labelName: "Town Planning Scheme",
                   labelKey: "BPA_TOWN_PLANING_SCHEME_LABEL"
                 },
-                optionLabel: "name",
+                // optionLabel: "name",
                 placeholder: { 
                     labelName: "Select Town Planning Scheme", 
                     labelKey: "BPA_TOWN_PLANING_SCHEME_PLACEHOLDER" 
                 },
-                sourceJsonPath: "applyScreenMdmsData.BPA.townPlanningScheme",
+                sourceJsonPath: "applyScreenMdmsData.BPA.TownPlanningScheme",
                 jsonPath: "BPA.additionalDetails.townPlanningScheme",
                 props: {
                   className : "tl-trade-type"
@@ -160,12 +160,12 @@ export const detailsofplot = getCommonCard({
                   labelName: "Proposed land use",
                   labelKey: "BPA_PROPOSED_LAND_USE_LABEL"
                 },
-                optionLabel: "name",
+                // optionLabel: "name",
                 placeholder: { 
                     labelName: "Select Proposed land use", 
                     labelKey: "BPA_PROPOSED_LAND_USE_PLACEHOLDER" 
                 },
-                sourceJsonPath: "applyScreenMdmsData.BPA.Proposedlanduse",
+                sourceJsonPath: "applyScreenMdmsData.BPA.ProposedLandUse",
                 jsonPath: "BPA.additionalDetails.proposedLandUse",
                 props: {
                   className : "tl-trade-type"
