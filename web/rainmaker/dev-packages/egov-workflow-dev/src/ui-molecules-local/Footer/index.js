@@ -176,7 +176,6 @@ class Footer extends React.Component {
       });
 
     if (moduleName === "NewTL") {
-
       const status = get(
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].status`
@@ -201,13 +200,12 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].licenseNumber`
       );
-
-
       const responseLength = get(
         state.screenConfiguration.preparedFinalObject,
         `licenseCount`,
         1
       );
+
       const rolearray =
         getUserInfo() &&
         JSON.parse(getUserInfo()).roles.filter(item => {
@@ -218,13 +216,15 @@ class Footer extends React.Component {
             return true;
         });
       const rolecheck = rolearray.length > 0 ? true : false;
+      const validTo = get(
+        state.screenConfiguration.preparedFinalObject,
+        `Licenses[0].validTo`
+      );
+      const now=Date.now();
+      const renewalPeriod=validTo-now;
 
-      if (
-        (status === "APPROVED" || status === "EXPIRED") &&
-        applicationType !== "RENEWAL" &&
-        responseLength === 1 &&
-        rolecheck === true
-      ) {
+      if(rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
+       renewalPeriod<=7889400000 ){
         const editButton = {
           label: "Edit",
           labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
@@ -238,18 +238,32 @@ class Footer extends React.Component {
             );
           }
         };
-        downloadMenu && downloadMenu.push(editButton);
+        
         const submitButton = {
           label: "Submit",
           labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
           link: () => {
             this.renewTradelicence(financialYear, tenantId);
           }
-        };
-        downloadMenu && downloadMenu.push(submitButton);
-      }
-    }
+        };    
+        if(responseLength > 1 ){
+          if(applicationType !== "NEW"){
+            downloadMenu && downloadMenu.push(editButton);
+            downloadMenu && downloadMenu.push(submitButton);
+          }
 
+        }
+        else if(responseLength === 1){
+         
+            downloadMenu && downloadMenu.push(editButton);
+            downloadMenu && downloadMenu.push(submitButton);
+          }
+
+
+        
+      
+    }
+  }
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",

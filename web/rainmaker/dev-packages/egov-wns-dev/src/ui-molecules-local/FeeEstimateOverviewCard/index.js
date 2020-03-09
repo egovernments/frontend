@@ -136,23 +136,6 @@ function FeesEstimateOverviewCard(props) {
                                     </Typography>
                                 </Grid>
                             </Grid>
-                            <Grid container>
-                                <Grid item xs={4}>
-                                    <Typography variant="body2" >
-                                        <LabelContainer labelKey="WS_REBATE_HEADER" />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={2}>
-                                </Grid>
-                                <Grid item xs={6}
-                                    align="right"
-                                    style={styles.taxStyles}
-                                    className="tl-application-table-total-value" >
-                                    <Typography variant="body2">
-                                        {estimate.fees.rebate}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
                         </Grid>
                     </div>
                     < Divider />
