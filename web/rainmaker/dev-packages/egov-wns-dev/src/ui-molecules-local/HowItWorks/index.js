@@ -17,7 +17,7 @@ const styles = theme => ({
 class HowItWorks extends React.Component {
 
   clickHandler = () => {
-    window.location.href = "/wns-citizen/howItWorks"
+    window.location.href = "/citizen/wns-citizen/howItWorks"
   }
 
   render() {
