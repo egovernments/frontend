@@ -259,6 +259,9 @@ const setDownloadMenu = (action, state, dispatch) => {
 
   if (riskType === "LOW") {
     switch (status) {
+      case "REVOCATED":
+        downloadMenu = [revocationPdfDownlaod];
+        break;
       case "APPROVED":
         // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
         // break;
@@ -279,8 +282,6 @@ const setDownloadMenu = (action, state, dispatch) => {
     }
   } else {
     switch (status) {
-      case "REVOCATED":
-        downloadMenu = [revocationPdfDownlaod];
       case "APPROVED":
         downloadMenu = [
           certificateDownloadObject,
