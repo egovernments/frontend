@@ -9,6 +9,7 @@ import { getCommonApplyFooter, validateFields } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import {
   prepareDocumentsUploadData,
@@ -19,6 +20,7 @@ import {
   applyForWater
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import set from 'lodash/set';
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = "pb.amritsar";
@@ -143,50 +145,55 @@ const callBackForNext = async (state, dispatch) => {
         "applyScreen.sewerage"
       );
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
-      if (water && sewerage) {
-        if (
-          (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-          (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-          (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-          (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
-          (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "") &&
-          (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
-          (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
-        ) {
-          isFormValid = true;
-          hasFieldToaster = false;
+      if (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") {
+        if (water && sewerage) {
+          if (
+            (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
+            (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
+            (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
+            (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
+            (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "") &&
+            (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
+            (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
+          ) {
+            isFormValid = true;
+            hasFieldToaster = false;
+          } else {
+            isFormValid = false;
+            hasFieldToaster = true;
+          }
+        } else if (water) {
+          if (
+            (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
+            (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
+            (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
+            (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
+            (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "")
+          ) {
+            isFormValid = true;
+            hasFieldToaster = false;
+          } else {
+            isFormValid = false;
+            hasFieldToaster = true;
+          }
         } else {
-          isFormValid = false;
-          hasFieldToaster = true;
-        }
-      } else if (water) {
-        if (
-          (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-          (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-          (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-          (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
-          (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "")
-        ) {
-          isFormValid = true;
-          hasFieldToaster = false;
-        } else {
-          isFormValid = false;
-          hasFieldToaster = true;
+          if (
+            (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
+            (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
+            (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
+            (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
+            (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
+          ) {
+            isFormValid = true;
+            hasFieldToaster = false;
+          } else {
+            isFormValid = false;
+            hasFieldToaster = true;
+          }
         }
       } else {
-        if (
-          (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-          (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-          (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-          (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
-          (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
-        ) {
-          isFormValid = true;
-          hasFieldToaster = false;
-        } else {
-          isFormValid = false;
-          hasFieldToaster = true;
-        }
+        isFormValid = false;
+        dispatch(toggleSnackbar(true, { labelKey: "WS_UPDATE_PROPERTY_INFO_AT_ULB" }, "warning"))
       }
       let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
       let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
@@ -200,17 +207,7 @@ const callBackForNext = async (state, dispatch) => {
           } else if (sewerChecked) { await applyForSewerage(state, dispatch); }
           else { await applyForWater(state, dispatch); }
         } else {
-          let propertyData = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property", {});
-          if (process.env.REACT_APP_NAME === "Citizen") {
-            if (JSON.parse(getUserInfo()).mobileNumber === propertyData.owners[0].mobileNumber) {
-              isFormValid = await applyForWaterOrSewerage(state, dispatch);
-            } else {
-              isFormValid = false;
-              dispatch(toggleSnackbar(true, { labelKey: "WS_DOES_NOT_OWN_PROPERTY" }, "warning"))
-            }
-          } else {
-            isFormValid = await applyForWaterOrSewerage(state, dispatch);
-          }
+          isFormValid = await applyForWaterOrSewerage(state, dispatch);
         }
       }
     }
@@ -221,14 +218,18 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 1) {
     if (moveToReview(state, dispatch)) {
       let applyFeild = get(state, "screenConfiguration.preparedFinalObject.applyScreen", {});
-      dispatch(prepareFinalObject("applyObject", applyFeild));;
+      dispatch(prepareFinalObject("applyObject", applyFeild));
       isFormValid = true; hasFieldToaster = false;
     }
     else { isFormValid = false; hasFieldToaster = true; }
     await pushTheDocsUploadedToRedux(state, dispatch);
+    if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+      let applyFeild = get(state, "screenConfiguration.preparedFinalObject.applyScreen", {});
+      dispatch(prepareFinalObject("applyObject", applyFeild));
+      setReviewPageRoute(state, dispatch);
+    }
   }
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
-    window.scrollTo(0, 0);
     if (getQueryArg(window.location.href, "action") === "edit") {
       setReviewPageRoute(state, dispatch);
     }
@@ -458,6 +459,142 @@ export const changeStep = (
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
+    }
+    if (mode !== "next") {
+      let checkBoxWater = get(state.screenConfiguration.preparedFinalObject, "applyScreen.water");
+      let checkBoxSewer = get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage");
+      if (checkBoxSewer && checkBoxWater) {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer",
+            "props.jsonPathSewerage",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer",
+            "props.jsonPathWater",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
+            "visible",
+            true
+          )
+        );
+      } else if (checkBoxWater) {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer",
+            "props.jsonPathWater",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
+            "visible",
+            false
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer",
+            "props.jsonPathSewerage",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps",
+            "visible",
+            false
+          )
+        );
+      }
     }
   } else {
     activeStep = defaultActiveStep;

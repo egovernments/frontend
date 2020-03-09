@@ -16,7 +16,7 @@ const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("SewerageConnection", []));
   dispatch(prepareFinalObject("applyScreen", {}));
   dispatch(prepareFinalObject("searchScreen", {}));
-  dispatch(setRoute("/wns/apply"));
+  window.location.href = "/wns/apply";
 };
 
 const employeeSearchResults = {
@@ -32,7 +32,7 @@ const employeeSearchResults = {
     dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
     if (states && states.length > 0) {
       const status = states.map((item, index) => { return { code: item.state } });
-      const applicationStatus=status.filter(item => item.code != null);
+      const applicationStatus = status.filter(item => item.code != null);
       dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
     }
 
