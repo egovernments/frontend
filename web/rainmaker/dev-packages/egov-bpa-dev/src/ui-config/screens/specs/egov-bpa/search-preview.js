@@ -361,6 +361,14 @@ const setSearchResponse = async (
     dispatch(
       handleField(
         "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
         "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.firstStakeholder",
         "visible",
         true
@@ -413,6 +421,14 @@ const setSearchResponse = async (
         )
       )
     }
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+        "visible",
+        true
+      )
+    );
     dispatch(
       handleField(
       "search-preview",
@@ -566,6 +582,11 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
       false
     );
 
