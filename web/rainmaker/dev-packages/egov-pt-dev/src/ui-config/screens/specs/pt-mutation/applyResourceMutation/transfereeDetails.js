@@ -293,7 +293,7 @@ const commonApplicantInformation = () => {
         required:true,
         // errorMessage: "Invalid Address",
         jsonPath:
-          "Property.ownersTemp[0].documentUid",
+          "Property.ownersTemp[0].document.documentUid",
         // gridDefination: {
         //   xs: 12,
         //   sm: 12,
