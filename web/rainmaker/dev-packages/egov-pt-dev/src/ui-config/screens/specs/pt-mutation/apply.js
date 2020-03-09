@@ -254,6 +254,10 @@ const getPropertyData = async (action, state, dispatch) => {
         "components.div.children.formwizardFirstStep.children.transferorInstitutionDetails.props.style",
         { display: "none" }
       );
+      set(
+        action.screenConfig,"components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        { display: "none" }
+      );
     }
 
     dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
