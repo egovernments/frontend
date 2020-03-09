@@ -5,7 +5,6 @@ import { searchResults } from "./searchResource/searchResults";
 import { searchApplicationResults } from "./searchResource/searchApplicationResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
@@ -16,7 +15,7 @@ const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("SewerageConnection", []));
   dispatch(prepareFinalObject("applyScreen", {}));
   dispatch(prepareFinalObject("searchScreen", {}));
-  dispatch(setRoute("/wns/apply"));
+  window.location.href = "/wns/apply";
 };
 
 const employeeSearchResults = {
@@ -31,8 +30,8 @@ const employeeSearchResults = {
     const applicationType = [{ code: "New Water connection", code: "New Water connection" }, { code: "New Sewerage Connection", code: "New Sewerage Connection" }]
     dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
     if (states && states.length > 0) {
-      const status = states.map((item, index) => { return { code: item.state } });
-      const applicationStatus=status.filter(item => item.code != null);
+      const status = states.map((item) => { return { code: item.state } });
+      const applicationStatus = status.filter(item => item.code != null);
       dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
     }
 
