@@ -3,12 +3,101 @@ import {
     getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
-import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
+import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 import { ifUserRoleExists } from "../utils";
-
+import {download} from  "../../../../ui-utils/commons";
+import './index.css';
+const downloadprintMenu=(state,applicationNumber,tenantId)=>{
+      let receiptDownloadObject = {
+        label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
+        link: () => {
+            const receiptQueryString = [
+                { key: "receiptNumbers", value: applicationNumber },
+                { key: "tenantId", value: tenantId }
+            ]
+            download(receiptQueryString);
+          
+        },
+        leftIcon: "receipt"
+      };
+      let receiptPrintObject = {
+        label: { labelName: "PRINT RECEIPT", labelKey: "COMMON_PRINT_RECEIPT" },
+        link: () => {
+            const receiptQueryString = [
+                { key: "receiptNumbers", value: applicationNumber },
+                { key: "tenantId", value: tenantId }
+            ]
+            download(receiptQueryString,"print");
+        },
+        leftIcon: "receipt"
+      };
+    let downloadMenu = [];
+    let printMenu = [];
+    // switch (purpose) {
+    //   case "approve":
+    //     downloadMenu = [certificateDownloadObject ];
+    //     printMenu = [certificatePrintObject ];
+    //     break;
+    //   case "apply":
+    //     downloadMenu = [applicationDownloadObject];
+    //     printMenu = [applicationPrintObject];
+    //     break;
+    //     default:
+    //     break;
+    // }
+        downloadMenu = [receiptDownloadObject];
+        printMenu = [receiptPrintObject];
+    
+  
+      return {
+  
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          className:"downloadprint-commonmenu",
+          style: { textAlign: "right", display: "flex" }
+        },
+        children: {
+          downloadMenu: {
+            uiFramework: "custom-molecules",
+            componentPath: "DownloadPrintButton",
+            props: {
+              data: {
+                label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+                 leftIcon: "cloud_download",
+                rightIcon: "arrow_drop_down",
+                props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+                menu: downloadMenu
+              }
+            }
+          },
+          printMenu: {
+            uiFramework: "custom-molecules",
+            componentPath: "DownloadPrintButton",
+            props: {
+              data: {
+                label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+                leftIcon: "print",
+                rightIcon: "arrow_drop_down",
+                props: { variant: "outlined", style: { height: "60px", color : "#FE7A51"}, className: "tl-print-button" },
+                menu: printMenu
+              }
+            }
+          }
+    
+        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6
+        // }
+      
+  
+      }
+     
+  }
 const getAcknowledgementCard = (
     state,
     dispatch,
@@ -38,6 +127,7 @@ const getAcknowledgementCard = (
                     }                  
                 }
             }),
+            headerdownloadprint:downloadprintMenu(state,receiptNumber,tenant),
             applicationSuccessCard: {
                 uiFramework: "custom-atoms",
                 componentPath: "Div",
@@ -61,13 +151,14 @@ const getAcknowledgementCard = (
                     })
                 }
             },
-            applicationSuccessFooter: applicationSuccessFooter(
-                state,
-                dispatch,
-                receiptNumber,
-                tenant,
-                consumerCode
-            )
+            // applicationSuccessFooter: applicationSuccessFooter(
+            //     state,
+            //     dispatch,
+            //     receiptNumber,
+            //     tenant,
+            //     consumerCode
+            // )
+            paymentFooter: paymentFooter(state,consumerCode, tenant, status)
         };
     } else if (status === "failure") {
         return {
@@ -107,7 +198,7 @@ const getAcknowledgementCard = (
                     })
                 }
             },
-            paymentFailureFooter: paymentFailureFooter(consumerCode, tenant)
+            paymentFooter: paymentFooter(state,consumerCode, tenant,status)
         };
     }
 };
