@@ -248,6 +248,17 @@ const commonApplicantInformation = () => {
 
           
         }else{
+          let documentType = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.OwnerTypeDocument",
+            []
+          );
+         documentType= documentType.filter(document=>{
+            return action.value===document.ownerTypeCode
+          })
+          if(documentType.length==1){
+            dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", documentType[0].code));
+          }
           showComponent(dispatch, categoryDocumentJsonPath, true);
           showComponent(dispatch, specialCategoryDocumentTypeJsonPath, true);
           // dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "props.style.display","block"));
