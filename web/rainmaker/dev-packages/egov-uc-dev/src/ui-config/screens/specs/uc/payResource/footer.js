@@ -91,12 +91,15 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
+        dispatch(toggleSpinner());
         window.posOnSuccess=(posResponse={})=>{
+          dispatch(toggleSpinner());
           callBackForPay(state,dispatch)
         }
 
         window.posOnFailure=(posResponse={})=>
         {
+          dispatch(toggleSpinner());
           dispatch(
             toggleSnackbar(
               true,
@@ -202,6 +205,7 @@ export const footer = getCommonApplyFooter({
 
 const callBackForPay = async (state, dispatch) => {
   // const { href } = window.location;
+  dispatch(toggleSpinner());
   let isFormValid = true;
 
   // --- Validation related -----//
@@ -358,7 +362,6 @@ const callBackForPay = async (state, dispatch) => {
   //---------------- Create Receipt ------------------//
   if (isFormValid) {
     try {
-      dispatch(toggleSpinner());
       let response = await httpRequest(
         "post",
         "collection-services/receipts/_create",
@@ -394,6 +397,7 @@ const callBackForPay = async (state, dispatch) => {
       console.log(e);
     }
   } else {
+    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
