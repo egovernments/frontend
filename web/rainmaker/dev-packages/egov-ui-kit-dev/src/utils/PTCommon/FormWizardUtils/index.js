@@ -207,7 +207,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.noOfFloors = newProperty.noOfFloors;
   propertyDetails.landArea = newProperty.landArea;
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
-  propertyDetails.units = newProperty.units.map(unit=>{
+  propertyDetails.units = newProperty.units&&newProperty.units.map(unit=>{
     unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
     return {...unit}
   });
