@@ -10,7 +10,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import get from "lodash/get";
 import set from "lodash/set";
 import filter from "lodash/filter";
-import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
+import { httpRequest, edcrHttpRequest, wrapRequestBody } from "../../../../ui-utils/api";
 import {
   prepareFinalObject,
   initScreen
@@ -41,6 +41,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import jp from "jsonpath";
 import { download } from "egov-common/ui-utils/commons";
+import axios from "axios";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -4264,19 +4265,21 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   );
   window.open(pdfDownload[fileStoreId]);
 
-  let BPARequest = await httpRequest(
-    "post",
-    `bpa-services/bpa/appl/_permitorderedcr`,
-    "",
-    [],
-    { BPA : detailsOfBpa }
-  );
-  const url = window.URL.createObjectURL(new Blob([BPARequest]));
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', 'file.pdf');
-  document.body.appendChild(link);
-  link.click();
+  
+let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
+  axios({
+    url: '/bpa-services/bpa/appl/_permitorderedcr',
+    method: 'POST',
+    responseType: 'blob',data
+   // important
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'permitorderedcr.pdf');
+    document.body.appendChild(link);
+    link.click();
+  });
 }
 
 export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) => {
