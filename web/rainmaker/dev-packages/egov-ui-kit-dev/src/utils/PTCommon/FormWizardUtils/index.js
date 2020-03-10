@@ -207,7 +207,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.noOfFloors = newProperty.noOfFloors;
   propertyDetails.landArea = newProperty.landArea;
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
-  propertyDetails.units = newProperty.units.map(unit=>{
+  propertyDetails.units = newProperty.units&&newProperty.units.map(unit=>{
     unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
     return {...unit}
   });
@@ -342,7 +342,10 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
   }
   if(process.env.REACT_APP_NAME === "Citizen")
   {
-    if (!draftRequest.draft.id) {
+  /*  
+  Draft Removed from PT2.2
+  
+  if (!draftRequest.draft.id) {
         draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
         draftRequest.draft.draftRecord = {
           selectedTabIndex: selected + 1,
@@ -385,7 +388,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
         } catch (e) {
           alert(e);
         }
-      }
+      } */
   } 
 
   
