@@ -242,7 +242,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     leftIcon: "assignment"
   };
   let paymentReceiptDownload = {
-    label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
+    label: { labelName: "Fee Receipt", labelKey: "BPA_FEE_RECEIPT" },
     link: () => {
       downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE");
     },
