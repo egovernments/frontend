@@ -206,18 +206,15 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep === 1) {
     if (moveToReview(state, dispatch)) {
-      let applyFeild = get(state, "screenConfiguration.preparedFinalObject.applyScreen", {});
-      dispatch(prepareFinalObject("applyObject", applyFeild));
+      await pushTheDocsUploadedToRedux(state, dispatch);
       isFormValid = true; hasFieldToaster = false;
+      if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+        setReviewPageRoute(state, dispatch);
+      }
     }
     else { isFormValid = false; hasFieldToaster = true; }
-    await pushTheDocsUploadedToRedux(state, dispatch);
-    if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
-      let applyFeild = get(state, "screenConfiguration.preparedFinalObject.applyScreen", {});
-      dispatch(prepareFinalObject("applyObject", applyFeild));
-      setReviewPageRoute(state, dispatch);
-    }
   }
+
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
     if (getQueryArg(window.location.href, "action") === "edit") {
       setReviewPageRoute(state, dispatch);

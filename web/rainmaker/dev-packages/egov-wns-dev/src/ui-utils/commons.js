@@ -45,6 +45,7 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
                 let docs = get(state, "screenConfiguration.preparedFinalObject");
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
+                await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
                 dispatch(prepareFinalObject("applyScreen", applyScreenObject));
             }
@@ -546,7 +547,7 @@ export const setDocsForEditFlow = async (state) => {
     return uploadedDocuments;
 };
 
-export const setWSDocuments = async (payload, sourceJsonPath, destJsonPath, dispatch, businessService) => {
+export const setWSDocuments = async (payload, sourceJsonPath, businessService) => {
     const uploadedDocData = get(payload, sourceJsonPath);
     const fileStoreIds =
         uploadedDocData &&
@@ -582,7 +583,7 @@ export const setWSDocuments = async (payload, sourceJsonPath, destJsonPath, disp
 export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
     let documentsUploadRedux = {};
     // const uploadedDocData = get(payload, sourceJsonPath);
-    let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "displayDocs", dispatch, "WS");
+    let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "WS");
     documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
         let docUploadRedux = {};
         docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: payload.applyScreen.documents[key].fileStoreId }] };
