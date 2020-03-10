@@ -1,14 +1,11 @@
-import {
-    getCommonHeader,
-    getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
+import get from "lodash/get";
 import { ifUserRoleExists } from "../utils";
 import {download} from  "../../../../ui-utils/commons";
+import {getHeader} from "./pay"
 import './index.css';
 const downloadprintMenu=(state,applicationNumber,tenantId)=>{
       let receiptDownloadObject = {
@@ -107,26 +104,36 @@ const getAcknowledgementCard = (
     tenant
 ) => {
     const roleExists = ifUserRoleExists("CITIZEN");
+    //console.log("=====>",state)
+    // const commonPayDetails = get(state.screenConfiguration.preparedFinalObject , "businessServiceMdmsData.common-masters.uiCommonPay");
+    // const businessServiceCode = get(state.screenConfiguration.preparedFinalObject , "businessServiceInfo.code")
+    let header = getHeader(state);
+    // commonPayDetails && commonPayDetails.map(item => {
+    //     if (item.code == businessServiceCode) {
+    //         header  = getHeader(item.headerBandLabel,consumerCode);
+    //     }
+    // })
     if (status === "success") {
         return {
-            header: getCommonContainer({
-                header: getCommonHeader({
-                    labelName: roleExists ? 'Payment Details' : 'Collection Details',
-                    labelKey: roleExists ? "PAYMENT_HEADER_CITIZEN" : "PAYMENT_HEADER_EMPLOYEE"
-                }),
-                applicationNumber: {
-                    uiFramework: "custom-atoms-local",
-                    moduleName: "egov-common",
-                    componentPath: "ApplicationNoContainer",
-                    props: {
-                        number: consumerCode,
-                        label: {
-                            labelValue:"Consumer Code.:",
-                            labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
-                        }
-                    }                  
-                }
-            }),
+            // header: getCommonContainer({
+            //     header: getCommonHeader({
+            //         labelName: roleExists ? 'Payment Details' : 'Collection Details',
+            //         labelKey: roleExists ? "PAYMENT_HEADER_CITIZEN" : "PAYMENT_HEADER_EMPLOYEE"
+            //     }),
+            //     applicationNumber: {
+            //         uiFramework: "custom-atoms-local",
+            //         moduleName: "egov-common",
+            //         componentPath: "ApplicationNoContainer",
+            //         props: {
+            //             number: consumerCode,
+            //             label: {
+            //                 labelValue:"Consumer Code.:",
+            //                 labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
+            //             }
+            //         }                  
+            //     }
+            // }),
+            header,
             headerdownloadprint:downloadprintMenu(state,receiptNumber,tenant),
             applicationSuccessCard: {
                 uiFramework: "custom-atoms",
@@ -151,35 +158,11 @@ const getAcknowledgementCard = (
                     })
                 }
             },
-            // applicationSuccessFooter: applicationSuccessFooter(
-            //     state,
-            //     dispatch,
-            //     receiptNumber,
-            //     tenant,
-            //     consumerCode
-            // )
             paymentFooter: paymentFooter(state,consumerCode, tenant, status)
         };
     } else if (status === "failure") {
         return {
-            header: getCommonContainer({
-                header: getCommonHeader({
-                    labelName: roleExists ? 'Payment Details' : 'Collection Details',
-                    labelKey: roleExists ? "PAYMENT_HEADER_CITIZEN" : "PAYMENT_HEADER_EMPLOYEE"
-                }),
-                applicationNumber: {
-                    uiFramework: "custom-atoms-local",
-                    moduleName: "egov-common",
-                    componentPath: "ApplicationNoContainer",
-                    props: {
-                        number: consumerCode,
-                        label: {
-                            labelValue:"Consumer Code.:",
-                            labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
-                        }
-                    }
-                }
-            }),
+            header,
             applicationSuccessCard: {
                 uiFramework: "custom-atoms",
                 componentPath: "Div",

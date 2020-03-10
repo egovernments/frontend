@@ -19,25 +19,42 @@ import set from "lodash/set";
 import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 import "./pay.css";
 
-const header = getCommonContainer({
-    header: getCommonHeader({
-        labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-        labelKey: "COMMON_PAY_SCREEN_HEADER"
-    }),
-    consumerCode: {
-        uiFramework: "custom-atoms-local",
-        moduleName: "egov-common",
-        componentPath: "ApplicationNoContainer",
-        props: {
-            number: '',
-            label: {
-                labelValue: "Consumer Code.:",
-                labelKey: "PAYMENT_COMMON_CONSUMER_CODE"
+export const getHeader = (state) => {
+    const commonPayDetails = get(state.screenConfiguration.preparedFinalObject , "businessServiceMdmsData.common-masters.uiCommonPay");
+    const businessServiceCode = get(state.screenConfiguration.preparedFinalObject , "businessServiceInfo.code");
+    let consumerCode = getQueryArg(window.location.href, "consumerCode");
+    let label = "";
+    commonPayDetails && commonPayDetails.map(item => {
+        if (item.code == businessServiceCode) {
+            label = item.headerBandLabel;
+            // let header  = getHeader(item.headerBandLabel,consumerCode);
+            // set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header)  
+        }
+    })
+    return getCommonContainer({
+        header: getCommonHeader({
+            labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+            labelKey: "COMMON_PAY_SCREEN_HEADER"
+        }),
+        consumerCode: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-common",
+            componentPath: "ApplicationNoContainer",
+            props: {
+                number: consumerCode,
+                label: {
+                    labelKey: label,
+                    //labelValue: "Consumer Code.:",
+                },
+                
+                // {
+                //     labelValue: "Consumer Code.:",
+                //     labelKey: "PAYMENT_COMMON_CONSUMER_CODE"
+                // }
             }
         }
-    }
-});
-
+    });
+}
 
 const getPaymentCard = () => {
 
@@ -78,28 +95,6 @@ const getPaymentCard = () => {
                     },
                     capturePaymentDetails,
                     g8Details
-                    // addPenaltyRebateButton: {
-                    //   componentPath: "Button",
-                    //   props: {
-                    //     color: "primary",
-                    //     style: {}
-                    //   },
-                    //   children: {
-                    //     previousButtonLabel: getLabel({
-                    //       labelName: "ADD REBATE/PENALTY",
-                    //       labelKey: "NOC_PAYMENT_ADD_RBT_PEN"
-                    //     })
-                    //   },
-                    //   onClickDefination: {
-                    //     action: "condition",
-                    //     callBack: (state, dispatch) => showHideAdhocPopup(state, dispatch, "pay")
-                    //   }
-                    // },
-                    // viewBreakupButton: getDialogButton(
-                    //   "VIEW BREAKUP",
-                    //   "TL_PAYMENT_VIEW_BREAKUP",
-                    //   "pay"
-                    // ),
                 })
             }
         }
@@ -194,8 +189,13 @@ const screenConfig = {
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
-        fetchBill(state, dispatch, consumerCode, tenantId, businessService);
-        const data = getPaymentCard();
+        fetchBill(state, dispatch, consumerCode, tenantId, businessService).then(
+            response => {
+                let header = getHeader(state);
+                set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
+            }
+        );
+        const data = getPaymentCard();    
         set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
         return action;
     },
@@ -212,42 +212,20 @@ const screenConfig = {
                     uiFramework: "custom-atoms",
                     componentPath: "Container",
                     children: {
-                        header: {
-                            gridDefination: {
-                                xs: 12,
-                                sm: 10
-                            },
-                            ...header
-                        }
+                        // header: {
+                        //     gridDefination: {
+                        //         xs: 12,
+                        //         sm: 10
+                        //     },
+                        //     ...header
+                        // }
+                        header : {}
                     }
                 },
                 formwizardFirstStep: {},
                 footer
             }
         },
-        // adhocDialog: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-noc",
-        //   componentPath: "DialogContainer",
-        //   props: {
-        //     open: false,
-        //     maxWidth: "sm",
-        //     screenKey: "pay"
-        //   },
-        //   children: {
-        //     popup: adhocPopup
-        //   }
-        // }
-        // breakUpDialog: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-tradelicence",
-        //   componentPath: "ViewBreakupContainer",
-        //   props: {
-        //     open: false,
-        //     maxWidth: "md",
-        //     screenKey: "pay"
-        //   }
-        // }
     }
 };
 
