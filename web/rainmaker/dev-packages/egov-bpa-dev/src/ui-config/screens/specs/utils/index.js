@@ -4222,7 +4222,7 @@ export const revocationPdfDownload = async(action, state, dispatch) => {
   );
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_createnosave?key=bpa-revocation&tenantId=${bpaDetails.tenantId}`,
+    `pdf-service/v1/_create?key=bpa-revocation&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
     { Bpa: [bpaDetails] }
