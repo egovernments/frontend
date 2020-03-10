@@ -136,41 +136,7 @@ class FormWizard extends Component {
 
     try {
       let currentDraft;
-      if (!isReassesment) {
-        let draftsResponse = await httpRequest(
-          "pt-services-v2/drafts/_search",
-          "_search",
-          [
-            {
-              key: isReassesment ? "assessmentNumber" : "id",
-              value: draftId
-            },
-            {
-              key: "tenantId",
-              value: getQueryValue(search, "tenantId")
-            }
-          ],
-          draftRequest
-        );
-        currentDraft = draftsResponse.drafts.find(
-          res =>
-            get(res, "assessmentNumber", "") === draftId ||
-            get(res, "id", "") === draftId
-        );
-        const prepareFormDataFromApi = get(
-          currentDraft,
-          "draftRecord.prepareFormData",
-          {}
-        );
-        const preparedForm = convertRawDataToFormConfig(prepareFormDataFromApi); //convertRawDataToFormConfig(responseee)
-        currentDraft = {
-          draftRecord: {
-            ...currentDraft.draftRecord,
-            ...preparedForm,
-            prepareFormData: prepareFormDataFromApi
-          }
-        };
-      } else {
+    
         let searchPropertyResponse = await httpRequest(
           "property-services/property/_search",
           "_search",
@@ -194,7 +160,18 @@ class FormWizard extends Component {
         );
         // prepareFinalObject("documentsUploadRedux",{} );
         this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
-        let propertyResponse = {
+        if (
+          searchPropertyResponse.Properties[0].propertyDetails &&
+          searchPropertyResponse.Properties[0].propertyDetails.length > 0
+        ) {
+          searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
+            item.units = sortBy(
+              item.units,
+              unit => parseInt(unit.floorNo) || -99999
+            );
+          });
+        }
+           let propertyResponse = {
           ...searchPropertyResponse,
           Properties: [
             {
@@ -220,11 +197,7 @@ class FormWizard extends Component {
             "Properties[0].propertyDetails[0].citizenInfo.uuid"
           )
         });
-      }
-
-      if (!currentDraft) {
-        throw new Error("draft not found");
-      }
+      
 
       this.setState({
         draftByIDResponse: currentDraft

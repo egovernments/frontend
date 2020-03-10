@@ -88,7 +88,7 @@ class PTHome extends Component {
     const { numDrafts } = this.props;
     return [
       /*
-      Assessment IS REMOVED FROM PT 2.0
+      Assessment IS REMOVED FROM PT2.0
       {
         primaryText: (
           <Label label="PT_COMPLETED_ASSESSMENTS" labelStyle={labelStyle} />

@@ -342,7 +342,10 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
   }
   if(process.env.REACT_APP_NAME === "Citizen")
   {
-    if (!draftRequest.draft.id) {
+  /*  
+  Draft Removed from PT2.2
+  
+  if (!draftRequest.draft.id) {
         draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
         draftRequest.draft.draftRecord = {
           selectedTabIndex: selected + 1,
@@ -385,7 +388,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
         } catch (e) {
           alert(e);
         }
-      }
+      } */
   } 
 
   
