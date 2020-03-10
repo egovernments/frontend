@@ -230,7 +230,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
       permitOrderNoDownload(action, state, dispatch);
-      generatePdf(state, dispatch, "application_download");
+      // generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
@@ -252,7 +252,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
     link: () => {
       revocationPdfDownload(action, state, dispatch);
-      generatePdf(state, dispatch, "application_download");
+      // generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
