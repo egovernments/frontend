@@ -140,6 +140,15 @@ export const transfereeSummary = getCommonGrayCard({
                 callBack: checkValueForNA
             }
           ),
+          ownerSpecialDocumentType: getLabelWithValue(
+            {
+              labelName: "Special Category Document Type",
+              labelKey: "PT_OWNERSHIP_SPECIAL_CATEGORY_DOCUMENT_TYPE"
+            },
+            {
+              jsonPath:"Property.ownersTemp[0].documentType",
+              callBack: checkValueForNA      }
+          ),
           ownerDocumentId: getLabelWithValue(
             {
               labelName: "Document ID",
@@ -150,15 +159,7 @@ export const transfereeSummary = getCommonGrayCard({
                 callBack: checkValueForNA
             }
           ),
-          ownerSpecialDocumentType: getLabelWithValue(
-            {
-              labelName: "Special Category Document Type",
-              labelKey: "PT_OWNERSHIP_SPECIAL_CATEGORY_DOCUMENT_TYPE"
-            },
-            {
-              jsonPath:"Property.ownersTemp[0].documentType",
-              callBack: checkValueForNA      }
-          )
+         
         })
       }),
       items: [],

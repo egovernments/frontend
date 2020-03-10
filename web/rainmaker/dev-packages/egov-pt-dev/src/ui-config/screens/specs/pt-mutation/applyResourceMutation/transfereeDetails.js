@@ -278,6 +278,36 @@ const commonApplicantInformation = () => {
           className:"applicant-details-error"
         }
       }),
+      specialCategoryDocumentType: getSelectField({
+        label: {
+          labelName: "Document Type",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
+       },
+        placeholder: {
+          labelName: "Enter Document Type.",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
+       },
+        required:true,
+        jsonPath:
+        "Property.ownersTemp[0].documentType",
+        localePrefix: {
+          moduleName: "PropertyTax",
+          masterName: "ReasonForTransfer"
+        },
+        sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
+        props:{
+          className:"applicant-details-error",
+          style:{
+            display:"none"
+          },
+          
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        }
+      }),
       specialCategoryDocument: getTextField({
         label: {
           labelName: "Document Id No.",
@@ -305,33 +335,8 @@ const commonApplicantInformation = () => {
           
         }
       }),
-      specialCategoryDocumentType: getTextField({
-        label: {
-          labelName: "Document Type",
-          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Document Type.",
-          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
-        },
-        pattern: getPattern("Address"),
-        required:true,
-        // errorMessage: "Invalid Address",
-        jsonPath:
-          "Property.ownersTemp[0].documentType",
-        // gridDefination: {
-        //   xs: 12,
-        //   sm: 12,
-        //   md: 6
-        // },
-        props:{
-          className:"applicant-details-error",
-          style:{
-            display:"none"
-          },
-          
-        }
-      }),
+      
+      
     })
   });
 };

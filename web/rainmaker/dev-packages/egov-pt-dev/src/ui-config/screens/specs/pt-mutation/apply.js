@@ -266,7 +266,39 @@ const getPropertyData = async (action, state, dispatch) => {
   }
 };
 
+const getSpecialCategoryDocumentTypeMDMSData=async (action, state, dispatch) => {
+  let tenantId ='pb'
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [{ name: "OwnerTypeDocument" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
 
+    let OwnerTypeDocument=get(
+      payload,
+      "MdmsRes.PropertyTax.OwnerTypeDocument"
+    )
+    dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", OwnerTypeDocument));
+  } catch (e) {
+    console.log(e);
+  }
+
+};
 const getMdmsData = async (action, state, dispatch) => {
   let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   let mdmsBody = {
@@ -496,6 +528,8 @@ const screenConfig = {
     });
 
 getMdmsTransferReasonData(action, state, dispatch);
+
+getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
     // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
