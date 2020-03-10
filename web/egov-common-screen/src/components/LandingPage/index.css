@@ -4,7 +4,11 @@
 .common-background{
     background-size: cover!important;
 }
-
+@media only screen and (max-width: 1300px) {
+    #login-button a{
+        width:25%!important;
+    }
+}
 @media only screen and (max-width: 1200px) {
     .LandingPage-btn-105,#login-button{
         width: 40%!important;
