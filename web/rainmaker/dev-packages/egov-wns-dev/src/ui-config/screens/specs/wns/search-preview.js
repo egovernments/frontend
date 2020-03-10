@@ -11,8 +11,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, getSearchResultsForSewerage, waterEstimateCalculation, getDescriptionFromMDMS, findAndReplace, swEstimateCalculation } from "../../../../ui-utils/commons";
+import { prepareFinalObject, preparedFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getSearchResults, getSearchResultsForSewerage, waterEstimateCalculation, getDescriptionFromMDMS, findAndReplace, swEstimateCalculation, setWSDocuments } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
   setMultiOwnerForSV,
@@ -108,20 +108,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
-      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen"), "NA", null);
+      dispatch(prepareFinalObject("DocumentsData", []));
+      let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       let parsedObject = parserFunction(applyScreenObject);
-      dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
-
-      // to set documents 
-      if (applyScreenObject.documents !== undefined && applyScreenObject.documents !== null) {
-        setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
-        // await setDocuments(
-        //   state.screenConfiguration.preparedFinalObject,
-        //   "WaterConnection[0].documents",
-        //   "DocumentsData",
-        //   dispatch, "WS"
-        // );
-      }
+      dispatch(prepareFinalObject("WaterConnection[0]", findAndReplace(parsedObject, "NA", null)));
     }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
@@ -519,7 +509,13 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     }
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
-      setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
+      await setDocuments(
+        state.screenConfiguration.preparedFinalObject,
+        "WaterConnection[0].documents",
+        "DocumentsData",
+        dispatch,
+        "WS"
+      );
     }
     estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
     if (estimate !== null && estimate !== undefined) {
@@ -542,7 +538,13 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
 
     // to set documents 
     if (payload.SewerageConnections[0].documents !== null && payload.SewerageConnections[0].documents !== "NA") {
-      setWSDocuments(state.screenConfiguration.preparedFinalObject, dispatch);
+      await setDocuments(
+        state.screenConfiguration.preparedFinalObject,
+        "WaterConnection[0].documents",
+        "DocumentsData",
+        dispatch,
+        "WS"
+      );
     }
 
     const convPayload = findAndReplace(payload, "NA", null)
@@ -580,7 +582,8 @@ const parserFunction = (obj) => {
     noOfTaps: parseInt(obj.noOfTaps),
     proposedWaterClosets: parseInt(obj.proposedWaterClosets),
     proposedToilets: parseInt(obj.proposedToilets),
-    proposedTaps: parseInt(obj.proposedTaps)
+    proposedTaps: parseInt(obj.proposedTaps),
+    plumberInfo: (obj.plumberInfo === null || obj.plumberInfo === "NA") ? [] : obj.plumberInfo
   }
   obj = { ...obj, ...parsedObject }
   return obj;
@@ -614,12 +617,20 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
   dispatch(prepareFinalObject("viewBillToolipData", finalArray));
 }
 
-const setWSDocuments = async (obj, dispatch) => {
-  await setDocuments(
-    obj,
-    "WaterConnection[0].documents",
-    "DocumentsData",
-    dispatch, "WS"
-  );
-}
+// const setWSDocuments = async (obj, dispatch) => {
+//   let getDocList = get(obj, "WaterConnection[0].documents");
+//   console.log("-------------------------");
+//   console.log(obj.WaterConnection);
+//   console.log(obj.WaterConnection[0]);
+//   console.log(obj.WaterConnection[0].documents);
+//   console.log('---------------------------------------------');
+//   dispatch(prepareFinalObject("DocumentsData", getDocList));
+//   console.log(get(obj, 'DocumentsData'));
+//   await setDocuments(
+//     obj,
+//     "WaterConnection[0].documents",
+//     "DocumentsData",
+//     dispatch, "WS"
+//   );
+// }
 export default screenConfig;
