@@ -293,9 +293,12 @@ const setSearchResponse = async (
   }
 
   if (property && property.owners && property.owners.length > 0) {
+
     let ownersTemp = [];
     let owners = [];
     property.owners.map(owner => {
+      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
+      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
       if (owner.status == "ACTIVE") {
       
         ownersTemp.push(owner);

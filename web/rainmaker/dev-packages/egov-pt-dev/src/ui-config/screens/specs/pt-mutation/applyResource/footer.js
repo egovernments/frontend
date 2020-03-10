@@ -141,7 +141,14 @@ const callBackForApply = async (state, dispatch) => {
 
     })
 
-
+   propertyPayload.ownersTemp.map(owner=>{
+     if(owner.documentUid&&owner.documentType){
+      owner.documents=[{}]
+    owner.documents[0].fileStoreId=owner.documentUid ;
+    owner.documents[0].documentType=owner.documentType ;
+    owner.documents[0].documentUid= owner.documentUid ;
+     }
+   })
   propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
     propertyPayload.additionalDetails.documentDate);
 
