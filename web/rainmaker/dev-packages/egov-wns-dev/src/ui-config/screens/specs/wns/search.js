@@ -15,7 +15,7 @@ const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("SewerageConnection", []));
   dispatch(prepareFinalObject("applyScreen", {}));
   dispatch(prepareFinalObject("searchScreen", {}));
-  window.location.href = "/wns/apply";
+  window.location.href = "/employee/wns/apply";
 };
 
 const employeeSearchResults = {
