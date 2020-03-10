@@ -218,14 +218,6 @@ const commonApplicantInformation = () => {
         },
         jsonPath:
           "Property.ownersTemp[0].ownerType",
-        // data: [
-        //   {
-        //     code: "A"
-        //   },
-        //   {
-        //     code: "B"
-        //   }
-        // ],
         required:true,
         localePrefix: {
           moduleName: "common-masters",
@@ -243,15 +235,21 @@ const commonApplicantInformation = () => {
   
         const categoryDocumentThirdStepJsonPath="components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.items[0].item0.children.cardContent.children.ownerContainer.children.ownerDocumentId";
 
+        const specialCategoryDocumentTypeJsonPath="components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocumentType";
+
         if(action.value === "NONE" || action.value===" "){
           showComponent(dispatch, categoryDocumentJsonPath, false);
           dispatch(handleField("apply", categoryDocumentJsonPath, "required", false));
           dispatch(handleField("apply", categoryDocumentJsonPath, "props.value", ""));
+          showComponent(dispatch, specialCategoryDocumentTypeJsonPath, false);
+          dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "required", false));
+          dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", ""));
           // dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "props.style.display","none"));
 
           
         }else{
           showComponent(dispatch, categoryDocumentJsonPath, true);
+          showComponent(dispatch, specialCategoryDocumentTypeJsonPath, true);
           // dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "props.style.display","block"));
         }
       },
@@ -293,7 +291,34 @@ const commonApplicantInformation = () => {
         required:true,
         // errorMessage: "Invalid Address",
         jsonPath:
-          "Property.ownersTemp[0].document.documentUid",
+          "Property.ownersTemp[0].documentUid",
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 12,
+        //   md: 6
+        // },
+        props:{
+          className:"applicant-details-error",
+          style:{
+            display:"none"
+          },
+          
+        }
+      }),
+      specialCategoryDocumentType: getTextField({
+        label: {
+          labelName: "Document Type",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Document Type.",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        required:true,
+        // errorMessage: "Invalid Address",
+        jsonPath:
+          "Property.ownersTemp[0].documentType",
         // gridDefination: {
         //   xs: 12,
         //   sm: 12,
