@@ -105,6 +105,7 @@ export const basicDetails = getCommonCard({
       }
     }),
     riskType: getTextField({
+      visible: false,
       label: {
         labelName: "Risk Type",
         labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"

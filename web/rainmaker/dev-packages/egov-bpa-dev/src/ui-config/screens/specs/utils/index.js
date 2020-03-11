@@ -2833,17 +2833,13 @@ const riskType = (state, dispatch) => {
   dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
     if (
-      plotArea < riskType[2].toPlotArea &&
-      buildingHeight < riskType[2].toBuildingHeight
+      plotArea < riskType[1].toPlotArea &&
+      buildingHeight < riskType[1].toBuildingHeight
     ) {
       scrutinyRiskType = "LOW"
     } else if (
-      (plotArea >= riskType[1].fromPlotArea && plotArea <= riskType[1].toPlotArea) ||
-      (buildingHeight >= riskType[1].fromBuildingHeight && buildingHeight <= riskType[1].toBuildingHeight)) {
-      scrutinyRiskType = "MEDIUM"
-    } else if (
-      (plotArea > riskType[0].fromPlotArea) ||
-      (buildingHeight >= riskType[0].fromBuildingHeight)) {
+      (plotArea >= riskType[0].fromPlotArea && plotArea <= riskType[0].toPlotArea) ||
+      (buildingHeight >= riskType[0].fromBuildingHeight && buildingHeight <= riskType[0].toBuildingHeight)) {
       scrutinyRiskType = "HIGH"
     }
   // if(scrutinyRiskType === "LOW"){
@@ -3364,9 +3360,23 @@ export const getBpaTextToLocalMapping = label => {
       getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
 
     case "APPROVED":
-      return getLocaleLabels("Approved", "NOC_APPROVED", localisationLabels);
+      return getLocaleLabels(
+        "Approved", 
+        "WF_BPA_APPROVED", 
+        localisationLabels
+      );
     case "REJECTED":
-      return getLocaleLabels("Rejected", "NOC_REJECTED", localisationLabels);
+      return getLocaleLabels(
+        "Rejected", 
+        "WF_BPA_REJECTED", 
+        localisationLabels
+      );
+    case "REVOCATED":
+      return getLocaleLabels(
+        "Revocated", 
+        "WF_BPA_REVOCATED", 
+        localisationLabels
+      );
     case "CANCELLED":
       return getLocaleLabels("Cancelled", "NOC_CANCELLED", localisationLabels);
     case "PENDINGAPPROVAL ":
@@ -3438,11 +3448,29 @@ export const getBpaTextToLocalMapping = label => {
         localisationLabels
       );
     case "INPROGRESS":
-      return getLocaleLabels("Inprogress", "WF_BPA_INPROGRESS", localisationLabels);
+      return getLocaleLabels(
+        "Inprogress", 
+        "WF_BPA_INPROGRESS", 
+        localisationLabels
+      );
     case "PENDING_APPL_FEE":
-      return getLocaleLabels("Pedding Application Fee", "WF_BPA_PENDING_APPL_FEE", localisationLabels);
+      return getLocaleLabels(
+        "Pedding Application Fee", 
+        "WF_BPA_PENDING_APPL_FEE", 
+        localisationLabels
+      );
     case "CITIZEN_APPROVAL_INPROCESS":
-      return getLocaleLabels("Inprogress", "WF_BPA_CITIZEN_APPROVAL_INPROCESS", localisationLabels);
+      return getLocaleLabels(
+        "Inprogress", 
+        "WF_BPA_CITIZEN_APPROVAL_INPROCESS", 
+        localisationLabels
+      );
+    case "PENDING_FEE":
+      return getLocaleLabels(
+        "Pending Fee Payment",
+        "WF_BPA_PENDING_FEE",
+        localisationLabels
+    );
     }
 };
 
@@ -3814,9 +3842,15 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
       prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
+    let riskType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.BPA.riskType", ""
+    );
     if(wfState.state.state == "PENDINGAPPROVAL" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
-      let checkListConditions = payload.MdmsRes.BPA.CheckList;
-      prepareapprovalQstns(state, dispatch, action, checkListConditions, appWfState);
+      if(riskType && riskType !== "LOW") {
+        let checkListConditions = payload.MdmsRes.BPA.CheckList;
+        prepareapprovalQstns(state, dispatch, action, checkListConditions, appWfState);
+      }
     }
   } catch (e) {
     console.log(e);
