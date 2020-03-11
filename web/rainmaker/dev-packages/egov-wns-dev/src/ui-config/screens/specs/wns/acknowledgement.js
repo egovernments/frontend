@@ -10,6 +10,7 @@ import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFo
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import { downloadApp } from "../../../../ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 
@@ -478,7 +479,7 @@ export const downloadPrintContainer = (
   action,
   state,
   dispatch,
-  status,
+  appStatus,
   applicationNumber,
   tenantId
 ) => {
@@ -524,26 +525,26 @@ export const downloadPrintContainer = (
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelKey: "WS_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      downloadAcknowledgementForm(Licenses);
+      const { WaterConnection, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      // const documents = WaterConnection[0].reviewDocData;
+      // set(WaterConnection[0], "WaterConnection.documents", documents)
+      downloadApp(WaterConnection);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "WS_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      downloadAcknowledgementForm(Licenses, 'print');
+      const { WaterConnection, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      // const documents = LicensesTemp[0].reviewDocData;
+      // set(Licenses[0], "additionalDetails.documents", documents)
+      downloadBill(WaterConnection, 'print');
     },
     leftIcon: "assignment"
   };
-  switch (status) {
+  switch (appStatus) {
     case "APPROVED":
       downloadMenu = [
         tlCertificateDownloadObject,
@@ -557,6 +558,15 @@ export const downloadPrintContainer = (
       ];
       break;
     case "APPLIED":
+      break;
+    case "PENDING_FOR_DOCUMENT_VERIFICATION":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case "PENDING_FOR_FIELD_INSPECTION":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
     case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
@@ -608,7 +618,7 @@ export const downloadPrintContainer = (
               label: { labelName: "PRINT", labelKey: "WS_COMMON_BUTTON_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginLeft:"15px" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginLeft: "15px" }, className: "tl-print-button" },
               menu: printMenu
             }
           }

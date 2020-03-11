@@ -1370,3 +1370,31 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
     }
 
 };
+// to download app
+export const downloadApp = (WaterConnection, mode = "download") => {
+    const queryStr = [
+        { key: "key", value: "wsapplication" },
+        { key: "tenantId", value: "pb" }
+    ]
+    const DOWNLOADRECEIPT = {
+        GET: {
+            URL: "/pdf-service/v1/_create",
+            ACTION: "_get",
+        },
+    };
+    try {
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { WaterConnection }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+            .then(res => {
+                res.filestoreIds[0]
+                if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+                    res.filestoreIds.map(fileStoreId => {
+                        downloadReceiptFromFilestoreID(fileStoreId, mode)
+                    })
+                } else {
+                    console.log("Error In Acknowledgement form Download");
+                }
+            });
+    } catch (exception) {
+        alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+}
