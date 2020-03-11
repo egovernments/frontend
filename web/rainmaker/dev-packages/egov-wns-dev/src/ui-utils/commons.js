@@ -49,7 +49,9 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
                 dispatch(prepareFinalObject("applyScreen", applyScreenObject));
-                dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObject));
+                if (getQueryArg(window.location.href, "action") === "edit") {
+                    dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObject));
+                }
             }
         });
     }
