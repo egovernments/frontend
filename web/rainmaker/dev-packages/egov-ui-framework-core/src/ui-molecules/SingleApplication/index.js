@@ -74,7 +74,7 @@ class SingleApplication extends React.Component {
     } else if (moduleName === "BPAREG") {
       if (item.serviceType === "BPAREG") {
         switch (item.status) {
-          case "INITIATED":
+          case "Initiated":
             setRoute(`/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
             break;
           default:
