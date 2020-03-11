@@ -22,6 +22,7 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
+        dispatch(prepareFinalObject("DocumentsData", []));
         Object.keys(reduxDocuments).forEach(async key => {
             if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
                 reduxDocuments[key].documents.forEach(element => {
@@ -46,8 +47,9 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 let docs = get(state, "screenConfiguration.preparedFinalObject");
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
-                let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
+                let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
                 dispatch(prepareFinalObject("applyScreen", applyScreenObject));
+                dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObject));
             }
         });
     }
