@@ -460,10 +460,16 @@ div[class^="MuiPaper-root"],
     }
 
   }
-  [class*="MuiStepIcon-active"] ,[class*="MuiStep-completed"]{
+  [class*="MuiStepIcon-active"] {
     circle,
     path {
       color: #fe7a51;
+    }
+  }
+  [class*="MuiStep-completed"]{
+    circle,
+    path {
+      color: green;
     }
   }
   [class*="MuiStepLabel"] {

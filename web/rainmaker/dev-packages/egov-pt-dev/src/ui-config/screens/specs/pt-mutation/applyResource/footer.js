@@ -200,8 +200,9 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
   propertyPayload.documents = Object.values(documentsUploadRedux).map(o => {
+    let documentValue=o.dropdown.value.split('.');
     return {
-      documentType: o.documentCode,
+      documentType:documentValue&&documentValue.length>1&&documentValue[2],
       fileStoreId: o.documents[0].fileStoreId,
       documentUid: o.documents[0].fileStoreId,
       auditDetails: null,
@@ -293,11 +294,11 @@ const validateMobileNumber = (state) => {
       return owner.name
     })
     const mobileNumbers = owners.map(owner => {
-      return owner.mobileNumber
+      if (owner.status == "ACTIVE") {
+        return owner.mobileNumber;
+      }
     })
-
     newOwners.map(owner => {
-
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
       }
@@ -373,7 +374,12 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-
+    // dispatch(
+    //   prepareFinalObject(
+    //     "documentsUploadRedux.3.dropdown.value",
+    //     `${get(state,'screenConfiguration.preparedFinalObject.documentsUploadRedux.3.documentCode','')}.${get(state,'screenConfiguration.preparedFinalObject.Property.additionalDetails.reasonForTransfer','')}`
+    //   )
+    // );
     if (isFormValid) {
       errorMsg = validateMobileNumber(state);
       errorMsg ? isFormValid = false : {};
