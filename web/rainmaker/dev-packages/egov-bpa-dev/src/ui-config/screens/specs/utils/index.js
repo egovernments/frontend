@@ -4290,7 +4290,7 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   }
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_create?key${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
+    `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
     { Bpa: [Bpa] }
