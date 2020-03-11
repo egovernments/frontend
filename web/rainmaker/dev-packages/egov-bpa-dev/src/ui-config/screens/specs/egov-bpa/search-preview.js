@@ -619,7 +619,8 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 8,
+                sm: 6,
+                md: 6
               },
               ...titlebar
             },
@@ -632,7 +633,8 @@ const screenConfig = {
               },
               gridDefination: {
                 xs: 12,
-                sm: 4,
+                sm: 6,
+                md: 6,
                 align: "right"
               },
               children: {
