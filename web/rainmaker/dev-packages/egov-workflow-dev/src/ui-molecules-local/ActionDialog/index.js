@@ -165,6 +165,8 @@ class ActionDialog extends React.Component {
                         data={dropDownData}
                         optionValue="value"
                         optionLabel="label"
+                        required={true}
+                        id="approverrName"
                         hasLocalization={false}
                         //onChange={e => this.onEmployeeClick(e)}
                         onChange={e =>
@@ -244,8 +246,10 @@ class ActionDialog extends React.Component {
                           marginRight: "45px"
                         }}
                         onClick={() =>
-                          onButtonClick(buttonLabel, isDocRequired)
-                        }
+                          document.getElementById("approverrName").value=="Select assignee Name"?
+                          alert("Please select Assignee Name")
+                          :onButtonClick(buttonLabel, isDocRequired)
+                      }
                       >
                         <LabelContainer
                           labelName={getButtonLabelName(buttonLabel)}
