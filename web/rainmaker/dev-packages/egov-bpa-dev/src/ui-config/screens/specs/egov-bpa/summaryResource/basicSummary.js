@@ -321,10 +321,10 @@ export const basicSummary = getCommonGrayCard({
                 reSurveyPlotNo: getLabelWithValue(
                   {
                       labelName: "Re-Survey/Plot No(CS)",
-                      labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
+                      labelKey: "BPA_BOUNDARY_RE_SURVEY_PLOT_LABEL"
                   },
                   {
-                      jsonPath: "BPA.additionalDetails.ReSurveyPlotNo",
+                      jsonPath: "BPA.additionalDetails.reSurveyPlotNo",
                       callBack: checkValueForNA
                   }
                 ),

@@ -3353,7 +3353,7 @@ export const getBpaTextToLocalMapping = label => {
       );
 
     case "INITIATED":
-      return getLocaleLabels("Initiated,", "NOC_INITIATED", localisationLabels);
+      return getLocaleLabels("Initiated,", "WF_BPA_INITIATED", localisationLabels);
     case "APPLIED":
       getLocaleLabels("Applied", "NOC_APPLIED", localisationLabels);
     case "PAID":
