@@ -76,6 +76,7 @@ class SingleApplication extends React.Component {
         switch (item.status) {
           case "INITIATED":
             setRoute(`/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+            break;
           default:
             setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }
