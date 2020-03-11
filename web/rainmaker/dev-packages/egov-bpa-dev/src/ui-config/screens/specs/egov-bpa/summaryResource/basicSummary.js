@@ -138,16 +138,16 @@ export const basicSummary = getCommonGrayCard({
               callBack: checkValueForNA
             }
           ),
-          risktype: getLabelWithValue(
-            {
-              labelName: "Risk Type",
-              labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
-            },
-            {
-              jsonPath: "BPA.riskType",
-              callBack: checkValueForNA
-            }
-          ),
+          // risktype: getLabelWithValue(
+          //   {
+          //     labelName: "Risk Type",
+          //     labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
+          //   },
+          //   {
+          //     jsonPath: "BPA.riskType",
+          //     callBack: checkValueForNA
+          //   }
+          // ),
           applicationdate: getLabelWithValue(
             {
               labelName: "Application Date",
