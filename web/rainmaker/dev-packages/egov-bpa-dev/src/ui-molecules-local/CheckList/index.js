@@ -75,8 +75,10 @@ const themeStyles = theme => ({
     alignItems: "center"
   },
   descriptionDiv: {
-    display: "flex",
-    alignItems: "center"
+    // display: "flex",
+    // alignItems: "center",
+    marginTop: "30px",
+    paddingRight: "20px"
   },
   formControl: {
     minWidth: 250,

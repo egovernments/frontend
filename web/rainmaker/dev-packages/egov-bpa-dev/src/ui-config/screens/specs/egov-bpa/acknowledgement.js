@@ -244,8 +244,12 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application Approved Successfully",
-              labelKey: "BPA_APPLICATION_APPROVED_SUCCESS_MESSAGE_MAIN"
+              labelName: "Application Approved By Citizen Successfully",
+              labelKey: "BPA_APPLICATION_APPROVED_ARCT_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName: "A notification has been sent to Architect",
+              labelKey: "BPA_APPLICATION_APPROVED_ARCT_SUCCESS_BODY_MESSAGE"
             },
             tailText: {
               labelName: "Application No.",
