@@ -108,10 +108,9 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
-      dispatch(prepareFinalObject("DocumentsData", []));
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
-      let parsedObject = parserFunction(applyScreenObject);
-      dispatch(prepareFinalObject("WaterConnection[0]", findAndReplace(parsedObject, "NA", null)));
+      let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
+      dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
     }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
