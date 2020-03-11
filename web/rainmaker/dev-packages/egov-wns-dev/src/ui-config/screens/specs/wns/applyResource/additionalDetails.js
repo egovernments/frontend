@@ -224,8 +224,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.plumberInfo[0].licenseNo"
       }),
       plumberName: getTextField({
@@ -240,6 +240,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
+        pattern: getPattern("Name"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
         jsonPath: "applyScreen.plumberInfo[0].name"
       }),
@@ -293,8 +294,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.roadCuttingArea"
       })
     }),
@@ -331,8 +332,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.meterId"
       }),
       meterInstallationDate: getDateField({
@@ -362,8 +363,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.initialMeterReading"
       })
     })
