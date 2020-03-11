@@ -4284,9 +4284,13 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   let detailsOfBpa = bpaDetails;
   bpaDetails.edcrDetail = payload.edcrDetail;
   let Bpa = bpaDetails;
+  let permitPfKey = "buildingpermit";
+  if(bpaDetails && bpaDetails.riskType === "LOW") {
+    permitPfKey = "buildingpermit-low"
+  }
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_create?key=buildingpermit&tenantId=${bpaDetails.tenantId}`,
+    `pdf-service/v1/_create?key${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
     { Bpa: [Bpa] }
