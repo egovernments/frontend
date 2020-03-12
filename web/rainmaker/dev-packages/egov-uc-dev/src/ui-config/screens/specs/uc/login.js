@@ -87,7 +87,7 @@ const login = {
           }
         },
         loginDetailsCard,
-        loginFooter
+        // loginFooter
       }
     }
   }
