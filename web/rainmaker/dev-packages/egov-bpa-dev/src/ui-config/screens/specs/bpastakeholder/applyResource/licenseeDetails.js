@@ -73,7 +73,7 @@ export const LicenseeCard = getCommonCard({
                 )
               );
               };
-              dispatch(prepareFinalObject("isDeclared",false));
+              dispatch(prepareFinalObject("LicensesTemp.isDeclared",false));
           }
 
           if (action.value == "ARCHITECT") {
