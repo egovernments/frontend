@@ -11,16 +11,11 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
   overrides: {
-    // Name of the component ⚛️ / style sheet
     MuiStepIcon: {
-      // Name of the rule
       completed: {
-        // Some CSS
-      
         color: '#39CB74!important',
-    
       },
-      active:{
+      active: {
         color: '#fe7a51!important',
       },
     },
@@ -60,37 +55,37 @@ const WizardComponent = ({
       {/*<BreadCrumbsForm onTabClick={onTabClick} selected={selected} formValidIndexArray={formValidIndexArray} />*/}
 
       {selected < 5 && <div>
-        
-        
+
+
         <MuiThemeProvider theme={theme}>
-        <Stepper
-        activeStep={selected}
-        alternativeLabel
-        style={{
-          background: "inherit",
-        }}
-        className="stepper-container"
-      >
-        {ptSteps.map((label) => {
-          return (
-            <Step key={label}>
-              <StepLabel>
-                <Label label={label} />
-              </StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-    </MuiThemeProvider>
-        
-        </div>}
+          <Stepper
+            activeStep={selected}
+            alternativeLabel
+            style={{
+              background: "inherit",
+            }}
+            className="stepper-container"
+          >
+            {ptSteps.map((label) => {
+              return (
+                <Step key={label}>
+                  <StepLabel>
+                    <Label label={label} />
+                  </StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        </MuiThemeProvider>
+
+      </div>}
       {selected < 4 && <div>{header}</div>}
       <div className="wizard-content clearfix">{content}</div>
       {footer}
       <div id="tax-wizard-buttons" className="wizard-footer col-sm-10" style={{ textAlign: "right" }}>
         <div className="button-container col-xs-10" style={{ float: "right" }}>
 
-          { selected != 5 && selected != 4 && <Button
+          {selected != 5 && selected != 4 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               selected - 1 === -1 ? history.push("/pt-mutation/propertySearch") : onTabClick(selected - 1);
