@@ -477,12 +477,12 @@ div[class^="MuiPaper-root"],
 
 div[class^="MuiPaper-root"],
 .stepper-container {
-// [class*="MuiStep-completed"]{
-//   circle,
-//   path {
-//     color: #39CB74;
-//   }
-// }
+[class*="MuiStep-completed"]{
+  circle,
+  path {
+    color: #39CB74;
+  }
+}
 }
 #tax-wizard-buttons {
   height: 64px;
