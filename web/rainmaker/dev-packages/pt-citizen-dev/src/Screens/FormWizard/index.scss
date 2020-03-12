@@ -215,10 +215,16 @@ div[class^="MuiPaper-root"],
       font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     }
   }
-  [class*="MuiStepIcon-active"] ,[class*="MuiStep-completed"]{
+  [class*="MuiStepIcon-active"] {
     circle,
     path {
       color: #fe7a51;
+    }
+  }
+  [class*="MuiStep-completed"]{
+    circle,
+    path {
+      color: #39CB74;
     }
   }
   [class*="MuiStepLabel"] {

@@ -5,6 +5,24 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import "./index.css";
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+
+
+const theme = createMuiTheme({
+  overrides: {
+    // Name of the component ⚛️ / style sheet
+    MuiStepIcon: {
+      // Name of the rule
+      completed: {
+        // Some CSS
+      
+        color: 'red',
+    
+      },
+    },
+  },
+})
 
 const ptSteps = [
   "PT_PROPERTY_ADDRESS_SUB_HEADER",
@@ -38,7 +56,11 @@ const WizardComponent = ({
     <div className={`wizard-cont active-step-${selected}`}>
       {/*<BreadCrumbsForm onTabClick={onTabClick} selected={selected} formValidIndexArray={formValidIndexArray} />*/}
 
-      {selected < 5 && <div><Stepper
+      {selected < 5 && <div>
+        
+        
+        <MuiThemeProvider theme={theme}>
+        <Stepper
         activeStep={selected}
         alternativeLabel
         style={{
@@ -55,7 +77,10 @@ const WizardComponent = ({
             </Step>
           );
         })}
-      </Stepper></div>}
+      </Stepper>
+    </MuiThemeProvider>
+        
+        </div>}
       {selected < 4 && <div>{header}</div>}
       <div className="wizard-content clearfix">{content}</div>
       {footer}
