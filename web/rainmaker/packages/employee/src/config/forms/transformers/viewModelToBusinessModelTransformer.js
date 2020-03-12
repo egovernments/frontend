@@ -151,7 +151,7 @@ const transformer = (formKey, form = {}, state = {}) => {
           tenantId = city.value && city.value;
         }
         formData.services[0].tenantId = tenantId;
-        const userRolesArray = JSON.parse(userInfo).roles.filter(item => item.tenantId === tenantId);
+        const userRolesArray = JSON.parse(userInfo).roles.filter(item => item.tenantId === tenantId || item.tenantId === process.env.REACT_APP_DEFAULT_TENANT_ID);
         const index = userRolesArray.findIndex((role) => {
           return role.code === "CSR";
         });
