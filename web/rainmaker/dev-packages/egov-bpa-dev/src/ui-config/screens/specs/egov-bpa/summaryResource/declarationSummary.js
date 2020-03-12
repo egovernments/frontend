@@ -1,4 +1,4 @@
-import { getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonContainer, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const declarationDetails = getCommonContainer({
   citizen: {
@@ -49,6 +49,18 @@ const declarationDetails = getCommonContainer({
 });
 
 export const declarationSummary = getCommonContainer({
+  headers: getCommonTitle(
+    {
+      labelName: "Declaration",
+      labelKey: "BPA_DECLARATION_TITLE"
+    },
+    {
+      style: {
+        marginBottom: 10,
+        marginTop: 18
+      }
+    }
+  ),
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
