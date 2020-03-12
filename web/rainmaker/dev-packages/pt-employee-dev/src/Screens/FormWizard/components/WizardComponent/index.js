@@ -17,11 +17,11 @@ const theme = createMuiTheme({
       completed: {
         // Some CSS
       
-        color: '#fe7a51',
+        color: '#39CB74!important',
     
       },
       active:{
-        color: 'orange',
+        color: '#fe7a51!important',
       },
     },
   },
