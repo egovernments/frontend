@@ -3831,12 +3831,18 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     prepareDocumentsView(state, dispatch, action, appState);
     let permitList = get (state.screenConfiguration.preparedFinalObject, "BPA.additionalDetails.pendingapproval");
     if(permitList && permitList.length > 0) {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
-        true
+      let riskType = get(
+        state,
+        "screenConfiguration.preparedFinalObject.BPA.riskType", ""
       );
-      dispatch(prepareFinalObject("permitList", permitList));
+      if(riskType && riskType != "LOW") {
+        set(
+          action,
+          "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
+          true
+        );
+        dispatch(prepareFinalObject("permitList", permitList));
+      }
     }
     if(wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
       let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
