@@ -4353,7 +4353,7 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
 
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_create?key=consolidatedreceipt&tenantId=${bpaDetails.tenantId}`,
+    `pdf-service/v1/_create?key=misc-receipt&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
     { Payments : payments }
