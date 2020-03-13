@@ -145,13 +145,16 @@ const transformer = (formKey, form = {}, state = {}) => {
     complaint: async () => {
       const formData = prepareFormData(form);
       const userInfo = getUserInfo();
-      const isNative = localStorageGet("isNative");
+      const isNative = JSON.parse(localStorageGet("isNative"));
       let userPhone = null;
       let userRole = null;
       try {
         userPhone = JSON.parse(userInfo).mobileNumber;
         userRole = JSON.parse(userInfo).roles[0].code;
-        formData.services[0].source = userRole === "CITIZEN" ? (isNative ? "mobileapp" : "web") : "";
+        const index = JSON.parse(userInfo).roles.findIndex((role) => {
+          return role.code === "CITIZEN";
+        });
+        formData.services[0].source = index > -1 ? isNative ? "mobileapp" : "web" : "";
         formData.services[0].phone = userPhone;
       } catch (error) {}
 

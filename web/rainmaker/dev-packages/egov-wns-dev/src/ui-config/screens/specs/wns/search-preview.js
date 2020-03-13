@@ -43,75 +43,50 @@ let headerSideText = { word1: "", word2: "" };
 const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 
-
-//---------------- existing Code -------------------- //
-// const searchResults = async (action, state, dispatch, applicationNo) => {
-//   let queryObject = [
-//     { key: "tenantId", value: tenantId },
-//     { key: "applicationNumber", value: applicationNumber }
-//   ];
-//   let payload = await getSearchResults(queryObject);
-
-
-//   console.log("payloaddata", payload)
-
-//   headerSideText = getHeaderSideText(
-//     get(payload, "WaterConnection[0].applicationStatus"),
-//     get(payload, "WaterConnection[0].applicationNo")
-//   );
-//   set(payload, "WaterConnection[0].headerSideText", headerSideText);
-
-//   // get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory") &&
-//   //   get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory").split(
-//   //     "."
-//   //   )[0] === "INDIVIDUAL"
-//   //   ? setMultiOwnerForSV(action, true)
-//   //   : setMultiOwnerForSV(action, false);
-
-//   // if (get(payload, "Licenses[0].licenseType")) {
-//   //   setValidToFromVisibilityForSV(
-//   //     action,
-//   //     get(payload, "Licenses[0].licenseType")
-//   //   );
-//   // }
-
-//   // await setDocuments(
-//   //   payload,
-//   //   "Licenses[0].tradeLicenseDetail.applicationDocuments",
-//   //   "LicensesTemp[0].reviewDocData",
-//   //   dispatch,'TL'
-//   // );
-//   let sts = getTransformedStatus(get(payload, "WaterConnection[0].applicationStatus"));
-//   payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-//   // payload &&
-//   //   dispatch(
-//   //     prepareFinalObject(
-//   //       "LicensesTemp[0].tradeDetailsResponse",
-//   //       getTradeTypeSubtypeDetails(payload)
-//   //     )
-//   //   );
-//   const WaterData = payload.WaterConnection[0];
-//   // const fetchFromReceipt = sts !== "pending_payment";
-//   createEstimateData(WaterData, "LicensesTemp[0].estimateCardData", dispatch, {}, {});
-//   // Fetch Bill and populate estimate card
-//   // const code = get(
-//   //   payload,
-//   //   "WaterConnection[0].property.address.locality.code"
-//   // );
-//   // const queryObj = [{ key: "tenantId", value: "pb.amritsar" }];
-//   // getBoundaryData(action, state, dispatch, queryObj, code);
-// };
-
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
   if (applicationNumber) {
+    let estimate;
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
-      dispatch(prepareFinalObject("DocumentsData", []));
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
-      let parsedObject = parserFunction(applyScreenObject);
-      dispatch(prepareFinalObject("WaterConnection[0]", findAndReplace(parsedObject, "NA", null)));
+      let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
+      dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
+      
+      let queryObjectForEst = [{
+        applicationNo: applicationNumber,
+        tenantId: tenantId,
+        waterConnection: parsedObject
+      }]
+      if (parsedObject.applicationNo.includes("WS")) {
+        estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
+        let viewBillTooltip = [];
+        if (estimate !== null && estimate !== undefined) {
+          if (estimate.Calculation.length > 0) {
+            await processBills(estimate, viewBillTooltip, dispatch);
+
+            // viewBreakUp 
+            estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+
+            dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
+          }
+        } else {
+          estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
+          let viewBillTooltip = []
+          if (estimate !== null && estimate !== undefined) {
+            if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
+              await processBills(estimate, viewBillTooltip, dispatch);
+              // viewBreakUp 
+              estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+              dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
+            }
+          }
+        }
+      }
+      if (estimate !== null && estimate !== undefined) {
+        createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
+      }
     }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
@@ -580,8 +555,6 @@ const parserFunction = (obj) => {
     meterId: parseInt(obj.meterId),
     initialMeterReading: parseInt(obj.initialMeterReading),
     noOfTaps: parseInt(obj.noOfTaps),
-    proposedWaterClosets: parseInt(obj.proposedWaterClosets),
-    proposedToilets: parseInt(obj.proposedToilets),
     proposedTaps: parseInt(obj.proposedTaps),
     plumberInfo: (obj.plumberInfo === null || obj.plumberInfo === "NA") ? [] : obj.plumberInfo
   }
@@ -591,17 +564,18 @@ const parserFunction = (obj) => {
 
 const processBills = async (data, viewBillTooltip, dispatch) => {
   let des, obj, groupBillDetails = [];
+  let appNumber=data.Calculation[0].applicationNo;
   data.Calculation[0].taxHeadEstimates.forEach(async element => {
     let cessKey = element.taxHeadCode
     let body;
-    if (service === "WATER") {
+    if (service === "WATER" ||appNumber.includes("WS")) {
       body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
     } else {
       body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
     }
     let res = await getDescriptionFromMDMS(body, dispatch)
     if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
-      if (service === "WATER") { des = res.MdmsRes["ws-services-calculation"]; }
+      if (service === "WATER" || appNumber.includes("WS")) { des = res.MdmsRes["ws-services-calculation"]; }
       else { des = res.MdmsRes["sw-services-calculation"]; }
       if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
         groupBillDetails.push({ key: cessKey, value: des[cessKey][0].description, amount: element.estimateAmount, order: element.order })

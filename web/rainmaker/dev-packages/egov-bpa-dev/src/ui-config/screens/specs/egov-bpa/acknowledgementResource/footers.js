@@ -60,7 +60,7 @@ export const applicationSuccessFooter = (
   tenant
 ) => {
   let status = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].status") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.status"));
-  let riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
+  let riskType = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].riskType") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.riskType"));
   let billbService
   if(riskType === "LOW") {
     billbService = "BPA.LOW_RISK_PERMIT_FEE"

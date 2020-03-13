@@ -148,6 +148,20 @@ export const transferorSummary = getCommonCard({
               // }
             }
           ),
+          ownerSpecialDocumentID: getLabelWithValue(
+            {
+              labelName: "Document Id",
+              labelKey: "PT_CATEGORY_DOCUMENT_ID"
+            },
+            {
+              jsonPath:
+              "Property.ownersInit[0].documentUid" ,
+              callBack: checkValueForNA
+              // callBack: value => {
+              //   return convertEpochToDate(value);
+              // }
+            }
+          ),
           ownerAddress: getLabelWithValue(
             {
               labelName: "Correspondence Address",

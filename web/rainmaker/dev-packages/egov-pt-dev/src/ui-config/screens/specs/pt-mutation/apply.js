@@ -187,6 +187,9 @@ const getPropertyData = async (action, state, dispatch) => {
     
     let owners = [];
     payload.Properties[0].owners.map(owner => {
+      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
+      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
+      
       if (owner.status == "ACTIVE") {
         owners.push(owner);
       } 
@@ -196,6 +199,8 @@ const getPropertyData = async (action, state, dispatch) => {
     payload.Properties[0].ownersInit = owners;
     payload.Properties[0].ownershipCategoryInit=payload.Properties[0].ownershipCategory;
   }
+  const previousPropertyUuid=payload.Properties[0].additionalDetails&&payload.Properties[0].additionalDetails.previousPropertyUuid;
+  payload.Properties[0].additionalDetails={previousPropertyUuid};
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
 
     if (

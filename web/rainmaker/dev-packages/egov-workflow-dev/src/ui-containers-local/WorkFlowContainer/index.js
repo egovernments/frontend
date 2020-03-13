@@ -204,7 +204,8 @@ class WorkFlowContainer extends React.Component {
       data.processInstance = {
         documents: data.wfDocuments,
         assignes: data.assignees,
-        comment: data.comment
+        comment: data.comment,
+        action: data.action
       }
     }
 

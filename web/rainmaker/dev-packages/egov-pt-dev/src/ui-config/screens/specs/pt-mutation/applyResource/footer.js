@@ -128,6 +128,18 @@ const callBackForApply = async (state, dispatch) => {
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
+
+  if (process.env.REACT_APP_NAME === "Citizen" && propertyPayload && !propertyPayload.declaration) {
+    const errorMessage = {
+      labelName:
+        "Please fill all mandatory fields for Applicant Details, then proceed!",
+      labelKey: "ERR_CITIZEN_DECLARATION_TOAST"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+
+
   let documentsUploadRedux = get(
     state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
   propertyPayload.workflow = {
@@ -141,14 +153,14 @@ const callBackForApply = async (state, dispatch) => {
 
     })
 
-   propertyPayload.ownersTemp.map(owner=>{
-     if(owner.documentUid&&owner.documentType){
-      owner.documents=[{}]
-    owner.documents[0].fileStoreId=owner.documentUid ;
-    owner.documents[0].documentType=owner.documentType ;
-    owner.documents[0].documentUid= owner.documentUid ;
-     }
-   })
+  propertyPayload.ownersTemp.map(owner => {
+    if (owner.documentUid && owner.documentType) {
+      owner.documents = [{}]
+      owner.documents[0].fileStoreId = owner.documentUid;
+      owner.documents[0].documentType = owner.documentType;
+      owner.documents[0].documentUid = owner.documentUid;
+    }
+  })
   propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
     propertyPayload.additionalDetails.documentDate);
 
@@ -200,8 +212,9 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
   propertyPayload.documents = Object.values(documentsUploadRedux).map(o => {
+    let documentValue = o.dropdown.value.split('.');
     return {
-      documentType: o.documentCode,
+      documentType: documentValue && documentValue.length > 1 && documentValue[2],
       fileStoreId: o.documents[0].fileStoreId,
       documentUid: o.documents[0].fileStoreId,
       auditDetails: null,
@@ -293,11 +306,11 @@ const validateMobileNumber = (state) => {
       return owner.name
     })
     const mobileNumbers = owners.map(owner => {
-      return owner.mobileNumber
+      if (owner.status == "ACTIVE") {
+        return owner.mobileNumber;
+      }
     })
-
     newOwners.map(owner => {
-
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
       }
@@ -373,7 +386,12 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-
+    // dispatch(
+    //   prepareFinalObject(
+    //     "documentsUploadRedux.3.dropdown.value",
+    //     `${get(state,'screenConfiguration.preparedFinalObject.documentsUploadRedux.3.documentCode','')}.${get(state,'screenConfiguration.preparedFinalObject.Property.additionalDetails.reasonForTransfer','')}`
+    //   )
+    // );
     if (isFormValid) {
       errorMsg = validateMobileNumber(state);
       errorMsg ? isFormValid = false : {};

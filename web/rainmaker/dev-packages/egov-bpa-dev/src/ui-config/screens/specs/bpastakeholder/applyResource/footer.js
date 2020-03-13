@@ -293,7 +293,7 @@ export const callBackForNext = async (state, dispatch) => {
     else {
       let errorMessage = {
         labelName: "Please confirm the declaration!",
-        labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
+        labelKey: "ERR_FILL_DECLARATION_MESSAGE"
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));      
     }
