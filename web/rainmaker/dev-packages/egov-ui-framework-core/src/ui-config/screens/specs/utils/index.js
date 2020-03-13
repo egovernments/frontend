@@ -160,16 +160,6 @@ export const getBreak = (props = {}) => {
   };
 };
 
-
-export const getLogo = (props = {}) => {
-  return {
-    uiFramework: "custom-atoms",
-    componentPath: "Images",
-    props
-  };
-};
-
-
 export const getLabel = (label, labelKey, props = {}) => {
   return {
     uiFramework: "custom-containers",

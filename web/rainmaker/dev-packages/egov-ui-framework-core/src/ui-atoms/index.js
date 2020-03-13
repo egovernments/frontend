@@ -57,7 +57,6 @@ const Break = Loadable({
   loader: () => import("./UtilityElement/Break"),
   loading: () => <Loading />
 });
-
 const Icon = Loadable({
   loader: () => import("./Icon"),
   loading: () => <Loading />
@@ -123,10 +122,6 @@ const AutoSuggest = Loadable({
   loader: () => import("./AutoSuggest"),
   loading: () => <Loading />
 });
-const Images = Loadable({
-  loader: () => import("./UtilityElement/Images"),
-  loading: () => <Loading />
-})
 
 export {
   Div,
@@ -158,6 +153,5 @@ export {
   UploadFile,
   UploadedDocument,
   MenuButton,
-  AutoSuggest,
-  Images
+  AutoSuggest
 };
