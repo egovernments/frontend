@@ -34,3 +34,7 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
   margin-bottom: 0 !important;
   color: rgba(0, 0, 0, 0.87);
 }
+
+.landingPageHeader .label-text {
+  padding-top: 10px !important;
+  }
