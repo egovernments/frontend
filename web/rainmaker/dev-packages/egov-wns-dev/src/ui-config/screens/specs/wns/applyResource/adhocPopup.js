@@ -365,7 +365,7 @@ export const adhocPopup = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        textAlign: "center"
       }
     },
     children: {
@@ -377,7 +377,7 @@ export const adhocPopup = getCommonContainer({
           style: {
             width: "140px",
             height: "48px",
-            marginRight: "16px"
+            margin: "8px"
           }
         },
         children: {
