@@ -93,7 +93,12 @@ export const getSearchResults = async queryObject => {
             "_search",
             queryObject
         );
-        return findAndReplace(response, null, "NA");
+        let result = findAndReplace(response, null, "NA");
+        let waterSource = result.WaterConnection[0].waterSource.split(".")[0];
+        let waterSubSource = result.WaterConnection[0].waterSource.split(".")[1];
+        result.WaterConnection[0].waterSource = waterSource;
+        result.WaterConnection[0].waterSubSource = waterSubSource;
+        return result;
     } catch (error) { console.log(error) }
 };
 
@@ -517,7 +522,7 @@ const parserFunction = (state) => {
         proposedWaterClosets: parseInt(queryObject.proposedWaterClosets),
         proposedToilets: parseInt(queryObject.proposedToilets),
         noOfTaps: parseInt(queryObject.noOfTaps),
-        waterClosets: parseInt(queryObject.waterClosets),
+        noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
         meterId: parseInt(queryObject.meterId),
@@ -633,6 +638,7 @@ export const applyForWater = async (state, dispatch) => {
             set(queryObjectForUpdate, "tenantId", tenantId);
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdate, "waterSource", (queryObjectForUpdate.waterSource + "." + queryObjectForUpdate.waterSubSource));
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
@@ -704,6 +710,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObjectForUpdateSewerage = { ...queryObjectForUpdateSewerage, ...queryObject }
             queryObjectForUpdateSewerage = findAndReplace(queryObjectForUpdateSewerage, "NA", null);
             set(queryObjectForUpdateWater, "processInstance.action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdateWater, "waterSource", (queryObjectForUpdateWater.waterSource + "." + queryObjectForUpdateWater.waterSubSource));
             set(queryObjectForUpdateSewerage, "processInstance.action", "SUBMIT_APPLICATION");
             set(queryObjectForUpdateSewerage, "connectionType", "Non Metered");
             (await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater }) &&
