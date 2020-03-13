@@ -90,7 +90,7 @@ export const getReviewConnectionDetails = (isEditable = true) => {
     },
     viewOne: getPropertyDetails,
     viewTwo: propertyLocationDetails,
-    viewThree: ownerDetails(),
+    viewThree: ownerDetails,
     viewFour: getConnectionDetails()
   });
 };
@@ -245,19 +245,19 @@ const getPropertyDetails = {
   type: "array"
 };
 
-const ownerDetails = () => {
-  return getCommonGrayCard({
-    headerDiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      ...propertyOwnerDetailsHeader,
-    },
-    multiOwner: {
+const ownerDetails = {
+  // return getCommonGrayCard({
+  //   headerDiv: {
+  //     uiFramework: "custom-atoms",
+  //     componentPath: "Container",
+  //     ...propertyOwnerDetailsHeader,
+  //   },
       uiFramework: "custom-containers",
       componentPath: "MultiItem",
       props: {
         className: "common-div-css search-preview",
         scheama: getCommonGrayCard({
+          div3: propertyOwnerDetailsHeader,
           propertyLocationDetailsContainer: getCommonContainer({
             name: getLabelWithValue(
               {
@@ -333,7 +333,7 @@ const ownerDetails = () => {
         afterPrefixJsonPath: "children.value.children.key"
       },
       type: "array"
-    }
-  });
+    
+  // });
 }
 
