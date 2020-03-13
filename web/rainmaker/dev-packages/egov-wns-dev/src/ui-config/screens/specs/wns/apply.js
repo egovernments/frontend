@@ -159,7 +159,15 @@ export const getMdmsData = async dispatch => {
         { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" }] },
         { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
-        { moduleName: "ws-services-masters", masterDetails: [{ name: "Documents" }, { name: "waterSubSource" }, { name: "waterSource" }, { name: "connectionType" }] }
+        {
+          moduleName: "ws-services-masters", masterDetails: [
+            { name: "Documents" },
+            { name: "waterSubSource" },
+            { name: "waterSource" },
+            { name: "waterSourceWithSubSource" },
+            { name: "connectionType" }
+          ]
+        }
       ]
     }
   };
@@ -170,6 +178,42 @@ export const getMdmsData = async dispatch => {
       let pipeSize = [];
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
       payload.MdmsRes['ws-services-calculation'].pipeSize = pipeSize;
+      let waterSource = [], GROUND = [], SURFACE = [], BULKSUPPLY = [];
+      payload.MdmsRes['ws-services-masters'].waterSourceWithSubSource.forEach(obj => {
+        waterSource.push({
+          code: obj.code.split(".")[0],
+          name: obj.name,
+          isActive: obj.active
+        });
+        if (obj.code.split(".")[0] === "GROUND") {
+          GROUND.push({
+            code: obj.code.split(".")[1],
+            name: obj.name,
+            isActive: obj.active
+          });
+        } else if (obj.code.split(".")[0] === "SURFACE") {
+          SURFACE.push({
+            code: obj.code.split(".")[1],
+            name: obj.name,
+            isActive: obj.active
+          });
+        } else if (obj.code.split(".")[0] === "BULKSUPPLY") {
+          BULKSUPPLY.push({
+            code: obj.code.split(".")[1],
+            name: obj.name,
+            isActive: obj.active
+          })
+        }
+      })
+      let filtered = waterSource.reduce((filtered, item) => {
+        if (!filtered.some(filteredItem => JSON.stringify(filteredItem.code) == JSON.stringify(item.code)))
+          filtered.push(item)
+        return filtered
+      }, [])
+      payload.MdmsRes['ws-services-masters'].waterSource = filtered;
+      payload.MdmsRes['ws-services-masters'].GROUND = GROUND;
+      payload.MdmsRes['ws-services-masters'].SURFACE = SURFACE;
+      payload.MdmsRes['ws-services-masters'].BULKSUPPLY = BULKSUPPLY;
     }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
