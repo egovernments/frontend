@@ -188,11 +188,11 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
 
-      waterClosets: getTextField({
+      noOfWaterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "applyScreen.waterClosets",
+        jsonPath: "applyScreen.noOfWaterClosets",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
