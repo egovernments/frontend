@@ -522,7 +522,7 @@ const parserFunction = (state) => {
         proposedWaterClosets: parseInt(queryObject.proposedWaterClosets),
         proposedToilets: parseInt(queryObject.proposedToilets),
         noOfTaps: parseInt(queryObject.noOfTaps),
-        waterClosets: parseInt(queryObject.waterClosets),
+        noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
         meterId: parseInt(queryObject.meterId),
