@@ -555,8 +555,6 @@ const parserFunction = (obj) => {
     meterId: parseInt(obj.meterId),
     initialMeterReading: parseInt(obj.initialMeterReading),
     noOfTaps: parseInt(obj.noOfTaps),
-    proposedWaterClosets: parseInt(obj.proposedWaterClosets),
-    proposedToilets: parseInt(obj.proposedToilets),
     proposedTaps: parseInt(obj.proposedTaps),
     plumberInfo: (obj.plumberInfo === null || obj.plumberInfo === "NA") ? [] : obj.plumberInfo
   }
