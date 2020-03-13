@@ -20,7 +20,8 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults, generatePdfFromDiv } from "../../../../ui-utils/commons";
+import { getSearchResults } from "../../../../ui-utils/commons";
+import {generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
 import { searchBill, getReceiptData, getpayments, downloadCertificateForm, downloadReceitForm } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
@@ -171,14 +172,14 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber)
+      generatePdfFromDiv("download", applicationNumber,"#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber)
+      generatePdfFromDiv("print", applicationNumber,"#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
