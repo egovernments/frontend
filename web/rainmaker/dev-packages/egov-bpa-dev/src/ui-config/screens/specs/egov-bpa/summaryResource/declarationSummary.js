@@ -39,7 +39,7 @@ const declarationDetails = getCommonContainer({
     props: {
       label: {
         labelName: "I am responsible for any defects/errors/omissions made while submitting the application",
-        labelKey: "BPA_STAKEHOLDER_DECLARAION_LABEL"
+        labelKey: "BPA_SECOND_STAKEHOLDER_DECLARAION_LABEL"
       },
       jsonPath: "BPA.isDeclaration",
     },
