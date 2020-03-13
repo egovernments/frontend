@@ -21,6 +21,10 @@ import TLHowItWorks from "../../ui-views/HowItWorks";
 import pgrRoutes from "pgr-citizen/Routes/pgr-routes";
 import ptRoutes from "pt-citizen/Routes/pt-routes";
 
+//Whatsapp Screen 
+import  WhatsAppCity from "modules/citizen/WhatsAppScreen/City";
+import  WhatsAppLocality from "modules/citizen/WhatsAppScreen/Locality";
+
 const routes = [
   {
     path: "user/register",
@@ -116,6 +120,25 @@ const routes = [
       hideFooter: true,
       hideBackButton: true,
       title: "TL_HOW_IT_WORKS",
+    },
+    
+  },
+  {
+    path: "openlink/whatsapp/city",
+    component:  WhatsAppCity ,
+    needsAuthentication: false,
+    options: {
+      hideFooter: true,
+      title: "",
+    },
+  },
+  {
+    path: "openlink/whatsapp/locality",
+    component:  WhatsAppLocality ,
+    needsAuthentication: false,
+    options: {
+      hideFooter: true,
+      title: "",
     },
   },
   ...pgrRoutes,
