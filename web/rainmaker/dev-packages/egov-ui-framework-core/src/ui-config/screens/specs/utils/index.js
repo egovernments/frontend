@@ -171,6 +171,15 @@ export const getLabel = (label, labelKey, props = {}) => {
   };
 };
 
+
+export const getLogo = (props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Images",
+    props
+  };
+};
+
 export const getSelectField = selectScheama => {
   return getTextField({
     ...selectScheama,

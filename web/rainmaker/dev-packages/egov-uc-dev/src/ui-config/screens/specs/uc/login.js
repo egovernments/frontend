@@ -82,12 +82,12 @@ const login = {
                 xs: 12,
                 sm: 6
               },
-              ...header
+              // ...header
             }
           }
         },
         loginDetailsCard,
-        loginFooter
+        // loginFooter
       }
     }
   }
