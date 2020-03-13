@@ -1690,6 +1690,7 @@ class FormWizard extends Component {
       this.setState({
         termsError: "PT_CHECK_DECLARATION_BOX"
       });
+      window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
       alert("Please check the declaration box to proceed futher");
       return;
     }
