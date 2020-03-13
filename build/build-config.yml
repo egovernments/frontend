@@ -9,13 +9,13 @@
 # - 
 
 config:
--   name: frontend/citizen
+-   name: builds/frontend/citizen
     build:
     - work-dir: web/rainmaker/
       dockerfile: web/rainmaker/docker/citizen/Dockerfile
       image-name: citizen
 
--   name: frontend/employee
+-   name: builds/frontend/employee
     build:
     - work-dir: web/rainmaker/
       dockerfile: web/rainmaker/docker/employee/Dockerfile
