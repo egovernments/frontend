@@ -64,14 +64,7 @@ const AmountToBePaid = getCommonGrayCard({
       }),
       beforeFieldChange: (action, state, dispatch) => {
         const pattern = getPattern("Amount");
-        const billingServiceDetails = get(state.screenConfiguration.preparedFinalObject , "businessServiceMdmsData.BillingService.BusinessService");
-        const businessServiceCode = get(state.screenConfiguration.preparedFinalObject , "businessServiceInfo.code");
-        let minAmountPayable = 0;
-        billingServiceDetails && billingServiceDetails.map(item => {
-            if (item.code == businessServiceCode) {
-              minAmountPayable = item.minAmountPayable;
-            }
-        })
+        const minAmountPayable = get(state.screenConfiguration.preparedFinalObject , "businessServiceInfo.minAmountPayable");
         try {
           validateAmountInput(pattern, action, dispatch, state , minAmountPayable);
         } catch (e) {

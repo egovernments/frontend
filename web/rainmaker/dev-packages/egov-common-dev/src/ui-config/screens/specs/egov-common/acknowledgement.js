@@ -89,10 +89,8 @@ const getAcknowledgementCard = (
 ) => {
     const roleExists = ifUserRoleExists("CITIZEN");
     let header = getHeader(state);
-    const commonPayDetails = get(state.screenConfiguration.preparedFinalObject , "businessServiceMdmsData.common-masters.uiCommonPay");
-    const businessServiceCode = get(state.screenConfiguration.preparedFinalObject , "businessServiceInfo.code");
-    const serviceDetails = commonPayDetails && commonPayDetails.length > 0 && commonPayDetails.filter(item => item.code === businessServiceCode)
-    const {citizenSuccess , employeeSuccess , citizenFailure , employeeFailure} = serviceDetails[0];
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+    const {citizenSuccess , employeeSuccess , citizenFailure , employeeFailure} = uiCommonPayConfig;
     if (status === "success") {
         return {
             header,

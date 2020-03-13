@@ -7,7 +7,7 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getCurrentFinancialYear, generateBill, getBusinessServiceMdmsData } from "../utils";
-import capturePaymentDetails from "./payResource/capture-payment-details";
+import { capturePaymentDetails } from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
@@ -20,17 +20,9 @@ import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./pay
 import "./pay.css";
 
 export const getHeader = (state) => {
-    const commonPayDetails = get(state.screenConfiguration.preparedFinalObject , "businessServiceMdmsData.common-masters.uiCommonPay");
-    const businessServiceCode = get(state.screenConfiguration.preparedFinalObject , "businessServiceInfo.code");
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     let consumerCode = getQueryArg(window.location.href, "consumerCode");
-    let label = "";
-    commonPayDetails && commonPayDetails.map(item => {
-        if (item.code == businessServiceCode) {
-            label = item.headerBandLabel;
-            // let header  = getHeader(item.headerBandLabel,consumerCode);
-            // set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header)  
-        }
-    })
+    let label = uiCommonPayConfig.headerBandLabel;
     return getCommonContainer({
         header: getCommonHeader({
             labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
@@ -44,22 +36,14 @@ export const getHeader = (state) => {
                 number: consumerCode,
                 label: {
                     labelKey: label,
-                    //labelValue: "Consumer Code.:",
                 },
-                
-                // {
-                //     labelValue: "Consumer Code.:",
-                //     labelKey: "PAYMENT_COMMON_CONSUMER_CODE"
-                // }
             }
         }
     });
 }
 
-const getPaymentCard = () => {
-
+const getPaymentCard = (state) => {
     const roleExists = ifUserRoleExists("CITIZEN");
-
     if (roleExists) {
         return {
             uiFramework: "custom-atoms",
@@ -93,15 +77,13 @@ const getPaymentCard = () => {
                         ...AmountToBePaid,
                         visible: false
                     },
-                    capturePaymentDetails,
+                    capturePaymentDetails : capturePaymentDetails(state),
                     g8Details
                 })
             }
         }
     }
 }
-
-
 
 const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessService) => {
     await getBusinessServiceMdmsData(dispatch, tenantId);
@@ -123,6 +105,15 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessSe
             dispatch(prepareFinalObject("businessServiceInfo", item));
         }
     })
+
+    //commonPay configuration 
+    const commonPayDetails = get(state.screenConfiguration.preparedFinalObject , "businessServiceMdmsData.common-masters.uiCommonPay");
+    commonPayDetails && commonPayDetails.map(item => {
+        if (item.code == businessService) {
+            dispatch(prepareFinalObject("commonPayInfo", item));
+        }
+    })
+
     const isPartialPaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.partPaymentAllowed");
     if (isPartialPaymentAllowed) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));
@@ -159,18 +150,6 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessSe
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName")));
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber")));
 
-
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "Owner"));
-    // const payerComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payer";
-    // dispatch(handleField("pay", payerComponentPath, "props.value","" ));
-    //
-    // const paidByComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.paidBy";
-    // dispatch(handleField("pay", paidByComponentPath, "props.value","" ));
-    //
-    // const numberComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payerMobileNumber";
-    // dispatch(handleField("pay", numberComponentPath, "props.value","" ));
-
-
     //Initially select instrument type as Cash
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
 
@@ -195,7 +174,7 @@ const screenConfig = {
                 set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
             }
         );
-        const data = getPaymentCard();    
+        const data = getPaymentCard(state);    
         set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
         return action;
     },
@@ -212,13 +191,6 @@ const screenConfig = {
                     uiFramework: "custom-atoms",
                     componentPath: "Container",
                     children: {
-                        // header: {
-                        //     gridDefination: {
-                        //         xs: 12,
-                        //         sm: 10
-                        //     },
-                        //     ...header
-                        // }
                         header : {}
                     }
                 },
