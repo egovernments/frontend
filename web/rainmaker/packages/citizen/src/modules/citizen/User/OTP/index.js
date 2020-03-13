@@ -7,6 +7,7 @@ import { handleFieldChange, submitForm, setFieldProperty } from "egov-ui-kit/red
 import { sendOTP } from "egov-ui-kit/redux/auth/actions";
 import { Screen } from "modules/common";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { withRouter } from "react-router";
 import commonConfig from "config/common";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
@@ -15,6 +16,9 @@ import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 const OTPFormHOC = formHoc({ formKey: "otp" })(OTPForm);
 
 class OTP extends Component {
+  state = {
+    timerSwitch: false
+  };
   componentWillMount() {
     const { previousRoute } = this.props;
     if (previousRoute.length === 0) {
@@ -64,14 +68,21 @@ class OTP extends Component {
     else if (getQueryArg("", "smsLink")) this.sendOtpForAutoLogin();
   };
 
-  render() {
-    const { phoneNumber, loading, bannerUrl, logoUrl } = this.props;
-    const { resendOTP } = this;
+  completed = () => {
+    console.log('Timer has completed')
+    this.setState({
+      timerSwitch:true
+    });
+  };
 
+  render() {
+    const { phoneNumber, loading, bannerUrl, logoUrl,history } = this.props;
+    const { resendOTP,completed } = this;
+   const {timerSwitch}=this.state;
     return (
       <Screen loading={loading} className="force-padding-0">
         <Banner bannerUrl={bannerUrl} logoUrl={logoUrl}>
-          <OTPFormHOC resendOTP={resendOTP} phoneNumber={phoneNumber} logoUrl={logoUrl} />
+          <OTPFormHOC resendOTP={resendOTP} phoneNumber={phoneNumber} logoUrl={logoUrl} history={history} timerSwitch={timerSwitch} completed={completed}/>
         </Banner>
       </Screen>
     );
@@ -102,7 +113,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(OTP);
+)(OTP));

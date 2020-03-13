@@ -96,10 +96,10 @@ const CountdownTimer = createReactClass({
         const hours = parseInt((totalSeconds / 3600).toString(), 10);
 
         const ss = seconds < 10 ? '0' + seconds : seconds;
-        const mm = minutes < 10 ? '0' + minutes : minutes;
-        const hh = hours < 10 ? '0' + hours : hours;
-
-        return hh + ':' + mm + ':' + ss;
+        const mm = minutes < 10 ?  minutes : minutes;
+       // const hh = hours < 10 ? '0' + hours : hours;
+        const finalTime=totalSeconds;
+        return finalTime;
     },
 
     render: function () {
