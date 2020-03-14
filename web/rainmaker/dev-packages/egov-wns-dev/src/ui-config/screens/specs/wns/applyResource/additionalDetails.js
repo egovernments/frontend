@@ -13,7 +13,10 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 //   import { searchApiCall } from "./functions";
 import commonConfig from "config/common.js";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getHeaderSideText } from "../../utils";
 import get from 'lodash/get';
 import { httpRequest } from '../../../../../ui-utils/index';
@@ -154,16 +157,36 @@ export const additionDetails = getCommonCard({
           jsonPath: "applyScreen.waterSource"
         }),
         beforeFieldChange: async (action, state, dispatch) => {
-          let waterSource = get(state, "screenConfiguration.preparedFinalObject.applyScreen.waterSource");
-          if (waterSource === "Ground") {
-            let code = `"masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'GROUND')]"}]`
-            await waterSubSourceType(state, dispatch, code)
-          } else if (waterSource === "Surface") {
-            let code = `"masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'SURFACE')]"}]`
-            await waterSubSourceType(state, dispatch, code)
-          } else {
-            let code = `"masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'BULKSUPPLY')]"}]`
-            await waterSubSourceType(state, dispatch, code)
+          if (action.value === "GROUND") {
+            dispatch(
+              prepareFinalObject(
+                "waterSubSourceForSelectedWaterSource",
+                get(
+                  state.screenConfiguration.preparedFinalObject,
+                  "applyScreenMdmsData.ws-services-masters.GROUND"
+                )
+              )
+            )
+          } else if (action.value === "SURFACE") {
+            dispatch(
+              prepareFinalObject(
+                "waterSubSourceForSelectedWaterSource",
+                get(
+                  state.screenConfiguration.preparedFinalObject,
+                  "applyScreenMdmsData.ws-services-masters.SURFACE"
+                )
+              )
+            )
+          } else if (action.value === "BULKSUPPLY") {
+            dispatch(
+              prepareFinalObject(
+                "waterSubSourceForSelectedWaterSource",
+                get(
+                  state.screenConfiguration.preparedFinalObject,
+                  "applyScreenMdmsData.ws-services-masters.BULKSUPPLY"
+                )
+              )
+            )
           }
         }
       },
@@ -172,7 +195,7 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_WARER_SUB_SOURCE_PLACEHOLDER" },
         required: false,
-        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.waterSubSource[0].subsource",
+        sourceJsonPath: "waterSubSourceForSelectedWaterSource",
         gridDefination: { xs: 12, sm: 6 },
         errorMessage: "ERR_INVALID_BILLING_PERIOD",
         jsonPath: "applyScreen.waterSubSource"
@@ -188,11 +211,11 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
 
-      waterClosets: getTextField({
+      noOfWaterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "applyScreen.waterClosets",
+        jsonPath: "applyScreen.noOfWaterClosets",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
@@ -224,8 +247,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.plumberInfo[0].licenseNo"
       }),
       plumberName: getTextField({
@@ -240,6 +263,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
+        pattern: getPattern("Name"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
         jsonPath: "applyScreen.plumberInfo[0].name"
       }),
@@ -293,8 +317,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.roadCuttingArea"
       })
     }),
@@ -331,8 +355,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.meterId"
       }),
       meterInstallationDate: getDateField({
@@ -362,8 +386,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.initialMeterReading"
       })
     })

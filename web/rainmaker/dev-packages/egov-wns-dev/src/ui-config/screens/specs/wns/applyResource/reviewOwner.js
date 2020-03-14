@@ -95,7 +95,7 @@ export const reviewWaterClosets = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
   },
   {
-    jsonPath: "applyScreen.waterClosets",
+    jsonPath: "applyScreen.noOfWaterClosets",
   }
 );
 

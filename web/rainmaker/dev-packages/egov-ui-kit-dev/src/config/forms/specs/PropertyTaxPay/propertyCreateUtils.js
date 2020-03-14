@@ -104,7 +104,12 @@ export const getCreatePropertyResponse = (createPropertyResponse) => {
   // createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
   // Documents array coming in reverse order from API
   // createPropertyResponse.Properties[0] && createPropertyResponse.Properties[0].documents && createPropertyResponse.Properties[0].documents.length && createPropertyResponse.Properties[0].documents.reverse();
+  try{
   return { Properties: convertToOldPTObject(createPropertyResponse), newProperties: createPropertyResponse.Properties };
+  }catch(e){
+    console.error(e);
+    return { Properties: [], newProperties: [] };
+  }
 };
 
 export const convertToArray = (documentsUploadRedux) => {

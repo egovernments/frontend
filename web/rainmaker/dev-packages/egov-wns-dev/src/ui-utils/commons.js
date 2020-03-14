@@ -23,6 +23,7 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
+        dispatch(prepareFinalObject("DocumentsData", []));
         Object.keys(reduxDocuments).forEach(async key => {
             if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
                 reduxDocuments[key].documents.forEach(element => {
@@ -46,8 +47,12 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
                 let docs = get(state, "screenConfiguration.preparedFinalObject");
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
-                let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
+                await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
+                let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
                 dispatch(prepareFinalObject("applyScreen", applyScreenObject));
+                if (getQueryArg(window.location.href, "action") === "edit") {
+                    dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObject));
+                }
             }
         });
     }
@@ -89,7 +94,12 @@ export const getSearchResults = async queryObject => {
             "_search",
             queryObject
         );
-        return findAndReplace(response, null, "NA");
+        let result = findAndReplace(response, null, "NA");
+        let waterSource = result.WaterConnection[0].waterSource.split(".")[0];
+        let waterSubSource = result.WaterConnection[0].waterSource.split(".")[1];
+        result.WaterConnection[0].waterSource = waterSource;
+        result.WaterConnection[0].waterSubSource = waterSubSource;
+        return result;
     } catch (error) { console.log(error) }
 };
 
@@ -513,7 +523,7 @@ const parserFunction = (state) => {
         proposedWaterClosets: parseInt(queryObject.proposedWaterClosets),
         proposedToilets: parseInt(queryObject.proposedToilets),
         noOfTaps: parseInt(queryObject.noOfTaps),
-        waterClosets: parseInt(queryObject.waterClosets),
+        noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
         meterId: parseInt(queryObject.meterId),
@@ -547,7 +557,7 @@ export const setDocsForEditFlow = async (state) => {
     return uploadedDocuments;
 };
 
-export const setWSDocuments = async (payload, sourceJsonPath, destJsonPath, dispatch, businessService) => {
+export const setWSDocuments = async (payload, sourceJsonPath, businessService) => {
     const uploadedDocData = get(payload, sourceJsonPath);
     const fileStoreIds =
         uploadedDocData &&
@@ -583,7 +593,7 @@ export const setWSDocuments = async (payload, sourceJsonPath, destJsonPath, disp
 export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
     let documentsUploadRedux = {};
     // const uploadedDocData = get(payload, sourceJsonPath);
-    let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "displayDocs", dispatch, "WS");
+    let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "WS");
     documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
         let docUploadRedux = {};
         docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: payload.applyScreen.documents[key].fileStoreId }] };
@@ -628,14 +638,15 @@ export const applyForWater = async (state, dispatch) => {
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
             set(queryObjectForUpdate, "tenantId", tenantId);
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
-            set(queryObjectForUpdate, "action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdate, "waterSource", (queryObjectForUpdate.waterSource + "." + queryObjectForUpdate.waterSubSource));
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
         } else {
-            set(queryObject, "action", "INITIATE")
+            set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
@@ -660,7 +671,7 @@ export const applyForSewerage = async (state, dispatch) => {
         if (method === "UPDATE") {
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
-            set(queryObjectForUpdate, "action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
             set(queryObjectForUpdate, "connectionType", "Non Metered");
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
@@ -668,7 +679,7 @@ export const applyForSewerage = async (state, dispatch) => {
             let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
             dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
         } else {
-            set(queryObject, "action", "INITIATE");
+            set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
@@ -699,8 +710,9 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObjectForUpdateWater = findAndReplace(queryObjectForUpdateWater, "NA", null);
             queryObjectForUpdateSewerage = { ...queryObjectForUpdateSewerage, ...queryObject }
             queryObjectForUpdateSewerage = findAndReplace(queryObjectForUpdateSewerage, "NA", null);
-            set(queryObjectForUpdateWater, "action", "SUBMIT_APPLICATION");
-            set(queryObjectForUpdateSewerage, "action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdateWater, "processInstance.action", "SUBMIT_APPLICATION");
+            set(queryObjectForUpdateWater, "waterSource", (queryObjectForUpdateWater.waterSource + "." + queryObjectForUpdateWater.waterSubSource));
+            set(queryObjectForUpdateSewerage, "processInstance.action", "SUBMIT_APPLICATION");
             set(queryObjectForUpdateSewerage, "connectionType", "Non Metered");
             (await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater }) &&
                 await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage }));
@@ -717,7 +729,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
         } else {
-            set(queryObject, "action", "INITIATE");
+            set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: queryObject });
             const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });

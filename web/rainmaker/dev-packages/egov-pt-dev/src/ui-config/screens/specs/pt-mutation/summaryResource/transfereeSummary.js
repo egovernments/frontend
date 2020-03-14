@@ -139,7 +139,27 @@ export const transfereeSummary = getCommonGrayCard({
                 "Property.ownersTemp[0].permanentAddress",
                 callBack: checkValueForNA
             }
-          )
+          ),
+          ownerSpecialDocumentType: getLabelWithValue(
+            {
+              labelName: "Special Category Document Type",
+              labelKey: "PT_OWNERSHIP_SPECIAL_CATEGORY_DOCUMENT_TYPE"
+            },
+            {
+              jsonPath:"Property.ownersTemp[0].documentType",
+              callBack: checkValueForNA      }
+          ),
+          ownerDocumentId: getLabelWithValue(
+            {
+              labelName: "Document ID",
+              labelKey: "PT_OWNERSHIP_DOCUMENT_ID"
+            },
+            {
+              jsonPath:"Property.ownersTemp[0].documentUid",
+                callBack: checkValueForNA
+            }
+          ),
+         
         })
       }),
       items: [],

@@ -187,6 +187,9 @@ const getPropertyData = async (action, state, dispatch) => {
     
     let owners = [];
     payload.Properties[0].owners.map(owner => {
+      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
+      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
+      
       if (owner.status == "ACTIVE") {
         owners.push(owner);
       } 
@@ -196,6 +199,8 @@ const getPropertyData = async (action, state, dispatch) => {
     payload.Properties[0].ownersInit = owners;
     payload.Properties[0].ownershipCategoryInit=payload.Properties[0].ownershipCategory;
   }
+  const previousPropertyUuid=payload.Properties[0].additionalDetails&&payload.Properties[0].additionalDetails.previousPropertyUuid;
+  payload.Properties[0].additionalDetails={previousPropertyUuid};
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
 
     if (
@@ -254,6 +259,10 @@ const getPropertyData = async (action, state, dispatch) => {
         "components.div.children.formwizardFirstStep.children.transferorInstitutionDetails.props.style",
         { display: "none" }
       );
+      set(
+        action.screenConfig,"components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        { display: "none" }
+      );
     }
 
     dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
@@ -262,7 +271,39 @@ const getPropertyData = async (action, state, dispatch) => {
   }
 };
 
+const getSpecialCategoryDocumentTypeMDMSData=async (action, state, dispatch) => {
+  let tenantId ='pb'
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [{ name: "OwnerTypeDocument" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
 
+    let OwnerTypeDocument=get(
+      payload,
+      "MdmsRes.PropertyTax.OwnerTypeDocument"
+    )
+    dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", OwnerTypeDocument));
+  } catch (e) {
+    console.log(e);
+  }
+
+};
 const getMdmsData = async (action, state, dispatch) => {
   let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   let mdmsBody = {
@@ -492,6 +533,8 @@ const screenConfig = {
     });
 
 getMdmsTransferReasonData(action, state, dispatch);
+
+getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
     // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
