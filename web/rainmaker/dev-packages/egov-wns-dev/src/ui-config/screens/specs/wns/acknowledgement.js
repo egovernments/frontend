@@ -486,24 +486,24 @@ export const downloadPrintContainer = (
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
-  let tlCertificateDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+  let wsEstimateDownloadObject = {
+    label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
+      const { wnsConnection } = state.screenConfiguration.preparedFinalObject;
+      downloadEstimateNotice(wnsConnection);
     },
     leftIcon: "book"
   };
-  let tlCertificatePrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+  let wsEstimatePrintObject = {
+    label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses, 'print');
+      const { wnsConnection } = state.screenConfiguration.preparedFinalObject;
+      downloadEstimateNotice(wnsConnection, 'print');
     },
     leftIcon: "book"
   };
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+  let sanctionDownloadObject = {
+    label: { labelKey: "WS_SANCTION_LETTER" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
@@ -513,8 +513,8 @@ export const downloadPrintContainer = (
     },
     leftIcon: "receipt"
   };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+  let sanctionPrintObject = {
+    label: { labelKey: "WS_SANCTION_LETTER" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
@@ -527,52 +527,56 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      // const documents = WaterConnection[0].reviewDocData;
-      // set(WaterConnection[0], "WaterConnection.documents", documents)
-      downloadApp(WaterConnection);
+      const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
+      WaterConnection[0].pdfDocuments = DocumentsData
+      downloadApp(WaterConnection, 'application');
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      // const documents = LicensesTemp[0].reviewDocData;
-      // set(Licenses[0], "additionalDetails.documents", documents)
-      downloadBill(WaterConnection, 'print');
+      const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
+      WaterConnection[0].pdfDocuments = DocumentsData
+      downloadApp(WaterConnection, 'application', 'print');
     },
     leftIcon: "assignment"
   };
   switch (appStatus) {
     case "APPROVED":
       downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
+        sanctionDownloadObject,
+        wsEstimateDownloadObject,
         applicationDownloadObject
       ];
       printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
+        sanctionPrintObject,
+        wsEstimatePrintObject,
         applicationPrintObject
       ];
       break;
-    case "APPLIED":
-      break;
+    case "PENDING_FOR_FIELD_INSPECTION":
+    case "PENDING_FOR_CITIZEN_ACTION":
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
     case "PENDING_FOR_FIELD_INSPECTION":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+    case "PENDING_APPROVAL_FOR_CONNECTION":
+      downloadMenu = [applicationDownloadObject, wsEstimateDownloadObject];
+      printMenu = [applicationPrintObject, wsEstimatePrintObject];
       break;
-    case "CITIZENACTIONREQUIRED":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+    case "PENDING_FOR_PAYMENT":
+      downloadMenu = [
+        sanctionDownloadObject,
+        wsEstimateDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        sanctionPrintObject,
+        wsEstimatePrintObject,
+        applicationPrintObject
+      ];
       break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];

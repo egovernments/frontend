@@ -17,6 +17,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
@@ -1370,20 +1371,80 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
     }
 
 };
-// to download app
-export const downloadApp = (WaterConnection, mode = "download") => {
-    const queryStr = [
-        { key: "key", value: "wsapplication" },
-        { key: "tenantId", value: "pb" }
-    ]
-    const DOWNLOADRECEIPT = {
+// to download application 
+export const downloadApp = async (wnsConnection, type, mode = "download") => {
+
+    const appNo = wnsConnection[0].applicationNo;
+    let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
+    let apiUrl, appService, estKey, queryObjectForEst, pdfKey;
+    if (wnsConnection[0].service === "WATER") {
+        apiUrl = "ws-calculator/waterCalculator/_estimate";
+        appService = "ws-applicationwater";
+        queryObjectForEst = [{
+            applicationNo: appNo,
+            tenantId: getTenantId(),
+            waterConnection: wnsConnection[0]
+        }]
+        pdfKey = "WaterConnection"
+    } else {
+        apiUrl = "sw-calculator/sewerageCalculator/_estimate";
+        appService = "ws-applicationsewerage";
+        queryObjectForEst = [{
+            applicationNo: appNo,
+            tenantId: getTenantId(),
+            sewerageConnection: wnsConnection[0]
+        }],
+            pdfKey = "SewerageConnection"
+    }
+    console.log(200001, queryStr);
+
+    const DOWNLOADCONNECTIONDETAILS = {
         GET: {
             URL: "/pdf-service/v1/_create",
             ACTION: "_get",
         },
     };
+
+
+    switch (type) {
+        case 'application':
+            queryStr.push({ key: "key", value: appService })
+            break
+        // case 'estmateNotice':
+        //     queryStr.push({ key: "key", value: appService })
+        //     break;
+    }
+
     try {
-        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { WaterConnection }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        const estResponse = await httpRequest(
+            "post",
+            apiUrl,
+            "_estimate",
+            [],
+
+            {
+                isconnectionCalculation: false,
+                CalculationCriteria: queryObjectForEst
+            }
+        );
+        console.log(1011, pdfKey);
+
+        wnsConnection[0].totalAmount = estResponse.Calculation[0].totalAmount;
+        wnsConnection[0].applicationFee = estResponse.Calculation[0].fee;
+        wnsConnection[0].serviceFee = estResponse.Calculation[0].charge;
+        wnsConnection[0].tax = estResponse.Calculation[0].taxAmount;
+        let obj = {};
+        if (wnsConnection[0].service === "WATER") {
+            obj = {
+                WaterConnection: wnsConnection
+            }
+        } else {
+            obj = {
+                SewerageConnection: wnsConnection
+            }
+        }
+
+        await httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, obj, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
                 res.filestoreIds[0]
                 if (res && res.filestoreIds && res.filestoreIds.length > 0) {
@@ -1391,10 +1452,11 @@ export const downloadApp = (WaterConnection, mode = "download") => {
                         downloadReceiptFromFilestoreID(fileStoreId, mode)
                     })
                 } else {
-                    console.log("Error In Acknowledgement form Download");
+                    console.log("Error In Download");
                 }
+
             });
     } catch (exception) {
-        alert('Some Error Occured while downloading Acknowledgement form!');
+        alert('Some Error Occured while downloading!');
     }
 }
