@@ -16,7 +16,10 @@ import {
   pushTheDocsUploadedToRedux,
   findAndReplace,
   applyForSewerage,
-  applyForWater
+  applyForWater,
+  validateFeildsForBothWaterAndSewerage,
+  validateFeildsForWater,
+  validateFeildsForSewerage
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
@@ -137,49 +140,14 @@ const callBackForNext = async (state, dispatch) => {
       if (applyScreenObject.water || applyScreenObject.sewerage) {
         if (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") {
           if (water && sewerage) {
-            if (
-              (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-              (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-              (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-              (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
-              (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "") &&
-              (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
-              (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
-            ) {
-              isFormValid = true;
-              hasFieldToaster = false;
-            } else {
-              isFormValid = false;
-              hasFieldToaster = true;
-            }
+            if (validateFeildsForBothWaterAndSewerage(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
+            else { isFormValid = false; hasFieldToaster = true; }
           } else if (water) {
-            if (
-              (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-              (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-              (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-              (applyScreenObject.hasOwnProperty("proposedTaps") && applyScreenObject["proposedTaps"] !== undefined && applyScreenObject["proposedTaps"] !== "") &&
-              (applyScreenObject.hasOwnProperty("proposedPipeSize") && applyScreenObject["proposedPipeSize"] !== undefined && applyScreenObject["proposedPipeSize"] !== "")
-            ) {
-              isFormValid = true;
-              hasFieldToaster = false;
-            } else {
-              isFormValid = false;
-              hasFieldToaster = true;
-            }
+            if (validateFeildsForWater(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
+            else { isFormValid = false; hasFieldToaster = true; }
           } else {
-            if (
-              (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") &&
-              (applyScreenObject.hasOwnProperty("water") && applyScreenObject["water"] !== undefined && applyScreenObject["water"] !== "") &&
-              (applyScreenObject.hasOwnProperty("sewerage") && applyScreenObject["sewerage"] !== undefined && applyScreenObject["sewerage"] !== "") &&
-              (applyScreenObject.hasOwnProperty("proposedWaterClosets") && applyScreenObject["proposedWaterClosets"] !== undefined && applyScreenObject["proposedWaterClosets"] !== "") &&
-              (applyScreenObject.hasOwnProperty("proposedToilets") && applyScreenObject["proposedToilets"] !== undefined && applyScreenObject["proposedToilets"] !== "")
-            ) {
-              isFormValid = true;
-              hasFieldToaster = false;
-            } else {
-              isFormValid = false;
-              hasFieldToaster = true;
-            }
+            if (validateFeildsForSewerage(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
+            else { isFormValid = false; hasFieldToaster = true; }
           }
         } else {
           isFormValid = false;

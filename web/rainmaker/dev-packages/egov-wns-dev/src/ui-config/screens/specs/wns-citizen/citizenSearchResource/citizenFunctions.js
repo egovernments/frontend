@@ -1,4 +1,4 @@
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField, } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getMyConnectionResults, getSWMyConnectionResults } from '../../../../../ui-utils/commons';
 
@@ -14,6 +14,15 @@ export const fetchData = async (action, state, dispatch) => {
     if (finalArray !== undefined && finalArray !== null) {
         const myConnectionsResult=finalArray.filter(item => item.connectionNo !== "NA" && item.connectionNo !== null);  
       dispatch(prepareFinalObject("myApplicationsCount", myConnectionsResult.length));
+      dispatch(
+        handleField(
+            "home",
+            "components.div.children.listCard1.props",
+              "Count",
+              finalArray.length?finalArray.length:0
+        )
+    );
+
      }
   }
   catch (error) { console.log(error); }
