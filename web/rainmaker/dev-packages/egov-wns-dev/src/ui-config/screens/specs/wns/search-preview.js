@@ -34,7 +34,6 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
 
-
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
@@ -88,6 +87,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
       }
     }
+
+
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
       set(
@@ -125,10 +126,25 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const status = getTransformedStatus(
       get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
     );
-    // const status = get(
-    //   state,
-    //   "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
-    // );
+
+    const appStatus = get(
+      state,
+      "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
+    );
+
+    const printCont = downloadPrintContainer(
+      action,
+      state,
+      dispatch,
+      appStatus,
+      applicationNumber,
+      tenantId
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+      printCont
+    );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
@@ -347,19 +363,7 @@ const screenConfig = {
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: serviceModuleName }
     ];
-    const printCont = downloadPrintContainer(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-      printCont
-    );
+
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
