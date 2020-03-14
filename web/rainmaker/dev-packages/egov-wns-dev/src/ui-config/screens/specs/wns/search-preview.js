@@ -53,40 +53,43 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
-      
-      let queryObjectForEst = [{
-        applicationNo: applicationNumber,
-        tenantId: tenantId,
-        waterConnection: parsedObject
-      }]
-      if (parsedObject.applicationNo.includes("WS")) {
-        estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
-        let viewBillTooltip = [];
-        if (estimate !== null && estimate !== undefined) {
-          if (estimate.Calculation.length > 0) {
-            await processBills(estimate, viewBillTooltip, dispatch);
-
-            // viewBreakUp 
-            estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
-
-            dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
-          }
-        } else {
-          estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
-          let viewBillTooltip = []
+      if(parsedObject.applicationStatus==="PENDING_FOR_FIELD_INSPECTION"){
+        let queryObjectForEst = [{
+          applicationNo: applicationNumber,
+          tenantId: tenantId,
+          waterConnection: parsedObject
+        }]
+        if (parsedObject.applicationNo.includes("WS")) {
+          estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
+          let viewBillTooltip = [];
           if (estimate !== null && estimate !== undefined) {
-            if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
+            if (estimate.Calculation.length > 0) {
               await processBills(estimate, viewBillTooltip, dispatch);
+  
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+  
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
+            }
+          } else {
+            estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
+            let viewBillTooltip = []
+            if (estimate !== null && estimate !== undefined) {
+              if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
+                await processBills(estimate, viewBillTooltip, dispatch);
+                // viewBreakUp 
+                estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+                dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
+              }
             }
           }
         }
+        if (estimate !== null && estimate !== undefined) {
+          createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
+        }
       }
-      if (estimate !== null && estimate !== undefined) {
-        createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
-      }
+      
+      
     }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
