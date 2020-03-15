@@ -489,16 +489,16 @@ export const downloadPrintContainer = (
   let wsEstimateDownloadObject = {
     label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
-      const { wnsConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadEstimateNotice(wnsConnection);
+      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
+      downloadApp(WaterConnection, 'estimateNotice');
     },
     leftIcon: "book"
   };
   let wsEstimatePrintObject = {
     label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
-      const { wnsConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadEstimateNotice(wnsConnection, 'print');
+      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
+      downloadApp(WaterConnection, 'estimateNotice', 'print');
     },
     leftIcon: "book"
   };
