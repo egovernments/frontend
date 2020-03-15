@@ -1479,8 +1479,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             sewerageConnection: wnsConnection[0]
         }]
     }
-    console.log('querStr', queryStr);
-
+   
     const DOWNLOADCONNECTIONDETAILS = {
         GET: {
             URL: "/pdf-service/v1/_create",
