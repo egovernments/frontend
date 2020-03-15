@@ -1456,10 +1456,11 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 };
 // to download application 
 export const downloadApp = async (wnsConnection, type, mode = "download") => {
-
+    const tenantName = getTenantId().split('.')[1]
+    wnsConnection[0].tenantName = tenantName.toUpperCase();
     const appNo = wnsConnection[0].applicationNo;
     let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
-    let apiUrl, appService, estKey, queryObjectForEst, pdfKey;
+    let apiUrl, appService, estKey, queryObjectForEst
     if (wnsConnection[0].service === "WATER") {
         apiUrl = "ws-calculator/waterCalculator/_estimate";
         appService = "ws-applicationwater";
@@ -1468,7 +1469,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             tenantId: getTenantId(),
             waterConnection: wnsConnection[0]
         }]
-        pdfKey = "WaterConnection"
+
     } else {
         apiUrl = "sw-calculator/sewerageCalculator/_estimate";
         appService = "ws-applicationsewerage";
@@ -1476,11 +1477,9 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             applicationNo: appNo,
             tenantId: getTenantId(),
             sewerageConnection: wnsConnection[0]
-        }],
-            pdfKey = "SewerageConnection"
+        }]
     }
-    console.log(200001, queryStr);
-
+   
     const DOWNLOADCONNECTIONDETAILS = {
         GET: {
             URL: "/pdf-service/v1/_create",
@@ -1493,9 +1492,10 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         case 'application':
             queryStr.push({ key: "key", value: appService })
             break
-        // case 'estmateNotice':
-        //     queryStr.push({ key: "key", value: appService })
-        //     break;
+        case 'estimateNotice':
+            appService = "ws-estimationnotice";
+            queryStr.push({ key: "key", value: appService });
+            break;
     }
 
     try {
@@ -1510,20 +1510,32 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                 CalculationCriteria: queryObjectForEst
             }
         );
-        console.log(1011, pdfKey);
 
         wnsConnection[0].totalAmount = estResponse.Calculation[0].totalAmount;
         wnsConnection[0].applicationFee = estResponse.Calculation[0].fee;
         wnsConnection[0].serviceFee = estResponse.Calculation[0].charge;
         wnsConnection[0].tax = estResponse.Calculation[0].taxAmount;
+
+        if (type === 'estimateNotice') {
+            estResponse.Calculation[0].taxHeadEstimates.map((val) => {
+                val.taxHeadCode = val.taxHeadCode.substring(3)
+            });
+            wnsConnection[0].pdfTaxhead = estResponse.Calculation[0].taxHeadEstimates;
+        }
         let obj = {};
-        if (wnsConnection[0].service === "WATER") {
-            obj = {
-                WaterConnection: wnsConnection
+        if (type === 'application') {
+            if (wnsConnection[0].service === "WATER") {
+                obj = {
+                    WaterConnection: wnsConnection
+                }
+            } else {
+                obj = {
+                    SewerageConnection: wnsConnection
+                }
             }
-        } else {
+        } else if (type === 'estimateNotice') {
             obj = {
-                SewerageConnection: wnsConnection
+                WnsConnection: wnsConnection
             }
         }
 
