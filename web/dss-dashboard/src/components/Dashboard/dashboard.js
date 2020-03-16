@@ -246,6 +246,7 @@ class Dashboard extends Component {
         {
           _.map(tabsInitData, (k, v) => {
             return (<Typography
+              key={v}
               component="div"
               role="tabpanel"
               hidden={(defaultTab) !== v}

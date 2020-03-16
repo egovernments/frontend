@@ -33,7 +33,7 @@ import removeImageExtension from '../../../actions/removeImageExtension';
 const styles = theme => ({
   root: {
     textAlign: "center",
-    paddingTop: theme.spacing.unit * 20
+    paddingTop: theme.spacing(20)
   },
   panelDetail :{
     display: "initial !important",

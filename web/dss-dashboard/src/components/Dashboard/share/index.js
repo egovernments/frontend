@@ -254,9 +254,7 @@ class CustomizedShare extends Component {
                     // color="primary"
                     onClick={this.handleClick.bind(this)}
                 >
-                    <SVG style={{ marginRight: '10px' }}>
-                        {/* className={StyledMenuItem.CloseButton} */}
-                    </SVG>
+                    
                     {this.props.strings['DSS_SHARE'] || 'DSS_SHARE'}
                 </Button>
                 <StyledMenu
