@@ -68,7 +68,7 @@ class PTHome extends Component {
         icon: (
           <Icon style={iconStyle} action="custom" name="home-city-outline" />
         ),
-        route: "/property-tax/assess-pay/search-property"
+        route: "/pt-mutation/propertySearch"
       },
       {
         label: "PT_MY_PROPERTY_SCREEN_HEADER",
