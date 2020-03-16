@@ -554,6 +554,13 @@ export const getReceipt = async queryObject => {
   }
 };
 
+export const convertEpochToDateAndHandleNA = dateEpoch => {
+  if (dateEpoch !== undefined && dateEpoch !== null && dateEpoch !== "") {
+    let convertedToDate = convertEpochToDate(dateEpoch);
+    return convertedToDate;
+  } else { return "NA"; }
+}
+
 export const convertEpochToDate = dateEpoch => {
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;

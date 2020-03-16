@@ -6,7 +6,7 @@ import {
   getLabel,
   getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDate } from '../../utils';
+import { convertEpochToDateAndHandleNA } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -172,7 +172,7 @@ export const reviewConnectionExecutionDate = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.connectionExecutionDate",
-    callBack: convertEpochToDate
+    callBack: convertEpochToDateAndHandleNA
   }
 );
 export const reviewMeterId = getLabelWithValue(
@@ -188,7 +188,10 @@ export const reviewMeterInstallationDate = getLabelWithValue(
     labelName: "Meter Installation Date",
     labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE"
   },
-  { jsonPath: "applyScreen.meterInstallationDate" }
+  {
+    jsonPath: "applyScreen.meterInstallationDate",
+    callBack: convertEpochToDateAndHandleNA
+  }
 );
 
 export const reviewInitialMeterReading = getLabelWithValue(

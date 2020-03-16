@@ -173,25 +173,27 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 response.WaterConnection[i].service = "Water"
-                try {
-                    const data = await httpRequest(
-                        "post",
-                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
-                        "_fetchbill",
-                        // queryObject
-                    );
-                    if (data && data !== undefined) {
-                        if (data.Bill !== undefined && data.Bill.length > 0) {
-                            response.WaterConnection[i].due = data.Bill[0].totalAmount
+                if (response.WaterConnection[i].connectionNo !== null && response.WaterConnection[i].connectionNo !== undefined) {
+                    try {
+                        const data = await httpRequest(
+                            "post",
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
+                            "_fetchbill",
+                            // queryObject
+                        );
+                        if (data && data !== undefined) {
+                            if (data.Bill !== undefined && data.Bill.length > 0) {
+                                response.WaterConnection[i].due = data.Bill[0].totalAmount
+                            }
+
+                        } else {
+                            response.WaterConnection[i].due = 0
                         }
 
-                    } else {
-                        response.WaterConnection[i].due = 0
+                    } catch (err) {
+                        console.log(err)
+                        response.WaterConnection[i].due = "NA"
                     }
-
-                } catch (err) {
-                    console.log(err)
-                    response.WaterConnection[i].due = "NA"
                 }
             }
             // });
@@ -218,25 +220,27 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 response.WaterConnection[i].service = "Water"
-                try {
-                    const data = await httpRequest(
-                        "post",
-                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].applicationNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS.ONE_TIME_FEE`,
-                        "_fetchbill",
-                        // queryObject
-                    );
-                    if (data && data !== undefined) {
-                        if (data.Bill !== undefined && data.Bill.length > 0) {
-                            response.WaterConnection[i].due = data.Bill[0].totalAmount
+                if (response.WaterConnection[i].applicationNo !== null && response.WaterConnection[i].applicationNo !== undefined) {
+                    try {
+                        const data = await httpRequest(
+                            "post",
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].applicationNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS.ONE_TIME_FEE`,
+                            "_fetchbill",
+                            // queryObject
+                        );
+                        if (data && data !== undefined) {
+                            if (data.Bill !== undefined && data.Bill.length > 0) {
+                                response.WaterConnection[i].due = data.Bill[0].totalAmount
+                            }
+
+                        } else {
+                            response.WaterConnection[i].due = 0
                         }
 
-                    } else {
-                        response.WaterConnection[i].due = 0
+                    } catch (err) {
+                        console.log(err)
+                        response.WaterConnection[i].due = "NA"
                     }
-
-                } catch (err) {
-                    console.log(err)
-                    response.WaterConnection[i].due = "NA"
                 }
             }
             // });
@@ -263,25 +267,27 @@ export const getSWMyApplicationResults = async (queryObject, dispatch) => {
         if (response.SewerageConnections.length > 0) {
             for (let i = 0; i < response.SewerageConnections.length; i++) {
                 response.SewerageConnections[i].service = "Sewerage"
-                try {
-                    const data = await httpRequest(
-                        "post",
-                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].applicationNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW.ONE_TIME_FEE`,
-                        "_fetchbill",
-                        // queryObject
-                    );
-                    if (data && data !== undefined) {
-                        if (data.Bill !== undefined && data.Bill.length > 0) {
-                            response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                if (response.SewerageConnections[i].applicationNo !== undefined && response.SewerageConnections[i].applicationNo !== null) {
+                    try {
+                        const data = await httpRequest(
+                            "post",
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].applicationNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW.ONE_TIME_FEE`,
+                            "_fetchbill",
+                            // queryObject
+                        );
+                        if (data && data !== undefined) {
+                            if (data.Bill !== undefined && data.Bill.length > 0) {
+                                response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                            }
+
+                        } else {
+                            response.SewerageConnections[i].due = 0
                         }
 
-                    } else {
-                        response.SewerageConnections[i].due = 0
+                    } catch (err) {
+                        console.log(err)
+                        response.SewerageConnections[i].due = "NA"
                     }
-
-                } catch (err) {
-                    console.log(err)
-                    response.SewerageConnections[i].due = "NA"
                 }
             }
             // });
@@ -1333,25 +1339,27 @@ export const getSWMyConnectionResults = async (queryObject, dispatch) => {
         if (response.SewerageConnections.length > 0) {
             for (let i = 0; i < response.SewerageConnections.length; i++) {
                 response.SewerageConnections[i].service = "Sewerage"
-                try {
-                    const data = await httpRequest(
-                        "post",
-                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].connectionNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
-                        "_fetchbill",
-                        // queryObject
-                    );
-                    if (data && data !== undefined) {
-                        if (data.Bill !== undefined && data.Bill.length > 0) {
-                            response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                if (response.SewerageConnections[i].connectionNo !== undefined && response.SewerageConnections[i].connectionNo !== null) {
+                    try {
+                        const data = await httpRequest(
+                            "post",
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].connectionNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
+                            "_fetchbill",
+                            // queryObject
+                        );
+                        if (data && data !== undefined) {
+                            if (data.Bill !== undefined && data.Bill.length > 0) {
+                                response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                            }
+
+                        } else {
+                            response.SewerageConnections[i].due = 0
                         }
 
-                    } else {
-                        response.SewerageConnections[i].due = 0
+                    } catch (err) {
+                        console.log(err)
+                        response.SewerageConnections[i].due = "NA"
                     }
-
-                } catch (err) {
-                    console.log(err)
-                    response.SewerageConnections[i].due = "NA"
                 }
             }
             // });
