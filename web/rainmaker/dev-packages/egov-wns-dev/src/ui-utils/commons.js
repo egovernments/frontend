@@ -1456,7 +1456,9 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 };
 // to download application 
 export const downloadApp = async (wnsConnection, type, mode = "download") => {
-    const tenantName = getTenantId().split('.')[1]
+    let tenantName = wnsConnection[0].property.tenantId;
+    tenantName = tenantName.split('.')[1];
+    
     wnsConnection[0].tenantName = tenantName.toUpperCase();
     const appNo = wnsConnection[0].applicationNo;
     let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
@@ -1479,7 +1481,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             sewerageConnection: wnsConnection[0]
         }]
     }
-   
+
     const DOWNLOADCONNECTIONDETAILS = {
         GET: {
             URL: "/pdf-service/v1/_create",
@@ -1494,6 +1496,10 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             break
         case 'estimateNotice':
             appService = "ws-estimationnotice";
+            queryStr.push({ key: "key", value: appService });
+            break;
+        case 'sanctionLetter':
+            appService = "ws-sanctionletter";
             queryStr.push({ key: "key", value: appService });
             break;
     }
@@ -1533,7 +1539,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                     SewerageConnection: wnsConnection
                 }
             }
-        } else if (type === 'estimateNotice') {
+        } else if (type === 'estimateNotice' || type === 'sanctionLetter') {
             obj = {
                 WnsConnection: wnsConnection
             }
