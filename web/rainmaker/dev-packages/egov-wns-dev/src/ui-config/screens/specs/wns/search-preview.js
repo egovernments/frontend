@@ -34,7 +34,6 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
 
-
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
@@ -53,41 +52,46 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
-      
-      let queryObjectForEst = [{
-        applicationNo: applicationNumber,
-        tenantId: tenantId,
-        waterConnection: parsedObject
-      }]
-      if (parsedObject.applicationNo.includes("WS")) {
-        estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
-        let viewBillTooltip = [];
-        if (estimate !== null && estimate !== undefined) {
-          if (estimate.Calculation.length > 0) {
-            await processBills(estimate, viewBillTooltip, dispatch);
-
-            // viewBreakUp 
-            estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
-
-            dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
-          }
-        } else {
-          estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
-          let viewBillTooltip = []
+      if(parsedObject.applicationStatus==="PENDING_FOR_FIELD_INSPECTION"){
+        let queryObjectForEst = [{
+          applicationNo: applicationNumber,
+          tenantId: tenantId,
+          waterConnection: parsedObject
+        }]
+        if (parsedObject.applicationNo.includes("WS")) {
+          estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
+          let viewBillTooltip = [];
           if (estimate !== null && estimate !== undefined) {
-            if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
+            if (estimate.Calculation.length > 0) {
               await processBills(estimate, viewBillTooltip, dispatch);
+  
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+  
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
+            }
+          } else {
+            estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
+            let viewBillTooltip = []
+            if (estimate !== null && estimate !== undefined) {
+              if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
+                await processBills(estimate, viewBillTooltip, dispatch);
+                // viewBreakUp 
+                estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+                dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
+              }
             }
           }
         }
+        if (estimate !== null && estimate !== undefined) {
+          createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
+        }
       }
-      if (estimate !== null && estimate !== undefined) {
-        createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
-      }
+      
+      
     }
+
+
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
       set(
@@ -125,10 +129,25 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const status = getTransformedStatus(
       get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
     );
-    // const status = get(
-    //   state,
-    //   "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
-    // );
+
+    const appStatus = get(
+      state,
+      "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
+    );
+
+    const printCont = downloadPrintContainer(
+      action,
+      state,
+      dispatch,
+      appStatus,
+      applicationNumber,
+      tenantId
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+      printCont
+    );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
@@ -347,19 +366,7 @@ const screenConfig = {
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: serviceModuleName }
     ];
-    const printCont = downloadPrintContainer(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-      printCont
-    );
+
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
@@ -555,8 +562,6 @@ const parserFunction = (obj) => {
     meterId: parseInt(obj.meterId),
     initialMeterReading: parseInt(obj.initialMeterReading),
     noOfTaps: parseInt(obj.noOfTaps),
-    proposedWaterClosets: parseInt(obj.proposedWaterClosets),
-    proposedToilets: parseInt(obj.proposedToilets),
     proposedTaps: parseInt(obj.proposedTaps),
     plumberInfo: (obj.plumberInfo === null || obj.plumberInfo === "NA") ? [] : obj.plumberInfo
   }

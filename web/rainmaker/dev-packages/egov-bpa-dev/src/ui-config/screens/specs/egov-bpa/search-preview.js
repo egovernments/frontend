@@ -38,7 +38,7 @@ import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
 import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
-import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
+import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -192,6 +192,10 @@ const setDownloadMenu = (action, state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
+  let riskType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.riskType"
+  );
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -226,7 +230,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
       permitOrderNoDownload(action, state, dispatch);
-      generatePdf(state, dispatch, "application_download");
+      // generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
@@ -237,45 +241,78 @@ const setDownloadMenu = (action, state, dispatch) => {
     },
     leftIcon: "assignment"
   };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        certificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [];
-      break;
-    case "DOC_VERIFICATION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "FIELDINSPECTION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "NOC_VERIFICATION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "APPROVAL_INPROGRESS" : 
-    downloadMenu = [certificateDownloadObject];
-     break;
-    case "PENDING_SANC_FEE_PAYMENT" :
-    downloadMenu = [certificateDownloadObject];
-    break;
-    printMenu = [];
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
+  let paymentReceiptDownload = {
+    label: { labelName: "Fee Receipt", labelKey: "BPA_FEE_RECEIPT" },
+    link: () => {
+      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE");
+    },
+    leftIcon: "book"
+  };
+  let revocationPdfDownlaod = {
+    label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
+    link: () => {
+      revocationPdfDownload(action, state, dispatch);
+      // generatePdf(state, dispatch, "application_download");
+    },
+    leftIcon: "assignment"
+  };
+
+  if (riskType === "LOW") {
+    switch (status) {
+      case "REVOCATED":
+        downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
+        break;
+      case "APPROVED":
+      case "DOC_VERIFICATION_INPROGRESS":
+      case "FIELDINSPECTION_INPROGRESS":
+      case "NOC_VERIFICATION_INPROGRESS":
+      case "APPROVAL_INPROGRESS":
+        downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+        break;
+      default:
+        break;
+    }
+  } else {
+    switch (status) {
+      case "APPROVED":
+        downloadMenu = [
+          certificateDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [];
+        break;
+      case "DOC_VERIFICATION_INPROGRESS" :
       downloadMenu = [certificateDownloadObject];
+        break;
+      case "FIELDINSPECTION_INPROGRESS" :
+      downloadMenu = [certificateDownloadObject];
+        break;
+      case "NOC_VERIFICATION_INPROGRESS" :
+      downloadMenu = [certificateDownloadObject];
+        break;
+      case "APPROVAL_INPROGRESS" : 
+      downloadMenu = [certificateDownloadObject];
+       break;
+      case "PENDING_SANC_FEE_PAYMENT" :
+      downloadMenu = [certificateDownloadObject];
+      break;
       printMenu = [];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [];
-      break;
-    default:
-      break;
+      case "DOCUMENTVERIFY":
+      case "FIELDINSPECTION":
+      case "PENDINGAPPROVAL":
+      case "REJECTED":
+        downloadMenu = [certificateDownloadObject];
+        printMenu = [];
+        break;
+      case "CANCELLED":
+      case "PENDINGPAYMENT":
+        downloadMenu = [applicationDownloadObject];
+        printMenu = [];
+        break;
+      default:
+        break;
+    }
   }
   dispatch(
     handleField(
@@ -325,6 +362,14 @@ const setSearchResponse = async (
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   if (status && status == "INPROGRESS") {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+        "visible",
+        true
+      )
+    );
     dispatch(
       handleField(
         "search-preview",
@@ -380,6 +425,14 @@ const setSearchResponse = async (
         )
       )
     }
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+        "visible",
+        true
+      )
+    );
     dispatch(
       handleField(
       "search-preview",
@@ -535,6 +588,11 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
+      false
+    );
 
     return action;
   },
@@ -553,7 +611,8 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 8,
+                sm: 6,
+                md: 6
               },
               ...titlebar
             },
@@ -566,7 +625,8 @@ const screenConfig = {
               },
               gridDefination: {
                 xs: 12,
-                sm: 4,
+                sm: 6,
+                md: 6,
                 align: "right"
               },
               children: {

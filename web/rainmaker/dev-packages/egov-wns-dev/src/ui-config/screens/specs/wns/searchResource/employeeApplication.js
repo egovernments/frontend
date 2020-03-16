@@ -51,7 +51,7 @@ export const wnsApplication = getCommonCard({
       required: false,
       pattern: getPattern("consumerNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.connectionNumber"
+      jsonPath: "searchConnection.connectionNumber"
     }),
 
     ownerMobNo: getTextField({
@@ -72,7 +72,7 @@ export const wnsApplication = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.mobileNumber"
+      jsonPath: "searchConnection.mobileNumber"
     })
   }),
 

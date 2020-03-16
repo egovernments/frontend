@@ -21,7 +21,7 @@ export const searchApiCall = async (state, dispatch) => {
 
 const renderSearchConnectionTable = async (state, dispatch) => {
   let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "offset", value: "0" }];
-  let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
+  let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchConnection", {});
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
     state,

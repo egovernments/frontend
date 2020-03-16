@@ -184,6 +184,12 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "Usages"
+            },
+            {
+              name: "ProposedLandUse"
+            },
+            {
+              name: "TownPlanningScheme"
             }
           ]
         },

@@ -187,6 +187,9 @@ const getPropertyData = async (action, state, dispatch) => {
     
     let owners = [];
     payload.Properties[0].owners.map(owner => {
+      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
+      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
+      
       if (owner.status == "ACTIVE") {
         owners.push(owner);
       } 
