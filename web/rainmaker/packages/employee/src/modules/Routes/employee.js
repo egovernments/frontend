@@ -183,12 +183,12 @@ const routes = [
       redirectionUrl,
     },
   },
-  {
-    path: "utils/localization",
-    component: LocalizationScreen,
-    needsAuthentication: true,
-    options: { hideFooter: true, title: "CS_HOME_HEADER_LOCALIZATION" },
-  },
+  // {
+  //   path: "utils/localization",
+  //   component: LocalizationScreen,
+  //   needsAuthentication: true,
+  //   options: { hideFooter: true, title: "CS_HOME_HEADER_LOCALIZATION" },
+  // },
   ...pgrRoutes,
   ...ptRoutes,
   ...frameworkScreens,
