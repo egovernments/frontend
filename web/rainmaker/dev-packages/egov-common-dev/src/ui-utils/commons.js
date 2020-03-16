@@ -527,7 +527,7 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
 }
 
 
-export const download = (receiptQueryString, mode = "download") => {
+export const download = (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt") => {
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -543,7 +543,7 @@ export const download = (receiptQueryString, mode = "download") => {
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
-        { key: "key", value: "consolidatedreceipt" },
+        { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
       if(payloadReceiptDetails&&payloadReceiptDetails.Payments&&payloadReceiptDetails.Payments.length==0){
