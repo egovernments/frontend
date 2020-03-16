@@ -50,6 +50,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
+      applyScreenObject.applicationNo.includes("WS")?applyScreenObject.service="WATER":applyScreenObject.service="SEWERAGE";
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
       if(parsedObject.applicationStatus==="PENDING_FOR_FIELD_INSPECTION"){
