@@ -505,22 +505,22 @@ export const downloadPrintContainer = (
   let sanctionDownloadObject = {
     label: { labelKey: "WS_SANCTION_LETTER" },
     link: () => {
-      const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
-      ]
-      download(receiptQueryString);
+      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
+      const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "Department Use" : "To Citizen";
+      WaterConnection[0].appUserType = appUserType;
+      WaterConnection[0].commissionerName = "S.Ravindra Babu";
+      downloadApp(WaterConnection, 'sanctionLetter');
     },
     leftIcon: "receipt"
   };
   let sanctionPrintObject = {
     label: { labelKey: "WS_SANCTION_LETTER" },
     link: () => {
-      const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
-      ]
-      download(receiptQueryString, "print");
+      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
+      const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "Department Use" : "To Citizen";
+      WaterConnection[0].appUserType = appUserType;
+      WaterConnection[0].commissionerName = "S.Ravindra Babu";
+      downloadApp(WaterConnection, 'sanctionLetter', 'print');
     },
     leftIcon: "receipt"
   };
