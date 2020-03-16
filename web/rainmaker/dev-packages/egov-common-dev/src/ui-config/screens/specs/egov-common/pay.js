@@ -22,7 +22,8 @@ import "./pay.css";
 export const getHeader = (state) => {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     let consumerCode = getQueryArg(window.location.href, "consumerCode");
-    let label = uiCommonPayConfig.headerBandLabel;
+
+    let label = get(uiCommonPayConfig,"headerBandLabel");
     return getCommonContainer({
         header: getCommonHeader({
             labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates

@@ -90,7 +90,11 @@ const getAcknowledgementCard = (
     const roleExists = ifUserRoleExists("CITIZEN");
     let header = getHeader(state);
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
-    const {citizenSuccess , employeeSuccess , citizenFailure , employeeFailure} = uiCommonPayConfig;
+    const citizenSuccess=get(uiCommonPayConfig,"citizenSuccess");
+    const citizenFailure=get(uiCommonPayConfig,"citizenFailure");
+    const employeeSuccess=get(uiCommonPayConfig,"employeeSuccess");
+    const employeeFailure=get(uiCommonPayConfig,"employeeFailure");
+  //  const {citizenSuccess , employeeSuccess , citizenFailure , employeeFailure} = uiCommonPayConfig;
     if (status === "success") {
         return {
             header,
@@ -103,13 +107,13 @@ const getAcknowledgementCard = (
                         icon: "done",
                         backgroundColor: "#39CB74",
                         header: {
-                            labelKey: roleExists ? citizenSuccess.primaryMessage : employeeSuccess.primaryMessage
+                            labelKey: roleExists ? get(citizenSuccess,"primaryMessage","PAYMENT_MESSAGE_CITIZEN")  : get(employeeSuccess,"primaryMessage","PAYMENT_MESSAGE_EMPLOYEE")
                         },
                         body: {
-                            labelKey: roleExists ? citizenSuccess.secondaryMessage : employeeSuccess.secondaryMessage
+                            labelKey: roleExists ? get(citizenSuccess,"secondaryMessage","PAYMENT_MESSAGE_DETAIL_CITIZEN") : get(employeeSuccess,"secondaryMessage","PAYMENT_MESSAGE_DETAIL_EMPLOYEE")
                         },
                         tailText: {
-                            labelKey : roleExists ? citizenSuccess.receiptNo : employeeSuccess.receiptNo
+                            labelKey : roleExists ? get(citizenSuccess,"receiptNo","PAYMENT_RECEIPT_NO") : get(employeeSuccess,"receiptNo","PAYMENT_RECEIPT_NO")
                         },
                         number: receiptNumber
                     })
@@ -128,10 +132,10 @@ const getAcknowledgementCard = (
                         icon: "close",
                         backgroundColor: "#E54D42",
                         header: {
-                            labelKey: roleExists ? citizenFailure.primaryMessage : employeeFailure.primaryMessage
+                            labelKey: roleExists ? get(citizenFailure,"primaryMessage","PAYMENT_FAILURE_MESSAGE") : get(employeeFailure,"primaryMessage","PAYMENT_FAILURE_MESSAGE")
                         },
                         body: {
-                            labelKey: roleExists ? citizenFailure.secondaryMessage : employeeFailure.secondaryMessage
+                            labelKey: roleExists ? get(citizenFailure,"secondaryMessage","PAYMENT_FAILURE_MESSAGE_DETAIL") : get(employeeFailure,"secondaryMessage","PAYMENT_FAILURE_MESSAGE_DETAIL")
                         }
                     })
                 }

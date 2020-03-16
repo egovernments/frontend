@@ -16,7 +16,7 @@ const getCommonApplyFooter = children => {
 export const paymentFooter = (state,consumerCode, tenant,status) => {
 
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
-    const { footer } = uiCommonPayConfig;
+    const  footer  = get(uiCommonPayConfig,"footer");
     const redirectionURL = "/egov-common/pay";
     const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
     return getCommonApplyFooter({
@@ -35,14 +35,14 @@ export const paymentFooter = (state,consumerCode, tenant,status) => {
             },
             children: {
                 downloadReceiptButtonLabel: getLabel({
-                    ...footer.label,
-                    // labelName: get(businessServiceData,"footer.label.labelName","GO TO HOME"),
-                    // labelKey: serviceDetails
+                //    ...footer.label,
+                     labelName: get(footer,"label.labelName","GO TO HOME"),
+                     labelKey: get(footer,"label.labelKey","GO_TO_HOME")
                 })
             },
             onClickDefination: {
                 action: "page_change",
-                path: footer.link
+                path: get(footer,"link")
             },
         },
         retryButton: {
