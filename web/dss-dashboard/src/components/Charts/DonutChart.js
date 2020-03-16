@@ -38,7 +38,6 @@ const options = {
 				var total = meta.total;
 				var currentValue = dataset.data[tooltipItem.index];
 				var percentage = parseFloat((currentValue / total * 100).toFixed(1));
-				// if (dataset.dataSymbol[tooltipItem.index][0] == 'number' || dataset.dataSymbol[tooltipItem.index][1] == 'Unit') {
 				if (dataset.dataSymbol[tooltipItem.index][0] !== 'number') {
 					currentValue = NFormatterFun(currentValue, dataset.dataSymbol[tooltipItem.index][0], dataset.dataSymbol[tooltipItem.index][1], true)
 				}
@@ -75,7 +74,6 @@ class DonutChart extends React.Component {
 			var plots = k['plots'];
 			for (var i = 0; i < plots.length; i++) {
 				tempData.labels.push(strings[plots[i]['name']] || plots[i]['name']);
-				// tempdataSet.data.push(NFormatterFun(plots[i]['value'], plots[i]['symbol'], this.props.GFilterData['Denomination']));
 				tempdataSet.data.push(plots[i]['value'])
 				tempdataSet.dataSymbol.push([plots[i]['symbol'], this.props.GFilterData['Denomination']]);
 			}

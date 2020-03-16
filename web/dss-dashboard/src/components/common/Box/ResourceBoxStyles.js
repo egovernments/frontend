@@ -2,8 +2,6 @@ const styles = theme => ({
     container: {
         display: "flex",
         flexDirection: "row",
-        //paddingTop:23,
-        //paddingBottom:23
         height: 80
     },
     item: {

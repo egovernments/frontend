@@ -45,12 +45,9 @@ class LineChart extends React.Component {
   }
   
   callforNewData(elems) {
-		// this.setState({ data: null })
   }
   
   manupulateData(strings,chartData) {
-    // let temp, tempdata;
-    // temp = this.props.chartData;
     var tempdata = {
       labels: [],
       datasets: []
@@ -65,8 +62,6 @@ class LineChart extends React.Component {
       }
       let tempdataArr = [];
       let tempdatalabel = [],tempVal='';
-      // let val = NFormatterFun(_.get(d,'headerValue.value'), _.get(d,'headerValue.symbol'), this.props.GFilterData['Denomination'])
-      // tempObj.label = d.headerName + " : " + val;
       tempObj.label =   strings[d.headerName] || d.headerName;
       d.plots.map((d1, i) => {
         tempVal = NFormatterFun(d1.value, d1.symbol, this.props.GFilterData['Denomination']);

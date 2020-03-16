@@ -46,8 +46,6 @@ export default function getFinancialYearObj(onlyText,yearObj) {
 		    }
 	    }else{
 	    	// it will return for 1,2,3 quarter
-
-
 	    	if(yearObj){
 				FYobj = []
 				FYobj.push({

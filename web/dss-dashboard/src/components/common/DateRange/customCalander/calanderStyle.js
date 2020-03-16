@@ -7,27 +7,15 @@ const styles = theme => ({
     },
     root: {
         border: 'solid 1px #d9d9d9',
-        // height: 283,
         borderRadius: 2,
-        // width: 303,
-        // height: 'auto',
         margin: 0,
         padding: 0,
         display: 'block',
         overflow: 'hidden',
-        // position: 'absolute',
         borderCollapse: 'collapse',
         fontFamily: "Robo",
         backgroundColor: variables.white,
-        // boxShadow: '0 1px 3px rgba(0, 0, 0, 0.3125)',
-        // '-webkit-box-shadow': '0 1px 3px rgba(0, 0, 0, 0.3125)',
-        // borderRadius: 3,
-        // '-webkit-border-radius': 3,
         '& tbody': {
-            // width: 305,
-            // height: 283,
-            // borderRadius: 2,
-            // border: 'solid 1px #d9d9d9',
             backgroundColor: '#fcfcfc',
             '& tr': {
                 fontFamily: 'Roboto',
@@ -49,7 +37,6 @@ const styles = theme => ({
         }
     },
     tableHead: {
-        // width: 305,
         borderRadius: 2,
         borderBottom: 'solid 1px #d9d9d9',
         backgroundColor: '#f6f6f6',
@@ -75,13 +62,6 @@ const styles = theme => ({
         display: 'block',
     },
     calendarMonth: {
-        // '& tbody': {
-        //     '& tr': {
-        //         width: 81.66666666666667,
-        //         padding: 5,
-        //         lineHeight: 25,
-        //     }
-        // }
         width: '100%',
         margin: 0,
         padding: 0,
@@ -94,13 +74,6 @@ const styles = theme => ({
         }
     },
     calendarYear: {
-        // '& tbody': {
-        //     '& tr': {
-        //         width: 81.66666666666667,
-        //         padding: 5,
-        //         lineHeight: 25,
-        //     }
-        // }
         width: '100%',
         margin: 0,
         padding: 0,
@@ -116,7 +89,6 @@ const styles = theme => ({
         width: '100%',
         margin: 0,
         padding: 0,
-        // width: 44,
         height: 39,
         borderSpacing: 0,
         borderCollapse: 'collapse',
@@ -134,7 +106,6 @@ const styles = theme => ({
         '-webkit-border-radius': '3px 3px 0 0',
     },
     rectangle: {
-        // width: '305px',
         height: '30px',
         borderRadius: '2px',
         display: 'flex',
@@ -144,8 +115,6 @@ const styles = theme => ({
         fontFamily: 'roboto',
         '& span': {
             margin: 'auto',
-            // width: '92px',
-            // height: '16px',
             fontFamily: 'Roboto',
             fontSize: '12px',
             fontWeight: 500,
@@ -157,7 +126,6 @@ const styles = theme => ({
             color: '#000000',
         },
         '& svg:nth-child(1n)': {
-            // transform: 'rotate(180deg)',
             left: 0,
             margin: 'auto'
         },
@@ -170,7 +138,6 @@ const styles = theme => ({
         cursor: 'pointer'
     },
     calButtonprev: {
-        // backgroundImage: `url(${shape_icon})`
         left: 0
     },
     calButtonNext: {
@@ -192,8 +159,6 @@ const styles = theme => ({
         }
     },
     selectedDay: {
-        // width: 30,
-        // height: 29,
         backgroundColor: "#fe7a51",
         borderRadius: '50%',
         '& span': {
@@ -276,10 +241,6 @@ const styles = theme => ({
             height: 22
         }
     },
-
-
-
-
 
 });
 export default styles;

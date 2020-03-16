@@ -9,21 +9,17 @@ const styles = theme => ({
         cursor: 'pointer'
     },
     KPIItemSmall: {
-        //paddingLeft:20,
         flex: 1,
         fontFamily: 'montserrat',
-        //paddingTop:10
         textAlign: 'right'
     },
     KPIItem: {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        // marginLeft:"10%",        
         flex: 2
     },
     heading: {
-        //marginBottom:5,
     },
     fontLightGray: {
         color: variables.lighterGray

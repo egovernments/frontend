@@ -41,28 +41,20 @@ const PerformanceChartStyles = theme => ({
         height: 5,
         margin: '5px 0px',
         borderRadius: 2.5,
-        // display: '-webkit-box',
-        // display: -ms-flexbox,
         display: 'flex',
-        // height: 1rem,
         overflow: 'hidden',
         fontSize: '.75rem',
         background: '#e9ecef',
-        // borderRadius: '.25rem',
     },
     progressLine: {
         height: 5
     },
     bottomDiv: {
-        // borderTop: '1px solid #c3bebe',
-        // margin: '30px 30px 0 0',
         textAlign: 'initial'
     },
     body: {
         display: 'flex',
         flexDirection: 'column'
-            // margin: '30px 30px 0 30px'
-            // display: 'flex'
     }
 
 });

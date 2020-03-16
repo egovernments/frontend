@@ -26,7 +26,6 @@ class ChartType extends React.Component {
         this.setState({
             unit: this.props.GFilterData['Denomination']
         })
-        // this.getRequest(this.props, nextProps.filters, nextProps);
     }
 
     callAPI() {
@@ -45,37 +44,12 @@ class ChartType extends React.Component {
         let chartsAPI = new ChartsAPI(2000, 'dashboard', code, requestBody && requestBody.dataoption ? requestBody.dataoption : '');
         this.props.APITransport(chartsAPI);
     }
-    // getData(chartData) {
-    // 	var tempData = {
-    // 		labels: [],
-    // 		datasets: []
-    // 	};
-    // 	var tempdataSet = {
-    // 		label: "",
-    // 		backgroundColor: ["#35a2eb", "#f19c56", "#4c76c7", "#ff6384",],
-    // 		data: [],
-    // 		dataSymbol: []
-    // 	};
-
-    // 	_.map(chartData, function (k, v) {
-    // 		var plots = k['plots'];
-    // 		for (var i = 0; i < plots.length; i++) {
-    // 			tempData.labels.push(plots[i]['name']);
-    // 			tempdataSet.data.push(NFormatterFun(plots[i]['value'], plots[i]['symbol'], this.props.GFilterData['Denomination']));
-    // 			tempdataSet.dataSymbol.push([plots[i]['symbol'], this.props.GFilterData['Denomination']]);
-    // 		}
-    // 	}.bind(this))
-    // 	tempData.datasets.push(tempdataSet);
-    // 	return tempData;
-    // }
     render() {
         let chartKey = _.chain(this.props).get('chartData').first().get('id').value();
         let chartType = _.chain(this.props).get('chartData').first().get('chartType').toUpper().value();
         let data = _.chain(this.props).get('chartsGData').get(chartKey).get('data').value();
 
         if (data) {
-            // var chartData = this.state.data.responseData;
-            // this.state.data = null;
             switch (chartType) {
                 case 'PIE':
                     return <PieChart chartData={data}
@@ -146,7 +120,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         APITransport: APITransport,
-        // updateFilterData: updateGlobalFilterData
     }, dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ChartType);

@@ -21,7 +21,6 @@ const styles = theme => ({
         flexDerection: 'row',
         cursor: 'pointer',
         padding: ' 20px 50px 20px 23px',
-        // marginRight: '70vw'
     },
     title: {
         marginTop: 'auto',

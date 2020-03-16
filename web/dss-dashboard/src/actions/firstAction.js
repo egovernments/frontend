@@ -17,7 +17,6 @@ export const receiveDashBoardConfigData = (data) => dispatch => {
 }
 
 export const loadDashboardConfigData = () => dispatch => {
-    //dispatch(requestPosts(subreddit))
     return fetch(CONFIGS.API_URL + '/dbC_50b45a596a96780b3757')
         .then(response => {
             return response.json();

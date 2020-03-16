@@ -22,24 +22,6 @@ class ActionButton extends React.Component {
         this.props.handleClick(this.props.value, this.props.target, event)
     }
 
-    // hasPermission() {
-    //     const { RoleKey, RoleAction } = this.props;
-    //     return hasPermission(RoleKey, RoleAction);
-    // }
-
-    // renderButton() {
-    //     const { classes } = this.props;
-    //     return (
-    //         <Tooltip title="Remove" classes={{ tooltip: classes.lightTooltip }}>
-    //             <div>
-    //                 <Button className={classes.cancelButton} onClick={this.handleClick.bind(this)}>
-    //                     <SVG src={removeIcon} className={classes.Actionmenus}> Remove </SVG>
-    //                 </Button>
-    //             </div>
-    //         </Tooltip>
-    //     );
-    // }
-
     renderInfoButton() {
         const { classes, text } = this.props;
         return (
@@ -52,19 +34,6 @@ class ActionButton extends React.Component {
             </Tooltip>
         );
     }
-    // renderDetailsButton() {
-    //     const { classes } = this.props;
-    //     return (
-    //         <Tooltip title="Details" classes={{ tooltip: classes.lightTooltip }}>
-    //             <div>
-    //                 <Button className={classes.cancelButton} onClick={this.handleClick.bind(this)}>
-    //                     <SVG src={detailsIcon} className={classes.Actionmenus}> Details </SVG>
-    //                 </Button>
-    //             </div>
-    //         </Tooltip>
-    //     );
-    // }
-
     renderDefaultButton() {
         const { classes, text, disabled, clas, type } = this.props;
         if(this.props.containedButton === true){
@@ -88,9 +57,6 @@ class ActionButton extends React.Component {
                             color:this.state.buttonHovered ? '#FE7A51': "#96989a", 
                             fontSize:"32px"}}/>
                             // this.props.fontSize ? this.props.fontSize : ''}}/>
-                    //     <Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a", fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
-                    //     {text}
-                    // </Button>
                         :<Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a", fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
                             {text}
                         </Button>}

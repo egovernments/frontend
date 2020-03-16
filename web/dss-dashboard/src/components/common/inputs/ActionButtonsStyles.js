@@ -3,16 +3,9 @@ const actionButtonStyles = theme => ({
     Actionmenus: {
         width: 21,
         height: 21,
-        //margin: '0',
-        //float: 'left',
-        //display: 'flex',
         color: variables.gray1,
         '& svg': {
             fill: `${variables.gray1} !important`,
-            // width: 35,
-            //height: 32,
-            //float: 'left',
-            //'margin-top': -6,
             '& rect, & path': {
                 fill: `${variables.gray1} !important`
             }
@@ -32,32 +25,19 @@ const actionButtonStyles = theme => ({
         borderColor: variables.green
     },
     lightTooltip: {
-        // background: variables.white,
-        // color: variables.black,
         boxShadow: theme.shadows[1],
         fontSize: 11,
         fontFamily: variables.SecondaryFont
     },
     actionButton: {
         display: 'flex',
-        // background: '#27BB80',
         fontFamily: variables.SecondaryFont,
         textTransform: 'capitalize',
         fontSize: 16,
         color: variables.white,
         cursor: 'pointer',
-        // marginRight: 8,
         'flex-direction': 'row',
         border: 'none',
-
-        // '&:hover': {
-        //     backgroundColor: '#fe7a51',
-        //     color: variables.whiteColor
-        // },
-        // '&:focus': {
-        //     backgroundColor: '#fe7a51',
-        //     color: variables.whiteColor
-        // },
     },
     Actionmenus_defaultAdd: {
         width: 24,
@@ -78,13 +58,9 @@ const actionButtonStyles = theme => ({
         height: 24,
         margin: 'auto',
         marginLeft: 15,
-        // float: 'right',
         display: 'flex',
         '& svg': {
             fill: variables.blackColor,
-            // width: '100%',
-            // height: '100%',
-            // float: 'right',
         }
     },
     actionButton_exportdata: {
@@ -116,7 +92,6 @@ const actionButtonStyles = theme => ({
         width: 24,
         height: 24,
         margin: '0px 17px 0 0',
-        // marginLeft: 15,
         float: 'right',
         display: 'flex',
         '& svg': {
@@ -242,7 +217,6 @@ const actionButtonStyles = theme => ({
         }
     },
     kpiBox: {
-        //borderLeft: '6px solid #328EEB'
         color: variables.lighterGray,
     },
     activeLink: {
@@ -292,13 +266,9 @@ const actionButtonStyles = theme => ({
         }
     },
     actionButton1: {
-        // color: #FFFFFF; */
-        /* border: none; */
         cursor: 'pointer',
-        /* display: flex, */
         fontSize: '16px',
         fontFamily: 'Roboto',
-        /* flex-direction: row, */
         textTransform: 'uppercase',
         marginTop: 20,
         '&:hover': {
@@ -317,13 +287,9 @@ const actionButtonStyles = theme => ({
         color: '#fff'
     },
     actionButton_small: {
-        // height: 40,
-        // width: 40,
-        // marginLeft: 'auto',
         padding: 0,
         minWidth: '32px',
         textTransform: 'capitalize',
-        // width: '11px',
         height: 'auto',
         fontFamily: 'Roboto',
         fontSize: '10px',
@@ -340,15 +306,12 @@ const actionButtonStyles = theme => ({
     },
     actionButton_big: {
         padding: 0,
-        // flex: 1,
         minWidth: '32px',
         height: '30px',
         borderRadius: '2px',
         border: 'solid 1px #d9d9d9',
         backgroundColor: variables.white,
         textTransform: 'capitalize',
-        // width: '104px',
-        // height: '30px',
         fontFamily: 'Roboto',
         fontSize: '10px',
         fontWeight: 'normal',
@@ -362,8 +325,6 @@ const actionButtonStyles = theme => ({
         background: '#f0f0f0',
         cursor: 'pointer',
         '& span': {
-            // width: '61px',
-            // height: '16px',
             margin: '0 5px 0 5px',
             fontFamily: 'Roboto',
             fontSize: '12px',
@@ -373,7 +334,6 @@ const actionButtonStyles = theme => ({
             lineHeight: 'normal',
             letterSpacing: 'normal',
             textAlign: 'center',
-            // color: '#000000',
         }
     },
 

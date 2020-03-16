@@ -13,7 +13,6 @@ const styles = theme => ({
         fontSize: '16px',
         fontWeight: '500',
         color: 'rgba(0, 0, 0, 0.87)',
-        // margin: '12px !important'
     },
     subTitle: {
         textAlign: 'left',

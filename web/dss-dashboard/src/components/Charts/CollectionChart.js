@@ -67,8 +67,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators({
-		APITransport: APITransport,
-		// updateFilterData: updateGlobalFilterData
+		APITransport: APITransport
 	}, dispatch)
 }
 export default withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(CollectionChart));

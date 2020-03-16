@@ -13,10 +13,6 @@ export default class AllChartsAPI extends API {
         this.chartsData = {};
         this.chartsData = {};
         this.path = path;
-        // this.codeKey = codeKey;
-        // this.filter = filter;
-        // this.moduleLevel = moduleLevel;
-        // this.duration = duration;
         this.body = reqBody;
     }
 

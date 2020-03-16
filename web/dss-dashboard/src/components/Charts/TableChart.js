@@ -33,7 +33,6 @@ class TableChart extends Component {
   }
 
   getRequest(calledFrom, visualcode,active, filterList) {
-    //let filters = getFilterObj(this.props.GFilterData, this.props.globalFilterData, page);
     filterList = filterList ? filterList : this.state.filterList;
     let filters = {},ttest = [],tempFL;
     if(!_.isEmpty(filterList,true)){      
@@ -68,8 +67,6 @@ class TableChart extends Component {
         globalFilters['tenantId'] = tenentFilter
       }
     }
-    console.log(globalFilters)
-
     let getAxiosOptions = getChartOptions(visualcode, globalFilters);
     
     if (getAxiosOptions && getAxiosOptions.url) {
@@ -116,12 +113,6 @@ class TableChart extends Component {
   applyFilter = (visualcode, drillCode, drilfilters,tabName,rowData, event) => {
     let tempValue = rowData[drilfilters.column];
     tempValue = (typeof tempValue === 'object')?tempValue[0]:tempValue;
-    // need to change now its hack.
-    /*if(drilfilters.column != 'DDRs' && drilfilters.key == 'tenantId' && tempValue.split('.').length == 1){
-      let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
-
-      tempValue = tenent + '.'+tempValue.toLowerCase();
-    }*/
     tabName = tabName.toUpperCase();
     let tempArr = [visualcode,drillCode,drilfilters,tabName,tempValue];
     let filterList = this.state.filterList;
@@ -152,11 +143,6 @@ class TableChart extends Component {
   }
 
   getFilterObj(filters){
-    /*let tempDDR = this.props.globalFilterData[1]['master'][tvalue[i]];
-    for (var j = 0; j < tempDDR.length; j++) {
-      tempValue.push(tempDDR[j]);
-    }
-    console.log(this.props.GFilterData);*/
     return filters;
   }
 
@@ -238,7 +224,6 @@ class TableChart extends Component {
                       newrowData[a.name] = [a.label,text]
                   } else {
                       let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
-                      // console.log(typeof(val))
                       newrowData[a.name] = val
                   }
                 }
@@ -250,8 +235,6 @@ class TableChart extends Component {
       return (
         <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="tableHeading">
-            {/* <h5 style={{ flex: '1', textAlign: 'left' }}>Demand & Collection Index</h5> */}
-            {/* <div className="fwh"></div> */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <SwitchButton clickFromTab={this.clickFromTab} chartParent={chartParent} />
 
@@ -262,13 +245,6 @@ class TableChart extends Component {
               <div className="filLabel">
                 Filters Applied
               </div>              
-              {/* { 
-                _.map(this.state.filterList, (k, v) =>  {
-                    return this.renderChip(v,k)
-                })
-              } */}
-
-
               { 
                 isMobile ? 
                ( <div class="cutome_label_chip">
@@ -279,41 +255,20 @@ class TableChart extends Component {
                 return this.renderChip(v,k)
             })
               }
-
- {/* {_.map(this.state.filterList, (k, v) =>  {
-              if(isMobile){
-                    return(
-                      <div class="cutome_label_chip" style={{display: "inline-grid"}}>
-                      {this.renderChip(v,k)}
-                      </div>
-                    )
-                  }else{
-                    return this.renderChip(v,k)
-                  }
-                })} */}
-            </div>    
+           </div>    
           }
-          {/* <Table tableData={this.state.data} callBack={this.applyFilter.bind(this)} />               */}
           {
             <UiTable
               column={this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 && this.state.data.filter[0].column ? this.state.data.filter[0].column : (chartsData[chartKey] && Array.isArray(chartsData[chartKey].filter) && chartsData[chartKey].filter.length > 0 ? chartsData[chartKey].filter[0].column : '')}
               data={newData}
               columnData={columnData}
-              // callAPI={this.filterPageAPI.bind(this)}
               tableType='CENTERS_TABLE'
               cellClick={this.applyFilter.bind(this, visualcode, drillCode,drilfilters,tabName)}
-              //  orderBy={'Sno'}
-              // needCheckBox={false}
-              // needHash={false}
               Gfilter={this.props.GFilterData}
               needSearch
               needHash={true}
               needExport
               excelName={strings[this.props.label] || this.props.label || "DSS"}
-            // toggleSideDrawer={this.handleInfoClick.bind(this)}
-            // editInfo={this.handleEditClick.bind(this)}
-            // deleteCenter={this.setdeleteCenter.bind(this)}
-            // searchOnServer={this.searchOnServer.bind(this)}
             />
           }
         </div>

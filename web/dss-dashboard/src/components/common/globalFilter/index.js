@@ -64,10 +64,7 @@ class GlobalFilter extends Component {
 
     componentDidMount() {
         let tenentCode = `${localStorage.getItem('tenant-id')}` ? `${localStorage.getItem('tenant-id')}` : ''
-
         let userInfo = JSON.parse(`${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : '');
-        // let userInfo = `${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : ''
-
         let tenentList = []
         if (userInfo && userInfo['roles'] && Array.isArray(userInfo['roles']) && userInfo['roles'].length > 0) {
             userInfo['roles'].map(role => {
@@ -104,44 +101,13 @@ class GlobalFilter extends Component {
         const { TenentTransporter } = this.props
         let tenentAPI = new TenentAPI(2000, 'dashboard', Constant.TENENTS, req, '');
         TenentTransporter(tenentAPI);
-
-        // let tenentName = []
-        // let tenentObj = {}
-
-        // if (tenentCode && tenentCode !== 'null') {
-        //     let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[1] : ''
-
-        //     if (tenent && tenent !== 'null') {
-        //         let data = tenent[0].toUpperCase() + tenent.slice(1)
-        //         tenentObj[data] = tenentCode
-        //         tenentName.push(data)
-
-        //         this.setState({ tenants: tenentObj, tenentName: tenentName })
-
-        //     }
-        // }
-
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.tenents !== this.props.tenents) {
-            // let tenentIds = _.chain(this.props).get("tenents").get('MdmsRes').get('tenant').get('tenants').map((ulb, index) => {
             let tenants = _.get(this.props.tenents, 'MdmsRes.tenant.tenants')
             let tenentName = []
             let tenentObj = {}
-            // if (tenants && Array.isArray(tenants)) {
-            //     tenants.map((t) => {
-            //         if (t.code === `${localStorage.getItem('tenant-id')}`) {
-            //             tenentObj[t.name] = t.code
-            //             tenentName.push(t.name)
-            //         }
-
-            //     })
-
-            //     this.setState({ tenants: tenentObj, tenentName: tenentName })
-            // }
-
-
             if (this.state.tenentList && Array.isArray(this.state.tenentList) && this.state.tenentList.length > 0) {
                 this.state.tenentList.map(tenentVal => {
                     if (tenants && Array.isArray(tenants) && tenants.length > 0) {
@@ -158,7 +124,6 @@ class GlobalFilter extends Component {
         }
 
         if (prevProps.wards !== this.props.wards) {
-            // let wardData = _.chain(this.props).get("wards").get('MdmsRes').get('egov-location').get('TenantBoundary').first().get('boundary').get('children').first().get('children').map()
             let tenantsBoundry = _.get(this.props.wards, 'MdmsRes.egov-location.TenantBoundary')
 
             let adminName = []
@@ -171,44 +136,30 @@ class GlobalFilter extends Component {
                         let tenantsBoundryObj = boundaryData['boundary']
 
                         if (tenantsBoundryObj && tenantsBoundryObj.children && Array.isArray(tenantsBoundryObj.children) && tenantsBoundryObj.children.length > 0) {
-                            // let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
-
                             tenantsBoundryObj.children.map(tenantsBoundryObjChildren => {
                                 if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
                                     tenantsBoundryObjChildren.children.map((children) => {
-
                                         revenueBoundaryObj[children.name] = children.name
                                         revenueName.push(children.name)
                                     })
                                 }
                             })
-
-
-
                         }
                     } else {
                         let tenantsBoundryObj = boundaryData['boundary']
 
                         if (tenantsBoundryObj && tenantsBoundryObj.children && Array.isArray(tenantsBoundryObj.children) && tenantsBoundryObj.children.length > 0) {
-                            // let tenantsBoundryObjChildren = tenantsBoundryObj.children[0]
-                            
                             tenantsBoundryObj.children.map(tenantsBoundryObjChildren => {
-
                                 if (tenantsBoundryObjChildren && tenantsBoundryObjChildren.children && Array.isArray(tenantsBoundryObjChildren.children) && tenantsBoundryObjChildren.children.length > 0) {
                                     tenantsBoundryObjChildren.children.map((children) => {
                                         wardObj[children.name] = children.name
                                         adminName.push(children.name)
                                     })
                                 }
-
                             })
-                           
-
-
                         }
                     }
                 })
-
             }
             if (this.state.pageId === 'ulb-pgr') {
                 this.setState({ wards: adminName, wardsArr: wardObj })
@@ -222,7 +173,6 @@ class GlobalFilter extends Component {
     handleChanges(open, target, value) {
         if (target) {
             let newFilterData = this.state.filterData;
-            // let tempValue = value;
             if (target === 'Wards') {
                 let wardsObj = this.state.wardsArr
                 let wardKeys = []
@@ -236,10 +186,6 @@ class GlobalFilter extends Component {
             } else {
                 newFilterData[target] = value;
             }
-            // if(target == 'duration'){
-            //      newFilterData[target] = this.getDateFilter(value);
-            // }
-
             if (target === 'Services') {
                 newFilterData[target] = value;
             }
@@ -346,16 +292,6 @@ class GlobalFilter extends Component {
          * this is for quick fix as we reloded
          * 
          */
-        // this.setState({
-        //     title: 'FY 19-20',
-        //     dept: "All Services",
-        //     clear: true,
-        //     value: 'FY 19-20',
-        //     filterData: {
-        //         'Denomination': 'Lac'
-        //     }
-        // }, this.props.applyFilters(this.state.filterData));
-        // let pageId=_.get(this.props,'match.params.pageId');
         let viewAll = _.get(this.props, 'match.params.viewAll');
         if (viewAll) {
             let pageId = _.get(this.props, 'match.params.pageId');
@@ -394,17 +330,9 @@ class GlobalFilter extends Component {
 
                     </SVG>
                     <Input
-                        // disabled
-                        // disableUnderline={true}
                         id="adornment-amount"
                         value={(_.get(this.state, "filterData.duration.title") || this.state.value)}
                         className={classes.dateFilter}
-                        // onChange={handleChange('amount')}
-                        //     startAdornment={<InputAdornment position="start">
-                        //     <SVG src={icondepartment} className={classes.CloseButton}>
-
-                        //     </SVG>
-                        // </InputAdornment>}
                         endAdornment={<DropDownIcon style={{ color: '#656565' }}></DropDownIcon>}
                         onClick={this.openPicker.bind(this)}
                     />
@@ -420,7 +348,6 @@ class GlobalFilter extends Component {
                         value={this.state.value}
                         handleSelectedOk={this.handleChanges.bind(this)}
                     ></DateRange>
-                    {/* // handleApplyFilter={this.handleApplyFilter.bind(this)} */}
                 </div>
             </FormControl>
         );
@@ -553,10 +480,8 @@ class GlobalFilter extends Component {
         filterData[target] = newFilterData
         this.setState({ filterData: filterData, DDRs: newFilterData });
         if (typeof this.props.applyFilters === 'function') {
-            // this.props.applyFilters(filterData);
             this.setState({
                 DDRs: newFilterData,
-                // defaultV: newFilterData
             })
         }
         if (target === 'ULBS') {
@@ -580,8 +505,6 @@ class GlobalFilter extends Component {
                     {GFilterData.DDRs.map(item => {
                         let handleOnDelete = this.handleOnDelete.bind(this)
                         return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}>
-                            {/* <Chip fullwidth className={classes.mCustomChip} label={item} color={'gray'}  onDelete={() => handleOnDelete('DDRs',item)}> */}
-
                             <Chip fullwidth className={classes.mCustomChip} label={item} style={{ padingLeft: '3px' }} color={'gray'} >
                             </Chip></div>
                     })
@@ -595,8 +518,6 @@ class GlobalFilter extends Component {
                     {GFilterData.ULBS.map(item => {
                         let handleOnDelete = this.handleOnDelete.bind(this)
                         return <div style={{ margin: isMobile ? '4px 0 0 0' : '0 4px 0 0' }}>
-                            {/* <Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete('ULBS',item)}></Chip></div> */}
-
                             <Chip className={classes.mCustomChip} label={item} color={'gray'}></Chip></div>
                     })
 
@@ -662,33 +583,6 @@ class GlobalFilter extends Component {
                                 </div>
                             }
                         </div>
-
-                        {/* {!isMobile && this.renderFilters()} */}
-
-                        {/* <div className={classes.fVisible}>
-                        {GFilterData && GFilterData.DDRs && GFilterData.DDRs.length > 0 && <div className={classes.fVRow}>
-                            <div className={classes.fTitle}><span style={{ margin: 'auto' }}>Selected DDRs:</span></div>
-                            <div className={classes.mChips}>
-                                {GFilterData.DDRs.map(item => {
-                                    let handleOnDelete = this.handleOnDelete.bind(this)
-                                    return <Chip className={classes.mCustomChip} label={item} color={'gray'} onDelete={() => handleOnDelete(item)}></Chip>
-                                })
-    
-                                }
-                            </div>
-                        </div>}
-                        {GFilterData && GFilterData.ULBS && GFilterData.ULBS.length > 0 && <div className={classes.fVRow}>
-                            <div className={classes.fTitle}><span style={{ margin: 'auto' }}>Selected ULBs:</span></div>
-                            <div className={classes.mChips}>
-                                {GFilterData.ULBS.map(item => {
-                                    return <div style={{ marginRight: '5px' }}><Chip className={classes.mCustomChip} label={item} color={'gray'}></Chip></div>
-                                })
-    
-                                }</div>
-                        </div>
-                        }
-                    </div> */}
-
                     </Cards>
                 );
             } else {

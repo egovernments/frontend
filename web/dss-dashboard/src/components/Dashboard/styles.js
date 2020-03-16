@@ -32,9 +32,7 @@ const styles = theme => ({
     btn1: { borderRadius: '2px', height: 'fit-content', backgroundColor: "#fe7a51", color: "white" },
     actions: {
         display: 'flex',
-        margin: '12px !important',
-        // paddingLeft: '5px',
-        // paddingRight: '5px',
+        margin: '12px !important'
     },
     posit: {
         display: 'flex',
@@ -49,7 +47,6 @@ const styles = theme => ({
             flexDirection: 'row'
         },
         posit: {
-            // display: 'flex',
             flexDirection: 'row-reverse',
             marginTop: '3px'
         }

@@ -15,7 +15,6 @@ class GenericChart extends React.Component {
         this.props.setViewAll(visualCode);
     }
     renderCharts(d, chartData) {
-        // let {  page } = this.props;
         let filters = this.props.filters;
         switch (d.vizType.toUpperCase()) {
             case 'METRIC-COLLECTION':
@@ -39,7 +38,6 @@ class GenericChart extends React.Component {
             maxWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
-            // flex: 3
         }
         let style1 = {
             flex: ((row == 0) ? '2.1' : '1'),
@@ -49,7 +47,6 @@ class GenericChart extends React.Component {
             maxWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
-            // flex: 2
         }
         if(isMobile){
             return (

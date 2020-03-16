@@ -41,8 +41,7 @@ export default class DashboardPTAPI extends API {
     getHeaders() {
         return {
             headers: {
-                'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+                'Content-Type': 'application/json'
             }
         }
     }

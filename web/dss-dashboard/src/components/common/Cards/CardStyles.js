@@ -1,8 +1,7 @@
 import variables from '../../../styles/variables';
 export const CardStyle = {
     root: {
-        margin: '10px 10px 10px 10px !important !important',
-        // maxWidth: '97%'
+        margin: '10px 10px 10px 10px !important !important'
     },
     card: {
         minWidth: 150,
@@ -11,13 +10,10 @@ export const CardStyle = {
     cardheader: {
         paddingBottom: 0,
         paddingLeft: '20px',
-        paddingTop: '20px',
-        // flex: 6,
+        paddingTop: '20px',        
         maxWidth: '100% !important',
         wordBreak: 'break-all',
         display: 'flex',
-        // padding: 10,
-
         textAlign: 'left',
         '& div': {
             '& span': {
@@ -49,7 +45,6 @@ export const CardStyle = {
         transform: 'scale(0.8)',
     },
     title: {
-        // marginBottom: 5,s
         fontWeight: '500',
         fontFamily: 'Roboto'
     },
@@ -59,8 +54,7 @@ export const CardStyle = {
     actionMenues: {
         display: 'flex',
         paddingRight: '5px',
-        paddingTop: '10px',
-        // flexDirection:'row-reverce'
+        paddingTop: '10px'
     },
     actions: {
         padding: 0,
@@ -79,16 +73,7 @@ export const CardStyle = {
     },
     itemIcon: {
         minWidth: '30px'
-    },
-    lightTooltip: {
-        // background: variables.white,
-        // color: variables.black,
-        // fontSize: 11,
-        // fontFamily: variables.SecondaryFont,
-        // margin: 'auto',
-        // padding: 'auto'
-    },
-    
+    },    
     '@media (max-width: 3000px)': {
         redused: {
             maxWidth: '100%',

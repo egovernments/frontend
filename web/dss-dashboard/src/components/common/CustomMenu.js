@@ -76,21 +76,11 @@ class CustomizedMenus extends Component {
         this.state = {
             anchorEl: null,
             open: false,
-            shareOpen: false,
-            //logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
-            //pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
-            //  logo: this.props.globalFilter[1]['tentantLogo']['pb.banur']
-
+            shareOpen: false
         }
 
     }
-
-    // const[anchorEl, setAnchorEl] = React.useState(null);
-    // const[open, setOpen] = React.useState(false)
-    // const[shareOpen, setShareOpen] = React.useState(false)
-
     handleClick = event => {
-        // setAnchorEl(event.currentTarget);
         this.setState({
             anchorEl: event.currentTarget
         })
@@ -100,14 +90,12 @@ class CustomizedMenus extends Component {
         return true;
     };
     handleClick1 = event => {
-        // setOpen(!open)
         this.setState({
             open: !this.state.open
         })
     };
 
     handleClick2 = event => {
-        // setShareOpen(!shareOpen)
         this.setState({
             shareOpen: !this.state.shareOpen
         })
@@ -123,7 +111,6 @@ class CustomizedMenus extends Component {
         this.props.APITrans(true)
         downloadAsImage(this.props.strings[this.props.fileName] || this.props.fileName).then(function (success) {
             this.props.APITrans(false)
-            // setAnchorEl(null);
         }.bind(this)).catch(function (err) {
             console.log(err);
             this.setState({
@@ -139,19 +126,9 @@ class CustomizedMenus extends Component {
     }
 
     downloadPDF = () => {
-        // this.props.APITrans(true)
         let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
         printDocument(pdfDetails.logo,pdfDetails.headerText, this.props.strings[this.props.fileName] || this.props.fileName || 'DSS').then(function (pdfO) {
-            // let element = document.getElementById("printFtable")
-            // element.parentNode.removeChild(element);
-            // setAnchorEl(null);
-            // pdfO.save();
-
             try {
-                // pdf.deletePage(3)
-                // pdf.deletePage(2)
-                // pdf.deletePage(1)
-                // pdf.addPage();
                 this.props.APITrans(false)
             } catch{ }
         }).catch(function (error) {
@@ -169,7 +146,6 @@ class CustomizedMenus extends Component {
         var APITransport = this.props.APITransport
         let pdfDetails = getPDFHeaderDetails(this.props.mdmsData);
         printDocumentShare(pdfDetails.logo,pdfDetails.headerText).then(function (pdfO) {
-            // setAnchorEl(null);
             try {
                 let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_MOBILE, pdfO.output('blob'));
                 APITransport(fileUploadAPI)
@@ -315,7 +291,6 @@ class CustomizedMenus extends Component {
                     aria-controls="customized-menu"
                     aria-haspopup="true"
                     variant="contained"
-                    // color="primary"
                     onClick={this.handleClick}
                 >
                     {this.props.type === 'filter' &&

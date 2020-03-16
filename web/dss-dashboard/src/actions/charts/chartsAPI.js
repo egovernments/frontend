@@ -9,14 +9,10 @@ export default class ChartsAPI extends API {
     constructor(timeout = 2000, path, codeKey, reqBody, queryParams = null) {
         super('POST', timeout, false);
         this.type = C.CHARTS;
-        // this.queryParams = queryParams;
         this.chartsData = {};
         this.chartsData[codeKey] = [];
         this.path = path;
         this.codeKey = codeKey;
-        // this.filter = filter;
-        // this.moduleLevel = moduleLevel;
-        // this.duration = duration;
         this.body = reqBody;
     }
 

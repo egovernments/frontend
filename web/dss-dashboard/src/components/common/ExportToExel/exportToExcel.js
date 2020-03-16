@@ -8,10 +8,6 @@ class Workbook {
 }
 
 const download = (url, name) => {
-    // var blob = new Blob([csvString]);
-    // if (window.navigator.msSaveOrOpenBlob) // IE hack; see http://msdn.microsoft.com/en-us/library/ie/hh779016.aspx
-    // window.navigator.msSaveBlob(blob, "filename.csv");
-    // else {
     var a = window.document.createElement("a");
     a.href = url;
     a.download = name;

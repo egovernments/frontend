@@ -3,7 +3,6 @@ const styles = theme => ({
         display: 'flex',
         flex: 1,
         flexDirection: 'column',
-        // padding: 10
     },
     row: {
         flex: 1,

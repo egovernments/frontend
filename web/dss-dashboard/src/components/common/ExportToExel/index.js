@@ -23,7 +23,6 @@ class ExportToExel extends React.Component {
         return (<ActionButtons buttonType="download"
             text="Download"
             disableed={data && Object.keys(data).length == 0}
-            // clas = { classes.clearbtn }
             handleClick={this.handleClick.bind(this)}
         />
         )

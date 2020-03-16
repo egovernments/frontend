@@ -4,7 +4,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import CustomCalendar from './customCalander/cCalander';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import SwitchButton from '../switchButtons/switchButtons';
@@ -13,8 +12,6 @@ import style from './style';
 import moment from 'moment';
 import _ from 'lodash';
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
-// import { MediaQuery } from '@material-ui/core';
-// import { useTheme } from '@material-ui/core/styles';
 
 const year = (new Date()).getFullYear();
 let fYearObj = getFinancialYearObj('',true)
@@ -39,9 +36,6 @@ class DateRange extends React.Component {
       { key: "7", value: "Custom" },
       ],
     }
-    // const theme = useTheme();
-
-    // this.fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   }
   handleCancel = () => {
     this.props.onClose();
@@ -50,7 +44,6 @@ class DateRange extends React.Component {
   handleOk = () => {
     let { handleSelectedOk } = this.props;
     handleSelectedOk(false, 'duration', this.getDateFilter(this.state.value))
-    // this.props.handleApplyFilter(this.state.value)
   };
 
   getDuration(startDate, endDate) {
@@ -98,7 +91,6 @@ class DateRange extends React.Component {
           }
         }
       case 'THIS QUARTER':
-        // let duration2 = this.getDuration(moment().startOf('quarter').format('YYYY-MM-DD'), moment().endOf('quarter').format('YYYY-MM-DD'))
         return {
           title: "QUARTER",
           value: {
@@ -157,13 +149,11 @@ class DateRange extends React.Component {
         title: value
       })
     }
-    // this.props.handleSelected(open, target, this.getDateFilter(value))
   }
 
   svgWrapper = ({ dangerouslySetInnerHTML, className }) => {
     return (
       <span
-        // onClick={(e) => this.back(e)}
         dangerouslySetInnerHTML={dangerouslySetInnerHTML}
         className={className}
       />
@@ -177,23 +167,15 @@ class DateRange extends React.Component {
     }
   }
   render() {
-    // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
-    // let { classes, onClose, selected, value: valueProp, open } = this.props;
-
     let { classes, open } = this.props;
     return (
       <Dialog
-        // fullScreen={}
         disableBackdropClick
         disableEscapeKeyDown
-        // invisible={true}
-        // maxWidth="xl"
-        // onEntering={this.handleEntering}
         aria-labelledby="date-range"
         open={open}
 
         classes={{ paper: classes.root }}
-      // {...other}
       >
         <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#fe7a51' }}>
           {this.state.title}

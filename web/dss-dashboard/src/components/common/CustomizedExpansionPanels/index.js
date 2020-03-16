@@ -28,7 +28,6 @@ class CustomizedExpansionPanels extends React.Component {
   }
   onEditClick(e) {
     e.stopPropagation();
-    //alert("I'm not expanding!");
   }
   renderCards = (classes, chartData, displayName, filters, page,Gfilter,row ) =>{ 
     let rowrender = [],strings = this.props.strings

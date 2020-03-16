@@ -3,15 +3,12 @@ import variables from "../../../styles/variables";
 const styles = theme => ({
 
     "#customCalander": {
-        // '& div': {
         backgroundColor: 'red'
-        // }
     },
 
     root: {
         flexGrow: 1,
         maxWidth: '100%',
-        // background: 'red',
         top: 0,
         left: 0,
         position: 'absolute'
@@ -41,12 +38,9 @@ const styles = theme => ({
     divider: {
         width: "741px",
         height: "1px",
-        // border: "solid 1px #d9d9d9"
         background: "#d9d9d9",
     },
     changeyear: {
-        // width: 46px;
-        // height: 10px;
         fontFamily: 'Roboto',
         fontSize: '8px',
         fontWeight: 500,
@@ -58,19 +52,12 @@ const styles = theme => ({
     },
     fils: {
         display: 'flex',
-        // margin: '0 0 0 23px'
     },
     filterS: {
         display: 'flex',
-        /* min-width: 200px; */
         flexDirection: 'column',
-        // margin: '0 10px 0 10px',
-        // border: '1px solid black',
-        // borderRadius: '6px',
         margin: '0 0 0 34px',
-        // margin: -7px 0 0 34px,
         '& div:nth-child(2n)': {
-            // border: '1px solid black',
         }
     },
 
@@ -83,9 +70,6 @@ const styles = theme => ({
         '& svg': {
             width: '8px',
             height: '5px',
-            // transform: 'rotate(-270deg)',
-            // backgroundColor: variables.paleGrey,
-            // backgroundColor: 'rgba(0, 0, 0, 0.6)',
         }
     },
     next: {
@@ -95,7 +79,6 @@ const styles = theme => ({
             height: '5px',
             objectFit: 'contain',
             transform: 'rotate(180deg)',
-            // backgroundColor: 'rgba(0, 0, 0, 0.6)',
         }
     },
     rectangle: {
@@ -138,13 +121,8 @@ const styles = theme => ({
     },
     calanderDisplay: {
         display: 'flex',
-        // margin: '10px 0 0 22px'
     },
     calanderclass: {
-        // width: 305,
-        // height: 283,
-        // borderRadius: 2,
-        // border: 'solid 1px #d9d9d9',
         backgroundColor: '#fcfcfc',
     },
     space: {
@@ -155,11 +133,8 @@ const styles = theme => ({
         justifyContent: 'center'
     },
     cancelbtn: {
-        // width: 82,
-        // height: 32,
         borderRadius: 2,
         backgroundColor: variables.white,
-
         fontFamily: 'Roboto',
         fontSize: 12,
         fontWeight: 500,
@@ -188,9 +163,7 @@ const styles = theme => ({
         }
     },
 trans: {
-    // '& div > div': {
     background: 'transparent'
-    // }
 },
 '@media (max-width: 1115px)': {
     root: {

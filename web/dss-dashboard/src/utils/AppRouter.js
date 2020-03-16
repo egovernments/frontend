@@ -6,11 +6,7 @@ import Home from '../components/Home/Home'
 
 class AppRouter extends Component {
     authenticateUser = () => {
-        // let token = sessionStorage.getItem('token');
-        // if (token) {
         return true;
-        // }
-        // return false;
     }
 
 

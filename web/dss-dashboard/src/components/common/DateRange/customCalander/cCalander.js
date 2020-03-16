@@ -127,7 +127,6 @@ class CustomCalendar extends React.Component {
         });
     };
     setYear = year => {
-        // alert(year)
         let dateObject = Object.assign({}, this.state.dateObject);
         dateObject = moment(dateObject).set("year", year);
         this.setState({
@@ -225,11 +224,9 @@ class CustomCalendar extends React.Component {
                 selectedDay: d
             },
             () => {
-                // console.log("SELECTED DAY: ", this.state.selectedDay);
                 let dateObject = moment(Object.assign({}, this.state.dateObject));
                 dateObject.subtract(dateObject.get("date"),'day')
                 dateObject.add(this.state.selectedDay,'day')
-                // dateObject = moment(dateObject).set("day", d);
                 this.props.selectCDate(dateObject)
             }
         );
@@ -271,8 +268,7 @@ class CustomCalendar extends React.Component {
                 cells = [];
                 cells.push(row);
             }
-            if (i === totalSlots.length - 1) {
-                // let insertRow = cells.slice();
+            if (i === totalSlots.length - 1) {                
                 rows.push(cells);
             }
         });

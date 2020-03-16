@@ -20,7 +20,6 @@
      },
      minor: {
          backgroundColor: variables.darkyellow,
-         //  display: 'flex',
          flexDirection: "column",
          padding: 0,
      },

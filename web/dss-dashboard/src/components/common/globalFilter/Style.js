@@ -9,7 +9,6 @@ const styles = theme => ({
     formControl: {
         margin: '0',
         minWidth: 120,
-        // 'flex-grow': 1,
         '& label': {
             color: 'red',
             top: '-15px'
@@ -25,12 +24,9 @@ const styles = theme => ({
         textAlign: 'left !important'
     },
     filterS: {
-        // margin: 0 10px 0 10px; */
         display: 'flex',
         flex: 1,
-        /* flex: 0; */
         margin: isMobile ? '8px 0 0 0' : '5px 0 0 0',
-        // width: '190px',
         flexDirection: 'column'
     },
     filterHead: {

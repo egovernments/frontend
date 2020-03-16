@@ -57,12 +57,9 @@ class CustomSelectList extends Component {
     updateValues(val, tar) {
         const { checked } = this.state;
         var target = tar.split('.')[0];
-        // var idx = tar.split('.')[1];
         var Key = tar.split('.')[2];
         var newdata = {};
         const currentIndex = checked.indexOf(Key);
-        // var oldData = this.props.items[idx];
-        //this.state.rowData.map(data => Object.assign({}, data));
         Object.assign(newdata, this.state.rowData);
         switch (target) {
             case 'Username':

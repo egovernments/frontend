@@ -241,7 +241,6 @@ const hexToRgb = input => {
   
   export {
     hexToRgb,
-    //variables
     drawerWidth,
     transition,
     container,

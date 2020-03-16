@@ -15,14 +15,10 @@ export default function CardBody(props) {
     [classes.cardBodyProfile]: profile,
     [className]: className !== undefined
   });
-  // let url = Config.API_URL + Config.APP_NAME + page
 
   return (
     <div className={cardBodyClasses} {...rest}>
-      {/* <a href={url} style={{ textDecoration: 'none',cursor: 'pointer',cursor: 'hand' }}> */}
         {children}
-      {/* </a> */}
-
     </div>
   );
 }

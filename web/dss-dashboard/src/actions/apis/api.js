@@ -28,7 +28,6 @@ export default class API {
         return CONFIGS.UPLOAD_URL;
     }
     processResponse(res) {
-        // if (res && res.code && res.message && res.domain) {
         if (res) {
             this.code = res.code;
             this.message = res.message;
@@ -36,7 +35,6 @@ export default class API {
         }
     }
     processResponseCharts(res) {
-        // if (res && res.code && res.message && res.domain) {
         if (res) {
             this.code = res.statusInfo.statusCode;
             this.message = res.statusInfo.statusMessage;
