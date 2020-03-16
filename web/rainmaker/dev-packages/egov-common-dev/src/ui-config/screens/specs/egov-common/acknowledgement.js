@@ -9,7 +9,8 @@ import {getHeader} from "./pay"
 import './index.css';
 
 
-const downloadprintMenu=(state,applicationNumber,tenantId)=>{
+const downloadprintMenu=(state,applicationNumber,tenantId,uiCommonPayConfig)=>{
+    const receiptKey = get(uiCommonPayConfig, "receiptKey")
       let receiptDownloadObject = {
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
@@ -17,7 +18,7 @@ const downloadprintMenu=(state,applicationNumber,tenantId)=>{
                 { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
-            download(receiptQueryString);
+            download(receiptQueryString , "download" , receiptKey);
           
         },
         leftIcon: "receipt"
@@ -29,7 +30,7 @@ const downloadprintMenu=(state,applicationNumber,tenantId)=>{
                 { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
-            download(receiptQueryString,"print");
+            download(receiptQueryString  ,"print" , receiptKey);
         },
         leftIcon: "receipt"
       };
@@ -40,7 +41,6 @@ const downloadprintMenu=(state,applicationNumber,tenantId)=>{
     
   
       return {
-  
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
@@ -94,7 +94,7 @@ const getAcknowledgementCard = (
     if (status === "success") {
         return {
             header,
-            headerdownloadprint:downloadprintMenu(state,receiptNumber,tenant),
+            headerdownloadprint:downloadprintMenu(state,receiptNumber,tenant,uiCommonPayConfig),
             applicationSuccessCard: {
                 uiFramework: "custom-atoms",
                 componentPath: "Div",

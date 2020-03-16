@@ -5,7 +5,6 @@ import {
     getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import get from "lodash/get";
 import { getCurrentFinancialYear, generateBill, getBusinessServiceMdmsData } from "../utils";
 import { capturePaymentDetails } from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
@@ -14,9 +13,10 @@ import g8Details from "./payResource/g8-details";
 import AmountToBePaid from "./payResource/amount-to-be-paid";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
-import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
+import get from "lodash/get";
 import "./pay.css";
 
 export const getHeader = (state) => {
@@ -85,7 +85,7 @@ const getPaymentCard = (state) => {
     }
 }
 
-const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessService) => {
+const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBusinessService) => {
     await getBusinessServiceMdmsData(dispatch, tenantId);
 
     await generateBill(dispatch, consumerCode, tenantId, billBusinessService);
@@ -107,7 +107,7 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessSe
     })
 
     //commonPay configuration 
-    const commonPayDetails = get(state.screenConfiguration.preparedFinalObject , "businessServiceMdmsData.common-masters.uiCommonPay");
+    const commonPayDetails = get(state , "screenConfiguration.preparedFinalObject.businessServiceMdmsData.common-masters.uiCommonPay");
     commonPayDetails && commonPayDetails.map(item => {
         if (item.code == businessService) {
             dispatch(prepareFinalObject("commonPayInfo", item));
@@ -124,6 +124,13 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessSe
         //set total amount in instrument
         dispatch(prepareFinalObject("ReceiptTemp[0].instrument.amount", payload.amount));
     }
+
+
+    let header = getHeader(state);
+    set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
+
+    const data = getPaymentCard(state);    
+    set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
 
     if (get(totalAmount, "totalAmount") != undefined) {
         const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
@@ -157,7 +164,7 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessSe
     dispatch(prepareFinalObject("ReceiptTemp[0].tenantId", tenantId));
 
     //set tenantId in instrument
-    dispatch(prepareFinalObject("ReceiptTemp[0].instrument.tenantId", tenantId));
+    dispatch(prepareFinalObject("ReceiptTemp[0].instrument.tenantId", tenantId));   
 };
 
 
@@ -168,14 +175,15 @@ const screenConfig = {
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
-        fetchBill(state, dispatch, consumerCode, tenantId, businessService).then(
-            response => {
-                let header = getHeader(state);
-                set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
-            }
-        );
-        const data = getPaymentCard(state);    
-        set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
+        fetchBill(action ,state, dispatch, consumerCode, tenantId, businessService);
+        // fetchBill(action,state, dispatch, consumerCode, tenantId, businessService).then(
+        //     response => {
+        //         let header = getHeader(state);
+        //         set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
+        //     }
+        // );
+        // const data = getPaymentCard(state);    
+        // set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
         return action;
     },
     components: {
@@ -191,10 +199,10 @@ const screenConfig = {
                     uiFramework: "custom-atoms",
                     componentPath: "Container",
                     children: {
-                        header : {}
+                        // header : {}
                     }
                 },
-                formwizardFirstStep: {},
+                // formwizardFirstStep: {},
                 footer
             }
         },
