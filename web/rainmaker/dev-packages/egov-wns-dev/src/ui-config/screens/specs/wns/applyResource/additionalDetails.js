@@ -388,7 +388,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("Amount"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.initialMeterReading"
+        jsonPath: "applyScreen.additionalDetails.initialMeterReading"
       })
     })
   })

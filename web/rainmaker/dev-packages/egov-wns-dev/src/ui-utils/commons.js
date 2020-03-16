@@ -598,7 +598,12 @@ const parserFunction = (state) => {
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
         meterId: parseInt(queryObject.meterId),
-        initialMeterReading: parseInt(queryObject.initialMeterReading),
+        additionalDetails: {
+            initialMeterReading: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.initialMeterReading !== undefined
+            ) ? parseInt(queryObject.additionalDetails.initialMeterReading) : null
+        }
     }
     queryObject = { ...queryObject, ...parsedObject }
     return queryObject;
@@ -1479,7 +1484,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             sewerageConnection: wnsConnection[0]
         }]
     }
-   
+
     const DOWNLOADCONNECTIONDETAILS = {
         GET: {
             URL: "/pdf-service/v1/_create",
