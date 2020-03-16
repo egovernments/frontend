@@ -543,50 +543,28 @@ export const downloadPrintContainer = (
     leftIcon: "assignment"
   };
   switch (appStatus) {
-    case "APPROVED":
-      downloadMenu = [
-        sanctionDownloadObject,
-        wsEstimateDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        sanctionPrintObject,
-        wsEstimatePrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "PENDING_FOR_FIELD_INSPECTION":
-    case "PENDING_FOR_CITIZEN_ACTION":
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
+    case "PENDING_FOR_CITIZEN_ACTION":
+    case "PENDING_FOR_FIELD_INSPECTION":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
-    case "PENDING_FOR_FIELD_INSPECTION":
     case "PENDING_APPROVAL_FOR_CONNECTION":
       downloadMenu = [applicationDownloadObject, wsEstimateDownloadObject];
       printMenu = [applicationPrintObject, wsEstimatePrintObject];
       break;
     case "PENDING_FOR_PAYMENT":
-      downloadMenu = [
-        sanctionDownloadObject,
-        wsEstimateDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        sanctionPrintObject,
-        wsEstimatePrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+    case "PENDING_FOR_CONNECTION_ACTIVATION":
+    case "CONNECTION_ACTIVATED":
+      downloadMenu = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
+      printMenu = [sanctionPrintObject, wsEstimatePrintObject, applicationPrintObject];
       break;
     case "REJECTED":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
-    default:
+    default: downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
       break;
   }
   /** END */
