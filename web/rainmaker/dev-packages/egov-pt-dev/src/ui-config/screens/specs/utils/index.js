@@ -71,6 +71,9 @@ export const validateFields = (
     objectJsonPath,
     {}
   );
+  if(fields.isFieldValid===false){
+    return false;
+  }
   let isFormValid = true;
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {

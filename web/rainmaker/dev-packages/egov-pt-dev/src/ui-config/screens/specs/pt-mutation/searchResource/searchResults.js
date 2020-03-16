@@ -308,7 +308,7 @@ const onPropertyTabClick = (rowData, dispatch) => {
     default:
       // window.location.href = `search-preview?applicationNumber=${
       // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
-      navigate(`/property-tax/property/${rowData[0].props.children}/${rowData[6]}`);
+      navigate(propertyInformationScreenLink(rowData[0].props.children,rowData[6]));
       //   rowData[0]
       // }&tenantId=${rowData[6]}`; 
       break;
@@ -324,16 +324,24 @@ const applicationNumberClick = async (item) => {
   } else if (businessService == 'PT.CREATE') {
     navigate(`/property-tax/application-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}&type=property`);
   } else {
-    navigate(`/property-tax/property/${item.propertyId}/${item.tenantId}`);
+    navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
   }
 
 }
 
 const propertyIdClick = (item) => {
-  navigate(`/property-tax/property/${item.propertyId}/${item.tenantId}`);
+  navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
 }
 
 const navigate=(url)=>{
   // store.dispatch(setRoute(url));
   setRoute(url);
+}
+
+const propertyInformationScreenLink=(propertyId,tenantId)=>{
+  if(process.env.REACT_APP_NAME == "Citizen"){
+    return `/property-tax/my-properties/property/${propertyId}/${tenantId}`;
+  }else{
+    return `/property-tax/property/${propertyId}/${tenantId}`;
+  }
 }
