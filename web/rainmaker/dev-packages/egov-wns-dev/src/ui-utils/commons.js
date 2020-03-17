@@ -1471,7 +1471,7 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 export const downloadApp = async (wnsConnection, type, mode = "download") => {
     let tenantName = wnsConnection[0].property.tenantId;
     tenantName = tenantName.split('.')[1];
-    
+
     wnsConnection[0].tenantName = tenantName.toUpperCase();
     const appNo = wnsConnection[0].applicationNo;
     let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
@@ -1535,13 +1535,18 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         wnsConnection[0].serviceFee = estResponse.Calculation[0].charge;
         wnsConnection[0].tax = estResponse.Calculation[0].taxAmount;
 
-        if (type === 'estimateNotice') {
+        let obj = {};
+        if (type === 'estimateNotice' || type === 'sanctionLetter') {
             estResponse.Calculation[0].taxHeadEstimates.map((val) => {
                 val.taxHeadCode = val.taxHeadCode.substring(3)
             });
             wnsConnection[0].pdfTaxhead = estResponse.Calculation[0].taxHeadEstimates;
+
+            obj = {
+                WnsConnection: wnsConnection
+            }
         }
-        let obj = {};
+
         if (type === 'application') {
             if (wnsConnection[0].service === "WATER") {
                 obj = {
@@ -1552,11 +1557,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                     SewerageConnection: wnsConnection
                 }
             }
-        } else if (type === 'estimateNotice' || type === 'sanctionLetter') {
-            obj = {
-                WnsConnection: wnsConnection
-            }
-        }
+        } 
 
         await httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, obj, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
