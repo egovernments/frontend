@@ -8,26 +8,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
-const resetFields = (state, dispatch) => {
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerNo",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.ownerMobNo",
-      "props.value",
-      ""
-    )
-  );
-};
+import { resetFieldsForConnection } from '../../utils';
 
 export const wnsApplication = getCommonCard({
   subHeader: getCommonTitle({
@@ -103,7 +84,7 @@ export const wnsApplication = getCommonCard({
         },
         onClickDefination: {
           action: "condition",
-          callBack: resetFields
+          callBack: resetFieldsForConnection
         }
       },
       searchButton: {

@@ -6,6 +6,7 @@ import { searchApplicationResults } from "./searchResource/searchApplicationResu
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
@@ -28,6 +29,8 @@ const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen:  (action, state, dispatch) => {
+    resetFieldsForConnection(state, dispatch);
+    resetFieldsForApplication(state, dispatch);
     setBusinessServiceDataToLocalStorage(queryObject,dispatch);
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
