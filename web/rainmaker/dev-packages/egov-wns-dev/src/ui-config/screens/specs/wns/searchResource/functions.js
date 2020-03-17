@@ -13,8 +13,10 @@ export const searchApiCall = async (state, dispatch) => {
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
   let currentSearchTab = getCurrentTab === undefined ? "SEARCH_CONNECTION" : getCurrentTab;
   if (currentSearchTab === "SEARCH_CONNECTION") {
+    resetFieldsForApplication(state, dispatch);
     await renderSearchConnectionTable(state, dispatch);
   } else {
+    resetFieldsForConnection(state, dispatch);
     await renderSearchApplicationTable(state, dispatch);
   }
 }
