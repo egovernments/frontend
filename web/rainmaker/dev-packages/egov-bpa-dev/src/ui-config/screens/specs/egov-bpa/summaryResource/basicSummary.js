@@ -235,8 +235,8 @@ export const basicSummary = getCommonGrayCard({
           ),
           reviewMohalla: getLabelWithValue(
             {
-              labelName: "Mohalla",
-              labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+              labelName: "Village/Mohalla",
+              labelKey: "TL_NEW_TRADE_DETAILS_VILLAGE_MOHALLA_LABEL"
             },
             {
               jsonPath:"BPA.address.locality.code",

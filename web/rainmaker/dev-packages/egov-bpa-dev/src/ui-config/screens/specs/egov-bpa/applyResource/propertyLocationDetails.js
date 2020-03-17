@@ -209,8 +209,8 @@ export const bpaLocationDetails = getCommonCard(
             cursor: "pointer"
           },
           label: {
-            labelName: "Mohalla",
-            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+            labelName: "Village/Mohalla",
+            labelKey: "TL_NEW_TRADE_DETAILS_VILLAGE_MOHALLA_LABEL"
           },
           placeholder: {
             labelName: "Select Mohalla",
