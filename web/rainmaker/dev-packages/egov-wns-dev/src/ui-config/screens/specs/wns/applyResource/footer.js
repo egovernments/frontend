@@ -160,12 +160,16 @@ const callBackForNext = async (state, dispatch) => {
         if (isFormValid) {
           if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
             if (waterChecked && sewerChecked) {
-              if (sewerData && sewerData.length > 0) { await applyForWater(state, dispatch); }
-              if (waterData && waterData.length > 0) { await applyForSewerage(state, dispatch); }
-            } else if (sewerChecked) { await applyForSewerage(state, dispatch); }
-            else { await applyForWater(state, dispatch); }
-          } else {
-            isFormValid = await applyForWaterOrSewerage(state, dispatch);
+              if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
+              else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
+            } else if (sewerChecked && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
+            else if (waterChecked && waterData.length === 0) { await applyForWater(state, dispatch); }
+          } else if (waterChecked && sewerChecked) {
+            if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+          } else if (waterChecked) {
+            if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+          } else if (sewerChecked) {
+            if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
           }
         }
       } else {
