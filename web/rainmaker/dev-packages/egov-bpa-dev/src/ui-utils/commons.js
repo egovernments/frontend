@@ -495,7 +495,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
     applicationDocuments.map(item => item.fileStoreId).join(",");
   let fileUrlPayload =
     fileStoreIds && fileStoreIds.length > 0 && (await getFileUrlFromAPI(fileStoreIds));
-  if(fileUrlPayload && fileUrlPayload.length > 0) delete fileUrlPayload.fileStoreIds;
+  if(fileUrlPayload && fileUrlPayload.fileStoreIds) delete fileUrlPayload.fileStoreIds;
   applicationDocuments &&
     applicationDocuments.forEach((item, index) => {
       uploadedDocuments[index] = [
