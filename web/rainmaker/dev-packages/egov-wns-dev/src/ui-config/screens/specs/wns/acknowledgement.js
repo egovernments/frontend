@@ -506,7 +506,7 @@ export const downloadPrintContainer = (
     label: { labelKey: "WS_SANCTION_LETTER" },
     link: () => {
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "Department Use" : "To Citizen";
+      const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "To Citizen" : "Department Use";
       WaterConnection[0].appUserType = appUserType;
       WaterConnection[0].commissionerName = "S.Ravindra Babu";
       downloadApp(WaterConnection, 'sanctionLetter');
