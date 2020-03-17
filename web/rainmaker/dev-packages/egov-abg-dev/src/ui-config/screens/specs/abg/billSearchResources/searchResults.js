@@ -20,7 +20,7 @@ export const searchResults = {
           customBodyRender: (value, tableMeta, updateValue) => (
             <div
               onClick={() => {
-                downloadBill(tableMeta.rowData[1], tableMeta.rowData[7]);
+                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9]);
               }}
             >
               <a>{value}</a>
@@ -66,8 +66,8 @@ export const searchResults = {
                     : "employee";
                 if (tableMeta.rowData[5] === "PAID") {
                   const receiptQueryString = [
-                    { key: "billIds", value: tableMeta.rowData[10] },
-                    { key: "tenantId", value: tableMeta.rowData[9] }
+                    { key: "billIds", value: tableMeta.rowData[11] },
+                    { key: "tenantId", value: tableMeta.rowData[10] }
                   ];
                   download(receiptQueryString , "download" ,tableMeta.rowData[8]);
                 } else {
@@ -75,12 +75,12 @@ export const searchResults = {
                     process.env.NODE_ENV === "development"
                       ? `/egov-common/pay?consumerCode=${
                           tableMeta.rowData[1]
-                        }&tenantId=${tableMeta.rowData[9]}&businessService=${
+                        }&tenantId=${tableMeta.rowData[10]}&businessService=${
                           tableMeta.rowData[7]
                         }`
                       : `/${appName}/egov-common/pay?consumerCode=${
                           tableMeta.rowData[1]
-                        }&tenantId=${tableMeta.rowData[9]}&businessService=${
+                        }&tenantId=${tableMeta.rowData[10]}&businessService=${
                           tableMeta.rowData[7]
                         }`;
                   document.location.href = `${document.location.origin}${url}`;
@@ -100,6 +100,12 @@ export const searchResults = {
       },
       {
         name: "receiptKey",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "billKey",
         options: {
           display: false
         }

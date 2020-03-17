@@ -57,7 +57,7 @@ class PTAcknowledgement extends React.Component {
 
     store.dispatch(
       setRoute(
-        `/egov-common/pay?consumerCode=${propertyId}&tenantId=${tenant}`
+        `/egov-common/pay?consumerCode=${propertyId}&tenantId=${tenant}&businessService=PT`
 
       )
     );

@@ -115,6 +115,12 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
         }
     })
 
+    let header = getHeader(state);
+    set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
+
+    const data = getPaymentCard(state);    
+    set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
+
     const isPartialPaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.partPaymentAllowed");
     if (isPartialPaymentAllowed) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));
@@ -124,14 +130,7 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid", payload.amount));
         //set total amount in instrument
         dispatch(prepareFinalObject("ReceiptTemp[0].instrument.amount", payload.amount));
-    }
-
-
-    let header = getHeader(state);
-    set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
-
-    const data = getPaymentCard(state);    
-    set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
+    }  
 
     if (get(totalAmount, "totalAmount") != undefined) {
         const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";

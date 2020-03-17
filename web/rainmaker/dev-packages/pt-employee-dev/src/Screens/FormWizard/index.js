@@ -1037,7 +1037,7 @@ class FormWizard extends Component {
           propertyId = pty.propertyId;
           tenantId = pty.tenantId;
         }
-        this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
+        this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}&businessService=PT`
         )
         // this.setState(
         //   {
