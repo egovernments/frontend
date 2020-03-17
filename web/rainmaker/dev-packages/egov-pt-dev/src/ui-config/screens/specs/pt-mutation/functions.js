@@ -33,7 +33,6 @@ const searchApiCall = async (state, dispatch, index) => {
     "searchScreen",
     {}
   );
-  debugger
   if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
