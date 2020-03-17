@@ -345,6 +345,7 @@ class WorkFlowContainer extends React.Component {
       
     } else {
       baseUrl = process.env.REACT_APP_NAME==="Citizen" ? "tradelicense-citizen" : "tradelicence";
+      bservice="TL"
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
     switch (action) {
