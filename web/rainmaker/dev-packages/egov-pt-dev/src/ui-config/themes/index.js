@@ -52,21 +52,15 @@ const themeObject = {
     MuiTab:{
       labelContainer:{
         fontSize: "14px!important"
-      }
-    },
-    MuiTab:{
+      },
       labelWrapped:{
         fontSize: "14px!important"
-      }
-    },
-    MuiTab:{
+      },
       label:{
         fontSize: "14px!important"
       }
     },
-    
-
-    MuiTypography: {
+     MuiTypography: {
       title: {
         color: "rgba(0, 0, 0, 0.87)",
         fontFamily: "Roboto",
