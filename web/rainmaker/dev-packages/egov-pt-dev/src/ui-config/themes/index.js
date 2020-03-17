@@ -49,6 +49,22 @@ const themeObject = {
         fontSize: "14px"
       }
     },
+    MuiTab:{
+      labelContainer:{
+        fontSize: "14px!important"
+      }
+    },
+    MuiTab:{
+      labelWrapped:{
+        fontSize: "14px!important"
+      }
+    },
+    MuiTab:{
+      label:{
+        fontSize: "14px!important"
+      }
+    },
+    
 
     MuiTypography: {
       title: {
