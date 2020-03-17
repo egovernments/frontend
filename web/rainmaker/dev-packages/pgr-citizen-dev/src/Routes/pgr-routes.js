@@ -66,13 +66,13 @@ const routes = [
     path: "my-complaints",
     component: MyComplaints,
     needsAuthentication: true,
-    options: { title: "CS_HOME_MY_COMPLAINTS", hideBackButton:getQueryArg(window.location.href,"smsLink") === "true"? true:false }
+    options: { title: "CS_HOME_MY_COMPLAINTS", hideBackButton:(getQueryArg(window.location.href,"smsLink") === "true"||getQueryArg(window.location.href,"source") === "whatsapp")? true:false }
   },
   {
     path: "complaint-details/:serviceRequestId?",
     component: ComplaintDetails,
     needsAuthentication: true,
-    options: { hideFooter: true, title: "CS_HEADER_COMPLAINT_SUMMARY",hideBackButton:getQueryArg(window.location.href,"smsLink") === "true"? true:false }
+    options: { hideFooter: true, title: "CS_HEADER_COMPLAINT_SUMMARY",hideBackButton:(getQueryArg(window.location.href,"smsLink") === "true"||getQueryArg(window.location.href,"source") === "whatsapp"? true:false }
   },
   {
     path: "complaint-submitted",
