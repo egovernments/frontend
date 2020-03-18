@@ -21,8 +21,9 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { httpRequest } from "../../../../ui-utils";
 import {generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
-import { searchBill, getReceiptData, getpayments, downloadCertificateForm, downloadReceitForm } from "../utils/index";
+import { searchBill, showHideMutationDetailsCard, getpayments, downloadCertificateForm, downloadReceitForm } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -404,6 +405,36 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
 
 }
 
+const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: 'pb',
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [{name: "PropertyConfiguration"}]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+
+    let propertyConfiguation = get(payload, "MdmsRes.PropertyTax.PropertyConfiguration");
+    dispatch(prepareFinalObject("PropertyConfiguration", propertyConfiguation));
+    showHideMutationDetailsCard(action, state, dispatch);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -506,7 +537,7 @@ const screenConfig = {
       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
       printCont
     );
-
+    getPropertyConfigurationMDMSData(action, state, dispatch);
     return action;
   },
   components: {
