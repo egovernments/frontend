@@ -3828,7 +3828,11 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         }
       });
     };
-    prepareDocumentsView(state, dispatch, action, appState);
+    let proInstance = wfPayload.ProcessInstances[0];
+    let nextActions = get(proInstance, "nextActions");
+    let isVisibleTrue = false;
+    if(nextActions && nextActions.length > 0) isVisibleTrue = true;
+    prepareDocumentsView(state, dispatch, action, appState, isVisibleTrue);
     let permitList = get (state.screenConfiguration.preparedFinalObject, "BPA.additionalDetails.pendingapproval");
     if(permitList && permitList.length > 0) {
       let riskType = get(
@@ -3844,7 +3848,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         dispatch(prepareFinalObject("permitList", permitList));
       }
     }
-    if(wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+    if( isVisibleTrue && wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
       let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
       prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
@@ -3852,7 +3856,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       state,
       "screenConfiguration.preparedFinalObject.BPA.riskType", ""
     );
-    if(wfState.state.state == "PENDINGAPPROVAL" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+    if( isVisibleTrue && wfState.state.state == "PENDINGAPPROVAL" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
       if(riskType && riskType !== "LOW") {
         let checkListConditions = payload.MdmsRes.BPA.CheckList;
         prepareapprovalQstns(state, dispatch, action, checkListConditions, appWfState);
@@ -4021,7 +4025,7 @@ const documentMaping = async (state, dispatch, action,documentsPreview) => {
   });
   return documentsPreview;
 }
-const prepareDocumentsView = async (state, dispatch, action, appState) => {
+const prepareDocumentsView = async (state, dispatch, action, appState, isVisibleTrue) => {
   let documentsPreview = [];
 
   // Get all documents from response
@@ -4087,7 +4091,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
   let appDocumentsPreview = await documentMaping(state, dispatch, action, documentsPreview);
   dispatch(prepareFinalObject("documentDetailsPreview", appDocumentsPreview));
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-  if(isEmployee) {
+  if(isEmployee && isVisibleTrue) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
   }
 };
