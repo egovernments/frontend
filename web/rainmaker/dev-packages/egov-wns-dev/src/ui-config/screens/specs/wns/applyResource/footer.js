@@ -583,6 +583,7 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
+  window.scrollTo(0, 0);
   changeStep(state, dispatch, "previous");
 };
 
