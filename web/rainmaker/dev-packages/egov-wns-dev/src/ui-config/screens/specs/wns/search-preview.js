@@ -37,10 +37,24 @@ import { adhocPopup } from "./applyResource/adhocPopup";
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
-let headerSideText = { word1: "", word2: "" };
-
 const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+
+const headerrow = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_TASK_DETAILS"
+  }),
+  application: getCommonContainer({
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-wns",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: applicationNumber
+      }
+    }
+  })
+});
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
@@ -262,22 +276,6 @@ const setStatusBasedValue = status => {
   }
 };
 
-const headerrow = getCommonContainer({
-  header: getCommonHeader({
-    labelKey: "WS_TASK_DETAILS"
-  }),
-  application: getCommonContainer({
-    applicationNumber: {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-wns",
-      componentPath: "ApplicationNoContainer",
-      props: {
-        number: applicationNumber
-      }
-    }
-  })
-});
-
 const estimate = getCommonGrayCard({
   header: getCommonSubHeader({ labelKey: "WS_TASK_DETAILS_FEE_ESTIMATE" }),
   estimateSection: getFeesEstimateOverviewCard({
@@ -357,9 +355,9 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
-    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number", applicationNumber);
+    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number", applicationNumber);
     // if (status !== "pending_payment") {
     //   set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
     // }
