@@ -42,7 +42,7 @@ export const paymentFooter = (state,consumerCode, tenant,status) => {
             },
             onClickDefination: {
                 action: "page_change",
-                path: get(footer,"link")
+                path: get(footer,"link", `/inbox`)
             },
         },
         retryButton: {
