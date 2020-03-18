@@ -167,14 +167,15 @@ class MultiItem extends React.Component {
       onFieldChange,
       onComponentClick,
       screenKey,
-      componentJsonpath
+      componentJsonpath,
+      instrumentsAllowed
     } = this.props;
 
     const { onTabClick } = this;
 
     const transFormedProps = {
       ...this.props,
-      tabs: this.props.tabs.map((tab, key) => {
+      tabs: instrumentsAllowed.map((tab, key) => {
         return {
           ...tab,
           tabContent: (
@@ -199,10 +200,13 @@ class MultiItem extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { screenConfiguration } = state;
-  const { screenConfig, preparedFinalObject } = screenConfiguration;
-  return { screenConfig, preparedFinalObject, state };
+const mapStateToProps = (state , ownProps) => {
+  // const { screenConfiguration } = state;
+  // const { screenConfig } = screenConfiguration;
+  const {jsonPath , tabs} = ownProps;
+   const businessServiceDetails = get(state.screenConfiguration.preparedFinalObject , jsonPath);
+  const instrumentsAllowed = tabs.filter(item => item.code !== get(businessServiceDetails , "collectionModesNotAllowed[0]"))
+  return {  state,instrumentsAllowed };
 };
 
 export default connect(mapStateToProps)(MultiItem);

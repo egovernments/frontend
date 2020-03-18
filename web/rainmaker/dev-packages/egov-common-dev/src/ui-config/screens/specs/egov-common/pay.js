@@ -6,7 +6,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getCurrentFinancialYear, generateBill, getBusinessServiceMdmsData } from "../utils";
-import { capturePaymentDetails } from "./payResource/capture-payment-details";
+import capturePaymentDetails  from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
@@ -43,48 +43,6 @@ export const getHeader = (state) => {
     });
 }
 
-const getPaymentCard = (state) => {
-    const roleExists = ifUserRoleExists("CITIZEN");
-    if (roleExists) {
-        return {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-                paymentDetails: getCommonCard({
-                    header: getCommonTitle({
-                        labelName: "Payment Collection Details",
-                        labelKey: "NOC_PAYMENT_HEAD"
-                    }),
-                    estimateDetails,
-                    AmountToBePaid: {
-                        ...AmountToBePaid,
-                        visible: false
-                    }
-                })
-            }
-        }
-    } else {
-        return {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-                paymentDetails: getCommonCard({
-                    header: getCommonTitle({
-                        labelName: "Payment Collection Details",
-                        labelKey: "NOC_PAYMENT_HEAD"
-                    }),
-                    estimateDetails,
-                    AmountToBePaid: {
-                        ...AmountToBePaid,
-                        visible: false
-                    },
-                    capturePaymentDetails : capturePaymentDetails(state),
-                    g8Details
-                })
-            }
-        }
-    }
-}
 
 const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBusinessService) => {
     await getBusinessServiceMdmsData(dispatch, tenantId);
@@ -116,11 +74,9 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     })
 
     let header = getHeader(state);
-    set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
+    set(action.screenConfig, "components.div.children.headerDiv.children.header" ,header) 
 
-    const data = getPaymentCard(state);    
-    set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
-
+    
     const isPartialPaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.partPaymentAllowed");
     if (isPartialPaymentAllowed) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));
@@ -202,7 +158,25 @@ const screenConfig = {
                         // header : {}
                     }
                 },
-                // formwizardFirstStep: {},
+                formwizardFirstStep: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Div",
+                    children: {
+                        paymentDetails: getCommonCard({
+                            header: getCommonTitle({
+                                labelName: "Payment Collection Details",
+                                labelKey: "NOC_PAYMENT_HEAD"
+                            }),
+                            estimateDetails,
+                            AmountToBePaid: {
+                                ...AmountToBePaid,
+                                visible: false
+                            },
+                            capturePaymentDetails,
+                            g8Details
+                        })
+                    }
+                },
                 footer
             }
         },
