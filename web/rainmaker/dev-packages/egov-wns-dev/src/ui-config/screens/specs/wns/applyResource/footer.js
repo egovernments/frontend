@@ -399,6 +399,7 @@ export const changeStep = (
   mode = "next",
   defaultActiveStep = -1
 ) => {
+  window.scrollTo(0, 0);
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (defaultActiveStep === -1) {
     if (activeStep === 1 && mode === "next") {
