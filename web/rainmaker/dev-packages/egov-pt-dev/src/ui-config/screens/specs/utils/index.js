@@ -944,3 +944,23 @@ export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 }
+
+export const showHideMutationDetailsCard = (action, state, dispatch)=>{
+  const isMutationDetailsCard = get(state, "screenConfiguration.preparedFinalObject.PropertyConfiguration[0].Mutation.MutationDetails");
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.mutationDetails",
+      "props.hidden",
+      !isMutationDetailsCard
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.mutationSummary",
+      "props.hidden",
+      !isMutationDetailsCard
+    )
+  );
+}
