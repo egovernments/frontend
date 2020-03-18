@@ -1312,7 +1312,9 @@ class FormWizard extends Component {
     if (isAssesment || isReassesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
+
           window.scrollTo(0, 0);
+          this.props.prepareFinalObject("estimateResponse", estimateResponse.Calculation);
           this.setState({
             estimation: estimateResponse && estimateResponse.Calculation,
             totalAmountToBePaid: 1, // What is this?
