@@ -3,7 +3,6 @@ import {
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { cash, demandDraft, cheque, card } from "./payment-methods";
-import get from "lodash/get";
 
 const tabs= [
   {
@@ -32,31 +31,25 @@ const tabs= [
   }
 ]
 
-
-export const capturePaymentDetails = (state) =>{
-  const businessServiceDetails = get(state.screenConfiguration.preparedFinalObject , "businessServiceInfo");
-  console.log("======>",businessServiceDetails)
-  const instrumentsAllowed = tabs.filter(item => item.code !== get(businessServiceDetails , "collectionModesNotAllowed[0]"))
-  console.log("========>",instrumentsAllowed)
-  return getCommonGrayCard({
-    header: getCommonSubHeader(
-      { labelName: "Capture Payment", labelKey: "NOC_PAYMENT_CAP_PMT" },
-      {
-        style: {
-          marginBottom: "8px"
-        }
+const capturePaymentDetails = getCommonGrayCard({
+  header: getCommonSubHeader(
+    { labelName: "Capture Payment", labelKey: "NOC_PAYMENT_CAP_PMT" },
+    {
+      style: {
+        marginBottom: "8px"
       }
-    ),
-    tabSection: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-common",
-      componentPath: "CustomTabContainer",
-      props: {
-        tabs : [...instrumentsAllowed]
-      },
-      type: "array"
     }
-  });
-}
+  ),
+  tabSection: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-common",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs,
+      jsonPath : "businessServiceInfo"
+    },
+    type: "array"
+  }
+});
 
-// export default capturePaymentDetails;
+export default capturePaymentDetails;
