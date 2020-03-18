@@ -568,7 +568,7 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
 }
 
 
-export const downloadBill = async (consumerCode ,tenantId) => {
+export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolidatedbill") => {
   const searchCriteria = {
     consumerCode ,
     tenantId
@@ -587,7 +587,7 @@ export const downloadBill = async (consumerCode ,tenantId) => {
   };
   const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
   const queryStr = [
-            { key: "key", value: "consolidatedbill" },
+            { key: "key", value: configKey },
             { key: "tenantId", value: "pb" }
         ]
   const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })

@@ -101,7 +101,7 @@ export const searchApiCall = async (state, dispatch) => {
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
     );
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject , "searchScreenMdmsData.common-masters.uiCommonPay");
-    const receiptKey = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
+    const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
 
     try {
       let data = billTableData.map(item => ({
@@ -114,11 +114,11 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Status")]: item.status  || "-",
         [getTextToLocalMapping("Action")]: item.action || "-",
         businessService: searchScreenObject.businesService,
-        receiptKey : get(receiptKey[0] , "receiptKey"),
+        receiptKey : get(configObject[0] , "receiptKey"),
+        billKey : get(configObject[0] , "billKey"),
         tenantId: item.tenantId,
         "Bill Id": item.billId,
       }));
-      console.log("==Data" , data)
       dispatch(
         handleField(
           "billSearch",
