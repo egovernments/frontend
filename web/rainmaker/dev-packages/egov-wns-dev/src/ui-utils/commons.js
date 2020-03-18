@@ -37,6 +37,7 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                     element.id = reduxDocuments[key].id;
                 });
                 uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
+                dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
                 let docArrayFromFileStore = await setDocsForEditFlow(state);
                 uploadedDocs.forEach(obj => {
                     let element = obj.fileStoreId;
@@ -44,7 +45,6 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                         docArrayFromFileStore[resp].forEach(arr => { if (arr.fileStoreId === element) { obj.fileName = arr.fileName; } })
                     })
                 })
-                dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
                 let docs = get(state, "screenConfiguration.preparedFinalObject");
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
@@ -641,59 +641,63 @@ export const setDocsForEditFlow = async (state) => {
 
 export const setWSDocuments = async (payload, sourceJsonPath, businessService) => {
     const uploadedDocData = get(payload, sourceJsonPath);
-    const fileStoreIds =
-        uploadedDocData &&
-        uploadedDocData
-            .map((item) => {
-                return item.fileStoreId;
-            })
-            .join(",");
-    const fileUrlPayload = fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-    const reviewDocData =
-        uploadedDocData &&
-        uploadedDocData.map((item, index) => {
-            return {
-                title: `${businessService}_${item.documentType}`.replace(".", "_") || "",
-                link: (fileUrlPayload && fileUrlPayload[item.fileStoreId] && getFileUrl(fileUrlPayload[item.fileStoreId])) || "",
-                linkText: "View",
-                name:
-                    (fileUrlPayload &&
-                        fileUrlPayload[item.fileStoreId] &&
-                        decodeURIComponent(
-                            getFileUrl(fileUrlPayload[item.fileStoreId])
-                                .split("?")[0]
-                                .split("/")
-                                .pop()
-                                .slice(13)
-                        )) ||
-                    `Document - ${index + 1}`,
-            };
-        });
-    return reviewDocData;
+    if (uploadedDocData !== "NA" && uploadedDocData.length > 0) {
+        const fileStoreIds =
+            uploadedDocData &&
+            uploadedDocData
+                .map((item) => {
+                    return item.fileStoreId;
+                })
+                .join(",");
+        const fileUrlPayload = fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+        const reviewDocData =
+            uploadedDocData &&
+            uploadedDocData.map((item, index) => {
+                return {
+                    title: `${businessService}_${item.documentType}`.replace(".", "_") || "",
+                    link: (fileUrlPayload && fileUrlPayload[item.fileStoreId] && getFileUrl(fileUrlPayload[item.fileStoreId])) || "",
+                    linkText: "View",
+                    name:
+                        (fileUrlPayload &&
+                            fileUrlPayload[item.fileStoreId] &&
+                            decodeURIComponent(
+                                getFileUrl(fileUrlPayload[item.fileStoreId])
+                                    .split("?")[0]
+                                    .split("/")
+                                    .pop()
+                                    .slice(13)
+                            )) ||
+                        `Document - ${index + 1}`,
+                };
+            });
+        return reviewDocData;
+    }
 };
 
 export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
     let documentsUploadRedux = {};
     // const uploadedDocData = get(payload, sourceJsonPath);
     let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "WS");
-    documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
-        let docUploadRedux = {};
-        docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: payload.applyScreen.documents[key].fileStoreId }] };
-        let splittedString = payload.applyScreen.documents[key].documentType.split(".");
-        if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
-        else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
-        else { docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; }
-        docUploadRedux[key].id = payload.applyScreen.documents[key].id;
-        docUploadRedux[key].isDocumentRequired = true;
-        docUploadRedux[key].isDocumentTypeRequired = true;
-        return docUploadRedux;
-    });
-    let docs = {};
-    for (let i = 0; i < documentsUploadRedux.length; i++) {
-        docs[i] = documentsUploadRedux[i][i];
+    if (uploadedDocs !== undefined && uploadedDocs !== null && uploadedDocs.length > 0) {
+        documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
+            let docUploadRedux = {};
+            docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: payload.applyScreen.documents[key].fileStoreId }] };
+            let splittedString = payload.applyScreen.documents[key].documentType.split(".");
+            if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else { docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; }
+            docUploadRedux[key].id = payload.applyScreen.documents[key].id;
+            docUploadRedux[key].isDocumentRequired = true;
+            docUploadRedux[key].isDocumentTypeRequired = true;
+            return docUploadRedux;
+        });
+        let docs = {};
+        for (let i = 0; i < documentsUploadRedux.length; i++) {
+            docs[i] = documentsUploadRedux[i][i];
+        }
+        dispatch(prepareFinalObject("documentsUploadRedux", docs));
+        dispatch(prepareFinalObject(destJsonPath, docs));
     }
-    dispatch(prepareFinalObject("documentsUploadRedux", docs));
-    dispatch(prepareFinalObject(destJsonPath, docs));
 };
 
 export const applyForWaterOrSewerage = async (state, dispatch) => {
