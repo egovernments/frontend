@@ -7,11 +7,17 @@ import {
   getLabelWithValue,
   convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import get from "lodash/get";
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
 
-
+const showComponent = (dispatch, componentJsonPath, display) => {
+  let displayProps = display ? {} : { display: "none" };
+  dispatch(
+    handleField("apply", componentJsonPath, "props.style", displayProps)
+  );
+};
 export const transfereeSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
@@ -159,8 +165,8 @@ export const transfereeSummary = getCommonGrayCard({
                 callBack: checkValueForNA
             }
           ),
-         
-        })
+          
+        }),
       }),
       items: [],
       hasAddItem: false,
@@ -168,10 +174,25 @@ export const transfereeSummary = getCommonGrayCard({
       sourceJsonPath: "Property.ownersTemp",
       prefixSourceJsonPath:
         "children.cardContent.children.ownerContainer.children",
-      afterPrefixJsonPath: "children.value.children.key"
+      afterPrefixJsonPath: "children.value.children.key",
+
     },
     type: "array"
-  }
+  },
+  beforeInitScreen: (action, state, dispatch) => {
+    const categoryDocumentIDJsonPath= "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.props.style";
+
+    const categoryDocumentTypeJsonPath="components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
+    
+    
+    if(categoryType === "NONE"){
+    
+       dispatch(handleField("search-preview", categoryDocumentIDJsonPath, "display","none"));
+       dispatch(handleField("search-preview", categoryDocumentTypeJsonPath, "display","none"));
+
+      
+    }
+  },
 });
 
 export const transfereeInstitutionSummary = getCommonGrayCard({

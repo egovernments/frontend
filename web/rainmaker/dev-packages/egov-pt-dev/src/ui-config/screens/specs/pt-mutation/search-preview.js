@@ -413,6 +413,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
     let businessServicesData = JSON.parse(localStorage.getItem('businessServiceData'));
@@ -467,6 +468,25 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
+  
+    let categoryType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Property.ownersTemp[0].ownerType"
+    ); 
+    if(categoryType === "NONE"){
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.visible",
+        false
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.visible",
+        false
+      );
+      
+     
+   }
     // set(
     //   action,
     //   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",

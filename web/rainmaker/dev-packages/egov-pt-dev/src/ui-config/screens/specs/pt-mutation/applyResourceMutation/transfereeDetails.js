@@ -233,7 +233,11 @@ const commonApplicantInformation = () => {
       beforeFieldChange:(action, state, dispatch) => {
         const categoryDocumentJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocument";
   
-        const categoryDocumentThirdStepJsonPath="components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.items[0].item0.children.cardContent.children.ownerContainer.children.ownerDocumentId";
+        const categoryDocumentThirdStepJsonPath= "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.props.style";
+
+
+        const categoryDocumentTypeThirdStepJsonPath= "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
+       
 
         const specialCategoryDocumentTypeJsonPath="components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocumentType";
 
@@ -244,7 +248,9 @@ const commonApplicantInformation = () => {
           showComponent(dispatch, specialCategoryDocumentTypeJsonPath, false);
           dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "required", false));
           dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", ""));
-          // dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "props.style.display","none"));
+          //showComponent(dispatch, categoryDocumentThirdStepJsonPath, false);
+           dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "display","none"));
+           dispatch(handleField("apply", categoryDocumentTypeThirdStepJsonPath, "display","none"));
 
           
         }else{
