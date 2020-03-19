@@ -82,7 +82,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
-
+import cloneDeep from "lodash/cloneDeep";
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -1314,6 +1314,20 @@ class FormWizard extends Component {
         if (estimateResponse) {
 
           window.scrollTo(0, 0);
+
+          let { taxHeadEstimates, totalAmount } = estimateResponse.Calculation[0];
+          let adhocPenaltyAmt=0;
+          let adhocExemptionAmt=0;
+          taxHeadEstimates.map(taxHead=>{
+            if(taxHead.taxHeadCode=="PT_TIME_PENALTY"){
+              adhocPenaltyAmt=taxHead.estimateAmount+adhocPenaltyAmt;
+            }
+            if(taxHead.taxHeadCode=="PT_TIME_REBATE"){
+              adhocExemptionAmt=taxHead.estimateAmount+adhocExemptionAmt;
+            }} )
+            estimateResponse.Calculation[0].initialAmount=totalAmount;
+            estimateResponse.Calculation[0].adhocPenaltyAmt=adhocPenaltyAmt;
+            estimateResponse.Calculation[0].adhocExemptionAmt=adhocExemptionAmt;
           this.props.prepareFinalObject("estimateResponse", estimateResponse.Calculation);
           this.setState({
             estimation: estimateResponse && estimateResponse.Calculation,
@@ -1542,6 +1556,7 @@ class FormWizard extends Component {
   }
 
   assessProperty = async (action, Properties) => {
+    const {adhocExemptionPenalty}=this.props;
     let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
     const propertyId = getQueryArg(
       window.location.href,
@@ -1561,6 +1576,15 @@ class FormWizard extends Component {
       "source": "MUNICIPAL_RECORDS",
       "channel": "CFC_COUNTER",
     }
+
+    assessment.additionalDetails={}
+    if(Object.keys(adhocExemptionPenalty).length>1){
+      assessment.additionalDetails.adhocPenalty=Number(adhocExemptionPenalty.adhocPenalty);
+      assessment.additionalDetails.adhocPenaltyReason=adhocExemptionPenalty.adhocPenaltyReason=='Others'?adhocExemptionPenalty.adhocOtherPenaltyReason:adhocExemptionPenalty.adhocPenaltyReason;
+      assessment.additionalDetails.adhocExemption=Number(adhocExemptionPenalty.adhocExemption);
+      assessment.additionalDetails.adhocExemptionReason=adhocExemptionPenalty.adhocExemptionReason=='Others'?adhocExemptionPenalty.adhocOtherExemptionReason:adhocExemptionPenalty.adhocExemptionReason;
+    }
+
     if (action === "re-assess") {
       let assessments = await this.getAssessmentDetails();
       if (assessments.Assessments.length > 0) {
@@ -2054,7 +2078,7 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [], propertiesEdited = false } = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false,adhocExemptionPenalty = {}  } = preparedFinalObject;
   return {
     form,
     currentTenantId,
@@ -2063,7 +2087,8 @@ const mapStateToProps = state => {
     app,
     documentsUploadRedux,
     newProperties,
-    propertiesEdited
+    propertiesEdited,
+    adhocExemptionPenalty
   };
 };
 

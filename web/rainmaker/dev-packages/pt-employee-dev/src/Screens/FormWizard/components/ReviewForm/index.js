@@ -57,8 +57,8 @@ class ReviewForm extends Component {
 
   updateCalculation = () => {
     this.addRebateBox(false);
-    const { updateEstimate } = this.props;
-    updateEstimate();
+    // const { updateEstimate } = this.props;
+    // updateEstimate();
   };
 
   openCalculationDetails = () => {
@@ -123,11 +123,12 @@ class ReviewForm extends Component {
             open={showRebateBox}
             children={[
               <div className="pt-rebate-box">
-                <AddRebatePopUp updateEstimate={updateCalculation} totalAmount={totalAmount} />
+                <AddRebatePopUp  handleClose={() => addRebateBox(false)}/>
               </div>,
             ]}
             bodyStyle={{ backgroundColor: "#ffffff" }}
-            isClose={false}
+            isClose={true}
+            handleClose={() => addRebateBox(false)}
             onRequestClose={() => addRebateBox(false)}
             contentStyle={{ width: "56%" }}
             contentClassName="rebate-modal-content"
