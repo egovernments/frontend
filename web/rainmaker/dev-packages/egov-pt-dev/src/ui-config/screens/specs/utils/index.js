@@ -963,4 +963,12 @@ export const showHideMutationDetailsCard = (action, state, dispatch)=>{
       !isMutationDetailsCard
     )
   );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.mutationSummary",
+      "props.hidden",
+      !isMutationDetailsCard
+    )
+  );
 }
