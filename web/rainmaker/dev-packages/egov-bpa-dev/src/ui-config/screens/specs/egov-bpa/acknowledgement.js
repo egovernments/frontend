@@ -391,7 +391,7 @@ const getAcknowledgementCard = (
             body: {
               labelName:
                 "A notification regarding BPA Rejection has been sent to building owner at registered Mobile No.",
-              labelKey: "BPA_APPROVAL_REJ_MESSAGE_SUBHEAD"
+              labelKey: "BPA_APPROVAL_REJE_MESSAGE_SUBHEAD"
             }
           })
         }
@@ -414,7 +414,7 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName:
-                "A notification regarding BPA Revocation has been sent to building owner at registered Mobile No.",
+                "A notification regarding Building Permit application revocation has been sent to applicant at registered Mobile No.",
               labelKey: "BPA_APPROVAL_REV_MESSAGE_SUBHEAD"
             }
           })
