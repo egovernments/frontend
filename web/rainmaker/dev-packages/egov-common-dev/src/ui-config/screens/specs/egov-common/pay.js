@@ -36,7 +36,7 @@ export const getHeader = (state) => {
             props: {
                 number: consumerCode,
                 label: {
-                    labelKey: label,
+                    labelKey: label?label: "PAYMENT_COMMON_CONSUMER_CODE",
                 },
             }
         }
