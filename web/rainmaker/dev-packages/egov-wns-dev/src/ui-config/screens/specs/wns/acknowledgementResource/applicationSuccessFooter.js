@@ -146,8 +146,6 @@ export const applicationSuccessFooter = (
   state,
   dispatch,
   applicationNumber,
-  applicationNumberWater,
-  applicationNumberSewerage,
   tenant
 ) => {
   //const baseURL = getBaseURL();
