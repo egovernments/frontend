@@ -60,6 +60,57 @@ export const hyphenSeperatedDateTime = (d) => {
   return d;
 };
 
+export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
+  keys.forEach(key=>{
+    let splittedKey = key.split(".");
+    tempObj[splittedKey[splittedKey.length-1]] = MDMSdata[dataKey][key];
+    tempObj[splittedKey[splittedKey.length-1]].code = splittedKey[splittedKey.length-1];
+    splittedKey[splittedKey.length-2] ? tempObj[splittedKey[splittedKey.length-1]].prefix = splittedKey[splittedKey.length-2] : "";
+  })
+  return tempObj;
+}
+
+export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key) => {
+  let tempObj = {}
+  tempObj[categoryCode] = MDMSdata[dataKey][key];
+  tempObj[categoryCode].code = categoryCode;
+  return tempObj;
+}
+
+export const getUsageCategory = (dataKey, tempObj, MDMSdata, keys) => {
+  keys.forEach(key=>{
+    let splittedKey = key.split(".");
+    let categoryCode = splittedKey.pop();
+    if(splittedKey.length === 0) {
+      tempObj["UsageCategoryMajor"] = {...tempObj["UsageCategoryMajor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+    } else if (splittedKey.length === 1) {
+      tempObj["UsageCategoryMinor"] = {...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+    } else if (splittedKey.length === 2) {
+      tempObj["UsageCategorySubMinor"] = {...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+    } else if (splittedKey.length === 3) {
+      tempObj["UsageCategoryDetail"] = {...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+    }
+  });
+  return tempObj;
+}
+
+export const getTransformedDropdown = (MDMSdata, dataKeys) => {
+  dataKeys.forEach(dataKey=>{
+    if(MDMSdata.hasOwnProperty(dataKey)){
+      let keys = Object.keys(MDMSdata[dataKey]);
+      let tempObj = {};
+      if(keys && keys.length > 0){
+        if(dataKey !== "UsageCategory"){
+          MDMSdata[dataKey] = getSingleCodeObject(dataKey, tempObj, MDMSdata, keys);
+        } else {
+          MDMSdata = {...MDMSdata, ...getUsageCategory(dataKey, tempObj, MDMSdata, keys)};
+        }
+      }
+    }
+  });
+  return MDMSdata;
+  }  
+
 export const getQueryArg = (url, name) => {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");

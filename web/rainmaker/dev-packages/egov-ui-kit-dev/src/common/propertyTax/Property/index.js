@@ -113,6 +113,9 @@ class Property extends Component {
               {
                 name: "SubOwnerShipCategory",
               },
+              {
+                name: "UsageCategory",
+              },
             ],
           },
         ],
@@ -129,6 +132,7 @@ class Property extends Component {
       "OwnerType",
       "UsageCategoryDetail",
       "SubOwnerShipCategory",
+      "UsageCategory"
     ]);
     fetchProperties([
       { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
