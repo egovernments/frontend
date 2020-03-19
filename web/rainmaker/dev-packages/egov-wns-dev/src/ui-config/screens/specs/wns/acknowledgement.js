@@ -10,9 +10,9 @@ import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFo
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import { downloadApp } from "../../../../ui-utils/commons";
-import get from "lodash/get";
+import { downloadApp, getSearchResultsForSewerage, getSearchResults, findAndReplace } from "../../../../ui-utils/commons";
 import set from "lodash/set";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const getAcknowledgementCard = (
   state,
@@ -73,6 +73,8 @@ const getAcknowledgementCard = (
         state,
         dispatch,
         applicationNumber,
+        applicationNumberWater,
+        applicationNumberSewerage,
         tenant
       )
     };
@@ -595,7 +597,7 @@ export const downloadPrintContainer = (
       children: {
         downloadMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-wns",
           componentPath: "MenuButton",
           props: {
             data: {
@@ -609,7 +611,7 @@ export const downloadPrintContainer = (
         },
         printMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-wns",
           componentPath: "MenuButton",
           props: {
             data: {
@@ -631,6 +633,44 @@ export const downloadPrintContainer = (
   }
 };
 
+const fetchData = async (dispatch) => {
+  console.log("Fetch data called");
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
+  const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (applicationNumberSewerage && applicationNumberWater) {
+    await getWaterData(dispatch, applicationNumberWater, tenantId);
+    await getSewerageData(dispatch, applicationNumberSewerage, tenantId);
+  } else if (applicationNumber) {
+    if (applicationNumber.includes("WS")) {
+      await getWaterData(dispatch, applicationNumber, tenantId);
+    } else if (applicationNumber.includes("SW")) {
+      await getSewerageData(dispatch, applicationNumber, tenantId);
+    }
+  }
+}
+
+const getWaterData = async (dispatch, applicationNumber, tenantId) => {
+  let waterResponse = [];
+  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
+  try { waterResponse = await getSearchResults(queryObject); } catch (error) { console.log(error); waterResponse = [] };
+  if (waterResponse && waterResponse.WaterConnection !== undefined && waterResponse.WaterConnection.length > 0) {
+    waterResponse.WaterConnection[0].service = "WATER";
+    dispatch(prepareFinalObject("WaterConnection", findAndReplace(waterResponse.WaterConnection, "NA", null)));
+  } else { dispatch(prepareFinalObject("WaterConnection", [])); }
+}
+
+const getSewerageData = async (dispatch, applicationNumber, tenantId) => {
+  let sewerResponse = [];
+  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
+  try { sewerResponse = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.log(error); sewerResponse = [] };
+  if (sewerResponse && sewerResponse.SewerageConnections !== undefined && sewerResponse.SewerageConnections.length > 0) {
+    sewerResponse.SewerageConnections[0].service = "SEWERAGE";
+    dispatch(prepareFinalObject("SewerageConnection", findAndReplace(sewerResponse.SewerageConnections, "NA", null)));
+  } else { dispatch(prepareFinalObject("SewerageConnection", [])); }
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -644,6 +684,7 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
+    fetchData(dispatch);
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
     // const service = getQueryArg(window.location.href, "service");
@@ -662,6 +703,8 @@ const screenConfig = {
         purpose,
         status,
         applicationNumber,
+        null,
+        null,
         secondNumber,
         // financialYear,
         tenant

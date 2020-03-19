@@ -3,6 +3,9 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
+import { downloadApp } from '../../../../../ui-utils/commons';
+import get from 'lodash/get';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -35,7 +38,7 @@ const generatePdfAndDownload = (
   iframe.src =
     document.location.origin +
     window.basename +
-    `/tradelicence/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+    `/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}`;
   var hasIframeLoaded = false,
     hasEstimateLoaded = false;
   iframe.onload = function(e) {
@@ -118,10 +121,33 @@ const generatePdfAndDownload = (
   // });
 };
 
+const handleAppDownload = (state) => {
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
+  const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
+  let WaterConnection, SewerageConnection;
+  if (applicationNumberWater && applicationNumberSewerage) {
+    WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
+    downloadApp(WaterConnection, "application", "download");
+    SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
+    downloadApp(SewerageConnection, "application", "download");
+  } else if (applicationNumber) {
+    if (applicationNumber.includes("WS")) {
+      WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
+      downloadApp(WaterConnection, "application", "download");
+    } else if (applicationNumber.includes("SW")) {
+      SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
+      downloadApp(SewerageConnection, "application", "download");
+    }
+  }
+}
+
 export const applicationSuccessFooter = (
   state,
   dispatch,
   applicationNumber,
+  applicationNumberWater,
+  applicationNumberSewerage,
   tenant
 ) => {
   //const baseURL = getBaseURL();
@@ -173,15 +199,7 @@ export const applicationSuccessFooter = (
       },
       onClickDefination: {
         action: "condition",
-        callBack: () => {
-          generatePdfAndDownload(
-            state,
-            dispatch,
-            "download",
-            applicationNumber,
-            tenant
-          );
-        }
+        callBack: () => { handleAppDownload(state) }
       }
     },
     printFormButton: {

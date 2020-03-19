@@ -119,8 +119,10 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
         return "purpose=approve&status=success";
-        case "ACTIVATE_CONNECTION":
+      case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
+      case "REVOCATE":
+        return "purpose=application&status=revocated"
     }
   };
 
@@ -316,7 +318,6 @@ class WorkFlowContainer extends React.Component {
   };
 
   getRedirectUrl = (action, businessId, moduleName) => {
-    console.log("modulenamewater", moduleName);
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances } = this.props;
@@ -341,9 +342,12 @@ class WorkFlowContainer extends React.Component {
         bservice="WS.ONE_TIME_FEE"
       }else{
         bservice="SW.ONE_TIME_FEE"
-      }
-      
-    } else {
+      } 
+    } else if(moduleName === "PT"){
+       bservice="PT"
+    } else if(moduleName === "PT.MUTATION"){
+       bservice="PT.MUTATION"
+    }else {
       baseUrl = process.env.REACT_APP_NAME==="Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice="TL"
     }
