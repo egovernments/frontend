@@ -133,12 +133,26 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
   );
   jp.query(reduxDocuments, "$.*").forEach(doc => {
     if (doc.documents && doc.documents.length > 0) {
-      documentsPreview.push({
-        title: getTransformedLocale(doc.documentCode),
-        name: doc.documents[0].fileName,
-        fileStoreId: doc.documents[0].fileStoreId,
-        linkText: "View",
-        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
+      doc.documents.forEach(docDetail =>{
+        let obj = {};
+        obj.title = getTransformedLocale(doc.documentCode);
+        obj.name = docDetail.fileName;
+        obj.fileStoreId = docDetail.fileStoreId;
+        obj.linkText = "View";
+        obj.link = docDetail.fileUrl && docDetail.fileUrl.split(",")[0];
+        if (docDetail.wfState === "SEND_TO_CITIZEN") {
+          obj.createdBy = "BPA Architect"
+        }
+        else if(docDetail.wfState === "DOC_VERIFICATION_PENDING") {
+          obj.createdBy = "BPA Services Verifier"
+        }
+        else if (docDetail.wfState === "FIELDINSPECTION_PENDING") {
+          obj.createdBy = "BPA Field Inspector"   
+        }
+        else if (docDetail.wfState === "NOC_VERIFICATION_PENDING") {
+          obj.createdBy = "BPA Noc Verifier"    
+        }
+        documentsPreview.push(obj);
       });
     }
   });
