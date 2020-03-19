@@ -173,8 +173,8 @@ class PropertyTaxDetails extends React.Component {
                     minWidth: "inherit"
                   }}
                   onClick={
-                   ()=> console.log('clicked')
-                    // () => addRebateBox(true)
+                  //  ()=> console.log('clicked')
+                    () => addRebateBox(true)
                   }
                 />
               </div> <div
@@ -309,10 +309,10 @@ class PropertyTaxDetails extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
-  let { estimateResponse } = preparedFinalObject;
+  let { estimateResponse=[] } = preparedFinalObject;
 
   return {
-    estimateResponse: { ...estimateResponse }
+    estimateResponse: [ ...estimateResponse ]
   };
 };
 const mapDispatchToProps = (dispatch) => ({
