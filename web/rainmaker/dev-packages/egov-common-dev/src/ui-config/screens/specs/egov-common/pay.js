@@ -172,8 +172,8 @@ const screenConfig = {
                                 ...AmountToBePaid,
                                 visible: false
                             },
-                            capturePaymentDetails,
-                            g8Details
+                            capturePaymentDetails : ifUserRoleExists("CITIZEN") ? {} : capturePaymentDetails,
+                            g8Details : ifUserRoleExists("CITIZEN") ? {} : g8Details
                         })
                     }
                 },
