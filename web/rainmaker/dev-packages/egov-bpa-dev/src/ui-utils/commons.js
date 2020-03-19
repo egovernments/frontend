@@ -491,10 +491,11 @@ const setDocsForEditFlow = async (state, dispatch) => {
   );
   let uploadedDocuments = {};
   let fileStoreIds =
-    applicationDocuments &&
+    applicationDocuments && applicationDocuments.length > 0 &&
     applicationDocuments.map(item => item.fileStoreId).join(",");
-  const fileUrlPayload =
-    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  let fileUrlPayload =
+    fileStoreIds && fileStoreIds.length > 0 && (await getFileUrlFromAPI(fileStoreIds));
+  if(fileUrlPayload && fileUrlPayload.fileStoreIds) delete fileUrlPayload.fileStoreIds;
   applicationDocuments &&
     applicationDocuments.forEach((item, index) => {
       uploadedDocuments[index] = [
@@ -547,7 +548,13 @@ export const updatePFOforSearchResults = async (
   getQueryArg(window.location.href, "action") === "edit" &&
     (await setDocsForEditFlow(state, dispatch));
   if (payload) {
-    dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+    let stakeHolderDetails = payload.Licenses[0];
+    if (stakeHolderDetails && stakeHolderDetails.tradeLicenseDetail) {
+      let owners = stakeHolderDetails.tradeLicenseDetail.owners;
+      let dob = convertEchToDate(owners[0].dob);
+      stakeHolderDetails.tradeLicenseDetail.owners[0].dob = dob;
+    }
+    dispatch(prepareFinalObject("Licenses[0]", stakeHolderDetails));
   }
   const licenseType = payload && get(payload, "Licenses[0].licenseType");
   updateDropDowns(payload, action, state, dispatch, queryValue);
