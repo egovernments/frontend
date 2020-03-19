@@ -73,8 +73,6 @@ const getAcknowledgementCard = (
         state,
         dispatch,
         applicationNumber,
-        applicationNumberWater,
-        applicationNumberSewerage,
         tenant
       )
     };
@@ -597,7 +595,7 @@ export const downloadPrintContainer = (
       children: {
         downloadMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-wns",
+          moduleName: "egov-tradelicence",
           componentPath: "MenuButton",
           props: {
             data: {
@@ -611,7 +609,7 @@ export const downloadPrintContainer = (
         },
         printMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-wns",
+          moduleName: "egov-tradelicence",
           componentPath: "MenuButton",
           props: {
             data: {
@@ -634,7 +632,6 @@ export const downloadPrintContainer = (
 };
 
 const fetchData = async (dispatch) => {
-  console.log("Fetch data called");
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
   const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
@@ -703,8 +700,6 @@ const screenConfig = {
         purpose,
         status,
         applicationNumber,
-        null,
-        null,
         secondNumber,
         // financialYear,
         tenant
