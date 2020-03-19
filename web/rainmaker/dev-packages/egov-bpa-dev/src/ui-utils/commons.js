@@ -728,6 +728,14 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         if (activeIndex === 2) {
           action = "APPLY";
         }
+        let docs = []; 
+        let bparegDocuments = queryObject[0].tradeLicenseDetail.applicationDocuments;
+       if(bparegDocuments && bparegDocuments.length > 0) {
+        bparegDocuments.forEach(doc => {
+          if(doc != null) docs.push(doc)
+        })
+        }
+        queryObject[0].tradeLicenseDetail.applicationDocuments = docs;
       }
       // else if (
       //   queryObject[0].tradeLicenseDetail &&

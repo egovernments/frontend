@@ -90,15 +90,44 @@ class DocumentList extends Component {
 
       const uploadedIndex = Object.keys(uploadedDocumentsArranged).reduce(
         (res, curr) => {
-          if (uploadedDocumentsArranged[curr].length > 0) {
+          if (uploadedDocumentsArranged[curr] && uploadedDocumentsArranged[curr][0] && uploadedDocumentsArranged[curr].length > 0) {
             res.push(parseInt(curr)); //returns string so convert to integer
           }
           return res;
         },
         []
       );
+
+      let docNames = [], keys = [], uploadDocsNames = [];
+      for (var docs in uploadedDocumentsArranged) {
+        if (uploadedDocumentsArranged.hasOwnProperty(docs)) {
+          if(uploadedDocumentsArranged[docs] && uploadedDocumentsArranged[docs][0]) {
+            keys.push(uploadedDocumentsArranged[docs]);
+            docNames.push(uploadedDocumentsArranged[docs][0].documentType)
+          }
+        }
+      };
+      documents.forEach(dDoc => {
+        uploadDocsNames.push(dDoc.name);
+      });
+      let unique1 = uploadDocsNames.filter((o) => docNames.indexOf(o) === -1);
+      let unique2 = docNames.filter((o) => uploadDocsNames.indexOf(o) === -1);
+      let uniqueDoc = [];
+      const unique = unique1.concat(unique2);
+      documents.forEach(uDoc => {
+        if(unique && unique[0]){
+          if(unique[0] === uDoc.name){
+            uniqueDoc.push([uDoc]);
+          }
+        }
+      });
+
+      uniqueDoc.forEach(uniqueDocs => {
+        keys.push(uniqueDocs);
+      });
+      
       this.setState({
-        uploadedDocuments: uploadedDocumentsArranged,
+        uploadedDocuments: keys,
         uploadedIndex
       });
     }
