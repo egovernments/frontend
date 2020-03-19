@@ -121,23 +121,23 @@ const generatePdfAndDownload = (
   // });
 };
 
-const handleAppDownload = (state) => {
+const handleAppDownloadAndPrint = (state, action) => {
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
   const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
   let WaterConnection, SewerageConnection;
   if (applicationNumberWater && applicationNumberSewerage) {
     WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
-    downloadApp(WaterConnection, "application", "download");
+    downloadApp(WaterConnection, "application", action);
     SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
-    downloadApp(SewerageConnection, "application", "download");
+    downloadApp(SewerageConnection, "application", action);
   } else if (applicationNumber) {
     if (applicationNumber.includes("WS")) {
       WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
-      downloadApp(WaterConnection, "application", "download");
+      downloadApp(WaterConnection, "application", action);
     } else if (applicationNumber.includes("SW")) {
       SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
-      downloadApp(SewerageConnection, "application", "download");
+      downloadApp(SewerageConnection, "application", action);
     }
   }
 }
@@ -146,8 +146,6 @@ export const applicationSuccessFooter = (
   state,
   dispatch,
   applicationNumber,
-  applicationNumberWater,
-  applicationNumberSewerage,
   tenant
 ) => {
   //const baseURL = getBaseURL();
@@ -199,7 +197,7 @@ export const applicationSuccessFooter = (
       },
       onClickDefination: {
         action: "condition",
-        callBack: () => { handleAppDownload(state) }
+        callBack: () => { handleAppDownloadAndPrint(state, "download") }
       }
     },
     printFormButton: {
@@ -222,15 +220,7 @@ export const applicationSuccessFooter = (
       },
       onClickDefination: {
         action: "condition",
-        callBack: () => {
-          generatePdfAndDownload(
-            state,
-            dispatch,
-            "print",
-            applicationNumber,
-            tenant
-          );
-        }
+        callBack: () => { handleAppDownloadAndPrint(state, "print") }
       }
     }
 
