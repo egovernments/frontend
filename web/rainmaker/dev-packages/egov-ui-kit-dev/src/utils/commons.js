@@ -65,7 +65,6 @@ export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
     let splittedKey = key.split(".");
     tempObj[splittedKey[splittedKey.length-1]] = MDMSdata[dataKey][key];
     tempObj[splittedKey[splittedKey.length-1]].code = splittedKey[splittedKey.length-1];
-    splittedKey[splittedKey.length-2] ? tempObj[splittedKey[splittedKey.length-1]].prefix = splittedKey[splittedKey.length-2] : "";
   })
   return tempObj;
 }
