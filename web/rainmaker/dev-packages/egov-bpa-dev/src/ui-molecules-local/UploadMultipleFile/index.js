@@ -1,7 +1,7 @@
 import React from "react";
 import { UploadFile, UploadedDocument } from "egov-ui-framework/ui-atoms";
 
-const UploadSingleFile = ({
+const UploadMultipleFile = ({
   uploaded,
   classes,
   handleFileUpload,
@@ -17,20 +17,6 @@ const UploadSingleFile = ({
   }
   return (
     <div>
-      {!uploaded && (
-        <UploadFile
-          buttonProps={{
-            variant: "outlined",
-            color: "primary",
-            onClick: onButtonClick
-          }}
-          id={id}
-          handleFileUpload={handleFileUpload}
-          inputProps={{ multiple: false, ...inputProps }}
-          classes={classes}
-          buttonLabel={buttonLabel}
-        />
-      )}
       {uploaded && (
         <div>
           {documents &&
@@ -40,16 +26,29 @@ const UploadSingleFile = ({
                   {document && (
                     <UploadedDocument
                       document={document}
-                      removeDocument={removeDocument}
+                      removeDocument={()=>removeDocument(documentIndex)}
                     />
                   )}
                 </div>
-              );
+              ); 
             })}
         </div>
       )}
+        <UploadFile
+          buttonProps={{
+            variant: "outlined",
+            color: "primary",
+            onClick: onButtonClick
+          }}
+          id={id}
+          handleFileUpload={handleFileUpload}
+          inputProps={{ ...inputProps }}
+          classes={classes}
+          buttonLabel={buttonLabel}
+        />
+      
     </div>
   );
 };
 
-export default UploadSingleFile;
+export default UploadMultipleFile;

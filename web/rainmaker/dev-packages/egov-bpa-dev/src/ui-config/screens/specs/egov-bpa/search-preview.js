@@ -137,7 +137,7 @@ const prepareDocumentsView = async (state, dispatch) => {
   ];
 
   allDocuments.forEach(doc => {
-    
+
     documentsPreview.push({
       title: getTransformedLocale(doc.documentType),
       //title: doc.documentType,
@@ -444,6 +444,9 @@ const setSearchResponse = async (
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  if(response && response.Bpa["0"] && response.Bpa["0"].documents) {
+    dispatch(prepareFinalObject("documentsTemp", response.Bpa["0"].documents));
+  }
     let edcrRes = await edcrHttpRequest(
       "post",
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -504,7 +507,7 @@ const setSearchResponse = async (
       )
     );
   };
-
+  dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
 };
@@ -593,7 +596,7 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
       false
     );
-
+    
     return action;
   },
   components: {
