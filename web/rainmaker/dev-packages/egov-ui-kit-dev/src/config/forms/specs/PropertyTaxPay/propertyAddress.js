@@ -4,7 +4,7 @@ import { CITY } from "egov-ui-kit/utils/endPoints";
 import { pincode, mohalla, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import { prepareFormData, fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
-import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { getTranslatedLabel, generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 import sortBy from "lodash/sortBy";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -43,66 +43,10 @@ const formConfig = {
         dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
         const moduleValue = field.value;
         dispatch(fetchLocalizationLabel(getLocale(), moduleValue, moduleValue));
-        let requestBody = {
-          MdmsCriteria: {
-            tenantId: field.value,
-            moduleDetails: [
-              {
-                moduleName: "PropertyTax",
-                masterDetails: [
-                  {
-                    name: "Floor",
-                  },
-                  {
-                    name: "OccupancyType",
-                  },
-                  {
-                    name: "OwnerShipCategory",
-                  },
-                  {
-                    name: "OwnerType",
-                  },
-                  {
-                    name: "PropertySubType",
-                  },
-                  {
-                    name: "PropertyType",
-                  },
-                  {
-                    name: "SubOwnerShipCategory",
-                  },
-                  {
-                    name: "UsageCategoryDetail",
-                  },
-                  {
-                    name: "UsageCategoryMajor",
-                  },
-                  {
-                    name: "UsageCategoryMinor",
-                  },
-                  {
-                    name: "UsageCategorySubMinor",
-                  },
-                ],
-              },
-            ],
-          },
-        };
+        let requestBody = generalMDMSDataRequestObj(field.value);
 
         dispatch(
-          fetchGeneralMDMSData(requestBody, "PropertyTax", [
-            "Floor",
-            "OccupancyType",
-            "OwnerShipCategory",
-            "OwnerType",
-            "PropertySubType",
-            "PropertyType",
-            "SubOwnerShipCategory",
-            "UsageCategoryDetail",
-            "UsageCategoryMajor",
-            "UsageCategoryMinor",
-            "UsageCategorySubMinor",
-          ])
+          fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName())
         );
       },
     },
