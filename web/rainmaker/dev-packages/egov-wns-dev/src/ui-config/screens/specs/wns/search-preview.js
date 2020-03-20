@@ -79,22 +79,20 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           if (estimate !== null && estimate !== undefined) {
             if (estimate.Calculation.length > 0) {
               await processBills(estimate, viewBillTooltip, dispatch);
-  
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
-  
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
             }
-          } else {
-            estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
-            let viewBillTooltip = []
-            if (estimate !== null && estimate !== undefined) {
-              if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
-                await processBills(estimate, viewBillTooltip, dispatch);
-                // viewBreakUp 
-                estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
-                dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
-              }
+          } 
+        }else {
+          estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
+          let viewBillTooltip = []
+          if (estimate !== null && estimate !== undefined) {
+            if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
+              await processBills(estimate, viewBillTooltip, dispatch);
+              // viewBreakUp 
+              estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+              dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
             }
           }
         }
