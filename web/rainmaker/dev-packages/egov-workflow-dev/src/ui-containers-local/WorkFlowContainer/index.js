@@ -467,16 +467,30 @@ class WorkFlowContainer extends React.Component {
     let actions = orderBy(filteredActions, ["action"], ["desc"]);
 
     actions = actions.map(item => {
-      return {
-        buttonLabel: item.action,
-        moduleName: data[data.length - 1].businessService,
-        isLast: item.action === "PAY" ? true : false,
-        buttonUrl: getRedirectUrl(item.action, businessId, businessService),
-        dialogHeader: getHeaderName(item.action),
-        showEmployeeList: !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
-        roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
-        isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
-      };
+      if(businessService==="NewWS1" || businessService==="NewSW1"){
+        return {
+          buttonLabel: item.action,
+          moduleName: data[data.length - 1].businessService,
+          isLast: item.action === "PAY" ? true : false,
+          buttonUrl: getRedirectUrl(item.action, businessId, businessService),
+          dialogHeader: getHeaderName(item.action),
+          showEmployeeList: !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !=="RESUBMIT_APPLICATION",
+          roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
+          isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
+        };
+      }else{
+        return {
+          buttonLabel: item.action,
+          moduleName: data[data.length - 1].businessService,
+          isLast: item.action === "PAY" ? true : false,
+          buttonUrl: getRedirectUrl(item.action, businessId, businessService),
+          dialogHeader: getHeaderName(item.action),
+          showEmployeeList: !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+          roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
+          isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
+        };
+      }
+      
     });
     actions = actions.filter(item => item.buttonLabel !== 'INITIATE');
     let editAction = getActionIfEditable(
