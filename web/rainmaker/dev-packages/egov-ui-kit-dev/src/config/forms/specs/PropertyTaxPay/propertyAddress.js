@@ -83,9 +83,6 @@ const formConfig = {
                   {
                     name: "UsageCategorySubMinor",
                   },
-                  {
-                    name: "UsageCategory",
-                  },
                 ],
               },
             ],
@@ -104,8 +101,7 @@ const formConfig = {
             "UsageCategoryDetail",
             "UsageCategoryMajor",
             "UsageCategoryMinor",
-            "UsageCategorySubMinor",
-            "UsageCategory"
+            "UsageCategorySubMinor"
           ])
         );
       },

@@ -490,9 +490,6 @@ export const city = {
                 {
                   name: "UsageCategorySubMinor",
                 },
-                {
-                  name: "UsageCategory",
-                },
               ],
             },
           ],
@@ -511,8 +508,7 @@ export const city = {
           "UsageCategoryDetail",
           "UsageCategoryMajor",
           "UsageCategoryMinor",
-          "UsageCategorySubMinor",
-          "UsageCategory"
+          "UsageCategorySubMinor"
         ])
       );
     },
