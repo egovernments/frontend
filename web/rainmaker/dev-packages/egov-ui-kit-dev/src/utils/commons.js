@@ -110,6 +110,76 @@ export const getTransformedDropdown = (MDMSdata, dataKeys) => {
   return MDMSdata;
   }  
 
+export const generalMDMSDataRequestObj = (tenantId)=>{
+  let requestBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [
+            {
+              name: "Floor",
+            },
+            {
+              name: "OccupancyType",
+            },
+            {
+              name: "OwnerShipCategory",
+            },
+            {
+              name: "OwnerType",
+            },
+            {
+              name: "PropertySubType",
+            },
+            {
+              name: "PropertyType",
+            },
+            {
+              name: "SubOwnerShipCategory",
+            },
+            {
+              name: "UsageCategoryDetail",
+            },
+            {
+              name: "UsageCategoryMajor",
+            },
+            {
+              name: "UsageCategoryMinor",
+            },
+            {
+              name: "UsageCategorySubMinor",
+            },
+            {
+              name: "UsageCategory",
+            },
+          ],
+        },
+      ],
+    },
+  };
+  return requestBody;
+}
+
+export const getGeneralMDMSDataDropdownName = () => {
+  let keys = [
+            "Floor",
+            "OccupancyType",
+            "OwnerShipCategory",
+            "OwnerType",
+            "PropertySubType",
+            "PropertyType",
+            "SubOwnerShipCategory",
+            "UsageCategoryDetail",
+            "UsageCategoryMajor",
+            "UsageCategoryMinor",
+            "UsageCategorySubMinor",
+            "UsageCategory"
+  ];
+  return keys;
+}
+
 export const getQueryArg = (url, name) => {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");

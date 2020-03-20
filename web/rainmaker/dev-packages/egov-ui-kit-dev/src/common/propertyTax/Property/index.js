@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
-import { getCommaSeperatedAddress, getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { getCommaSeperatedAddress, getTranslatedLabel, generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
@@ -76,64 +76,8 @@ class Property extends Component {
       fetchReceipt,
       fetchAssessments,
     } = this.props;
-    const requestBody = {
-      MdmsCriteria: {
-        tenantId: commonConfig.tenantId,
-        moduleDetails: [
-          {
-            moduleName: "PropertyTax",
-            masterDetails: [
-              {
-                name: "Floor",
-              },
-              {
-                name: "UsageCategoryMajor",
-              },
-              {
-                name: "UsageCategoryMinor",
-              },
-              {
-                name: "UsageCategorySubMinor",
-              },
-              {
-                name: "OccupancyType",
-              },
-              {
-                name: "PropertyType",
-              },
-              {
-                name: "PropertySubType",
-              },
-              {
-                name: "OwnerType",
-              },
-              {
-                name: "UsageCategoryDetail",
-              },
-              {
-                name: "SubOwnerShipCategory",
-              },
-              {
-                name: "UsageCategory",
-              },
-            ],
-          },
-        ],
-      },
-    };
-    fetchGeneralMDMSData(requestBody, "PropertyTax", [
-      "Floor",
-      "UsageCategoryMajor",
-      "UsageCategoryMinor",
-      "UsageCategorySubMinor",
-      "OccupancyType",
-      "PropertyType",
-      "PropertySubType",
-      "OwnerType",
-      "UsageCategoryDetail",
-      "SubOwnerShipCategory",
-      "UsageCategory"
-    ]);
+    const requestBody = generalMDMSDataRequestObj(commonConfig.tenantId);
+    fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName());
     fetchProperties([
       { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
