@@ -204,14 +204,15 @@ class NocList extends Component {
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
         if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
+          documents.documents.map(docs => { 
           let doc = {}, finalDocs = [];
           doc.documentType = documents.dropDownValues.value;
-          doc.fileStoreId = documents.documents[0].fileStoreId;
-          doc.fileStore = documents.documents[0].fileStoreId;
-          doc.fileName = documents.documents[0].fileName;
-          doc.fileUrl = documents.documents[0].fileUrl;
+          doc.fileStoreId = docs.fileStoreId;
+          doc.fileStore = docs.fileStoreId;
+          doc.fileName = docs.fileName;
+          doc.fileUrl = docs.fileUrl;
           if (doc.id) {
-            doc.id = documents.documents[0].id;
+            doc.id = docs.id;
           }
           if(bpaDetails.additionalDetails) {
             if(bpaDetails.additionalDetails.fieldinspection_pending && bpaDetails.additionalDetails.fieldinspection_pending[0]) {
@@ -242,7 +243,8 @@ class NocList extends Component {
             }
             bpaDetails.additionalDetails = additionalDetailsDocs;
           }
-        }
+          }
+          })
         }
       });
   
@@ -263,38 +265,56 @@ class NocList extends Component {
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, nocDocumentsUploadRedux, bpaDetails } = this.props;
-    const fileUrl = await getFileUrlFromAPI(fileStoreId);
-
-    let nocDocuments = {
-      ...nocDocumentsUploadRedux,
-      [uploadedDocIndex]: {
-        ...nocDocumentsUploadRedux[uploadedDocIndex],
-        documents: [
-          {
-            fileName: file.name,
-            fileStoreId,
-            fileUrl: Object.values(fileUrl)[0]
-          }
-        ]
+    const fileUrl = getFileUrlFromAPI(fileStoreId).then(fileUrl);
+    let nocDocuments = {};
+    if (nocDocumentsUploadRedux[uploadedDocIndex] && nocDocumentsUploadRedux[uploadedDocIndex].documents) {
+      nocDocumentsUploadRedux[uploadedDocIndex].documents.push({
+        fileName: file.name,
+        fileStoreId,
+        fileUrl: Object.values(fileUrl)[0]
+      });
+      nocDocuments = {
+        ...nocDocumentsUploadRedux
+      };
+    } else {
+      nocDocuments = {
+        ...nocDocumentsUploadRedux,
+        [uploadedDocIndex]: {
+          ...nocDocumentsUploadRedux[uploadedDocIndex],
+          documents: [
+            {
+              fileName: file.name,
+              fileStoreId,
+              fileUrl: Object.values(fileUrl)[0]
+            }
+          ]
+        }
       }
     }
+
     prepareFinalObject("nocDocumentsUploadRedux", nocDocuments);
   
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
     if(isEmployee) {
       this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
-      }
+    }
 
   };
 
-  removeDocument = remDocIndex => {
-    const { prepareFinalObject } = this.props;
-    prepareFinalObject(
-      `nocDocumentsUploadRedux.${remDocIndex}.documents`,
-      undefined
-    );
+  removeDocument = (remDocIndex, docIndex) => {
+    const { prepareFinalObject, bpaDetails, nocDocumentsUploadRedux } = this.props;
+    for (let key in nocDocumentsUploadRedux) {
+      if (key === `${remDocIndex}`) {
+        nocDocumentsUploadRedux[key].documents.splice(docIndex, 1);
+      }
+    }
+    prepareFinalObject("nocDocumentsUploadRedux", nocDocumentsUploadRedux);
     this.forceUpdate();
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true    
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocumentsUploadRedux, bpaDetails);
+    }
   };
 
   handleChange = (key, event) => {
@@ -322,7 +342,7 @@ class NocList extends Component {
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents ? (
+          {nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents && nocDocumentsUploadRedux[key].documents.length ? (
             <div className={classes.documentSuccess}>
               <Icon>
                 <i class="material-icons">done</i>
@@ -372,7 +392,7 @@ class NocList extends Component {
           item={true}
           xs={12}
           sm={12}
-          md={3}
+          // md={4}
           className={classes.fileUploadDiv}
         >
           <UploadSingleFile
@@ -381,7 +401,7 @@ class NocList extends Component {
               handleFileUpload(e, this.handleDocument, this.props)
             }
             uploaded={
-              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents
+              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents && nocDocumentsUploadRedux[key].documents.length > 0
                 ? true
                 : false
             }

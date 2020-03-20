@@ -384,7 +384,7 @@ class BpaDocumentList extends Component {
         </div> 
       </Grid>
       <Grid container={true}>
-        <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
+        <Grid item={true} xs={4} sm={2} md={1} className={classes.iconDiv}>
           {documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents ? (
         <div className={classes.documentSuccess}>
               <Icon>
@@ -435,7 +435,7 @@ class BpaDocumentList extends Component {
       item={true}
       xs={12}
       sm={12}
-      md={3}
+      // md={6}
       className={classes.fileUploadDiv}
       >
           <UploadMultipleFile
