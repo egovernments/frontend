@@ -1275,7 +1275,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                                     win.focus();
                                 }
                                 else {
-                                    printJS(fileRes[res.filestoreIds[0]])
+                                    downloadReceiptFromFilestoreID(res.filestoreIds[0], "print");
                                 }
                             });
 
@@ -1316,7 +1316,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                                     win.focus();
                                 }
                                 else {
-                                    printJS(fileRes[res.filestoreIds[0]])
+                                    downloadReceiptFromFilestoreID(res.filestoreIds[0], "print");
                                 }
                             });
 
@@ -1561,7 +1561,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                     SewerageConnection: wnsConnection
                 }
             }
-        } 
+        }
 
         await httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, obj, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
