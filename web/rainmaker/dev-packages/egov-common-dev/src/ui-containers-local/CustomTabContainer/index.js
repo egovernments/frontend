@@ -6,11 +6,13 @@ import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import cloneDeep from "lodash/cloneDeep";
+import {paymentMethods} from "./payment-methods"
 import get from "lodash/get";
 
 class MultiItem extends React.Component {
   state = {
-    tabIndex: 0
+    tabIndex: 0,
+    tabs : []
   };
 
   methods = {
@@ -33,6 +35,17 @@ class MultiItem extends React.Component {
     "ReceiptTemp[0].instrument.bank.name",
     "ReceiptTemp[0].instrument.branchName"
   ];
+
+  componentWillReceiveProps = (nextProps) =>{
+    const tabs = get(nextProps, "tabs");
+    const previousTabs = get(this.props , "tabs");
+    if(tabs.length != previousTabs.length) {
+      this.props.dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection", "props.tabs", tabs));
+      this.setState({
+        tabs
+      })
+    }
+  }
 
   resetAllFields = (children, dispatch, state) => {
     for (var child in children) {
@@ -85,13 +98,7 @@ class MultiItem extends React.Component {
   };
 
   resetFields = (dispatch, state) => {
-    const {instrumentsAllowed}=this.props;
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", ""));
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", ""));
-    // dispatch(
-    //   prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", "")
-    // );
-    // dispatch(prepareFinalObject("ReceiptTemp[0].instrument", {}));
+    const { tabs }=this.state;
     if (
       get(
         state.screenConfiguration.preparedFinalObject,
@@ -105,7 +112,7 @@ class MultiItem extends React.Component {
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.bank.name", ""));
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.branchName", ""));
     } // Has to manually clear bank name and branch
-    const keyToIndexMapping = instrumentsAllowed.map((item,index) => {
+    const keyToIndexMapping = tabs.map((item,index) => {
       return{
               index : index,
               key: get(this.methods, item.code)
@@ -132,12 +139,9 @@ class MultiItem extends React.Component {
   };
 
   onTabChange = (tabIndex, dispatch, state) => {
-    const {instrumentsAllowed}=this.props;
+    const {tabs}=this.state;
     this.resetFields(dispatch, state);
-    this.setInstrumentType(get(this.methods , get(instrumentsAllowed[tabIndex] , "code")), dispatch);
-
- 
-
+    this.setInstrumentType(get(this.methods , get(tabs[tabIndex] , "code")), dispatch);
   };
 
   onTabClick = tabIndex => {
@@ -153,14 +157,12 @@ class MultiItem extends React.Component {
       onComponentClick,
       screenKey,
       componentJsonpath,
-      instrumentsAllowed
     } = this.props;
-
     const { onTabClick } = this;
-
+    const {tabs} = this.state;
     const transFormedProps = {
       ...this.props,
-      tabs: instrumentsAllowed.map((tab, key) => {
+      tabs: tabs.map((tab, key) => {
         return {
           ...tab,
           tabContent: (
@@ -181,17 +183,18 @@ class MultiItem extends React.Component {
         };
       })
     };
-    return <CustomTab handleClick={onTabClick} {...transFormedProps} />;
+    return <CustomTab handleClick={onTabClick} tabs={tabs} {...transFormedProps} />;
   }
 }
 
 const mapStateToProps = (state , ownProps) => {
   // const { screenConfiguration } = state;
   // const { screenConfig } = screenConfiguration;
-  const {jsonPath , tabs} = ownProps;
+  const {jsonPath} = ownProps;
    const businessServiceDetails = get(state.screenConfiguration.preparedFinalObject , jsonPath);
-  const instrumentsAllowed = tabs.filter(item => item.code !== get(businessServiceDetails , "collectionModesNotAllowed[0]"))
-  return {  state,instrumentsAllowed };
+  const tabs = paymentMethods.filter(item => item.code !== get(businessServiceDetails , "collectionModesNotAllowed[0]"))
+
+  return {  state , tabs };
 };
 
 export default connect(mapStateToProps)(MultiItem);
