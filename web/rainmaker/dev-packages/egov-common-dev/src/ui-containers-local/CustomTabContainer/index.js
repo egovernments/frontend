@@ -36,6 +36,13 @@ class MultiItem extends React.Component {
     "ReceiptTemp[0].instrument.branchName"
   ];
 
+  componentDidMount = () =>{
+    const {tabs} = this.props
+    this.setState({
+      tabs
+    })
+  }
+
   componentWillReceiveProps = (nextProps) =>{
     const tabs = get(nextProps, "tabs");
     const previousTabs = get(this.props , "tabs");
