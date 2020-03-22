@@ -59,7 +59,6 @@ const headerrow = getCommonContainer({
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
   if (applicationNumber) {
-    let estimate;
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
@@ -67,6 +66,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applyScreenObject.applicationNo.includes("WS")?applyScreenObject.service="WATER":applyScreenObject.service="SEWERAGE";
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
+       let estimate;
       if(parsedObject.applicationStatus==="PENDING_FOR_FIELD_INSPECTION"){
         let queryObjectForEst = [{
           applicationNo: applicationNumber,
@@ -85,10 +85,15 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
             }
           } 
         }else {
+          let queryObjectForEst = [{
+            applicationNo: applicationNumber,
+            tenantId: tenantId,
+            sewerageConnection: parsedObject
+          }]
           estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
           let viewBillTooltip = []
           if (estimate !== null && estimate !== undefined) {
-            if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
+            if (estimate.Calculation.length > 0) {
               await processBills(estimate, viewBillTooltip, dispatch);
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
@@ -100,8 +105,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
         }
       }
-      
-      
     }
 
 

@@ -69,10 +69,11 @@ export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
   return tempObj;
 }
 
-export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key) => {
+export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key, parentKey, parentKeyValue) => {
   let tempObj = {}
   tempObj[categoryCode] = MDMSdata[dataKey][key];
   tempObj[categoryCode].code = categoryCode;
+  tempObj[categoryCode][parentKey] = parentKeyValue;
   return tempObj;
 }
 
@@ -83,11 +84,11 @@ export const getUsageCategory = (dataKey, tempObj, MDMSdata, keys) => {
     if(splittedKey.length === 0) {
       tempObj["UsageCategoryMajor"] = {...tempObj["UsageCategoryMajor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
     } else if (splittedKey.length === 1) {
-      tempObj["UsageCategoryMinor"] = {...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+      tempObj["UsageCategoryMinor"] = {...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMajor", splittedKey[splittedKey.length-1])};
     } else if (splittedKey.length === 2) {
-      tempObj["UsageCategorySubMinor"] = {...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+      tempObj["UsageCategorySubMinor"] = {...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMinor", splittedKey[splittedKey.length-1])};
     } else if (splittedKey.length === 3) {
-      tempObj["UsageCategoryDetail"] = {...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+      tempObj["UsageCategoryDetail"] = {...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length-1])};
     }
   });
   return tempObj;
@@ -140,18 +141,6 @@ export const generalMDMSDataRequestObj = (tenantId)=>{
               name: "SubOwnerShipCategory",
             },
             {
-              name: "UsageCategoryDetail",
-            },
-            {
-              name: "UsageCategoryMajor",
-            },
-            {
-              name: "UsageCategoryMinor",
-            },
-            {
-              name: "UsageCategorySubMinor",
-            },
-            {
               name: "UsageCategory",
             },
           ],
@@ -171,10 +160,6 @@ export const getGeneralMDMSDataDropdownName = () => {
             "PropertySubType",
             "PropertyType",
             "SubOwnerShipCategory",
-            "UsageCategoryDetail",
-            "UsageCategoryMajor",
-            "UsageCategoryMinor",
-            "UsageCategorySubMinor",
             "UsageCategory"
   ];
   return keys;
