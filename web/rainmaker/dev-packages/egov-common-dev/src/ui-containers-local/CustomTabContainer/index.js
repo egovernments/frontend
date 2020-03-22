@@ -77,6 +77,7 @@ class MultiItem extends React.Component {
   };
 
   resetFields = (dispatch, state) => {
+    const {instrumentsAllowed}=this.props;
     // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", ""));
     // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", ""));
     // dispatch(
@@ -96,24 +97,38 @@ class MultiItem extends React.Component {
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.bank.name", ""));
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.branchName", ""));
     } // Has to manually clear bank name and branch
-    const keyToIndexMapping = [
-      {
-        index: 0,
-        key: "cash"
-      },
-      {
-        index: 1,
-        key: "cheque"
-      },
-      {
-        index: 2,
-        key: "demandDraft"
-      },
-      {
-        index: 3,
-        key: "card"
+    const keyToIndexMapping = instrumentsAllowed.map((item,index) => {
+      if(item.code=="CASH"){
+        return {index,key:"cash"};
       }
-    ];
+      if(item.code=="CHEQUE"){
+       return {index,key:"cheque"};
+     }
+     if(item.code=="DD"){
+       return {index,key:"demandDraft"};
+     }
+     if(item.code=="CARD"){
+       return {index,key:"card"};
+     }
+     })
+    // const keyToIndexMapping = [
+    //   {
+    //     index: 0,
+    //     key: "cash"
+    //   },
+    //   {
+    //     index: 1,
+    //     key: "cheque"
+    //   },
+    //   {
+    //     index: 2,
+    //     key: "demandDraft"
+    //   },
+    //   {
+    //     index: 3,
+    //     key: "card"
+    //   }
+    // ];
 
     keyToIndexMapping.forEach(item => {
       const objectJsonPath = `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${
@@ -135,24 +150,42 @@ class MultiItem extends React.Component {
   };
 
   onTabChange = (tabIndex, dispatch, state) => {
+ const {instrumentsAllowed}=this.props;
+ console.log("inst all",instrumentsAllowed)
+ const methods = instrumentsAllowed.map((item) => {
+ if(item.code=="CASH"){
+   return { code:"Cash"};
+ }
+ if(item.code=="CHEQUE"){
+  return {code:"Cheque"};
+}
+if(item.code=="DD"){
+  return { code:"DD"};
+}
+if(item.code=="CARD"){
+  return {code:"Card"};
+}
+})
+ 
     this.resetFields(dispatch, state);
-    switch (tabIndex) {
-      case 0:
-        this.setInstrumentType("Cash", dispatch);
-        break;
-      case 1:
-        this.setInstrumentType("Cheque", dispatch);
-        break;
-      case 2:
-        this.setInstrumentType("DD", dispatch);
-        break;
-      case 3:
-        this.setInstrumentType("Card", dispatch);
-        break;
-      default:
-        this.setInstrumentType("Cash", dispatch);
-        break;
-    }
+    this.setInstrumentType(methods[tabIndex].code,dispatch)
+    // switch (tabIndex) {
+    //   case 0:
+    //     this.setInstrumentType("Cash", dispatch);
+    //     break;
+    //   case 1:
+    //     this.setInstrumentType("Cheque", dispatch);
+    //     break;
+    //   case 2:
+    //     this.setInstrumentType("DD", dispatch);
+    //     break;
+    //   case 3:
+    //     this.setInstrumentType("Card", dispatch);
+    //     break;
+    //   default:
+    //     this.setInstrumentType("Cash", dispatch);
+    //     break;
+    // }
   };
 
   onTabClick = tabIndex => {
