@@ -6,7 +6,7 @@ import {
   getLabel,
   getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -67,7 +67,8 @@ export const reviewWaterSource = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
   },
   {
-    jsonPath: "applyScreen.waterSource"
+    jsonPath: "applyScreen.waterSource",
+    callBack: handleNA
   }
 );
 export const reviewWaterSubSource = getLabelWithValue(
@@ -77,6 +78,7 @@ export const reviewWaterSubSource = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.waterSubSource",
+    callBack: handleNA
   }
 );
 export const reviewPipeSize = getLabelWithValue(
