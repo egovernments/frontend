@@ -947,6 +947,7 @@ export const isDocumentValid = (docUploaded) => {
       if(docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value){
         temp++;
       }
+      return temp;
     });
     return temp === 3 ? true : false;
   }else{
