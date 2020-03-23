@@ -11,7 +11,6 @@ import store from "ui-redux/store";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
-import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import {
@@ -39,7 +38,7 @@ import {
   getEstimateFromBill
 } from "egov-ui-kit/utils/PTCommon";
 import { get, set, isEqual } from "lodash";
-import { fetchFromLocalStorage } from "egov-ui-kit/utils/commons";
+import { fetchFromLocalStorage, getTranslatedLabel, isDocumentValid } from "egov-ui-kit/utils/commons";
 import range from "lodash/range";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 import {
@@ -968,23 +967,7 @@ class FormWizard extends Component {
       case 3:
         window.scrollTo(0, 0);
         const uploadedDocs = get(this.props, "documentsUploadRedux");
-        let temp = 0;
-        let maxDocuments = 0;
-        if (uploadedDocs) {
-          let docsArray = [];
-          Object.keys(uploadedDocs).map(key => {
-            docsArray.push(uploadedDocs[key]);
-          })
-          docsArray.map(docs => {
-            if (docs && docs.isDocumentRequired) {
-              maxDocuments++;
-            }
-            if (docs && docs.isDocumentRequired && docs.documents && docs.dropdown) {
-              temp++;
-            }
-          });
-        }
-        if (!uploadedDocs || temp < maxDocuments) {
+        if (!isDocumentValid(uploadedDocs)) {
           alert("Please upload all the required documents and documents type.")
         } else {
           this.setState({
