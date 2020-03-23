@@ -203,7 +203,7 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom" }
+          { jsonPath: "applyScreen.uom" }
         ),
         reviewPlotSize: getLabelWithValue(
           {

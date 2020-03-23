@@ -668,6 +668,19 @@ const getSewerageData = async (dispatch, applicationNumber, tenantId) => {
   } else { dispatch(prepareFinalObject("SewerageConnection", [])); }
 }
 
+const pageReset = (dispatch) => {
+  dispatch(prepareFinalObject("WaterConnection", []));
+  dispatch(prepareFinalObject("SewerageConnection", []));
+  dispatch(prepareFinalObject("applyScreen", {}));
+  dispatch(prepareFinalObject("searchScreen", {}));
+  dispatch(prepareFinalObject("documentsContract", []));
+  dispatch(prepareFinalObject("applyScreenMdmsData", []));
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
+  dispatch(prepareFinalObject("DocumentsData", {}));
+  dispatch(prepareFinalObject("UploadedDocs", {}));
+  dispatch(prepareFinalObject("waterSubSourceForSelectedWaterSource", {}));
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -681,6 +694,7 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
+    pageReset(dispatch);
     fetchData(dispatch);
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
