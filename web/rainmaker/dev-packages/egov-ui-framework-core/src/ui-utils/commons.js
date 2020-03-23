@@ -158,6 +158,26 @@ export const getTranslatedLabel = (labelKey, localizationLabels) => {
   return translatedLabel || labelKey;
 };
 
+
+
+export const getUserDataFromUuid = async bodyObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+
+
 export const epochToYmd = et => {
   // Return null if et already null
   if (!et) return null;

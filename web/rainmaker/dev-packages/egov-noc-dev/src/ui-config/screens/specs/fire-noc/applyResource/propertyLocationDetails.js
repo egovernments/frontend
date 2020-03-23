@@ -76,6 +76,7 @@ const getDetailsFromProperty = async (state, dispatch) => {
         [],
         {}
       );
+      console.log("payloadfordata",payload2)
       if (
         payload &&
         payload.Properties &&
@@ -169,13 +170,13 @@ export const propertyLocationDetails = getCommonCard(
               label: "NOC_AREA_TYPE_RURAL"
             }
           ],
-          jsonPath: "FireNOCs[0].fireNOCDetails.areaType",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
           required: true
         }),
         beforeFieldChange: async (action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.areaType",
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
               action.value
             )
           );
@@ -271,6 +272,8 @@ export const propertyLocationDetails = getCommonCard(
             "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
             []
           );
+          console.log("fireStationsList",fireStationsList);
+
           const districtlist=[];
           for(var i=0;i< fireStationsList.length;i++)
           {
@@ -391,7 +394,7 @@ export const propertyLocationDetails = getCommonCard(
       district: {
         ...getSelectField({
           jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
-          // sourceJsonPath: "applyScreenMdmsData.tenant.District",
+          sourceJsonPath: "applyScreenMdmsData.tenant.District",
           required: true,
           visible: false,
           label: {
@@ -598,6 +601,7 @@ export const propertyLocationDetails = getCommonCard(
               [{ key: "tenantId", value: action.value }],
               {}
             );
+            console.log("payload",payload)
             const mohallaData =
               payload &&
               payload.TenantBoundary[0] &&
@@ -616,6 +620,8 @@ export const propertyLocationDetails = getCommonCard(
                 });
                 return result;
               }, []);
+
+              console.log(mohallaData,"mohallaData")
 
             
 
@@ -658,6 +664,7 @@ export const propertyLocationDetails = getCommonCard(
             "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
             []
           );
+          console.log("fireStationsList",fireStationsList);
           let fireStations = fireStationsList.filter(firestation => {
             return firestation.baseTenantId === action.value;
           });

@@ -20,7 +20,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 
 const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Payment for New Trade License (2018-2019)",
+    labelName: "Payment for New Fire NOC License (2018-2019)",
     labelKey: "TL_COMMON_PAYMENT_NEW_LIC"
   }),
   applicationNumber: {

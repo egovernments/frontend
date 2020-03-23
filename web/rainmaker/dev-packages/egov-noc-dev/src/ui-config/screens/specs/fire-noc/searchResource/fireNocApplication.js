@@ -192,21 +192,29 @@ export const NOCApplication = getCommonCard({
       required: false
     }),
 
-    toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
-      placeholder: {
-        labelName: "To Date",
-        labelKey: "NOC_TO_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.toDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: false
-    })
+    // toDate: getDateField({
+    //   label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
+    //   placeholder: {
+    //     labelName: "To Date",
+    //     labelKey: "NOC_TO_DATE_PLACEHOLDER"
+    //   },
+    //   jsonPath: "searchScreen.toDate",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   },
+    //   pattern: getPattern("Date"),
+    //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //   required: false
+    // }),
+
+
+
+
+
+
+    
+    
   }),
 
   button: getCommonContainer({

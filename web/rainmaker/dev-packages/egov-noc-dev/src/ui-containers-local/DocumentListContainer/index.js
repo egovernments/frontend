@@ -15,6 +15,7 @@ const styles = theme => ({
 });
 
 class DocumentListContainer extends Component {
+  debbuger;
   render() {
     const { ...rest } = this.props;
     return <DocumentList {...rest} />;

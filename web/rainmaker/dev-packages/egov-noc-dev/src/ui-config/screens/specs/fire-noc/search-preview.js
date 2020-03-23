@@ -293,8 +293,10 @@ const setSearchResponse = async (
     },
     { key: "applicationNumber", value: applicationNumber }
   ]);
+  console.log(response,"searchPreviewResponse")
   // const response = sampleSingleSearch();
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+
 
   // Set Institution/Applicant info card visibility
   if (

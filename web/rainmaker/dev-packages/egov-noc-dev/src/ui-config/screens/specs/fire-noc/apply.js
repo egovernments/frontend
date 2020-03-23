@@ -142,7 +142,8 @@ const getMdmsData = async (action, state, dispatch) => {
         },
         {
           moduleName: "firenoc",
-          masterDetails: [{ name: "BuildingType" }, { name: "FireStations" }]
+          masterDetails: [{ name: "BuildingType" }, { name: "FireStations" },{ name: "Documents" }
+        ]
         },
         {
           moduleName: "egov-location",
@@ -173,6 +174,8 @@ const getMdmsData = async (action, state, dispatch) => {
       mdmsBody
     );
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    console.log(payload,"payloadData");
+
   } catch (e) {
     console.log(e);
   }

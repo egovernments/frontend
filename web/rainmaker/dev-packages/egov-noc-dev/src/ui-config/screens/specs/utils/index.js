@@ -16,7 +16,9 @@ import {
   getCommonCard,
   getCommonValue,
   getCommonCaption,
-  getPattern
+  getPattern,
+  Table
+
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 
@@ -519,6 +521,8 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
       queryObject
     );
 
+
+
     // Get Bill
     const response = await getBill([
       {
@@ -575,6 +579,8 @@ export const createBill = async (queryObject,dispatch) => {
       "",
       queryObject
     );
+
+    console.log(response,"fetchbillResponse")
     return response;
   } catch (error) {
     dispatch(
@@ -681,7 +687,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       tenantId: tenantId,
       moduleDetails: [
         {
-          moduleName: "FireNoc",
+          moduleName: "Firenoc",
           masterDetails: [{ name: "Documents" }]
         }
       ]

@@ -22,12 +22,15 @@ export const searchApiCall = async (state, dispatch) => {
     "searchScreen",
     {}
   );
+  console.log("searchScreenObject",searchScreenObject);
+
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children",
     state,
     dispatch,
     "search"
   );
+  console.log("isSearchBoxFirstRowValid",isSearchBoxFirstRowValid)
 
   const isSearchBoxSecondRowValid = validateFields(
     "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
@@ -35,6 +38,9 @@ export const searchApiCall = async (state, dispatch) => {
     dispatch,
     "search"
   );
+
+  console.log("isSearchBoxSecondRowValid",isSearchBoxSecondRowValid)
+
 
   if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
     dispatch(
@@ -121,6 +127,10 @@ export const searchApiCall = async (state, dispatch) => {
         tenantId: item.tenantId,
         [getTextToLocalMapping("Status")]: item.fireNOCDetails.status || "-"
       }));
+
+      console.log(response,"responseFunctions");
+      console.log(data,"functionsData");
+      console.log(dispatch,"dispatchfunctions");
 
       dispatch(
         handleField(

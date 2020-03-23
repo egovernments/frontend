@@ -106,7 +106,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Area Type",
         labelKey: "NOC_AREA_TYPE_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.areaType" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType" }
     ),
     district: getLabelWithValue(
       {

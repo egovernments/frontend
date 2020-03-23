@@ -58,6 +58,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
       "",
       queryObject
     );
+    console.log(response,"searchResponse");
     store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
@@ -253,6 +254,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     });
 
     let response;
+    console.log()
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
@@ -261,6 +263,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         [],
         { FireNOCs: payload }
       );
+      console.log(response,"Create Response")
       response = furnishNocResponse(response);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
@@ -296,7 +299,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 export const prepareDocumentsUploadData = (state, dispatch) => {
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.Documents",
     []
   );
   documents = documents.filter(item => {

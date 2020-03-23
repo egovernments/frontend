@@ -245,11 +245,12 @@ class WorkFlowContainer extends React.Component {
     // }
   };
 
-  getEmployeeRoles = (nextAction, currentAction) => {
+  getEmployeeRoles = (nextAction, currentAction,moduleName="NewTL") => {
+
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: moduleName });
     let roles = [];
     if (nextAction === currentAction) {
       data.states &&
@@ -273,29 +274,35 @@ class WorkFlowContainer extends React.Component {
     return roles.toString();
   };
 
-  checkIfTerminatedState = nextStateUUID => {
+  checkIfTerminatedState = (nextStateUUID,moduleName="NewTL") => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    // const module = moduleName ? moduleName : "NewTL";
+
+    
+    console.log(nextStateUUID,"nextStateUUID");
+    const data = find(businessServiceData, { businessService: moduleName  });
+    console.log(data,"dataWorkflow");
+
     const nextState = find(data.states, { uuid: nextStateUUID });
     return nextState.isTerminateState;
   };
 
-  checkIfDocumentRequired = nextStateUUID => {
+  checkIfDocumentRequired = (nextStateUUID,moduleName="NewTL") => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: moduleName });
     const nextState = find(data.states, { uuid: nextStateUUID });
     return nextState.docUploadRequired;
   };
 
-  getActionIfEditable = (status, businessId) => {
+  getActionIfEditable = (status, businessId,moduleName="NewTL") => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: moduleName });
     const state = find(data.states, { applicationStatus: status });
     let actions = [];
     state.actions &&
@@ -327,7 +334,7 @@ class WorkFlowContainer extends React.Component {
       checkIfTerminatedState,
       getActionIfEditable,
       checkIfDocumentRequired,
-      getEmployeeRoles
+      getEmployeeRoles,
     } = this;
     // const businessServiceData = JSON.parse(
     //   localStorageGet("businessServiceData")
@@ -350,12 +357,12 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: !checkIfTerminatedState(item.nextState),
-        roles: getEmployeeRoles(item.nextState, item.currentState),
-        isDocRequired: checkIfDocumentRequired(item.nextState)
+        showEmployeeList: !checkIfTerminatedState(item.nextState, data[data.length - 1].businessService),
+        roles: getEmployeeRoles(item.nextState, item.currentState,data[data.length - 1].businessService),
+        isDocRequired: checkIfDocumentRequired(item.nextState,data[data.length - 1].businessService)
       };
     });
-    let editAction = getActionIfEditable(applicationStatus, businessId);
+    let editAction = getActionIfEditable(applicationStatus, businessId, data[data.length - 1].businessService);
     editAction.buttonLabel && actions.push(editAction);
     return actions;
   };
@@ -378,6 +385,7 @@ class WorkFlowContainer extends React.Component {
   render() {
     const { createWorkFLow } = this;
     const { ProcessInstances, prepareFinalObject } = this.props;
+  
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&

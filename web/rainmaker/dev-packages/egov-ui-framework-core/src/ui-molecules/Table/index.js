@@ -3,6 +3,8 @@ import MUIDataTable from "mui-datatables";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import cloneDeep from "lodash/cloneDeep";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+
 import "./index.css";
 
 class Table extends React.Component {
@@ -12,12 +14,66 @@ class Table extends React.Component {
     customSortOrder: "asc"
   };
 
+
+  getMuiTheme = () =>
+    createMuiTheme({
+      overrides: {
+        MUIDataTableBodyCell: {
+          root: {
+            "&:nth-child(2)": {
+              color: "#2196F3",
+              cursor: "pointer"
+            }
+          }
+        },
+        MuiTypography: {
+          caption: {
+            fontSize: "14px"
+          }
+        },
+        MuiFormLabel: {
+          root: {
+            fontSize: "14px"
+          }
+        },
+        MuiTableCell: {
+          body: {
+            fontSize: 14
+          }
+        }
+      }
+    });
+
+
+  // formatData = (data, columns) => {
+  //   return (
+  //     data &&
+  //     [...data].reduce((acc, curr) => {
+  //       let dataRow = [];
+  //       Object.keys(columns).forEach(column => {
+  //         let columnValue = get(curr, `${column}`, "");
+  //         if (get(columns, `${column}.format`, "")) {
+  //           columnValue = columns[column].format(curr);
+  //         }
+  //         dataRow.push(columnValue);
+  //       });
+  //       let updatedAcc = [...acc];
+  //       updatedAcc.push(dataRow);
+  //       return updatedAcc;
+  //     }, [])
+  //   );
+  // };
+
+
   formatData = (data, columns) => {
     return (
       data &&
       [...data].reduce((acc, curr) => {
         let dataRow = [];
-        Object.keys(columns).forEach(column => {
+        // Object.keys(columns).forEach(column => {
+        columns.forEach(column => {
+          // Handling the case where column name is an object with options
+          column = typeof column === "object" ? get(column, "name") : column;
           let columnValue = get(curr, `${column}`, "");
           if (get(columns, `${column}.format`, "")) {
             columnValue = columns[column].format(curr);
@@ -31,6 +87,8 @@ class Table extends React.Component {
     );
   };
 
+
+
   componentWillReceiveProps(nextProps) {
     const { data, columns } = nextProps;
     this.updateTable(data, columns);
@@ -41,11 +99,24 @@ class Table extends React.Component {
     this.updateTable(data, columns);
   }
 
+  // updateTable = (data, columns) => {
+  //   const updatedData = this.formatData(data, columns);
+  //   this.setState({
+  //     data: updatedData,
+  //     columns: Object.keys(columns)
+  //   });
+  // };
+
   updateTable = (data, columns) => {
-    const updatedData = this.formatData(data, columns);
+    // const updatedData = this.formatData(data, columns);
+    // Column names should be array not keys of an object!
+    // This is a quick fix, but correct this in other modules also!
+    let fixedColumns = Array.isArray(columns) ? columns : Object.keys(columns);
+    const updatedData = this.formatData(data, fixedColumns);
     this.setState({
       data: updatedData,
-      columns: Object.keys(columns)
+      // columns: Object.keys(columns)
+      columns: fixedColumns
     });
   };
 
@@ -66,6 +137,7 @@ class Table extends React.Component {
     const { data, columns } = this.state;
     const { options, title, customSortDate } = this.props;
     return (
+      <MuiThemeProvider theme={this.getMuiTheme()}>
       <MUIDataTable
         title={title}
         data={data}
@@ -76,6 +148,7 @@ class Table extends React.Component {
             this.onColumnSortChange(columnName, order)
         }}
       />
+      </MuiThemeProvider>
     );
   }
 }

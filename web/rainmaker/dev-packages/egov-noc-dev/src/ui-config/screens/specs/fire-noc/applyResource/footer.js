@@ -93,7 +93,7 @@ const getMdmsData = async (state, dispatch) => {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "fireNoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "firenoc", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
@@ -108,8 +108,8 @@ const getMdmsData = async (state, dispatch) => {
 
     dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.FireNoc.Documents
+        "applyScreenMdmsData.firenoc.Documents",
+        payload.MdmsRes.firenoc.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
