@@ -938,3 +938,18 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
     console.log(e);
   }
 }
+
+export const isDocumentValid = (docUploaded) => {
+  const totalDocsKeys = Object.keys(docUploaded) || [];
+  let temp = 0;
+  if(totalDocsKeys.length === 3){
+    totalDocsKeys.map(key=>{
+      if(docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value){
+        temp++;
+      }
+    });
+    return temp === 3 ? true : false;
+  }else{
+    return false;
+  }
+}
