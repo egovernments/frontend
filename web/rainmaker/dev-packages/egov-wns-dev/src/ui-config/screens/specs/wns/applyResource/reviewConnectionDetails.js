@@ -6,6 +6,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
+import { handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -224,7 +225,10 @@ const getPropertyDetails = {
             labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
             labelName: "Rain Water Harvesting Facility"
           },
-          { jsonPath: "applyScreen.rainWaterHarvesting" }
+          {
+            jsonPath: "applyScreen.rainWaterHarvesting",
+            callBack: handleNA
+          }
         )
       })
     }),
@@ -265,7 +269,8 @@ export const email = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
   },
   {
-    jsonPath: "applyScreen.property.owners[0].emailId"
+    jsonPath: "applyScreen.property.owners[0].emailId",
+    callBack: handleNA
   }
 )
 
@@ -307,7 +312,10 @@ export const correspondenceAddress = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_CROSADD"
   },
-  { jsonPath: "applyScreen.property.owners[0].correspondenceAddress" }
+  {
+    jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
+    callBack: handleNA
+  }
 )
 
 export const specialApplicantCategory = getLabelWithValue(
@@ -315,8 +323,8 @@ export const specialApplicantCategory = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
   },
   {
-    jsonPath:
-      "applyScreen.property.owners."
+    jsonPath: "applyScreen.property.owners[0].ownerType",
+    callBack: handleNA
   }
 )
 
