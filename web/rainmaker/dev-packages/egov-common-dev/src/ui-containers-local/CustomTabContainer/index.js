@@ -38,6 +38,7 @@ class MultiItem extends React.Component {
 
   componentDidMount = () =>{
     const {tabs} = this.props;
+    this.props.dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection", "props.tabs", tabs));
     this.setState({
       tabs
     })
@@ -167,6 +168,7 @@ class MultiItem extends React.Component {
     } = this.props;
     const { onTabClick } = this;
     const tabs = get(this.state , "tabs" , this.props.tabs);
+    // this.props.dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection", "props.tabs", tabs));
     const transFormedProps = {
       ...this.props,
       tabs: tabs.map((tab, key) => {
