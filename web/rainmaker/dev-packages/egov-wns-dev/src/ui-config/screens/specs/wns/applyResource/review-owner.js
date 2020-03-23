@@ -6,7 +6,7 @@ import {
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { convertEpochToDateAndHandleNA } from "../../utils";
+import { convertEpochToDateAndHandleNA, handleNA } from "../../utils";
 
 const service = getQueryArg(window.location.href, "service")
 
@@ -68,7 +68,8 @@ export const reviewWaterSource = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
   },
   {
-    jsonPath: "WaterConnection[0].waterSource"
+    jsonPath: "WaterConnection[0].waterSource",
+    callBack: handleNA
   }
 );
 export const reviewWaterSubSource = getLabelWithValue(
@@ -78,6 +79,7 @@ export const reviewWaterSubSource = getLabelWithValue(
   },
   {
     jsonPath: "WaterConnection[0].waterSubSource",
+    callBack: handleNA
   }
 );
 export const reviewPipeSize = getLabelWithValue(
@@ -90,17 +92,6 @@ export const reviewPipeSize = getLabelWithValue(
   }
 );
 
-// export const reviewBillingType = getLabelWithValue(
-//   {
-//     labelName: "Billing Type",
-//     labelKey: "WS_ADDN_DETAILS_BILLING_TYPE"
-//   },
-//   {
-//     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-//     // callBack: convertEpochToDate
-//   }
-// );
-
 export const reviewWaterClosets = getLabelWithValue(
   {
     labelName: "No. of Water Closets",
@@ -110,7 +101,7 @@ export const reviewWaterClosets = getLabelWithValue(
     jsonPath: "WaterConnection[0].noOfWaterClosets",
   }
 );
-export const reviewNoOfToilets = getLabelWithValue(
+export const reviewNoOfToilets = getLabelWithValue(dev-packages/egov-wns-dev/src/ui-config/screens/specs/wns/applyResource/review-owner.js
   {
     labelName: "No. of Toilets",
     labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS"
@@ -272,17 +263,6 @@ export const getReviewOwner = (isEditable = true) => {
     viewTwelve: activationDetails
   })
 };
-
-const connectionDetails = getCommonContainer({
-  reviewConnectionType,
-  reviewNumberOfTaps,
-  reviewWaterSource,
-  reviewWaterSubSource,
-  reviewPipeSize,
-  // reviewBillingType,
-  reviewWaterClosets,
-  reviewNoOfToilets
-});
 
 const connectionChargeDetails = getCommonContainer({
   reviewPlumberProvidedBy,
