@@ -91,11 +91,34 @@ const logoStyle = {
 };
 
 class PTInformation extends React.Component {
+  updateProperty = () => {
+    let {
+      propertiesAudit
+    } = this.props;
 
+    let Owners = [];
+    let Institution=null;
+    let ownershipCategory='';
+    propertiesAudit.reverse().map(property => {
+      if (property.status == "ACTIVE") {
+        Owners = property.owners.filter(owner => owner.status == "ACTIVE");
+        Institution=property.institution;
+        ownershipCategory=property.ownershipCategory;
+      }
+    })
+    if (Owners.length == 0) {
+      Owners = propertiesAudit[0].owners.filter(owner => owner.status == "ACTIVE");
+      Institution=property.institution;
+      ownershipCategory=property.ownershipCategory;
+    }
+    return {owners:Owners,institution:Institution,ownershipCategory};
+
+
+  }
   getLogoUrl = (tenantId) => {
-    const {cities} = this.props
+    const { cities } = this.props
     const filteredCity = cities && cities.length > 0 && cities.filter(item => item.code === tenantId);
-    return filteredCity ? get(filteredCity[0] , "logoId") : "" ; 
+    return filteredCity ? get(filteredCity[0], "logoId") : "";
   }
 
   render() {
@@ -106,18 +129,24 @@ class PTInformation extends React.Component {
       totalBillAmountDue,
       documentsUploaded,
       toggleSnackbarAndSetText,
-      cities
+      cities,
+      propertiesAudit
     } = this.props;
-    let logoUrl = ""; 
+    let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
-    if(get(properties,"tenantId")) {
-      logoUrl =get(properties,"tenantId") ?  this.getLogoUrl(get(properties,"tenantId")) : "";
-      corpCity = `TENANT_TENANTS_${get(properties,"tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
-      const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties,"tenantId"));
-      ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0] ,"city.ulbGrade")}` : "MUNICIPAL CORPORATION";
+    if (get(properties, "tenantId")) {
+      logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
+      corpCity = `TENANT_TENANTS_${get(properties, "tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
+      const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties, "tenantId"));
+      ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0], "city.ulbGrade")}` : "MUNICIPAL CORPORATION";
     }
-   
+    if (properties.status == "INWORKFLOW") {
+      const updatedOnwerInfo=this.updateProperty();
+      properties.propertyDetails[0].owners = updatedOnwerInfo.owners;
+      properties.propertyDetails[0].institution = updatedOnwerInfo.institution;
+      properties.propertyDetails[0].ownershipCategory = updatedOnwerInfo.ownershipCategory;
+    }
     return (
       <div className="form-without-button-cont-generic">
         {label && (
@@ -149,13 +178,13 @@ class PTInformation extends React.Component {
                 )}
                 <div className="pdf-header" id="pdf-header">
                   <Card
-                    style={{ display : "flex" , backgroundColor : "rgb(242, 242, 242)" , minHeight: "120px" , alignItems: "center" ,paddingLeft :"10px"}}
+                    style={{ display: "flex", backgroundColor: "rgb(242, 242, 242)", minHeight: "120px", alignItems: "center", paddingLeft: "10px" }}
                     textChildren={
-                      <div style={{display : "flex" }}>
+                      <div style={{ display: "flex" }}>
                         {/* <Image  id="image-id" style={logoStyle} source={logoUrl} /> */}
-                        <div style={{marginLeft : 30}}> 
-                          <div style={{display:"flex" , marginBottom : 5}}>
-                            <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" containerStyle={{marginRight : 10 ,textTransform: "uppercase"}}/>
+                        <div style={{ marginLeft: 30 }}>
+                          <div style={{ display: "flex", marginBottom: 5 }}>
+                            <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" containerStyle={{ marginRight: 10, textTransform: "uppercase" }} />
                             <Label label={ulbGrade} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" />
                           </div>
                           <Label label={"PT_PDF_SUBHEADER"} fontSize="16px" fontWeight="500" />
@@ -163,10 +192,10 @@ class PTInformation extends React.Component {
                       </div>
                     }
                   />
-                  <div style={{display : "flex" , justifyContent : "space-between"}}>
-                    <div style={{display : "flex"}}>
-                      <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{marginRight : 10}}/>
-                      <Label label={`: ${get(properties,"propertyId")}`} fontSize="20px"/>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex" }}>
+                      <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
+                      <Label label={`: ${get(properties, "propertyId")}`} fontSize="20px" />
                     </div>
                     {/* <div style={{display : "flex"}}>
                       <Label label="Property ID :" color="rgba(0, 0, 0, 0.87)" fontSize="20px"/>
@@ -178,7 +207,7 @@ class PTInformation extends React.Component {
                     </div> */}
                   </div>
                 </div>
-                
+
                 <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                 <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></AssessmentInfo>
                 <OwnerInfo
@@ -188,6 +217,7 @@ class PTInformation extends React.Component {
                   totalBillAmountDue={totalBillAmountDue}
                   ownershipTransfer={true}
                   viewHistory={true}
+                  propertiesAudit={propertiesAudit}
                 ></OwnerInfo>
                 <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                 <div id="property-assess-form">
@@ -205,8 +235,12 @@ class PTInformation extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+  const { screenConfiguration = {} } = state;
   const { cities } = state.common || [];
-  return { cities  };
+
+  const { preparedFinalObject } = screenConfiguration;
+  let { propertiesAudit = [] } = preparedFinalObject;
+  return { cities, propertiesAudit };
 }
 
 
