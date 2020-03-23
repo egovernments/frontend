@@ -12,7 +12,7 @@ import get from "lodash/get";
 class MultiItem extends React.Component {
   state = {
     tabIndex: 0,
-    tabs : []
+    tabs : undefined
   };
 
   methods = {
@@ -166,7 +166,7 @@ class MultiItem extends React.Component {
       componentJsonpath,
     } = this.props;
     const { onTabClick } = this;
-    const {tabs} = this.state || this.props;;
+    const tabs = get(this.state , "tabs" , this.props.tabs);
     const transFormedProps = {
       ...this.props,
       tabs: tabs.map((tab, key) => {
