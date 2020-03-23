@@ -95,8 +95,8 @@ export const getSearchResults = async queryObject => {
             queryObject
         );
         let result = findAndReplace(response, null, "NA");
-        let waterSource = result.WaterConnection[0].waterSource.split(".")[0];
-        let waterSubSource = result.WaterConnection[0].waterSource.split(".")[1];
+        let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
+        let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
         return result;

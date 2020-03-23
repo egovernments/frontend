@@ -6,6 +6,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
+import { handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -103,8 +104,8 @@ const propertyLocationDetails = {
             labelKey: "WS_PROP_DETAIL_CITY"
           },
           {
-            jsonPath:
-              "applyScreen.property.address.city"
+            jsonPath: "applyScreen.property.address.city",
+            callBack: handleNA
           }
         ),
         reviewDoorOrHouseNumber: getLabelWithValue(
@@ -112,35 +113,50 @@ const propertyLocationDetails = {
             labelName: "Door/House No.",
             labelKey: "WS_PROP_DETAIL_DHNO"
           },
-          { jsonPath: "applyScreen.property.address.doorNo" }
+          {
+            jsonPath: "applyScreen.property.address.doorNo",
+            callBack: handleNA
+          }
         ),
         reviewBuildingOrColonyName: getLabelWithValue(
           {
             labelName: "Building/Colony Name",
             labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
           },
-          { jsonPath: "applyScreen.property.address.buildingName" }
+          {
+            jsonPath: "applyScreen.property.address.buildingName",
+            callBack: handleNA
+          }
         ),
         reviewStreetName: getLabelWithValue(
           {
             labelName: "Street Name",
             labelKey: "WS_PROP_DETAIL_STREET_NAME"
           },
-          { jsonPath: "applyScreen.property.address.street" }
+          {
+            jsonPath: "applyScreen.property.address.street",
+            callBack: handleNA
+          }
         ),
         reviewLocalityOrMohalla: getLabelWithValue(
           {
             labelName: "Locality/Mohalla",
             labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
           },
-          { jsonPath: "applyScreen.property.address.locality.name" }
+          {
+            jsonPath: "applyScreen.property.address.locality.name",
+            callBack: handleNA
+          }
         ),
         reviewPincode: getLabelWithValue(
           {
             labelName: "Pincode",
             labelKey: "WS_PROP_DETAIL_PINCODE"
           },
-          { jsonPath: "applyScreen.property.address.pincode" }
+          {
+            jsonPath: "applyScreen.property.address.pincode",
+            callBack: handleNA
+          }
         ),
       })
     }),
@@ -171,6 +187,7 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "applyScreen.property.propertyId",
+            callBack: handleNA
             // callBack: value => {
             //   return value.split(".")[0];
             // }
@@ -183,6 +200,7 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "applyScreen.property.propertyType",
+            callBack: handleNA
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -194,7 +212,8 @@ const getPropertyDetails = {
             labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
           },
           {
-            jsonPath: "applyScreen.property.usageCategory"
+            jsonPath: "applyScreen.property.usageCategory",
+            callBack: handleNA
           }
         ),
 
@@ -203,28 +222,40 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom" }
+          {
+            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
+            callBack: handleNA
+          }
         ),
         reviewPlotSize: getLabelWithValue(
           {
             labelName: "Plot Size (in sq metres)",
             labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
           },
-          { jsonPath: "applyScreen.property.landArea" }
+          {
+            jsonPath: "applyScreen.property.landArea",
+            callBack: handleNA
+          }
         ),
         reviewNumberOfFloors: getLabelWithValue(
           {
             labelName: "Number Of Floors",
             labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
           },
-          { jsonPath: "applyScreen.property.noOfFloors" }
+          {
+            jsonPath: "applyScreen.property.noOfFloors",
+            callBack: handleNA
+          }
         ),
         rainwaterHarvestingFacility: getLabelWithValue(
           {
             labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
             labelName: "Rain Water Harvesting Facility"
           },
-          { jsonPath: "applyScreen.rainWaterHarvesting" }
+          {
+            jsonPath: "applyScreen.rainWaterHarvesting",
+            callBack: handleNA
+          }
         )
       })
     }),
@@ -247,7 +278,10 @@ export const mobileNumber = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
   },
-  { jsonPath: "applyScreen.property.owners[0].mobileNumber" }
+  {
+    jsonPath: "applyScreen.property.owners[0].mobileNumber",
+    callBack: handleNA
+  }
 )
 
 export const name = getLabelWithValue(
@@ -256,7 +290,8 @@ export const name = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
   },
   {
-    jsonPath: "applyScreen.property.owners[0].name"
+    jsonPath: "applyScreen.property.owners[0].name",
+    callBack: handleNA
   }
 )
 
@@ -265,7 +300,8 @@ export const email = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
   },
   {
-    jsonPath: "applyScreen.property.owners[0].emailId"
+    jsonPath: "applyScreen.property.owners[0].emailId",
+    callBack: handleNA
   }
 )
 
@@ -275,6 +311,7 @@ export const gender = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.property.owners[0].gender",
+    callBack: handleNA,
     localePrefix: {
       moduleName: "COMMON",
       masterName: "GENDER"
@@ -286,28 +323,40 @@ export const dateOfBirth = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_DOB_LABEL"
   },
-  { jsonPath: "applyScreen.property.owners[0].dob" }
+  {
+    jsonPath: "applyScreen.property.owners[0].dob",
+    callBack: handleNA
+  }
 )
 
 export const fatherName = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
   },
-  { jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName" }
+  {
+    jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName",
+    callBack: handleNA
+  }
 )
 
 export const relationship = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
   },
-  { jsonPath: "applyScreen.property.owners[0].relationship" }
+  {
+    jsonPath: "applyScreen.property.owners[0].relationship",
+    callBack: handleNA
+  }
 )
 
 export const correspondenceAddress = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_CROSADD"
   },
-  { jsonPath: "applyScreen.property.owners[0].correspondenceAddress" }
+  {
+    jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
+    callBack: handleNA
+  }
 )
 
 export const specialApplicantCategory = getLabelWithValue(
@@ -315,8 +364,8 @@ export const specialApplicantCategory = getLabelWithValue(
     labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
   },
   {
-    jsonPath:
-      "applyScreen.property.owners."
+    jsonPath: "applyScreen.property.owners[0].ownerType",
+    callBack: handleNA
   }
 )
 

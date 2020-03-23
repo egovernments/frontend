@@ -6,7 +6,7 @@ import {
   getLabel,
   getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -47,9 +47,7 @@ export const reviewConnectionType = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.connectionType",
-    // callBack: value => {
-    //   return value.split(".")[0];
-    // }
+    callBack: handleNA
   }
 );
 export const reviewNumberOfTaps = getLabelWithValue(
@@ -59,6 +57,7 @@ export const reviewNumberOfTaps = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.noOfTaps",
+    callBack: handleNA
   }
 );
 export const reviewWaterSource = getLabelWithValue(
@@ -67,7 +66,8 @@ export const reviewWaterSource = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
   },
   {
-    jsonPath: "applyScreen.waterSource"
+    jsonPath: "applyScreen.waterSource",
+    callBack: handleNA
   }
 );
 export const reviewWaterSubSource = getLabelWithValue(
@@ -77,6 +77,7 @@ export const reviewWaterSubSource = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.waterSubSource",
+    callBack: handleNA
   }
 );
 export const reviewPipeSize = getLabelWithValue(
@@ -86,6 +87,7 @@ export const reviewPipeSize = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.pipeSize",
+    callBack: handleNA
   }
 );
 
@@ -96,6 +98,7 @@ export const reviewWaterClosets = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.noOfWaterClosets",
+    callBack: handleNA
   }
 );
 
@@ -106,6 +109,7 @@ export const reviewNumberOfToilets = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.noOfToilets",
+    callBack: handleNA
   }
 );
 
@@ -115,7 +119,8 @@ export const reviewPlumberProvidedBy = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
   },
   {
-    jsonPath: "applyScreen.plumberInfo[0].detailsProvidedBy"
+    jsonPath: "applyScreen.plumberInfo[0].detailsProvidedBy",
+    callBack: handleNA
   }
 );
 export const reviewPlumberLicenseNo = getLabelWithValue(
@@ -124,7 +129,8 @@ export const reviewPlumberLicenseNo = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
   },
   {
-    jsonPath: "applyScreen.plumberInfo[0].licenseNo"
+    jsonPath: "applyScreen.plumberInfo[0].licenseNo",
+    callBack: handleNA
   }
 );
 export const reviewPlumberName = getLabelWithValue(
@@ -132,7 +138,10 @@ export const reviewPlumberName = getLabelWithValue(
     labelName: "Plumber Name",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
   },
-  { jsonPath: "applyScreen.plumberInfo[0].name" }
+  {
+    jsonPath: "applyScreen.plumberInfo[0].name",
+    callBack: handleNA
+  }
 );
 
 export const reviewPlumberMobileNo = getLabelWithValue(
@@ -141,7 +150,8 @@ export const reviewPlumberMobileNo = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
   },
   {
-    jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
+    jsonPath: "applyScreen.plumberInfo[0].mobileNumber",
+    callBack: handleNA
   }
 );
 
@@ -152,7 +162,7 @@ export const reviewRoadType = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.roadType",
-    // callBack: convertEpochToDate
+    callBack: handleNA
   }
 );
 
@@ -162,7 +172,8 @@ export const reviewArea = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
   },
   {
-    jsonPath: "applyScreen.roadCuttingArea"
+    jsonPath: "applyScreen.roadCuttingArea",
+    callBack: handleNA
   }
 );
 export const reviewConnectionExecutionDate = getLabelWithValue(
@@ -180,7 +191,10 @@ export const reviewMeterId = getLabelWithValue(
     labelName: "Meter ID",
     labelKey: "WS_SERV_DETAIL_METER_ID"
   },
-  { jsonPath: "applyScreen.meterId" }
+  {
+    jsonPath: "applyScreen.meterId",
+    callBack: handleNA
+  }
 );
 
 export const reviewMeterInstallationDate = getLabelWithValue(
@@ -199,7 +213,10 @@ export const reviewInitialMeterReading = getLabelWithValue(
     labelName: "Initial Meter Reading",
     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
   },
-  { jsonPath: "applyScreen.additionalDetails.initialMeterReading" }
+  {
+    jsonPath: "applyScreen.additionalDetails.initialMeterReading",
+    callBack: handleNA
+  }
 );
 
 export const reviewOwner = (isEditable = true) => {
