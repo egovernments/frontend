@@ -4120,6 +4120,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       obj.createdBy = "BPA Noc Verifier"    
     }
     documentsPreview.push(obj);
+    return obj;
   });
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
@@ -4241,7 +4242,7 @@ if(tempDoc) {
         documentsDocTypes.map( doc => {
         if(docs === doc) {
           documentsContract[0].cards.map( items => {
-            if(items && items.code === doc) items.required = false;
+            if(items && items.code === doc) return items.required = false;
           })
         }
         })
