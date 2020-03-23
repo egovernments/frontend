@@ -37,7 +37,7 @@ class MultiItem extends React.Component {
   ];
 
   componentDidMount = () =>{
-    const {tabs} = this.props
+    const {tabs} = this.props;
     this.setState({
       tabs
     })
@@ -166,7 +166,7 @@ class MultiItem extends React.Component {
       componentJsonpath,
     } = this.props;
     const { onTabClick } = this;
-    const {tabs} = this.state;
+    const {tabs} = this.state || this.props;;
     const transFormedProps = {
       ...this.props,
       tabs: tabs.map((tab, key) => {
