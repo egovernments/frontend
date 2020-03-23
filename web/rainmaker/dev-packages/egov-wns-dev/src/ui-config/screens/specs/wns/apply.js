@@ -96,46 +96,6 @@ export const documentDetails = getCommonCard({
     moduleName: "egov-wns",
     componentPath: "DocumentListContainer",
     props: {
-      documents: [
-        {
-          name: "Identity Proof ",
-          required: true,
-          jsonPath: "applyScreen.documents.identityProof",
-          selector: {
-            inputLabel: "Select Document",
-            menuItems: [{ value: "AADHAAR", label: "Aadhaar Card" }, { value: "VOTERID", label: "Voter ID Card" }, { value: "DRIVING", label: "Driving License" }]
-          }
-        },
-        {
-          name: "Address Proof",
-          required: true,
-          jsonPath: "applyScreen.documents.addressProof",
-          selector: {
-            inputLabel: "Select Document",
-            menuItems: [{ value: "ELECTRICITYBILL", label: "Electricity Bill" }, { value: "DL", label: "Driving License" }, { value: "VOTERID", label: "Voter ID Card" }]
-          }
-        },
-        {
-          name: "Building Plan/ Completion Certificate",
-          required: false,
-          jsonPath: "applyScreen.documents.completionCertificate"
-        },
-        {
-          name: "Electicity Bill",
-          required: true,
-          jsonPath: "applyScreen.documents.electricityBill"
-        },
-        {
-          name: "Property Tax Reciept",
-          required: false,
-          jsonPath: "applyScreen.documents.ptReciept"
-        },
-        {
-          name: "Plumber Report/ Drawing",
-          required: true,
-          jsonPath: "applyScreen.documents.plumberReport"
-        }
-      ],
       buttonLabel: {
         labelName: "UPLOAD FILE",
         labelKey: "WS_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"

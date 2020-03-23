@@ -603,20 +603,5 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
   dispatch(prepareFinalObject("viewBillToolipData", finalArray));
 }
 
-// const setWSDocuments = async (obj, dispatch) => {
-//   let getDocList = get(obj, "WaterConnection[0].documents");
-//   console.log("-------------------------");
-//   console.log(obj.WaterConnection);
-//   console.log(obj.WaterConnection[0]);
-//   console.log(obj.WaterConnection[0].documents);
-//   console.log('---------------------------------------------');
-//   dispatch(prepareFinalObject("DocumentsData", getDocList));
-//   console.log(get(obj, 'DocumentsData'));
-//   await setDocuments(
-//     obj,
-//     "WaterConnection[0].documents",
-//     "DocumentsData",
-//     dispatch, "WS"
-//   );
-// }
+
 export default screenConfig;
