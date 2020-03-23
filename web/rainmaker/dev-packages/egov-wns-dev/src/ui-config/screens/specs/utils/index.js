@@ -561,6 +561,12 @@ export const convertEpochToDateAndHandleNA = dateEpoch => {
   } else { return "NA"; }
 }
 
+export const handleNA = params => {
+  if (params !== undefined && params !== null && params !== "") {
+    return params;
+  } else { return "NA"; }
+}
+
 export const convertEpochToDate = dateEpoch => {
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
@@ -1029,15 +1035,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.accountDescription.split("-")[0],
               LicenseData
             ) && {
-                value: getToolTipInfo(
-                  item.accountDescription.split("-")[0],
-                  LicenseData
-                ),
-                key: getToolTipInfo(
-                  item.accountDescription.split("-")[0],
-                  LicenseData
-                )
-              }
+              value: getToolTipInfo(
+                item.accountDescription.split("-")[0],
+                LicenseData
+              ),
+              key: getToolTipInfo(
+                item.accountDescription.split("-")[0],
+                LicenseData
+              )
+            }
           });
       } else {
         item.taxHeadCode &&
