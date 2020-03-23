@@ -108,8 +108,8 @@ class PTInformation extends React.Component {
     })
     if (Owners.length == 0) {
       Owners = propertiesAudit[0].owners.filter(owner => owner.status == "ACTIVE");
-      Institution=property.institution;
-      ownershipCategory=property.ownershipCategory;
+      Institution=propertiesAudit[0].institution;
+      ownershipCategory=propertiesAudit[0].ownershipCategory;
     }
     return {owners:Owners,institution:Institution,ownershipCategory};
 
