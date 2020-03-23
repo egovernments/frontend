@@ -686,7 +686,11 @@ export const downloadReceipt = (receiptQueryString) => {
           { key: "key", value: "consolidatedreceipt" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
         ]
-
+        const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId")
+      if(oldFileStoreId){
+        downloadReceiptFromFilestoreID(oldFileStoreId,mode)
+      }
+     else{
         httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
           .then(res => {
             getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
@@ -695,7 +699,7 @@ export const downloadReceipt = (receiptQueryString) => {
             });
 
           });
-
+        }
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
       }
