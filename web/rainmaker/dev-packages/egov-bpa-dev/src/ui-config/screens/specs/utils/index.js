@@ -4246,6 +4246,7 @@ if(tempDoc) {
           })
         }
         })
+        return docs;
       })
       result = documentsCodes;
     } else {
