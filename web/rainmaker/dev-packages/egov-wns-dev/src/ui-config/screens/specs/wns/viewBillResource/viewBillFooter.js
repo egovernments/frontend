@@ -13,8 +13,6 @@ const callDownloadBill = () => {
       key: 'consumerCode',
       value: getQueryArg(window.location.href, "connectionNumber")
     },
-    // { key: "billIds", value: '9d9293bc-da3f-474f-a392-b71242791471' },
-
     { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
   downloadBill(val);
 }

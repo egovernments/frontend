@@ -818,6 +818,8 @@ export const footerReviewTop = (
   let downloadMenu = [];
   let printMenu = [];
   let licenseNumber= get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
+  const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
+  const receiptKey = get(uiCommonConfig , "receiptKey");
   const responseLength = get(
     state.screenConfiguration.preparedFinalObject,
     `licenseCount`,
@@ -849,7 +851,7 @@ export const footerReviewTop = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      download(receiptQueryString);
+      download(receiptQueryString , "download" ,receiptKey );
       // generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
@@ -861,7 +863,7 @@ export const footerReviewTop = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      download(receiptQueryString,"print");
+      download(receiptQueryString,"print" ,receiptKey);
      // generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
@@ -987,6 +989,8 @@ export const downloadPrintContainer = (
   tenantId
 ) => {
   /** MenuButton data based on status */
+  const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
+  const receiptKey = get(uiCommonConfig , "receiptKey");
   let downloadMenu = [];
   let printMenu = [];
   let tlCertificateDownloadObject = {
@@ -1012,7 +1016,7 @@ export const downloadPrintContainer = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      download(receiptQueryString);
+      download(receiptQueryString , "download" , receiptKey);
     },
     leftIcon: "receipt"
   };
@@ -1023,7 +1027,7 @@ export const downloadPrintContainer = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      download(receiptQueryString,"print");
+      download(receiptQueryString,"print" , receiptKey);
     },
     leftIcon: "receipt"
   };
