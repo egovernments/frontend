@@ -65,16 +65,25 @@ class Table extends React.Component {
   }
 
   componentDidMount() {
-    const { data, columns } = this.props;
-    this.updateTable(data, columns);
+    const { data, columns,multipleTable } = this.props;
+    this.updateTable(data, columns,multipleTable);
   }
 
-  updateTable = (data, columns) => {
+  updateTable = (data, columns,multipleTable) => {
     // const updatedData = this.formatData(data, columns);
     // Column names should be array not keys of an object!
     // This is a quick fix, but correct this in other modules also!
     let fixedColumns = Array.isArray(columns) ? columns : Object.keys(columns);
-    const updatedData = this.formatData(data, fixedColumns);
+    let updatedData = [];
+    if(multipleTable){
+      for(var k=0;k<data.length;k++){
+        let table = this.formatData(data[k], fixedColumns);
+        updatedData.push(table);
+      } 
+    }else{
+      updatedData = this.formatData(data, fixedColumns);
+    }
+    
     this.setState({
       data: updatedData,
       // columns: Object.keys(columns)
@@ -98,20 +107,43 @@ class Table extends React.Component {
   render() {
     const { data, columns } = this.state;
     const { options, title, customSortDate } = this.props;
+    console.log('+++++++++ bpa table');
+    console.log(data);
+    // return (
+    //   <MuiThemeProvider theme={this.getMuiTheme()}>
+    //     <MUIDataTable
+    //       title={title}
+    //       data={data}
+    //       columns={columns}
+    //       options={{
+    //         ...options,
+    //         onColumnSortChange: (columnName, order) =>
+    //           this.onColumnSortChange(columnName, order)
+    //       }}
+    //     />
+    //   </MuiThemeProvider>
+    // );
     return (
-      <MuiThemeProvider theme={this.getMuiTheme()}>
-        <MUIDataTable
-          title={title}
-          data={data}
-          columns={columns}
-          options={{
-            ...options,
-            onColumnSortChange: (columnName, order) =>
-              this.onColumnSortChange(columnName, order)
-          }}
-        />
-      </MuiThemeProvider>
-    );
+      <div style={{ paddingTop: 10 }}>
+        {data &&
+          data.map((document, key) => {
+            return (
+              <MuiThemeProvider theme={this.getMuiTheme()}>
+                <MUIDataTable
+                  title={title}
+                  data={document}
+                  columns={columns}
+                  options={{
+                    ...options,
+                    onColumnSortChange: (columnName, order) =>
+                      this.onColumnSortChange(columnName, order)
+                  }}
+                />
+            </MuiThemeProvider>
+            );
+          })}
+      </div>
+    )
   }
 }
 

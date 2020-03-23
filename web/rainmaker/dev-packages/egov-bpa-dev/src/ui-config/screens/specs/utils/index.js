@@ -4383,22 +4383,31 @@ const getFloorDetails = (index) => {
 };
 
 export const setProposedBuildingData = async (state, dispatch) => {
+  
   const response = get(
     state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
     []
   );
+  var tableData=[];
   if (response && response.length > 0) {
-    let tableData = await response.map((item, index) => (
-      {
-        [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
-        [getBpaTextToLocalMapping("Level")]: item.number,
-        [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-        [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-        [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-        [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
-      }));
+    debugger;
+    for(var j=0;j<response.length;j++){
 
+      let floors = response[j] && response[j].building && response[j].building.floors;
+    let block = await floors.map((item, index) => (
+      {
+      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+      [getBpaTextToLocalMapping("Level")]:item.number,     
+      [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+    }));
+     tableData.push(block);
+    }
+        debugger;
+        console.log(tableData, "=====> setproposedetails")
     dispatch(
       handleField(
         "apply",
@@ -4407,6 +4416,7 @@ export const setProposedBuildingData = async (state, dispatch) => {
         tableData
       )
     );
+    debugger;
     return tableData;
   }
 }

@@ -4,7 +4,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping, generateBillForBPA } from "../../utils";
+import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping,setProposedBuildingData, generateBillForBPA } from "../../utils";
 import "./index.css";
 import { getQueryArg, getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
@@ -200,28 +200,29 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-    const response = get(
-      state,
-      "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
-      []
-  );
-    let tableData = response.map((item, index) => (
-      {
-      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail((item.number).toString()) || '-',
-      [getBpaTextToLocalMapping("Level")]:item.number,     
-      [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
-    }));
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
-        "props.data",
-        tableData
-      )
-    );
+    setProposedBuildingData(state,dispatch);
+  //   const response = get(
+  //     state,
+  //     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+  //     []
+  // );
+    // let tableData = response.map((item, index) => (
+    //   {
+    //   [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail((item.number).toString()) || '-',
+    //   [getBpaTextToLocalMapping("Level")]:item.number,     
+    //   [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+    //   [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+    //   [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+    //   [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+    // }));
+  //   dispatch(
+  //     handleField(
+  //       "apply",
+  //       "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
+  //       "props.data",
+  //       tableData
+  //     )
+  //   );
   }
 
   if (activeStep === 1) {

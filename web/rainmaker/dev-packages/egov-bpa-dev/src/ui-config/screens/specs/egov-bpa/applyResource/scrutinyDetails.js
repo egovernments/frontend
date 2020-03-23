@@ -320,7 +320,8 @@ export const proposedBuildingDetails = getCommonCard({
         moduleName: "egov-bpa",
         componentPath: "Table",
         props: {
-          data : setProposedBuildingData,
+          multipleTable:true,
+          // data : setProposedBuildingData,
           columns: {
             "Floor Description": {},
             "Level": {},
