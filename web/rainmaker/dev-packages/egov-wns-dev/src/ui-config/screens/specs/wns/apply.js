@@ -2,6 +2,7 @@ import {
   getStepperObject,
   getCommonHeader,
   getCommonCard,
+  getCommonGrayCard,
   getCommonContainer,
   getCommonTitle,
   getCommonParagraph,
@@ -56,7 +57,7 @@ export const header = getCommonContainer({
     props: { number: "NA" },
     visible: false
   },
- 
+
   applicationNumberSewerage: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
@@ -220,6 +221,7 @@ export const getData = async (action, state, dispatch) => {
 const propertyDetail = getPropertyDetails();
 const propertyIDDetails = getPropertyIDDetails();
 const ownerDetail = getOwnerDetails();
+
 export const ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
 export const IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
 export const Details = getCommonCard({ propertyDetail });
