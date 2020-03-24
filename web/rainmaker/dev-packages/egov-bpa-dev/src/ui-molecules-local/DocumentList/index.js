@@ -362,7 +362,7 @@ class DocumentList extends Component {
   }
 }
 
-BpaDocumentList.propTypes = {
+DocumentList.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
