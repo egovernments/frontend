@@ -89,7 +89,7 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
   let documentsPreview = [];
   let reduxDocuments = get(
     state,
-    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    "screenConfiguration.preparedFinalObject.bparegDocumentDetailsUploadRedux",
     {}
   );
   jp.query(reduxDocuments, "$.*").forEach(doc => {
@@ -265,7 +265,7 @@ export const callBackForNext = async (state, dispatch) => {
 
   if (activeStep === 2) {
     const documentsFormat = Object.values(
-      get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
+      get(state.screenConfiguration.preparedFinalObject, "bparegDocumentDetailsUploadRedux")
     );
 
     let validateDocumentField = false;

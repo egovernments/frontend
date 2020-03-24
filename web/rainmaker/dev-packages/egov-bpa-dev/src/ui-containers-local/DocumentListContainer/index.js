@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { BpaDocumentList } from "../../ui-molecules-local";
+import { DocumentList } from "../../ui-molecules-local";
 import { connect } from "react-redux";
 import get from "lodash/get";
 
@@ -17,7 +17,7 @@ const styles = theme => ({
 class DocumentListContainer extends Component {
   render() {
     const { ...rest } = this.props;
-    return <BpaDocumentList {...rest} />;
+    return <DocumentList {...rest} />;
   }
 }
 

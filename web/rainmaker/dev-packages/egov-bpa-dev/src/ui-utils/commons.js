@@ -740,7 +740,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let documentsUpdalod = get(
         state,
-        "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+        "screenConfiguration.preparedFinalObject.bparegDocumentDetailsUploadRedux",
         []
       );
     
