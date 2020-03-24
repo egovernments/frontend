@@ -1688,69 +1688,110 @@ export const updateDropDowns = async (
   setOwnerShipDropDownFieldChange(state, dispatch, payload);
 };
 
-export const getDocList = (state, dispatch) => {
+export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
+  let docs = get (state.screenConfiguration.preparedFinalObject, "BPARegDocumentsContract");
+  let bpaDocs = [];
+
+  if (docs && docs.length > 0) {
+    docs.forEach(section => {
+      section.cards.forEach(doc => {
+        let docObj = {};
+        docObj.documentType = section.code;
+        docObj.documentCode = doc.code;
+        docObj.isDocumentRequired = doc.required;
+        docObj.isDocumentTypeRequired = doc.required;
+        bpaDocs.push(docObj);
+      })
+    });
+  }
+
+  let uploadedDocs = get (
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.applicationDocuments", []);
+  
+  if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    uploadedDocs.forEach(upDoc => {
+      bpaDocs.forEach(bpaDoc => {
+        let bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        if(bpaDetailsDoc == bpaDoc.documentCode) {
+          let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
+          let name = (fileUrls[upDoc.fileStoreId] && 
+            decodeURIComponent(
+              fileUrls[upDoc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues.value =  upDoc.documentType;
+          bpaDoc.documents = [
+            {
+              fileName : name,
+              fileStoreId : upDoc.fileStoreId,
+              fileUrl : url,
+              id : upDoc.id
+            }
+          ]
+        }
+      })
+    })
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
+  }
+}
+
+export const getDocList = async (state, dispatch) => {
   const tradeSubTypes = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.tradeUnits"
   );
 
-  const tradeSubCategories = get(
+  let TradeTypetoRoleMapping =  get(
     state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.MdmsTradeType"
+    "applyScreenMdmsData.StakeholderRegistraition.TradeTypetoRoleMapping", []
   );
-  let selectedTypes = [];
-  tradeSubTypes.forEach(tradeSubType => {
-    selectedTypes.push(
-      filter(tradeSubCategories, {
-        code: tradeSubType.tradeType
+  // let TradeTypetoRoleMapping = tradeTypetoRoleMapping.TradeTypetoRoleMapping;
+  let tardetypSeletedTypes = [];
+  tradeSubTypes.forEach(tradeTradeSubType => {
+    tardetypSeletedTypes.push(
+      filter(TradeTypetoRoleMapping, {
+        tradeType: tradeTradeSubType.tradeType
       })
     );
   });
 
-  // selectedTypes[0] &&
-  //
-  let applicationDocArray = [];
+  let docTyps = tardetypSeletedTypes[0][0].docTypes;
+  if(docTyps && docTyps.length > 0) {
+  const bpaDocuments = docTyps;
+  let documentsContract = [];
+  let tempDoc = {};
 
-  selectedTypes.forEach(tradeSubTypeDoc => {
-    applicationDocArray = [
-      ...applicationDocArray,
-      ...tradeSubTypeDoc[0].applicationDocument
-    ];
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["code"] = doc.code.split(".")[0];
+    card["title"] = doc.code.split(".")[0];
+    card["cards"] = [];
+    tempDoc[doc.code.split(".")[0]] = card;
   });
-  function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-  }
-  applicationDocArray = applicationDocArray.filter(onlyUnique);
-  let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
-  dispatch(
-    prepareFinalObject(
-      "LicensesTemp[0].applicationDocuments",
-      applicationDocument
-    )
-  );
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    tempDoc[doc.code.split(".")[0]].cards.push(card);
+  });
 
-  //REARRANGE APPLICATION DOCS FROM TL SEARCH IN EDIT FLOW
-  let applicationDocs = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
-    []
-  );
-  let applicationDocsReArranged =
-    applicationDocs &&
-    applicationDocs.length &&
-    applicationDocument.map(item => {
-      const index = applicationDocs.findIndex(
-        i => i.documentType === item.name
-      );
-      return applicationDocs[index];
-    });
-  applicationDocsReArranged &&
-    dispatch(
-      prepareFinalObject(
-        "Licenses[0].tradeLicenseDetail.applicationDocuments",
-        applicationDocsReArranged
-      )
-    );
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+  dispatch(prepareFinalObject("BPARegDocumentsContract", documentsContract));
+  }
+
+  await prepareDocumentDetailsUploadRedux(state, dispatch);
 };
 
 export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
