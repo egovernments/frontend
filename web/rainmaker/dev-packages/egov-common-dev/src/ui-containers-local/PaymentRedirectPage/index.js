@@ -38,11 +38,11 @@ class PaymentRedirect extends Component {
           [],
           {}
         );
-
+        const businessService = get(searchResponse, "Payments[0].paymentDetails[0].businessService");
         let transactionId = get(searchResponse, "Payments[0].paymentDetails[0].receiptNumber");
         this.props.setRoute(
           // status=success&receiptNumber=PB-TL-2019-10-29-003220&consumerCode=PT-1909-208877&tenantId=pb.amritsar
-          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}`
+          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
         );
       }
     } catch (e) {
