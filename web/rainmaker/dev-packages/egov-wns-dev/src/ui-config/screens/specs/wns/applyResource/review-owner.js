@@ -101,7 +101,7 @@ export const reviewWaterClosets = getLabelWithValue(
     jsonPath: "WaterConnection[0].noOfWaterClosets",
   }
 );
-export const reviewNoOfToilets = getLabelWithValue(dev-packages/egov-wns-dev/src/ui-config/screens/specs/wns/applyResource/review-owner.js
+export const reviewNoOfToilets = getLabelWithValue(
   {
     labelName: "No. of Toilets",
     labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS"
