@@ -1,6 +1,7 @@
 import pdfMakeCustom from "pdfmake/build/pdfmake";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import _ from "lodash";
+import QRCode from "qrcode";
 import { getMessageFromLocalization } from "./receiptTransformer";
 import pdfFonts from "./vfs_fonts";
 // pdfMakeCustom.vfs = pdfFonts.vfs;
@@ -819,7 +820,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
   return receiptData;
 };
 
-const getCertificateData = (transformedData, ulbLogo) => {
+const getCertificateData = (transformedData, ulbLogo,qrcode) => {
   console.log(transformedData);
   var tlCertificateData = {
     defaultStyle: {
@@ -829,14 +830,14 @@ const getCertificateData = (transformedData, ulbLogo) => {
       {
         style: "tl-head",
         table: {
-          widths: [60, "*"],
+          widths: [60, "*",60],
           body: [
             [
               {
                 image: ulbLogo,
                 width: 50,
                 height: 61.25,
-                margin: [5, 0, 0, 0]//left top right bottom
+                margin: [5, 15, 0, 0]//left top right bottom
               },
               {
                 stack: [
@@ -859,7 +860,14 @@ const getCertificateData = (transformedData, ulbLogo) => {
                   }
                 ],
                 alignment: "center",
-                margin: [40, 10, 0, 0]
+                margin: [10, 10, 0, 0]
+              },
+              {
+                image: qrcode,
+                width: 50,
+                height: 61.25,
+                margin: [0, 15, 0, 0],
+                alignment: "center"
               }
             ]
           ]
@@ -1839,7 +1847,13 @@ const generateReceipt = async (state, dispatch, type) => {
   };
   switch (type) {
     case "certificate_download":
-      let certificate_data = getCertificateData(transformedData, ulbLogo);
+      let qrText = `Owner Name: ${transformedData.owners[0].name},License Number: ${transformedData.licenseNumber}, license Issue Date: ${
+        transformedData.licenseIssueDate},license Expiry Date: ${transformedData.licenseExpiryDate},City: ${transformedData.city}, Trade Name: ${transformedData.tradeName},
+        Trade Subtype: ${transformedData.tradeTypeCertificate} `;
+      console.log("=====>>>"+qrText);
+      let qrcode = await QRCode.toDataURL(qrText);
+      console.log("=====>>>"+qrcode);
+      let certificate_data = getCertificateData(transformedData, ulbLogo,qrcode);
       certificate_data &&
         //  pdfMakeCustom.createPdf(certificate_data)
         //  .download("tl_certificate.pdf");
