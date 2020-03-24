@@ -21,7 +21,7 @@ import {
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
-import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField,
@@ -294,20 +294,25 @@ const setSearchResponse = async (
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
   let bpaDocs = [];
-
+  
   if (docs && docs.length > 0) {
     docs.forEach(section => {
       section.cards.forEach(doc => {
         let docObj = {};
         docObj.documentType = section.code;
         docObj.documentCode = doc.code;
-        docObj.isDocumentRequired = doc.required;
+        if(uploadedDocs && uploadedDocs.length > 0) {
+          docObj.isDocumentRequired = false;
+        }
+        else {
+          docObj.isDocumentRequired = doc.required;          
+        }
         docObj.isDocumentTypeRequired = doc.required;
         bpaDocs.push(docObj);
       })
     });
   }
-
+  
   let bpaDetails = get (state.screenConfiguration.preparedFinalObject, "BPA");
   let uploadedDocs = bpaDetails.documents;
   
@@ -316,7 +321,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
     let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
     uploadedDocs.forEach(upDoc => {
       bpaDocs.forEach(bpaDoc => {
-        let bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        let bpaDetailsDoc;
+        if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
         if(bpaDetailsDoc == bpaDoc.documentCode) {
           let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
           let name = (fileUrls[upDoc.fileStoreId] && 
@@ -331,17 +337,50 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           `Document - ${index + 1}`;
           bpaDoc.dropDownValues = {};
           bpaDoc.dropDownValues.value =  upDoc.documentType;
-          bpaDoc.documents = [
-            {
-              fileName : name,
-              fileStoreId : upDoc.fileStoreId,
-              fileUrl : url,
-              id : upDoc.id
-            }
-          ]
+          if(bpaDoc.previewdocuments ){
+            bpaDoc.previewdocuments.push(
+              {
+                // title: getTransformedLocale(bpaDoc.documentCode),
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                // id : upDoc.id,
+                wfState: upDoc.wfState                                
+              }
+            );
+          }else{
+            bpaDoc.previewdocuments = [
+              {
+                // title: getTransformedLocale(bpaDoc.documentCode),
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                // id : upDoc.id,
+                wfState: upDoc.wfState                                
+              }
+            ];
+          }
         }
       })
     })
+    let previewStoreIds = jp.query(bpaDocs, "$..[*].*.fileStoreId");
+    let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : {};
+      
+    bpaDocs.forEach(doc => {
+
+      if (doc.previewdocuments && doc.previewdocuments.length > 0) {
+          doc.previewdocuments.forEach(docDetail =>{
+            docDetail["link"] = fileUrls[docDetail.fileStoreId];
+            return docDetail;
+          });
+      }
+    });
     dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
   }
 }
