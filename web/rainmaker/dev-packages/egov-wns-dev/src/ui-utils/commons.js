@@ -1478,6 +1478,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
     wnsConnection[0].tenantName = tenantName.toUpperCase();
     const appNo = wnsConnection[0].applicationNo;
+
     let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
     let apiUrl, appService, estKey, queryObjectForEst
     if (wnsConnection[0].service === "WATER") {
@@ -1553,6 +1554,13 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
         if (type === 'application') {
             if (wnsConnection[0].service === "WATER") {
+                if (wnsConnection[0].rainWaterHarvesting !== undefined && wnsConnection[0].rainWaterHarvesting !== null) {
+                    if (wnsConnection[0].rainWaterHarvesting === true) {
+                        wnsConnection[0].rainWaterHarvesting = 'SCORE_YES'
+                    } else {
+                        wnsConnection[0].rainWaterHarvesting = 'SCORE_NO'
+                    }
+                }
                 obj = {
                     WaterConnection: wnsConnection
                 }
