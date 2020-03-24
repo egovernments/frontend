@@ -14,7 +14,7 @@ import {
   createEstimateData
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg, getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getLocaleLabels, getTransformedLocalStorgaeLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { setTenantId, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 import {
@@ -27,6 +27,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import get from "lodash/get";
 import some from "lodash/some";
+import jp from "jsonpath";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -83,6 +84,43 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
     }
   });
 };
+
+const prepareDocumentsDetailsView = async (state, dispatch) => {
+  let documentsPreview = [];
+  let reduxDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    {}
+  );
+  jp.query(reduxDocuments, "$.*").forEach(doc => {
+    if (doc.documents && doc.documents.length > 0) {
+      documentsPreview.push({
+        title: getTransformedLocale(doc.documentCode),
+        name: doc.documents[0].fileName,
+        fileStoreId: doc.documents[0].fileStoreId,
+        linkText: "View",
+        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
+      });
+    }
+  });
+  dispatch( prepareFinalObject("LicensesTemp[0].reviewDocData", documentsPreview) );
+};
+
+const getSummaryRequiredDetails = async (state, dispatch) => {
+  const LicenseData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0]",
+    {}
+  );
+  createEstimateData(
+    LicenseData,
+    "LicensesTemp[0].estimateCardData",
+    dispatch,
+    {},
+    true
+  ); //get bill and populate estimate card
+  prepareDocumentsDetailsView(state, dispatch);
+}
 
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
@@ -226,53 +264,58 @@ export const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 2) {
-    const LicenseData = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0]",
-      {}
+    const documentsFormat = Object.values(
+      get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
     );
 
-    const uploadedDocData = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.applicationDocuments",
-      []
-    );
-
-    const uploadedTempDocData = get(
-      state.screenConfiguration.preparedFinalObject,
-      "LicensesTemp[0].applicationDocuments",
-      []
-    );
-
-    for (var y = 0; y < uploadedTempDocData.length; y++) {
-      if (
-        uploadedTempDocData[y].required &&
-        !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
-      ) {
-        isFormValid = false;
+    let validateDocumentField = false;
+    if (documentsFormat && documentsFormat.length) {
+      for (let i = 0; i < documentsFormat.length; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get( documentsFormat[i], "isDocumentTypeRequired" );
+        let documents = get(documentsFormat[i], "documents");
+        if (isDocumentRequired) {
+          if (documents && documents.length > 0) {
+            if (isDocumentTypeRequired) {
+              if (get(documentsFormat[i], "dropDownValues.value")) {
+                validateDocumentField = true;
+              } else {
+                dispatch(
+                  toggleSnackbar(
+                    true,
+                    { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
+                    "warning"
+                  )
+                );
+                validateDocumentField = false;
+                break;
+              }
+            } else {
+              validateDocumentField = true;
+            }
+          } else {
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
+                "warning"
+              )
+            );
+            validateDocumentField = false;
+            break;
+          }
+        } else {
+          validateDocumentField = true;
+        }
       }
-      if (isFormValid) {
-        const reviewDocData =
-          uploadedDocData &&
-          uploadedDocData.map(item => {
-            return {
-              title: `BPA_${item.documentType}`,
-              link: item.fileUrl && item.fileUrl.split(",")[0],
-              linkText: "View",
-              name: item.fileName
-            };
-          });
-        createEstimateData(
-          LicenseData,
-          "LicensesTemp[0].estimateCardData",
-          dispatch,
-          {},
-          true
-        ); //get bill and populate estimate card
-        dispatch(
-          prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
-        );
+      if (!validateDocumentField) {
+      isFormValid = false;
+      hasFieldToaster = true;
+      } else {
+        getSummaryRequiredDetails(state, dispatch);
       }
+    } else {
+      getSummaryRequiredDetails(state, dispatch);
     }
   }
 

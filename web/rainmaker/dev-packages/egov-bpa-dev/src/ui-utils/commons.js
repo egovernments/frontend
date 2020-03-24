@@ -737,6 +737,43 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         }
         queryObject[0].tradeLicenseDetail.applicationDocuments = docs;
       }
+
+      let documentsUpdalod = get(
+        state,
+        "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+        []
+      );
+    
+      let documnts = [];
+     if(documentsUpdalod) {
+      Object.keys(documentsUpdalod).forEach(function(key) {
+        documnts.push(documentsUpdalod[key])
+      });
+     }
+
+    //  documentType, tenantId
+      
+      let requiredDocuments = [];
+      if (documnts && documnts.length > 0) {
+        documnts.forEach(documents => {
+        if(documents && documents.documents){
+          let doc = {};
+          doc.fileStoreId = documents.documents[0].fileStoreId;
+          doc.fileStore = documents.documents[0].fileStoreId;
+          doc.fileName = documents.documents[0].fileName;
+          doc.fileUrl = documents.documents[0].fileUrl;
+          doc.documentType = documents.documentCode;
+          doc.tenantId = tenantId;
+          if(documents.documents[0].id) {
+            doc.id = documents.documents[0].id;
+          }
+          requiredDocuments.push(doc);
+        }
+      })
+    }
+    if(requiredDocuments && requiredDocuments.length) {
+      queryObject[0].tradeLicenseDetail.applicationDocuments = requiredDocuments;
+    }
       // else if (
       //   queryObject[0].tradeLicenseDetail &&
       //   queryObject[0].tradeLicenseDetail.applicationDocuments &&
