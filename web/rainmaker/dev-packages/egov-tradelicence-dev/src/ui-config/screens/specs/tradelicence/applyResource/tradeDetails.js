@@ -1039,7 +1039,7 @@ export const tradeDetails = getCommonCard({
               tradeTypeDropdownData
             )
           );
-
+          dispatch(pFO("Licenses[0].financialYear", "2019-20"));
 
       }
     },
