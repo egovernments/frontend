@@ -98,7 +98,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
 
   //set business service data
-    
+
   const businessService = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].workflowCode"
@@ -125,7 +125,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   const LicenseData = payload.Licenses[0];
   const fetchFromReceipt = sts !== "pending_payment";
 
-    
+
   // generate estimate data
   createEstimateData(
     LicenseData,
@@ -150,7 +150,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let queryObjectSearch = [
       {
         key: "tenantId",
-        value: tenantId 
+        value: tenantId
       },
       { key: "offset", value: "0" },
       { key: "licenseNumbers", value: licenseNumber}
@@ -271,7 +271,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
           printCont
         );
-    }   
+    }
 
     // Get approval details based on status and set it in screenconfig
 
@@ -310,12 +310,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         false
       );
     }
-    
+
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].applicationType"
     );
-   
+
     const headerrow = getCommonContainer({
       header: getCommonHeader({
         labelName: "Trade License Application (2018-2019)",
@@ -347,7 +347,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       headerrow
     );
 
- 
+
     // const footer = footerReview(
     //   action,
     //   state,
@@ -367,7 +367,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         action,
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
-      );       
+      );
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
   }
@@ -470,15 +470,15 @@ const setActionItems = (action, object) => {
 
 export const tradeReviewDetails = getCommonCard({
   title,
-  estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
+  // estimate,
+  // viewBreakupButton: getDialogButton(
+  //   "VIEW BREAKUP",
+  //   "TL_PAYMENT_VIEW_BREAKUP",
+  //   "search-preview"
+  // ),
   reviewTradeDetails,
   reviewOwnerDetails,
-  reviewDocumentDetails
+  // reviewDocumentDetails
 });
 
 const screenConfig = {
@@ -515,7 +515,7 @@ const screenConfig = {
                 xs: 12,
                 sm: 8
               },
-          
+
              ...headerrow
 
             },

@@ -196,7 +196,7 @@ export const updatePFOforSearchResults = async (
     );
   setDocsForEditFlow(state, dispatch);
   updateDropDowns(payload, action, state, dispatch, queryValue);
- 
+
   setApplicationNumberBox(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
@@ -375,7 +375,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         // if(process.env.REACT_APP_NAME === "Citizen"){
         //   const nextFinancialyear = await getNextFinancialYearForRenewal(queryObject[0].financialYear);
         //   set(queryObject[0], "financialYear", nextFinancialyear);
-        // }     
+        // }
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
       }
@@ -402,8 +402,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //Code for edit flow
 
       if (
-        queryObject[0].tradeLicenseDetail &&
-        queryObject[0].tradeLicenseDetail.applicationDocuments
+        queryObject[0].tradeLicenseDetail
+        // &&
+        // queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
 
 
