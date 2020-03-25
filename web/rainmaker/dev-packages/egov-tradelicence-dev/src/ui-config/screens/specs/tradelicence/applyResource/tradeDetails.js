@@ -34,7 +34,7 @@ const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
-    
+
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
@@ -60,7 +60,7 @@ const tradeUnitCard = {
                 labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_PLACEHOLDER"
               },
               required: true,
-              jsonPath: "LicensesTemp.tradeUnits[0].tradeType", 
+              jsonPath: "LicensesTemp.tradeUnits[0].tradeType",
               sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
               localePrefix: {
                 moduleName: "TRADELICENSE",
@@ -140,9 +140,30 @@ const tradeUnitCard = {
                     )
                   );
                 }
+
+                let cardIndex = action.componentJsonpath
+                  .split("items[")[1]
+                  .split("]")[0];
+                let tradeCategory = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  `LicensesTemp.tradeUnits[${cardIndex}].tradeType`,
+                  ""
+                );
+                dispatch(
+                  pFO(
+                    "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+                    get(
+                      state.screenConfiguration.preparedFinalObject,
+                      `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCategory}.${
+                        action.value
+                      }`,
+                      []
+                    )
+                  )
+                );
               } catch (e) {
                 console.log(e);
-              }        
+              }
               }
           },
           tradeType: {
@@ -240,7 +261,7 @@ const tradeUnitCard = {
                 labelName: "Trade Sub-Type",
                 labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
               },
-              
+
               placeholder: {
                 labelName: "Select Trade Sub-Type",
                 labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
@@ -776,6 +797,11 @@ export const tradeDetails = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 6
+        },
+        props: {
+          disabled: true,
+          className: "tl-trade-type",
+          value: "2020-21",
         }
       }),
       visible: false
@@ -854,7 +880,7 @@ export const tradeDetails = getCommonCard({
     //     sm: 6
     //   },
     //   props:{
-    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
+    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false
     //   },
     //   iconObj: {
     //     iconName: "search",
@@ -1014,7 +1040,7 @@ export const tradeDetails = getCommonCard({
           );
 
 
-      }      
+      }
     },
     tradeName: getTextField({
       label: {
@@ -1023,7 +1049,7 @@ export const tradeDetails = getCommonCard({
       },
       props:{
         className:"applicant-details-error"
-      }, 
+      },
       placeholder: {
         labelName: "Example Food Delivery",
         labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_PLACEHOLDER"
@@ -1031,7 +1057,7 @@ export const tradeDetails = getCommonCard({
       required: true,
       pattern: getPattern("eventDescription"),
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose"
-    }),    
+    }),
     // tradeStructureType: {
     //   ...getSelectField({
     //     label: {

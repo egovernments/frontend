@@ -3,7 +3,10 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { download } from "egov-common/ui-utils/commons";
-import { applyTradeLicense,getNextFinancialYearForRenewal} from "../../../../../ui-utils/commons";
+import {
+  applyTradeLicense,
+  getNextFinancialYearForRenewal
+} from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -59,7 +62,7 @@ const editRenewalMoveToSuccess = (LicenseData, dispatch) => {
 export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#custom-atoms-div");
   html2canvas(target, {
-    onclone: function (clonedDoc) {
+    onclone: function(clonedDoc) {
       // clonedDoc.getElementById("custom-atoms-footer")[
       //   "data-html2canvas-ignore"
       // ] = "true";
@@ -166,7 +169,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 1) {
+  if (activeStep === 0) {
     // await getDocList(state, dispatch);
 
     let isOwnerShipValid = validateFields(
@@ -245,9 +248,9 @@ export const callBackForNext = async (state, dispatch) => {
     );
 
     get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory") &&
-      get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
-        "."
-      )[0] === "INDIVIDUAL"
+    get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
       ? setMultiOwnerForApply(state, true)
       : setMultiOwnerForApply(state, false);
 
@@ -319,12 +322,11 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch,activeStep);
+    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
     if (isFormValid) {
       if (getQueryArg(window.location.href, "action") === "EDITRENEWAL")
-      editRenewalMoveToSuccess(LicenseData, dispatch);
-      else
-      moveToSuccess(LicenseData, dispatch);
+        editRenewalMoveToSuccess(LicenseData, dispatch);
+      else moveToSuccess(LicenseData, dispatch);
     }
   }
   if (activeStep !== 3) {
@@ -383,7 +385,10 @@ export const changeStep = (
       );
       activeStep = isDocsUploaded ? 3 : 2;
     } else {
-        activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
+      activeStep =
+        mode === "next"
+          ? 3
+          : 0
     }
   } else {
     activeStep = defaultActiveStep;
@@ -595,15 +600,13 @@ export const footer = getCommonApplyFooter({
   }
 });
 
-
-
-export const renewTradelicence  = async (financialYear,state,dispatch) => {
+export const renewTradelicence = async (financialYear, state, dispatch) => {
   const licences = get(
     state.screenConfiguration.preparedFinalObject,
     `Licenses`
   );
 
-  const tenantId= get(licences[0] , "tenantId");
+  const tenantId = get(licences[0], "tenantId");
 
   const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
 
@@ -611,23 +614,24 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
   set(licences[0], "action", "INITIATE");
   set(licences[0], "workflowCode", wfCode);
   set(licences[0], "applicationType", "RENEWAL");
-  set(licences[0],"financialYear" ,nextFinancialYear);
+  set(licences[0], "financialYear", nextFinancialYear);
 
-const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
-    Licenses: licences
-  })
-   const renewedapplicationNo = get(
-    response,
-    `Licenses[0].applicationNumber`
+  const response = await httpRequest(
+    "post",
+    "/tl-services/v1/_update",
+    "",
+    [],
+    {
+      Licenses: licences
+    }
   );
-  const licenseNumber = get(
-    response,
-    `Licenses[0].licenseNumber`
-  );
+  const renewedapplicationNo = get(response, `Licenses[0].applicationNumber`);
+  const licenseNumber = get(response, `Licenses[0].licenseNumber`);
   dispatch(
     setRoute(
       `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
-    ));
+    )
+  );
 };
 
 export const footerReview = (
@@ -640,7 +644,10 @@ export const footerReview = (
   financialYear
 ) => {
   /** MenuButton data based on status */
-  let licenseNumber= get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
+  let licenseNumber = get(
+    state.screenConfiguration.preparedFinalObject.Licenses[0],
+    "licenseNumber"
+  );
   const responseLength = get(
     state.screenConfiguration.preparedFinalObject,
     `licenseCount`,
@@ -656,14 +663,12 @@ export const footerReview = (
           uiFramework: "custom-atoms",
           componentPath: "Div",
           props: {
-           
             style: {
-            float:"right",
-            display:"flex"
+              float: "right",
+              display: "flex"
             }
           },
           children: {
-           
             resubmitButton: {
               componentPath: "Button",
               props: {
@@ -685,12 +690,12 @@ export const footerReview = (
                 action: "condition",
                 callBack: openPopup
               },
-              visible:getButtonVisibility(status, "RESUBMIT"),
+              visible: getButtonVisibility(status, "RESUBMIT"),
               roleDefination: {
                 rolePath: "user-info.roles",
                 roles: ["TL_CEMP", "CITIZEN"]
               }
-            },  
+            },
             editButton: {
               componentPath: "Button",
               props: {
@@ -721,14 +726,16 @@ export const footerReview = (
                 callBack: () => {
                   dispatch(
                     setRoute(
-                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-                     `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+                      // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                      `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
                     )
                   );
-                },
-
+                }
               },
-              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
+              visible:
+                (getButtonVisibility(status, "APPROVED") ||
+                  getButtonVisibility(status, "EXPIRED")) &&
+                responseLength === 1
             },
             submitButton: {
               componentPath: "Button",
@@ -758,12 +765,14 @@ export const footerReview = (
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  renewTradelicence(financialYear, state,dispatch);
-                },
-
+                  renewTradelicence(financialYear, state, dispatch);
+                }
               },
-              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
-            },    
+              visible:
+                (getButtonVisibility(status, "APPROVED") ||
+                  getButtonVisibility(status, "EXPIRED")) &&
+                responseLength === 1
+            },
             makePayment: {
               componentPath: "Button",
               props: {
@@ -787,20 +796,23 @@ export const footerReview = (
                 callBack: () => {
                   dispatch(
                     setRoute(
-                     `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
+                      `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
                     )
                   );
-                },
-
+                }
               },
-              visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
+              visible:
+                process.env.REACT_APP_NAME === "Citizen" &&
+                getButtonVisibility(status, "PENDINGPAYMENT")
+                  ? true
+                  : false
             }
           },
           gridDefination: {
             xs: 12,
             sm: 12
           }
-        },     
+        }
       }
     }
   });
@@ -817,9 +829,15 @@ export const footerReviewTop = (
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
-  let licenseNumber= get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
-  const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
-  const receiptKey = get(uiCommonConfig , "receiptKey");
+  let licenseNumber = get(
+    state.screenConfiguration.preparedFinalObject.Licenses[0],
+    "licenseNumber"
+  );
+  const uiCommonConfig = get(
+    state.screenConfiguration.preparedFinalObject,
+    "uiCommonConfig"
+  );
+  const receiptKey = get(uiCommonConfig, "receiptKey");
   const responseLength = get(
     state.screenConfiguration.preparedFinalObject,
     `licenseCount`,
@@ -838,20 +856,30 @@ export const footerReviewTop = (
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses,'print');
+      downloadCertificateForm(Licenses, "print");
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-
-
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
-      ]
-      download(receiptQueryString , "download" ,receiptKey );
+        {
+          key: "consumerCodes",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "tenantId"
+          )
+        }
+      ];
+      download(receiptQueryString, "download", receiptKey);
       // generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
@@ -859,21 +887,36 @@ export const footerReviewTop = (
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      const receiptQueryString =  [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
-      ]
-      download(receiptQueryString,"print" ,receiptKey);
-     // generateReceipt(state, dispatch, "receipt_print");
+      const receiptQueryString = [
+        {
+          key: "consumerCodes",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "tenantId"
+          )
+        }
+      ];
+      download(receiptQueryString, "print", receiptKey);
+      // generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses ,LicensesTemp} = state.screenConfiguration.preparedFinalObject;
+      const {
+        Licenses,
+        LicensesTemp
+      } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0],"additionalDetails.documents",documents)
+      set(Licenses[0], "additionalDetails.documents", documents);
       downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
@@ -881,14 +924,17 @@ export const footerReviewTop = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const {
+        Licenses,
+        LicensesTemp
+      } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      set(Licenses[0], "additionalDetails.documents", documents);
+      downloadAcknowledgementForm(Licenses, "print");
     },
     leftIcon: "assignment"
   };
-  
+
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -941,10 +987,14 @@ export const footerReviewTop = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
-               leftIcon: "cloud_download",
+              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+              leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: {
+                variant: "outlined",
+                style: { height: "60px", color: "#FE7A51" },
+                className: "tl-download-button"
+              },
               menu: downloadMenu
             }
           }
@@ -955,30 +1005,30 @@ export const footerReviewTop = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: {
+                variant: "outlined",
+                style: { height: "60px", color: "#FE7A51" },
+                className: "tl-print-button"
+              },
               menu: printMenu
             }
           }
         }
-
-      },
+      }
       // gridDefination: {
       //   xs: 12,
       //   sm: 6
       // }
-    } 
-  }
-  
+    }
+  };
 };
 
 export const openPopup = (state, dispatch) => {
-  dispatch(
-    prepareFinalObject("ResubmitAction", true)
-  );
-}
+  dispatch(prepareFinalObject("ResubmitAction", true));
+};
 
 export const downloadPrintContainer = (
   action,
@@ -989,8 +1039,11 @@ export const downloadPrintContainer = (
   tenantId
 ) => {
   /** MenuButton data based on status */
-  const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
-  const receiptKey = get(uiCommonConfig , "receiptKey");
+  const uiCommonConfig = get(
+    state.screenConfiguration.preparedFinalObject,
+    "uiCommonConfig"
+  );
+  const receiptKey = get(uiCommonConfig, "receiptKey");
   let downloadMenu = [];
   let printMenu = [];
   let tlCertificateDownloadObject = {
@@ -1005,7 +1058,7 @@ export const downloadPrintContainer = (
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses,'print');
+      downloadCertificateForm(Licenses, "print");
     },
     leftIcon: "book"
   };
@@ -1013,30 +1066,57 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
-      ]
-      download(receiptQueryString , "download" , receiptKey);
+        {
+          key: "consumerCodes",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "tenantId"
+          )
+        }
+      ];
+      download(receiptQueryString, "download", receiptKey);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      const receiptQueryString =  [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
-      ]
-      download(receiptQueryString,"print" , receiptKey);
+      const receiptQueryString = [
+        {
+          key: "consumerCodes",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "tenantId"
+          )
+        }
+      ];
+      download(receiptQueryString, "print", receiptKey);
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const {
+        Licenses,
+        LicensesTemp
+      } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0],"additionalDetails.documents",documents)
+      set(Licenses[0], "additionalDetails.documents", documents);
       downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
@@ -1044,10 +1124,13 @@ export const downloadPrintContainer = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const {
+        Licenses,
+        LicensesTemp
+      } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      set(Licenses[0], "additionalDetails.documents", documents);
+      downloadAcknowledgementForm(Licenses, "print");
     },
     leftIcon: "assignment"
   };
@@ -1065,7 +1148,7 @@ export const downloadPrintContainer = (
       ];
       break;
     case "APPLIED":
-    case "CITIZENACTIONREQUIRED":  
+    case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
@@ -1099,10 +1182,14 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
-               leftIcon: "cloud_download",
+              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+              leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: {
+                variant: "outlined",
+                style: { height: "60px", color: "#FE7A51" },
+                className: "tl-download-button"
+              },
               menu: downloadMenu
             }
           }
@@ -1113,20 +1200,23 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: {
+                variant: "outlined",
+                style: { height: "60px", color: "#FE7A51" },
+                className: "tl-print-button"
+              },
               menu: printMenu
             }
           }
         }
-
-      },
+      }
       // gridDefination: {
       //   xs: 12,
       //   sm: 6
       // }
     }
-  }
+  };
 };

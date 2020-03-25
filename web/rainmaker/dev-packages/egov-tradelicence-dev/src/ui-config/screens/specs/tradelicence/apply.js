@@ -39,8 +39,8 @@ import commonConfig from "config/common.js";
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
-  { labelName: "Owner Details", labelKey: "TL_COMMON_OWN_DETAILS" },
-  { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
+  // { labelName: "Owner Details", labelKey: "TL_COMMON_OWN_DETAILS" },
+  // { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
   { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
 ];
 export const stepper = getStepperObject(
@@ -63,7 +63,7 @@ export const header = getCommonContainer({
           }`,
          // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
           labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR":"TL_COMMON_APPL_NEW_LICENSE_YEAR"
-         
+
         })
       : {},
   applicationNumber: {
@@ -194,7 +194,7 @@ export const getData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
- 
+
   if (applicationNo) {
     //Edit/Update Flow ----
     const applicationType = get(
@@ -278,6 +278,7 @@ export const formwizardFirstStep = {
   },
   children: {
     tradeDetails,
+    tradeOwnerDetails
     // tradeLocationDetails
   }
 };
@@ -289,7 +290,7 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    tradeOwnerDetails
+    // tradeOwnerDetails
   },
   visible: false
 };
