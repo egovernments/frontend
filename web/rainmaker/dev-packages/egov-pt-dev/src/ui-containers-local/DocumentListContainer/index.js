@@ -20,27 +20,49 @@ class DocumentListContainer extends Component {
     const { ...rest } = this.props;
     return <DocumentList {...rest} />;
   }
- 
+
 }
 
-
+const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
+  if (!filterConditon) {
+    return true;
+  } else {
+    if (filterConditon.onArray) {
+      let returnValue=false;
+      const objectArray = get(preparedFinalObject, filterConditon.jsonPath, []);
+      objectArray.map(object => {
+        if (!filterConditon.filterValue.includes(object[filterConditon.arrayAttribute])) {
+          returnValue= true;
+        }
+      })
+      return returnValue;
+    }
+    const objectValue = get(preparedFinalObject, filterConditon.jsonPath, '');
+    if (!filterConditon.filterValue.includes(objectValue)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
 const mapStateToProps = state => {
-let   preparedFinalObject=get(state,'screenConfiguration.preparedFinalObject',{})
-const reasonForTransfer=get(preparedFinalObject,'Property.additionalDetails.reasonForTransfer','');
+  let preparedFinalObject = get(state, 'screenConfiguration.preparedFinalObject', {})
+  const reasonForTransfer = get(preparedFinalObject, 'Property.additionalDetails.reasonForTransfer', '');
   let documentsList = get(
     state,
     "screenConfiguration.preparedFinalObject.documentsContract",
     []
   );
-  documentsList.map(documentList=>{
-    documentList.cards.map(document=>{
-      if(document.code.includes("TRANSFERREASONDOCUMENT")){
-        document.dropdown.value=reasonForTransfer;
-        document.dropdown.disabled=true;
+  documentsList.map(documentList => {
+    documentList.cards.map(document => {
+      if (document.code.includes("TRANSFERREASONDOCUMENT")) {
+        document.dropdown.value = reasonForTransfer;
+        document.dropdown.disabled = true;
       }
     })
+    documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition))
   })
-  return { documentsList ,preparedFinalObject};
+  return { documentsList, preparedFinalObject };
 };
 const mapDispatchToProps = dispatch => {
   return {

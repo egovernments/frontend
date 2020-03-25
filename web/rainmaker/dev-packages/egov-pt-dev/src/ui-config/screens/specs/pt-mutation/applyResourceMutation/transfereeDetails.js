@@ -16,7 +16,7 @@ import get from "lodash/get";
 import "./index.css";
 
 const showComponent = (dispatch, componentJsonPath, display, oldStyle = {}) => {
-  let displayProps = display ? { ...oldStyle } : { ...oldStyle, display: "none" };
+  let displayProps = display ? { ...oldStyle ,display:'block'} : { ...oldStyle, display: "none" };
   dispatch(
     handleField("apply", componentJsonPath, "props.style", displayProps)
   );

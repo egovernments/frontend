@@ -325,6 +325,12 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
       card["name"] = doc.code;
       card["code"] = doc.code;
       card["required"] = doc.required ? true : false;
+      if(doc.hasFilterCondition&&doc.filterCondition){
+        card["filterCondition"]=doc.filterCondition;
+      }
+      // if(doc.code=='OWNER_REGISTRATIONPROOF'){
+      //   card["filterCondition"]={"filterValue":["NONE"],"jsonPath":"Property.ownersTemp","onArray":true,"arrayAttribute":"ownerType"};
+      // }
       if (doc.hasDropdown && doc.dropdownData) {
         let dropdown = {};
         dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
