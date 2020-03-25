@@ -2201,6 +2201,15 @@ export const setFilteredTradeTypes = (
                 mdmsTTTransformed[item.code].applicationDocument
             });
           }
+          if (
+            item.code &&
+            mdmsTTTransformed[item.code] 
+          ) {
+            tradeTypeList.push({
+              ...item
+            });
+          }
+
         });
       if (tradeTypeList && tradeTypeList.length > 0) {
         let filteredList =

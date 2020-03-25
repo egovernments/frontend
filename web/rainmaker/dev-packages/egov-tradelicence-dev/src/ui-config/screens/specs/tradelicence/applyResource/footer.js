@@ -167,7 +167,7 @@ export const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
-    await getDocList(state, dispatch);
+    // await getDocList(state, dispatch);
 
     let isOwnerShipValid = validateFields(
       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
@@ -304,11 +304,11 @@ export const callBackForNext = async (state, dispatch) => {
             name: item.fileName
           };
         });
-      createEstimateData(
-        LicenseData,
-        "LicensesTemp[0].estimateCardData",
-        dispatch
-      ); //get bill and populate estimate card
+      // createEstimateData(
+      //   LicenseData,
+      //   "LicensesTemp[0].estimateCardData",
+      //   dispatch
+      // ); //get bill and populate estimate card
       dispatch(
         prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
       );

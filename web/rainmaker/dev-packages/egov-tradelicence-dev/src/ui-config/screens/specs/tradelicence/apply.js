@@ -395,7 +395,7 @@ const screenConfig = {
         stepper,
         formwizardFirstStep,
         formwizardSecondStep,
-        formwizardThirdStep,
+        // formwizardThirdStep,
         formwizardFourthStep,
         footer
       }
