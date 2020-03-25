@@ -212,8 +212,9 @@ const tradeUnitCard = {
                     )
                   )
                 );
-                console.log("Trade type", action.value)
-               dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", action.value));
+                let finalTradeType = tradeCategory + "." + action.value + "." + action.value;
+                console.log("Final Trade Type", finalTradeType)
+               dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", finalTradeType));
               } catch (e) {
                 console.log(e);
               }
@@ -873,86 +874,86 @@ export const tradeDetails = getCommonCard({
     //   infoIcon: "info_circle",
     //   jsonPath: "Licenses[0].oldLicenseNumber"
     // }),
-    tradeLicenseType: {
-      ...getSelectField({
-        label: {
-          labelName: "License Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select License Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        jsonPath: "Licenses[0].licenseType",
-        localePrefix: {
-          moduleName: "TRADELICENSE",
-          masterName: "LICENSETYPE"
-        },
-        props: {
-          disabled: true,
-          value: "TEMPORARY",
-          className: "tl-trade-type"
-        },
-        sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        if (action.value === "TEMPORARY") {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
-              "visible",
-              true
-            )
-          );
-        } else {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
-              "visible",
-              false
-            )
-          );
-          // dispatch(pFO("Licenses[0].validFrom", null));
-          // dispatch(pFO("Licenses[0].validTo", null));
-        }
+    // tradeLicenseType: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "License Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL"
+    //     },
+    //     placeholder: {
+    //       labelName: "Select License Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER"
+    //     },
+    //     required: true,
+    //     jsonPath: "Licenses[0].licenseType",
+    //     localePrefix: {
+    //       moduleName: "TRADELICENSE",
+    //       masterName: "LICENSETYPE"
+    //     },
+    //     props: {
+    //       disabled: true,
+    //       value: "TEMPORARY",
+    //       className: "tl-trade-type"
+    //     },
+    //     sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
+    //   }),
+    //   beforeFieldChange: (action, state, dispatch) => {
+    //     if (action.value === "TEMPORARY") {
+    //       dispatch(
+    //         handleField(
+    //           "apply",
+    //           "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+    //           "visible",
+    //           true
+    //         )
+    //       );
+    //       dispatch(
+    //         handleField(
+    //           "apply",
+    //           "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
+    //           "visible",
+    //           true
+    //         )
+    //       );
+    //     } else {
+    //       dispatch(
+    //         handleField(
+    //           "apply",
+    //           "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+    //           "visible",
+    //           false
+    //         )
+    //       );
+    //       dispatch(
+    //         handleField(
+    //           "apply",
+    //           "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
+    //           "visible",
+    //           false
+    //         )
+    //       );
+    //       // dispatch(pFO("Licenses[0].validFrom", null));
+    //       // dispatch(pFO("Licenses[0].validTo", null));
+    //     }
 
-        const tradeTypes = setFilteredTradeTypes(
-          state,
-          dispatch,
-          action.value
-        );
-        const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
-        tradeTypeDropdownData &&
-          dispatch(
-            pFO(
-              "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-              tradeTypeDropdownData
-            )
-          );
+    //     const tradeTypes = setFilteredTradeTypes(
+    //       state,
+    //       dispatch,
+    //       action.value
+    //     );
+    //     const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
+    //     tradeTypeDropdownData &&
+    //       dispatch(
+    //         pFO(
+    //           "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+    //           tradeTypeDropdownData
+    //         )
+    //       );
 
-          console.log("MODIFIED TYPES", tradeTypes)
+    //       console.log("MODIFIED TYPES", tradeTypes)
 
-      }
-    },
+    //   }
+    // },
     tradeFromDate: {
       ...getDateField({
         label: {
@@ -975,7 +976,7 @@ export const tradeDetails = getCommonCard({
           }
         }
       }),
-      visible: false
+      visible: true
     },
     tradeToDate: {
       ...getDateField({
@@ -995,7 +996,7 @@ export const tradeDetails = getCommonCard({
           }
         }
       }),
-      visible: false,
+      visible: true,
       beforeFieldChange: (action, state, dispatch) => {
 
         const tradeTypes = setFilteredTradeTypes(
