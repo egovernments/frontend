@@ -1688,7 +1688,7 @@ export const updateDropDowns = async (
   setOwnerShipDropDownFieldChange(state, dispatch, payload);
 };
 
-const prepareBPAREGDocumentDetailsUploadRedux = async (state, dispatch) => {
+export const prepareBPAREGDocumentDetailsUploadRedux = async (state, dispatch) => {
   let docs = get (state.screenConfiguration.preparedFinalObject, "BPARegDocumentsContract");
   let bpaDocs = [];
 
@@ -1790,8 +1790,6 @@ export const getDocList = async (state, dispatch) => {
   });
   dispatch(prepareFinalObject("BPARegDocumentsContract", documentsContract));
   }
-
-  await prepareBPAREGDocumentDetailsUploadRedux(state, dispatch);
 };
 
 export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
