@@ -7,67 +7,65 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import {
-  getQueryArg
-} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 import { convertEpochToDate, checkValueForNA } from "../../utils";
 
-const accessoriesCard = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "review-trade-search-preview",
-    scheama: getCommonGrayCard({
-      accessoriesCardContainer: getCommonContainer({
-        reviewAccessoryType: getLabelWithValue(
-          {
-            labelName: "Accesory Type",
-            labelKey: "TL_REVIEWACCESSORY_TYPE_LABEL"
-          },
-          {
-            jsonPath:
-              "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
-            localePrefix: {
-              moduleName: "TRADELICENSE",
-              masterName: "ACCESSORIESCATEGORY"
-            },
-          }
-        ),
-        reviewAccessoryUOM: getLabelWithValue(
-          {
-            labelName: "UOM",
-            labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER"
-          },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uom", callBack: checkValueForNA }
-        ),
-        reviewAccessoryUOMValue: getLabelWithValue(
-          {
-            labelName: "UOM Value",
-            labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
-          },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue", callBack: checkValueForNA }
-        ),
-        reviewAccessoryCount: getLabelWithValue(
-          {
-            labelName: "Accessory Count",
-            labelKey: "TL_NEW_TRADE_ACCESSORY_COUNT"
-          },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count", callBack: checkValueForNA }
-        )
-      })
-    }),
-
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "Licenses[0].tradeLicenseDetail.accessories",
-    prefixSourceJsonPath:
-      "children.cardContent.children.accessoriesCardContainer.children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
-};
+// const accessoriesCard = {
+//   uiFramework: "custom-containers",
+//   componentPath: "MultiItem",
+//   props: {
+//     className: "review-trade-search-preview",
+//     scheama: getCommonGrayCard({
+//       accessoriesCardContainer: getCommonContainer({
+//         reviewAccessoryType: getLabelWithValue(
+//           {
+//             labelName: "Accesory Type",
+//             labelKey: "TL_REVIEWACCESSORY_TYPE_LABEL"
+//           },
+//           {
+//             jsonPath:
+//               "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
+//             localePrefix: {
+//               moduleName: "TRADELICENSE",
+//               masterName: "ACCESSORIESCATEGORY"
+//             },
+//           }
+//         ),
+//         reviewAccessoryUOM: getLabelWithValue(
+//           {
+//             labelName: "UOM",
+//             labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER"
+//           },
+//           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uom", callBack: checkValueForNA }
+//         ),
+//         reviewAccessoryUOMValue: getLabelWithValue(
+//           {
+//             labelName: "UOM Value",
+//             labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
+//           },
+//           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue", callBack: checkValueForNA }
+//         ),
+//         reviewAccessoryCount: getLabelWithValue(
+//           {
+//             labelName: "Accessory Count",
+//             labelKey: "TL_NEW_TRADE_ACCESSORY_COUNT"
+//           },
+//           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count", callBack: checkValueForNA }
+//         )
+//       })
+//     }),
+//
+//     items: [],
+//     hasAddItem: false,
+//     isReviewPage: true,
+//     sourceJsonPath: "Licenses[0].tradeLicenseDetail.accessories",
+//     prefixSourceJsonPath:
+//       "children.cardContent.children.accessoriesCardContainer.children",
+//     afterPrefixJsonPath: "children.value.children.key"
+//   },
+//   type: "array"
+// };
 
 const tradeTypeCard = {
   uiFramework: "custom-containers",
@@ -104,7 +102,7 @@ const tradeTypeCard = {
               masterName: "TRADETYPE"
             },
             callBack: value => {
-              return value ?  value.split(".")[1] : "NA";
+              return value ? value.split(".")[1] : "NA";
             }
           }
         )
@@ -245,19 +243,25 @@ export const getReviewTrade = (isEditable = true) => {
       //   { jsonPath: "Licenses[0].tradeName"}
       // ),
       reviewFromDate: getLabelWithValue(
-        { labelName: "From Date",labelKey : "TL_COMMON_FROM_DATE_LABEL" },
+        { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
         {
           jsonPath: "Licenses[0].validFrom",
           callBack: convertEpochToDate
         }
       ),
       reviewToDate: getLabelWithValue(
-        { labelName: "To Date",labelKey : "TL_COMMON_TO_DATE_LABEL" },
+        { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
         {
           jsonPath: "Licenses[0].validTo",
           callBack: convertEpochToDate
         }
       ),
+      reviewPurpose: getLabelWithValue(
+        { labelName: "Purpose", labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE" },
+        {
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose"
+        }
+      )
       // reviewStructureType: getLabelWithValue(
       //   { labelName: "Structure Type" ,labelKey : "TL_STRUCTURE_TYPE"},
       //   {

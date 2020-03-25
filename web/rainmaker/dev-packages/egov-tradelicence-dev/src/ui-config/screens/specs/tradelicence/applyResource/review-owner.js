@@ -171,8 +171,8 @@ export const getReviewOwner = (isEditable = true) => {
       props: {
         scheama: getCommonGrayCard({
           viewFive: getCommonContainer({
-            reviewownershipType,
-            reviewsubOwnership,
+            // reviewownershipType,
+            // reviewsubOwnership,
             reviewOwnerPhoneNo,
             reviewOwnerName: getLabelWithValue(
               {
@@ -181,37 +181,45 @@ export const getReviewOwner = (isEditable = true) => {
               },
               { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
             ),
-            reviewOwnerFatherName,
-            reviewRelationship,
-            reviewOwnerGender,
-            reviewOwnerDOB,
-            reviewOwnerEmail,
-            reviewOwnerPAN,
-            reviewOwnerAddr: getLabelWithValue(
+            reviewVehicle: getLabelWithValue(
               {
-                labelName: "Corrospondence Address",
-                labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
+                labelName: "Vehicle Number",
+                labelKey: "TL_NEW_OWNER_VEHICLE_NUMBER_LABEL"
               },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
-                  callBack: checkValueForNA
-              }
-            ),
-            reviewOwnerSpecialCat: getLabelWithValue(
-              {
-                labelName: "Special Owner Category",
-                labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
-              },
-              {
-                jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-                localePrefix: {
-                  moduleName: "common-masters",
-                  masterName: "OwnerType"
-                },
-                callBack: checkValueForNA
-              }
+              { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleNumber" }
             )
+            // ,
+            // reviewOwnerFatherName,
+            // reviewRelationship,
+            // reviewOwnerGender,
+            // reviewOwnerDOB,
+            // reviewOwnerEmail,
+            // reviewOwnerPAN,
+            // reviewOwnerAddr: getLabelWithValue(
+            //   {
+            //     labelName: "Corrospondence Address",
+            //     labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
+            //   },
+            //   {
+            //     jsonPath:
+            //       "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
+            //       callBack: checkValueForNA
+            //   }
+            // ),
+            // reviewOwnerSpecialCat: getLabelWithValue(
+            //   {
+            //     labelName: "Special Owner Category",
+            //     labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
+            //   },
+            //   {
+            //     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
+            //     localePrefix: {
+            //       moduleName: "common-masters",
+            //       masterName: "OwnerType"
+            //     },
+            //     callBack: checkValueForNA
+            //   }
+            // )
           })
         }),
 
@@ -222,71 +230,72 @@ export const getReviewOwner = (isEditable = true) => {
         afterPrefixJsonPath: "children.value.children.key"
       },
       type: "array"
-    },
-    multiOwnerInstitutional: {
-      uiFramework: "custom-containers",
-      componentPath: "MultiItem",
-      props: {
-        scheama: getCommonGrayCard({
-          viewFive: getCommonContainer({
-            reviewownershipType,
-            reviewsubOwnership,
-            reviewOwnerPhoneNo,
-            reviewoffTelephone: getLabelWithValue(
-              {
-                labelName: "Official Telephone No.",
-                labelKey: "TL_NEW_OWNER_PHONE_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber",
-                  callBack: checkValueForNA
-              }
-            ),
-            reviewOwnerName: getLabelWithValue(
-              {
-                labelName: "Name of the Authorised Person",
-                labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
-              },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"}
-            ),
-            reviewDesignation: getLabelWithValue(
-              {
-                labelName: "Designation",
-                labelKey: "TL_NEW_OWNER_DESIG_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.institution.designation",
-                  callBack: checkValueForNA
-              }
-            ),
-            reviewOwnerFatherName,
-            reviewRelationship,
-            reviewOwnerGender,
-            reviewOwnerDOB,
-
-            reviewOwnerEmail,
-            reviewOwnerAddr: getLabelWithValue(
-              {
-                labelName: "Official Corrospondence Address",
-                labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
-                  callBack: checkValueForNA
-              }
-            )
-          })
-        }),
-
-        items: [],
-        hasAddItem: false,
-        sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
-        prefixSourceJsonPath: "children.cardContent.children.viewFive.children"
-      },
-      type: "array"
     }
+    // ,
+    // multiOwnerInstitutional: {
+    //   uiFramework: "custom-containers",
+    //   componentPath: "MultiItem",
+    //   props: {
+    //     scheama: getCommonGrayCard({
+    //       viewFive: getCommonContainer({
+    //         reviewownershipType,
+    //         reviewsubOwnership,
+    //         reviewOwnerPhoneNo,
+    //         reviewoffTelephone: getLabelWithValue(
+    //           {
+    //             labelName: "Official Telephone No.",
+    //             labelKey: "TL_NEW_OWNER_PHONE_LABEL"
+    //           },
+    //           {
+    //             jsonPath:
+    //               "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber",
+    //               callBack: checkValueForNA
+    //           }
+    //         ),
+    //         reviewOwnerName: getLabelWithValue(
+    //           {
+    //             labelName: "Name of the Authorised Person",
+    //             labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
+    //           },
+    //           { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"}
+    //         ),
+    //         reviewDesignation: getLabelWithValue(
+    //           {
+    //             labelName: "Designation",
+    //             labelKey: "TL_NEW_OWNER_DESIG_LABEL"
+    //           },
+    //           {
+    //             jsonPath:
+    //               "Licenses[0].tradeLicenseDetail.institution.designation",
+    //               callBack: checkValueForNA
+    //           }
+    //         ),
+    //         reviewOwnerFatherName,
+    //         reviewRelationship,
+    //         reviewOwnerGender,
+    //         reviewOwnerDOB,
+    //
+    //         reviewOwnerEmail,
+    //         reviewOwnerAddr: getLabelWithValue(
+    //           {
+    //             labelName: "Official Corrospondence Address",
+    //             labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
+    //           },
+    //           {
+    //             jsonPath:
+    //               "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
+    //               callBack: checkValueForNA
+    //           }
+    //         )
+    //       })
+    //     }),
+    //
+    //     items: [],
+    //     hasAddItem: false,
+    //     sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
+    //     prefixSourceJsonPath: "children.cardContent.children.viewFive.children"
+    //   },
+    //   type: "array"
+    // }
   });
 };
