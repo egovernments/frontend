@@ -508,7 +508,8 @@ const tradeUnitCard = {
       "children.cardContent.children.tradeUnitCardContainer.children",
     onMultiItemAdd: (state, muliItemContent) => {
       return setFieldsOnAddItem(state, muliItemContent);
-    }
+    },
+    hasAddItem:false
   },
   type: "array"
 };
