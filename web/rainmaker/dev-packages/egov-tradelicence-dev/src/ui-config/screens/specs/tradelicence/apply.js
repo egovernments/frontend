@@ -221,7 +221,7 @@ export const getData = async (action, state, dispatch) => {
     }
     // dispatch(prepareFinalObject("LicensesTemp", []));
     await updatePFOforSearchResults(action, state, dispatch, applicationNo,tenantId);
-   
+    dispatch(prepareFinalObject("Licenses[0].financialYear”, “2020-21"));
     if (!queryValue) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
@@ -232,7 +232,7 @@ export const getData = async (action, state, dispatch) => {
         prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
       );
       if (oldApplicationNo !== null) {
-        dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
+        // dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
         dispatch(
           prepareFinalObject(
             "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
