@@ -595,6 +595,21 @@ export const tradeOwnerDetails = getCommonCard({
         }
       }
     },
+      applicatintAddInfo: getTextField({
+        label: {
+          labelName: "Vehicle Number",
+          labelKey: "TL_NEW_OWNER_VEHICLE_NUMBER_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Vehicle Number",
+          labelKey: "TL_NEW_OWNER_VEHICLE_NUMBER_PLACEHOLDER"
+        },
+        required: false,
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleNumber"
+      })
     
   },
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}}
