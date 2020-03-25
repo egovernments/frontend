@@ -2208,8 +2208,8 @@ export const setFilteredTradeTypes = (
           tradeTypeList.length > 0 &&
           tradeTypeList.filter(item => {
             if (
-              item.licenseType === licenseType &&
-              item.structureType === structureSubtype
+              item.licenseType === licenseType
+              // && item.structureType === structureSubtype
             )
               return true;
           });

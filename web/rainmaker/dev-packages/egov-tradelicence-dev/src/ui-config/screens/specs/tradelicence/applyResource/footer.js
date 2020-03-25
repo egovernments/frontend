@@ -158,8 +158,8 @@ export const callBackForNext = async (state, dispatch) => {
     }
     if (
       !isTradeDetailsValid ||
-      !isTradeLocationValid ||
-      !isAccessoriesValid ||
+      // !isTradeLocationValid ||
+      // !isAccessoriesValid ||
       !isTradeUnitValid
     ) {
       isFormValid = false;

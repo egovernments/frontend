@@ -38,7 +38,7 @@ const tradeUnitCard = {
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
-          labelName: "Trade Unit  ",
+          labelName: "Category",
           labelKey: "TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER"
         },
         {
@@ -60,7 +60,8 @@ const tradeUnitCard = {
                 labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_PLACEHOLDER"
               },
               required: true,
-              jsonPath: "LicensesTemp.tradeUnits[0].tradeType",
+              jsonPath: "LicensesTemp.tradeUnits[0].tradeType", 
+              sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
               localePrefix: {
                 moduleName: "TRADELICENSE",
                 masterName: "TRADETYPE"
@@ -141,8 +142,8 @@ const tradeUnitCard = {
                 }
               } catch (e) {
                 console.log(e);
+              }        
               }
-            }
           },
           tradeType: {
             ...getSelectField({
@@ -423,45 +424,42 @@ const tradeUnitCard = {
           },
           tradeUOM: getTextField({
             label: {
-              labelName: "UOM (Unit of Measurement)",
-              labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
+              labelName: "Vehicle Number",
+              labelKey: "TL_NEW_TRADE_DETAILS_VEHICLE_LABEL"
             },
             placeholder: {
-              labelName: "UOM",
-              labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER"
+              labelName: "Vehicle Number",
+              labelKey: "TL_NEW_TRADE_DETAILS_VEHICLE_PLACEHOLDER"
             },
             // required: true,
-            props: {
-              disabled: true
-            },
-            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
+            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleNumber",
             gridDefination: {
               xs: 12,
               sm: 4
             }
           }),
-          tradeUOMValue: getTextField({
-            label: {
-              labelName: "UOM Value",
-              labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
-            },
-            placeholder: {
-              labelName: "Enter UOM Value",
-              labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_PLACEHOLDER"
-            },
-            required: true,
-            props: {
-              disabled: true,
-              setDataInField: true,
-              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue"
-            },
-            pattern: getPattern("UOMValue"),
-            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue",
-            gridDefination: {
-              xs: 12,
-              sm: 4
-            }
-          })
+          // tradeUOMValue: getTextField({
+          //   label: {
+          //     labelName: "UOM Value",
+          //     labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
+          //   },
+          //   placeholder: {
+          //     labelName: "Enter UOM Value",
+          //     labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_PLACEHOLDER"
+          //   },
+          //   required: true,
+          //   props: {
+          //     disabled: true,
+          //     setDataInField: true,
+          //     jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue"
+          //   },
+          //   pattern: getPattern("UOMValue"),
+          //   jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue",
+          //   gridDefination: {
+          //     xs: 12,
+          //     sm: 4
+          //   }
+          // })
         },
         {
           style: {
@@ -769,9 +767,6 @@ export const tradeDetails = getCommonCard({
         required: true,
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
-         props:{
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
-        },
         gridDefination: {
           xs: 12,
           sm: 6
@@ -838,40 +833,40 @@ export const tradeDetails = getCommonCard({
     //     }
     //   }
     // },
-    oldLicenseNo: getTextField({
-      label: {
-        labelName: "Old License No",
-        labelKey: "TL_OLD_LICENSE_NO"
-      },
-      placeholder: {
-        labelName: "Enter Old License No",
-        labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      props:{
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
-      },
-      iconObj: {
-        iconName: "search",
-        position: "end",
-        color: "#FE7A51",
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            fillOldLicenseData(state, dispatch);
-          }
-        }
-      },
-      title: {
-        value: "Fill the form by searching your old approved trade license",
-        key: "TL_OLD_TL_NO"
-      },
-      infoIcon: "info_circle",
-      jsonPath: "Licenses[0].oldLicenseNumber"
-    }),
+    // oldLicenseNo: getTextField({
+    //   label: {
+    //     labelName: "Old License No",
+    //     labelKey: "TL_OLD_LICENSE_NO"
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Old License No",
+    //     labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 6
+    //   },
+    //   props:{
+    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
+    //   },
+    //   iconObj: {
+    //     iconName: "search",
+    //     position: "end",
+    //     color: "#FE7A51",
+    //     onClickDefination: {
+    //       action: "condition",
+    //       callBack: (state, dispatch) => {
+    //         fillOldLicenseData(state, dispatch);
+    //       }
+    //     }
+    //   },
+    //   title: {
+    //     value: "Fill the form by searching your old approved trade license",
+    //     key: "TL_OLD_TL_NO"
+    //   },
+    //   infoIcon: "info_circle",
+    //   jsonPath: "Licenses[0].oldLicenseNumber"
+    // }),
     tradeLicenseType: {
       ...getSelectField({
         label: {
@@ -890,7 +885,7 @@ export const tradeDetails = getCommonCard({
         },
         props: {
           disabled: true,
-          value: "PERMANENT",
+          value: "TEMPORARY",
           className: "tl-trade-type"
         },
         sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
@@ -933,25 +928,25 @@ export const tradeDetails = getCommonCard({
           // dispatch(pFO("Licenses[0].validFrom", null));
           // dispatch(pFO("Licenses[0].validTo", null));
         }
+
+        const tradeTypes = setFilteredTradeTypes(
+          state,
+          dispatch,
+          action.value
+        );
+        const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
+        tradeTypeDropdownData &&
+          dispatch(
+            pFO(
+              "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+              tradeTypeDropdownData
+            )
+          );
+
+          console.log("MODIFIED TYPES", tradeTypes)
+
       }
     },
-    tradeName: getTextField({
-      label: {
-        labelName: "Name of Trade",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_LABEL"
-      },
-      props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-      }, 
-      placeholder: {
-        labelName: "Example Diljit Da Dhaba",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
-      },
-      required: true,
-      pattern: getPattern("TradeName"),
-      jsonPath: "Licenses[0].tradeName"
-    }),
     tradeFromDate: {
       ...getDateField({
         label: {
@@ -994,83 +989,13 @@ export const tradeDetails = getCommonCard({
           }
         }
       }),
-      visible: false
-    },
-    tradeStructureType: {
-      ...getSelectField({
-        label: {
-          labelName: "Structure Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Structure Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_PLACEHOLDER"
-        },
-        props:{
-          className:"applicant-details-error",
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-        },
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "STRUCTURETYPE"
-        },
-        required: true,
-        jsonPath: "LicensesTemp[0].tradeLicenseDetail.structureType",
-        sourceJsonPath:
-          "applyScreenMdmsData.common-masters.StructureTypeTransformed"
-      }),
+      visible: false,
       beforeFieldChange: (action, state, dispatch) => {
-        try {
-          dispatch(
-            pFO(
-              "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
-              get(
-                state.screenConfiguration.preparedFinalObject
-                  .applyScreenMdmsData["common-masters"],
-                `StructureType.${action.value}`,
-                []
-              )
-            )
-          );
-          // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    },
-    tradeStructureSubType: {
-      ...getSelectField({
-        label: {
-          labelName: "Structure Sub Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
-        },
-        props:{
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Select Structure Sub Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "STRUCTURETYPE"
-        },
-        jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-        sourceJsonPath:
-          "applyScreenMdmsData.common-masters.StructureSubTypeTransformed"
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
+
         const tradeTypes = setFilteredTradeTypes(
           state,
           dispatch,
-          get(
-            state.screenConfiguration.preparedFinalObject,
-            "Licenses[0].licenseType",
-            "PERMANENT"
-          ),
-          action.value
+          "TEMPORARY"
         );
         const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
         tradeTypeDropdownData &&
@@ -1080,78 +1005,182 @@ export const tradeDetails = getCommonCard({
               tradeTypeDropdownData
             )
           );
-      }
+
+
+      }      
     },
-    tradeCommencementDate: getDateField({
+    tradeName: getTextField({
       label: {
-        labelName: "Trade Commencement Date",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
+        labelName: "Purpose",
+        labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE"
       },
       props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false
-      },
+        className:"applicant-details-error"
+      }, 
       placeholder: {
-        labelName: "Enter Trade Commencement Date",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_PLACEHOLDER"
+        labelName: "Example Food Delivery",
+        labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_PLACEHOLDER"
       },
       required: true,
-      pattern: getPattern("Date"),
-      jsonPath: "Licenses[0].commencementDate"
-    }),
-    tradeGSTNo: getTextField({
-      label: {
-        labelName: "Trade GST No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-      },
-      props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-      },
-      placeholder: {
-        labelName: "Enter Trade GST No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
-      },
-      pattern: getPattern("GSTNo"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
-    }),
-    tradeOperationalArea: getTextField({
-      label: {
-        labelName: "Operatonal Area (Sq Ft)",
-        labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
-      },
-      props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-      },
-      placeholder: {
-        labelName: "Enter Operatonal Area in Sq Ft",
-        labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
-      },
-      pattern: getPattern("OperationalArea"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
-    }),
-    tradeNoOfEmployee: getTextField({
-      label: {
-        labelName: "No. Of Employee",
-        labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
-      },
-      props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-      },
-      placeholder: {
-        labelName: "Enter No. Of Employee",
-        labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
-      },
-      pattern: getPattern("NoOfEmp"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
-    })
+      pattern: getPattern("eventDescription"),
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose"
+    }),    
+    // tradeStructureType: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Structure Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL"
+    //     },
+    //     placeholder: {
+    //       labelName: "Select Structure Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_PLACEHOLDER"
+    //     },
+    //     props:{
+    //       className:"applicant-details-error",
+    //       disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    //     },
+    //     localePrefix: {
+    //       moduleName: "common-masters",
+    //       masterName: "STRUCTURETYPE"
+    //     },
+    //     required: true,
+    //     jsonPath: "LicensesTemp[0].tradeLicenseDetail.structureType",
+    //     sourceJsonPath:
+    //       "applyScreenMdmsData.common-masters.StructureTypeTransformed"
+    //   }),
+    //   beforeFieldChange: (action, state, dispatch) => {
+    //     try {
+    //       dispatch(
+    //         pFO(
+    //           "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
+    //           get(
+    //             state.screenConfiguration.preparedFinalObject
+    //               .applyScreenMdmsData["common-masters"],
+    //             `StructureType.${action.value}`,
+    //             []
+    //           )
+    //         )
+    //       );
+    //       // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+    //   }
+    // },
+    // tradeStructureSubType: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Structure Sub Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
+    //     },
+    //     props:{
+    //       disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    //       className:"applicant-details-error"
+    //     },
+    //     placeholder: {
+    //       labelName: "Select Structure Sub Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_PLACEHOLDER"
+    //     },
+    //     required: true,
+    //     localePrefix: {
+    //       moduleName: "common-masters",
+    //       masterName: "STRUCTURETYPE"
+    //     },
+    //     jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
+    //     sourceJsonPath:
+    //       "applyScreenMdmsData.common-masters.StructureSubTypeTransformed"
+    //   }),
+    //   beforeFieldChange: (action, state, dispatch) => {
+    //     const tradeTypes = setFilteredTradeTypes(
+    //       state,
+    //       dispatch,
+    //       get(
+    //         state.screenConfiguration.preparedFinalObject,
+    //         "Licenses[0].licenseType",
+    //         "PERMANENT"
+    //       ),
+    //       action.value
+    //     );
+    //     const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
+    //     tradeTypeDropdownData &&
+    //       dispatch(
+    //         pFO(
+    //           "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+    //           tradeTypeDropdownData
+    //         )
+    //       );
+    //   }
+    // },
+    // tradeCommencementDate: getDateField({
+    //   label: {
+    //     labelName: "Trade Commencement Date",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
+    //   },
+    //   props:{
+    //     className:"applicant-details-error",
+    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Trade Commencement Date",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_PLACEHOLDER"
+    //   },
+    //   required: true,
+    //   pattern: getPattern("Date"),
+    //   jsonPath: "Licenses[0].commencementDate"
+    // }),
+    // tradeGSTNo: getTextField({
+    //   label: {
+    //     labelName: "Trade GST No.",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
+    //   },
+    //   props:{
+    //     className:"applicant-details-error",
+    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Trade GST No.",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
+    //   },
+    //   pattern: getPattern("GSTNo"),
+    //   jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
+    // }),
+    // tradeOperationalArea: getTextField({
+    //   label: {
+    //     labelName: "Operatonal Area (Sq Ft)",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
+    //   },
+    //   props:{
+    //     className:"applicant-details-error",
+    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Operatonal Area in Sq Ft",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
+    //   },
+    //   pattern: getPattern("OperationalArea"),
+    //   jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
+    // }),
+    // tradeNoOfEmployee: getTextField({
+    //   label: {
+    //     labelName: "No. Of Employee",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+    //   },
+    //   props:{
+    //     className:"applicant-details-error",
+    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter No. Of Employee",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
+    //   },
+    //   pattern: getPattern("NoOfEmp"),
+    //   jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
+    // })
   },
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},
   ),
   tradeUnitCard,
-  accessoriesCard
+  // accessoriesCard
 });
 
 const setFieldsOnAddItem = (state, multiItemContent) => {

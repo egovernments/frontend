@@ -278,7 +278,7 @@ export const formwizardFirstStep = {
   },
   children: {
     tradeDetails,
-    tradeLocationDetails
+    // tradeLocationDetails
   }
 };
 
