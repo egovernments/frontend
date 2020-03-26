@@ -16,40 +16,6 @@ import { getReviewDocuments } from "./review-documents";
 //   })
 // });
 
-const declarationDetails = getCommonContainer({
-  checkbox:{
-   uiFramework: "custom-atoms-local",
-  //  moduleName: "egov-tradeli",
-   componentPath: "Checkbox",
-   props: {
-     content:'EPASS_MUTATION_DECLARATION',
-      label: {
-        labelName: "Declaration Message",
-        labelKey: "EPASS_DECLARATION_MESSAGE"
-      },
-    //  jsonPath:
-    //      "Property.declaration"
-   },
-
-   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
- }
- });
-
-
-export const declarationSummary = getCommonContainer({
- header: {
-   uiFramework: "custom-atoms",
-   componentPath: "Container",
-   props: {
-     style: { margin: "10px" }
-   },
-   children: {
-     body:declarationDetails
-   }
- },
-
-});
-
 const reviewTradeDetails = getReviewTrade();
 
 const reviewOwnerDetails = getReviewOwner();
