@@ -830,7 +830,7 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
       {
         style: "tl-head",
         table: {
-          widths: [60, "*",60],
+          widths: [60, "*",90],
           body: [
             [
               {
@@ -864,9 +864,9 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
               },
               {
                 image: qrcode,
-                width: 50,
-                height: 61.25,
-                margin: [0, 15, 0, 0],
+                width: 90,
+                height: 90.25,
+                margin: [5, 5, 0, 5],
                 alignment: "center"
               }
             ]
@@ -1847,8 +1847,8 @@ const generateReceipt = async (state, dispatch, type) => {
   };
   switch (type) {
     case "certificate_download":
-      let qrText = `Owner Name: ${transformedData.owners[0].name},License Number: ${transformedData.licenseNumber}, license Issue Date: ${
-        transformedData.licenseIssueDate},license Expiry Date: ${transformedData.licenseExpiryDate},City: ${transformedData.city}, Trade Name: ${transformedData.tradeName},
+      let qrText = `Trade Owner Name: ${transformedData.owners[0].name},Trade License Number: ${transformedData.licenseNumber}, license Issue Date: ${
+        transformedData.licenseIssueDate},Trade License Expiry Date: ${transformedData.licenseExpiryDate},City: ${transformedData.city}, Trade Name: ${transformedData.tradeName},
         Trade Subtype: ${transformedData.tradeTypeCertificate} `;
       console.log("=====>>>"+qrText);
       let qrcode = await QRCode.toDataURL(qrText);
