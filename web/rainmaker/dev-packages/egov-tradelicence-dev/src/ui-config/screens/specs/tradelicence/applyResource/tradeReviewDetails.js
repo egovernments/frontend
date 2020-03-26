@@ -20,6 +20,42 @@ const reviewTradeDetails = getReviewTrade();
 
 const reviewOwnerDetails = getReviewOwner();
 
+
+const declarationDetails = getCommonContainer({
+  checkbox:{
+   uiFramework: "custom-atoms-local",
+  //  moduleName: "egov-tradeli",
+   componentPath: "Checkbox",
+   props: {
+     content:'PT_MUTATION_DECLARATION',
+      label: {
+        labelName: "I hereby declare that the measurements, specifications and other details and specifications mentioned above are correct, complete and true to the best of my knowledge and belief and that I shall abide by the approved plan and the provisions in the Act and Rules in undertaking the construction.",
+        labelKey: "BPA_STAKEHOLDER_DECLARAION_LABEL"
+      },
+      jsonPath: "trade.isDeclared",
+    
+    //  jsonPath:
+    //      "Property.declaration"
+   },
+   
+   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+ }
+ });
+
+
+export const declarationSummary = getCommonContainer({
+ header: {
+   uiFramework: "custom-atoms",
+   componentPath: "Container",
+   props: {
+     style: { margin: "10px" }
+   },
+   children: {
+     body:declarationDetails
+   }
+ },
+
+});
 // const reviewDocumentDetails = getReviewDocuments();
 
 export const tradeReviewDetails = getCommonCard({
