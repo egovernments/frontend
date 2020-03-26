@@ -402,7 +402,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         queryObject[0].tradeLicenseDetail &&
         queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
-        if (getQueryArg(window.location.href, "action") === "edit"||isRenewal) {
+        if (getQueryArg(window.location.href, "action") === "edit") {
           // const removedDocs = get(
           //   state.screenConfiguration.preparedFinalObject,
           //   "LicensesTemp[0].removedDocs",

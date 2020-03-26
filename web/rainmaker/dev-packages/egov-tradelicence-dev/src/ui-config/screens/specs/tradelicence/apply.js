@@ -340,6 +340,20 @@ const screenConfig = {
       );
       const isRenewal= get(state.screenConfiguration.preparedFinalObject,"LicensesTemp[0].renewal")?true:false;
       isRenewal && dispatch(toggleSpinner());
+      if(isRenewal){
+        const accessories = get(state.screenConfiguration.preparedFinalObject , "Licenses[0].tradeLicenseDetail.accessories");
+        const length =accessories ? accessories.length : 0;
+        if(length > 0){
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.accessoriesCard.props.items[0].item0.children.cardContent.children.accessoriesCardContainer.children.accessoriesCount`,
+                "props.disabled",
+                false
+              )
+            );
+          }
+      }
       const mohallaLocalePrefix = {
         moduleName: tenantId,
         masterName: "REVENUE"
