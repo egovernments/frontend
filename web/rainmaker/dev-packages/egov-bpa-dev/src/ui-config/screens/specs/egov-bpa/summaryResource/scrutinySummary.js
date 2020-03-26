@@ -257,7 +257,11 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath: "scrutinyDetails.planDetail.planInformation.demolitionArea",
-                            callBack: checkValueForNA
+                            callBack: value => {
+                                if(value == "0") { return "0"; }
+                                else if(value) { return value; }
+                                else { return "NA"}
+                                }
                         }
                     )
                 })

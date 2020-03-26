@@ -417,9 +417,9 @@ const callBackForNext = async (state, dispatch) => {
             "BPA.owners[0].isPrimaryOwner"
           );
           if (primaryOwner && primaryOwner === true) {
-            if (bpaStatus) {
-              changeStep(state, dispatch);
-            } else {
+            // if (bpaStatus) {
+            //   changeStep(state, dispatch);
+            // } else {
               let response = await createUpdateBpaApplication(
                 state,
                 dispatch,
@@ -427,7 +427,7 @@ const callBackForNext = async (state, dispatch) => {
               );
               responseStatus = get(response, "status", "");
               responseStatus === "success" && changeStep(state, dispatch);
-            }
+            // }
             prepareDocumentsUploadData(state, dispatch);
           } else {
             let errorMessage = {
@@ -455,9 +455,9 @@ const callBackForNext = async (state, dispatch) => {
               };
               dispatch(toggleSnackbar(true, errorMessage, "warning"));
             } else {
-              if (bpaStatus) {
-                changeStep(state, dispatch);
-              } else {
+              // if (bpaStatus) {
+              //   changeStep(state, dispatch);
+              // } else {
                 let response = await createUpdateBpaApplication(
                   state,
                   dispatch,
@@ -465,7 +465,7 @@ const callBackForNext = async (state, dispatch) => {
                 );
                 responseStatus = get(response, "status", "");
                 responseStatus === "success" && changeStep(state, dispatch);
-              }
+              // }
               prepareDocumentsUploadData(state, dispatch);
             }
           } else {
