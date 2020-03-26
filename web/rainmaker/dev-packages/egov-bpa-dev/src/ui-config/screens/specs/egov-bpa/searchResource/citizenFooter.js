@@ -144,7 +144,7 @@ export const citizenFooter = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Approve",
-        labelKey: "BPA_CITIZEN_APPROVE_BUTTON"
+        labelKey: "BPA_APPROVE_BUTTON"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",

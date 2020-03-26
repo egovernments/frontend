@@ -302,7 +302,8 @@ const estimate = getCommonGrayCard({
     onClickDefination: {
       action: "condition",
       callBack: showHideAdhocPopup
-    }
+    },
+    visible: process.env.REACT_APP_NAME !== "Citizen"
   },
 });
 

@@ -223,7 +223,7 @@ class ActionDialog extends React.Component {
               >
                 <LabelContainer
                   labelName={"send to architect"}
-                  labelKey={`WF_BPAbuttonLabel`}
+                  labelKey={`BPA_${applicationAction}_BUTTON`}
                 />
               </Button>
             </Grid>

@@ -542,6 +542,9 @@ const setDocsForEditFlow = async (state, dispatch) => {
   dispatch(
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
   );
+  dispatch(
+    prepareFinalObject("LicensesTemp[0].isDocsEdit", true)
+  );
 };
 
 export const updatePFOforSearchResults = async (
@@ -741,22 +744,22 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //   getMultipleOwners(owners)
       // );
       let action = "NOWORKFLOW";
-      if (
-        queryObject[0].tradeLicenseDetail &&
-        queryObject[0].tradeLicenseDetail.applicationDocuments
-      ) {
-        if (activeIndex === 2) {
-          action = "APPLY";
-        }
-        let docs = []; 
-        let bparegDocuments = queryObject[0].tradeLicenseDetail.applicationDocuments;
-       if(bparegDocuments && bparegDocuments.length > 0) {
-        bparegDocuments.forEach(doc => {
-          if(doc != null) docs.push(doc)
-        })
-        }
-        queryObject[0].tradeLicenseDetail.applicationDocuments = docs;
-      }
+      // if (
+      //   queryObject[0].tradeLicenseDetail &&
+      //   queryObject[0].tradeLicenseDetail.applicationDocuments
+      // ) {
+      //   if (activeIndex === 2) {
+      //     action = "APPLY";
+      //   }
+      //   let docs = []; 
+      //   let bparegDocuments = queryObject[0].tradeLicenseDetail.applicationDocuments;
+      //  if(bparegDocuments && bparegDocuments.length > 0) {
+      //   bparegDocuments.forEach(doc => {
+      //     if(doc != null) docs.push(doc)
+      //   })
+      //   }
+      //   queryObject[0].tradeLicenseDetail.applicationDocuments = docs;
+      // }
 
       let documentsUpdalod = get(
         state,
