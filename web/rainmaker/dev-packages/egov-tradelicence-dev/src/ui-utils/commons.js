@@ -425,7 +425,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //   action = "INITIATE"
       //   }
         if (isRenewal) {
-          action = "INITIATE";
           let renewalSearchQueryObject = [
             { key: "tenantId", value: queryObject[0].tenantId },
             { key: "applicationNumber", value: queryObject[0].applicationNumber }
