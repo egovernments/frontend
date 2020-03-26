@@ -72,13 +72,13 @@ export const paymentSuccessFooter = (
   };
   switch (status) {
     case "APPROVED":
-      downloadMenu = [tlCertificateDownloadObject, receiptDownloadObject];
-      printMenu = [tlCertificatePrintObject, receiptPrintObject];
+      downloadMenu = [tlCertificateDownloadObject];
+      printMenu = [tlCertificatePrintObject];
       break;
     case "APPLIED":
     case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject, tlCertificateDownloadObject];
-      printMenu = [applicationPrintObject, tlCertificatePrintObject];
+      downloadMenu = [ tlCertificateDownloadObject];
+      printMenu = [ tlCertificatePrintObject];
       break;
     // case "PENDINGPAYMENT":
     //   downloadMenu = [applicationDownloadObject];
@@ -89,12 +89,12 @@ export const paymentSuccessFooter = (
     //   printMenu = [receiptPrintObject, applicationPrintObject];
     //   break;
     case "cancelled":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+      downloadMenu = [ applicationDownloadObject];
+      printMenu = [ applicationPrintObject];
       break;
     case "rejected":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [ applicationPrintObject];
       break;
     default:
       break;

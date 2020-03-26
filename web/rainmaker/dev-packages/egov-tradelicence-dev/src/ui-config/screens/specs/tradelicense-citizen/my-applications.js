@@ -33,30 +33,25 @@ const screenConfig = {
           props: {
             contents: [
               {
-                label: "TL_COMMON_TABLE_COL_APP_TYPE",
-                jsonPath: "applicationType"
-              },
-              {
-                label: "TL_COMMON_TABLE_COL_TRD_NAME",
-                jsonPath: "tradeName"
-              },
-              {
                 label: "TL_COMMON_TABLE_COL_APP_NO",
                 jsonPath: "applicationNumber"
+              },
+              {
+                label: "TL_COMMON_TABLE_COL_TRADE_TYPE",
+                jsonPath: "tradeLicenseDetail.tradeUnits[0].tradeType",
+                localePrefix: {
+                  moduleName: "TRADELICENSE",
+                  masterName: "TRADETYPE"
+                }
               },
               {
                 label: "TL_COMMON_TABLE_COL_OWN_NAME",
                 jsonPath: "tradeLicenseDetail.owners[0].name"
               },
               {
-                label: "TL_COMMON_TABLE_COL_LIC_NO",
-                jsonPath: "licenseNumber"
+                label: "TL_COMMON_TABLE_COL_OWN_MOBILE",
+                jsonPath: "tradeLicenseDetail.owners[0].mobileNumber"
               },
-              {
-                label: "TL_COMMON_TABLE_COL_STATUS",
-                jsonPath: "status",
-                prefix: "WF_NEWTL_"
-              }
             ],
             moduleName: "TL",
             homeURL: "/tradelicense-citizen/home"

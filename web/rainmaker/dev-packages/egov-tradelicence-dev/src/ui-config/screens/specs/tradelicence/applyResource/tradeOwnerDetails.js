@@ -445,156 +445,6 @@ export const tradeOwnerDetails = getCommonCard({
     }
   ),
   ownershipType: getCommonContainer({
-    // ownership: {
-    //   ...getSelectField({
-    //     label: {
-    //       labelName: "Type of ownership",
-    //       labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL"
-    //     },
-    //     placeholder: {
-    //       labelName: "Select Type of Ownership",
-    //       labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_PLACEHOLDER"
-    //     },
-    //     jsonPath: "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
-    //     required: true,
-    //     localePrefix: {
-    //       moduleName: "common-masters",
-    //       masterName: "OwnerShipCategory"
-    //     },
-    //     sourceJsonPath:
-    //       "applyScreenMdmsData.common-masters.OwnerShipCategoryTransformed"
-    //   }),
-    //   beforeFieldChange: (action, state, dispatch) => {
-    //     try {
-    //       dispatch(
-    //         pFO(
-    //           "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed",
-    //           get(
-    //             state.screenConfiguration.preparedFinalObject,
-    //             `applyScreenMdmsData.common-masters.OwnerShipCategory.${action.value}`,
-    //             []
-    //           )
-    //         )
-    //       );
-    //       if (action.value === "INDIVIDUAL") {
-    //         if (
-    //           get(
-    //             state.screenConfiguration.preparedFinalObject,
-    //             "Licenses[0].tradeLicenseDetail.institution"
-    //           )
-    //         ) {
-    //           dispatch(pFO("Licenses[0].tradeLicenseDetail.institution", null));
-    //         }
-    //         dispatch(
-    //           handleField(
-    //             "apply",
-    //             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-    //             "visible",
-    //             true
-    //           )
-    //         );
-    //         dispatch(
-    //           handleField(
-    //             "apply",
-    //             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
-    //             "visible",
-    //             false
-    //           )
-    //         );
-    //       } else {
-    //         dispatch(
-    //           handleField(
-    //             "apply",
-    //             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-    //             "visible",
-    //             false
-    //           )
-    //         );
-    //         dispatch(
-    //           handleField(
-    //             "apply",
-    //             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
-    //             "visible",
-    //             true
-    //           )
-    //         );
-    //         dispatch(
-    //           pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
-    //         );
-    //       }
-    //     } catch (e) {
-    //       console.log(e);
-    //     }
-    //   }
-    // },
-    // subOwnership: {
-    //   ...getSelectField({
-    //     label: {
-    //       labelName: "Type of sub-ownership",
-    //       labelKey: "TL_TYPE_OF_SUB_OWNERSHIP"
-    //     },
-    //     placeholder: {
-    //       labelName: "Select Type of sub ownership",
-    //       labelKey: "TL_TYPE_OF_SUB_OWNERSHIP_PLACEHOLDER"
-    //     },
-    //     jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-    //     required: true,
-    //     localePrefix: {
-    //       moduleName: "common-masters",
-    //       masterName: "OwnerShipCategory"
-    //     },
-    //     sourceJsonPath:
-    //       "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed"
-    //   }),
-    //   beforeFieldChange: (action, state, dispatch) => {
-    //     if (action.value === "INDIVIDUAL.SINGLEOWNER") {
-    //       const ownerInfoCards = get(
-    //         state.screenConfiguration.screenConfig.apply, //hardcoded to apply screen
-    //         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items"
-    //       );
-    //       dispatch(
-    //         handleField(
-    //           "apply",
-    //           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-    //           "props.hasAddItem",
-    //           false
-    //         )
-    //       );
-    //       if (ownerInfoCards && ownerInfoCards.length > 1) {
-    //         const singleCard = ownerInfoCards.slice(0, 1); //get the first element if multiple cards present
-
-    //         dispatch(
-    //           handleField(
-    //             "apply",
-    //             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-    //             "props.items",
-    //             singleCard
-    //           )
-    //         );
-    //         dispatch(
-    //           pFO(
-    //             "Licenses[0].tradeLicenseDetail.owners",
-    //             get(
-    //               state.screenConfiguration.preparedFinalObject,
-    //               "Licenses[0].tradeLicenseDetail.owners"
-    //             ).slice(0, 1)
-    //           )
-    //         );
-    //       }
-    //     }
-
-    //     if (action.value === "INDIVIDUAL.MULTIPLEOWNERS") {
-    //       dispatch(
-    //         handleField(
-    //           "apply",
-    //           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-    //           "props.hasAddItem",
-    //           true
-    //         )
-    //       );
-    //     }
-    //   }
-    // },
     getOwnerMobNoField: getTextField({
       label: {
         labelName: "Mobile No.",
@@ -657,6 +507,38 @@ export const tradeOwnerDetails = getCommonCard({
         },
         required: false,
         jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleNumber"
+      }),    
+      vehicleManufacturer: getTextField({
+        label: {
+          labelName: "Vehicle Manufacturer",
+          labelKey: "TL_NEW_OWNER_VEHICLE_MANUFACTURER_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Vehicle Manufacturer",
+          labelKey: "TL_NEW_OWNER_VEHICLE_MANUFACTURER_PLACEHOLDER"
+        },
+        required: true,
+        visible: false,
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleManufacturer"
+      }),    
+      vehicleModel: getTextField({
+        label: {
+          labelName: "Vehicle Model",
+          labelKey: "TL_NEW_OWNER_VEHICLE_MODEL_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Vehicle Model",
+          labelKey: "TL_NEW_OWNER_VEHICLE_MODEL_PLACEHOLDER"
+        },
+        required: true,
+        visible: false,
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleModel"
       })
     
   },

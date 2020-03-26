@@ -368,7 +368,6 @@ const screenConfig = {
         "PERMANENT"
       );
     });
-
     return action;
   },
 

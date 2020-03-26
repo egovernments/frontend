@@ -2171,25 +2171,20 @@ export const setFilteredTradeTypes = (
   licenseType,
   structureSubtype
 ) => {
-  const tradeTypeBSlab = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.TradeLicense.TradeType",
-    []
-  );
   const mdmsTradeTypes = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.TradeLicense.MdmsTradeType",
     []
   );
   try {
-    if (tradeTypeBSlab.length > 0 && mdmsTradeTypes.length > 0) {
+    if (mdmsTradeTypes.length > 0) {
       const mdmsTTTransformed = mdmsTradeTypes.reduce((acc, item) => {
         item.code && (acc[item.code] = item);
         return acc;
       }, {});
       let tradeTypeList = [];
-      tradeTypeBSlab.length > 0 &&
-        tradeTypeBSlab.forEach(item => {
+      mdmsTradeTypes.length > 0 &&
+      mdmsTradeTypes.forEach(item => {
           if (
             item.code &&
             mdmsTTTransformed[item.code] &&
@@ -2212,18 +2207,8 @@ export const setFilteredTradeTypes = (
 
         });
       if (tradeTypeList && tradeTypeList.length > 0) {
-        let filteredList =
-          tradeTypeList &&
-          tradeTypeList.length > 0 &&
-          tradeTypeList.filter(item => {
-            if (
-              item.licenseType === licenseType
-              // && item.structureType === structureSubtype
-            )
-              return true;
-          });
         let tradeTypeTransformed = commonTransform(
-          { TradeType: [...filteredList] },
+          { TradeType: [...tradeTypeList] },
           "TradeType"
         );
         dispatch(
