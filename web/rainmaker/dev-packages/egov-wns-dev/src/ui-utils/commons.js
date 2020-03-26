@@ -230,7 +230,11 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
-                                response.WaterConnection[i].due = data.Bill[0].totalAmount
+                                if(data.Bill[0].totalAmount!==0){
+                                    response.WaterConnection[i].due = data.Bill[0].totalAmount
+                                }else{
+                                    response.WaterConnection[i].due = "NA"
+                                } 
                             }
 
                         } else {
@@ -277,7 +281,11 @@ export const getSWMyApplicationResults = async (queryObject, dispatch) => {
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
-                                response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                                if(data.Bill[0].totalAmount!==0){
+                                    response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                                }else{
+                                    response.SewerageConnections[i].due = "NA"
+                                } 
                             }
 
                         } else {
