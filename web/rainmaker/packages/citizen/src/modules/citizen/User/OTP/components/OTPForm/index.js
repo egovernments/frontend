@@ -26,12 +26,6 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
             <div style={{ marginBottom: "24px" }}>
               <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
-          <Label bold={true}  fontSize= "23px" label="|" />
-          </div>
-           <div style={{marginLeft:"7px" }}>
-              <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
           </div>
           <Label className="otp-heading text-center" bold={true} dark={true} fontSize={16} label="CORE_OTP_HEADING" />
           <div className="citizen-otp-sent-message">
