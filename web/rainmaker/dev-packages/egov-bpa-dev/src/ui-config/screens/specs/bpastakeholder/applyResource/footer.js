@@ -11,7 +11,8 @@ import {
   getDocList,
   validateFields,
   ifUserRoleExists,
-  createEstimateData
+  createEstimateData,
+  prepareBPAREGDocumentDetailsUploadRedux
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg, getLocaleLabels, getTransformedLocalStorgaeLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
@@ -236,7 +237,14 @@ export const callBackForNext = async (state, dispatch) => {
     ) {
       isFormValid = false;
     } else {
+      let isDocsEdit = get(
+        state.screenConfiguration.preparedFinalObject, 
+        "LicensesTemp[0].isDocsEdit", ""
+      );
       await getDocList(state, dispatch);
+      if(isDocsEdit != true){
+        await prepareBPAREGDocumentDetailsUploadRedux(state, dispatch);
+      }
 
       isFormValid = await applyTradeLicense(state, dispatch);
       if (!isFormValid) {
