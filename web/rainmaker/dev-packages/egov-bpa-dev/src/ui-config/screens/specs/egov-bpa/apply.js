@@ -59,8 +59,8 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Apply for building permit (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: ""
+    labelName: `Apply for building permit`, //later use getFinancialYearDates
+    labelKey: "BPA_APPLY_FOR_BUILDING_PERMIT_HEADER"
   }),
   //applicationNumber: applicationNumberContainer()
   applicationNumber: {

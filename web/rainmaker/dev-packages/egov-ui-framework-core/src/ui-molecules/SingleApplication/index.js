@@ -17,6 +17,7 @@ import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import Label from "../../ui-containers/LabelContainer";
 import "./index.css";
 import { handleScreenConfigurationFieldChange as handleField } from "../../ui-redux/screen-configuration/actions";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 const styles = {
   card: {
     marginLeft: 8,
@@ -81,9 +82,15 @@ class SingleApplication extends React.Component {
             setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }
       } else {
+        const userInfo = JSON.parse(getUserInfo());
+        const roles = get(userInfo, "roles");
         switch (item.status) {
           case "Initiated":
-            setRoute(`/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+            if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {
+              setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
+            } else {
+              setRoute(`/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+            }
             break;
           default:
             setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
