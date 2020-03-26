@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const styles = theme => ({
     root: {
-        paddingTop: "30px",
+        paddingTop: "0px",
         overflow: "hidden",
         height: '100%',
     },
@@ -98,7 +98,7 @@ class LandingPage extends React.Component {
                 <Grid container className={classes.root} id="common-container">
 
                     <Grid container style={{ marginBottom: "10px" }}>
-                        <Grid item md={12} style={{ textAlign: "center" }}>
+                        <Grid item md={12} style={{ textAlign: "center", backgroundColor:"#FFF",paddingTop:"20px", height:"80px", marginBottom:"50px" }}>
                             <img src={logoUrl} alt="company-logo" width="20%" />
                         </Grid>
                     </Grid>
