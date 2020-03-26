@@ -54,6 +54,10 @@ const screenConfig = {
               {
                 label: "BPA_COMMON_SLA",
                 jsonPath: "sla",
+              },
+              {
+                label: "BPA_VALID_TO_DATE",
+                jsonPath: "validTo"
               }
             ],
             moduleName: "BPAREG",

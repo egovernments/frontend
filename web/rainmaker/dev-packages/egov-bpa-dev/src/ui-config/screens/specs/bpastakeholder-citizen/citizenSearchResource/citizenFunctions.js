@@ -7,7 +7,7 @@ import {
 import commonConfig from "config/common.js";
 import get from "lodash/get";
 import { getWorkFlowData,getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
-import { getTextToLocalMapping } from "../../utils/index";
+import { getTextToLocalMapping, convertEpochToDate } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const getMdmsData = async () => {
@@ -100,6 +100,10 @@ export const fetchData = async (
         let modifiedTime = element.auditDetails.lastModifiedTime;
         let licensetypeFull =
           element.tradeLicenseDetail.tradeUnits[0].tradeType;
+        let validTo = null;
+        if(element.validTo) {
+          validTo = convertEpochToDate(parseInt(element.validTo))
+        }
         if (licensetypeFull.split(".").length > 1) {
           service +=
             " - " +
@@ -132,7 +136,8 @@ export const fetchData = async (
           ),
           tenantId: get(element, "tenantId", null),
           modifiedTime: modifiedTime,
-          sortNumber: 0
+          sortNumber: 0,
+          validTo: validTo
         });
       });
 
