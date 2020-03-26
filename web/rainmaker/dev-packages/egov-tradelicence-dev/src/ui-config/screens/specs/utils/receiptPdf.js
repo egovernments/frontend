@@ -1848,7 +1848,7 @@ const generateReceipt = async (state, dispatch, type) => {
   switch (type) {
     case "certificate_download":
       let qrText = `Trade Owner Name: ${transformedData.owners[0].name},Trade License Number: ${transformedData.licenseNumber}, Trade license Issue Date: ${
-        transformedData.licenseIssueDate},License Expiry Date: ${transformedData.licenseExpiryDate},City: ${transformedData.city}, Trade Name: ${transformedData.tradeName},
+        transformedData.licenseIssueDate},License Expiry Date: ${transformedData.licenseExpiryDate},ULB Name: ${transformedData.city}, Trade Name: ${transformedData.tradeName},
         Trade Subtype: ${transformedData.tradeTypeCertificate} `;
       console.log("=====>>>"+qrText);
       let qrcode = await QRCode.toDataURL(qrText);
