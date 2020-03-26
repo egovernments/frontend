@@ -22,7 +22,29 @@ class DocumentListContainer extends Component {
   }
 
 }
-
+// parentValue
+const  filterDropdownFunction = (rowObject, preparedFinalObject, filterConditon) => {
+  if (!filterConditon) {
+    return true;
+  } else {
+    if (filterConditon.parentArrayJsonPath) {
+      let returnValue=false;
+      const objectArray = get(preparedFinalObject, filterConditon.parentArrayJsonPath, []);
+      objectArray.map(object => {
+        if (rowObject.parentValue.includes(object[filterConditon.parentJsonpath])) {
+          returnValue= true;
+        }
+      })
+      return returnValue;
+    }
+    const objectValue = get(preparedFinalObject, filterConditon.parentJsonpath, '');
+    if (rowObject.parentValue.includes(objectValue)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
 const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
   if (!filterConditon) {
     return true;
@@ -59,6 +81,7 @@ const mapStateToProps = state => {
         document.dropdown.value = reasonForTransfer;
         document.dropdown.disabled = true;
       }
+      document.dropdown.menu=document.dropdown.menu.filter(menu=>filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
     })
     documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition))
   })

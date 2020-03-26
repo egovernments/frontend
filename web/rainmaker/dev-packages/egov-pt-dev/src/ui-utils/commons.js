@@ -55,8 +55,8 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 export const getSearchResults = async (queryObject, dispatch) => {
   try {
-    
-    
+
+
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
@@ -320,31 +320,39 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
   documents.forEach(doc => {
     // Handle the case for multiple muildings
-   
-      let card = {};
-      card["name"] = doc.code;
-      card["code"] = doc.code;
-      card["required"] = doc.required ? true : false;
-      if(doc.hasFilterCondition&&doc.filterCondition){
-        card["filterCondition"]=doc.filterCondition;
-      }
-      // if(doc.code=='OWNER_REGISTRATIONPROOF'){
-      //   card["filterCondition"]={"filterValue":["NONE"],"jsonPath":"Property.ownersTemp","onArray":true,"arrayAttribute":"ownerType"};
-      // }
-      if (doc.hasDropdown && doc.dropdownData) {
-        let dropdown = {};
-        dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
-        dropdown.required = true;
-        dropdown.menu = doc.dropdownData.filter(item => {
-          return item.active;
-        });
-        dropdown.menu = dropdown.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
-        });
-        card["dropdown"] = dropdown;
-      }
-      tempDoc[doc.documentType].cards.push(card);
-    
+
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.additionalDetails && doc.additionalDetails.filterCondition) {
+      card["filterCondition"] = doc.additionalDetails.filterCondition;
+    }
+    if (doc.additionalDetails && doc.additionalDetails.dropdownFilter) {
+      card["dropdownFilter"] = doc.additionalDetails.dropdownFilter;
+    }
+
+    // if(doc.code=='OWNER_REGISTRATIONPROOF'){
+    //   card["filterCondition"]={"filterValue":["NONE"],"jsonPath":"Property.ownersTemp","onArray":true,"arrayAttribute":"ownerType"};
+    // }
+    if (doc.hasDropdown && doc.dropdownData) {
+      let dropdown = {};
+      dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
+      dropdown.required = true;
+      dropdown.menu = doc.dropdownData.filter(item => {
+        return item.active;
+      });
+      dropdown.menu = dropdown.menu.map(item => {
+        let menuItem = { code: item.code, label: getTransformedLocale(item.code) };
+        if (item.parentValue) {
+          menuItem['parentValue'] = item.parentValue;
+        }
+        return { ...menuItem };
+      });
+      card["dropdown"] = dropdown;
+    }
+    tempDoc[doc.documentType].cards.push(card);
+
   });
 
   Object.keys(tempDoc).forEach(key => {
@@ -479,12 +487,12 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
 export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#material-ui-cardContent");
   html2canvas(target, {
-    imageTimeout:1500000000,
+    imageTimeout: 1500000000,
     onclone: function (clonedDoc) {
-      if(clonedDoc.getElementById("pdf-header")){
+      if (clonedDoc.getElementById("pdf-header")) {
         clonedDoc.getElementById("pdf-header").style.display = "block";
       }
-      
+
       // if(clonedDoc.getElementById("property-assess-form")){
       //   clonedDoc.getElementById("property-assess-form").style.display = "none";
       // }
@@ -494,18 +502,18 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
       // if(clonedDoc.getElementById("pt-flex-child-button")){
       //   clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
       // }
-      
+
     }
   }).then(canvas => {
     var data = canvas.toDataURL();
     var imgWidth = 200;
     var pageHeight = 295;
-    var imgHeight =  pageHeight-80;
+    var imgHeight = pageHeight - 80;
     var doc = new jsPDF("p", "mm");
     var position = 0;
 
-    doc.addImage(data, "PNG", 5, 10+position, imgWidth, imgHeight);
- 
+    doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
+
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);
     } else if (action === "print") {
