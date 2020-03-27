@@ -121,7 +121,7 @@ export const reviewPlumberProvidedBy = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
   },
   {
-    jsonPath: "WaterConnection[0].plumberInfo[0].name",
+    jsonPath: "WaterConnection[0].additionalDetails.detailsProvidedBy",
     callBack: handleNA
   }
 );
