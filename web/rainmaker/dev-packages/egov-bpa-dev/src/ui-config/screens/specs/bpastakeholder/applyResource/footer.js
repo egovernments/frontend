@@ -120,6 +120,19 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
     {},
     true
   ); //get bill and populate estimate card
+  let getLicenceValidData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.tradeSubType[0].validityPeriod", 0
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.footnoteOFLicenceValid.children.footNote",
+      "props.labelKey[1]",
+      getLicenceValidData
+    )
+  );
+ 
   prepareDocumentsDetailsView(state, dispatch);
 }
 
