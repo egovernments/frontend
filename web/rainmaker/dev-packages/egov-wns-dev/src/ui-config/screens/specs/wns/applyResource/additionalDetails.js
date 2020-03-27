@@ -28,7 +28,7 @@ const getPlumberRadioButton = {
   moduleName: "egov-wns",
   componentPath: "RadioGroupContainer",
   gridDefination: { xs: 12, sm: 12 },
-  jsonPath: "applyScreen.plumberInfo[0].detailsProvidedBy",
+  jsonPath: "applyScreen.additionalDetails.detailsProvidedBy",
   props: {
     label: { key: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY" },
     buttons: [
