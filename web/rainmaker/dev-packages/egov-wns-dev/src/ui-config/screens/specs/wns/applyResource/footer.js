@@ -403,7 +403,14 @@ export const changeStep = (
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (defaultActiveStep === -1) {
     if (activeStep === 1 && mode === "next") {
-      activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
+      const isDocsUploaded = get(
+        state.screenConfiguration.preparedFinalObject,
+        "applyScreen.documents",
+        null
+      );
+      if(isDocsUploaded){
+        activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
+      }
     } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
     } else {
@@ -412,7 +419,6 @@ export const changeStep = (
   } else {
     activeStep = defaultActiveStep;
   }
-
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = isNextButton(activeStep);
   const isPayButtonVisible = activeStep === 3 ? true : false;
