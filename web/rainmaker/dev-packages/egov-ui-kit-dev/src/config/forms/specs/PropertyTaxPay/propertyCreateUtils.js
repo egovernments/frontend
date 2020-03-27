@@ -188,9 +188,8 @@ export const prefillPTDocuments = async (payload, sourceJsonPath, destJsonPath, 
     });
     // documentsUploadRedux && documentsUploadRedux.length && documentsUploadRedux.reverse();
   let docs = {};
-  for (let i = 0; i < documentsUploadRedux.length; i++) {
+ if(documentsUploadRedux){ for (let i = 0; i < documentsUploadRedux.length; i++) {
     docs[i] = documentsUploadRedux[i][i];
-  }
-  console.log("documentsUploadRedux-----:   ", docs);
+  }}
   dispatch(prepareFinalObject(destJsonPath, docs));
 };

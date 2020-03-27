@@ -205,7 +205,9 @@ class DocumentList extends Component {
     if(documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length){
         Object.keys(docsUploaded).map((key, index)=>{
             Object.keys(docsUploaded[key]).map((item,index)=>{
+              if(docsUploaded[key]&& documentsUploadRedux[key]){
                 documentsUploadRedux[key][item]= docsUploaded[key][item];
+              }
             });
         });
         prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
