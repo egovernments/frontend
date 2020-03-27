@@ -179,101 +179,72 @@ const getOwners = data => {
 const getBuildings = data => {
   let retbuildings = [];
   data &&
-    data.buildings.forEach(building => {
-      retbuildings.push([
-        {
-          text: "Property Type",
-          border: [true, true, false, false]
-        },
-        {
-          text: " Name of Building",
-          border: [false, true, false, false]
-        },
-        {
-          text: "Building Usage Type",
-          border: [false, true, false, false]
-        },
-        {
-          text: "Building Usage Subtype",
-          border: [false, true, true, false]
-        }
-      ]);
-      retbuildings.push([
-        {
-          text: data.propertyType,
-          style: "receipt-table-value",
-          border: [true, false, false, false]
-        },
-        {
-          text: get(building, "name", "NA"),
-          style: "receipt-table-value",
-          border: [false, false, false, false]
-        },
-        {
-          text: get(building, "usageType", "NA"),
-          style: "receipt-table-value",
-          border: [false, false, false, false]
-        },
-        {
-          text: get(building, "usageSubType", "NA"),
-          style: "receipt-table-value",
-          border: [false, false, true, false]
-        }
-      ]);
-      let headerrow = [];
-      let valuerow = [];
-      for (let [uomkey, uomvalue] of Object.entries(building.uoms)) {
-        headerrow.push({
-          text: getMessageFromLocalization(
-            `NOC_PROPERTY_DETAILS_${getTransformedLocale(uomkey)}_LABEL`
-          ),
-          border:
-            valuerow.length == 0
-              ? [true, false, false, false]
-              : valuerow.length == 3
-              ? [false, false, true, false]
-              : [false, false, false, false]
-        });
-        valuerow.push({
-          text: uomvalue,
-          style: "receipt-table-value",
-          border:
-            valuerow.length == 0
-              ? [true, false, false, false]
-              : valuerow.length == 3
-              ? [false, false, true, false]
-              : [false, false, false, false]
-          // left, top ,right ,down
-        });
-        // draw when elements in one row are four
-        if (headerrow.length == 4) {
-          retbuildings.push(
-            [headerrow[0], headerrow[1], headerrow[2], headerrow[3]],
-            [valuerow[0], valuerow[1], valuerow[2], valuerow[3]]
-          );
-          headerrow = [];
-          valuerow = [];
-        }
+  data.buildings.forEach(building => {
+    retbuildings.push([
+      {
+        text: "Property Type",
+        border: [true, true, false, false]
+      },
+      {
+        text: " Name of Building",
+        border: [false, true, false, false]
+      },
+      {
+        text: "Building Usage Type",
+        border: [false, true, false, false]
+      },
+      {
+        text: "Building Usage Subtype",
+        border: [false, true, true, false]
       }
-      if (headerrow.length > 0) {
-        var i;
-        for (i = 4 - headerrow.length; i > 0; i--) {
-          headerrow.push({
-            text: "",
-            border:
-              valuerow.length == 3
-                ? [false, false, true, false]
-                : [false, false, false, false]
-          });
-          valuerow.push({
-            text: "",
-            style: "receipt-table-value",
-            border:
-              valuerow.length == 3
-                ? [false, false, true, false]
-                : [false, false, false, true]
-          });
-        }
+    ]);
+    retbuildings.push([
+      {
+        text: data.propertyType,
+        style: "receipt-table-value",
+        border: [true, false, false, false]
+      },
+      {
+        text: get(building, "name", "NA"),
+        style: "receipt-table-value",
+        border: [false, false, false, false]
+      },
+      {
+        text: get(building, "usageType", "NA"),
+        style: "receipt-table-value",
+        border: [false, false, false, false]
+      },
+      {
+        text: get(building, "usageSubType", "NA"),
+        style: "receipt-table-value",
+        border: [false, false, true, false]
+      }
+    ]);
+    let headerrow = [];
+    let valuerow = [];
+    for (let [uomkey, uomvalue] of Object.entries(building.uoms)) {
+      headerrow.push({
+        text: getMessageFromLocalization(
+          `NOC_PROPERTY_DETAILS_${getTransformedLocale(uomkey)}_LABEL`
+        ),
+        border: valuerow.length == 0
+          ? [true, false, false, false]
+          : valuerow.length == 3
+            ? [false, false, true, false]
+            : [false, false, false, false]
+      });
+      valuerow.push({
+        text: uomvalue,
+        style: "receipt-table-value",
+        border: valuerow.length == 0
+          ? [true, false, false, false]
+          : valuerow.length == 3
+            ? [false, false, true, false]
+            : [false, false, false, false]
+      // left, top ,right ,down
+      });
+      // draw when elements in one row are four
+      if (headerrow.length == 4) {
         retbuildings.push(
           [headerrow[0], headerrow[1], headerrow[2], headerrow[3]],
           [valuerow[0], valuerow[1], valuerow[2], valuerow[3]]
@@ -281,15 +252,41 @@ const getBuildings = data => {
         headerrow = [];
         valuerow = [];
       }
-      // set last row bottom border
-      retbuildings[retbuildings.length - 1][0].border[3] = true;
-      retbuildings[retbuildings.length - 1][1].border[3] = true;
-      retbuildings[retbuildings.length - 1][2].border[3] = true;
-      retbuildings[retbuildings.length - 1][3].border[3] = true;
-    });
+    }
+    if (headerrow.length > 0) {
+      var i;
+      for (i = 4 - headerrow.length; i > 0; i--) {
+        headerrow.push({
+          text: "",
+          border: valuerow.length == 3
+            ? [false, false, true, false]
+            : [false, false, false, false]
+        });
+        valuerow.push({
+          text: "",
+          style: "receipt-table-value",
+          border: valuerow.length == 3
+            ? [false, false, true, false]
+            : [false, false, false, true]
+        });
+      }
+      retbuildings.push(
+        [headerrow[0], headerrow[1], headerrow[2], headerrow[3]],
+        [valuerow[0], valuerow[1], valuerow[2], valuerow[3]]
+      );
+      headerrow = [];
+      valuerow = [];
+    }
+    // set last row bottom border
+    retbuildings[retbuildings.length - 1][0].border[3] = true;
+    retbuildings[retbuildings.length - 1][1].border[3] = true;
+    retbuildings[retbuildings.length - 1][2].border[3] = true;
+    retbuildings[retbuildings.length - 1][3].border[3] = true;
+  });
   return retbuildings;
 };
 const getApplicationData = async (transformedData, ulbLogo, type) => {
+  console.log("transformedData33", transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
       return i === 0 || i === node.table.body.length ? 0.1 : 0.1;
@@ -303,18 +300,18 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     vLineColor: function(i, node) {
       return i === 0 || i === node.table.widths.length ? "#979797" : "#979797";
     }
-    // paddingLeft: function(i, node) {
-    //   return 5;
-    // },
-    // paddingRight: function(i, node) {
-    //   return 5;
-    // },
-    // paddingTop: function(i, node) {
-    //   return 5;
-    // },
-    // paddingBottom: function(i, node) {
-    //   return 5;
-    // }
+  // paddingLeft: function(i, node) {
+  //   return 5;
+  // },
+  // paddingRight: function(i, node) {
+  //   return 5;
+  // },
+  // paddingTop: function(i, node) {
+  //   return 5;
+  // },
+  // paddingBottom: function(i, node) {
+  //   return 5;
+  // }
   };
 
   let headerText = "Application Confirmation";
@@ -432,34 +429,75 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       table: {
         widths: ["*", "*", "*", "*"],
         body: [
+
           [
             {
-              text: "Property Id",
+              text: "Area Type",
               border: [true, true, false, false]
             },
             {
-              text: "City",
+              text: "District",
               border: [false, true, false, false]
             },
             {
-              text: "Door/House No.",
+              text: "Sub-District",
               border: [false, true, false, false]
             },
             {
-              text: "Building/Company Name",
+              text: "Property Id",
               border: [false, true, true, false]
-            }
+            },
+
           ],
           [
             {
-              text: transformedData.propertyId,
+              text: transformedData.areaType,
               style: "receipt-table-value",
               border: [true, false, false, false]
             },
             {
-              text: transformedData.city,
+              text: transformedData.district,
               style: "receipt-table-value",
               border: [false, false, false, false]
+            },
+            {
+              text: transformedData.subDistrict,
+              style: "receipt-table-value",
+              border: [false, false, false, false]
+            },
+            {
+              text: transformedData.propertyId,
+              style: "receipt-table-value",
+              border: [false, false, true, false]
+            },
+
+          ],
+
+          [
+
+            {
+              text: "City",
+              border: [true, false, false, false]
+            },
+            {
+              text: "Door/House No.",
+              border: [false, false, false, false]
+            },
+            {
+              text: "Building/Company Name",
+              border: [false, false, false, false]
+            },
+            {
+              text: "Street Name",
+              border: [false, false, true, false]
+            }
+          ],
+          [
+
+            {
+              text: transformedData.city,
+              style: "receipt-table-value",
+              border: [true, false, false, false]
             },
             {
               text: transformedData.door,
@@ -469,14 +507,26 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
             {
               text: transformedData.buildingName,
               style: "receipt-table-value",
+              border: [false, false, false, false]
+            },
+            {
+              text: transformedData.street,
+              style: "receipt-table-value",
               border: [false, false, true, false]
-            }
+            },
           ],
           [
+
+
             {
-              text: "Street Name",
+              text: " village",
               border: [true, false, false, false]
             },
+            {
+              text: " landmark",
+              border: [false, false, false, false]
+            },
+
 
             {
               text: " Mohalla",
@@ -484,40 +534,90 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
             },
             {
               text: "Pincode",
-              border: [false, false, false, false]
-            },
-            {
-              text: "Location on Map",
               border: [false, false, true, false]
-            }
+            },
+
           ],
           [
+
             {
-              text: transformedData.street,
+              text: transformedData.village,
               style: "receipt-table-value",
-              border: [true, false, false, true]
+              border: [true, false, false, false]
             },
+
+            {
+              text: transformedData.landmark,
+              style: "receipt-table-value",
+              border: [false, false, false, false]
+            },
+
             {
               text: transformedData.mohalla,
               style: "receipt-table-value",
-              border: [false, false, false, true]
+              border: [false, false, false, false]
             },
             {
               text: transformedData.pincode,
               style: "receipt-table-value",
-              border: [false, false, false, true]
+              border: [false, false, true, false]
             },
+
+          ],
+
+          [
+            {
+              text: "Location on Map",
+              style: "receipt-table-value",
+              border: [true, false, false, false]
+            },
+            {
+              text: "Fire Station",
+              style: "receipt-table-value",
+              border: [false, false, false, false]
+            },
+            {
+              text: "",
+              style: "receipt-table-value",
+              border: [false, false, false, false]
+            },
+            {
+              text: "",
+              style: "receipt-table-value",
+              border: [false, false, true, false]
+            },
+
+          ],
+          [
             {
               text: transformedData.gis,
               style: "receipt-table-value",
+              border: [true, false, false, true]
+            },
+            {
+              text: "",
+              style: "receipt-table-value",
+              border: [false, false, false, true]
+            },
+            {
+              text: "",
+              style: "receipt-table-value",
+              border: [false, false, false, true]
+            },
+            {
+              text: "",
+              style: "receipt-table-value",
               border: [false, false, true, true]
-            }
+            },
           ]
+
         ]
       },
       layout: borderLayout
-    }
-  ];
+    },
+
+  ]
+
   let applicantDetails = [
     {
       text: "APPLICANT DETAILS",
@@ -629,7 +729,10 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
         ]
       },
       layout: borderLayout
-    }
+    },
+
+
+
   ];
   let documents = [];
   let owners = transformedData.owners.map(owner => [
@@ -638,16 +741,25 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       border: [true, true, false, true],
       style: "receipt-table-value"
     },
-    { text: owner.name, border: [false, true, true, true] },
+    {
+      text: owner.name,
+      border: [false, true, true, true]
+    },
     {
       text: "Mobile No.",
       border: [true, true, false, true],
       style: "receipt-table-value"
     },
-    { text: owner.mobile, border: [false, true, true, true] }
+    {
+      text: owner.mobile,
+      border: [false, true, true, true]
+    }
   ]);
   let applicantInformation = [
-    { text: "APPLICANT INFORMATION", style: "noc-title" },
+    {
+      text: "APPLICANT INFORMATION",
+      style: "noc-title"
+    },
     {
       style: "noc-table",
       table: {
@@ -658,7 +770,10 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     }
   ];
   let amountPaid = [
-    { text: "AMOUNT PAID", style: "noc-title" },
+    {
+      text: "AMOUNT PAID",
+      style: "noc-title"
+    },
     {
       style: "noc-table",
       table: {
@@ -718,7 +833,10 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     }
   ];
   let paymentInformation = [
-    { text: "PAYMENT INFORMATION", style: "noc-title" },
+    {
+      text: "PAYMENT INFORMATION",
+      style: "noc-title"
+    },
     {
       style: "noc-table",
       table: {
@@ -796,9 +914,9 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     }
   ];
   let qrText = `Application: ${transformedData.applicationNumber}, Date: ${
-    transformedData.applicationDate
+  transformedData.applicationDate
   }, Buildings: ${transformedData.propertyType}, Applicant: ${
-    transformedData.owners[0].name
+  transformedData.owners[0].name
   }, Address: ${transformedData.address}`;
 
   if (transformedData.ownershipType.startsWith("INSTITUTION")) {
@@ -866,11 +984,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       applicantDetails = [];
       documents = [];
       qrText = `Application: ${
-        transformedData.applicationNumber
+      transformedData.applicationNumber
       }, Receipt number: ${transformedData.receiptNumber}, Date of payment: ${
-        transformedData.paymentDate
+      transformedData.paymentDate
       }, Fees Paid: ${transformedData.amountPaid}, Payment mode: ${
-        transformedData.paymentMode
+      transformedData.paymentMode
       }, Transaction ID: ${transformedData.transactionNumber}`;
       break;
     case "certificate":
@@ -963,11 +1081,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
         }
       ];
       qrText = `Application: ${
-        transformedData.applicationNumber
+      transformedData.applicationNumber
       }, NOC Number: ${transformedData.fireNOCNumber}, Date of Issue: ${
-        transformedData.issuedDate
+      transformedData.issuedDate
       }, Valid Till: ${transformedData.validTo}, Buildings: ${
-        transformedData.propertyType
+      transformedData.propertyType
       }, Applicant: ${transformedData.owners[0].name}`;
       break;
   }
@@ -1116,6 +1234,8 @@ const generatePdf = async (state, dispatch, type) => {
     "applicationDataForPdf",
     {}
   );
+  console.log(applicationData, "applicationDatageneratepdf")
+
   let paymentData = get(
     state.screenConfiguration.preparedFinalObject,
     "receiptDataForPdf",
@@ -1172,8 +1292,11 @@ const generatePdf = async (state, dispatch, type) => {
         ulbLogo,
         "application"
       );
+      console.log("application_data", application_data);
+      console.log("application************", transformedData)
+
       application_data &&
-        pdfMake.createPdf(application_data).download(fileName);
+      pdfMake.createPdf(application_data).download(fileName);
       break;
     case "application_print":
       application_data = await getApplicationData(
@@ -1191,7 +1314,7 @@ const generatePdf = async (state, dispatch, type) => {
         "receipt"
       );
       application_data &&
-        pdfMake.createPdf(application_data).download(fileName);
+      pdfMake.createPdf(application_data).download(fileName);
       break;
     case "receipt_print":
       application_data = await getApplicationData(
@@ -1208,8 +1331,11 @@ const generatePdf = async (state, dispatch, type) => {
         ulbLogo,
         "certificate"
       );
+
+      console.log("certificate_download", application_data);
+      console.log("certificate_download************", transformedData)
       application_data &&
-        pdfMake.createPdf(application_data).download(fileName);
+      pdfMake.createPdf(application_data).download(fileName);
       break;
     case "certificate_print":
       application_data = await getApplicationData(

@@ -160,6 +160,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         )}`
       )
     );
+
     data.door = nullToNa(
       get(
         response,
@@ -167,6 +168,48 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         "NA"
       )
     );
+
+    data.areaType = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
+        "NA"
+      )
+    );
+
+
+    data.district = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
+        "NA"
+      )
+    );
+
+    data.subDistrict = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+        "NA"
+      )
+    );
+
+    data.village = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.village",
+        "NA"
+      )
+    );
+
+    data.landmark = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.landmark",
+        "NA"
+      )
+    );
+
     data.buildingName = nullToNa(
       get(
         response,
@@ -211,7 +254,13 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       data.buildingName,
       data.street,
       data.mohalla,
-      data.city
+      data.city,
+      data.areaType,
+      data.subDistrict,
+      data.district,
+      data.village,
+      data.landmark
+
     );
 
     // Applicant Details
@@ -269,7 +318,10 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     // User Data
     loadUserNameData(get(response, "FireNOCs[0].auditDetails.lastModifiedBy"));
   }
+
+  console.log(data,"********DATA***********");
   store.dispatch(prepareFinalObject("applicationDataForPdf", data));
+  
 };
 
 export const loadReceiptData = async (consumerCode, tenant) => {
