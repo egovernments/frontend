@@ -230,11 +230,11 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
-                                if(data.Bill[0].totalAmount!==0){
+                                if (data.Bill[0].totalAmount !== 0) {
                                     response.WaterConnection[i].due = data.Bill[0].totalAmount
-                                }else{
+                                } else {
                                     response.WaterConnection[i].due = "NA"
-                                } 
+                                }
                             }
 
                         } else {
@@ -281,11 +281,11 @@ export const getSWMyApplicationResults = async (queryObject, dispatch) => {
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
-                                if(data.Bill[0].totalAmount!==0){
+                                if (data.Bill[0].totalAmount !== 0) {
                                     response.SewerageConnections[i].due = data.Bill[0].totalAmount
-                                }else{
+                                } else {
                                     response.SewerageConnections[i].due = "NA"
-                                } 
+                                }
                             }
 
                         } else {
@@ -1490,6 +1490,16 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
     let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
     let apiUrl, appService, estKey, queryObjectForEst
     if (wnsConnection[0].service === "WATER") {
+
+        // for Estimate api 
+        if (wnsConnection[0].rainWaterHarvesting !== undefined && wnsConnection[0].rainWaterHarvesting !== null) {
+            if (wnsConnection[0].rainWaterHarvesting === 'SCORE_YES') {
+                wnsConnection[0].rainWaterHarvesting = true
+            } else if (wnsConnection[0].rainWaterHarvesting === 'SCORE_NO') {
+                wnsConnection[0].rainWaterHarvesting = false
+            }
+        }
+
         apiUrl = "ws-calculator/waterCalculator/_estimate";
         appService = "ws-applicationwater";
         queryObjectForEst = [{
