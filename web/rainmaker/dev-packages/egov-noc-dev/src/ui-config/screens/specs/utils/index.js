@@ -575,7 +575,11 @@ export const createBill = async (queryObject,dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_fetchbill",
+
+       //"/billing-service/bill/_fetchbill",
+      // "/billing-service/bill/_getbill",
+      "/firenoc-calculator/v1/_getbill",
+
       "",
       queryObject
     );
@@ -603,7 +607,8 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
           value: tenantId
         },
         {
-          key: "consumerCode",
+         // key: "consumerCode",
+          key: "applicationNumber",
           value: applicationNumber
         },
         { key: "services", value: "FIRENOC" }

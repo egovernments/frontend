@@ -1108,6 +1108,9 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 };
 
 const generatePdf = async (state, dispatch, type) => {
+
+  console.log("Prasad - in reciept generatePdf file", state);
+
   let applicationData = get(
     state.screenConfiguration.preparedFinalObject,
     "applicationDataForPdf",
@@ -1133,7 +1136,7 @@ const generatePdf = async (state, dispatch, type) => {
     "userDataForPdf",
     {}
   );
-  if (isEmpty(applicationData)) {
+  /* if (isEmpty(applicationData)) {
     console.log("Error in application data");
     return;
   } else if (isEmpty(mdmsData)) {
@@ -1142,19 +1145,19 @@ const generatePdf = async (state, dispatch, type) => {
   } else if (isEmpty(ulbLogo)) {
     console.log("Error in image data");
     return;
-  } else if (
+  }  else if (
     (type.startsWith("receipt") || type.startsWith("certificate")) &&
     isEmpty(auditorData)
   ) {
     console.log("Error in auditor user data");
     return;
-  } else if (
+  }  else if (
     (type.startsWith("receipt") || type.startsWith("certificate")) &&
     isEmpty(paymentData)
   ) {
     console.log("Error in payment data");
     return;
-  }
+  } */
   let transformedData = {
     ...applicationData,
     ...paymentData,

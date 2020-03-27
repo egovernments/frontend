@@ -14,14 +14,13 @@ import {
   getTransformedLocale,
   setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
-import { createEstimateData } from "../utils/index";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { searchBill, generateBill ,createBill} from "../utils/index";
+import { searchBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -286,6 +285,8 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId
 ) => {
+
+  console.log("prasad", applicationNumber, tenantId)
   const response = await getSearchResults([
     {
       key: "tenantId",
@@ -293,10 +294,8 @@ const setSearchResponse = async (
     },
     { key: "applicationNumber", value: applicationNumber }
   ]);
-  console.log(response,"searchPreviewResponse")
   // const response = sampleSingleSearch();
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
-
 
   // Set Institution/Applicant info card visibility
   if (
@@ -334,43 +333,16 @@ const setSearchResponse = async (
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
-  beforeInitScreen:  (action, state, dispatch) => {
-    let applicationNumber =
-    getQueryArg(window.location.href, "applicationNumber") ||
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.applicationNumber"
+  beforeInitScreen: (action, state, dispatch) => {
+    const applicationNumber = getQueryArg(
+      window.location.href,
+      "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    generateBill(dispatch, applicationNumber, tenantId);
-    // const queryObject1 = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "consumerCode", value: applicationNumber },
-    //   { key: "services", value: "FIRENOC" }
-    // ];
- 
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    // searchBill(dispatch, applicationNumber, tenantId);
-  //  createBill(queryObject1,dispatch)
-  //  .then(payload=>{
-  //   console.log("2323232>>>....billData",payload);
-  //   let billData = get(payload, "Bill[0]") ;
-  //   console.log("2323232>>>....billData",billData);
-  //   if (billData) {
-  //     const estimateData = 
-  //     (billData);
-  //     estimateData &&
-  //       estimateData.length &&
-  //       dispatch(
-  //         prepareFinalObject(
-  //           "applyScreenMdmsData.estimateCardData",
-  //           estimateData
-  //         )
-  //       );
-  //       console.log("asdsasd",estimateData);
-  //   }
+    searchBill(dispatch, applicationNumber, tenantId);
 
-  // })
+   // debugger;
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
@@ -406,6 +378,7 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
+
     return action;
   },
   components: {

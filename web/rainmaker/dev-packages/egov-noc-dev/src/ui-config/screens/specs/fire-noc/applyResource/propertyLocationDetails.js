@@ -255,11 +255,23 @@ export const propertyLocationDetails = getCommonCard(
                 false
               )
             );
+         /*    dispatch(
+              prepareFinalObject(
+                "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
+                action.value
+              )
+             );
+            dispatch(  
+              prepareFinalObject(
+                "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2",
+                action.value
+              )
+              ); */
+
           const districtList= get(
             state.screenConfiguration,
             "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
-            []
-          );
+            []              );
           const districtTenantMap =districtList.map((item)=>{
             return {
               name:item.city.districtName,
@@ -327,7 +339,7 @@ export const propertyLocationDetails = getCommonCard(
             );
             dispatch(
               prepareFinalObject(
-                "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2",
+                "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
                 null
               )
             );
@@ -447,7 +459,8 @@ export const propertyLocationDetails = getCommonCard(
               if(fireStations[0]){
               firestationtenantidlist.push({code:fireStations[0].baseTenantId});
               for(var j=0;j<fireStations[0].subDistrict.length;j++){
-                  subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
+              //subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
+                 subDistrictLists.push(fireStations[0].subDistrict[j]);  
               }
             }
             }
@@ -473,7 +486,7 @@ export const propertyLocationDetails = getCommonCard(
             labelName: "Select Sub District",
             labelKey: "NOC_SUB_DISTRICT_PLACEHOLDER"
           },
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
           required: true,
           visible: false,
           props: {
@@ -484,7 +497,7 @@ export const propertyLocationDetails = getCommonCard(
         beforeFieldChange: async (action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2",
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
               action.value
             )
           );
@@ -503,7 +516,7 @@ export const propertyLocationDetails = getCommonCard(
             {
               for(var j=0;j<fireStations[i].subDistrict.length;j++)
               {
-                if(fireStations[i].subDistrict[j]==action.value)
+                if(fireStations[i].subDistrict[j].code==action.value)
               {
                 firesation.push({code:fireStations[i].code});
                 console.log("789546221525552452",getTenantId());

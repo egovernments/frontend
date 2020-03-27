@@ -152,11 +152,15 @@ export const applicationSuccessFooter = (
       //Add onClickDefination and RoleDefination later
       onClickDefination: {
         action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+      //  path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
           // process.env.REACT_APP_SELF_RUNNING === "true"
           //   ? `/egov-ui-framework/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
           //   : `/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
-      },
+          path:
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+            : `/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+        },
       roleDefination: {
         rolePath: "user-info.roles",
         action: "PAY",
@@ -307,6 +311,9 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
 
 //Function for payment success(Show buttons for download and print receipts)
 export const paymentSuccessFooter = () => {
+
+  console.log("Prasad - paymentSuccessFooter");
+  
   return getCommonApplyFooter({
     //call gotoHome
     downloadReceiptButton: {

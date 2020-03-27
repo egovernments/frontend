@@ -13,6 +13,7 @@ import {
   getTransformedLocale,
   getUserDataFromUuid
 } from "egov-ui-framework/ui-utils/commons";
+
 import { getSearchResults } from "../../../../ui-utils/commons";
 
 const ifNotNull = value => {
@@ -279,7 +280,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       value: tenant
     },
     {
-      key: "consumerCodes",
+      key: "consumerCode",
       value: consumerCode
     }
   ];

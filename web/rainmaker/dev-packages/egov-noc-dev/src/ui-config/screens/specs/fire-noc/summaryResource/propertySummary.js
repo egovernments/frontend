@@ -108,20 +108,20 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType" }
     ),
-    district: getLabelWithValue(
+   district: getLabelWithValue(
       {
         labelName: "District Name",
         labelKey: "NOC_DISTRICT_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city" }
     ),
     subDistrict: getLabelWithValue(
       {
         labelName: "sub District Name",
         labelKey: "NOC_SUB_DISTRICT_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline2" }
-    ),
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict" }
+    ), 
     propertyId: getLabelWithValue(
       {
         labelName: "Property ID",
