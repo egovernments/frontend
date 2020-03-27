@@ -69,7 +69,8 @@ import {
   validateUnitandPlotSize,
   normalizePropertyDetails,
   renderPlotAndFloorDetails,
-  getBusinessServiceNextAction
+  getBusinessServiceNextAction,
+  getSortedTaxSlab
 } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import sortBy from "lodash/sortBy";
 import {
@@ -1365,7 +1366,7 @@ class FormWizard extends Component {
           this
         );
         this.setState({ calculationScreenData: calculationScreenData.data });
-
+        estimateResponse = getSortedTaxSlab(estimateResponse);
         hideSpinner();
         return estimateResponse;
       } catch (e) {
