@@ -595,8 +595,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, true]
             },
             {
-              text: "",
-              style: "receipt-table-value",
+              text: transformedData.fireStationId,
+              style: "receipt-table-firestation",
               border: [false, false, false, true]
             },
             {
@@ -1204,6 +1204,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
         color: "#484848",
         bold: true,
         fontSize: 10
+      },
+      "receipt-table-firestation": {
+        color: "#484848",
+        bold: true,
+        fontSize: 7
       },
       "receipt-footer": {
         color: "#484848",
