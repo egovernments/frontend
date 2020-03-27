@@ -232,15 +232,22 @@ const commonApplicantInformation = () => {
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
-          const categoryDocumentJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocument";
 
-          const categoryDocumentThirdStepJsonPath = "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.props.style";
+        
+            let dynamicPath= `${action.componentJsonpath.split('.specialApplicantCategory')[0]}`;
+            
+          const categoryDocumentJsonPath = `${dynamicPath}.specialCategoryDocument`;
+ const specialCategoryDocumentTypeJsonPath =`${dynamicPath}.specialCategoryDocumentType`;
+
+ 
+//  const thirdStepPath="components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.items[0].item0.children.cardContent.children.ownerContainer.children";
+const thirdStepPath= "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children";
+
+ const categoryDocumentThirdStepJsonPath = `${thirdStepPath}.ownerDocumentId.props.style`;
 
 
-          const categoryDocumentTypeThirdStepJsonPath = "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
+ const categoryDocumentTypeThirdStepJsonPath =`${thirdStepPath}.ownerSpecialDocumentType.props.style`;
 
-
-          const specialCategoryDocumentTypeJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.specialCategoryDocumentType";
 
           if (action.value === "NONE" || action.value === " ") {
             showComponent(dispatch, categoryDocumentJsonPath, false);
@@ -268,7 +275,9 @@ const commonApplicantInformation = () => {
             }
             showComponent(dispatch, categoryDocumentJsonPath, true);
             showComponent(dispatch, specialCategoryDocumentTypeJsonPath, true);
-            // dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "props.style.display","block"));
+            dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "display","block"));
+            dispatch(handleField("apply", categoryDocumentTypeThirdStepJsonPath, "display", "block"));
+
           }
         },
       },
@@ -584,6 +593,7 @@ export const transfereeDetails = getCommonCard({
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
+        
           let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
 
 
