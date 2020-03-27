@@ -565,7 +565,12 @@ const parserFunction = (obj) => {
       initialMeterReading: (
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.initialMeterReading !== undefined
-      ) ? parseInt(obj.additionalDetails.initialMeterReading) : null
+      ) ? parseInt(obj.additionalDetails.initialMeterReading) : null,
+      detailsProvidedBy: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.detailsProvidedBy !== undefined &&
+        obj.additionalDetails.detailsProvidedBy !== null
+      ) ? obj.additionalDetails.detailsProvidedBy : "",
     },
     noOfTaps: parseInt(obj.noOfTaps),
     proposedTaps: parseInt(obj.proposedTaps),
