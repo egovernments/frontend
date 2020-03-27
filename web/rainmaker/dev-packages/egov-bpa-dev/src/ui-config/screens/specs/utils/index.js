@@ -4018,7 +4018,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
       dropDownValues.label = "Select Documents";
-      dropDownValues.required = doc.required;
+      dropDownValues.required = doc.required ? true : false;
       dropDownValues.menu = doc.dropDownValues.filter(item => {
         return item.active;
       });

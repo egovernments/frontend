@@ -118,7 +118,7 @@ const styles = {
 };
 
 const requiredIcon = (
-  <sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
+  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>*</sup>
 );
 
 class DocumentList extends Component {
@@ -282,7 +282,7 @@ class DocumentList extends Component {
               data={card.dropDownValues.menu}
               optionValue="code"
               optionLabel="label"
-              required={true}
+              required={card.required}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
             />
