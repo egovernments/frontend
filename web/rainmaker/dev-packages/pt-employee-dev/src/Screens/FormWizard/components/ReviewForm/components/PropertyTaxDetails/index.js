@@ -153,7 +153,7 @@ class PropertyTaxDetails extends React.Component {
               </div>
               <div
                 style={{ padding: 0 }}
-                className="col-sm-5 rebate-button"
+                className="col-sm-6 rebate-button"
               >
                 <FlatButton
                   label={
@@ -179,7 +179,7 @@ class PropertyTaxDetails extends React.Component {
                 />
               </div> <div
                 style={{ padding: 0 }}
-                className="col-sm-5 view-detail-button"
+                className="col-sm-4 view-detail-button"
                 
               >
                 <FlatButton

@@ -67,7 +67,8 @@ import {
   getImportantDates,
   renderPlotAndFloorDetails,
   removeAdhocIfDifferentFY,
-  getBusinessServiceNextAction
+  getBusinessServiceNextAction,
+  getSortedTaxSlab
 } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import sortBy from "lodash/sortBy";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -1351,7 +1352,7 @@ class FormWizard extends Component {
           this
         );
         this.setState({ calculationScreenData: calculationScreenData.data });
-
+        estimateResponse = getSortedTaxSlab(estimateResponse);
         hideSpinner();
         return estimateResponse;
       } catch (e) {
