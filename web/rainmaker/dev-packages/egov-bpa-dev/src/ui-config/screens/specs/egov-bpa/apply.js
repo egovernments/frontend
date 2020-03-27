@@ -21,7 +21,7 @@ import {
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
-import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, orderWfProcessInstances, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField,
@@ -459,17 +459,44 @@ if(isTrue) {
 }
 }
 
+let setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJsonpath)=>{
+  const queryObject1 = [
+    { key: "businessIds", value: applicationNumber },
+    { key: "history", value: true },
+    { key: "tenantId", value: tenantId }
+  ];
+  let processInstances =[];
+    const payload1 = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject1
+    );
+    if (payload1 && payload1.ProcessInstances.length > 0) {
+      processInstances= orderWfProcessInstances(
+        payload1.ProcessInstances
+      );      
+      dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances",processInstances));
+      
+      let sendToArchitect = (processInstances && processInstances.length>1 && processInstances[processInstances.length-1].action)||"";
+      
+      if(sendToArchitect =="SEND_TO_ARCHITECT"){
+        dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
+      }
+     
+    }
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
-  beforeInitScreen: (action, state, dispatch) => {
+  beforeInitScreen: (action, state, dispatch,componentJsonpath) => {
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-
+    setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "BPA");
     getTenantMdmsData(action, state, dispatch).then(response => {
@@ -569,6 +596,13 @@ const screenConfig = {
           }
         },
         stepper,
+        taskStatus: {
+          moduleName: "egov-workflow",
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",          
+          visible: false,
+          componentJsonpath:'components.div.children.taskStatus',
+          },
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
