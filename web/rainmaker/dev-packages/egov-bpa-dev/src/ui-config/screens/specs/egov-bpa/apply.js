@@ -21,7 +21,7 @@ import {
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
-import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage, getTransformedLocale, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField,
@@ -253,6 +253,16 @@ const setSearchResponse = async (
   const appDate = response.Bpa["0"].auditDetails.createdTime;
   const latitude = response.Bpa["0"].address.geoLocation.latitude;
   const longitude = response.Bpa["0"].address.geoLocation.longitude;
+  const riskType = response.Bpa["0"].riskType;
+  let bpaService = "BPA";
+  if(riskType === "LOW") {
+    bpaService = "BPA_LOW";
+  }
+  const queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "businessServices", value: bpaService }
+  ];
+  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
   let edcrRes = await edcrHttpRequest(
@@ -459,10 +469,37 @@ if(isTrue) {
 }
 }
 
+const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJsonpath)=>{
+  const queryObject = [
+    { key: "businessIds", value: applicationNumber },
+    { key: "history", value: true },
+    { key: "tenantId", value: tenantId }
+  ];
+  let processInstances =[];
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
+    );
+    if (payload && payload.ProcessInstances.length > 0) {
+      processInstances= orderWfProcessInstances(
+        payload.ProcessInstances
+      );      
+      dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances",processInstances));
+      
+      let sendToArchitect = (processInstances && processInstances.length>1 && processInstances[processInstances.length-1].action)||"";
+      
+      if(sendToArchitect =="SEND_TO_ARCHITECT"){
+        dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
+      }
+     
+    }
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
-  beforeInitScreen: (action, state, dispatch) => {
+  beforeInitScreen: (action, state, dispatch,componentJsonpath) => {
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -485,12 +522,12 @@ const screenConfig = {
     } else {
       setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
+      const queryObject = [
+        { key: "tenantId", value: tenantId },
+        { key: "businessServices", value: "BPA" }
+      ];
+      setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "BPA" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
@@ -516,6 +553,8 @@ const screenConfig = {
       // prepareDocumentsUploadData(state, dispatch);
       // prepareNOCUploadData(state, dispatch);
     });
+
+    setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
@@ -569,6 +608,18 @@ const screenConfig = {
           }
         },
         stepper,
+        taskStatus: {
+          moduleName: "egov-workflow",
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",          
+          visible: false,
+          componentJsonpath:'components.div.children.taskStatus',
+          props: {
+            dataPath: "BPA",
+            moduleName: "BPA",
+            updateUrl: "/bpa-services/bpa/appl/_update"
+          }
+          },
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
