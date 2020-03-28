@@ -88,7 +88,8 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
     const queryValue = getQueryArg(window.location.href, "applicationNumber");
-    const tenantId = getTenantId();
+    // TODO: Fix this
+    const tenantId = "in.mp"; //getTenantId();
     const applicationNo = queryValue
       ? queryValue
       : get(
