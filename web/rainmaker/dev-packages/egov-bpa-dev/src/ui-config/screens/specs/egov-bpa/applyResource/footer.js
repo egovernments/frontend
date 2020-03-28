@@ -144,7 +144,7 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
           obj.createdBy = "BPA Architect"
         }
         else if(docDetail.wfState === "DOC_VERIFICATION_PENDING") {
-          obj.createdBy = "BPA Services Verifier"
+          obj.createdBy = "BPA Document Verifier"
         }
         else if (docDetail.wfState === "FIELDINSPECTION_PENDING") {
           obj.createdBy = "BPA Field Inspector"   
