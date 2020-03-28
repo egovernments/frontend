@@ -24,10 +24,7 @@ const cardItems = [
       labelName: "Apply for Trade License"
     },
     icon: <TradeLicenseIcon />,
-    route: {
-      screenKey: "home",
-      jsonPath: "components.cityPickerDialog"
-    }
+    route: "apply"
   },
   {
     label: {
