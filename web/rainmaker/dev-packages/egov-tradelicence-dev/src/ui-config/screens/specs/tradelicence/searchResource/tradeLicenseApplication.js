@@ -82,32 +82,32 @@ export const tradeLicenseApplication = getCommonCard({
     })
   }),
   applicationTypeAndToFromDateContainer: getCommonContainer({
-    applicationType: {
-      ...getSelectField({
-        label: {
-          labelName: "Application Type",
-          labelKey: "TL_APPLICATION_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Application Type",
-          labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "TradeLicense",
-          masterName: "ApplicationType"
-        },
-        jsonPath:
-          "searchScreen.applicationType",
-        sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        props: {
-          className: "applicant-details-error"
-        }
-      })
-    },
+    // applicationType: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Application Type",
+    //       labelKey: "TL_APPLICATION_TYPE_LABEL"
+    //     },
+    //     placeholder: {
+    //       labelName: "Select Application Type",
+    //       labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
+    //     },
+    //     localePrefix: {
+    //       moduleName: "TradeLicense",
+    //       masterName: "ApplicationType"
+    //     },
+    //     jsonPath:
+    //       "searchScreen.applicationType",
+    //     sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 4
+    //     },
+    //     props: {
+    //       className: "applicant-details-error"
+    //     }
+    //   })
+    // },
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
       placeholder: {

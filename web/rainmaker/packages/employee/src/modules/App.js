@@ -80,9 +80,9 @@ class App extends Component {
 
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
 
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {
-      nextProps.hasLocalisation && this.props.history.replace("/language-selection");
-    }
+    // if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {
+    //   nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+    // }
   }
 
   render() {

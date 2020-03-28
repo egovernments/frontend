@@ -939,13 +939,13 @@ export const footerReviewTop = (
     case "APPROVED":
       downloadMenu = [
         tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
+        // receiptDownloadObject,
+        // applicationDownloadObject
       ];
       printMenu = [
         tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
+        // receiptPrintObject,
+        // applicationPrintObject
       ];
       break;
     case "APPLIED":
@@ -1138,13 +1138,13 @@ export const downloadPrintContainer = (
     case "APPROVED":
       downloadMenu = [
         tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
+        // receiptDownloadObject,
+        // applicationDownloadObject
       ];
       printMenu = [
         tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
+        // receiptPrintObject,
+        // applicationPrintObject
       ];
       break;
     case "APPLIED":

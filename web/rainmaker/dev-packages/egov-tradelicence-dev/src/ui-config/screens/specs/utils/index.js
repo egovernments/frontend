@@ -2422,6 +2422,30 @@ export const getTextToLocalMapping = label => {
         "TL_TYPE_NEW",
         localisationLabels
       );
+      case "From District":
+      return getLocaleLabels(
+        "From District",
+        "TL_FROM_DISTRICT_LABEL",
+        localisationLabels
+      );
+      case "To District":
+      return getLocaleLabels(
+        "To District",
+        "TL_TO_DISTRICT_LABEL",
+        localisationLabels
+      );   
+      case "Mobile Number":
+      return getLocaleLabels(
+        "Mobile Number",
+        "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL",
+        localisationLabels
+      );    
+      case "Category":
+      return getLocaleLabels(
+        "Category",
+        "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL",
+        localisationLabels
+      );                         
   }
 };
 

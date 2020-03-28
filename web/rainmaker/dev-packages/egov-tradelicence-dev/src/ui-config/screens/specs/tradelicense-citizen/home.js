@@ -60,11 +60,6 @@ const tradeLicenseSearchAndResult = {
             history: {}
           }
         },
-        listCard: {
-          uiFramework: "custom-molecules-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "HowItWorks"
-        }
       }
     },
     // div: {

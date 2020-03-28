@@ -573,12 +573,12 @@ class TableData extends Component {
             <FilterListIcon />
             </div>
           </div>
-          <Hidden only={["xs"]} implementation="css">
+          {/* <Hidden only={["xs"]} implementation="css">
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter></Hidden>
           <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
           {this.state.showFilter&&
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>}
-          </Hidden>
+          </Hidden> */}
         </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
         <div className="backgroundWhite">

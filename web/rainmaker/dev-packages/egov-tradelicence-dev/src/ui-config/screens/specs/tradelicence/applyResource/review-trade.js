@@ -190,7 +190,9 @@ export const getReviewTrade = (isEditable = true) => {
         }
       }
     },
-    viewOne: getCommonContainer({
+    viewOne: tradeTypeCard,
+    div1: getDivider(),
+    viewTwo: getCommonContainer({
       fromState: getLabelWithValue(
         { labelName: "From State", labelKey: "TL_FROM_STATE_LABEL" },
         {
@@ -288,8 +290,6 @@ export const getReviewTrade = (isEditable = true) => {
       //   }
       // )
     }),
-    div1: getDivider(),
-    viewTwo: tradeTypeCard
     // ,
     // div2: getDivider(),
     // viewThree: accessoriesCard,

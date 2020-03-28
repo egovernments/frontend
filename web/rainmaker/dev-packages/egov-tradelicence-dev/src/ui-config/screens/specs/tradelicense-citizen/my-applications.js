@@ -37,6 +37,10 @@ const screenConfig = {
                 jsonPath: "applicationNumber"
               },
               {
+                label: "TL_COMMON_TABLE_COL_EPASS_NO",
+                jsonPath: "licenseNumber"
+              },
+              {
                 label: "TL_COMMON_TABLE_COL_TRADE_TYPE",
                 jsonPath: "tradeLicenseDetail.tradeUnits[0].tradeType",
                 localePrefix: {

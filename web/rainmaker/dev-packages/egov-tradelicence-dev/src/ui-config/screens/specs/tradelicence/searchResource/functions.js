@@ -104,16 +104,15 @@ export const searchApiCall = async (state, dispatch) => {
       let data = response.Licenses.map(item => ({
         [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
-        [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
-        [getTextToLocalMapping("Trade Name")]: item.tradeName || "-",
+        [getTextToLocalMapping("Category")]: item.tradeLicenseDetail.tradeUnits[0].tradeType || "-",
         [getTextToLocalMapping("Owner Name")]:
           item.tradeLicenseDetail.owners[0].name || "-",
-        [getTextToLocalMapping("Application Date")]:
-          convertEpochToDate(item.applicationDate) || "-",
-          [getTextToLocalMapping("Financial Year")]:
-          item.financialYear || "-",
-          [getTextToLocalMapping("Application Type")]:
-          `TL_TYPE_${item.applicationType}`  || "NEW",
+          [getTextToLocalMapping("Mobile Number")]:
+          item.tradeLicenseDetail.owners[0].mobileNumber || "-",          
+          [getTextToLocalMapping("From District")]:
+            item.tradeLicenseDetail.additionalDetail.fromDistrict || "-",
+            [getTextToLocalMapping("To District")]:
+              item.tradeLicenseDetail.additionalDetail.toDistrict || "-",
         [getTextToLocalMapping("Status")]: `WF_${item.workflowCode.toUpperCase()}_${item.status}` || "-",
         ["tenantId"]: item.tenantId,
         ["status1"]: item.status || "-"

@@ -515,7 +515,7 @@ const tradeUnitCard = {
               labelName: "Example Food Delivery",
               labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_PLACEHOLDER"
             },
-            required: true,
+            required: false,
             pattern: getPattern("eventDescription"),
             jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose"
           }),

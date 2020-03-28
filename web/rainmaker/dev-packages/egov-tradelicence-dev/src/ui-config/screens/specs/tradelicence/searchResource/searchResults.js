@@ -14,35 +14,12 @@ export const searchResults = {
   props: {
     columns: [
       getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("License No"),
-      getTextToLocalMapping("Trade Name"),
+      getTextToLocalMapping("Category"),
       getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
-      getTextToLocalMapping("Financial Year"),
-      {
-        name: getTextToLocalMapping("Application Type"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span>
-              {getLocaleLabels(value,value)}
-            </span>
-          )
-        }
-      },
-      {
-        name: getTextToLocalMapping("Status"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span
-              style={value.includes("APPROVED") ? { color: "green" } : { color: "red" }}
-            >
-              {getLocaleLabels(value,value)}
-            </span>
-          )
-        }
-      },
+      getTextToLocalMapping("Mobile Number"),
+      getTextToLocalMapping("From District"),
+      getTextToLocalMapping("To District"),
+      getTextToLocalMapping("Status"),
       {
         name: "tenantId",
         options: {
@@ -90,16 +67,16 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[7]) {
+  switch (rowData[8]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[8]
+        rowData[7]
       }`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[8]}`;
+      }&tenantId=${rowData[7]}`;
       break;
   }
 };
