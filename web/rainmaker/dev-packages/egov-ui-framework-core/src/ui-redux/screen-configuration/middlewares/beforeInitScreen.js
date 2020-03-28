@@ -14,6 +14,9 @@ const beforeInitScreen = store => next =>async action => {
       }
     }
     next(action);
+    if (window.appOverrides) {
+      window.appOverridesv1.initScreen(action, state, dispatch);
+    }    
   } else {
     next(action);
   }

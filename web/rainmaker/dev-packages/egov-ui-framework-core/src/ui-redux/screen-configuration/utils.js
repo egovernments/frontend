@@ -18,7 +18,6 @@ export const validateField = field => {
     visible,
     isDOB
   } = field;
-
   if (visible !== undefined && !visible) {
     return { isFieldValid: true, errorText: "" };
   }

@@ -188,20 +188,6 @@ export const getReviewOwner = (isEditable = true) => {
               },
               { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleNumber" }
             ),
-            reviewVehicleManufacturer: getLabelWithValue(
-              {
-                labelName: "Vehicle Manufacturer",
-                labelKey: "TL_NEW_OWNER_VEHICLE_MANUFACTURER_LABEL"
-              },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleManufacturer" }
-            ),
-            reviewVehicleModel: getLabelWithValue(
-              {
-                labelName: "Vehicle Model",
-                labelKey: "TL_NEW_OWNER_VEHICLE_MODEL_LABEL"
-              },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleModel" }
-            )
             // ,
             // reviewOwnerFatherName,
             // reviewRelationship,

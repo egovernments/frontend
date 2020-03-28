@@ -15,7 +15,9 @@ import {
   objectToDropdown,
   getCurrentFinancialYear,
   getnextFinancialYear,
-  getAllDataFromBillingSlab
+  getAllDataFromBillingSlab,
+  setFilteredTradeTypes,
+  getTradeTypeDropdownData
 } from "../utils";
 import {
   prepareFinalObject,
@@ -107,7 +109,9 @@ export const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "TradeType", filter: `[?(@.type == "TL")]` },
             { name: "AccessoriesCategory" },
-            { name: "ApplicationType" }
+            { name: "ApplicationType" },
+            { name: "District" },
+            { name: "State" },
           ]
         },
         {
@@ -367,6 +371,40 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       );
+
+      const tradeTypes = setFilteredTradeTypes(
+        state,
+        dispatch,
+        "TEMPORARY"
+      );
+      let maxLength = 0;
+      if(tradeTypes && tradeTypes.TradeType){
+        for (const key of Object.keys(tradeTypes.TradeType)) {
+          if(tradeTypes.TradeType[key].length > maxLength)
+            maxLength = tradeTypes.TradeType[key].length;
+        }
+      }
+
+      if(maxLength > 1){
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.tradeUnitCardContainer.children.tradeType",
+            "visible",
+            true
+          )
+        );
+      }
+
+      const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
+      tradeTypeDropdownData &&
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+            tradeTypeDropdownData
+          )
+        );
+        dispatch(prepareFinalObject("Licenses[0].financialYear", "2019-20"));
     });
     return action;
   },
@@ -395,7 +433,7 @@ const screenConfig = {
         stepper,
         formwizardFirstStep,
         formwizardSecondStep,
-        // formwizardThirdStep,
+        formwizardThirdStep,
         formwizardFourthStep,
         footer
       }

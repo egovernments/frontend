@@ -18,7 +18,11 @@ import {
   stepper,
   getMdmsData
 } from "../tradelicence/apply";
-import { getAllDataFromBillingSlab } from "../utils";
+import { 
+  getAllDataFromBillingSlab,
+  setFilteredTradeTypes,
+  getTradeTypeDropdownData 
+} from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -95,7 +99,42 @@ const screenConfig = {
     if (applicationNo) {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {
-      getData(action, state, dispatch, tenantId);
+      getData(action, state, dispatch, tenantId).then(responseAction => {
+        const tradeTypes = setFilteredTradeTypes(
+          state,
+          dispatch,
+          "TEMPORARY"
+        );
+        let maxLength = 0;
+        if(tradeTypes && tradeTypes.TradeType){
+          for (const key of Object.keys(tradeTypes.TradeType)) {
+            if(tradeTypes.TradeType[key].length > maxLength)
+              maxLength = tradeTypes.TradeType[key].length;
+          }
+        }
+
+        if(maxLength > 1){
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.tradeUnitCardContainer.children.tradeType",
+              "visible",
+              true
+            )
+          );
+        }
+
+        const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
+        tradeTypeDropdownData &&
+          dispatch(
+            prepareFinalObject(
+              "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+              tradeTypeDropdownData
+            )
+          );
+          dispatch(prepareFinalObject("Licenses[0].financialYear", "2019-20"));
+      
+      });
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;

@@ -90,20 +90,10 @@ const tradeTypeCard = {
             }
           }
         ),
-        reviewTradeType: getLabelWithValue(
+        reviewPurpose: getLabelWithValue(
+          { labelName: "Purpose", labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE" },
           {
-            labelName: "Trade Type",
-            labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
-          },
-          {
-            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-            localePrefix: {
-              moduleName: "TRADELICENSE",
-              masterName: "TRADETYPE"
-            },
-            callBack: value => {
-              return value ? value.split(".")[1] : "NA";
-            }
+            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose"
           }
         )
         // ,
@@ -201,67 +191,39 @@ export const getReviewTrade = (isEditable = true) => {
       }
     },
     viewOne: getCommonContainer({
-      // reviewApplicationType: getLabelWithValue(
-      //   {
-      //     labelName: "Application Type",
-      //     labelKey: "TL_APPLICATION_TYPE"
-      //   },
-      //   {
-      //     jsonPath:
-      //       "Licenses[0].applicationType",
-      //     localePrefix: {
-      //       moduleName: "TradeLicense",
-      //       masterName: "ApplicationType"
-      //     },
-      //   }
-      // ),
-      // reviewOldLicenseNo: getLabelWithValue(
-      //   {
-      //     labelName: "Old License Number",
-      //     labelKey: "TL_OLD_LICENSE_NO"
-      //   },
-      //   { jsonPath: "Licenses[0].oldLicenseNumber", callBack: checkValueForNA }
-      // ),
-      // reviewLicenceType: getLabelWithValue(
-      //   {
-      //     labelName: "Licence Type",
-      //     labelKey: "TL_COMMON_TABLE_COL_LICENSE_TYPE"
-      //   },
-      //   {
-      //     jsonPath: "Licenses[0].licenseType",
-      //     localePrefix: {
-      //       moduleName: "TRADELICENSE",
-      //       masterName: "LICENSETYPE"
-      //     },
-      //   }
-      // ),
-      // reviewTradeName: getLabelWithValue(
-      //   {
-      //     labelName: "Trade Name",
-      //     labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
-      //   },
-      //   { jsonPath: "Licenses[0].tradeName"}
-      // ),
-      reviewFromDate: getLabelWithValue(
-        { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
+      fromState: getLabelWithValue(
+        { labelName: "From State", labelKey: "TL_FROM_STATE_LABEL" },
         {
-          jsonPath: "Licenses[0].validFrom",
-          callBack: convertEpochToDate
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.fromState",
+          localePrefix: {
+            moduleName: "TRADELICENSE",
+            masterName: "STATE"
+          },
+          callBack: value => {
+            return  value ? value : "NA";
+          }
         }
       ),
-      reviewToDate: getLabelWithValue(
-        { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
+      fromDistrict: getLabelWithValue(
+        { labelName: "From District", labelKey: "TL_FROM_DISTRICT_LABEL" },
         {
-          jsonPath: "Licenses[0].validTo",
-          callBack: convertEpochToDate
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.fromDistrict",
+          localePrefix: {
+            moduleName: "TRADELICENSE",
+            masterName: "District"
+          },
+        },
+      ),
+      toDistrict: getLabelWithValue(
+        { labelName: "To District", labelKey: "TL_TO_DISTRICT_LABEL" },
+        {
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.toDistrict",
+          localePrefix: {
+            moduleName: "TRADELICENSE",
+            masterName: "District"
+          },
         }
       ),
-      reviewPurpose: getLabelWithValue(
-        { labelName: "Purpose", labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE" },
-        {
-          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose"
-        }
-      )
       // reviewStructureType: getLabelWithValue(
       //   { labelName: "Structure Type" ,labelKey : "TL_STRUCTURE_TYPE"},
       //   {

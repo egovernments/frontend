@@ -29,11 +29,7 @@ const checkActiveItem = item => {
 
 class MultiItem extends React.Component {
   componentDidMount = () => {
-    const props = this.props;
     this.initMultiItem(this.props);
-    if(typeof this.props.onInit === "function"){
-      props.onInit(props.state, props.dispatch);
-    }
   };
 
   initMultiItem = props => {
@@ -287,7 +283,6 @@ const mapDispatchToProps = dispatch => {
   return {
     updatePreparedFormObject: (jsonPath, value) =>
       dispatch(pFO(jsonPath, value)),
-      dispatch
   };
 };
 

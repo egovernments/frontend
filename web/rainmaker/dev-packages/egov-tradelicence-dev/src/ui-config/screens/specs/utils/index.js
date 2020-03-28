@@ -457,6 +457,10 @@ export const commonTransform = (object, path) => {
     const splitList = a.code.split(".");
     let ipath = "";
     for (let i = 0; i < splitList.length; i += 1) {
+      if(splitList.length === 1){
+        transformedData[splitList[0]] = [a]
+        break
+      }
       if (i != splitList.length - 1) {
         if (
           !(

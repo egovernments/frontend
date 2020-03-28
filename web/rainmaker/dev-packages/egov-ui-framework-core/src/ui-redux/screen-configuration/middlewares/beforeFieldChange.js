@@ -13,6 +13,9 @@ const beforeFieldChange = (store) => (next) => (action) => {
         componentObject.beforeFieldChange(action,state,dispatch);
       }
       next(action);
+      if (window.appOverrides) {
+        window.appOverridesv1.onChange(action, state, dispatch);
+      }
   } else {
     next(action);
   }
