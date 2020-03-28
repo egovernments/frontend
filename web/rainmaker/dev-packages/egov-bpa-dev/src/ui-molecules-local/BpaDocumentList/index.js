@@ -248,7 +248,8 @@ class BpaDocumentList extends Component {
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails } = this.props;
-    const fileUrl =  getFileUrlFromAPI(fileStoreId).then(fileUrl)
+    // const fileUrl =  getFileUrlFromAPI(fileStoreId).then(fileUrl)
+    const fileUrl = await getFileUrlFromAPI(fileStoreId);
     let appDocumentList = {};
     if (documentDetailsUploadRedux[uploadedDocIndex] &&
       documentDetailsUploadRedux[uploadedDocIndex].documents) {
