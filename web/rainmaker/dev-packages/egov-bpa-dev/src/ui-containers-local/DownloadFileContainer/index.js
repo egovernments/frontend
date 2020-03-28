@@ -18,7 +18,7 @@ class DownloadFileContainer extends Component {
               docs.createdBy = "BPA Architect"
             }
             else if(docs.wfState === "DOC_VERIFICATION_PENDING") {
-              docs.createdBy = "BPA Services Verifier"
+              docs.createdBy = "BPA Document Verifier"
             }
             else if (docs.wfState === "FIELDINSPECTION_PENDING") {
               docs.createdBy = "BPA Field Inspector"   

@@ -62,7 +62,7 @@ function MultiCardDownloadGrid(props) {
             </Grid>
             <Grid container>
               <Grid xs={9} className={classes.subtext}>
-                {item && item.wfState ? <Typography className={classes.body2}>WfState : {item.wfState}</Typography> : null }
+                {/* {item && item.wfState ? <Typography className={classes.body2}>WfState : {item.wfState}</Typography> : null } */}
                 {item && item.createdBy ? <Typography className={classes.body2}>CreatedBy: {item.createdBy}</Typography> : null }             
                 <Typography className={classes.body2}>{item.name}</Typography>
               </Grid>
