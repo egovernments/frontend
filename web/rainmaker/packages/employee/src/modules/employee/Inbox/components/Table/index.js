@@ -34,7 +34,7 @@ class InboxData extends React.Component {
   componentDidMount = async () => {
     let mdmsBody = {
       MdmsCriteria: {
-        tenantId: process.env.REACT_APP_DEFAULT_TENANT_ID,
+        tenantId: getTenantId(),
         moduleDetails: [
          {
             moduleName: "common-masters",

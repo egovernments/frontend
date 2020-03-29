@@ -140,61 +140,61 @@ export const tradeLicenseApplication = getCommonCard({
       required: false
     })
   }),
-  appStatusContainer: getCommonContainer({
-    applicationNo: getSelectField({
-      label: {
-        labelName: "Application status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
-      },
-      required: false,
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "NEWTL"
-      },
-      jsonPath: "searchScreen.status",
-      data:[
-        {
-          code : "INITIATED"
-        },
-        {
-          code : "APPLIED"
-        },
-        {
-          code : "FIELDINSPECTION"
-        },
-        {
-          code : "PENDINGAPPROVAL"
-        },
-        {
-          code : "PENDINGPAYMENT"
-        },
-        {
-          code : "APPROVED"
-        },
-        {
-          code : "CITIZENACTIONREQUIRED"
-        },     
-        {
-          code : "EXPIRED"
-        },
-        {
-          code : "CANCELLED"
-        },
-        {
-          code : "REJECTED"
-        }
-      ],
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
+  // appStatusContainer: getCommonContainer({
+  //   applicationNo: getSelectField({
+  //     label: {
+  //       labelName: "Application status",
+  //       labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+  //     },
+  //     placeholder: {
+  //       labelName: "Select Application Status",
+  //       labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+  //     },
+  //     required: false,
+  //     localePrefix: {
+  //       moduleName: "WF",
+  //       masterName: "NEWTL"
+  //     },
+  //     jsonPath: "searchScreen.status",
+  //     data:[
+  //       {
+  //         code : "INITIATED"
+  //       },
+  //       {
+  //         code : "APPLIED"
+  //       },
+  //       {
+  //         code : "FIELDINSPECTION"
+  //       },
+  //       {
+  //         code : "PENDINGAPPROVAL"
+  //       },
+  //       {
+  //         code : "PENDINGPAYMENT"
+  //       },
+  //       {
+  //         code : "APPROVED"
+  //       },
+  //       {
+  //         code : "CITIZENACTIONREQUIRED"
+  //       },     
+  //       {
+  //         code : "EXPIRED"
+  //       },
+  //       {
+  //         code : "CANCELLED"
+  //       },
+  //       {
+  //         code : "REJECTED"
+  //       }
+  //     ],
+  //     gridDefination: {
+  //       xs: 12,
+  //       sm: 4
+  //     }
+  //   }),
 
-  }),
+  // }),
   
 
   button: getCommonContainer({

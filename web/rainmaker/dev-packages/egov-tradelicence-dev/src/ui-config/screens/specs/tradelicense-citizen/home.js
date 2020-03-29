@@ -4,7 +4,8 @@ import { fetchData } from "./citizenSearchResource/citizenFunctions";
 import { cityPicker } from "./citypicker";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
-import "../utils/index.css";
+import "../utils/index.css";import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 const header = getCommonHeader(
   {
     labelName: "Trade License",
@@ -24,7 +25,7 @@ const cardItems = [
       labelName: "Apply for Trade License"
     },
     icon: <TradeLicenseIcon />,
-    route: "apply"
+    route: "apply",        
   },
   {
     label: {
@@ -40,6 +41,10 @@ const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
+  
+    dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+    dispatch(prepareFinalObject("LicensesTemp", []));
+
     fetchData(action, state, dispatch);
     return action;
   },
