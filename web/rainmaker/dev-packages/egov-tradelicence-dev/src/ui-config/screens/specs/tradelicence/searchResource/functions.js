@@ -9,9 +9,12 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  getTransformedLocalStorgaeLabels,
+  getLocaleLabels
+} from "egov-ui-framework/ui-utils/commons";
 
 export const searchApiCall = async (state, dispatch) => {
-  showHideTable(false, dispatch);
   let queryObject = [
     {
       key: "tenantId",
@@ -100,20 +103,20 @@ export const searchApiCall = async (state, dispatch) => {
 
     const response = await getSearchResults(queryObject);
     try {
-      
+      const localisationLabels = getTransformedLocalStorgaeLabels();
       let data = response.Licenses.map(item => ({
         [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
-        [getTextToLocalMapping("Category")]: item.tradeLicenseDetail.tradeUnits[0].tradeType || "-",
+        [getTextToLocalMapping("Category")]: getLocaleLabels("TRADELICENSE_TRADETYPE_"+item.tradeLicenseDetail.tradeUnits[0].tradeType, "TRADELICENSE_TRADETYPE_"+item.tradeLicenseDetail.tradeUnits[0].tradeType, localisationLabels) || "-",
         [getTextToLocalMapping("Owner Name")]:
           item.tradeLicenseDetail.owners[0].name || "-",
           [getTextToLocalMapping("Mobile Number")]:
           item.tradeLicenseDetail.owners[0].mobileNumber || "-",          
           [getTextToLocalMapping("From District")]:
-            item.tradeLicenseDetail.additionalDetail.fromDistrict || "-",
+          getLocaleLabels("TRADELICENSE_DISTRICT_"+item.tradeLicenseDetail.additionalDetail.fromDistrict, "TRADELICENSE_DISTRICT_"+item.tradeLicenseDetail.additionalDetail.fromDistrict, localisationLabels) || "-",
             [getTextToLocalMapping("To District")]:
-              item.tradeLicenseDetail.additionalDetail.toDistrict || "-",
-        [getTextToLocalMapping("Status")]: `WF_${item.workflowCode.toUpperCase()}_${item.status}` || "-",
+            getLocaleLabels("TRADELICENSE_DISTRICT_"+item.tradeLicenseDetail.additionalDetail.toDistrict, "TRADELICENSE_DISTRICT_"+item.tradeLicenseDetail.additionalDetail.toDistrict, localisationLabels)  || "-",
+        [getTextToLocalMapping("Status")]: getLocaleLabels(`WF_${item.workflowCode.toUpperCase()}_${item.status}`, `WF_${item.workflowCode.toUpperCase()}_${item.status}`, localisationLabels) || "-",
         ["tenantId"]: item.tenantId,
         ["status1"]: item.status || "-"
       }));
