@@ -184,20 +184,21 @@ class TableData extends Component {
     if (initialInboxData.length == 2) {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
-          let isValid = this.checkRow(eachRow, filter, searchFilter, taskboardLabel);
-          if (isValid && ind == 1) {
-            let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
-            if (eachRow[4].text <= 0) {
-              ESCALATED_SLA.push(eachRow[4].text);
-            }
-            if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
-              NEARING_SLA.push(eachRow[4].text);
-            }
-            totalRows.push(1);
-          }
-          if (isValid) {
-            return this.checkSLA(taskboardLabel, eachRow);
-          }
+          // let isValid = this.checkRow(eachRow, filter, searchFilter, taskboardLabel);
+          let isValid = true
+          // if (isValid && ind == 1) {
+          //   let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
+          //   if (eachRow[4].text <= 0) {
+          //     ESCALATED_SLA.push(eachRow[4].text);
+          //   }
+          //   if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
+          //     NEARING_SLA.push(eachRow[4].text);
+          //   }
+          //   totalRows.push(1);
+          // }
+          // if (isValid) {
+          //   return this.checkSLA(taskboardLabel, eachRow);
+          // }
           return isValid;
         }
 
@@ -205,15 +206,15 @@ class TableData extends Component {
       })
     }
     
-    if (initialInboxData.length == 2) {
-      initialInboxData.map((row, ind) => {
-        row.rows = row.rows.filter((eachRow) => {
-          let isValid = this.checkSLA(taskboardLabel,eachRow);
-          return isValid;
-        }
-        )
-      })
-    }
+    // if (initialInboxData.length == 2) {
+    //   initialInboxData.map((row, ind) => {
+    //     row.rows = row.rows.filter((eachRow) => {
+    //       let isValid = this.checkSLA(taskboardLabel,eachRow);
+    //       return isValid;
+    //     }
+    //     )
+    //   })
+    // }
 
 
 
@@ -317,7 +318,7 @@ class TableData extends Component {
       })
       var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
       let row0 = {text: item.businessId, subtext: item.businessService, hiddenText: item.moduleName };
-      let row1 = {text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
+      // let row1 = {text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row2 = {
         text: item.state ? (
           <Label
@@ -330,30 +331,30 @@ class TableData extends Component {
           ),
       };
 
-      let row3 = { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
-      let row4 = { text: Math.round(sla), badge: true };
-      let row5 = { historyButton: true };
+      // let row3 = { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
+      // let row4 = { text: Math.round(sla), badge: true };
+      // let row5 = { historyButton: true };
 
-      let localityDropdown = { label: getLocaleLabels("",row1.text.props.label,localizationLabels), value: row1.text.props.label };
-      localityDropdownList.push(localityDropdown);
-      let moduleDropdown = { label: getLocaleLabels("",`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`,localizationLabels), value: row2.text.props.label.split('_')[1] };
-      moduleDropdownList.push(moduleDropdown);
+      // let localityDropdown = { label: getLocaleLabels("",row1.text.props.label,localizationLabels), value: row1.text.props.label };
+      // localityDropdownList.push(localityDropdown);
+      // let moduleDropdown = { label: getLocaleLabels("",`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`,localizationLabels), value: row2.text.props.label.split('_')[1] };
+      // moduleDropdownList.push(moduleDropdown);
       let statusDropdown = { label:  getLocaleLabels("",row2.text.props.label,localizationLabels), value: row2.text.props.label.split('_')[2] };
       statusDropdownList.push(statusDropdown);
 
       let dataRows = [
         row0,
-        row1,
+        // row1,
         row2,
-        row3,
-        row4,
+        // row3,
+        // row4,
         {
-        ...row5, hiddenField: [row0.text.toLowerCase(),
-        String(row4.text),
-        getLocaleLabels("",`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`,localizationLabels).toLowerCase(),
-        getLocaleLabels("",row1.text.props.label , localizationLabels).toLowerCase(),
-        getLocaleLabels("",row2.text.props.label ,localizationLabels).toLowerCase(),
-        row3.text.props.label.toLowerCase()]
+        // ...row5, hiddenField: [row0.text.toLowerCase(),
+        // String(row4.text),
+        // getLocaleLabels("",`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`,localizationLabels).toLowerCase(),
+        // getLocaleLabels("",row1.text.props.label , localizationLabels).toLowerCase(),
+        // getLocaleLabels("",row2.text.props.label ,localizationLabels).toLowerCase(),
+        // row3.text.props.label.toLowerCase()]
         }
       ];
       return dataRows;
@@ -452,21 +453,35 @@ class TableData extends Component {
         ["businesssServiceSla"]
       );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+      // const applicationNos = responseData && get(responseData , "ProcessInstances").map((item,index)=>{
+      //   return item.businessId
+      // });
+      // console.log("======>",applicationNos)
+     
+      //     try {
+      //       const epassRequestData = [{ key: "tenantId", value: tenantId } , { key: "applicationNumber", value: applicationNos.join(",") }];
+      //       let epassData = await httpRequest("tl-services/v1/_search", "_search", epassRequestData);
+      //       console.log("======>",epassData)
 
+      //     } catch (e) {
+      //       console.log("error");
+      //     }
+        
+      
 
-      // const assignedDataRows = []
-      // const allDataRows = []
+      // console.log("======>",epassData)
 
+      
       const assignedDataRows = await this.prepareInboxDataRows(assignedData);
       const allDataRows = await this.prepareInboxDataRows(allData,true);
       
       
       let headersList = [
         "WF_INBOX_HEADER_APPLICATION_NO",
-        "WF_INBOX_HEADER_LOCALITY",
+        // "WF_INBOX_HEADER_LOCALITY",
         "WF_INBOX_HEADER_STATUS",
-        "WF_INBOX_HEADER_CURRENT_OWNER",
-        "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+        // "WF_INBOX_HEADER_CURRENT_OWNER",
+        // "WF_INBOX_HEADER_SLA_DAYS_REMAINING",        
       ];
       inboxData[0].headers = headersList;
       inboxData[0].rows = assignedDataRows;
@@ -551,7 +566,7 @@ class TableData extends Component {
       <div className="col-md-12 col-sm-12 col-xs-12">
         <div>
           <div className="row" style={{ marginBottom: '5px',marginTop:'5px', marginLeft: '-20px' }}>
-            <div className="col-md-9 col-sm-9 col-xs-12"  style={{ marginTop: '5px'}}>
+            <div className="col-md-9 col-sm-9 col-xs-12"  style={{ marginTop: '5px' ,marginBottom :15}}>
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
             <div className="col-md-3 col-sm-3 col-xs-10 search-bar" style={{}}>
@@ -580,7 +595,10 @@ class TableData extends Component {
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>}
           </Hidden> */}
         </div>
-        <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
+        <div style={{marginBotton : 10}}>
+
+        </div>
+        {/* <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} /> */}
         <div className="backgroundWhite">
           <Tabs
             value={value}

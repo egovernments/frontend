@@ -6,7 +6,6 @@ import {
   getCommonTitle,
   getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
 import get from "lodash/get";
 import set from "lodash/set";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -78,6 +77,32 @@ export const header = getCommonContainer({
     visible: false
   }
 });
+
+
+export const citizenInfoCard = getCommonContainer({
+  icon : {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "Information",
+  },
+  header :getCommonParagraph(
+    {
+      labelName: `Each citizen traveling needs a separate pass, and needs to apply for individual passes`,
+      labelKey: "EPASS_CITIZEN_INFO",
+    },
+    {
+      style: {
+        fontSize: 16,
+        marginBottom: 0,
+        marginLeft : 10,
+        color: "rgba(0, 0, 0, 0.87)"
+      }
+    }
+  ),
+},
+{style:{
+  marginTop :20
+}});
 
 export const tradeDocumentDetails = getCommonCard({
   header: getCommonTitle(
@@ -432,6 +457,7 @@ const screenConfig = {
           }
         },
         stepper,
+        citizenInfoCard,  
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,

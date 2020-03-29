@@ -170,19 +170,19 @@ class InboxData extends React.Component {
                         <div className = "rainmaker-displayInline">
                           {sortOrder === "desc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("asc")}>
-                              <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
-                              <ArrowDropUpIcon />
+                              <Label label={item} labelStyle={{ fontWeight: "500",display : "flex" , justifyContent : "center" }} color="#000000"  />
+                              {/* <ArrowDropUpIcon /> */}
                             </div>
                           )}
                           {sortOrder === "asc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("desc")}>
-                              <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
+                              <Label label={item} labelStyle={{ fontWeight: "500",display : "flex" , justifyContent : "center" }} color="#000000"  />
                               <ArrowDropDownIcon />
                             </div>
                           )}
                         </div>
                       ) : (
-                        <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
+                        <Label label={item} labelStyle={{ fontWeight: "500",display : "flex" , justifyContent : "center" }} color="#000000"/>
                       )}
                     </TableCell>
                   );
@@ -209,24 +209,26 @@ class InboxData extends React.Component {
                               </div>
                             </TableCell>
                           );
-                        } else if (item.badge) {
-                          return (
+                        } 
+                        else if (item.badge) {
+                          {/* return (
                             <TableCell className={classNames}>
                               <span class={"inbox-cell-badge-primary"} style={{backgroundColor : this.getSlaColor(item.text, row[2].text.props.label.split("_")[1])}}>{item.text}</span>
                             </TableCell>
-                          );
+                          ); */}
                         } else if (item.historyButton) {
-                          return (
+                          {/* return (
                             <TableCell className={classNames}>
                               <div onClick={() => onHistoryClick(row[0])} style={{ cursor: "pointer" }}>
                                 <i class="material-icons">history</i>
                               </div>
                             </TableCell>
-                          );
-                        } else {
+                          ); */}
+                        } 
+                        else {
                           return (
                             <TableCell className={classNames}>
-                              <div>{item.text}</div>
+                              <div style={{display : "flex" , justifyContent : "center"}}>{item.text}</div>
                             </TableCell>
                           );
                         }
@@ -258,7 +260,8 @@ class InboxData extends React.Component {
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
             <div>
-              {data.rows.map((row, index) => {
+              {/* {data.rows.map((row, index) => {
+                console.log("=======>",item)
                 return (
                   <Card
                     key={index}
@@ -300,7 +303,7 @@ class InboxData extends React.Component {
                     }
                   />
                 );
-              })}
+              })} */}
               <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
             </div>
           )}

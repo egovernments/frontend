@@ -52,6 +52,11 @@ const TradeLicenseIcon = Loadable({
   loading: () => <Loading />
 });
 
+const Information = Loadable({
+  loader: () => import("./Icons/Information"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   ApplicationNoContainer,
@@ -62,5 +67,6 @@ export {
   Asteric,
   MenuButton,
   FormIcon,
-  TradeLicenseIcon
+  TradeLicenseIcon,
+  Information
 };
