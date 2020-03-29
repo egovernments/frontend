@@ -183,7 +183,7 @@ class SingleApplication extends React.Component {
                         </Grid>
                       );
                     })}
-                    {moduleName === "TL" &&
+                    {/* {moduleName === "TL" &&
                       <div>
                         <Grid container style={{ marginBottom: 12 }}>
                           <Grid item xs={6}>
@@ -209,7 +209,7 @@ class SingleApplication extends React.Component {
                           </Grid>
                         </Grid>
                       </div>
-                    }
+                    } */}
 
                     {/* <Link to={this.onCardClick(item)}> */}
                     <div style={{ cursor: "pointer" }} onClick={() => {

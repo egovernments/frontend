@@ -34,7 +34,20 @@ const tradeTypeCard = {
         reviewPurpose: getLabelWithValue(
           { labelName: "Purpose", labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE" },
           {
-            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose"
+            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose",
+            localePrefix: {
+              moduleName: "TRADELICENSE",
+              masterName: "PURPOSE"
+            },
+            callBack: value => {
+              return value ? value.split(".")[0] : "NA";
+            }
+          }
+        ),
+        reviewPurposeDetails: getLabelWithValue(
+          { labelName: "Purpose Details", labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_DETAILS" },
+          {
+            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purposeDetail"
           }
         )
         // ,
