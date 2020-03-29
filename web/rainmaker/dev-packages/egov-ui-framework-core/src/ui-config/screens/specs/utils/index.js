@@ -530,5 +530,5 @@ export const getPattern = type => {
 };
 
 export const checkValueForNA = value => {
-  return value && value !== "null" ? value : "NA";
+  return value && value !== "null" ? value : "-";
 };

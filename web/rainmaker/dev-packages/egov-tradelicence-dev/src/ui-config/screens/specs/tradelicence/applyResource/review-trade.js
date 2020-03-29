@@ -251,8 +251,8 @@ export const getDeclarationCard = () => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Trade Details",
-            labelKey: "Declaration"
+            labelName: "Declaration",
+            labelKey: "EPASS_DECLARATION_HEADER"
           })
         },
       }
