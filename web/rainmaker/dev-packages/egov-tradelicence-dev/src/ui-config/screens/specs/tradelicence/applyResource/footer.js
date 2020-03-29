@@ -965,20 +965,20 @@ export const footerReviewTop = (
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      // downloadMenu = [applicationDownloadObject];
+      // printMenu = [applicationPrintObject];
       break;
     case "pending_approval":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+      // downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      // printMenu = [receiptPrintObject, applicationPrintObject];
       break;
     case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      // downloadMenu = [applicationDownloadObject];
+      // printMenu = [applicationPrintObject];
       break;
     case "REJECTED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      // downloadMenu = [applicationDownloadObject];
+      // printMenu = [applicationPrintObject];
       break;
     default:
       break;
@@ -1164,16 +1164,16 @@ export const downloadPrintContainer = (
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      // downloadMenu = [applicationDownloadObject];
+      // printMenu = [applicationPrintObject];
       break;
     case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      // downloadMenu = [applicationDownloadObject];
+      // printMenu = [applicationPrintObject];
       break;
     case "REJECTED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      // downloadMenu = [applicationDownloadObject];
+      // printMenu = [applicationPrintObject];
       break;
     default:
       break;
