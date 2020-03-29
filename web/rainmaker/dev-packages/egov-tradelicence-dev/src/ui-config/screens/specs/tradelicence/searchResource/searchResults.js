@@ -14,12 +14,12 @@ export const searchResults = {
   props: {
     columns: [
       getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("Category"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Mobile Number"),
       getTextToLocalMapping("From District"),
       getTextToLocalMapping("To District"),
-      getTextToLocalMapping("Status"),
+      getTextToLocalMapping("Name"),
+      getTextToLocalMapping("e-Pass Category"),
+      // getTextToLocalMapping("To District"),
+      // getTextToLocalMapping("Status"),
       {
         name: "tenantId",
         options: {
@@ -70,13 +70,13 @@ const onRowClick = rowData => {
   switch (rowData[8]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[7]
+        rowData[5]
       }`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[7]}`;
+      }&tenantId=${rowData[5]}`;
       break;
   }
 };

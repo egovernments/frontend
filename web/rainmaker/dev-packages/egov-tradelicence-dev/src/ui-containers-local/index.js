@@ -52,6 +52,11 @@ const ResubmitActionContainer = Loadable({
   loading: () => <Loading />
 });
 
+const PassCheckboxContainer = Loadable({
+  loader: () => import("./PassCheckboxContainer"),
+  loading: () => <Loading />
+});
+
 
 export {
   CustomTabContainer,
@@ -64,5 +69,6 @@ export {
   PaymentRedirectPage,
   ViewBreakupContainer,
   DialogContainer,
-  ResubmitActionContainer
+  ResubmitActionContainer,
+  PassCheckboxContainer
 };

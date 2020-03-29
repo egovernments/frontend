@@ -2445,6 +2445,18 @@ export const getTextToLocalMapping = label => {
         "Category",
         "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL",
         localisationLabels
+      );  
+      case "Name":
+      return getLocaleLabels(
+        "Name",
+        "TL_NEW_OWNER_NAME",
+        localisationLabels
+      );    
+      case "e-Pass Category":
+      return getLocaleLabels(
+        "e-Pass Category",
+        "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL",
+        localisationLabels
       );                         
   }
 };

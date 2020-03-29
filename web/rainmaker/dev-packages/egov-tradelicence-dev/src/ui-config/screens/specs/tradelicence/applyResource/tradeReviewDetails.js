@@ -6,7 +6,7 @@ import {
 
 import { getFeesEstimateCard, getDialogButton } from "../../utils";
 
-import { getReviewTrade } from "./review-trade";
+import { getReviewTrade,getDeclarationCard } from "./review-trade";
 import { getReviewOwner } from "./review-owner";
 import { getReviewDocuments } from "./review-documents";
 
@@ -19,6 +19,8 @@ import { getReviewDocuments } from "./review-documents";
 const reviewTradeDetails = getReviewTrade();
 
 const reviewOwnerDetails = getReviewOwner();
+
+const declarationDetails = getDeclarationCard();
 
 // const reviewDocumentDetails = getReviewDocuments();
 
@@ -38,3 +40,9 @@ export const tradeReviewDetails = getCommonCard({
   // ,
   // reviewDocumentDetails
 });
+
+export const declarationCard = getCommonCard({
+  declarationDetails
+});
+
+

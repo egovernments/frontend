@@ -25,7 +25,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
-import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
+import { tradeReviewDetails ,declarationCard } from "./applyResource/tradeReviewDetails";
 import { tradeDetails } from "./applyResource/tradeDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
@@ -318,7 +318,8 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    tradeReviewDetails
+    tradeReviewDetails,
+    declarationCard
   },
   visible: false
 };

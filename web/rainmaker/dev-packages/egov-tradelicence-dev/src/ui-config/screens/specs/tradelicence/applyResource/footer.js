@@ -322,11 +322,23 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-    if (isFormValid) {
+    const isDeclared = get(LicenseData , "tradeLicenseDetail.additionalDetail.declared")
+    if(isDeclared){
+      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
       if (getQueryArg(window.location.href, "action") === "EDITRENEWAL")
         editRenewalMoveToSuccess(LicenseData, dispatch);
       else moveToSuccess(LicenseData, dispatch);
+    }else{
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please click the checkbox to proceed!",
+            labelKey: "EPASS_DECLARATION_STATEMENT"
+          },
+          "error"
+        )
+      );
     }
   }
   if (activeStep !== 3) {
