@@ -103,7 +103,6 @@ export const searchApiCall = async (state, dispatch) => {
 
     const response = await getSearchResults(queryObject);
     try {
-      const localisationLabels = getTransformedLocalStorgaeLabels();
       let data = response.Licenses.map(item => ({
         [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
@@ -113,7 +112,7 @@ export const searchApiCall = async (state, dispatch) => {
           [getTextToLocalMapping("Name")]:
           item.tradeLicenseDetail.owners[0].name || "-",          
           [getTextToLocalMapping("e-Pass Category")]:
-            item.tradeLicenseDetail.additionalDetail.fromDistrict || "-",
+            item.tradeLicenseDetail.tradeUnits[0].tradeType || "-",
         //     [getTextToLocalMapping("To District")]:
         //       item.tradeLicenseDetail.additionalDetail.toDistrict || "-",
         // [getTextToLocalMapping("Status")]: `WF_${item.workflowCode.toUpperCase()}_${item.status}` || "-",

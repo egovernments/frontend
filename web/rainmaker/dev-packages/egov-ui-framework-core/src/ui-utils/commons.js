@@ -190,7 +190,7 @@ export const getLocaleLabels = (label, labelKey, localizationLabels) => {
   if (labelKey) {
     let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
     if (!translatedLabel || labelKey === translatedLabel) {
-      return translatedLabel;
+      return label;
     } else {
       return translatedLabel;
     }

@@ -14,10 +14,43 @@ export const searchResults = {
   props: {
     columns: [
       getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("From District"),
-      getTextToLocalMapping("To District"),
+      {
+        name : getTextToLocalMapping("From District"),
+        options:{
+          filter: false,
+          customBodyRender: value => (
+            <span>
+               {getLocaleLabels(value,`TRADELICENSE_DISTRICT_${value}`)}
+            </span>
+          )
+
+        }
+      },
+      {
+        name : getTextToLocalMapping("To District"),
+        options:{
+          filter: false,
+          customBodyRender: value => (
+            <span>
+               {getLocaleLabels(value,`TRADELICENSE_DISTRICT_${value}`)}
+            </span>
+          )
+
+        }
+      },
       getTextToLocalMapping("Name"),
-      getTextToLocalMapping("e-Pass Category"),
+      {
+        name : getTextToLocalMapping("e-Pass Category"),
+        options:{
+          filter: false,
+          customBodyRender: value => (
+            <span>
+               {getLocaleLabels(value,`TRADELICENSE_TRADETYPE_${value}`)}
+            </span>
+          )
+
+        }
+      },
       // getTextToLocalMapping("To District"),
       // getTextToLocalMapping("Status"),
       {
