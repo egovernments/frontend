@@ -530,7 +530,8 @@ const tradeUnitCard = {
               labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_DETAILS"
             },
             props:{
-              className:"applicant-details-error"
+              className:"applicant-details-error",
+              multiline: true
             },
             placeholder: {
               labelName: "Descirbe the purpose",

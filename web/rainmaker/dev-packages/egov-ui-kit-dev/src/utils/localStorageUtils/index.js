@@ -1,4 +1,5 @@
 
+import get from "lodash/get";
 
 const appName = process.env.REACT_APP_NAME;
 
@@ -17,6 +18,14 @@ export const getLocalization = (key) => {
 };
 export const getLocale = () => {
   return localStorage.getItem("locale");
+};
+export const getCitizenPermanentCityTenant = () => {
+  let addresses = localStorageGet("user-info", "addresses");
+  for (const address of addresses){
+    if(address.type === 'PERMANENT'){
+      return address.city
+    }
+  }
 };
 
 //SET methods

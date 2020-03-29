@@ -25,7 +25,7 @@ import {
   getTradeTypeDropdownData 
 } from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getLocale, getCitizenPermanentCityTenant } from "egov-ui-kit/utils/localStorageUtils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
@@ -89,8 +89,8 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
     const queryValue = getQueryArg(window.location.href, "applicationNumber");
-    // TODO: Fix this
-    const tenantId = "in.mp"; //getTenantId();
+    
+    const tenantId = getCitizenPermanentCityTenant(); 
     const applicationNo = queryValue
       ? queryValue
       : get(
