@@ -106,7 +106,7 @@ const NavigationDrawer = ({
         })}
 
         <div className="rainmaker-displayInline" style={{ justifyContent: "left" ,marginLeft:"10px"}}>
-          <div style={{ marginTop: "42px" }}>
+          {/* <div style={{ marginTop: "42px" }}>
             <img  src={logo} height="14px !important"/>
           </div >
           <div style={{ marginLeft: "2px", marginTop: "44px"  }}>
@@ -114,7 +114,7 @@ const NavigationDrawer = ({
           </div>
           <div style={{ marginLeft: "2px" ,marginTop: "44px"  }}>
             <Label bold={true} color="black" bold={true} fontSize="13px" label="STATE_LABEL" />
-          </div >
+          </div > */}
           <div style={{ marginTop: "42px" ,marginLeft:"65px" }}>
           <img src={digitLogo} height="14px !important" />
           </div>

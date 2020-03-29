@@ -502,22 +502,43 @@ const tradeUnitCard = {
             required:false,
             visible: false
           }),
-
-          purpose: getTextField({
+          purpose: {
+            ...getSelectField({
+              label: {
+                labelName: "Purpose",
+                labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE"
+              },
+              placeholder: {
+                labelName: "Select a Purpose",
+                labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_PLACEHOLDER"
+              },
+              localePrefix: {
+                moduleName: "TRADELICENSE",
+                masterName: "PURPOSE"
+              },
+              required: true,
+              jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose",
+              sourceJsonPath: "applyScreenMdmsData.TradeLicense.Purpose",
+              props: {
+                className: "tl-trade-type",
+              }
+            }),
+          },
+          purposeDetail: getTextField({
             label: {
-              labelName: "Purpose",
-              labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE"
+              labelName: "Purpose Details",
+              labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_DETAILS"
             },
             props:{
               className:"applicant-details-error"
             },
             placeholder: {
-              labelName: "Example Food Delivery",
-              labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_PLACEHOLDER"
+              labelName: "Descirbe the purpose",
+              labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_DETAILS_PLACEHOLDER"
             },
-            required: false,
+            required: true,
             pattern: getPattern("eventDescription"),
-            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose"
+            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purposeDetail"
           }),
         },
         {

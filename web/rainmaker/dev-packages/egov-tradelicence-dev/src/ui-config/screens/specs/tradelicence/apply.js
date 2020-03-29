@@ -137,6 +137,7 @@ export const getMdmsData = async (action, state, dispatch) => {
             { name: "ApplicationType" },
             { name: "District" },
             { name: "State" },
+            { name: "Purpose" },
           ]
         },
         {

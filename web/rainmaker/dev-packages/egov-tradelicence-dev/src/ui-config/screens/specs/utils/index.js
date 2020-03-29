@@ -964,39 +964,48 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
 }
 
 export const downloadCertificateForm = (Licenses,mode='download') => {
- const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";
-  const queryStr = [
-    { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
-    { key: "tenantId", value: "pb" }
-  ]
-  const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
-  try {
-    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-      .then(res => {
-        res.filestoreIds[0]
-        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-          res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,mode)
-          })
-        } else {
-          console.log("Error In Acknowledgement form Download");
-        }
-      });
-  } catch (exception) {
-    alert('Some Error Occured while downloading Acknowledgement form!');
-  }
+ const id= Licenses &&  Licenses.length >0 && get(Licenses[0],"id");
+ const tenantId = getQueryArg(window.location.href, "tenantId")
+ if(id && tenantId){
+  let url = `/egov-pdf/download/epass?tenantId=${tenantId}&uuid=${id}`
+   if(mode === 'download'){
+      var win = window.open(url, '_blank');
+      if(win){
+        win.focus();
+      }
+   } 
+   if(mode === 'print'){
+    axios.get(url, {
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/pdf"
+      }
+    })
+    .then(function (response) {
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+    })
+    .catch(function (error) {
+      console.error("Failed to print Certificate!", error)
+      alert('Error Occured while printing Certificate!');
+    })
+
+   }
+
+ } else{
+   console.error("Invalid ID or tenant id, aborting download!")
+   alert('Error Occured while downloading Certificate!');
+ }
+
 }
-
-
-
-
-
-
 
 export const prepareDocumentTypeObj = documents => {
   let documentsArr =
