@@ -260,8 +260,7 @@ class InboxData extends React.Component {
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
             <div>
-              {/* {data.rows.map((row, index) => {
-                console.log("=======>",item)
+            {data.rows.map((row, index) => {
                 return (
                   <Card
                     key={index}
@@ -270,16 +269,16 @@ class InboxData extends React.Component {
                         <div className="head" onClick={() => getModuleLink(row[0], row, 0)}>
                           <a style={{ color: "#FE7A51" }}>{row[0].text}</a>
                         </div>
-                        <div className="head">
+                        {/* <div className="head">
                           <Label label={`CS_COMMON_INBOX_${row[0].subtext.toUpperCase()}`} color="#000000" />
-                        </div>
+                        </div> */}
 
                         <div className="card-div-style">
                           <Label label={data.headers[1]} labelStyle={{ fontWeight: "500" }} />
                         </div>
                         <div className="card-div-style">{row[1].text}</div>
 
-                        <div className="card-div-style">
+                        {/* <div className="card-div-style">
                           <Label label={data.headers[2]} labelStyle={{ fontWeight: "500" }} />
                         </div>
                         <div className="card-div-style">{row[2].text}</div>
@@ -291,19 +290,19 @@ class InboxData extends React.Component {
 
                         <div className="card-div-style">
                           <Label label={data.headers[4]} labelStyle={{ fontWeight: "500" }} />
-                        </div>
-                        <div className="card-sladiv-style">
+                        </div> */}
+                        {/* <div className="card-sladiv-style">
                           <span class={"inbox-cell-badge-primary"} style={{backgroundColor : this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1])}}>{row[4].text}</span>
                         </div>
 
                         <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0])}>
                           <i class="material-icons">history</i>
-                        </div>
+                        </div> */}
                       </div>
                     }
                   />
                 );
-              })} */}
+              })}
               <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
             </div>
           )}

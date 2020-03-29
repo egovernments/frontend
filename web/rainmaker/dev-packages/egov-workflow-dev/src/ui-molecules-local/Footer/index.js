@@ -169,8 +169,10 @@ class Footer extends React.Component {
           labelName: { buttonLabel },
           labelKey: `WF_${moduleName.toUpperCase()}_${buttonLabel}`,
           link: () => {
-            (moduleName === "NewTL" || moduleName === "EDITRENEWAL" ) && buttonLabel==="APPLY" ? onDialogButtonClick(buttonLabel, isDocRequired) : 
-            this.openActionDialog(item);
+            (moduleName === "NewTL" || moduleName === "EDITRENEWAL") &&
+            buttonLabel === "APPLY"
+              ? onDialogButtonClick(buttonLabel, isDocRequired)
+              : this.openActionDialog(item);
           }
         };
       });
@@ -220,50 +222,46 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].validTo`
       );
-      const now=Date.now();
-      const renewalPeriod=validTo-now;
+      const now = Date.now();
+      const renewalPeriod = validTo - now;
 
-      if(rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
-       renewalPeriod<=7889400000 ){
-        const editButton = {
-          label: "Edit",
-          labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
-          link: () => {
-            const baseURL =
-              process.env.REACT_APP_NAME === "Citizen"
-                ? "/tradelicense-citizen/apply"
-                : "/tradelicence/apply";
-            this.props.setRoute(
-              `${baseURL}?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-            );
-          }
-        };
-        
-        const submitButton = {
-          label: "Submit",
-          labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
-          link: () => {
-            this.renewTradelicence(financialYear, tenantId);
-          }
-        };    
-        if(responseLength > 1 ){
-          if(applicationType !== "NEW"){
-            downloadMenu && downloadMenu.push(editButton);
-            downloadMenu && downloadMenu.push(submitButton);
-          }
+      // if (
+      //   rolecheck &&
+      //   (status === "APPROVED" || status === "EXPIRED") &&
+      //   renewalPeriod <= 7889400000
+      // ) {
+      //   const editButton = {
+      //     label: "Edit",
+      //     labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
+      //     link: () => {
+      //       const baseURL =
+      //         process.env.REACT_APP_NAME === "Citizen"
+      //           ? "/tradelicense-citizen/apply"
+      //           : "/tradelicence/apply";
+      //       this.props.setRoute(
+      //         `${baseURL}?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+      //       );
+      //     }
+      //   };
 
-        }
-        else if(responseLength === 1){
-         
-            downloadMenu && downloadMenu.push(editButton);
-            downloadMenu && downloadMenu.push(submitButton);
-          }
-
-
-        
-      
+      //   const submitButton = {
+      //     label: "Submit",
+      //     labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
+      //     link: () => {
+      //       this.renewTradelicence(financialYear, tenantId);
+      //     }
+      //   };
+      //   if (responseLength > 1) {
+      //     if (applicationType !== "NEW") {
+      //       downloadMenu && downloadMenu.push(editButton);
+      //       downloadMenu && downloadMenu.push(submitButton);
+      //     }
+      //   } else if (responseLength === 1) {
+      //     downloadMenu && downloadMenu.push(editButton);
+      //     downloadMenu && downloadMenu.push(submitButton);
+      //   }
+      // }
     }
-  }
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
