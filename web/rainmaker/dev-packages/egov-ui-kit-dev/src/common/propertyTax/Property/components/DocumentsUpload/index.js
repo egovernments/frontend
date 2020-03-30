@@ -66,23 +66,10 @@ class DocumentsUpload extends Component {
 };
 
   getMdmsData = async () => {
-    // const { prepareFinalObject } = this.props;
-    
-     let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-    // let mdmsBody = {
-    //   MdmsCriteria: {
-    //     tenantId: tenantId,
-    //     moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }],
-    //   },
-    // };
-    // try {
-     
-    //  let payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody, [], {}, true);
-    //   prepareFinalObject("applyScreenMdmsData", payload.MdmsRes);
-    //   prepareDocumentsUploadData( payload.MdmsRes.PropertyTax.Documents);
-    // } catch (e) {
-    //   console.log(e);
-    // }
+
+    //  let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+    let tenantId =  getTenantId()||'';
+    tenantId=tenantId.split('.')[0];
    let respo=await this.props.fetchDocuments(tenantId);
    const { Documents=[] } = this.props;
     if(respo){

@@ -137,62 +137,62 @@ class FormWizard extends Component {
     getImportantDates(this);
     try {
       let currentDraft;
-     
-        let searchPropertyResponse = await httpRequest(
-          "property-services/property/_search",
-          "_search",
-          [
-            {
-              key: "tenantId",
-              value: tenantId
-            },
-            {
-              key: "propertyIds",
-              value: getQueryValue(search, "propertyId") //"PT-107-001278",
-            }
-          ]
-        );
-        searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
-        await prefillPTDocuments(
-          searchPropertyResponse,
-          "Properties[0].documents",
-          "documentsUploadRedux",
-          store.dispatch, 'PT'
-        );
-        this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
-        if (
-          searchPropertyResponse.Properties[0].propertyDetails &&
-          searchPropertyResponse.Properties[0].propertyDetails.length > 0
-        ) {
-          searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
-            item.units = sortBy(
-              item.units,
-              unit => parseInt(unit.floorNo) || -99999
-            );
-          });
-        }
-        // console.log(searchPropertyResponse);
-        let propertyResponse = {
-          ...searchPropertyResponse,
-          Properties: [
-            {
-              ...searchPropertyResponse.Properties[0],
-              propertyDetails: getTargetPropertiesDetails(
-                searchPropertyResponse.Properties[0].propertyDetails,
-                this
-              )
-            }
-          ]
-        };
-        const preparedForm = convertRawDataToFormConfig(propertyResponse); //convertRawDataToFormConfig(responseee)
-        currentDraft = {
-          draftRecord: {
-            ...preparedForm,
-            selectedTabIndex: 3,
-            prepareFormData: propertyResponse //prepareFormData2,
+
+      let searchPropertyResponse = await httpRequest(
+        "property-services/property/_search",
+        "_search",
+        [
+          {
+            key: "tenantId",
+            value: tenantId
+          },
+          {
+            key: "propertyIds",
+            value: getQueryValue(search, "propertyId") //"PT-107-001278",
           }
-        };
-     
+        ]
+      );
+      searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
+      await prefillPTDocuments(
+        searchPropertyResponse,
+        "Properties[0].documents",
+        "documentsUploadRedux",
+        store.dispatch, 'PT'
+      );
+      this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
+      if (
+        searchPropertyResponse.Properties[0].propertyDetails &&
+        searchPropertyResponse.Properties[0].propertyDetails.length > 0
+      ) {
+        searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
+          item.units = sortBy(
+            item.units,
+            unit => parseInt(unit.floorNo) || -99999
+          );
+        });
+      }
+      // console.log(searchPropertyResponse);
+      let propertyResponse = {
+        ...searchPropertyResponse,
+        Properties: [
+          {
+            ...searchPropertyResponse.Properties[0],
+            propertyDetails: getTargetPropertiesDetails(
+              searchPropertyResponse.Properties[0].propertyDetails,
+              this
+            )
+          }
+        ]
+      };
+      const preparedForm = convertRawDataToFormConfig(propertyResponse); //convertRawDataToFormConfig(responseee)
+      currentDraft = {
+        draftRecord: {
+          ...preparedForm,
+          selectedTabIndex: 3,
+          prepareFormData: propertyResponse //prepareFormData2,
+        }
+      };
+
       this.setState({
         draftByIDResponse: currentDraft
       });
@@ -427,7 +427,7 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
-    const {propertiesEdited}= this.props;
+    const { propertiesEdited } = this.props;
     const isReviewPage = selected === 3;
     switch (ownerType) {
       case "SINGLEOWNER":
@@ -509,7 +509,7 @@ class FormWizard extends Component {
       assessedPropertyDetails
     } = this.state;
     const { onRadioButtonChange, updateTotalAmount } = this;
-    const { location ,propertiesEdited} = this.props;
+    const { location, propertiesEdited } = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
 
@@ -732,7 +732,7 @@ class FormWizard extends Component {
     const { formValidIndexArray, selected } = this.state;
     const { location } = this.props;
     let { search } = location;
-    const isCompletePayment =false;
+    const isCompletePayment = false;
     if (formValidIndexArray.indexOf(index) !== -1 && selected >= index) {
       !isCompletePayment
         ? this.setState({
@@ -751,7 +751,7 @@ class FormWizard extends Component {
       financialYearFromQuery,
       estimation
     } = this.state;
-    const { setRoute, displayFormErrorsAction, form } = this.props;
+    const { setRoute, displayFormErrorsAction, form, requiredDocCount } = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -968,7 +968,7 @@ class FormWizard extends Component {
       case 3:
         window.scrollTo(0, 0);
         const uploadedDocs = get(this.props, "documentsUploadRedux");
-        if (!isDocumentValid(uploadedDocs)) {
+        if (!isDocumentValid(uploadedDocs, requiredDocCount)) {
           alert("Please upload all the required documents and documents type.")
         } else {
           this.setState({
@@ -1300,18 +1300,19 @@ class FormWizard extends Component {
           window.scrollTo(0, 0);
 
           let { taxHeadEstimates, totalAmount } = estimateResponse.Calculation[0];
-          let adhocPenaltyAmt=0;
-          let adhocExemptionAmt=0;
-          taxHeadEstimates.map(taxHead=>{
-            if(taxHead.taxHeadCode=="PT_TIME_PENALTY"){
-              adhocPenaltyAmt=taxHead.estimateAmount+adhocPenaltyAmt;
+          let adhocPenaltyAmt = 0;
+          let adhocExemptionAmt = 0;
+          taxHeadEstimates.map(taxHead => {
+            if (taxHead.taxHeadCode == "PT_TIME_PENALTY") {
+              adhocPenaltyAmt = taxHead.estimateAmount + adhocPenaltyAmt;
             }
-            if(taxHead.taxHeadCode=="PT_TIME_REBATE"){
-              adhocExemptionAmt=taxHead.estimateAmount+adhocExemptionAmt;
-            }} )
-            estimateResponse.Calculation[0].initialAmount=totalAmount;
-            estimateResponse.Calculation[0].adhocPenaltyAmt=adhocPenaltyAmt;
-            estimateResponse.Calculation[0].adhocExemptionAmt=adhocExemptionAmt;
+            if (taxHead.taxHeadCode == "PT_TIME_REBATE") {
+              adhocExemptionAmt = taxHead.estimateAmount + adhocExemptionAmt;
+            }
+          })
+          estimateResponse.Calculation[0].initialAmount = totalAmount;
+          estimateResponse.Calculation[0].adhocPenaltyAmt = adhocPenaltyAmt;
+          estimateResponse.Calculation[0].adhocExemptionAmt = adhocExemptionAmt;
           this.props.prepareFinalObject("estimateResponse", estimateResponse.Calculation);
           this.setState({
             estimation: estimateResponse && estimateResponse.Calculation,
@@ -1324,7 +1325,7 @@ class FormWizard extends Component {
   }
 
   estimate = async () => {
-    let { hideSpinner, location ,showSpinner} = this.props;
+    let { hideSpinner, location, showSpinner } = this.props;
     let { search } = location;
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
@@ -1540,7 +1541,7 @@ class FormWizard extends Component {
   }
 
   assessProperty = async (action, Properties) => {
-    const {adhocExemptionPenalty}=this.props;
+    const { adhocExemptionPenalty } = this.props;
     let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
     const propertyId = getQueryArg(
       window.location.href,
@@ -1561,12 +1562,12 @@ class FormWizard extends Component {
       "channel": "CFC_COUNTER",
     }
 
-    assessment.additionalDetails={}
-    if(Object.keys(adhocExemptionPenalty).length>1){
-      assessment.additionalDetails.adhocPenalty=Number(adhocExemptionPenalty.adhocPenalty);
-      assessment.additionalDetails.adhocPenaltyReason=adhocExemptionPenalty.adhocPenaltyReason=='Others'?adhocExemptionPenalty.adhocOtherPenaltyReason:adhocExemptionPenalty.adhocPenaltyReason;
-      assessment.additionalDetails.adhocExemption=Number(adhocExemptionPenalty.adhocExemption);
-      assessment.additionalDetails.adhocExemptionReason=adhocExemptionPenalty.adhocExemptionReason=='Others'?adhocExemptionPenalty.adhocOtherExemptionReason:adhocExemptionPenalty.adhocExemptionReason;
+    assessment.additionalDetails = {}
+    if (Object.keys(adhocExemptionPenalty).length > 1) {
+      assessment.additionalDetails.adhocPenalty = Number(adhocExemptionPenalty.adhocPenalty);
+      assessment.additionalDetails.adhocPenaltyReason = adhocExemptionPenalty.adhocPenaltyReason == 'Others' ? adhocExemptionPenalty.adhocOtherPenaltyReason : adhocExemptionPenalty.adhocPenaltyReason;
+      assessment.additionalDetails.adhocExemption = Number(adhocExemptionPenalty.adhocExemption);
+      assessment.additionalDetails.adhocExemptionReason = adhocExemptionPenalty.adhocExemptionReason == 'Others' ? adhocExemptionPenalty.adhocOtherExemptionReason : adhocExemptionPenalty.adhocExemptionReason;
     }
 
     if (action === "re-assess") {
@@ -1593,8 +1594,8 @@ class FormWizard extends Component {
           Assessment: assessment
         }
       );
-     
-      const assessmentNumber= get(assessPropertyResponse, "Assessments[0].assessmentNumber",'');
+
+      const assessmentNumber = get(assessPropertyResponse, "Assessments[0].assessmentNumber", '');
       if (action === "re-assess") {
         store.dispatch(
           setRoute(
@@ -1654,7 +1655,7 @@ class FormWizard extends Component {
         }
       }
       try {
-        propertyPayload.creationReason=action=='create'?'CREATE':'UPDATE';
+        propertyPayload.creationReason = action == 'create' ? 'CREATE' : 'UPDATE';
         const propertyResponse = await httpRequest(
           `property-services/property/${propertyMethodAction}`,
           `${propertyMethodAction}`,
@@ -1668,16 +1669,16 @@ class FormWizard extends Component {
         );
         if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
           if (propertyResponse.Properties[0].propertyId) {
-            const propertyId = get(propertyResponse, "Properties[0].propertyId",'');
-            const tenantId =  get(propertyResponse, "Properties[0].tenantId",'');
-            const acknowldgementNumber= get(propertyResponse, "Properties[0].acknowldgementNumber",'');
+            const propertyId = get(propertyResponse, "Properties[0].propertyId", '');
+            const tenantId = get(propertyResponse, "Properties[0].tenantId", '');
+            const acknowldgementNumber = get(propertyResponse, "Properties[0].acknowldgementNumber", '');
             // Navigate to success page
-            if(action=='create'){
+            if (action == 'create') {
               this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
-            }else{
+            } else {
               this.props.history.push(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
             }
-            
+
             // if ((action === "assess") || (action === "re-assess")) {
             //   this.assessProperty(action, propertyResponse.Properties);
             // } else {
@@ -1956,11 +1957,11 @@ class FormWizard extends Component {
       selected,
       formValidIndexArray,
     } = this.state;
-    const { location ,propertiesEdited} = this.props;
+    const { location, propertiesEdited } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     // let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
-    if (propertyId && selected == 3&&!propertiesEdited) {
+    if (propertyId && selected == 3 && !propertiesEdited) {
       this.setState({
         selected: 4,
         formValidIndexArray: [...formValidIndexArray, 4]
@@ -2062,7 +2063,13 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [], propertiesEdited = false,adhocExemptionPenalty = {}  } = preparedFinalObject;
+  const { documentsContract = [], documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {} } = preparedFinalObject;
+  let requiredDocCount = 0;
+  documentsContract && documentsContract[0] && documentsContract[0].cards && documentsContract[0].cards.map(document => {
+    if (document.required == true) {
+      requiredDocCount++;
+    }
+  })
   return {
     form,
     currentTenantId,
@@ -2072,7 +2079,8 @@ const mapStateToProps = state => {
     documentsUploadRedux,
     newProperties,
     propertiesEdited,
-    adhocExemptionPenalty
+    adhocExemptionPenalty,
+    requiredDocCount
   };
 };
 
