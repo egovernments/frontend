@@ -112,6 +112,13 @@ export const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
+    
+    const isTradeOwnersValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
+      state,
+      dispatch
+    );
+
     const isTradeLocationValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
       state,
@@ -161,6 +168,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
     if (
       !isTradeDetailsValid ||
+      !isTradeOwnersValid ||
       // !isTradeLocationValid ||
       // !isAccessoriesValid ||
       !isTradeUnitValid

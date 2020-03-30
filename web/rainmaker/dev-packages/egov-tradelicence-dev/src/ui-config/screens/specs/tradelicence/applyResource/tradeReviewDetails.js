@@ -16,9 +16,9 @@ import { getReviewDocuments } from "./review-documents";
 //   })
 // });
 
-const reviewTradeDetails = getReviewTrade();
+const reviewTradeDetails = getReviewTrade(false);
 
-const reviewOwnerDetails = getReviewOwner();
+const reviewOwnerDetails = getReviewOwner(false);
 
 const declarationDetails = getDeclarationCard();
 
@@ -44,5 +44,3 @@ export const tradeReviewDetails = getCommonCard({
 export const declarationCard = getCommonCard({
   declarationDetails
 });
-
-

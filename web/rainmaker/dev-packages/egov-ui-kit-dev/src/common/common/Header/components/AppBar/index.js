@@ -85,7 +85,7 @@ const EgovAppBar = ({
             handleItemClick={handleItemClick}
           />
         </Toolbar>
-        {notificationButton && role === "citizen" && (
+        {/*notificationButton && role === "citizen" && (
           <div className="notification-icon-web notification-icon" onClick={(e) => onNotificationClick(history)}>
             {notificationsCount ? (
               <IconButton aria-label="4 pending messages">
@@ -97,7 +97,7 @@ const EgovAppBar = ({
               <Icon action="social" name="notifications-none" color="#000000" fill="#000000" />
             )}
           </div>
-        )}
+            )*/}
 
         <div className="appbar-right-logo">
           <img src={digitLogo} />

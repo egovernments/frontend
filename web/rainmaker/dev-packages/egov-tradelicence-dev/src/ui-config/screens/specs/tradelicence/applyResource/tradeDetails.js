@@ -531,7 +531,8 @@ const tradeUnitCard = {
             },
             props:{
               className:"applicant-details-error",
-              multiline: true
+              multiline: true,
+              rows: "2",
             },
             placeholder: {
               labelName: "Descirbe the purpose",

@@ -397,7 +397,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         "tradeLicenseDetail.owners",
         getMultipleOwners(owners)
       );
-
       let action = "INITIATE";
       //Code for edit flow
 
@@ -408,7 +407,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       ) {
 
 
-        if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal) {
+        if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal || activeIndex === 0) {
         } else if (activeIndex === 1) {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
