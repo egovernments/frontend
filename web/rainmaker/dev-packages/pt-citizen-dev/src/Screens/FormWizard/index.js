@@ -136,68 +136,68 @@ class FormWizard extends Component {
 
     try {
       let currentDraft;
-    
-        let searchPropertyResponse = await httpRequest(
-          "property-services/property/_search",
-          "_search",
-          [
-            {
-              key: "tenantId",
-              value: tenantId
-            },
-            {
-              key: "propertyIds",
-              value: getQueryValue(search, "propertyId") //"PT-107-001278",
-            }
-          ]
-        );
-        searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
-        await prefillPTDocuments(
-          searchPropertyResponse,
-          "Properties[0].documents",
-          "documentsUploadRedux",
-          store.dispatch, 'PT'
-        );
-        // prepareFinalObject("documentsUploadRedux",{} );
-        this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
-        if (
-          searchPropertyResponse.Properties[0].propertyDetails &&
-          searchPropertyResponse.Properties[0].propertyDetails.length > 0
-        ) {
-          searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
-            item.units = sortBy(
-              item.units,
-              unit => parseInt(unit.floorNo) || -99999
-            );
-          });
-        }
-           let propertyResponse = {
-          ...searchPropertyResponse,
-          Properties: [
-            {
-              ...searchPropertyResponse.Properties[0],
-              propertyDetails: getTargetPropertiesDetails(
-                searchPropertyResponse.Properties[0].propertyDetails,
-                this
-              )
-            }
-          ]
-        };
-        const preparedForm = convertRawDataToFormConfig(propertyResponse); //convertRawDataToFormConfig(responseee)
-        currentDraft = {
-          draftRecord: {
-            ...preparedForm,
-            selectedTabIndex: 3,
-            prepareFormData: { Properties: propertyResponse["Properties"] } //prepareFormData2,
+
+      let searchPropertyResponse = await httpRequest(
+        "property-services/property/_search",
+        "_search",
+        [
+          {
+            key: "tenantId",
+            value: tenantId
+          },
+          {
+            key: "propertyIds",
+            value: getQueryValue(search, "propertyId") //"PT-107-001278",
           }
-        };
-        this.setState({
-          propertyUUID: get(
-            searchPropertyResponse,
-            "Properties[0].propertyDetails[0].citizenInfo.uuid"
-          )
+        ]
+      );
+      searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
+      await prefillPTDocuments(
+        searchPropertyResponse,
+        "Properties[0].documents",
+        "documentsUploadRedux",
+        store.dispatch, 'PT'
+      );
+      // prepareFinalObject("documentsUploadRedux",{} );
+      this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
+      if (
+        searchPropertyResponse.Properties[0].propertyDetails &&
+        searchPropertyResponse.Properties[0].propertyDetails.length > 0
+      ) {
+        searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
+          item.units = sortBy(
+            item.units,
+            unit => parseInt(unit.floorNo) || -99999
+          );
         });
-      
+      }
+      let propertyResponse = {
+        ...searchPropertyResponse,
+        Properties: [
+          {
+            ...searchPropertyResponse.Properties[0],
+            propertyDetails: getTargetPropertiesDetails(
+              searchPropertyResponse.Properties[0].propertyDetails,
+              this
+            )
+          }
+        ]
+      };
+      const preparedForm = convertRawDataToFormConfig(propertyResponse); //convertRawDataToFormConfig(responseee)
+      currentDraft = {
+        draftRecord: {
+          ...preparedForm,
+          selectedTabIndex: 3,
+          prepareFormData: { Properties: propertyResponse["Properties"] } //prepareFormData2,
+        }
+      };
+      this.setState({
+        propertyUUID: get(
+          searchPropertyResponse,
+          "Properties[0].propertyDetails[0].citizenInfo.uuid"
+        )
+      });
+
 
       this.setState({
         draftByIDResponse: currentDraft
@@ -310,7 +310,7 @@ class FormWizard extends Component {
       }
     }
   };
- 
+
   componentDidMount = async () => {
     const { selected } = this.state;
     let {
@@ -436,7 +436,8 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
-    const {propertiesEdited}= this.props;
+    const { propertiesEdited } = this.props;
+   
     const isReviewPage = selected === 3;
     switch (ownerType) {
       case "SINGLEOWNER":
@@ -492,7 +493,7 @@ class FormWizard extends Component {
       termsError, propertyUUID,
       assessedPropertyDetails
     } = this.state;
-    const { form, currentTenantId, search ,propertiesEdited} = this.props;
+    const { form, currentTenantId, search, propertiesEdited } = this.props;
     let { search: searchQuery } = this.props.location;
     let isAssesment = Boolean(getQueryValue(searchQuery, "isAssesment").replace('false', ''));
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
@@ -821,8 +822,8 @@ class FormWizard extends Component {
           Assessment: assessment
         }
       );
-     
-      const assessmentNumber= get(assessPropertyResponse, "Assessments[0].assessmentNumber",'');
+
+      const assessmentNumber = get(assessPropertyResponse, "Assessments[0].assessmentNumber", '');
       if (action === "re-assess") {
         store.dispatch(
           setRoute(
@@ -883,7 +884,7 @@ class FormWizard extends Component {
         }
       }
       try {
-        propertyPayload.creationReason=action=='create'?'CREATE':'UPDATE';
+        propertyPayload.creationReason = action == 'create' ? 'CREATE' : 'UPDATE';
         const propertyResponse = await httpRequest(
           `property-services/property/${propertyMethodAction}`,
           `${propertyMethodAction}`,
@@ -897,21 +898,21 @@ class FormWizard extends Component {
         );
         if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
           if (propertyResponse.Properties[0].propertyId) {
-            const propertyId = get(propertyResponse, "Properties[0].propertyId",'');
-            const tenantId =  get(propertyResponse, "Properties[0].tenantId",'');
-            const acknowldgementNumber= get(propertyResponse, "Properties[0].acknowldgementNumber",'');
+            const propertyId = get(propertyResponse, "Properties[0].propertyId", '');
+            const tenantId = get(propertyResponse, "Properties[0].tenantId", '');
+            const acknowldgementNumber = get(propertyResponse, "Properties[0].acknowldgementNumber", '');
             // Navigate to success page
-            if(action=='create'){
+            if (action == 'create') {
               this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
-            }else{
+            } else {
               this.props.history.push(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
             }
-     
+
           }
         }
       } catch (e) {
         hideSpinner();
-          store.dispatch(
+        store.dispatch(
           setRoute(
             `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
           )
@@ -925,7 +926,7 @@ class FormWizard extends Component {
     // utils
     const { pay, estimate, createAndUpdate } = this;
     const { selected, formValidIndexArray, estimation } = this.state;
-    const { displayFormErrorsAction, form } = this.props;
+    const { displayFormErrorsAction, form, requiredDocCount } = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -1138,7 +1139,7 @@ class FormWizard extends Component {
         break;
       case 3:
         const uploadedDocs = get(this.props, "documentsUploadRedux");
-        if (!isDocumentValid(uploadedDocs)) {
+        if (!isDocumentValid(uploadedDocs, requiredDocCount)) {
           alert("Please upload all the required documents and documents type.")
         } else {
           this.setState(
@@ -1338,7 +1339,7 @@ class FormWizard extends Component {
   }
 
   estimate = async () => {
-    let { showSpinner, location ,hideSpinner} = this.props;
+    let { showSpinner, location, hideSpinner } = this.props;
     let { search } = location;
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
@@ -1690,11 +1691,11 @@ class FormWizard extends Component {
       selected,
       formValidIndexArray,
     } = this.state;
-    const { location ,propertiesEdited} = this.props;
+    const { location, propertiesEdited } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     // let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
-    if (propertyId && selected == 3&&!propertiesEdited) {
+    if (propertyId && selected == 3 && !propertiesEdited) {
       this.setState({
         selected: 4,
         formValidIndexArray: [...formValidIndexArray, 4]
@@ -1797,7 +1798,14 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [], propertiesEdited = false } = preparedFinalObject;
+  const { documentsContract = [], documentsUploadRedux, newProperties = [], propertiesEdited = false } = preparedFinalObject;
+
+  let requiredDocCount = 0;
+  documentsContract && documentsContract[0] && documentsContract[0].cards && documentsContract[0].cards.map(document => {
+    if (document.required == true) {
+      requiredDocCount++;
+    }
+  })
   return {
     form,
     prepareFormData: common.prepareFormData,
@@ -1805,7 +1813,8 @@ const mapStateToProps = state => {
     common,
     app,
     documentsUploadRedux, newProperties,
-    propertiesEdited
+    propertiesEdited,
+    requiredDocCount
   };
 };
 
