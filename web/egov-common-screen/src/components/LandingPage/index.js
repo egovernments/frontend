@@ -63,6 +63,15 @@ class LandingPage extends React.Component {
                                 "name": "StateInfo"
                             }
                         ]
+                    },
+                    {
+                        "moduleName": "tenant",
+                        "masterDetails": [
+
+                            {
+                                "name": "tenants"
+                            }
+                        ]
                     }
                 ]
             }
