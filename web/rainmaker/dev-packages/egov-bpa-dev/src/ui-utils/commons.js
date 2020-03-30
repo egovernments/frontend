@@ -774,7 +774,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       });
      }
 
-    //  documentType, tenantId
+     if(documents && documents.length && documnts && documnts.length) {
+      documents.forEach(upDocs => {
+        documnts.forEach(reduxDocs => {
+          if(reduxDocs && upDocs &&
+            reduxDocs.documentCode === upDocs.documentType) {
+            reduxDocs.documents[0].id = upDocs.id;
+          }
+        })
+       })
+     }
       
       let requiredDocuments = [];
       if (documnts && documnts.length > 0) {
