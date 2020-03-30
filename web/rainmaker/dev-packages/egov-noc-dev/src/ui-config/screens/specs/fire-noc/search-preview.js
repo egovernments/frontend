@@ -46,7 +46,7 @@ const titlebar = getCommonContainer({
       number: getQueryArg(window.location.href, "applicationNumber")
     }
   },
-/*  downloadMenu: {
+  downloadMenu: {
     uiFramework: "custom-atoms",
     componentPath: "MenuButton",
     props: {
@@ -71,7 +71,7 @@ const titlebar = getCommonContainer({
         menu: []
       }
     }
-  }  */
+  }  
 });
 
 const prepareDocumentsView = async (state, dispatch) => {
