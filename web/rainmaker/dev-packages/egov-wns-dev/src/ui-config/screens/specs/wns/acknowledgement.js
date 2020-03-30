@@ -676,8 +676,7 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("documentsContract", []));
   dispatch(prepareFinalObject("applyScreenMdmsData", []));
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
-  dispatch(prepareFinalObject("DocumentsData", {}));
-  dispatch(prepareFinalObject("UploadedDocs", {}));
+  dispatch(prepareFinalObject("UploadedDocs", []));
   dispatch(prepareFinalObject("waterSubSourceForSelectedWaterSource", {}));
 }
 
