@@ -1,11 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import get from "lodash/get";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
+import { sortByEpoch, getEpochForDate } from "../../utils";
 import {
   getLocalization,
   getTenantId
@@ -111,45 +107,36 @@ export const searchResults = {
   visible: false,
   props: {
     // data: [],
-    columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("NOC No"),
-      getTextToLocalMapping("NOC Type"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
-      {
-        name: getTextToLocalMapping("Status"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
-              }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
-          )
+    columns: {
+      [get(textToLocalMapping, "Application No")]: {
+        format: rowData => {
+          return (
+            <Link to={onRowClick(rowData)}>
+              <span
+                style={{
+                  color: "#FE7A51"
+                }}
+              >
+                {rowData[get(textToLocalMapping, "Application No")]}
+              </span>
+            </Link>
+          );
         }
       },
-      {
-        name: "tenantId",
-        options: {
-          display: false
-        }
-      }
-    ],
-    title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+      [get(textToLocalMapping, "NOC No")]: {},
+      [get(textToLocalMapping, "NOC Type")]: {},
+      [get(textToLocalMapping, "Owner Name")]: {},
+      [get(textToLocalMapping, "Application Date")]: {},
+      [get(textToLocalMapping, "Status")]: {}
+    },
+    title: get(textToLocalMapping, "Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
       download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
-      }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Application Date",
@@ -170,43 +157,27 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  console.log(rowData,"rowdataforsearch")
-  switch (rowData[5]) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
-      }`;
-      break;
+  let appendUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  switch (rowData[get(textToLocalMapping, "Status")]) {
+    case get(textToLocalMapping, "APPLIED"):
+    case get(textToLocalMapping, "PENDINGPAYMENT"):
+    case get(textToLocalMapping, "APPROVED"):
+    case get(textToLocalMapping, "PENDINGAPPROVAL"):
+    case get(textToLocalMapping, "FIELDINSPECTION"):
+    case get(textToLocalMapping, "REJECTED"):
+    case get(textToLocalMapping, "CANCELLED"):
+    case get(textToLocalMapping, "DOCUMENTVERIFY"):
+      return `${appendUrl}/fire-noc/search-preview?applicationNumber=${
+        rowData[get(textToLocalMapping, "Application No")]
+      }&tenantId=${rowData["tenantId"]}`;
+
+    case get(textToLocalMapping, "INITIATED"):
+      return `${appendUrl}/fire-noc/apply?applicationNumber=${
+        rowData[get(textToLocalMapping, "Application No")]
+      }&tenantId=${rowData.tenantId}`;
+
     default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-      }&tenantId=${rowData[6]}`;
-      break;
+      return `${appendUrl}/fire-noc/search`;
   }
 };
-
-// const onRowClick = rowData => {
-//   let appendUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//   switch (rowData[get(textToLocalMapping, "Status")]) {
-//     case get(textToLocalMapping, "APPLIED"):
-//     case get(textToLocalMapping, "PENDINGPAYMENT"):
-//     case get(textToLocalMapping, "APPROVED"):
-//     case get(textToLocalMapping, "PENDINGAPPROVAL"):
-//     case get(textToLocalMapping, "FIELDINSPECTION"):
-//     case get(textToLocalMapping, "REJECTED"):
-//     case get(textToLocalMapping, "CANCELLED"):
-//     case get(textToLocalMapping, "DOCUMENTVERIFY"):
-//       return `${appendUrl}/fire-noc/search-preview?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData["tenantId"]}`;
-
-//     case get(textToLocalMapping, "INITIATED"):
-//       return `${appendUrl}/fire-noc/apply?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData.tenantId}`;
-
-//     default:
-//       return `${appendUrl}/fire-noc/search`;
-//   }
-// };
