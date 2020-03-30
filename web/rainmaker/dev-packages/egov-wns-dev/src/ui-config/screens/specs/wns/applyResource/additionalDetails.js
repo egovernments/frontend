@@ -291,7 +291,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: /^[0-9a-zA-Z]+$/i,
+        pattern: /^[a-z0-9]+$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.meterId"
       }),

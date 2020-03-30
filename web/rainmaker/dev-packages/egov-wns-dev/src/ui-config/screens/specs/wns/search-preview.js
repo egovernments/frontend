@@ -560,7 +560,6 @@ const parserFunction = (obj) => {
     proposedWaterClosets: parseInt(obj.proposedWaterClosets),
     proposedToilets: parseInt(obj.proposedToilets),
     roadCuttingArea: parseInt(obj.roadCuttingArea),
-    meterId: parseInt(obj.meterId),
     additionalDetails: {
       initialMeterReading: (
         obj.additionalDetails !== undefined &&
