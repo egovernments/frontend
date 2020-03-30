@@ -197,7 +197,6 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "applicationNumber"
     );
-    if (moduleName)
       if (moduleName === "NewWS1" || moduleName === "NewSW1") {
         data = data[0];
         data.assignees = [];
