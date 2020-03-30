@@ -125,18 +125,23 @@ const handleAppDownloadAndPrint = (state, action) => {
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
   const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
-  let WaterConnection, SewerageConnection;
+  const { WaterConnection, DocumentsData, SewerageConnection } = state.screenConfiguration.preparedFinalObject;
+  let filteredDocs = DocumentsData;
+  filteredDocs.map(val => {
+    if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) { val.title = "WS_OWNER.IDENTITYPROOF"; }
+    else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) { val.title = "WS_OWNER.ADDRESSPROOF"; }
+  });
   if (applicationNumberWater && applicationNumberSewerage) {
-    WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
+    WaterConnection[0].pdfDocuments = filteredDocs;
+    SewerageConnection[0].pdfDocuments = filteredDocs;
     downloadApp(WaterConnection, "application", action);
-    SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
     downloadApp(SewerageConnection, "application", action);
   } else if (applicationNumber) {
     if (applicationNumber.includes("WS")) {
-      WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
+      WaterConnection[0].pdfDocuments = filteredDocs;
       downloadApp(WaterConnection, "application", action);
     } else if (applicationNumber.includes("SW")) {
-      SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
+      SewerageConnection[0].pdfDocuments = filteredDocs;
       downloadApp(SewerageConnection, "application", action);
     }
   }
