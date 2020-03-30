@@ -23,12 +23,12 @@ class Footer extends React.Component {
     const { Licenses, state } = this.props;
     const { status, applicationNumber } = (Licenses && Licenses[0]) || "";
     return {
-      label: "Download",
+     /* label: "Download",
       leftIcon: "cloud_download",
       rightIcon: "arrow_drop_down",
       props: { variant: "outlined", style: { marginLeft: 10 } },
-      menu: getDownloadItems(status, applicationNumber, state).downloadMenu
-      // menu: ["One ", "Two", "Three"]
+      //menu: getDownloadItems(status, applicationNumber, state).downloadMenu
+      // menu: ["One ", "Two", "Three"] */
     };
   };
 
@@ -36,12 +36,12 @@ class Footer extends React.Component {
     const { Licenses, state } = this.props;
     const { status, applicationNumber } = (Licenses && Licenses[0]) || "";
     return {
-      label: "Print",
+    /*  label: "Print",
       leftIcon: "print",
       rightIcon: "arrow_drop_down",
       props: { variant: "outlined", style: { marginLeft: 10 } },
       // menu: ["One ", "Two", "Three"]
-      menu: getDownloadItems(status, applicationNumber, state).printMenu
+     menu: getDownloadItems(status, applicationNumber, state).printMenu */
     };
   };
 
