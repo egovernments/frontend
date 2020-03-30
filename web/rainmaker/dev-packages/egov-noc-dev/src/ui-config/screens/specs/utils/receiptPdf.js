@@ -1261,7 +1261,7 @@ const generatePdf = async (state, dispatch, type) => {
     "userDataForPdf",
     {}
   );
-  /* if (isEmpty(applicationData)) {
+/*    if (isEmpty(applicationData)) {
     console.log("Error in application data");
     return;
   } else if (isEmpty(mdmsData)) {
@@ -1282,7 +1282,7 @@ const generatePdf = async (state, dispatch, type) => {
   ) {
     console.log("Error in payment data");
     return;
-  } */
+  }  */
   let transformedData = {
     ...applicationData,
     ...paymentData,

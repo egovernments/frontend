@@ -460,7 +460,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/payments/_search",
+      "collection-services/receipts/_search",
       "",
       queryObject
     );
@@ -516,7 +516,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/payments/_search",
+      "/collection-services/receipts/_search",
       "",
       queryObject
     );
