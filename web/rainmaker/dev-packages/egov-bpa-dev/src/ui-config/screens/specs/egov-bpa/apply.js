@@ -459,32 +459,80 @@ if(isTrue) {
 }
 }
 
-let setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJsonpath)=>{
-  const queryObject1 = [
-    { key: "businessIds", value: applicationNumber },
-    { key: "history", value: true },
-    { key: "tenantId", value: tenantId }
-  ];
-  let processInstances =[];
+ 
+       
+    const setTaskStatus = async (
+      state,
+      dispatch,
+      applicationNumber,
+      tenantId, action
+    ) => {
+      const response = await getAppSearchResults([
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        { key: "applicationNos", value: applicationNumber }
+      ]);
+          
+      const riskType = response.Bpa["0"].riskType;
+      let businessServicesValue = "BPA";
+      if (riskType === "LOW") {
+        businessServicesValue = "BPA_LOW";
+      }
+      else if (riskType === "HIGH"){
+        businessServicesValue = "BPA";
+      }
+      else {
+        businessServicesValue = "BPA";
+      }
+
+    
+      const queryObject2 = [
+        { key: "tenantId", value: tenantId },
+        { key: "businessServices", value: businessServicesValue }
+      ];
+      
+      setBusinessServiceDataToLocalStorage(queryObject2, dispatch);
+
+
+    const queryObject1 = [
+      { key: "businessIds", value: applicationNumber },
+      { key: "history", value: true },
+      { key: "tenantId", value: tenantId },
+      //{ key: "businessServices", value: businessServicesValue }    
+    ];
+    let processInstances =[];
     const payload1 = await httpRequest(
       "post",
       "egov-workflow-v2/egov-wf/process/_search",
       "",
       queryObject1
     );
-    if (payload1 && payload1.ProcessInstances.length > 0) {
+    console.log("mypayload1",payload1);
+
+      if (payload1 && payload1.ProcessInstances.length > 0) {
+      debugger;
       processInstances= orderWfProcessInstances(
         payload1.ProcessInstances
-      );      
+      );
+    
       dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances",processInstances));
+        let sendToArchitect = (processInstances && processInstances.length>1 && processInstances[processInstances.length-1].action)||"";
+        if(sendToArchitect =="SEND_TO_ARCHITECT"){
+          debugger;
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.taskStatus", 
+              "visible", 
+              true
+            )
+          );
+        }
       
-      let sendToArchitect = (processInstances && processInstances.length>1 && processInstances[processInstances.length-1].action)||"";
       
-      if(sendToArchitect =="SEND_TO_ARCHITECT"){
-        dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
       }
-     
-    }
 }
 const screenConfig = {
   uiFramework: "material-ui",
@@ -496,7 +544,8 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-    setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
+   // setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
+   setTaskStatus(state, dispatch, applicationNumber, tenantId, action);
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "BPA");
     getTenantMdmsData(action, state, dispatch).then(response => {
@@ -602,7 +651,12 @@ const screenConfig = {
           componentPath: "WorkFlowContainer",          
           visible: false,
           componentJsonpath:'components.div.children.taskStatus',
-          },
+          props: {
+            dataPath: "BPA",
+            moduleName: "BPA",
+            updateUrl: "/bpa-services/bpa/appl/_update"
+          }
+        },
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
