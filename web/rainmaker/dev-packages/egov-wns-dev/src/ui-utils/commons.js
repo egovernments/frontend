@@ -611,7 +611,6 @@ const parserFunction = (state) => {
         noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
-        meterId: parseInt(queryObject.meterId),
         additionalDetails: {
             initialMeterReading: (
                 queryObject.additionalDetails !== undefined &&
