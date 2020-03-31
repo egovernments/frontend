@@ -239,7 +239,9 @@ const commonApplicantInformation = () => {
           const categoryDocumentJsonPath = `${dynamicPath}.specialCategoryDocument`;
  const specialCategoryDocumentTypeJsonPath =`${dynamicPath}.specialCategoryDocumentType`;
 
- 
+//  componentJsonpath: "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.items[0].item0.children.cardContent.children.ownerContainer.children.ownerDocumentId"
+
+
 //  const thirdStepPath="components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.items[0].item0.children.cardContent.children.ownerContainer.children";
 const thirdStepPath= "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children";
 
@@ -257,6 +259,7 @@ const thirdStepPath= "components.div.children.formwizardThirdStep.children.summa
             dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "required", false));
             dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", ""));
             //showComponent(dispatch, categoryDocumentThirdStepJsonPath, false);
+      
             dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "display", "none"));
             dispatch(handleField("apply", categoryDocumentTypeThirdStepJsonPath, "display", "none"));
 
@@ -275,6 +278,7 @@ const thirdStepPath= "components.div.children.formwizardThirdStep.children.summa
             }
             showComponent(dispatch, categoryDocumentJsonPath, true);
             showComponent(dispatch, specialCategoryDocumentTypeJsonPath, true);
+        
             dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "display","block"));
             dispatch(handleField("apply", categoryDocumentTypeThirdStepJsonPath, "display", "block"));
 
