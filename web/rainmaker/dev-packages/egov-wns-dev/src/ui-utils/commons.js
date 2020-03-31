@@ -571,14 +571,16 @@ export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
 const validatePropertyOwners = (applyScreenObject) => {
     if (applyScreenObject.property.owners && applyScreenObject.property.owners.length > 0) {
         let owners = applyScreenObject.property.owners;
+        let valid = [];
         for (let i = 0; i < owners.length; i++) {
             if (
                 owners[i].hasOwnProperty("mobileNumber") && owners[i]['mobileNumber'] !== undefined && owners[i]["mobileNumber"] !== "" &&
                 owners[i].hasOwnProperty("name") && owners[i]['name'] !== undefined && owners[i]["name"] !== "" &&
                 owners[i].hasOwnProperty("fatherOrHusbandName") && owners[i]['fatherOrHusbandName'] !== undefined && owners[i]["fatherOrHusbandName"] !== "" &&
                 owners[i].hasOwnProperty("correspondenceAddress") && owners[i]['correspondenceAddress'] !== undefined && owners[i]["correspondenceAddress"] !== ""
-            ) { return true; } else { return false; }
+            ) { valid.push(1) } else { valid.push(0) }
         }
+        if (valid.includes(0)) { return false; } else { return true; }
     }
 }
 
