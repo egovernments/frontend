@@ -988,21 +988,13 @@ export const downloadCertificateForm = (Licenses,mode='download') => {
   }
 }
 
-
-
-
-
-
-
 export const prepareDocumentTypeObj = documents => {
   let documentsArr =
-    documents.length > 0
+  documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
         documentsArr.push({
-          name: item,
-          required: true,
+          ...item,
           jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-          statement: getStatementForDocType(item)
         });
         return documentsArr;
       }, [])
@@ -1730,24 +1722,6 @@ export const updateDropDowns = async (
     }
   }
 
-  // const tradeTypes = get(
-  //   state.screenConfiguration.preparedFinalObject,
-  //   "applyScreenMdmsData.TradeLicense.TradeType",
-  //   []
-  // );
-  // // debugger;
-  // const tradeTypeDropdownData =
-  //   tradeTypes &&
-  //   Object.keys(tradeTypes).map(item => {
-  //     return { code: item, active: true };
-  //   });
-  // tradeTypeDropdownData &&
-  //   dispatch(
-  //     prepareFinalObject(
-  //       "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-  //       tradeTypeDropdownData
-  //     )
-  //   );
   const tradeSubTypes = get(
     payload,
     "Licenses[0].tradeLicenseDetail.tradeUnits",
@@ -1809,40 +1783,45 @@ export const updateDropDowns = async (
 };
 
 export const getDocList = (state, dispatch) => {
-  const tradeSubTypes = get(
+  const tradeUnits = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.tradeUnits"
+    "Licenses[0].tradeLicenseDetail.tradeUnits[0]"
   );
 
-  const applicationType = get(state.screenConfiguration.preparedFinalObject ,"Licenses[0].applicationType" );
+  const documentObj = get(state.screenConfiguration.preparedFinalObject , "applyScreenMdmsData.TradeLicense.documentObj");
+  const documentTypes = get(state.screenConfiguration.preparedFinalObject , "applyScreenMdmsData.common-masters.DocumentType");
 
-  const tradeSubCategories = get(
-    state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.MdmsTradeType"
-  );
-  let selectedTypes = [];
-  tradeSubTypes && tradeSubTypes.forEach(tradeSubType => {
-    selectedTypes.push(
-      filter(tradeSubCategories, {
-        code: tradeSubType.tradeType
-      })
-    );
-  });
+  const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" : "NEW";
+  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
   
-  let applicationDocArray = [];
-  selectedTypes && selectedTypes.forEach(tradeSubTypeDoc => {
-   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "EDITRENEWAL" || applicationType==="RENEWAL" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
-   
-    applicationDocArray = [
-      ...applicationDocArray,
-      ...applicationarrayTemp 
-    ];
-  });
+  const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc , item , index) => {
+    documentTypes.find((document, index) => {
+      if (document.code === item.documentType)
+        acc.push({
+          ...documentTypes[index]
+        })
+    });
+    return acc;   
+  },[])
+  const applicationDocArray = filteredDocTypes && filteredDocTypes.reduce((result,item)=>{
+    const transformedDocObj = documentObjArray[0].allowedDocs.filter(docObj => docObj.documentType === item.code)[0];
+    if(transformedDocObj.applicationType.includes(applicationType)){
+      result.push(
+        {
+          code : item.code,
+          maxFileSize : item.maxFileSize,
+          required :transformedDocObj.required,
+          formatProps : {
+            accept : item.allowedFormat.join(",")
+          },
+          description : `COMMON_${item.code}_DESCRIPTION`,
+          statement : `COMMON_${item.code}_STATEMENT`
+        }
+      )
+    }    
+    return result;
+  },[])
 
-  function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-  }
-  applicationDocArray = applicationDocArray.filter(onlyUnique);
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
     prepareFinalObject(
@@ -1862,7 +1841,7 @@ export const getDocList = (state, dispatch) => {
     applicationDocs.length &&
     applicationDocument.reduce((acc,item) => {
       const index = applicationDocs.findIndex(
-        i => i.documentType === item.name
+        i => i.documentType === item.code
       );
       if(index >- 1){
         acc.push(applicationDocs[index])
@@ -1876,7 +1855,8 @@ export const getDocList = (state, dispatch) => {
         applicationDocsReArranged
       )
     );
-};
+
+}
 
 export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
   let tradeSubOwnershipCat = get(
