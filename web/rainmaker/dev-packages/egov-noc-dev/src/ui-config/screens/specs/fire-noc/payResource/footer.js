@@ -34,24 +34,24 @@ export const callPGService = async (state, dispatch) => {
       }
     ];
     const billPayload = await getBill(queryObj);
-    const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map((item,index)=>{
+   /* const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map((item,index)=>{
       return {
         amountPaid :item.taxAmount,
         billId : get(billPayload, "Bill[0].id")
       }
-    })
-    // const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
-    //   item => {        
-        // if (item.businessService === "FIRENOC") {
-        //   item.amountPaid = get(
-        //     billPayload,
-        //     "Bill[0].billDetails[0].totalAmount"
-        //   );
-        //   item.billId = get(billPayload, "Bill[0].id")
-        // }
-        // return item;
-    //   }
-    // );
+    }) */
+     const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
+       item => {        
+       if (item.businessService === "FIRENOC") {
+          item.amountPaid = get(
+            billPayload,
+            "Bill[0].billDetails[0].totalAmount"
+           );
+           item.billId = get(billPayload, "Bill[0].id")
+         }
+        return item;
+       }
+    );
     try {
       const userMobileNumber = get(state,"auth.userInfo.mobileNumber")
       const userName = get(state,"auth.userInfo.name")
