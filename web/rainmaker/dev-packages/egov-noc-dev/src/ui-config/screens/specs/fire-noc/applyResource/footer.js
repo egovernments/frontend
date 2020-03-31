@@ -269,6 +269,8 @@ const callBackForNext = async (state, dispatch) => {
           "INITIATE"
         );
         responseStatus = get(response, "status", "");
+
+        console.log("prasad application responce ", response )
       }
       responseStatus === "success" && changeStep(state, dispatch);
     } else if (hasFieldToaster) {

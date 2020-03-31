@@ -562,7 +562,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
 };
 
 export const createEstimateData = billObject => {
-  debugger;
+ // debugger;
 
   const billDetails = billObject && billObject.billDetails;
   let fees =
@@ -622,12 +622,12 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
         { key: "services", value: "FIRENOC" }
       ];
       const payload = await createBill(queryObj,dispatch);
-      debugger;
+    //  debugger;
 
       // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-        debugger;
+      //  debugger;
         const estimateData = createEstimateData(payload.Bill[0]);
         estimateData &&
           estimateData.length &&
@@ -736,7 +736,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
         [],
         mdmsBody
       );
-      debugger;
+  //    debugger;
    
       dispatch(
         prepareFinalObject(
@@ -744,7 +744,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
           payload.MdmsRes.firenoc.Documents
         )
       );
-      console.log("Prasad mdms service", payload);
+     // console.log("Prasad mdms service", payload);
 
       prepareDocumentsUploadData(state, dispatch);
     } 

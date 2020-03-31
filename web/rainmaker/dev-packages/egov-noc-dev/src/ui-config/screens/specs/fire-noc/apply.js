@@ -292,6 +292,9 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
+    
+    console.log("prasad applicationNumber", applicationNumber);
+    console.log("prasad tenantId", tenantId);
 
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "fire-noc");
