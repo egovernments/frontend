@@ -12,7 +12,7 @@ export const propertySearchApiCall = async (state, dispatch) => {
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
-    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROVIDE_VALID_PROP_ID", labelName: "Please enter a valid property ID" }, "warning"));
+    dispatch(toggleSnackbar(true, { labelKey: "WS_FILL_REQUIRED_FIELDS", labelName: "Please fill required details" }, "warning"));
   } else {
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && searchScreenObject[key].trim() !== "") {

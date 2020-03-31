@@ -189,7 +189,7 @@ const callBackForNext = async (state, dispatch) => {
         }
       } else {
         isFormValid = false;
-        dispatch(toggleSnackbar(true, { labelKey: "WS_FILL_MANDATORY_FIELDS", labelName: "Please fill Required details" }, "warning"))
+        dispatch(toggleSnackbar(true, { labelKey: "WS_FILL_REQUIRED_FIELDS", labelName: "Please fill Required details" }, "warning"))
       }
     }
     prepareDocumentsUploadData(state, dispatch);
@@ -235,8 +235,8 @@ const callBackForNext = async (state, dispatch) => {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
-        labelName: "Please fill all mandatory fields!",
-        labelKey: "WS_FILL_MANDATORY_FIELDS"
+        labelName: "Please fill required details",
+        labelKey: "WS_FILL_REQUIRED_FIELDS"
       };
       switch (activeStep) {
         case 1:
