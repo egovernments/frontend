@@ -145,20 +145,39 @@ const callBackForNext = async (state, dispatch) => {
       if (searchPropertyId !== undefined && searchPropertyId !== "") {
         if (applyScreenObject.water || applyScreenObject.sewerage) {
           if (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") {
-            if (handleMandatoryFeildsOfProperty(applyScreenObject.property)) {
-              if (water && sewerage) {
-                if (validateFeildsForBothWaterAndSewerage(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
-                else { isFormValid = false; hasFieldToaster = true; }
-              } else if (water) {
-                if (validateFeildsForWater(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
-                else { isFormValid = false; hasFieldToaster = true; }
+            if (water && sewerage) {
+              if (validateFeildsForBothWaterAndSewerage(applyScreenObject) && handleMandatoryFeildsOfProperty(applyScreenObject.property)) {
+                isFormValid = true;
+                hasFieldToaster = false;
+              } else if (validateFeildsForBothWaterAndSewerage(applyScreenObject) && !handleMandatoryFeildsOfProperty(applyScreenObject.property)) {
+                isFormValid = false
+                dispatch(toggleSnackbar(true, { labelKey: "WS_UPDATE_PROPERTY_INFO_AT_ULB", labelName: "" }, "warning"));
               } else {
-                if (validateFeildsForSewerage(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
-                else { isFormValid = false; hasFieldToaster = true; }
+                isFormValid = false;
+                dispatch(toggleSnackbar(true, { labelKey: "WS_FILL_REQUIRED_FIELDS", labelName: "Please fill Required details" }, "warning"))
               }
-            } else {
-              isFormValid = false
-              dispatch(toggleSnackbar(true, { labelKey: "WS_UPDATE_PROPERTY_INFO_AT_ULB", labelName: "" }, "warning"));
+            } else if (water) {
+              if (validateFeildsForWater(applyScreenObject) && handleMandatoryFeildsOfProperty(applyScreenObject.property)) {
+                isFormValid = true;
+                hasFieldToaster = false;
+              } else if (validateFeildsForWater(applyScreenObject) && !handleMandatoryFeildsOfProperty(applyScreenObject.property)) {
+                isFormValid = false
+                dispatch(toggleSnackbar(true, { labelKey: "WS_UPDATE_PROPERTY_INFO_AT_ULB", labelName: "" }, "warning"));
+              } else {
+                isFormValid = false;
+                dispatch(toggleSnackbar(true, { labelKey: "WS_FILL_REQUIRED_FIELDS", labelName: "Please fill Required details" }, "warning"))
+              }
+            } else if (sewerage) {
+              if (validateFeildsForSewerage(applyScreenObject) && handleMandatoryFeildsOfProperty(applyScreenObject.property)) {
+                isFormValid = true;
+                hasFieldToaster = false;
+              } else if (validateFeildsForSewerage(applyScreenObject) && !handleMandatoryFeildsOfProperty(applyScreenObject.property)) {
+                isFormValid = false
+                dispatch(toggleSnackbar(true, { labelKey: "WS_UPDATE_PROPERTY_INFO_AT_ULB", labelName: "" }, "warning"));
+              } else {
+                isFormValid = false;
+                dispatch(toggleSnackbar(true, { labelKey: "WS_FILL_REQUIRED_FIELDS", labelName: "Please fill Required details" }, "warning"))
+              }
             }
           } else {
             isFormValid = false;
@@ -235,7 +254,7 @@ const callBackForNext = async (state, dispatch) => {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
-        labelName: "Please fill required details",
+        labelName: "Please fill all mandatory fields!",
         labelKey: "WS_FILL_REQUIRED_FIELDS"
       };
       switch (activeStep) {
