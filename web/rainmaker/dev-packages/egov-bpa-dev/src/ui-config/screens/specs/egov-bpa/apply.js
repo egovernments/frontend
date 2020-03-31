@@ -617,7 +617,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/bpa/appl/_update"
+            updateUrl: "/bpa-services/bpa/_update"
           }
           },
         formwizardFirstStep,

@@ -2985,7 +2985,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     ];
     const bpaSearch = await httpRequest(
       "post",
-      "bpa-services/bpa/appl/_search",
+      "bpa-services/bpa/_search",
       "",
       queryObject
     );
@@ -4495,7 +4495,7 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   
 let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
   axios({
-    url: '/bpa-services/bpa/appl/_permitorderedcr',
+    url: '/bpa-services/bpa/_permitorderedcr',
     method: 'POST',
     responseType: 'blob',data
    // important
