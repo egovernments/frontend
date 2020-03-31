@@ -3860,6 +3860,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     const wfState = wfPayload.ProcessInstances[0];
     let appState;
     const appWfState = wfState.state.state;
+    dispatch(prepareFinalObject("applicationProcessInstances", get(wfPayload, "ProcessInstances[0]")));
 
      let requiredDocuments, appDocuments = [];
     if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
@@ -4165,7 +4166,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   let previewDocuments = [];
   
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-  if(isEmployee && isVisibleTrue) {
+  if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
   }
 };
@@ -4187,7 +4188,16 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
     {}
   );
 
-  let documents = []
+  let documents = [];
+  let bpaStatusAction = get(bpaAppDetails, "status").includes("CITIZEN_ACTION_PENDING");
+  if(bpaStatusAction) {
+    appState = "INITIATED";
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.documentDetailsCard.visible",
+      false
+    );
+  }
   applicationDocuments.forEach(doc => {
     if(doc.WFState == appState && doc.RiskType === bpaAppDetails.riskType && doc.ServiceType === bpaAppDetails.serviceType && doc.applicationType === bpaAppDetails.applicationType) {
       documents.push(doc.docTypes)
@@ -4332,7 +4342,7 @@ if(tempDoc) {
     }
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if (finalDocuments && finalDocuments.length > 0 && isEmployee) {
+    if (finalDocuments && finalDocuments.length > 0) {
       set(
         action,
         "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",

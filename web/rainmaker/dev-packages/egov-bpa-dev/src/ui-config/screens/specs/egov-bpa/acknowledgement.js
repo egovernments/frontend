@@ -503,7 +503,7 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "forward" && status === "success") {
+  } else if ((purpose === "forward" || purpose === "FORWARD") && status === "success") {
     return {
       header,
       applicationSuccessCard: {
@@ -547,11 +547,11 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName: "Application has been sent back successfully",
-              labelKey: "NOC_APPLICATION_SENDBACK_SUCCESS"
+              labelKey: "BPA_APPLICATION_SENDBACK_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })

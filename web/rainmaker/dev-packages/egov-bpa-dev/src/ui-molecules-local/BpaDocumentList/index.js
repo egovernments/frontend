@@ -247,7 +247,7 @@ class BpaDocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails } = this.props;
+    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails, bpaSendBackAcionStatus } = this.props;
     // const fileUrl =  getFileUrlFromAPI(fileStoreId).then(fileUrl)
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
     let appDocumentList = {};
@@ -281,15 +281,21 @@ class BpaDocumentList extends Component {
 
     prepareFinalObject("documentDetailsUploadRedux", appDocumentList );
 
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
-
-    if(isEmployee) {
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    if(isEmployee || bpaSendBackAcionStatus) {
       this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
     }
   };
 
   removeDocument = (remDocIndex, docIndex) => {
-    const {documentDetailsUploadRedux, prepareFinalObject, bpaDetails, documentDetailsPreview} = this.props;
+    const {
+      documentDetailsUploadRedux, 
+      prepareFinalObject, 
+      bpaDetails, 
+      documentDetailsPreview,
+      bpaSendBackAcionStatus
+    } = this.props;
+
     for (let key in documentDetailsUploadRedux) {
       if (key === `${remDocIndex}`) {
         documentDetailsUploadRedux[key].documents.splice(docIndex, 1);
@@ -297,14 +303,14 @@ class BpaDocumentList extends Component {
     }
     prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
     this.forceUpdate();
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
-    if (isEmployee) {
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    if (isEmployee || bpaSendBackAcionStatus) {
       this.prepareDocumentsInEmployee(documentDetailsUploadRedux, bpaDetails, documentDetailsPreview, prepareFinalObject);
     }
   };
 
   handleChange = (key, event) => {
-    const { documentDetailsUploadRedux, prepareFinalObject, bpaDetails } = this.props;
+    const { documentDetailsUploadRedux, prepareFinalObject, bpaDetails,bpaSendBackAcionStatus } = this.props;
     let appDocumentList = {
       ...documentDetailsUploadRedux,
       [key]: {
@@ -314,15 +320,23 @@ class BpaDocumentList extends Component {
     }
     prepareFinalObject(`documentDetailsUploadRedux`, appDocumentList);
 
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
-
-    if(isEmployee) {
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    if(isEmployee || bpaSendBackAcionStatus ) {
       this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
     }
   };
 
   getUploadCard = (card, key) => {
-    const { classes, documentDetailsUploadRedux, documentDetailsPreview, bpaDetails, verifierDocDetailsUpload, applyScreenMdmsData, ...rest} = this.props;
+    const { 
+      classes, 
+      documentDetailsUploadRedux, 
+      documentDetailsPreview, 
+      bpaDetails, 
+      verifierDocDetailsUpload, 
+      applyScreenMdmsData,
+      bpaSendBackAcionStatus,
+       ...rest
+      } = this.props;
     let jsonPath = `documentDetailsUploadRedux[${key}].dropDownValues.value`;
     let documents;
     let data = [];
@@ -351,11 +365,10 @@ class BpaDocumentList extends Component {
       );
     }
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if(isEmployee) {
+    if(isEmployee || bpaSendBackAcionStatus ) {
       let code;
       card.dropDownValues.menu.map(cards => {
         code = getTransformedLocale(cards.code);
-        console.log(code, "cccc");
         documentDetailsPreview.map(docs => {
           if(code === docs.title) {
             verifierData.push(docs)
@@ -530,8 +543,9 @@ const mapStateToProps = state => {
     screenConfiguration.preparedFinalObject,
     "BPA",
     {}
-  )
-  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails };
+  );
+  let bpaSendBackAcionStatus = get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
+  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus };
 };
 
 const mapDispatchToProps = dispatch => {
