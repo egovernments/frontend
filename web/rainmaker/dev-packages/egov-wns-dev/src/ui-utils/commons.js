@@ -553,24 +553,32 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
 }
 
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
-    let objectConvertedNAToNull = findAndReplace(applyScreenObject, "NA", null);
+    let propertyObject = findAndReplace(applyScreenObject, "NA", null);
     if (
-        objectConvertedNAToNull.hasOwnProperty("propertyId") && objectConvertedNAToNull['propertyId'] !== undefined && objectConvertedNAToNull["propertyId"] !== "" &&
-        objectConvertedNAToNull.hasOwnProperty("propertyType") && objectConvertedNAToNull["propertyType"] !== undefined && objectConvertedNAToNull["propertyType"] !== "" &&
-        objectConvertedNAToNull.hasOwnProperty("usageCategory") && objectConvertedNAToNull["usageCategory"] !== undefined && objectConvertedNAToNull["usageCategory"] !== "" &&
-        objectConvertedNAToNull.hasOwnProperty("landArea") && objectConvertedNAToNull["landArea"] !== undefined && objectConvertedNAToNull["landArea"] !== "" &&
-        objectConvertedNAToNull.hasOwnProperty("rainWaterHarvesting") && objectConvertedNAToNull["rainWaterHarvesting"] !== undefined && objectConvertedNAToNull["rainWaterHarvesting"] !== "" &&
-        objectConvertedNAToNull.hasOwnProperty("address.city") && objectConvertedNAToNull['address.city'] !== undefined && objectConvertedNAToNull["address.city"] !== "" &&
-        objectConvertedNAToNull.hasOwnProperty("address.doorNo") && objectConvertedNAToNull["address.doorNo"] !== undefined && objectConvertedNAToNull["address.doorNo"] !== "" &&
-        objectConvertedNAToNull.hasOwnProperty("address.locality.name") && objectConvertedNAToNull["address.locality.name"] !== undefined && objectConvertedNAToNull["address.locality.name"] !== "" &&
-        objectConvertedNAToNull.hasOwnProperty("owners") && objectConvertedNAToNull["owners"] !== undefined && objectConvertedNAToNull["owners"] !== "" &&
-        validatePropertyOwners(applyScreenObject)
+        propertyObject.hasOwnProperty("propertyId") && propertyObject['propertyId'] !== undefined && propertyObject["propertyId"] !== "" &&
+        propertyObject.hasOwnProperty("propertyType") && propertyObject["propertyType"] !== undefined && propertyObject["propertyType"] !== "" &&
+        propertyObject.hasOwnProperty("usageCategory") && propertyObject["usageCategory"] !== undefined && propertyObject["usageCategory"] !== "" &&
+        propertyObject.hasOwnProperty("landArea") && propertyObject["landArea"] !== undefined && propertyObject["landArea"] !== "" &&
+        // propertyObject.hasOwnProperty("rainWaterHarvesting") && propertyObject["rainWaterHarvesting"] !== undefined && propertyObject["rainWaterHarvesting"] !== "" &&
+        propertyObject.hasOwnProperty("owners") && propertyObject["owners"] !== undefined && propertyObject["owners"] !== "" &&
+        validatePropertyOwners(applyScreenObject) &&
+        handleAddressObjectInProperty(applyScreenObject.address)
     ) { return true; } else { return false; }
 }
 
+const handleAddressObjectInProperty = (address) => {
+    if (address !== undefined && address !== null && address !== {}) {
+        if (
+            address.hasOwnProperty("city") && address['city'] !== undefined && address["city"] !== "" && address["city"] !== null &&
+            address.hasOwnProperty("doorNo") && address["doorNo"] !== undefined && address["doorNo"] !== "" && address["doorNo"] !== null &&
+            address.hasOwnProperty("locality") && address.locality.name !== undefined && address.locality.name !== "" && address.locality.name !== null
+        ) { return true; } else { return false; }
+    }
+}
+
 const validatePropertyOwners = (applyScreenObject) => {
-    if (applyScreenObject.property.owners && applyScreenObject.property.owners.length > 0) {
-        let owners = applyScreenObject.property.owners;
+    if (applyScreenObject.owners && applyScreenObject.owners.length > 0) {
+        let owners = applyScreenObject.owners;
         let valid = [];
         for (let i = 0; i < owners.length; i++) {
             if (
