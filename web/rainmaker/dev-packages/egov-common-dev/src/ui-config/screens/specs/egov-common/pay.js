@@ -21,7 +21,7 @@ import "./pay.css";
 export const getHeader = (state) => {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     let consumerCode = getQueryArg(window.location.href, "consumerCode");
-
+    let businessService = getQueryArg(window.location.href, "businessService");
     let label = get(uiCommonPayConfig,"headerBandLabel");
     return getCommonContainer({
         header: getCommonHeader({
