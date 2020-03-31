@@ -92,7 +92,7 @@ class ActionDialog extends React.Component {
       if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE")) {
         let response = await httpRequest(
           "post",
-          "bpa-services/bpa/_update",
+          "bpa-services/_update",
           "",
           [],
           { BPA: bpaDetails }
