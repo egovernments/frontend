@@ -552,6 +552,36 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
     ) { return true; } else { return false }
 }
 
+export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
+    let objectConvertedNAToNull = findAndReplace(applyScreenObject, "NA", null);
+    if (
+        objectConvertedNAToNull.hasOwnProperty("propertyId") && objectConvertedNAToNull['propertyId'] !== undefined && objectConvertedNAToNull["propertyId"] !== "" &&
+        objectConvertedNAToNull.hasOwnProperty("propertyType") && objectConvertedNAToNull["propertyType"] !== undefined && objectConvertedNAToNull["propertyType"] !== "" &&
+        objectConvertedNAToNull.hasOwnProperty("usageCategory") && objectConvertedNAToNull["usageCategory"] !== undefined && objectConvertedNAToNull["usageCategory"] !== "" &&
+        objectConvertedNAToNull.hasOwnProperty("landArea") && objectConvertedNAToNull["landArea"] !== undefined && objectConvertedNAToNull["landArea"] !== "" &&
+        objectConvertedNAToNull.hasOwnProperty("rainWaterHarvesting") && objectConvertedNAToNull["rainWaterHarvesting"] !== undefined && objectConvertedNAToNull["rainWaterHarvesting"] !== "" &&
+        objectConvertedNAToNull.hasOwnProperty("address.city") && objectConvertedNAToNull['address.city'] !== undefined && objectConvertedNAToNull["address.city"] !== "" &&
+        objectConvertedNAToNull.hasOwnProperty("address.doorNo") && objectConvertedNAToNull["address.doorNo"] !== undefined && objectConvertedNAToNull["address.doorNo"] !== "" &&
+        objectConvertedNAToNull.hasOwnProperty("address.locality.name") && objectConvertedNAToNull["address.locality.name"] !== undefined && objectConvertedNAToNull["address.locality.name"] !== "" &&
+        objectConvertedNAToNull.hasOwnProperty("owners") && objectConvertedNAToNull["owners"] !== undefined && objectConvertedNAToNull["owners"] !== "" &&
+        validatePropertyOwners(applyScreenObject)
+    ) { return true; } else { return false; }
+}
+
+const validatePropertyOwners = (applyScreenObject) => {
+    if (applyScreenObject.property.owners && applyScreenObject.property.owners.length > 0) {
+        let owners = applyScreenObject.property.owners;
+        for (let i = 0; i < owners.length; i++) {
+            if (
+                owners[i].hasOwnProperty("mobileNumber") && owners[i]['mobileNumber'] !== undefined && owners[i]["mobileNumber"] !== "" &&
+                owners[i].hasOwnProperty("name") && owners[i]['name'] !== undefined && owners[i]["name"] !== "" &&
+                owners[i].hasOwnProperty("fatherOrHusbandName") && owners[i]['fatherOrHusbandName'] !== undefined && owners[i]["fatherOrHusbandName"] !== "" &&
+                owners[i].hasOwnProperty("correspondenceAddress") && owners[i]['correspondenceAddress'] !== undefined && owners[i]["correspondenceAddress"] !== ""
+            ) { return true; } else { return false; }
+        }
+    }
+}
+
 export const prepareDocumentsUploadData = (state, dispatch) => {
     let documents = get(
         state,
