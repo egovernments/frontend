@@ -19,7 +19,8 @@ import {
   applyForWater,
   validateFeildsForBothWaterAndSewerage,
   validateFeildsForWater,
-  validateFeildsForSewerage
+  validateFeildsForSewerage,
+  handleMandatoryFeildsOfProperty
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
@@ -136,45 +137,59 @@ const callBackForNext = async (state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "applyScreen.sewerage"
       );
+      const searchPropertyId = get(
+        state.screenConfiguration.preparedFinalObject,
+        "searchScreen.propertyIds"
+      )
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
-      if (applyScreenObject.water || applyScreenObject.sewerage) {
-        if (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") {
-          if (water && sewerage) {
-            if (validateFeildsForBothWaterAndSewerage(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
-            else { isFormValid = false; hasFieldToaster = true; }
-          } else if (water) {
-            if (validateFeildsForWater(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
-            else { isFormValid = false; hasFieldToaster = true; }
+      if (searchPropertyId !== undefined && searchPropertyId !== "") {
+        if (applyScreenObject.water || applyScreenObject.sewerage) {
+          if (applyScreenObject.hasOwnProperty("property") && applyScreenObject['property'] !== undefined && applyScreenObject["property"] !== "") {
+            if (handleMandatoryFeildsOfProperty(applyScreenObject.property)) {
+              if (water && sewerage) {
+                if (validateFeildsForBothWaterAndSewerage(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
+                else { isFormValid = false; hasFieldToaster = true; }
+              } else if (water) {
+                if (validateFeildsForWater(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
+                else { isFormValid = false; hasFieldToaster = true; }
+              } else {
+                if (validateFeildsForSewerage(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
+                else { isFormValid = false; hasFieldToaster = true; }
+              }
+            } else {
+              isFormValid = false
+              dispatch(toggleSnackbar(true, { labelKey: "WS_UPDATE_PROPERTY_INFO_AT_ULB", labelName: "" }, "warning"));
+            }
           } else {
-            if (validateFeildsForSewerage(applyScreenObject)) { isFormValid = true; hasFieldToaster = false; }
-            else { isFormValid = false; hasFieldToaster = true; }
+            isFormValid = false;
+            dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROP_NOT_FOUND", labelName: "No Property records found" }, "warning"));
+          }
+          let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
+          let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
+          let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
+          let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
+          if (isFormValid) {
+            if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
+              if (waterChecked && sewerChecked) {
+                if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
+                else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
+              } else if (sewerChecked && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
+              else if (waterChecked && waterData.length === 0) { await applyForWater(state, dispatch); }
+            } else if (waterChecked && sewerChecked) {
+              if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+            } else if (waterChecked) {
+              if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+            } else if (sewerChecked) {
+              if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+            }
           }
         } else {
           isFormValid = false;
-          dispatch(toggleSnackbar(true, { labelKey: "WS_UPDATE_PROPERTY_INFO_AT_ULB" }, "warning"))
-        }
-        let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
-        let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
-        let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
-        let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
-        if (isFormValid) {
-          if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
-            if (waterChecked && sewerChecked) {
-              if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
-              else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-            } else if (sewerChecked && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-            else if (waterChecked && waterData.length === 0) { await applyForWater(state, dispatch); }
-          } else if (waterChecked && sewerChecked) {
-            if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
-          } else if (waterChecked) {
-            if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
-          } else if (sewerChecked) {
-            if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
-          }
+          hasFieldToaster = true;
         }
       } else {
         isFormValid = false;
-        hasFieldToaster = true;
+        dispatch(toggleSnackbar(true, { labelKey: "WS_FILL_MANDATORY_FIELDS", labelName: "Please fill Required details" }, "warning"))
       }
     }
     prepareDocumentsUploadData(state, dispatch);
