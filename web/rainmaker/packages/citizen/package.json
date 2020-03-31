@@ -19,7 +19,6 @@
     "datatables.net-buttons-bs": "^1.5.3",
     "egov-tradelicence": "0.0.1",
     "egov-noc": "0.0.1",
-    "egov-hrms": "0.0.1",
     "egov-ui-framework": "0.1.41",
     "egov-ui-kit": "^0.0.1",
     "egov-workflow": "0.0.1",
