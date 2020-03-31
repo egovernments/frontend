@@ -4,8 +4,10 @@ import {
   getCommonContainer,
   getCommonTitle,
   getTextField,
+  getSelectField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
@@ -98,7 +100,7 @@ export const nocDetails = getCommonCard({
   ),
   break: getBreak(),
   nocDetailsContainer: getCommonContainer({
-    nocRadioGroup: {
+/*     nocRadioGroup: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
@@ -124,9 +126,34 @@ export const nocDetails = getCommonCard({
         jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
         defaultValue: "PROVISIONAL"
       },
-      type: "array",
+      type: "array", */
+      nocSelect: {
+        ...getSelectField({
+        label: {
+          labelName: "NOC Type",
+          labelKey: "NOC_TYPE_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Application Type",
+          labelKey: "NOC_APPLICATION_TYPE_PLACEHOLDER"
+        },
+        data: [
+          {
+            code: "NEW",
+            label: "NOC_TYPE_NEW_RADIOBUTTON"
+          },
+          {
+            code: "PROVISIONAL",
+            label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
+          }
+        ],
+        jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
+        //required: true
+      }),
+
       beforeFieldChange: (action, state, dispatch) => {
-        if (action.value === "PROVISIONAL") {
+        
+      if (action.value === "PROVISIONAL") {
           dispatch(
             handleField(
               "apply",
@@ -135,16 +162,16 @@ export const nocDetails = getCommonCard({
               { visibility: "hidden" }
             )
           );
-        } else {
+        } else { 
           dispatch(
             handleField(
               "apply",
               "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
               "props.style",
-              {}
-            )
+              { display: "visible" }
+             )
           );
-        }
+        }  
       }
     },
     provisionalNocNumber: {
@@ -156,7 +183,7 @@ export const nocDetails = getCommonCard({
         placeholder: {
           labelName: "Enter Provisional fire NoC number",
           labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_PLACEHOLDER"
-        },
+        },      
         pattern: getPattern("FireNOCNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         // required: true,
