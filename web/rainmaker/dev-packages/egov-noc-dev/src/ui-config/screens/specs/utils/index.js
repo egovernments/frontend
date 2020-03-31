@@ -22,6 +22,10 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 
+import {
+  prepareDocumentsUploadData, 
+} from "../../../../ui-utils/commons";
+
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -692,7 +696,7 @@ export const resetFields = (state, dispatch) => {
 };
 
 export const getRequiredDocData = async (action, state, dispatch) => {
-  let tenantId =
+/*   let tenantId =
     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
@@ -714,11 +718,42 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-  } catch (e) {
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes)); */
+
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: "pb",
+        moduleDetails: [
+          { moduleName: "firenoc", masterDetails: [{ name: "Documents" }] }
+        ]
+      }
+    };
+    try {
+      let payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      debugger;
+   
+      dispatch(
+        prepareFinalObject(
+          "searchScreenMdmsData.firenoc.Documents",
+          payload.MdmsRes.firenoc.Documents
+        )
+      );
+      console.log("Prasad mdms service", payload);
+
+      prepareDocumentsUploadData(state, dispatch);
+    } 
+   catch (e) {
     console.log(e);
   }
 };
+
+ 
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();

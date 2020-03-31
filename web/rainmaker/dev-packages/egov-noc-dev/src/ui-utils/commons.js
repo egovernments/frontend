@@ -297,9 +297,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
+
+  console.log("prasad prepareDocumentsUploadData", prepareDocumentsUploadData)
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.Documents",
+    "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents",
     []
   );
   documents = documents.filter(item => {

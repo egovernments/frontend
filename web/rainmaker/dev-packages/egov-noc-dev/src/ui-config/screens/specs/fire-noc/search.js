@@ -70,7 +70,7 @@ const NOCSearchAndResult = {
     getRequiredDocData(action, state, dispatch).then(() => {
       let documents = get(
         state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.FireNoc.Documents",
+        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents",
         []
       );
       set(
@@ -78,7 +78,7 @@ const NOCSearchAndResult = {
         "screenConfig.components.adhocDialog.children.popup",
         getRequiredDocuments(documents)
       );
-    });
+    }); 
     return action;
   },
   components: {
