@@ -269,7 +269,7 @@ export const callBackForNext = async (state, dispatch) => {
     for (var y = 0; y < uploadedTempDocData.length; y++) {
       if (
         uploadedTempDocData[y].required &&
-        !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
+        !some(uploadedDocData, { documentType: uploadedTempDocData[y].code })
       ) {
         isFormValid = false;
       }
