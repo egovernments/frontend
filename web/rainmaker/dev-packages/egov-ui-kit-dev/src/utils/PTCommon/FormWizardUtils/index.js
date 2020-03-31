@@ -814,16 +814,19 @@ export const removeAdhocIfDifferentFY = (property, fY) => {
 };
 
 export const getSortedTaxSlab = (estimateResponse) => {
-  if(estimateResponse && estimateResponse.Calculation && estimateResponse.Calculation[0].length > 0) {
-    const taxHeadKeys = ["PT_TAX", "PT_CANCER_CESS", "PT_TIME_REBATE", "PT_TIME_PENALTY", "PT_TIME_INTEREST", "PT_OWNER_EXEMPTION", "PT_ROUNDOFF", "PT_UNIT_USAGE_EXEMPTION", "PT_FIRE_CESS"];
-    const tempArray = estimateResponse.Calculation[0].taxHeadEstimates;
-    if(tempArray && tempArray.length > 0) {
-      let tempArray1 = [];
-      taxHeadKeys.map((key)=>{
-        tempArray1.push(
-          tempArray[tempArray.findIndex(item => item.taxHeadCode.indexOf(key) !== -1)])
-      });
-      estimateResponse.Calculation[0].taxHeadEstimates = tempArray1;
+  if(estimateResponse && estimateResponse.Calculation && estimateResponse.Calculation.length > 0) {
+    if(estimateResponse.Calculation[0].taxHeadEstimates && estimateResponse.Calculation[0].taxHeadEstimates.length > 0){
+      const taxHeadKeys = ["PT_TAX", "PT_CANCER_CESS", "PT_TIME_REBATE", "PT_TIME_PENALTY", "PT_TIME_INTEREST", "PT_OWNER_EXEMPTION", "PT_ROUNDOFF", "PT_UNIT_USAGE_EXEMPTION", "PT_FIRE_CESS"];
+      const tempArray = estimateResponse.Calculation[0].taxHeadEstimates;
+      if(tempArray && tempArray.length > 0) {
+        let tempArray1 = [];
+        taxHeadKeys.map((key)=>{
+          let itemKeys = {};
+          itemKeys = tempArray[tempArray.findIndex(item => item.taxHeadCode.indexOf(key) !== -1)];
+          if (itemKeys) tempArray1.push(itemKeys);
+        });
+        estimateResponse.Calculation[0].taxHeadEstimates = tempArray1;
+      }
     }
   }
   return estimateResponse;
