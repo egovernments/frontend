@@ -413,7 +413,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["*", "*", "*", "*"],
+        widths: ["25%", "25%", "25%", "25%"],
         body: getBuildings(transformedData)
       },
       layout: borderLayout
@@ -427,7 +427,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["*", "*", "*", "*"],
+        widths: ["25%", "25%", "25%", "25%"],
         body: [
 
           [
@@ -456,7 +456,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: transformedData.district,
+              text: transformedData.city,
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -626,7 +626,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["*", "*", "*", "*"],
+        //widths: ["*", "*", "*", "*"],
+        widths: ["25%", "25%", "25%", "25%"],
         body: getOwners(transformedData)
       },
       layout: borderLayout
@@ -640,7 +641,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["*", "*", "*", "*"],
+        widths: ["25%", "25%", "25%", "25%"],
         body: [
           [
             {
@@ -763,7 +764,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["*", "*", "*", "*"],
+      //  widths: ["25%", "25%", "25%", "25%"],
+        widths: ["25%", "25%", "25%", "25%"],
         body: owners
       },
       layout: borderLayout
@@ -777,7 +779,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["*", "*", "*", "*"],
+        widths: ["25%", "25%", "25%", "25%"],
         body: [
           [
             {
@@ -1208,7 +1210,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       "receipt-table-firestation": {
         color: "#484848",
         bold: true,
-        fontSize: 7
+        fontSize: 10
       },
       "receipt-footer": {
         color: "#484848",
@@ -1232,7 +1234,6 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 
 const generatePdf = async (state, dispatch, type) => {
 
-  console.log("Prasad - in reciept generatePdf file", state);
 
   let applicationData = get(
     state.screenConfiguration.preparedFinalObject,
@@ -1337,8 +1338,9 @@ const generatePdf = async (state, dispatch, type) => {
         "certificate"
       );
 
-      console.log("certificate_download", application_data);
-      console.log("certificate_download************", transformedData)
+     //console.log("certificate_download", application_data);
+     // console.log("certificate_download************", transformedData)
+
       application_data &&
       pdfMake.createPdf(application_data).download(fileName);
       break;
