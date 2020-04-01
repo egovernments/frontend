@@ -176,16 +176,6 @@ const screenConfig = {
         const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
         const tenant = getQueryArg(window.location.href, "tenantId");
         const businessService = getQueryArg(window.location.href, "businessService");
-        if(ifUserRoleExists("CITIZEN")){
-            getBusinessServiceMdmsData(dispatch, tenant).then(response => {
-                const commonPayDetails = get(state , "screenConfiguration.preparedFinalObject.businessServiceMdmsData.common-masters.uiCommonPay");
-                commonPayDetails && commonPayDetails.map(item => {
-                        if (item.code == businessService) {
-                            dispatch(prepareFinalObject("commonPayInfo", item));
-                        }
-                })
-            })
-        }
         const data = getAcknowledgementCard(
             state,
             dispatch,

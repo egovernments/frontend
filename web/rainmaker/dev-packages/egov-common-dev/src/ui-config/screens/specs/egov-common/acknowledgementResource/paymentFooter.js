@@ -70,7 +70,7 @@ export const paymentFooter = (state,consumerCode, tenant,status) => {
             },
             onClickDefination: {
                 action: "page_change",
-                path: get(item,"link", `/inbox`)
+                path: ifUserRoleExists("CITIZEN") ? get(item,"citizenUrl", "/") : get(item,"employeeUrl", "/inbox")
             },
         }
     })
