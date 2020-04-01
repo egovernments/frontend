@@ -4382,7 +4382,7 @@ const getFloorDetails = (index) => {
   }
 };
 
-export const setProposedBuildingData = async (state, dispatch) => {
+/*  export const setProposedBuildingData = async (state, dispatch) => {
   
   const response = get(
     state,
@@ -4404,14 +4404,18 @@ export const setProposedBuildingData = async (state, dispatch) => {
       [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
       [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
     }));
-     tableData.push(block);
+    
+
+     tableData = [...Array(2).fill(block)];
+     //tableData.push(blockfinal);
+     
     }
         debugger;
         console.log(tableData, "=====> setproposedetails")
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
+        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.component.props.scheama.children.cardContent.children.proposedBuildingDetailsContainer",
         "props.data",
         tableData
       )
@@ -4419,7 +4423,41 @@ export const setProposedBuildingData = async (state, dispatch) => {
     debugger;
     return tableData;
   }
-}
+}  */
+
+export const setProposedBuildingData = async (state, dispatch) => {
+  const response = get(
+    state,
+    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+    []
+  );
+  //var tableData=[];
+  if (response && response.length > 0) {
+    let tableData = await response.map((item, index) => (
+      {
+        [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+        [getBpaTextToLocalMapping("Level")]: item.number,
+        [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+        [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+        [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+        [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+      }));
+      //tableData = [...Array(2).fill(block)];
+      console.log("tableData",tableData);
+   /*  dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.component.props.scheama.children.cardContent.children.proposedBuildingDetailsContainer",
+        "props.data",
+        tableData
+      )
+    ); */
+
+    dispatch(prepareFinalObject("scrutinyDetails.planDetail.blocks",tableData));
+    return tableData;
+  }
+} 
+
 
 export const getConditionsInPermitList = async (action, state, dispatch) => {
   let permitConditions = get(

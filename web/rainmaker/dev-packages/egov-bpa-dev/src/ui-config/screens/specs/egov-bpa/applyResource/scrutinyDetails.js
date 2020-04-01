@@ -15,6 +15,31 @@ import get from "lodash/get";
 import "./index.css";
 import { setProposedBuildingData } from "../../utils/index.js";
 
+/* const subOccupancyTypeVar= {
+  ...getSelectField({
+    label: {
+      labelName: "Sub Occupancy Type",
+      labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Sub Occupancy Type",
+      labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
+    },
+    jsonPath: "BPA.subOccupancyType",
+    localePrefix: {
+      moduleName: "BPA",
+      masterName: "SUBOCCUPANCYTYPE"
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 6
+    },
+    props: {
+      className: "applicant-details-error textfield-enterable-selection"
+    }
+  }),
+}; */
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -98,7 +123,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
       }
     ),
     applicantTypeSelection: getCommonContainer({
-      occupancyType: {
+     /*  occupancyType: {
         ...getSelectField({
           label: {
             labelName: "Occupancy Type",
@@ -166,7 +191,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             className: "applicant-details-error textfield-enterable-selection"
           }
         }),
-      },
+      }, */
       // annualExpectedExpenditure : getTextField({
       //   label: {
       //     labelName: "Annual Expected Expenditure",
@@ -303,50 +328,196 @@ export const proposedBuildingDetails = getCommonCard({
       labelName: "Proposed Building Details",
       labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
     },
+       
     {
+
       style: {
-        marginBottom: 18
+        marginBottom: 10
       }
     }
   ),
+ /*  occupancyType: {
+    ...getSelectField({
+      label: {
+        labelName: "Occupancy Type",
+        labelKey: "BPA_OCCUPANCY_TYPE"
+      },
+      placeholder: {
+        labelName: "Select Occupancy Type",
+        labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
+      },
+      localePrefix: {
+        moduleName: "BPA",
+        masterName: "OCCUPANCYTYPE"
+      },
+      jsonPath: "BPA.occupancyType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        disabled: true,
+        className : "tl-trade-type"
+      }
+    }),
+    beforeFieldChange: (action, state, dispatch) => {
+      let path = action.componentJsonpath.replace(
+        /.occupancyType$/,
+        ".subOccupancyType"
+      );
+      let occupancyType = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+        []
+      );
+      let subOccupancyType = occupancyType.filter(item => {
+        return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
+      });
+      dispatch(handleField("apply", path, "props.data", subOccupancyType));
+      dispatch(prepareFinalObject("BPA.additionalDetails.isCharitableTrustBuilding",false));
+    }
+  }, */
   proposedContainer: {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     visible: true,
-    children: {
-      breakPending: getBreak(),
-      proposedBuildingDetailsContainer: {
-        uiFramework: "custom-molecules-local",
-        moduleName: "egov-bpa",
-        componentPath: "Table",
-        props: {
-          multipleTable:true,
-          // data : setProposedBuildingData,
-          columns: {
-            "Floor Description": {},
-            "Level": {},
-            "Occupancy/Sub Occupancy": {},
-            "Buildup Area": {},
-            "Floor Area": {},
-            "Carpet Area": {}
-          },
-          title: "Builtup and Carpet Area Details",
-          options: {
-            filterType: "dropdown",
-            responsive: "stacked",
-            selectableRows: false,
-            pagination: false,
-            selectableRowsHeader: false,
-            sortFilterList: false,
-            sort: false,
-            filter: false,
-            search: false,
-            print: false,
-            download: false,
-            viewColumns: false
-          }
-        }
-      },
+    children: {    
+      
+      component:{
+        uiFramework: "custom-containers",
+        componentPath: "MultiItem",
+        props: { 
+          scheama: getCommonGrayCard({
+            applicantContainer: getCommonContainer({
+              header: getCommonTitle(
+                {
+                  labelName: "Block",
+                 // labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
+                },
+                {
+                  style: {
+                    fontSize: 18,
+                    "width":"50%"
+                  }
+                }
+              ),
+              occupancyType: {
+                ...getSelectField({
+                  label: {
+                    labelName: "Occupancy Type",
+                    labelKey: "BPA_OCCUPANCY_TYPE"
+                  },
+                  placeholder: {
+                    labelName: "Select Occupancy Type",
+                    labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
+                  },
+                  localePrefix: {
+                    moduleName: "BPA",
+                    masterName: "OCCUPANCYTYPE"
+                  },
+                  jsonPath: "BPA.occupancyType",
+                  sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
+                  required: true,
+                  gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  },
+                  props: {
+                    disabled: true,
+                    className : "tl-trade-type"
+                  }
+                }),
+                beforeFieldChange: (action, state, dispatch) => {
+                  let path = action.componentJsonpath.replace(
+                    /.occupancyType$/,
+                    ".subOccupancyType"
+                  );
+                  let occupancyType = get(
+                    state,
+                    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+                    []
+                  );
+                  let subOccupancyType = occupancyType.filter(item => {
+                    return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
+                  });
+                  dispatch(handleField("apply", path, "props.data", subOccupancyType));
+                  dispatch(prepareFinalObject("BPA.additionalDetails.isCharitableTrustBuilding",false));
+                }
+              },
+              subOccupancyType: {
+                ...getSelectField({
+                  label: {
+                    labelName: "Sub Occupancy Type",
+                    labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+                  },
+                  placeholder: {
+                    labelName: "Select Sub Occupancy Type",
+                    labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
+                  },
+                  jsonPath: "BPA.subOccupancyType",
+                  localePrefix: {
+                    moduleName: "BPA",
+                    masterName: "SUBOCCUPANCYTYPE"
+                  },
+                  gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  },
+                  props: {
+                    className: "applicant-details-error textfield-enterable-selection"
+                  }
+                }),
+                
+              },
+              
+              proposedBuildingDetailsContainer: {
+                uiFramework: "custom-molecules-local",
+                moduleName: "egov-bpa",
+                componentPath: "Table",            
+                
+                props: {
+                  //data : setProposedBuildingData,
+                  //multipleTable:true, 
+                  jsonPath:"scrutinyDetails.planDetail.blocks",
+                  style:{marginBottom:20}, 
+                  columns: {
+                    "Floor Description": {},
+                    "Level": {},
+                    "Occupancy/Sub Occupancy": {},
+                    "Buildup Area": {},
+                    "Floor Area": {},
+                    "Carpet Area": {}, 
+                  },
+                  title: "",
+                  //suboccupancy:{},
+                  options: {
+                    filterType: "dropdown",
+                    responsive: "stacked",
+                    selectableRows: false,
+                    pagination: false,
+                    selectableRowsHeader: false,
+                    sortFilterList: false,
+                    sort: false,
+                    filter: false,
+                    search: false,
+                    print: false,
+                    download: false,
+                    viewColumns: false,
+                  }
+                }          
+              }, 
+            }),
+          }),       
+          items: [], 
+          sourceJsonPath: "scrutinyDetails.planDetail.blocks", 
+        }, 
+        type: "array"
+      }, 
       breakP: getBreak(),
       breakq: getBreak(),
       totalBuildUpAreaDetailsContainer: getCommonContainer({
@@ -413,3 +584,6 @@ export const proposedBuildingDetails = getCommonCard({
     }
   }
 });
+
+
+
