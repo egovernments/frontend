@@ -67,7 +67,7 @@ const moveToReview = (state, dispatch) => {
         dispatch(
           toggleSnackbar(
             true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+            { labelName: "Please upload mandatory documents!", labelKey: "" },
             "warning"
           )
         );
@@ -418,11 +418,13 @@ const callBackForNext = async (state, dispatch) => {
     );
 
     if (ownershipCategory.includes("INSTITUTIONAL")) {
-      const owner = get(
+      let owner = get(
         state.screenConfiguration.preparedFinalObject,
         "Property.owners",
         []
       );
+      owner=owner.filter(own=>own.status == "ACTIVE");
+      
       dispatch(
         prepareFinalObject(
           "Property.ownersInit",
@@ -431,11 +433,13 @@ const callBackForNext = async (state, dispatch) => {
       );
     }
     else {
-      const owner = get(
+      let owner = get(
         state.screenConfiguration.preparedFinalObject,
         "Property.owners",
         []
       );
+      owner=owner.filter(own=>own.status == "ACTIVE");
+      
       dispatch(
         prepareFinalObject(
           "Property.ownersInit",
