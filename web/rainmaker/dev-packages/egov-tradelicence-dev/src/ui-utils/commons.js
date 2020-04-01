@@ -364,6 +364,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // set(queryObject[0], "financialYear", currentFinancialYr);
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
     }
+    if(!get(queryObject[0] , "tradeLicenseDetail.additionalDetail.fromState" )){
+      set(queryObject[0], "tradeLicenseDetail.additionalDetail.fromState" , cityId.split(".")[1])
+    }
+    if(!get(queryObject[0] , "tradeLicenseDetail.additionalDetail.toState" )){
+      set(queryObject[0], "tradeLicenseDetail.additionalDetail.toState" , cityId.split(".")[1])
+    }
 
     set(queryObject[0], "tenantId", tenantId);
     set(queryObject[0], "workflowCode", "NewTL");
