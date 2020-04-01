@@ -4030,6 +4030,9 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
       dropDownValues.menu = dropDownValues.menu.map(item => {
         return { code: item.code, label: item.code };
       });
+      if(dropDownValues.menu && dropDownValues.menu.length == 1) {
+        dropDownValues.value = dropDownValues.menu[0].code;
+      }
       card["dropDownValues"] = dropDownValues;
     }
     tempDoc[doc.code.split(".")[0]].cards.push(card);

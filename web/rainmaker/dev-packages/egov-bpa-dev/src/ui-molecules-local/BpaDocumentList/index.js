@@ -175,14 +175,34 @@ class BpaDocumentList extends Component {
             `[${index}].documentCode`
           );
           if (oldDocType != docType.code || oldDocCode != card.name) {
-            documentDetailsUploadRedux[index] = {
-              documentType: docType.code,
-              documentCode: card.name,
-              isDocumentRequired: card.required,
-              isDocumentTypeRequired: card.dropDownValues
-                ? card.dropDownValues.required
-                : false
-            };
+            // documentDetailsUploadRedux[index] = {
+            //   documentType: docType.code,
+            //   documentCode: card.name,
+            //   isDocumentRequired: card.required,
+            //   isDocumentTypeRequired: card.dropDownValues
+            //     ? card.dropDownValues.required
+            //     : false
+            // };
+            let obj = {};
+            obj.documentType= docType.code,
+            obj.documentCode=card.name,
+            obj.isDocumentRequired= card.required,
+            obj.isDocumentTypeRequired= card.dropDownValues ? card.dropDownValues.required: false
+            if(card.dropDownValues.menu && card.dropDownValues.menu.length == 1 ) {
+              obj.dropDownValues = {};
+              obj.dropDownValues.value = {};
+              obj.dropDownValues.value = card.dropDownValues.menu[0].code;
+            }
+            documentDetailsUploadRedux[index] = obj;   
+          } else {
+            if(card.dropDownValues.menu && card.dropDownValues.menu.length == 1 ) {
+              documentDetailsUploadRedux[index].dropDownValues = {};
+              documentDetailsUploadRedux[index].dropDownValues.value = {};
+              documentDetailsUploadRedux[index].dropDownValues.value = card.dropDownValues.menu[0].code;
+              documentDetailsUploadRedux[index] = {
+                ...documentDetailsUploadRedux[index]
+              }
+            }
           }
           index++;
         }
