@@ -180,69 +180,6 @@ export const getReviewTrade = (isEditable = true) => {
           },
         }
       ),
-      // reviewStructureType: getLabelWithValue(
-      //   { labelName: "Structure Type" ,labelKey : "TL_STRUCTURE_TYPE"},
-      //   {
-      //     jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-      //     localePrefix: {
-      //       moduleName: "common-masters",
-      //       masterName: "STRUCTURETYPE"
-      //     },
-      //     callBack: value => {
-      //       return  value ? value.split(".")[0] : "NA";
-      //     }
-      //   }
-      // ),
-      // reviewSubStructureType: getLabelWithValue(
-      //   { labelName: "Structure Sub Type", labelKey : "TL_STRUCTURE_SUB_TYPE" },
-      //   {
-      //     jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-      //     localePrefix: {
-      //       moduleName: "common-masters",
-      //       masterName: "STRUCTURETYPE"
-      //     },
-      //   }
-      // ),
-      // reviewCommencementDate: getLabelWithValue(
-      //   {
-      //     labelName: "Commencement Date",
-      //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
-      //   },
-      //   {
-      //     jsonPath: "Licenses[0].commencementDate",
-      //     callBack: convertEpochToDate
-      //   }
-      // ),
-      // reviewGSTNo: getLabelWithValue(
-      //   {
-      //     labelName: "GST No.",
-      //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-      //   },
-      //   {
-      //     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo",
-      //     callBack: checkValueForNA
-      //   }
-      // ),
-      // reviewOperationalArea: getLabelWithValue(
-      //   {
-      //     labelName: "Operational Area",
-      //     labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
-      //   },
-      //   {
-      //     jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea",
-      //     callBack: checkValueForNA
-      //   }
-      // ),
-      // reviewNoOfEmployee: getLabelWithValue(
-      //   {
-      //     labelName: "No of Employees",
-      //     labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
-      //   },
-      //   {
-      //     jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees",
-      //     callBack: checkValueForNA
-      //   }
-      // )
     }),
   });
 };

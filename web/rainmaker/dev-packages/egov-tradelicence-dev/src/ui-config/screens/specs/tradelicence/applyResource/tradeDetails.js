@@ -172,7 +172,25 @@ const tradeUnitCard = {
                     )
                   );
 
-                } else {
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.toState",
+                      "visible",
+                      false
+                    )
+                  );
+
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.toDistrictText",
+                      "visible",
+                      false
+                    )
+                  );
+
+                } else if(action.value === "INTRASTATE") {
                   dispatch(
                     handleField(
                       "apply",
@@ -197,6 +215,76 @@ const tradeUnitCard = {
                       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.fromDistrictText",
                       "visible",
                       false
+                    )
+                  );
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.toState",
+                      "visible",
+                      false
+                    )
+                  );
+
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.toDistrictText",
+                      "visible",
+                      false
+                    )
+                  );
+                } else {
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.fromState",
+                      "visible",
+                      false
+                    )
+                  );
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.toState",
+                      "visible",
+                      true
+                    )
+                  );
+
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.fromDistrict",
+                      "visible",
+                      true
+                    )
+                  );
+
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.toDistrict",
+                      "visible",
+                      false
+                    )
+                  );
+
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.toState",
+                      "visible",
+                      true
+                    )
+                  );
+
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.toDistrictText",
+                      "visible",
+                      true
                     )
                   );
                 }
@@ -539,7 +627,7 @@ const tradeUnitCard = {
               labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_DETAILS_PLACEHOLDER"
             },
             required: true,
-            pattern: getPattern("eventDescription"),
+            pattern: getPattern("epassValidity"),
             jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purposeDetail"
           }),
         },
@@ -607,6 +695,29 @@ export const tradeDetails = getCommonCard({
         }
       }),
     },
+    toState: {
+      ...getSelectField({
+        label: {
+          labelName: "To State",
+          labelKey: "TL_TO_STATE_LABEL"
+        },
+        placeholder: {
+          labelName: "Select To State",
+          labelKey: "TL_TO_STATE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "TRADELICENSE",
+          masterName: "STATE"
+        },
+        required: true,
+        visible: false,
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.toState",
+        sourceJsonPath: "applyScreenMdmsData.TradeLicense.State",
+        props: {
+          className: "tl-trade-type",
+        }
+      }),
+    },
     fromDistrict: {
       ...getSelectField({
         label: {
@@ -644,7 +755,7 @@ export const tradeDetails = getCommonCard({
       },
       required: true,
       visible: false,
-      pattern: getPattern("TradeName"),
+      pattern: getPattern("epassValidity"),
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.fromDistrict"
     }),
     toDistrict: {
@@ -670,6 +781,23 @@ export const tradeDetails = getCommonCard({
       }),
       visible: true
     },
+    toDistrictText: getTextField({
+      label: {
+        labelName: "To District",
+        labelKey: "TL_TO_DISTRICT_LABEL"
+      },
+      props:{
+        className:"applicant-details-error"
+      },
+      placeholder: {
+        labelName: "Select To District",
+        labelKey: "TL_TO_DISTRICT_PLACEHOLDER"
+      },
+      required: true,
+      visible: false,
+      pattern: getPattern("epassValidity"),
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.toDistrict"
+    }),
   },
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},
   ),
