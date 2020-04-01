@@ -744,7 +744,6 @@ export const getRequiredDocData = async (action, state, dispatch) => {
           payload.MdmsRes.firenoc.Documents
         )
       );
-     // console.log("Prasad mdms service", payload);
 
       prepareDocumentsUploadData(state, dispatch);
     } 

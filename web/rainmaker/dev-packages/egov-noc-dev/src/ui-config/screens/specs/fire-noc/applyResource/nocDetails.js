@@ -49,6 +49,8 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
+
+
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
     get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===

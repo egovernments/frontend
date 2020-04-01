@@ -314,7 +314,6 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
 //Function for payment success(Show buttons for download and print receipts)
 export const paymentSuccessFooter = () => {
 
-  console.log("Prasad - paymentSuccessFooter");
   
   return getCommonApplyFooter({
     //call gotoHome

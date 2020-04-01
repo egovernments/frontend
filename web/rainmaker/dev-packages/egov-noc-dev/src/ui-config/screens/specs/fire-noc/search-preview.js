@@ -286,7 +286,6 @@ const setSearchResponse = async (
   tenantId
 ) => {
 
- // console.log("prasad", applicationNumber, tenantId)
   const response = await getSearchResults([
     {
       key: "tenantId",
