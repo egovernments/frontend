@@ -195,7 +195,6 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "pay" && status === "success") {
     loadPdfGenerationData(applicationNumber, tenant)
-    console.log("Prasad",loadPdfGenerationData(applicationNumber, tenant));
     return {
       header,
       applicationSuccessCard: {
