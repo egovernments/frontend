@@ -505,6 +505,7 @@ export const tradeOwnerDetails = getCommonCard({
           labelName: "Enter Vehicle Number",
           labelKey: "TL_NEW_OWNER_VEHICLE_NUMBER_PLACEHOLDER"
         },
+        pattern: getPattern("vehicleNumber"),
         required: false,
         jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleNumber"
       }),    

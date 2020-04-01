@@ -528,6 +528,8 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9/-]*$/i;
     case "epassValidity":
       return /^[^\$\"'<>?\\\\~`!@#$%^={}\[\]*:;“”‘’]{1,100}$/i;
+    case "vehicleNumber":
+      return /^[^\$\"'<>?\\\\~`!@$&%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
   }
 };
 

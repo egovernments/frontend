@@ -160,6 +160,16 @@ export const getReviewTrade = (isEditable = true) => {
           }
         }
       ),
+      toState: getLabelWithValue(
+        { labelName: "To State", labelKey: "TL_TO_STATE_LABEL" },
+        {
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.toState",
+          localePrefix: {
+            moduleName: "TRADELICENSE",
+            masterName: "STATE"
+          },
+        }
+      ),
       fromDistrict: getLabelWithValue(
         { labelName: "From District", labelKey: "TL_FROM_DISTRICT_LABEL" },
         {

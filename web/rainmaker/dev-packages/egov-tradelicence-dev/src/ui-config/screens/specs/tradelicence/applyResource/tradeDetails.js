@@ -581,7 +581,6 @@ const tradeUnitCard = {
               labelName: "Vehicle Number",
               labelKey: "TL_NEW_TRADE_DETAILS_VEHICLE_PLACEHOLDER"
             },
-            // required: true,
             jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.vehicleNumber",
             gridDefination: {
               xs: 12,
