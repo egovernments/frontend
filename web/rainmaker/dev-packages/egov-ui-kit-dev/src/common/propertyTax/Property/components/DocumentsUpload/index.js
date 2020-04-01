@@ -32,6 +32,12 @@ class DocumentsUpload extends Component {
       card["name"] = doc.code;
       card["code"] = doc.code;
       card["required"] = doc.required ? true : false;
+      if (doc.additionalDetails && doc.additionalDetails.filterCondition) {
+        card["filterCondition"] = doc.additionalDetails.filterCondition;
+      }
+      if (doc.additionalDetails && doc.additionalDetails.dropdownFilter) {
+        card["dropdownFilter"] = doc.additionalDetails.dropdownFilter;
+      }
       if (doc.hasDropdown && doc.dropdownData) {
         let dropdown = {};
         dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
@@ -40,7 +46,11 @@ class DocumentsUpload extends Component {
           return item.active;
         });
         dropdown.menu = dropdown.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
+          let menuItem = { code: item.code, label: getTransformedLocale(item.code) };
+          if (item.parentValue) {
+            menuItem['parentValue'] = item.parentValue;
+          }
+          return { ...menuItem };
         });
         card["dropdown"] = dropdown;
       }
@@ -56,23 +66,10 @@ class DocumentsUpload extends Component {
 };
 
   getMdmsData = async () => {
-    // const { prepareFinalObject } = this.props;
-    
-     let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-    // let mdmsBody = {
-    //   MdmsCriteria: {
-    //     tenantId: tenantId,
-    //     moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }],
-    //   },
-    // };
-    // try {
-     
-    //  let payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody, [], {}, true);
-    //   prepareFinalObject("applyScreenMdmsData", payload.MdmsRes);
-    //   prepareDocumentsUploadData( payload.MdmsRes.PropertyTax.Documents);
-    // } catch (e) {
-    //   console.log(e);
-    // }
+
+    //  let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+    let tenantId =  getTenantId()||'';
+    tenantId=tenantId.split('.')[0];
    let respo=await this.props.fetchDocuments(tenantId);
    const { Documents=[] } = this.props;
     if(respo){
@@ -80,6 +77,7 @@ class DocumentsUpload extends Component {
     }
   };
   componentDidMount(){
+    this.props.prepareFinalObject("documentsContract", []);
     this.getMdmsData();
   }
   render() {

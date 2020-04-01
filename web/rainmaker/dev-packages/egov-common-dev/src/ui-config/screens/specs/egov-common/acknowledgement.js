@@ -5,7 +5,9 @@ import set from "lodash/set";
 import get from "lodash/get";
 import { ifUserRoleExists } from "../utils";
 import {download} from  "../../../../ui-utils/commons";
-import {getHeader} from "./pay"
+import {getHeader} from "./pay";
+import {getBusinessServiceMdmsData} from "../utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import './index.css';
 
 
@@ -18,7 +20,7 @@ const downloadprintMenu=(state,applicationNumber,tenantId,uiCommonPayConfig)=>{
                 { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
-            download(receiptQueryString , "download" , receiptKey);
+            download(receiptQueryString , "download" , receiptKey, state);
           
         },
         leftIcon: "receipt"
@@ -30,7 +32,7 @@ const downloadprintMenu=(state,applicationNumber,tenantId,uiCommonPayConfig)=>{
                 { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
-            download(receiptQueryString  ,"print" , receiptKey);
+            download(receiptQueryString  ,"print" , receiptKey ,state);
         },
         leftIcon: "receipt"
       };
@@ -162,6 +164,17 @@ const screenConfig = {
         const consumerCode = getQueryArg(window.location.href, "consumerCode");
         const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
         const tenant = getQueryArg(window.location.href, "tenantId");
+        const businessService = getQueryArg(window.location.href, "businessService");
+        if(ifUserRoleExists("CITIZEN")){
+            getBusinessServiceMdmsData(dispatch, tenant).then(response => {
+                const commonPayDetails = get(state , "screenConfiguration.preparedFinalObject.businessServiceMdmsData.common-masters.uiCommonPay");
+                commonPayDetails && commonPayDetails.map(item => {
+                        if (item.code == businessService) {
+                            dispatch(prepareFinalObject("commonPayInfo", item));
+                        }
+                })
+            })
+        }
         const data = getAcknowledgementCard(
             state,
             dispatch,
@@ -170,7 +183,7 @@ const screenConfig = {
             consumerCode,
             tenant
         );
-        set(action, "screenConfig.components.div.children", data);
+        set(action, "screenConfig.components.div.children", data);        
         return action;
     }
 };

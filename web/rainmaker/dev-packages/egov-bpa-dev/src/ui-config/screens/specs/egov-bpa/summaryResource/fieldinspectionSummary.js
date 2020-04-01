@@ -96,7 +96,8 @@ import {
             labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
           },
           inputProps: {
-            accept: "image/*, .pdf, .png, .jpeg"
+            accept: "image/*, .pdf, .png, .jpeg",
+            multiple: false            
           },
           maxFileSize: 6000
         },

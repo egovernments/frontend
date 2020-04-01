@@ -216,10 +216,11 @@ class UserSettings extends Component {
   }
 }
 
-const mapStateToProps = ({ common }) => {
+const mapStateToProps = ({ app,common }) => {
+  const {locale}=app;
   const { stateInfoById } = common;
   let languages = get(stateInfoById, "0.languages", []);
-  return { languages };
+  return { languages ,locale};
 };
 
 const mapDispatchToProps = (dispatch) => {

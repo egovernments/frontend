@@ -561,6 +561,12 @@ export const convertEpochToDateAndHandleNA = dateEpoch => {
   } else { return "NA"; }
 }
 
+export const handleNA = params => {
+  if (params !== undefined && params !== null && params !== "" && params!==0) {
+    return params;
+  } else { return "NA"; }
+}
+
 export const convertEpochToDate = dateEpoch => {
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;

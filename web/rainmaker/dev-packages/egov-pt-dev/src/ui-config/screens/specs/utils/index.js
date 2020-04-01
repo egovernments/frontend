@@ -18,7 +18,8 @@ import {
   getCommonCard,
   getCommonValue,
   getCommonCaption,
-  getPattern
+  getPattern,
+  getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 
@@ -944,6 +945,12 @@ export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 }
+export const getLabelIfNotNull=(label,value,props)=>{
+  const labelObj=getLabelWithValue(label,value,props);
+   return labelObj ;
+}
+
+
 
 export const showHideMutationDetailsCard = (action, state, dispatch)=>{
   const isMutationDetailsCard = get(state, "screenConfiguration.preparedFinalObject.PropertyConfiguration[0].Mutation.MutationDetails");

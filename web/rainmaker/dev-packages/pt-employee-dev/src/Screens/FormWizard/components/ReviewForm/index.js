@@ -72,8 +72,15 @@ class ReviewForm extends Component {
   editIcon = <Icon onClick={this.handleEdit} style={defaultIconStyle} color="#ffffff" action="image" name="edit" />;
 
   onEditButtonClick = (index) => {
-    let { onTabClick } = this.props;
-    this.props.prepareFinalObject("propertiesEdited", true);
+    const { onTabClick ,location={}} = this.props;
+ 
+    const { search } = location;
+    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    if (isAssesment || isReassesment) {
+      this.props.prepareFinalObject("propertiesEdited", true);
+    }
+
     onTabClick(index);
   };
 

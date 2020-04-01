@@ -31,6 +31,16 @@ const extractFromString = (str, index) => {
   return null;
 };
 
+const getUsageCategory = (usageCategory) => {
+  let categoryArray = usageCategory.split(".");
+  let tempObj = {};
+  tempObj["usageCategoryMajor"] = categoryArray[0];
+  tempObj["usageCategoryMinor"] = categoryArray[1];
+  tempObj["usageCategorySubMinor"] = categoryArray[2];
+  tempObj["usageCategoryDetail"] = categoryArray[3];
+  return tempObj;
+}
+
 export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, self) => {
   // localStorageSet("draftId", draftInfo.id);
   self.setState(
@@ -209,7 +219,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
   propertyDetails.units = newProperty.units&&newProperty.units.map(unit=>{
     unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
-    return {...unit}
+    return {...unit, ...getUsageCategory(newProperty.usageCategory)}
   });
 
   propertyDetails.documents = newProperty.documents;
@@ -281,10 +291,10 @@ export const convertToOldPTObject = (newObject) => {
     // unit.usageCategory;
     // propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
     // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
-    unit.usageCategoryMajor = extractFromString(unit.usageCategory, 0)
-    unit.usageCategoryMinor = extractFromString(unit.usageCategory, 1)
-    unit.usageCategorySubMinor = extractFromString(unit.usageCategory, 2)
-    unit.usageCategoryDetail = extractFromString(unit.usageCategory, 3)
+    // unit.usageCategoryMajor = extractFromString(unit.usageCategory, 0)
+    // unit.usageCategoryMinor = extractFromString(unit.usageCategory, 1)
+    // unit.usageCategorySubMinor = extractFromString(unit.usageCategory, 2)
+    // unit.usageCategoryDetail = extractFromString(unit.usageCategory, 3)
     // unit.constructionDetail = {
     //   builtUpArea: unit.unitArea,
     // };
@@ -802,3 +812,22 @@ export const removeAdhocIfDifferentFY = (property, fY) => {
   set(property, "Properties[0].propertyDetails[0].adhocPenaltyReason", null);
   return property;
 };
+
+export const getSortedTaxSlab = (estimateResponse) => {
+  if(estimateResponse && estimateResponse.Calculation && estimateResponse.Calculation.length > 0) {
+    if(estimateResponse.Calculation[0].taxHeadEstimates && estimateResponse.Calculation[0].taxHeadEstimates.length > 0){
+      const taxHeadKeys = ["PT_TAX", "PT_CANCER_CESS", "PT_TIME_REBATE", "PT_TIME_PENALTY", "PT_TIME_INTEREST", "PT_OWNER_EXEMPTION", "PT_ROUNDOFF", "PT_UNIT_USAGE_EXEMPTION", "PT_FIRE_CESS"];
+      const tempArray = estimateResponse.Calculation[0].taxHeadEstimates;
+      if(tempArray && tempArray.length > 0) {
+        let tempArray1 = [];
+        taxHeadKeys.map((key)=>{
+          let itemKeys = {};
+          itemKeys = tempArray[tempArray.findIndex(item => item.taxHeadCode.indexOf(key) !== -1)];
+          if (itemKeys) tempArray1.push(itemKeys);
+        });
+        estimateResponse.Calculation[0].taxHeadEstimates = tempArray1;
+      }
+    }
+  }
+  return estimateResponse;
+}
