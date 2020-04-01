@@ -748,9 +748,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //   queryObject[0].tradeLicenseDetail &&
       //   queryObject[0].tradeLicenseDetail.applicationDocuments
       // ) {
-      //   if (activeIndex === 2) {
-      //     action = "APPLY";
-      //   }
+        if (activeIndex === 2) {
+          action = "APPLY";
+        }
       //   let docs = []; 
       //   let bparegDocuments = queryObject[0].tradeLicenseDetail.applicationDocuments;
       //  if(bparegDocuments && bparegDocuments.length > 0) {
