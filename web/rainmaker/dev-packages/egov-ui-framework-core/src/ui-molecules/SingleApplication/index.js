@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import Label from "../../ui-containers/LabelContainer";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,8 +8,15 @@ import Button from "@material-ui/core/Button";
 import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import {toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
-import { handleScreenConfigurationFieldChange as handleField } from "../../ui-redux/screen-configuration/actions";
+import { checkValueForNA } from "../../ui-config/screens/specs/utils";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { epochToDate, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
+import orderBy from "lodash/orderBy";
+
 
 const styles = {
   card: {
@@ -21,72 +27,102 @@ const styles = {
 };
 
 class SingleApplication extends React.Component {
-  onCardClick = item => {
-    const { moduleName } = this.props;
-    if (moduleName === "TL") {
-      switch (item.status) {
-        case "INITIATED":
-          return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-        default:
-          return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-      }
-    } else if (moduleName === "FIRENOC") {
-      switch (item.fireNOCDetails.status) {
-        case "INITIATED":
-          return `/fire-noc/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
-        default:
-          return `/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
-      }
+
+
+ /*  onCardClick = item => {
+    switch (item.status) {
+      case "INITIATED":
+        return `/tradelicense-citizen/apply?applicationNumber=${
+          item.applicationNumber
+        }&tenantId=${item.tenantId}`;
+      default:
+        return `/tradelicence/search-preview?applicationNumber=${
+          item.applicationNumber
+        }&tenantId=${item.tenantId}`;
+    }
+  }; */
+
+  setBusinessServiceDataToLocalStorage = async (queryObject) => {
+    const {toggleSnackbar} = this.props;
+    try {
+      const payload = await httpRequest("post","egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
+      return get(payload, "BusinessServices");
+    } catch (e) {
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Not authorized to access Business Service!",
+          labelKey: "ERR_NOT_AUTHORISED_BUSINESS_SERVICE",
+        },
+        "error"
+      );
     }
   };
 
-  onButtonCLick = () => {
-    const { setRoute } = this.props;
-    setRoute("/tradelicense-citizen/home");
-    // let toggle = get(
-    //   screenConfig["my-applications"],
-    //   "components.cityPickerDialog.props.open",
-    //   false
-    // );
-    // handleField(
-    //   "my-applications",
-    //   "components.cityPickerDialog",
-    //   "props.open",
-    //   !toggle
-    // );
-  };
+  onCardClick = async (item) => {
+    const { moduleName, toggleSnackbar, setRoute } = this.props;
+    if (moduleName === "TL") {
+      const wfCode = get(item, "workflowCode");
+      const businessServiceQueryObject = [
+        { key: "tenantId", value: get(item, "tenantId") },
+        {
+          key: "businessServices",
+          value: wfCode
+        }
+      ];
+      this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
+      switch (item.status) {
+        case "INITIATED":
+          setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+        default:
+          setRoute(`/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+      }
+      } else if (moduleName === "FIRENOC") {
+        switch (item.fireNOCDetails.status) {
+          case "INITIATED":
+            setRoute(`/fire-noc/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`);
+          default:
+            setRoute(`/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`);
+        }
+      } else{
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Business service returns empty response!",
+                labelKey: "Business service returns empty response!",
+              },
+              "error"
+            );
+          }
+      }
+    
 
   render() {
-    const {
-      searchResults,
-      onActionClick,
-      classes,
-      applicationName,
-      applicationNumber,
-      ownerName,
-      moduleNumber,
-      status,
-      statusPrefix
-    } = this.props;
+    const { searchResults, onActionClick, classes } = this.props;
     return (
       <div className="application-card">
-        {searchResults && searchResults.length > 0 ? (
+        {searchResults &&
           searchResults.map(item => {
+            console.log("New search results")
             return (
               <Card className={classes.card}>
                 <CardContent>
-                  <div>
+                  <div style={{cursor:"pointer"}} onClick = {()=>{
+                        const url = this.onCardClick(item);
+                        // setRoute(url);
+                        }}>
                     <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
-                          labelKey={applicationName.label}
+                          label={"FIRE_NOC_MY_APPLICATION_TYPE"}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
                       <Grid item xs={6}>
                         <Label
-                          labelKey={get(item, applicationName.jsonPath)}
+                          labelKey={item.fireNOCDetails.fireNOCType}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -95,14 +131,14 @@ class SingleApplication extends React.Component {
                     <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
-                          labelKey={applicationNumber.label}
+                          labelKey="FIRE_NOC_MY_APPLICATION_NO"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
                       <Grid item xs={6}>
                         <Label
-                          labelKey={get(item, applicationNumber.jsonPath)}
+                          labelKey={item.fireNOCDetails.applicationNumber}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -111,118 +147,79 @@ class SingleApplication extends React.Component {
                     <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
-                          labelKey={ownerName.label}
+                          labelKey="FIRE_NOC_MY_APPLICATION_NAME"
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
                       <Grid item xs={6}>
                         <Label
-                          labelKey={get(item, ownerName.jsonPath)}
+                          labelKey={item.fireNOCDetails.applicantDetails.owners[0].name}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
                       </Grid>
                     </Grid>
-                    {get(item, moduleNumber.jsonPath) && (
-                      <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
-                          <Label
-                            labelKey={moduleNumber.label}
-                            fontSize={14}
-                            style={{
-                              fontSize: 14,
-                              color: "rgba(0, 0, 0, 0.60"
-                            }}
-                          />
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Label
-                            labelKey={get(item, moduleNumber.jsonPath)}
-                            style={{
-                              fontSize: 14,
-                              color: "rgba(0, 0, 0, 0.87"
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
-                    )}
-                    <Grid container style={{ marginBottom: 12 }}>
+                                      <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
-                          labelKey={status.label}
+                          labelKey="FIRE_NOC_MY_APPLICATION_STATUS"
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
                       <Grid item xs={6}>
                         <Label
-                          labelKey={`${statusPrefix}${get(
-                            item,
-                            status.jsonPath
-                          )}`}
+                          labelKey={item.fireNOCDetails.status}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
                       </Grid>
                     </Grid>
-                    <Link to={this.onCardClick(item)}>
-                      <div>
-                        <Label
-                          labelKey={"TL_VIEW_DETAILS"}
-                          textTransform={"uppercase"}
-                          style={{
-                            color: "#fe7a51",
-                            fontSize: 14,
-                            textTransform: "uppercase"
-                          }}
-                        />
-                      </div>
-                    </Link>
+                 
                   </div>
                 </CardContent>
               </Card>
             );
-          })
-        ) : (
-          <div className="no-assessment-message-cont">
-            <Label
-              labelKey={"No results Found!"}
-              style={{ marginBottom: 10 }}
-            />
-            <Button
-              style={{
-                height: 36,
-                lineHeight: "auto",
-                minWidth: "inherit"
-              }}
-              className="assessment-button"
-              variant="contained"
-              color="primary"
-              onClick={this.onButtonCLick}
-            >
-              <Label labelKey="NEW TRADE LICENSE" />
-            </Button>
-          </div>
-        )}
+          })}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
+/* const mapStateToProps = state => {
   const searchResults = get(
     state.screenConfiguration.preparedFinalObject,
     "searchResults",
     []
   );
+  return { searchResults };
+};
+
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    null
+  )(SingleApplication)
+); */
+
+const mapStateToProps = state => {
+  const searchResultsRaw = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchResults",
+    []
+  );
+  let searchResults = orderBy(
+    searchResultsRaw,
+    ["auditDetails.lastModifiedTime"],
+    ["desc"]);  
+    searchResults=searchResults?searchResults:searchResultsRaw ;
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, searchResults };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    setRoute: path => dispatch(setRoute(path))
-    // handleField: (screenKey, jsonPath, fieldKey, value) =>
-    //   dispatch(handleField(screenKey, jsonPath, fieldKey, value))
+    setRoute: path => dispatch(setRoute(path)),
+    toggleSnackbar : (open,message,type) => dispatch(toggleSnackbar(open,message,type))
   };
 };
 
