@@ -4342,7 +4342,7 @@ if(tempDoc) {
     }
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if (finalDocuments && finalDocuments.length > 0) {
+    if (finalDocuments && finalDocuments.length > 0 && (isEmployee || bpaStatusAction) ) {
       set(
         action,
         "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
