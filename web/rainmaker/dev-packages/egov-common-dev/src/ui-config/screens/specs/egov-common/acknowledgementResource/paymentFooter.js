@@ -49,7 +49,7 @@ export const paymentFooter = (state,consumerCode, tenant,status) => {
 
 
 
-    const footer = buttons.map((item,index) => {
+    const footer =buttons&& buttons.map((item,index) => {
         return{
             componentPath: "Button",
             props: {
