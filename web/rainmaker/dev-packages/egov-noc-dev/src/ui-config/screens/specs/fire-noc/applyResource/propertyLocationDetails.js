@@ -429,7 +429,7 @@ export const propertyLocationDetails = getCommonCard(
       },
       district: {
         ...getSelectField({
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
           sourceJsonPath: "applyScreenMdmsData.tenant.District",
           required: true,
           visible: false,
@@ -441,7 +441,7 @@ export const propertyLocationDetails = getCommonCard(
             labelName: "Select District",
             labelKey: "NOC_DISTRICT_PLACEHOLDER"
           },
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
+          //jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
           // sourceJsonPath: "applyScreenMdmsData.tenant.District",
           required: true,
           fullwidth: true,
@@ -453,7 +453,7 @@ export const propertyLocationDetails = getCommonCard(
         beforeFieldChange: async (action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
               action.value
             )
           );
