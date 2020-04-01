@@ -1688,69 +1688,108 @@ export const updateDropDowns = async (
   setOwnerShipDropDownFieldChange(state, dispatch, payload);
 };
 
-export const getDocList = (state, dispatch) => {
+export const prepareBPAREGDocumentDetailsUploadRedux = async (state, dispatch) => {
+  let docs = get (state.screenConfiguration.preparedFinalObject, "BPARegDocumentsContract");
+  let bpaDocs = [];
+
+  if (docs && docs.length > 0) {
+    docs.forEach(section => {
+      section.cards.forEach(doc => {
+        let docObj = {};
+        docObj.documentType = section.code;
+        docObj.documentCode = doc.code;
+        docObj.isDocumentRequired = doc.required;
+        docObj.isDocumentTypeRequired = doc.required;
+        bpaDocs.push(docObj);
+      })
+    });
+  }
+
+  let uploadedDocs = get (
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.applicationDocuments", []);
+  
+  if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    uploadedDocs.forEach(upDoc => {
+      bpaDocs.forEach(bpaDoc => {
+        let bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        if(bpaDetailsDoc == bpaDoc.documentCode) {
+          let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
+          let name = (fileUrls[upDoc.fileStoreId] && 
+            decodeURIComponent(
+              fileUrls[upDoc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues.value =  upDoc.documentType;
+          bpaDoc.documents = [
+            {
+              fileName : name,
+              fileStoreId : upDoc.fileStoreId,
+              fileUrl : url,
+              id : upDoc.id
+            }
+          ]
+        }
+      })
+    })
+    dispatch(prepareFinalObject("bparegDocumentDetailsUploadRedux", bpaDocs));
+  }
+}
+
+export const getDocList = async (state, dispatch) => {
   const tradeSubTypes = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.tradeUnits"
   );
 
-  const tradeSubCategories = get(
+  let TradeTypetoRoleMapping =  get(
     state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.MdmsTradeType"
+    "applyScreenMdmsData.StakeholderRegistraition.TradeTypetoRoleMapping", []
   );
-  let selectedTypes = [];
-  tradeSubTypes.forEach(tradeSubType => {
-    selectedTypes.push(
-      filter(tradeSubCategories, {
-        code: tradeSubType.tradeType
+  
+  let tardetypSeletedTypes = [];
+  tradeSubTypes.forEach(tradeTradeSubType => {
+    tardetypSeletedTypes.push(
+      filter(TradeTypetoRoleMapping, {
+        tradeType: tradeTradeSubType.tradeType
       })
     );
   });
 
-  // selectedTypes[0] &&
-  //
-  let applicationDocArray = [];
+  let docTyps = tardetypSeletedTypes[0][0].docTypes;
+  if(docTyps && docTyps.length > 0) {
+  const bpaDocuments = docTyps;
+  let documentsContract = [];
+  let tempDoc = {};
 
-  selectedTypes.forEach(tradeSubTypeDoc => {
-    applicationDocArray = [
-      ...applicationDocArray,
-      ...tradeSubTypeDoc[0].applicationDocument
-    ];
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["code"] = doc.code.split(".")[0];
+    card["title"] = doc.code.split(".")[0];
+    card["cards"] = [];
+    tempDoc[doc.code.split(".")[0]] = card;
   });
-  function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-  }
-  applicationDocArray = applicationDocArray.filter(onlyUnique);
-  let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
-  dispatch(
-    prepareFinalObject(
-      "LicensesTemp[0].applicationDocuments",
-      applicationDocument
-    )
-  );
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    tempDoc[doc.code.split(".")[0]].cards.push(card);
+  });
 
-  //REARRANGE APPLICATION DOCS FROM TL SEARCH IN EDIT FLOW
-  let applicationDocs = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
-    []
-  );
-  let applicationDocsReArranged =
-    applicationDocs &&
-    applicationDocs.length &&
-    applicationDocument.map(item => {
-      const index = applicationDocs.findIndex(
-        i => i.documentType === item.name
-      );
-      return applicationDocs[index];
-    });
-  applicationDocsReArranged &&
-    dispatch(
-      prepareFinalObject(
-        "Licenses[0].tradeLicenseDetail.applicationDocuments",
-        applicationDocsReArranged
-      )
-    );
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+  dispatch(prepareFinalObject("BPARegDocumentsContract", documentsContract));
+  }
 };
 
 export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
@@ -2946,7 +2985,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     ];
     const bpaSearch = await httpRequest(
       "post",
-      "bpa-services/bpa/appl/_search",
+      "bpa-services/_search",
       "",
       queryObject
     );
@@ -3821,6 +3860,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     const wfState = wfPayload.ProcessInstances[0];
     let appState;
     const appWfState = wfState.state.state;
+    dispatch(prepareFinalObject("applicationProcessInstances", get(wfPayload, "ProcessInstances[0]")));
 
      let requiredDocuments, appDocuments = [];
     if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
@@ -3983,7 +4023,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
       dropDownValues.label = "Select Documents";
-      dropDownValues.required = doc.required;
+      dropDownValues.required = doc.required ? true : false;
       dropDownValues.menu = doc.dropDownValues.filter(item => {
         return item.active;
       });
@@ -4009,7 +4049,7 @@ const documentMaping = async (state, dispatch, action,documentsPreview) => {
   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-  documentsPreview = documentsPreview.map((doc, index) => {
+   let documentsPreviews = documentsPreview.map((doc, index) => {
     doc["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
@@ -4027,7 +4067,7 @@ const documentMaping = async (state, dispatch, action,documentsPreview) => {
       `Document - ${index + 1}`;
       return doc;
   });
-  return documentsPreview;
+  return documentsPreviews;
 }
 const prepareDocumentsView = async (state, dispatch, action, appState, isVisibleTrue) => {
   let documentsPreview = [];
@@ -4065,14 +4105,14 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   
     if(fieldInspectionDocs && fieldInspectionDocs.length > 0 && fieldInspectionsQstions && fieldInspectionsQstions.length > 0) {
       let fiDocumentsPreview = [];
-      fieldInspectionDocs.forEach(fiDoc => {
+      fieldInspectionDocs.forEach(fiDoc => {        
         fiDocumentsPreview.push({
           title: getTransformedLocale(fiDoc.documentType),
           fileStoreId: fiDoc.fileStoreId,
           linkText: "View"
         });
       })
-      
+
       let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
       set(
         action,
@@ -4082,20 +4122,51 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
       dispatch(prepareFinalObject("fieldInspectionCheckListDetailsPreview", fieldInspectionsQstions)); 
     }
-
-  allDocuments.forEach(doc => {
+    let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
+    let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    allDocuments.map((doc, index) => {
     uploadedAppDocuments.push(doc);
-
-    documentsPreview.push({
-      title: getTransformedLocale(doc.documentType),
-      fileStoreId: doc.fileStoreId,
-      linkText: "View"
-    });
+    let obj = {};
+    obj.title = getTransformedLocale(doc.documentType);
+    obj.fileStoreId = doc.fileStoreId;
+    obj.linkText = "View";
+    obj.wfState = doc.wfState;
+    obj["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
+      "";
+    obj["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          getFileUrl(fileUrls[doc.fileStoreId])
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+    if (doc.wfState === "SEND_TO_CITIZEN") {
+      obj.createdBy = "BPA Architect"
+    }
+    else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
+      obj.createdBy = "BPA Document Verifier"
+    }
+    else if (doc.wfState === "FIELDINSPECTION_PENDING") {
+      obj.createdBy = "BPA Field Inspector"   
+    }
+    else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
+      obj.createdBy = "BPA Noc Verifier"    
+    }
+    documentsPreview.push(obj);
+    return obj;
   });
-  let appDocumentsPreview = await documentMaping(state, dispatch, action, documentsPreview);
-  dispatch(prepareFinalObject("documentDetailsPreview", appDocumentsPreview));
+  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+  let previewDocuments = [];
+  
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-  if(isEmployee && isVisibleTrue) {
+  if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
   }
 };
@@ -4117,7 +4188,16 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
     {}
   );
 
-  let documents = []
+  let documents = [];
+  let bpaStatusAction = get(bpaAppDetails, "status").includes("CITIZEN_ACTION_PENDING");
+  if(bpaStatusAction) {
+    appState = "INITIATED";
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.documentDetailsCard.visible",
+      false
+    );
+  }
   applicationDocuments.forEach(doc => {
     if(doc.WFState == appState && doc.RiskType === bpaAppDetails.riskType && doc.ServiceType === bpaAppDetails.serviceType && doc.applicationType === bpaAppDetails.applicationType) {
       documents.push(doc.docTypes)
@@ -4207,7 +4287,17 @@ if(tempDoc) {
 
     let result;
     if (documentsDocTypes && documentsDocTypes.length > 0) {
-      result = documentsCodes.filter(comparer(documentsDocTypes));
+      documentsCodes.map( docs => {
+        documentsDocTypes.map( doc => {
+        if(docs === doc) {
+          documentsContract[0].cards.map( items => {
+            if(items && items.code === doc) return items.required = false;
+          })
+        }
+        })
+        return docs;
+      })
+      result = documentsCodes;
     } else {
       result = documentsCodes;
     }
@@ -4252,7 +4342,7 @@ if(tempDoc) {
     }
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if (finalDocuments && finalDocuments.length > 0 && isEmployee) {
+    if (finalDocuments && finalDocuments.length > 0) {
       set(
         action,
         "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
@@ -4263,6 +4353,101 @@ if(tempDoc) {
   }
 };
 
+export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
+  let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
+  let bpaDocs = [];    
+  const bpaDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA",
+    {}
+  );
+  let uploadedDocs = bpaDetails.documents; 
+
+  if (docs && docs.length > 0) {
+    docs.forEach(section => {
+      section.cards.forEach(doc => {
+        let docObj = {};
+        docObj.documentType = section.code;
+        docObj.documentCode = doc.code;
+        if(uploadedDocs && uploadedDocs.length > 0) {
+          docObj.isDocumentRequired = false;
+        }
+        else {
+          docObj.isDocumentRequired = doc.required;          
+        }
+        docObj.isDocumentTypeRequired = doc.required;
+        bpaDocs.push(docObj);
+      })
+    });
+  }
+  if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    uploadedDocs.forEach(upDoc => {
+      bpaDocs.forEach(bpaDoc => {
+        let bpaDetailsDoc;
+        if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        if(bpaDetailsDoc == bpaDoc.documentCode) {
+          let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
+          let name = (fileUrls[upDoc.fileStoreId] && 
+            decodeURIComponent(
+              fileUrls[upDoc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues.value =  upDoc.documentType;
+          if(bpaDoc.previewdocuments ){
+            bpaDoc.previewdocuments.push(
+              {
+                title: getTransformedLocale(bpaDoc.documentCode),
+                documentType: bpaDoc.dropDownValues.value,
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                id : upDoc.id,
+                wfState: upDoc.wfState
+              }
+            );
+          }else{
+            bpaDoc.previewdocuments = [
+              {
+                title: getTransformedLocale(bpaDoc.documentCode),
+                documentType: bpaDoc.dropDownValues.value,               
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                id : upDoc.id,
+                wfState: upDoc.wfState                
+              }
+            ];
+          }
+        }
+      })
+    })
+    let previewStoreIds = jp.query(bpaDocs, "$..[*].*.fileStoreId");
+    let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : {};
+      
+    bpaDocs.forEach(doc => {
+
+      if (doc.previewdocuments && doc.previewdocuments.length > 0) {
+          doc.previewdocuments.forEach(docDetail =>{
+            docDetail["link"] = fileUrls[docDetail.fileStoreId];
+            return docDetail;
+          });
+      }
+    });
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
+  }
+}
 
 export const revocationPdfDownload = async(action, state, dispatch) => {
   let bpaDetails = get (
@@ -4320,7 +4505,7 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   
 let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
   axios({
-    url: '/bpa-services/bpa/appl/_permitorderedcr',
+    url: '/bpa-services/_permitorderedcr',
     method: 'POST',
     responseType: 'blob',data
    // important

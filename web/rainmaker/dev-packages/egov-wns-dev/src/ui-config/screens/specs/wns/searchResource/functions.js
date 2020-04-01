@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, fetchBill, getSearchResultsForSewerage } from "../../../../../ui-utils/commons";
-import { convertEpochToDate,convertDateToEpoch, getTextToLocalMapping, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
+import { convertEpochToDate, convertDateToEpoch, getTextToLocalMapping, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -79,7 +79,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
           queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
         }
         let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
-        if(element.connectionNo!=="NA" && element.connectionNo!== null){
+        if (element.connectionNo !== "NA" && element.connectionNo !== null) {
           billResults ? billResults.Bill.map(bill => {
             finalArray.push({
               due: bill.totalAmount,
@@ -102,7 +102,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             connectionType: element.connectionType
           })
         }
-        
+
       }
       showConnectionResults(finalArray, dispatch)
     } catch (err) { console.log(err) }
@@ -150,13 +150,13 @@ const renderSearchApplicationTable = async (state, dispatch) => {
     }
     try {
       let getSearchResult, getSearchResultForSewerage;
-      if(searchScreenObject.applicationType==="New Water connection") {
-         getSearchResult = getSearchResults(queryObject)
-      }else if(searchScreenObject.applicationType==="New Sewerage Connection"){
-         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
-      }else{
-        getSearchResult = getSearchResults(queryObject),
+      if (searchScreenObject.applicationType === "New Water connection") {
+        getSearchResult = getSearchResults(queryObject)
+      } else if (searchScreenObject.applicationType === "New Sewerage Connection") {
         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      } else {
+        getSearchResult = getSearchResults(queryObject),
+          getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       }
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
@@ -167,15 +167,32 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = findAndReplace(combinedSearchResults[i], null, "NA");
-        finalArray.push({
-          connectionNo: element.connectionNo,
-          applicationNo: element.applicationNo,
-          name: element.property.owners[0].name,
-          applicationStatus: element.applicationStatus,
-          address: element.property.address.street,
-          service: element.service,
-          connectionType: element.connectionType
-        })
+        if (element.property.owners &&
+          element.property.owners !== "NA" &&
+          element.property.owners !== null &&
+          element.property.owners.length > 1) {
+          let ownerName = "";
+          element.property.owners.forEach(ele => { ownerName = ownerName + ", " + ele.name })
+          finalArray.push({
+            connectionNo: element.connectionNo,
+            applicationNo: element.applicationNo,
+            name: ownerName.slice(2, ),
+            applicationStatus: element.applicationStatus,
+            address: element.property.address.street,
+            service: element.service,
+            connectionType: element.connectionType
+          })
+        } else {
+          finalArray.push({
+            connectionNo: element.connectionNo,
+            applicationNo: element.applicationNo,
+            name: element.property.owners[0].name,
+            applicationStatus: element.applicationStatus,
+            address: element.property.address.street,
+            service: element.service,
+            connectionType: element.connectionType
+          })
+        }
       }
       showApplicationResults(finalArray, dispatch)
     } catch (err) { console.log(err) }

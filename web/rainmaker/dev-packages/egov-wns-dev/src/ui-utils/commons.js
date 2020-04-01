@@ -95,8 +95,8 @@ export const getSearchResults = async queryObject => {
             queryObject
         );
         let result = findAndReplace(response, null, "NA");
-        let waterSource = result.WaterConnection[0].waterSource.split(".")[0];
-        let waterSubSource = result.WaterConnection[0].waterSource.split(".")[1];
+        let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
+        let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
         return result;
@@ -230,7 +230,11 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
-                                response.WaterConnection[i].due = data.Bill[0].totalAmount
+                                if (data.Bill[0].totalAmount !== 0) {
+                                    response.WaterConnection[i].due = data.Bill[0].totalAmount
+                                } else {
+                                    response.WaterConnection[i].due = "NA"
+                                }
                             }
 
                         } else {
@@ -277,7 +281,11 @@ export const getSWMyApplicationResults = async (queryObject, dispatch) => {
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
-                                response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                                if (data.Bill[0].totalAmount !== 0) {
+                                    response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                                } else {
+                                    response.SewerageConnections[i].due = "NA"
+                                }
                             }
 
                         } else {
@@ -544,6 +552,46 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
     ) { return true; } else { return false }
 }
 
+export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
+    let propertyObject = findAndReplace(applyScreenObject, "NA", null);
+    if (
+        propertyObject.hasOwnProperty("propertyId") && propertyObject['propertyId'] !== undefined && propertyObject["propertyId"] !== "" &&
+        propertyObject.hasOwnProperty("propertyType") && propertyObject["propertyType"] !== undefined && propertyObject["propertyType"] !== "" &&
+        propertyObject.hasOwnProperty("usageCategory") && propertyObject["usageCategory"] !== undefined && propertyObject["usageCategory"] !== "" &&
+        propertyObject.hasOwnProperty("landArea") && propertyObject["landArea"] !== undefined && propertyObject["landArea"] !== "" &&
+        // propertyObject.hasOwnProperty("rainWaterHarvesting") && propertyObject["rainWaterHarvesting"] !== undefined && propertyObject["rainWaterHarvesting"] !== "" &&
+        propertyObject.hasOwnProperty("owners") && propertyObject["owners"] !== undefined && propertyObject["owners"] !== "" &&
+        validatePropertyOwners(applyScreenObject) &&
+        handleAddressObjectInProperty(applyScreenObject.address)
+    ) { return true; } else { return false; }
+}
+
+const handleAddressObjectInProperty = (address) => {
+    if (address !== undefined && address !== null && address !== {}) {
+        if (
+            address.hasOwnProperty("city") && address['city'] !== undefined && address["city"] !== "" && address["city"] !== null &&
+            address.hasOwnProperty("doorNo") && address["doorNo"] !== undefined && address["doorNo"] !== "" && address["doorNo"] !== null &&
+            address.hasOwnProperty("locality") && address.locality.name !== undefined && address.locality.name !== "" && address.locality.name !== null
+        ) { return true; } else { return false; }
+    }
+}
+
+const validatePropertyOwners = (applyScreenObject) => {
+    if (applyScreenObject.owners && applyScreenObject.owners.length > 0) {
+        let owners = applyScreenObject.owners;
+        let valid = [];
+        for (let i = 0; i < owners.length; i++) {
+            if (
+                owners[i].hasOwnProperty("mobileNumber") && owners[i]['mobileNumber'] !== undefined && owners[i]["mobileNumber"] !== "" &&
+                owners[i].hasOwnProperty("name") && owners[i]['name'] !== undefined && owners[i]["name"] !== "" &&
+                owners[i].hasOwnProperty("fatherOrHusbandName") && owners[i]['fatherOrHusbandName'] !== undefined && owners[i]["fatherOrHusbandName"] !== "" &&
+                owners[i].hasOwnProperty("correspondenceAddress") && owners[i]['correspondenceAddress'] !== undefined && owners[i]["correspondenceAddress"] !== ""
+            ) { valid.push(1) } else { valid.push(0) }
+        }
+        if (valid.includes(0)) { return false; } else { return true; }
+    }
+}
+
 export const prepareDocumentsUploadData = (state, dispatch) => {
     let documents = get(
         state,
@@ -603,12 +651,16 @@ const parserFunction = (state) => {
         noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
-        meterId: parseInt(queryObject.meterId),
         additionalDetails: {
             initialMeterReading: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.initialMeterReading !== undefined
-            ) ? parseInt(queryObject.additionalDetails.initialMeterReading) : null
+            ) ? parseInt(queryObject.additionalDetails.initialMeterReading) : null,
+            detailsProvidedBy: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.detailsProvidedBy !== undefined &&
+                queryObject.additionalDetails.detailsProvidedBy !== null
+            ) ? queryObject.additionalDetails.detailsProvidedBy : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
@@ -1478,9 +1530,20 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
     wnsConnection[0].tenantName = tenantName.toUpperCase();
     const appNo = wnsConnection[0].applicationNo;
+
     let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
     let apiUrl, appService, estKey, queryObjectForEst
     if (wnsConnection[0].service === "WATER") {
+
+        // for Estimate api 
+        if (wnsConnection[0].rainWaterHarvesting !== undefined && wnsConnection[0].rainWaterHarvesting !== null) {
+            if (wnsConnection[0].rainWaterHarvesting === 'SCORE_YES') {
+                wnsConnection[0].rainWaterHarvesting = true
+            } else if (wnsConnection[0].rainWaterHarvesting === 'SCORE_NO') {
+                wnsConnection[0].rainWaterHarvesting = false
+            }
+        }
+
         apiUrl = "ws-calculator/waterCalculator/_estimate";
         appService = "ws-applicationwater";
         queryObjectForEst = [{
@@ -1553,6 +1616,13 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
         if (type === 'application') {
             if (wnsConnection[0].service === "WATER") {
+                if (wnsConnection[0].rainWaterHarvesting !== undefined && wnsConnection[0].rainWaterHarvesting !== null) {
+                    if (wnsConnection[0].rainWaterHarvesting === true) {
+                        wnsConnection[0].rainWaterHarvesting = 'SCORE_YES'
+                    } else {
+                        wnsConnection[0].rainWaterHarvesting = 'SCORE_NO'
+                    }
+                }
                 obj = {
                     WaterConnection: wnsConnection
                 }

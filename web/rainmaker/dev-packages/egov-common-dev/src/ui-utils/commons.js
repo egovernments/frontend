@@ -527,7 +527,11 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
 }
 
 
-export const download = (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt") => {
+export const download = (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
+  if(process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+    configKey = get(uiCommonPayConfig, "receiptKey")
+  }
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -550,6 +554,11 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
         console.log("Could not find any receipts");   
         return;
       }
+      const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId")
+      if(oldFileStoreId){
+        downloadReceiptFromFilestoreID(oldFileStoreId,mode)
+      }
+     else{
       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           res.filestoreIds[0]
@@ -561,6 +570,7 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
             console.log("Error In Receipt Download");        
           }         
         });
+      }
     })
   } catch (exception) {
     alert('Some Error Occured while downloading Receipt!');

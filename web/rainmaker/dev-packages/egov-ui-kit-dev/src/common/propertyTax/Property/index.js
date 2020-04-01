@@ -651,8 +651,6 @@ const mapStateToProps = (state, ownProps) => {
   if (Assessments.length == 0) {
     totalBillAmountDue = 0
   }
-
-
   return {
     urls,
     propertyItems,

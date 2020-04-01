@@ -302,7 +302,8 @@ const estimate = getCommonGrayCard({
     onClickDefination: {
       action: "condition",
       callBack: showHideAdhocPopup
-    }
+    },
+    visible: process.env.REACT_APP_NAME !== "Citizen"
   },
 });
 
@@ -559,12 +560,16 @@ const parserFunction = (obj) => {
     proposedWaterClosets: parseInt(obj.proposedWaterClosets),
     proposedToilets: parseInt(obj.proposedToilets),
     roadCuttingArea: parseInt(obj.roadCuttingArea),
-    meterId: parseInt(obj.meterId),
     additionalDetails: {
       initialMeterReading: (
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.initialMeterReading !== undefined
-      ) ? parseInt(obj.additionalDetails.initialMeterReading) : null
+      ) ? parseInt(obj.additionalDetails.initialMeterReading) : null,
+      detailsProvidedBy: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.detailsProvidedBy !== undefined &&
+        obj.additionalDetails.detailsProvidedBy !== null
+      ) ? obj.additionalDetails.detailsProvidedBy : "",
     },
     noOfTaps: parseInt(obj.noOfTaps),
     proposedTaps: parseInt(obj.proposedTaps),
@@ -603,20 +608,5 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
   dispatch(prepareFinalObject("viewBillToolipData", finalArray));
 }
 
-// const setWSDocuments = async (obj, dispatch) => {
-//   let getDocList = get(obj, "WaterConnection[0].documents");
-//   console.log("-------------------------");
-//   console.log(obj.WaterConnection);
-//   console.log(obj.WaterConnection[0]);
-//   console.log(obj.WaterConnection[0].documents);
-//   console.log('---------------------------------------------');
-//   dispatch(prepareFinalObject("DocumentsData", getDocList));
-//   console.log(get(obj, 'DocumentsData'));
-//   await setDocuments(
-//     obj,
-//     "WaterConnection[0].documents",
-//     "DocumentsData",
-//     dispatch, "WS"
-//   );
-// }
+
 export default screenConfig;
