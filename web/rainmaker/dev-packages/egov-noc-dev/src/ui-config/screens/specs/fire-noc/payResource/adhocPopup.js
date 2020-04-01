@@ -45,7 +45,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
           value: tenantId
         },
         {
-          key: "consumerCode",
+          key: "applicationNumber",
           value: applicationNumber
         },
         { key: "services", value: "FIRENOC" }
