@@ -75,8 +75,8 @@ class ReviewForm extends Component {
     const { onTabClick ,location={}} = this.props;
  
     const { search } = location;
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    let isAssesment = getQueryValue(search, "purpose")=='assess';
+    let isReassesment = getQueryValue(search, "purpose")=='reassess';
     if (isAssesment || isReassesment) {
       this.props.prepareFinalObject("propertiesEdited", true);
     }
@@ -90,8 +90,10 @@ class ReviewForm extends Component {
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
     const { generalMDMSDataById = {},location={} } = this.props;
     const { search } = location;
-    const isReassess = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    const isAssess = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    let isAssess=getQueryValue(search, "purpose")=='assess';
+    let isReassess= getQueryValue(search, "purpose")=='reassess';
+
+    
     return (
       <div>
         <Card

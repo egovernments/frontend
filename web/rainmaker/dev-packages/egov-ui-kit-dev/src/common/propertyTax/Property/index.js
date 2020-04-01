@@ -125,7 +125,7 @@ class Property extends Component {
 
       this.setState({
         dialogueOpen: true,
-        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
+        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&purpose=assess&propertyId=${propertyId}&tenantId=${tenantId}`,
       });
     }
   };

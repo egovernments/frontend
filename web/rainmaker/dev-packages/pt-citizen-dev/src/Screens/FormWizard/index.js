@@ -327,9 +327,12 @@ class FormWizard extends Component {
       const assessmentId =
         getQueryValue(search, "assessmentId") ||
         fetchFromLocalStorage("draftId");
-      const isReassesment = !!getQueryValue(search, "isReassesment");
-      const isReasses = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-      let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+      
+      const isReasses =getQueryValue(search, "purpose")=='reassess';
+      
+      let isAssesment = getQueryValue(search, "purpose")=='assess';
+      let isReassesment = getQueryValue(search, "purpose")=='reassess';
+
       const tenantId = getQueryValue(search, "tenantId");
       const propertyId = getQueryValue(search, "propertyId");
       const draftUuid = getQueryValue(search, "uuid");
@@ -495,7 +498,11 @@ class FormWizard extends Component {
     } = this.state;
     const { form, currentTenantId, search, propertiesEdited } = this.props;
     let { search: searchQuery } = this.props.location;
-    let isAssesment = Boolean(getQueryValue(searchQuery, "isAssesment").replace('false', ''));
+
+    
+    let isAssesment = getQueryValue(searchQuery, "purpose")=='assess';
+    let isReassesment = getQueryValue(searchQuery, "purpose")=='reassess';
+
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     switch (selected) {
       case 0:
@@ -1151,8 +1158,9 @@ class FormWizard extends Component {
         break;
       case 4:
         let { search: search1 } = this.props.location;
-        let isReassesment = Boolean(getQueryValue(search1, "isReassesment").replace('false', ''));
-        let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+        let isAssesment1 = getQueryValue(search1, "purpose")=='assess';
+        let isReassesment = getQueryValue(search1, "purpose")=='reassess';
+
         if (estimation && estimation.length && estimation.length > 1 && estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
@@ -1322,8 +1330,10 @@ class FormWizard extends Component {
 
   getEstimates = async () => {
     let { search } = this.props.location;
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+ 
+    let isAssesment = getQueryValue(search, "purpose")=='assess';
+    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+
     if (isAssesment || isReassesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
@@ -1341,8 +1351,13 @@ class FormWizard extends Component {
   estimate = async () => {
     let { showSpinner, location, hideSpinner } = this.props;
     let { search } = location;
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+   
+
+
+    let isAssesment = getQueryValue(search, "purpose")=='assess';
+    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+
+
     if (isAssesment || isReassesment) {
       let prepareFormData = { ...this.props.prepareFormData };
       showSpinner();
@@ -1558,7 +1573,10 @@ class FormWizard extends Component {
     let { search } = location;
     let currentUUID = get(JSON.parse(getUserInfo()), "uuid");
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
-    const isReassesment = getQueryValue(search, "isReassesment");
+    
+    let isAssesment = getQueryValue(search, "purpose")=='assess';
+    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+
     if (formValidIndexArray.indexOf(index) !== -1 && selected >= index) {
       this.setState({
         selected: index,
@@ -1572,8 +1590,10 @@ class FormWizard extends Component {
   };
   getButtonLabels(index) {
     let { search } = this.props.location;
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+   
+    let isAssesment = getQueryValue(search, "purpose")=='assess';
+    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+
     let buttonLabel = "PT_COMMONS_NEXT";
     if (index == 4) {
       isAssesment ? buttonLabel = 'PT_ASSESS_PROPERTY' : (isReassesment ? buttonLabel = "PT_UPDATE_ASSESSMENT" : buttonLabel = "PT_ADD_ASSESS_PROPERTY");
@@ -1592,8 +1612,10 @@ class FormWizard extends Component {
     const addNewPropertyLabel = getTranslatedLabel('PT_NEW_PROPERTY_HEADER', localizationLabelsData);
     const propertyId = getQueryValue(search, "propertyId") || PTUID;
     const assessmentYear = getQueryValue(search, "FY");
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    
+    let isAssesment = getQueryValue(search, "purpose")=='assess';
+    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+
     let headerObj = {};
     headerObj.header = 'PT_PROPERTY_INFORMATION';
     headerObj.headerValue = '';
@@ -1649,16 +1671,21 @@ class FormWizard extends Component {
 
   getMessageHeader() {
     let { search } = this.props.location;
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+
+    let isAssesment = getQueryValue(search, "purpose")=='assess';
+    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+
     let buttonLabel = "PT_PROPERTY_ASSESS_SUCCESS";
     isAssesment ? buttonLabel = 'PT_PROPERTY_ASSESS_SUCCESS' : (isReassesment ? buttonLabel = "PT_PROPERTY_REASSESS_SUCCESS" : buttonLabel = "PT_PROPERTY_ADD_SUCCESS");
     return buttonLabel;
   }
   getMessage() {
     let { search } = this.props.location;
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    
+  let isAssesment = getQueryValue(search, "purpose")=='assess';
+  let isReassesment = getQueryValue(search, "purpose")=='reassess';
+
+   
     let buttonLabel = "PT_PROPERTY_ASSESS_NOTIFICATION";
     isAssesment ? buttonLabel = 'PT_PROPERTY_ASSESS_NOTIFICATION' : (isReassesment ? buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION" : buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION");
     return buttonLabel;

@@ -72,7 +72,7 @@ class DropDown extends Component {
       case "Re-Assess":
         history &&
           history.push(
-            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.latestAssessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
+            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.latestAssessmentNumber}&purpose=reassess&propertyId=${
             item.propertyId
             }&tenantId=${item.tenantId}`
           );
@@ -96,7 +96,7 @@ class DropDown extends Component {
           history.push(
             `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${
             item.assessmentNo
-            }&isAssesment=true&isReassesment=true&proceedToPayment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
+            }&purpose=assess&proceedToPayment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
           );
         break;
     }

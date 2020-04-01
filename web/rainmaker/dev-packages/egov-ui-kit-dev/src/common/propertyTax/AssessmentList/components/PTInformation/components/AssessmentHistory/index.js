@@ -100,7 +100,7 @@ class AssessmentHistory extends Component {
                                     } else {
                                         history &&
                                             history.push(
-                                                `/property-tax/assessment-form?FY=${Assessment.financialYear}&assessmentId=${Assessment.assessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
+                                                `/property-tax/assessment-form?FY=${Assessment.financialYear}&assessmentId=${Assessment.assessmentNumber}&purpose=reassess&propertyId=${
                                                 propertyId
                                                 }&tenantId=${Assessment.tenantId}`
                                             );
