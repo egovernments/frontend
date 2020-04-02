@@ -1,12 +1,14 @@
-import { compose } from "recompose";
-import { Button } from "components"
-import { withRouter } from "react-router-dom";
+import { Button } from "components";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Label from "egov-ui-kit/utils/translationNode";
-import HistoryCard from "../../../../../Property/components/HistoryCard";
+import { withRouter } from "react-router-dom";
+import { compose } from "recompose";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import HistoryCard from "../../../../../Property/components/HistoryCard";
+
 export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
     let subRowGrid = 1;
     if (rowGrid == 6) {
@@ -99,10 +101,7 @@ class AssessmentHistory extends Component {
                                         );
                                     } else {
                                         history &&
-                                            history.push(
-                                                `/property-tax/assessment-form?FY=${Assessment.financialYear}&assessmentId=${Assessment.assessmentNumber}&purpose=reassess&propertyId=${
-                                                propertyId
-                                                }&tenantId=${Assessment.tenantId}`
+                                            history.push(getPropertyLink(propertyId, Assessment.tenantId, "reassess", Assessment.financialYear, Assessment.assessmentNumber)
                                             );
                                     }
                                     // lastElement.onClick();

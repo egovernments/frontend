@@ -1,31 +1,26 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import Label from "egov-ui-kit/utils/translationNode";
-import { getCommaSeperatedAddress, getTranslatedLabel, generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
-import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
-import AssessmentList from "../AssessmentList";
-import YearDialogue from "../YearDialogue";
+import { Button } from "components";
+import commonConfig from "config/common.js";
 import Screen from "egov-ui-kit/common/common/Screen";
-import { Icon, BreadCrumbs } from "egov-ui-kit/components";
-import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import PropertyInformation from "./components/PropertyInformation";
-import {
-  fetchProperties,
-  getSingleAssesmentandStatus,
-  fetchTotalBillAmount,
-  fetchReceipt,
-  fetchAssessments,
-} from "egov-ui-kit/redux/properties/actions";
 import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
+import { Icon } from "egov-ui-kit/components";
+import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { fetchAssessments, fetchProperties, fetchReceipt, fetchTotalBillAmount, getSingleAssesmentandStatus } from "egov-ui-kit/redux/properties/actions";
+import { generalMDMSDataRequestObj, getCommaSeperatedAddress, getGeneralMDMSDataDropdownName, getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import Label from "egov-ui-kit/utils/translationNode";
 import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
-import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import commonConfig from "config/common.js";
-import { Button, Card } from "components";
-import "./index.css";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import PTHeader from "../../common/PTHeader";
+import AssessmentList from "../AssessmentList";
+import YearDialogue from "../YearDialogue";
+import PropertyInformation from "./components/PropertyInformation";
+import "./index.css";
 
 const innerDivStyle = {
   padding: "0",
@@ -125,7 +120,7 @@ class Property extends Component {
 
       this.setState({
         dialogueOpen: true,
-        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&purpose=assess&propertyId=${propertyId}&tenantId=${tenantId}`,
+        urlToAppend: getPropertyLink(propertyId, tenantId, "assess", -1, assessmentNo),
       });
     }
   };
