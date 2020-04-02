@@ -200,7 +200,7 @@ export const additionDetails = getCommonCard({
         },
         required: false,
         pattern: getPattern("Name"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.plumberInfo[0].name"
       }),
       plumberMobNo: getTextField({
