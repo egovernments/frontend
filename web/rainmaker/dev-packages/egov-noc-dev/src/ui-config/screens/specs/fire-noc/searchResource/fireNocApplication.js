@@ -1,14 +1,4 @@
-import {
-  getCommonCard,
-  getCommonContainer,
-  getCommonParagraph,
-  getCommonTitle,
-  getDateField,
-  getLabel,
-  getPattern,
-  getSelectField,
-  getTextField
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonParagraph, getCommonTitle, getDateField, getLabel, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
 
@@ -48,6 +38,15 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.newProvisionalType",
+      "props.value",
+      ""
+    )
+  );
+
+  dispatch(
+    handleField(
+      "search",
       "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.fromDate",
       "props.value",
       ""
@@ -61,6 +60,7 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+
 };
 
 export const NOCApplication = getCommonCard({
@@ -154,30 +154,33 @@ export const NOCApplication = getCommonCard({
         xs: 12,
         sm: 4
       }
-      // data: [
-      //   {
-      //     code: "INITIATED"
-      //   },
-      //   {
-      //     code: "APPLIED"
-      //   },
-      //   {
-      //     code: "PAID"
-      //   },
-      //   {
-      //     code: "APPROVED"
-      //   },
-      //   {
-      //     code: "REJECTED"
-      //   },
-      //   {
-      //     code: "CANCELLED"
-      //   }
-      // ]
+    // data: [
+    //   {
+    //     code: "INITIATED"
+    //   },
+    //   {
+    //     code: "APPLIED"
+    //   },
+    //   {
+    //     code: "PAID"
+    //   },
+    //   {
+    //     code: "APPROVED"
+    //   },
+    //   {
+    //     code: "REJECTED"
+    //   },
+    //   {
+    //     code: "CANCELLED"
+    //   }
+    // ]
     }),
 
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "NOC_FROM_DATE_LABEL" },
+      label: {
+        labelName: "From Date",
+        labelKey: "NOC_FROM_DATE_LABEL"
+      },
       placeholder: {
         labelName: "From Date",
         labelKey: "NOC_FROM_DATE_PLACEHOLDER"
@@ -192,30 +195,49 @@ export const NOCApplication = getCommonCard({
       required: false
     }),
 
-    // toDate: getDateField({
-    //   label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
-    //   placeholder: {
-    //     labelName: "To Date",
-    //     labelKey: "NOC_TO_DATE_PLACEHOLDER"
-    //   },
-    //   jsonPath: "searchScreen.toDate",
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 4
-    //   },
-    //   pattern: getPattern("Date"),
-    //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-    //   required: false
-    // }),
+
+
+
+    newProvisionalType: getSelectField({
+      label: {
+        labelName: "Application Type",
+      // labelKey: "NOC_APPLICATION_NOC_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Application Type",
+      // labelKey: "NOC_APPLICATION_PLACEHOLDER"
+      },
+
+      data: [
+        {
+          code: "NEW",
+          label: "NOC_TYPE_NEW_RADIOBUTTON"
+        },
+        {
+          code: "PROVISIONAL",
+          label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
+        }
+      ],
+      // jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
+      jsonPath: "searchScreen.fireNOCType",
+      // sourceJsonPath: "applyScreenMdmsData.searchScreen.fireNOCType",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+
+    }),
 
 
 
 
 
 
-    
-    
+
   }),
+
+
+
 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
@@ -224,7 +246,7 @@ export const NOCApplication = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 6
-          // align: "center"
+        // align: "center"
         },
         props: {
           variant: "outlined",
@@ -253,7 +275,7 @@ export const NOCApplication = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 6
-          // align: "center"
+        // align: "center"
         },
         props: {
           variant: "contained",
