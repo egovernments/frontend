@@ -954,3 +954,20 @@ export const isDocumentValid = (docUploaded,requiredDocCount) => {
     return false;
   }
 }
+
+export const getMohallaData = (payload, tenantId) => {
+  return payload &&	payload.TenantBoundary[0] && payload.TenantBoundary[0].boundary && payload.TenantBoundary[0].boundary.reduce((result, item) => {
+			  result.push({
+				...item,
+				name: `${tenantId
+				  .toUpperCase()
+				  .replace(
+					/[.]/g,
+					"_"
+				  )}_REVENUE_${item.code
+				  .toUpperCase()
+				  .replace(/[._:-\s\/]/g, "_")}`
+			  });
+			  return result;
+      }, []);
+}
