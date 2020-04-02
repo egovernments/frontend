@@ -440,6 +440,7 @@ class BpaDocumentList extends Component {
       data={card.dropDownValues.menu}
       optionValue="code"
       optionLabel="label"
+      autoSelect={true}
       required={card.required}
       onChange={event => this.handleChange(key, event)}
       jsonPath={jsonPath}
