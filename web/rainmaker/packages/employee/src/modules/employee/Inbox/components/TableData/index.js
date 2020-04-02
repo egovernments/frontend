@@ -98,7 +98,10 @@ class TableData extends Component {
     try {
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
-      const assignedData = _.orderBy(_.filter(responseData.ProcessInstances, (item) => _.get(item.assignee, "uuid") === uuid), [
+      //debugger;
+      const assignedData = _.orderBy(_.filter(responseData.ProcessInstances, (item) => _.get(item.assignee, "uuid") === uuid), 
+      
+      [
         "businesssServiceSla",
       ]);
       const allData = _.orderBy(_.get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);

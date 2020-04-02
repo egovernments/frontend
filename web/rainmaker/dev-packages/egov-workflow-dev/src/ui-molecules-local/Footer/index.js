@@ -11,45 +11,49 @@ import MenuButton from "egov-ui-framework/ui-atoms/MenuButton";
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
 import "./index.css";
-
 class Footer extends React.Component {
   state = {
     open: false,
     data: {},
     employeeList: []
   };
-
   getDownloadData = () => {
-    const { Licenses, state } = this.props;
-    const { status, applicationNumber } = (Licenses && Licenses[0]) || "";
+    const { dataPath, state } = this.props;
+    const data = get(
+      state,
+      `screenConfiguration.preparedFinalObject.${dataPath}`
+    );
+    const { status, applicationNumber } = (data && data[0]) || "";
     return {
-     /* label: "Download",
+      label: "Download",
       leftIcon: "cloud_download",
       rightIcon: "arrow_drop_down",
       props: { variant: "outlined", style: { marginLeft: 10 } },
-      //menu: getDownloadItems(status, applicationNumber, state).downloadMenu
-      // menu: ["One ", "Two", "Three"] */
+      menu: getDownloadItems(status, applicationNumber, state).downloadMenu
+      // menu: ["One ", "Two", "Three"]
     };
   };
-
   getPrintData = () => {
-    const { Licenses, state } = this.props;
-    const { status, applicationNumber } = (Licenses && Licenses[0]) || "";
+    const { dataPath, state } = this.props;
+    const data = get(
+      state,
+      `screenConfiguration.preparedFinalObject.${dataPath}`
+    );
+    const { status, applicationNumber } = (data && data[0]) || "";
     return {
-    /*  label: "Print",
+      label: "Print",
       leftIcon: "print",
       rightIcon: "arrow_drop_down",
       props: { variant: "outlined", style: { marginLeft: 10 } },
       // menu: ["One ", "Two", "Three"]
-     menu: getDownloadItems(status, applicationNumber, state).printMenu */
+      menu: getDownloadItems(status, applicationNumber, state).printMenu
     };
   };
-
   openActionDialog = async item => {
-    const { handleFieldChange, setRoute } = this.props;
+    const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
-    handleFieldChange("Licenses[0].comment", "");
-    handleFieldChange("Licenses[0].assignee", "");
+    handleFieldChange(`${dataPath}[0].comment`, "");
+    handleFieldChange(`${dataPath}[0].assignee`, "");
     if (item.isLast) {
       setRoute(item.buttonUrl);
       // window.location.href = window.origin + item.buttonUrl;
@@ -83,26 +87,26 @@ class Footer extends React.Component {
           };
         });
     }
-
     this.setState({ open: true, data: item, employeeList });
   };
-
   onClose = () => {
     this.setState({
       open: false
     });
   };
-
   render() {
     const {
       color,
       variant,
       contractData,
       handleFieldChange,
-      onDialogButtonClick
+      onDialogButtonClick,
+      dataPath,
+      moduleName
     } = this.props;
     const { open, data, employeeList } = this.state;
     const { getPrintData, getDownloadData } = this;
+    let visibility = moduleName === "FIRENOC" ? "hidden" : "visible";
     return (
       <div
         className="apply-wizard-footer"
@@ -110,18 +114,7 @@ class Footer extends React.Component {
         style={{ textAlign: "right" }}
       >
         <Container>
-          <Item xs={12} sm={4} style={{ paddingLeft: "20px" }}>
-            <Container>
-              <Item xs={12} sm={6}>
-                <MenuButton data={getDownloadData()} />
-              </Item>
-
-              <Item xs={12} sm={6}>
-                <MenuButton data={getPrintData()} />
-              </Item>
-            </Container>
-          </Item>
-          <Item xs={12} sm={8}>
+          <Item xs={12} sm={12}>
             {contractData &&
               contractData.map(item => {
                 const { buttonLabel, moduleName } = item;
@@ -133,7 +126,8 @@ class Footer extends React.Component {
                     style={{
                       minWidth: "200px",
                       height: "48px",
-                      marginRight: "45px"
+                      marginRight: "45px",
+                      display: buttonLabel === "REFER" ? "none" : "initial"
                     }}
                   >
                     <LabelContainer
@@ -152,25 +146,20 @@ class Footer extends React.Component {
           dropDownData={employeeList}
           handleFieldChange={handleFieldChange}
           onButtonClick={onDialogButtonClick}
+          dataPath={dataPath}
         />
       </div>
     );
   }
 }
-
 const mapStateToProps = state => {
-  const { screenConfiguration } = state;
-  const { preparedFinalObject } = screenConfiguration;
-  const { Licenses } = preparedFinalObject;
-  return { Licenses, state };
+  return { state };
 };
-
 const mapDispatchToProps = dispatch => {
   return {
     setRoute: url => dispatch(setRoute(url))
   };
 };
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
