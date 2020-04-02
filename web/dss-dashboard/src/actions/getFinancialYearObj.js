@@ -11,6 +11,7 @@ export default function getFinancialYearObj(onlyText,yearObj) {
 		}else{
 	    	text = `FY ${moment().month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').add(1, 'years').format("YY")}`;
 		}
+		text = `FY ${moment(moment().subtract(1,'year')).month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').format("YY")}`;
 		return text;
 	}else{
 		yearObj = (yearObj)?yearObj:false;

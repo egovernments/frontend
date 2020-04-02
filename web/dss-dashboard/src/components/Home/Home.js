@@ -195,7 +195,9 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        let getFYobj = getFinancialYearObj();
+        let getFYobj = getFinancialYearObj('',true);
+
+        getFYobj = getFYobj[0];
 
         let newFilterData = this.state.filter
 
