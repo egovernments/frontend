@@ -255,6 +255,8 @@ export const propertyLocationDetails = getCommonCard(
                 false
               )
             );
+
+        
          /*    dispatch(
               prepareFinalObject(
                 "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
@@ -326,7 +328,7 @@ export const propertyLocationDetails = getCommonCard(
 
           console.log("unique districtlist",unqDistrictList); 
 
-          dispatch(
+         /*  dispatch(
             prepareFinalObject(
               "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
               null
@@ -337,7 +339,7 @@ export const propertyLocationDetails = getCommonCard(
               "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
               null
             )
-          );
+          ); */
           dispatch(
             handleField(
               "apply",
@@ -349,7 +351,7 @@ export const propertyLocationDetails = getCommonCard(
             
           }
           else{            
-            dispatch(
+        /*     dispatch(
               prepareFinalObject(
                 "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
                 null
@@ -366,7 +368,7 @@ export const propertyLocationDetails = getCommonCard(
                 "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
                 null
               )
-            );
+            ); */
             
             dispatch(
               handleField(
@@ -427,6 +429,7 @@ export const propertyLocationDetails = getCommonCard(
           }
         }
       },
+
       district: {
         ...getSelectField({
           jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
@@ -457,6 +460,7 @@ export const propertyLocationDetails = getCommonCard(
               action.value
             )
           );
+          //debugger;
           if(action.value){
             let fireStationsList = get(
               state,
@@ -588,13 +592,30 @@ export const propertyLocationDetails = getCommonCard(
               {
                 firesation.push({code:fireStations[i].code});
 
-                console.log("789546221525552452",getTenantId());
+
+                let city_value = get(
+                  state,
+                  "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+                  []
+                );
+                console.log('city_value', city_value);
+
+
+                let finalvalue = getTenantId() +'.'+ city_value; 
+                let tenantresult = finalvalue.toLowerCase();
+                
+
+                console.log('finalvalue', finalvalue);
+
+               /*  console.log("789546221525552452",getTenantId()); */
+
                 dispatch(
                   prepareFinalObject(
                     "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-                    getTenantId()
+                    tenantresult
                   )
                 );
+
                 dispatch(
                   prepareFinalObject(
                     "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
@@ -645,6 +666,37 @@ export const propertyLocationDetails = getCommonCard(
         jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId",
         visible: false
       }),
+
+    /*   propertyCity: {
+        uiFramework: "custom-containers",
+        componentPath: "AutosuggestContainer",       
+        required: true,
+        visible: false,
+        props: { 
+          style: {
+            width: "100%",
+            cursor: "pointer"
+          },
+          label: {
+            labelName: "City",
+            labelKey: "NOC_PROPERTY_CITY_LABEL"
+          },
+          placeholder: {
+            labelName: "Select City",
+            labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
+          },
+          sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+          labelsFromLocalisation: true,
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          suggestions: [],
+          fullwidth: true,
+          required: true,                  
+          inputLabelProps: {
+            shrink: true
+          }          
+        },  */       
+      
       propertyCity: {
         ...getSelectField({
           label: { labelName: "City", labelKey: "NOC_PROPERTY_CITY_LABEL" },
@@ -666,7 +718,7 @@ export const propertyLocationDetails = getCommonCard(
             required: true
             // disabled: true
           }
-        }),
+        }), 
         beforeFieldChange: async (action, state, dispatch) => {
           //Below only runs for citizen - not required here in employee
           dispatch(
@@ -758,8 +810,15 @@ export const propertyLocationDetails = getCommonCard(
               fireStations
             )
           );
-        }
-      },
+       // } ,
+       /*  gridDefination: {
+          xs: 12,
+          sm: 6
+        } */
+     // })     
+    },
+  },
+
       propertyPlotSurveyNo: getTextField({
         label: {
           labelName: "Plot/Survey No.",
