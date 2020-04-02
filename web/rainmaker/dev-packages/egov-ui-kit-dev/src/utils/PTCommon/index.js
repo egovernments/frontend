@@ -473,7 +473,10 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
       if (clonedDoc.getElementById("pt-flex-child-button")) {
         clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
       }
-
+      if (clonedDoc.getElementById("pt-header-due-amount")) {
+        clonedDoc.getElementById("pt-header-due-amount").style.display = "none";
+      }
+      
     }
   }).then(canvas => {
     var data = canvas.toDataURL();
