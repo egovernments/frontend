@@ -80,7 +80,7 @@ export const searchApiCall = async (state, dispatch) => {
       "searchScreenMdmsData.BillingService.BusinessService"
     ).filter(item => item.code === searchScreenObject.businesService);
 
-    searchScreenObject.url = serviceObject[0].billGineiURL;
+    searchScreenObject.url =  serviceObject[0]&&serviceObject[0].billGineiURL;
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject)
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
