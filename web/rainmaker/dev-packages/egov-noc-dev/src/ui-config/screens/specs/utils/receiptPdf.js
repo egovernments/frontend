@@ -886,6 +886,37 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       layout: borderLayout
     }
   ];
+
+  let citizengeneratedApprovedBy = [
+    {
+      style: "receipt-approver",
+      columns: [
+        {
+          text: [
+            {
+             // text: "Approved by: ",
+              //bold: true
+            },
+            {
+            //  text: transformedData.auditorName,
+             // bold: false
+            }
+          ],
+          alignment: "left"
+        },
+        {
+          text: [
+            {
+              text: "Commissioner/EO",
+              bold: true
+            }
+          ],
+          alignment: "right"
+        }
+      ]
+    }      
+ ] ;
+
   let generatedApprovedBy = [
     {
       style: "receipt-approver",
@@ -927,6 +958,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
   } else {
     institutionDetails = [];
   }
+
+
 
   switch (type) {
     case "application":
@@ -1053,6 +1086,38 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       ];
       applicantDetails = [];
       documents = [];
+
+      
+      citizengeneratedApprovedBy = [
+        {
+          style: "receipt-approver",
+          columns: [
+            {
+              text: [
+                {
+                 // text: "Approved by: ",
+                  //bold: true
+                },
+                {
+                //  text: transformedData.auditorName,
+                 // bold: false
+                }
+              ],
+              alignment: "left"
+            },
+            {
+              text: [
+                {
+                  text: "Commissioner/EO",
+                  bold: true
+                }
+              ],
+              alignment: "right"
+            }
+          ]
+        }      
+     ] ;
+
       generatedApprovedBy = [
         {
           style: "receipt-approver",
@@ -1080,8 +1145,9 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               alignment: "right"
             }
           ]
-        }
-      ];
+        }      
+     ] ;
+
       qrText = `Application: ${
       transformedData.applicationNumber
       }, NOC Number: ${transformedData.fireNOCNumber}, Date of Issue: ${
@@ -1152,7 +1218,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       ...institutionDetails,
       ...amountPaid,
       ...paymentInformation,
-      ...generatedApprovedBy
+      process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy 
+
     ],
     footer: [],
     styles: {
@@ -1247,6 +1314,8 @@ const generatePdf = async (state, dispatch, type) => {
     "receiptDataForPdf",
     {}
   );
+  console.log(paymentData, "paymentData")
+
   let mdmsData = get(
     state.screenConfiguration.preparedFinalObject,
     "mdmsDataForPdf",
