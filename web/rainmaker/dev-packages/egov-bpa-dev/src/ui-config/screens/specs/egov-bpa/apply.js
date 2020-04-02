@@ -44,6 +44,51 @@ import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";
 
+export const getLicenseNumber = async (state,dispatch) => {
+
+  const tenantId = get(
+  state,
+  "auth.userInfo.tenantId"
+  );
+
+  const id = get(
+  state.screenConfiguration.preparedFinalObject,
+  "BPA.userInfo.id"
+  )
+
+  const queryObject = [
+  {
+  key: "tenantId",
+  value: tenantId
+  },
+  {
+  key: "id",
+  value: id
+  }
+  ];
+
+  try {
+    const License = await httpRequest(
+    "post",
+    "/tl-services/v1/BPAREG/_search",
+    "",[],
+    queryObject
+    );
+    for(let i = 0;i <= License.Licenses.length ; i++)
+    {
+    if(License.Licenses[i].status==="APPROVED"){
+    dispatch(prepareFinalObject("BPA.appliedBy",`${License.Licenses[i].tradeLicenseDetail.owners[0].name}/${License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType}/${License.Licenses[i].licenseNumber}`))
+    break;
+    }
+    }
+    return License;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
   { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
@@ -515,6 +560,8 @@ const screenConfig = {
       // prepareDocumentsUploadData(state, dispatch);
       // prepareNOCUploadData(state, dispatch);
     });
+    
+    getLicenseNumber(state,dispatch);
 
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
     // Code to goto a specific step through URL
