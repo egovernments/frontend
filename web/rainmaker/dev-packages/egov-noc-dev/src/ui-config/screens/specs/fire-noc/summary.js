@@ -21,6 +21,9 @@ import { footer } from "./summaryResource/footer";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { generateBill } from "../utils/index";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -119,6 +122,7 @@ const screenConfig = {
 
     generateBill(dispatch, applicationNumber, tenantId);
     prepareDocumentsView(state, dispatch);
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;
   },
   components: {
