@@ -43,6 +43,7 @@ const EgovAppBar = ({
   handleItemClick,
   hasLocalisation,
   notificationsCount,
+  isUserSetting,
   ...rest
 }) => {
   return (
@@ -83,6 +84,7 @@ const EgovAppBar = ({
             onIconClick={onToolBarIconClick}
             userInfo={userInfo}
             handleItemClick={handleItemClick}
+            isUserSetting={isUserSetting}
           />
         </Toolbar>
         {notificationButton && role === "citizen" && (

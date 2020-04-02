@@ -55,11 +55,6 @@ const formConfig = {
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         dispatch(prepareFormData("Properties[0].tenantId", field.value));
         // dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
-        let requestBody = generalMDMSDataRequestObj(field.value);
-
-        dispatch(
-          fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName())
-        );
       },
       beforeFieldChange: ({ action, dispatch, state }) => {
         if (get(state, "common.prepareFormData.PropertiesTemp[0].address.city") !== action.value) {
