@@ -204,6 +204,16 @@ export const basicDetails = getCommonCard({
         sm: 12,
         md: 6
       }
+    }),
+    appliedBy: getCommonContainer({
+    name: getLabelWithValue(
+      {
+      labelName: "Applied By:",
+      },
+      {
+      jsonPath: "BPA.appliedBy",
+      }
+    ),
     })
   })
 });
