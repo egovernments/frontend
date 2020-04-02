@@ -166,7 +166,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "290px",
+          minWidth: "25%",
           height: "48px",
           marginRight: "16px"
         }
@@ -188,7 +188,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "290px",
+          minWidth: "25%",
           height: "48px",
           marginRight: "16px"
         }
@@ -211,7 +211,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "290px",
+          minWidth: "25%",
           height: "48px",
           marginRight: "16px"
         }
