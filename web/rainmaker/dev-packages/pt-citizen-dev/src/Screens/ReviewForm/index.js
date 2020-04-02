@@ -1,26 +1,21 @@
-import React, { Component } from "react";
-import { Icon } from "components";
-import CalculationDetails from "./components/CalculationDetails";
-import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
-import { Card } from "components";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { connect } from "react-redux";
-import { MDMS } from "egov-ui-kit/utils/endPoints";
-import EditIcon from "./components/EditIcon";
-import {getQueryValue,
-  findCorrectDateObj,
-  findCorrectDateObjPenaltyIntrest
-} from "egov-ui-kit/utils/PTCommon";
-import Label from "egov-ui-kit/utils/translationNode";
-import { SingleCheckbox } from "components";
-import "./index.css";
-import { convertToArray } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
-import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
-import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
-import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
-import DocumentsInfo from "egov-ui-kit/common/propertyTax/Property/components/DocumentsInfo";
+import { Card, Icon, SingleCheckbox } from "components";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
+import DocumentsInfo from "egov-ui-kit/common/propertyTax/Property/components/DocumentsInfo";
+import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
+import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
+import { convertToArray } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
+import { findCorrectDateObj, findCorrectDateObjPenaltyIntrest, getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import { formWizardConstants } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import Label from "egov-ui-kit/utils/translationNode";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import CalculationDetails from "./components/CalculationDetails";
+import EditIcon from "./components/EditIcon";
+import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
+import "./index.css";
 
 const defaultIconStyle = {
   fill: "#767676",
@@ -185,19 +180,9 @@ class ReviewForm extends Component {
   };
 
   onEditButtonClick = index => {
-    
-    const { onTabClick ,location={}} = this.props;
-    
-    const { search } = location;
-    let isAssesment = getQueryValue(search, "purpose")=='assess';
-    let isReassesment = getQueryValue(search, "purpose")=='reassess';
 
-    // let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
-    // let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    if (isAssesment || isReassesment) {
-      this.props.prepareFinalObject("propertiesEdited", true);
-    }
-  
+    const { onTabClick, location = {} } = this.props;
+    this.props.prepareFinalObject("propertiesEdited", true);
     onTabClick(index);
   };
 
@@ -234,15 +219,12 @@ class ReviewForm extends Component {
       toggleTerms
     } = this.props;
     let { totalAmount } = estimationDetails[0] || {};
-    const { generalMDMSDataById = {} ,location={}} = this.props;
-    
-  const { search } = location;
+    const { generalMDMSDataById = {}, location = {} } = this.props;
 
-  let isAssess = getQueryValue(search, "purpose")=='assess';
-  let isReassess = getQueryValue(search, "purpose")=='reassess';
+    const { search } = location;
 
-    // const isReassess = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    //   const isAssess = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    const purpose = getQueryValue(search, "purpose");
+
     return (
       <div>
         <Card
@@ -256,16 +238,16 @@ class ReviewForm extends Component {
                 />
 
               </div>
-              {(isAssess||isReassess)&& <PropertyTaxDetailsCard
+              {formWizardConstants[purpose].isEstimateDetails && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 openCalculationDetails={this.openCalculationDetails}
                 optionSelected={valueSelected}
               />}
-              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
-              <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
-              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} ></OwnerInfo>
-              <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></DocumentsInfo>
+              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(0)} /> : null}></PropertyAddressInfo>
+              <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(1)} /> : null}></AssessmentInfo>
+              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].canEditOwner ? <EditIcon onIconClick={() => onEditButtonClick(2)} /> : null}></OwnerInfo>
+              <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(3)} /> : null}></DocumentsInfo>
               <div>
                 {!this.props.isCompletePayment && (
                   <CalculationDetails
@@ -310,7 +292,7 @@ class ReviewForm extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { common = {}, screenConfiguration } = state;
   const { generalMDMSDataById } = common || {};
-  const { preparedFinalObject} = screenConfiguration;
+  const { preparedFinalObject } = screenConfiguration;
   let { documentsUploadRedux } = preparedFinalObject;
   documentsUploadRedux = convertToArray(documentsUploadRedux);
   return {
@@ -322,7 +304,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   setRoute: route => dispatch({ type: "SET_ROUTE", route }),
   prepareFinalObject: (jsonPath, value) =>
-  dispatch(prepareFinalObject(jsonPath, value)),
+    dispatch(prepareFinalObject(jsonPath, value)),
 });
 
 export default connect(

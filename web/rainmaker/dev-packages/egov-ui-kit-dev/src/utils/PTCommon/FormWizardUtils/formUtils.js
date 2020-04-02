@@ -1,4 +1,11 @@
-
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { createPropertyPayload } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { hideSpinner } from "egov-ui-kit/redux/common/actions";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { getBusinessServiceNextAction } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+import { get } from "lodash";
+import store from "ui-redux/store";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -188,7 +195,6 @@ export const convertToOldPTObject = (newObject) => {
   })
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
-
   return Properties;
 };
 
@@ -203,7 +209,228 @@ export const getPropertyLink = (propertyId, tenantId, purpose, financialYear, as
   }
   return `/property-tax/assessment-form?FY=${financialYear}&assessmentId=${assessmentNumber}&purpose=${purpose}&propertyId=${
     propertyId}&tenantId=${tenantId}`;
+}
+
+export const PROPERTY_FORM_PURPOSE = {
+  REASSESS: 'reassess',
+  ASSESS: 'assess',
+  CREATE: 'create',
+  UPDATE: 'update',
+  DEFAULT: 'create'
+}
+
+export const formWizardConstants = {
+  [PROPERTY_FORM_PURPOSE.ASSESS]: {
+    header: 'PT_ASSESS_PROPERTY',
+    isSubHeader: true,
+    isFinancialYear: true,
+    buttonLabel: 'PT_ASSESS_PROPERTY_BUTTON',
+    isEditButton: false,
+    canEditOwner: false,
+    isEstimateDetails: true
+  },
+  [PROPERTY_FORM_PURPOSE.REASSESS]: {
+    header: 'PT_REASSESS_PROPERTY',
+    isSubHeader: true,
+    isFinancialYear: true,
+    buttonLabel: 'PT_REASSESS_PROPERTY_BUTTON',
+    isEditButton: false,
+    canEditOwner: false,
+    isEstimateDetails: true
+  },
+  [PROPERTY_FORM_PURPOSE.UPDATE]: {
+    header: 'PT_UPDATE_PROPERTY',
+    isSubHeader: true,
+    isFinancialYear: false,
+    buttonLabel: 'PT_UPDATE_PROPERTY_BUTTON',
+    isEditButton: true,
+    canEditOwner: false,
+    isEstimateDetails: false
+  },
+  [PROPERTY_FORM_PURPOSE.CREATE]: {
+    header: 'PT_CREATE_PROPERTY',
+    isSubHeader: false,
+    isFinancialYear: false,
+    buttonLabel: 'PT_CREATE_PROPERTY_BUTTON',
+    isEditButton: true,
+    canEditOwner: true,
+    isEstimateDetails: false
+  }
+}
+
+const getAssessmentDetails = async () => {
+  try {
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const assessmentId = getQueryArg(
+      window.location.href,
+      "assessmentId"
+    );
+    let searchPropertyResponse = await httpRequest(
+      `property-services/assessment/_search?assessmentNumbers=${assessmentId}`,
+      "_search",
+      [],
+      {
+
+      }
+    );
+    return searchPropertyResponse;
+  } catch (e) {
+    console.log(e.message);
+
+  }
 
 }
-  //getPropertyLink(propertyId,tenantId,"assess",-1,assessmentNo)
-// import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+const assessProperty = async (action, Properties) => {
+  let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
+  const propertyId = getQueryArg(
+    window.location.href,
+    "propertyId"
+  );
+  const assessmentId = getQueryArg(
+    window.location.href,
+    "assessmentId"
+  );
+  const financialYear = getQueryArg(window.location.href, "FY");
+  const tenant = getQueryArg(window.location.href, "tenantId");
+  let assessment = {
+    "tenantId": tenant,
+    "propertyId": propertyId,
+    "financialYear": financialYear,
+    "assessmentDate": new Date().getTime() - 60000,
+    "source": "MUNICIPAL_RECORDS",
+    "channel": "CFC_COUNTER",
+  }
+  if (action === "re-assess") {
+    let assessments = await getAssessmentDetails();
+    if (assessments.Assessments.length > 0) {
+      let assessmentResponse = assessments.Assessments[0];
+      assessment = assessmentResponse;
+      assessment.assessmentDate = new Date().getTime() - 60000;
+    }
+
+    // assessment.auditDetails={...Properties[0].auditDetails};
+    // assessment.unitUsageList=Properties[0].units.map(unit=>{
+    //   return {unitId:unit.id,occupancyDate:unit.occupancyDate}
+    // });
+    // assessment.assessmentNumber=assessmentId;
+
+  }
+  try {
+    let assessPropertyResponse = await httpRequest(
+      `property-services/assessment/${propertyMethodAction}`,
+      `${propertyMethodAction}`,
+      [],
+      {
+        Assessment: assessment
+      }
+    );
+
+    const assessmentNumber = get(assessPropertyResponse, "Assessments[0].assessmentNumber", '');
+    if (action === "re-assess") {
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
+        )
+      );
+    } else {
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
+        )
+      );
+    }
+
+  } catch (e) {
+    store.dispatch(
+      hideSpinner());
+    //  this.setState({ nextButtonEnabled: true });
+    //  alert(e);
+    if (action === "assess") {
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+
+        )
+      );
+    }
+    else {
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=reassessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+
+        )
+      );
+    }
+  }
+}
+
+
+const createProperty = async (Properties, action, props) => {
+  const { documentsUploadRedux, newProperties, propertiesEdited } = props;
+  const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
+  const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
+
+  if ((action === "assess" || action === "re-assess") && !propertiesEdited) {
+    assessProperty(action, propertyPayload);
+  } else {
+    if (action === "assess" || action === "re-assess") {
+
+      const workflow = {
+        "businessService": "PT.CREATE",
+        "action": getBusinessServiceNextAction('PT.CREATE', null),
+        "moduleName": "PT"
+      }
+      if (propertyPayload.workflow) {
+        propertyPayload.workflow = { ...propertyPayload.workflow, ...workflow }
+      } else {
+        propertyPayload.workflow = workflow
+      }
+    }
+    try {
+      propertyPayload.creationReason = action == 'create' ? 'CREATE' : 'UPDATE';
+      const propertyResponse = await httpRequest(
+        `property-services/property/${propertyMethodAction}`,
+        `${propertyMethodAction}`,
+        [],
+        {
+          Property: propertyPayload
+        },
+        [],
+        {},
+        true
+      );
+      if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
+        if (propertyResponse.Properties[0].propertyId) {
+          const propertyId = get(propertyResponse, "Properties[0].propertyId", '');
+          const tenantId = get(propertyResponse, "Properties[0].tenantId", '');
+          const acknowldgementNumber = get(propertyResponse, "Properties[0].acknowldgementNumber", '');
+          // Navigate to success page
+          if (action == 'create') {
+            store.dispatch(
+              setRoute(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`));
+          } else {
+            store.dispatch(
+              setRoute(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`));
+          }
+
+        }
+      }
+    } catch (e) {
+      store.dispatch(hideSpinner());
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
+        )
+      );
+
+    }
+  }
+}
+
+
+
+
+
+export const propertySubmitAction = (Properties, action, props) => {
+  createProperty(Properties, action, props);
+};
