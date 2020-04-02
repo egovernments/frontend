@@ -44,7 +44,7 @@ class PaymentRedirect extends Component {
 
   componentDidMount = async () => {
     let { search } = this.props.location;
-    const {reduxObj , dispatch ,prepareFinalObject} = this.props;
+    const {reduxObj , prepareFinalObject} = this.props;
     const txnQuery=search.split('&')[0].replace('eg_pg_txnid','transactionId');
     console.log(txnQuery,'txnQuery');
     
@@ -77,11 +77,15 @@ class PaymentRedirect extends Component {
         let transactionId = get(searchResponse, "Payments[0].paymentDetails[0].receiptNumber");
         this.getBusinessServiceMdmsData(tenantId).then(response => {
           const commonPayDetails = get(reduxObj , "businessServiceMdmsData.common-masters.uiCommonPay");
-          commonPayDetails && commonPayDetails.map(item => {
-                  if (item.code == businessService) {
-                      prepareFinalObject("commonPayInfo", item);
-                  }
-          })
+          const index = commonPayDetails && commonPayDetails.findIndex((item) => {
+            return item.code == businessService;
+          });
+          if(index > -1){
+            prepareFinalObject("commonPayInfo" , commonPayDetails[index]);
+          }else{
+            const details = commonPayDetails.filter(item => item.code === "DEFAULT");
+            prepareFinalObject("commonPayInfo" , details);
+          }
           this.props.setRoute(`/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
           );
       })

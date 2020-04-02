@@ -2,6 +2,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
 import get from "lodash/get";
 import './acknowledgementUtils.css'
+
 const getCommonApplyFooter = children => {
     return {
         uiFramework: "custom-atoms",
@@ -13,9 +14,23 @@ const getCommonApplyFooter = children => {
     };
 };
 
+const defaultValues = {
+    "code": "DEFAULT",
+    "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
+    "receiptKey": "consolidatedreceipt",
+    "billKey": "consolidatedbill",
+    "buttons": [
+      {
+        "label": "COMMON_BUTTON_HOME",
+        "citizenUrl": "/",
+        "employeeUrl": "/inbox"
+      }
+    ]
+  }
+
 export const paymentFooter = (state,consumerCode, tenant,status) => {
 
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo" , defaultValues);
     const  buttons  = get(uiCommonPayConfig,"buttons");
     const redirectionURL = "/egov-common/pay";
     const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
