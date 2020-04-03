@@ -10,7 +10,7 @@ import { fetchAssessments, fetchProperties, fetchReceipt, fetchTotalBillAmount, 
 import { generalMDMSDataRequestObj, getCommaSeperatedAddress, getGeneralMDMSDataDropdownName, getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
-import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
@@ -120,8 +120,25 @@ class Property extends Component {
 
       this.setState({
         dialogueOpen: true,
-        urlToAppend: getPropertyLink(propertyId, tenantId, "assess", -1, assessmentNo),
+        urlToAppend: getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.ASSESS, -1, assessmentNo),
       });
+    }
+  };
+  onEditPropertyClick = () => {
+    const { latestPropertyDetails, propertyId, tenantId, selPropertyDetails } = this.props;
+    const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    if (selPropertyDetails.status != "ACTIVE") {
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+        "error"
+      );
+    } else {
+      this.props.history.push(getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.UPDATE, -1, assessmentNo));
+      // this.setState({
+      //   dialogueOpen: true,
+      //   urlToAppend: getPropertyLink(propertyId, tenantId, "assess", -1, assessmentNo),
+      // });
     }
   };
 
@@ -294,10 +311,22 @@ class Property extends Component {
           />
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
-          <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
+          <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
+
+            <Button
+              label={
+                <Label buttonLabel={true}
+                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
+                  color="#fe7a51" />
+              }
+              onClick={() => this.onEditPropertyClick()}
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+              buttonStyle={{ border: "1px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "inherit" ,marginRight: "20px"}}
+            />
             <Button
               onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
+              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit" }}
             />

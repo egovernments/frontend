@@ -222,6 +222,7 @@ export const PROPERTY_FORM_PURPOSE = {
 export const formWizardConstants = {
   [PROPERTY_FORM_PURPOSE.ASSESS]: {
     header: 'PT_ASSESS_PROPERTY',
+    parentButton: 'PT_ASSESS',
     isSubHeader: true,
     isFinancialYear: true,
     buttonLabel: 'PT_ASSESS_PROPERTY_BUTTON',
@@ -231,6 +232,7 @@ export const formWizardConstants = {
   },
   [PROPERTY_FORM_PURPOSE.REASSESS]: {
     header: 'PT_REASSESS_PROPERTY',
+    parentButton: 'PT_ASSESS',
     isSubHeader: true,
     isFinancialYear: true,
     buttonLabel: 'PT_REASSESS_PROPERTY_BUTTON',
@@ -240,6 +242,7 @@ export const formWizardConstants = {
   },
   [PROPERTY_FORM_PURPOSE.UPDATE]: {
     header: 'PT_UPDATE_PROPERTY',
+    parentButton: 'PT_UPDATE',
     isSubHeader: true,
     isFinancialYear: false,
     buttonLabel: 'PT_UPDATE_PROPERTY_BUTTON',
@@ -249,6 +252,7 @@ export const formWizardConstants = {
   },
   [PROPERTY_FORM_PURPOSE.CREATE]: {
     header: 'PT_CREATE_PROPERTY',
+    parentButton: 'PT_CREATE',
     isSubHeader: false,
     isFinancialYear: false,
     buttonLabel: 'PT_CREATE_PROPERTY_BUTTON',

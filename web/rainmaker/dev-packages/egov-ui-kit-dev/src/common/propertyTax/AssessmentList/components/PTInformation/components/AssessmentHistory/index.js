@@ -1,6 +1,6 @@
 import { Button } from "components";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -90,7 +90,7 @@ class AssessmentHistory extends Component {
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
-                                label={<Label buttonLabel={true} label='PT_RE_ASSESS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
+                                label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.REASSESS].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
                                     if (this.props.selPropertyDetails.status != "ACTIVE") {
@@ -101,7 +101,7 @@ class AssessmentHistory extends Component {
                                         );
                                     } else {
                                         history &&
-                                            history.push(getPropertyLink(propertyId, Assessment.tenantId, "reassess", Assessment.financialYear, Assessment.assessmentNumber)
+                                            history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.REASSESS, Assessment.financialYear, Assessment.assessmentNumber)
                                             );
                                     }
                                     // lastElement.onClick();
