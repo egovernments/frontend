@@ -97,7 +97,7 @@ class ActionDialog extends React.Component {
 
     } = this.props;
 
-    console.log("datapath props",this.props )
+    //console.log("datapath props",this.props )
     const {
       buttonLabel,
       showEmployeeList,
@@ -110,7 +110,7 @@ class ActionDialog extends React.Component {
     if (window.innerWidth <= 768) {
       fullscreen = true;
     }
-    debugger;
+   // debugger;
     dataPath =	
       dataPath === "FireNOCs"	
         ? `${dataPath}[0].fireNOCDetails`	
@@ -178,7 +178,7 @@ class ActionDialog extends React.Component {
                         hasLocalization={false}
                         //onChange={e => this.onEmployeeClick(e)}
                         onChange={e =>
-                          {debugger;
+                          {
                           handleFieldChange(
                             `${dataPath}.assignee`,
                             e.target.value
@@ -259,7 +259,6 @@ class ActionDialog extends React.Component {
                         onClick={  
                           () =>
                           {
-                            debugger                   
 
                          onButtonClick(buttonLabel, isDocRequired)
                           }
