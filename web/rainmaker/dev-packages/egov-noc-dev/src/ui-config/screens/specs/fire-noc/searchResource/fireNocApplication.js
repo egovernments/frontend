@@ -2,6 +2,8 @@ import { getCommonCard, getCommonContainer, getCommonParagraph, getCommonTitle, 
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
 
+
+
 const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
@@ -39,6 +41,14 @@ const resetFields = (state, dispatch) => {
     handleField(
       "search",
       "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.newProvisionalType",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.citySearch",
       "props.value",
       ""
     )
@@ -154,26 +164,7 @@ export const NOCApplication = getCommonCard({
         xs: 12,
         sm: 4
       }
-    // data: [
-    //   {
-    //     code: "INITIATED"
-    //   },
-    //   {
-    //     code: "APPLIED"
-    //   },
-    //   {
-    //     code: "PAID"
-    //   },
-    //   {
-    //     code: "APPROVED"
-    //   },
-    //   {
-    //     code: "REJECTED"
-    //   },
-    //   {
-    //     code: "CANCELLED"
-    //   }
-    // ]
+
     }),
 
     fromDate: getDateField({
@@ -200,13 +191,13 @@ export const NOCApplication = getCommonCard({
 
     newProvisionalType: getSelectField({
       label: {
-        labelName: "Application Type",
-      // labelKey: "NOC_APPLICATION_NOC_LABEL"
-      },
-      placeholder: {
+        labelName: "NOC Type",
+        labelKey: "NOC_TYPE_LABEL"
+        },
+        placeholder: {
         labelName: "Select Application Type",
-      // labelKey: "NOC_APPLICATION_PLACEHOLDER"
-      },
+        labelKey: "NOC_APPLICATION_TYPE_PLACEHOLDER"
+        },
 
       data: [
         {
@@ -229,15 +220,54 @@ export const NOCApplication = getCommonCard({
     }),
 
 
+    citySearch: getSelectField({
+      label: {
+        labelName: "City",
+        labelKey: "NOC_PROPERTY_CITY_LABEL"
+      },
+
+      placeholder: {
+        labelName: "Select City",
+        labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
+      },
+      sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+      jsonPath: "searchScreen.city",
+
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
 
 
 
+    beforeFieldChange: async (action, state, dispatch) => {
+
+
+
+      dispatch(
+        prepareFinalObject(
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+          action.value
+        )
+      );
+       try {
+        let payload = await httpRequest(
+          "post",
+          "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+          "_search",
+          [{ key: "tenantId", value: action.value }],
+          {}
+        );
+        console.log(payload,"payload")
+       }
+       catch (e) {
+        console.log(e);
+      }
+    }
 
 
   }),
-
-
-
 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({

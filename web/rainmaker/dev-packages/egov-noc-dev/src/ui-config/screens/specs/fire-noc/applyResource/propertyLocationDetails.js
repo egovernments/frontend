@@ -274,11 +274,12 @@ export const propertyLocationDetails = getCommonCard(
             state.screenConfiguration,
             "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
             []              );
+            debugger;
           const districtTenantMap =districtList.map((item)=>{
             return {
               name:item.city.districtName,
               //code:item.code
-              code:item.city.districtCode
+              code:item.city.districtTenantCode
             }
 
           });
@@ -293,9 +294,10 @@ export const propertyLocationDetails = getCommonCard(
 
           //console.log("fireStationsList",fireStationsList);
 
+
           const districtlist=[];
 
-      /*     for(var i=0;i< fireStationsList.length;i++)
+           for(var i=0;i< fireStationsList.length;i++)
           {
             for(var j=0;j<districtTenantMap.length;j++)
             {
@@ -303,13 +305,13 @@ export const propertyLocationDetails = getCommonCard(
               {
                 
                 districtlist.push({
-                  code:districtTenantMap[j].name                  
+                  code:districtTenantMap[j].code                  
                 })
               }
             }
-          }   */
+          }   
 
-         for (let i=0;i<districtTenantMap.length;i++)
+         /* for (let i=0;i<districtTenantMap.length;i++)
           {
             districtlist.push({
 
@@ -318,7 +320,7 @@ export const propertyLocationDetails = getCommonCard(
 
             })
 
-          }          
+          }      */     
  
           //console.log("districtlist",districtlist); 
 
@@ -474,7 +476,7 @@ export const propertyLocationDetails = getCommonCard(
             );
             let districtlist = districtData.filter((districtlists)=>{
              
-                return districtlists.city.districtName===action.value
+                return districtlists.city.districtTenantCode===action.value
               
             });
 
@@ -483,12 +485,10 @@ export const propertyLocationDetails = getCommonCard(
              let tenantids = districtlist.map((districtlists)=>{             
               return districtlists.code          
              });
-          //  console.log("tenant ids", tenantids); 
 
-          
+          //  console.log("tenant ids", tenantids);        
 
-            
-           // console.log("fireStationsList",fireStationsList);
+          // console.log("fireStationsList",fireStationsList);
 
 
 
@@ -591,7 +591,8 @@ export const propertyLocationDetails = getCommonCard(
                 if(fireStations[i].subDistrict[j].code==action.value)
               {
                 firesation.push({code:fireStations[i].code});
-                
+
+
 
                 console.log('Tenant Id', getTenantId()); 
 
@@ -731,7 +732,7 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
           },
           sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.tenantId",
           required: true,
           visible: false,
           props: {
@@ -744,7 +745,7 @@ export const propertyLocationDetails = getCommonCard(
           //Below only runs for citizen - not required here in employee
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.tenantId",
               action.value
             )
           );

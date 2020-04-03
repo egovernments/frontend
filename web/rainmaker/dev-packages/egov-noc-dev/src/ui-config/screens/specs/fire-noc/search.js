@@ -38,6 +38,44 @@ const pageResetAndChange = (state, dispatch) => {
   // dispatch(setRoute("/tradelicence/apply"));
 };
 
+const getMdmsData2 = async (action,state, dispatch) => {
+
+  let tenantId = getTenantId();
+
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        }
+      ]
+    }
+
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+      
+    );
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    console.log(payload,"payloadDatatenants");
+
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const NOCSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",

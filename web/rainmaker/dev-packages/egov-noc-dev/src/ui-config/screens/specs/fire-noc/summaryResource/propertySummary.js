@@ -142,7 +142,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelKey: "NOC_PROPERTY_CITY_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.tenantId",
         /* localePrefix: {
           moduleName: "TENANT",
           masterName: "TENANTS"
