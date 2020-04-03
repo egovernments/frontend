@@ -591,17 +591,21 @@ export const propertyLocationDetails = getCommonCard(
                 if(fireStations[i].subDistrict[j].code==action.value)
               {
                 firesation.push({code:fireStations[i].code});
+                
 
-                let tenantid = getTenantId(); 
+                console.log('Tenant Id', getTenantId()); 
 
-         /*       if(tenantid === "pb")
+              if(process.env.REACT_APP_NAME === "Citizen")
                 {
-                  console.log("pb log");
+                  console.log("citizen login");
+
                 let city_value = get(
                   state,
                   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
                   []
+
                 );
+
                 console.log('city_value', city_value);
 
 
@@ -609,10 +613,8 @@ export const propertyLocationDetails = getCommonCard(
 
                 let tenantresult = finalvalue.toLowerCase();
                 
+                console.log('finalvalue', finalvalue); 
 
-                console.log('finalvalue', finalvalue);
-
-           console.log("789546221525552452",getTenantId());
 
                 dispatch(
                   prepareFinalObject(
@@ -623,14 +625,15 @@ export const propertyLocationDetails = getCommonCard(
                }
                else
                {
-                console.log("normal tenant log");
-                */
+                console.log("employee login");
+              
                 dispatch(
                   prepareFinalObject(
                     "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
                     getTenantId()
                   )
                 );
+              }
                
 
 
