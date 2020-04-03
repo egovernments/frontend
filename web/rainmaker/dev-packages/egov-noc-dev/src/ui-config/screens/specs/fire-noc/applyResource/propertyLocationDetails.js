@@ -593,6 +593,9 @@ export const propertyLocationDetails = getCommonCard(
                 firesation.push({code:fireStations[i].code});
 
 
+              if(getTenantId()=== 'pb')
+                {
+                  console.log("pb log");
                 let city_value = get(
                   state,
                   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
@@ -615,6 +618,17 @@ export const propertyLocationDetails = getCommonCard(
                     tenantresult
                   )
                 );
+               }
+               else
+               {
+                dispatch(
+                  prepareFinalObject(
+                    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+                    getTenantId()
+                  )
+                );
+               }
+
 
                 dispatch(
                   prepareFinalObject(
