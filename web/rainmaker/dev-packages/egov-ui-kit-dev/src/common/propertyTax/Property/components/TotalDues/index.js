@@ -29,7 +29,7 @@ class TotalDues extends React.Component {
     const envURL = "/egov-common/pay";
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
-      <div className="">
+      <div className=""  id="pt-header-due-amount">
         <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
           <Label buttonLabel={false} label="PT_TOTAL_DUES" color="rgba(0, 0, 0, 0.74)" labelStyle={labelStyle} fontSize="14px" />
           <Label

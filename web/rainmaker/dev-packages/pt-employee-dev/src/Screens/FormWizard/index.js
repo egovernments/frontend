@@ -169,10 +169,10 @@ class FormWizard extends Component {
         "draftRecord.propertyAddress.fields.city.value",
         ""
       );
-      if (!!activeModule) {
-        const documentTypeMdms = await getDocumentTypes();
-        if (!!documentTypeMdms) fetchMDMDDocumentTypeSuccess(documentTypeMdms);
-      }
+      // if (!!activeModule) {
+      //   const documentTypeMdms = await getDocumentTypes();
+      //   if (!!documentTypeMdms) fetchMDMDDocumentTypeSuccess(documentTypeMdms);
+      // }
       if (isReassesment) {
         activeModule &&
           this.props.handleFieldChange("propertyAddress", "city", activeModule);
@@ -303,29 +303,7 @@ class FormWizard extends Component {
       resetForm();
     });
     if (assessmentId) {
-      fetchGeneralMDMSData(
-        null,
-        "PropertyTax",
-        [
-          "Floor",
-          "OccupancyType",
-          "OwnerShipCategory",
-          "OwnerType",
-          "PropertySubType",
-          "PropertyType",
-          "SubOwnerShipCategory",
-          "UsageCategoryDetail",
-          "UsageCategoryMajor",
-          "UsageCategoryMinor",
-          "UsageCategorySubMinor",
-          "Rebate",
-          "Penalty",
-          "Interest",
-          "FireCess"
-        ],
-        "",
-        tenantId
-      );
+      // fetchGeneralMDMSData(null, "PropertyTax", ["Floor", "OccupancyType", "OwnerShipCategory", "OwnerType", "PropertySubType", "PropertyType", "SubOwnerShipCategory", "UsageCategory", "Rebate", "Penalty", "Interest", "FireCess"], "", tenantId);
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
       if (selected > 2) {
         const { tenantId: id } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];

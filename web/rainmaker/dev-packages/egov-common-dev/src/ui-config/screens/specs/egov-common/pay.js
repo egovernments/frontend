@@ -21,7 +21,7 @@ import "./pay.css";
 export const getHeader = (state) => {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     let consumerCode = getQueryArg(window.location.href, "consumerCode");
-
+    let businessService = getQueryArg(window.location.href, "businessService");
     let label = get(uiCommonPayConfig,"headerBandLabel");
     return getCommonContainer({
         header: getCommonHeader({
@@ -66,11 +66,20 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
 
     //commonPay configuration 
     const commonPayDetails = get(state , "screenConfiguration.preparedFinalObject.businessServiceMdmsData.common-masters.uiCommonPay");
-    commonPayDetails && commonPayDetails.map(item => {
-        if (item.code == businessService) {
-            dispatch(prepareFinalObject("commonPayInfo", item));
-        }
-    })
+    const index = commonPayDetails && commonPayDetails.findIndex((item) => {
+        return item.code == businessService;
+    });
+    if(index > -1){
+        dispatch(prepareFinalObject("commonPayInfo" , commonPayDetails[index]));
+    //   commonPayDetails && commonPayDetails.map(item => {
+    //     if (item.code == businessService) {
+    //         dispatch(prepareFinalObject("commonPayInfo", item));
+    //     }
+    //   })
+    }else{
+        const details = commonPayDetails.filter(item => item.code === "DEFAULT");
+        dispatch(prepareFinalObject("commonPayInfo" , details));
+    }
 
     let header = getHeader(state);
     set(action.screenConfig, "components.div.children.headerDiv.children.header" ,header) 
