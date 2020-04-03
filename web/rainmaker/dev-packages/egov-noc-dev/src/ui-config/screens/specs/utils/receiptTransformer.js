@@ -11,7 +11,8 @@ import {
   getTranslatedLabel,
   transformById,
   getTransformedLocale,
-  getUserDataFromUuid
+  getUserDataFromUuid,
+  getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 
 import { getSearchResults } from "../../../../ui-utils/commons";
@@ -149,16 +150,16 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         "NA"
       )
     );
-    data.city = nullToNa(
-      getMessageFromLocalization(
-        `TENANT_TENANTS_${getTransformedLocale(
-          get(
-            response,
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-            "NA"
-          )
-        )}`
-      )
+    data.city = nullToNa(	
+      getMessageFromLocalization(	
+        `TENANT_TENANTS_${getTransformedLocale(	
+          get(	
+            response,	
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",	
+            "NA"	
+          )	
+        )}`	
+      )	
     );
 
     data.door = nullToNa(
@@ -178,12 +179,14 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     );
 
 
-    data.district = nullToNa(
-      get(
-        response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressline1",
-        "NA"
-      )
+    data.district = nullToNa(    
+      
+          get(
+            response,
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+              "NA"
+          )
+        
     );
 
     data.subDistrict = nullToNa(
@@ -224,17 +227,46 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         "NA"
       )
     );
-    data.mohalla = nullToNa(
+
+    let value = get(
+      response,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+      "NA");
+
+    const  tenantId = getQueryArg(window.location.href, "tenantId"); 
+
+   /*  data.mohalla = nullToNa(   
+      
       getMessageFromLocalization(
-        `revenue.locality.${getTransformedLocale(
-          get(
-            response,
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
-            "NA"
-          )
-        )}`
+        //`revenue.locality.${getTransformedLocale(
+          `${getTransformedLocale(tenantId)}_REVENUE_${value }`           
       )
-    );
+    ); */
+
+
+       data.mohalla = nullToNa(
+        getMessageFromLocalization(
+        `${getTransformedLocale(
+            get(
+            response,
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+            "NA"
+            )
+            )}_REVENUE_${getTransformedLocale(
+            get(
+              response,
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+              "NA"
+              )
+            )}`
+          ) 
+        );
+
+
+
+    
+
+
     data.pincode = nullToNa(
       get(
         response,
