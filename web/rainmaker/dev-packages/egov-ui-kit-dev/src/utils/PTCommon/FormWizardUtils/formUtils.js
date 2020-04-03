@@ -269,23 +269,24 @@ const getAssessmentDetails = async () => {
       window.location.href,
       "assessmentId"
     );
+
     let searchPropertyResponse = await httpRequest(
-      `property-services/assessment/_search?assessmentNumbers=${assessmentId}`,
+      `property-services/assessment/_search?assessmentNumbers=${assessmentId}&tenantId=${tenantId}`,
       "_search",
       [],
       {
 
-      }
+      }, [], {}, true
     );
     return searchPropertyResponse;
   } catch (e) {
     console.log(e.message);
-
   }
-
 }
+
 const assessProperty = async (action, Properties) => {
-  let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
+  const purpose = getPurpose()
+  let propertyMethodAction = purpose == PROPERTY_FORM_PURPOSE.REASSESS ? "_update" : '_create';
   const propertyId = getQueryArg(
     window.location.href,
     "propertyId"
@@ -304,20 +305,13 @@ const assessProperty = async (action, Properties) => {
     "source": "MUNICIPAL_RECORDS",
     "channel": "CFC_COUNTER",
   }
-  if (action === "re-assess") {
+  if (purpose == PROPERTY_FORM_PURPOSE.REASSESS) {
     let assessments = await getAssessmentDetails();
     if (assessments.Assessments.length > 0) {
       let assessmentResponse = assessments.Assessments[0];
       assessment = assessmentResponse;
       assessment.assessmentDate = new Date().getTime() - 60000;
     }
-
-    // assessment.auditDetails={...Properties[0].auditDetails};
-    // assessment.unitUsageList=Properties[0].units.map(unit=>{
-    //   return {unitId:unit.id,occupancyDate:unit.occupancyDate}
-    // });
-    // assessment.assessmentNumber=assessmentId;
-
   }
   try {
     let assessPropertyResponse = await httpRequest(
@@ -330,41 +324,16 @@ const assessProperty = async (action, Properties) => {
     );
 
     const assessmentNumber = get(assessPropertyResponse, "Assessments[0].assessmentNumber", '');
-    if (action === "re-assess") {
-      store.dispatch(
-        setRoute(
-          `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
-        )
-      );
-    } else {
-      store.dispatch(
-        setRoute(
-          `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
-        )
-      );
-    }
+
+    routeToAcknowledgement(purpose, 'success', assessment.propertyId, assessment.tenantId, assessmentNumber, assessment.financialYear);
+
 
   } catch (e) {
     store.dispatch(
       hideSpinner());
-    //  this.setState({ nextButtonEnabled: true });
-    //  alert(e);
-    if (action === "assess") {
-      store.dispatch(
-        setRoute(
-          `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
 
-        )
-      );
-    }
-    else {
-      store.dispatch(
-        setRoute(
-          `/property-tax/pt-acknowledgment?purpose=reassessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+    routeToAcknowledgement(purpose, 'failure', assessment.propertyId, assessment.tenantId, null, assessment.financialYear);
 
-        )
-      );
-    }
   }
 }
 
@@ -372,69 +341,104 @@ const assessProperty = async (action, Properties) => {
 const createProperty = async (Properties, action, props) => {
   const { documentsUploadRedux, newProperties, propertiesEdited } = props;
   const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
-  const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
+  const propertyMethodAction = action;
 
-  if ((action === "assess" || action === "re-assess") && !propertiesEdited) {
-    assessProperty(action, propertyPayload);
-  } else {
-    if (action === "assess" || action === "re-assess") {
 
-      const workflow = {
-        "businessService": "PT.CREATE",
-        "action": getBusinessServiceNextAction('PT.CREATE', null),
-        "moduleName": "PT"
-      }
-      if (propertyPayload.workflow) {
-        propertyPayload.workflow = { ...propertyPayload.workflow, ...workflow }
-      } else {
-        propertyPayload.workflow = workflow
-      }
+  if (action === "_update") {
+    const workflow = {
+      "businessService": "PT.CREATE",
+      "action": getBusinessServiceNextAction('PT.CREATE', null),
+      "moduleName": "PT"
     }
-    try {
-      propertyPayload.creationReason = action == 'create' ? 'CREATE' : 'UPDATE';
-      const propertyResponse = await httpRequest(
-        `property-services/property/${propertyMethodAction}`,
-        `${propertyMethodAction}`,
-        [],
-        {
-          Property: propertyPayload
-        },
-        [],
-        {},
-        true
-      );
-      if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
-        if (propertyResponse.Properties[0].propertyId) {
-          const propertyId = get(propertyResponse, "Properties[0].propertyId", '');
-          const tenantId = get(propertyResponse, "Properties[0].tenantId", '');
-          const acknowldgementNumber = get(propertyResponse, "Properties[0].acknowldgementNumber", '');
-          // Navigate to success page
-          if (action == 'create') {
-            store.dispatch(
-              setRoute(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`));
-          } else {
-            store.dispatch(
-              setRoute(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`));
-          }
-
-        }
-      }
-    } catch (e) {
-      store.dispatch(hideSpinner());
-      store.dispatch(
-        setRoute(
-          `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
-        )
-      );
-
+    if (propertyPayload.workflow) {
+      propertyPayload.workflow = { ...propertyPayload.workflow, ...workflow }
+    } else {
+      propertyPayload.workflow = workflow
     }
   }
+  try {
+    propertyPayload.creationReason = action == '_create' ? 'CREATE' : 'UPDATE';
+    const propertyResponse = await httpRequest(
+      `property-services/property/${propertyMethodAction}`,
+      `${propertyMethodAction}`,
+      [],
+      {
+        Property: propertyPayload
+      },
+      [],
+      {},
+      true
+    );
+    if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
+      if (propertyResponse.Properties[0].propertyId) {
+        const propertyId = get(propertyResponse, "Properties[0].propertyId", '');
+        const tenantId = get(propertyResponse, "Properties[0].tenantId", '');
+        const acknowldgementNumber = get(propertyResponse, "Properties[0].acknowldgementNumber", '');
+        // Navigate to success page
+        if (action == '_create') {
+          routeToAcknowledgement(PROPERTY_FORM_PURPOSE.CREATE, 'success', propertyId, tenantId, acknowldgementNumber);
+        } else {
+          routeToAcknowledgement(PROPERTY_FORM_PURPOSE.UPDATE, 'success', propertyId, tenantId, acknowldgementNumber);
+        }
+
+      }
+    }
+  } catch (e) {
+    store.dispatch(hideSpinner());
+    if (action == '_create') {
+      routeToAcknowledgement(PROPERTY_FORM_PURPOSE.CREATE, 'failure');
+    } else {
+      routeToAcknowledgement(PROPERTY_FORM_PURPOSE.UPDATE, 'failure');
+    }
+
+  }
+}
+
+
+const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNumber, FY) => {
+
+  let routeLink = `/property-tax/pt-acknowledgment?purpose=${purpose}&status=${status}`;
+  routeLink = propertyId ? `${routeLink}&propertyId=${propertyId}` : `${routeLink}`;
+  routeLink = tenantId ? `${routeLink}&tenantId=${tenantId}` : `${routeLink}`;
+  routeLink = secondNumber ? `${routeLink}&secondNumber=${secondNumber}` : `${routeLink}`;
+  routeLink = FY ? `${routeLink}&FY=${FY}` : `${routeLink}`;
+
+  store.dispatch(
+    setRoute(
+      routeLink
+    )
+  );
 }
 
 
 
 
-
 export const propertySubmitAction = (Properties, action, props) => {
-  createProperty(Properties, action, props);
+
+
+  const purpose = getPurpose()
+
+  switch (purpose) {
+    case PROPERTY_FORM_PURPOSE.REASSESS:
+      assessProperty("_update");
+      break;
+    case PROPERTY_FORM_PURPOSE.ASSESS:
+      assessProperty("_create");
+      break;
+    case PROPERTY_FORM_PURPOSE.UPDATE:
+      createProperty(Properties, '_update', props);
+      break;
+    case PROPERTY_FORM_PURPOSE.CREATE:
+      createProperty(Properties, '_create', props);
+      break;
+    default:
+      createProperty(Properties, '_create', props);
+  }
+
 };
+
+
+export const getPurpose = () => {
+  const purpose = getQueryArg(window.location.href, "purpose") || PROPERTY_FORM_PURPOSE.DEFAULT;
+  return purpose;
+}

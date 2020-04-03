@@ -1,13 +1,12 @@
 import { Card } from "components";
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
-import { createAssessmentPayload, createPropertyPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData, hideSpinner, prepareFormData as prepareFormDataAction, showSpinner, toggleSpinner, updatePrepareFormDataFromDraft } from "egov-ui-kit/redux/common/actions";
 import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms } from "egov-ui-kit/redux/form/actions";
@@ -16,8 +15,8 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { fetchFromLocalStorage, isDocumentValid } from "egov-ui-kit/utils/commons";
 import { getUserInfo, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { getEstimateFromBill, getFinancialYearFromQuery, getQueryValue, resetFormWizard } from "egov-ui-kit/utils/PTCommon";
-import { addOwner, callDraft, configOwnersDetailsFromDraft, getBusinessServiceNextAction, getCalculationScreenData, getHeaderLabel, getInstituteInfo, getMultipleOwnerInfo, getSelectedCombination, getSingleOwnerInfo, getSortedTaxSlab, getTargetPropertiesDetails, normalizePropertyDetails, renderPlotAndFloorDetails, validateUnitandPlotSize } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
-import { formWizardConstants, PROPERTY_FORM_PURPOSE,propertySubmitAction } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { addOwner, callDraft, configOwnersDetailsFromDraft, getCalculationScreenData, getHeaderLabel, getInstituteInfo, getMultipleOwnerInfo, getSelectedCombination, getSingleOwnerInfo, getSortedTaxSlab, getTargetPropertiesDetails, normalizePropertyDetails, renderPlotAndFloorDetails, validateUnitandPlotSize } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+import { formWizardConstants, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import { convertRawDataToFormConfig } from "egov-ui-kit/utils/PTCommon/propertyToFormTransformer";
 import Label from "egov-ui-kit/utils/translationNode";
 import { get, isEqual, range, set } from "lodash";
@@ -328,7 +327,7 @@ class FormWizard extends Component {
         addOwner(true, OwnerInformation, this);
       }
 
-      const purpose = getQueryValue(search, "purpose") || PROPERTY_FORM_PURPOSE.DEFAULT;
+      const purpose = getPurpose();
 
 
       const financialYearFromQuery = getFinancialYearFromQuery();
@@ -720,7 +719,7 @@ class FormWizard extends Component {
     );
     // Create/Update property call, action will be either create or update
 
-      propertySubmitAction(properties,action,this.props);
+    propertySubmitAction(properties, action, this.props);
 
   };
 
@@ -1400,7 +1399,7 @@ class FormWizard extends Component {
   getHeader(selected, search, PTUID) {
     const propertyId = getQueryValue(search, "propertyId") || PTUID;
     const assessmentYear = getQueryValue(search, "FY");
-    const purpose = getQueryValue(search, "purpose") || PROPERTY_FORM_PURPOSE.DEFAULT;
+    const purpose = getPurpose();
     let headerObj = {};
     headerObj.header = 'PT_PROPERTY_INFORMATION';
     headerObj.headerValue = '';

@@ -1,89 +1,40 @@
-import React, { Component } from "react";
 import { Card } from "components";
-import WizardComponent from "./components/WizardComponent";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import {
-  deleteForm,
-  updateForms,
-  handleFieldChange
-} from "egov-ui-kit/redux/form/actions";
-import store from "ui-redux/store";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import PTHeader from "egov-ui-kit/common/common/PTHeader";
-import Label from "egov-ui-kit/utils/translationNode";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-import {
-  UsageInformationHOC,
-  PropertyAddressHOC,
-  OwnershipTypeHOC,
-  OwnerInfoHOC,
-  InstitutionHOC,
-  OwnerInformation,
-  InstitutionAuthorityHOC
-} from "./components/Forms";
-import ReviewForm from "./components/ReviewForm";
-import FloorsDetails from "./components/Forms/FloorsDetails";
-import PlotDetails from "./components/Forms/PlotDetails";
-import MultipleOwnerInfoHOC from "./components/Forms/MultipleOwnerInfo";
-import { connect } from "react-redux";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
-import { validateForm } from "egov-ui-kit/redux/form/utils";
-import { displayFormErrors } from "egov-ui-kit/redux/form/actions";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
-import {
-  getQueryValue,
-  getFinancialYearFromQuery,
-  getEstimateFromBill
-} from "egov-ui-kit/utils/PTCommon";
-import { get, set, isEqual } from "lodash";
-import { fetchFromLocalStorage, getTranslatedLabel, isDocumentValid } from "egov-ui-kit/utils/commons";
-import range from "lodash/range";
-import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
-import {
-  fetchGeneralMDMSData,
-  generalMDMSFetchSuccess,
-  updatePrepareFormDataFromDraft
-} from "egov-ui-kit/redux/common/actions";
-import PaymentDetails from "./components/PaymentDetails";
-import { getDocumentTypes } from "./utils/mdmsCalls";
-import { convertRawDataToFormConfig } from "egov-ui-kit/utils/PTCommon/propertyToFormTransformer";
-import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
-import "./index.css";
-import {
-  callDraft,
-  addOwner,
-  configOwnersDetailsFromDraft,
-  getTargetPropertiesDetails,
-  getSelectedCombination,
-  getSingleOwnerInfo,
-  getMultipleOwnerInfo,
-  getInstituteInfo,
-  getCalculationScreenData,
-  getHeaderLabel,
-  validateUnitandPlotSize,
-  normalizePropertyDetails,
-  getImportantDates,
-  renderPlotAndFloorDetails,
-  removeAdhocIfDifferentFY,
-  getBusinessServiceNextAction,
-  getSortedTaxSlab
-} from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
-import sortBy from "lodash/sortBy";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
-import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
-import { removeForm } from "egov-ui-kit/redux/form/actions";
-import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
-import cloneDeep from "lodash/cloneDeep";
-import { formWizardConstants, PROPERTY_FORM_PURPOSE,propertySubmitAction } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { fetchGeneralMDMSData, generalMDMSFetchSuccess, hideSpinner, prepareFormData as prepareFormDataAction, showSpinner, toggleSpinner, updatePrepareFormDataFromDraft } from "egov-ui-kit/redux/common/actions";
+import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms } from "egov-ui-kit/redux/form/actions";
+import { validateForm } from "egov-ui-kit/redux/form/utils";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { fetchFromLocalStorage, isDocumentValid } from "egov-ui-kit/utils/commons";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getEstimateFromBill, getFinancialYearFromQuery, getQueryValue, resetFormWizard } from "egov-ui-kit/utils/PTCommon";
+import { addOwner, callDraft, configOwnersDetailsFromDraft, getCalculationScreenData, getHeaderLabel, getImportantDates, getInstituteInfo, getMultipleOwnerInfo, getSelectedCombination, getSingleOwnerInfo, getSortedTaxSlab, getTargetPropertiesDetails, normalizePropertyDetails, removeAdhocIfDifferentFY, renderPlotAndFloorDetails, validateUnitandPlotSize } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+import { formWizardConstants, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { convertRawDataToFormConfig } from "egov-ui-kit/utils/PTCommon/propertyToFormTransformer";
+import Label from "egov-ui-kit/utils/translationNode";
+import { get, isEqual, set } from "lodash";
+import range from "lodash/range";
+import sortBy from "lodash/sortBy";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
+import store from "ui-redux/store";
+import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC } from "./components/Forms";
+import FloorsDetails from "./components/Forms/FloorsDetails";
+import MultipleOwnerInfoHOC from "./components/Forms/MultipleOwnerInfo";
+import PlotDetails from "./components/Forms/PlotDetails";
+import PaymentDetails from "./components/PaymentDetails";
+import ReviewForm from "./components/ReviewForm";
+import WizardComponent from "./components/WizardComponent";
+import "./index.css";
+import { getDocumentTypes } from "./utils/mdmsCalls";
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -337,13 +288,13 @@ class FormWizard extends Component {
     showSpinner();
     const { selected } = this.state;
     let { resetForm } = this;
-    
-    let isAssesment = getQueryValue(search, "purpose")=='assess';
-    let isReassesment = getQueryValue(search, "purpose")=='reassess';
 
-    const isReasses= getQueryValue(search, "purpose")=='reassess';
+    let isAssesment = getQueryValue(search, "purpose") == 'assess';
+    let isReassesment = getQueryValue(search, "purpose") == 'reassess';
+
+    const isReasses = getQueryValue(search, "purpose") == 'reassess';
     const propertyId = getQueryValue(search, "propertyId");
-   
+
     const tenantId = getQueryValue(search, "tenantId");
     const draftUuid = getQueryValue(search, "uuid");
     const assessmentId =
@@ -398,15 +349,15 @@ class FormWizard extends Component {
     if (!!documentTypeMdms) fetchMDMDDocumentTypeSuccess(documentTypeMdms);
 
     const financialYearFromQuery = getFinancialYearFromQuery();
-    const purpose = getQueryValue(search, "purpose") || PROPERTY_FORM_PURPOSE.DEFAULT;
+    const purpose = getPurpose();
 
-      this.setState({
-        financialYearFromQuery, purpose,
-        isAssesment: purpose == PROPERTY_FORM_PURPOSE.ASSESS,
-        isReassesment: purpose == PROPERTY_FORM_PURPOSE.REASSESS,
-        isCreate: purpose == PROPERTY_FORM_PURPOSE.CREATE,
-        isUpdate: purpose == PROPERTY_FORM_PURPOSE.UPDATE
-      });
+    this.setState({
+      financialYearFromQuery, purpose,
+      isAssesment: purpose == PROPERTY_FORM_PURPOSE.ASSESS,
+      isReassesment: purpose == PROPERTY_FORM_PURPOSE.REASSESS,
+      isCreate: purpose == PROPERTY_FORM_PURPOSE.CREATE,
+      isUpdate: purpose == PROPERTY_FORM_PURPOSE.UPDATE
+    });
 
 
     const titleObject = isReasses
@@ -642,12 +593,12 @@ class FormWizard extends Component {
     }
     return buttonLabel;
   }
-  
+
 
   getMessageHeader() {
     let { search } = this.props.location;
-    let isAssesment = getQueryValue(search, "purpose")=='assess';
-    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+    let isAssesment = getQueryValue(search, "purpose") == 'assess';
+    let isReassesment = getQueryValue(search, "purpose") == 'reassess';
     let buttonLabel = "PT_PROPERTY_ASSESS_SUCCESS";
     isAssesment ? buttonLabel = 'PT_PROPERTY_ASSESS_SUCCESS' : (isReassesment ? buttonLabel = "PT_PROPERTY_REASSESS_SUCCESS" : buttonLabel = "PT_PROPERTY_ADD_SUCCESS");
     return buttonLabel;
@@ -655,8 +606,8 @@ class FormWizard extends Component {
   getMessage() {
     const { location = {} } = this.props;
     let { search = '' } = location;
-    let isAssesment = getQueryValue(search, "purpose")=='assess';
-    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+    let isAssesment = getQueryValue(search, "purpose") == 'assess';
+    let isReassesment = getQueryValue(search, "purpose") == 'reassess';
     let buttonLabel = "PT_PROPERTY_ASSESS_NOTIFICATION";
     isAssesment ? buttonLabel = 'PT_PROPERTY_ASSESS_NOTIFICATION' : (isReassesment ? buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION" : buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION");
     return buttonLabel;
@@ -664,7 +615,7 @@ class FormWizard extends Component {
   getHeader(selected, search, PTUID) {
     const propertyId = getQueryValue(search, "propertyId") || PTUID;
     const assessmentYear = getQueryValue(search, "FY");
-    const purpose = getQueryValue(search, "purpose") || PROPERTY_FORM_PURPOSE.DEFAULT;
+    const purpose = getPurpose();
     let headerObj = {};
     headerObj.header = 'PT_PROPERTY_INFORMATION';
     headerObj.headerValue = '';
@@ -961,9 +912,9 @@ class FormWizard extends Component {
         let { assessedPropertyDetails: asd = {} } = this.state;
         const { Properties: pts = [] } = asd;
         let { search: search1 } = this.props.location;
-        let isAssesment1 = getQueryValue(search1, "purpose")=='assess';
-        let isReassesment = getQueryValue(search1, "purpose")=='reassess';
-   
+        let isAssesment1 = getQueryValue(search1, "purpose") == 'assess';
+        let isReassesment = getQueryValue(search1, "purpose") == 'reassess';
+
         let propertyId1 = '';
         let tenantId1 = '';
         for (let pty of pts) {
@@ -1269,10 +1220,10 @@ class FormWizard extends Component {
 
   getEstimates = async () => {
     let { search } = this.props.location;
-    let isAssesment = getQueryValue(search, "purpose")=='assess';
-    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+    let isAssesment = getQueryValue(search, "purpose") == 'assess';
+    let isReassesment = getQueryValue(search, "purpose") == 'reassess';
 
- 
+
     if (isAssesment || isReassesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
@@ -1307,8 +1258,8 @@ class FormWizard extends Component {
   estimate = async () => {
     let { hideSpinner, location, showSpinner } = this.props;
     let { search } = location;
-    let isAssesment = getQueryValue(search, "purpose")=='assess';
-    let isReassesment = getQueryValue(search, "purpose")=='reassess';
+    let isAssesment = getQueryValue(search, "purpose") == 'assess';
+    let isReassesment = getQueryValue(search, "purpose") == 'reassess';
 
     if (isAssesment || isReassesment) {
       let prepareFormData = { ...this.props.prepareFormData };
@@ -1495,10 +1446,10 @@ class FormWizard extends Component {
       this
     );
     // Create/Update property call, action will be either create or update
-    propertySubmitAction(properties,action,this.props);
+    propertySubmitAction(properties, action, this.props);
   };
 
- 
+
 
   pay = async () => {
     const { callPGService } = this;

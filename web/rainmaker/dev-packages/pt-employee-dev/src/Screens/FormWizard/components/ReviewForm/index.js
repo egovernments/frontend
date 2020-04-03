@@ -6,8 +6,7 @@ import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerI
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
 import { convertToArray } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import formHoc from "egov-ui-kit/hocs/form";
-import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
-import { formWizardConstants } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getPurpose } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -83,7 +82,7 @@ class ReviewForm extends Component {
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
     const { generalMDMSDataById = {}, location = {} } = this.props;
     const { search } = location;
-    const purpose = getQueryValue(search, "purpose");
+    const purpose = getPurpose();
 
 
     return (

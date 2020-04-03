@@ -7,8 +7,8 @@ import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/compone
 import { convertToArray } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
-import { findCorrectDateObj, findCorrectDateObjPenaltyIntrest, getQueryValue } from "egov-ui-kit/utils/PTCommon";
-import { formWizardConstants } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { findCorrectDateObj, findCorrectDateObjPenaltyIntrest } from "egov-ui-kit/utils/PTCommon";
+import { formWizardConstants, getPurpose } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -181,7 +181,7 @@ class ReviewForm extends Component {
 
   onEditButtonClick = index => {
 
-    const { onTabClick,prepareFinalObject} = this.props;
+    const { onTabClick, prepareFinalObject } = this.props;
     prepareFinalObject("propertiesEdited", true);
     onTabClick(index);
   };
@@ -223,7 +223,7 @@ class ReviewForm extends Component {
 
     const { search } = location;
 
-    const purpose = getQueryValue(search, "purpose");
+    const purpose = getPurpose();
 
     return (
       <div>
