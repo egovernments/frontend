@@ -594,7 +594,7 @@ export const propertyLocationDetails = getCommonCard(
 
                 let tenantid = getTenantId();
 
-               if(tenantid === "pb")
+         /*       if(tenantid === "pb")
                 {
                   console.log("pb log");
                 let city_value = get(
@@ -612,7 +612,7 @@ export const propertyLocationDetails = getCommonCard(
 
                 console.log('finalvalue', finalvalue);
 
-               /*  console.log("789546221525552452",getTenantId()); */
+           console.log("789546221525552452",getTenantId());
 
                 dispatch(
                   prepareFinalObject(
@@ -624,14 +624,14 @@ export const propertyLocationDetails = getCommonCard(
                else
                {
                 console.log("normal tenant log");
-
+                */
                 dispatch(
                   prepareFinalObject(
                     "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
                     getTenantId()
                   )
                 );
-               }
+               
 
 
                 dispatch(
