@@ -44,11 +44,8 @@ class PaymentRedirect extends Component {
           {
             FireNOCs: get(response, "FireNOCs", [])
           }
-        );
-        
-        debugger;
+        );      
 
-        console.log(Transaction[0]);
 
         let transactionId = get(pgUpdateResponse, "Transaction[0].txnId");
 
