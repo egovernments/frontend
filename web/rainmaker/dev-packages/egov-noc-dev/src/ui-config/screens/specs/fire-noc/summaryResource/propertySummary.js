@@ -113,14 +113,20 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "District Name",
         labelKey: "NOC_DISTRICT_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+       callBack: value => {
+        return `TL_${value}`;
+      }
+     }
     ),
     subDistrict: getLabelWithValue(
       {
         labelName: "sub District Name",
         labelKey: "NOC_SUB_DISTRICT_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+          
+     }
     ), 
     propertyId: getLabelWithValue(
       {
@@ -137,9 +143,12 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       {
         jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-        localePrefix: {
+        /* localePrefix: {
           moduleName: "TENANT",
           masterName: "TENANTS"
+        }, */
+        callBack: value => {
+          return `TL_${value}`;
         }
       }
     ),
