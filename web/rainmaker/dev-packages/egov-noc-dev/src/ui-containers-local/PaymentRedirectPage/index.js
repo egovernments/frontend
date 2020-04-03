@@ -18,6 +18,9 @@ class PaymentRedirect extends Component {
         [],
         {}
       );
+      debugger;
+      console.log("pg service responce", pgUpdateResponse);
+
       let consumerCode = get(pgUpdateResponse, "Transaction[0].consumerCode");
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
@@ -42,10 +45,18 @@ class PaymentRedirect extends Component {
             FireNOCs: get(response, "FireNOCs", [])
           }
         );
+        
+        debugger;
+
+        console.log(Transaction[0]);
 
         let transactionId = get(pgUpdateResponse, "Transaction[0].txnId");
+
+        let receiptNumber = get(pgUpdateResponse, "Transaction[0].receipt");
+
+
         this.props.setRoute(
-          `/fire-noc/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&tenantId=${tenantId}&secondNumber=${transactionId}`
+          `/fire-noc/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
         );
       }
     } catch (e) {
