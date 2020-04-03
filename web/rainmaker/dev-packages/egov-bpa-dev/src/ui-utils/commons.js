@@ -1012,10 +1012,9 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
-  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared"); 
-  let isDeclaration = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclaration");  
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
    
-  if(isDeclared && isDeclaration) {
+  if(isDeclared) {
     let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");

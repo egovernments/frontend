@@ -658,7 +658,7 @@ const screenConfig = {
                     labelName: "Select Licensee Type",
                     labelKey: "BPA_SELECT_LICENSE_TYPE_LABEL"
                   },
-                  jsonPath: "BPA.licenceType",
+                  jsonPath: "BPA.tradeType",
                   sourceJsonPath: "applyScreenMdmsData.licenceTypes",
                   required: true,
                   gridDefination: {
