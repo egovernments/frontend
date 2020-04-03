@@ -397,7 +397,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
 const selectLicenceType = (state, dispatch) => {
   let value = get(
     state.screenConfiguration.preparedFinalObject , 
-    "BPA.licenceType", ""
+    "BPA.tradeType", ""
     );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject , 
