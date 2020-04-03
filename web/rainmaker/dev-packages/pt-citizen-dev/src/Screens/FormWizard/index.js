@@ -1401,8 +1401,6 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId") || PTUID;
     const assessmentYear = getQueryValue(search, "FY");
     const purpose = getQueryValue(search, "purpose") || PROPERTY_FORM_PURPOSE.DEFAULT;
-
-
     let headerObj = {};
     headerObj.header = 'PT_PROPERTY_INFORMATION';
     headerObj.headerValue = '';
@@ -1413,7 +1411,6 @@ class FormWizard extends Component {
       case 2:
       case 3:
       case 4:
-
         headerObj.subHeaderValue = formWizardConstants[purpose].isSubHeader ? propertyId : '';
         headerObj.headerValue = formWizardConstants[purpose].isFinancialYear ? `(${assessmentYear})` : '';
         headerObj.header = formWizardConstants[purpose].header;

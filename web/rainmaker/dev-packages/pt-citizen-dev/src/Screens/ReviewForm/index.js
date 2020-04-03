@@ -181,8 +181,8 @@ class ReviewForm extends Component {
 
   onEditButtonClick = index => {
 
-    const { onTabClick, location = {} } = this.props;
-    this.props.prepareFinalObject("propertiesEdited", true);
+    const { onTabClick,prepareFinalObject} = this.props;
+    prepareFinalObject("propertiesEdited", true);
     onTabClick(index);
   };
 
