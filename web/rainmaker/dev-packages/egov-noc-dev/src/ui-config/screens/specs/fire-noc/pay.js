@@ -113,7 +113,7 @@ const screenConfig = {
               //   labelName: ""
               // }),
               estimateDetails,
-              addPenaltyRebateButton: {
+          /*      addPenaltyRebateButton: {
                 componentPath: "Button",
                 props: {
                   color: "primary",
@@ -129,7 +129,7 @@ const screenConfig = {
                   action: "condition",
                   callBack: (state, dispatch) => showHideAdhocPopup(state, dispatch, "pay")
                 }
-              },
+              },  */
               // viewBreakupButton: getDialogButton(
               //   "VIEW BREAKUP",
               //   "TL_PAYMENT_VIEW_BREAKUP",
