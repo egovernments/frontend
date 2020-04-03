@@ -232,7 +232,7 @@ export const formWizardConstants = {
   },
   [PROPERTY_FORM_PURPOSE.REASSESS]: {
     header: 'PT_REASSESS_PROPERTY',
-    parentButton: 'PT_ASSESS',
+    parentButton: 'PT_REASSESS',
     isSubHeader: true,
     isFinancialYear: true,
     buttonLabel: 'PT_REASSESS_PROPERTY_BUTTON',

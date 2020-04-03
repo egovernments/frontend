@@ -28,13 +28,13 @@ const  filterDropdownFunction = (rowObject, preparedFinalObject, filterConditon)
       let returnValue=false;
       const objectArray = get(preparedFinalObject, filterConditon.parentArrayJsonPath, []);
       objectArray.map(object => {
-        if (rowObject.parentValue.includes(object[filterConditon.parentJsonpath])) {
+        if (rowObject.parentValue.includes(get(object,filterConditon.parentJsonpath,null))) {
           returnValue= true;
         }
       })
       return returnValue;
     }
-    const objectValue = get(preparedFinalObject, filterConditon.parentJsonpath, '');
+    const objectValue = get(preparedFinalObject, filterConditon.parentJsonpath, null);
     if (rowObject.parentValue.includes(objectValue)) {
       return true;
     } else {
@@ -50,13 +50,13 @@ const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
       let returnValue=false;
       const objectArray = get(preparedFinalObject, filterConditon.jsonPath, []);
       objectArray.map(object => {
-        if (!filterConditon.filterValue.includes(object[filterConditon.arrayAttribute])) {
+        if (!filterConditon.filterValue.includes(get(object,filterConditon.arrayAttribute,null))) {
           returnValue= true;
         }
       })
       return returnValue;
     }
-    const objectValue = get(preparedFinalObject, filterConditon.jsonPath, '');
+    const objectValue = get(preparedFinalObject, filterConditon.jsonPath, null);
     if (!filterConditon.filterValue.includes(objectValue)) {
       return true;
     } else {
