@@ -123,7 +123,7 @@ class RadioButtonsGroup extends React.Component {
           </RadioGroup>
         </FormControl>
       </div>
-    );
+    ); 
   }
 }
 
