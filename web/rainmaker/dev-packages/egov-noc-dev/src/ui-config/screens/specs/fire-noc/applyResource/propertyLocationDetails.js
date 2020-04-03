@@ -592,7 +592,7 @@ export const propertyLocationDetails = getCommonCard(
               {
                 firesation.push({code:fireStations[i].code});
 
-                let tenantid = getTenantId();
+                let tenantid = getTenantId(); 
 
          /*       if(tenantid === "pb")
                 {
