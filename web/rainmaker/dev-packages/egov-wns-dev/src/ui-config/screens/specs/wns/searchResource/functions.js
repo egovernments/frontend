@@ -232,7 +232,7 @@ const showApplicationResults = (connections, dispatch) => {
     [getTextToLocalMapping("Application No")]: item.applicationNo,
     [getTextToLocalMapping("Application Type")]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
     [getTextToLocalMapping("Owner Name")]: item.name,
-    [getTextToLocalMapping("Application Status")]: item.applicationStatus,
+    [getTextToLocalMapping("Application Status")]: item.applicationStatus.split("_").join(" "),
     [getTextToLocalMapping("Address")]: item.address,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
     ["service"]: item.service,
