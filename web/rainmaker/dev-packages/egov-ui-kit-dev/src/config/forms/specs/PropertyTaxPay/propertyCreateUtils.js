@@ -1,8 +1,7 @@
-// import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import { getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+import { getFileUrl, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import get from "lodash/get";
 
 export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
   properties[0] = {

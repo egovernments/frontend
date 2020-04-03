@@ -4,7 +4,9 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
+import { httpRequest } from "egov-ui-kit/utils/api";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import { formWizardConstants, getPurpose, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import React from "react";
@@ -14,7 +16,6 @@ import { generatePdfAndDownload } from "../../../utils/PTCommon";
 import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import "./index.css";
-import { httpRequest } from "egov-ui-kit/utils/api";
 
 class PTAcknowledgement extends React.Component {
   state = {
@@ -106,7 +107,7 @@ class PTAcknowledgement extends React.Component {
   }
   render() {
     const { acknowledgeType = "success", messageHeader = "", message = "", receiptHeader = "PT_APPLICATION_NO_LABEL", receiptNo = "" } = this.props;
-    const purpose = getQueryArg(window.location.href, "purpose");
+    const purpose = getPurpose();
     const status = getQueryArg(window.location.href, "status");
     const financialYear = getQueryArg(window.location.href, "FY");
     const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -120,7 +121,7 @@ class PTAcknowledgement extends React.Component {
     ) || '';
     let downloadMenu = [];
     let printMenu = [];
-    if ((purpose == 'assessment' || purpose == 'reassessment') && !this.state.fetchBill && !this.state.showPay && !this.state.fetchingBill) {
+    if ((purpose == PROPERTY_FORM_PURPOSE.ASSESS || purpose == PROPERTY_FORM_PURPOSE.REASSESS) && !this.state.fetchBill && !this.state.showPay && !this.state.fetchingBill) {
       this.getFetchBillResponse(propertyId, tenantId)
     }
     let applicationDownloadObject = {
@@ -168,12 +169,12 @@ class PTAcknowledgement extends React.Component {
     let printButton = { menu: [], onClick: "", visibility: false };
     let statusIcon = {};
     let ptIDLabel = {};
-    if (purpose === "apply" && status === "success") {
+    if (purpose === PROPERTY_FORM_PURPOSE.CREATE && status === "success") {
 
       ptHeader = {
         // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "New Property",
-        labelKey: "PT_NEW_PROPERTY",
+        labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
         subheader: 'propertyId',
         subHeaderValue: 'propertyId'
@@ -200,12 +201,12 @@ class PTAcknowledgement extends React.Component {
       Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
-    } else if (purpose === "update" && status === "success") {
+    } else if (purpose === PROPERTY_FORM_PURPOSE.UPDATE && status === "success") {
 
       ptHeader = {
         // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "New Property",
-        labelKey: "PT_UPDATE_PROPERTY",
+        labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
         subheader: 'propertyId',
         subHeaderValue: 'propertyId'
@@ -233,11 +234,11 @@ class PTAcknowledgement extends React.Component {
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
     }
-    else if (purpose === "apply" && status === "failure") {
+    else if (purpose === PROPERTY_FORM_PURPOSE.CREATE && status === "failure") {
       ptHeader = {
         // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "New Property",
-        labelKey: "PT_NEW_PROPERTY",
+        labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear]
       };
       ptMsg = {
@@ -262,12 +263,41 @@ class PTAcknowledgement extends React.Component {
       Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
       // downloadButton={menu:downloadMenu,visibility:false} ;
       // printButton={menu:printMenu,visibility:false} ;
+    } else if (purpose === PROPERTY_FORM_PURPOSE.UPDATE && status === "failure") {
+      ptHeader = {
+        // labelName: `Application for New Trade License (${financialYearText})`,
+        labelName: "New Property",
+        labelKey: formWizardConstants[purpose].header,
+        dynamicArray: [financialYear]
+      };
+      ptMsg = {
+        labelName: "New Property Application Submission Failed",
+        labelKey: "PT_UPDATE_PROPERTY_FAILURE_MSG",
+      };
+      ptIDLabel = {
+        labelName: "Poperty ID",
+        labelKey: "PT_PROPERTY_ID",
+        visibility: false
+      };
+      statusIcon = {
+        icon: "close",
+        iconColor: "#E54D42",
+      };
+      ptSubMsg = {
+        labelName: "A notification regarding new property application has been sent to property owner at registered Mobile No.",
+        labelKey: "PT_UPDATE_PROPERTY_FAILURE_SUB_MSG",
+      };
+
+      Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
+      Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
+      // downloadButton={menu:downloadMenu,visibility:false} ;
+      // printButton={menu:printMenu,visibility:false} ;
     }
-    else if (purpose === "assessment" && status === "success") {
+    else if (purpose === PROPERTY_FORM_PURPOSE.ASSESS && status === "success") {
       ptHeader = {
         // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "Property Assessment",
-        labelKey: "PT_PROPERTY_ASSESSMENT",
+        labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear]
       };
       ptIDLabel = {
@@ -292,11 +322,11 @@ class PTAcknowledgement extends React.Component {
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
     }
-    else if (purpose === "assessment" && status === "failure") {
+    else if (purpose === PROPERTY_FORM_PURPOSE.ASSESS && status === "failure") {
       ptHeader = {
         // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "Property Assessment",
-        labelKey: "PT_PROPERTY_ASSESSMENT",
+        labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear]
       };
       ptIDLabel = {
@@ -321,11 +351,11 @@ class PTAcknowledgement extends React.Component {
       // downloadButton={menu:downloadMenu,visibility:false} ;
       // printButton={menu:printMenu,visibility:false} ;
     }
-    else if (purpose === "reassessment" && status === "success") {
+    else if (purpose === PROPERTY_FORM_PURPOSE.REASSESS && status === "success") {
       ptHeader = {
         // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "Re-Assess Property",
-        labelKey: "PT_PROPERTY_RE_ASSESSMENT",
+        labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear]
       };
       ptIDLabel = {
@@ -350,11 +380,11 @@ class PTAcknowledgement extends React.Component {
       // downloadButton={menu:downloadMenu,visibility:false} ;
       // printButton={menu:printMenu,visibility:false} ;
     }
-    else if (purpose === "reassessment" && status === "failure") {
+    else if (purpose === PROPERTY_FORM_PURPOSE.REASSESS && status === "failure") {
       ptHeader = {
         // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "Re-Assess Property",
-        labelKey: "PT_PROPERTY_RE_ASSESSMENT",
+        labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear]
       };
       ptIDLabel = {
@@ -476,7 +506,7 @@ class PTAcknowledgement extends React.Component {
                       id="material-ui-paragraph"
                       style={{ fontSize: "24px", fontWeight: "500" }}
                     >
-                      {ptIDLabel.visibility&& <span>
+                      {ptIDLabel.visibility && <span>
                         <Label label={secondNumber} fontSize="24px" color="rgba(0, 0, 0, 0.87)" fontWeight="500" />
                       </span>}
                     </h1>
