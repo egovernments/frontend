@@ -14,7 +14,6 @@ const getCommonApplyFooter = children => {
     children
   };
 };
-
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
     componentPath: "Button",
@@ -35,15 +34,20 @@ export const citizenFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "page_change",
-      path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+      path:`/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
+      // path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
         // process.env.REACT_APP_SELF_RUNNING === "true"
         //   ? `/egov-ui-framework/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
         //   : `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+
     },
-    roleDefination: {
+
+     roleDefination: {
       rolePath: "user-info.roles",
-      action: "PAY"
-    },
+      action: "PAY",
+      moduleName:"FIRENOC"
+    }, 
+
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
