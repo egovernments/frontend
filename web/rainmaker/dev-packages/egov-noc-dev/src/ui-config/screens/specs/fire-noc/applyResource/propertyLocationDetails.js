@@ -732,7 +732,7 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
           },
           sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.tenantId",
+          jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
           required: true,
           visible: false,
           props: {
@@ -745,7 +745,7 @@ export const propertyLocationDetails = getCommonCard(
           //Below only runs for citizen - not required here in employee
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.propertyDetails.address.tenantId",
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
               action.value
             )
           );
