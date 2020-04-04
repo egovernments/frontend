@@ -116,7 +116,7 @@ class SingleApplication extends React.Component {
                       <Grid item xs={6}>
                         <Label
                           labelKey="FIRE_NOC_MY_APPLICATION_TYPE"
-                          fontSize={12}
+                          fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
