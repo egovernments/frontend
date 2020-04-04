@@ -104,7 +104,7 @@ class SingleApplication extends React.Component {
       <div className="application-card">
         {searchResults &&
           searchResults.map(item => {
-            console.log("New search results")
+            //console.log("New search results")
             return (
               <Card className={classes.card}>
                 <CardContent>
@@ -112,14 +112,15 @@ class SingleApplication extends React.Component {
                         const url = this.onCardClick(item);
                         // setRoute(url);
                         }}>
-                    <Grid container style={{ marginBottom: 12 }}>
+                   <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
-                          label={"FIRE_NOC_MY_APPLICATION_TYPE"}
-                          fontSize={14}
+                          labelKey="FIRE_NOC_MY_APPLICATION_TYPE"
+                          fontSize={12}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
+                      
                       <Grid item xs={6}>
                         <Label
                           labelKey={item.fireNOCDetails.fireNOCType}
@@ -127,7 +128,7 @@ class SingleApplication extends React.Component {
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
                       </Grid>
-                    </Grid>
+                    </Grid> 
                     <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
