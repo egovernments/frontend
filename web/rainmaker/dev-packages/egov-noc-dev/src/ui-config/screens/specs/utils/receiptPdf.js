@@ -436,7 +436,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, true, false, false]
             },
             {
-              text: "District",
+              text: "District Name",
               border: [false, true, false, false]
             },
             {
