@@ -225,7 +225,10 @@ export const NOCApplication = getCommonCard({
         labelName: "City",
         labelKey: "NOC_PROPERTY_CITY_LABEL"
       },
-
+      localePrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS"
+      },
       placeholder: {
         labelName: "Select City",
         labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
@@ -238,7 +241,7 @@ export const NOCApplication = getCommonCard({
         sm: 4
       }
     }),
-
+    
 
 
 

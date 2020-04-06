@@ -721,6 +721,7 @@ export const propertyLocationDetails = getCommonCard(
       
       propertyCity: {
         ...getSelectField({
+          componentPath: "AutosuggestContainer",
           label: { labelName: "City", labelKey: "NOC_PROPERTY_CITY_LABEL" },
           localePrefix: {
             moduleName: "TENANT",
@@ -737,6 +738,9 @@ export const propertyLocationDetails = getCommonCard(
           visible: false,
           props: {
             className:"applicant-details-error",
+            menuPortalTarget:document.querySelector('body'),
+            optionLabel: "name",
+            optionValue: "code",
             required: true
             // disabled: true
           }
