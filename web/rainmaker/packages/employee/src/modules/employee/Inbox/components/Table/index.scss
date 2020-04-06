@@ -104,6 +104,7 @@
   margin: 5px;
   align-items: center;
   justify-content: center;
+  margin-left: 15px;
   /* .rainmaker-card {
       -webkit-box-shadow: none !important;
       box-shadow: none !important;
@@ -124,7 +125,7 @@
 
 .inbox-module-container {
   display: flex;
-  padding: 0px 15px;
+  padding: 0px 26px;
 }
 
 .inbox-taskboard-subtext {
@@ -176,6 +177,7 @@
     display: none !important;
   }
   .inbox-card-top {
+    margin-left: 15px;
     height: 148px;
   }
   .inbox-card-top-label {
@@ -185,10 +187,15 @@
   }
   .inbox-worklist-card {
     font-size: 3vw;
+    ;
   }
   .inbox-filter {
     position: relative;
     padding: 10px;
     top: 0px;
+  }
+
+  .inbox-module-card {
+    max-width: 332px;
   }
 }
