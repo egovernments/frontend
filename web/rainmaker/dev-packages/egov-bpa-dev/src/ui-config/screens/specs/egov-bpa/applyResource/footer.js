@@ -182,12 +182,14 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
 }
 
 const callBackForNext = async (state, dispatch) => {
+  //debugger;
   window.scrollTo(0,0);
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
     0
   );
+  
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -242,32 +244,42 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
+    
     let isBuildingPlanScrutinyDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.buildingPlanScrutinyDetails.children.cardContent.children.buildingPlanScrutinyDetailsContainer.children",
       state,
       dispatch
     );
-    let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
+   /*  let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.applicantTypeSelection.children",
       state, 
       dispatch
-    );
-    let isDemolitiondetailsCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.demolitiondetails.children.cardContent.children.demolitionDetailsContainer.children",
-      state,
-      dispatch
-    );
+    ); */
+   
     let isProposedBuildingDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
       state,
       dispatch
     );
 
+    let isDemolitiondetailsCardValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.demolitiondetails.children.cardContent.children.demolitionDetailsContainer.children",
+      state,
+      dispatch
+    );
+
+    let isabstractProposedBuildingDetailsCardValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.abstractProposedBuildingDetails.children.cardContent.children.proposedContainer.children.totalBuildUpAreaDetailsContainer.children",
+      state,
+      dispatch
+    );
+
     if (
-      // !isBuildingPlanScrutinyDetailsCardValid 
-      !isBlockWiseOccupancyAndUsageDetailsCardValid ||
-      !isDemolitiondetailsCardValid ||
-      !isProposedBuildingDetailsCardValid
+      !isBuildingPlanScrutinyDetailsCardValid || 
+      //!isBlockWiseOccupancyAndUsageDetailsCardValid ||
+      !isProposedBuildingDetailsCardValid ||
+      !isDemolitiondetailsCardValid ||      
+      !isabstractProposedBuildingDetailsCardValid
     ) {
       isFormValid = false;
       hasFieldToaster = true;
