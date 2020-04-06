@@ -269,7 +269,7 @@ export const prepareEditFlow = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
+        "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocSelect",
         "props.value",
         nocType
       )
