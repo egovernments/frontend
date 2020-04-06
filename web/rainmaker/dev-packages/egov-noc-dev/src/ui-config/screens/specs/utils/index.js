@@ -695,6 +695,45 @@ export const resetFields = (state, dispatch) => {
   );
 };
 
+	
+export const getMdmsDataTenant = async (action, state, dispatch) => {
+  let tenantId = getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let tenantData = null;
+    tenantData = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+      
+    );
+let arr = tenantData.MdmsRes.tenant.tenants
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.searchScreen.tenantData",arr
+      )
+    ); 
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getRequiredDocData = async (action, state, dispatch) => {
 /*   let tenantId =
     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
@@ -720,9 +759,11 @@ export const getRequiredDocData = async (action, state, dispatch) => {
     );
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes)); */
 
+    let tenantId = process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+
     let mdmsBody = {
       MdmsCriteria: {
-        tenantId: "pb",
+        tenantId: tenantId,
         moduleDetails: [
           { moduleName: "firenoc", masterDetails: [{ name: "Documents" }] }
         ]

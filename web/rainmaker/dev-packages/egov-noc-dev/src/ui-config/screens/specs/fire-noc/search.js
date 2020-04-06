@@ -4,7 +4,7 @@ import {
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { NOCApplication } from "./searchResource/fireNocApplication";
-import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
+import { showHideAdhocPopup, resetFields, getRequiredDocData,getMdmsDataTenant } from "../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchResults } from "./searchResource/searchResults";
@@ -39,12 +39,20 @@ const pageResetAndChange = (state, dispatch) => {
   // dispatch(setRoute("/tradelicence/apply"));
 };
 
+
+
+
+
+
 const NOCSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+
   //  resetFields(state, dispatch);
     const tenantId = getTenantId();
+
+    const getmyMDMSTenent = getMdmsDataTenant(action, state,dispatch);
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "FIRENOC" }
@@ -61,50 +69,17 @@ const NOCSearchAndResult = {
           code: item.state
         };
       });
+
+
       dispatch(
         prepareFinalObject(
           "applyScreenMdmsData.searchScreen.status",
           status.filter(item => item.code != null)
         )
-      );
+      ); 
+
     }
 
-    const getMdmsData2 = async (action,state, dispatch) => {
-
-      let tenantId = getTenantId();
-
-      let mdmsBody = {
-        MdmsCriteria: {
-          tenantId: tenantId,
-          moduleDetails: [
-            {
-              moduleName: "tenant",
-              masterDetails: [
-                {
-                  name: "tenants"
-                }
-              ]
-            }
-          ]
-        }
-
-      };
-      try {
-        let payload = null;
-        payload = await httpRequest(
-          "post",
-          "/egov-mdms-service/v1/_search",
-          "_search",
-          [],
-          mdmsBody
-          
-        );
-        dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    
-      } catch (e) {
-        console.log(e);
-      }
-    };
 
 
     getRequiredDocData(action, state, dispatch).then(() => {
@@ -119,7 +94,6 @@ const NOCSearchAndResult = {
         getRequiredDocuments(documents)
       );
 
-      getMdmsData2(action,state, dispatch);
 
     }); 
     return action;

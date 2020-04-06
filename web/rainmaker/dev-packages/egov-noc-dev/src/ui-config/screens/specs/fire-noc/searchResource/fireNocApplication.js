@@ -230,7 +230,7 @@ export const NOCApplication = getCommonCard({
         labelName: "Select City",
         labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
       },
-      sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+      sourceJsonPath: "applyScreenMdmsData.searchScreen.tenantData",
       jsonPath: "searchScreen.city",
 
       gridDefination: {
@@ -240,31 +240,6 @@ export const NOCApplication = getCommonCard({
     }),
 
 
-
-    beforeFieldChange: async (action, state, dispatch) => {
-
-
-
-      dispatch(
-        prepareFinalObject(
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-          action.value
-        )
-      );
-       try {
-        let payload = await httpRequest(
-          "post",
-          "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-          "_search",
-          [{ key: "tenantId", value: action.value }],
-          {}
-        );
-        console.log(payload,"payload")
-       }
-       catch (e) {
-        console.log(e);
-      }
-    }
 
 
   }),
