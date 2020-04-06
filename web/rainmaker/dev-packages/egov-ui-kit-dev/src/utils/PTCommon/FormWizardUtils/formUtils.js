@@ -284,7 +284,7 @@ const getAssessmentDetails = async () => {
   }
 }
 
-const assessProperty = async (action, Properties) => {
+const assessProperty = async (action, props) => {
   const purpose = getPurpose()
   let propertyMethodAction = purpose == PROPERTY_FORM_PURPOSE.REASSESS ? "_update" : '_create';
   const propertyId = getQueryArg(
@@ -305,6 +305,19 @@ const assessProperty = async (action, Properties) => {
     "source": "MUNICIPAL_RECORDS",
     "channel": "CFC_COUNTER",
   }
+  const adhocExemptionPenalty = get(props, 'adhocExemptionPenalty', {});
+
+
+  assessment.additionalDetails = {}
+  if (Object.keys(adhocExemptionPenalty).length > 1) {
+    assessment.additionalDetails.adhocPenalty = Number(adhocExemptionPenalty.adhocPenalty);
+    assessment.additionalDetails.adhocPenaltyReason = adhocExemptionPenalty.adhocPenaltyReason == 'Others' ? adhocExemptionPenalty.adhocOtherPenaltyReason : adhocExemptionPenalty.adhocPenaltyReason;
+    assessment.additionalDetails.adhocExemption = Number(adhocExemptionPenalty.adhocExemption);
+    assessment.additionalDetails.adhocExemptionReason = adhocExemptionPenalty.adhocExemptionReason == 'Others' ? adhocExemptionPenalty.adhocOtherExemptionReason : adhocExemptionPenalty.adhocExemptionReason;
+  }
+
+
+
   if (purpose == PROPERTY_FORM_PURPOSE.REASSESS) {
     let assessments = await getAssessmentDetails();
     if (assessments.Assessments.length > 0) {
@@ -420,10 +433,10 @@ export const propertySubmitAction = (Properties, action, props) => {
 
   switch (purpose) {
     case PROPERTY_FORM_PURPOSE.REASSESS:
-      assessProperty("_update");
+      assessProperty("_update", props);
       break;
     case PROPERTY_FORM_PURPOSE.ASSESS:
-      assessProperty("_create");
+      assessProperty("_create", props);
       break;
     case PROPERTY_FORM_PURPOSE.UPDATE:
       createProperty(Properties, '_update', props);
