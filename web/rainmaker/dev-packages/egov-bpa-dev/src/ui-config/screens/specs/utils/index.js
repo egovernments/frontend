@@ -1262,12 +1262,13 @@ export const getCurrentFinancialYear = () => {
   return fiscalYr;
 };
 
-export const validateFields = (
+export const validateFields = (  
   objectJsonPath,
   state,
   dispatch,
   screen = "apply"
 ) => {
+  debugger;
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
@@ -1298,6 +1299,7 @@ export const validateFields = (
       }
     }
   }
+  debugger;
   return isFormValid;
 };
 
@@ -4567,58 +4569,42 @@ const getFloorDetails = (index) => {
   }
 };
 
-/*  export const setProposedBuildingData = async (state, dispatch) => {
-  
+export const setProposedBuildingData = async (state, dispatch, action) => {
+  debugger;
   const response = get(
     state,
     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
     []
   );
-  var tableData=[];
-  if (response && response.length > 0) {
-    debugger;
-    for(var j=0;j<response.length;j++){
-
-      let floors = response[j] && response[j].building && response[j].building.floors;
-    let block = await floors.map((item, index) => (
-      {
-      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
-      [getBpaTextToLocalMapping("Level")]:item.number,     
-      [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
-    }));
-    
-
-     tableData = [...Array(2).fill(block)];
-     //tableData.push(blockfinal);
-     
-    }
-        debugger;
-        console.log(tableData, "=====> setproposedetails")
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.component.props.scheama.children.cardContent.children.proposedBuildingDetailsContainer",
-        "props.data",
-        tableData
-      )
-    );
-    debugger;
-    return tableData;
-  }
-}  */
-
-export const setProposedBuildingData = async (state, dispatch) => {
-  const response = get(
+console.log("myresponse",response)
+    let occupancyType = get(
     state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
     []
   );
-  //var tableData=[];
+  
+  let subOccupancyType = occupancyType.filter(item => {
+   // return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
+    return item.active;
+  }); 
+
+  /* let titleIndex = get(
+    state,
+    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
+    []
+  );
+  console.log("titleIndex",titleIndex);
+  if (titleIndex && titleIndex.length > 0) {
+
+     titleIndex = titleIndex.map((item, index) =>  `Block ${index+1}`); 
+   
+  };  */
+  let tableData=[];
   if (response && response.length > 0) {
-    let tableData = await response.map((item, index) => (
+    for(var j=0;j<response.length;j++){
+      let title=`Block ${j+1}`;
+    let floors = response[j] && response[j].building && response[j].building.floors;
+    let block = await floors.map((item, index) => (
       {
         [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
         [getBpaTextToLocalMapping("Level")]: item.number,
@@ -4627,8 +4613,13 @@ export const setProposedBuildingData = async (state, dispatch) => {
         [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
         [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
       }));
+      tableData.push({blocks:block,suboccupancyData:subOccupancyType,titleData:title} );
+      
+    }; 
+
       //tableData = [...Array(2).fill(block)];
       console.log("tableData",tableData);
+      
    /*  dispatch(
       handleField(
         "apply",
@@ -4636,9 +4627,10 @@ export const setProposedBuildingData = async (state, dispatch) => {
         "props.data",
         tableData
       )
-    ); */
+    ); */      
 
-    dispatch(prepareFinalObject("scrutinyDetails.planDetail.blocks",tableData));
+    dispatch(prepareFinalObject("edcr.blockDetail", tableData));
+  
     return tableData;
   }
 } 
