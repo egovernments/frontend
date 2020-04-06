@@ -830,7 +830,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       {
         style: "tl-head",
         table: {
-          widths: [60, "*"],
+          widths: [60, "*", 90],
           body: [
             [
               {
