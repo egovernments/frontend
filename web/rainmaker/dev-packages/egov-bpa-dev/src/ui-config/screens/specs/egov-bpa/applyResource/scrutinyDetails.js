@@ -267,8 +267,48 @@ export const proposedBuildingDetails = getCommonCard({
                   ),             
                  
            
+              // subOccupancyType: {
+              //   ...getSelectField({
+              //     label: {
+              //       labelName: "Sub Occupancy Type",
+              //       labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+              //     },
+              //     placeholder: {
+              //       labelName: "Select Sub Occupancy Type",
+              //       labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
+              //     },
+              //     jsonPath: "BPA.blocks[0].SubOccupancyType",                  
+              //     sourceJsonPath: "edcr.blockDetail[0].suboccupancyData",
+              //     //jsonPath:"applyScreenMdmsData.BPA.SubOccupancyType",
+              //     localePrefix: {
+              //       moduleName: "BPA",
+              //       masterName: "SUBOCCUPANCYTYPE"
+              //     },
+              //     gridDefination: {
+              //       xs: 12,
+              //       sm: 12,
+              //       md: 6
+              //     },
+              //     required: true,
+              //     props: {
+              //       //className: "applicant-details-error textfield-enterable-selection",
+              //       //data:beforeFieldChange,
+              //       className : "tl-trade-type"
+              //     }
+              //   }),
+                
+              // },
+
               subOccupancyType: {
-                ...getSelectField({
+                uiFramework: "custom-containers-local",
+                moduleName: "egov-bpa",
+                componentPath: "AutosuggestContainer",
+                required: true,
+                props: {
+                  style: {
+                    width: "100%",
+                    cursor: "pointer"
+                  },
                   label: {
                     labelName: "Sub Occupancy Type",
                     labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
@@ -277,26 +317,26 @@ export const proposedBuildingDetails = getCommonCard({
                     labelName: "Select Sub Occupancy Type",
                     labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
                   },
-                  jsonPath: "BPA.blocks[0].SubOccupancyType",                  
-                  sourceJsonPath: "edcr.blockDetail[0].suboccupancyData",
-                  //jsonPath:"applyScreenMdmsData.BPA.SubOccupancyType",
                   localePrefix: {
                     moduleName: "BPA",
                     masterName: "SUBOCCUPANCYTYPE"
                   },
-                  gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                  },
+                  jsonPath: "BPA.blocks[0].SubOccupancyType",
+                  sourceJsonPath: "edcr.blockDetail[0].suboccupancyData",
+                  labelsFromLocalisation: true,
+                  suggestions: [],
+                  fullwidth: true,
                   required: true,
-                  props: {
-                    //className: "applicant-details-error textfield-enterable-selection",
-                    //data:beforeFieldChange,
-                    className : "tl-trade-type"
+                  isMulti: true,
+                  inputLabelProps: {
+                    shrink: true
                   }
-                }),
-                
+                },
+                gridDefination: {
+                  xs: 12,
+                  sm: 12,
+                  md: 6
+                }
               },
              
               proposedBuildingDetailsContainer: {
