@@ -1,9 +1,9 @@
-import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { DocumentList } from "../../ui-molecules-local";
-import { connect } from "react-redux";
-import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { DocumentList } from "../../ui-molecules-local";
 
 const styles = theme => ({
   button: {
@@ -23,16 +23,16 @@ class DocumentListContainer extends Component {
 
 }
 // parentValue
-const  filterDropdownFunction = (rowObject, preparedFinalObject, filterConditon) => {
+const filterDropdownFunction = (rowObject, preparedFinalObject, filterConditon) => {
   if (!filterConditon) {
     return true;
   } else {
     if (filterConditon.parentArrayJsonPath) {
-      let returnValue=false;
+      let returnValue = false;
       const objectArray = get(preparedFinalObject, filterConditon.parentArrayJsonPath, []);
       objectArray.map(object => {
         if (rowObject.parentValue.includes(object[filterConditon.parentJsonpath])) {
-          returnValue= true;
+          returnValue = true;
         }
       })
       return returnValue;
@@ -50,11 +50,11 @@ const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
     return true;
   } else {
     if (filterConditon.onArray) {
-      let returnValue=false;
+      let returnValue = false;
       const objectArray = get(preparedFinalObject, filterConditon.jsonPath, []);
       objectArray.map(object => {
         if (!filterConditon.filterValue.includes(object[filterConditon.arrayAttribute])) {
-          returnValue= true;
+          returnValue = true;
         }
       })
       return returnValue;
@@ -81,7 +81,7 @@ const mapStateToProps = state => {
         document.dropdown.value = reasonForTransfer;
         document.dropdown.disabled = true;
       }
-      document.dropdown.menu=document.dropdown.menu.filter(menu=>filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
+      document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
     })
     documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition))
   })
