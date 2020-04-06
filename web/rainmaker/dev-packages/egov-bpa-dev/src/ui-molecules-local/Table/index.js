@@ -146,7 +146,6 @@ const mapStateToProps = (state, ownprops) => {
      preFinalObj :state.screenConfiguration.preparedFinalObject
   };
 } */
-
 export default connect(
   mapStateToProps,{})(Table);
 
