@@ -32,19 +32,6 @@ const reviewOwnerDetails = getReviewOwner();
 const reviewLicenseDetails = getReviewLicenseDetails();
 const reviewDocumentDetails = getReviewDocuments();
 
-export const footnoteOFLicenceValid = getCommonContainer({
-  footNote : {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-bpa",
-    componentPath: "NoteAtom",
-    props: {
-      labelName: "This licensee is valid for <xx> Year(s)",
-      labelKey: ["BPA_LICENSE_VALID_LABEL", 3, "BPA_YEARS_LABEL"],
-    },
-    visible: true
-  }
-
-});
 
 export const tradeReviewDetails = getCommonCard({
   header: getCommonTitle({
@@ -58,6 +45,5 @@ export const tradeReviewDetails = getCommonCard({
   reviewPermanentDetails,
   reviewCommunicationDetails,
   reviewDocumentDetails,
-  declarationSummary,
-  footnoteOFLicenceValid
+  declarationSummary
 });
