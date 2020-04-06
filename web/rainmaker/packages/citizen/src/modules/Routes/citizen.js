@@ -12,6 +12,12 @@ import HowItWorks from "modules/citizen/HowItWorks";
 import ContactUs from "modules/citizen/ContactUs";
 import { ImageModalDisplay } from "modules/common";
 
+//FireNOC
+
+import FnHowItWorks from "../../ui-views/FnHowItWorks";
+
+
+
 // pgr specific screens
 
 import { TrackLocation } from "modules/common";
@@ -111,6 +117,16 @@ const routes = [
   {
     path: "trade-license/how-it-works",
     component: TLHowItWorks,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "TL_HOW_IT_WORKS",
+    },
+  },
+  {
+    path: "fire-noc/how-it-works",
+    component: FnHowItWorks,
     needsAuthentication: true,
     options: {
       hideFooter: true,

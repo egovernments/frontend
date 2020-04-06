@@ -18,7 +18,13 @@ const onButton1Click = (item, history, onPGRClick) => {
   //   history && history.push(route);
   // }
 };
+
 const onButton2Click = (item, history) => {
+
+  console.log('item values ', item);
+
+  debugger;
+
   if (process.env.REACT_APP_NAME === "Citizen") {
     if (item.moduleTitle === "PT_PAYMENT_STEP_HEADER1") {
       history && history.push("property-tax/how-it-works");
@@ -28,6 +34,9 @@ const onButton2Click = (item, history) => {
     }
     if (item.moduleTitle === "TL_COMMON_TL") {
       history && history.push("trade-license/how-it-works");
+    }
+    if (item.moduleTitle === "ACTION_TEST_FIRENOC") {
+      history && history.push("/fire-noc/how-it-works");
     }
   }
 };
