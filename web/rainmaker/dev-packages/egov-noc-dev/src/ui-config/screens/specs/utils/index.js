@@ -761,6 +761,12 @@ export const getRequiredDocData = async (action, state, dispatch) => {
 
     let tenantId = process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
 
+   // console.log("tenant id ", tenantId);
+
+    tenantId = tenantId ? tenantId : "pb";
+    
+   // console.log("new tenant id", tenantId);
+    
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: tenantId,
