@@ -15,6 +15,10 @@ import { applyMohallaData } from "./publicSearchUtils";
 
 export const searchPropertyDetails = {
   ...getCommonCard({
+    subHeader: getCommonTitle({
+      labelName: "Search Property",
+      labelKey: "SEARCH_PROPERTY"
+    }),
     subParagraph: getCommonParagraph({
       labelName:
         "Provide at least one non-mandatory parameter to search for an application",
@@ -30,7 +34,7 @@ export const searchPropertyDetails = {
           },
           placeholder: {
             labelName: "Select ULB",
-            labelKey: "PT_ULB_CITY_PLACEHOLDER"
+            labelKey: "ABG_ULB_PLACEHOLDER"
           },
 
           localePrefix: {
@@ -58,32 +62,25 @@ export const searchPropertyDetails = {
           // 	action.value
           //   )
           // );
-          try {
-            let payload = await httpRequest(
-              "post",
-              "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-              "_search",
-              [{ key: "tenantId", value: action.value }],
-              {}
-            );
-            const mohallaData = getMohallaData(payload, action.value);
-            applyMohallaData(mohallaData, action.value, dispatch);
-          } catch (e) {
-            console.log(e);
+          if (action.value) {
+            try {
+              let payload = await httpRequest(
+                "post",
+                "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+                "_search",
+                [{ key: "tenantId", value: action.value }],
+                {}
+              );
+              const mohallaData = getMohallaData(payload, action.value);
+              applyMohallaData(mohallaData, action.value, dispatch);
+            } catch (e) {
+              console.log(e);
+            }
           }
         }
       },
       locality: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-pt",
-        componentPath: "AutosuggestContainer",
-        jsonPath: "searchScreen.locality.code",
-        required: true,
-        props: {
-          style: {
-            width: "100%",
-            cursor: "pointer"
-          },
+        ...getSelectField({
           label: {
             labelName: "Locality",
             labelKey: "PT_SEARCH_LOCALITY"
@@ -93,16 +90,17 @@ export const searchPropertyDetails = {
             labelKey: "PT_SEARCH_LOCALITY_PLACEHOLDER"
           },
           jsonPath: "searchScreen.locality.code",
-          sourceJsonPath: "applyScreenMdmsData.tenant.localities",
-          labelsFromLocalisation: true,
-          suggestions: [],
-          fullwidth: true,
+          // data: [],
           required: true,
-          inputLabelProps: {
-            shrink: true
+          sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+          gridDefination: {
+            xs: 12,
+            sm: 3
+          },
+          props: {
+            className: "locality-dropdown"
           }
-          // className: "tradelicense-mohalla-apply"
-        },
+        }),
         beforeFieldChange: async (action, state, dispatch) => {
           // dispatch(
           //   prepareFinalObject(
@@ -110,10 +108,6 @@ export const searchPropertyDetails = {
           //     action.value && action.value.label
           //   )
           // );
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 3
         }
       },
       ownerName: getTextField({
@@ -125,7 +119,6 @@ export const searchPropertyDetails = {
           labelName: "Enter Property Owner Name",
           labelKey: "PT_SEARCH_OWNER_NAME_PLACEHOLDER"
         },
-        required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath: "searchScreen.ownerName",
@@ -176,29 +169,13 @@ export const searchPropertyDetails = {
         pattern: /^[a-zA-Z0-9-]*$/i,
         errorMessage: "ERR_INVALID_PROPERTY_ID",
         jsonPath: "searchScreen.ids"
-      }),
-      existingPropertyId: getTextField({
-        label: {
-          labelName: "Existing Property ID/Survey ID",
-          labelKey: "PT_EXISTING_PROPERTY_SURVEY_ID"
-        },
-        placeholder: {
-          labelName: "Enter Existing Property ID",
-          labelKey: "PT_EXISTING_PROPERTY_ID_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 3
-        },
-        required: false,
-        pattern: /^[a-zA-Z0-9-]*$/i,
-        errorMessage: "ERR_INVALID_PROPERTY_ID",
-        jsonPath: "searchScreen.oldpropertyids"
       })
     }),
     button: getCommonContainer({
       buttonContainer: getCommonContainer({
         resetButton: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-pt",
           componentPath: "Button",
           gridDefination: {
             xs: 12,
@@ -206,6 +183,7 @@ export const searchPropertyDetails = {
             // align: "center"
           },
           props: {
+            className: "public-domain-search-buttons",
             variant: "outlined",
             style: {
               color: "black",
@@ -228,6 +206,8 @@ export const searchPropertyDetails = {
           }
         },
         searchButton: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-pt",
           componentPath: "Button",
           gridDefination: {
             xs: 12,
@@ -236,6 +216,7 @@ export const searchPropertyDetails = {
           },
           props: {
             variant: "contained",
+            className: "public-domain-search-buttons",
             style: {
               color: "white",
               margin: "8px",
@@ -257,18 +238,18 @@ export const searchPropertyDetails = {
           }
         }
       })
-	}),
-	props:{
-		style:{
-			position: "relative",
-			top: "60px",
-		}
-	}
+    }),
+    props: {
+      style: {
+        position: "relative",
+        top: "60px"
+      }
+    }
   }),
-  props:{
-	style:{
-		position: "relative",
-      top: "60px",
-	}
+  props: {
+    style: {
+      position: "relative",
+      top: "60px"
+    }
   }
 };

@@ -159,6 +159,7 @@ class Header extends Component {
       hasLocalisation,
       notificationsCount,
       isUserSetting = true,
+      msevaLogo,
       headerStyle
     } = this.props;
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
@@ -174,7 +175,7 @@ class Header extends Component {
           defaultTitle={defaultTitle}
           titleAddon={titleAddon}
           role={role}
-          ulbLogo={ulbLogo}
+          ulbLogo={isUserSetting === false ? msevaLogo : ulbLogo}
           {...appBarProps}
           fetchLocalizationLabel={fetchLocalizationLabel}
           userInfo={userInfo}
