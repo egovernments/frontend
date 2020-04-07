@@ -86,6 +86,8 @@ class WorkFlowContainer extends React.Component {
     switch (action) {
       case "FORWARD":
         return "purpose=forward&status=success";
+      case "APPLY":
+        return "purpose=apply&status=success";
       case "MARK":
         return "purpose=mark&status=success";
       case "REJECT":
@@ -160,13 +162,14 @@ class WorkFlowContainer extends React.Component {
       });
 
       if (payload) {
+       // debugger;
+       // console.log("prasad workflow payload",payload )
         let path = "";
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         const licenseNumber = get(payload, path, "");
-        window.location.href = `acknowledgement?${this.getPurposeString(
-          label
-        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
+        const value = this.getPurposeString(label); 
+        window.location.href = `acknowledgement?${value}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
       }
     } catch (e) {
       toggleSnackbar(
