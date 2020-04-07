@@ -1,124 +1,47 @@
-
-import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  toggleSnackbar,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../../utils/index";
+import {
+  getSearchResults,
+  getPayload,
+  getTenantName
+} from "./publicSearchUtils";
+import { getTextToLocalMapping, validateFields } from "../../utils/index";
+import { ComponentJsonPath } from "./publicSearchUtils";
+import { searchResponse } from "./publicSerchConstant";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch);
-}
+};
 
 const removeValidation = (state, dispatch) => {
- 
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
-      "props.error",
-      false
-    )
-  );
+  Object.keys(ComponentJsonPath).map(key => {
+    dispatch(
+      handleField("public-search", ComponentJsonPath[key], "props.error", false)
+    );
 
+    dispatch(
+      handleField("public-search", ComponentJsonPath[key], "isFieldValid", true)
+    );
+  });
+};
 
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
-      "isFieldValid",
-      true
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
-      "isFieldValid",
-      true
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
-      "isFieldValid",
-      true
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
-      "isFieldValid",
-      true
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
-      "isFieldValid",
-      true
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
-      "isFieldValid",
-      true
-    )
-  );
-
-}
-
-const getAddress = (item) => {
-  let doorNo = item.address.doorNo != null ? (item.address.doorNo + ",") : '';
-  let buildingName = item.address.buildingName != null ? (item.address.buildingName + ",") : '';
-  let street = item.address.street != null ? (item.address.street + ",") : '';
-  let mohalla = item.address.locality.name ? (item.address.locality.name + ",") : '';
-  let city = item.address.city != null ? (item.address.city) : '';
-  return (doorNo + buildingName + street + mohalla + city);
-}
+const getAddress = item => {
+  if (item && item.address) {
+    let doorNo = item.address.doorNo != null ? item.address.doorNo + "," : "";
+    let buildingName =
+      item.address.buildingName != null ? item.address.buildingName + "," : "";
+    let street = item.address.street != null ? item.address.street + "," : "";
+    let mohalla = item.address.locality.name
+      ? item.address.locality.name + ","
+      : "";
+    let city = item.address.city != null ? item.address.city : "";
+    return doorNo + buildingName + street + mohalla + city;
+  }
+};
 
 const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -128,33 +51,11 @@ const searchApiCall = async (state, dispatch) => {
     "searchScreen",
     {}
   );
-  if (!searchScreenObject.tenantId) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
-        },
-        "error"
-      )
-    );
-    return;
-
-  }
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: searchScreenObject.tenantId
-    }
-  ];
-
-  let formValid = false;
-  if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
-	formValid = true;
-  }
   
-  if (!formValid) {
+  if (
+    searchScreenObject.tenantId === "" ||
+    searchScreenObject.locality === ""
+  ) {
     dispatch(
       toggleSnackbar(
         true,
@@ -169,60 +70,13 @@ const searchApiCall = async (state, dispatch) => {
   }
 
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.captureMutationDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
+    "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children",
     state,
     dispatch,
-    "propertySearch"
+    "public-search"
   );
 
-  const isownerCityRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
-    state,
-    dispatch,
-    "propertySearch"
-  );
-
-
-  const isownerMobNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.mobileNumber == '';
-
-  const ispropertyTaxUniqueIdRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.ids == '';
-
-  const isexistingPropertyIdRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.oldpropertyids == '';
-  const ispropertyTaxApplicationNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.acknowledgementIds == '';
-  const ispropertyTaxApplicationOwnerNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.mobileNumber == '';
-  const ispropertyTaxApplicationPidRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.ids == '';
-
-  if (!(isSearchBoxFirstRowValid)) {
+  if (!isSearchBoxFirstRowValid) {
     dispatch(
       toggleSnackbar(
         true,
@@ -235,103 +89,45 @@ const searchApiCall = async (state, dispatch) => {
     );
     return;
   }
-  if (!(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid)) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill at least one field along with city",
-          labelKey: "PT_INVALID_INPUT"
-        },
-        "error"
-      )
-    );
-    return;
-  } 
-
+  
   if (
-    Object.keys(searchScreenObject).length == 0 || Object.keys(searchScreenObject).length == 1 ||
-    (Object.values(searchScreenObject).every(x => x === ""))
+    Object.keys(searchScreenObject).length == 0 ||
+    Object.keys(searchScreenObject).length == 1 ||
+    Object.values(searchScreenObject).every(x => x === "")
   ) {
     dispatch(
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill at least one field along with city",
-          labelKey: "PT_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE_OTHER_THAN_CITY"
+          labelName: "Please fill at least one field along with city and locality",
+          labelKey:
+            "PT_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE_OTHER_THAN_CITY"
         },
         "error"
       )
     );
     return;
-  }
-  else {
-
+  } else {
     removeValidation(state, dispatch);
 
     //  showHideProgress(true, dispatch);
-    for (var key in searchScreenObject) {
-      if (
-        searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key].trim() !== ""
-      ) {
-        if (key === "fromDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "daystart")
-          });
-        } else if (key === "tenantId") {
-          // queryObject.push({
-          //   key: key,
-          //   value: convertDateToEpoch(searchScreenObject[key], "dayend")
-          // });
-
-        }
-        else if (key === "ids") {
-          queryObject.push({
-            key: "propertyIds",
-            value: searchScreenObject[key].trim()
-          });
-        }
-
-        else if (key === "toDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "dayend")
-          });
-        }
-        // else if (key === "status") {
-        //   queryObject.push({
-        //     key: "action",
-        //     value: searchScreenObject[key].trim()
-        //   });
-        // }
-        else {
-          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
-        }
-      }
-    }
+    const requestPayload = getPayload(searchScreenObject);
     try {
-      const response = await getSearchResults(queryObject);
-      // const response = searchSampleResponse();
+      const response = await getSearchResults(requestPayload);
+      // const response = searchResponse;
 
       let propertyData = response.Properties.map(item => ({
-        [getTextToLocalMapping("Property Tax Unique Id")]:
-          item.propertyId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.owners[0].name || "-",
-        [getTextToLocalMapping("Guardian Name")]:
-          item.owners[0].fatherOrHusbandName || "-",
-        [getTextToLocalMapping("Existing Property Id")]:
-          item.oldPropertyId || "-",
-        [getTextToLocalMapping("Address")]:
-          getAddress(item) || "-",
-        tenantId: item.tenantId,
-        [getTextToLocalMapping("Status")]: item.status || "-"
+        [getTextToLocalMapping("Property ID")]: item.propertyId || "-",
+        [getTextToLocalMapping("Owner Name")]: item.ownersName || "-",
+        [getTextToLocalMapping("Address")]: getAddress(item) || "-",
+        [getTextToLocalMapping("Property Status")]: item.status || "-",
+        [getTextToLocalMapping("Amount Dues")]: item.pendingDues || "-",
+        [getTextToLocalMapping("Action")]: item.pendingDues || "-"
       }));
 
       dispatch(
         handleField(
-          "propertySearch",
+          "public-search",
           "components.div.children.searchPropertyTable",
           "props.data",
           propertyData
@@ -339,17 +135,17 @@ const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "propertySearch",
+          "public-search",
           "components.div.children.searchPropertyTable",
           "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Properties"
-          )} (${response.Properties.length})`
+          `${getTextToLocalMapping("Search Results for Properties")} (${
+            response.Properties.length
+          })`
         )
       );
-      
+
       //showHideProgress(false, dispatch);
-      showHideTable(true, dispatch, index);
+      showHideTable(true, dispatch);
     } catch (error) {
       //showHideProgress(false, dispatch);
       dispatch(
@@ -364,96 +160,27 @@ const searchApiCall = async (state, dispatch) => {
   }
 };
 const showHideTable = (booleanHideOrShow, dispatch) => {
-    dispatch(
-      handleField(
-        "propertySearch",
-        "components.div.children.searchPropertyTable",
-        "visible",
-        booleanHideOrShow
-      )
-    );
+  dispatch(
+    handleField(
+      "public-search",
+      "components.div.children.searchPropertyTable",
+      "visible",
+      booleanHideOrShow
+    )
+  );
 };
 
 export const resetFields = (state, dispatch) => {
-	if (process.env.REACT_APP_NAME == "Citizen") {
-	  dispatch(
-		handleField(
-		  "propertySearch",
-		  "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
-		  "props.value",
-		  ""
-		)
-	  );
-  
-	  dispatch(prepareFinalObject(
-		"searchScreen.tenantId",
-		''
-	  ))
-	}
-  
-	dispatch(
-	  handleField(
-		"propertySearch",
-		"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
-		"props.value",
-		""
-	  )
-	);
-	dispatch(
-	  handleField(
-		"propertySearch",
-		"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
-		"props.value",
-		""
-	  )
-	);
-	dispatch(
-	  handleField(
-		"propertySearch",
-		"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
-		"props.value",
-		""
-	  )
-	);
-	dispatch(
-	  handleField(
-		"propertySearch",
-		"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
-		"props.value",
-		""
-	  )
-	);
-	dispatch(
-	  handleField(
-		"propertySearch",
-		"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
-		"props.value",
-		""
-	  )
-	);
-	dispatch(
-	  handleField(
-		"propertySearch",
-		"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
-		"props.value",
-		""
-	  )
-	);
-	dispatch(prepareFinalObject(
-	  "searchScreen.acknowledgementIds",
-	  ''
-	))
-	dispatch(prepareFinalObject(
-	  "searchScreen.ids",
-	  ''
-	))
-	dispatch(prepareFinalObject(
-	  "searchScreen.mobileNumber",
-	  ''
-	))
-	dispatch(prepareFinalObject(
-	  "searchScreen.oldpropertyids",
-	  ''
-	))
-  
-  };
+  Object.keys(ComponentJsonPath).map(key => {
+    dispatch(
+      handleField("public-search", ComponentJsonPath[key], "props.value", "")
+    );
+  });
+
+  dispatch(prepareFinalObject("searchScreen.tenantId", ""));
+  dispatch(prepareFinalObject("searchScreen.locality.code", ""));
+  dispatch(prepareFinalObject("searchScreen.ids", ""));
+  dispatch(prepareFinalObject("searchScreen.mobileNumber", ""));
+  dispatch(prepareFinalObject("searchScreen.ownerName", ""));
+  removeValidation(state, dispatch);
+};
