@@ -182,7 +182,6 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
 }
 
 const callBackForNext = async (state, dispatch) => {
-  //debugger;
   window.scrollTo(0,0);
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
@@ -219,28 +218,6 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = true;
     }
     setProposedBuildingData(state,dispatch);
-  //   const response = get(
-  //     state,
-  //     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
-  //     []
-  // );
-    // let tableData = response.map((item, index) => (
-    //   {
-    //   [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail((item.number).toString()) || '-',
-    //   [getBpaTextToLocalMapping("Level")]:item.number,     
-    //   [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-    //   [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-    //   [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-    //   [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
-    // }));
-  //   dispatch(
-  //     handleField(
-  //       "apply",
-  //       "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
-  //       "props.data",
-  //       tableData
-  //     )
-  //   );
   }
 
   if (activeStep === 1) {
@@ -268,22 +245,24 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
-    let isabstractProposedBuildingDetailsCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.abstractProposedBuildingDetails.children.cardContent.children.proposedContainer.children.totalBuildUpAreaDetailsContainer.children",
-      state,
-      dispatch
-    );
+    // let isabstractProposedBuildingDetailsCardValid = validateFields(
+    //   "components.div.children.formwizardSecondStep.children.abstractProposedBuildingDetails.children.cardContent.children.proposedContainer.children.totalBuildUpAreaDetailsContainer.children",
+    //   state,
+    //   dispatch
+    // );
 
-    if (
-      !isBuildingPlanScrutinyDetailsCardValid || 
-      //!isBlockWiseOccupancyAndUsageDetailsCardValid ||
-      !isProposedBuildingDetailsCardValid ||
-      !isDemolitiondetailsCardValid ||      
-      !isabstractProposedBuildingDetailsCardValid
-    ) {
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
+    // if (
+    //   !isBuildingPlanScrutinyDetailsCardValid || 
+    //   //!isBlockWiseOccupancyAndUsageDetailsCardValid ||
+    //   !isProposedBuildingDetailsCardValid ||
+    //   !isDemolitiondetailsCardValid  
+    //   // !isabstractProposedBuildingDetailsCardValid
+    // ) {
+    //   isFormValid = false;
+    //   hasFieldToaster = true;
+    // }
+
+
   }
 
   if (activeStep === 2) {

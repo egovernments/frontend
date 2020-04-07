@@ -229,6 +229,22 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     })
   }
 
+  let subOccupancyData = get(
+    state, "screenConfiguration.preparedFinalObject.edcr.blockDetail"
+  );
+  let occupancyType = [];
+  if (subOccupancyData && subOccupancyData.length) {
+    for (let blck = 0; blck < subOccupancyData.length; blck++) {
+      let subOccupancyType = [];
+      subOccupancyData[blck] && subOccupancyData[blck].occupancyType &&
+        subOccupancyData[blck].occupancyType.length &&
+        subOccupancyData[blck].occupancyType.forEach(dta => {
+          subOccupancyType.push(dta.value)
+        })
+        occupancyType.push({subOccupancyType : subOccupancyType})
+    }
+  }
+
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let tenantId =
@@ -237,6 +253,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       getTenantId();
     set(payload, "tenantId", tenantId);
     set(payload, "action", status);
+    set(payload, "blocks", occupancyType);
 
     // set(payload, "additionalDetails", null);
     set(payload, "units", null);

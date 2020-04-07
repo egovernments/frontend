@@ -115,7 +115,6 @@ class Table extends React.Component {
         />
       </MuiThemeProvider>
     );
-    debugger;
   }
 }
 

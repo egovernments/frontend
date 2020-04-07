@@ -1268,7 +1268,6 @@ export const validateFields = (
   dispatch,
   screen = "apply"
 ) => {
-  debugger;
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
@@ -1299,7 +1298,6 @@ export const validateFields = (
       }
     }
   }
-  debugger;
   return isFormValid;
 };
 
@@ -4570,67 +4568,40 @@ const getFloorDetails = (index) => {
 };
 
 export const setProposedBuildingData = async (state, dispatch, action) => {
-  debugger;
   const response = get(
     state,
     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
     []
   );
-console.log("myresponse",response)
-    let occupancyType = get(
+  let occupancyType = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
     []
   );
-  
+
   let subOccupancyType = occupancyType.filter(item => {
-   // return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
     return item.active;
-  }); 
+  });
 
-  /* let titleIndex = get(
-    state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
-    []
-  );
-  console.log("titleIndex",titleIndex);
-  if (titleIndex && titleIndex.length > 0) {
-
-     titleIndex = titleIndex.map((item, index) =>  `Block ${index+1}`); 
-   
-  };  */
-  let tableData=[];
+  let tableData = [];
   if (response && response.length > 0) {
-    for(var j=0;j<response.length;j++){
-      let title=`Block ${j+1}`;
-    let floors = response[j] && response[j].building && response[j].building.floors;
-    let block = await floors.map((item, index) => (
-      {
-        [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
-        [getBpaTextToLocalMapping("Level")]: item.number,
-        [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-        [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-        [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-        [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
-      }));
-      tableData.push({blocks:block,suboccupancyData:subOccupancyType,titleData:title} );
-      
-    }; 
+    for (var j = 0; j < response.length; j++) {
+      let title = `Block ${j + 1}`;
+      let floors = response[j] && response[j].building && response[j].building.floors;
+      let block = await floors.map((item, index) => (
+        {
+          [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+          [getBpaTextToLocalMapping("Level")]: item.number,
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+          [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+          [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+        }));
+      tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title });
 
-      //tableData = [...Array(2).fill(block)];
-      console.log("tableData",tableData);
-      
-   /*  dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.component.props.scheama.children.cardContent.children.proposedBuildingDetailsContainer",
-        "props.data",
-        tableData
-      )
-    ); */      
-
+    };
     dispatch(prepareFinalObject("edcr.blockDetail", tableData));
-  
+
     return tableData;
   }
 } 
