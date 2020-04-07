@@ -6,7 +6,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
   dispatch(prepareFinalObject("applyScreen.property", []));
-  let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }];
+  let queryObject = [{ key: "tenantId", value: "pb.amritsar" }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
 
   if (
