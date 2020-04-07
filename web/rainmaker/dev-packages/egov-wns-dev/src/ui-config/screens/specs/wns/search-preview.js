@@ -564,7 +564,7 @@ const parserFunction = (obj) => {
       initialMeterReading: (
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.initialMeterReading !== undefined
-      ) ? parseInt(obj.additionalDetails.initialMeterReading) : null,
+      ) ? parseFloat(obj.additionalDetails.initialMeterReading) : null,
       detailsProvidedBy: (
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.detailsProvidedBy !== undefined &&
