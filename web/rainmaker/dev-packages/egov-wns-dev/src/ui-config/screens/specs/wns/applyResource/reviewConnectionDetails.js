@@ -200,7 +200,7 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "applyScreen.uom", callBack: handleNA }
+          { jsonPath: "applyScreen.property.propertySubUsageType", callBack: handleNA }
         ),
         reviewPlotSize: getLabelWithValue(
           {

@@ -80,7 +80,8 @@ const propertyDetails = getCommonContainer({
       labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL",
       labelName: "Property Sub Usage Type"
     },
-    { jsonPath: "applyScreen.property.usageCategory",
+     { 
+      jsonPath: "applyScreen.property.propertySubUsageType",
     callBack: handleNA
   }
   ),
