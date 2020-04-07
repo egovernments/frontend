@@ -190,15 +190,24 @@ const callBackForNext = async (state, dispatch) => {
           if (isFormValid) {
             if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
               if (waterChecked && sewerChecked) {
+                dispatch(prepareFinalObject("applyScreen.service", "Water And Sewerage"));
                 if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
                 else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-              } else if (sewerChecked && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-              else if (waterChecked && waterData.length === 0) { await applyForWater(state, dispatch); }
+              } else if (sewerChecked && sewerData.length === 0) {
+                dispatch(prepareFinalObject("applyScreen.service", "Sewerage"));
+                await applyForSewerage(state, dispatch);
+              } else if (waterChecked && waterData.length === 0) {
+                dispatch(prepareFinalObject("applyScreen.service", "Water"))
+                await applyForWater(state, dispatch);
+              }
             } else if (waterChecked && sewerChecked) {
+              dispatch(prepareFinalObject("applyScreen.service", "Water And Sewerage"));
               if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
             } else if (waterChecked) {
+              dispatch(prepareFinalObject("applyScreen.service", "Water"))
               if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
             } else if (sewerChecked) {
+              dispatch(prepareFinalObject("applyScreen.service", "Sewerage"))
               if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
             }
           }
