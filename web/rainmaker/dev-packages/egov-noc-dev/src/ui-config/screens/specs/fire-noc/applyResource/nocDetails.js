@@ -49,7 +49,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
-
+ 
 
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
@@ -76,6 +76,36 @@ const loadProvisionalNocData = async (state, dispatch) => {
     )
   );
 
+
+  let District = get(response, "FireNOCs[0].fireNOCDetails.propertyDetails.address.city", "");
+
+  console.log("data fetching search field District ", District);
+
+
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.District",
+      "props.value",
+      District
+    )
+  );
+
+  let subDistrict = get(response, "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict", "");
+
+  console.log("data fetching search field subDistrict", subDistrict);
+
+
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.subDistrict",
+      "props.value",
+      subDistrict
+    )
+  );
+
+
   // Set provisional fire noc number
   dispatch(
     prepareFinalObject(
@@ -84,7 +114,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
     )
   );
 
-  // Set fire noc id to null
+    // Set fire noc id to null
   dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
 };
 
@@ -145,7 +175,7 @@ export const nocDetails = getCommonCard({
             label: "NOC_TYPE_NEW_RADIOBUTTON"
           },
           {
-            code: "PROVISIONAL",
+            code: "PROVISIONAL",             
             label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
           }
         ],

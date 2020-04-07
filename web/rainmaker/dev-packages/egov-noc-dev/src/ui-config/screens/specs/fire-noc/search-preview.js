@@ -71,8 +71,8 @@ const titlebar = getCommonContainer({
         menu: []
       }
     }
-  }  
-});
+  }
+}); 
 
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
@@ -341,8 +341,7 @@ const screenConfig = {
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
-   // debugger;
-
+    
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
     const queryObject = [
@@ -372,11 +371,12 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-    set(
+   /*  set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
+      true
+    );   */
+    
 
     return action;
   },
@@ -420,8 +420,8 @@ const screenConfig = {
           institutionSummary: institutionSummary,
           documentsSummary: documentsSummary
         }),
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+       citizenFooter: 
+       process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     }
   }
