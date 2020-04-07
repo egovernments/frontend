@@ -350,6 +350,7 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     pageReset(dispatch);
+    getData(action, state, dispatch).then(() => { });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -382,7 +383,6 @@ const screenConfig = {
 
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    getData(action, state, dispatch).then(() => { });
     prepareDocumentsUploadData(state, dispatch);
     return action;
   },

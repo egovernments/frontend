@@ -397,25 +397,10 @@ export const taskNoOfToilets = getLabelWithValue(
 
 
 const getConnectionDetails = () => {
-  return ({
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
-    props: {
-      className: "common-div-css search-preview",
-      scheama: getCommonGrayCard({
-        div4: connectionDetailsHeader,
-        serviceCardContainer: renderService()
-      }),
-      items: [],
-      hasAddItem: false,
-      isReviewPage: true,
-      sourceJsonPath: "applyScreen",
-      prefixSourceJsonPath:
-        "children.cardContent.children.getConnectionContainer.children",
-      afterPrefixJsonPath: "children.value.children.key"
-    },
-    type: "array"
-  });
+  return getCommonContainer({
+    connectionDetailsHeader,
+    view: renderService()
+  })
 }
 
 export const renderService = () => {
