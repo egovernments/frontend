@@ -321,8 +321,8 @@ class Property extends Component {
               }
               onClick={() => this.onEditPropertyClick()}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "inherit" ,marginRight: "20px"}}
+              buttonStyle={{ border: "1px solid #fe7a51", paddingRight: '25px', paddingLeft: '25px' }}
+              style={{ lineHeight: "auto", minWidth: "inherit", marginRight: "20px" }}
             />
             <Button
               onClick={() => this.onAssessPayClick()}
