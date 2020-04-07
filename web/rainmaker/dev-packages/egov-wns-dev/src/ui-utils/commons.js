@@ -655,7 +655,7 @@ const parserFunction = (state) => {
             initialMeterReading: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.initialMeterReading !== undefined
-            ) ? parseInt(queryObject.additionalDetails.initialMeterReading) : null,
+            ) ? parseFloat(queryObject.additionalDetails.initialMeterReading) : null,
             detailsProvidedBy: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.detailsProvidedBy !== undefined &&
