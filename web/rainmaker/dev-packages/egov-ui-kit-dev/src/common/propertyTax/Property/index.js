@@ -73,6 +73,7 @@ class Property extends Component {
     } = this.props;
     const requestBody = generalMDMSDataRequestObj(commonConfig.tenantId);
     fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName());
+
     fetchProperties([
       { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
@@ -244,6 +245,8 @@ class Property extends Component {
     // if (this.props.userID !== prevProps.userID) {
     //   this.fetchData(this.props.userID);
     // }
+
+
     const propertyId = decodeURIComponent(this.props.match.params.propertyId);
     const { totalBillAmountDue, Assessments } = this.props;
     if (Assessments && Assessments.length > 0 && Assessments[0].propertyId == propertyId && !this.state.billFetched) {
@@ -279,6 +282,7 @@ class Property extends Component {
       receiptsByYr,
       totalBillAmountDue,
       documentsUploaded,
+      loading
     } = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
@@ -293,7 +297,7 @@ class Property extends Component {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
     }
     return (
-      <Screen className={clsName}>
+      <Screen className={clsName} loading={loading}>
         <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} />
         {
           <AssessmentList
@@ -321,14 +325,14 @@ class Property extends Component {
               }
               onClick={() => this.onEditPropertyClick()}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51", paddingRight: '25px', paddingLeft: '25px' }}
-              style={{ lineHeight: "auto", minWidth: "inherit", marginRight: "20px" }}
+              buttonStyle={{ border: "1px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
             />
             <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
               primary={true}
-              style={{ lineHeight: "auto", minWidth: "inherit" }}
+              style={{ lineHeight: "auto", minWidth: "45%" }}
             />
           </div>
         </div>
@@ -337,31 +341,7 @@ class Property extends Component {
     );
   }
 }
-const getYearlyAssessments = (propertiesArray = []) => {
-  let yearlyAssessments = [];
-  return yearlyAssessments;
-  // propertiesArray.map((property) => {
-  //   if (yearlyAssessments.length == 0) {
-  //     yearlyAssessments[0] = [property];
-  //   } else {
-  //     let bool = true;
-  //     for (let pty of yearlyAssessments) {
-  //       if (pty[0].financialYear == property.financialYear) {
-  //         pty.push(property)
-  //         bool = false;
-  //       }
-  //     }
-  //     if (bool) {
-  //       yearlyAssessments.push([property]);
-  //     }
-  //   }
-  // })
-  // for (let eachYrAssessments of yearlyAssessments) {
-  //   eachYrAssessments.sort((x, y) => y.assessmentDate - x.assessmentDate);
-  // }
-  // yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
-  // return yearlyAssessments;
-};
+
 const getPendingAssessments = (selPropertyDetails, singleAssessmentByStatus = []) => {
   let pendingAssessments = [];
   // let propertiesArray = selPropertyDetails.propertyDetails || [];
@@ -386,15 +366,7 @@ const getPendingAssessments = (selPropertyDetails, singleAssessmentByStatus = []
   // }
   return pendingAssessments;
 };
-const checkPaid = (property, ptList = []) => {
-  let status = true;
-  for (let pt of ptList) {
-    if (pt.assessmentNumber == property.assessmentNumber) {
-      status = false;
-    }
-  }
-  return status;
-};
+
 const getAddressInfo = (addressObj, extraItems) => {
   return (
     addressObj && [
@@ -689,7 +661,8 @@ const mapStateToProps = (state, ownProps) => {
     localization,
     totalBillAmountDue,
     documentsUploaded,
-    Assessments
+    Assessments,
+    loading
   };
 };
 
