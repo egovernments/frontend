@@ -11,7 +11,7 @@ import {
 } from "./publicSearchUtils";
 import { getTextToLocalMapping, validateFields } from "../../utils/index";
 import { ComponentJsonPath } from "./publicSearchUtils";
-import { searchResponse } from "./publicSerchConstant";
+// import { searchResponse } from "./publicSerchConstant";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch);
