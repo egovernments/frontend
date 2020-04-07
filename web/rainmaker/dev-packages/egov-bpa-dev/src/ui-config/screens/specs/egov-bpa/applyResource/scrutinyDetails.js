@@ -251,7 +251,7 @@ export const proposedBuildingDetails = getCommonCard({
         componentPath: "MultiItem",       
         props: { 
           hasAddItem:false,
-          scheama: getCommonGrayCard({
+          scheama: getCommonContainer({
             applicantContainer: getCommonContainer({
               
                header: getLabel(
@@ -277,7 +277,7 @@ export const proposedBuildingDetails = getCommonCard({
               //       labelName: "Select Sub Occupancy Type",
               //       labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
               //     },
-              //     jsonPath: "BPA.blocks[0].SubOccupancyType",                  
+              //     jsonPath: "edcr.blockDetail[0].occupancyType",              
               //     sourceJsonPath: "edcr.blockDetail[0].suboccupancyData",
               //     //jsonPath:"applyScreenMdmsData.BPA.SubOccupancyType",
               //     localePrefix: {
@@ -304,6 +304,8 @@ export const proposedBuildingDetails = getCommonCard({
                 moduleName: "egov-bpa",
                 componentPath: "AutosuggestContainer",
                 required: true,
+                jsonPath: "edcr.blockDetail[0].occupancyType",
+                // sourceJsonPath: "edcr.blockDetail[0].suboccupancyData",
                 props: {
                   style: {
                     width: "100%",
@@ -321,7 +323,7 @@ export const proposedBuildingDetails = getCommonCard({
                     moduleName: "BPA",
                     masterName: "SUBOCCUPANCYTYPE"
                   },
-                  jsonPath: "BPA.blocks[0].SubOccupancyType",
+                  jsonPath: "edcr.blockDetail[0].occupancyType",
                   sourceJsonPath: "edcr.blockDetail[0].suboccupancyData",
                   labelsFromLocalisation: true,
                   suggestions: [],
