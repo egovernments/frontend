@@ -325,14 +325,14 @@ class Property extends Component {
               }
               onClick={() => this.onEditPropertyClick()}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51", paddingRight: '25px', paddingLeft: '25px' }}
-              style={{ lineHeight: "auto", minWidth: "inherit", marginRight: "20px" }}
+              buttonStyle={{ border: "1px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
             />
             <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
               primary={true}
-              style={{ lineHeight: "auto", minWidth: "inherit" }}
+              style={{ lineHeight: "auto", minWidth: "45%" }}
             />
           </div>
         </div>
