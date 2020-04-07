@@ -118,6 +118,7 @@ export const searchApiCall = async (state, dispatch) => {
         billKey : get(configObject[0] , "billKey"),
         tenantId: item.tenantId,
         "Bill Id": item.billId,
+        "billSearchUrl" : searchScreenObject.url,
       }));
       dispatch(
         handleField(

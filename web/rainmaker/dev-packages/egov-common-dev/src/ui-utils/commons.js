@@ -578,14 +578,14 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
 }
 
 
-export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolidatedbill") => {
+export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolidatedbill",url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
   const searchCriteria = {
     consumerCode ,
     tenantId
   }
   const FETCHBILL={
     GET:{
-      URL:"egov-searcher/bill-genie/billswithaddranduser/_get",
+      URL:url,
       ACTION: "_get",
     }
   }
