@@ -843,10 +843,7 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
               {
                 stack: [
                   {
-                    text: getCorporationName(
-                      transformedData.corporationName,
-                      transformedData.actualAddress
-                    ),
+                    text: transformedData.corporationName,
                     style: "receipt-logo-header",
                     //margin: [50, 0, 0, 0]//left top right bottom
                     // font:"Roboto"
@@ -1341,10 +1338,7 @@ const getACKData = (transformedData, ulbLogo) => {
                     alignment: "center"
                   },
                   {
-                    text: getCorporationName(
-                      transformedData.corporationName,
-                      transformedData.actualAddress
-                    ),
+                    text: transformedData.corporationName,
                     style: "receipt-logo-header",
                     margin: [0, 10, 0, 0]
                     // font:"Roboto"
