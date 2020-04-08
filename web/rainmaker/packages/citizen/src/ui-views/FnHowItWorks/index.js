@@ -6,7 +6,7 @@ const FnHowItWorks = (props) => {
         <h1> for FireNOC </h1>
 
       <iframe
-        src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb/TL_UserManual_Citizen.pdf#view=FitH&embedded=true"
+        src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb/Fire_NOC_Help_Doc.pdf"
         style={{ width: "100%", height: "90%" }}
         frameborder="0"
       />
