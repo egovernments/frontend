@@ -18,8 +18,13 @@ export const propertyID = getCommonContainer({
   propertyID: getTextField({
     label: { labelKey: "WS_PROPERTY_ID_LABEL" },
     placeholder: { labelKey: "WS_PROPERTY_ID_PLACEHOLDER" },
-    gridDefination: { xs: 12, sm: 6, md: 6 },
+    gridDefination: { xs: 12, sm: 5, md: 5 },
     required: true,
+    props:{
+      style: {
+        width: "100%"
+      }
+    },
     sourceJsonPath: "applyScreen.property.propertyId",
     title: {
       value: "Fill the form by searching your old approved trade license",
@@ -31,7 +36,7 @@ export const propertyID = getCommonContainer({
   }),
   searchButton: {
     componentPath: "Button",
-    gridDefination: { xs: 12, sm: 6, md: 6 },
+    gridDefination: { xs: 12, sm: 7, md: 7 },
     props: {
       variant: "contained",
       style: {
