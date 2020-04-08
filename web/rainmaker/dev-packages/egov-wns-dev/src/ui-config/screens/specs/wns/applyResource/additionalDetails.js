@@ -42,7 +42,7 @@ const getPlumberRadioButton = {
 
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
-    labelKey: "WS_COMMON_ADDN_DETAILS"
+    labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
   }),
   connectiondetailscontainer: getCommonGrayCard({
     subHeader: getCommonTitle({
