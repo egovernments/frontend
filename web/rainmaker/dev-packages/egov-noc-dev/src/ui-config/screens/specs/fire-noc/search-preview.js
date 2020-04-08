@@ -33,6 +33,11 @@ import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 
+import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
+import { getRequiredDocData } from "../utils";
+
+
+
 const titlebar = getCommonContainer({
   header: getCommonHeader({
     labelName: "Task Details",
@@ -350,6 +355,19 @@ const screenConfig = {
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
+    getRequiredDocData(action, state, dispatch).then(() => {
+      let documents = get(
+        state,
+        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents",
+        []
+      );
+      set(
+        action,
+        "screenConfig.components.adhocDialog.children.popup",
+        getRequiredDocuments(documents)
+      );
+    });
+
     // Hide edit buttons
     set(
       action,
@@ -370,12 +388,36 @@ const screenConfig = {
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
+    );    
+   
+   //debugger;
+
+    let checkdocs = get(
+      state,
+      "screenConfiguration.preparedFinalObject.documentsPreview",
+      []
     );
-   /*  set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      true
-    );   */
+
+    console.log("checkdocs", checkdocs)
+
+    if(checkdocs.length)  
+    {
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+        false
+      ); 
+    }    
+    else
+    {
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+        true
+      ); 
+    }
+
+ 
     
 
     return action;
