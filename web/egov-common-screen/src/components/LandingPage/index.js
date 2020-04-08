@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-
+import FormLabel from '@material-ui/core/FormLabel';
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -35,36 +35,30 @@ const styles = theme => ({
 
     }
 });
-const City = [
-    
-    {
-        value: 'Haldwani',
-        label: 'Haldwani',
-        url:"https://google.com"
-    },
-    {
-        value: 'Haldwani',
-        label: 'Haldwani',
-    },
-    {
-        value: 'Haldwani',
-        label: 'Haldwani',
-
-    },
-    {
-        value: 'Haldwani',
-        label: 'Haldwani',
-    }
-];
-
 class LandingPage extends React.Component {
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
     };
-    state = {
-        backgroundUrl: "",
-        logoUrl: ""
-    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: '',
+            backgroundUrl: "",
+            logoUrl: "",
+            tenantInfo: [],
+            Redirectlink: ""
+        };
+    
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+      }
+      handleChange(event) {
+        this.setState({value: event.target.value});
+      }
+      handleSubmit(event) {
+        window.open("https://portal.mseva.bihar.gov.in/");
+       event.preventDefault();
+     }
     componentDidMount() {
         let tenantIdFromPath = ""
         tenantIdFromPath = document.location.search ? document.location.search.split('=')[1] : "bh";
@@ -110,7 +104,7 @@ class LandingPage extends React.Component {
                 this.setValuestoState("tenantId", tenantIdFromPath);
                 this.setValuestoState("backgroundUrl", response.data.MdmsRes["common-masters"].StateInfo[0].bannerUrl);
                 this.setValuestoState("logoUrl", response.data.MdmsRes["common-masters"].StateInfo[0].logoUrl);
-                this.setValuestoState("tenantInfo",response.data.MdmsRes["tenant"].tenants);
+                this.setValuestoState("tenantInfo", response.data.MdmsRes["tenant"].tenants);
             })
             .catch(err => { console.log(err, "error"); })
     }
@@ -121,11 +115,10 @@ class LandingPage extends React.Component {
     };
     render() {
         const { classes } = this.props;
-        const { backgroundUrl, logoUrl,tenantInfo } = this.state;
+        const { backgroundUrl, logoUrl, tenantInfo } = this.state;
+        console.log("=====tenantInfo=====", tenantInfo);
 
-        console.log("state", this.state,tenantInfo);
-
-//console.log("tenanat=====",tenantInfo.code);
+        //console.log("tenanat=====",tenantInfo.code);
 
         return (
             <div
@@ -136,42 +129,41 @@ class LandingPage extends React.Component {
                 }}>
                 <Grid container className={classes.root} id="common-container">
                     <div className={classes.root}>
-                        <Card className={classes.paper} style={{ textAlign: "center", marginTop: "150px", padding:"40px" }}>
+                        <Card className={classes.paper} style={{ textAlign: "left", marginTop: "150px", padding: "40px" }}>
 
                             <Grid container spacing={2} >
                                 <Grid item xs={12} sm container>
                                     <Grid item xs container direction="column" spacing={2}>
-                                        <div>
+                                        <div style={{ textAlign: "center", margin:"10px 20px" }}>
                                             <img class="img-responsive mseva-logo employee-login-logo" src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/mSeva_Bihar.png"></img>
                                         </div>
                                         <form className={classes.root} noValidate autoComplete="off">
+                                        <FormLabel required> City</FormLabel>
                                             <TextField
                                                 id="standard-select-currency-native"
                                                 select
-                                                label="City"
                                                 required="true"
-                                                placeholder="Select Your City"
+                                                value={this.state.tenanatInfo}
                                                 className={classes.textField}
-                                                value={this.state.currency}
-                                                style={{width:"90%", color:"#000"}}
-                                                onChange={this.handleChange('currency')}
+                                                style={{ width: "100%", color: "#000" }}
+                                                onChange={this.handleChange}
                                                 SelectProps={{
                                                     native: true,
                                                     MenuProps: {
                                                         className: classes.menu,
                                                     },
                                                 }}
-                                                // helperText="Please select your currency"
+                                                helperText="Please select your City"
                                                 margin="normal"
                                             >
-                                                {City.map(option => (
-                                                    <option key={option.value} value={option.value} href={option.url}>
-                                                        {option.label}
+                                                {tenantInfo.length > 0 && tenantInfo.map(option => (
+                                                    <option key={option.value} value={option.name} href={option.ulbPortalLink}>
+                                                        {option.name}
                                                     </option>
-                                                    
+
                                                 ))}
                                             </TextField>
-                                            <Button variant="contained" style={{backgroundColor:"rgb(254, 122, 81)", color:"#FFF", fontWeight:"600", fontSize:"14px", width:"90%", marginTop:"15px", height:"45px"}}>CONTINUE</Button>
+                                            <Button variant="contained" onClick={this.handleSubmit} style={{ backgroundColor: "rgb(254, 122, 81)", color: "#FFF", fontWeight: "600", fontSize: "14px", width: "90%", marginTop: "15px", height: "45px", width: "100%" }}>CONTINUE</Button>
                                         </form>
                                     </Grid>
                                 </Grid>
@@ -184,4 +176,3 @@ class LandingPage extends React.Component {
     }
 }
 export default withStyles(styles)(LandingPage);
-
