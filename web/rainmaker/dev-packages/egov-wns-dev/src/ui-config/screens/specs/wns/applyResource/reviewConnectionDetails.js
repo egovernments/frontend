@@ -222,7 +222,7 @@ const getPropertyDetails = {
             labelName: "Rain Water Harvesting Facility"
           },
           {
-            jsonPath: "applyScreen.rainWaterHarvesting",
+            jsonPath: "applyScreen.property.rainWaterHarvesting",
             callBack: handleNA
           }
         )

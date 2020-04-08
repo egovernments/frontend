@@ -237,7 +237,7 @@ const getPropertyDetails = {
             labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
             labelName: "Rain Water Harvesting Facility"
           },
-          { jsonPath: "WaterConnection[0].rainWaterHarvesting",
+          { jsonPath: "WaterConnection[0].property.rainWaterHarvesting",
           callBack: handleNA }
         )
       })
