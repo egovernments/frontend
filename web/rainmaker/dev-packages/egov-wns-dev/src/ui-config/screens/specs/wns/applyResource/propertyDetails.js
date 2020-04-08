@@ -36,12 +36,15 @@ export const propertyID = getCommonContainer({
   }),
   searchButton: {
     componentPath: "Button",
-    gridDefination: { xs: 12, sm: 7, md: 7 },
+    gridDefination: { xs: 12, sm: 5, md: 5 },
     props: {
       variant: "contained",
       style: {
         color: "white",
-        margin: "8px",
+        marginTop: "19px",
+        marginBottom: "10px",
+        marginLeft: "10px",
+        marginRight: "10px",
         backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
         borderRadius: "2px",
         width: "30%",
