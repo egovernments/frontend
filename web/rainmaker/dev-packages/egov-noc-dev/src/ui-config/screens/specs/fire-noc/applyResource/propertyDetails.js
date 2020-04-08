@@ -314,8 +314,8 @@ const commonBuildingData = buildingType => {
 export const propertyDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Property Details",
-      labelKey: "PROPERTY_DETAILS_HEADER"
+      labelName: "Building Details",
+      labelKey: "PROPERTY_BUILDING_DETAILS_HEADER"
     },
     {
       style: {

@@ -96,8 +96,8 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
+    propertyLocationDetails,
     propertyDetails,
-    propertyLocationDetails
   },
   visible: false
 };
