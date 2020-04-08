@@ -196,3 +196,9 @@
         width: 100%!important;
     }
 }
+#standard-select-currency-native option{
+    padding: 15px 0!important;
+}
+.Dropdownvalues{
+    padding: 20px 0;
+}

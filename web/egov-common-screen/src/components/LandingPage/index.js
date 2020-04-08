@@ -32,33 +32,42 @@ const styles = theme => ({
         lineHeight: 2
     },
     listStyle: {
-
+        padding:"15px 0"
     }
 });
 class LandingPage extends React.Component {
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.value });
-    };
-    constructor(props) {
+   
+   
+      constructor(props) {
         super(props);
-        this.state = {
-            value: '',
-            backgroundUrl: "",
-            logoUrl: "",
-            tenantInfo: [],
-            Redirectlink: ""
-        };
+        this.state = {value: '',
+        backgroundUrl: "",
+        logoUrl: "",
+        tenantInfo: [],
+        Redirectlink: ""
+    };
     
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
       }
+    
       handleChange(event) {
         this.setState({value: event.target.value});
       }
+    
       handleSubmit(event) {
-        window.open("https://portal.mseva.bihar.gov.in/");
-       event.preventDefault();
-     }
+        // alert('A name was submitted: ' + this.state.value);
+        console.log("select city"+this.state.value);
+        if(this.state.value==="Select your City"){
+            window.open("/"); 
+        }
+        else{
+            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value, "_self");
+            event.preventDefault();
+        }
+        
+      }
+      
     componentDidMount() {
         let tenantIdFromPath = ""
         tenantIdFromPath = document.location.search ? document.location.search.split('=')[1] : "bh";
@@ -113,6 +122,7 @@ class LandingPage extends React.Component {
             [property]: value
         })
     };
+
     render() {
         const { classes } = this.props;
         const { backgroundUrl, logoUrl, tenantInfo } = this.state;
@@ -137,34 +147,63 @@ class LandingPage extends React.Component {
                                         <div style={{ textAlign: "center", margin:"10px 20px" }}>
                                             <img class="img-responsive mseva-logo employee-login-logo" src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/mSeva_Bihar.png"></img>
                                         </div>
-                                        <form className={classes.root} noValidate autoComplete="off">
-                                        <FormLabel required> City</FormLabel>
-                                            <TextField
-                                                id="standard-select-currency-native"
-                                                select
-                                                required="true"
-                                                value={this.state.tenanatInfo}
-                                                className={classes.textField}
-                                                style={{ width: "100%", color: "#000" }}
-                                                onChange={this.handleChange}
-                                                SelectProps={{
-                                                    native: true,
-                                                    MenuProps: {
-                                                        className: classes.menu,
-                                                    },
-                                                }}
-                                                helperText="Please select your City"
-                                                margin="normal"
-                                            >
-                                                {tenantInfo.length > 0 && tenantInfo.map(option => (
+                                        <form onSubmit={this.handleSubmit}>
+                                            <label>City <span>*</span></label><br/>
+                                            
+                                            
+                                            {/* <select type="text" value={this.state.value} onChange={this.handleChange} style={{width:"100%", 
+                                            border: "none", 
+                                             background: "#fff",
+                                             borderBottom: "1px solid gray",
+                                             fontize: "20px",
+                                             padding: "20px 0 5px"
+                                             }} >
+                                            {tenantInfo.length > 0 && tenantInfo.map(option => (
                                                     <option key={option.value} value={option.name} href={option.ulbPortalLink}>
                                                         {option.name}
                                                     </option>
 
                                                 ))}
+                                            
+                                            </select><br/> */}
+
+
+                                            <TextField
+                                                id="standard-select-currency-native"
+                                                select
+                                                value={this.state.value}
+                                                onChange={this.handleChange}
+                                                
+                                                SelectProps={{
+                                                    native: true,
+                                                    MenuProps: {
+                                                        className: classes.listStyle,
+                                                    },
+                                                }}
+                                                style={{width:"100%"}} >
+                                            >
+                                                <option className="Dropdownvalues">Select your City</option>
+                                                {tenantInfo.length > 0 && tenantInfo.map(option => (
+                                                    <option className="Dropdownvalues" key={option.value} value={option.name} >
+                                                        {option.name}
+                                                    </option>
+
+                                                ))}
                                             </TextField>
-                                            <Button variant="contained" onClick={this.handleSubmit} style={{ backgroundColor: "rgb(254, 122, 81)", color: "#FFF", fontWeight: "600", fontSize: "14px", width: "90%", marginTop: "15px", height: "45px", width: "100%" }}>CONTINUE</Button>
+                                            <Button variant="contained" type="submit" style={{ backgroundColor: "rgb(254, 122, 81)", color: "#FFF", fontWeight: "600", fontSize: "14px", width: "90%", marginTop: "50px", height: "45px", width: "100%" }}>CONTINUE</Button>
+                                            {/* <input type="submit" value="Continue" style={{
+                                                margin: "15px 0",
+                                                height: "40px",
+                                                border: "none",
+                                                width: "100%",
+                                                background: "rgb(254, 122, 81)",
+                                                color: "white",
+                                                borderRradius: "3px",
+                                                fontWeight: "600",
+                                                textTransform: "uppercase",
+                                            }}/> */}
                                         </form>
+                                        <p style={{color:"red", fontSize:"12px"}}>*Please select city from dropdown before continuing</p>
                                     </Grid>
                                 </Grid>
                             </Grid>
