@@ -38,7 +38,7 @@ import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
 import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
-import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload } from "../utils/index";
+import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload, setProposedBuildingData } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -507,6 +507,7 @@ const setSearchResponse = async (
       )
     );
   };
+  setProposedBuildingData(state, dispatch);
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);

@@ -231,7 +231,6 @@ export const proposedBuildingDetails = getCommonCard({
                 props: {
                   className: "mymuitable",
                   jsonPath: "edcr.blockDetail[0].blocks",
-                  sourceJsonPath: "edcr.blockDetail[0].blocks",
                   style: { marginBottom: 20 },
                   columns: {
                     "Floor Description": {},
@@ -306,6 +305,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Proposed Building Abstract",
+      labelKey: "BPA_PROPOSED_BUILDING_ABSTRACT_HEADER"
     },
     {
       style: {

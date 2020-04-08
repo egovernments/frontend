@@ -4578,7 +4578,12 @@ export const setProposedBuildingData = async (state, dispatch, action) => {
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
     []
   );
-
+  const BPA = get (
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    {}
+  );
+  
   let subOccupancyType = occupancyType.filter(item => {
     return item.active;
   });
@@ -4597,7 +4602,22 @@ export const setProposedBuildingData = async (state, dispatch, action) => {
           [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
           [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
         }));
-      tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title });
+      let occupancyTypeCheck = [], formatedSubOccupancyType = "";
+      if(BPA && BPA.blocks && BPA.blocks[j] && BPA.blocks[j].subOccupancyType) {
+        let sOccupancyType = (BPA.blocks[j].subOccupancyType).split(",");
+        sOccupancyType.forEach(subOcData => {
+          occupancyTypeCheck.push({
+            value : subOcData,
+            label : getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${subOcData}`)
+          });
+        });
+      }
+      
+      if(occupancyTypeCheck && occupancyTypeCheck.length) {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck });
+      } else {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title });
+      }
 
     };
     dispatch(prepareFinalObject("edcr.blockDetail", tableData));
