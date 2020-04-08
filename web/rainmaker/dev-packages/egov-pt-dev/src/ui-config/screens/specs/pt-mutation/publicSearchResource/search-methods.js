@@ -11,7 +11,6 @@ import {
 } from "./publicSearchUtils";
 import { getTextToLocalMapping, validateFields } from "../../utils/index";
 import { ComponentJsonPath } from "./publicSearchUtils";
-// import { searchResponse } from "./publicSerchConstant";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch);
@@ -26,6 +25,7 @@ const removeValidation = (state, dispatch) => {
     dispatch(
       handleField("public-search", ComponentJsonPath[key], "isFieldValid", true)
     );
+    return true;
   });
 };
 
@@ -175,8 +175,14 @@ export const resetFields = (state, dispatch) => {
     dispatch(
       handleField("public-search", ComponentJsonPath[key], "props.value", "")
     );
+    return true;
   });
-
+  dispatch(
+    handleField("public-search", ComponentJsonPath["locality"], "props.data", [])
+  );
+  dispatch(
+    prepareFinalObject("applyScreenMdmsData.tenant.localities", [])
+  );
   dispatch(prepareFinalObject("searchScreen.tenantId", ""));
   dispatch(prepareFinalObject("searchScreen.locality.code", ""));
   dispatch(prepareFinalObject("searchScreen.ids", ""));
