@@ -354,15 +354,17 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment["mobileNumber"] =
     finalReceiptData.Bill[0].payerMobileNumber;
   ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].payerName;
-  if (ReceiptBodyNew.Payment.paymentMode !== "Cash") {
+  if(finalReceiptData.instrument.transactionNumber){
     ReceiptBodyNew.Payment["transactionNumber"] =
       finalReceiptData.instrument.transactionNumber;
+  }
+  if(finalReceiptData.instrument.instrumentNumber){
     ReceiptBodyNew.Payment["instrumentNumber"] =
       finalReceiptData.instrument.instrumentNumber;
-    if (ReceiptBodyNew.Payment.paymentMode === "Cheque") {
-      ReceiptBodyNew.Payment["instrumentDate"] =
+  }
+  if( finalReceiptData.instrument.instrumentDate){
+    ReceiptBodyNew.Payment["instrumentDate"] =
         finalReceiptData.instrument.instrumentDate;
-    }
   }
 
   let amtPaid =
