@@ -1484,7 +1484,7 @@ class FormWizard extends Component {
     if (propertyId && selected == 3 && !propertiesEdited) {
       this.setState({
         selected: 4,
-        formValidIndexArray: [...formValidIndexArray, 4]
+        formValidIndexArray: [...formValidIndexArray, 3]
       });
     }
   }
