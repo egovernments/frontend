@@ -15,10 +15,11 @@ const callDownloadBill = () => {
       key: 'consumerCode',
       value: getQueryArg(window.location.href, "connectionNumber")
     },
+    { key: 'tenantId', value: tenantId },
     {
       key: "businessService", value: businessService
-    },
-    { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
+    }
+  ]
   downloadBill(val);
 }
 
