@@ -90,18 +90,14 @@ const searchApiCall = async (state, dispatch) => {
     return;
   }
   
-  if (
-    Object.keys(searchScreenObject).length == 0 ||
-    Object.keys(searchScreenObject).length == 1 ||
-    Object.values(searchScreenObject).every(x => x === "")
-  ) {
+  if (searchScreenObject.tenantId && searchScreenObject.locality && !(searchScreenObject.ids || searchScreenObject.mobileNumber || searchScreenObject.ownerName)) {
     dispatch(
       toggleSnackbar(
         true,
         {
           labelName: "Please fill at least one field along with city and locality",
           labelKey:
-            "PT_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE_OTHER_THAN_CITY"
+            "PT_SEARCH_SELECT_AT_LEAST_ONE_FIELD_WITH_CITY_AND_LOCALITY"
         },
         "error"
       )
