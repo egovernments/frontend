@@ -1469,7 +1469,7 @@ export const getFinancialYearDates = (format, et, noOfYears) => {
   var date = !et ? new Date() : new Date(et);
   var curMonth = date.getMonth();
   var financialDates = { startDate: "NA", endDate: "NA" };
-  if (curMonth > 3 && noOfYears) {
+  if (curMonth >= 3 && noOfYears) {
     switch (format) {
       case "dd/mm/yyyy":
         financialDates.startDate = `01/04/${date.getFullYear().toString()}`;
