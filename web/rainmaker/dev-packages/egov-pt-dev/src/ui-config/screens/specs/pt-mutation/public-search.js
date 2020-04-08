@@ -102,8 +102,7 @@ const screenConfig = {
           componentPath: "HeaderContainer",
           moduleName: "egov-pt",
           props: {
-            msevaLogo: msevaLogo,
-            defaultTitle: "Punjab"
+            msevaLogo: msevaLogo
           }
         },
         searchPropertyDetails,
