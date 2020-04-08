@@ -6,14 +6,17 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const connectionNo = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId");
-const businessService=connectionNo.includes("WS")?"WS":"SW" ;
-console.log("===>businessService",businessService)
+const businessService = connectionNo.includes("WS") ? "WS" : "SW";
+// console.log("===>businessService",businessService)
 
 const callDownloadBill = () => {
   const val = [
     {
       key: 'consumerCode',
       value: getQueryArg(window.location.href, "connectionNumber")
+    },
+    {
+      key: "businessService", value: businessService
     },
     { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
   downloadBill(val);
