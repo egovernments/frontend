@@ -1,14 +1,14 @@
 import React from 'react';
 import './index.css';
-import { Grid, Card, CardActions, CardContent, List, ListItem, ListItemText } from '@material-ui/core';
+import { Grid, Card, CardActions, CardContent, List, ListItem, ListItemText, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     root: {
-        paddingTop: "0px",
-        overflow: "hidden",
-        height: '100%',
+        flexGrow: 1,
     },
     btn: {
         padding: "2.5% 5%",
@@ -20,6 +20,11 @@ const styles = theme => ({
         textDecoration: "none",
         textAlign: "center"
     },
+    paper: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+        maxWidth: 300,
+    },
     text: {
         padding: "12px",
         fontSize: "22px",
@@ -30,13 +35,36 @@ const styles = theme => ({
 
     }
 });
+const City = [
+    
+    {
+        value: 'Haldwani',
+        label: 'Haldwani',
+        url:"https://google.com"
+    },
+    {
+        value: 'Haldwani',
+        label: 'Haldwani',
+    },
+    {
+        value: 'Haldwani',
+        label: 'Haldwani',
+
+    },
+    {
+        value: 'Haldwani',
+        label: 'Haldwani',
+    }
+];
 
 class LandingPage extends React.Component {
+    handleChange = name => event => {
+        this.setState({ [name]: event.target.value });
+    };
     state = {
         backgroundUrl: "",
         logoUrl: ""
     }
-
     componentDidMount() {
         let tenantIdFromPath = ""
         tenantIdFromPath = document.location.search ? document.location.search.split('=')[1] : "bh";
@@ -82,7 +110,7 @@ class LandingPage extends React.Component {
                 this.setValuestoState("tenantId", tenantIdFromPath);
                 this.setValuestoState("backgroundUrl", response.data.MdmsRes["common-masters"].StateInfo[0].bannerUrl);
                 this.setValuestoState("logoUrl", response.data.MdmsRes["common-masters"].StateInfo[0].logoUrl);
-
+                this.setValuestoState("tenantInfo",response.data.MdmsRes["tenant"].tenants);
             })
             .catch(err => { console.log(err, "error"); })
     }
@@ -93,102 +121,67 @@ class LandingPage extends React.Component {
     };
     render() {
         const { classes } = this.props;
-        const { backgroundUrl, logoUrl } = this.state;
+        const { backgroundUrl, logoUrl,tenantInfo } = this.state;
 
-        console.log("state", this.state)
+        console.log("state", this.state,tenantInfo);
+
+//console.log("tenanat=====",tenantInfo.code);
 
         return (
             <div
-            className="common-background"
-             style={{
-                height: '100%',
-                background: `linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(${backgroundUrl}) no-repeat center`,
-            }}>
+                className="common-background"
+                style={{
+                    height: '100%',
+                    background: `url(${backgroundUrl}) no-repeat center`,
+                }}>
                 <Grid container className={classes.root} id="common-container">
+                    <div className={classes.root}>
+                        <Card className={classes.paper} style={{ textAlign: "center", marginTop: "150px", padding:"40px" }}>
 
-                    <Grid container style={{ marginBottom: "10px" }}>
-                        <Grid item md={12} style={{ textAlign: "center", backgroundColor:"#FFF",paddingTop:"20px", height:"80px", marginBottom:"50px" }}>
-                            <img src={logoUrl} alt="company-logo" width="20%" />
-                        </Grid>
-                    </Grid>
-
-                    <Grid container spacing={4}>
-                        <Grid item md={1}></Grid>
-                        <Grid item md={5}>
-                            <Card style={{ borderRadius: 0, height:380 }}>
-                                <CardContent style={{height:270}}> 
-                                    <Grid container  alignItems="center" >
-                                        <Grid item md={1} >
-                                            <img src="assets/citizen.png" alt="citizen-logo" width="40px" height="40px" style={{opacity:0.6}} />
-                                        </Grid>
-                                        <Grid item md={11}>
-                                            <List style={{ padding: 0 }}>
-                                                <ListItem style={{ padding: "0px 0px 0px 8px" }}>
-                                                    <ListItemText
-                                                        primary={<span style={{ fontSize: "22px", fontWeight: "680", opacity:0.75}}>नागरिक</span>}
-                                                        secondary={<span style={{ fontStyle: "italic" }}>Citizen</span>}
-                                                    />
-                                                </ListItem>
-                                            </List>
-
-                                        </Grid>
+                            <Grid container spacing={2} >
+                                <Grid item xs={12} sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                        <div>
+                                            <img class="img-responsive mseva-logo employee-login-logo" src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/mSeva_Bihar.png"></img>
+                                        </div>
+                                        <form className={classes.root} noValidate autoComplete="off">
+                                            <TextField
+                                                id="standard-select-currency-native"
+                                                select
+                                                label="City"
+                                                required="true"
+                                                placeholder="Select Your City"
+                                                className={classes.textField}
+                                                value={this.state.currency}
+                                                style={{width:"90%", color:"#000"}}
+                                                onChange={this.handleChange('currency')}
+                                                SelectProps={{
+                                                    native: true,
+                                                    MenuProps: {
+                                                        className: classes.menu,
+                                                    },
+                                                }}
+                                                // helperText="Please select your currency"
+                                                margin="normal"
+                                            >
+                                                {City.map(option => (
+                                                    <option key={option.value} value={option.value} href={option.url}>
+                                                        {option.label}
+                                                    </option>
+                                                    
+                                                ))}
+                                            </TextField>
+                                            <Button variant="contained" style={{backgroundColor:"rgb(254, 122, 81)", color:"#FFF", fontWeight:"600", fontSize:"14px", width:"90%", marginTop:"15px", height:"45px"}}>CONTINUE</Button>
+                                        </form>
                                     </Grid>
-                                    <List style={{ padding: 0 }}>
-                                        <ListItem style={{ padding: 0 }}>
-                                            <ListItemText
-                                                primary={<span style={{ fontSize: "14px", fontfamily: "inherit",opacity:0.8 }}>एमसेवा नागरिक खाता नागरिकों को शहरी स्थानीय निकाय (नगर पालिका / नगर निगम) द्वारा प्रदान की गई विभिन्न सेवाओं का ऑनलाइन लाभ उठाने में सक्षम बनाता है। शहरी स्थानीय निकाय प्रमुख रूप से व्यापार लाइसेंस, संपत्ति कर और नागरिक शिकायतों आदि से संबंधित सेवाएं प्रदान करते हैं। रजिस्टर / कृपया लॉग इन करने के लिए नीचे क्लिक करें।
-                                                </span>}
-                                                secondary={<span style={{ fontStyle: "italic" }}>A mSeva citizen account enables citizens to avail the various services online rendered by the urban local body (Municipality/ Municipal Corporation). The major services which the local body provides are related to Trade License, Property Tax, and Citizen Grievances etc. Please click below to register/log in.</span>}
-                                            />
-                                        </ListItem>
-                                    </List>
-
-                                </CardContent>
-                                <CardActions className="login-citizen" style={{ padding: "16px"}}>
-                                    <a href="/citizen" className={classes.btn} id="login-button">
-                                        लॉग इन / LOGIN
-                                      </a>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                        <Grid item md={5}>
-                            <Card style={{ borderRadius: 0, height:380 }}>
-                                <CardContent style={{height:270}}>
-                                    <Grid container alignItems="center" >
-                                        <Grid item md={1}>
-                                            <img src="assets/municiple-employee.png" alt="municiple-employee-logo" width="40px" height="40px" style={{opacity:0.6}} />
-                                        </Grid>
-                                        <Grid item md={11}>
-                                            <List style={{ padding: 0 }}>
-                                                <ListItem style={{ padding: "0px 0px 0px 8px" }}>
-                                                    <ListItemText
-                                                        primary={<span style={{ fontSize: "22px", fontWeight: "680" , opacity:0.75}}>नगर निगम कर्मचारी</span>}
-                                                        secondary={<span style={{ fontStyle: "italic" }}>Municipal Employee</span>}
-                                                    />
-                                                </ListItem>
-                                            </List>
-                                        </Grid>
-                                    </Grid>
-                                    <List style={{ padding: 0 }}>
-                                        <ListItem style={{ padding: 0 }}>
-                                            <ListItemText
-                                                primary={<span style={{ fontSize: "14px", fontfamily: "inherit" , opacity:0.8}}>एमसेवा कर्मचारी खाता शहरी स्थानीय निकाय (नगर पालिका / नगर निगम) के कर्मचारी को दिन-प्रतिदिन की गतिविधियों के लिए सक्षम बनाता है और उसे नागरिकों द्वारा सौंपे गए सेवा अनुरोध की समय पर डिलीवरी सुनिश्चित करता है। कृपया लॉग इन करने के लिए नीचे क्लिक करें।</span>}
-                                                secondary={<span style={{ fontStyle: "italic" }}>A mSeva employee account enables the employee of urban local body (Municipality/ Municipal Corporation) to perform its day to day activities and ensure the timely delivery of services applied by citizen assigned to him/her. Please click below to login.</span>}
-                                            />
-                                        </ListItem>
-                                    </List>
-                                </CardContent>
-                                <CardActions id="login-citizen" style={{ padding: "16px"}} >
-                                    <a href="/employee" className={classes.btn} id="login-button">लॉग इन / LOGIN
-                             </a>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                        <Grid item md={1}></Grid>
-                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Card>
+                    </div>
                 </Grid>
             </div>
         );
     }
 }
 export default withStyles(styles)(LandingPage);
+
