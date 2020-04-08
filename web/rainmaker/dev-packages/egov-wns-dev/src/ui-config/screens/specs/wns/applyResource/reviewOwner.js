@@ -233,7 +233,7 @@ export const reviewOwner = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Additional Details ( To be filled by Municipal Employee)",
-            labelKey: "WS_COMMON_ADDN_DETAILS"
+            labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
           })
         },
         editSection: {
