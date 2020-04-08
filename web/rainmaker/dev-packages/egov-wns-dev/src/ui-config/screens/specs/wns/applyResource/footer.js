@@ -126,8 +126,9 @@ const callBackForNext = async (state, dispatch) => {
         };
       });
       dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
-      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
-      dispatch(prepareFinalObject("applyScreen", applyScreenObject));
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      let applyScreenObj=findAndReplace(applyScreenObject,0,null);
+      dispatch(prepareFinalObject("applyScreen", applyScreenObj));
     } else {
       const water = get(
         state.screenConfiguration.preparedFinalObject,
