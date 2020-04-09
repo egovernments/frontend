@@ -345,9 +345,7 @@ const setSearchResponse = async (
   }
 
   if (get(property, 'ownersInit[0].altContactNumber', 0)) {
-    property.institution = {};
-    property.institution.nameOfAuthorizedPerson = get(property, 'ownersInit[0].name', '');
-
+   
     dispatch(
       handleField(
         "search-preview",
