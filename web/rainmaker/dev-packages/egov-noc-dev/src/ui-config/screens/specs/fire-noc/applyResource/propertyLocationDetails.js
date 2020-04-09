@@ -633,17 +633,8 @@ export const propertyLocationDetails = getCommonCard(
 
           if( value === 'Urban')
           {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.District",
-                "props.value",
-                ""
-              )
-            );     
-
-        
-            
+             
+          
             dispatch(
               handleField(
                 "apply",
@@ -652,9 +643,6 @@ export const propertyLocationDetails = getCommonCard(
                 urbanlist
               )
             );
-
-
-
 
           }   else {
             
@@ -1011,7 +999,7 @@ export const propertyLocationDetails = getCommonCard(
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo"
       }),
-     /*  propertyBuilidingName: getTextField({
+      /*  propertyBuilidingName: getTextField({
         label: {
           labelName: "Building/Colony Name",
           labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
