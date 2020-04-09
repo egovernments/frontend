@@ -145,9 +145,9 @@ class LandingPage extends React.Component {
                             <Grid container spacing={2} >
                                 <Grid item xs={12} sm container>
                                     <Grid item xs container direction="column" spacing={2}>
-                                        <div style={{ textAlign: "center", margin:"10px 20px 30px" }}>
+                                        <div style={{ textAlign: "center", margin:"10px 0px 30px" }}>
                                             <img class="img-responsive mseva-logo employee-login-logo" src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/mSeva_Bihar.png"></img>
-                                        </div>
+                                        </div>                                                              
                                         <form onSubmit={this.handleSubmit}>
                                             <label>City <span style={{color:"red"}}>*</span></label><br/>
                                             
