@@ -71,11 +71,6 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     });
     if(index > -1){
         dispatch(prepareFinalObject("commonPayInfo" , commonPayDetails[index]));
-    //   commonPayDetails && commonPayDetails.map(item => {
-    //     if (item.code == businessService) {
-    //         dispatch(prepareFinalObject("commonPayInfo", item));
-    //     }
-    //   })
     }else{
         const details = commonPayDetails.filter(item => item.code === "DEFAULT");
         dispatch(prepareFinalObject("commonPayInfo" , details));

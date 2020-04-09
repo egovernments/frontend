@@ -90,7 +90,7 @@ const getAcknowledgementCard = (
     const roleExists = ifUserRoleExists("CITIZEN");
     let header = getHeader(state);
     const businessService = getQueryArg(window.location.href, "businessService");
-    const transBusinessService = businessService ? businessService.replace(/[._:-\s\/]/g, "_") : "DEFAULT";
+    const transBusinessService = businessService ? businessService.toUpperCase().replace(/[._:-\s\/]/g, "_") : "DEFAULT";
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     if (status === "success") {
         return {
