@@ -615,6 +615,7 @@ const mapStateToProps = (state, ownProps) => {
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
+  loading = loading && Object.keys(selPropertyDetails).length > 0 ? false : true;
   const { documentsUploaded } = selPropertyDetails || [];
   const latestPropertyDetails = getLatestPropertyDetails(selPropertyDetails.propertyDetails);
   const pendingAssessments = getPendingAssessments(selPropertyDetails, singleAssessmentByStatus);
