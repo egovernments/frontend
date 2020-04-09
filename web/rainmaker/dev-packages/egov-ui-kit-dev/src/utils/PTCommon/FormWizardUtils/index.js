@@ -8,7 +8,7 @@ import { getPlotAndFloorFormConfigPath } from "../../../config/forms/specs/Prope
 import { get, set, isEmpty } from "lodash";
 import { trimObj } from "../../../utils/commons";
 import { MDMS } from "../../../utils/endPoints";
-import {  localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 
 export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, self) => {
@@ -47,12 +47,10 @@ export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, sel
   );
 };
 export const getBusinessServiceNextAction = (businessServiceName, currentAction) => {
-  const businessServiceData = JSON.parse(
-    localStorageGet("businessServiceData")
-  );
-  
-  const data =businessServiceData&&businessServiceData.filter(businessService=>businessService.businessService=="PT.CREATE");
-  let { states } = data&&data.length>0&&data[0] || [];
+  const businessServiceData = JSON.parse(window.localStorage.getItem("businessServiceData")) || JSON.parse(window.localStorage.getItem("Employee.businessServiceData"))
+
+  const data = businessServiceData && businessServiceData.filter(businessService => businessService.businessService == "PT.CREATE");
+  let { states } = data && data.length > 0 && data[0] || [];
 
   if (states && states.length > 0) {
     states = states.filter((item, index) => {
@@ -108,58 +106,57 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
   } catch (e) {
     alert(e);
   }
-  if(process.env.REACT_APP_NAME === "Citizen")
-  {
-  /*  
-  Draft Removed from PT2.2
-  
-  if (!draftRequest.draft.id) {
-        draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
-        draftRequest.draft.draftRecord = {
-          selectedTabIndex: selected + 1,
-          prepareFormData,
-        };
-        try {
-          let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
-          const draftInfo = draftResponse.drafts[0];  
-          updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
-        } catch (e) {
-          alert(e);
-        }
-      } else {
-        const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
-        draftRequest.draft = {
-          ...draftRequest.draft,
-          assessmentNumber: assessmentNo,
-          tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
-          draftRecord: {
-            ...draftRequest.draft.draftRecord,
-            selectedTabIndex: assessmentNumber ? selected : selected + 1,
-            assessmentNumber: assessmentNo,
+  if (process.env.REACT_APP_NAME === "Citizen") {
+    /*  
+    Draft Removed from PT2.2
+    
+    if (!draftRequest.draft.id) {
+          draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
+          draftRequest.draft.draftRecord = {
+            selectedTabIndex: selected + 1,
             prepareFormData,
-          },
-          prepareFormData,
-        };
-        try {
-          if (selected === 3) {
-            draftRequest = {
-              ...draftRequest,
-              draft: {
-                ...draftRequest.draft,
-                isActive: false,
-              },
-            };
+          };
+          try {
+            let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
+            const draftInfo = draftResponse.drafts[0];  
+            updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
+          } catch (e) {
+            alert(e);
           }
-          let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
-          const draftInfo = draftResponse.drafts[0];  
-          updateDraftinLocalStorage(draftInfo, "", self);
-        } catch (e) {
-          alert(e);
-        }
-      } */
-  } 
+        } else {
+          const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
+          draftRequest.draft = {
+            ...draftRequest.draft,
+            assessmentNumber: assessmentNo,
+            tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
+            draftRecord: {
+              ...draftRequest.draft.draftRecord,
+              selectedTabIndex: assessmentNumber ? selected : selected + 1,
+              assessmentNumber: assessmentNo,
+              prepareFormData,
+            },
+            prepareFormData,
+          };
+          try {
+            if (selected === 3) {
+              draftRequest = {
+                ...draftRequest,
+                draft: {
+                  ...draftRequest.draft,
+                  isActive: false,
+                },
+              };
+            }
+            let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
+            const draftInfo = draftResponse.drafts[0];  
+            updateDraftinLocalStorage(draftInfo, "", self);
+          } catch (e) {
+            alert(e);
+          }
+        } */
+  }
 
-  
+
 };
 
 export const updateTotalAmount = (value, isFullPayment, errorText) => {
@@ -572,13 +569,13 @@ export const removeAdhocIfDifferentFY = (property, fY) => {
 };
 
 export const getSortedTaxSlab = (estimateResponse) => {
-  if(estimateResponse && estimateResponse.Calculation && estimateResponse.Calculation.length > 0) {
-    if(estimateResponse.Calculation[0].taxHeadEstimates && estimateResponse.Calculation[0].taxHeadEstimates.length > 0){
+  if (estimateResponse && estimateResponse.Calculation && estimateResponse.Calculation.length > 0) {
+    if (estimateResponse.Calculation[0].taxHeadEstimates && estimateResponse.Calculation[0].taxHeadEstimates.length > 0) {
       const taxHeadKeys = ["PT_TAX", "PT_CANCER_CESS", "PT_TIME_REBATE", "PT_TIME_PENALTY", "PT_TIME_INTEREST", "PT_OWNER_EXEMPTION", "PT_ROUNDOFF", "PT_UNIT_USAGE_EXEMPTION", "PT_FIRE_CESS"];
       const tempArray = estimateResponse.Calculation[0].taxHeadEstimates;
-      if(tempArray && tempArray.length > 0) {
+      if (tempArray && tempArray.length > 0) {
         let tempArray1 = [];
-        taxHeadKeys.map((key)=>{
+        taxHeadKeys.map((key) => {
           let itemKeys = {};
           itemKeys = tempArray[tempArray.findIndex(item => item.taxHeadCode.indexOf(key) !== -1)];
           if (itemKeys) tempArray1.push(itemKeys);
