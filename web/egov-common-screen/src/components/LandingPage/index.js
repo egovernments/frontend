@@ -58,12 +58,12 @@ class LandingPage extends React.Component {
       handleSubmit(event) {
          
         console.log("select city"+this.state.value);
-        if(this.state.value==="Select your City"||this.state.value===""){
+        if(this.state.value==="Select your City"||this.state.value==="_self"){
             // window.open("/", ""); 
             alert('Please select your city ');
         }
         else{
-            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value, "");
+            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value, "_self");
             event.preventDefault();
         }
         
@@ -145,7 +145,7 @@ class LandingPage extends React.Component {
                             <Grid container spacing={2} >
                                 <Grid item xs={12} sm container>
                                     <Grid item xs container direction="column" spacing={2}>
-                                        <div style={{ textAlign: "center", margin:"10px 20px" }}>
+                                        <div style={{ textAlign: "center", margin:"10px 20px 30px" }}>
                                             <img class="img-responsive mseva-logo employee-login-logo" src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/mSeva_Bihar.png"></img>
                                         </div>
                                         <form onSubmit={this.handleSubmit}>
@@ -180,6 +180,7 @@ class LandingPage extends React.Component {
                                                         borderBottomColor: "white",
                                                       },
                                                 }}
+                                                
                                                 style={{width:"100%"}} >
                                             >
                                                 <option className="Dropdownvalues" value="Select your City">Select your City</option>
@@ -190,7 +191,7 @@ class LandingPage extends React.Component {
 
                                                 ))}
                                             </TextField>
-                                            <Button variant="contained" type="submit" style={{ backgroundColor: "rgb(254, 122, 81)", color: "#FFF", fontWeight: "600", fontSize: "14px", width: "90%", marginTop: "50px", height: "45px", width: "100%" }}>CONTINUE</Button>
+                                            <Button variant="contained" type="submit" style={{ backgroundColor: "rgb(254, 122, 81)", color: "#FFF", fontWeight: "600", fontSize: "14px", width: "90%", marginTop: "25px", height: "45px", width: "100%" }}>CONTINUE</Button>
                                             {/* <input type="submit" value="Continue" style={{
                                                 margin: "15px 0",
                                                 height: "40px",
