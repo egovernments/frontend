@@ -117,6 +117,72 @@ export const payeeDetails = getCommonContainer({
   })
 });
 
+export const onlineDetails = getCommonContainer({
+  txnNo: getTextField({
+    label: {
+      labelName: "Transaction No.",
+      labelKey: "PAYMENT_TXN_NO_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Cheque  no.",
+      labelKey: "PAYMENT_TXN_NO_PLACEHOLDER"
+    },
+    //Pattern validation for Cheque number
+    jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
+    required: true
+  }),
+  txnDate: getDateField({
+    label: {
+      labelName: "Transaction Date",
+      labelKey: "PAYMENT_TXN_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "dd/mm/yy",
+      labelKey: "PAYMENT_TXN_DATE_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
+  }),
+  onlineIFSC: getTextField({
+    label: {
+      labelName: "IFSC",
+      labelKey: "NOC_PAYMENT_IFSC_CODE_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter bank IFSC",
+      labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "ReceiptTemp[0].instrument.ifscCode",
+    iconObj: {
+      iconName: "search",
+      position: "end",
+      color: "#FE7A51",
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          onIconClick(state, dispatch, 1);
+        }
+      }
+    }
+  }),
+  chequeBank: getTextField({
+    label: {
+      labelName: "Bank Name",
+      labelKey: "NOC_PAYMENT_BANK_NAME_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter bank name",
+      labelKey: "NOC_PAYMENT_BANK_NAME_PLACEHOLDER"
+    },
+    required: true,
+    props: {
+      disabled: true
+    },
+    jsonPath: "ReceiptTemp[0].instrument.bank.name"
+  })
+});
+
 export const chequeDetails = getCommonContainer({
   chequeNo: getTextField({
     label: {
@@ -198,9 +264,47 @@ export const chequeDetails = getCommonContainer({
   })
 });
 
+export const poDetails = getCommonContainer({
+  ipoNo: getTextField({
+    label: {
+      labelName: "IPO No.",
+      labelKey: "PAYMENT_IPO_NO_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter IPO No.",
+      labelKey: "PAYMENT_IPO_NO_PLACEHOLDER"
+    },
+    //Pattern validation for Cheque number
+    jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
+    required: true
+  }),
+  txnDate: getDateField({
+    label: {
+      labelName: "Transaction Date",
+      labelKey: "PAYMENT_TXN_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "dd/mm/yy",
+      labelKey: "PAYMENT_TXN_DATE_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
+  })
+});
+
 export const cheque = getCommonContainer({
   payeeDetails,
   chequeDetails
+});
+
+export const neftRtgs = getCommonContainer({
+  payeeDetails,
+  onlineDetails
+});
+
+export const postalOrder = getCommonContainer({
+  payeeDetails,
+  poDetails
 });
 
 export const demandDraftDetails = getCommonContainer({
@@ -363,6 +467,24 @@ export const paymentMethods= [
     tabButton: "COMMON_CREDIT_DEBIT_CARD",
     tabIcon: "Schedule",
     tabContent: { card }
+  },
+  {
+    code : "OFFLINE_NEFT",
+    tabButton: "COMMON_NEFT",
+    tabIcon: "Schedule",
+    tabContent: { neftRtgs }
+  },
+  {
+    code : "OFFLINE_RTGS",
+    tabButton: "COMMON_RTGS",
+    tabIcon: "Schedule",
+    tabContent: { neftRtgs }
+  },
+  {
+    code : "POSTAL_ORDER",
+    tabButton: "COMMON_POSTAL_ORDER",
+    tabIcon: "Schedule",
+    tabContent: { postalOrder }
   }
 ]
 
