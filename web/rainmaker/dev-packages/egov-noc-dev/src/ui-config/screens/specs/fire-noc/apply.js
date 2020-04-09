@@ -275,6 +275,8 @@ export const prepareEditFlow = async (
       )
     );
 
+
+
     // setCardsIfMultipleBuildings(state, dispatch);
 
     // Set sample docs upload
@@ -406,6 +408,21 @@ const screenConfig = {
       state,
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
       nocType
+    );
+/* 
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.area",
+        "props.value",
+        "Urban"
+      )
+    );  */
+  
+    set(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
+      "Urban"
     );
 
     // Preset multi-cards (CASE WHEN DATA PRE-LOADED)
