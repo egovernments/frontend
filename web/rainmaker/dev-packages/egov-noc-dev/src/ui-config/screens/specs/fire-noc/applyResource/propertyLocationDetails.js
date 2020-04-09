@@ -139,8 +139,8 @@ export const propertyLocationDetails = getCommonCard(
   {
     header: getCommonTitle(
       {
-        labelName: "Property Location Details",
-        labelKey: "NOC_PROPERTY_LOCATION_DETAILS_HEADER"
+        labelName: "Building Location Details",
+        labelKey: "NOC_BUILDING_LOCATION_DETAILS_HEADER"
       },
       {
         style: {
