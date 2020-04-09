@@ -199,12 +199,20 @@ class MultiItem extends React.Component {
 }
 
 const mapStateToProps = (state , ownProps) => {
-  // const { screenConfiguration } = state;
-  // const { screenConfig } = screenConfiguration;
   const {jsonPath} = ownProps;
-   const businessServiceDetails = get(state.screenConfiguration.preparedFinalObject , jsonPath);
-  const tabs = paymentMethods.filter(item => item.code !== get(businessServiceDetails , "collectionModesNotAllowed[0]"))
-
+  const businessServiceDetails = get(state.screenConfiguration.preparedFinalObject , jsonPath);
+  const notAllowedTypes = get(businessServiceDetails , "collectionModesNotAllowed");
+  const tabs = paymentMethods && paymentMethods.reduce((acc , item) => {
+    const index = notAllowedTypes && notAllowedTypes.findIndex((type) => {
+      return item.code == type;
+    });
+    if(index === -1){
+      acc.push({
+        ...item
+      })
+    }
+    return acc;
+  },[])
   return {  state , tabs };
 };
 
