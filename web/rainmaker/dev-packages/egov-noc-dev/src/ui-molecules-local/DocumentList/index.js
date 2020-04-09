@@ -36,8 +36,9 @@ const themeStyles = theme => ({
     marginTop: "10px",
     marginBottom: "10px",
     border: "#d6d6d6",
-    borderStyle: "solid",
-    borderWidth: "1px"
+   // borderStyle: "solid",
+    borderWidth: "1px",
+    paddingLeft: "1px"    
   },
   documentIcon: {
     backgroundColor: "#FFFFFF",
