@@ -56,13 +56,14 @@ class LandingPage extends React.Component {
       }
     
       handleSubmit(event) {
-        // alert('A name was submitted: ' + this.state.value);
+         
         console.log("select city"+this.state.value);
-        if(this.state.value==="Select your City"){
-            window.open("/"); 
+        if(this.state.value==="Select your City"||this.state.value===""){
+            // window.open("/", ""); 
+            alert('Please select your city ');
         }
         else{
-            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value, "_self");
+            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value, "");
             event.preventDefault();
         }
         
@@ -148,7 +149,7 @@ class LandingPage extends React.Component {
                                             <img class="img-responsive mseva-logo employee-login-logo" src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/mSeva_Bihar.png"></img>
                                         </div>
                                         <form onSubmit={this.handleSubmit}>
-                                            <label>City <span>*</span></label><br/>
+                                            <label>City <span style={{color:"red"}}>*</span></label><br/>
                                             
                                             
                                             {/* <select type="text" value={this.state.value} onChange={this.handleChange} style={{width:"100%", 
@@ -173,16 +174,15 @@ class LandingPage extends React.Component {
                                                 select
                                                 value={this.state.value}
                                                 onChange={this.handleChange}
-                                                
                                                 SelectProps={{
                                                     native: true,
-                                                    MenuProps: {
-                                                        className: classes.listStyle,
-                                                    },
+                                                    '&:hover:before': {
+                                                        borderBottomColor: "white",
+                                                      },
                                                 }}
                                                 style={{width:"100%"}} >
                                             >
-                                                <option className="Dropdownvalues">Select your City</option>
+                                                <option className="Dropdownvalues" value="Select your City">Select your City</option>
                                                 {tenantInfo.length > 0 && tenantInfo.map(option => (
                                                     <option className="Dropdownvalues" key={option.value} value={option.name} >
                                                         {option.name}
