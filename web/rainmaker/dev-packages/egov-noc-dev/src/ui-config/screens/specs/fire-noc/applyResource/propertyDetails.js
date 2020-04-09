@@ -191,7 +191,7 @@ const commonBuildingData = buildingType => {
     buildingUsageType: {
       ...getSelectField({
         label: {
-          labelName: "Building Usage Type as per NBC",
+          labelName: "Building Usage Type",
           labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_TYPE_LABEL"
         },
         placeholder: {
@@ -224,18 +224,23 @@ const commonBuildingData = buildingType => {
           "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
           []
         );
-        let buildingSubUsageTypeData = buildingUsageTypeData.filter(item => {
+         let buildingSubUsageTypeData = buildingUsageTypeData.filter(item => {
           return item.active && item.code.startsWith(action.value);
-        });
+        }); 
+
+    
+
+       // console.log("buildingSubUsageTypeData", buildingSubUsageTypeData);
+
         dispatch(
-          handleField("apply", path, "props.data", buildingSubUsageTypeData)
-        );
+          handleField("apply", path, "props.data", buildingSubUsageTypeData[0].BuildingSubType)
+        ); 
       }
     },
     buildingSubUsageType: {
       ...getSelectField({
         label: {
-          labelName: "Building Usage Subtype as per NBC",
+          labelName: "Building Usage Subtype",
           labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_SUBTYPE_LABEL"
         },
         placeholder: {
