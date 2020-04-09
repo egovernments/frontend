@@ -60,7 +60,7 @@ class LandingPage extends React.Component {
         console.log("select city"+this.state.value);
         if(this.state.value==="Select your City"||this.state.value===""){
             // window.open("/", ""); 
-            alert('Please select your city ');
+            alert('Please select your city from City Dropdown');
         }
         else{
             window.open("https://portal.mseva.bihar.gov.in/" + this.state.value, "_self");
