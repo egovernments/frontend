@@ -215,3 +215,9 @@
 #standard-select-currency-native :hover, :active{
     border-bottom: orange!important;
 }
+#common-container .employee-login-logo{
+    width: 58%!important;
+}
+#standard-select-currency-native > option:nth-child(10),#standard-select-currency-native > option:nth-child(11){
+    display: none!important;
+}
