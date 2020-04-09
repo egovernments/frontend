@@ -63,7 +63,7 @@ class LandingPage extends React.Component {
             alert('Please select your city ');
         }
         else{
-            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value, "_self");
+            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value,);
             event.preventDefault();
         }
         
