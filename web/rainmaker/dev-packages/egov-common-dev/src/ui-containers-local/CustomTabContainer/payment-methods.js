@@ -124,7 +124,7 @@ export const onlineDetails = getCommonContainer({
       labelKey: "PAYMENT_TXN_NO_LABEL"
     },
     placeholder: {
-      labelName: "Enter Cheque  no.",
+      labelName: "Enter Transaction  no.",
       labelKey: "PAYMENT_TXN_NO_PLACEHOLDER"
     },
     //Pattern validation for Cheque number
