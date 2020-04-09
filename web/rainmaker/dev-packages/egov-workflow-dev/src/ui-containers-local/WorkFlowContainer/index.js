@@ -117,7 +117,7 @@ class WorkFlowContainer extends React.Component {
         toggleSnackbar(
           true,
           {
-            labelName: "Comment field is mandatory while adding rejecting appliction!",
+            labelName: "Comment field is mandatory while rejecting appliction!",
             labelKey: "ERR_WF_UPDATE_REJECT_ACTION_ERROR"
           },
           "error"
