@@ -181,7 +181,7 @@ const scrutinizePlan = async (state, dispatch) => {
     bodyFormData.append("planFile", file);
     let EDCRHost = process.env.REACT_APP_EDCR_API_HOST
       ? process.env.REACT_APP_EDCR_API_HOST
-      : "https://egov-dcr-galaxy.egovernments.org";
+      : "https://egov-micro-dev.egovernments.org";
 
     let response = await axios({
       method: "post",
