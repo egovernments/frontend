@@ -1,14 +1,13 @@
+import { get, isEmpty, set } from "lodash";
 import React from "react";
-import formHoc from "../../../hocs/form";
-import { httpRequest } from "../../api";
-import { getQueryValue, getFinancialYearFromQuery, convertUnitsToSqFt, findCorrectDateObj, findCorrectDateObjPenaltyIntrest } from "../../PTCommon";
 import { Icon } from "../../../components";
-import Label from "../../../utils/translationNode";
 import { getPlotAndFloorFormConfigPath } from "../../../config/forms/specs/PropertyTaxPay/utils/assessInfoFormManager";
-import { get, set, isEmpty } from "lodash";
+import formHoc from "../../../hocs/form";
 import { trimObj } from "../../../utils/commons";
 import { MDMS } from "../../../utils/endPoints";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import Label from "../../../utils/translationNode";
+import { httpRequest } from "../../api";
+import { convertUnitsToSqFt, findCorrectDateObj, findCorrectDateObjPenaltyIntrest, getFinancialYearFromQuery, getQueryValue } from "../../PTCommon";
 
 
 export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, self) => {
