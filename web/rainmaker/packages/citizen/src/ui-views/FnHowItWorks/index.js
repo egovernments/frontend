@@ -3,7 +3,6 @@ import React from "react";
 const FnHowItWorks = (props) => {
   return (
     <div style={{ height: "100vh" }}>
-        <h1> for FireNOC </h1>
 
       <iframe
         src="https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb/Fire_NOC_Help_Doc.pdf"
