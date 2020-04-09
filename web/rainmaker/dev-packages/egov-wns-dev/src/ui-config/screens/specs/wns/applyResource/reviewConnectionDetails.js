@@ -346,7 +346,7 @@ const propertyOwnerDetails = () => {
       items: [],
       hasAddItem: false,
       sourceJsonPath: "applyScreen.property.owners",
-      prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
+      prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
