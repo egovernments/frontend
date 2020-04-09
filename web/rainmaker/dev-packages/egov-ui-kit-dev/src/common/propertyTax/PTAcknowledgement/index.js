@@ -89,7 +89,8 @@ class PTAcknowledgement extends React.Component {
     this.setState({ fetchingBill: true });
     const queryObject = [
       { key: "consumerCode", value: propertyId },
-      { key: "tenantId", value: tenantId }
+      { key: "tenantId", value: tenantId },
+      { key: "businessService", value: 'PT' }
     ];
     try {
       const payload = await httpRequest(
