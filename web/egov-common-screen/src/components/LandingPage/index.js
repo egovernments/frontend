@@ -58,7 +58,7 @@ class LandingPage extends React.Component {
       handleSubmit(event) {
          
         console.log("select city"+this.state.value);
-        if(this.state.value==="Select your City"||this.state.value==="","_self"){
+        if(this.state.value==="Select your City"||this.state.value===""){
             // window.open("/", ""); 
             alert('Please select your city ');
         }
