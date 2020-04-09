@@ -208,5 +208,10 @@
     padding: 15px 0!important;
 }
 .Dropdownvalues{
-    padding: 20px 0;
+    padding: 10px 0;
+}
+
+
+#standard-select-currency-native :hover, :active{
+    border-bottom: orange!important;
 }
