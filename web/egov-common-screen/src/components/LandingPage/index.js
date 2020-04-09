@@ -63,7 +63,7 @@ class LandingPage extends React.Component {
             alert('Please select your city ');
         }
         else{
-            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value,);
+            window.open("https://portal.mseva.bihar.gov.in/" + this.state.value, "_self");
             event.preventDefault();
         }
         
@@ -183,7 +183,7 @@ class LandingPage extends React.Component {
                                                 
                                                 style={{width:"100%"}} >
                                             >
-                                                <option className="Dropdownvalues" value="Select your City">Select your City</option>
+                                                <option className="Dropdownvalues" value="">Select your City</option>
                                                 {tenantInfo.length > 0 && tenantInfo.map(option => (
                                                     <option className="Dropdownvalues" key={option.value} value={option.name} >
                                                         {option.name}
