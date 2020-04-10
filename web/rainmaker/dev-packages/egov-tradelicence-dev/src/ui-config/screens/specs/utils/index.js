@@ -1414,16 +1414,6 @@ export const epochToYmdDate = et => {
   return formattedDate;
 };
 
-export const getTodaysDateInYMD = () => {
-  let date = new Date();
-  //date = date.valueOf();
-  let month = date.getMonth() + 1;
-  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  date = `${date.getFullYear()}-${month}-${day}`;
-  // date = epochToYmdDate(date);
-  return date;
-};
-
 export const getNextMonthDateInYMD = () => {
   //For getting date of same day but of next month
   let date = getTodaysDateInYMD();
