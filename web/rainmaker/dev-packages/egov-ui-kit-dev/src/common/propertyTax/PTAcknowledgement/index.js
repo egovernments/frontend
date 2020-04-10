@@ -6,7 +6,7 @@ import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/C
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
-import { formWizardConstants, getPurpose, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getPurpose, PROPERTY_FORM_PURPOSE, routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import React from "react";
@@ -55,13 +55,12 @@ class PTAcknowledgement extends React.Component {
       "propertyId"
     );
     const tenant = getQueryArg(window.location.href, "tenantId");
-
-    store.dispatch(
-      setRoute(
-        `/egov-common/pay?consumerCode=${propertyId}&tenantId=${tenant}&businessService=PT`
-
-      )
-    );
+    routeToCommonPay(propertyId, tenant);
+    // store.dispatch(
+    //   setRoute(
+    //     `/egov-common/pay?consumerCode=${propertyId}&tenantId=${tenant}&businessService=PT`
+    //   )
+    // );
   }
 
   downloadAcknowledgementForm = () => {
