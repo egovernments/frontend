@@ -424,6 +424,19 @@ const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNum
 }
 
 
+export const routeToCommonPay = (propertyId, tenantId,businessService='PT') => {
+
+  let routeLink = `/egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}&businessService=${businessService}`;
+  store.dispatch(
+    setRoute(
+      routeLink
+    )
+  );
+}
+
+
+
+
 
 
 export const propertySubmitAction = (Properties, action, props) => {
