@@ -1,5 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const getCommonApplyFooter = children => {
   return {
@@ -22,6 +23,30 @@ const getRedirectionURL = () => {
 };
 
 export const gotoHomeFooter = getCommonApplyFooter({
+  ocCreateApp: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      },
+      // disabled: true
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "CREATE OCUPANCY CERTIFICATE APPLICATION",
+        labelKey: "EDCR_OC_CREATE_APP_BUTTON"
+      })
+    },
+    onClickDefination: {
+      action: "page_change",
+       path: `/egov-bpa/apply?tenantId=${getQueryArg(window.location.href, "tenantId")}`
+    },
+    visible : false
+  },
   gotoHome: {
     componentPath: "Button",
     props: {

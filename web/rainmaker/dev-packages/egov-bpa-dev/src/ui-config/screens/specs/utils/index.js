@@ -4633,3 +4633,39 @@ export const getConditionsInPermitList = async (action, state, dispatch) => {
   
   dispatch(prepareFinalObject( "BPA.additionalDetails.pendingapproval" ,finalPermitList));
 }
+
+export const getLicenseNumber = async (state, dispatch) => {
+
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let userInfo = JSON.parse(getUserInfo());
+  const id = get(userInfo, "id");
+  const queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "id",
+      value: id
+    }
+  ];
+
+  try {
+    const License = await httpRequest(
+      "post",
+      "/tl-services/v1/BPAREG/_search",
+      "", [],
+      queryObject
+    );
+    for (let i = 0; i <= License.Licenses.length; i++) {
+      if (License.Licenses[i].status === "APPROVED") {
+        dispatch(prepareFinalObject("bpaDetails.appliedBy", `${License.Licenses[i].tradeLicenseDetail.owners[0].name}/${License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType}/${License.Licenses[i].licenseNumber}`))
+        break;
+      }
+    }
+    return License;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};

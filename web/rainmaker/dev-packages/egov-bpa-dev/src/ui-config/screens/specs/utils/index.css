@@ -43,3 +43,8 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
 #material-ui-rightContainer {
   margin-top: 5px !important;
 }
+
+#material-ui-ocScrutinyDetailsContainer{
+  padding: 20px 10px !important;
+  background: #f2f2f2 !important;
+}

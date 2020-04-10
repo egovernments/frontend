@@ -10,8 +10,11 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import get from "lodash/get";
 import set from "lodash/set";
-import { validateFields } from "../utils";
+import { validateFields, getLicenseNumber } from "../utils";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getBpaSearchResults } from "../../../../ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { edcrHttpRequest } from "../../../../ui-utils/api";
 
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
@@ -23,6 +26,20 @@ export const fetchData = async (
 ) => {
   dispatch(prepareFinalObject("searchResults", []));
   dispatch(prepareFinalObject("myApplicationsCount", 0));
+
+  const mdmsRes = await getMdmsDataForOc(dispatch);
+  let tenants =
+    mdmsRes &&
+    mdmsRes.MdmsRes &&
+    mdmsRes.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "BPAAPPLY") return true;
+    });
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      tenants
+    )
+  );
 
   const response = await getSearchResultsfromEDCR(action, state, dispatch);
   try {
@@ -298,4 +315,66 @@ export const fetchMDMSData = async (action, state, dispatch) => {
     });
   }
   dispatch(prepareFinalObject("applyScreenMdmsData.tenantData", TenantList));
+};
+
+export const fetchMDMSOCData = async (action, state, dispatch) => {
+  const mdmsRes = await getMdmsDataForOc(dispatch);
+  if(mdmsRes && mdmsRes.MdmsRes) {
+    dispatch(prepareFinalObject("applyScreenMdmsData", mdmsRes.MdmsRes));
+  }
+};
+
+export const getMdmsDataForOc = async () => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [{ name: "citymodule" }]
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [{name: "ServiceType"}]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let permitNum = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Scrutiny[0].permitNumber`,
+    ""
+  );
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "permitNos", value: permitNum }
+  ];
+  const response = await getBpaSearchResults(queryObject);
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
+    "search", []
+  );
+
+  let primaryOwnerArray = response.Bpa[0].owners.filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  set(get(response, "Bpa[0]"), "applicantName", primaryOwnerArray.length && primaryOwnerArray[0].name)
+  dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
+  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
+  await getLicenseNumber(state,dispatch);
 };
