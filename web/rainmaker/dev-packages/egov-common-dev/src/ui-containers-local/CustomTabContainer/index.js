@@ -16,13 +16,13 @@ class MultiItem extends React.Component {
   };
 
   methods = {
-    CASH : "Cash",
-    CHEQUE : "Cheque",
+    CASH : "cash",
+    CHEQUE : "cheque",
     DD : "DD",
-    CARD : "Card",
-    OFFLINE_NEFT : "OFFLINE_NEFT",
-    OFFLINE_RTGS : "OFFLINE_RTGS",
-    POSTAL_ORDER : "POSTAL_ORDER"
+    CARD : "card",
+    OFFLINE_NEFT : "neftRtgs",
+    OFFLINE_RTGS : "neftRtgs",
+    POSTAL_ORDER : "postalOrder"
   }
 
   fieldsToReset = [
@@ -109,37 +109,51 @@ class MultiItem extends React.Component {
 
   resetFields = (dispatch, state) => {
     const { tabs }=this.state;
-    if (
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].instrument.bank.name"
-      ) &&
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].instrument.branchName"
-      )
-    ) {
+    const finalObject = get(state , "screenConfiguration.preparedFinalObject");
+    const ifscCode = get(finalObject, "ReceiptTemp[0].instrument.ifscCode");
+    const transactionDateInput = get(finalObject, "ReceiptTemp[0].instrument.transactionDateInput");
+    const transactionNumber = get(finalObject, "ReceiptTemp[0].instrument.transactionNumber");
+    const bankName = get(finalObject,"ReceiptTemp[0].instrument.bank.name");
+    const branchName  = get(state.screenConfiguration.preparedFinalObject,"ReceiptTemp[0].instrument.branchName");
+    if (bankName && branchName) {
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.bank.name", ""));
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.branchName", ""));
-    } // Has to manually clear bank name and branch
+    }
+    if(ifscCode){
+      dispatch(prepareFinalObject("ReceiptTemp[0].instrument.ifscCode", ""));
+    }
+    if(transactionDateInput){
+      dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionDateInput", ""));
+    }
+    if(transactionNumber){
+      dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", ""));
+    }
     const keyToIndexMapping = tabs.map((item,index) => {
       return{
               index : index,
               key: get(this.methods, item.code)
       }
     })
-
-    keyToIndexMapping.forEach(item => {
-      const objectJsonPath = `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${
-        item.index
-      }].tabContent[${item.key}].children`;
-      const children = get(
-        state.screenConfiguration.screenConfig["pay"],
-        objectJsonPath,
-        {}
-      );
+    const objectJsonPath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs";
+    const instrumentTypes = get(state.screenConfiguration.screenConfig["pay"] , objectJsonPath);
+    
+    instrumentTypes.forEach(item => {
+      const tabContent = get(item , "tabContent");
+      const children = Object.values(tabContent)[0].children;
       this.resetAllFields(children, dispatch, state);
-    });
+    })
+    
+    // keyToIndexMapping.forEach(item => {
+    //   const objectJsonPath = `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${
+    //     item.index
+    //   }].tabContent[${item.key}].children`;
+    //   const children = get(
+    //     state.screenConfiguration.screenConfig["pay"],
+    //     objectJsonPath,
+    //     {}
+    //   );
+    //   this.resetAllFields(children, dispatch, state);
+    // });
   };
 
   setInstrumentType = (value, dispatch) => {
@@ -151,7 +165,7 @@ class MultiItem extends React.Component {
   onTabChange = (tabIndex, dispatch, state) => {
     const {tabs}=this.state;
     this.resetFields(dispatch, state);
-    this.setInstrumentType(get(this.methods , get(tabs[tabIndex] , "code")), dispatch);
+    this.setInstrumentType(get(tabs[tabIndex] , "code"), dispatch);
   };
 
   onTabClick = tabIndex => {
