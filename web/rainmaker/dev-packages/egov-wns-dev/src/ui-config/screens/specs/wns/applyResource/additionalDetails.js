@@ -42,7 +42,7 @@ const getPlumberRadioButton = {
 
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
-    labelKey: "WS_COMMON_ADDN_DETAILS"
+    labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
   }),
   connectiondetailscontainer: getCommonGrayCard({
     subHeader: getCommonTitle({
@@ -200,7 +200,7 @@ export const additionDetails = getCommonCard({
         },
         required: false,
         pattern: getPattern("Name"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.plumberInfo[0].name"
       }),
       plumberMobNo: getTextField({
@@ -322,7 +322,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("Amount"),
+        pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading"
       })

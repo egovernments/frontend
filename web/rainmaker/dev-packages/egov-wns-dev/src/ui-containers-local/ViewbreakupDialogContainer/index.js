@@ -41,13 +41,14 @@ const getMultiItem = (billingslabData, classes, style) => {
               color: "rgba(0, 0, 0, 0.6000000238418579)",
               fontSize: "14px",
               fontWeigt: 400,
-              lineSpacing: "17px"
+              lineSpacing: "17px",
+              marginRight:"10px"
             }}
           />
         </Grid>
         <Grid sm={3} className={classes.rightAlign}>
           <Label
-            label={`${item.estimateAmount}`}
+            label={`Rs ${item.estimateAmount}`}
             style={{
               color: "rgba(0, 0, 0, 0.8700000047683716)",
               fontSize: "14px",
@@ -68,11 +69,13 @@ class ViewBreakupContainer extends React.Component {
       fontSize: "20px",
       fontWeigt: 500,
       lineSpacing: "28px",
-      marginTop: 25
+      marginTop: 25,
+      marginRight:10
     }
   };
 
   getGridItem = (total, classes, style) => {
+
     return (
       <Grid sm={12} className={classes.container} container={true}>
         <Grid sm={9}>
@@ -86,7 +89,8 @@ class ViewBreakupContainer extends React.Component {
                   color: "rgba(0, 0, 0, 0.8700000047683716)",
                   fontSize: "14px",
                   fontWeigt: 400,
-                  lineSpacing: "17px"
+                  lineSpacing: "17px",
+                  marginRight:"10px"
                 }
             }
           />

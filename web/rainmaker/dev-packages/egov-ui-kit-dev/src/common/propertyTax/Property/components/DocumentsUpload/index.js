@@ -32,11 +32,20 @@ class DocumentsUpload extends Component {
       card["name"] = doc.code;
       card["code"] = doc.code;
       card["required"] = doc.required ? true : false;
+      // doc.additionalDetails=doc.additionalDetails?doc.additionalDetails:{};
+      // doc.additionalDetails.enabledActions={};
+      // doc.additionalDetails.enabledActions.assess={disableUpload:true,disableDropdown:true};
+      // doc.additionalDetails.enabledActions.reassess={disableUpload:true,disableDropdown:true};
+      // doc.additionalDetails.enabledActions.update={disableUpload:true,disableDropdown:true};
+      // doc.additionalDetails.enabledActions.create={disableUpload:false,disableDropdown:false};
       if (doc.additionalDetails && doc.additionalDetails.filterCondition) {
         card["filterCondition"] = doc.additionalDetails.filterCondition;
       }
       if (doc.additionalDetails && doc.additionalDetails.dropdownFilter) {
         card["dropdownFilter"] = doc.additionalDetails.dropdownFilter;
+      }
+      if (doc.additionalDetails && doc.additionalDetails.enabledActions) {
+        card["enabledActions"] = doc.additionalDetails.enabledActions;
       }
       if (doc.hasDropdown && doc.dropdownData) {
         let dropdown = {};

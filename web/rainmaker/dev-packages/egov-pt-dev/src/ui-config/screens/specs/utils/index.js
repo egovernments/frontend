@@ -851,6 +851,12 @@ export const getTextToLocalMapping = label => {
         "INWORKFLOW",
         localisationLabels
       );
+      case "Property ID":
+      return getLocaleLabels(
+        "Property ID",
+        "PT_MUTATION_PID",
+        localisationLabels
+      );
     default:
       return getLocaleLabels(
         label,

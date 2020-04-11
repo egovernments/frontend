@@ -200,7 +200,7 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "applyScreen.uom", callBack: handleNA }
+          { jsonPath: "applyScreen.property.propertySubUsageType", callBack: handleNA }
         ),
         reviewPlotSize: getLabelWithValue(
           {
@@ -222,7 +222,7 @@ const getPropertyDetails = {
             labelName: "Rain Water Harvesting Facility"
           },
           {
-            jsonPath: "applyScreen.rainWaterHarvesting",
+            jsonPath: "applyScreen.property.rainWaterHarvesting",
             callBack: handleNA
           }
         )
@@ -346,7 +346,7 @@ const propertyOwnerDetails = () => {
       items: [],
       hasAddItem: false,
       sourceJsonPath: "applyScreen.property.owners",
-      prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
+      prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
@@ -397,25 +397,10 @@ export const taskNoOfToilets = getLabelWithValue(
 
 
 const getConnectionDetails = () => {
-  return ({
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
-    props: {
-      className: "common-div-css search-preview",
-      scheama: getCommonGrayCard({
-        div4: connectionDetailsHeader,
-        serviceCardContainer: renderService()
-      }),
-      items: [],
-      hasAddItem: false,
-      isReviewPage: true,
-      sourceJsonPath: "applyScreen",
-      prefixSourceJsonPath:
-        "children.cardContent.children.getConnectionContainer.children",
-      afterPrefixJsonPath: "children.value.children.key"
-    },
-    type: "array"
-  });
+  return getCommonContainer({
+    connectionDetailsHeader,
+    view: renderService()
+  })
 }
 
 export const renderService = () => {

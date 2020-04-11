@@ -35,6 +35,14 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
   color: rgba(0, 0, 0, 0.87);
 }
 
+#material-ui-rightContainerH div{
+  font-size: 24px !important;
+  padding-top: 10px !important;
+  color: #262627 !important;
+}
+#material-ui-rightContainer {
+  margin-top: 5px !important;
+}
 #material-ui-applicantContainer {
   background: rgb(242, 242, 242) !important;
   padding: 10px !important;

@@ -49,9 +49,11 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-                dispatch(prepareFinalObject("applyScreen", applyScreenObject));
+                
+                let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
+                dispatch(prepareFinalObject("applyScreen", applyScreenObj));
                 if (getQueryArg(window.location.href, "action") === "edit") {
-                    dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObject));
+                    dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObj));
                 }
             }
         });
@@ -655,7 +657,7 @@ const parserFunction = (state) => {
             initialMeterReading: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.initialMeterReading !== undefined
-            ) ? parseInt(queryObject.additionalDetails.initialMeterReading) : null,
+            ) ? parseFloat(queryObject.additionalDetails.initialMeterReading) : null,
             detailsProvidedBy: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.detailsProvidedBy !== undefined &&
@@ -1536,14 +1538,13 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
     if (wnsConnection[0].service === "WATER") {
 
         // for Estimate api 
-        if (wnsConnection[0].rainWaterHarvesting !== undefined && wnsConnection[0].rainWaterHarvesting !== null) {
-            if (wnsConnection[0].rainWaterHarvesting === 'SCORE_YES') {
-                wnsConnection[0].rainWaterHarvesting = true
-            } else if (wnsConnection[0].rainWaterHarvesting === 'SCORE_NO') {
-                wnsConnection[0].rainWaterHarvesting = false
+        if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+            if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
+                wnsConnection[0].property.rainWaterHarvesting = true
+            } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {
+                wnsConnection[0].property.rainWaterHarvesting = false
             }
         }
-
         apiUrl = "ws-calculator/waterCalculator/_estimate";
         appService = "ws-applicationwater";
         queryObjectForEst = [{
@@ -1616,11 +1617,11 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
         if (type === 'application') {
             if (wnsConnection[0].service === "WATER") {
-                if (wnsConnection[0].rainWaterHarvesting !== undefined && wnsConnection[0].rainWaterHarvesting !== null) {
-                    if (wnsConnection[0].rainWaterHarvesting === true) {
-                        wnsConnection[0].rainWaterHarvesting = 'SCORE_YES'
+                if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+                    if (wnsConnection[0].property.rainWaterHarvesting === true) {
+                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'
                     } else {
-                        wnsConnection[0].rainWaterHarvesting = 'SCORE_NO'
+                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_NO'
                     }
                 }
                 obj = {

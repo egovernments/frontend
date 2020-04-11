@@ -399,7 +399,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
 const selectLicenceType = (state, dispatch) => {
   let value = get(
     state.screenConfiguration.preparedFinalObject , 
-    "BPA.licenceType", ""
+    "BPA.tradeType", ""
     );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject , 
@@ -660,7 +660,7 @@ const screenConfig = {
                     labelName: "Select Licensee Type",
                     labelKey: "BPA_SELECT_LICENSE_TYPE_LABEL"
                   },
-                  jsonPath: "BPA.licenceType",
+                  jsonPath: "BPA.tradeType",
                   sourceJsonPath: "applyScreenMdmsData.licenceTypes",
                   required: true,
                   gridDefination: {

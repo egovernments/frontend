@@ -22,7 +22,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils";
-import {generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
+import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
 import { searchBill, showHideMutationDetailsCard, getpayments, downloadCertificateForm, downloadReceitForm } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
@@ -173,14 +173,14 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber,"#material-ui-cardContent")
+      generatePdfFromDiv("download", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber,"#material-ui-cardContent")
+      generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
@@ -299,10 +299,10 @@ const setSearchResponse = async (
     let ownersTemp = [];
     let owners = [];
     property.owners.map(owner => {
-      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
-      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
+      owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+      owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
       if (owner.status == "ACTIVE") {
-      
+
         ownersTemp.push(owner);
       } else {
         owners.push(owner);
@@ -345,9 +345,7 @@ const setSearchResponse = async (
   }
 
   if (get(property, 'ownersInit[0].altContactNumber', 0)) {
-    property.institution = {};
-    property.institution.nameOfAuthorizedPerson = get(property, 'ownersInit[0].name', '');
-
+   
     dispatch(
       handleField(
         "search-preview",
@@ -369,6 +367,66 @@ const setSearchResponse = async (
     );
   }
 
+
+  let transfereeOwners = get(
+    property,
+    "ownersTemp", []
+  );
+  let transferorOwners = get(
+    property,
+    "ownersInit", []
+  );
+  let transfereeOwnersDid = true;
+  let transferorOwnersDid = true;
+  transfereeOwners.map(owner => {
+    if (owner.ownerType != 'NONE') {
+      transfereeOwnersDid = false;
+    }
+  })
+  transferorOwners.map(owner => {
+    if (owner.ownerType != 'NONE') {
+      transferorOwnersDid = false;
+    }
+
+  })
+  if (transferorOwnersDid) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
+        "props.style.display",
+        'none'
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID",
+        "props.style.display",
+        'none'
+      )
+    );
+
+  }
+  if (transfereeOwnersDid) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId",
+        "props.style.display",
+        'none'
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
+        "props.style.display",
+        'none'
+      )
+    );
+
+  }
 
   dispatch(prepareFinalObject("Property", property));
   dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
@@ -412,7 +470,7 @@ const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
       moduleDetails: [
         {
           moduleName: "PropertyTax",
-          masterDetails: [{name: "PropertyConfiguration"}]
+          masterDetails: [{ name: "PropertyConfiguration" }]
         }
       ]
     }
@@ -444,7 +502,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
     let businessServicesData = JSON.parse(localStorage.getItem('businessServiceData'));
@@ -499,25 +557,7 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-  
-    let categoryType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Property.ownersTemp[0].ownerType"
-    ); 
-    if(categoryType === "NONE"){
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.visible",
-        false
-      );
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.visible",
-        false
-      );
-      
-     
-   }
+
     // set(
     //   action,
     //   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
