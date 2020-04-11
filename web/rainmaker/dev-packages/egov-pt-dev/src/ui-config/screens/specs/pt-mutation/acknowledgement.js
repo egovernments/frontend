@@ -18,6 +18,7 @@ import set from "lodash/set";
 import get from "lodash/get";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {  downloadCertificateForm} from "../utils/index";
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Transfer of Ownership`, 
@@ -38,46 +39,19 @@ export const header = getCommonContainer({
   }
 });
  
-export const downloadCertificateForm = (Properties,tenantId,mode='download') => {
-   const queryStr = [
-     { key: "key", value:"ptmutationcertificate" },
-     { key: "tenantId", value: tenantId }
-   ]
-   const DOWNLOADRECEIPT = {
-     GET: {
-       URL: "/pdf-service/v1/_create",
-       ACTION: "_get",
-     },
-   };
-   try {
-     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-       .then(res => {
-         res.filestoreIds[0]
-         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-           res.filestoreIds.map(fileStoreId => {
-             downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
-           })
-         } else {
-           console.log("Error In Acknowledgement form Download");
-         }
-       });
-   } catch (exception) {
-     alert('Some Error Occured while downloading Acknowledgement form!');
-   }
- }
-
  const downloadprintMenu=(state,applicationNumber,tenantId,purpose,moduleName)=>{
   const certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId);
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber);
+     
     },
     leftIcon: "book"
   };
   const certificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId,'print');
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber, 'print');
     },
     leftIcon: "book"
   };

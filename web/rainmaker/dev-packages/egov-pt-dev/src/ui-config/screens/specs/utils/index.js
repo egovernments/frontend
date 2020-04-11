@@ -12,6 +12,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
+import { getSearchResults } from "../../../../ui-utils/commons";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import isUndefined from "lodash/isUndefined";
 import {
@@ -896,7 +897,7 @@ export const getpayments = async queryObject => {
   }
 };
 
-export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'download') => {
+export const downloadCertificateForm = async(oldProperties, pdfcode, tenantId,applicationNumber, mode = 'download') => {
   const queryStr = [
     { key: "key", value: pdfcode },
     { key: "tenantId", value: tenantId }
@@ -907,6 +908,21 @@ export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'd
       ACTION: "_get",
     },
   };
+  const response = await getSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "acknowledgementIds", value: applicationNumber }
+  ]);
+  const Properties= get(response, "Properties", oldProperties);
+  const document=get(Properties[0],"documents").filter(item=>item.documentType=="PTMUTATION");
+  const oldFileStoreId=document&& get(document[0],"fileStoreId")
+  if(oldFileStoreId){
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
+  }
+  else{
+  
   try {
     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
       .then(res => {
@@ -923,8 +939,9 @@ export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'd
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 }
+}
 
-export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download') => {
+export const downloadReceitForm = async(Payments, pdfcode, tenantId,applicationNumber, mode = 'download') => {
   const queryStr = [
     { key: "key", value: pdfcode },
     { key: "tenantId", value: tenantId }
@@ -935,6 +952,23 @@ export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download
       ACTION: "_get",
     },
   };
+  let queryObj = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "consumerCodes",
+      value: applicationNumber
+    }
+  ];
+
+  const responsePayments = await getpayments(queryObj)
+  const oldFileStoreId=get(responsePayments.Payments[0],"fileStoreId")
+  if(oldFileStoreId){
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
+  }
+  else{
   try {
     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
       .then(res => {
@@ -950,6 +984,7 @@ export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download
   } catch (exception) {
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
+}
 }
 export const getLabelIfNotNull=(label,value,props)=>{
   const labelObj=getLabelWithValue(label,value,props);
