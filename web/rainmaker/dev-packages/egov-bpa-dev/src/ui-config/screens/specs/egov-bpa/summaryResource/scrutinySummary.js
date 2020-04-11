@@ -224,18 +224,25 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
                         },
                         {
-                            jsonPath: "edcr.blockDetail[0]",
+                            jsonPath: `edcr.blockDetail[0]`,
                             localePrefix: {
                                 moduleName: "BPA",
                                 masterName: "SUBOCCUPANCYTYPE"
                             },
                             callBack: value => {
-                                let returnVAlue = "";
-                                value && value.occupancyType && value.occupancyType.length && 
-                                value.occupancyType.forEach(oValue => {
-                                  returnVAlue += getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${oValue.value}`)+","
-                                })
-                              return returnVAlue || checkValueForNA;
+                                let returnVAlue;
+                                if (value && value.occupancyType && value.occupancyType.length) {
+                                    returnVAlue = "";
+                                    let occupancy = value.occupancyType;
+                                    for (let tp = 0; tp < occupancy.length; tp++) {
+                                        if (tp === (occupancy.length - 1)) {
+                                            returnVAlue += getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
+                                        } else {
+                                            returnVAlue += getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
+                                        }
+                                    }
+                                }
+                                return returnVAlue || checkValueForNA;
                             },
                         }
                     ),
@@ -278,6 +285,7 @@ export const scrutinySummary = getCommonGrayCard({
                 isReviewPage: true,
                 prefixSourceJsonPath: "children.cardContent.children.blocksContainer.children",
                 sourceJsonPath: "edcr.blockDetail",
+                afterPrefixJsonPath: "children.value.children.key"
               },
               type: "array"
             },
