@@ -358,7 +358,8 @@ export const propertyLocationDetails = getCommonCard(
           const districtList= get(
             state.screenConfiguration,
             "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
-            []              );
+            []           
+          );
 
           const districtTenantMap =districtList.map((item)=>{
             return {
@@ -826,11 +827,10 @@ export const propertyLocationDetails = getCommonCard(
               "props.value",
               props_value
             )
-          );   */
-          
+          );   */          
           set(
             state,
-            "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+            "screenConfiguration.preparedFinalObject.FireNOCs[0].tenantId",
             props_value
           );
         }

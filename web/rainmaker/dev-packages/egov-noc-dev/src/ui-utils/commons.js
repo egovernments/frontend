@@ -85,12 +85,35 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "FireNOCs",
       []
     );
-    let tenantId = get(
+
+    debugger;
+    
+    let areaType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
+      []
+    );
+
+   let tenantId;
+   
+    if (areaType==='Rural')
+    {
+       tenantId = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].tenantId",
+        getTenantId()
+       );
+    }
+    else 
+    {
+       tenantId = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
       getTenantId()
-    );
+     );
+    }
 
+    
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
 

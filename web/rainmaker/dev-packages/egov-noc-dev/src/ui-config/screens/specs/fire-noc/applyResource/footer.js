@@ -9,6 +9,8 @@ import { getCommonApplyFooter, validateFields } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 import {
   createUpdateNocApplication,
   prepareDocumentsUploadData
@@ -16,10 +18,37 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const setReviewPageRoute = (state, dispatch) => {
-  let tenantId = get(
+
+  let areaType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
+    []
+  );
+
+ let tenantId;
+ 
+  if (areaType==='Rural')
+  {
+     tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].tenantId",
+      getTenantId()
+     );
+  }
+  else 
+  {
+     tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+    getTenantId()
+   );
+  }
+
+  /* let tenantId = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
-  );
+  ); */
+
   const applicationNumber = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
