@@ -495,7 +495,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
           [
 
             {
-              text: transformedData.city,
+              text: transformedData.areaType ==='Urban'? transformedData.city:'N/A',
               style: "receipt-table-value",
               border: [true, false, false, false]
             },
@@ -1681,7 +1681,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
           [
 
             {
-              text: transformedData.city,
+              text: transformedData.areaType ==='Urban'? transformedData.city:'N/A',
               style: "receipt-table-value",
               border: [true, false, false, false]
             },
@@ -3247,7 +3247,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
           [
 
             {
-              text: transformedData.city,
+              text: transformedData.areaType ==='Urban'? transformedData.city:'N/A',
               style: "receipt-table-value",
               border: [true, false, false, false]
             },
