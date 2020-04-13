@@ -240,16 +240,18 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
 
     const  tenantId = getQueryArg(window.location.href, "tenantId"); 
 
+   
+
     if(data.areaType === 'Urban')
     {
-    data.mohalla = nullToNa(   
-        
+    data.mohalla = nullToNa(  
+       
         getMessageFromLocalization(
-          //`revenue.locality.${getTransformedLocale(
-            `${getTransformedLocale(tenantId)}_REVENUE_${value }`           
+            `${getTransformedLocale(tenantId)}_REVENUE_${value.replace("-", "_") }`           
         )
       ); 
     }
+    
     else
     {
       data.mohalla = "N/A";
