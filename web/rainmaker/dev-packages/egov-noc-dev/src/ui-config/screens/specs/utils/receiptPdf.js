@@ -440,7 +440,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, true, false, false]
             },
             {
-              text: "Sub-District",
+              text: "Tehsil",
               border: [false, true, false, false]
             },
             {
@@ -456,7 +456,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: transformedData.city,
+              text: transformedData.district,
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -484,9 +484,9 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, false, false, false]
             },
             {
-              text: "Building/Company Name",
+              text: "",
               border: [false, false, false, false]
-            },
+            }, 
             {
               text: "Street Name",
               border: [false, false, true, false]
@@ -504,11 +504,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
-            {
-              text: transformedData.buildingName,
+             {
+              text: '',
               style: "receipt-table-value",
               border: [false, false, false, false]
-            },
+            }, 
             {
               text: transformedData.street,
               style: "receipt-table-value",
@@ -572,7 +572,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: "Fire Station",
+              text: "",
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -595,7 +595,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, true]
             },
             {
-              text: transformedData.fireStationId,
+              text: '',
               style: "receipt-table-firestation",
               border: [false, false, false, true]
             },
@@ -1626,7 +1626,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, true, false, false]
             },
             {
-              text: "Sub-District",
+              text: "Tehsil",
               border: [false, true, false, false]
             },
             {
@@ -1642,7 +1642,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: transformedData.city,
+              text: transformedData.district,
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -1669,9 +1669,9 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               text: "Door/House No.",
               border: [false, false, false, false]
             },
-            {
-              text: "Building/Company Name",
-              border: [false, false, false, false]
+             {
+             text: "",
+             border: [false, false, false, false]
             },
             {
               text: "Street Name",
@@ -1690,11 +1690,11 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
-            {
-              text: transformedData.buildingName,
+             {
+              text: '',
               style: "receipt-table-value",
-              border: [false, false, false, false]
-            },
+             border: [false, false, false, false]
+            }, 
             {
               text: transformedData.street,
               style: "receipt-table-value",
@@ -1758,7 +1758,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: "Fire Station",
+              text: "",
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -1781,7 +1781,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, true]
             },
             {
-              text: transformedData.fireStationId,
+              text: '',
               style: "receipt-table-firestation",
               border: [false, false, false, true]
             },
@@ -3192,7 +3192,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, true, false, false]
             },
             {
-              text: "Sub-District",
+              text: "Tehsil",
               border: [false, true, false, false]
             },
             {
@@ -3208,7 +3208,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: transformedData.city,
+              text: transformedData.district,
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -3235,8 +3235,8 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               text: "Door/House No.",
               border: [false, false, false, false]
             },
-            {
-              text: "Building/Company Name",
+           {
+              text: "",
               border: [false, false, false, false]
             },
             {
@@ -3256,11 +3256,11 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
-            {
-              text: transformedData.buildingName,
+             {
+              text: '',
               style: "receipt-table-value",
               border: [false, false, false, false]
-            },
+            }, 
             {
               text: transformedData.street,
               style: "receipt-table-value",
@@ -3324,7 +3324,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: "Fire Station",
+              text: "",
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -3347,7 +3347,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, true]
             },
             {
-              text: transformedData.fireStationId,
+              text: '',
               style: "receipt-table-firestation",
               border: [false, false, false, true]
             },

@@ -191,6 +191,9 @@ export const propertyLocationDetails = getCommonCard(
             //     )
             //   );
             // }
+
+        
+
             dispatch(
               handleField(
                 "apply",
@@ -658,8 +661,9 @@ export const propertyLocationDetails = getCommonCard(
                 subDistrictLists
               )
             );  
-          } 
-            
+
+   
+           }          
             
           }
         }

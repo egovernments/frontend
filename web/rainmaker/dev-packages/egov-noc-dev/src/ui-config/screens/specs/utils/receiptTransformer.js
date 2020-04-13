@@ -68,7 +68,7 @@ export const loadUlbLogo = tenantid => {
     );
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+ img.src = `/pb-egov-assets/${tenantid}/logo.png`; 
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -154,15 +154,12 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     );
 
     data.city = nullToNa(	
-      getMessageFromLocalization(	
-        `TENANT_TENANTS_${getTransformedLocale(	
-          get(	
+            get(	
             response,	
             "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",	
             "NA"	
-          )	
-        )}`	
-      )	
+        )	
+     	
     );
 
     data.door = nullToNa(
@@ -181,18 +178,19 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       )
     );
 
+    let district_value = nullToNa(  
+      get(	
+         response,	
+         "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",	
+         "NA"	
+       )	       
+   );
 
-    data.district = nullToNa(    
-      getMessageFromLocalization(	
-        `TENANT_TENANTS_${getTransformedLocale(	
-          get(	
-            response,	
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",	
-            "NA"	
-          )	
-        )}`	
-      )	
-    );
+    data.district = nullToNa(          
+        getMessageFromLocalization(`TL_${district_value}` ) ); 
+  
+    console.log("data.district", data.district);
+      
 
     data.subDistrict = nullToNa(
       get(
@@ -250,8 +248,9 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
             `${getTransformedLocale(tenantId)}_REVENUE_${value.replace("-", "_") }`           
         )
       ); 
-    }
     
+    }
+
     else
     {
       data.mohalla = "N/A";

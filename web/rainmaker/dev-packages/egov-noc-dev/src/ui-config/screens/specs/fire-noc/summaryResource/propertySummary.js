@@ -132,7 +132,7 @@ const propertyLocationDetails = getCommonGrayCard({
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
      
       callBack: value => {
-        return `TL_${value}`;
+        return `${value}`;
       }
           
      }
@@ -168,7 +168,7 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
     ),
-    buildingCompanyName: getLabelWithValue(
+/*     buildingCompanyName: getLabelWithValue(
       {
         labelName: "Building/Company Name",
         labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
@@ -177,7 +177,7 @@ const propertyLocationDetails = getCommonGrayCard({
         jsonPath:
           "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName"
       }
-    ),
+    ), */
     streetName: getLabelWithValue(
       {
         labelName: "Street Name",
@@ -230,7 +230,7 @@ const propertyLocationDetails = getCommonGrayCard({
           "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude"
       }
     ),
-    applicableFireStation: getLabelWithValue(
+/*     applicableFireStation: getLabelWithValue(
       {
         labelName: "Applicable Fire Station",
         labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
@@ -242,7 +242,7 @@ const propertyLocationDetails = getCommonGrayCard({
           masterName: "FireStations"
         }
       }
-    )
+    ) */
   })
 });
 
