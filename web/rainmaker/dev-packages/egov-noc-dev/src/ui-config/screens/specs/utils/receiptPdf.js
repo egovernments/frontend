@@ -788,12 +788,12 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               alignment: "center"
             },
-            {
+            /* {
               text: "NOC Taxes",
               border: [true, true, true, true],
               style: "receipt-table-value",
               alignment: "center"
-            },
+            }, */
             {
               text: "Adhoc Penalty/Rebate",
               border: [true, true, true, true],
@@ -813,11 +813,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, true, true, true],
               alignment: "center"
             },
-            {
+           /*  {
               text: transformedData.nocTaxes,
               border: [true, true, true, true],
               alignment: "center"
-            },
+            }, */
             {
               text: transformedData.nocAdhocPenaltyRebate,
               border: [true, true, true, true],
@@ -1974,12 +1974,12 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               alignment: "center"
             },
-            {
+            /* {
               text: "NOC Taxes",
               border: [true, true, true, true],
               style: "receipt-table-value",
               alignment: "center"
-            },
+            }, */
             {
               text: "Adhoc Penalty/Rebate",
               border: [true, true, true, true],
@@ -1999,11 +1999,11 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, true, true, true],
               alignment: "center"
             },
-            {
+           /*  {
               text: transformedData.nocTaxes,
               border: [true, true, true, true],
               alignment: "center"
-            },
+            }, */
             {
               text: transformedData.nocAdhocPenaltyRebate,
               border: [true, true, true, true],
@@ -3540,12 +3540,12 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               alignment: "center"
             },
-            {
+            /* {
               text: "NOC Taxes",
               border: [true, true, true, true],
               style: "receipt-table-value",
               alignment: "center"
-            },
+            }, */
             {
               text: "Adhoc Penalty/Rebate",
               border: [true, true, true, true],
@@ -3565,11 +3565,11 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, true, true, true],
               alignment: "center"
             },
-            {
+            /* {
               text: transformedData.nocTaxes,
               border: [true, true, true, true],
               alignment: "center"
-            },
+            }, */
             {
               text: transformedData.nocAdhocPenaltyRebate,
               border: [true, true, true, true],
