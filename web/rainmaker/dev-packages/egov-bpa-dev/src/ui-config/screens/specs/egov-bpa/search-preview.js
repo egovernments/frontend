@@ -3,7 +3,8 @@ import {
   getCommonContainer,
   getCommonHeader,
   getLabelWithValue,
-  getCommonTitle
+  getCommonTitle,
+  convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -22,7 +23,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { searchBill , requiredDocumentsData, setNocDocuments } from "../utils/index";
+import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -53,20 +54,39 @@ export const ifUserRoleExists = role => {
   } else return false;
 };
 
-const titlebar = getCommonContainer({
-    header: getCommonHeader({
-      labelName: "Task Details",
-      labelKey: "NOC_TASK_DETAILS_HEADER"
-    }),
-    applicationNumber: {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-bpa",
-      componentPath: "ApplicationNoContainer",
-      props: {
-        number: ""
+const titlebar = {
+  uiFramework: "custom-atoms",
+  componentPath: "Div",
+  children: {
+    leftContainerH:getCommonContainer({
+      header: getCommonHeader({
+        labelName: "Task Details",
+        labelKey: "NOC_TASK_DETAILS_HEADER"
+      }),
+      applicationNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number: ""
+        }
       }
-    },
-});
+    }),
+    rightContainerH: getCommonContainer({
+      footNote : {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
+        componentPath: "NoteAtom",
+        props: {
+          labelName: "This licensee is valid for <xx> Year(s)",
+          labelKey: ["BPA_LICENSE_VALID_LABEL"],
+        },
+        visible: false
+      }
+    })
+  }
+}
+
 const titlebar2 = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
@@ -137,7 +157,7 @@ const prepareDocumentsView = async (state, dispatch) => {
   ];
 
   allDocuments.forEach(doc => {
-    
+
     documentsPreview.push({
       title: getTransformedLocale(doc.documentType),
       //title: doc.documentType,
@@ -263,17 +283,9 @@ const setDownloadMenu = (action, state, dispatch) => {
         downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
         break;
       case "APPROVED":
-        // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
-        // break;
       case "DOC_VERIFICATION_INPROGRESS":
-        // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
-        // break;
       case "FIELDINSPECTION_INPROGRESS":
-        // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
-        // break;
       case "NOC_VERIFICATION_INPROGRESS":
-        // downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
-        // break;
       case "APPROVAL_INPROGRESS":
         downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
         break;
@@ -386,14 +398,6 @@ const setSearchResponse = async (
         true
       )
     );
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.secondStakeholder",
-        "visible",
-        true
-      )
-    )
   }
 
   if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
@@ -489,7 +493,7 @@ const setSearchResponse = async (
   dispatch(
     handleField(
       "search-preview",
-      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "components.div.children.headerDiv.children.header.children.leftContainerH.children.applicationNumber",
       "props.number",
       applicationNumber
     )
@@ -513,6 +517,23 @@ const setSearchResponse = async (
     );
   };
 
+  if(get(response, "Bpa[0].validityDate")) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
+        "props.labelKey[2]",
+        convertEpochToDate(get(response, "Bpa[0].validityDate"))
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote.visible",
+        true
+      )
+    );
+  }
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
 };
@@ -601,7 +622,7 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
       false
     );
-
+    
     return action;
   },
   components: {
@@ -652,7 +673,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/bpa/appl/_update"
+            updateUrl: "/bpa-services/_update"
           }
         },
         sendToArchPickerDialog :{

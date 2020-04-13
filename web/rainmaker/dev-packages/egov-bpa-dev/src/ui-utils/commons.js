@@ -79,7 +79,7 @@ export const getBpaSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/bpa-services/bpa/appl/_search?offset=0&limit=-1",
+      "/bpa-services/_search?offset=0&limit=-1",
       "",
       queryObject
     );
@@ -127,7 +127,7 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/bpa-services/bpa/appl/_search",
+      "/bpa-services/_search",
       "",
       queryObject
     );
@@ -281,7 +281,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/bpa/appl/_create",
+        "bpa-services/_create",
         "",
         [],
         { BPA: payload }
@@ -292,7 +292,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/bpa/appl/_update",
+        "bpa-services/_update",
         "",
         [],
         { BPA: payload }
@@ -728,9 +728,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //   queryObject[0].tradeLicenseDetail &&
       //   queryObject[0].tradeLicenseDetail.applicationDocuments
       // ) {
-      //   if (activeIndex === 2) {
-      //     action = "APPLY";
-      //   }
+        if (activeIndex === 2) {
+          action = "APPLY";
+        }
       //   let docs = []; 
       //   let bparegDocuments = queryObject[0].tradeLicenseDetail.applicationDocuments;
       //  if(bparegDocuments && bparegDocuments.length > 0) {
@@ -992,10 +992,9 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
-  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared"); 
-  let isDeclaration = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclaration");  
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
    
-  if(isDeclared && isDeclaration) {
+  if(isDeclared) {
     let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
