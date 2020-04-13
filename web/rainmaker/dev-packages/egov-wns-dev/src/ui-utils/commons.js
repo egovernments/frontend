@@ -49,7 +49,6 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-                
                 let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
                 dispatch(prepareFinalObject("applyScreen", applyScreenObj));
                 if (getQueryArg(window.location.href, "action") === "edit") {
@@ -669,6 +668,60 @@ const parserFunction = (state) => {
     return queryObject;
 }
 
+export const prepareDocumentsUploadRedux = async (state, dispatch) => {
+    const { documentsUploadRedux } = state.screenConfiguration.preparedFinalObject;
+    let documentsList = get(state, "screenConfiguration.preparedFinalObject.documentsContract", []);
+    let index = 0;
+    documentsList.forEach(docType => {
+        docType.cards &&
+            docType.cards.forEach(card => {
+                if (card.subCards) {
+                    card.subCards.forEach(subCard => {
+                        let oldDocType = get(
+                            documentsUploadRedux,
+                            `[${index}].documentType`
+                        );
+                        let oldDocCode = get(
+                            documentsUploadRedux,
+                            `[${index}].documentCode`
+                        );
+                        let oldDocSubCode = get(
+                            documentsUploadRedux,
+                            `[${index}].documentSubCode`
+                        );
+                        if (
+                            oldDocType != docType.code ||
+                            oldDocCode != card.name ||
+                            oldDocSubCode != subCard.name
+                        ) {
+                            documentsUploadRedux[index] = {
+                                documentType: docType.code,
+                                documentCode: card.name,
+                                documentSubCode: subCard.name
+                            };
+                        }
+                        index++;
+                    });
+                } else {
+                    let oldDocType = get(documentsUploadRedux, `[${index}].documentType`);
+                    let oldDocCode = get(documentsUploadRedux, `[${index}].documentCode`);
+                    if (oldDocType != docType.code || oldDocCode != card.name) {
+                        documentsUploadRedux[index] = {
+                            documentType: docType.code,
+                            documentCode: card.name,
+                            isDocumentRequired: card.required,
+                            isDocumentTypeRequired: card.dropdown
+                                ? card.dropdown.required
+                                : false
+                        };
+                    }
+                }
+                index++;
+            });
+    });
+    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+};
+
 export const setDocsForEditFlow = async (state) => {
     const applicationDocuments = get(state.screenConfiguration.preparedFinalObject, "applyScreen.documents", []);
     let uploadedDocuments = {};
@@ -725,6 +778,77 @@ export const setWSDocuments = async (payload, sourceJsonPath, businessService) =
                 };
             });
         return reviewDocData;
+    }
+};
+
+export const downloadAndPrintForNonApply = async (state, dispatch) => {
+    let documentPath;
+    const {
+        WaterConnection,
+        SewerageConnection
+    } = state.screenConfiguration.preparedFinalObject;
+    if (
+        (WaterConnection.length > 0 &&
+            SewerageConnection.length > 0) ||
+        WaterConnection.length > 0
+    ) {
+        documentPath = 'WaterConnection[0].documents';
+    } else if (SewerageConnection.length > 0) {
+        documentPath = 'SewerageConnection[0].documents';
+    }
+    await setDocuments(
+        state.screenConfiguration.preparedFinalObject,
+        documentPath,
+        "DocumentsData",
+        dispatch,
+        "WS"
+    );
+}
+
+export const prepareDocUploadRedux = async (state, dispatch) => {
+    let documentsUploadRedux = {}, uploadedDocs = [];
+    let payload = state.screenConfiguration.preparedFinalObject;
+    let documentPath;
+    const {
+        WaterConnection,
+        SewerageConnection
+    } = state.screenConfiguration.preparedFinalObject;
+    if (
+        (
+            WaterConnection !== undefined &&
+            WaterConnection.length > 0 &&
+            SewerageConnection !== undefined &&
+            SewerageConnection.length > 0
+        ) ||
+        (
+            WaterConnection !== undefined &&
+            WaterConnection.length > 0
+        )
+    ) {
+        documentPath = payload.WaterConnection[0].documents;
+        uploadedDocs = await setWSDocuments(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", "WS");
+    } else if (SewerageConnection !== undefined && SewerageConnection.length > 0) {
+        documentPath = payload.SewerageConnection[0].documents;
+        uploadedDocs = await setWSDocuments(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", "WS");
+    }
+    if (uploadedDocs !== undefined && uploadedDocs !== null && uploadedDocs.length > 0) {
+        documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
+            let docUploadRedux = {};
+            docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: documentPath[key].fileStoreId }] };
+            let splittedString = documentPath[key].documentType.split(".");
+            if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else { docUploadRedux[key].documentType = documentPath[key].documentType; }
+            docUploadRedux[key].id = documentPath[key].id;
+            docUploadRedux[key].isDocumentRequired = true;
+            docUploadRedux[key].isDocumentTypeRequired = true;
+            return docUploadRedux;
+        });
+        let docs = {};
+        for (let i = 0; i < documentsUploadRedux.length; i++) {
+            docs[i] = documentsUploadRedux[i][i];
+        }
+        dispatch(prepareFinalObject("documentsUploadRedux", docs))
     }
 };
 
