@@ -8,7 +8,14 @@ export const propertySearchApiCall = async (state, dispatch) => {
   showHideFields(dispatch, false);
   let queryObject = [{ key: "tenantId", value: "pb.amritsar" }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
-
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.cardContent.children.headerDiv",
+      "props.items",
+      []
+    )
+  );
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
