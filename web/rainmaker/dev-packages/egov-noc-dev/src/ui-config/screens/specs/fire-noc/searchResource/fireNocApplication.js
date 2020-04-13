@@ -1,7 +1,9 @@
 import { getCommonCard, getCommonContainer, getCommonParagraph, getCommonTitle, getDateField, getLabel, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
-
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import set from "lodash/set";
 
 
 const resetFields = (state, dispatch) => {
@@ -48,7 +50,44 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.areaType",
+      "props.value",
+      ""
+    )
+  );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.newProvisionalType",
+      "props.value",
+      ""
+    )
+  );
+
+  dispatch(
+    handleField(
+      "search",
       "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.citySearch",
+      "props.value",
+      ""
+    )
+  );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.district",
+      "props.value",
+      ""
+    )
+  );
+  
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.subDistrict",
       "props.value",
       ""
     )
@@ -158,14 +197,14 @@ export const NOCApplication = getCommonCard({
         masterName: "FIRENOC"
       },
       jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+      sourceJsonPath: "searchScreenMdmsData.searchScreen.status",
       required: false,
       gridDefination: {
         xs: 12,
         sm: 4
       }
 
-    }),
+    }),    
 
     fromDate: getDateField({
       label: {
@@ -185,8 +224,6 @@ export const NOCApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false
     }),
-
-
 
 
     newProvisionalType: getSelectField({
@@ -219,6 +256,450 @@ export const NOCApplication = getCommonCard({
 
     }),
 
+    
+    areaType: {
+      ...getSelectField({
+      label: {
+        labelName: "NOC Area_Type",
+        labelKey: "NOC_AREA_TYPE_LABEL"
+        },
+        placeholder: {
+        labelName: "Select Application Area Type",
+        labelKey: "NOC_APPLICATION_AREA_TYPE"
+        }, 
+
+      data: [
+        {
+          code: "Urban",
+          label: "NOC_TYPE_URBAN"
+        },
+        {
+          code: "Rural",
+          label: "NOC_TYPE_RURAL"
+        }
+      ],
+      // jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
+      jsonPath: "searchScreen.areaType",
+      // sourceJsonPath: "applyScreenMdmsData.searchScreen.fireNOCType",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+
+    }),
+
+    beforeFieldChange: async (action, state, dispatch) => {
+      dispatch(
+        prepareFinalObject(
+          "searchScreen.areaType",
+          action.value
+        )
+      );
+      if(action.value=='Rural'){
+
+        const districtList= get(
+          state.screenConfiguration,
+          "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
+          []              );
+
+        const districtTenantMap =districtList.map((item)=>{
+          return {
+            name:item.city.districtName,
+            //code:item.code
+            code:item.city.districtTenantCode
+          }
+
+        });
+
+        const fireStationsList = get(
+          state,
+          "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+          []
+        );
+
+
+
+        const districtlist=[];
+
+         for(var i=0;i< fireStationsList.length;i++)
+        {
+          for(var j=0;j<districtTenantMap.length;j++)
+          {
+            if(districtTenantMap[j].code==fireStationsList[i].baseTenantId)
+            {
+              
+              districtlist.push({
+                code:districtTenantMap[j].code                  
+              })
+            }
+          }
+        }   
+
+   
+
+        const unqDistrictList=districtlist.filter( 
+          (ele, ind) => ind === districtlist.findIndex( elem => elem.code === ele.code)
+        );
+
+
+    
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.district",         
+            "props.data",
+            unqDistrictList
+          )
+        );
+   
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.district",         
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.subDistrict",         
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.citySearch",         
+            "visible",
+            false
+          )
+        );
+      }
+      else
+      {
+
+              
+        const districtList= get(
+          state.screenConfiguration,
+          "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
+          []              );
+
+        const districtTenantMap =districtList.map((item)=>{
+          return {
+            name:item.city.districtName,
+            //code:item.code
+            code:item.city.districtTenantCode
+          }
+
+        });
+
+        //console.log("districtTenantMap",districtTenantMap); 
+
+        const fireStationsList = get(
+          state,
+          "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+          []
+        );
+
+        //console.log("fireStationsList",fireStationsList);
+
+
+        const districtlist=[];
+
+         for(var i=0;i< fireStationsList.length;i++)
+        {
+          for(var j=0;j<districtTenantMap.length;j++)
+          {
+            if(districtTenantMap[j].code==fireStationsList[i].baseTenantId)
+            {
+              
+              districtlist.push({
+                code:districtTenantMap[j].code                  
+              })
+            }
+          }
+        }   
+
+       /* for (let i=0;i<districtTenantMap.length;i++)
+        {
+          districtlist.push({
+
+            code:districtTenantMap[i].name,
+            //name:districtTenantMap[i].name
+
+          })
+
+        }      */     
+
+        //console.log("districtlist",districtlist); 
+
+        const unqDistrictList=districtlist.filter( 
+          (ele, ind) => ind === districtlist.findIndex( elem => elem.code === ele.code)
+        );
+
+        console.log("unique districtlist",unqDistrictList); 
+
+       /*  dispatch(
+          prepareFinalObject(
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+            null
+          )
+        );
+        dispatch(
+          prepareFinalObject(
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+            null
+          )
+        ); */
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.district",         
+            "props.data",
+            unqDistrictList
+          )
+        );
+
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.district",         
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.subDistrict",         
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.citySearch",         
+            "visible",
+            true
+          )
+        );
+      }
+    }
+   },
+
+    district: {
+      ...getSelectField({
+      label: {
+        labelName: "District",
+        labelKey: "NOC_PROPERTY_DISTRICT_LABEL"
+      },
+      localePrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS"
+      },
+      placeholder: {
+        labelName: "Select District",
+        labelKey: "NOC_PROPERTY_DISTRICT_PLACEHOLDER"
+      },
+      sourceJsonPath: "applyScreenMdmsData.tenant.District",
+      jsonPath: "searchScreen.city",
+
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      visible:false,
+
+    }),
+    beforeFieldChange: async (action, state, dispatch) => {
+      dispatch(
+        prepareFinalObject(
+          "searchScreen.city",
+          action.value
+        )
+      );       
+
+      if(action.value){
+        
+
+     
+        let fireStationsList = get(
+          state,
+          "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+          []
+        );
+        const districtData= get(
+          state.screenConfiguration,
+          "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
+          []
+        );
+        let districtlist = districtData.filter((districtlists)=>{
+         
+            return districtlists.city.districtTenantCode===action.value
+          
+        });
+
+       console.log("tenanats list",districtlist );
+
+         let tenantids = districtlist.map((districtlists)=>{             
+          return districtlists.code          
+         });
+
+         let urbanids = districtlist.map((districtlists)=>{             
+          return districtlists.code          
+         });
+
+        console.log("tenant ids", urbanids); 
+        
+   
+       
+       let urbanlist = []
+
+        for (let i=0;i<urbanids.length;i++)
+          {
+                urbanlist.push({
+
+                 code:urbanids[i],
+                      })
+            }
+
+        console.log(urbanlist);
+
+        const subDistrictLists=[]; 
+
+        const firestationtenantidlist=[];
+
+        const fireStations = [];
+ 
+       for(var i=0;i<tenantids.length;i++)
+        {
+         const fireStations = fireStationsList.filter(firestation => {       
+                           
+          return tenantids.includes(firestation.baseTenantId);   
+
+            // return tenantids[i].indexOf(firestation.baseTenantId) !== -1 
+
+            // return firestation.baseTenantId === tenantids[i]; 
+
+            //return 'code' in districtlist[i];
+
+          }); 
+
+          if(fireStations[i]){
+
+            // firestationtenantidlist.push({code:fireStations[0].baseTenantId}); 
+
+            for(var j=0;j<fireStations[i].subDistrict.length;j++){
+            //subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
+                subDistrictLists.push(fireStations[i].subDistrict[j]);  
+              }
+            }
+
+        }  
+
+        //console.log('filtered fireStations', fireStations);     
+      
+        let value = get(
+          state.screenConfiguration.preparedFinalObject,
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+
+      if( value === 'Urban')
+      {
+         
+      
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.citySearch",
+           "props.data",
+            urbanlist
+          )
+        );
+
+      }   else {
+        
+
+       console.log("subdistrict list",subDistrictLists );        
+        
+      
+
+        dispatch(
+          handleField(
+            "search",
+            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.subDistrict",         
+            "props.data",
+            subDistrictLists
+          )
+        );
+      } 
+        
+      }
+    }
+  },
+
+    subDistrict: {
+      ...getSelectField({
+      label: {
+        labelName: "SubDistrict",
+        labelKey: "NOC_PROPERTY_SUBDISTRICT_LABEL"
+      },
+     /*   localePrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS"
+      }, */
+      placeholder: {
+        labelName: "Select SubDistrict",
+        labelKey: "NOC_PROPERTY_SUBDISTRICT_PLACEHOLDER"
+      },
+      sourceJsonPath: "applyScreenMdmsData.tenant.SubDistrict",
+      jsonPath: "searchScreen.subDistrict",
+
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      visible:false,
+    }),
+
+    afterFieldChange: (action, state, dispatch) => {
+
+      let fireStationsList = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+        []
+      );
+      
+      let fireStations = fireStationsList.filter(firestation => {
+        return firestation.subDistrict 
+      });
+
+      let props_value ;
+       
+      for(var i=0;i<fireStations.length;i++)
+      {
+        for(var j=0;j<fireStations[i].subDistrict.length;j++)
+        {
+          if(fireStations[i].subDistrict[j].code==action.value)
+        {
+          props_value = fireStations[i].baseTenantId;
+        }
+       }
+      }
+
+     console.log("props value", props_value);            
+      
+      set(
+        state,
+        "screenConfiguration.preparedFinalObject.searchScreen.subDistrict",
+        props_value
+      );
+    }
+
+  },
+
 
     citySearch: getSelectField({
       label: {
@@ -234,7 +715,7 @@ export const NOCApplication = getCommonCard({
         labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
       },
       sourceJsonPath: "applyScreenMdmsData.searchScreen.tenantData",
-      jsonPath: "searchScreen.city",
+      jsonPath: "searchScreen.subDistrict",
 
       gridDefination: {
         xs: 12,

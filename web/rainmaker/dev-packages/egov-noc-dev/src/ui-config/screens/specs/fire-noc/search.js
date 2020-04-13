@@ -61,8 +61,10 @@ const NOCSearchAndResult = {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
+    
     const data = find(businessServiceData, { businessService: "FIRENOC" });
-    const { states } = data || [];
+    const { states } = data ? data : [];
+
     if (states && states.length > 0) {
       const status = states.map((item, index) => {
         return {
@@ -73,7 +75,7 @@ const NOCSearchAndResult = {
 
       dispatch(
         prepareFinalObject(
-          "applyScreenMdmsData.searchScreen.status",
+          "searchScreenMdmsData.searchScreen.status",
           status.filter(item => item.code != null)
         )
       ); 

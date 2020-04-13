@@ -42,7 +42,7 @@ export const searchApiCall = async (state, dispatch) => {
   console.log("isSearchBoxSecondRowValid",isSearchBoxSecondRowValid)
 
 
-  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
+  if (!(isSearchBoxFirstRowValid || isSearchBoxSecondRowValid)) {
     dispatch(
       toggleSnackbar(
         true,
@@ -119,7 +119,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
         [getTextToLocalMapping("NOC Type")]:
           item.fireNOCDetails.fireNOCType || "-",
-        [getTextToLocalMapping("Owner Name")]:
+          [getTextToLocalMapping("Owner Name")]:
           get(item, "fireNOCDetails.applicantDetails.owners[0].name") || "-",
         [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
