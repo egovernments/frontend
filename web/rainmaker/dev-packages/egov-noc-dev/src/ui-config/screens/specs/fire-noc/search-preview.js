@@ -24,6 +24,7 @@ import { searchBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
+import { citizenSubmitFooter } from "./searchResource/citizenSubmitFooter";
 import {
   applicantSummary,
   institutionSummary
@@ -299,7 +300,57 @@ const setSearchResponse = async (
     { key: "applicationNumber", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", []))); 
+
+ debugger;
+
+  let checkdocs = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentsPreview",
+    []
+  );
+
+  console.log("checkdocs", checkdocs)
+
+  let appliacationStatus = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.status",
+    ""
+  );
+
+  console.log("appliacationStatus", appliacationStatus); 
+
+  if(appliacationStatus==='INITIATED')  
+  {
+
+   /* set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );  */
+
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection",
+        "visible",
+        true
+      )
+    )
+  }    
+  else
+  {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection",
+        "visible",
+        false
+      )
+    )
+  }
+
+
 
   // Set Institution/Applicant info card visibility
   if (
@@ -388,37 +439,23 @@ const screenConfig = {
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
-    );    
-   
-   //debugger;
-
-    let checkdocs = get(
-      state,
-      "screenConfiguration.preparedFinalObject.documentsPreview",
-      []
     );
+    
+/*     set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );  */
 
-    console.log("checkdocs", checkdocs)
-
-    if(checkdocs.length)  
-    {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-        false
-      ); 
-    }    
-    else
-    {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-        true
-      ); 
-    }
+ //  debugger;
+   
+  
 
  
-    
+
+
+ 
+      
 
     return action;
   },
@@ -462,8 +499,11 @@ const screenConfig = {
           institutionSummary: institutionSummary,
           documentsSummary: documentsSummary
         }),
+       
+      /*  citizenSubmitFooter:
+       process.env.REACT_APP_NAME === "Citizen" ? citizenSubmitFooter : {},  */
        citizenFooter: 
-       process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+       process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {},         
       }
     }
   }

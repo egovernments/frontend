@@ -120,6 +120,29 @@ const screenConfig = {
       );
     }
 
+    let value = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+
+    if( value === 'Urban')
+    {           
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.subDistrict.visible",
+        false
+      );      
+
+    }       
+    else {      
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.city.visible",
+        false
+      );
+
+      } 
+    
+
     generateBill(dispatch, applicationNumber, tenantId);
     prepareDocumentsView(state, dispatch);
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));

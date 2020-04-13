@@ -18,7 +18,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
   );
   const applicationNumber = get(
     state,
@@ -128,7 +128,7 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  if (activeStep === 1) {
+  if (activeStep === 1) {  
     let isPropertyLocationCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
       state,

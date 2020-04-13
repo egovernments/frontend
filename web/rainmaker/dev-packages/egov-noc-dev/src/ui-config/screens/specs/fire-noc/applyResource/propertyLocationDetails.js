@@ -585,9 +585,9 @@ export const propertyLocationDetails = getCommonCard(
 
             for (let i=0;i<urbanids.length;i++)
               {
-                          urbanlist.push({
+                    urbanlist.push({
 
-                            code:urbanids[i],
+                     code:urbanids[i],
                           })
                 }
 
@@ -763,7 +763,11 @@ export const propertyLocationDetails = getCommonCard(
               }
               } 
             }
-           /*             dispatch(
+
+     
+
+
+           /*  dispatch(
               handleField(
                 "apply",
                 "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyFirestation",
@@ -782,10 +786,53 @@ export const propertyLocationDetails = getCommonCard(
                   "FireNOCs[0].fireNOCDetails.firestationId", firesation[0].code)
               );
 
-            }
-             
-
+            }               
           }
+
+        },
+
+
+        afterFieldChange: (action, state, dispatch) => {
+
+          let fireStationsList = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+            []
+          );
+          
+          let fireStations = fireStationsList.filter(firestation => {
+            return firestation.subDistrict 
+          });
+
+          let props_value ;
+           
+          for(var i=0;i<fireStations.length;i++)
+          {
+            for(var j=0;j<fireStations[i].subDistrict.length;j++)
+            {
+              if(fireStations[i].subDistrict[j].code==action.value)
+            {
+              props_value = fireStations[i].baseTenantId;
+            }
+           }
+          }
+
+         console.log("props value", props_value);
+                
+      /*     dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardSecondStep.child…ren.propertyDetailsConatiner.children.subDistrict",
+              "props.value",
+              props_value
+            )
+          );   */
+          
+          set(
+            state,
+            "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+            props_value
+          );
         }
       },
       propertyId: getTextField({
