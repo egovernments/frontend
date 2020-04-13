@@ -779,7 +779,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["25%", "25%", "25%", "25%"],
+        widths: ["*", "*", "*"],
         body: [
           [
             {
@@ -1965,7 +1965,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["25%", "25%", "25%", "25%"],
+        widths: ["*", "*", "*"],
         body: [
           [
             {
@@ -3531,7 +3531,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["25%", "25%", "25%", "25%"],
+        widths: ["*", "*", "*"],
         body: [
           [
             {
