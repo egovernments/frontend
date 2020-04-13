@@ -158,7 +158,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         `TENANT_TENANTS_${getTransformedLocale(	
           get(	
             response,	
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",	
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",	
             "NA"	
           )	
         )}`	
