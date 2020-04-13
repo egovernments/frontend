@@ -219,8 +219,13 @@ class WorkFlowContainer extends React.Component {
       }
     } else if (moduleName === "FIRENOC") {
       switch (action) {
+
+        case "APPLY":
+          return `/fire-noc/acknowledgement?purpose=apply&status=success&applicationNumber=${businessId}&tenantId=${tenant}`; 
+   
         case "PAY":
           return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
+
         case "EDIT":
           return isAlreadyEdited
             ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`

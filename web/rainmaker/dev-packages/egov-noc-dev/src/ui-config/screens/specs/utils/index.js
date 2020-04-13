@@ -211,9 +211,24 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     window.location.href,
     "applicationNumber"
   );
-  const applicationNumberQueryString = applicationNumber
+  
+  let applicationNumberQueryString = applicationNumber
     ? `&applicationNumber=${applicationNumber}`
     : ``;
+
+/*   debugger;
+
+  let tenantId = getTenantId();
+
+  console.log("tenantId", tenantId);
+
+
+  let aargs = applicationNumberQueryString.concat(tenantId);
+
+  console.log("aargs", aargs); */
+
+  // http://localhost:3000/firenoc-services/v1/_search?tenantId=null&applicationNumber=PB-FN-2020-04-07-006987 
+
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/fire-noc/apply?step=${step}${applicationNumberQueryString}`
@@ -698,7 +713,40 @@ export const resetFields = (state, dispatch) => {
 	
 export const getMdmsDataTenant = async (action, state, dispatch) => {
   let tenantId = getTenantId();
+
   let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }]
+        },
+        {
+          moduleName: "firenoc",
+          masterDetails: [{ name: "BuildingType" }, { name: "FireStations" },{ name: "Documents" }
+        ]
+        },
+        {
+          moduleName: "egov-location",
+          masterDetails: [
+            {
+              name: "TenantBoundary"
+            }
+          ]
+        },
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        }
+      ]
+    }
+  };
+/*   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
@@ -712,7 +760,7 @@ export const getMdmsDataTenant = async (action, state, dispatch) => {
         }
       ]
     }
-  };
+  }; */
   try {
     let tenantData = null;
     tenantData = await httpRequest(
@@ -723,7 +771,10 @@ export const getMdmsDataTenant = async (action, state, dispatch) => {
       mdmsBody
       
     );
-let arr = tenantData.MdmsRes.tenant.tenants
+
+    dispatch(prepareFinalObject("applyScreenMdmsData", tenantData.MdmsRes));
+
+   let arr = tenantData.MdmsRes.tenant.tenants
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.searchScreen.tenantData",arr
