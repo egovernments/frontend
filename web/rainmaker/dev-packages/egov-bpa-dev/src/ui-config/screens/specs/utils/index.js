@@ -1262,7 +1262,7 @@ export const getCurrentFinancialYear = () => {
   return fiscalYr;
 };
 
-export const validateFields = (
+export const validateFields = (  
   objectJsonPath,
   state,
   dispatch,
@@ -4406,7 +4406,7 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
 
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_create?key=misc-receipt&tenantId=${bpaDetails.tenantId}`,
+    `pdf-service/v1/_create?key=consolidatedreceipt&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
     { Payments : payments }
@@ -4427,34 +4427,65 @@ const getFloorDetails = (index) => {
   }
 };
 
-export const setProposedBuildingData = async (state, dispatch) => {
+export const setProposedBuildingData = async (state, dispatch, action) => {
   const response = get(
     state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
     []
   );
-  if (response && response.length > 0) {
-    let tableData = await response.map((item, index) => (
-      {
-        [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
-        [getBpaTextToLocalMapping("Level")]: item.number,
-        [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-        [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-        [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-        [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
-      }));
+  let occupancyType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+    []
+  );
+  const BPA = get (
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    {}
+  );
+  
+  let subOccupancyType = occupancyType.filter(item => {
+    return item.active;
+  });
 
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
-        "props.data",
-        tableData
-      )
-    );
+  let tableData = [];
+  if (response && response.length > 0) {
+    for (var j = 0; j < response.length; j++) {
+      let title = `Block ${j + 1}`;
+      let floors = response[j] && response[j].building && response[j].building.floors;
+      let block = await floors.map((item, index) => (
+        {
+          [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+          [getBpaTextToLocalMapping("Level")]: item.number,
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+          [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+          [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+        }));
+      let occupancyTypeCheck = [], formatedSubOccupancyType = "";
+      if(BPA && BPA.blocks && BPA.blocks[j] && BPA.blocks[j].subOccupancyType) {
+        let sOccupancyType = (BPA.blocks[j].subOccupancyType).split(",");
+        sOccupancyType.forEach(subOcData => {
+          occupancyTypeCheck.push({
+            value : subOcData,
+            label : getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${subOcData}`)
+          });
+        });
+      }
+      
+      if(occupancyTypeCheck && occupancyTypeCheck.length) {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck });
+      } else {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title });
+      }
+
+    };
+    dispatch(prepareFinalObject("edcr.blockDetail", tableData));
+
     return tableData;
   }
-}
+} 
+
 
 export const getConditionsInPermitList = async (action, state, dispatch) => {
   let permitConditions = get(

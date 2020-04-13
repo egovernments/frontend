@@ -13,7 +13,8 @@ import {
   buildingPlanScrutinyDetails,
   blockWiseOccupancyAndUsageDetails,
   demolitiondetails,
-  proposedBuildingDetails
+  proposedBuildingDetails,
+  abstractProposedBuildingDetails
 } from "./applyResource/scrutinyDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import {
@@ -21,7 +22,7 @@ import {
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
-import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage, getTransformedLocale, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField,
@@ -95,9 +96,10 @@ export const formwizardSecondStep = {
   },
   children: {
     buildingPlanScrutinyDetails,
-    blockWiseOccupancyAndUsageDetails,
+   // blockWiseOccupancyAndUsageDetails,    
+    proposedBuildingDetails,
     demolitiondetails,
-    proposedBuildingDetails
+    abstractProposedBuildingDetails
   },
   visible: false
 };
@@ -430,38 +432,37 @@ if(isTrue) {
 }
 }
 
-const setTaskStatus = async (state, applicationNumber, tenantId, dispatch, componentJsonpath) => {
+const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJsonpath)=>{
   const queryObject = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
     { key: "tenantId", value: tenantId }
   ];
-  let processInstances = [];
-  const payload = await httpRequest(
-    "post",
-    "egov-workflow-v2/egov-wf/process/_search",
-    "",
-    queryObject
-  );
-  if (payload && payload.ProcessInstances.length > 0) {
-    processInstances = orderWfProcessInstances(
-      payload.ProcessInstances
+  let processInstances =[];
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
     );
-    dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances", processInstances));
-
-    let sendToArchitect = (processInstances && processInstances.length > 1 && processInstances[processInstances.length - 1].action) || "";
-
-    if (sendToArchitect == "SEND_TO_ARCHITECT") {
-      dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
+    if (payload && payload.ProcessInstances.length > 0) {
+      processInstances= orderWfProcessInstances(
+        payload.ProcessInstances
+      );      
+      dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances",processInstances));
+      
+      let sendToArchitect = (processInstances && processInstances.length>1 && processInstances[processInstances.length-1].action)||"";
+      
+      if(sendToArchitect =="SEND_TO_ARCHITECT"){
+        dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
+      }
+     
     }
-
-  }
 }
-
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
-  beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
+  beforeInitScreen: (action, state, dispatch,componentJsonpath) => {
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -517,6 +518,7 @@ const screenConfig = {
     });
 
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
+
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
       let intStep = parseInt(step);
@@ -572,15 +574,15 @@ const screenConfig = {
         taskStatus: {
           moduleName: "egov-workflow",
           uiFramework: "custom-containers-local",
-          componentPath: "WorkFlowContainer",
+          componentPath: "WorkFlowContainer",          
           visible: false,
-          componentJsonpath: 'components.div.children.taskStatus',
+          componentJsonpath:'components.div.children.taskStatus',
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
             updateUrl: "/bpa-services/_update"
           }
-        },
+          },
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,

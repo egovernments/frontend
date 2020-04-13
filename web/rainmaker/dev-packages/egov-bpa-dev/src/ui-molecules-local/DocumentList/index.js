@@ -127,7 +127,6 @@ class DocumentList extends Component {
   };
 
   componentDidMount = () => {
-    console.log(this.props)
     const {
       documentsList,
       bparegDocumentDetailsUploadRedux = {},
@@ -282,6 +281,7 @@ class DocumentList extends Component {
               data={card.dropDownValues.menu}
               optionValue="code"
               optionLabel="label"
+              autoSelect={true}
               required={card.required}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}

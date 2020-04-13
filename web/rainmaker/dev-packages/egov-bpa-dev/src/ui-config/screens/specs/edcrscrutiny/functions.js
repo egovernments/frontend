@@ -58,7 +58,10 @@ const moveToSuccess = (dispatch, edcrDetail) => {
   const tenantId = edcrDetail.tenantId;
 
   const purpose = "apply";
-  const status = edcrDetail.status === "Accepted" ? "success" : "rejected";
+  let status = edcrDetail.status === "Accepted" ? "success" : "rejected";
+  if(edcrDetail.status == "Aborted") {
+    status = "aborted";
+  }
   dispatch(
     setRoute(
       `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`
