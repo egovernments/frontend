@@ -361,12 +361,6 @@ const getAcknowledgementCard = (
           })
         }
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
     };
   } else if (purpose === "pay" && status === "failure") {
     return {
@@ -436,12 +430,6 @@ const getAcknowledgementCard = (
           })
         }
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
     };
   } else if (purpose === "forward" && status === "success") {
     return {
