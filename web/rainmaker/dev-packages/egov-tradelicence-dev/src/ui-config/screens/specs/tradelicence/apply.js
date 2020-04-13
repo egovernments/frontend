@@ -183,6 +183,17 @@ export const getMdmsData = async (action, state, dispatch) => {
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
     );
+    payload = commonTransform(
+      payload,
+      "MdmsRes.TradeLicense.Purpose"
+    );
+    set(
+      payload,
+      "MdmsRes.TradeLicense.transformedPurpose",
+      objectToDropdown(
+        get(payload, "MdmsRes.TradeLicense.Purpose", [])
+      )
+    );
     set(
       payload,
       "MdmsRes.common-masters.OwnerShipCategoryTransformed",
@@ -422,7 +433,6 @@ const screenConfig = {
           )
         );
       }
-
       const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
       tradeTypeDropdownData &&
         dispatch(

@@ -605,12 +605,102 @@ const tradeUnitCard = {
               },
               required: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose",
-              sourceJsonPath: "applyScreenMdmsData.TradeLicense.Purpose",
+              sourceJsonPath: "applyScreenMdmsData.TradeLicense.transformedPurpose",
               props: {
                 className: "tl-trade-type",
-              }
+              },
+              beforeFieldChange: (action, state, dispatch) => {
+                if(action.value){
+                  const purposedetails =   get(
+                    state.screenConfiguration.preparedFinalObject
+                      .applyScreenMdmsData["TradeLicense"],
+                    `Purpose.${action.value}`,
+                    []
+                  );
+                  try {
+                    if(get(purposedetails[0], "code" ) !== action.value){
+                      dispatch(
+                        handleField(
+                          "apply",
+                          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.tradeUnitCardContainer.children.purposeSubDetails",
+                          "visible",
+                          true
+                        )
+                      );
+                      dispatch(
+                        pFO(
+                          "applyScreenMdmsData.TradeLicense.transformedPurposeSubdetails",
+                          purposedetails
+                        )
+                      );
+                    }else{
+                      dispatch(
+                        handleField(
+                          "apply",
+                          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.tradeUnitCardContainer.children.purposeSubDetails",
+                          "visible",
+                          false
+                        )
+                      );
+                    }
+                    
+                    // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
+                  } catch (e) {
+                    console.log(e);
+                  }
+                }
+                }
             }),
           },
+          purposeSubDetails: {
+            ...getSelectField({
+              label: {
+                labelName: "Purpose Sub-Details",
+                labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_SUB_DETAILS"
+              },
+              placeholder: {
+                labelName: "Select Purpose Sub-Details",
+                labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_PURPOSE_SUB_DETAILS_PLACEHOLDER"
+              },
+              localePrefix: {
+                moduleName: "TRADELICENSE",
+                masterName: "PURPOSE"
+              },
+              required: true,
+              jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purposeSubDetails",
+              sourceJsonPath: "applyScreenMdmsData.TradeLicense.transformedPurposeSubdetails",
+              props: {
+                className: "tl-trade-type",
+              },
+            }),
+          },
+          // purpose : {
+          //   uiFramework: "custom-containers",
+          //   componentPath: "NamespaceContainer",
+          //   gridDefination : {
+          //     xs: 12,
+          //     sm: 6
+          //   },
+          //   props:{
+          //     label: {
+          //       labelName: "Purpose",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE"
+          //     },
+          //     placeholder: {
+          //       labelName: "Select a Purpose",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_PLACEHOLDER"
+          //     },
+          //     localePrefix: {
+          //       moduleName: "TRADELICENSE",
+          //       masterName: "PURPOSE"
+          //     },                   
+          //     required: true,
+          //     select :true,
+          //     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purpose",
+          //     sourceJsonPath: "applyScreenMdmsData.TradeLicense.Purpose",
+          //     className: "tl-trade-type"                   
+          //   }
+          // },
           purposeDetail: getTextField({
             label: {
               labelName: "Purpose Details",
@@ -776,6 +866,20 @@ export const tradeDetails = getCommonCard({
         sourceJsonPath: "applyScreenMdmsData.TradeLicense.District",
         props: {
           className: "tl-trade-type",
+        },
+        beforeFieldChange: (action, state, dispatch) => {
+          const fromDistrict = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.additionalDetail.fromDistrict" )
+          if(action.value === fromDistrict){
+            dispatch(toggleSnackbar(
+              true,
+              {
+                labelName:
+                  "Please select a valid To District",
+                labelKey: "COMMON_VALID_DISTRICT"
+              },
+              "warning"
+            ));
+          }
         }
       }),
       visible: true
@@ -796,6 +900,42 @@ export const tradeDetails = getCommonCard({
       visible: false,
       pattern: getPattern("epassValidity"),
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.toDistrict"
+    }),
+    fromAddress: getTextField({
+      label: {
+        labelName: "Departure Address",
+        labelKey: "TL_NEW_TRADE_DETAILS_DEPARTURE_ADDRESS"
+      },
+      props:{
+        className:"applicant-details-error",
+        multiline: true,
+        rows: "2",
+      },
+      placeholder: {
+        labelName: "Descirbe the purpose",
+        labelKey: "TL_NEW_TRADE_DETAILS_DEPARTURE_ADDRESS_PLACEHOLDER"
+      },
+      required: true,
+      pattern: getPattern("epassValidity"),
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.departureAddress"
+    }),
+    toAddress: getTextField({
+      label: {
+        labelName: "Destination Address",
+        labelKey: "TL_NEW_TRADE_DETAILS_DESTINATION_ADDRESS"
+      },
+      props:{
+        className:"applicant-details-error",
+        multiline: true,
+        rows: "2",
+      },
+      placeholder: {
+        labelName: "Descirbe the purpose",
+        labelKey: "TL_NEW_TRADE_DETAILS_DESTINATION_ADDRESS_PLACEHOLDER"
+      },
+      required: true,
+      pattern: getPattern("epassValidity"),
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.destinationAddress"
     }),
   },
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},

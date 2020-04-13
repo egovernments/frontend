@@ -44,42 +44,45 @@ const tradeTypeCard = {
             }
           }
         ),
+        reviewPurposeSubDetails: getLabelWithValue(
+          {
+            labelName: "Purpose Sub-Details",
+            labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_SUB_DETAILS"
+          },
+          {
+            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purposeSubDetails",
+            localePrefix: {
+              moduleName: "TRADELICENSE",
+              masterName: "PURPOSE"
+            },
+            callBack: value => {
+              return value ? value : "NA";
+            }
+          }
+        ),
         reviewPurposeDetails: getLabelWithValue(
           { labelName: "Purpose Details", labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_DETAILS" },
           {
             jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purposeDetail"
           }
+        ),
+        departureAddress: getLabelWithValue(
+          {  labelName: "Departure Address",
+             labelKey: "TL_NEW_TRADE_DETAILS_DEPARTURE_ADDRESS" 
+          },
+          {
+            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.departureAddress"
+          }
+        ),
+        destinationAddress: getLabelWithValue(
+          { labelName: "Destination Address",
+            labelKey: "TL_NEW_TRADE_DETAILS_DESTINATION_ADDRESS"
+          },
+          {
+            jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.destinationAddress"
+          }
         )
-        // ,
-        // reviewTradeSubtype: getLabelWithValue(
-        //   {
-        //     labelName: "Trade Sub-Type",
-        //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
-        //   },
-        //   {
-        //     jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-        //     localePrefix: {
-        //       moduleName: "TRADELICENSE",
-        //       masterName: "TRADETYPE"
-        //     },
-        //     callBack: checkValueForNA
-        //   }
-        // ),
-        //
-        // reviewTradeUOM: getLabelWithValue(
-        //   {
-        //     labelName: "UOM (Unit of Measurement)",
-        //     labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
-        //   },
-        //   { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom", callBack: checkValueForNA }
-        // ),
-        // reviewTradeUOMValue: getLabelWithValue(
-        //   {
-        //     labelName: "UOM Value",
-        //     labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
-        //   },
-        //   { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue", callBack: checkValueForNA }
-        // )
+        
       })
     }),
     items: [],

@@ -103,6 +103,7 @@ export const callBackForNext = async (state, dispatch) => {
   );
   let isFormValid = true;
   let hasFieldToaster = true;
+  let errorMessage = {};
   if (activeStep === 0) {
     const data = get(state.screenConfiguration, "preparedFinalObject");
     setOwnerShipDropDownFieldChange(state, dispatch, data);
@@ -239,7 +240,18 @@ export const callBackForNext = async (state, dispatch) => {
       );
       return false; // to show the above message
     }
-    if (isFormValid && isOwnerShipValid) {
+    const additionalDetails =  get(state.screenConfiguration.preparedFinalObject , "Licenses[0].tradeLicenseDetail.additionalDetail");
+    const fromDistrict = get(additionalDetails , "fromDistrict");
+    const toDistrict = get(additionalDetails , "toDistrict");
+    if(fromDistrict === toDistrict){
+      isFormValid = false;
+      errorMessage = {
+        labelName:
+          "Please select a valid To District",
+        labelKey: "COMMON_VALID_DISTRICT"
+      }
+    }
+    if (isFormValid && isOwnerShipValid ) {
       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
       if (!isFormValid) {
         hasFieldToaster = false;
@@ -353,14 +365,14 @@ export const callBackForNext = async (state, dispatch) => {
     if (isFormValid) {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
-      let errorMessage = {
-        labelName:
-          "Please fill all mandatory fields and upload the documents !",
-        labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
-      };
+      // let errorMessage = {
+      //   labelName:
+      //     "Please fill all mandatory fields and upload the documents !",
+      //   labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
+      // };
       switch (activeStep) {
         case 0:
-          errorMessage = {
+          errorMessage = errorMessage ? errorMessage :{
             labelName:
               "Please fill all mandatory fields for Trade Details, then do next !",
             labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
