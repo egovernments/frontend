@@ -87,9 +87,10 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     );
     let tenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
       getTenantId()
     );
+
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
 
@@ -136,9 +137,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         let value = get(building.uomsMap, uom);
         value &&
           finalUoms.push({
-            code: uom,
+            //code: uom,
+            code: "HEIGHT_OF_BUILDING",
             value: parseInt(value),
-            isActiveUom: requiredUoms.includes(uom) ? true : false,
+            //isActiveUom: requiredUoms.includes(uom) ? true : false,
+            isActiveUom:  true ,
             active: true
           });
       });
@@ -298,7 +301,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
 
-  
+
   let documents = get(
     state,
     "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents",
@@ -455,10 +458,10 @@ export const furnishNocResponse = response => {
       uomMap
     );
 
-    let usageType = get(building, "usageType");
+    let usageType = get(building, "usageSubType");
     set(
       response,
-      `FireNOCs[0].fireNOCDetails.buildings[${index}].usageTypeMajor`,
+      `FireNOCs[0].fireNOCDetails.buildings[${index}].usageSubType`,
       usageType == undefined ? "" : usageType.split(".")[0]
     );
   });
