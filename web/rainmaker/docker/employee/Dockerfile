@@ -1,5 +1,5 @@
 
-FROM egovio/alpine-node-builder-10:yarn AS build  
+FROM egovio/alpine-node-builder-10:yarn AS build
 ARG WORK_DIR
 WORKDIR /app
 ENV NODE_OPTIONS "--max-old-space-size=4000"
@@ -9,7 +9,7 @@ COPY ${WORK_DIR} .
 RUN yarn run prod:employee
 
 # Create runtime image
-FROM nginx:mainline-alpine 
+FROM nginx:mainline-alpine
 ENV WEB_DIR=/var/web/employee
 
 RUN mkdir -p ${WEB_DIR}
