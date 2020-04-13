@@ -17,7 +17,7 @@ import {
   prepareFinalObject,
   initScreen
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import isUndefined from "lodash/isUndefined";
 import isEmpty from "lodash/isEmpty";
 import {
