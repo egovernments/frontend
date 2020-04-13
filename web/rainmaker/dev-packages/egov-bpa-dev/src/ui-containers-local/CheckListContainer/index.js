@@ -21,7 +21,8 @@ class CheckListContainer extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownprops) => {
+
   let documentsList = get(
     state,
     "screenConfiguration.preparedFinalObject.FieldinspectionQstns",
@@ -32,6 +33,7 @@ const mapStateToProps = state => {
     "screenConfiguration.preparedFinalObject.BPA",
     []
   )
+
   return { documentsList, bpaDetails };
 };
 
