@@ -74,13 +74,16 @@ export const reviewOwnerDetails = reviewOwner(process.env.REACT_APP_NAME !== "Ci
 
 export const reviewDocumentDetails = reviewDocuments();
 
-
-const summaryScreen = getCommonCard({
+const summaryScreenCitizen = getCommonCard({
+  reviewConnDetails,
+  reviewDocumentDetails,
+});
+const summaryScreenEMP = getCommonCard({
   reviewConnDetails,
   reviewDocumentDetails,
   reviewOwnerDetails
 })
-
+let summaryScreen=process.env.REACT_APP_NAME === "Citizen"?summaryScreenCitizen:summaryScreenEMP;
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
     { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
