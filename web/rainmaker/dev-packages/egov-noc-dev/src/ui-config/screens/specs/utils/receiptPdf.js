@@ -7,6 +7,9 @@ import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getMessageFromLocalization } from "./receiptTransformer";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
+//import pdfMakeCustom from "pdfmake/build/pdfmake";
+//import pdfFonts from "./vfs_fonts";
+
 const getOwners = data => {
   let retowners = [];
   data.owners.forEach(owner => {
@@ -2480,7 +2483,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `Certified that the ${transformedData.buildingName} at  ${transformedData.address} comprised of ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor) owned/occupied by   ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building / premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
+                text: `Certified that the ${transformedData.buildings[0].name} at  ${transformedData.address} comprised of ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor) owned/occupied by   ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building / premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
 
                 border: [true, false, true, false],             
                 alignment: "center"
@@ -2508,7 +2511,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
                 text: `Issued on ${transformedData.issuedDate} at ${transformedData.city}`,
    
                     border: [true, false, true, false],             
-                alignment: "center"
+                alignment: "left"
               },
              
            ], 
@@ -2529,7 +2532,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             
             [             
               {
-                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildingName} ਜੋ ਿਕ ${transformedData.address} ${transformedData.city} ${transformedData.subDistrict} ਸਮੇਤ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ${transformedData.owners[0].name} ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ${transformedData.issuedDate} ਮੋਜੂਦਗੀ ਿਵੱਚ ${transformedData.owners[0].name} (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group Assembly subdivision               D-2 (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।`,
+                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਜੋ ਿਕ ${transformedData.address} ${transformedData.city} ${transformedData.subDistrict} ਸਮੇਤ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ${transformedData.owners[0].name} ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ${transformedData.issuedDate} ਮੋਜੂਦਗੀ ਿਵੱਚ ${transformedData.owners[0].name} (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group Assembly subdivision               D-2 (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।`,
                 border: [true, false, true, false],             
                 alignment: "center"
               },             
@@ -4047,7 +4050,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
              
               {
                 //text: `Certified that the ${transformedData.buildingName} at   ${transformedData.door}  ${transformedData.street} comprised of 0 basements and 3 (Upper floor) owned/occupied by   ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building / premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
-                text: `Certified that the ${transformedData.buildingName} at ${transformedData.address}   ${transformedData.city} ${transformedData.subDistrict}   has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group Educational subdivision B-1 (as per NBC).`,
+                text: `Certified that the ${transformedData.buildingName} at ${transformedData.address}      has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group Educational subdivision B-1 (as per NBC).`,
                 border: [true, false, true, false],             
                 alignment: "center"
               },
@@ -4095,7 +4098,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             
             [             
               {
-                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildingName} ਪਤਾ ${transformedData.address} ${transformedData.city} ${transformedData.subDistrict}  ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ                 ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.NO_OF_FLOORS} ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ                 ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ Educational ਸਬਡਵੀਜਨ B-1 ਿਵੱਚ ਪੈਦਾ ਹੈ।` ,
+                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildingName} ਪਤਾ ${transformedData.address}   ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ                 ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.NO_OF_FLOORS} ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ                 ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ Educational ਸਬਡਵੀਜਨ B-1 ਿਵੱਚ ਪੈਦਾ ਹੈ।` ,
                 border: [true, false, true, false],             
                 alignment: "center"
               },             
@@ -4643,6 +4646,17 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
 };
 
 const generatePdf = async (state, dispatch, type) => {
+
+/*      pdfMake.vfs = pdfFonts.vfs;
+  pdfMake.fonts = {
+    Camby: {
+      normal: "Cambay-Regular.ttf",
+      bold: "Cambay-Regular.ttf",
+      italics: "Cambay-Regular.ttf",
+      bolditalics: "Cambay-Regular.ttf"
+    }
+  };  */
+
 
 
   let applicationData = get(

@@ -27,10 +27,10 @@ const nullToNa = value => {
   return ["", "NA", "null", null].includes(value) ? "NA" : value;
 };
 
-const createAddress = (doorNo, buildingName, street, locality, city) => {
+const createAddress = (doorNo, street, locality, city) => {
   let address = "";
   address += ifNotNull(doorNo) ? doorNo + ", " : "";
-  address += ifNotNull(buildingName) ? buildingName + ", " : "";
+//  address += ifNotNull(buildingName) ? buildingName + ", " : "";
   address += ifNotNull(street) ? street + ", " : "";
   address += locality + ", ";
   address += city;
@@ -137,7 +137,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         ),
         usageSubType: getMessageFromLocalization(
           `FIRENOC_BUILDINGTYPE_${getTransformedLocale(
-            get(building, "usageType", "NA")
+            get(building, "usageSubType", "NA")
           )}`
         ),
         uoms: uomsObject
@@ -292,19 +292,54 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         "NA"
       )
     );
-    data.address = createAddress(
+
+    const urbancreateAddress = (doorNo, street, mohalla, landmark, city, district, pincode) => {
+      let address = "";
+      address += ifNotNull(doorNo) ? doorNo + ", " : "";   
+      address += ifNotNull(street) ? street + ", " : "";
+      address += ifNotNull(mohalla) ? mohalla + ", " : "";
+      address += ifNotNull(landmark) ? landmark + ", " : "";      
+      address += ifNotNull(city) ? city + ", " : "";
+      address += ifNotNull(district) ? district + ", " : "";
+      address += ifNotNull(pincode) ? pincode + ", " : "";   
+      return address;
+    };
+
+    const ruralcreateAddress = ( doorNo, street, landmark, village, subDistrict, district, pincode ) => {
+      let address = "";
+      address += ifNotNull(doorNo) ? doorNo + ", " : "";   
+      address += ifNotNull(street) ? street + ", " : "";
+      address += ifNotNull(landmark) ? landmark + ", " : ""; 
+      address += ifNotNull(village) ? village + ", " : "";
+      address += ifNotNull(subDistrict) ? subDistrict + ", " : "";
+      address += ifNotNull(district) ? district + ", " : "";
+      address += ifNotNull(pincode) ? pincode + ", " : "";      
+      return address;
+    };
+
+    data.urbanaddress = urbancreateAddress(
       data.door,
-      data.buildingName,
       data.street,
       data.mohalla,
-      data.city,
-      data.areaType,
-      data.subDistrict,
-      data.district,
-      data.village,
-      data.landmark
+      data.landmark,
+      data.city,     
+      data.district,     
+      data.pincode     
 
     );
+
+    data.ruraladdress = ruralcreateAddress(
+      data.door,
+      data.street,
+      data.landmark,
+      data.village,     
+      data.subDistrict,
+      data.district,
+      data.pincode
+
+        );
+
+        data.address = data.areaType==='Urban'?data.urbanaddress :data.ruraladdress ;
 
     // Applicant Details
     let owners = get(
@@ -325,6 +360,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         address: get(owner, "correspondenceAddress", "NA")
       };
     });
+
+   
 
     // Institution Details
     data.ownershipType = nullToNa(
