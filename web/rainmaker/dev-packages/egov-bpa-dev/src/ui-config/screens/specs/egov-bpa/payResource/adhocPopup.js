@@ -26,7 +26,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   try {
     const BpaPayload = await httpRequest(
       "post",
-      "/bpa-services/v1/_update",
+      "/bpa-services/bpa/appl/v1/_update",
       "",
       [],
       { BPA: BpaRequestBody }

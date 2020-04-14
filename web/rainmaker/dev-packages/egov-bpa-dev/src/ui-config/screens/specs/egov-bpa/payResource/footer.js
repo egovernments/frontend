@@ -161,7 +161,7 @@ const updatePayAction = async (
     set(response, "BPA.action", "PAY");
     response = await httpRequest(
       "post",
-      "/bpa-services/v1/_update",
+      "/bpa-services/bpa/appl/v1/_update",
       "",
       [],
       {
