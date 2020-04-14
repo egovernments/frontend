@@ -17,7 +17,8 @@ import {
   formwizardFourthStep,
   stepper,
   getMdmsData,
-  citizenInfoCard
+  citizenInfoCard,
+  citizenInfoCardTwo
 } from "../tradelicence/apply";
 import { 
   getAllDataFromBillingSlab,
@@ -164,6 +165,7 @@ const screenConfig = {
         },
         stepper,
         citizenInfoCard,
+        citizenInfoCardTwo,
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,

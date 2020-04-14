@@ -104,6 +104,31 @@ export const citizenInfoCard = getCommonContainer({
   marginTop :20
 }});
 
+export const citizenInfoCardTwo = getCommonContainer({
+  iconNew : {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "Information",
+  },
+  headerNew :getCommonParagraph(
+    {
+      labelName: `Please travel only if it is very much necessary. Most applications without a proper reason are getting rejected.`,
+      labelKey: "EPASS_CITIZEN_INFO_TWO",
+    },
+    {
+      style: {
+        fontSize: 16,
+        marginBottom: 0,
+        marginLeft : 10,
+        color: "rgba(0, 0, 0, 0.87)"
+      }
+    }
+  ),
+},
+{style:{
+  marginTop :20
+}});
+
 export const tradeDocumentDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -469,7 +494,8 @@ const screenConfig = {
           }
         },
         stepper,
-        citizenInfoCard,  
+        citizenInfoCard, 
+        citizenInfoCardTwo, 
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,

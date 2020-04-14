@@ -527,7 +527,9 @@ export const getPattern = type => {
     case "consumerNo":
       return /^[a-zA-Z0-9/-]*$/i;
     case "epassValidity":
-      return /^[^\$\"'<>?\\\\~`!@#$%^={}\[\]*:;“”‘’]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^={}\[\]*:;“”‘’]{10,250}$/i;
+    case "district":
+      return /^[^\$\"'<>?\\\\~`!@#$%^={}\[\]*:;“”‘’]{3,250}$/i;
     case "vehicleNumber":
       return /^[^\$\"'<>?\\\\~`!@$&%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
   }

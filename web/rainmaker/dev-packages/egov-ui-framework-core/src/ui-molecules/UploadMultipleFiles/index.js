@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import set from "lodash/set";
 
 const styles = theme => ({
   button: {
@@ -63,14 +64,18 @@ class UploadMultipleFiles extends Component {
        {this.props.description && <LabelContainer labelKey ={this.props.description} />}
         {documents &&
           documents.map((document, index) => {
-            return (
+            const {active , fileName} = document;
+            if(!fileName){
+              set(document , "fileName" , `epass-document-${index+1}`)
+            }
+            return active ===false ? (<div></div>) : (
               <div style={{ marginTop: 10 }} key={index}>
                 <UploadedDocument
                   document={document}
                   removeDocument={() => this.removeDocument(index)}
                 />
               </div>
-            );
+            ) ;
           })}
         <UploadFile
           buttonProps={{

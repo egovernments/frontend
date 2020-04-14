@@ -412,6 +412,29 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         // queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
 
+        //epass changes
+        if (activeIndex === 0) {
+          let searchQueryObject = [
+            { key: "tenantId", value: queryObject[0].tenantId },
+            { key: "applicationNumber", value: queryObject[0].applicationNumber }
+          ];
+          const searchResponse = await getSearchResults(searchQueryObject);
+          const epassDocuments = get(searchResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
+            for (let i = 1; i <= documents.length; i++) {
+              if (i > epassDocuments.length) {
+                epassDocuments.push(documents[i-1])
+              }
+              else{
+                if(!documents[i-1].hasOwnProperty("id")){
+                  epassDocuments[i-1].active=false;
+                  epassDocuments.push(documents[i-1])
+                }
+              }
+            }
+            dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", epassDocuments));
+            set(queryObject[0], "tradeLicenseDetail.applicationDocuments", epassDocuments);
+        }
+
 
         if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal || activeIndex === 0) {
         } else if (activeIndex === 1) {

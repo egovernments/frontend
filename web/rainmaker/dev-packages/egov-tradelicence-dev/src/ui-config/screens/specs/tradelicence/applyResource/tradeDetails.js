@@ -697,7 +697,7 @@ const tradeUnitCard = {
           // },
           purposeDetail: getTextField({
             label: {
-              labelName: "Purpose Details",
+              labelName: "Purpose Additional Details",
               labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_DETAILS"
             },
             props:{
@@ -710,6 +710,7 @@ const tradeUnitCard = {
               labelKey: "TL_NEW_TRADE_DETAILS_PURPOSE_DETAILS_PLACEHOLDER"
             },
             required: true,
+            errorMessage :"EPASS_VALIDITY_PATTERN_MESSAGE",
             pattern: getPattern("epassValidity"),
             jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.purposeDetail"
           }),
@@ -838,7 +839,8 @@ export const tradeDetails = getCommonCard({
       },
       required: true,
       visible: false,
-      pattern: getPattern("epassValidity"),
+      pattern: getPattern("district"),
+      errorMessage :"EPASS_DISTRICT_PATTERN_MESSAGE",
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.fromDistrict"
     }),
     toDistrict: {
@@ -892,7 +894,8 @@ export const tradeDetails = getCommonCard({
       },
       required: true,
       visible: false,
-      pattern: getPattern("epassValidity"),
+      errorMessage :"EPASS_DISTRICT_PATTERN_MESSAGE",
+      pattern: getPattern("district"),
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.toDistrict"
     }),
     fromAddress: getTextField({
@@ -906,9 +909,10 @@ export const tradeDetails = getCommonCard({
         rows: "2",
       },
       placeholder: {
-        labelName: "Descirbe the purpose",
+        labelName: "Enter full departure address",
         labelKey: "TL_NEW_TRADE_DETAILS_DEPARTURE_ADDRESS_PLACEHOLDER"
       },
+      errorMessage :"EPASS_VALIDITY_PATTERN_MESSAGE",
       required: true,
       pattern: getPattern("epassValidity"),
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.departureAddress"
@@ -924,10 +928,11 @@ export const tradeDetails = getCommonCard({
         rows: "2",
       },
       placeholder: {
-        labelName: "Descirbe the purpose",
+        labelName: "Enter full destination address",
         labelKey: "TL_NEW_TRADE_DETAILS_DESTINATION_ADDRESS_PLACEHOLDER"
       },
       required: true,
+      errorMessage :"EPASS_VALIDITY_PATTERN_MESSAGE",
       pattern: getPattern("epassValidity"),
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.destinationAddress"
     }),
