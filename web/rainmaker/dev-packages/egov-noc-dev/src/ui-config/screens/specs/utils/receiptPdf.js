@@ -1,14 +1,17 @@
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfFonts from "./vfs_fonts";
+
+//import pdfFonts from "pdfmake/build/vfs_fonts";
+
 import QRCode from "qrcode";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getMessageFromLocalization } from "./receiptTransformer";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+//pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 //import pdfMakeCustom from "pdfmake/build/pdfmake";
-//import pdfFonts from "./vfs_fonts";
 
 const getOwners = data => {
   let retowners = [];
@@ -1167,6 +1170,9 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 
 
   let dd = {
+    defaultStyle: {
+      font: "raavi"
+    },
     content: [
       {
         style: "noc-head",
@@ -1239,7 +1245,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       },
       "receipt-logo-header": {
         color: "#484848",
-        fontFamily: "Cambay",
+        fontFamily: "raavi",
         fontSize: 16,
         bold: true,
         letterSpacing: 0.74,
@@ -1247,7 +1253,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       },
       "receipt-logo-sub-header": {
         color: "#484848",
-        fontFamily: "Cambay",
+        fontFamily: "raavi",
         fontSize: 13,
         letterSpacing: 0.6
       },
@@ -2352,6 +2358,9 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
 
  
   let dd = {
+    defaultStyle: {
+      font: "raavi"
+    },
     
     content: [     
       {       
@@ -2955,7 +2964,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
       
       "receipt-logo-header": {
         color: "#484848",
-        fontFamily: "Cambay",
+        fontFamily: "raavi",
         fontSize: 16,
         bold: true,
         letterSpacing: 0.74,
@@ -2963,7 +2972,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
       },
       "receipt-logo-sub-header": {
         color: "#484848",
-        fontFamily: "Cambay",
+        fontFamily: "raavi",
         fontSize: 13,
         letterSpacing: 0.6
       },
@@ -3918,6 +3927,9 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
 
  
   let dd = {
+    defaultStyle: {
+      font: "raavi"
+    },
     
     content: [     
       {       
@@ -4573,7 +4585,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
       },
       "receipt-logo-header": {
         color: "#484848",
-        fontFamily: "Cambay",
+        fontFamily: "raavi",
         fontSize: 16,
         bold: true,
         letterSpacing: 0.74,
@@ -4581,7 +4593,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
       },
       "receipt-logo-sub-header": {
         color: "#484848",
-        fontFamily: "Cambay",
+        fontFamily: "raavi",
         fontSize: 13,
         letterSpacing: 0.6
       },
@@ -4647,15 +4659,16 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
 
 const generatePdf = async (state, dispatch, type) => {
 
-/*      pdfMake.vfs = pdfFonts.vfs;
-  pdfMake.fonts = {
-    Camby: {
-      normal: "Cambay-Regular.ttf",
-      bold: "Cambay-Regular.ttf",
-      italics: "Cambay-Regular.ttf",
-      bolditalics: "Cambay-Regular.ttf"
-    }
-  };  */
+      pdfMake.vfs = pdfFonts.vfs;
+
+      pdfMake.fonts = {
+        raavi: {
+          normal: "raavi.ttf",
+          bold: "raavi.ttf",
+          italics: "raavi.ttf",
+          bolditalics: "raavi.ttf"
+        }
+      }; 
 
 
 

@@ -18,7 +18,6 @@ class PaymentRedirect extends Component {
         [],
         {}
       );
-      debugger;
       console.log("pg service responce", pgUpdateResponse);
 
       let consumerCode = get(pgUpdateResponse, "Transaction[0].consumerCode");
