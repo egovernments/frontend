@@ -221,11 +221,11 @@ const callBackForApply = async (state, dispatch) => {
       status: "ACTIVE"
     }
   })
-
-  let oldDocuments=propertyPayload.documents.filter(document=>{
+  let oldDocuments=[];
+  oldDocuments=propertyPayload.documents&&Array.isArray(propertyPayload.documents)&&propertyPayload.documents.filter(document=>{
     return (document.documentType.includes('USAGEPROOF')|| document.documentType.includes('OCCUPANCYPROOF')|| document.documentType.includes('CONSTRUCTIONPROOF'))
   })
- 
+  oldDocuments=oldDocuments||[];
   propertyPayload.documents=[...newDocuments,...oldDocuments];
 
   try {
