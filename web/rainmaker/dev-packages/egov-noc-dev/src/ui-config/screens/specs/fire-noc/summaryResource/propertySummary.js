@@ -190,7 +190,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Village Name",
         labelKey: "NOC_PROPERTY_DETAILS_VILL_NAME_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.village" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2" }
     ),
     landMarkName: getLabelWithValue(
       {

@@ -153,14 +153,17 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       )
     );
 
-    data.city = nullToNa(	
-            get(	
-            response,	
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",	
-            "NA"	
-        )	
-     	
-    );
+ 
+    let city_value = nullToNa(  
+      get(	
+         response,	
+         "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",	
+         "NA"	
+       )	       
+   );
+
+    data.city = nullToNa(          
+        getMessageFromLocalization(`TL_${city_value}` ) ); 
 
     data.door = nullToNa(
       get(
@@ -189,7 +192,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     data.district = nullToNa(          
         getMessageFromLocalization(`TL_${district_value}` ) ); 
   
-    console.log("data.district", data.district);
+   
       
 
     data.subDistrict = nullToNa(
@@ -203,7 +206,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     data.village = nullToNa(
       get(
         response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.village",
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2",
         "NA"
       )
     );

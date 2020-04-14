@@ -1171,7 +1171,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 
   let dd = {
     defaultStyle: {
-      font: "raavi"
+      font: "raavi",
+     
     },
     content: [
       {
@@ -1229,7 +1230,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
      ...institutionDetails,
      ...amountPaid,
      ...paymentInformation,
-      process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy 
+     ...process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy 
 
     ],
     footer: [],
@@ -1239,7 +1240,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
         margin: [-70, -41, -81, 0]
       },
       "noc-head-new": {
-        fontSize: 10,
+        fontSize: 8,
         fillColor: "#F2F2F2",
         margin: [0, 0, 0, 0]
       },
@@ -1317,7 +1318,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 };
 
 const newgetApplicationData = async (transformedData, ulbLogo, type) => {
-  console.log("transformedData33", transformedData)
+  console.log("new type certificate data", transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
       return i === 0 || i === node.table.body.length ? 0.1 : 0.1;
@@ -1443,160 +1444,6 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
       text: "",
       style: "noc-title"
     }];
- 
-  /* let firstparagraph = [
-   
-    {
-      style: "noc-table",
-      table: {
-     //   widths: ["*", "*", "*"],
-        body: [
-          [
-            {
-              text: `Certified that the ${transformedData.buildingName} at   ${transformedData.door}  ${transformedData.street} comprised of 0 basements and 3 (Upper floor) owned/occupied by   ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building / premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
-              border: [false, false, false, false],
-              style: "noc-table-key"
-            },          
-            
-          ],
-          
-        ]
-      },
-    }
-  ];
-
-  let issued = [
-    {
-      text: `Issued on ${transformedData.issuedDate} at ${transformedData.city}`,
-      style: "noc-title"
-    }];
-
-  let secondparagraph = [
-    
-    {
-      style: "noc-table",
-      table: {
-        //widths: ["*", "*", "*"],
-        body: [
-          [
-            {
-              text: "ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ Barbeque Nation Hospitality Limited ਜੋ ਿਕ THIRD FLOOR SCO 37 & 38  PHASE 2 PATIALA ਸਮੇਤ 0 ਬੇਸਮਟ ਅਤੇ 3 (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ MANISH KUMAR PANDEY ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ 04-May-2019 ਮੋਜੂਦਗੀ ਿਵੱਚ Manish Kumar (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group Assembly subdivision               D-2 (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।",
-        
-              border: [false, false, false, false],
-              style: "noc-table-key"
-            },           
-            
-          ],
-          
-        ]
-      },
-    }
-  ]; */
-
- /*  let pointsheadline= [{
-    
-      text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.city}.`,
-      style: "noc-title"
-    }];
-
-  let firstpointinenglish = [
-    {
-      text: "1. Fire Safety arrangements shall be kept in working condition at all times",
-      style:"noc-title"
-    }
-  ];
-
-  let firstpointinpunjabi = [
-    {
-      text: "ਹਰ ਸਮਅੱਗ ਤਬਚਾਅ ਦੇਯੰਤਰਾਂਨੰੂਚਾਲੂ /ਚੰਗੀ ਹਾਲਤ ਿਵੱਚ ਰੱਿਖਆ ਜਾਵੇ।",
-      style:"noc-title"
-    }
-  ];
-  
-  let secondpointinenglish = [
-    {
-      text: "2. No, alteration/ addition/ change in use of occupancy is allowed.",
-      style:"noc-title"
-    }
-  ];
-
-  let secondpointinpunjabi = [
-    {
-      text: "ਿਕਸਵੀ ਤਰਦੇ ਬਦਲਾਅ/ ਵਾਧੇ/ ਕਾਬਜਕਾਰ ਿਵੱਚ ਬਦਲਾਵ ਦੀ ਮਨਾਹੀ ਹੈ।",      
-      style:"noc-title"
-    }
-  ];
-
-  let thridpointinenglish = [
-    {
-      text: "3. Occupants/ owner should have trained staff to operate the operaon of fire safety system provided there in.",
-      style:"noc-title"
-    }
-  ];
-
-  let thirdpointinpunjabi = [
-    {
-      text: "ਉਪਲੱਬਧ ਅੱਗ ਬੁਝਾਉਣ ਦੇ ਯੰਤਰ ਦੀ ਵਰਤ ਤ ਰਿਹਣ ਵਾਲੇ ਲੋਕ / ਮਾਲਕ ਨੰ ੂ ਜਾਣੂੰ ਕਰਵਾਇਆ ਜਾਣਾਯਕੀਨੀ ਬਣਾਇਆ ਜਾਵੇ।",            
-      style:"noc-title"
-    }
-  ];
-
-  let fourthpointinenglish = [
-    {
-      text: "4. Fire Officer can check the arrangements of fire safety at any me, this cerficate will be withdrawn without any noce if any deficiency is found.",
-      style:"noc-title"
-    }
-  ];
-
-  let fourthpointinpunjabi = [
-    {
-      text: "ਫਾਇਰ ਿਬਗੇਡ ਅਿਧਕਾਰੀ ਿਕਸੇ ਵੀ ਵਕਤ ਇਨ ਸਾਰੇ ਪਬੰਧ ਨੰ ੂ ਚੈਕ ਕਰ ਸਕਦਾ ਹੈ, ਜੇ ਕਰ ਕੋਈ ਕਮੀ ਪਾਈਗਈ ਤ ਿਬਨ ਿਕਸੇ ਨਿਟਸ ਦੇ ਇਹ ਸਰਟੀਿਫਕੇਟ ਰੱਦ ਸਮਿਝਆ ਜਾਵੇਗਾ।",      
-      style:"noc-title"
-    }
-  ];
-
-  let fifthpointinenglish = [
-    {
-      text: "5.Occupants/ owner should apply for renewal of fire safety cerficate one month prior to expiry of this cerficate.",
-      style:"noc-title"
-    }
-  ];
-
-  let fifthpointinpunjabi = [
-    {
-      text: "ਮਾਲਕ ਜਾਰੀ ਕੀਤੇ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਸਰਟੀਿਫਕੇਟ ਦੀ ਿਮਤੀ ਖਤਮ ਹੋਣ ਤ ਇੱਕ ਮਹੀਨਾ ਪਿਹਲ ਰੀਨੀਊਕਰਵਾਉਣ ਲਈ ਪਾਬੰਦ ਹੋਵੇਗਾ।", 
-      style:"noc-title"
-    }
-  ];
-
-
-  let starmarkoneinenglish = [
-    {
-      text: "* Above Details cannot be used as ownership proof.",
-      style:"noc-title"
-    }
-  ];
-
-  let starmarkoneinpunjabi = [
-    {
-      text: "ਉਪਰੋਕਤ ਦਰਸਾਈ ਗਈ ਜਾਣਕਾਰੀ ਨੰੂਮਾਲਕਾਨਾ ਦੇ ਸਬੂਤ ਵਜ ਨਹ ਵਰਿਤਆ ਜਾਵੇਗਾ।", 
-      style:"noc-title"
-    }
-  ];
-
-  let starmarktwoinenglish = [
-    {
-      text: "This is digitaly created cerificate, no signatue are needed",
-      style:"noc-title"
-    }
-  ];
-
-  let starmarktwoinpunjabi = [
-    {
-      text: "ਇਹ ਿਡਜੀਟਲੀ (ਕੰਿਪਊਟਰਾਈਜ਼ਡ) ਿਤਆਰ ਕੀਤਾ ਿਗਆ ਸਰਟੀਿਫਕੇਟ ਹੈ, ਿਜਸ ਿਵੱਚ ਦਸਤਖਤ ਦੀ ਕੋਈ ਲੋੜ ਨਹ ਹੈ।", 
-      style:"noc-title"
-    }
-  ]; */
   
 
 
@@ -2223,62 +2070,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
       break;
     case "certificate":
       headerText = "Certificate";
-      /* nocSubheadOne = [
-        {
-          text: [
-            {
-              text: "Fire NOC No. ",
-              bold: true
-            },
-            {
-              text: transformedData.fireNOCNumber,
-              bold: false
-            }
-          ],
-          alignment: "left"
-        },
-        {
-          text: [
-            {
-              text: "Application No. ",
-              bold: true
-            },
-            {
-              text: transformedData.applicationNumber,
-              bold: false
-            }
-          ],
-          alignment: "right"
-        }
-      ];
-       nocSubheadTwo = [
-        {
-          text: [
-            {
-              text: "Date of Issue ",
-              bold: true
-            },
-            {
-              text: transformedData.issuedDate,
-              bold: false
-            }
-          ],
-          alignment: "left"
-        },
-        {
-          text: [
-            {
-              text: "Valid Till ",
-              bold: true
-            },
-            {
-              text: transformedData.validTo,
-              bold: false
-            }
-          ],
-          alignment: "right"
-        }
-      ]; */
+     
       applicantDetails = [];
       documents = [];
 
@@ -2359,7 +2151,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
  
   let dd = {
     defaultStyle: {
-      font: "raavi"
+      font: "raavi",      
     },
     
     content: [     
@@ -2386,7 +2178,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
                     alignment: "center",
                   },
                   {
-                    text: `${transformedData.city}`,
+                    text:  transformedData.areaType ==='Rural'? transformedData.subDistrict: transformedData.city,
                     style: "receipt-logo-sub-header",
                     alignment: "center",
                   },
@@ -2492,7 +2284,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `Certified that the ${transformedData.buildings[0].name} at  ${transformedData.address} comprised of ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor) owned/occupied by   ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building / premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
+                text: `Certified that the ${transformedData.buildings[0].name} at  ${transformedData.address} comprised of ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (Upper floor) owned/occupied by   ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building / premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
 
                 border: [true, false, true, false],             
                 alignment: "center"
@@ -2517,7 +2309,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `Issued on ${transformedData.issuedDate} at ${transformedData.city}`,
+                text: `Issued on ${transformedData.issuedDate} at ${transformedData.areaType ==='Rural'? transformedData.subDistrict: transformedData.city}`,
    
                     border: [true, false, true, false],             
                 alignment: "left"
@@ -2541,9 +2333,10 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             
             [             
               {
-                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਜੋ ਿਕ ${transformedData.address} ${transformedData.city} ${transformedData.subDistrict} ਸਮੇਤ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ${transformedData.owners[0].name} ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ${transformedData.issuedDate} ਮੋਜੂਦਗੀ ਿਵੱਚ ${transformedData.owners[0].name} (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group Assembly subdivision               D-2 (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।`,
+                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਜੋ ਿਕ ${transformedData.address}  ਸਮੇਤ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ${transformedData.owners[0].name} ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ${transformedData.issuedDate} ਮੋਜੂਦਗੀ ਿਵੱਚ ${transformedData.owners[0].name} (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group Assembly subdivision D-2 (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।`,
                 border: [true, false, true, false],             
-                alignment: "center"
+                alignment: "center",                
+
               },             
            ], 
            
@@ -2563,7 +2356,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             
             [             
               {
-                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.city}.`,
+                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.areaType ==='Rural'? transformedData.subDistrict: transformedData.city}.`,
                 border: [true, false, true, false],             
                 alignment: "left"
               },             
@@ -2828,7 +2621,8 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "* Above Details cannot be used as ownership proof.",
                 border: [true, false, true, false],             
-                alignment: "center"
+                alignment: "center",
+                color: "#FF0000",
               },             
            ], 
            
@@ -2944,7 +2738,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
      ...institutionDetails,
      ...amountPaid,
      ...paymentInformation, */
-     // process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy 
+     //...process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy 
 
     
     ],
@@ -2956,7 +2750,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
         margin: [-70, -41, -81, 0]
       },
       "noc-head-new": {
-        fontSize: 11,
+        fontSize: 9,
         //fillColor: "#F2F2F2",
         margin: [0, 0, 0, 0]
       },
@@ -3928,7 +3722,8 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
  
   let dd = {
     defaultStyle: {
-      font: "raavi"
+      font: "raavi",
+     
     },
     
     content: [     
@@ -3955,7 +3750,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
                     alignment: "center",
                   },
                   {
-                    text: `< ${transformedData.city} >`,
+                    text: `< ${transformedData.areaType ==='Rural'? transformedData.subDistrict: transformedData.city} >`,
                     style: "receipt-logo-sub-header",
                     alignment: "center",
                   },
@@ -4062,9 +3857,10 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
              
               {
                 //text: `Certified that the ${transformedData.buildingName} at   ${transformedData.door}  ${transformedData.street} comprised of 0 basements and 3 (Upper floor) owned/occupied by   ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building / premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
-                text: `Certified that the ${transformedData.buildingName} at ${transformedData.address}      has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group Educational subdivision B-1 (as per NBC).`,
+                text: `Certified that the ${transformedData.buildings[0].name} at ${transformedData.address} has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group Educational subdivision B-1 (as per NBC).`,
                 border: [true, false, true, false],             
-                alignment: "center"
+                alignment: "center",
+                
               },
              
            ], 
@@ -4089,7 +3885,8 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
                 text: `Issued on ${transformedData.issuedDate} at ${transformedData.fireStationId}`,
    
                     border: [true, false, true, false],             
-                alignment: "left"
+                alignment: "left",
+                
               },
              
            ], 
@@ -4110,9 +3907,11 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             
             [             
               {
-                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildingName} ਪਤਾ ${transformedData.address}   ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ                 ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.NO_OF_FLOORS} ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ                 ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ Educational ਸਬਡਵੀਜਨ B-1 ਿਵੱਚ ਪੈਦਾ ਹੈ।` ,
+                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਪਤਾ ${transformedData.address} ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ  ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ  ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ Educational ਸਬਡਵੀਜਨ B-1 ਿਵੱਚ ਪੈਦਾ ਹੈ।` ,
                 border: [true, false, true, false],             
-                alignment: "center"
+                alignment: "center",
+                
+
               },             
            ], 
            
@@ -4132,9 +3931,11 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             
             [             
               {
-                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.city}.`,
+                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.areaType ==='Rural'? transformedData.subDistrict: transformedData.city}.`,
                 border: [true, false, true, false],             
-                alignment: "left"
+                alignment: "left",
+               
+                
               },             
            ], 
            
@@ -4156,7 +3957,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "Provisional NOC is issued subject to following conditions:",
                 border: [true, false, true, false],             
-                alignment: "left"
+                alignment: "left",
               },             
            ], 
            
@@ -4489,7 +4290,8 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "* Above Details cannot be used as ownership proof.",
                 border: [true, false, true, false],             
-                alignment: "center"
+                alignment: "center",
+                color: "#FF0000",
               },             
            ], 
            
@@ -4532,7 +4334,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             [             
               {
                 text: "This is digitaly created cerificate, no signatue are needed",
-               border: [true, false, true, false],             
+                border: [true, false, true, false],             
                 alignment: "center"
               },             
            ], 
@@ -4567,6 +4369,8 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
         layout: {},
       },
 
+     // ...process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy
+
 
 
     
@@ -4579,7 +4383,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
         margin: [-70, -41, -81, 0]
       },
       "noc-head-new": {
-        fontSize: 11,
+        fontSize: 9,
         //fillColor: "#F2F2F2",
         margin: [0, 0, 0, 0]
       },

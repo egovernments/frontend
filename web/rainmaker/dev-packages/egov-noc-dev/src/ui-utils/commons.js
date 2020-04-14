@@ -94,7 +94,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     );
 
    debugger;
-   
+
        let tenantId = get(
         state.screenConfiguration.preparedFinalObject,
         "FireNOCs[0].tenantId",
@@ -113,6 +113,21 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
+
+    let village = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2",
+      '');
+
+    console.log("village", village); 
+
+    set(
+      payload[0],
+      "fireNOCDetails.propertyDetails.address.addressLine2",
+      village
+    );
+
+
 
     // Get uploaded documents from redux
     let reduxDocuments = get(

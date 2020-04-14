@@ -985,7 +985,7 @@ export const propertyLocationDetails = getCommonCard(
                 "post",
                 "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
                 "_search",
-                [{ key: "tenantId", value: props_value }],
+                [{ key: "tenantId", value: action.value }],
                 {}
               );
               console.log("payload",payload)
@@ -1124,7 +1124,7 @@ export const propertyLocationDetails = getCommonCard(
         },
         visible:false,
         required: true,
-        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.village"
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2"
       }),
       propertyLandmark: getTextField({
         label: {
