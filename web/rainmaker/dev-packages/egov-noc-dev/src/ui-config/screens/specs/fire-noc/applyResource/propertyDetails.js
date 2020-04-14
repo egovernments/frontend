@@ -53,6 +53,41 @@ const prepareSelectField = (uom, start, end) => {
       placeholder: {
         labelKey: `NOC_PROPERTY_DETAILS_${uom}_PLACEHOLDER`
       },
+      title: {
+        value: "Excluding Basement,Including Ground Floor",
+        // key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
+      },
+      infoIcon: "info_circle",
+      pattern: /^[0-9]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      required: true,
+      jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
+      data: data,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props:{
+        className:"applicant-details-error"
+      }
+    })
+  };
+};
+
+const prepareSelectField22 = (uom, start, end) => {
+  let data = [];
+  for (let i = start; i <= end; i++) {
+    data.push({ code: `${i}` });
+  }
+  return {
+    ...getSelectField({
+      label: {
+        labelKey: `NOC_PROPERTY_DETAILS_${uom}_LABEL`
+      },
+      placeholder: {
+        labelKey: `NOC_PROPERTY_DETAILS_${uom}_PLACEHOLDER`
+      },
       pattern: /^[0-9]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
@@ -311,7 +346,7 @@ const commonBuildingData = buildingType => {
       }
     },
     NO_OF_FLOORS: prepareSelectField("NO_OF_FLOORS", 1, 20),
-    NO_OF_BASEMENTS: prepareSelectField("NO_OF_BASEMENTS", 0, 5),
+    NO_OF_BASEMENTS: prepareSelectField22("NO_OF_BASEMENTS", 0, 5),
     PLOT_SIZE: prepareTextField("PLOT_SIZE"),
     BUILTUP_AREA: prepareTextField("BUILTUP_AREA"),
     HEIGHT_OF_BUILDING: prepareTextField("HEIGHT_OF_BUILDING")
