@@ -1451,6 +1451,21 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
                 { key: "key", value: "consolidatedbill" },
                 { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
             ]
+            let data=[];
+            payloadReceiptDetails.Bill[0].billDetails.map(curEl=>data.push(curEl));
+            let sortData=data.sort((a,b)=>b.toPeriod-a.toPeriod);
+            sortData.shift();
+            let totalAmount=0;
+            let previousArrears=0;
+            if(sortData.length>0){
+                let totalArrearsAmount=sortData.map(el=>el.amount+totalAmount);
+                 previousArrears=totalArrearsAmount.reduce((a,b)=>a+b);
+            }
+           
+            payloadReceiptDetails.Bill[0].billDetails.sort((a,b)=>b.toPeriod-a.toPeriod);
+    
+            payloadReceiptDetails.Bill[0].arrearAmount=previousArrears.toFixed(2);
+
             httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                 .then(res => {
                     getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
