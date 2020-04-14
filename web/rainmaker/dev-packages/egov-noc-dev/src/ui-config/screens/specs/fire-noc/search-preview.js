@@ -379,6 +379,38 @@ const setSearchResponse = async (
     );
   }
 
+
+    
+ let value = get(
+  state.screenConfiguration.preparedFinalObject,
+  "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+
+    if( value === 'Rural')
+    {           
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.city",
+          "visible",
+          false
+        )
+      );  
+
+    }       
+    else {   
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.subDistrict",
+          "visible",
+          false
+        )
+      );     
+  } 
+
+  
+
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
@@ -447,9 +479,6 @@ const screenConfig = {
       false
     );  */
 
- //  debugger;
-   
-  
 
  
 
