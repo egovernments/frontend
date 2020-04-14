@@ -54,13 +54,8 @@ const prepareSelectField = (uom, start, end) => {
         labelKey: `NOC_PROPERTY_DETAILS_${uom}_PLACEHOLDER`
       },
       title: {
-<<<<<<< HEAD
         value: "Excluding Basement,Including Ground Floor",
-        // key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
-=======
-        value: "Please search profile linked to the mobile no.",
-        key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
->>>>>>> 0b20441e642e744a6bb788abf30616cfec1d3af2
+                 key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
       },
       infoIcon: "info_circle",
       pattern: /^[0-9]*$/i,
