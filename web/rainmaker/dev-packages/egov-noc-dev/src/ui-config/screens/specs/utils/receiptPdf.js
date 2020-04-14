@@ -461,7 +461,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, false, false, false]
             },
             {
-              text: transformedData.subDistrict,
+              text: transformedData.areaType ==='Rural'? transformedData.subDistrict:'N/A',
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -1647,7 +1647,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, false, false, false]
             },
             {
-              text: transformedData.subDistrict,
+              text: transformedData.areaType ==='Rural'? transformedData.subDistrict:'N/A',
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -3213,7 +3213,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, false, false, false]
             },
             {
-              text: transformedData.subDistrict,
+              text: transformedData.areaType ==='Rural'? transformedData.subDistrict:'N/A',
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
