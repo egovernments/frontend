@@ -507,8 +507,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);
       set(queryObject[0], "action", "INITIATE");
       //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
-      if (!queryObject[0].applicationNumber)
-        set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
+      // if (!queryObject[0].applicationNumber)
+      //   set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
       const response = await httpRequest(
         "post",
         "/tl-services/v1/_create",

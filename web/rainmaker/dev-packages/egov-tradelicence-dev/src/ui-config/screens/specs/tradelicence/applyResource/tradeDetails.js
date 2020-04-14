@@ -2,19 +2,13 @@ import {
   getCommonCard,
   getCommonGrayCard,
   getCommonTitle,
-  getCommonSubHeader,
   getTextField,
-  getDateField,
   getSelectField,
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  getIconStyle,
   objectToDropdown,
-  getTodaysDateInYMD,
-  getFinancialYearDates,
-  getNextMonthDateInYMD,
   getUniqueItemsFromArray,
 } from "../../utils";
 import {
@@ -1018,3 +1012,34 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
   }
   return multiItemContent;
 };
+
+
+export const epassDocuments = getCommonCard({
+  header: getCommonTitle(
+    {
+      labelName: "Upload Documents",
+      labelKey: "EPASS_DOCUMENTS_HEADER"
+    },
+    {
+      style: {
+        marginBottom: 18
+      }
+    }
+  ),
+  documentContainer: getCommonContainer({
+    document : {
+      uiFramework: "custom-molecules",
+      componentPath: "UploadMultipleFiles",
+      props :{
+        description : "EPASS_DOCUMENTS_DESCRIPTION",
+        maxFiles:2,
+        inputProps:{
+         accept: "image/*, .pdf, .png, .jpeg"
+        },
+        buttonLabel : { labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" },
+        jsonPath : "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        maxFileSize : 5000
+      }
+    }
+  })
+});

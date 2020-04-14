@@ -20,7 +20,7 @@ import {
   downloadCertificateForm
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg ,setDocuments} from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   toggleSnackbar,
@@ -240,6 +240,12 @@ export const callBackForNext = async (state, dispatch) => {
       );
       return false; // to show the above message
     }
+    await setDocuments(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.applicationDocuments",
+      "LicensesTemp[0].reviewDocData",
+      dispatch,'TL'
+    );
     const additionalDetails =  get(state.screenConfiguration.preparedFinalObject , "Licenses[0].tradeLicenseDetail.additionalDetail");
     const fromDistrict = get(additionalDetails , "fromDistrict");
     const toDistrict = get(additionalDetails , "toDistrict");

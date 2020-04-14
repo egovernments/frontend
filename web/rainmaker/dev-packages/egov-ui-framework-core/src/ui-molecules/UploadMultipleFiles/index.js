@@ -3,6 +3,7 @@ import { UploadFile, UploadedDocument } from "../../ui-atoms";
 import { withStyles } from "@material-ui/core/styles";
 import { handleFileUpload } from "../../ui-utils/commons";
 import { connect } from "react-redux";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 
@@ -59,6 +60,7 @@ class UploadMultipleFiles extends Component {
     const { documents } = this.state;
     return (
       <div>
+       {this.props.description && <LabelContainer labelKey ={this.props.description} />}
         {documents &&
           documents.map((document, index) => {
             return (

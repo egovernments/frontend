@@ -25,7 +25,7 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
 import { tradeReviewDetails ,declarationCard } from "./applyResource/tradeReviewDetails";
-import { tradeDetails } from "./applyResource/tradeDetails";
+import { tradeDetails,epassDocuments } from "./applyResource/tradeDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { documentList } from "./applyResource/documentList";
@@ -319,7 +319,8 @@ export const formwizardFirstStep = {
   },
   children: {
     tradeDetails,
-    tradeOwnerDetails
+    tradeOwnerDetails,
+    epassDocuments,
     // tradeLocationDetails
   }
 };
