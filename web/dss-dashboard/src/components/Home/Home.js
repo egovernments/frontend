@@ -26,6 +26,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '../common/CustomMenu'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 import mdmsAPI from '../../actions/mdms/mdms';
+import moment from 'moment';
 
 class Home extends React.Component {
     constructor(props) {
@@ -35,6 +36,7 @@ class Home extends React.Component {
             filter: this.props.GFilterData,
             page: _.get(this.props, 'match.params.pageId'),
             dontShowHeader: true,
+            getFYobj:getFinancialYearObj(),
             dashboardConfigData: []
         };
     }
@@ -195,14 +197,9 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        let getFYobj = getFinancialYearObj('',true);
-
-        getFYobj = getFYobj[0];
-
         let newFilterData = this.state.filter
-
-        newFilterData.duration.value.startDate = getFYobj.value.startDate
-        newFilterData.duration.value.endDate = getFYobj.value.endDate
+        newFilterData.duration.value.startDate = this.state.getFYobj.value.startDate
+        newFilterData.duration.value.endDate = this.state.getFYobj.value.endDate
 
         this.setState({
             filter: newFilterData
@@ -212,6 +209,17 @@ class Home extends React.Component {
         this.props.APITransport(mdmsApi);
 
         this.callDashboardAPI();
+    }
+
+    getTitleText(strings){        
+        let title,fromTxt,toTxt;
+
+        fromTxt = (strings["DSS_FROM"])? strings["DSS_FROM"] : "DSS_FROM";
+        toTxt = (strings["DSS_TO"])? strings["DSS_TO"] : "DSS_TO";
+
+        title = fromTxt + " " + moment.unix(this.state.getFYobj.value.startDate).format("MMM, DD YYYY") + " " +toTxt +" " + moment().format("MMM, DD YYYY")
+
+    return title;
     }
 
     render() {
@@ -249,7 +257,7 @@ class Home extends React.Component {
 
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                    <Typography className={classes.filter}>{strings[tabsInitData.title] || tabsInitData.title}</Typography>
+                    <Typography className={classes.filter}>{this.getTitleText(strings)}</Typography>
                 </Grid>
 
                 {/* {tabsInitData.visualizations && Array.isArray(tabsInitData.visualizations) && tabsInitData.visualizations.length > 0 && this.gettingData(tabsInitData.visualizations)} */}

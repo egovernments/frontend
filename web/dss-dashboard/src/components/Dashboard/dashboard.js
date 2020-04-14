@@ -67,9 +67,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    let getFYobj = getFinancialYearObj('',true);
-
-    getFYobj = getFYobj[0];
+    let getFYobj = getFinancialYearObj();
 
     let newFilterData = this.state.filter
     
