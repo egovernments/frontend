@@ -15,11 +15,9 @@ class ComponentInterface extends React.Component {
   }
   componentDidMount() {
     const { componentPath, uiFramework, moduleName } = this.props;
-    console.log(componentPath,"componentPath");
     let LoadableComponent = null;
     const selfRunning =
       process.env.REACT_APP_SELF_RUNNING === "true" ? true : false;
-      console.log(selfRunning,"selfRunning");
     switch (uiFramework) {
       // case "carbon":
       //   LoadableComponent = Loadable({
