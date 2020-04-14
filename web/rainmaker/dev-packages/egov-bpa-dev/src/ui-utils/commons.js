@@ -217,6 +217,9 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let subOccupancyData = get(
     state, "screenConfiguration.preparedFinalObject.edcr.blockDetail"
   );
+  let BPADetails = get(
+    state, "screenConfiguration.preparedFinalObject.BPA"
+  );
   let blocks = [];
   subOccupancyData.forEach((block, index) => {
     let arry = [];
@@ -227,6 +230,9 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     blocks[index] = {};
     blocks[index].subOccupancyType = {};
     blocks[index].subOccupancyType = arry.join();
+    if(BPADetails.blocks && BPADetails.blocks[index] && BPADetails.blocks[index].id) {
+      blocks[index].id = BPADetails.blocks[index].id;
+    }
   })
 
   try {
