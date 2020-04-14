@@ -86,7 +86,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       []
     );
 
-    debugger;
     
     let areaType = get(
       state.screenConfiguration.preparedFinalObject,
@@ -94,24 +93,22 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       []
     );
 
-   let tenantId;
+   debugger;
    
-    if (areaType==='Rural')
-    {
-       tenantId = get(
+       let tenantId = get(
         state.screenConfiguration.preparedFinalObject,
         "FireNOCs[0].tenantId",
         getTenantId()
        );
-    }
-    else 
+   
+ /*    else 
     {
        tenantId = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
       getTenantId()
      );
-    }
+    } */
 
     
     set(payload[0], "tenantId", tenantId);

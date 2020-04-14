@@ -25,24 +25,22 @@ const setReviewPageRoute = (state, dispatch) => {
     []
   );
 
- let tenantId;
  
-  if (areaType==='Rural')
-  {
-     tenantId = get(
+  
+ let tenantId = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].tenantId",
       getTenantId()
      );
-  }
-  else 
+ 
+ /*  else 
   {
      tenantId = get(
     state.screenConfiguration.preparedFinalObject,
     "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
     getTenantId()
    );
-  }
+  } */
 
   /* let tenantId = get(
     state,
