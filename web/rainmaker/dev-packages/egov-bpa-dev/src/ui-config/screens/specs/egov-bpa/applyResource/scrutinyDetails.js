@@ -86,78 +86,75 @@ export const proposedBuildingDetails = getCommonCard({
       }
     }
   ),
-  header: {
-    uiFramework: "custom-atoms",
-    componentPath: "Container",
-    props: {
-      style: {
-        width: "50%",
-        display: "inline-block",
-        fontSize: "18px",
-        paddingLeft: "10px"
+  buildingheaderDetails : getCommonContainer({
+    header: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+          style: {
+            fontSize: "18px",
+            paddingLeft: "10px",
+            paddingTop: "14px"
+          }
+        },
+      children: {
+        proposedLabel: getLabel({
+          labelName: "Proposed Building Details",
+          labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
+        })
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+    },
+    occupancyType: {
+      ...getSelectField({
+        label: {
+          labelName: "Occupancy Type",
+          labelKey: "BPA_OCCUPANCY_TYPE"
+        },
+        placeholder: {
+          labelName: "Select Occupancy Type",
+          labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "BPA",
+          masterName: "OCCUPANCYTYPE"
+        },
+        jsonPath: "BPA.occupancyType",
+        sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props: {
+          disabled: true,
+          className: "tl-trade-type"
+        }
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+        let path = action.componentJsonpath.replace(
+          /.occupancyType/,
+          //".proposedContainer.children.component.props.scheama.children.cardContent.children.children.subOccupancyType"
+          ".subOccupancyType"
+        );
+        let occupancyType = get(
+          state,
+          "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+          []
+        );
+        let subOccupancyType = occupancyType.filter(item => {
+          return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
+        });
+        dispatch(handleField("apply", path, "props.data", subOccupancyType));
+        dispatch(prepareFinalObject("BPA.additionalDetails.isCharitableTrustBuilding", false));
       }
     },
-    children: {
-      proposedLabel: getLabel({
-        labelName: "Proposed Building Details",
-        labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
-      })
-    }
-  },
-  occupancy: {
-    uiFramework: "custom-atoms",
-    componentPath: "Container",
-    props: {
-      className: "occupancytypeblock",
-    },
-    children: {
-      occupancyType: {
-        ...getSelectField({
-          label: {
-            labelName: "Occupancy Type",
-            labelKey: "BPA_OCCUPANCY_TYPE"
-          },
-          placeholder: {
-            labelName: "Select Occupancy Type",
-            labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
-          },
-          localePrefix: {
-            moduleName: "BPA",
-            masterName: "OCCUPANCYTYPE"
-          },
-          jsonPath: "BPA.occupancyType",
-          sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
-          required: true,
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          props: {
-            disabled: true,
-            className: "tl-trade-type"
-          }
-        }),
-        beforeFieldChange: (action, state, dispatch) => {
-          let path = action.componentJsonpath.replace(
-            /.occupancyType/,
-            //".proposedContainer.children.component.props.scheama.children.cardContent.children.children.subOccupancyType"
-            ".subOccupancyType"
-          );
-          let occupancyType = get(
-            state,
-            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
-            []
-          );
-          let subOccupancyType = occupancyType.filter(item => {
-            return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
-          });
-          dispatch(handleField("apply", path, "props.data", subOccupancyType));
-          dispatch(prepareFinalObject("BPA.additionalDetails.isCharitableTrustBuilding", false));
-        }
-      },
-    }
-  },
+  }),
   proposedContainer: {
     uiFramework: "custom-atoms",
     componentPath: "Div",
