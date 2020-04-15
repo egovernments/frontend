@@ -5,13 +5,13 @@ import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import {
+  handleFileUpload,
   getFileUrlFromAPI,
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import { handleFileUpload } from "../../ui-utils/commons"
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
@@ -192,7 +192,7 @@ class DocumentList extends Component {
       <div style={{ paddingTop: 10 }}>
         {documents &&
           documents.map((document, key) => {
-            const currentDocumentProps =  inputProps.filter(item => item.type === document.name);
+            //const currentDocumentProps =  inputProps.filter(item => item.type === document.name);
             return (
               <div
                 key={key}
@@ -249,7 +249,7 @@ class DocumentList extends Component {
                       onButtonClick={() => this.onUploadClick(key)}
                       inputProps={document.name == "OWNERPHOTO" ? this.props.imageProps : this.props.inputProps}
                       buttonLabel={this.props.buttonLabel}
-                      inputProps={currentDocumentProps[0].formatProps}
+                      //inputProps={currentDocumentProps[0].formatProps}
                     />
                   </Grid>
                 </Grid>
