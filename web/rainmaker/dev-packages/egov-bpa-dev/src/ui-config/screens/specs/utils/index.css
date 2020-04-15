@@ -52,3 +52,16 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
 #material-ui-blocksContainer div:nth-child(3) {
   width: 100% !important;
 }
+
+#material-ui-fieldinspectionSummary {
+  width: 100% !important;
+}
+
+#material-ui-buildingheaderDetails:nth-child(1) { 
+  padding: 14px 0 0 10px;
+}
+
+#custom-containers-proposedLabel {
+  color: black;
+  font-size: 16px;
+}

@@ -3514,6 +3514,24 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_PENDING_FEE",
         localisationLabels
     );
+    case "CITIZEN_ACTION_PENDING_AT_DOC_VERIF":
+      return getLocaleLabels(
+        "Send Back From Doc Verification",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_DOC_VERIF",
+        localisationLabels
+    );
+    case "CITIZEN_ACTION_PENDING_AT_FI_VERIF":
+      return getLocaleLabels(
+        "Send Back From Field Inspection",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_FI_VERIF",
+        localisationLabels
+    );
+    case "CITIZEN_ACTION_PENDING_AT_NOC_VERIF":
+      return getLocaleLabels(
+        "Send Back From Noc Verification",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_NOC_VERIF",
+        localisationLabels
+    );
     }
 };
 
@@ -4116,7 +4134,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
       set(
         action,
-        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
         true
       );
       dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
@@ -4158,6 +4176,12 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     }
     else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
       obj.createdBy = "BPA Noc Verifier"    
+    } else if(doc.wfState === "BACK_FROM_DOC_VERIFICATION") {
+      obj.createdBy = "Back From Doc Verifier" 
+    } else if(doc.wfState === "BACK_FROM_FI_VERIFICATION") {
+      obj.createdBy = "Back From Field Inspector" 
+    } else if(doc.wfState === "BACK_FROM_NOC_VERIFICATION") {
+      obj.createdBy = "Back From Noc Verifier" 
     }
     documentsPreview.push(obj);
     return obj;
