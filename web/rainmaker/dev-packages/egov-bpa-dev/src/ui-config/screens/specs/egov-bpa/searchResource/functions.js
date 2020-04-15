@@ -9,6 +9,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const searchApiCall = async (state, dispatch) => {
+  
   showHideTable(false, dispatch);
   let tenantId = getTenantId();
   let queryObject = [
@@ -22,25 +23,13 @@ export const searchApiCall = async (state, dispatch) => {
     "searchScreen",
     {}
   );
-  // const isSearchBoxFirstRowValid = validateFields(
-  //   "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children",
-  //   state,
-  //   dispatch,
-  //   "search"
-  // );
+  let screenKey = get(
+    state.screenConfiguration.screenConfig.ocsearch,
+    "name",
+    "search"
+  );
 
-  // if (!(isSearchBoxFirstRowValid)) {
-  //   dispatch(
-  //     toggleSnackbar(
-  //       true,
-  //       {
-  //         labelName: "Please fill valid fields to search",
-  //         labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
-  //       },
-  //       "error"
-  //     )
-  //   );
-  // } else 
+ 
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
@@ -68,14 +57,29 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  } else {
+  }  else if (
+    screenKey === "ocsearch" &&
+   ( (searchScreenObject["applicationType"] === undefined ||
+      searchScreenObject["applicationType"].length === 0) ||
+    (searchScreenObject["serviceType"] === undefined ||
+    searchScreenObject["serviceType"].length === 0))
+  ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName:  "Please fill all the mandatory fields", labelKey: "ERR_FILL_ALL_FIELDS"},
+        "warning"
+      )
+    );
+  } 
+  else {
     //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key].trim() !== ""
+        searchScreenObject[key].trim() !== "" 
       ) {
-        if (key === "fromDate") {
+         if (key === "fromDate") {
           queryObject.push({
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "daystart")
@@ -93,13 +97,11 @@ export const searchApiCall = async (state, dispatch) => {
     }
     try {
       const response = await getBpaSearchResults(queryObject);
-      // const response = searchSampleResponse();
+
 
       let data = response.Bpa.map(item => ({
         [getBpaTextToLocalMapping("Application No")]: item.applicationNo || "-",
-        // [getBpaTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
-        // [getBpaTextToLocalMapping("NOC Type")]:
-        //   item.fireNOCDetails.fireNOCType || "-",
+    
         [getBpaTextToLocalMapping("Owner Name")]:
           get(item, "owners[0].name") || "-",
         [getBpaTextToLocalMapping("Application Date")]:
@@ -117,36 +119,40 @@ export const searchApiCall = async (state, dispatch) => {
           }
         });
       }
-
-      dispatch(
-        handleField(
-          "search",
-          "components.div.children.searchResults",
-          "props.data",
-          data
-        )
-      );
-      dispatch(
-        handleField(
-          "search",
-          "components.div.children.searchResults",
-          "props.title",
-          `${getBpaTextToLocalMapping(
-            "Search Results for BPA Applications"
-          )} (${response.Bpa.length})`
-        )
-      );
+   
+        dispatch(
+          handleField(
+            // "search",
+            screenKey,
+            "components.div.children.searchResults",
+            "props.data",
+            data
+          )
+        );
+        dispatch(
+          handleField(
+            // "search",
+            screenKey,
+            "components.div.children.searchResults",
+            "props.title",
+            `${getBpaTextToLocalMapping(
+              "Search Results for BPA Applications"
+            )} (${response.Bpa.length})`
+          )
+        );
+        
       //showHideProgress(false, dispatch);
-      showHideTable(true, dispatch);
+      showHideTable(true, dispatch,screenKey);
     } catch (error) {
       console.log(error);
     }
   }
 };
-const showHideTable = (booleanHideOrShow, dispatch) => {
+
+const showHideTable = (booleanHideOrShow, dispatch, screenKey) => {
   dispatch(
     handleField(
-      "search",
+      screenKey, // "search",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow
