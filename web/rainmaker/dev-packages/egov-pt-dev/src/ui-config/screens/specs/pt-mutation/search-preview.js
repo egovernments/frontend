@@ -23,7 +23,7 @@ import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils";
 import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
-import { searchBill, showHideMutationDetailsCard, getpayments, downloadCertificateForm, downloadReceitForm } from "../utils/index";
+import { searchBill, showHideMutationDetailsCard, getpayments, downloadCertificateForm, downloadReceitForm, prepareDocumentsView } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -221,43 +221,6 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
     )
   );
   /** END */
-};
-
-const prepareDocumentsView = async (state, dispatch) => {
-  let documentsPreview = [];
-
-  let allDocuments =
-    state.screenConfiguration.preparedFinalObject.Property.documents;
-
-  allDocuments && allDocuments.forEach(doc => {
-    documentsPreview.push({
-      title: getTransformedLocale(doc.documentType),
-      fileStoreId: doc.fileStoreId,
-      linkText: "View"
-    });
-  });
-  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-  let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-  documentsPreview = documentsPreview.map((doc, index) => {
-    doc["link"] =
-      (fileUrls &&
-        fileUrls[doc.fileStoreId] &&
-        getFileUrl(fileUrls[doc.fileStoreId])) ||
-      "";
-    doc["name"] =
-      (fileUrls[doc.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[doc.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
-      `Document - ${index + 1}`;
-    return doc;
-  });
-  dispatch(prepareFinalObject("documentsUploadRedux", documentsPreview));
 };
 
 const setSearchResponse = async (

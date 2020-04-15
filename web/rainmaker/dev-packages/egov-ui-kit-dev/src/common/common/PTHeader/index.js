@@ -40,7 +40,7 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
   }
 
   return (
-    <div className="search-preview-header" style={{ display: "flex", marginBottom: downloadPrintButton ? 20 : 10, marginTop: 20, justifyContent: "space-between" }}>
+    <div className="search-preview-header flex-child" style={{ display: "flex", marginBottom: downloadPrintButton ? 20 : 10, marginTop: 20, justifyContent: "space-between" }}>
       <div>
         <Label
           label={`${getTranslatedLabel(header, localizationLabelsData)} ${headerValue}`}

@@ -499,10 +499,11 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
     );
   }
 };
-export const generatePdfFromDiv = (action, applicationNumber) => {
-  let target = document.querySelector("#material-ui-cardContent");
+export const generatePdfFromDiv = (action, applicationNumber, divID) => {
+  const divName = divID ? divID : "#material-ui-cardContent";
+  let target = document.querySelector(divName);
   html2canvas(target, {
-    imageTimeout: 1500000000,
+    // imageTimeout: 1500000000,
     onclone: function (clonedDoc) {
       if (clonedDoc.getElementById("pdf-header")) {
         clonedDoc.getElementById("pdf-header").style.display = "block";
@@ -520,14 +521,22 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
 
     }
   }).then(canvas => {
-    var data = canvas.toDataURL();
+    var data = canvas.toDataURL("image/jpeg", 1);
     var imgWidth = 200;
-    var pageHeight = 295;
-    var imgHeight = pageHeight - 80;
+    var pageHeight = 290;
+    var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    var heightLeft = imgHeight;
     var doc = new jsPDF("p", "mm");
     var position = 0;
 
-    doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
+    doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      doc.addPage();
+      doc.addImage(data, 'PNG', 5, 10 + position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
 
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);
