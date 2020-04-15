@@ -3510,6 +3510,24 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_PENDING_FEE",
         localisationLabels
     );
+    case "CITIZEN_ACTION_PENDING_AT_DOC_VERIF":
+      return getLocaleLabels(
+        "Send Back From Doc Verification",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_DOC_VERIF",
+        localisationLabels
+    );
+    case "CITIZEN_ACTION_PENDING_AT_FI_VERIF":
+      return getLocaleLabels(
+        "Send Back From Field Inspection",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_FI_VERIF",
+        localisationLabels
+    );
+    case "CITIZEN_ACTION_PENDING_AT_NOC_VERIF":
+      return getLocaleLabels(
+        "Send Back From Noc Verification",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_NOC_VERIF",
+        localisationLabels
+    );
     }
 };
 
