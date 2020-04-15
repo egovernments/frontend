@@ -238,7 +238,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let blocks = [];
   subOccupancyData.forEach((block, index) => {
     let arry = [];
-    block && block.occupancyType.length &&
+    block && block.occupancyType && block.occupancyType.length &&
       block.occupancyType.forEach(occType => {
         arry.push(occType.value);
       })
