@@ -101,11 +101,11 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: "Application Type ",
+                text: "Application Type. ",
                 bold: true
               },
               {
-                text: transformedData.applicationType,
+                text: ((transformedData.applicationType=="APPLICATIONTYPE.NEW")?"New":"Renewal"),
                 bold: false
               }
             ],
@@ -115,7 +115,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: "Old License No. ",
+                text: "Old Application No. ",
                 bold: true
               },
               {
@@ -147,11 +147,11 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: "Receipt No. ",
+                text: "License No. ",
                 bold: true
               },
               {
-                text: transformedData.receiptNumber,
+                text: transformedData.licenseNumber,
                 bold: false
               }
             ],

@@ -1,6 +1,14 @@
 import React from "react";
 import isEmpty from "lodash/isEmpty";
-import ComponentInterface from "../ComponentInterface";
+import Loadable from 'react-loadable';
+import LoadingIndicator from '../LoadingIndicator';
+const Loading = () => <LoadingIndicator/>;
+
+const ComponentInterface=Loadable({
+  loader:()=>import ('../ComponentInterface'),
+  loading:Loading
+})
+
 
 const RenderScreen = ({
   components,

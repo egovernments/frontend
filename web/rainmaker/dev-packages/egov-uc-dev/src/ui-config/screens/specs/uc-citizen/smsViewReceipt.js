@@ -1,6 +1,6 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { generateCitizenReciept } from "../utils/recieptPdf";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   toggleSnackbar
