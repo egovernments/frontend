@@ -888,7 +888,7 @@ export const tradeDetails = getCommonCard(
             masterName: "ApplicationType"
           },
           jsonPath:
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+            "Licenses[0].applicationType",
           sourceJsonPath: "applyScreenMdmsData.TradeLicense.ApplicationType",
           gridDefination: {
             xs: 12,
@@ -897,9 +897,9 @@ export const tradeDetails = getCommonCard(
         }),
         beforeFieldChange: (action, state, dispatch) => {
           getAllDataFromBillingSlab(process.env.REACT_APP_NAME === "Citizen"?getQueryArg(window.location.href, "tenantId"):getTenantId(), dispatch,[{
-            key:"applicationType",value:action.value
+            key:"applicationType",value:action.value.split(".")[1]
           }]);
-          if (action.value === "APPLICATIONTYPE.RENEWAL") {
+          if (action.value.split(".")[1] === "RENEWAL") {
             dispatch(
               handleField(
                 "apply",

@@ -2110,7 +2110,7 @@ const getAllBillingSlabs = async (tenantId, queryObj = []) => {
 };
 
 export const getAllDataFromBillingSlab = async (tenantId, dispatch,queryObj=[{
-  key:"applicationType",value:"APPLICATIONTYPE.NEW"
+  key:"applicationType",value:"NEW"
 }]) => {
   const payload = await getAllBillingSlabs(tenantId,queryObj);
   const processedData =
