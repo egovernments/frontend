@@ -95,15 +95,16 @@ const prepareDocumentsView = async (state, dispatch) => {
   );
   let applicantDocuments = jp.query(
     firenoc,
-    "$.fireNOCDetails.applicantDetails.additionalDetail.documents.*"
+    "$.fireNOCDetails.additionalDetail.*.ownerAuditionalDetail.*"
   );
+
   let otherDocuments = jp.query(
     firenoc,
     "$.fireNOCDetails.additionalDetail.documents.*"
   );
   let allDocuments = [
     ...buildingDocuments,
-    ...applicantDocuments,
+    ...applicantDocuments[0],
     ...otherDocuments
   ];
 

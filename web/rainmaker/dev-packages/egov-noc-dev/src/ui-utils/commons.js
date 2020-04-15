@@ -266,9 +266,16 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 
     set(
       payload[0],
-      "fireNOCDetails.applicantDetails.additionalDetail.documents",
+      "fireNOCDetails.applicantDetails.additionalDetail.ownerAuditionalDetail.documents",
       ownerDocuments
     );
+    set(
+      payload[0],
+      "fireNOCDetails.buildings.applicationDocuments.items",
+      ownerDocuments
+    );
+
+
     set(
       payload[0],
       "fireNOCDetails.additionalDetail.documents",
