@@ -606,7 +606,7 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
       false
     );
     set(

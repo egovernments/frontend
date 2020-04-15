@@ -59,8 +59,8 @@ const fieldInspectionMultiItem = () => {
       },
       applicationdate: getDateField({
         label: {
-          labelName: "Inspection Date",
-          labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
+          labelName: "BPA_FI_DATE_LABEL_NAME",
+          labelKey: "BPA_FI_DATE_LABEL"
         },
         props: {
           className: "tl-trade-type",
@@ -75,8 +75,8 @@ const fieldInspectionMultiItem = () => {
       }),
       applicationtime: getTimeField({
         label: {
-          labelName: "Inspection Time",
-          labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
+          labelName: "BPA_FI_TIME_LABEL_NAME",
+          labelKey: "BPA_FI_TIME_LABEL"
         },
         props: {
           className: "tl-trade-type",
@@ -168,7 +168,9 @@ export const fieldinspectionSummary = getCommonContainer({
         labelKey: ""
       },
       prefixSourceJsonPath: "children.cardContent.children.fiCard.children",
-      sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending"
+      sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
+      headerJsonPath : "children.cardContent.children.fiCard.children.header.children.header.children.key.props.label",
+      headerName : "BPA_FI_REPORT",
     },
     gridDefination: {
       xs: 12,

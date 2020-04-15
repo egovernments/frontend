@@ -2,7 +2,8 @@ import {
   getCommonGrayCard,
   getCommonSubHeader,
   getBreak,
-  getCommonContainer
+  getCommonContainer,
+  getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const getHeader = label => {
@@ -40,6 +41,28 @@ const fieldSummaryContent = () => {
         }
       }
     },
+    lableData : getCommonContainer({
+      fieldSummaryDate: getLabelWithValue(
+        {
+          labelName: "BPA_FI_DATE_LABEL_NAME",
+          labelKey: "BPA_FI_DATE_LABEL"
+        },
+        {
+          jsonPath:
+            "BPA.additionalDetails.fieldinspection_pending[0].date"
+        }
+      ),
+      fieldSummaryTime: getLabelWithValue(
+        {
+          labelName: "BPA_FI_TIME_LABEL_NAME",
+          labelKey: "BPA_FI_TIME_LABEL"
+        },
+        {
+          jsonPath:
+            "BPA.additionalDetails.fieldinspection_pending[0].time"
+        }
+      )
+    }),
     checkListDetailsContainer: getHeader({
       labelName: "Check List",
       labelKey: "BPA_CHECK_LIST_DETAILS"
@@ -62,7 +85,7 @@ const fieldSummaryContent = () => {
     fiDocumentDetailsCard: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-bpa",
-      componentPath: "DownloadFileContainer",
+      componentPath: "DownloadFileContainerForFI",
       props: {
         jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].docs",
         jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
@@ -82,8 +105,10 @@ export const fieldSummary = getCommonContainer({
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      prefixSourceJsonPath: "children",
-      sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending"
+      prefixSourceJsonPath: "children.cardContent.children",
+      sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
+      headerJsonPath : "children.cardContent.children.header.children.header.children.key.props.label",
+      headerName : "BPA_FI_REPORT"
     },
     type: "array"
   }

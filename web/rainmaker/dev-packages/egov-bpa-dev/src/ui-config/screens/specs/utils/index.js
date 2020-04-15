@@ -4116,7 +4116,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
       set(
         action,
-        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
         true
       );
       dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
