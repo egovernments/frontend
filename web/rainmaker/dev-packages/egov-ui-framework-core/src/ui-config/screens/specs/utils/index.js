@@ -91,7 +91,7 @@ export const getCommonValue = (value, props = {}) => {
   return getCommonHeader(value, { variant: "body2", ...props });
 };
 
-export const getCommonCard = (children, cardProps = {}) => {
+export const getCommonCard = (children, cardProps = {}, cardContentProps = {}) => {
   return {
     componentPath: "Card",
     props: {
@@ -100,6 +100,9 @@ export const getCommonCard = (children, cardProps = {}) => {
     children: {
       cardContent: {
         componentPath: "CardContent",
+        props: {
+          ...cardContentProps
+        },
         children
       }
     }

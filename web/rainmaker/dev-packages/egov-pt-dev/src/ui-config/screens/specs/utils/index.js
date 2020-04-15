@@ -5,7 +5,10 @@ import get from "lodash/get";
 import {
   getQueryArg,
   getTransformedLocalStorgaeLabels,
-  getLocaleLabels
+  getLocaleLabels,
+  getTransformedLocale,
+  getFileUrlFromAPI,
+  getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -23,6 +26,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
+import jp from "jsonpath";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -1020,3 +1024,41 @@ export const showHideMutationDetailsCard = (action, state, dispatch)=>{
     )
   );
 }
+
+
+export const prepareDocumentsView = async (state, dispatch) => {
+  let documentsPreview = [];
+
+  let allDocuments =
+    state.screenConfiguration.preparedFinalObject.Property.documents;
+
+  allDocuments && allDocuments.forEach(doc => {
+    documentsPreview.push({
+      title: getTransformedLocale(doc.documentType),
+      fileStoreId: doc.fileStoreId,
+      linkText: "View"
+    });
+  });
+  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+  documentsPreview = documentsPreview.map((doc, index) => {
+    doc["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
+      "";
+    doc["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          getFileUrl(fileUrls[doc.fileStoreId])
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+    return doc;
+  });
+  dispatch(prepareFinalObject("documentsUploadRedux", documentsPreview));
+};
