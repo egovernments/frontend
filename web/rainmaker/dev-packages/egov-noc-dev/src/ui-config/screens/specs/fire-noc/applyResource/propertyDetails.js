@@ -55,7 +55,7 @@ const prepareSelectField = (uom, start, end) => {
       },
       title: {
         value: "Excluding Basement,Including Ground Floor",
-                 key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
+        key: "NOC_APPLICANT_NO_OF_FLOORS_TOOLTIP_MESSAGE"
       },
       infoIcon: "info_circle",
       pattern: /^[0-9]*$/i,
