@@ -57,6 +57,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 if(totalAmount>0){
   arrears=totalAmount-billDetails[0].amount;
+  arrears = arrears.toFixed(2);
 }
   const estimate = {
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },

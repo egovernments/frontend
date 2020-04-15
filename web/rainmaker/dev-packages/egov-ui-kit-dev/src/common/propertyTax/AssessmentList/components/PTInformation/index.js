@@ -13,78 +13,6 @@ import DocumentsInfo from "../../../Property/components/DocumentsInfo";
 import get from "lodash/get";
 import "./index.css"
 
-// const PTInformation = ({
-//   items,
-//   label,
-//   onItemClick,
-//   innerDivStyle,
-//   hoverColor,
-//   properties,
-//   style,
-//   generalMDMSDataById,
-//   totalBillAmountDue,
-//   history,
-//   documentsUploaded,
-//   toggleSnackbarAndSetText
-// }) => {
-//   const items2 = [items[1]];
-//   return (
-//     <div className="form-without-button-cont-generic">
-//       {label && (
-//         <Label
-//           label={label}
-//           containerStyle={{ padding: "24px 0px 24px 0", marginLeft: "16px" }}
-//           dark={true}
-//           bold={true}
-//           labelStyle={{ letterSpacing: 0 }}
-//           fontSize={"20px"}
-//         />
-//       )}
-//       <div >
-//         <Card
-//           textChildren={
-//             <div id="property-review-form" className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-//               {totalBillAmountDue > 0 && (
-//                 <Card
-//                   textChildren={
-//                     <TotalDues history tenantId={properties.tenantId} consumerCode={properties.propertyId} totalBillAmountDue={totalBillAmountDue} />
-//                   }
-//                   style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
-//                 />
-//               )}
-//               {/* className="pdf-header" */}
-//               <Card textChildren={
-//                 <div>
-
-//                 <Label label={"AMRITSAR MUNICIPAL CORPORATION"} fontSize="16px" fontWeight="500"/>
-//                 <Label label={"Property Tax Assessment Confirmation"} fontSize="14px" fontWeight="500"/>
-//                 </div>
-//               } />
-//               <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
-//               <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></AssessmentInfo>
-//               <OwnerInfo
-//               toggleSnackbarAndSetText={toggleSnackbarAndSetText}
-//                 properties={properties}
-//                 generalMDMSDataById={generalMDMSDataById}
-//                 totalBillAmountDue={totalBillAmountDue}
-//                 ownershipTransfer={true}
-//                 viewHistory={true}
-//               ></OwnerInfo>
-//               <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
-//               <div id="property-assess-form">
-//                 <AssessmentHistory></AssessmentHistory>
-//                 <PaymentHistory></PaymentHistory>
-//                 <ApplicationHistory></ApplicationHistory>
-//               </div>
-//             </div>
-//           }
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-
 const logoStyle = {
   height: "61px",
   width: "60px",
@@ -93,9 +21,10 @@ const logoStyle = {
 class PTInformation extends React.Component {
   updateProperty = () => {
     let {
-      propertiesAudit
+      propertiesAudit,
+      properties
     } = this.props;
-
+    if(propertiesAudit.length===0) propertiesAudit.push(properties);
     let Owners = [];
     let Institution=null;
     let ownershipCategory='';

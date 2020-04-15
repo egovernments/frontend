@@ -261,6 +261,14 @@ const ownerDetails = {
         scheama: getCommonGrayCard({
           div3: propertyOwnerDetailsHeader,
           propertyLocationDetailsContainer: getCommonContainer({
+             mobileNumber: getLabelWithValue(
+              {
+                labelName: "Mobile Number",
+                  labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
+              },
+              { jsonPath: "WaterConnection[0].property.owners[0].mobileNumber",
+              callBack: handleNA }
+          ),
             name: getLabelWithValue(
               {
                 labelName: "Name",
