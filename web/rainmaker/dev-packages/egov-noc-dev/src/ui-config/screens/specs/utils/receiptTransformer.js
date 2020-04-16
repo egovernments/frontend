@@ -2,10 +2,12 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
 import { getMdmsData, getReceiptData, getFinancialYearDates } from "../utils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import {
   getLocalization,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
+
 import {
   getUlbGradeLabel,
   getTranslatedLabel,
@@ -15,9 +17,8 @@ import {
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-
 import { getSearchResults } from "../../../../ui-utils/commons";
+
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -54,7 +55,8 @@ export const getMessageFromLocalization = code => {
   return messageObject ? messageObject.message : code;
 };
 
-export const loadUlbLogo = tenantid => {
+export const loadUlbLogo = utenantId => {
+
   var img = new Image();
   img.crossOrigin = "Anonymous";
   img.onload = function() {
@@ -68,7 +70,7 @@ export const loadUlbLogo = tenantid => {
     );
     canvas = null;
   };
- img.src = `/pb-egov-assets/${tenantid}/logo.png`; 
+ img.src = `/pb-egov-assets/${utenantId}/logo.png`; 
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -122,6 +124,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "NA")
     );
     let buildings = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
+
+    
     data.buildings = buildings.map(building => {
       let uoms = get(building, "uoms", []);
       let uomsObject = {};
@@ -143,6 +147,26 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         uoms: uomsObject
       };
     });
+
+
+/*     let buildingUsageTypeData = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
+      []
+    );
+     let buildingSubUsageTypeData = buildingUsageTypeData.filter(item => {
+      return item.active && item.code.startsWith(action.value);
+    }); 
+  
+  
+  
+    console.log("buildingSubUsageTypeData", buildingSubUsageTypeData);
+  
+    dispatch(
+      handleField("apply", path, "props.data", buildingSubUsageTypeData[0].BuildingSubType)
+    ); 
+ */
+    
 
     // Property Location
     data.propertyId = nullToNa(
@@ -239,17 +263,23 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
       "NA");
 
-    const  tenantId = getQueryArg(window.location.href, "tenantId"); 
+      let utenantId = get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+        "NA");
 
-   
+    //const  tenantId = getQueryArg(window.location.href, "tenantId");    
 
-    if(data.areaType === 'Urban')
+   if(data.areaType === 'Urban')
     {
-    data.mohalla = nullToNa(  
-       
-        getMessageFromLocalization(
-            `${getTransformedLocale(tenantId)}_REVENUE_${value.replace("-", "_") }`           
-        )
+
+
+     data.mohalla = nullToNa(         
+     /*  getTransformedLocale(
+            `${getTransformedLocale(utenantId)}_REVENUE_${value.replace("-", "_") }`           
+        )  */
+        getMessageFromLocalization(`${getTransformedLocale(utenantId)}_REVENUE_${value.replace("-", "_")}`)       
+
       ); 
     
     }
@@ -257,15 +287,14 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     else
     {
       data.mohalla = "N/A";
-    }
+    } 
 
-
-    /*   data.mohalla = nullToNa(
+    /*  data.mohalla = nullToNa(
         getMessageFromLocalization(
         `${getTransformedLocale(
             get(
             response,
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
             "NA"
             )
             )}_REVENUE_${getTransformedLocale(
@@ -275,8 +304,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
               "NA"
               )
             )}`
-          ));  */
-      
+          )); 
+       */
 
     
 
@@ -492,6 +521,7 @@ export const loadMdmsData = async tenantid => {
   let localStorageLabels = JSON.parse(
     window.localStorage.getItem(`localization_${getLocale()}`)
   );
+
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
   let queryObject = [
@@ -541,6 +571,10 @@ export const loadMdmsData = async tenantid => {
   store.dispatch(prepareFinalObject("mdmsDataForPdf", data));
 };
 
+
+  
+
+
 export const loadUserNameData = async uuid => {
   let data = {};
   let bodyObject = {
@@ -555,10 +589,20 @@ export const loadUserNameData = async uuid => {
 };
 
 /** Data used for creation of receipt is generated and stored in local storage here */
-export const loadPdfGenerationData = (applicationNumber, tenant) => {
+export const loadPdfGenerationData = (applicationNumber, tenant, utenantId) => {
   /** Logo loaded and stored in local storage in base64 */
-  loadUlbLogo(tenant);
+
+  console.log("prasad utenantId", utenantId);
+  console.log("prasad tenantId", tenant);
+
+
+
+  loadUlbLogo(utenantId);
   loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
   loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
+
+  console.log("utenantId", utenantId);
+
   loadMdmsData(tenant);
+
 };

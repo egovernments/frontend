@@ -414,7 +414,24 @@ const setSearchResponse = async (
 
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
-  await loadPdfGenerationData(applicationNumber, tenantId);
+
+  
+  let utenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+    ""
+  );
+
+  if ( value === 'Urban' )
+  {
+    await loadPdfGenerationData(applicationNumber, tenantId, utenantId);
+
+  }
+  else
+  {
+    await loadPdfGenerationData(applicationNumber, tenantId, tenantId);
+  }
+  
   setDownloadMenu(state, dispatch);
 };
 
@@ -427,6 +444,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
