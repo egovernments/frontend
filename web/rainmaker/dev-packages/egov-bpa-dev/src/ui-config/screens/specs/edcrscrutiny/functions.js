@@ -71,9 +71,7 @@ const moveToSuccess = (dispatch, edcrDetail) => {
 
 const getSearchResultsfromEDCR = async (action, state, dispatch) => {
   try {
-    let EDCRHost = process.env.REACT_APP_EDCR_API_HOST
-      ? process.env.REACT_APP_EDCR_API_HOST
-      : "https://state-bihar-uat.egovernments.org"; //"https://egov-dcr-galaxy.egovernments.org";
+    let EDCRHost = "";
 
     const response = await axios.post(
       `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${getTenantId()}`,
@@ -108,9 +106,7 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
   tenantId
 ) => {
   try {
-    let EDCRHost = process.env.REACT_APP_EDCR_API_HOST
-      ? process.env.REACT_APP_EDCR_API_HOST
-      : "https://state-bihar-uat.egovernments.org"; //"https://egov-dcr-galaxy.egovernments.org";
+    let EDCRHost = "";
     const response = await axios.post(
       `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
       {
@@ -179,9 +175,7 @@ const scrutinizePlan = async (state, dispatch) => {
     var bodyFormData = new FormData();
     bodyFormData.append("edcrRequest", JSON.stringify(edcrRequest));
     bodyFormData.append("planFile", file);
-    let EDCRHost = process.env.REACT_APP_EDCR_API_HOST
-      ? process.env.REACT_APP_EDCR_API_HOST
-      : "https://state-bihar-uat.egovernments.org"; // "https://egov-dcr-galaxy.egovernments.org";
+    let EDCRHost = "";
 
     let response = await axios({
       method: "post",
