@@ -4,6 +4,7 @@ import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import DocumentList from "../DocumentList";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const styles = theme => ({
   button: {
@@ -16,6 +17,11 @@ const styles = theme => ({
 });
 
 class DocumentListContainer extends Component {
+  componentDidUpdate() {
+    const { ptDocumentsList, prepareFinalObject } = this.props;
+    const documents = get(ptDocumentsList, '[0].cards', []) || [];
+    prepareFinalObject('ptDocumentCount', documents.length);
+  }
   render() {
     const { ...rest } = this.props;
     return <DocumentList {...rest} />;
@@ -102,10 +108,16 @@ const mapStateToProps = state => {
   })
   return { ptDocumentsList, preparedFinalObject };
 };
+const mapDispatchToProps = dispatch => {
+  return {
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
+  };
+};
 
 export default withStyles(styles)(
   connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
   )(DocumentListContainer)
 );

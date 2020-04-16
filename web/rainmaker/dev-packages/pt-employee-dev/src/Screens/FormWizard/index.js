@@ -1791,13 +1791,9 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsContract = [], documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {} } = preparedFinalObject;
-  let requiredDocCount = 0;
-  documentsContract && documentsContract[0] && documentsContract[0].cards && documentsContract[0].cards.map(document => {
-    if (document.required == true) {
-      requiredDocCount++;
-    }
-  })
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {} ,ptDocumentCount=0} = preparedFinalObject;
+  let requiredDocCount = ptDocumentCount;
+  
   return {
     form,
     currentTenantId,
