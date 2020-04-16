@@ -260,6 +260,15 @@ const screenConfig = {
                 true
               )
             )
+          } else {
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.ocCreateApp",
+                "visible",
+                false
+              )
+            )
           }
         }
       })
