@@ -22,6 +22,13 @@ const getRedirectionURL = () => {
   return redirectionURL;
 };
 
+const getRedirectionOCURL = () => {
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+  let url = `/egov-bpa/ocapply?tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
+  return url;
+};
+
 export const gotoHomeFooter = getCommonApplyFooter({
   ocCreateApp: {
     componentPath: "Button",
@@ -43,7 +50,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "page_change",
-       path: `/egov-bpa/apply?tenantId=${getQueryArg(window.location.href, "tenantId")}`
+       path: getRedirectionOCURL()
     },
     visible : false
   },

@@ -185,7 +185,7 @@ const buildingInfoCard = getCommonCard({
           className: "tl-trade-type"
         },
         pattern: getPattern("Name"),
-        jsonPath: "bpaDetails.applicantName"
+        jsonPath: "Scrutiny[0].applicantName"
       }),
       servicetype: {
         ...getSelectField({

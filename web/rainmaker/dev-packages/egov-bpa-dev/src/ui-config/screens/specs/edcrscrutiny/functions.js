@@ -69,19 +69,24 @@ export const uuidv4 = () => {
   return require("uuid/v4")();
 };
 
-const moveToSuccess = (dispatch, edcrDetail) => {
+const moveToSuccess = (dispatch, edcrDetail, isOCApp) => {
   const applicationNo = edcrDetail.transactionNumber;
 
   const tenantId = edcrDetail.tenantId;
+  const edcrNumber = get(edcrDetail, "edcrNumber"); 
 
-  const purpose = "apply";
+  const purpose = isOCApp ? "ocapply" :"apply";
   let status = edcrDetail.status === "Accepted" ? "success" : "rejected";
   if(edcrDetail.status == "Aborted") {
     status = "aborted";
   }
+  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
+  if(isOCApp) {
+    url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
+  }
   dispatch(
     setRoute(
-      `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`
+      url
     )
   );
 };
@@ -156,9 +161,23 @@ const scrutinizePlan = async (state, dispatch) => {
   try {
     dispatch(toggleSpinner());
 
+    let { screenConfiguration } = state;
+    let { preparedFinalObject } = screenConfiguration;
+    let isOCApp = window.location.href.includes("ocapply");
+    let tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
+
+    let userInfo = { id: userUUid, tenantId: userTenant }, edcrNumber = "";
+
+    if (isOCApp) { 
+      tenantId = getQueryArg(window.location.href, "tenantId");
+      userInfo = { id: userUUid, tenantId: tenantId },
+      edcrNumber =  get(state.screenConfiguration.preparedFinalObject, "bpaDetails.edcrNumber");
+     }
+    else { userInfo = { id: userUUid, tenantId: userTenant } }
+
     let edcrRequest = {
       transactionNumber: "",
-      edcrNumber: "",
+      edcrNumber: edcrNumber,
       planFile: null,
       tenantId: "",
       RequestInfo: {
@@ -171,32 +190,36 @@ const scrutinizePlan = async (state, dispatch) => {
         key: "",
         msgId: "",
         correlationId: "",
-        userInfo: {
-          id: userUUid,
-          tenantId: userTenant
-        }
+        userInfo: userInfo
       }
     };
     //generate trx no
     const transactionNumber = uuidv4();
     //
-    let { screenConfiguration } = state;
-    let { preparedFinalObject } = screenConfiguration;
-    const tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
     const applicantName = get(preparedFinalObject, "Scrutiny[0].applicantName");
     const file = get(preparedFinalObject, "Scrutiny[0].buildingPlan[0]");
+    const permitNumber = get(preparedFinalObject, "Scrutiny[0].permitNumber");
+    const permitDate = get(preparedFinalObject, "bpaDetails.orderGeneratedDate");
 
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
     edcrRequest = { ...edcrRequest, applicantName };
+
+    let url = `/edcr/rest/dcr/scrutinizeplan?tenantId=${tenantId}`;
+    if(isOCApp) {
+      url = `/edcr/rest/dcr/scrutinizeocplan?tenantId=${tenantId}`;
+      edcrRequest = { ...edcrRequest, permitDate };
+      edcrRequest = { ...edcrRequest, permitNumber };
+    }
+
     var bodyFormData = new FormData();
     bodyFormData.append("edcrRequest", JSON.stringify(edcrRequest));
     bodyFormData.append("planFile", file);
-    let EDCRHost = "";
+
 
     let response = await axios({
       method: "post",
-      url: `${EDCRHost}/edcr/rest/dcr/scrutinizeplan?tenantId=${tenantId}`,
+      url: url,
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" }
     });
@@ -205,7 +228,7 @@ const scrutinizePlan = async (state, dispatch) => {
       if (data.edcrDetail) {
         dispatch(prepareFinalObject("edcrDetail", data.edcrDetail));
         dispatch(toggleSpinner());
-        moveToSuccess(dispatch, data.edcrDetail[0]);
+        moveToSuccess(dispatch, data.edcrDetail[0], isOCApp);
       }
     }
   } catch (e) {
@@ -373,7 +396,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
   );
 
   let primaryOwnerArray = response.Bpa[0].owners.filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
-  set(get(response, "Bpa[0]"), "applicantName", primaryOwnerArray.length && primaryOwnerArray[0].name)
+  dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
   dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
   await getLicenseNumber(state,dispatch);
