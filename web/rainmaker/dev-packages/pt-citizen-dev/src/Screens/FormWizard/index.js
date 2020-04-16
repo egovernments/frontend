@@ -948,6 +948,14 @@ class FormWizard extends Component {
               selected: index,
               formValidIndexArray: [...formValidIndexArray, selected]
             })
+          if (Object.keys(uploadedDocs).length != requiredDocCount) {
+            Object.keys(uploadedDocs).map(key => {
+              if (key < requiredDocCount) {
+                newDocs[key] = uploadedDocs[key];
+              }
+            })
+            this.props.prepareFinalObject('documentsUploadRedux', newDocs)
+          }
         }
         break;
       case 4:
@@ -1584,9 +1592,9 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [], propertiesEdited = false ,ptDocumentCount=0} = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, ptDocumentCount = 0 } = preparedFinalObject;
 
-  let requiredDocCount =ptDocumentCount;
+  let requiredDocCount = ptDocumentCount;
   return {
     form,
     prepareFormData: common.prepareFormData,
