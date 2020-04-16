@@ -357,12 +357,8 @@ class BpaDocumentList extends Component {
             }
             else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
               docs.createdBy = "BPA Noc Verifier"    
-            } else if(doc.wfState === "BACK_FROM_DOC_VERIFICATION") {
-              docs.createdBy = "Back From Doc Verifier" 
-            } else if(doc.wfState === "BACK_FROM_FI_VERIFICATION") {
-              docs.createdBy = "Back From Field Inspector" 
-            } else if(doc.wfState === "BACK_FROM_NOC_VERIFICATION") {
-              docs.createdBy = "Back From Noc Verifier" 
+            } else {
+              docs.createdBy = "BPA Architect"
             }
             data.push(docs);
           }

@@ -25,12 +25,8 @@ class DownloadFileContainer extends Component {
             }
             else if (docs.wfState === "NOC_VERIFICATION_PENDING") {
               docs.createdBy = "BPA Noc Verifier"    
-            } else if(docs.wfState === "BACK_FROM_DOC_VERIFICATION") {
-              docs.createdBy = "Back From Doc Verifier" 
-            } else if(docs.wfState === "BACK_FROM_FI_VERIFICATION") {
-              docs.createdBy = "Back From Field Inspector" 
-            } else if(docs.wfState === "BACK_FROM_NOC_VERIFICATION") {
-              docs.createdBy = "Back From Noc Verifier" 
+            } else {
+              docs.createdBy = "BPA Architect"
             }
             data.push(docs);
           })
