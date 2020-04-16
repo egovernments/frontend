@@ -4176,13 +4176,9 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     }
     else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
       obj.createdBy = "BPA Noc Verifier"    
-    } else if(doc.wfState === "BACK_FROM_DOC_VERIFICATION") {
-      obj.createdBy = "Back From Doc Verifier" 
-    } else if(doc.wfState === "BACK_FROM_FI_VERIFICATION") {
-      obj.createdBy = "Back From Field Inspector" 
-    } else if(doc.wfState === "BACK_FROM_NOC_VERIFICATION") {
-      obj.createdBy = "Back From Noc Verifier" 
-    }
+    } else {
+      obj.createdBy = "BPA Architect"
+    }   
     documentsPreview.push(obj);
     return obj;
   });
