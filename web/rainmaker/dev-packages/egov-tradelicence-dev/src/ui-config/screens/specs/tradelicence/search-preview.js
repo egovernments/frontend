@@ -26,7 +26,7 @@ import {
   showHideAdhocPopup
 } from "../utils";
 
-import { footerReview, downloadPrintContainer } from "./applyResource/footer";
+import { footerReview, footerReviewTop, downloadPrintContainer } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -250,7 +250,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     }
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
-
+    const financialYear = get(data, "Licenses[0].financialYear");
     get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
       get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
         "."

@@ -1814,7 +1814,7 @@ const getACKData = (transformedData, ulbLogo) => {
   return tlACKData;
 };
 
-const generateReceipt = async (state, dispatch, type) => {
+export const generateReceipt = async (state, dispatch, type) => {
   //  console.log("Transformed Data--",transformedData);
   pdfMakeCustom.vfs = pdfFonts.vfs;
   pdfMakeCustom.fonts = {
@@ -1860,7 +1860,7 @@ const generateReceipt = async (state, dispatch, type) => {
     state.screenConfiguration.preparedFinalObject,
     "base64UlbLogo",
     ""
-  ) : logo;
+  ) : "";
   if (_.isEmpty(data1)) {
     console.log("Error in application data");
     return;
@@ -1928,5 +1928,3 @@ const generateReceipt = async (state, dispatch, type) => {
       break;
   }
 };
-
-export default generateReceipt;

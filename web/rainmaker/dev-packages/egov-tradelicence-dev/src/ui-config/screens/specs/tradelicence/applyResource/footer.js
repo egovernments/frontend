@@ -16,6 +16,7 @@ import {
   downloadAcknowledgementForm,
   downloadCertificateForm
 } from "../../utils";
+import { generateReceipt } from "../../utils/receiptPdf"
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";

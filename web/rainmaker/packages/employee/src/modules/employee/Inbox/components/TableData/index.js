@@ -408,9 +408,10 @@ class TableData extends Component {
   getMaxSLA() {
     const businessServiceData = this.getBussinessServiceData();
     let businessServiceSla = {}
+    console.log("BusinessServiceData", businessServiceData);    
     businessServiceData.map(eachRow => {
       businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
-    })
+    });
     this.setState({ businessServiceSla });
     return businessServiceSla;
   }
