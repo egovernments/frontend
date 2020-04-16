@@ -52,22 +52,22 @@ const searchApiCall = async (state, dispatch) => {
     {}
   );
   
-  if (
-    searchScreenObject.tenantId === "" ||
-    searchScreenObject.locality === ""
-  ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
-        },
-        "error"
-      )
-    );
-    return;
-  }
+  // if (
+  //   searchScreenObject.tenantId === "" ||
+  //   searchScreenObject.locality === ""
+  // ) {
+  //   dispatch(
+  //     toggleSnackbar(
+  //       true,
+  //       {
+  //         labelName: "Please fill valid fields to search",
+  //         labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+  //       },
+  //       "error"
+  //     )
+  //   );
+  //   return;
+  // }
 
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children",

@@ -181,7 +181,11 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "applyScreen.property.propertyType",
-            callBack: handleNA
+            callBack: handleNA,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPTYPE"
+            }
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -192,7 +196,12 @@ const getPropertyDetails = {
             labelName: "Property Usage Type",
             labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "applyScreen.property.usageCategory", callBack: handleNA }
+          { jsonPath: "applyScreen.property.usageCategory", callBack: handleNA,
+          localePrefix: {
+            moduleName: "WS",
+            masterName: "PROPUSGTYPE"
+          }
+       }
         ),
 
         reviewPropertySubUsageType: getLabelWithValue(
@@ -222,7 +231,7 @@ const getPropertyDetails = {
             labelName: "Rain Water Harvesting Facility"
           },
           {
-            jsonPath: "applyScreen.rainWaterHarvesting",
+            jsonPath: "applyScreen.property.rainWaterHarvesting",
             callBack: handleNA
           }
         )
@@ -346,7 +355,7 @@ const propertyOwnerDetails = () => {
       items: [],
       hasAddItem: false,
       sourceJsonPath: "applyScreen.property.owners",
-      prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
+      prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"

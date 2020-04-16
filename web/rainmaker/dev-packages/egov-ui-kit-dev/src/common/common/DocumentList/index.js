@@ -303,7 +303,7 @@ class DocumentList extends Component {
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
               data={card.dropdown.menu}
-              disabled={card.dropdown.disabled}
+              disabled={card.dropdown.disabled && documentsUploadRedux[key] && documentsUploadRedux[key].documents ? true : false}
               optionValue="code"
               optionLabel="label"
               required={true}
@@ -336,7 +336,7 @@ class DocumentList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
-            disabled={card.disabled}
+            disabled={card.disabled && documentsUploadRedux[key] && documentsUploadRedux[key].documents ? true : false}
           />
         </Grid>
       </Grid>
@@ -403,6 +403,13 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
+  Object.keys(documentsUploadRedux).map(key=>{
+    let documentCode = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value||'';
+    let codes=documentCode&&documentCode.split('.');
+    if(codes&&codes.length==1&&codes[0].length>0){
+      documentsUploadRedux[key].dropdown.value="OWNER.REGISTRATIONPROOF."+documentCode;
+    }
+  })
   return { documentsUploadRedux, moduleName };
 };
 

@@ -10,9 +10,19 @@ import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFo
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import { downloadApp, getSearchResultsForSewerage, getSearchResults, findAndReplace } from "../../../../ui-utils/commons";
+import {
+  downloadApp,
+  getSearchResultsForSewerage,
+  getSearchResults,
+  findAndReplace,
+  prepareDocumentsUploadRedux,
+  prepareDocumentsUploadData,
+  prepareDocUploadRedux,
+  downloadAndPrintForNonApply
+} from "../../../../ui-utils/commons";
 import set from "lodash/set";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getMdmsData } from './apply';
 
 const getAcknowledgementCard = (
   state,
@@ -213,7 +223,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      approvalSuccessFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   } else if (purpose === "sendback" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
@@ -256,7 +271,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      approvalSuccessFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
@@ -293,7 +313,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   } else if (purpose === "application" && status === "cancelled") {
     return {
@@ -336,7 +361,6 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
     };
   } else if (purpose === "pay" && status === "failure") {
     return {
@@ -406,7 +430,6 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
     };
   } else if (purpose === "forward" && status === "success") {
     return {
@@ -438,7 +461,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   } else if (purpose === "activate" && status === "success") {
     return {
@@ -470,7 +498,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   }
 };
@@ -673,11 +706,8 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("SewerageConnection", []));
   dispatch(prepareFinalObject("applyScreen", {}));
   dispatch(prepareFinalObject("searchScreen", {}));
-  dispatch(prepareFinalObject("documentsContract", []));
-  dispatch(prepareFinalObject("applyScreenMdmsData", []));
-  dispatch(prepareFinalObject("documentsUploadRedux", {}));
-  dispatch(prepareFinalObject("UploadedDocs", []));
   dispatch(prepareFinalObject("waterSubSourceForSelectedWaterSource", {}));
+  dispatch(prepareFinalObject("UploadedDocs", []));
 }
 
 const screenConfig = {
@@ -694,7 +724,13 @@ const screenConfig = {
   },
   beforeInitScreen: (action, state, dispatch) => {
     pageReset(dispatch);
-    fetchData(dispatch);
+    fetchData(dispatch)
+      .then(() => getMdmsData(dispatch))
+      .then(() => prepareDocumentsUploadData(state, dispatch))
+      .then(() => prepareDocUploadRedux(state, dispatch))
+      .then(() => prepareDocumentsUploadRedux(state, dispatch))
+      .then(() => downloadAndPrintForNonApply(state, dispatch))
+      .catch(error => console.log(error))
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
     // const service = getQueryArg(window.location.href, "service");

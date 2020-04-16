@@ -88,7 +88,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               connectionNo: element.connectionNo,
               name: element.property.owners[0].name,
               status: element.status,
-              address: element.property.address.street,
+              address: handleAddress(element),
               connectionType: element.connectionType
             })
           }) : finalArray.push({
@@ -98,7 +98,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             connectionNo: element.connectionNo,
             name: element.property.owners[0].name,
             status: element.status,
-            address: element.property.address.street,
+            address: handleAddress(element),
             connectionType: element.connectionType
           })
         }
@@ -176,9 +176,9 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           finalArray.push({
             connectionNo: element.connectionNo,
             applicationNo: element.applicationNo,
-            name: ownerName.slice(2, ),
+            name: ownerName.slice(2),
             applicationStatus: element.applicationStatus,
-            address: element.property.address.street,
+            address: handleAddress(element),
             service: element.service,
             connectionType: element.connectionType
           })
@@ -188,7 +188,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
             applicationNo: element.applicationNo,
             name: element.property.owners[0].name,
             applicationStatus: element.applicationStatus,
-            address: element.property.address.street,
+            address: handleAddress(element),
             service: element.service,
             connectionType: element.connectionType
           })
@@ -197,6 +197,21 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       showApplicationResults(finalArray, dispatch)
     } catch (err) { console.log(err) }
   }
+}
+
+const handleAddress = (element) => {
+  let city = (
+    element.property.address !== undefined &&
+    element.property.address.city !== undefined &&
+    element.property.address.city !== null
+  ) ? element.property.address.city : "";
+  let localityName = (
+    element.property.address.locality !== undefined &&
+    element.property.address.locality !== null &&
+    element.property.address.locality.name !== null
+  ) ? element.property.address.locality.name : "";
+
+  return (city === "" && localityName === "") ? "NA" : `${localityName}, ${city}`;
 }
 
 const showHideConnectionTable = (booleanHideOrShow, dispatch) => {

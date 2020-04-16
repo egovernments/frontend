@@ -17,7 +17,7 @@ import {
   prepareFinalObject,
   initScreen
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import isUndefined from "lodash/isUndefined";
 import isEmpty from "lodash/isEmpty";
 import {
@@ -959,7 +959,7 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
   }
 }
 
-export const downloadCertificateForm = (Licenses,mode='download') => {
+export const downloadCertificateForm = async(LicensesOld,applicationNumber,tenantId,mode='download') => {
  const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";
   const queryStr = [
     { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
@@ -971,7 +971,21 @@ export const downloadCertificateForm = (Licenses,mode='download') => {
       ACTION: "_get",
     },
   };
-  try {
+  let queryObject = [
+    { key: "tenantId", value: tenantId},
+    {
+      key: "applicationNumber",
+      value: applicationNumber
+    }
+  ];
+  const LicensesPayload = await getSearchResults(queryObject);
+  const Licenses=get(LicensesPayload,"Licenses");
+  const oldFileStoreId=get(Licenses[0],"fileStoreId")
+  if(oldFileStoreId){
+    downloadReceiptFromFilestoreID(oldFileStoreId,mode)
+  }
+  else{
+  try { 
     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
       .then(res => {
         res.filestoreIds[0]
@@ -986,6 +1000,7 @@ export const downloadCertificateForm = (Licenses,mode='download') => {
   } catch (exception) {
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
+}
 }
 
 export const prepareDocumentTypeObj = documents => {
@@ -1397,16 +1412,6 @@ export const epochToYmdDate = et => {
     "-" +
     date.getUTCDate();
   return formattedDate;
-};
-
-export const getTodaysDateInYMD = () => {
-  let date = new Date();
-  //date = date.valueOf();
-  let month = date.getMonth() + 1;
-  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  date = `${date.getFullYear()}-${month}-${day}`;
-  // date = epochToYmdDate(date);
-  return date;
 };
 
 export const getNextMonthDateInYMD = () => {

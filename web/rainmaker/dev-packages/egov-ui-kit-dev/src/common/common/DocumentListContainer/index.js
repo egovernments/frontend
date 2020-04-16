@@ -67,6 +67,14 @@ const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
 }
 const mapStateToProps = state => {
   let preparedFinalObject = get(state, 'common.prepareFormData', {})
+
+  let uploadedDocuments = get(preparedFinalObject, 'Properties[0].documents', []) || [];
+  let uploadedDocumentTypes = uploadedDocuments.map(document => {
+    let documentTypes = document.documentType && document.documentType.split('.');
+    return documentTypes && Array.isArray(documentTypes) && documentTypes.length > 1 && documentTypes[1];
+  })
+
+
   let ptDocumentsList = get(
     state,
     "screenConfiguration.preparedFinalObject.documentsContract",
@@ -80,8 +88,9 @@ const mapStateToProps = state => {
       }
       if (document.enabledActions) {
         const purpose = getPurpose();
-        document.disabled = document.enabledActions[purpose].disableUpload ? true : false;
-        document.dropdown.disabled = document.enabledActions[purpose].disableDropdown ? true : false;
+        let documentCode = document.code.split('.');
+        document.disabled = document.enabledActions[purpose].disableUpload && uploadedDocumentTypes.includes(documentCode && documentCode.length > 1 && documentCode[1]) ? true : false;
+        document.dropdown.disabled = document.enabledActions[purpose].disableDropdown && uploadedDocumentTypes.includes(documentCode && documentCode.length > 1 && documentCode[1]) ? true : false;
       }
 
       document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));

@@ -360,7 +360,7 @@ const createProperty = async (Properties, action, props) => {
   if (action === "_update") {
     const workflow = {
       "businessService": "PT.CREATE",
-      "action": getBusinessServiceNextAction('PT.CREATE', null),
+      "action": getBusinessServiceNextAction('PT.CREATE', null) || "OPEN",
       "moduleName": "PT"
     }
     if (propertyPayload.workflow) {
@@ -422,6 +422,19 @@ const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNum
     )
   );
 }
+
+
+export const routeToCommonPay = (propertyId, tenantId,businessService='PT') => {
+
+  let routeLink = `/egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}&businessService=${businessService}`;
+  store.dispatch(
+    setRoute(
+      routeLink
+    )
+  );
+}
+
+
 
 
 

@@ -42,9 +42,7 @@ export const ComponentJsonPath = {
   ownerMobNo:
     "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.ownerMobNo",
   propertyID:
-    "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.propertyID",
-  existingPropertyId:
-    "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.existingPropertyId"
+    "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.propertyID"
 };
 
 export const getSearchResults = async requestPayload => {

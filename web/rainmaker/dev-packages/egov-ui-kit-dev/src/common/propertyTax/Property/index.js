@@ -424,7 +424,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
       //   return "NA";
       // }
       if (floor[dataKey] === "NONRESIDENTIAL") {
-        return generalMDMSDataById["UsageCategoryMinor"] ? generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name : "NA";
+        return generalMDMSDataById["UsageCategoryMinor"]&& generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]]&& generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name ? generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name : "NA";
       } else {
         return generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][floor[dataKey]].name : "NA";
       }
@@ -615,6 +615,7 @@ const mapStateToProps = (state, ownProps) => {
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
+  loading = loading==false && Object.keys(selPropertyDetails).length > 0 ? false : true;
   const { documentsUploaded } = selPropertyDetails || [];
   const latestPropertyDetails = getLatestPropertyDetails(selPropertyDetails.propertyDetails);
   const pendingAssessments = getPendingAssessments(selPropertyDetails, singleAssessmentByStatus);

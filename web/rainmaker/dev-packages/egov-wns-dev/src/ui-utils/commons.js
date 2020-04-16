@@ -49,7 +49,6 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-                
                 let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
                 dispatch(prepareFinalObject("applyScreen", applyScreenObj));
                 if (getQueryArg(window.location.href, "action") === "edit") {
@@ -669,6 +668,60 @@ const parserFunction = (state) => {
     return queryObject;
 }
 
+export const prepareDocumentsUploadRedux = async (state, dispatch) => {
+    const { documentsUploadRedux } = state.screenConfiguration.preparedFinalObject;
+    let documentsList = get(state, "screenConfiguration.preparedFinalObject.documentsContract", []);
+    let index = 0;
+    documentsList.forEach(docType => {
+        docType.cards &&
+            docType.cards.forEach(card => {
+                if (card.subCards) {
+                    card.subCards.forEach(subCard => {
+                        let oldDocType = get(
+                            documentsUploadRedux,
+                            `[${index}].documentType`
+                        );
+                        let oldDocCode = get(
+                            documentsUploadRedux,
+                            `[${index}].documentCode`
+                        );
+                        let oldDocSubCode = get(
+                            documentsUploadRedux,
+                            `[${index}].documentSubCode`
+                        );
+                        if (
+                            oldDocType != docType.code ||
+                            oldDocCode != card.name ||
+                            oldDocSubCode != subCard.name
+                        ) {
+                            documentsUploadRedux[index] = {
+                                documentType: docType.code,
+                                documentCode: card.name,
+                                documentSubCode: subCard.name
+                            };
+                        }
+                        index++;
+                    });
+                } else {
+                    let oldDocType = get(documentsUploadRedux, `[${index}].documentType`);
+                    let oldDocCode = get(documentsUploadRedux, `[${index}].documentCode`);
+                    if (oldDocType != docType.code || oldDocCode != card.name) {
+                        documentsUploadRedux[index] = {
+                            documentType: docType.code,
+                            documentCode: card.name,
+                            isDocumentRequired: card.required,
+                            isDocumentTypeRequired: card.dropdown
+                                ? card.dropdown.required
+                                : false
+                        };
+                    }
+                }
+                index++;
+            });
+    });
+    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+};
+
 export const setDocsForEditFlow = async (state) => {
     const applicationDocuments = get(state.screenConfiguration.preparedFinalObject, "applyScreen.documents", []);
     let uploadedDocuments = {};
@@ -725,6 +778,77 @@ export const setWSDocuments = async (payload, sourceJsonPath, businessService) =
                 };
             });
         return reviewDocData;
+    }
+};
+
+export const downloadAndPrintForNonApply = async (state, dispatch) => {
+    let documentPath;
+    const {
+        WaterConnection,
+        SewerageConnection
+    } = state.screenConfiguration.preparedFinalObject;
+    if (
+        (WaterConnection.length > 0 &&
+            SewerageConnection.length > 0) ||
+        WaterConnection.length > 0
+    ) {
+        documentPath = 'WaterConnection[0].documents';
+    } else if (SewerageConnection.length > 0) {
+        documentPath = 'SewerageConnection[0].documents';
+    }
+    await setDocuments(
+        state.screenConfiguration.preparedFinalObject,
+        documentPath,
+        "DocumentsData",
+        dispatch,
+        "WS"
+    );
+}
+
+export const prepareDocUploadRedux = async (state, dispatch) => {
+    let documentsUploadRedux = {}, uploadedDocs = [];
+    let payload = state.screenConfiguration.preparedFinalObject;
+    let documentPath;
+    const {
+        WaterConnection,
+        SewerageConnection
+    } = state.screenConfiguration.preparedFinalObject;
+    if (
+        (
+            WaterConnection !== undefined &&
+            WaterConnection.length > 0 &&
+            SewerageConnection !== undefined &&
+            SewerageConnection.length > 0
+        ) ||
+        (
+            WaterConnection !== undefined &&
+            WaterConnection.length > 0
+        )
+    ) {
+        documentPath = payload.WaterConnection[0].documents;
+        uploadedDocs = await setWSDocuments(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", "WS");
+    } else if (SewerageConnection !== undefined && SewerageConnection.length > 0) {
+        documentPath = payload.SewerageConnection[0].documents;
+        uploadedDocs = await setWSDocuments(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", "WS");
+    }
+    if (uploadedDocs !== undefined && uploadedDocs !== null && uploadedDocs.length > 0) {
+        documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
+            let docUploadRedux = {};
+            docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: documentPath[key].fileStoreId }] };
+            let splittedString = documentPath[key].documentType.split(".");
+            if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else { docUploadRedux[key].documentType = documentPath[key].documentType; }
+            docUploadRedux[key].id = documentPath[key].id;
+            docUploadRedux[key].isDocumentRequired = true;
+            docUploadRedux[key].isDocumentTypeRequired = true;
+            return docUploadRedux;
+        });
+        let docs = {};
+        for (let i = 0; i < documentsUploadRedux.length; i++) {
+            docs[i] = documentsUploadRedux[i][i];
+        }
+        dispatch(prepareFinalObject("documentsUploadRedux", docs))
     }
 };
 
@@ -1305,22 +1429,6 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                             payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting = 'SCORE_NO'
                         }
                     }
-
-                    if (payloadReceiptDetails.WaterConnection[0].property.propertyType !== null && payloadReceiptDetails.WaterConnection[0].property.propertyType !== undefined) {
-                        const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.WaterConnection[0].property.propertyType) + ")]"
-                        let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
-                        const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
-                        payloadReceiptDetails.WaterConnection[0].property.propertyTypeValue = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
-                    }
-
-                    if (payloadReceiptDetails.WaterConnection[0].property.usageCategory !== null && payloadReceiptDetails.WaterConnection[0].property.usageCategory !== undefined) {
-                        const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.WaterConnection[0].property.usageCategory) + ")]"
-                        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
-                        const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
-                        payloadReceiptDetails.WaterConnection[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
-                    }
-
-
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
@@ -1347,20 +1455,6 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                         { key: "key", value: "ws-consolidatedsewerageconnection" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
-
-                    if (payloadReceiptDetails.SewerageConnections[0].property.propertyType !== null && payloadReceiptDetails.SewerageConnections[0].property.propertyType !== undefined) {
-                        const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.SewerageConnections[0].property.propertyType) + ")]"
-                        let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
-                        const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
-                        payloadReceiptDetails.SewerageConnections[0].property.propertyTypeValue = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
-                    }
-
-                    if (payloadReceiptDetails.SewerageConnections[0].property.usageCategory !== null && payloadReceiptDetails.SewerageConnections[0].property.usageCategory !== undefined) {
-                        const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.SewerageConnections[0].property.usageCategory) + ")]"
-                        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
-                        const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
-                        payloadReceiptDetails.SewerageConnections[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
-                    }
 
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
@@ -1451,6 +1545,21 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
                 { key: "key", value: "consolidatedbill" },
                 { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
             ]
+            let data=[];
+            payloadReceiptDetails.Bill[0].billDetails.map(curEl=>data.push(curEl));
+            let sortData=data.sort((a,b)=>b.toPeriod-a.toPeriod);
+            sortData.shift();
+            let totalAmount=0;
+            let previousArrears=0;
+            if(sortData.length>0){
+                let totalArrearsAmount=sortData.map(el=>el.amount+totalAmount);
+                 previousArrears=totalArrearsAmount.reduce((a,b)=>a+b);
+            }
+           
+            payloadReceiptDetails.Bill[0].billDetails.sort((a,b)=>b.toPeriod-a.toPeriod);
+    
+            payloadReceiptDetails.Bill[0].arrearAmount=previousArrears.toFixed(2);
+
             httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                 .then(res => {
                     getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
@@ -1538,14 +1647,13 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
     if (wnsConnection[0].service === "WATER") {
 
         // for Estimate api 
-        if (wnsConnection[0].rainWaterHarvesting !== undefined && wnsConnection[0].rainWaterHarvesting !== null) {
-            if (wnsConnection[0].rainWaterHarvesting === 'SCORE_YES') {
-                wnsConnection[0].rainWaterHarvesting = true
-            } else if (wnsConnection[0].rainWaterHarvesting === 'SCORE_NO') {
-                wnsConnection[0].rainWaterHarvesting = false
+        if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+            if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
+                wnsConnection[0].property.rainWaterHarvesting = true
+            } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {
+                wnsConnection[0].property.rainWaterHarvesting = false
             }
         }
-
         apiUrl = "ws-calculator/waterCalculator/_estimate";
         appService = "ws-applicationwater";
         queryObjectForEst = [{
@@ -1618,11 +1726,11 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
         if (type === 'application') {
             if (wnsConnection[0].service === "WATER") {
-                if (wnsConnection[0].rainWaterHarvesting !== undefined && wnsConnection[0].rainWaterHarvesting !== null) {
-                    if (wnsConnection[0].rainWaterHarvesting === true) {
-                        wnsConnection[0].rainWaterHarvesting = 'SCORE_YES'
+                if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+                    if (wnsConnection[0].property.rainWaterHarvesting === true) {
+                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'
                     } else {
-                        wnsConnection[0].rainWaterHarvesting = 'SCORE_NO'
+                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_NO'
                     }
                 }
                 obj = {

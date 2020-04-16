@@ -596,11 +596,17 @@ export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolid
       },
   };
   const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const oldFileStoreId=get(billResponse.Bills[0],"fileStoreId")
+  if(oldFileStoreId){
+    downloadReceiptFromFilestoreID(oldFileStoreId,'download')
+  }
+  else{
   const queryStr = [
             { key: "key", value: configKey },
             { key: "tenantId", value: "pb" }
         ]
   const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
   downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
+      }
 }
 
