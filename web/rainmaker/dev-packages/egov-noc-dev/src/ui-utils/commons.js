@@ -172,10 +172,10 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         let value = get(building.uomsMap, uom);
         value &&
           finalUoms.push({
-            //code: uom,
-            code: "HEIGHT_OF_BUILDING",
+            code: uom,
+          //  code: "HEIGHT_OF_BUILDING",
             value: parseInt(value),
-            //isActiveUom: requiredUoms.includes(uom) ? true : false,
+           // isActiveUom: requiredUoms.includes(uom) ? true : false,
             isActiveUom:  true ,
             active: true
           });
