@@ -3876,7 +3876,8 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     let nextActions = get(proInstance, "nextActions");
     let isVisibleTrue = false;
     if(nextActions && nextActions.length > 0) isVisibleTrue = true;
-    prepareDocumentsView(state, dispatch, action, appState, isVisibleTrue);
+    
+    (state, dispatch, action, appState, isVisibleTrue);
     let permitList = get (state.screenConfiguration.preparedFinalObject, "BPA.additionalDetails.pendingapproval");
     if(permitList && permitList.length > 0) {
       let riskType = get(
@@ -4071,7 +4072,7 @@ const documentMaping = async (state, dispatch, action,documentsPreview) => {
 }
 const prepareDocumentsView = async (state, dispatch, action, appState, isVisibleTrue) => {
   let documentsPreview = [];
-
+  debugger;
   // Get all documents from response
   let BPA = get(
     state,
@@ -4085,42 +4086,54 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   );
 
   let uploadedAppDocuments = [];
-  let otherDocuments = jp.query(
-    BPA,
-    "$.additionalDetail.documents.*"
-  );
+  let otherDocuments = BPA.additionalDetails.documents ? jp.query(BPA,
+    "$.additionalDetails.documents.*"
+  ):[];
   let allDocuments = [
    // ...buildingDocuments,
     ...applicantDocuments,
     ...otherDocuments
   ];
 
-    let additionalDetail = BPA.additionalDetails, 
+    let additionalDetail = BPA.additionalDetails, fieldinspectionreportdata = [{docs:[], questions:[]}], index=0,
     fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
+    console.log(additionalDetail,'additionalDetailhere');
     if(additionalDetail && additionalDetail["fieldinspection_pending"] && additionalDetail["fieldinspection_pending"].length > 0) {
-      fieldInspectionDetails = additionalDetail["fieldinspection_pending"][0]
-      fieldInspectionDocs = fieldInspectionDetails.docs;
-      fieldInspectionsQstions = fieldInspectionDetails.questions;
-    }
-  
-    if(fieldInspectionDocs && fieldInspectionDocs.length > 0 && fieldInspectionsQstions && fieldInspectionsQstions.length > 0) {
-      let fiDocumentsPreview = [];
-      fieldInspectionDocs.forEach(fiDoc => {        
-        fiDocumentsPreview.push({
-          title: getTransformedLocale(fiDoc.documentType),
-          fileStoreId: fiDoc.fileStoreId,
-          linkText: "View"
-        });
-      })
+     (additionalDetail["fieldinspection_pending"]).forEach(async (record, index) =>{
 
-      let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
+        fieldinspectionreportdata[index]= { date : record.date?record.date:'', 
+                                            time: record.time?record.time:'',
+                                            questions: record.questions?record.questions:[]
+                                          }
+          fieldInspectionDocs = record.docs?record.docs:[];
+            console.log(fieldInspectionDocs,index,'fieldInspectionDocs');
+      if(fieldInspectionDocs && fieldInspectionDocs.length > 0) {
+        let fiDocumentsPreview = [];
+        fieldInspectionDocs.forEach(fiDoc => {        
+          fiDocumentsPreview.push({
+            title: getTransformedLocale(fiDoc.documentType),
+            fileStoreId: fiDoc.fileStoreId,
+            linkText: "View"
+          });
+        });
+        let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
+        if(fieldinspectionreportdata[index])
+        fieldinspectionreportdata[index].docs = fieldInspectionDocuments;
+
+      }
+      // index++;
+    });
+    
+
+    console.log(fieldinspectionreportdata,'fieldinspectionreportdata');
       set(
         action,
         "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
         true
       );
-      dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
-      dispatch(prepareFinalObject("fieldInspectionCheckListDetailsPreview", fieldInspectionsQstions)); 
+      dispatch(prepareFinalObject("fieldinspectionreportdata", fieldinspectionreportdata));
+      
+      
     }
     let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
     let fileUrls =
@@ -4162,6 +4175,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     documentsPreview.push(obj);
     return obj;
   });
+  console.log(documentsPreview,'documentsPreview')
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
   
