@@ -12,13 +12,16 @@ import {
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 
+import get from "lodash/get";
+import set from "lodash/set";
+
 const test = value => {
   value = value ? value.split(".")[0] : "";
   return value;
 };
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
-
+  
 const getHeader = label => {
   return {
     uiFramework: "custom-molecules-local",
@@ -163,8 +166,8 @@ const propertyLocationDetails = getCommonGrayCard({
     ),
     doorHouseNo: getLabelWithValue(
       {
-        labelName: "Door/House No.",
-        labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_DOOR_HOUSE_NO_LABEL"
+        labelName: "Plot/ Survey No.",
+        labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_PLOT_SURVEY_NO_LABEL"
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
     ),
@@ -192,27 +195,40 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2" }
     ),
-    landMarkName: getLabelWithValue(
+    landMarkName: {
+      ...getLabelWithValue(
       {
         labelName: "Landmark Name",
         labelKey: "NOC_PROPERTY_DETAILS_LANDMARK_NAME_LABEL"
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.landmark" }
-    ),
-    mohalla: getLabelWithValue(
+       ),   
+   },
+
+    mohalla: {
+      ...getLabelWithValue(
       {
         labelName: "Mohalla",
         labelKey: "NOC_PROPERTY_DETAILS_MOHALLA_LABEL"
-      },
+      },     
       {
         jsonPath:
           "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
-        callBack: value => {
+        callBack: (value, state) => {
+
+           let mtenanatId = get(
+            state.screenConfiguration.preparedFinalObject,
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+          ); 
+
           let res = value.replace("-", "_");
-          return `${getTransformedLocale(tenantId)}_REVENUE_${res}`;
-        }
-      }
-    ),
+          return `${getTransformedLocale(mtenanatId)}_REVENUE_${res}`;
+         }
+        },     
+      ),
+     
+
+    },
     pincode: getLabelWithValue(
       {
         labelName: "Pincode",

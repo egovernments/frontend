@@ -75,7 +75,7 @@ const screenConfig = {
         state.screenConfiguration.preparedFinalObject,
         "FireNOCs[0].tenantId"
       );
-
+   
     let uomsObject = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.buildings[0].uomsMap"
