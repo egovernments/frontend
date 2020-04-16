@@ -4097,7 +4097,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
 
     let additionalDetail = BPA.additionalDetails, fieldinspectionreportdata = [{docs:[], questions:[]}], index=0,
     fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
-    console.log(additionalDetail,'additionalDetailhere');
+    
     if(additionalDetail && additionalDetail["fieldinspection_pending"] && additionalDetail["fieldinspection_pending"].length > 0) {
      (additionalDetail["fieldinspection_pending"]).forEach(async (record, index) =>{
 
@@ -4175,7 +4175,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     documentsPreview.push(obj);
     return obj;
   });
-  console.log(documentsPreview,'documentsPreview')
+  
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
   
