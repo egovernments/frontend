@@ -2,12 +2,10 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
 import { getMdmsData, getReceiptData, getFinancialYearDates } from "../utils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import {
   getLocalization,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
-
 import {
   getUlbGradeLabel,
   getTranslatedLabel,
@@ -17,8 +15,9 @@ import {
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
+import { getSearchResults } from "../../../../ui-utils/commons";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -56,7 +55,6 @@ export const getMessageFromLocalization = code => {
 };
 
 export const loadUlbLogo = utenantId => {
-
   var img = new Image();
   img.crossOrigin = "Anonymous";
   img.onload = function() {
@@ -124,8 +122,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "NA")
     );
     let buildings = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
-
-    
     data.buildings = buildings.map(building => {
       let uoms = get(building, "uoms", []);
       let uomsObject = {};
@@ -148,26 +144,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       };
     });
 
-
-/*     let buildingUsageTypeData = get(
-      state,
-      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
-      []
-    );
-     let buildingSubUsageTypeData = buildingUsageTypeData.filter(item => {
-      return item.active && item.code.startsWith(action.value);
-    }); 
-  
-  
-  
-    console.log("buildingSubUsageTypeData", buildingSubUsageTypeData);
-  
-    dispatch(
-      handleField("apply", path, "props.data", buildingSubUsageTypeData[0].BuildingSubType)
-    ); 
- */
-    
-
     // Property Location
     data.propertyId = nullToNa(
       get(
@@ -177,13 +153,22 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       )
     );
 
+
+    data.basements = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId",
+        "NA"
+      )
+    );
+
  
     let city_value = nullToNa(  
-      get(	
-         response,	
-         "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",	
-         "NA"	
-       )	       
+      get(  
+         response,  
+         "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",  
+         "NA" 
+       )         
    );
 
     data.city = nullToNa(          
@@ -206,11 +191,11 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     );
 
     let district_value = nullToNa(  
-      get(	
-         response,	
-         "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",	
-         "NA"	
-       )	       
+      get(  
+         response,  
+         "FireNOCs[0].fireNOCDetails.propertyDetails.address.city", 
+         "NA" 
+       )         
    );
 
     data.district = nullToNa(          
@@ -263,38 +248,47 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
       "NA");
 
-      let utenantId = get(
-        response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
-        "NA");
+    const  tenantId = getQueryArg(window.location.href, "tenantId"); 
 
-    //const  tenantId = getQueryArg(window.location.href, "tenantId");    
+   
 
-   if(data.areaType === 'Urban')
+    if(data.areaType === 'Urban')
     {
-
-
-     data.mohalla = nullToNa(         
-     /*  getTransformedLocale(
-            `${getTransformedLocale(utenantId)}_REVENUE_${value.replace("-", "_") }`           
-        )  */
-        getMessageFromLocalization(`${getTransformedLocale(utenantId)}_REVENUE_${value.replace("-", "_")}`)       
-
+    data.mohalla = nullToNa(  
+        getMessageFromLocalization(
+            `${getTransformedLocale(tenantId)}_REVENUE_${value.replace("-", "_") }`           
+        )
       ); 
-    
+
+
+  
+      let city_value2 = nullToNa(  
+        get(  
+           response,  
+           "FireNOCs[0].fireNOCDetails.propertyDetails.locality.code",  
+           "NA" 
+         )         
+     );
+  
+      data.mymohalla = nullToNa(          
+          getMessageFromLocalization(`TL_${city_value2}` ) ); 
+      
+
+    console.log(data.mymohalla,"data.mymohalla");
     }
 
     else
     {
       data.mohalla = "N/A";
-    } 
+    }
 
-    /*  data.mohalla = nullToNa(
+
+    /*   data.mohalla = nullToNa(
         getMessageFromLocalization(
         `${getTransformedLocale(
             get(
             response,
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
             "NA"
             )
             )}_REVENUE_${getTransformedLocale(
@@ -304,8 +298,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
               "NA"
               )
             )}`
-          )); 
-       */
+          ));  */
+      
 
     
 
@@ -371,7 +365,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
 
         );
 
-        data.address = data.areaType==='Urban'?data.urbanaddress :data.ruraladdress ;
+        data.address = data.areaType==='Urban'? data.urbanaddress :data.ruraladdress ;
 
     // Applicant Details
     let owners = get(
@@ -521,7 +515,6 @@ export const loadMdmsData = async tenantid => {
   let localStorageLabels = JSON.parse(
     window.localStorage.getItem(`localization_${getLocale()}`)
   );
-
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
   let queryObject = [
@@ -571,10 +564,6 @@ export const loadMdmsData = async tenantid => {
   store.dispatch(prepareFinalObject("mdmsDataForPdf", data));
 };
 
-
-  
-
-
 export const loadUserNameData = async uuid => {
   let data = {};
   let bodyObject = {
@@ -588,16 +577,21 @@ export const loadUserNameData = async uuid => {
   store.dispatch(prepareFinalObject("userDataForPdf", data));
 };
 
+ /** Data used for creation of receipt is generated and stored in local storage here */
+/*export const loadPdfGenerationData = (applicationNumber, tenant) => {
+  /** Logo loaded and stored in local storage in base64 
+  loadUlbLogo(tenant);
+  loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
+  loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
+  loadMdmsData(tenant);
+}; */
+
 /** Data used for creation of receipt is generated and stored in local storage here */
 export const loadPdfGenerationData = (applicationNumber, tenant, utenantId) => {
   /** Logo loaded and stored in local storage in base64 */
 
-  console.log("prasad utenantId", utenantId);
-  console.log("prasad tenantId", tenant);
-
-
-
   loadUlbLogo(utenantId);
+
   loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
   loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
 

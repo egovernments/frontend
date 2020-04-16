@@ -422,15 +422,15 @@ const setSearchResponse = async (
     ""
   );
 
-  if ( value === 'Urban' )
+   if ( value === 'Urban' )
   {
     await loadPdfGenerationData(applicationNumber, tenantId, utenantId);
 
   }
   else
-  {
+  { 
     await loadPdfGenerationData(applicationNumber, tenantId, tenantId);
-  }
+   } 
   
   setDownloadMenu(state, dispatch);
 };

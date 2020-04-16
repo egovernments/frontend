@@ -66,10 +66,11 @@ const getAcknowledgementCard = (
   status,
   applicationNumber,
   secondNumber,
-  tenant
+  tenant,
+  utenantId  
 ) => {
   if (purpose === "apply" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
+    loadPdfGenerationData(applicationNumber, tenant, utenantId);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -194,7 +195,7 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "pay" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant)
+    loadPdfGenerationData(applicationNumber, tenant, utenantId)
     return {
       header,
       applicationSuccessCard: {
@@ -224,7 +225,7 @@ const getAcknowledgementCard = (
       paymentSuccessFooter: paymentSuccessFooter()
     };
   } else if (purpose === "approve" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
+    loadPdfGenerationData(applicationNumber, tenant, utenantId);
     return {
       header,
       applicationSuccessCard: {
@@ -479,19 +480,55 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
+
+    let utenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+      ""
+    );
+  
+    
+
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const data = getAcknowledgementCard(
+
+
+    let value = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+      if ( value === 'Urban' )
+      {
+      const data = getAcknowledgementCard(
       state,
       dispatch,
       purpose,
       status,
       applicationNumber,
       secondNumber,
-      tenant
+      tenant,
+      utenantId
+
     );
     setApplicationData(dispatch, applicationNumber, tenant);
     set(action, "screenConfig.components.div.children", data);
+    }
+    else
+    {
+      const data = getAcknowledgementCard(
+        state,
+        dispatch,
+        purpose,
+        status,
+        applicationNumber,
+        secondNumber,
+        tenant,
+        tenant
+      );
+      setApplicationData(dispatch, applicationNumber, tenant);
+     set(action, "screenConfig.components.div.children", data);
+
+    }
+    
     return action;
   }
 };
