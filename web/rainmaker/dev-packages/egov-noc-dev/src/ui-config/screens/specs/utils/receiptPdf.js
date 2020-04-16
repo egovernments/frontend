@@ -2283,9 +2283,11 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `Certified that the ${transformedData.buildings[0].name} at ${transformedData.address}comprised of ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor) owned/occupied by ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building/premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
+                text: `                        Certified that the ${transformedData.buildings[0].name} at ${transformedData.address}comprised of ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor) owned/occupied by ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building/premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
                 border: [true, false, true, false],            
-                alignment: "justify"
+                alignment: "justify",
+                preserveLeadingSpaces: true
+
 
               },
              
@@ -3860,11 +3862,11 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                //text: `Certified that the ${transformedData.buildingName} at   ${transformedData.door}  ${transformedData.street} comprised of 0 basements and 3 (Upper flor) owned/occupied by   ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building / premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
-                text: `Certified that the ${transformedData.buildings[0].name} at ${transformedData.address} has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group Educational subdivision B-1 (as per NBC).`,
+                text: `                        Certified that the ${transformedData.buildings[0].name} at ${transformedData.address} has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group Educational subdivision B-1 (as per NBC).`,
                 border: [true, false, true, false],            
                 alignment: "justify",
-                textIndent : 50
+                textIndent : 50,
+                preserveLeadingSpaces: true
                
               },
              
