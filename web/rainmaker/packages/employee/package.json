@@ -1,5 +1,6 @@
 {
   "name": "rainmaker-employee",
+  "license": "egov",
   "version": "0.0.2",
   "private": true,
   "homepage": "https://mseva-uat.lgpunjab.gov.in/employee/",
