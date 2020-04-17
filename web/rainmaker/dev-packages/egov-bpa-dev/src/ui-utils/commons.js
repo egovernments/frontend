@@ -178,11 +178,13 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let requiredDocuments = [];
   if (documnts && documnts.length > 0) {
     documnts.forEach(documents => {
-    if(documents && documents.documents){
+    if(
+      documents && documents.documents && 
+      documents.dropDownValues && 
+      documents.dropDownValues.value
+      ){
       let doc = {};
-      if(documents.dropDownValues) {
       doc.documentType = documents.dropDownValues.value;
-      }
       doc.fileStoreId = documents.documents[0].fileStoreId;
       doc.fileStore = documents.documents[0].fileStoreId;
       doc.fileName = documents.documents[0].fileName;
