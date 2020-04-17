@@ -1183,7 +1183,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 image: ulbLogo,
                 width: 60,
-                height: 61.25,
+                // height: 61.25,
+                height :60,
                 margin: [51, 12, 10, 3]
               },
               {
@@ -2162,7 +2163,8 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 image: ulbLogo,
                 width: 60,
-                height: 61.25,
+               // height: 61.25,
+                height :60,
                 margin: [31, 12, 10, 10],
                 border: [true, true, false, false],            
 
@@ -2177,7 +2179,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
                   },
                   {
                     //text:  transformedData.areaType ==='Rural'? transformedData.corporationName: transformedData.city,
-                    text:  `( ${ transformedData.ulbname} )`,
+                    text:  `( ${ transformedData.corporationName} )`,
                     style: "receipt-logo-sub-header",
                     alignment: "center",
 
@@ -2312,7 +2314,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `Issued on ${transformedData.issuedDate} at ${transformedData.ulbname}`,
+                text: `Issued on ${transformedData.issuedDate} at ${transformedData.corporationName}`,
    
                     border: [true, false, true, false],            
                 alignment: "left"
@@ -2336,9 +2338,11 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਜੋ ਿਕ ${transformedData.address}  ਸਮੇਤ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ${transformedData.owners[0].name} ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ${transformedData.issuedDate} ਮੋਜੂਦਗੀ ਿਵੱਚ ${transformedData.owners[0].name} (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group Assembly subdivision D-2 (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।`,
+                text: `                        ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਜੋ ਿਕ ${transformedData.address}  ਸਮੇਤ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ${transformedData.owners[0].name} ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ${transformedData.issuedDate} ਮੋਜੂਦਗੀ ਿਵੱਚ ${transformedData.owners[0].name} (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group Assembly subdivision D-2 (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।`,
                 border: [true, false, true, false],            
-                alignment: "justify",                
+                alignment: "justify",
+                preserveLeadingSpaces: true
+                
 
               },            
            ],
@@ -2359,7 +2363,29 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.ulbname}.`,
+                text: "",
+                border: [true, false, true, false],            
+                alignment: "left",
+              },            
+           ],
+           
+           
+                       
+          ]
+        },
+   
+        layout: {},
+      },
+
+      {      
+        style: "noc-head-new",
+        table: {
+          widths: ["*"],
+          body: [          
+           
+            [            
+              {
+                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.corporationName}.`,
                 border: [true, false, true, false],            
                 alignment: "left"
               },            
@@ -2381,7 +2407,29 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                margin: [10, 23, 0, 0],
+                text: "",
+                border: [true, false, true, false],            
+                alignment: "left",
+              },            
+           ],
+           
+           
+                       
+          ]
+        },
+   
+        layout: {},
+      },
+
+      {      
+        style: "noc-head-new",
+        table: {
+          widths: ["*"],
+          body: [          
+           
+            [            
+              {
+                margin: [10, 0, 0, 0],
 
                 text: "1. Fire Safety arrangements shall be kept in working condition at all times",
                 border: [true, false, true, false],            
@@ -2624,8 +2672,10 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "* Above Details cannot be used as ownership proof.",
                 border: [true, false, true, false],            
-                alignment: "center",
+                alignment: "left",
                 color: "#FF0000",
+                margin: [10, 0, 0, 0],
+
               },            
            ],
            
@@ -2647,7 +2697,9 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "ਉਪਰੋਕਤ ਦਰਸਾਈ ਗਈ ਜਾਣਕਾਰੀ ਨੰੂਮਾਲਕਾਨਾ ਦੇ ਸਬੂਤ ਵਜ ਨਹ ਵਰਿਤਆ ਜਾਵੇਗਾ।",
                 border: [true, false, true, false],            
-                alignment: "center"
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+
               },            
            ],
            
@@ -2669,7 +2721,9 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "This is digitaly created cerificate, no signatue are needed",
                border: [true, false, true, false],            
-                alignment: "center"
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+
               },            
            ],
            
@@ -2691,7 +2745,9 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "ਇਹ ਿਡਜੀਟਲੀ (ਕੰਿਪਊਟਰਾਈਜ਼ਡ) ਿਤਆਰ ਕੀਤਾ ਿਗਆ ਸਰਟੀਿਫਕੇਟ ਹੈ, ਿਜਸ ਿਵੱਚ ਦਸਤਖਤ ਦੀ ਕੋਈ ਲੋੜ ਨਹ ਹੈ।",
                 border: [true, false, true, true],            
-                alignment: "center"
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+
               },            
            ],
            
@@ -3743,7 +3799,8 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 image: ulbLogo,
                 width: 60,
-                height: 61.25,
+                // height: 61.25,
+                height :60,
                 margin: [30, 12, 10, 10],
                 border: [true, true, false, false],            
 
@@ -3759,7 +3816,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
                   {
                    // text: `< ${transformedData.areaType ==='Rural'? transformedData.corporationName: transformedData.city} >`,
                   
-                    text:  `( ${transformedData.ulbname} )`,
+                    text:  `( ${transformedData.corporationName} )`,
                     style: "receipt-logo-sub-header",
                     alignment: "center",
                     fontSize:11
@@ -3893,7 +3950,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `Issued on ${transformedData.issuedDate} at ${transformedData.ulbname}`,
+                text: `Issued on ${transformedData.issuedDate} at ${transformedData.corporationName}`,
    
                     border: [true, false, true, false],            
                 alignment: "left",
@@ -3918,10 +3975,10 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਪਤਾ ${transformedData.address} ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ  ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ  ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ Educational ਸਬਡਵੀਜਨ B-1 ਿਵੱਚ ਪੈਦਾ ਹੈ।` ,
+                text: `                        ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਪਤਾ ${transformedData.address} ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ  ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ  ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ Educational ਸਬਡਵੀਜਨ B-1 ਿਵੱਚ ਪੈਦਾ ਹੈ।` ,
                 border: [true, false, true, false],            
                 alignment: "justify",
-               
+                preserveLeadingSpaces: true,               
 
               },            
            ],
@@ -3942,11 +3999,32 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.ulbname}.`,
+                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.corporationName}.`,
                 border: [true, false, true, false],            
                 alignment: "left",
                
                
+              },            
+           ],
+           
+           
+                       
+          ]
+        },
+   
+        layout: {},
+      },
+      {      
+        style: "noc-head-new",
+        table: {
+          widths: ["*"],
+          body: [          
+           
+            [            
+              {
+                text: "",
+                border: [true, false, true, false],            
+                alignment: "left",
               },            
            ],
            
@@ -3967,6 +4045,27 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             [            
               {
                 text: "Provisional NOC is issued subject to following conditions:",
+                border: [true, false, true, false],            
+                alignment: "left",
+              },            
+           ],
+           
+           
+                       
+          ]
+        },
+   
+        layout: {},
+      },
+      {      
+        style: "noc-head-new",
+        table: {
+          widths: ["*"],
+          body: [          
+           
+            [            
+              {
+                text: "",
                 border: [true, false, true, false],            
                 alignment: "left",
               },            
@@ -4010,7 +4109,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                margin: [10, 23, 0, 0],
+                margin: [10, 0, 0, 0],
 
                 text: "1. Occupant/Owner must install/provide fire safety arrangements as per submitted fire layout plan/drawing during construction.",
                 border: [true, false, true, false],            
@@ -4058,7 +4157,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: "2. Occupant/Owner must obtain the ﬁnal NOC from ﬁre department on completion of building construction before occupancy.",
+                text: "2. Occupant/Owner must obtain the final NOC from ﬁre department on completion of building construction before occupancy.",
                 border: [true, false, true, false],            
                 alignment: "left",
                 margin: [10, 0, 0, 0],
@@ -4301,8 +4400,10 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "* Above Details cannot be used as ownership proof.",
                 border: [true, false, true, false],            
-                alignment: "center",
+                alignment: "left",
                 color: "#FF0000",
+                margin: [10, 0, 0, 0],
+
               },            
            ],
            
@@ -4324,7 +4425,9 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "ਉਪਰੋਕਤ ਦਰਸਾਈ ਗਈ ਜਾਣਕਾਰੀ ਨੰੂਮਾਲਕਾਨਾ ਦੇ ਸਬੂਤ ਵਜ ਨਹ ਵਰਿਤਆ ਜਾਵੇਗਾ।",
                 border: [true, false, true, false],            
-                alignment: "center"
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+
               },            
            ],
            
@@ -4346,7 +4449,9 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "This is digitaly created cerificate, no signatue are needed",
                 border: [true, false, true, false],            
-                alignment: "center"
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+
               },            
            ],
            
@@ -4368,7 +4473,9 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               {
                 text: "ਇਹ ਿਡਜੀਟਲੀ (ਕੰਿਪਊਟਰਾਈਜ਼ਡ) ਿਤਆਰ ਕੀਤਾ ਿਗਆ ਸਰਟੀਿਫਕੇਟ ਹੈ, ਿਜਸ ਿਵੱਚ ਦਸਤਖਤ ਦੀ ਕੋਈ ਲੋੜ ਨਹ ਹੈ।",
                 border: [true, false, true, true],            
-                alignment: "center"
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+
               },            
            ],
            

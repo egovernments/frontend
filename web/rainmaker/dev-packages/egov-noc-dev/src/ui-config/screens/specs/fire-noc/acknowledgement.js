@@ -70,7 +70,7 @@ const getAcknowledgementCard = (
   utenantId  
 ) => {
   if (purpose === "apply" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant, utenantId);
+    loadPdfGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -195,7 +195,7 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "pay" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant, utenantId)
+    loadPdfGenerationData(applicationNumber, tenant)
     return {
       header,
       applicationSuccessCard: {
@@ -225,7 +225,7 @@ const getAcknowledgementCard = (
       paymentSuccessFooter: paymentSuccessFooter()
     };
   } else if (purpose === "approve" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant, utenantId);
+    loadPdfGenerationData(applicationNumber, tenant);
     return {
       header,
       applicationSuccessCard: {

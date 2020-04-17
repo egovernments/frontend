@@ -68,7 +68,8 @@ export const loadUlbLogo = utenantId => {
     );
     canvas = null;
   };
- img.src = `/pb-egov-assets/${utenantId}/logo.png`; 
+ //img.src = `/pb-egov-assets/${utenantId}/logo.png`; 
+ img.src = '/pb-egov-assets/pb/Punjab_FS_logo.jpg'; 
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -620,15 +621,13 @@ export const loadUserNameData = async uuid => {
 }; */
 
 /** Data used for creation of receipt is generated and stored in local storage here */
-export const loadPdfGenerationData = (applicationNumber, tenant, utenantId) => {
+export const loadPdfGenerationData = (applicationNumber, tenant) => {
   /** Logo loaded and stored in local storage in base64 */
 
-  loadUlbLogo(utenantId);
+  loadUlbLogo(tenant);
 
   loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
   loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
-
-  console.log("utenantId", utenantId);
 
   loadMdmsData(tenant);
 
