@@ -1,16 +1,14 @@
 import { getCommonCard, getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
-import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
-import { searchBill, showHideMutationDetailsCard, getpayments, downloadCertificateForm, downloadReceitForm, prepareDocumentsView } from "../utils/index";
-import generatePdf from "../utils/receiptPdf";
+import { getSearchResults } from "../../../../ui-utils/commons";
+import { downloadCertificateForm, downloadReceitForm, getpayments, prepareDocumentsView, searchBill, showHideMutationDetailsCard } from "../utils/index";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 import { downloadPrintContainer } from "./functions";
@@ -50,28 +48,28 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber);
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, applicationNumber);
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber, 'print');
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, applicationNumber, 'print');
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId,applicationNumber);
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, applicationNumber);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId,applicationNumber, 'print');
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, applicationNumber, 'print');
     },
     leftIcon: "receipt"
   };
@@ -223,29 +221,6 @@ const setSearchResponse = async (
     );
   }
 
-  if (get(property, 'ownersInit[0].altContactNumber', 0)) {
-   
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.transferorSummary",
-        "visible",
-        false
-      )
-    );
-
-  } else {
-
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.transferorInstitutionSummary",
-        "visible",
-        false
-      )
-    );
-  }
-
 
   let transfereeOwners = get(
     property,
@@ -306,15 +281,39 @@ const setSearchResponse = async (
     );
 
   }
-  
-if(auditResponse&&Array.isArray( get(auditResponse, "Properties", []))&& get(auditResponse, "Properties", []).length>0){
-  const propertiesAudit = get(auditResponse, "Properties", []);
+
+  if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+    const propertiesAudit = get(auditResponse, "Properties", []);
 
 
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+    previousActiveProperty
 
-  
-  
-}
+    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+      property.institutionInit = previousActiveProperty.institution;
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.transferorSummary",
+          "visible",
+          false
+        )
+      );
+    } else {
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.transferorInstitutionSummary",
+          "visible",
+          false
+        )
+      );
+    }
+  }
+
 
   // auditResponse
   dispatch(prepareFinalObject("Property", property));
