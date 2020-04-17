@@ -979,7 +979,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
         {
           text: [
             {
-              text: "Application No.            ",
+              text: "Application No. ",
               bold: true
             },
             {
@@ -992,7 +992,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
         {
           text: [
             {
-              text: "Date of Payment   ",
+              text: "Date of Payment ",
               bold: true
             },
             {
@@ -2014,7 +2014,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
         {
           text: [
             {
-              text: "Application No.            ",
+              text: "Application No. ",
               bold: true
             },
             {
@@ -2027,7 +2027,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
         {
           text: [
             {
-              text: "Date of Payment   ",
+              text: "Date of Payment ",
               bold: true
             },
             {
@@ -3537,7 +3537,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
         {
           text: [
             {
-              text: "Application No.            ",
+              text: "Application No. ",
               bold: true
             },
             {
@@ -3550,7 +3550,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
         {
           text: [
             {
-              text: "Date of Payment   ",
+              text: "Date of Payment ",
               bold: true
             },
             {
