@@ -243,16 +243,43 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       )
     );
 
+
+    const  tenantId = getQueryArg(window.location.href, "tenantId"); 
+
+    
     let value = get(
       response,
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
       "NA");
 
-    const  tenantId = getQueryArg(window.location.href, "tenantId"); 
+      let utenantId = get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+        "NA");
 
+    //const  tenantId = getQueryArg(window.location.href, "tenantId");    
+
+   if(data.areaType === 'Urban')
+    {
+
+
+     data.mohalla = nullToNa(         
+     /*  getTransformedLocale(
+            `${getTransformedLocale(utenantId)}_REVENUE_${value.replace("-", "_") }`           
+        )  */
+        getMessageFromLocalization(`${getTransformedLocale(utenantId)}_REVENUE_${value.replace("-", "_")}`)       
+
+      ); 
+    
+    }
+
+    else
+    {
+      data.mohalla = "N/A";
+    } 
    
 
-    if(data.areaType === 'Urban')
+/*     if(data.areaType === 'Urban')
     {
     data.mohalla = nullToNa(  
         getMessageFromLocalization(
@@ -280,7 +307,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     else
     {
       data.mohalla = "N/A";
-    }
+    } */
 
 
     /*   data.mohalla = nullToNa(
