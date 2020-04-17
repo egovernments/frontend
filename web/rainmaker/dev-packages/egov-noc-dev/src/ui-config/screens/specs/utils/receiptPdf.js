@@ -489,14 +489,15 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               text: "Door/House No.",
               border: [false, false, false, false]
             },
+            
             {
-              text: "",
+              text: "Street Name",
               border: [false, false, false, false]
             },
             {
-              text: "Street Name",
+              text: "Location on Map",
               border: [false, false, true, false]
-            }
+             },
           ],
           [
 
@@ -510,16 +511,19 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
-             {
-              text: '',
-              style: "receipt-table-value",
-              border: [false, false, false, false]
-            },
             {
               text: transformedData.street,
               style: "receipt-table-value",
-              border: [false, false, true, false]
+              border: [false, false, false, false]
             },
+
+             {
+              text: transformedData.gis,
+              style: "receipt-table-value",
+             border: [false, false, true, false]
+             
+
+            },            
           ],
           [
 
@@ -571,9 +575,9 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 
           ],
 
-          [
+           [
             {
-              text: "Location on Map",
+              text: "",
               style: "receipt-table-value",
               border: [true, false, false, false]
             },
@@ -596,7 +600,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
           ],
           [
             {
-              text: transformedData.gis,
+              text: '',
               style: "receipt-table-value",
               border: [true, false, false, true]
             },
@@ -615,7 +619,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, true, true]
             },
-          ]
+          ] 
 
         ]
       },
@@ -1524,14 +1528,16 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               text: "Door/House No.",
               border: [false, false, false, false]
             },
-             {
-             text: "",
-             border: [false, false, false, false]
-            },
+            
             {
               text: "Street Name",
+              border: [false, false, false, false]
+            },
+            {
+              text: "Location on Map",
               border: [false, false, true, false]
-            }
+
+             },
           ],
           [
 
@@ -1545,16 +1551,18 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
-             {
-              text: '',
-              style: "receipt-table-value",
-             border: [false, false, false, false]
-            },
             {
               text: transformedData.street,
               style: "receipt-table-value",
-              border: [false, false, true, false]
+              border: [false, false, false, false]
             },
+
+             {
+              text: transformedData.gis,
+              style: "receipt-table-value",
+              border: [false, false, false, true]
+
+            },            
           ],
           [
 
@@ -1608,7 +1616,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
 
           [
             {
-              text: "Location on Map",
+              text: "",
               style: "receipt-table-value",
               border: [true, false, false, false]
             },
@@ -1631,7 +1639,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
           ],
           [
             {
-              text: transformedData.gis,
+              text: '',
               style: "receipt-table-value",
               border: [true, false, false, true]
             },
@@ -1650,7 +1658,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, true, true]
             },
-          ]
+          ] 
 
         ]
       },
@@ -3104,14 +3112,16 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               text: "Door/House No.",
               border: [false, false, false, false]
             },
-           {
-              text: "",
+            
+            {
+              text: "Street Name",
               border: [false, false, false, false]
             },
             {
-              text: "Street Name",
+              text: "Location on Map",
               border: [false, false, true, false]
-            }
+
+             },
           ],
           [
 
@@ -3125,16 +3135,18 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
-             {
-              text: '',
-              style: "receipt-table-value",
-              border: [false, false, false, false]
-            },
             {
               text: transformedData.street,
               style: "receipt-table-value",
-              border: [false, false, true, false]
+              border: [false, false, false, false]
             },
+
+             {
+              text: transformedData.gis,
+              style: "receipt-table-value",
+              border: [false, false, false, true]
+
+            },            
           ],
           [
 
@@ -3185,10 +3197,9 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             },
 
           ],
-
-          [
+           [
             {
-              text: "Location on Map",
+              text: "",
               style: "receipt-table-value",
               border: [true, false, false, false]
             },
@@ -3211,7 +3222,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
           ],
           [
             {
-              text: transformedData.gis,
+              text: '',
               style: "receipt-table-value",
               border: [true, false, false, true]
             },
@@ -3231,7 +3242,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, false, true, true]
             },
           ]
-
+ 
         ]
       },
       layout: borderLayout
