@@ -1,4 +1,5 @@
 import { withStyles } from "@material-ui/core/styles";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getPurpose } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
 import React, { Component } from "react";
@@ -16,6 +17,11 @@ const styles = theme => ({
 });
 
 class DocumentListContainer extends Component {
+  componentDidUpdate() {
+    const { ptDocumentsList, prepareFinalObject } = this.props;
+    const documents = get(ptDocumentsList, '[0].cards', []) || [];
+    prepareFinalObject('ptDocumentCount', documents.length);
+  }
   render() {
     const { ...rest } = this.props;
     return <DocumentList {...rest} />;
@@ -102,10 +108,16 @@ const mapStateToProps = state => {
   })
   return { ptDocumentsList, preparedFinalObject };
 };
+const mapDispatchToProps = dispatch => {
+  return {
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
+  };
+};
 
 export default withStyles(styles)(
   connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
   )(DocumentListContainer)
 );
