@@ -4168,7 +4168,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: "2. Occupant/Owner must obtain the final NOC from ﬁre department on completion of building construction before occupancy.",
+                text: "2. Occupant/Owner must obtain the final NOC from fire department on completion of building construction before occupancy.",
                 border: [true, false, true, false],            
                 alignment: "left",
                 margin: [10, 0, 0, 0],
@@ -4360,7 +4360,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: "6. Fire department reserves the right to withdraw this issued certiﬁcate, if any change in ﬁre/building layout plan is made without notice to ﬁre department.",
+                text: "6. Fire department reserves the right to withdraw this issued certificate, if any change in fire/building layout plan is made without notice to fire department.",
                 border: [true, false, true, false],            
                 alignment: "left",
                 margin: [10, 0, 0, 0],
