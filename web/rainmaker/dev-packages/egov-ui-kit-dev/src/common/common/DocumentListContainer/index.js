@@ -18,9 +18,12 @@ const styles = theme => ({
 
 class DocumentListContainer extends Component {
   componentDidUpdate() {
-    const { ptDocumentsList, prepareFinalObject } = this.props;
+    const { ptDocumentsList, prepareFinalObject, ptDocumentCount } = this.props;
     const documents = get(ptDocumentsList, '[0].cards', []) || [];
-    prepareFinalObject('ptDocumentCount', documents.length);
+    if (ptDocumentCount != documents.length) {
+      prepareFinalObject('ptDocumentCount', documents.length);
+    }
+
   }
   render() {
     const { ...rest } = this.props;
@@ -80,10 +83,14 @@ const mapStateToProps = state => {
     return documentTypes && Array.isArray(documentTypes) && documentTypes.length > 1 && documentTypes[1];
   })
 
-
   let ptDocumentsList = get(
     state,
     "screenConfiguration.preparedFinalObject.documentsContract",
+    []
+  );
+  let ptDocumentCount = get(
+    state,
+    "screenConfiguration.preparedFinalObject.ptDocumentCount",
     []
   );
   ptDocumentsList.map(documentList => {
@@ -106,7 +113,7 @@ const mapStateToProps = state => {
     })
     documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition))
   })
-  return { ptDocumentsList, preparedFinalObject };
+  return { ptDocumentsList, preparedFinalObject, ptDocumentCount };
 };
 const mapDispatchToProps = dispatch => {
   return {
