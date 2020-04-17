@@ -541,6 +541,10 @@ export const loadMdmsData = async tenantid => {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
       return item.code == tenantid;
     });
+
+    console.log('prasad ulbData',ulbData);
+
+
     /** START Corporation name generation logic */
     const ulbGrade = get(ulbData, "city.ulbGrade", "NA")
       ? getUlbGradeLabel(get(ulbData, "city.ulbGrade", "NA"))
@@ -556,6 +560,8 @@ export const loadMdmsData = async tenantid => {
     ).toUpperCase()} ${getTranslatedLabel(ulbGrade, localizationLabels)}`;
 
     /** END */
+
+    data.ulbname = get(ulbData, "name", "NA");
     data.corporationAddress = get(ulbData, "address", "NA");
     data.corporationContact = get(ulbData, "contactNumber", "NA");
     data.corporationWebsite = get(ulbData, "domainUrl", "NA");

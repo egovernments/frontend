@@ -2176,9 +2176,11 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
                     alignment: "center",
                   },
                   {
-                    text:  transformedData.areaType ==='Rural'? transformedData.corporationName: transformedData.city,
+                    //text:  transformedData.areaType ==='Rural'? transformedData.corporationName: transformedData.city,
+                    text:  `( ${ transformedData.ulbname} )`,
                     style: "receipt-logo-sub-header",
                     alignment: "center",
+
                   },
                   {
                     text: "FIRE SAFETY CERTIFICATE",
@@ -2310,7 +2312,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `Issued on ${transformedData.issuedDate} at ${transformedData.areaType ==='Rural'? transformedData.subDistrict: transformedData.city}`,
+                text: `Issued on ${transformedData.issuedDate} at ${transformedData.ulbname}`,
    
                     border: [true, false, true, false],            
                 alignment: "left"
@@ -2357,7 +2359,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.areaType ==='Rural'? transformedData.subDistrict: transformedData.city}.`,
+                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.ulbname}.`,
                 border: [true, false, true, false],            
                 alignment: "left"
               },            
@@ -3755,7 +3757,9 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
                     alignment: "center",
                   },
                   {
-                    text: `< ${transformedData.areaType ==='Rural'? transformedData.corporationName: transformedData.city} >`,
+                   // text: `< ${transformedData.areaType ==='Rural'? transformedData.corporationName: transformedData.city} >`,
+                  
+                    text:  `( ${transformedData.ulbname} )`,
                     style: "receipt-logo-sub-header",
                     alignment: "center",
                     fontSize:11
@@ -3889,7 +3893,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `Issued on ${transformedData.issuedDate} at ${transformedData.fireStationId}`,
+                text: `Issued on ${transformedData.issuedDate} at ${transformedData.ulbname}`,
    
                     border: [true, false, true, false],            
                 alignment: "left",
@@ -3938,7 +3942,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.areaType ==='Rural'? transformedData.subDistrict: transformedData.city}.`,
+                text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.ulbname}.`,
                 border: [true, false, true, false],            
                 alignment: "left",
                
