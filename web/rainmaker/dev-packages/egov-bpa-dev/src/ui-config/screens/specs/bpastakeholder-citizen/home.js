@@ -46,7 +46,20 @@ const cardItems = [
     icon: <BPANewPermitIcon />,
     route: {
       screenKey: "home",
-      jsonPath: "components.cityPickerDialog"
+      jsonPath: "components.cityPickerDialog",
+      value: "apply"
+    }
+  },
+  {
+    label: {
+      labelKey: "BPA_OC_COMMON_APPL_NEW_CONSTRUCTION",
+      labelName: "Occupancy Certificate New Building Construction"
+    },
+    icon: <BPANewPermitIcon />,
+    route: {
+      screenKey: "home",
+      jsonPath: "components.cityPickerDialog",
+      value: "ocapply"
     }
   },
   {

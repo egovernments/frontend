@@ -17,7 +17,7 @@ import {
   prepareFinalObject,
   initScreen
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import isUndefined from "lodash/isUndefined";
 import isEmpty from "lodash/isEmpty";
 import {
@@ -1412,16 +1412,6 @@ export const epochToYmdDate = et => {
     "-" +
     date.getUTCDate();
   return formattedDate;
-};
-
-export const getTodaysDateInYMD = () => {
-  let date = new Date();
-  //date = date.valueOf();
-  let month = date.getMonth() + 1;
-  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  date = `${date.getFullYear()}-${month}-${day}`;
-  // date = epochToYmdDate(date);
-  return date;
 };
 
 export const getNextMonthDateInYMD = () => {

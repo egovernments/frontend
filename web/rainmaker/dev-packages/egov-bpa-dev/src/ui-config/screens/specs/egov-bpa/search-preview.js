@@ -39,7 +39,7 @@ import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
 import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
-import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload } from "../utils/index";
+import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload, setProposedBuildingData } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -382,22 +382,32 @@ const setSearchResponse = async (
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   if (status && status == "INPROGRESS") {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
-        "visible",
-        true
-      )
-    );
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.firstStakeholder",
-        "visible",
-        true
-      )
-    );
+    let userInfo = JSON.parse(getUserInfo()), roles = get(userInfo, "roles"), isArchitect = false;
+    if (roles && roles.length > 0) {
+      roles.forEach(role => {
+        if (role.code === "BPA_ARCHITECT") {
+          isArchitect = true;
+        }
+      })
+    }
+    if(isArchitect) {
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.firstStakeholder",
+          "visible",
+          true
+        )
+      );
+    }
   }
 
   if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
@@ -520,6 +530,8 @@ const setSearchResponse = async (
     );
   };
 
+  setProposedBuildingData(state, dispatch);
+
   if(get(response, "Bpa[0].validityDate")) {
     dispatch(
       handleField(
@@ -537,6 +549,7 @@ const setSearchResponse = async (
       )
     );
   }
+
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
@@ -603,7 +616,7 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
       false
     );
     set(

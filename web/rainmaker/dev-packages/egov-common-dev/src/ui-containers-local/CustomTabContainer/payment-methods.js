@@ -5,6 +5,7 @@ import {
   getDateField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -140,8 +141,16 @@ export const onlineDetails = getCommonContainer({
       labelName: "dd/mm/yy",
       labelKey: "PAYMENT_TXN_DATE_PLACEHOLDER"
     },
+    pattern: getPattern("Date"),
+    errorMessage: "PAYMENT_TX_ERROR_MESSAGE",
     required: true,
-    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
+    isDOB: true,
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput",
+    props: {
+      inputProps: {
+        max: getTodaysDateInYMD()
+      }
+    }
   }),
   onlineIFSC: getTextField({
     label: {
@@ -287,8 +296,16 @@ export const poDetails = getCommonContainer({
       labelName: "dd/mm/yy",
       labelKey: "PAYMENT_TXN_DATE_PLACEHOLDER"
     },
+    pattern: getPattern("Date"),
+    errorMessage: "PAYMENT_TX_ERROR_MESSAGE",
+    isDOB: true,
     required: true,
-    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput",
+    props: {
+      inputProps: {
+        max: getTodaysDateInYMD()
+      }
+    }
   })
 });
 

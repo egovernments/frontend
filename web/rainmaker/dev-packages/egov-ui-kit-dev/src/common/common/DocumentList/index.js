@@ -403,6 +403,13 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
+  Object.keys(documentsUploadRedux).map(key=>{
+    let documentCode = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value||'';
+    let codes=documentCode&&documentCode.split('.');
+    if(codes&&codes.length==1&&codes[0].length>0){
+      documentsUploadRedux[key].dropdown.value="OWNER.REGISTRATIONPROOF."+documentCode;
+    }
+  })
   return { documentsUploadRedux, moduleName };
 };
 

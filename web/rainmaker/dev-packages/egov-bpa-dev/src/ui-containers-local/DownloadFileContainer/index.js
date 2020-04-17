@@ -25,6 +25,8 @@ class DownloadFileContainer extends Component {
             }
             else if (docs.wfState === "NOC_VERIFICATION_PENDING") {
               docs.createdBy = "BPA Noc Verifier"    
+            } else {
+              docs.createdBy = "BPA Architect"
             }
             data.push(docs);
           })

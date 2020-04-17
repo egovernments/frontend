@@ -74,6 +74,10 @@ export const searchApiCall = async (state, dispatch) => {
       ) {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
+      if(searchScreenObject.hasOwnProperty(key) &&
+      searchScreenObject[key].trim() === ""){
+       delete searchScreenObject[key] ;
+      }
     }
     let serviceObject = get(
       state.screenConfiguration.preparedFinalObject,

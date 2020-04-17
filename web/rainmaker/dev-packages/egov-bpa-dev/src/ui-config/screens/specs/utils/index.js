@@ -1262,7 +1262,7 @@ export const getCurrentFinancialYear = () => {
   return fiscalYr;
 };
 
-export const validateFields = (
+export const validateFields = (  
   objectJsonPath,
   state,
   dispatch,
@@ -3514,6 +3514,24 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_PENDING_FEE",
         localisationLabels
     );
+    case "CITIZEN_ACTION_PENDING_AT_DOC_VERIF":
+      return getLocaleLabels(
+        "Send Back From Doc Verification",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_DOC_VERIF",
+        localisationLabels
+    );
+    case "CITIZEN_ACTION_PENDING_AT_FI_VERIF":
+      return getLocaleLabels(
+        "Send Back From Field Inspection",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_FI_VERIF",
+        localisationLabels
+    );
+    case "CITIZEN_ACTION_PENDING_AT_NOC_VERIF":
+      return getLocaleLabels(
+        "Send Back From Noc Verification",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_NOC_VERIF",
+        localisationLabels
+    );
     }
 };
 
@@ -3613,15 +3631,14 @@ export const setNameOfUser = (action, state, dispatch) => {
 
 export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
   try {
-    let payload = null;
-    payload = await httpRequest(
+    let payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
       "_search",
       [],
       mdmsBody
     );
-    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    return payload;
   } catch (e) {
     console.log(e);
   }
@@ -4116,7 +4133,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
       set(
         action,
-        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
         true
       );
       dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
@@ -4158,7 +4175,9 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     }
     else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
       obj.createdBy = "BPA Noc Verifier"    
-    }
+    } else {
+      obj.createdBy = "BPA Architect"
+    }   
     documentsPreview.push(obj);
     return obj;
   });
@@ -4567,34 +4586,65 @@ const getFloorDetails = (index) => {
   }
 };
 
-export const setProposedBuildingData = async (state, dispatch) => {
+export const setProposedBuildingData = async (state, dispatch, action) => {
   const response = get(
     state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
     []
   );
-  if (response && response.length > 0) {
-    let tableData = await response.map((item, index) => (
-      {
-        [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
-        [getBpaTextToLocalMapping("Level")]: item.number,
-        [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-        [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-        [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-        [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
-      }));
+  let occupancyType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+    []
+  );
+  const BPA = get (
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    {}
+  );
+  
+  let subOccupancyType = occupancyType.filter(item => {
+    return item.active;
+  });
 
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
-        "props.data",
-        tableData
-      )
-    );
+  let tableData = [];
+  if (response && response.length > 0) {
+    for (var j = 0; j < response.length; j++) {
+      let title = `Block ${j + 1}`;
+      let floors = response[j] && response[j].building && response[j].building.floors;
+      let block = await floors.map((item, index) => (
+        {
+          [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+          [getBpaTextToLocalMapping("Level")]: item.number,
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+          [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+          [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+        }));
+      let occupancyTypeCheck = [], formatedSubOccupancyType = "";
+      if(BPA && BPA.blocks && BPA.blocks[j] && BPA.blocks[j].subOccupancyType) {
+        let sOccupancyType = (BPA.blocks[j].subOccupancyType).split(",");
+        sOccupancyType.forEach(subOcData => {
+          occupancyTypeCheck.push({
+            value : subOcData,
+            label : getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${subOcData}`)
+          });
+        });
+      }
+      
+      if(occupancyTypeCheck && occupancyTypeCheck.length) {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck });
+      } else {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title });
+      }
+
+    };
+    dispatch(prepareFinalObject("edcr.blockDetail", tableData));
+
     return tableData;
   }
-}
+} 
+
 
 export const getConditionsInPermitList = async (action, state, dispatch) => {
   let permitConditions = get(

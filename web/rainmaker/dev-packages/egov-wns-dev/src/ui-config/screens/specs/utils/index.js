@@ -555,7 +555,12 @@ export const getReceipt = async queryObject => {
 };
 
 export const convertEpochToDateAndHandleNA = dateEpoch => {
-  if (dateEpoch !== undefined && dateEpoch !== null && dateEpoch !== "") {
+  if (
+    dateEpoch !== undefined &&
+    dateEpoch !== null &&
+    dateEpoch !== "" &&
+    dateEpoch !== 0
+  ) {
     let convertedToDate = convertEpochToDate(dateEpoch);
     return convertedToDate;
   } else { return "NA"; }

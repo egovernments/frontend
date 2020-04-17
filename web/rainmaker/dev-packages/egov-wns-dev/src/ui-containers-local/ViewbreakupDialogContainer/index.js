@@ -42,7 +42,39 @@ const getMultiItem = (billingslabData, classes, style) => {
               fontSize: "14px",
               fontWeigt: 400,
               lineSpacing: "17px",
-              marginRight:"10px"
+              marginRight: "10px"
+            }}
+          />
+        </Grid>
+        <Grid sm={3} className={classes.rightAlign}>
+          <Label
+            label={`Rs ${item.estimateAmount}`}
+            style={{
+              color: "rgba(0, 0, 0, 0.8700000047683716)",
+              fontSize: "14px",
+              fontWeigt: 400,
+              lineSpacing: "17px"
+            }}
+          />
+        </Grid>
+      </Grid>
+    );
+  });
+};
+
+const getMultiItemForTax = (billingslabData, classes, style) => {
+  return billingslabData.map((item, index) => {
+    return (
+      <Grid sm={12} className={classes.container} container={true}>
+        <Grid sm={9}>
+          <LabelContainer
+            labelKey={item.taxHeadCode}
+            style={{
+              color: "rgba(0, 0, 0, 0.8700000047683716)",
+              fontSize: "16px",
+              fontWeigt: 400,
+              lineSpacing: "19px",
+              marginRight: "10px"
             }}
           />
         </Grid>
@@ -70,7 +102,7 @@ class ViewBreakupContainer extends React.Component {
       fontWeigt: 500,
       lineSpacing: "28px",
       marginTop: 25,
-      marginRight:10
+      marginRight: 5
     }
   };
 
@@ -210,25 +242,12 @@ class ViewBreakupContainer extends React.Component {
                 getGridItem(serviceTotal, classes)}
 
               {taxUnitData && taxUnitData.length > 0 && (
-                <div style={{ paddingBottom: "12px", marginTop: 20 }}>
-                  <LabelContainer
-                    labelKey="WS_TAX_HEADER"
-                    style={{
-                      color: "rgba(0, 0, 0, 0.8700000047683716)",
-                      fontSize: "16px",
-                      fontWeigt: 400,
-                      lineSpacing: "19px"
-                    }}
-                  />
-                </div>
+                getMultiItemForTax(taxUnitData, classes)
               )}
-              {taxUnitData &&
-                taxUnitData.length > 0 &&
-                getMultiItem(taxUnitData, classes)}
               <Divider className={classes.root} />
-              {taxUnitData &&
+              {/* {taxUnitData &&
                 taxUnitData.length > 0 &&
-                getGridItem(taxTotal, classes)}
+                getGridItem(taxTotal, classes)} */}
 
               {/* {serviceUnitData &&
                 serviceUnitData.length > 0 && */}

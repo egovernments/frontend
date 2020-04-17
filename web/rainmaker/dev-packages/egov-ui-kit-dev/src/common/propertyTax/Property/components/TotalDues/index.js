@@ -1,5 +1,6 @@
 import { downloadBill } from "egov-common/ui-utils/commons";
 import { Tooltip } from "egov-ui-framework/ui-molecules";
+import { routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import { withRouter } from "react-router-dom";
@@ -68,7 +69,8 @@ class TotalDues extends React.Component {
                 primary={true}
                 labelText="PT_TOTALDUES_PAY"
                 onClickAction={() => {
-                  history.push(`${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=PT`);
+                  routeToCommonPay(consumerCode, tenantId);
+                  // history.push(`${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=PT`);
                 }}
               />
             </div>

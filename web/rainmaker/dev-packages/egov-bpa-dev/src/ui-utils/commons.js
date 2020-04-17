@@ -229,6 +229,27 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     })
   }
 
+  let subOccupancyData = get(
+    state, "screenConfiguration.preparedFinalObject.edcr.blockDetail"
+  );
+  let BPADetails = get(
+    state, "screenConfiguration.preparedFinalObject.BPA"
+  );
+  let blocks = [];
+  subOccupancyData.forEach((block, index) => {
+    let arry = [];
+    block && block.occupancyType && block.occupancyType.length &&
+      block.occupancyType.forEach(occType => {
+        arry.push(occType.value);
+      })
+    blocks[index] = {};
+    blocks[index].subOccupancyType = {};
+    blocks[index].subOccupancyType = arry.join();
+    if(BPADetails.blocks && BPADetails.blocks[index] && BPADetails.blocks[index].id) {
+      blocks[index].id = BPADetails.blocks[index].id;
+    }
+  })
+
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let tenantId =
@@ -240,6 +261,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
     // set(payload, "additionalDetails", null);
     set(payload, "units", null);
+    set(payload, "blocks", blocks);
 
 
     let documents;
