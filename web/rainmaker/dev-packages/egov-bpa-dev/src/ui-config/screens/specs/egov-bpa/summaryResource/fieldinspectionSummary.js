@@ -67,7 +67,6 @@ const fieldInspectionMultiItem = () => {
           jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
           jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].date"
         },
-        required : true,
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -84,7 +83,6 @@ const fieldInspectionMultiItem = () => {
           jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
           jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].time"
         },
-        required : true,
         gridDefination: {
           xs: 12,
           sm: 12,
