@@ -137,7 +137,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
           )}`
         ),
         usageSubType: getMessageFromLocalization(
-          `FIRENOC_BUILDINGTYPE_${getTransformedLocale(
+          //`${getTransformedLocale(
+          `FIRENOC_BUILDINGSUBTYPE_${getTransformedLocale(
             get(building, "usageSubType", "NA")
           )}`
         ),
