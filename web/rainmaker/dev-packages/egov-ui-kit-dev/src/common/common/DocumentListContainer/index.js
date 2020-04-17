@@ -1,10 +1,10 @@
 import { withStyles } from "@material-ui/core/styles";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getPurpose } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import DocumentList from "../DocumentList";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const styles = theme => ({
   button: {
