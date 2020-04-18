@@ -421,11 +421,7 @@ class NocList extends Component {
         {documentsList &&
           documentsList.map(container => {
             return (
-              <div>
-                <LabelContainer
-                  labelKey={getTransformedLocale(container.title)}
-                  style={styles.documentTitle}
-                />
+              <div>                
                 {container.cards.map(card => {
                   return (
                     <div className={classes.documentContainer}>
