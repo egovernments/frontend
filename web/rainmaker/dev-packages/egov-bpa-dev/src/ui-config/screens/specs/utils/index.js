@@ -4072,8 +4072,6 @@ const documentMaping = async (state, dispatch, action,documentsPreview) => {
 }
 const prepareDocumentsView = async (state, dispatch, action, appState, isVisibleTrue) => {
   let documentsPreview = [];
-  debugger;
-  // Get all documents from response
   let BPA = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA",
@@ -4088,28 +4086,36 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   let uploadedAppDocuments = [];
   let otherDocuments = BPA.additionalDetails.documents ? jp.query(BPA,
     "$.additionalDetails.documents.*"
-  ):[];
-  let allDocuments = [
-   // ...buildingDocuments,
+  ) : [];
+  let allDocuments = [ 
     ...applicantDocuments,
     ...otherDocuments
   ];
 
-    let additionalDetail = BPA.additionalDetails, fieldinspectionreportdata = [{docs:[], questions:[]}], index=0,
-    fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
-    
-    if(additionalDetail && additionalDetail["fieldinspection_pending"] && additionalDetail["fieldinspection_pending"].length > 0) {
-     (additionalDetail["fieldinspection_pending"]).forEach(async (record, index) =>{
+  let additionalDetail = BPA.additionalDetails,
+     fieldinspectionreportdata = [],
+    index = 0,
+    fieldInspectionDetails,
+    fieldInspectionDocs = [],
+    fieldInspectionsQstions = [];
+  if (additionalDetail && additionalDetail["fieldinspection_pending"] && additionalDetail["fieldinspection_pending"].length > 0) {
+    (additionalDetail["fieldinspection_pending"]).forEach(async (record, index) => {
+          if(record.isDeleted === undefined || record.isDeleted != false) {
+            let recordIndex = fieldinspectionreportdata.length;
+            let fieldNumber = recordIndex+1;
+ 
+      fieldinspectionreportdata[recordIndex] = {
 
-        fieldinspectionreportdata[index]= { date : record.date?record.date:'', 
-                                            time: record.time?record.time:'',
-                                            questions: record.questions?record.questions:[]
-                                          }
-          fieldInspectionDocs = record.docs?record.docs:[];
-            console.log(fieldInspectionDocs,index,'fieldInspectionDocs');
-      if(fieldInspectionDocs && fieldInspectionDocs.length > 0) {
+        title: 'Field Inspection Report - ' + (fieldNumber).toString(),
+        date: record.date ? record.date : '',
+        time: record.time ? record.time : '',
+        questions: record.questions ? record.questions : []
+      }
+      fieldInspectionDocs = record.docs ? record.docs : [];
+
+      if (fieldInspectionDocs && fieldInspectionDocs.length > 0) {
         let fiDocumentsPreview = [];
-        fieldInspectionDocs.forEach(fiDoc => {        
+        fieldInspectionDocs.forEach(fiDoc => {
           fiDocumentsPreview.push({
             title: getTransformedLocale(fiDoc.documentType),
             fileStoreId: fiDoc.fileStoreId,
@@ -4117,70 +4123,63 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
           });
         });
         let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
-        if(fieldinspectionreportdata[index])
-        fieldinspectionreportdata[index].docs = fieldInspectionDocuments;
+        if (fieldinspectionreportdata[recordIndex])
+          fieldinspectionreportdata[recordIndex].docs = fieldInspectionDocuments;
 
-      }
-      // index++;
-    });
+      }     
+
+     } 
     
+    });   
 
-    console.log(fieldinspectionreportdata,'fieldinspectionreportdata');
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
-        true
-      );
-      dispatch(prepareFinalObject("fieldinspectionreportdata", fieldinspectionreportdata));
-      
-      
-    }
-    let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
-    let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-    allDocuments.map((doc, index) => {
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+      true
+    );
+    dispatch(prepareFinalObject("fieldinspectionreportdata", fieldinspectionreportdata));
+   
+
+  }
+  let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
+  let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+  allDocuments.map((doc, index) => {
     uploadedAppDocuments.push(doc);
     let obj = {};
     obj.title = getTransformedLocale(doc.documentType);
     obj.fileStoreId = doc.fileStoreId;
     obj.linkText = "View";
     obj.wfState = doc.wfState;
-    obj["link"] =
-      (fileUrls &&
-        fileUrls[doc.fileStoreId] &&
-        getFileUrl(fileUrls[doc.fileStoreId])) ||
+    obj["link"] = (fileUrls &&
+      fileUrls[doc.fileStoreId] &&
+      getFileUrl(fileUrls[doc.fileStoreId])) ||
       "";
-    obj["name"] =
-      (fileUrls[doc.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[doc.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
+    obj["name"] = (fileUrls[doc.fileStoreId] &&
+      decodeURIComponent(
+        getFileUrl(fileUrls[doc.fileStoreId])
+          .split("?")[0]
+          .split("/")
+          .pop()
+          .slice(13)
+      )) ||
       `Document - ${index + 1}`;
     if (doc.wfState === "SEND_TO_CITIZEN") {
       obj.createdBy = "BPA Architect"
-    }
-    else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
+    } else if (doc.wfState === "DOC_VERIFICATION_PENDING") {
       obj.createdBy = "BPA Document Verifier"
-    }
-    else if (doc.wfState === "FIELDINSPECTION_PENDING") {
-      obj.createdBy = "BPA Field Inspector"   
-    }
-    else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
-      obj.createdBy = "BPA Noc Verifier"    
+    } else if (doc.wfState === "FIELDINSPECTION_PENDING") {
+      obj.createdBy = "BPA Field Inspector"
+    } else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
+      obj.createdBy = "BPA Noc Verifier"
     }
     documentsPreview.push(obj);
     return obj;
   });
-  
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
-  
+
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-  if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
+  if ((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
   }
 };
