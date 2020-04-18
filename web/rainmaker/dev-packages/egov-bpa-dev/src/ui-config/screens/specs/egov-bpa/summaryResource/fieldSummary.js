@@ -1,12 +1,4 @@
-import {
-  getCommonGrayCard,
-  getCommonSubHeader,
-  getLabel,
-  getBreak,
-  getDateField,
-  getTimeField,
-  getPattern
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonGrayCard, getCommonSubHeader, getCommonContainer, getLabelWithValue, getLabel, getBreak, getDateField, getTimeField, getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
 import { documentDetails } from "../applyResource/documentDetails";
 import { changeStep } from "../applyResource/footer";
@@ -18,73 +10,88 @@ const getHeader = label => {
     componentPath: "DividerWithLabel",
     props: {
       className: "hr-generic-divider-label",
+     
       labelProps: {},
       dividerProps: {},
       label
     },
+     
     type: "array"
   };
 };
-
 
 export const fieldSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
     props: {
-      style: { marginBottom: "10px" }
+      style: {
+        marginBottom: "10px"
+      }
     },
-    children: {
-      header: {
-        gridDefination: {
-          xs: 8
-        },
-        ...getCommonSubHeader({
-          labelName: "Field Inspection",
-          labelKey: "BPA_FIELD_INSPECTION_DETAILS_TITLE"
-        })
-      },
-    }
+
   },
   fieldInspectionDetailsCard: {
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
+    
     props: {
       className: "applicant-summary",
       scheama: getCommonGrayCard({
-        fieldinspectiondate: getDateField({
-          label: {
-           labelName: "Inspection Date",
-          },
+        dateandtimeContainer: getCommonContainer({
+          header: getLabel(
+            "Field Inspection Report ",
+            "",
+            {
+              jsonPath: "fieldinspectionreportdata[0].title",
+            style: {
+             marginRight:"50px",
+             color:"#000",
+             fontWeight:"bold",
+             fontSize:"18px"
+            }
+            },
+          ),
+       
+          fieldinspectiondate: getDateField({
+            label: {
+              labelName: "Inspection Date",
+            },
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 3
+            },
+            props:{
+              disabled:true,
+            },
             pattern: getPattern("Date"),
             jsonPath: "fieldinspectionreportdata[0].date",
-            props: {
-              disabled: true,
-              /* style: {                
-                display: "inline-block",
-                width: "50%"               
-              } */
-            },
           }),
           fieldinspectiontime: getTimeField({
-          label: {
-            labelName: "Inspection Time",
-          },
+            label: {
+              labelName: "Inspection Time",
+            },
+            props:{
+              disabled:true
+            },
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 3
+            },
             jsonPath: "fieldinspectionreportdata[0].time",
-            props: {
-              disabled: true,
-              /* style: {                
-                display: "inline-block",
-                width: "50%"               
-              } */
-            }
           }),
-        checkListDetailsContainer: getHeader({
-          labelName: "Check List",
-          labelKey: "BPA_CHECK_LIST_DETAILS"
-        }),
-        break: getBreak(),
-        CheckListQuestions: getCommonGrayCard({
+
+
+          break: getBreak(),
+          checkListDetailsContainer: getHeader({
+            labelName: "Check List",
+             
+            
+          }),
+          break: getBreak(),
+          CheckListQuestions: getCommonGrayCard({
             body: {
               uiFramework: "custom-containers-local",
               moduleName: "egov-bpa",
@@ -92,32 +99,33 @@ export const fieldSummary = getCommonGrayCard({
               props: {
                 className: "noc-review-documents",
                 jsonPath: "fieldinspectionreportdata[0].questions",
-                 }
+               
+              },
             },
-        }),
-        documentsDetailsContainer: getHeader({
+          }),
+          documentsDetailsContainer: getHeader({
             labelName: "Documents",
-            labelKey: "BPA_FIELD_INSPECTION_DOCUMENTS"
-              }),
-        break: getBreak(), 
-        DocumentList: getCommonGrayCard({
+
+          }),
+          break: getBreak(),
+          DocumentList: getCommonGrayCard({
             body: {
               uiFramework: "custom-containers-local",
               moduleName: "egov-bpa",
               componentPath: "DownloadFileContainer",
-              props: {  
+              props: {
                 className: "noc-review-documents",
                 jsonPath: "fieldinspectionreportdata[0].docs",
               }
             },
+          }),
         }),
       }),
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      prefixSourceJsonPath:
-        "children.cardContent.children",
-      afterPrefixJsonPath:  "children.cardContent.children.body",
+      prefixSourceJsonPath: "children.cardContent.children.dateandtimeContainer.children",
+      afterPrefixJsonPath: "children.cardContent.children.body",
       sourceJsonPath: "fieldinspectionreportdata",
     },
     type: "array"
