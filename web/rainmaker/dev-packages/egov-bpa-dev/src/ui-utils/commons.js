@@ -230,10 +230,10 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         arry.push(occType.value);
       })
     blocks[index] = {};
-    blocks[index].subOccupancyType = {};
-    blocks[index].subOccupancyType = arry.join();
-    if(BPADetails.blocks && BPADetails.blocks[index] && BPADetails.blocks[index].id) {
-      blocks[index].id = BPADetails.blocks[index].id;
+    blocks[index].usageCategory = {};
+    blocks[index].usageCategory = arry.join();
+    if(BPADetails.units && BPADetails.units[index] && BPADetails.units[index].id) {
+      blocks[index].id = BPADetails.units[index].id;
     }
   })
 
@@ -247,8 +247,8 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     set(payload, "action", status);
 
     // set(payload, "additionalDetails", null);
-    set(payload, "units", null);
-    set(payload, "blocks", blocks);
+    // set(payload, "units", null);
+    set(payload, "units", blocks);
 
     let documents;
     if (requiredDocuments && requiredDocuments.length > 0) {
