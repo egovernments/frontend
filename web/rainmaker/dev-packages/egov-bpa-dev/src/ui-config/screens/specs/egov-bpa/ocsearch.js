@@ -35,20 +35,6 @@ const header = getCommonHeader({
   labelKey: "OC"
 });
 
-// const pageResetAndChange = (state, dispatch) => {
-//   dispatch(
-//     prepareFinalObject("BPA's", [{ "bpaDetails.bpaType": "NEW" }])
-//   );
-//   // dispatch(setRoute("/tradelicence/apply"));
-// };
-
-// const startApplyFlow = (state, dispatch) => {
-//   dispatch(prepareFinalObject("BPAs", []));
-//   dispatch(prepareFinalObject("scrutinyDetails", {}));
-//   const applyUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/citySelection` : `/egov-bpa/citySelection`;
-//   dispatch(setRoute(applyUrl));
-// };
 
 const getMdmsData = async (state, dispatch) => {
  
@@ -127,19 +113,7 @@ const OCSearchAndResult = {
       );
       // getMdmsData(state,dispatch);
     }
-    // getRequiredDocData(action, state, dispatch).then(() => {
-    //   let documents = get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.searchScreenMdmsData.BPA.Documents",
-    //     []
-    //   );
-    //   set(
-    //     action,
-    //     "screenConfig.components.adhocDialog.children.popup",
-    //     // getRequiredDocuments(documents)
-    //   );
-    // });
-    //for service and app type
+  
     getTenantMdmsData(action, state, dispatch);
     return action;
   },
