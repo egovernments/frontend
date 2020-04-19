@@ -2869,7 +2869,7 @@ const riskType = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
   );
-  dispatch(prepareFinalObject("BPA.blocks", [block]));
+  // dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
     if (
       plotArea < riskType[1].toPlotArea &&
