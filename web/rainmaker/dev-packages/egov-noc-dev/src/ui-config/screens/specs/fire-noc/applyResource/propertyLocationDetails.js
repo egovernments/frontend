@@ -12,7 +12,10 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  getTenantId,
+  localStorageGet
+} from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -278,16 +281,19 @@ export const propertyLocationDetails = getCommonCard(
             "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
             []              );
 
+          console.log("districtList", districtList);
+
           const districtTenantMap =districtList.map((item)=>{
             return {
               name:item.city.districtName,
               //code:item.code
-              code:item.city.districtTenantCode
+              code:item.city.districtTenantCode           
+
             }
 
           });
 
-          //console.log("districtTenantMap",districtTenantMap); 
+         console.log("districtTenantMap",districtTenantMap); 
 
           const fireStationsList = get(
             state,
@@ -295,40 +301,45 @@ export const propertyLocationDetails = getCommonCard(
             []
           );
 
-          //console.log("fireStationsList",fireStationsList);
+          console.log("fireStationsList",fireStationsList);
 
 
-          const districtlist=[];
+          const districtlistRural=[];
 
-           for(var i=0;i< fireStationsList.length;i++)
+         // debugger
+
+   /*          for(var i=0;i< fireStationsList.length;i++)
           {
             for(var j=0;j<districtTenantMap.length;j++)
             {
-              if(districtTenantMap[j].code==fireStationsList[i].baseTenantId)
-              {
-                
-                districtlist.push({
+              if(districtTenantMap[j].code===fireStationsList[i].baseTenantId)
+              {                
+                districtlistRural.push({
                   code:districtTenantMap[j].code                  
                 })
               }
             }
-          }   
+          } 
+   */
 
-         /* for (let i=0;i<districtTenantMap.length;i++)
+
+         for (let i=0;i<districtTenantMap.length;i++)
           {
-            districtlist.push({
+            districtlistRural.push({
 
-              code:districtTenantMap[i].name,
+              code:districtTenantMap[i].code,
               //name:districtTenantMap[i].name
 
             })
 
-          }      */     
+          }       
+          
+  
  
-          //console.log("districtlist",districtlist); 
+         console.log("districtlist",districtlistRural); 
 
-          const unqDistrictList=districtlist.filter( 
-            (ele, ind) => ind === districtlist.findIndex( elem => elem.code === ele.code)
+          const unqDistrictList=districtlistRural.filter( 
+            (ele, ind) => ind === districtlistRural.findIndex( elem => elem.code === ele.code)
           );
 
           console.log("unique districtlist",unqDistrictList); 
@@ -345,6 +356,8 @@ export const propertyLocationDetails = getCommonCard(
               null
             )
           ); */
+
+          
           dispatch(
             handleField(
               "apply",
@@ -386,7 +399,7 @@ export const propertyLocationDetails = getCommonCard(
 
           const districtlist=[];
 
-           for(var i=0;i< fireStationsList.length;i++)
+      /*    for(var i=0;i< fireStationsList.length;i++)
           {
             for(var j=0;j<districtTenantMap.length;j++)
             {
@@ -398,18 +411,19 @@ export const propertyLocationDetails = getCommonCard(
                 })
               }
             }
-          }   
+          }  */  
 
-         /* for (let i=0;i<districtTenantMap.length;i++)
+
+         for (let i=0;i<districtTenantMap.length;i++)
           {
             districtlist.push({
 
-              code:districtTenantMap[i].name,
+              code:districtTenantMap[i].code,
               //name:districtTenantMap[i].name
 
             })
 
-          }      */     
+          }         
  
           //console.log("districtlist",districtlist); 
 
@@ -527,7 +541,7 @@ export const propertyLocationDetails = getCommonCard(
           localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
-          },
+          }, 
           label: {
             labelName: "District Name",
             labelKey: "NOC_DISTRICT_LABEL"
@@ -560,16 +574,26 @@ export const propertyLocationDetails = getCommonCard(
               "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
               []
             );
+            
+            console.log("fireStationsList", fireStationsList);
+
             const districtData= get(
               state.screenConfiguration,
               "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
               []
             );
+
+            console.log("districtData", districtData);
+
+         
+
             let districtlist = districtData.filter((districtlists)=>{
              
                 return districtlists.city.districtTenantCode===action.value
               
-            });
+            });       
+
+            
 
            console.log("tenanats list",districtlist );
 
@@ -580,6 +604,8 @@ export const propertyLocationDetails = getCommonCard(
              let urbanids = districtlist.map((districtlists)=>{             
               return districtlists.code          
              });
+
+
 
             console.log("tenant ids", urbanids); 
             
@@ -640,6 +666,40 @@ export const propertyLocationDetails = getCommonCard(
 
           if( value === 'Urban')
           {
+
+            const ulblist=[]; 
+
+            const firestationtenantidlist=[];
+
+            const fireStations = [];
+     
+           for(var i=0;i<tenantids.length;i++)
+            {
+             const fireStations = fireStationsList.filter(firestation => {       
+                               
+              return tenantids.includes(firestation.baseTenantId);   
+
+                // return tenantids[i].indexOf(firestation.baseTenantId) !== -1 
+
+                // return firestation.baseTenantId === tenantids[i]; 
+
+                //return 'code' in districtlist[i];
+
+              }); 
+
+              if(fireStations[i]){
+
+                // firestationtenantidlist.push({code:fireStations[0].baseTenantId}); 
+  
+                for(var j=0;j<fireStations[i].ulb.length;j++){
+
+                //subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
+
+                     ulblist.push(fireStations[i].ulb[j]);  
+                  }
+                }
+
+            }  
              
           
             dispatch(
@@ -647,7 +707,7 @@ export const propertyLocationDetails = getCommonCard(
                 "apply",
                 "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyCity",
                 "props.data",
-                urbanlist
+                ulblist
               )
             );
 

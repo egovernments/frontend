@@ -321,7 +321,8 @@ export const NOCApplication = getCommonCard({
 
         const districtlist=[];
 
-         for(var i=0;i< fireStationsList.length;i++)
+     /* 
+     for(var i=0;i< fireStationsList.length;i++)
         {
           for(var j=0;j<districtTenantMap.length;j++)
           {
@@ -333,7 +334,20 @@ export const NOCApplication = getCommonCard({
               })
             }
           }
-        }   
+        }  
+        
+        */
+        
+        for (let i=0;i<districtTenantMap.length;i++)
+        {
+          districtlist.push({
+
+            code:districtTenantMap[i].code,
+            //name:districtTenantMap[i].name
+
+          })
+
+        } 
 
    
 
@@ -408,7 +422,7 @@ export const NOCApplication = getCommonCard({
 
         const districtlist=[];
 
-         for(var i=0;i< fireStationsList.length;i++)
+    /*      for(var i=0;i< fireStationsList.length;i++)
         {
           for(var j=0;j<districtTenantMap.length;j++)
           {
@@ -420,18 +434,18 @@ export const NOCApplication = getCommonCard({
               })
             }
           }
-        }   
+        }    */
 
-       /* for (let i=0;i<districtTenantMap.length;i++)
+       for (let i=0;i<districtTenantMap.length;i++)
         {
           districtlist.push({
 
-            code:districtTenantMap[i].name,
+            code:districtTenantMap[i].code,
             //name:districtTenantMap[i].name
 
           })
 
-        }      */     
+        }       
 
         //console.log("districtlist",districtlist); 
 
@@ -531,11 +545,18 @@ export const NOCApplication = getCommonCard({
           "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
           []
         );
+        
+        console.log("fireStationsList", fireStationsList);
+
         const districtData= get(
           state.screenConfiguration,
           "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
           []
         );
+
+        console.log("districtData", districtData);
+
+
         let districtlist = districtData.filter((districtlists)=>{
          
             return districtlists.city.districtTenantCode===action.value
@@ -561,12 +582,15 @@ export const NOCApplication = getCommonCard({
         for (let i=0;i<urbanids.length;i++)
           {
                 urbanlist.push({
+                
+                  code:urbanids[i],
 
-                 code:urbanids[i],
                       })
             }
 
-        console.log(urbanlist);
+        console.log("urbanlist",urbanlist);
+
+
 
         const subDistrictLists=[]; 
 
@@ -604,10 +628,45 @@ export const NOCApplication = getCommonCard({
       
         let value = get(
           state.screenConfiguration.preparedFinalObject,
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+          "searchScreen.areaType",[]);
 
       if( value === 'Urban')
       {
+
+        const ulblist=[]; 
+
+        const firestationtenantidlist=[];
+
+        const fireStations = [];
+ 
+       for(var i=0;i<tenantids.length;i++)
+        {
+         const fireStations = fireStationsList.filter(firestation => {       
+                           
+          return tenantids.includes(firestation.baseTenantId);   
+
+            // return tenantids[i].indexOf(firestation.baseTenantId) !== -1 
+
+            // return firestation.baseTenantId === tenantids[i]; 
+
+            //return 'code' in districtlist[i];
+
+          }); 
+
+          if(fireStations[i]){
+
+            // firestationtenantidlist.push({code:fireStations[0].baseTenantId}); 
+
+            for(var j=0;j<fireStations[i].ulb.length;j++){
+
+            //subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
+
+                 ulblist.push(fireStations[i].ulb[j]);  
+              }
+            }
+
+        }  
+         
          
       
         dispatch(
@@ -615,7 +674,7 @@ export const NOCApplication = getCommonCard({
             "search",
             "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.citySearch",
            "props.data",
-            urbanlist
+           ulblist
           )
         );
 
