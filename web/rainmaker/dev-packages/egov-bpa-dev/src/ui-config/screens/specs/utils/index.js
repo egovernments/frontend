@@ -4134,7 +4134,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
       set(
         action,
-        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
         true
       );
       dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
@@ -4176,13 +4176,9 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     }
     else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
       obj.createdBy = "BPA Noc Verifier"    
-    } else if(doc.wfState === "BACK_FROM_DOC_VERIFICATION") {
-      obj.createdBy = "Back From Doc Verifier" 
-    } else if(doc.wfState === "BACK_FROM_FI_VERIFICATION") {
-      obj.createdBy = "Back From Field Inspector" 
-    } else if(doc.wfState === "BACK_FROM_NOC_VERIFICATION") {
-      obj.createdBy = "Back From Noc Verifier" 
-    }
+    } else {
+      obj.createdBy = "BPA Architect"
+    }   
     documentsPreview.push(obj);
     return obj;
   });

@@ -446,23 +446,24 @@ const setSearchResponse = async (
           false
         )
       )
-    }
-    dispatch(
-      handleField(
+    } else {
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
         "search-preview",
-        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.citizen",
         "visible",
         true
+        )
       )
-    );
-    dispatch(
-      handleField(
-      "search-preview",
-      "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.citizen",
-      "visible",
-      true
-    )
-  )
+    }
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
@@ -616,7 +617,7 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
       false
     );
     set(

@@ -186,7 +186,7 @@ export const proposedBuildingDetails = getCommonCard({
                 uiFramework: "custom-containers-local",
                 moduleName: "egov-bpa",
                 componentPath: "AutosuggestContainer",
-                required: true,
+                // required: true,
                 props: {
                   style: {
                     width: "100%",
@@ -209,7 +209,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelsFromLocalisation: true,
                   suggestions: [],
                   fullwidth: true,
-                  required: true,
+                  // required: true,
                   isMulti: true,
                   inputLabelProps: {
                     shrink: true
@@ -418,7 +418,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
             labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_PLACEHOLDER"
           },
           pattern: getPattern("Amount"),
-          required: true,
+          // required: true,
           jsonPath: "BPA.additionalDetails.annualExpectedExpenditure",
           gridDefination: {
             xs: 12,
