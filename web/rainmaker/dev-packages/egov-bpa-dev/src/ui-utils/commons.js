@@ -514,14 +514,14 @@ export const prepareNOCUploadData = (state, dispatch) => {
 };
 
 export const prepareOwnershipType = response => {
-  console.log(response);
-  // Handle applicant ownership dependent dropdowns
-  let ownershipCategory = get(response, "BPA.ownerShipType");
-  set(
-    response,
-    "BPA.ownershipCategory",
-    ownershipCategory == undefined ? "SINGLE" : ownershipType.split(".")[0]
-  );
+  // console.log(response);
+  // // Handle applicant ownership dependent dropdowns
+  // let ownershipCategory = get(response, "BPA.ownerShipType");
+  // set(
+  //   response,
+  //   "BPA.ownershipCategory",
+  //   ownershipCategory == undefined ? "SINGLE" : ownershipType.split(".")[0]
+  // );
   return response;
 };
 

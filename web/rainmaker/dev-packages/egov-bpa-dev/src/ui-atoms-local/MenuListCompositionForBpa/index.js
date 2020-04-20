@@ -116,7 +116,7 @@ class MenuListCompositionForBpa extends React.Component {
   }
 }
 
-MenuListComposition.propTypes = {
+MenuListCompositionForBpa.propTypes = {
   classes: PropTypes.object.isRequired
 };
 

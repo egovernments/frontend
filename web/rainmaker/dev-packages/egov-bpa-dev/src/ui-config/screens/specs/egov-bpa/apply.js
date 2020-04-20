@@ -346,7 +346,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 .pop()
                 .slice(13)
             )) ||
-          `Document - ${index + 1}`;
+          `Document - ${ 1}`;
           bpaDoc.dropDownValues = {};
           bpaDoc.dropDownValues.value =  upDoc.documentType;
           if(bpaDoc.previewdocuments ){
