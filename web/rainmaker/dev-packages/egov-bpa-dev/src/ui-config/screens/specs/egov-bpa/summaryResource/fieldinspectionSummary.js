@@ -7,11 +7,17 @@ import {
   getBreak,
   getDateField,
   getTimeField,
-  getCommonHeader
+  getCommonTitle,
+  getCommonHeader,
+  getPattern,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
-import { getTransformedLocale, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {
+  getTransformedLocale,
+  getQueryArg,
+} from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
+
 
 const getHeader = (label) => {
   return {
@@ -28,36 +34,10 @@ const getHeader = (label) => {
   };
 };
 export const fieldinspectionSummary = getCommonGrayCard({
-  header: {
-    uiFramework: "custom-atoms",
-    componentPath: "Container",
-    props: {
-      style: { marginBottom: "10px" },
-    },
-    children: {
-      header: {
-        gridDefination: {
-          xs: 8,
-        },
-        ...getCommonSubHeader({
-          labelName: "Field Inspection Report",
-        }),
-      },
-      editSection: {
-        componentPath: "Button",
-        props: {
-          color: "primary",
-          style: {
-            marginTop: "-10px",
-            marginRight: "-18px",
-          },
-        },
-        gridDefination: {
-          xs: 4,
-          align: "right",
-        },
-      },
-    },
+
+  addItemLabel: {
+    LabelName: "ADD ANOTHER FIELD INSPECTION REPORT",
+    labelKey: "ADD_ANOTHER_FIELD_INSPECTION_REPORT"
   },
   fieldInspectionDetailsCard: {
     uiFramework: "custom-containers",
@@ -66,14 +46,24 @@ export const fieldinspectionSummary = getCommonGrayCard({
       className: "applicant-summary",
       scheama: getCommonGrayCard({
         fieldDetails: getCommonContainer({
-         
-          headerContainer:getCommonHeader({
-            label:{
-              labelName:"Field Inspection - ",
+          header: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            props: {
+              style: { marginBottom: "10px" },
             },
-            headerJsonPath:"BPA.additionalDetails.fieldinspection_pending[0]"
-          }),
-          
+            children: {
+              header: {
+                gridDefination: {
+                  xs: 8,
+                },
+                ...getCommonSubHeader({
+                  labelName: "Field Inspection ",
+                }),
+              },
+    
+            },
+          },
           fieldinspectiondate: getDateField({
             label: {
               labelName: "Inspection Date",
@@ -158,15 +148,18 @@ export const fieldinspectionSummary = getCommonGrayCard({
           },
         }),
       }),
+      addItemLabel: {
+        labelName: "ADD ANOTHER FIELD INSPECTION REPORT",
+      },
       items: [],
-      hasAddItem: true,
-      //onFieldChange: addItemToState,
+      hasAddItem: true,      
       isReviewPage: false,
       prefixSourceJsonPath:
-        "children.cardContent.children.fieldDetails.children",
-      //afterPrefixJsonPath: "children.value.children.key",
-      //jsonPathUpdatePrefix:"BPA.additionalDetails.fieldinspection_pending",
+        "children.cardContent.children.fieldDetails.children",      
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
+      headerName:"Field Inspection Report ",
+      headerJsonPath:  "children.cardContent.children.fieldDetails.children.header.children.header.children.key.props.labelName",
+      
     },
     type: "array",
   },
