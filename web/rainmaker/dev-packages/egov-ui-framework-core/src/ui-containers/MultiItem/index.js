@@ -261,10 +261,10 @@ class MultiItem extends React.Component {
         {hasAddItem !== false && (
           <Container style={{ marginTop: "8px" }}>
             <Item xs={12} align="right">
-              {/* <Button onClick={e => addItem()} color="primary">
+              <Button onClick={e => addItem()} color="primary">
                 <Icon iconName="add" />
                 <LabelConatiner labelName={labelName} labelKey={labelKey} />
-              </Button> */}
+              </Button>
             </Item>
           </Container>
         )}
