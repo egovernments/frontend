@@ -108,7 +108,7 @@ const getCorporationName = (corporationName, actualAddress) => {
   }
 };
 
-const getReceiptData = (transformedData, ulbLogo) => {
+const getReceiptData = (transformedData={}, ulbLogo) => {
   let owners = transformedData.owners.map(owner => [
     {
       text: getLocaleLabels("Owner Name", "TL_LOCALIZATION_OWNER_NAME"),
@@ -856,7 +856,7 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
                       "TL_LOCALIZATION_TRADE_LICENSE_CERTIFICATE"
                     ),
                     style: "receipt-logo-sub-header",
-                  
+
                   }
                 ],
                 alignment: "center",
@@ -873,13 +873,13 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
         },
         layout: {}
       },
-      
+
       {
         style: "noctable",
           table: {
             widths: [
               "70%",
-              "30%"             
+              "30%"
             ],
             body: [
               [
@@ -900,7 +900,7 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
                           text: transformedData.licenseNumber
                         }
                       ]
-                    },  
+                    },
                     {
                       style: "tl-certificate-data-2",
                       columns: [
@@ -916,7 +916,7 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
                           text: transformedData.oldLicenseNumber
                         }
                       ]
-                    },    
+                    },
                     {
                       style: "tl-certificate-data-2",
                       columns: [
@@ -981,16 +981,16 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
                         }
                       ]
                     }
-                    
+
                   ],
                 },
-                
-              
-              ]   
-            ]    
+
+
+              ]
+            ]
           },
         layout: noborder
-      }, 
+      },
       {
         style: "tl-certificate-data-2",
         columns: [
@@ -1006,7 +1006,7 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
             text: transformedData.oldLicenseNumber
           }
         ]
-      },    
+      },
       {
         style: "tl-certificate-data-2",
         columns: [
@@ -1236,7 +1236,7 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
           }
         ]
       },
-      
+
         {
           image: qrcode,
           width: 120,
@@ -1258,11 +1258,11 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
               {
                 text: `${transformedData.auditorName}, ${transformedData.designation}`
               },
-              
+
             ],
             alignment: "left"
           },
-          
+
           {
             text: [
               {
@@ -1275,7 +1275,7 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
             ],
             alignment: "right"
           },
-          
+
         ]
       },
       {
@@ -1691,7 +1691,7 @@ const getACKData = (transformedData, ulbLogo) => {
           }
         ]
       },
-      
+
       // {
       //   style: "tl-certificate-data-2",
       //   columns: [
@@ -1739,9 +1739,9 @@ const getACKData = (transformedData, ulbLogo) => {
       //       text: transformedData.bpl
       //     }
       //   ]
-      // }         
-        
-      
+      // }
+
+
       // {
       //   style: "tl-certificate-data-2",
       //   columns: [
