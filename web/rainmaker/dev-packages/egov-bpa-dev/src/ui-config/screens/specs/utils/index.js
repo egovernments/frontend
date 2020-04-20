@@ -2869,7 +2869,7 @@ const riskType = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
   );
-  dispatch(prepareFinalObject("BPA.blocks", [block]));
+  // dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
     if (
       plotArea < riskType[2].toPlotArea &&
@@ -4623,8 +4623,8 @@ export const setProposedBuildingData = async (state, dispatch, action) => {
           [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
         }));
       let occupancyTypeCheck = [], formatedSubOccupancyType = "";
-      if(BPA && BPA.blocks && BPA.blocks[j] && BPA.blocks[j].subOccupancyType) {
-        let sOccupancyType = (BPA.blocks[j].subOccupancyType).split(",");
+      if(BPA && BPA.units && BPA.units[j] && BPA.units[j].usageCategory) {
+        let sOccupancyType = (BPA.units[j].usageCategory).split(",");
         sOccupancyType.forEach(subOcData => {
           occupancyTypeCheck.push({
             value : subOcData,

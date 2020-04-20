@@ -335,25 +335,25 @@ export const abstractProposedBuildingDetails = getCommonCard({
             }
           })
         },
-        isCharitableTrustBuilding: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-bpa",
-          componentPath: "BpaCheckboxContainer",
-          jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding",
-          props: {
-            label: {
-              labelName: "Is Charitable TrustBuilding ?",
-              labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
-            },
-            jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding"
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          type: "array"
-        },
+        // isCharitableTrustBuilding: {
+        //   uiFramework: "custom-containers-local",
+        //   moduleName: "egov-bpa",
+        //   componentPath: "BpaCheckboxContainer",
+        //   jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding",
+        //   props: {
+        //     label: {
+        //       labelName: "Is Charitable TrustBuilding ?",
+        //       labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
+        //     },
+        //     jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding"
+        //   },
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 12,
+        //     md: 6
+        //   },
+        //   type: "array"
+        // },
         numOfFloors: {
           ...getTextField({
             label: {
@@ -372,24 +372,24 @@ export const abstractProposedBuildingDetails = getCommonCard({
             }
           })
         },
-        isAffordableHousingScheme: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-bpa",
-          componentPath: "BpaCheckboxContainer",
-          props: {
-            label: {
-              labelName: "Is Affordable Housing Scheme ?",
-              labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
-            },
-            jsonPath: "BPA.additionalDetails.isAffordableHousingScheme"
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          type: "array"
-        },
+        // isAffordableHousingScheme: {
+        //   uiFramework: "custom-containers-local",
+        //   moduleName: "egov-bpa",
+        //   componentPath: "BpaCheckboxContainer",
+        //   props: {
+        //     label: {
+        //       labelName: "Is Affordable Housing Scheme ?",
+        //       labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
+        //     },
+        //     jsonPath: "BPA.additionalDetails.isAffordableHousingScheme"
+        //   },
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 12,
+        //     md: 6
+        //   },
+        //   type: "array"
+        // },
         highFromGroundLevel: {
           ...getTextField({
             label: {
@@ -408,24 +408,24 @@ export const abstractProposedBuildingDetails = getCommonCard({
             }
           })
         },
-        annualExpectedExpenditure: getTextField({
-          label: {
-            labelName: "Annual Expected Expenditure",
-            labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Annual Expected Expenditure",
-            labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_PLACEHOLDER"
-          },
-          pattern: getPattern("Amount"),
-          // required: true,
-          jsonPath: "BPA.additionalDetails.annualExpectedExpenditure",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          }
-        }),
+        // annualExpectedExpenditure: getTextField({
+        //   label: {
+        //     labelName: "Annual Expected Expenditure",
+        //     labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_LABEL"
+        //   },
+        //   placeholder: {
+        //     labelName: "Enter Annual Expected Expenditure",
+        //     labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_PLACEHOLDER"
+        //   },
+        //   pattern: getPattern("Amount"),
+        //   required: true,
+        //   jsonPath: "BPA.additionalDetails.annualExpectedExpenditure",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 12,
+        //     md: 6
+        //   }
+        // }),
       })
 
     }
