@@ -1175,6 +1175,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
   let dd = {
     defaultStyle: {
       font: "raavi",
+
      
     },
     content: [
@@ -2257,7 +2258,11 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `NOC No: ${transformedData.fireNOCNumber}`,
+                //text: `NOC No: ${transformedData.fireNOCNumber}`,
+                text: [  "NOC No:" , 
+                { text: `${transformedData.fireNOCNumber}`, 
+                bold:true },  
+                ],
                 border: [true, false, false, false],            
                 alignment: "left",
                 style:"noc-table-nocnumber"
@@ -2295,7 +2300,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `                        Certified that the ${transformedData.buildings[0].name} at ${transformedData.address}comprised of ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor) owned/occupied by ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building/premises is fit for occupancy group Assembly subdivision D-2 (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
+                text: `                        Certified that the ${transformedData.buildings[0].name} at ${transformedData.address}comprised of ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor) owned/occupied by ${transformedData.owners[0].name} have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ${transformedData.issuedDate} in the presence of ${transformedData.owners[0].name} (Name of the owner or his representative) and that the building/premises is fit for occupancy group ${transformedData.NBCGroup} subdivision ${transformedData.NBCSubGroup} (As per NBC) for period of one year from issue date. Subject to the following conditions.`,
                 border: [true, false, true, false],            
                 alignment: "justify",
                 preserveLeadingSpaces: true
@@ -2346,7 +2351,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `                        ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਜੋ ਿਕ ${transformedData.address}  ਸਮੇਤ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ${transformedData.owners[0].name} ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ${transformedData.issuedDate} ਮੋਜੂਦਗੀ ਿਵੱਚ ${transformedData.owners[0].name} (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group Assembly subdivision D-2 (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।`,
+                text: `                        ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਜੋ ਿਕ ${transformedData.address}  ਸਮੇਤ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ${transformedData.owners[0].name} ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ${transformedData.issuedDate} ਮੋਜੂਦਗੀ ਿਵੱਚ ${transformedData.owners[0].name} (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group ${transformedData.NBCGroup} subdivision ${transformedData.NBCSubGroup} (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ਇੱਕ ਸਾਲ ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।`,
                 border: [true, false, true, false],            
                 alignment: "justify",
                 preserveLeadingSpaces: true
@@ -2982,8 +2987,11 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
         body: [
           [
             {
-              //text: "NOC No ".transformedData.fireNOCNumber,
-              text: `NOC No: ${transformedData.fireNOCNumber}`,
+            //  text: `NOC No: ${transformedData.fireNOCNumber}`,
+              text: [  "NOC No:" , 
+              { text: `${transformedData.fireNOCNumber}`, 
+              bold:true },  
+               ],
               border: [false, false, false, false],
               //style: "noc-table-key"
               alignment: "left"
@@ -3897,7 +3905,10 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `NOC No: ${transformedData.fireNOCNumber}`,
+                text: [  "NOC No:" , 
+                  { text: `${transformedData.fireNOCNumber}`, 
+                  bold:true },  
+                ],
                 border: [true, false, false, false],            
                 alignment: "left"
  
@@ -3934,7 +3945,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             [
              
               {
-                text: `                        Certified that the ${transformedData.buildings[0].name} at ${transformedData.address} has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group Educational subdivision B-1 (as per NBC).`,
+                text: `                        Certified that the ${transformedData.buildings[0].name} at ${transformedData.address} has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} basements and ${transformedData.buildings[0].uoms.NO_OF_FLOORS} (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group ${transformedData.NBCGroup} subdivision ${transformedData.NBCSubGroup} (as per NBC).`,
                 border: [true, false, true, false],            
                 alignment: "justify",
                 textIndent : 50,
@@ -3986,7 +3997,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
            
             [            
               {
-                text: `                        ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਪਤਾ ${transformedData.address} ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ  ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ  ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ Educational ਸਬਡਵੀਜਨ B-1 ਿਵੱਚ ਪੈਦਾ ਹੈ।` ,
+                text: `                        ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ${transformedData.buildings[0].name} ਪਤਾ ${transformedData.address} ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ  ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ${transformedData.buildings[0].uoms.NO_OF_BASEMENTS} ਬੇਸਮਟ ਅਤੇ ${transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING} ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ  ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ ${transformedData.NBCGroup} ਸਬਡਵੀਜਨ ${transformedData.NBCSubGroup} ਿਵੱਚ ਪੈਦਾ ਹੈ।` ,
                 border: [true, false, true, false],            
                 alignment: "justify",
                 preserveLeadingSpaces: true,               
@@ -4514,7 +4525,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
       "noc-head-new": {
         fontSize: 9,
         //fillColor: "#F2F2F2",
-        margin: [0, 0, 0, 0]
+        margin: [0, 0, 0, 0],
       },
       "receipt-logo-header": {
         color: "#484848",
@@ -4597,7 +4608,7 @@ const generatePdf = async (state, dispatch, type) => {
       pdfMake.fonts = {
         raavi: {
           normal: "raavi.ttf",
-          bold: "raavi.ttf",
+          bold: "raavib.ttf",
           italics: "raavi.ttf",
           bolditalics: "raavi.ttf"
         }

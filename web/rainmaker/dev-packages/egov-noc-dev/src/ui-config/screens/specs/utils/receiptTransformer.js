@@ -2,6 +2,8 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
 import { getMdmsData, getReceiptData, getFinancialYearDates } from "../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
 import {
   getLocalization,
   getLocale
@@ -123,6 +125,9 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "NA")
     );
     let buildings = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
+    
+    console.log("buildings", buildings);
+
     data.buildings = buildings.map(building => {
       let uoms = get(building, "uoms", []);
       let uomsObject = {};
@@ -145,6 +150,90 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         uoms: uomsObject
       };
     });
+
+
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenant,
+        moduleDetails: [
+          {
+            moduleName: "firenoc",
+            masterDetails: [{ name: "BuildingType" }]
+          },
+       
+        ]
+      }
+    };
+
+    var NBCGroup, NBCSubGroup;
+
+    try {
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      console.log(payload,"loadNBCData");
+
+      let BuildingType =  get(
+                            payload,
+                            "MdmsRes.firenoc.BuildingType",
+                            "NA" 
+                          );
+
+      console.log(BuildingType,"BuildingType");
+
+  
+      
+
+   //   let bsubtype = []
+/* 
+      for ( let i =0; i<=BuildingType.length; i++)
+        {
+            if(buildings[0].usageType === BuildingType[i].code )
+            {
+
+              console.log("test",BuildingType[i].BuildingSubType);
+
+            }
+       }  */
+
+       let bsubtype = BuildingType.filter(type => 
+        { if (buildings[0].usageType === type.code ) 
+          return type.BuildingSubType} 
+        );
+
+        console.log('bsubtype', bsubtype);
+
+
+        for(let i=0; i<=bsubtype[0].BuildingSubType.length>0;i++)
+        {
+
+          if(buildings[0].usageSubType===bsubtype[0].BuildingSubType[i].code)
+
+            {
+                NBCGroup =  bsubtype[0].BuildingSubType[i].NBCGroup ? bsubtype[0].BuildingSubType[i].NBCGroup: '' ;
+                NBCSubGroup = bsubtype[0].BuildingSubType[i].NBCSubGroup ? bsubtype[0].BuildingSubType[i].NBCSubGroup: '';
+                console.log('NBCGroup', NBCGroup);
+                console.log('NBCSubGroup', NBCSubGroup);
+            }
+
+            }       
+  
+      }           
+  
+
+  
+     catch (e) {
+      console.log(e);
+    }
+
+    data.NBCGroup = NBCGroup;
+    data.NBCSubGroup = NBCSubGroup;
+   
 
     // Property Location
     data.propertyId = nullToNa(
@@ -201,9 +290,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
    );
 
     data.district = nullToNa(          
-        getMessageFromLocalization(`TL_${district_value}` ) ); 
-  
-   
+        getMessageFromLocalization(`TL_${district_value}` ) );    
       
 
     data.subDistrict = nullToNa(
@@ -555,10 +642,12 @@ export const loadMdmsData = async tenantid => {
       key: "moduleName",
       value: "tenant"
     },
-    {
+     {
       key: "masterName",
       value: "tenants"
-    }
+    },
+  
+    
   ];
   let response = await getMdmsData(queryObject);
 
@@ -599,6 +688,7 @@ export const loadMdmsData = async tenantid => {
   store.dispatch(prepareFinalObject("mdmsDataForPdf", data));
 };
 
+
 export const loadUserNameData = async uuid => {
   let data = {};
   let bodyObject = {
@@ -631,5 +721,6 @@ export const loadPdfGenerationData = (applicationNumber, tenant) => {
   loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
 
   loadMdmsData(tenant);
+
 
 };
