@@ -16,6 +16,12 @@ export const propertySearchApiCall = async (state, dispatch) => {
       []
     )
   );
+  dispatch(
+    prepareFinalObject(
+      "applyScreen.property",
+      {}
+    )
+  );
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
@@ -33,9 +39,6 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
-        if (!_.isEmpty(get(state, "screenConfiguration.preparedFinalObject.applyScreen.property", {}))) {
-          dispatch(prepareFinalObject("applyScreen.property", {}))
-        }
         dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
         showHideFields(dispatch, true);
       } else {
