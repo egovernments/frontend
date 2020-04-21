@@ -234,12 +234,24 @@ class EnhancedTable extends React.Component {
     const { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
     var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
     let { strings } = this.props;
+    let expData = tableData; 
+    // iterate here for Excel download
+    for(var i=0; i < expData.length; i++){
+      if(typeof expData[i] === 'object'){
+        for(var key in expData[i]){
+          if(typeof expData[i][key] === 'object'){
+            expData[i][key] = expData[i][key][1]
+          }
+          //console.log(expData[i][key]);     
+        }
+      }   
+    }
     return (
       <Paper className={classes.root}>
         <div className={classes.downloadNsearch}>
           {needExport ? (
             <ExportToExcel
-              data={tableData}
+              data={expData}
               name={excelName}
             />
           ) : null}
