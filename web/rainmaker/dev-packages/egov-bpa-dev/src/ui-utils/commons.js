@@ -186,10 +186,9 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     documnts.forEach(documents => {
     if(documents && documents.documents){
       documents.documents.forEach(docItem =>{
+        if(documents.dropDownValues && documents.dropDownValues.value) {
         let doc = {};
-        if(documents.dropDownValues) {
         doc.documentType = documents.dropDownValues.value;
-        }
         doc.fileStoreId = docItem.fileStoreId;
         doc.fileStore = docItem.fileStoreId;
         doc.fileName = docItem.fileName;
@@ -200,6 +199,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
           }
         });
         requiredDocuments.push(doc);
+      }
       })
     }
   });
