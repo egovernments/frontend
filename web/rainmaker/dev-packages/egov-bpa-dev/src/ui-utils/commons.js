@@ -243,6 +243,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         arry.push(occType.value);
       })
     blocks[index] = {};
+    blocks[index].blockIndex = index;
     blocks[index].usageCategory = {};
     blocks[index].usageCategory = arry.join();
     if(BPADetails.units && BPADetails.units[index] && BPADetails.units[index].id) {
