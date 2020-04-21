@@ -47,20 +47,20 @@ const fieldInspectionMultiItem = () => {
               labelKey: "BPA_FIELD_INSPECTION_DETAILS_TITLE"
             })
           },
-          editSection: {
-            componentPath: "Button",
-            props: {
-              color: "primary",
-              style: {
-                marginTop: "-10px",
-                marginRight: "-18px"
-              }
-            },
-            gridDefination: {
-              xs: 4,
-              align: "right"
-            }
-          }
+          // editSection1: {
+          //   componentPath: "Button",
+          //   props: {
+          //     color: "primary",
+          //     style: {
+          //       marginTop: "-10px",
+          //       marginRight: "-18px"
+          //     }
+          //   },
+          //   gridDefination: {
+          //     xs: 4,
+          //     align: "right"
+          //   }
+          // }
         }
       },
       applicationdate: getDateField({
