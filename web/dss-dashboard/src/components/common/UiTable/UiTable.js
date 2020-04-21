@@ -234,7 +234,7 @@ class EnhancedTable extends React.Component {
     const { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
     var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
     let { strings } = this.props;
-    let expData = tableData; 
+    let expData = _.cloneDeep(tableData);
     // iterate here for Excel download
     for(var i=0; i < expData.length; i++){
       if(typeof expData[i] === 'object'){
