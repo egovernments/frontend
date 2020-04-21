@@ -36,7 +36,7 @@ export const propertyID = getCommonContainer({
   }),
   searchButton: {
     componentPath: "Button",
-    gridDefination: { xs: 12, sm: 5, md: 5 },
+    gridDefination: { xs: 12, sm: 1, md: 1 },
     props: {
       variant: "contained",
       style: {
@@ -47,7 +47,7 @@ export const propertyID = getCommonContainer({
         marginRight: "10px",
         backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
         borderRadius: "2px",
-        width: "30%",
+        width: "95%",
         height: "32px"
       }
     },
@@ -59,7 +59,13 @@ export const propertyID = getCommonContainer({
     onClickDefination: {
       action: "condition",
       callBack: propertySearchApiCall
-    }
+    },
+  },
+  clickHereLink: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "AddLinkForProperty",
+    gridDefination: { xs: 12, sm: 4, md: 4 }
   }
 })
 
@@ -96,7 +102,7 @@ const propertyDetails = getCommonContainer({
       labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL",
       labelName: "Property Sub Usage Type"
     },
-     { 
+    {
       jsonPath: "applyScreen.property.propertySubUsageType",
     callBack: handleNA
   }
