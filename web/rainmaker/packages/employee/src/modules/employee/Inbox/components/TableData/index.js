@@ -317,7 +317,7 @@ class TableData extends Component {
       })
       var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
       let row0 = {text: item.businessId, subtext: item.businessService, hiddenText: item.moduleName };
-      let row1 = {text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
+      let row1 = {text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_ADMIN_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row2 = {
         text: item.state ? (
           <Label

@@ -461,12 +461,15 @@ const setSearchResponse = async (
         "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.citizen",
         "visible",
         true
+        )
       )
-    )
     }
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  if(response && response.Bpa["0"] && response.Bpa["0"].documents) {
+    dispatch(prepareFinalObject("documentsTemp", response.Bpa["0"].documents));
+  }
     let edcrRes = await edcrHttpRequest(
       "post",
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -547,6 +550,8 @@ const setSearchResponse = async (
       )
     );
   }
+
+  dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
 };
