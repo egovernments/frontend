@@ -600,7 +600,7 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: "FIRENOC" }
+        { key: "businessService", value: "FIRENOC" }
       ];
       const payload = await createBill(queryObj,dispatch);
       // let payload = sampleGetBill();
@@ -794,4 +794,8 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
   }
+};
+
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
 };
