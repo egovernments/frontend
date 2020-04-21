@@ -739,6 +739,18 @@ export const getTextToLocalMapping = label => {
         "PT_COMMON_TABLE_COL_PT_ID",
         localisationLabels
       );
+      case "Unique Property Id":
+      return getLocaleLabels(
+        "Unique Property Id",
+        "PT_COMMON_TABLE_COL_UNIQ_PT_ID",
+        localisationLabels
+      );
+      case "Action":
+      return getLocaleLabels(
+        "Action",
+        "PT_COMMON_TABLE_COL_ACTION_LABEL",
+        localisationLabels
+      );
 
     case "Application No":
       return getLocaleLabels(
