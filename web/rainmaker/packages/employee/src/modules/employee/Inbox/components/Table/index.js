@@ -101,11 +101,14 @@ class InboxData extends React.Component {
   getModuleLink = async (item, row, index) => {
     const status = row[2].text && row[2].text.props.defaultLabel;
     const taskId = index === 0 && item.text;
-    const tenantId = getTenantId();
+    let tenantId = getTenantId();
     // const processInstances = await this.getProcessIntanceData(row[0].text);
     // if (processInstances && processInstances.length > 0) {
     //   await addWflowFileUrl(processInstances, prepareFinalObject);
     // }
+    if(row[0].hiddenText == "BPAREG") {
+      tenantId = tenantId.split('.')[0];
+    }
     let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
 
