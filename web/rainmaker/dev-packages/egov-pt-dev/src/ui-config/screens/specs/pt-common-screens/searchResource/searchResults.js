@@ -62,5 +62,9 @@ export const searchPropertyTable = {
 };
 
 const getSelect=data=>{
-  window.location.href=`/employee/wns/apply?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+  if(process.env.REACT_APP_NAME == "Citizen"){
+    window.location.href=`/citizen/wns/apply?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+  }else{
+    window.location.href=`/employee/wns/apply?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+  }
 }
