@@ -135,7 +135,7 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  showHideAdhocPopup(state, dispatch, "search");
+                  showHideAdhocPopup(state, dispatch, "propertySearch");
 
                 }
               },

@@ -1,6 +1,7 @@
 import { getCommonContainer, getCommonGrayCard, getCommonSubHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { checkValueForNA } from "../../utils";
 import { getLabelIfNotNull } from "../../utils/index";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 export const transfereeSummary = getCommonGrayCard({
@@ -146,6 +147,7 @@ export const transfereeSummary = getCommonGrayCard({
     type: "array"
   },
   beforeInitScreen: (action, state, dispatch) => {
+    let categoryType='sas';
     const categoryDocumentIDJsonPath = "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.props.style";
     const categoryDocumentTypeJsonPath = "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
     if (categoryType === "NONE") {
