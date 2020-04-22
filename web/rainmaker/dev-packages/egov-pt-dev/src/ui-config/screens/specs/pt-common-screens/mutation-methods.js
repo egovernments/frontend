@@ -10,12 +10,10 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { propertySearch, applicationSearch } from "./searchResource/searchFunctions";
+import { propertySearch} from "./searchResource/searchFunctions";
 
 
 export const resetFields = (state, dispatch) => {
-  console.log()
-  if (process.env.REACT_APP_NAME == "Citizen") {
     dispatch(
       handleField(
         "propertySearch",
@@ -28,7 +26,6 @@ export const resetFields = (state, dispatch) => {
       "searchScreen.tenantId",
       ''
     ))
-  }
 
   dispatch(
     handleField(
@@ -54,18 +51,18 @@ export const resetFields = (state, dispatch) => {
       ""
     )
   );
-  // dispatch(prepareFinalObject(
-  //   "searchScreen.ids",
-  //   ''
-  // ))
-  // dispatch(prepareFinalObject(
-  //   "searchScreen.mobileNumber",
-  //   ''
-  // ))
-  // dispatch(prepareFinalObject(
-  //   "searchScreen.oldpropertyids",
-  //   ''
-  // ))
+  dispatch(prepareFinalObject(
+    "searchScreen.propertyIds",
+    ''
+  ))
+  dispatch(prepareFinalObject(
+    "searchScreen.mobileNumber",
+    ''
+  ))
+  dispatch(prepareFinalObject(
+    "searchScreen.oldpropertyids",
+    ''
+  ))
 
 };
 
@@ -98,10 +95,10 @@ export const searchPropertyDetails = getCommonCard({
       jsonPath: "searchScreen.tenantId",
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       required: true,
-      props: {
-        required: true,
-        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-      },
+      // props: {
+      //   required: true,
+      //   disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+      // },
       gridDefination: {
         xs: 12,
         sm: 4
@@ -167,7 +164,7 @@ export const searchPropertyDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.ids"
+      jsonPath: "searchScreen.propertyIds"
     })
     
   }),
@@ -197,10 +194,10 @@ export const searchPropertyDetails = getCommonCard({
             labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_RESET_BUTTON"
           })
         },
-        // onClickDefination: {
-        //   action: "condition",
-        //   callBack: resetFields
-        // }
+        onClickDefination: {
+          action: "condition",
+          callBack: resetFields
+        }
       },
       searchButton: {
         componentPath: "Button",
@@ -226,10 +223,10 @@ export const searchPropertyDetails = getCommonCard({
             labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
           })
         },
-        // onClickDefination: {
-        //   action: "condition",
-        //   callBack: propertySearch
-        // }
+        onClickDefination: {
+          action: "condition",
+          callBack: propertySearch
+        }
       }
     })
   })
