@@ -197,14 +197,14 @@ export const getData = async (action, state, dispatch) => {
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
   const applicationType = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+    "Licenses[0].applicationType",
     null
   );
   if (applicationNo) {
     //Edit/Update Flow ----
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+      "Licenses[0].applicationType",
       null
     );
     const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
@@ -215,11 +215,7 @@ export const getData = async (action, state, dispatch) => {
           {
             licenseType: "PERMANENT",
             oldLicenseNumber: queryValue ? "" : applicationNo,
-            tradeLicenseDetail: {
-              additionalDetail: {
-                applicationType: applicationType ? applicationType : "NEW"
-              }
-            }
+            applicationType: applicationType ? applicationType : "NEW"
           }
         ])
       );
@@ -229,13 +225,13 @@ export const getData = async (action, state, dispatch) => {
     updatePFOforSearchResults(action, state, dispatch, applicationNo).then((response)=>{
       const applicationType = get(
         response,
-        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+        "Licenses[0].applicationType",
         null
       );
       getAllDataFromBillingSlab(getTenantId(1), dispatch,[{
         key:"applicationType",value:applicationType
       }]);
-      if (!queryValue) {
+      if (queryValue && isEditRenewal) {
         const oldApplicationNo = get(
           state.screenConfiguration.preparedFinalObject,
           "Licenses[0].applicationNumber",
@@ -248,8 +244,8 @@ export const getData = async (action, state, dispatch) => {
           dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
           dispatch(
             prepareFinalObject(
-              "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-              "APPLICATIONTYPE.RENEWAL"
+              "Licenses[0].applicationType",
+              "RENEWAL"
             )
           );
           dispatch(

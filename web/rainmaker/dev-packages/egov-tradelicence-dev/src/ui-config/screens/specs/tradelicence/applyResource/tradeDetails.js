@@ -441,7 +441,7 @@ const tradeUnitCard = {
               labelName: "Enter UOM Value",
               labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_PLACEHOLDER"
             },
-            required: true,
+            required: false,
             props: {
               disabled: true,
               setDataInField: true,
@@ -761,7 +761,7 @@ const accessoriesCard = {
 //   ]
 // });
 
-
+const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
 
 export const tradeDetails = getCommonCard(
   {
@@ -851,7 +851,7 @@ export const tradeDetails = getCommonCard(
           sourceJsonPath: "Licenses[0].validFrom",
           callBack: convertEpochToDate,
           props: {
-            disabled: true
+            disabled: isEditRenewal ? false : true
           }
         }),
       },
@@ -868,7 +868,7 @@ export const tradeDetails = getCommonCard(
           sourceJsonPath: "Licenses[0].validTo",
           callBack: convertEpochToDate,
           props: {
-            disabled: true
+            disabled: isEditRenewal ? false : true
           }
         }),
       },
@@ -888,7 +888,7 @@ export const tradeDetails = getCommonCard(
             masterName: "ApplicationType"
           },
           jsonPath:
-            "Licenses[0].applicationType",
+            "APPLICATIONTYPE."+"Licenses[0].applicationType",
           sourceJsonPath: "applyScreenMdmsData.TradeLicense.ApplicationType",
           gridDefination: {
             xs: 12,
