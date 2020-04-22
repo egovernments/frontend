@@ -306,11 +306,15 @@ class ShowForm extends Component {
       //  debugger;
 
        
-          if (searchParams[i].defaultValue["bh.testing"] === "Testing") 
+         if (searchParams[i].name==='ulb')
+         {
+
+         if (searchParams[i].defaultValue["bh.testing"] === "Testing") 
           {
           delete searchParams[i].defaultValue["bh.testing"];
           }
-       
+
+         }
           if (searchParams[i].initialValue) {        
             
           if (searchParams[i].type === "epoch") {
