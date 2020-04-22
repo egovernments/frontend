@@ -305,8 +305,7 @@ class ShowForm extends Component {
        // console.log("search params",searchParams[i])
       //  debugger;
 
-        if(searchParams[i].name=="ulb")
-        {
+       
           if (searchParams[i].defaultValue["bh.testing"] === "Testing") 
           {
           delete searchParams[i].defaultValue["bh.testing"];
@@ -330,7 +329,7 @@ class ShowForm extends Component {
             );
           }
         }
-        }
+        
       }
       setForm(required);
       clearReportHistory();
