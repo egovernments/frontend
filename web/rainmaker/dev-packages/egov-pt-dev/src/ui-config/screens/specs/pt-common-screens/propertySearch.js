@@ -118,13 +118,12 @@ const screenConfig = {
                   labelKey: "PT_COMMON_REGISTER_NEW_PROPERTY_BUTTON"
                 })
               },
-              // onClickDefination: {
-              //   action: "condition",
-              //   callBack: (state, dispatch) => {
-              //     showHideAdhocPopup(state, dispatch, "search");
-
-              //   }
-              // },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  window.location.href = "/pt-common-screens/register-property";
+                }
+              },
             }
           }
         },
