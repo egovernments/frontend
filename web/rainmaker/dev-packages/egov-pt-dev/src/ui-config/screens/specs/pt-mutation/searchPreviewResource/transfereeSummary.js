@@ -147,7 +147,6 @@ export const transfereeSummary = getCommonGrayCard({
     type: "array"
   },
   beforeInitScreen: (action, state, dispatch) => {
-    let categoryType='sas';
     const categoryDocumentIDJsonPath = "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.props.style";
     const categoryDocumentTypeJsonPath = "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
     if (categoryType === "NONE") {
