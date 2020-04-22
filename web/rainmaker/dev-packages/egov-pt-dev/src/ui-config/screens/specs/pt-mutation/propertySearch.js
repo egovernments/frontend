@@ -13,7 +13,10 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import { adhocPopup } from "./adhocPopup";
 import { showHideAdhocPopup } from "../utils";
+import set from "lodash/set";
+import get from "lodash/get";
 import { resetFields } from "./mutation-methods";
+import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -21,7 +24,7 @@ const tenant = getTenantId();
 
 //console.log(captureMutationDetails);
 
-const getMDMSData = async (dispatch) => {
+const getMDMSData = async (action,dispatch) => {
   const mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -33,7 +36,7 @@ const getMDMSData = async (dispatch) => {
               name: "tenants"
             },{name: "citymodule"}
           ]
-        }
+        }, { moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }
       ]
     }
   }
@@ -46,6 +49,18 @@ const getMDMSData = async (dispatch) => {
       mdmsBody
     );
     payload.MdmsRes.tenant.tenants=payload.MdmsRes.tenant.citymodule[1].tenants;
+
+
+    let documents = get(
+      payload.MdmsRes,
+      "PropertyTax.Documents",
+      []
+    );
+    set(
+      action,
+      "screenConfig.components.adhocDialog.children.popup",
+      getRequiredDocuments(documents)
+    );
     // console.log("payload--", payload)
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     if(process.env.REACT_APP_NAME != "Citizen"){
@@ -71,7 +86,7 @@ const screenConfig = {
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
-    getMDMSData(dispatch);
+    getMDMSData(action,dispatch);
     return action;
   },
 
@@ -160,11 +175,11 @@ const screenConfig = {
       componentPath: "DialogContainer",
       props: {
         open: false,
-        maxWidth: "sm",
-        screenKey: "search"
+        maxWidth: false,
+        screenKey: "propertySearch"
       },
       children: {
-        popup: adhocPopup
+        popup: {}
       }
     }
   }
