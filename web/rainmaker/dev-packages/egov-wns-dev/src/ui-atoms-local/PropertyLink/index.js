@@ -20,9 +20,10 @@ function AddLinkForProperty() {
     <div style={styles}>
       <LabelContainer
         labelName="To Find/Create Property ID"
-        labelKey="WS_APPLY_CREATE_MSG" /><span> </span><LabelContainer
-        style={clickHereStyles}
-        labelKey="WS_APPLY_CLICK_HERE" />
+        labelKey="WS_APPLY_CREATE_MSG" /><span> </span><a href="/pt-common-screens/propertySearch" ><LabelContainer
+          style={clickHereStyles}
+          labelKey="WS_APPLY_CLICK_HERE" />
+      </a>
     </div>
   );
 }
