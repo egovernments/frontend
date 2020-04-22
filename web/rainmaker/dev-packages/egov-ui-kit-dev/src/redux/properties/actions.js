@@ -12,7 +12,7 @@ import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 
-const FileDownload = require('js-file-download');
+// const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
     type: actionTypes.RESET_PROPERTY_STATE,

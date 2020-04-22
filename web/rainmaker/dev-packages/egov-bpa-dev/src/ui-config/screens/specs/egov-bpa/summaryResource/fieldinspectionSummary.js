@@ -7,6 +7,12 @@ import {
   getTimeField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
+import { getTranslatedLabel, transformById } from "egov-ui-framework/ui-utils/commons";
+import { getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+
+const localizationLabels = JSON.parse(getLocalization(`localization_${getLocale()}`));
+let transfomedKeys = transformById(localizationLabels, "code");
+
 const getHeader = label => {
   return {
     uiFramework: "custom-molecules-local",
@@ -41,20 +47,20 @@ const fieldInspectionMultiItem = () => {
               labelKey: "BPA_FIELD_INSPECTION_DETAILS_TITLE"
             })
           },
-          editSection: {
-            componentPath: "Button",
-            props: {
-              color: "primary",
-              style: {
-                marginTop: "-10px",
-                marginRight: "-18px"
-              }
-            },
-            gridDefination: {
-              xs: 4,
-              align: "right"
-            }
-          }
+          // editSection1: {
+          //   componentPath: "Button",
+          //   props: {
+          //     color: "primary",
+          //     style: {
+          //       marginTop: "-10px",
+          //       marginRight: "-18px"
+          //     }
+          //   },
+          //   gridDefination: {
+          //     xs: 4,
+          //     align: "right"
+          //   }
+          // }
         }
       },
       applicationdate: getDateField({
@@ -172,7 +178,7 @@ export const fieldinspectionSummary = getCommonContainer({
       prefixSourceJsonPath: "children.cardContent.children.fiCard.children",
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
       headerJsonPath : "children.cardContent.children.fiCard.children.header.children.header.children.key.props.label",
-      headerName : "BPA_FI_REPORT",
+      headerName : getTranslatedLabel("BPA_FI_REPORT", transfomedKeys),
     },
     gridDefination: {
       xs: 12,

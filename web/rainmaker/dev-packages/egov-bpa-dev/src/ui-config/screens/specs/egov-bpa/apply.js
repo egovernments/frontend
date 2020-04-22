@@ -306,20 +306,27 @@ const setSearchResponse = async (
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
   let bpaDocs = [];
-
+  
   if (docs && docs.length > 0) {
     docs.forEach(section => {
       section.cards.forEach(doc => {
         let docObj = {};
         docObj.documentType = section.code;
         docObj.documentCode = doc.code;
+        if(uploadedDocs && uploadedDocs.length > 0) {
+          docObj.isDocumentRequired = false;
+        }
+        else {
+          docObj.isDocumentRequired = doc.required;          
         docObj.isDocumentRequired = doc.required;
+          docObj.isDocumentRequired = doc.required;          
+        }
         docObj.isDocumentTypeRequired = doc.required;
         bpaDocs.push(docObj);
       })
     });
   }
-
+  
   let bpaDetails = get (state.screenConfiguration.preparedFinalObject, "BPA");
   let uploadedDocs = bpaDetails.documents;
   
@@ -328,7 +335,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
     let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
     uploadedDocs.forEach(upDoc => {
       bpaDocs.forEach(bpaDoc => {
-        let bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        let bpaDetailsDoc;
+        if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
         if(bpaDetailsDoc == bpaDoc.documentCode) {
           let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
           let name = (fileUrls[upDoc.fileStoreId] && 
@@ -343,17 +351,83 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           `Document - ${index + 1}`;
           bpaDoc.dropDownValues = {};
           bpaDoc.dropDownValues.value =  upDoc.documentType;
-          bpaDoc.documents = [
-            {
-              fileName : name,
-              fileStoreId : upDoc.fileStoreId,
-              fileUrl : url,
-              id : upDoc.id
-            }
-          ]
+          if(bpaDoc.previewdocuments ){
+            bpaDoc.previewdocuments.push(
+              {
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),
+                dropDownValues : bpaDoc.dropDownValues.value,    
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                wfState: upDoc.wfState                                
+              }
+            );
+          }else{
+            bpaDoc.previewdocuments = [
+              {
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),
+                dropDownValues : bpaDoc.dropDownValues.value,             
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                wfState: upDoc.wfState                                
+              }
+            ];
+          }
+
+          // if(bpaDoc.documents ){
+          //   bpaDoc.documents.push(
+          //     {
+          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+          //       name: name,
+          //       linkText: "View",
+          //       fileName : name,
+          //       fileStoreId : upDoc.fileStoreId,
+          //       fileUrl : url,
+          //       wfState: upDoc.wfState                                
+          //     }
+          //   );
+          // }else{
+          //   bpaDoc.documents = [
+          //     {
+          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+          //       name: name,
+          //       linkText: "View",
+          //       fileName : name,
+          //       fileStoreId : upDoc.fileStoreId,
+          //       fileUrl : url,
+          //       wfState: upDoc.wfState                                
+          //     }
+          //   ];
+          // }
         }
       })
     })
+    let previewStoreIds = jp.query(bpaDocs, "$..[*].*.fileStoreId");
+    let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : {};
+      
+    bpaDocs.forEach(doc => {
+
+      if (doc.previewdocuments && doc.previewdocuments.length > 0) {
+          doc.previewdocuments.forEach(docDetail =>{
+            docDetail["link"] = fileUrls[docDetail.fileStoreId];
+            return docDetail;
+          });
+      }
+    });
+    // bpaDocs.forEach(doc => {
+
+    //   if (doc.documents && doc.documents.length > 0) {
+    //       doc.documents.forEach(docDetail =>{
+    //         docDetail["link"] = fileUrls[docDetail.fileStoreId];
+    //         return docDetail;
+    //       });
+    //   }
+    // });
     dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
   }
 }

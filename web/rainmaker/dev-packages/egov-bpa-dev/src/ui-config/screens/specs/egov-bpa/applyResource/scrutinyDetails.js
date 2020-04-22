@@ -209,7 +209,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelsFromLocalisation: true,
                   suggestions: [],
                   fullwidth: true,
-                  // required: true,
+                  required: false,
                   isMulti: true,
                   inputLabelProps: {
                     shrink: true

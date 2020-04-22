@@ -33,7 +33,7 @@ const style = {
   container: {
     display: "flex",
     minHeight: "106px",
-    justifyContent: "center",
+    justifyContent: "left",
     alignItems: "center"
   }
 };
@@ -74,9 +74,9 @@ const acknowledgementCard = ({
           componentPath: "Avatar",
           props: {
             style: {
-              width: "72px",
-              height: "72px",
-              backgroundColor: backgroundColor
+              width: "50px",
+              height: "50px",
+              backgroundColor: backgroundColor,
             }
           },
           children: {

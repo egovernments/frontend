@@ -317,7 +317,7 @@ class TableData extends Component {
       })
       var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
       let row0 = {text: item.businessId, subtext: item.businessService, hiddenText: item.moduleName };
-      let row1 = {text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
+      let row1 = {text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_ADMIN_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row2 = {
         text: item.state ? (
           <Label
@@ -331,7 +331,7 @@ class TableData extends Component {
       };
 
       let row3 = { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
-      let row4 = { text: Math.round(sla), badge: true };
+      let row4 = { text: Math.round(sla) };
       let row5 = { historyButton: true };
 
       let localityDropdown = { label: getLocaleLabels("",row1.text.props.label,localizationLabels), value: row1.text.props.label };
