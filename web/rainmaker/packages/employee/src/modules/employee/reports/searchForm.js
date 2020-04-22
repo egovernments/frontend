@@ -86,10 +86,10 @@ class ShowForm extends Component {
       const response = await commonApiPost(url, queryJSON);
       let keys = jp.query(response, splitArray[1].split("|")[1]);
       let values = jp.query(response, splitArray[1].split("|")[2]);
-      let defaultValue = {};
+      let defaultValue = {};     
       for (var k = 0; k < keys.length; k++) {
-        defaultValue[keys[k]] = values[k];
-      }
+     defaultValue[keys[k]] = values[k];  
+      } 
       const defaultValuesLength = Object.keys(defaultValue).length;
 
       if (fieldType == "url") {
@@ -276,6 +276,7 @@ class ShowForm extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
+    debugger;
     let { changeButtonText, clearReportHistory, needDefaultSearch } = this.props;
     let { dateError } = this.state;
 
@@ -301,7 +302,18 @@ class ShowForm extends Component {
         if (searchParams[i].name !== "tenantId" && searchParams[i].isMandatory) {
           required.push(searchParams[i].name);
         }
-        if (searchParams[i].initialValue) {
+       // console.log("search params",searchParams[i])
+      //  debugger;
+
+        if(searchParams[i].name=="ulb")
+        {
+          if (searchParams[i].defaultValue["bh.testing"] === "Testing") 
+          {
+          delete searchParams[i].defaultValue["bh.testing"];
+          }
+       
+          if (searchParams[i].initialValue) {        
+            
           if (searchParams[i].type === "epoch") {
             this.handleChange(
               { target: { value: this.toDateObj(searchParams[i].initialValue) } },
@@ -317,6 +329,7 @@ class ShowForm extends Component {
               ""
             );
           }
+        }
         }
       }
       setForm(required);
@@ -336,6 +349,7 @@ class ShowForm extends Component {
     let required = [];
     this.setState({ reportName: this.props.match.params.reportName });
     this.setState({ moduleName: this.props.match.params.moduleName });
+    debugger;
     if (searchParams) {
       for (var i = 0; i < searchParams.length; i++) {
         if (searchParams[i].isMandatory) {
@@ -641,6 +655,7 @@ class ShowForm extends Component {
   };
 
   render() {
+  //  debugger;
     let { buttonText, metaData, reportIndex, searchForm } = this.props;
     let { search } = this;
     return (
