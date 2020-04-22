@@ -7,59 +7,6 @@ export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch)
 }
 
-const removeValidation = (state, dispatch, index) => {
- 
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
-      "isFieldValid",
-      true
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
-      "isFieldValid",
-      true
-    )
-  );
-  dispatch(
-    handleField(
-      "propertySearch",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
-      "isFieldValid",
-      true
-    )
-  );
-
-}
-
 const getAddress = (item) => {
   let doorNo = item.address.doorNo != null ? (item.address.doorNo + ",") : '';
   let buildingName = item.address.buildingName != null ? (item.address.buildingName + ",") : '';
@@ -77,226 +24,54 @@ const searchApiCall = async (state, dispatch) => {
     "searchScreen",
     {}
   );
-  if (!searchScreenObject.tenantId) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
-        },
-        "error"
-      )
-    );
-    return;
+  let queryObject=[];
 
-  }
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: searchScreenObject.tenantId
-    }
-  ];
-  if (process.env.REACT_APP_NAME == "Citizen") {
-    queryObject = [];
-  }
-
-  let formValid = false;
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '') {
-      formValid = true;
-    }
-
-  if (!formValid) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
-        },
-        "error"
-      )
-    );
-    return;
-  }
-  let form1 = validateFields("components.div.children.searchPropertyDetails", state, dispatch, "propertySearch");
-  // let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
-  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
-  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
-  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.captureMutationDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
+    "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children",
     state,
     dispatch,
     "propertySearch"
   );
 
-  const isownerCityRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+  const isSearchBoxSecondRowValid = validateFields(
+    "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children",
     state,
     dispatch,
     "propertySearch"
   );
 
-
-  const isownerMobNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.mobileNumber == '';
-
-  const ispropertyTaxUniqueIdRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.ids == '';
-
-  const isexistingPropertyIdRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.oldpropertyids == '';
-  const ispropertyTaxApplicationNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.acknowledgementIds == '';
-  const ispropertyTaxApplicationOwnerNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.mobileNumber == '';
-  const ispropertyTaxApplicationPidRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.ids == '';
-
-
-
-
-  if (!(isSearchBoxFirstRowValid)) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
-        },
-        "error"
-      )
-    );
-    return;
-  }
-  if (!(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid)) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill at least one field along with city",
-          labelKey: "PT_INVALID_INPUT"
-        },
-        "error"
-      )
-    );
-    return;
-  } 
-
-
-  if (
-    Object.keys(searchScreenObject).length == 0 || Object.keys(searchScreenObject).length == 1 ||
-    (Object.values(searchScreenObject).every(x => x === ""))
+  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
+    dispatch(toggleSnackbar(true, {labelName:"Please provide the city and any one other field information to search for property.", labelKey: "ERR_PT_COMMON_FILL_MANDATORY_FIELDS" }, "warning"));
+  } else if (
+    Object.keys(searchScreenObject).length == 0 ||
+    Object.values(searchScreenObject).every(x => x === "")
   ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill at least one field along with city",
-          labelKey: "PT_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE_OTHER_THAN_CITY"
-        },
-        "error"
-      )
-    );
-    return;
-  }
-  //   else if (
-  //     (searchScreenObject["fromDate"] === undefined ||
-  //       searchScreenObject["fromDate"].length === 0) &&
-  //     searchScreenObject["toDate"] !== undefined &&
-  //     searchScreenObject["toDate"].length !== 0
-  //   ) {
-  //     dispatch(
-  //       toggleSnackbar(
-  //         true,
-  //         { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
-  //         "warning"
-  //       )
-  //     );
-  //   } 
-  else {
-
-    removeValidation(state, dispatch);
-
-    //  showHideProgress(true, dispatch);
+    dispatch(toggleSnackbar(true, {labelName:"Please provide the city and any one other field information to search for property.", labelKey: "ERR_PT_COMMON_FILL_MANDATORY_FIELDS" }, "warning"));
+  }  else if (
+    (searchScreenObject["propertyIds"] === undefined || searchScreenObject["propertyIds"] === "") &&
+    (searchScreenObject["mobileNumber"] === undefined || searchScreenObject["mobileNumber"] === "") &&
+    (searchScreenObject["oldpropertyids"] === undefined || searchScreenObject["oldpropertyids"] === "")
+  ) {
+    dispatch(toggleSnackbar(true, { labelName:"In addition to City, please provide any one of the other parameters to search for property.",labelKey: "ERR_PT_COMMON_FILL_VALID_FIELDS" }, "warning"));
+  }else{
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
-        if (key === "fromDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "daystart")
-          });
-        } else if (key === "tenantId") {
-          // queryObject.push({
-          //   key: key,
-          //   value: convertDateToEpoch(searchScreenObject[key], "dayend")
-          // });
-
-        }
-        else if (key === "ids") {
-          queryObject.push({
-            key: "propertyIds",
-            value: searchScreenObject[key].trim()
-          });
-        }
-
-        else if (key === "toDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "dayend")
-          });
-        }
-        // else if (key === "status") {
-        //   queryObject.push({
-        //     key: "action",
-        //     value: searchScreenObject[key].trim()
-        //   });
-        // }
-        else {
-          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
-        }
+        queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
     try {
       const response = await getSearchResults(queryObject);
-      // const response = searchSampleResponse();
-
       let propertyData = response.Properties.map(item => ({
         [getTextToLocalMapping("Unique Property Id")]:
           item.propertyId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.owners[0].name || "-",
+        [getTextToLocalMapping("Owner Name")]: item.owners.map(owner=>owner.name).join(",") || "-",
         [getTextToLocalMapping("Address")]:
           getAddress(item) || "-",
-        tenantId: item.tenantId,
-        [getTextToLocalMapping("Action")]: item.status || "-"
+        [getTextToLocalMapping("Action")]: "SELECT",
+        tenantId: item.tenantId
       }));
 
       dispatch(
@@ -317,10 +92,9 @@ const searchApiCall = async (state, dispatch) => {
           )} (${response.Properties.length})`
         )
       );
-      //showHideProgress(false, dispatch);
+
       showHideTable(true, dispatch);
     } catch (error) {
-      //showHideProgress(false, dispatch);
       dispatch(
         toggleSnackbar(
           true,
@@ -330,8 +104,10 @@ const searchApiCall = async (state, dispatch) => {
       );
       console.log(error);
     }
+   
   }
 };
+
 const showHideTable = (booleanHideOrShow, dispatch) => {
     dispatch(
       handleField(
@@ -341,5 +117,4 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
         booleanHideOrShow
       )
     );
-  
 };

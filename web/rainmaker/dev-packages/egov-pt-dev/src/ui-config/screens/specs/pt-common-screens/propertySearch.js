@@ -9,7 +9,6 @@ import { searchPropertyTable} from "./searchResource/searchResults";
 import { httpRequest } from "../../../../ui-utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
-// import { adhocPopup } from "../pt-mutation/adhocPopup";
 // import { showHideAdhocPopup } from "../utils";
 import { resetFields } from "./mutation-methods";
 import {searchPropertyDetails} from "./mutation-methods"
@@ -28,7 +27,7 @@ const getMDMSData = async (dispatch) => {
           masterDetails: [
             {
               name: "tenants"
-            },{name: "citymodule"}
+            },
           ]
         }
       ]
@@ -42,17 +41,7 @@ const getMDMSData = async (dispatch) => {
       [],
       mdmsBody
     );
-    payload.MdmsRes.tenant.tenants=payload.MdmsRes.tenant.citymodule[1].tenants;
-    // console.log("payload--", payload)
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    if(process.env.REACT_APP_NAME != "Citizen"){
-      dispatch(
-        prepareFinalObject(
-          "searchScreen.tenantId",
-          tenant
-        )
-      );
-    }
   } catch (e) {
     console.log(e);
   }
@@ -141,23 +130,10 @@ const screenConfig = {
         },
         searchPropertyDetails,
         breakAfterSearch: getBreak(),
-        // searchPropertyTable
+        searchPropertyTable
 
       }
-    },
-    // adhocDialog: {
-    //   uiFramework: "custom-containers-local",
-    //   moduleName: "egov-pt",
-    //   componentPath: "DialogContainer",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "sm",
-    //     screenKey: "search"
-    //   },
-    //   children: {
-    //     popup: adhocPopup
-    //   }
-    // }
+    }
   }
 };
 
