@@ -132,6 +132,34 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
       getLicenceValidData
     )
   );
+  const tradeType = get(LicenseData, "tradeLicenseDetail.tradeUnits[0].tradeType");
+  if (tradeType.split('.')[0] == "ARCHITECT") {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+        "visible",
+        true
+      )
+    );
+  } else {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+        "visible",
+        false
+      )
+    );
+  }
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewValidityPeriod",
+      "visible",
+      false
+    )
+  );
  
   prepareDocumentsDetailsView(state, dispatch);
 }
