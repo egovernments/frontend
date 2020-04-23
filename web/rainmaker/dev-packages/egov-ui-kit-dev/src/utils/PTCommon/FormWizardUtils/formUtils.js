@@ -1,7 +1,5 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
-import store from "ui-redux/store";
-import { assessProperty, createProperty } from "./formActionUtils";
+import { assessProperty, createProperty, routeTo } from "./formActionUtils";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -259,11 +257,7 @@ export const formWizardConstants = {
 
 export const routeToCommonPay = (propertyId, tenantId, businessService = 'PT') => {
   let routeLink = `/egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}&businessService=${businessService}`;
-  store.dispatch(
-    setRoute(
-      routeLink
-    )
-  );
+  routeTo(routeLink)
 }
 
 export const propertySubmitAction = (Properties, action, props) => {

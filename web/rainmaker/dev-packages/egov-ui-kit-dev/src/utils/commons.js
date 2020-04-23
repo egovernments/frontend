@@ -11,6 +11,7 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
 import React from "react";
+import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -886,11 +887,13 @@ export const getTotalAmountDue = (payload) => {
 
 
 export const setRoute = (link) => {
-  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
-  window.location.href =
-    process.env.NODE_ENV === "production"
-      ? moduleName + link
-      : link;
+  // let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+  // window.location.href =
+  //   process.env.NODE_ENV === "production"
+  //     ? moduleName + link
+  //     : link;
+
+  routeTo(link)
 }
 
 
