@@ -313,7 +313,11 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath: "scrutinyDetails.planDetail.planInformation.demolitionArea",
-                            callBack: checkValueForNA
+                            callBack: value => {
+                                if(value) { return value;} 
+                                else if(value == "0") { return "0"} 
+                                else { return checkValueForNA }
+                            }
                         }
                     )
                 })
@@ -372,36 +376,36 @@ export const scrutinySummary = getCommonGrayCard({
                                 callBack: checkValueForNA
                         }
                     ),
-                    isCharitableTrustBuilding: getLabelWithValue(
-                        {
-                            labelName: "Is Charitable TrustBuilding ?",
-                            labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
-                        },
-                        {
-                            jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding",
-                            callBack: checkValueForNA
-                        }
-                    ),
-                    isAffordableHousingScheme: getLabelWithValue(
-                        {
-                            labelName: "Is Affordable Housing Scheme ?",
-                            labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
-                        },
-                        {
-                            jsonPath: "BPA.additionalDetails.isAffordableHousingScheme",
-                            callBack: checkValueForNA
-                        }
-                    ),
-                    annualExpectedExpenditure: getLabelWithValue(
-                        {
-                            labelName: "Annual Expected Expenditure",
-                            labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_LABEL"
-                        },
-                        {
-                            jsonPath: "BPA.additionalDetails.annualExpectedExpenditure",
-                            callBack: checkValueForNA
-                        }
-                    ),
+                    // isCharitableTrustBuilding: getLabelWithValue(
+                    //     {
+                    //         labelName: "Is Charitable TrustBuilding ?",
+                    //         labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding",
+                    //         callBack: checkValueForNA
+                    //     }
+                    // ),
+                    // isAffordableHousingScheme: getLabelWithValue(
+                    //     {
+                    //         labelName: "Is Affordable Housing Scheme ?",
+                    //         labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPA.additionalDetails.isAffordableHousingScheme",
+                    //         callBack: checkValueForNA
+                    //     }
+                    // ),
+                    // annualExpectedExpenditure: getLabelWithValue(
+                    //     {
+                    //         labelName: "Annual Expected Expenditure",
+                    //         labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPA.additionalDetails.annualExpectedExpenditure",
+                    //         callBack: checkValueForNA
+                    //     }
+                    // ),
                 })
             }),
             items: [],
