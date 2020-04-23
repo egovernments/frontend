@@ -68,7 +68,7 @@ const titlebar = {
         moduleName: "egov-bpa",
         componentPath: "ApplicationNoContainer",
         props: {
-          number: ""
+          number: "NA"
         }
       }
     }),
@@ -78,8 +78,7 @@ const titlebar = {
         moduleName: "egov-bpa",
         componentPath: "NoteAtom",
         props: {
-          labelName: "This licensee is valid for <xx> Year(s)",
-          labelKey: ["BPA_LICENSE_VALID_LABEL"],
+          number: "NA"
         },
         visible: false
       }
@@ -100,7 +99,9 @@ const titlebar2 = {
       moduleName: "egov-bpa",
       componentPath: "PermitNumber",
       gridDefination: {},
-      props: {}
+      props: {
+        number: "NA"
+      },
     },
     rightContainer:getCommonContainer({
       downloadMenu: {
@@ -538,10 +539,11 @@ const setSearchResponse = async (
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
-        "props.labelKey[2]",
+        "props.number",
         convertEpochToDate(get(response, "Bpa[0].validityDate"))
       )
     );
+
     dispatch(
       handleField(
         "search-preview",
