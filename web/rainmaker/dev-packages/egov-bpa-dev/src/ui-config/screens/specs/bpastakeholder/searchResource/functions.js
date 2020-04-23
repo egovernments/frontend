@@ -114,9 +114,7 @@ export const searchApiCall = async (state, dispatch) => {
           item.tradeLicenseDetail.owners[0].name || "-",
         [getTextToLocalMapping("Licensee Type")]:
           getTextToLocalMapping(
-            `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType
-              .toUpperCase()
-              .replace(/[._:-\s\/]/g, "_")}_VIEW`
+            `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType.split('.')[0].toUpperCase()}`
           ) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
         [getTextToLocalMapping("Owner Name")]:
