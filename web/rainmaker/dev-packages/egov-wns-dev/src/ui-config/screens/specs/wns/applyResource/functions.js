@@ -34,7 +34,18 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
     }
     try {
-      if (process.env.REACT_APP_NAME === "Citizen") {
+      let allowCitizenToSearchOtherProperties = get(
+        state
+          .screenConfiguration
+          .preparedFinalObject
+          .applyScreenMdmsData["ws-services-masters"],
+        "PropertySearch", []
+      )
+        .map(a => a.code === "allowCitizenToUseAnyProperty")[0];
+      if (
+        process.env.REACT_APP_NAME === "Citizen" &&
+        !allowCitizenToSearchOtherProperties
+      ) {
         queryObject.push({ key: "mobileNumber", value: JSON.parse(getUserInfo()).mobileNumber })
       }
       let response = await getPropertyResults(queryObject, dispatch);

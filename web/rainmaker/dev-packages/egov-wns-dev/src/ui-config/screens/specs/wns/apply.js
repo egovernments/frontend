@@ -83,7 +83,7 @@ const summaryScreenEMP = getCommonCard({
   reviewDocumentDetails,
   reviewOwnerDetails
 })
-let summaryScreen=process.env.REACT_APP_NAME === "Citizen"?summaryScreenCitizen:summaryScreenEMP;
+let summaryScreen = process.env.REACT_APP_NAME === "Citizen" ? summaryScreenCitizen : summaryScreenEMP;
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
     { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
@@ -129,7 +129,8 @@ export const getMdmsData = async dispatch => {
             { name: "waterSubSource" },
             { name: "waterSource" },
             { name: "waterSourceWithSubSource" },
-            { name: "connectionType" }
+            { name: "connectionType" },
+            { name: "PropertySearch" }
           ]
         }
       ]
