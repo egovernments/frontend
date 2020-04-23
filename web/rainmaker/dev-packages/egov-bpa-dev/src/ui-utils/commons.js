@@ -157,6 +157,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     []
   );
 
+  let BPADocs = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.documents",
+    []
+  );
+
   let documnts = [];
  if(documentsUpdalod) {
   Object.keys(documentsUpdalod).forEach(function(key) {
@@ -180,54 +186,48 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     documnts.forEach(documents => {
     if(documents && documents.documents){
       documents.documents.forEach(docItem =>{
+        if(documents.dropDownValues && documents.dropDownValues.value) {
         let doc = {};
-        if(documents.dropDownValues) {
         doc.documentType = documents.dropDownValues.value;
-        }
         doc.fileStoreId = docItem.fileStoreId;
         doc.fileStore = docItem.fileStoreId;
         doc.fileName = docItem.fileName;
         doc.fileUrl = docItem.fileUrl;
-        if(doc.id) {
-          doc.id = docItem.id;
-        }
+        BPADocs && BPADocs.forEach(bpaDc => {
+          if(bpaDc.fileStoreId ===  docItem.fileStoreId) {
+            doc.id = bpaDc.id;
+          }
+        });
+        requiredDocuments.push(doc);
+      }
+      })
+    }
+  });
+
+  documnts.forEach(documents => {
+    if(documents && documents.previewdocuments){
+      documents.previewdocuments.forEach(pDoc =>{
+        let doc = {};
+        // if(documents.dropDownValues) {
+        // doc.documentType = documents.dropDownValues.value;
+        // }
+        doc.documentType = pDoc.dropDownValues;
+        doc.fileStoreId = pDoc.fileStoreId;
+        doc.fileStore = pDoc.fileStoreId;
+        doc.fileName = pDoc.fileName;
+        doc.fileUrl = pDoc.fileUrl;
+        BPADocs && BPADocs.forEach(bpaDc => {
+          if(bpaDc.fileStoreId ===  pDoc.fileStoreId) {
+            doc.id = bpaDc.id;
+          }
+        });
         requiredDocuments.push(doc);
       })
     }
-  })
+  });
+
 }
 
-  let uploadeDocumnts = [];
-  if (documentsUpdalod) {
-    Object.keys(documentsUpdalod).forEach(function(key) {
-      uploadeDocumnts.push(documentsUpdalod[key])
-    });
-  }
-  if (uploadeDocumnts && uploadeDocumnts.length > 0) {
-    uploadeDocumnts.forEach(upDoc => {
-      let value;
-      if (upDoc && upDoc.dropDownValues && upDoc.dropDownValues.value)
-        value = upDoc.dropDownValues.value;
-    })
-  }
-  let comparingPreviuosDoc = [];
-  let BPAUploadeddocuments = get(
-    state.screenConfiguration.preparedFinalObject,
-    "BPA.documents",
-    []
-  );
-
-  let bpaComparingDocuments = []
-  if (BPAUploadeddocuments && BPAUploadeddocuments.length > 0) {
-    BPAUploadeddocuments.forEach(upDoc => {
-      requiredDocuments.forEach(doc => {
-        if(upDoc && doc && upDoc.documentType && doc.documentType && upDoc.documentType === doc.documentType) {
-          // doc.id = upDoc.id;
-          bpaComparingDocuments.push(doc);
-        }
-      })
-    })
-  }
 
   let subOccupancyData = get(
     state, "screenConfiguration.preparedFinalObject.edcr.blockDetail"
@@ -263,7 +263,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     // set(payload, "additionalDetails", null);
     // set(payload, "units", null);
     set(payload, "units", blocks);
-
 
     let documents;
     if (requiredDocuments && requiredDocuments.length > 0) {

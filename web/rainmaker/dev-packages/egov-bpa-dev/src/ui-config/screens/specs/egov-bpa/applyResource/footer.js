@@ -132,7 +132,7 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
     {}
   );
   jp.query(reduxDocuments, "$.*").forEach(doc => {
-    if (doc.documents && doc.documents.length > 0) {
+    if (doc.documents && doc.documents.length > 0 && doc.dropDownValues) {
       doc.documents.forEach(docDetail =>{
         let obj = {};
         obj.title = getTransformedLocale(doc.documentCode);

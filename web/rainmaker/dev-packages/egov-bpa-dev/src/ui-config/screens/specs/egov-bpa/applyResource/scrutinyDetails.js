@@ -49,8 +49,14 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         md: 3
       },
       props: {
-          label: 'Uploaded Diagram',
-          linkDetail : 'uploadedDiagram.dxf',
+          label: {
+            labelName: "Uploaded Diagram",
+            labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM"
+          },
+          linkDetail: {
+            labelName: "uploadedDiagram.dxf",
+            labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM_DXF"
+          },
           jsonPath: "scrutinyDetails.updatedDxfFile",
       },
       type: "array"
@@ -65,8 +71,14 @@ export const buildingPlanScrutinyDetails = getCommonCard({
       md: 3
     },
     props: {
-        label: 'Scrutiny Report',
-        linkDetail: 'ScrutinyReport.pdf',
+        label: {
+          labelName: "Scrutiny Report",
+          labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT"
+        },
+        linkDetail: {
+          labelName: "ScrutinyReport.pdf",
+          labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT_PDF"
+        },
         jsonPath: "scrutinyDetails.planReport",
       },
     type: "array"
@@ -209,7 +221,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelsFromLocalisation: true,
                   suggestions: [],
                   fullwidth: true,
-                  // required: true,
+                  required: false,
                   isMulti: true,
                   inputLabelProps: {
                     shrink: true
