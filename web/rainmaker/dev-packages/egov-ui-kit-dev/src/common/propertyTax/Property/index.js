@@ -120,6 +120,29 @@ class Property extends Component {
         ],
       },
     };
+
+    const requestBodyForBusinessService = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "BillingService",
+            masterDetails: [
+              {
+                name: "TaxPeriod",
+              },
+              {
+                name: "TaxHeadMaster",
+              },
+              {
+                name: "BusinessService",
+                filter: "[?(@.businessService=='PropertyTax')]"
+              }
+            ],
+          },
+        ],
+      },
+    };
     fetchGeneralMDMSData(requestBody, "PropertyTax", [
       "Floor",
       "UsageCategoryMajor",
@@ -140,11 +163,9 @@ class Property extends Component {
       "Thana"
     ]);
     fetchGeneralMDMSData(
-      null,
+      requestBodyForBusinessService,
       "BillingService",
-      ["TaxPeriod", "TaxHeadMaster"],
-      "",
-      commonConfig.tenantId
+      ["TaxPeriod", "TaxHeadMaster","BusinessService"]
     );
     fetchProperties([
       { key: "ids", value: decodeURIComponent(this.props.match.params.propertyId) },

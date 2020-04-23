@@ -9,9 +9,11 @@ import OwnerInfo from '../../../Property/components/OwnerInfo';
 import TotalDues from '../../../Property/components/TotalDues';
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
+import get from "lodash/get";
 
 const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style, generalMDMSDataById, totalBillAmountDue, history, loadMdmsData }) => {
     const items2 = [items[1]];
+    const hasOnlinePayment=get(generalMDMSDataById,"BusinessService.PT.hasOnlinePayment",true);
     return (
         <div className="form-without-button-cont-generic" >
             {label && (
@@ -45,7 +47,7 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                                 } /> */}
                             <AssessmentHistory></AssessmentHistory>
                             <PaymentHistory></PaymentHistory>
-                            <Card textChildren={<TotalDues history tenantId={properties.tenantId} consumerCode={properties.propertyId} totalBillAmountDue={totalBillAmountDue} />} style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }} />
+                            <Card textChildren={<TotalDues history tenantId={properties.tenantId} consumerCode={properties.propertyId} totalBillAmountDue={totalBillAmountDue} hasOnlinePayment={hasOnlinePayment} />} style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }} />
 
                         </div>
                     }
