@@ -1,7 +1,7 @@
 
 import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
-// import { setRoute } from "egov-ui-kit/redux/app/actions";
-import { getApplicationType,setRoute } from "egov-ui-kit/utils/commons";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { getApplicationType } from "egov-ui-kit/utils/commons";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import React from "react";
 import store from "ui-redux/store";
@@ -334,8 +334,8 @@ const propertyIdClick = (item) => {
 }
 
 const navigate=(url)=>{
-  // store.dispatch(setRoute(url));
-  setRoute(url);
+  store.dispatch(setRoute(url));
+  // setRoute(url);
 }
 
 const propertyInformationScreenLink=(propertyId,tenantId)=>{
