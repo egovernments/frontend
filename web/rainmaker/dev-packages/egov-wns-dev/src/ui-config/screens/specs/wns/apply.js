@@ -22,6 +22,7 @@ import {
   prepareDocumentsUploadData,
   getSearchResultsForSewerage,
   getSearchResults,
+  getPropertyResults,
   handleApplicationNumberDisplay,
   findAndReplace,
   prefillDocuments
@@ -186,6 +187,8 @@ export const getMdmsData = async dispatch => {
 export const getData = async (action, state, dispatch) => {
   const applicationNo = getQueryArg(window.location.href, "applicationNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
+  const propertyID=getQueryArg(window.location.href,"propertyId");
+
   await getMdmsData(dispatch);
   if (applicationNo) {
     //Edit/Update Flow ----
@@ -297,6 +300,12 @@ export const getData = async (action, state, dispatch) => {
         dispatch
       );
     }
+  }else if(propertyID){
+    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
+    let payload=await getPropertyResults(queryObject,dispatch);
+    let propertyObj=payload.Properties[0];
+    dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, "null", "NA")));
+    dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
   }
 };
 
@@ -356,8 +365,23 @@ const screenConfig = {
     getData(action, state, dispatch).then(() => { });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
+    const propertyId=getQueryArg(window.location.href,"propertyId");
+
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-    if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+
+    if(propertyId){
+      togglePropertyFeilds(action, true);
+      if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, true);
+      } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, true);
+      } else {
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, false);
+      }
+    }else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
       togglePropertyFeilds(action, true);
       if (applicationNumber.includes("SW")) {
         dispatch(prepareFinalObject("applyScreen.water", false));
