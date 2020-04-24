@@ -7,7 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 const arrayCrawler = (arr, n) => {
   if (n == 1) {
     return arr.map(item => {
@@ -103,9 +103,9 @@ const jurisdictionDetailsCard = {
               },
               required: true,
               jsonPath: "Employee[0].jurisdictions[0].boundaryType",
-              localePrefix :{
-                moduleName : "EGOV_LOCATION",
-                masterName : "BOUNDARYTYPE"
+              localePrefix: {
+                moduleName: "EGOV_LOCATION",
+                masterName: "BOUNDARYTYPE"
               },
               props: {
                 className: "hr-generic-selectfield",
@@ -197,6 +197,41 @@ const jurisdictionDetailsCard = {
                   processedBoundaryData
                 )
               );
+              if (action.value && action.value == 'Locality') {
+               console.log("========== getTenantId======",  getTenantId());
+               let localePrefix = {
+                masterName: "ADMIN",
+                moduleName: `${getTenantId().toUpperCase()
+                .replace(/[.]/g, "_")}`
+                }
+                dispatch(
+                  handleField(
+                    "create",
+                    action.componentJsonpath.replace(
+                      ".boundaryType",
+                      ".boundary"
+                    ),
+                    "props.localePrefix",
+                    localePrefix
+                  )
+                );
+              } else {
+                let localePrefix = {
+                  masterName: "TENANTS",
+                  moduleName: "TENANT"
+                }
+                dispatch(
+                  handleField(
+                    "create",
+                    action.componentJsonpath.replace(
+                      ".boundaryType",
+                      ".boundary"
+                    ),
+                    "props.localePrefix",
+                    localePrefix
+                  )
+                );
+              }
             }
           },
           boundary: {
