@@ -40,8 +40,8 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import jp from "jsonpath";
-import { download } from "egov-common/ui-utils/commons";
 import axios from "axios";
+import { getBpaSearchResults } from "../../../../ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -4685,7 +4685,7 @@ export const getConditionsInPermitList = async (action, state, dispatch) => {
   dispatch(prepareFinalObject( "BPA.additionalDetails.pendingapproval" ,finalPermitList));
 }
 
-export const getLicenseNumber = async (state, dispatch) => {
+export const getLicenseDetails = async (state, dispatch) => {
 
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let userInfo = JSON.parse(getUserInfo());
@@ -4710,11 +4710,14 @@ export const getLicenseNumber = async (state, dispatch) => {
     );
     for (let i = 0; i <= License.Licenses.length; i++) {
       if (License.Licenses[i].status === "APPROVED") {
-        dispatch(prepareFinalObject("bpaDetails.appliedBy", `${License.Licenses[i].tradeLicenseDetail.owners[0].name}/${License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType}/${License.Licenses[i].licenseNumber}`))
-        break;
+        let name = License.Licenses[i].tradeLicenseDetail.owners[0].name;
+        let tradeType = License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType;
+        let licenseNumber = License.Licenses[i].licenseNumber;
+        let tradeTypeWithLocalization = getTextToLocalMapping(`TRADELICENSE_TRADETYPE_${tradeType.split('.')[0].toUpperCase()}`);
+        return `${name}/${tradeTypeWithLocalization}/${licenseNumber}`;
+        // return `${License.Licenses[i].tradeLicenseDetail.owners[0].name}/${License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType}/${License.Licenses[i].licenseNumber}`;
       }
     }
-    return License;
   } catch (error) {
     console.log(error);
     return {};
@@ -4726,30 +4729,27 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
     { key: "tenantId", value: tenantId },
     { key: "permitNos", value: permitNumber }
   ];
+
   const response = await getBpaSearchResults(queryObject);
-  console.log(response,'response')
-  if(response.Bpa.length>0)
-  return response.Bpa[0];
+
+  if (response.Bpa.length > 0)
+    return response.Bpa[0];
   else
-  return 'NOPERMIT';
+    return 'NOPERMIT';
 
 };
 
-export const getOcEdcrDetails = async (state, dispatch, fieldInfo) => {
+export const getOcEdcrDetails = async (state, dispatch) => {
   try {
     const scrutinyNo = get(
       state.screenConfiguration.preparedFinalObject,
       `BPA.edcrNumber`,
       ""
-    );
-    console.log(scrutinyNo,'scrutinyNo');
-    let tenantId =
-      getQueryArg(window.location.href, "tenantId") ||
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "BPA.address.city"
-      );
-      //check format
+    ) || getQueryArg(window.location.href, "edcrNumber");
+
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+
+    //check format
     if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
       dispatch(
         toggleSnackbar(
@@ -4763,68 +4763,71 @@ export const getOcEdcrDetails = async (state, dispatch, fieldInfo) => {
       );
       return;
     }
+
     //get oc edcr details
     let ocpayload = await edcrHttpRequest(
       "post",
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
-        scrutinyNo +
-        "&tenantId=" + tenantId,
+      scrutinyNo +
+      "&tenantId=" + tenantId,
       {}
     );
-    console.log(ocpayload,ocpayload.edcrDetail[0].permitNumber,'ocpayload');
+
     //get permit details for oc edcr using permitNumber
-    const bpaDetails = await getPermitDetails(ocpayload.edcrDetail[0].permitNumber,tenantId);
-      if(bpaDetails==='NOPERMIT'){//no valid permit
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "Incorrect Permit Number!",
-              labelKey: "BPA_INCORRECT_PERMIT_NUMBER"
-            },
-            "error"
-          )
-        );
-        return;
-      }
-      console.log(bpaDetails,'bpaDetails');
-      const todayDate = new Date();
-      //Check oc edcr date validity less than today
-      if(ocpayload.edcrDetail[0].permitDate > todayDate){//to be checked for the date comparison
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "Invalid Permit Date!",
-              labelKey: "BPA_INVALID_PERMIT"
-            },
-            "error"
-          )
-        );
-        return;
-      }
-      //get permit edcr details
-      let bpapayload = await edcrHttpRequest(
-        "post",
-        "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
-        bpaDetails.edcrNumber +
-          "&tenantId=" + tenantId,
-        {}
+    const bpaDetails = await getPermitDetails(get(ocpayload, "edcrDetail[0].permitNumber"), tenantId);
+    if (bpaDetails === 'NOPERMIT') {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Permit Number!",
+            labelKey: "BPA_INCORRECT_PERMIT_NUMBER"
+          },
+          "error"
+        )
       );
-      console.log(bpapayload,'bpapayload');
-      if(ocpayload.edcrDetail[0].tenantId !==bpapayload.edcrDetail[0].tenantId){//check city using tenantId- is this correct
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "Invalid City!",
-              labelKey: "BPA_INVALID_PERMIT_CITY"
-            },
-            "error"
-          )
-        );
-        return;
-      }
+      return;
+    }
+
+    //Check oc edcr date validity less than today
+    const todayDate = new Date();
+    if (get(ocpayload, "edcrDetail[0].permitDate") > todayDate) {  //to be checked for the date comparison
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Invalid Permit Date!",
+            labelKey: "BPA_INVALID_PERMIT"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //get permit edcr details
+    let edcrPayload = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+      bpaDetails.edcrNumber +
+      "&tenantId=" + tenantId,
+      {}
+    );
+
+    if (get(ocpayload, "edcrDetail[0].tenantId") !== get(edcrPayload, "edcrDetail[0].tenantId")) {//check city using tenantId- is this correct
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Invalid City!",
+            labelKey: "BPA_INVALID_PERMIT_CITY"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
     //check duplicates
     let queryObject = [
       {
@@ -4842,11 +4845,9 @@ export const getOcEdcrDetails = async (state, dispatch, fieldInfo) => {
       "",
       queryObject
     );
-    console.log(bpaSearch,'bpaSearch');
 
-    // let isData = true;
     let data = bpaSearch.Bpa.map((data, index) => {
-      if(data.edcrNumber === scrutinyNo && data.status !=='REJECTED' && index>0) {
+      if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED' && index > 0) {
         dispatch(
           toggleSnackbar(
             true,
@@ -4861,6 +4862,9 @@ export const getOcEdcrDetails = async (state, dispatch, fieldInfo) => {
       }
     });
 
+    dispatch(prepareFinalObject("ocScrutinyDetails", get(ocpayload, "edcrDetail[0]")));
+    dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
+    dispatch(prepareFinalObject("bpaDetails", bpaDetails));
   } catch (e) {
     dispatch(
       toggleSnackbar(

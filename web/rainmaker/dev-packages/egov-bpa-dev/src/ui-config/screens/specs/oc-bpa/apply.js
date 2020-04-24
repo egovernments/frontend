@@ -5,9 +5,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getQueryArg,
-  getFileUrlFromAPI,
   setBusinessServiceDataToLocalStorage,
-  getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -31,7 +29,8 @@ import {
   getAppSearchResults
 } from "../../../../ui-utils/commons";
 import {
-  getBpaMdmsData
+  getBpaMdmsData,
+  getOcEdcrDetails
 } from "../utils";
 
 
@@ -113,9 +112,6 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "OwnerType"
-            },
-            {
-              name: "OwnerShipCategory"
             }
           ]
         },
@@ -139,22 +135,7 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "SubOccupancyType"
-            },
-            {
-              name: "Usages"
-            },
-            {
-              name: "ProposedLandUse"
-            },
-            {
-              name: "TownPlanningScheme"
             }
-          ]
-        },
-        {
-          moduleName: "TradeLicense",
-          masterDetails: [
-            { name: "TradeType", filter: `[?(@.type == "BPA")]` }
           ]
         }
       ]
@@ -162,87 +143,27 @@ const getMdmsData = async (action, state, dispatch) => {
   };
   let payload = await getBpaMdmsData(action, state, dispatch, mdmsBody);
   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-};
-
-const getFirstListFromDotSeparated = list => {
-  list = list.map(item => {
-    if (item.active) {
-      return item.code.split(".")[0];
-    }
-  });
-  list = [...new Set(list)].map(item => {
-    return { code: item };
-  });
-  return list;
-};
-
-const setSearchResponse = async (
-  state,
-  dispatch,
-  applicationNumber,
-  tenantId, action
-) => {
-  const response = await getAppSearchResults([
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "applicationNos", value: applicationNumber }
-  ]);
-
-  dispatch(prepareFinalObject("BPA", get(response, "Bpa[0]")));
-
-  let edcrRes = await edcrHttpRequest(
-    "post",
-    `/edcr/rest/dcr/scrutinydetails?edcrNumber=${get(response, "Bpa[0].edcrNumber")}&tenantId=${tenantId}`,
-    "search", []
+  let applicationType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[0].code"
   );
-
-  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
-
-  const ownershipCategory = get(response, "Bpa[0].ownershipCategory");
-  if (ownershipCategory) {
-    dispatch(prepareFinalObject("BPA.ownerShipMajorType", ownershipCategory.split('.')[0]));
-  }
+  dispatch(prepareFinalObject("BPA.applicationType", applicationType));
 };
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-
     set(state, "screenConfiguration.moduleName", "OCBPA");
 
-    getMdmsData(action, state, dispatch).then(response => {
-      let ownershipCategory = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
-        []
-      );
-      ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.DropdownsData.OwnershipCategory",
-          ownershipCategory
-        )
-      );
-      let applicationType = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[0].code"
-      );
-      dispatch(prepareFinalObject("BPA.applicationType", applicationType));
-    });
-
-    let isEdit = true;
-    if (step || step == 0) {
-      isEdit = false
+    const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+    if(edcrNumber) {
+      dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
+      getOcEdcrDetails(state, dispatch)
     }
-    if (applicationNumber && isEdit) {
-      setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
-    }
+    getMdmsData(action, state, dispatch);
 
     const queryObject = [
       { key: "tenantId", value: tenantId },

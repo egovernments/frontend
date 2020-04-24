@@ -7,6 +7,7 @@ import {
   getPattern,
   getLabel,
   getDateField,
+  getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { documentList } from "./documentList";
 import { resetFields, submitFields } from "./functions";
@@ -18,7 +19,8 @@ const header = getCommonHeader({
   labelKey: "BPA_OC_SCRUTINY_TITLE"
 });
 
-export const ocScrutinyDetailsContainer = getCommonContainer({
+export const ocScrutinyDetailsContainer = getCommonGrayCard({
+
   // buildingplanscrutinyapplicationnumber: getLabelWithValue(
   //   {
   //     labelName: "eDCR Number",
@@ -28,56 +30,74 @@ export const ocScrutinyDetailsContainer = getCommonContainer({
   //     jsonPath: "scrutinyDetails.edcrNumber"
   //   }
   // ),
-
-  eDCRNumber: getTextField({
-    label: {
-      labelName: "eDCR Number",
-      labelKey: "BPA_EDCR_NO_LABEL"
-    },
-    gridDefination: {
-      xs: 12,
-      sm: 4,
-      md: 4
-    },
-    props: {
-      disabled: true,
-      className: "tl-trade-type"
-    },
-    jsonPath: "bpaDetails.edcrNumber"
-  }),
-
-  uploadedfile: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-bpa",
-    componentPath: "downloadFile",
-    gridDefination: {
-      xs: 12,
-      sm: 4,
-      md: 4
-    },
-    props: {
-      label: 'Uploaded Diagram',
-      linkDetail: 'uploadedDiagram.dxf',
-      jsonPath: "scrutinyDetails.updatedDxfFile",
-    },
-    type: "array"
+  gridDefination: {
+    xs: 12,
+    sm: 12,
+    md: 12
   },
-  scrutinyreport: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-bpa",
-    componentPath: "downloadFile",
-    gridDefination: {
-      xs: 12,
-      sm: 4,
-      md: 4
+  scrutinyDetailsCard: getCommonContainer({
+    eDCRNumber: getTextField({
+      label: {
+        labelName: "eDCR Number",
+        labelKey: "BPA_EDCR_NO_LABEL"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+      },
+      props: {
+        disabled: true,
+        className: "tl-trade-type"
+      },
+      jsonPath: "bpaDetails.edcrNumber"
+    }),
+  
+    uploadedfile: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-bpa",
+      componentPath: "downloadFile",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+      },
+      props: {
+        label: {
+          labelName: "Uploaded Diagram",
+          labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM"
+        },
+        linkDetail: {
+          labelName: "uploadedDiagram.dxf",
+          labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM_DXF"
+        },
+        jsonPath: "scrutinyDetails.updatedDxfFile",
+      },
+      type: "array"
     },
-    props: {
-      label: 'Scrutiny Report',
-      linkDetail: 'ScrutinyReport.pdf',
-      jsonPath: "scrutinyDetails.planReport",
-    },
-    type: "array"
-  }
+    scrutinyreport: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-bpa",
+      componentPath: "downloadFile",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+      },
+      props: {
+        label: {
+          labelName: "Scrutiny Report",
+          labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT"
+        },
+        linkDetail: {
+          labelName: "ScrutinyReport.pdf",
+          labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT_PDF"
+        },
+        jsonPath: "scrutinyDetails.planReport",
+      },
+      type: "array"
+    }
+  })
 });
 
 const buildingInfoCard = getCommonCard({

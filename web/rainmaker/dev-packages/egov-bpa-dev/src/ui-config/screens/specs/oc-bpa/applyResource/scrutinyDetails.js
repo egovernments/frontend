@@ -4,8 +4,6 @@ import {
   getTextField,
   getCommonContainer,
   getPattern,
-  getCommonGrayCard,
-  getCommonSubHeader,
   getLabelWithValue,
   getBreak,
   getSelectField,
@@ -15,7 +13,6 @@ import {
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import "./index.css";
-import { setProposedBuildingData } from "../../utils/index.js";
 import { getOcEdcrDetails } from "../../utils";
 
 export const basicDetails = getCommonCard({
@@ -88,7 +85,7 @@ export const basicDetails = getCommonCard({
         labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
       },
       required: true,
-      jsonPath: 'scrutinyDetails.planDetail.planInformation.occupancy',
+      jsonPath: 'ocScrutinyDetails.planDetail.planInformation.occupancy',
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -281,7 +278,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         labelKey: "BPA_EDCR_NO_LABEL"
       },
       {
-        jsonPath: "scrutinyDetails.edcrNumber"
+        jsonPath: "ocScrutinyDetails.edcrNumber"
       }
     ),
 
@@ -295,9 +292,15 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         md: 3
       },
       props: {
-        label: 'Uploaded Diagram',
-        linkDetail: 'uploadedDiagram.dxf',
-        jsonPath: "scrutinyDetails.updatedDxfFile",
+        label: {
+          labelName: "Uploaded Diagram",
+          labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM"
+        },
+        linkDetail: {
+          labelName: "uploadedDiagram.dxf",
+          labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM_DXF"
+        },
+        jsonPath: "ocScrutinyDetails.updatedDxfFile",
       },
       type: "array"
     },
@@ -311,9 +314,15 @@ export const buildingPlanScrutinyDetails = getCommonCard({
         md: 3
       },
       props: {
-        label: 'Scrutiny Report',
-        linkDetail: 'ScrutinyReport.pdf',
-        jsonPath: "scrutinyDetails.planReport",
+        label: {
+          labelName: "Scrutiny Report",
+          labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT"
+        },
+        linkDetail: {
+          labelName: "ScrutinyReport.pdf",
+          labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT_PDF"
+        },
+        jsonPath: "ocScrutinyDetails.planReport",
       },
       type: "array"
     }
@@ -540,7 +549,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
               labelName: "Total Buildup Area (sq.mtrs)",
               labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
             },
-            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalArea[0].builtUpArea",
+            jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.totalArea[0].builtUpArea",
             props: {
               disabled: 'true',
               className: "tl-trade-type"
@@ -551,25 +560,6 @@ export const abstractProposedBuildingDetails = getCommonCard({
               md: 6
             }
           })
-        },
-        isCharitableTrustBuilding: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-bpa",
-          componentPath: "BpaCheckboxContainer",
-          jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding",
-          props: {
-            label: {
-              labelName: "Is Charitable TrustBuilding ?",
-              labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
-            },
-            jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding"
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          type: "array"
         },
         numOfFloors: {
           ...getTextField({
@@ -577,7 +567,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
               labelName: "Total Floor Area",
               labelKey: "BPA_APPLICATION_NO_OF_FLOORS"
             },
-            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalArea[0].floorArea",
+            jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.totalArea[0].floorArea",
             props: {
               disabled: 'true',
               className: "tl-trade-type"
@@ -588,24 +578,6 @@ export const abstractProposedBuildingDetails = getCommonCard({
               md: 6
             }
           })
-        },
-        isAffordableHousingScheme: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-bpa",
-          componentPath: "BpaCheckboxContainer",
-          props: {
-            label: {
-              labelName: "Is Affordable Housing Scheme ?",
-              labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
-            },
-            jsonPath: "BPA.additionalDetails.isAffordableHousingScheme"
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          type: "array"
         },
         highFromGroundLevel: {
           ...getTextField({
@@ -613,7 +585,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
               labelName: "Total Carpet Area",
               labelKey: "BPA_APPLICATION_HIGH_FROM_GROUND"
             },
-            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalArea[0].carpetArea",
+            jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.totalArea[0].carpetArea",
             props: {
               disabled: 'true',
               className: "tl-trade-type"
@@ -624,25 +596,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
               md: 6
             }
           })
-        },
-        annualExpectedExpenditure: getTextField({
-          label: {
-            labelName: "Annual Expected Expenditure",
-            labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Annual Expected Expenditure",
-            labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_PLACEHOLDER"
-          },
-          pattern: getPattern("Amount"),
-          required: true,
-          jsonPath: "BPA.additionalDetails.annualExpectedExpenditure",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          }
-        }),
+        }
       })
 
     }

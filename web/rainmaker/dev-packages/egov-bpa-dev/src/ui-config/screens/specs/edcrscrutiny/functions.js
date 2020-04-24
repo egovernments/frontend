@@ -10,7 +10,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import get from "lodash/get";
 import set from "lodash/set";
-import { validateFields, getLicenseNumber } from "../utils";
+import { validateFields, getLicenseDetails } from "../utils";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -399,5 +399,6 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
   dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
   dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
-  await getLicenseNumber(state,dispatch);
+  let SHLicenseDetails = await getLicenseDetails(state,dispatch);
+  dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
 };
