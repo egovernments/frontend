@@ -955,7 +955,7 @@ export const footerReviewTop = (
           componentPath: "Div",
           children: {
 
-            resubmitButton: {
+          /*      resubmitButton: {
               componentPath: "Button",
               props: {
                 variant: "contained",
@@ -967,10 +967,10 @@ export const footerReviewTop = (
                 }
               },
               children: {
-                nextButtonLabel: getLabel({
+             nextButtonLabel: getLabel({
                   labelName: "RESUBMIT",
                   labelKey: "TL_RESUBMIT"
-                })
+                }) 
               },
               onClickDefination: {
                 action: "condition",
@@ -981,7 +981,7 @@ export const footerReviewTop = (
                 rolePath: "user-info.roles",
                 roles: ["TL_CEMP", "CITIZEN"]
               }
-            },
+            }, */
 
           },
           gridDefination: {
