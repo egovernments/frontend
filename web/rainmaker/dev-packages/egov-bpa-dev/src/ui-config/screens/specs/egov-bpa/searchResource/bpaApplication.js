@@ -126,7 +126,57 @@ export const BPAApplication = getCommonCard({
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false
-    })
+    }),
+    applicationType: getSelectField({
+      label: {
+        labelName: "Application Type",
+        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Application Type",
+        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_PLACEHOLDER"
+      },
+      localePrefix: {
+        moduleName: "WF",
+        masterName: "BPA"
+      },
+      props: {
+         className : "tl-trade-type"
+      },
+      jsonPath: "searchScreen.applicationType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      }
+    }),
+    serviceType: getSelectField({
+      label: {
+        labelName: "Service type",
+        labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
+      },
+      placeholder: {
+        labelName: "Select service type",
+        labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_PLACEHOLDER"
+      },
+      localePrefix: {
+        moduleName: "WF",
+        masterName: "BPA"
+      },
+      props:{
+        className:"textfield-enterable-selection"
+      },
+      required: true,
+      jsonPath: "searchScreen.serviceType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      }
+    }),
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
