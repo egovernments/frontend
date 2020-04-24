@@ -18,7 +18,8 @@ import { httpRequest } from "../../../../ui-utils";
 import set from "lodash/set";
 import get from "lodash/get";
 
-import { propertyOwnershipDetails } from './applyResourceMutation/propertyOwnershipDetails'
+import { propertyOwnershipDetails } from './applyResourceMutation/propertyOwnershipDetails';
+import commonConfig from "config/common.js";
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -39,6 +40,89 @@ export const formwizardFirstStep = {
     propertyOwnershipDetails
   }
 };
+const getMDMSPropertyData = async (dispatch) => {
+  const mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [
+          {name: "PropertyType"},
+          {name: "UsageCategory"},
+          {name:"UsageCategoryMajor"},
+          {name:"UsageCategoryMinor"},
+          {name:"UsageCategorySubMinor"}
+          ]
+        }
+      ]
+    }
+  }
+  try {
+    let payload=null;
+     payload = await httpRequest("post","/egov-mdms-service/v1/_search","_search",[],mdmsBody);
+  let PropertyType=[];let subUsageType=[]; let UsageType=[];let Commercial=[];let Industrial=[]; let Institutional=[]; let Mixed=[];
+  console.log("===>payload",payload)
+  payload.MdmsRes.PropertyTax.PropertyType.filter(item=>{
+    if(item.name!="Built Up"){
+      PropertyType.push({
+        name:item.name,
+        code: item.code,
+        isActive: item.active
+      })
+    }
+    
+  })
+payload.MdmsRes.PropertyTax.PropertyType=PropertyType;
+
+payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
+  if(item.code.split(".").length<=2 && item.code!="NONRESIDENTIAL"){
+      UsageType.push({
+        active:item.active,
+        name:item.name,
+        code:item.code,
+        fromFY:item.fromFY
+      })
+    }
+})
+payload.MdmsRes.PropertyTax.UsageType=UsageType;
+
+payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
+  if(item.code.split(".").includes("COMMERCIAL") && item.code.split(".").length>2){
+    Commercial.push({
+      active:item.active,
+        name:item.name,
+        code:item.code,
+        fromFY:item.fromFY
+    })
+  }else if(item.code.split(".").includes("INDUSTRIAL") && item.code.split(".").length>2){
+    Industrial.push({
+      active:item.active,
+        name:item.name,
+        code:item.code,
+        fromFY:item.fromFY
+    })
+  }else if(item.code.split(".").includes("INSTITUTIONAL") && item.code.split(".").length>2){
+    Institutional.push({
+      active:item.active,
+        name:item.name,
+        code:item.code,
+        fromFY:item.fromFY
+    })
+  }
+})
+payload.MdmsRes.PropertyTax.Commercial=Commercial;
+payload.MdmsRes.PropertyTax.Industrial=Industrial;
+payload.MdmsRes.PropertyTax.Institutional=Institutional;
+// payload.MdmsRes.PropertyTax.Institutional=Mixed;
+
+
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 
 const getMdmsData = async (action, state, dispatch) => {
   let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
@@ -84,6 +168,8 @@ const getMdmsData = async (action, state, dispatch) => {
       mdmsBody
     );
 
+    console.log("==payload",payload);
+
     let OwnerShipCategory = get(
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
@@ -126,11 +212,12 @@ const getFirstListFromDotSeparated = list => {
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "apply",
+  name: "register-property",
   beforeInitScreen: (action, state, dispatch) => {
+    getMDMSPropertyData(dispatch);
     dispatch(
       prepareFinalObject(
-        "Property.additionalDetails",
+        "Property.assemblyDetails",
         {}
       )
     );
