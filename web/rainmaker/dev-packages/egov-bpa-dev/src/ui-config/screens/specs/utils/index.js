@@ -3631,15 +3631,14 @@ export const setNameOfUser = (action, state, dispatch) => {
 
 export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
   try {
-    let payload = null;
-    payload = await httpRequest(
+    let payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
       "_search",
       [],
       mdmsBody
     );
-    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    return payload;
   } catch (e) {
     console.log(e);
   }
@@ -4685,3 +4684,190 @@ export const getConditionsInPermitList = async (action, state, dispatch) => {
   
   dispatch(prepareFinalObject( "BPA.additionalDetails.pendingapproval" ,finalPermitList));
 }
+
+export const getLicenseNumber = async (state, dispatch) => {
+
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let userInfo = JSON.parse(getUserInfo());
+  const id = get(userInfo, "id");
+  const queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "id",
+      value: id
+    }
+  ];
+
+  try {
+    const License = await httpRequest(
+      "post",
+      "/tl-services/v1/BPAREG/_search",
+      "", [],
+      queryObject
+    );
+    for (let i = 0; i <= License.Licenses.length; i++) {
+      if (License.Licenses[i].status === "APPROVED") {
+        dispatch(prepareFinalObject("bpaDetails.appliedBy", `${License.Licenses[i].tradeLicenseDetail.owners[0].name}/${License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType}/${License.Licenses[i].licenseNumber}`))
+        break;
+      }
+    }
+    return License;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const getPermitDetails = async (permitNumber, tenantId) => {
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "permitNos", value: permitNumber }
+  ];
+  const response = await getBpaSearchResults(queryObject);
+  console.log(response,'response')
+  if(response.Bpa.length>0)
+  return response.Bpa[0];
+  else
+  return 'NOPERMIT';
+
+};
+
+export const getOcEdcrDetails = async (state, dispatch, fieldInfo) => {
+  try {
+    const scrutinyNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `BPA.edcrNumber`,
+      ""
+    );
+    console.log(scrutinyNo,'scrutinyNo');
+    let tenantId =
+      getQueryArg(window.location.href, "tenantId") ||
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        "BPA.address.city"
+      );
+      //check format
+    if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Scrutiny Number!",
+            labelKey: "BPA_INCORRECT_SCRUTINY_NUMBER"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+    //get oc edcr details
+    let ocpayload = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+        scrutinyNo +
+        "&tenantId=" + tenantId,
+      {}
+    );
+    console.log(ocpayload,ocpayload.edcrDetail[0].permitNumber,'ocpayload');
+    //get permit details for oc edcr using permitNumber
+    const bpaDetails = await getPermitDetails(ocpayload.edcrDetail[0].permitNumber,tenantId);
+      if(bpaDetails==='NOPERMIT'){//no valid permit
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Incorrect Permit Number!",
+              labelKey: "BPA_INCORRECT_PERMIT_NUMBER"
+            },
+            "error"
+          )
+        );
+        return;
+      }
+      console.log(bpaDetails,'bpaDetails');
+      const todayDate = new Date();
+      //Check oc edcr date validity less than today
+      if(ocpayload.edcrDetail[0].permitDate > todayDate){//to be checked for the date comparison
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Invalid Permit Date!",
+              labelKey: "BPA_INVALID_PERMIT"
+            },
+            "error"
+          )
+        );
+        return;
+      }
+      //get permit edcr details
+      let bpapayload = await edcrHttpRequest(
+        "post",
+        "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+        bpaDetails.edcrNumber +
+          "&tenantId=" + tenantId,
+        {}
+      );
+      console.log(bpapayload,'bpapayload');
+      if(ocpayload.edcrDetail[0].tenantId !==bpapayload.edcrDetail[0].tenantId){//check city using tenantId- is this correct
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Invalid City!",
+              labelKey: "BPA_INVALID_PERMIT_CITY"
+            },
+            "error"
+          )
+        );
+        return;
+      }
+    //check duplicates
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId,
+      },
+      {
+        key: "edcrNumbers",
+        value: scrutinyNo,
+      }
+    ];
+    const bpaSearch = await httpRequest(
+      "post",
+      "bpa-services/_search",
+      "",
+      queryObject
+    );
+    console.log(bpaSearch,'bpaSearch');
+
+    // let isData = true;
+    let data = bpaSearch.Bpa.map((data, index) => {
+      if(data.edcrNumber === scrutinyNo && data.status !=='REJECTED' && index>0) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Application Number already exists",
+              labelKey: "APPLICATION_NUMBER_ALREADY_EXISTS"
+            },
+            "error"
+          )
+        );
+        return;
+      }
+    });
+
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "info"
+      )
+    );
+  }
+};
