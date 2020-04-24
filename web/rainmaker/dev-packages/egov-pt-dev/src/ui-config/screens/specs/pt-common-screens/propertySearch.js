@@ -27,7 +27,7 @@ const getMDMSData = async (dispatch) => {
           masterDetails: [
             {
               name: "tenants"
-            },
+            },{name: "citymodule"}
           ]
         }
       ]
@@ -42,6 +42,14 @@ const getMDMSData = async (dispatch) => {
       mdmsBody
     );
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    if(process.env.REACT_APP_NAME != "Citizen"){
+      dispatch(
+        prepareFinalObject(
+          "searchScreen.tenantId",
+          tenant
+        )
+      );
+    }
   } catch (e) {
     console.log(e);
   }
