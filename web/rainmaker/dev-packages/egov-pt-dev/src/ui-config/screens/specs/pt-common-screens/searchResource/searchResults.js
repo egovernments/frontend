@@ -9,9 +9,21 @@ export const searchPropertyTable = {
   componentPath: "Table",
   visible: false,
   props: {
-    className: "propertyTab",
     columns: [
-      getTextToLocalMapping("Unique Property Id"),
+      {
+       name: getTextToLocalMapping("Unique Property Id"),  
+       options: {
+        filter: false,
+        customBodyRender: (value) =>{
+        return(
+           <span style={{ color: "black",cursor: "auto" }}>
+            {value}
+          </span>
+        )
+      }
+      }
+    },
+     
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Address"),
       {
