@@ -16,11 +16,16 @@ const clickHereStyles = {
 }
 
 function AddLinkForProperty() {
+  let link = process
+    .env
+    .REACT_APP_NAME === "Citizen" ?
+    "citizen/pt-common-screens/propertySearch" :
+    "employee/pt-common-screens/propertySearch";
   return (
     <div style={styles}>
       <LabelContainer
         labelName="To Find/Create Property ID"
-        labelKey="WS_APPLY_CREATE_MSG" /><span> </span><a href="/pt-common-screens/propertySearch" ><LabelContainer
+        labelKey="WS_APPLY_CREATE_MSG" /><span> </span><a href={`${link}`} ><LabelContainer
           style={clickHereStyles}
           labelKey="WS_APPLY_CLICK_HERE" />
       </a>
