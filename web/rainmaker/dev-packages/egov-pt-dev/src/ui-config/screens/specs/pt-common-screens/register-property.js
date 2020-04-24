@@ -135,13 +135,10 @@ const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }]
         },
         {
-          moduleName: "firenoc",
-          masterDetails: [{ name: "BuildingType" }, { name: "FireStations" }]
-        },
-        {
           moduleName: "egov-location",
           masterDetails: [
             {
+              // hierarchyTypeCode=REVENUE&boundaryType=Locality
               name: "TenantBoundary"
             }
           ]
@@ -153,8 +150,7 @@ const getMdmsData = async (action, state, dispatch) => {
               name: "tenants"
             }
           ]
-        },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] }
+        }
       ]
     }
   };
@@ -187,9 +183,10 @@ const getMdmsData = async (action, state, dispatch) => {
     });
     OwnerShipCategory = OwnerShipCategory.filter((v, i, a) => a.indexOf(v) === i)
     OwnerShipCategory = OwnerShipCategory.map(val => { return { code: val, active: true } });
+    
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
-
+    payload.MdmsRes['common-masters'].mollaha = 
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
