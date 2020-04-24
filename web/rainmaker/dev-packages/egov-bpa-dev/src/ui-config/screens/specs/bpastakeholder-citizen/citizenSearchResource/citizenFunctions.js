@@ -109,11 +109,11 @@ export const fetchData = async (
               )}`
             );
         }
-        service +=
-          " - " +
-          getTextToLocalMapping(
-            `TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull)}`
-          );
+        // service +=
+        //   " - " +
+        //   getTextToLocalMapping(
+        //     `TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull)}`
+        //   );
         searchConvertedArray.push({
           applicationNumber: get(element, "applicationNumber", null),
           ownername: get(element, "tradeLicenseDetail.owners[0].name", null),

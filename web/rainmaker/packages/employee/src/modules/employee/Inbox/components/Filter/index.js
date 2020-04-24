@@ -42,6 +42,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                         borderBottom: "1px solid #FE7A51",
                         width: "90%"
                     }}
+                    prefix ={"CS_COMMON_INBOX_"}
                 />
             </div>
             <div className="col-md-3" >

@@ -112,7 +112,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       nullToNa(
         get(
           response,
-          "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+          "Licenses[0].applicationType",
           "NA"
         )
       )
@@ -428,7 +428,7 @@ export const loadMdmsData = async tenantid => {
       .toUpperCase()
       .replace(/[.]/g, "_")}`;
 
-      data.corporationName = `${getTranslatedLabel(cityKey, localizationLabels).toUpperCase()} ${getTranslatedLabel(ulbGrade, localizationLabels)}`;
+      data.corporationName = `${getTranslatedLabel(cityKey, localizationLabels).toUpperCase()}`;
 
     /** END */
     data.corporationAddress = get(ulbData, "address", "NA");

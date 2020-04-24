@@ -4589,6 +4589,7 @@ export const setProposedBuildingData = async (state, dispatch, action) => {
     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
     []
   );
+  let getLocalLabels = get( state, "app.localizationLabels");
   let occupancyType = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
@@ -4624,7 +4625,7 @@ export const setProposedBuildingData = async (state, dispatch, action) => {
         sOccupancyType.forEach(subOcData => {
           occupancyTypeCheck.push({
             value : subOcData,
-            label : getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${subOcData}`)
+            label : getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${subOcData}`, getLocalLabels )
           });
         });
       }

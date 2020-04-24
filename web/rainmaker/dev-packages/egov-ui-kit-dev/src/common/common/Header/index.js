@@ -157,6 +157,7 @@ class Header extends Component {
       notificationButton,
       activeRoutePath,
       hasLocalisation,
+      notificationsCount,
       hideDigitLogo,
     } = this.props;
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
@@ -186,6 +187,7 @@ class Header extends Component {
           handleItemClick={_handleItemClick}
           activeRoutePath={activeRoutePath}
           hasLocalisation={hasLocalisation}
+          notificationsCount={notificationsCount}
           hideDigitLogo={hideDigitLogo}
         />
         <NavigationDrawer
@@ -230,6 +232,7 @@ const getUlbGradeLabel = (ulbGrade) => {
 
 const mapStateToProps = (state, ownProps) => {
   const cities = state.common.cities || [];
+  const notificationsCount = get(state.app, "notificationsCount");
   const { hideDigitLogo } = (state.common.stateInfoById && state.common.stateInfoById.length > 0 && state.common.stateInfoById[0]) || false;
   const { role } = ownProps;
   const tenantId = role && role.toLowerCase() === "citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
@@ -237,7 +240,7 @@ const mapStateToProps = (state, ownProps) => {
   const ulbGrade = userTenant && get(userTenant[0], "city.ulbGrade");
   const name = userTenant && get(userTenant[0], "code");
   const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
-  return { cities, defaultTitle, name, hideDigitLogo };
+  return { cities, defaultTitle, name, hideDigitLogo,notificationsCount};
 };
 
 const mapDispatchToProps = (dispatch) => {

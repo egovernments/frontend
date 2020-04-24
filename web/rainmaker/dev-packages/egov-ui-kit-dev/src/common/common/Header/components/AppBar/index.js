@@ -86,6 +86,21 @@ const EgovAppBar = ({
             handleItemClick={handleItemClick}
           />
         </Toolbar>
+
+        {notificationButton && role === "citizen" && (
+          <div className="notification-icon-web notification-icon" onClick={(e) => onNotificationClick(history)}>
+            {notificationsCount ? (
+              <IconButton aria-label="4 pending messages">
+                <Badge badgeContent={notificationsCount} color="primary">
+                  <Icon action="social" name="notifications-none" color="#000000" fill="#000000" />
+                </Badge>
+              </IconButton>
+            ) : (
+              <Icon action="social" name="notifications-none" color="#000000" fill="#000000" />
+            )}
+          </div>
+        )}
+
         <div className="appbar-right-logo">
           <img src={digitLogo} />
         </div>
@@ -111,20 +126,8 @@ const EgovAppBar = ({
             </IconButton>
           )}
         </div>
-        {notificationButton && role === "citizen" && (
-          <div className="notification-icon-mobile notification-icon" onClick={(e) => onNotificationClick(history)}>
-            {notificationsCount ? (
-              <IconButton aria-label="4 pending messages">
-                <Badge badgeContent={notificationsCount} color="primary">
-                  <Icon action="social" name="notifications-none" color="#fff" />
-                </Badge>
-              </IconButton>
-            ) : (
-              <Icon action="social" name="notifications-none" color="#fff" />
-            )}
-          </div>
-        )}
-      </AppBar>
+
+        </AppBar>
     </div>
   );
 };

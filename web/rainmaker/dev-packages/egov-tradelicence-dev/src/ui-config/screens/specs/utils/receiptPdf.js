@@ -995,178 +995,196 @@ const getCertificateData = (transformedData, ulbLogo,qrcode) => {
         layout: noborder
       },
       {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels("Trade Name", "TL_LOCALIZATION_TRADE_NAME")+":"
+        style: "noctable",
+          table: {
+            widths: [
+              "70%",
+              "30%"             
+            ],
+            body: [
+              [
+                {
+                stack:[
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels("Trade Name", "TL_LOCALIZATION_TRADE_NAME")+":"
+                      },
+                      {
+                        width: "*",
+                        text: transformedData.tradeName
+                        //  font: "Roboto"
+                      }
+                    ]
+                  },
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels(
+                          "Trade Owner Name",
+                          "TL_LOCALIZATION_TRADE_OWNER_NAME"
+                        )+":"
+                      },
+                      {
+                        width: "*",
+                        text: transformedData.ownersList
+                        //   font: "Roboto"
+                      }
+                    ]
+                  },
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels(
+                          "Trade Owner Contact",
+                          "TL_LOCALIZATION_TRADE_OWNER_CONTACT"
+                        )+":"
+                      },
+                      {
+                        width: "*",
+                        text: transformedData.owners[0].mobile
+                      }
+                    ]
+                  },
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels(
+                          "Occupancy Type",
+                          "TL_LOCALIZATION_OCCUPANCY_TYPE"
+                        )+":"
+                      },
+                      {
+                        width: "*",
+                        text: transformedData.occupancyType
+                      }
+                    ]
+                  },
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels(
+                          "Trade Address",
+                          "TL_LOCALIZATION_TRADE_ADDRESS"
+                        )+":"
+                      },
+                      {
+                        width: "*",
+                        text: getLocaleLabels("NA", (transformedData.actualAddress.tenantId.replace(".", "_") +
+                        "_ADMIN_" +
+                        transformedData.actualAddress.locality.code
+                        ).toUpperCase())
+                        +
+                          ", " +
+                        getLocaleLabels("NA", transformedData.city.replace(".","_").toUpperCase())
+                      }
+                    ]
+                  },
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels("Trade Type", "TL_LOCALIZATION_TRADE_TYPE")+":"
+                      },
+                      {
+                        width: "*",
+                        text: transformedData.tradeTypeCertificate
+                      }
+                    ]
+                  },
+                  // {
+                  //   style: "tl-certificate-data-2",
+                  //   columns: [
+                  //     {
+                  //       width: 160,
+                  //       text: "Accessories"
+                  //     },
+                  //     {
+                  //       width: "*",
+                  //       text: `${transformedData.accessoriesList}`
+                  //     }
+                  //   ]
+                  // },
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels(
+                          "Trade License Fee",
+                          "TL_LOCALIZATION_TRADE_LICENSE_FEE"
+                        )+":"
+                      },
+                      {
+                        width: "*",
+                        text:
+                          getLocaleLabels("Rs.", "TL_LOCALIZATION_TRADE_LICENSE_RS") +
+                          transformedData.totalAmount
+                        //     font: "Roboto"
+                      }
+                    ]
+                  },
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels(
+                          "License Issue Date",
+                          "TL_LOCALIZATION_LICENSE_ISSUE_DATE"
+                        )+":"
+                      },
+                      {
+                        width: "*",
+                        text: transformedData.licenseIssueDate
+                      }
+                    ]
+                  },
+                  {
+                    style: "tl-certificate-data-2",
+                    columns: [
+                      {
+                        width: 160,
+                        text: getLocaleLabels(
+                          "License Validity",
+                          "TL_LOCALIZATION_LICENSE_VALIDITY"
+                        )+":"
+                      },
+                      {
+                        width: "*",
+                        text:
+                          transformedData.licenseValidity.startDate +
+                          getLocaleLabels("To", "TL_LOCALIZATION_TRADE_LICENSE_TO") +
+                          transformedData.licenseValidity.endDate
+                      }
+                    ]
+                  }
+                    
+                  ],
+                },
+                {
+                  image: qrcode,
+                  width: 120,
+                  height: 120,
+                  margin: [5, 0, 0, 5],
+                  alignment: "right"
+                }
+              ]   
+            ]    
           },
-          {
-            width: "*",
-            text: transformedData.tradeName
-            //  font: "Roboto"
-          }
-        ]
+        layout: noborder
       },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Trade Owner Name",
-              "TL_LOCALIZATION_TRADE_OWNER_NAME"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.ownersList
-            //   font: "Roboto"
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Trade Owner Contact",
-              "TL_LOCALIZATION_TRADE_OWNER_CONTACT"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.owners[0].mobile
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Occupancy Type",
-              "TL_LOCALIZATION_OCCUPANCY_TYPE"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.occupancyType
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Trade Address",
-              "TL_LOCALIZATION_TRADE_ADDRESS"
-            )+":"
-          },
-          {
-            width: "*",
-            text: getLocaleLabels("NA", (transformedData.actualAddress.tenantId.replace(".", "_") +
-            "_ADMIN_" +
-            transformedData.actualAddress.locality.code
-            ).toUpperCase())
-            +
-              ", " +
-            getLocaleLabels("NA", transformedData.city.replace(".","_").toUpperCase())
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels("Trade Type", "TL_LOCALIZATION_TRADE_TYPE")+":"
-          },
-          {
-            width: "*",
-            text: transformedData.tradeTypeCertificate
-          }
-        ]
-      },
-      // {
-      //   style: "tl-certificate-data-2",
-      //   columns: [
-      //     {
-      //       width: 160,
-      //       text: "Accessories"
-      //     },
-      //     {
-      //       width: "*",
-      //       text: `${transformedData.accessoriesList}`
-      //     }
-      //   ]
-      // },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Trade License Fee",
-              "TL_LOCALIZATION_TRADE_LICENSE_FEE"
-            )+":"
-          },
-          {
-            width: "*",
-            text:
-              getLocaleLabels("Rs.", "TL_LOCALIZATION_TRADE_LICENSE_RS") +
-              transformedData.totalAmount
-            //     font: "Roboto"
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "License Issue Date",
-              "TL_LOCALIZATION_LICENSE_ISSUE_DATE"
-            )+":"
-          },
-          {
-            width: "*",
-            text: transformedData.licenseIssueDate
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "License Validity",
-              "TL_LOCALIZATION_LICENSE_VALIDITY"
-            )+":"
-          },
-          {
-            width: "*",
-            text:
-              transformedData.licenseValidity.startDate +
-              getLocaleLabels("To", "TL_LOCALIZATION_TRADE_LICENSE_TO") +
-              transformedData.licenseValidity.endDate
-          }
-        ]
-      },
-      
-        {
-          image: qrcode,
-          width: 120,
-          height: 120,
-          margin: [5, -50, 0, 5],
-          alignment: "right"
-        },
       {
         style: "tl-certificate-footer",
         columns: [

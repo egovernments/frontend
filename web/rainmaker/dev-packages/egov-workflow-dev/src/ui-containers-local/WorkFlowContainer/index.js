@@ -138,6 +138,19 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
+     //this is the not the right way to check action
+     if(get(data[0], "action")==="REJECT" && !get(data[0], "comment"))
+     {
+       toggleSnackbar(
+         true,
+         {
+           labelName: "Comment field is mandatory while rejecting appliction!",
+           labelKey: "ERR_WF_UPDATE_REJECT_ACTION_ERROR"
+         },
+         "error"
+       );
+       return;
+     }
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
         const removedDocs = get(
