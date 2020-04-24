@@ -12,6 +12,9 @@ import PendingAmountDialog from "../PendingAmountDue";
 import ViewHistoryDialog from "../ViewHistory";
 import { ViewHistory, TransferOwnership } from "../ActionItems";
 import "./index.css";
+import { connect } from "react-redux";
+import DialogContainer from 'egov-pt/ui-containers-local/DialogContainer';
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
@@ -21,9 +24,21 @@ class OwnerInfo extends Component {
   state = {
     pendingAmountDue: false,
     viewHistory: false,
+    docRequired: false,
     ownershipInfo: {}
   };
-
+  openApplyDocsUI = () => {
+    this.setState({ docRequired: true });
+    this.props.handleField(
+      'property',
+      `components.adhocDialog`,
+      "props.open",
+      true
+    );
+  }
+  componentDidMount = () => {
+    
+  }
   transformData = (property) => {
     const { owners, institution, ownershipCategory } = property;
     let itemKey = [];
@@ -70,7 +85,7 @@ class OwnerInfo extends Component {
         newList.push(element);
       }
     })
-    return newList&&Array.isArray(newList)&&newList.filter(element=>element.creationReason!='UPDATE');
+    return newList && Array.isArray(newList) && newList.filter(element => element.creationReason != 'UPDATE');
   }
   getPropertyResponse = async (propertyId, tenantId, dialogName) => {
     const queryObject = [
@@ -117,13 +132,15 @@ class OwnerInfo extends Component {
           "error"
         );
       } else {
-        let link = `/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`;
+        this.openApplyDocsUI();
+        // this.setState({ docRequired: true });
+        // let link = `/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`;
 
-        let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
-        window.location.href =
-          process.env.NODE_ENV === "production"
-            ? moduleName + link
-            : link;
+        // let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+        // window.location.href =
+        //   process.env.NODE_ENV === "production"
+        //     ? moduleName + link
+        //     : link;
         // this.props.history.push(link);
       }
     } else if (dialogName === "viewHistory") {
@@ -343,7 +360,12 @@ class OwnerInfo extends Component {
             }
           />
         )}
-
+        {this.state.docRequired && (
+          <DialogContainer open={false}
+            maxWidth={false}
+            screenKey={"property"}>{}
+          </DialogContainer>
+        )}
         {this.state.pendingAmountDue && (
           <PendingAmountDialog
             open={this.state.pendingAmountDue}
@@ -366,4 +388,14 @@ class OwnerInfo extends Component {
   }
 }
 
-export default withRouter(OwnerInfo);
+
+const mapDispatchToProps = dispatch => {
+  return { handleField: (a, b, c, d) => dispatch(handleField(a, b, c, d)) };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(withRouter(OwnerInfo));
+
+
