@@ -15,6 +15,9 @@ import {
   objectToDropdown,
   getCurrentFinancialYear,
   getnextFinancialYear,
+  getFinancialYearDates,
+  convertDateToEpoch,
+  getRenewalFinancialYearDates,
   getAllDataFromBillingSlab
 } from "../utils";
 import {
@@ -232,6 +235,16 @@ export const getData = async (action, state, dispatch) => {
         key:"applicationType",value:applicationType
       }]);
       if (queryValue && isEditRenewal) {
+        const noOfYears = parseInt(get(
+          state.screenConfiguration.preparedFinalObject,
+          "Licenses[0].tradeLicenseDetail.additionalDetail.noOfYears",
+          ""
+        ));
+        const endTime = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Licenses[0].validTo",
+          ""
+        );
         const oldApplicationNo = get(
           state.screenConfiguration.preparedFinalObject,
           "Licenses[0].applicationNumber",
@@ -241,21 +254,27 @@ export const getData = async (action, state, dispatch) => {
           prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
         );
         if (oldApplicationNo !== null) {
-          dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
+          let startDate = getFinancialYearDates("yyyy-mm-dd", endTime+1000 , noOfYears).startDate
+          let endDate = getFinancialYearDates("yyyy-mm-dd", endTime+1000 , noOfYears).endDate
           dispatch(
             prepareFinalObject(
-              "Licenses[0].applicationType",
-              "RENEWAL"
-            )
-          );
+              `Licenses[0].validFrom`,convertDateToEpoch(startDate,"")
+            ));
+          dispatch(prepareFinalObject(
+            `Licenses[0].validTo`,convertDateToEpoch(endDate,"dayend")
+          )); 
           dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
-              "props.value",
-              ""
-            )
-          );
+            prepareFinalObject(
+              `Licenses[0].financialYear`, startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length-2)
+            )); 
+          // dispatch(
+          //   handleField(
+          //     "apply",
+          //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
+          //     "props.value",
+          //     startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length-2)
+          //   )
+          // );
           dispatch(
             handleField(
               "apply",
@@ -264,8 +283,20 @@ export const getData = async (action, state, dispatch) => {
               "APPLICATIONTYPE.RENEWAL"
             )
           );
+          dispatch(
+            prepareFinalObject(
+              "Licenses[0].applicationType",
+              "RENEWAL"
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "Licenses[0].workflowCode",
+              "EDITRENEWAL"
+            )
+          );
         }
-
+        dispatch(prepareFinalObject("Licenses[0].action", "INITIATE"));
         dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
         dispatch(
           handleField(

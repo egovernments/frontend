@@ -7,6 +7,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
+import { getFinancialYearDates, convertDateToEpoch } from "egov-tradelicence/ui-config/screens/specs/utils";
 import {getNextFinancialYearForRenewal,getSearchResults} from "../../ui-utils/commons"
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
@@ -121,14 +122,28 @@ class Footer extends React.Component {
       `Licenses`
     );
 
-    const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
-
+    const noOfYears = parseInt(get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.additionalDetail.noOfYears",
+      ""
+    ));
+    const endTime = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].validTo",
+      ""
+    );
+    let startDate = getFinancialYearDates("yyyy-mm-dd", endTime + 1000, noOfYears).startDate
+    let endDate = getFinancialYearDates("yyyy-mm-dd", endTime + 1000, noOfYears).endDate
+    const nextFinancialYear = startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length - 2);
+  
     const wfCode = "DIRECTRENEWAL";
     set(licences[0], "action", "INITIATE");
     set(licences[0], "workflowCode", wfCode);
     set(licences[0], "applicationType", "RENEWAL");
     set(licences[0],"financialYear" ,nextFinancialYear);
-
+    set(licences[0],"validFrom" ,convertDateToEpoch(startDate, ""));
+    set(licences[0],"validTo" ,convertDateToEpoch(endDate, "dayend"));
+  
   const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
       Licenses: licences
     })
@@ -204,16 +219,16 @@ class Footer extends React.Component {
         })
        const rolecheck= rolearray.length>0? true: false;
     if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
-      const editButton = {
-        label: "Edit",
-        labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
-        link: () => {
-          this.props.setRoute(
-            `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-          );
-        }
-      };
-      downloadMenu && downloadMenu.push(editButton);
+      // const editButton = {
+      //   label: "Edit",
+      //   labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
+      //   link: () => {
+      //     this.props.setRoute(
+      //       `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+      //     );
+      //   }
+      // };
+      // downloadMenu && downloadMenu.push(editButton);
       const submitButton = {
         label: "Submit",
         labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",

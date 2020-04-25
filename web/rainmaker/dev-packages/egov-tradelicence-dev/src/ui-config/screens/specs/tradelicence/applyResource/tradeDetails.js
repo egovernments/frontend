@@ -851,7 +851,7 @@ export const tradeDetails = getCommonCard(
           sourceJsonPath: "Licenses[0].validFrom",
           callBack: convertEpochToDate,
           props: {
-            disabled: isEditRenewal ? false : true
+            disabled: true
           }
         }),
       },
@@ -868,7 +868,7 @@ export const tradeDetails = getCommonCard(
           sourceJsonPath: "Licenses[0].validTo",
           callBack: convertEpochToDate,
           props: {
-            disabled: isEditRenewal ? false : true
+            disabled: true
           }
         }),
       },
@@ -887,8 +887,7 @@ export const tradeDetails = getCommonCard(
             moduleName: "TradeLicense",
             masterName: "ApplicationType"
           },
-          jsonPath:
-            "APPLICATIONTYPE."+"Licenses[0].applicationType",
+          jsonPath:"Licenses[0].applicationType",
           sourceJsonPath: "applyScreenMdmsData.TradeLicense.ApplicationType",
           gridDefination: {
             xs: 12,

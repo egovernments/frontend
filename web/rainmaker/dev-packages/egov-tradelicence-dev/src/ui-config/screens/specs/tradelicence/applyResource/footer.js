@@ -14,7 +14,9 @@ import {
   createEstimateData,
   validateFields,
   downloadAcknowledgementForm,
-  downloadCertificateForm
+  downloadCertificateForm,
+  getFinancialYearDates,
+  convertDateToEpoch
 } from "../../utils";
 import { generateReceipt } from "../../utils/receiptPdf"
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -606,14 +608,27 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
   );
 
   const tenantId= get(licences[0] , "tenantId");
-
-  const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
+  const noOfYears = parseInt(get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.additionalDetail.noOfYears",
+    ""
+  ));
+  const endTime = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].validTo",
+    ""
+  );
+  let startDate = getFinancialYearDates("yyyy-mm-dd", endTime + 1000, noOfYears).startDate
+  let endDate = getFinancialYearDates("yyyy-mm-dd", endTime + 1000, noOfYears).endDate
+  //const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
 
   const wfCode = "DIRECTRENEWAL";
   set(licences[0], "action", "INITIATE");
   set(licences[0], "workflowCode", wfCode);
   set(licences[0], "applicationType", "RENEWAL");
-  set(licences[0],"financialYear" ,nextFinancialYear);
+  set(licences[0],"financialYear" ,startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length - 2));
+  set(licences[0],"validFrom" ,convertDateToEpoch(startDate, ""));
+  set(licences[0],"validTo" ,convertDateToEpoch(endDate, "dayend"));
 
 const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
     Licenses: licences
@@ -628,7 +643,7 @@ const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
   );
   dispatch(
     setRoute(
-      `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
     ));
 };
 
@@ -666,7 +681,7 @@ export const footerReview = (
           },
           children: {
            
-            resubmitButton: {
+            /*resubmitButton: {
               componentPath: "Button",
               props: {
                 variant: "contained",
@@ -692,7 +707,7 @@ export const footerReview = (
                 rolePath: "user-info.roles",
                 roles: ["TL_CEMP", "CITIZEN"]
               }
-            },  
+            },*/  
             editButton: {
               componentPath: "Button",
               props: {
@@ -955,33 +970,33 @@ export const footerReviewTop = (
           componentPath: "Div",
           children: {
 
-          /*      resubmitButton: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px"
-                }
-              },
-              children: {
-             nextButtonLabel: getLabel({
-                  labelName: "RESUBMIT",
-                  labelKey: "TL_RESUBMIT"
-                }) 
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: openPopup
-              },
-              visible:getButtonVisibility(status, "RESUBMIT"),
-              roleDefination: {
-                rolePath: "user-info.roles",
-                roles: ["TL_CEMP", "CITIZEN"]
-              }
-            }, */
+            // resubmitButton: {
+            //   componentPath: "Button",
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       minWidth: "180px",
+            //       height: "48px",
+            //       marginRight: "45px"
+            //     }
+            //   },
+            //   children: {
+            //     nextButtonLabel: getLabel({
+            //       labelName: "RESUBMIT",
+            //       labelKey: "TL_RESUBMIT"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: openPopup
+            //   },
+            //   visible:getButtonVisibility(status, "RESUBMIT"),
+            //   roleDefination: {
+            //     rolePath: "user-info.roles",
+            //     roles: ["TL_CEMP", "CITIZEN"]
+            //   }
+            // },
 
           },
           gridDefination: {

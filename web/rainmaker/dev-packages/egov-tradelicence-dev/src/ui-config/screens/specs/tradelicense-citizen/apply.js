@@ -18,7 +18,7 @@ import {
   stepper,
   getMdmsData
 } from "../tradelicence/apply";
-import { getAllDataFromBillingSlab } from "../utils";
+import { getAllDataFromBillingSlab , getFinancialYearDates, convertDateToEpoch} from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -59,7 +59,17 @@ const updateSearchResults = async (
       window.location.href,
       "applicationNumber"
     );
-    if (!queryValueFromUrl) {
+    const endTime = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].validTo",
+      ""
+    );
+    const noOfYears = parseInt(get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.additionalDetail.noOfYears",
+      ""
+    ));
+    if (queryValueFromUrl) {
       dispatch(
         prepareFinalObject(
           "Licenses[0].oldLicenseNumber",
@@ -70,6 +80,40 @@ const updateSearchResults = async (
           )
         )
       );
+      let startDate = getFinancialYearDates("yyyy-mm-dd", endTime + 1000, noOfYears).startDate
+      let endDate = getFinancialYearDates("yyyy-mm-dd", endTime + 1000, noOfYears).endDate
+      dispatch(
+        prepareFinalObject(
+          `Licenses[0].validFrom`, convertDateToEpoch(startDate, "")
+        ));
+      dispatch(prepareFinalObject(
+        `Licenses[0].validTo`, convertDateToEpoch(endDate, "dayend")
+      ));
+      dispatch(
+        prepareFinalObject(
+          `Licenses[0].financialYear`, startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length - 2)
+        ));
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
+            "props.value",
+            "APPLICATIONTYPE.RENEWAL"
+          )
+        );
+        dispatch(
+          prepareFinalObject(
+            "Licenses[0].applicationType",
+            "RENEWAL"
+          )
+        );
+        dispatch(
+          prepareFinalObject(
+            "Licenses[0].workflowCode",
+            "EDITRENEWAL"
+          )
+        );
+      dispatch(prepareFinalObject("Licenses[0].action", "INITIATE"));
       dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
       dispatch(
         handleField(
@@ -83,7 +127,7 @@ const updateSearchResults = async (
     else {
       const applicationType = get(
         response,
-        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+        "Licenses[0].applicationType",
         null
       );
       getAllDataFromBillingSlab(tenantId, dispatch,[{

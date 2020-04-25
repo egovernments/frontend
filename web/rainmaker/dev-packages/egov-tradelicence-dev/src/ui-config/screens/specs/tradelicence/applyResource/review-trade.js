@@ -228,7 +228,7 @@ export const getReviewTrade = (isEditable = true) => {
         },
         {
           jsonPath: "Licenses[0].validTo",
-          callBack:convertEpochToDateForEndDate
+          callBack:convertEpochToDate
         }
       ),
       reviewApplicationType: getLabelWithValue(

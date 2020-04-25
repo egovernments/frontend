@@ -337,13 +337,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     set(
       queryObject[0],
       "validFrom",
-      convertDateToEpoch(queryObject[0].validFrom, "dayend")
+      convertDateToEpoch(queryObject[0].validFrom)
     );
     set(queryObject[0], "wfDocuments", documents);
     set(
       queryObject[0],
       "validTo",
-      convertDateToEpoch(queryObject[0].validTo, "dayend")
+      convertDateToEpoch(queryObject[0].validTo)
     );
     if (queryObject[0] && queryObject[0].commencementDate) {
       queryObject[0].commencementDate = convertDateToEpoch(
@@ -362,7 +362,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
+      { key: "businessServices", value: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "EDITRENEWAL" : "NewTL" }
     ];
     if (process.env.REACT_APP_NAME === "Citizen") {
       // let currentFinancialYr = getCurrentFinancialYear();
@@ -375,8 +375,14 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "tenantId", tenantId);
-    set(queryObject[0], "workflowCode", "NewTL");
-    set(queryObject[0], "applicationType", "NEW");
+    console.log("State--->",state);
+    if(get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "")=="APPLICATIONTYPE.RENEWAL"){    
+    set(queryObject[0], "workflowCode", "EDITRENEWAL");
+    set(queryObject[0], "applicationType", "RENEWAL");
+    }else{
+      set(queryObject[0], "workflowCode", "NewTL");
+      set(queryObject[0], "applicationType", "NEW");
+    }
 
     if (queryObject[0].applicationNumber) {
       //call update
