@@ -34,7 +34,7 @@ export const propertyAssemblyDetails = getCommonCard({
       },
       required: true,
       jsonPath:
-        "Property.assemblyDetails.propertyType",
+        "registerScreen.propertyType",
       // localePrefix: {
       //   moduleName: "PropertyTax",
       //   masterName: "PropertyType"
@@ -52,16 +52,15 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_LAND_AREA"
       },
       props: {
-        className: "applicant-details-error"
       },
       placeholder: {
         labelName: "Select Total Land Area",
         labelKey: "PT_COMMON_TOTAL_LAND_AREA_PLACEHOLDER"
       },
       required: true,
-      pattern: getPattern("Amount"),
+      pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "Property.assemblyDetails.totalLandArea"
+      jsonPath: "registerScreen.totalLandArea"
     }),
     totalConstructedArea: getTextField({
       label: {
@@ -69,16 +68,15 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_CONSTRUCTED_AREA"
       },
       props: {
-        className: "applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Total Constructed Area",
         labelKey: "PT_COMMON_TOTAL_CONSTRUCTED_AREA_PLACEHOLDER"
       },
       required: true,
-      pattern: getPattern("amount"),
+      pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "Property.assemblyDetails.totalConstructedArea"
+      jsonPath: "registerScreen.totalConstructedArea"
     }),
     usageType: getSelectField({
       label: {
@@ -91,7 +89,7 @@ export const propertyAssemblyDetails = getCommonCard({
       },
       required: true,
       jsonPath:
-        "Property.assemblyDetails.usageType",
+        "registerScreen.usageType",
       // localePrefix: {
       //   moduleName: "PropertyTax",
       //   masterName: "UsageCategory"
@@ -103,42 +101,20 @@ export const propertyAssemblyDetails = getCommonCard({
         md: 6
       },
       beforeFieldChange: async (action, state, dispatch) => {
-        console.log("===>action",action)
-        if (action.value === "NONRESIDENTIAL.COMMERCIAL") {
-          dispatch(
-            prepareFinalObject(
-              "propsubusagetypeForSelectedusageCategory",
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                "searchScreenMdmsData.PropertyTax.Commercial"
-              )
-            )
+        let subTypeValues=get(
+          state.screenConfiguration.preparedFinalObject,
+            "searchScreenMdmsData.PropertyTax.subUsageType"
+        )
+        dispatch(
+          prepareFinalObject(
+            "propsubusagetypeForSelectedusageCategory",
+            subTypeValues.filter(cur=>{
+              return (cur.code.startsWith(action.value))
+            })
           )
-        }else if(action.value === "NONRESIDENTIAL.INDUSTRIAL") {
-          dispatch(
-            prepareFinalObject(
-              "propsubusagetypeForSelectedusageCategory",
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                "searchScreenMdmsData.PropertyTax.Industrial"
-              )
-            )
-          )
-        }else if(action.value === "NONRESIDENTIAL.INSTITUTIONAL"){
-          dispatch(
-            prepareFinalObject(
-              "propsubusagetypeForSelectedusageCategory",
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                "searchScreenMdmsData.PropertyTax.Institutional"
-              )
-            )
-          )
-        }
+        )
       }
     }),
-   
-    
     subUsageType: getSelectField({
       label: {
         labelName: "Sub Usage Type",
@@ -150,7 +126,7 @@ export const propertyAssemblyDetails = getCommonCard({
       },
       required: true,
       jsonPath:
-        "Property.assemblyDetails.subUsageType",
+        "registerScreen.subUsageType",
       // localePrefix: {
       //   moduleName: "PropertyTax",
       //   masterName: "ReasonForTransfer"
