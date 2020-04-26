@@ -228,7 +228,7 @@ export const getReviewTrade = (isEditable = true) => {
         },
         {
           jsonPath: "Licenses[0].validTo",
-          callBack:convertEpochToDate
+          callBack:convertEpochToDateForEndDate
         }
       ),
       reviewApplicationType: getLabelWithValue(
@@ -283,7 +283,7 @@ export const getReviewTrade = (isEditable = true) => {
         { labelName: "To Date",labelKey : "TL_COMMON_TO_DATE_LABEL" },
         {
           jsonPath: "Licenses[0].validTo",
-          callBack: convertEpochToDateForEndDate
+          callBack: convertEpochToDate
         }
       ),
       reviewStructureType: getLabelWithValue(
