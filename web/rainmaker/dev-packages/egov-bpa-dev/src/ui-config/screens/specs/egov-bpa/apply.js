@@ -318,6 +318,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
         }
         else {
           docObj.isDocumentRequired = doc.required;          
+        docObj.isDocumentRequired = doc.required;
+          docObj.isDocumentRequired = doc.required;          
         }
         docObj.isDocumentTypeRequired = doc.required;
         bpaDocs.push(docObj);
@@ -352,32 +354,56 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           if(bpaDoc.previewdocuments ){
             bpaDoc.previewdocuments.push(
               {
-                // title: getTransformedLocale(bpaDoc.documentCode),
-                title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),
+                dropDownValues : bpaDoc.dropDownValues.value,    
                 name: name,
                 linkText: "View",
                 fileName : name,
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
-                // id : upDoc.id,
                 wfState: upDoc.wfState                                
               }
             );
           }else{
             bpaDoc.previewdocuments = [
               {
-                // title: getTransformedLocale(bpaDoc.documentCode),
-                title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),
+                dropDownValues : bpaDoc.dropDownValues.value,             
                 name: name,
                 linkText: "View",
                 fileName : name,
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
-                // id : upDoc.id,
                 wfState: upDoc.wfState                                
               }
             ];
           }
+
+          // if(bpaDoc.documents ){
+          //   bpaDoc.documents.push(
+          //     {
+          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+          //       name: name,
+          //       linkText: "View",
+          //       fileName : name,
+          //       fileStoreId : upDoc.fileStoreId,
+          //       fileUrl : url,
+          //       wfState: upDoc.wfState                                
+          //     }
+          //   );
+          // }else{
+          //   bpaDoc.documents = [
+          //     {
+          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+          //       name: name,
+          //       linkText: "View",
+          //       fileName : name,
+          //       fileStoreId : upDoc.fileStoreId,
+          //       fileUrl : url,
+          //       wfState: upDoc.wfState                                
+          //     }
+          //   ];
+          // }
         }
       })
     })
@@ -393,6 +419,15 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           });
       }
     });
+    // bpaDocs.forEach(doc => {
+
+    //   if (doc.documents && doc.documents.length > 0) {
+    //       doc.documents.forEach(docDetail =>{
+    //         docDetail["link"] = fileUrls[docDetail.fileStoreId];
+    //         return docDetail;
+    //       });
+    //   }
+    // });
     dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
   }
 }

@@ -9,9 +9,21 @@ export const searchPropertyTable = {
   componentPath: "Table",
   visible: false,
   props: {
-    className: "propertyTab",
     columns: [
-      getTextToLocalMapping("Unique Property Id"),
+      {
+       name: getTextToLocalMapping("Unique Property Id"),  
+       options: {
+        filter: false,
+        customBodyRender: (value) =>{
+        return(
+           <span style={{ color: "black",cursor: "auto" }}>
+            {value}
+          </span>
+        )
+      }
+      }
+    },
+     
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Address"),
       {
@@ -62,5 +74,9 @@ export const searchPropertyTable = {
 };
 
 const getSelect=data=>{
-  window.location.href=`/employee/wns/apply?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+  if(process.env.REACT_APP_NAME == "Citizen"){
+    window.location.href=`/citizen/wns/apply?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+  }else{
+    window.location.href=`/employee/wns/apply?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+  }
 }

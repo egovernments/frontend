@@ -27,7 +27,7 @@ const getMDMSData = async (dispatch) => {
           masterDetails: [
             {
               name: "tenants"
-            },
+            },{name: "citymodule"}
           ]
         }
       ]
@@ -42,6 +42,14 @@ const getMDMSData = async (dispatch) => {
       mdmsBody
     );
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    if(process.env.REACT_APP_NAME != "Citizen"){
+      dispatch(
+        prepareFinalObject(
+          "searchScreen.tenantId",
+          tenant
+        )
+      );
+    }
   } catch (e) {
     console.log(e);
   }
@@ -118,13 +126,12 @@ const screenConfig = {
                   labelKey: "PT_COMMON_REGISTER_NEW_PROPERTY_BUTTON"
                 })
               },
-              // onClickDefination: {
-              //   action: "condition",
-              //   callBack: (state, dispatch) => {
-              //     showHideAdhocPopup(state, dispatch, "search");
-
-              //   }
-              // },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  window.location.href = "/pt-common-screens/register-property";
+                }
+              },
             }
           }
         },
