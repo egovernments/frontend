@@ -733,9 +733,9 @@ export const getRequiredDocData = async (action, state, dispatch) => {
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
-    case "Property Tax Unique Id":
+    case "Unique Property ID":
       return getLocaleLabels(
-        "Property Tax Unique Id",
+        "Unique Property ID",
         "PT_COMMON_TABLE_COL_PT_ID",
         localisationLabels
       );
