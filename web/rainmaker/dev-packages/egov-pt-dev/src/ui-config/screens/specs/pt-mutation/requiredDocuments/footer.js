@@ -70,7 +70,7 @@ export const footer = {
       children: {
         printButtonLabel: getLabel({
           labelName: "Print",
-          labelKey: "NOC_COMMON_BUTTON_PRINT"
+          labelKey: "PT_COMMON_BUTTON_PRINT"
         })
       },
       visible: true,
@@ -93,7 +93,7 @@ export const footer = {
       children: {
         applyButtonLabel: getLabel({
           labelName: "Apply",
-          labelKey: "NOC_COMMON_BUTTON_APPLY"
+          labelKey: "PT_COMMON_BUTTON_APPLY"
         })
       },
       visible: true,
