@@ -44,7 +44,8 @@ export const fetchLocalizationLabel = (locale, module, tenantId) => {
   return async (dispatch) => {
     // const commonModules =
     //   "rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-abg,rainmaker-bpareg,rainmaker-ws,rainmaker-dss,rainmaker-bpa";
-    const localeModule = `rainmaker-common,${getModule()}`;
+    const moduleName = getModule();
+    const localeModule = moduleName === 'rainmaker-common' ? 'rainmaker-common' : `rainmaker-common,${moduleName}`;
     try {
       const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
         { key: "module", value: localeModule },
