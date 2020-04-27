@@ -79,23 +79,6 @@ export const basicDetails = getCommonCard({
         disabled: true,
       }
     },
-    occupancy: getTextField({
-      label: {
-        labelName: "Occupancy",
-        labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
-      },
-      required: true,
-      jsonPath: 'ocScrutinyDetails.planDetail.planInformation.occupancy',
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      },
-      props: {
-        disabled: true,
-        className: "tl-trade-type"
-      }
-    }),
     applicationType: getTextField({
       label: {
         labelName: "Application Type",
@@ -374,8 +357,8 @@ export const proposedBuildingDetails = getCommonCard({
           moduleName: "BPA",
           masterName: "OCCUPANCYTYPE"
         },
-        jsonPath: "BPA.occupancyType",
-        sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
+        jsonPath: "ocScrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
+        sourceJsonPath: "applyScreenMdmsData.BPA.occupancyData",
         required: true,
         gridDefination: {
           xs: 12,

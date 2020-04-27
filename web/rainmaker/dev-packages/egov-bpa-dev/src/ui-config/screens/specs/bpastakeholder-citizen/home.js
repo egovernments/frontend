@@ -60,8 +60,7 @@ const cardItems = [
     icon: <BPANewPermitIcon />,
     route: {
       screenKey: "home",
-      jsonPath: "components.cityPickerDialog",
-      value: "ocapply"
+      jsonPath: "components.cityPickerDialogForOC"
     }
   },
   {
@@ -194,6 +193,26 @@ const tradeLicenseSearchAndResult = {
               root: "city-picker-dialog-style"
             }
             // style: { minHeight: "180px", minWidth: "365px" }
+          },
+          children: {
+            popup: cityPicker
+          }
+        }
+      }
+    },
+    cityPickerDialogForOC: {
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "md"
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
           },
           children: {
             popup: cityPicker

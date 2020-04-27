@@ -42,6 +42,7 @@ import {
 import jp from "jsonpath";
 import axios from "axios";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
+import _ from "lodash";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -3575,21 +3576,44 @@ export const applyForm = (state, dispatch) => {
     "citiesByModule.citizenTenantId"
   );
 
-  const isTradeDetailsValid = validateFields(
-    "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
-    state,
-    dispatch,
-    "home"
+  const ocCityPicker = get(
+    state.screenConfiguration.screenConfig,
+    "home.components.cityPickerDialogForOC.props.open", false
   );
-
-  if (isTradeDetailsValid) {
-    window.location.href =
-      process.env.NODE_ENV === "production"
-        ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
-        : process.env.REACT_APP_SELF_RUNNING === true
-          ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
-          : `/egov-bpa/apply?tenantId=${tenantId}`;
-  };
+  if(ocCityPicker) {
+    const isOcCityValid = validateFields(
+      "components.cityPickerDialogForOC.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "home"
+    );
+  
+    if (isOcCityValid) {
+      window.location.href =
+        process.env.NODE_ENV === "production"
+          ? `/citizen/oc-bpa/apply?tenantId=${tenantId}`
+          : process.env.REACT_APP_SELF_RUNNING === true
+            ? `/egov-ui-framework/oc-bpa/apply?tenantId=${tenantId}`
+            : `/oc-bpa/apply?tenantId=${tenantId}`;
+    };
+  } else {
+    const isTradeDetailsValid = validateFields(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "home"
+    );
+  
+    if (isTradeDetailsValid) {
+      window.location.href =
+        process.env.NODE_ENV === "production"
+          ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
+          : process.env.REACT_APP_SELF_RUNNING === true
+            ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
+            : `/egov-bpa/apply?tenantId=${tenantId}`;
+    };
+  }
+  
   city(state, dispatch, tenantId);
 };
 
@@ -4745,6 +4769,109 @@ export const getLicenseDetails = async (state, dispatch) => {
   }
 };
 
+export const ocuupancyType = (state, dispatch) => {
+  let occupancyDataObj = get(
+    state.screenConfiguration.preparedFinalObject,
+    "ocScrutinyDetails.planDetail.occupancies[0].typeHelper.type", []
+  );
+  let occupancyData = [];
+  occupancyData.push({code: occupancyDataObj.code});
+  dispatch(prepareFinalObject("applyScreenMdmsData.BPA.occupancyData", occupancyData));
+}
+
+export const deviationValidation = (action, state, dispatch) => {
+  const APPROVED = "Approved";
+  const ALLOW = "Validate and allow";
+  const REJECT = "Validate and restrict";
+  const INCOMPLETEINFO = "Not enough details";
+
+  let ocScrutinyDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "ocScrutinyDetails", {}
+  );
+  let scrutinyDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "scrutinyDetails", {}
+  );
+  let ocEDCRDetails = {};
+  ocEDCRDetails.edcrDetail = [];
+  ocEDCRDetails.edcrDetail[0] = ocScrutinyDetails;
+
+  let eDCRDetails = {};
+  eDCRDetails.edcrDetail = [];
+  eDCRDetails.edcrDetail[0] = scrutinyDetails;
+
+  let validationParams = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.BPA.DeviationParams"
+  )
+
+  let validationResponse = APPROVED;
+  let planParam = [],
+    ocParam = [];
+
+  for (let paramRecord of validationParams) {
+
+    let firstIndex = paramRecord.paramPath.indexOf("[");
+    let lastIndex = paramRecord.paramPath.lastIndexOf("[");
+
+    if (firstIndex !== lastIndex) {// To check if the record has multiple sub records like blocks
+      let firstpath = paramRecord.paramPath.substring(0, lastIndex);
+      let secondpath = paramRecord.paramPath.substring(lastIndex + 4);
+      let planRecs = _.get(eDCRDetails, firstpath, []);
+      let ocRecs = _.get(ocEDCRDetails, firstpath, []);
+      planRecs.forEach((element, i) => {
+        planParam.push(_.get(planRecs[i], secondpath, null));
+        ocParam.push(_.get(ocRecs[i], secondpath, null));
+      });
+    } else {
+      planParam.push(_.get(eDCRDetails, paramRecord.paramPath, null));
+      ocParam.push(_.get(ocEDCRDetails, paramRecord.paramPath, null));
+    }
+    if (planParam && ocParam && planParam.length === ocParam.length) {
+      for (let i = 0; i < planParam.length; i++) {
+        let diff = 0;
+        if (paramRecord.calculationType === "number") {
+          diff = Math.abs(ocParam[i] - planParam[i]);
+        } else {
+          //(paramRecord.calculationType==="percentage"){
+          diff = (Math.abs(ocParam[i] - planParam[i]) / planParam[i]) * 100;
+        }
+
+        if (diff > paramRecord.tolerancelimit) {
+          if (paramRecord.restrictionType === REJECT) {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.footer.children.nextButton",
+                "props.disabled",
+                true
+              )
+            );
+            dispatch(
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "System has to validate and restrict the user from creating the application.",
+                  labelKey: "BPA_TOLERANCE_LIMIT_ERROR"
+                },
+                "error"
+              )
+            );
+          } else {
+            validationResponse = ALLOW;
+          }
+        }
+      }
+    } else {
+      validationResponse = INCOMPLETEINFO;
+      break;
+    }
+  }
+  return validationResponse;
+};
+
+
 export const getPermitDetails = async (permitNumber, tenantId) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
@@ -4888,10 +5015,13 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
 
     dispatch(prepareFinalObject("ocScrutinyDetails", get(ocpayload, "edcrDetail[0]")));
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
+    deviationValidation(action, state, dispatch);
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
     setProposedBuildingData(state, dispatch, action, "ocApply");
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
     dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
+    riskType(state, dispatch);
+    ocuupancyType(state, dispatch);
   } catch (e) {
     dispatch(
       toggleSnackbar(

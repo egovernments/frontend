@@ -136,6 +136,9 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "SubOccupancyType"
+            },
+            {
+              name: "DeviationParams"
             }
           ]
         }

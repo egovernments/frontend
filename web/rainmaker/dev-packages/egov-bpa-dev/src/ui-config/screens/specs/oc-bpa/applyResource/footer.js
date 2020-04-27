@@ -3,7 +3,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { getCommonApplyFooter } from "../../utils";
+import { getCommonApplyFooter, deviationValidation } from "../../utils";
 import "./index.css";
 import {
   submitBpaApplication,
@@ -19,6 +19,10 @@ const callBackForNext = async (state, dispatch) => {
   );
   let isFormValid = true;
   let hasFieldToaster = false;
+
+  if(activeStep === 0) {
+    deviationValidation(state, dispatch)
+  }
 
   if (activeStep !== 4) {
     if (isFormValid) {
