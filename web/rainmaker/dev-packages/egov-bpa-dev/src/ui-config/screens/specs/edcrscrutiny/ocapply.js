@@ -10,7 +10,7 @@ import {
   getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { documentList } from "./documentList";
-import { resetFields, submitFields } from "./functions";
+import { resetOCFields, submitFields } from "./functions";
 import { fetchMDMSOCData, getBuildingDetails } from "./functions";
 import set from "lodash/set";
 
@@ -103,6 +103,23 @@ export const ocScrutinyDetailsContainer = getCommonGrayCard({
 const buildingInfoCard = getCommonCard({
   buildingPlanCardContainer: getCommonContainer({
     inputdetails: getCommonContainer({
+      buildingPermitDate: getDateField({
+        label: {
+          labelName: "Building Permit Date",
+          labelKey: "EDCR_BUILDING_PERMIT_DATE_LABEL"
+        },
+        jsonPath: "bpaDetails.orderGeneratedDate",
+        required: true,
+        props: {
+          // disabled: true,
+          required: true
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        }
+      }),
       buildingPermitNum: getTextField({
         label: {
           labelName: "Building Permit Number",
@@ -121,7 +138,7 @@ const buildingInfoCard = getCommonCard({
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "Scrutiny[0].permitNumber",
         props: {
-          className: "textfield-enterable-selection"
+          required: true,
         },
         iconObj: {
           iconName: "search",
@@ -140,19 +157,6 @@ const buildingInfoCard = getCommonCard({
           md: 6
         }
       }),
-      dummyDiv2: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        visible: true,
-        props: {
-          disabled: true,
-        }
-      },
       city: getTextField({
         label: {
           labelName: "City",
@@ -164,22 +168,6 @@ const buildingInfoCard = getCommonCard({
         },
         optionLabel: "name",
         jsonPath: "bpaDetails.tenantId",
-        props: {
-          disabled: true,
-          className: "tl-trade-type"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        }
-      }),
-      buildingPermitDate: getDateField({
-        label: {
-          labelName: "Building Permit Date",
-          labelKey: "EDCR_BUILDING_PERMIT_DATE_LABEL"
-        },
-        jsonPath: "bpaDetails.orderGeneratedDate",
         props: {
           disabled: true,
           className: "tl-trade-type"
@@ -275,7 +263,7 @@ const buildingInfoCard = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 12,
-          md: 12
+          md: 6
         },
         props: {
           disabled: true,
@@ -347,7 +335,7 @@ const buildingInfoCard = getCommonCard({
         },
         onClickDefination: {
           action: "condition",
-          callBack: resetFields
+          callBack: resetOCFields
         }
       },
 

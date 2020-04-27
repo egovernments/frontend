@@ -270,10 +270,12 @@ export const resetFields = (state, dispatch) => {
 };
 
 export const validateForm = (state, dispatch) => {
+  let screenKey = window.location.href.includes("ocapply") ? "ocapply": "apply";
   let isInputDataValid = validateFields(
     "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children",
     state,
-    dispatch
+    dispatch,
+    screenKey
   );
 
   let filedata = get(
@@ -389,6 +391,21 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     { key: "permitNos", value: permitNum }
   ];
   const response = await getBpaSearchResults(queryObject);
+
+  if (get(response, "Bpa[0].edcrNumber") == undefined) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "No Records Found",
+          labelKey: "BPA_NO_REC_FOUND_LABEL"
+        },
+        "error"
+      )
+    );
+    return;
+  }
+
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
@@ -402,3 +419,18 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
   let SHLicenseDetails = await getLicenseDetails(state,dispatch);
   dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
 };
+
+export const resetOCFields = (state, dispatch) => {
+  const applicantName = get(
+    state.screenConfiguration.preparedFinalObject, 
+    "Scrutiny[0].applicantName"
+    );
+  let filedata = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Scrutiny[0].buildingPlan[0]"
+  );
+
+  if(applicantName || (typeof filedata === "object" && !Array.isArray(filedata))) {
+    window.location.reload();
+  }
+}
