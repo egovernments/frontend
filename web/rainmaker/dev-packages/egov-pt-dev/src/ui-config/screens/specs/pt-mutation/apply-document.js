@@ -29,6 +29,8 @@ const screenConfig = {
             action: "condition",
             callBack: startMutationApplyFlow
         })
+        set(mutationDocumentUIChildren, 'children.footer.children.header.children.header.children.key.props.labelKey','PTM_REQ_DOCS_HEADER')
+        set(mutationDocumentUIChildren, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey','PTM_COMMON_BUTTON_APPLY')
         set(
             action,
             "screenConfig.components.adhocDialog.children.popup",

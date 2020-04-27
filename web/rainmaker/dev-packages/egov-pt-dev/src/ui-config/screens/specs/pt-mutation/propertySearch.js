@@ -13,6 +13,7 @@ import propertySearchTabs from "./property-search-tabs";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
+import { startApplyFlow } from "./requiredDocuments/footer";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -52,11 +53,22 @@ const getMDMSData = async (action, dispatch) => {
       "PropertyTax.Documents",
       []
     );
-    set(
-      action,
-      "screenConfig.components.adhocDialog.children.popup",
-      getRequiredDocuments(documents)
-    );
+
+    let documentUi=getRequiredDocuments(documents);
+    set(documentUi, 'children.footer.children.header.children.header.children.key.props.labelKey','PT_REQ_DOCS_HEADER')
+    set(documentUi, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey','PT_COMMON_BUTTON_APPLY')
+    set(documentUi, 'children.footer.children.footer.children.applyButton.onClickDefination', {
+      action: "condition",
+      callBack: startApplyFlow
+  })
+  set(
+    action,
+    "screenConfig.components.adhocDialog.children.popup",
+    documentUi
+  );
+
+
+
     // console.log("payload--", payload)
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     if (process.env.REACT_APP_NAME != "Citizen") {

@@ -18,7 +18,7 @@ const printDiv = () => {
   printWindow.close();
 };
 
-const startApplyFlow = (state, dispatch) => {
+export const startApplyFlow = (state, dispatch) => {
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   const applyUrl = `/property-tax/assessment-form`;
   dispatch(setRoute(applyUrl));
