@@ -287,6 +287,11 @@ export const getPurpose = () => {
   return purpose;
 }
 
+export const getPropertyInfoScreenUrl = (propertyId,tenantId) => {
+  const url= process.env.REACT_APP_NAME === "Citizen" ?
+  `/property-tax/my-properties/property/${propertyId}/${tenantId}` :`/property-tax/property/${propertyId}/${tenantId}`;
+  return url;
+}
 
 export const getCommonTenant = () => {
   return process.env.REACT_APP_DEFAULT_TENANT_ID;

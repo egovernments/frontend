@@ -12,6 +12,7 @@ import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
 import React from "react";
 import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
+import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -903,9 +904,7 @@ export const navigateToApplication = (businessService, propsHistory, application
   } else if (businessService == 'PT.CREATE') {
     setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
   } else {
-    process.env.REACT_APP_NAME === "Citizen" ?
-      setRoute(`/property-tax/my-properties/property/${propertyId}/${tenantId}`)
-      : setRoute(`/property-tax/property/${propertyId}/${tenantId}`)
+    setRoute(getPropertyInfoScreenUrl(propertyId,tenantId));
   }
 }
 

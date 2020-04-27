@@ -1,5 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
@@ -22,6 +23,17 @@ const startApplyFlow = (state, dispatch) => {
   const applyUrl = `/property-tax/assessment-form`;
   dispatch(setRoute(applyUrl));
 };
+
+export const startMutationApplyFlow= (state, dispatch) =>{
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
+  const consumerCode = getQueryArg(
+    window.location.href,
+    "consumerCode"
+  );
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const applyUrl = `/pt-mutation/apply?consumerCode=${consumerCode}&tenantId=${tenantId}`;
+  dispatch(setRoute(applyUrl));
+}
 
 export const footer = {
   uiFramework: "custom-atoms",
