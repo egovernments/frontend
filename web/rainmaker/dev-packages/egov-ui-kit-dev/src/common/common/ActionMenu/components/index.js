@@ -12,7 +12,9 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Tooltip from "@material-ui/core/Tooltip";
 import Label from "egov-ui-kit/utils/translationNode";
-import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getModuleName } from "egov-ui-kit/utils/commons";
+import { localStorageSet, localStorageGet, setModule, getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const styles = {
@@ -81,6 +83,9 @@ class ActionMenuComp extends Component {
   }
   initialMenuUpdate() {
     let pathParam = {};
+    setModule(getModuleName());
+    const tenantId = getTenantId();
+    this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
     const menuPath = fetchFromLocalStorage("menuPath");
     pathParam = {
       path: "",
@@ -550,6 +555,7 @@ class ActionMenuComp extends Component {
 const mapDispatchToProps = (dispatch) => ({
   handleToggle: (showMenu) => dispatch({ type: "MENU_TOGGLE", showMenu }),
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
+  fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
 });
 export default connect(
   null,
