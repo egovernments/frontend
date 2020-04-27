@@ -11,7 +11,6 @@ import { searchPropertyTable, searchApplicationTable } from "./searchResource/se
 import { httpRequest } from "../../../../ui-utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
-import { adhocPopup } from "./adhocPopup";
 import { showHideAdhocPopup } from "../utils";
 import set from "lodash/set";
 import get from "lodash/get";
