@@ -14,8 +14,8 @@ const getLocalTextFromCode = localCode => {
 };
 
 export const textToLocalMapping = {
-  "Property Tax Unique Id": getLocaleLabels(
-    "Property Tax Unique Id",
+  "Unique Property ID": getLocaleLabels(
+    "Unique Property ID",
     "PT_COMMON_TABLE_COL_PT_ID",
     getTransformedLocalStorgaeLabels()
   ),
@@ -116,7 +116,7 @@ export const searchPropertyTable = {
     // data: [],
     columns: [
       {
-        name: getTextToLocalMapping("Property Tax Unique Id"),
+        name: getTextToLocalMapping("Unique Property ID"),
         options: {
           filter: false,
           customBodyRender: value => (
@@ -216,7 +216,7 @@ export const searchApplicationTable = {
         }
       },
       {
-        name: getTextToLocalMapping("Property Tax Unique Id"),
+        name: getTextToLocalMapping("Unique Property ID"),
         options: {
           filter: false,
           customBodyRender: value => (
