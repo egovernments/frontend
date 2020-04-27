@@ -3,7 +3,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertEpochToDate,convertEpochToDateForEndDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
@@ -128,7 +128,7 @@ class SingleApplication extends React.Component {
   };
   generatevalidity = (item) => {
     const validFrom = item.validFrom ? convertEpochToDate(get(item, "validFrom")) : "NA";
-    const validTo = item.validTo ? convertEpochToDate(get(item, "validTo")) : "NA";
+    const validTo = item.validTo ? convertEpochToDateForEndDate(get(item, "validTo")) : "NA";
     const validity = validFrom + " - " + validTo;
     return validity;
   }
