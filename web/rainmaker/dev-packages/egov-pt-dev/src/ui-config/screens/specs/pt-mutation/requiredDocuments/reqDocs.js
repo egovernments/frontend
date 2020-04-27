@@ -45,8 +45,8 @@ const styles = {
 
 const header = getCommonHeader(
   {
-    labelName: "Required Documents-Fire NOC",
-    labelKey: "NOC_REQ_DOCS_HEADER"
+    labelName: "Required Documents-PT",
+    labelKey: "PT_REQ_DOCS_HEADER"
   },
   {
     style: styles.header
@@ -59,7 +59,7 @@ const generateDocument = item => {
     item.code &&
     getCommonTitle(
       {
-        labelKey: getTransformedLocale(`NOC_${item.code}_HEADING`)
+        labelKey: getTransformedLocale(`PT_${item.code}_HEADING`)
       },
       {
         style: styles.subHeader
@@ -72,7 +72,7 @@ const generateDocument = item => {
     docs = item.dropdownData.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`NOC_${doc.code}_LABEL`)
+          labelKey: getTransformedLocale(`PT_${doc.code}_LABEL`)
         },
         {
           style: styles.docs
@@ -84,7 +84,7 @@ const generateDocument = item => {
     docs = item.options.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`NOC_${doc.code}_LABEL`)
+          labelKey: getTransformedLocale(`PT_${doc.code}_LABEL`)
         },
         {
           style: styles.docs
@@ -98,7 +98,7 @@ const generateDocument = item => {
   let subParagraph = item.description
     ? getCommonParagraph(
         {
-          labelKey: getTransformedLocale(`NOC_${item.description}_NOTE`)
+          labelKey: getTransformedLocale(`PT_${item.description}_NOTE`)
         },
         {
           style: styles.description
@@ -147,7 +147,7 @@ export const getRequiredDocuments = documents => {
     },
     {
       style: {
-        paddingBottom: 75
+        // paddingBottom: 75
       }
     }
   );

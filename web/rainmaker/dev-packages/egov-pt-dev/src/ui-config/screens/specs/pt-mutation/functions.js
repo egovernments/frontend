@@ -139,7 +139,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -174,7 +174,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -249,7 +249,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )

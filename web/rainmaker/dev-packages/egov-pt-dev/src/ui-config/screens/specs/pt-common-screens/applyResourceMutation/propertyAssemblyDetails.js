@@ -34,11 +34,7 @@ export const propertyAssemblyDetails = getCommonCard({
       },
       required: true,
       jsonPath:
-        "registerScreen.propertyType",
-      // localePrefix: {
-      //   moduleName: "PropertyTax",
-      //   masterName: "PropertyType"
-      // },
+        "Property.assemblyDetails.propertyType",
       sourceJsonPath: "searchScreenMdmsData.PropertyTax.PropertyType",
       gridDefination: {
         xs: 12,
@@ -60,7 +56,7 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "registerScreen.totalLandArea"
+      jsonPath: "Property.assemblyDetails.totalLandArea"
     }),
     totalConstructedArea: getTextField({
       label: {
@@ -76,7 +72,7 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "registerScreen.totalConstructedArea"
+      jsonPath: "Property.assemblyDetails.totalConstructedArea"
     }),
     usageType: getSelectField({
       label: {
@@ -89,11 +85,7 @@ export const propertyAssemblyDetails = getCommonCard({
       },
       required: true,
       jsonPath:
-        "registerScreen.usageType",
-      // localePrefix: {
-      //   moduleName: "PropertyTax",
-      //   masterName: "UsageCategory"
-      // },
+        "Property.assemblyDetails.usageType",
       sourceJsonPath: "searchScreenMdmsData.PropertyTax.UsageType",
       gridDefination: {
         xs: 12,
@@ -101,17 +93,29 @@ export const propertyAssemblyDetails = getCommonCard({
         md: 6
       },
       beforeFieldChange: async (action, state, dispatch) => {
+        let propType=get(
+          state.screenConfiguration.preparedFinalObject,
+          "Property.assemblyDetails.propertyType"
+        );
         let subTypeValues=get(
           state.screenConfiguration.preparedFinalObject,
             "searchScreenMdmsData.PropertyTax.subUsageType"
-        )
+        );
+        let subUsage;
+        if(propType==="BUILTUP.SHAREDPROPERTY"){
+        if(action.value==="MIXED"){
+          subUsage= subTypeValues;
+        }else{
+          subUsage=subTypeValues.filter(cur=>{
+            return (cur.code.startsWith(action.value))
+          })
+        }
+      }
         dispatch(
           prepareFinalObject(
             "propsubusagetypeForSelectedusageCategory",
-            subTypeValues.filter(cur=>{
-              return (cur.code.startsWith(action.value))
-            })
-          )
+            subUsage
+          ) 
         )
       }
     }),
@@ -126,11 +130,7 @@ export const propertyAssemblyDetails = getCommonCard({
       },
       required: true,
       jsonPath:
-        "registerScreen.subUsageType",
-      // localePrefix: {
-      //   moduleName: "PropertyTax",
-      //   masterName: "ReasonForTransfer"
-      // },
+        "Property.assemblyDetails.subUsageType",
       sourceJsonPath: "propsubusagetypeForSelectedusageCategory",
       gridDefination: {
         xs: 12,

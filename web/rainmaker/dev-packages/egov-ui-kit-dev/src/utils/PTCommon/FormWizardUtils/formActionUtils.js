@@ -145,9 +145,11 @@ const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNum
     routeLink = secondNumber ? `${routeLink}&secondNumber=${secondNumber}` : `${routeLink}`;
     routeLink = FY ? `${routeLink}&FY=${FY}` : `${routeLink}`;
 
-    store.dispatch(
-        setRoute(
-            routeLink
-        )
-    );
+    routeTo(routeLink);
+}
+
+
+
+export const routeTo = (routeLink) => {
+    store.dispatch(setRoute(routeLink));
 }
