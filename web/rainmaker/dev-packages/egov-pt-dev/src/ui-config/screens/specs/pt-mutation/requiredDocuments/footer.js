@@ -1,5 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
@@ -18,27 +19,38 @@ const printDiv = () => {
 };
 
 const startApplyFlow = (state, dispatch) => {
-  dispatch(prepareFinalObject("FireNOCs", []));
-  const applyUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
+  const applyUrl = `/property-tax/assessment-form`;
   dispatch(setRoute(applyUrl));
 };
+
+export const startMutationApplyFlow= (state, dispatch) =>{
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
+  const consumerCode = getQueryArg(
+    window.location.href,
+    "consumerCode"
+  );
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const applyUrl = `/pt-mutation/apply?consumerCode=${consumerCode}&tenantId=${tenantId}`;
+  dispatch(setRoute(applyUrl));
+}
 
 export const footer = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
   props: {
-    className: "pt-apply-wizard-footer",
+    className: "apply-wizard-footerReq",
 
-    style: {
-      width: "100%",
-      textAlign: "center",
-      bottom: 52
-    }
+    // style: {
+    //   width: "93%",
+    //   textAlign: "center",
+    //   bottom: 52,
+    //   left:48
+    // }
   },
 
   // props: {
-  //   className: "pt-apply-wizard-footer",
+  //   className: "apply-wizard-footer",
   //   style: {
   //     textAlign: "center"
   //   }
@@ -50,7 +62,7 @@ export const footer = {
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "200px",
+         minWidth: "180px",
           height: "48px",
           marginRight: "16px"
         }
@@ -73,7 +85,7 @@ export const footer = {
         variant: "contained",
         color: "primary",
         style: {
-          minWidth: "200px",
+         minWidth: "180px",
           height: "48px",
           marginRight: "45px"
         }
