@@ -546,3 +546,80 @@ export const generatePdfFromDiv = (action, applicationNumber, divID) => {
     }
   });
 };
+
+export const getBoundaryData = async (
+  action,
+  state,
+  dispatch,
+  queryObject,
+  code,
+  componentPath
+) => {
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      queryObject,
+      {}
+    );
+    const tenantId =
+      process.env.REACT_APP_NAME === "Employee"
+        ? get(
+          state.screenConfiguration.preparedFinalObject,
+          "Property.locationDetails.city"
+        )
+        : getQueryArg(window.location.href, "tenantId");
+
+    const mohallaData =
+      payload &&
+      payload.TenantBoundary[0] &&
+      payload.TenantBoundary[0].boundary &&
+      payload.TenantBoundary[0].boundary.reduce((result, item) => {
+        result.push({
+          ...item,
+          name: `${tenantId
+            .toUpperCase()
+            .replace(/[.]/g, "_")}_REVENUE_${item.code
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}`
+        });
+        return result;
+      }, []);
+
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.tenant.localities",
+        // payload.TenantBoundary && payload.TenantBoundary[0].boundary,
+        mohallaData
+      )
+    );
+
+    dispatch(
+      handleField(
+        "register-property",
+        "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
+        "props.suggestions",
+        mohallaData
+      )
+    );
+    if (code) {
+      
+      let data = payload.TenantBoundary[0].boundary;
+      let messageObject =
+        data &&
+        data.find(item => {
+          return item.code == code;
+        });
+      if (messageObject)
+        dispatch(
+          prepareFinalObject(
+            "Property.locationDetails.locality.code",
+            messageObject.name
+          )
+        );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
