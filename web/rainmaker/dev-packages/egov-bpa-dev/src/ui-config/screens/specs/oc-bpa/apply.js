@@ -30,7 +30,8 @@ import {
 } from "../../../../ui-utils/commons";
 import {
   getBpaMdmsData,
-  getOcEdcrDetails
+  getOcEdcrDetails,
+  getTodaysDateInYYYMMDD
 } from "../utils";
 
 
@@ -164,6 +165,8 @@ const screenConfig = {
       getOcEdcrDetails(state, dispatch)
     }
     getMdmsData(action, state, dispatch);
+    const today = getTodaysDateInYYYMMDD();
+    dispatch(prepareFinalObject("BPAs.appdate", today));
 
     const queryObject = [
       { key: "tenantId", value: tenantId },

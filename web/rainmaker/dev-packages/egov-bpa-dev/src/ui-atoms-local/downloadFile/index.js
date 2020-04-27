@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 //import "./index.css";
 import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const styles = {
   root: {
@@ -55,6 +56,18 @@ const mapStateToProps = (state, ownprops) => {
   const { preparedFinalObject } = screenConfiguration;
   let fieldValue =
     value === undefined ? get(preparedFinalObject, jsonPath) : value;
+    if(jsonPath == "ocScrutinyDetails.permitNumber") {
+      let tenantId = getQueryArg(window.location.href, "tenantId");
+      let permitNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo");
+      let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+      let url = `${window.location.origin}/egov-bpa/search-preview?applicationNumber=${permitNumber}&tenantId=${tenantId}`;
+      if(process.env.NODE_ENV === "production") {
+        if(checkingApp){
+          url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${permitNumber}&tenantId=${tenantId}`;
+        }
+      }
+      fieldValue = url;
+    }
   return { value: fieldValue, localizationLabels };
 };
 

@@ -4586,23 +4586,44 @@ const getFloorDetails = (index) => {
   }
 };
 
-export const setProposedBuildingData = async (state, dispatch, action) => {
-  const response = get(
-    state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
-    []
-  );
+export const setProposedBuildingData = async (state, dispatch, action, value) => {
+  
+  let response, occupancyType, BPA;
   let getLocalLabels = get( state, "app.localizationLabels");
-  let occupancyType = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
-    []
-  );
-  const BPA = get (
-    state,
-    "screenConfiguration.preparedFinalObject.BPA",
-    {}
-  );
+
+  if(value == "ocApply") {
+    response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.ocScrutinyDetails.planDetail.blocks",
+      []
+    );
+    occupancyType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+      []
+    );
+    BPA = get (
+      state,
+      "screenConfiguration.preparedFinalObject.BPA",
+      {}
+    );
+  } else {
+    response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
+      []
+    );
+    occupancyType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+      []
+    );
+    BPA = get (
+      state,
+      "screenConfiguration.preparedFinalObject.BPA",
+      {}
+    );
+  }
   
   let subOccupancyType = occupancyType.filter(item => {
     return item.active;
@@ -4739,7 +4760,7 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
 };
 
-export const getOcEdcrDetails = async (state, dispatch) => {
+export const getOcEdcrDetails = async (state, dispatch, action) => {
   try {
     const scrutinyNo = get(
       state.screenConfiguration.preparedFinalObject,
@@ -4862,9 +4883,15 @@ export const getOcEdcrDetails = async (state, dispatch) => {
       }
     });
 
+    let primaryOwnerArray = bpaDetails.owners.filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+    set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
+
     dispatch(prepareFinalObject("ocScrutinyDetails", get(ocpayload, "edcrDetail[0]")));
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
+    setProposedBuildingData(state, dispatch, action, "ocApply");
+    let SHLicenseDetails = await getLicenseDetails(state,dispatch);
+    dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
   } catch (e) {
     dispatch(
       toggleSnackbar(

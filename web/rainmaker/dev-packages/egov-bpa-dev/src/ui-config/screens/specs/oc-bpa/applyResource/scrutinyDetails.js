@@ -96,25 +96,16 @@ export const basicDetails = getCommonCard({
         className: "tl-trade-type"
       }
     }),
-    applicationType: getSelectField({
+    applicationType: getTextField({
       label: {
         labelName: "Application Type",
         labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Type",
-        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_PLACEHOLDER"
-      },
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "BPA"
       },
       props: {
         disabled: true,
         className: "tl-trade-type"
       },
-      jsonPath: "BPA.applicationType",
-      sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
+      jsonPath: "ocScrutinyDetails.appliactionType",
       required: true,
       gridDefination: {
         xs: 12,
@@ -184,48 +175,10 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
-    remarks: getTextField({
-      label: {
-        labelName: "Remarks",
-        labelKey: "BPA_BASIC_DETAILS_REMARKS_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Remarks Here",
-        labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
-      },
-      jsonPath: "BPA.remarks",
-      props: {
-        className: "textfield-enterable-selection",
-        multiline: true,
-        rows: "4"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      }
-    }),
     applicantName: getTextField({
       label: {
         labelName: "Applicant Name",
         labelKey: "EDCR_SCRUTINY_NAME_LABEL"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      },
-      props: {
-        disabled: true,
-        className: "tl-trade-type"
-      },
-      pattern: getPattern("Name"),
-      jsonPath: "bpaDetails.applicantName"
-    }),
-    buildingPermitNum: getTextField({
-      label: {
-        labelName: "Building Permit Number",
-        labelKey: "EDCR_BUILDING_PERMIT_NUM_LABEL"
       },
       gridDefination: {
         xs: 12,
@@ -247,7 +200,7 @@ export const basicDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 12,
-        md: 12
+        md: 6
       },
       props: {
         disabled: true,
@@ -255,7 +208,50 @@ export const basicDetails = getCommonCard({
       },
       pattern: getPattern("Name"),
       jsonPath: "bpaDetails.appliedBy"
-    })
+    }),
+    remarks: getTextField({
+      label: {
+        labelName: "Remarks",
+        labelKey: "BPA_BASIC_DETAILS_REMARKS_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Remarks Here",
+        labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
+      },
+      jsonPath: "BPA.remarks",
+      props: {
+        className: "textfield-enterable-selection",
+        multiline: true,
+        rows: "4"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      }
+    }),
+    buildingPermitNum: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-bpa",
+      componentPath: "downloadFile",
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        label: {
+          labelName: "Building Permit Number",
+          labelKey: "EDCR_BUILDING_PERMIT_NUM_LABEL"
+        },
+        linkDetail: {
+          labelName: "PB-BP-2020-04-15-002055",
+          labelKey: "PB-BP-2020-04-15-002055"
+        },
+        jsonPath: "ocScrutinyDetails.permitNumber",
+      },
+      type: "array"
+    }
   })
 });
 
