@@ -10,9 +10,9 @@ import {
   getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { documentList } from "./documentList";
-import { resetOCFields, submitFields } from "./functions";
-import { fetchMDMSOCData, getBuildingDetails } from "./functions";
+import { fetchMDMSOCData, getBuildingDetails, resetOCFields, submitFields } from "./functions";
 import set from "lodash/set";
+import { getTodaysDateInYMD } from "../utils";
 
 const header = getCommonHeader({
   labelName: "Occupancy Certificate eDCR Scrutiny",
@@ -108,11 +108,14 @@ const buildingInfoCard = getCommonCard({
           labelName: "Building Permit Date",
           labelKey: "EDCR_BUILDING_PERMIT_DATE_LABEL"
         },
-        jsonPath: "bpaDetails.orderGeneratedDate",
+        jsonPath: "Scrutiny[0].permitDate",
         required: true,
+        pattern: getPattern("Date"),
         props: {
-          // disabled: true,
-          required: true
+          required: true,
+          inputProps: {
+            max: getTodaysDateInYMD()
+          }
         },
         gridDefination: {
           xs: 12,

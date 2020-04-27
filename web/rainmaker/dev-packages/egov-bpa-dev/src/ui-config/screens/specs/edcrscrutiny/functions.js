@@ -15,6 +15,7 @@ import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
+import { convertDateToEpoch } from "../utils";
 
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
@@ -199,7 +200,7 @@ const scrutinizePlan = async (state, dispatch) => {
     const applicantName = get(preparedFinalObject, "Scrutiny[0].applicantName");
     const file = get(preparedFinalObject, "Scrutiny[0].buildingPlan[0]");
     const permitNumber = get(preparedFinalObject, "Scrutiny[0].permitNumber");
-    const permitDate = get(preparedFinalObject, "bpaDetails.orderGeneratedDate");
+    const permitDate = get(preparedFinalObject, "Scrutiny[0].permitDate");
 
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
@@ -277,6 +278,21 @@ export const validateForm = (state, dispatch) => {
     dispatch,
     screenKey
   );
+
+  if(screenKey == "ocapply") {
+    let applicantName = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Scrutiny[0].applicantName", ""
+    )
+    if(applicantName) {
+      let errorMessage = {
+        labelName: "Please fill all date and permit number and click on search",
+        labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return;
+    }
+  }
 
   let filedata = get(
     state.screenConfiguration.preparedFinalObject,
@@ -386,9 +402,24 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     `Scrutiny[0].permitNumber`,
     ""
   );
+  let permitDate = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Scrutiny[0].permitDate`,
+    ""
+  );
+  if(!permitDate || !permitNum) {
+    let errorMessage = {
+      labelName: "Please fill all date and permit number and click on search",
+      labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+
   let queryObject = [
     { key: "tenantId", value: tenantId },
-    { key: "permitNos", value: permitNum }
+    { key: "permitNos", value: permitNum },
+    { key: "permitDate", value: convertDateToEpoch(permitDate) }
   ];
   const response = await getBpaSearchResults(queryObject);
 
