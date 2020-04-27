@@ -629,10 +629,22 @@ export const download = (receiptQueryString, mode = "download") => {
       ]
       }
       else if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL'){
-        queryStr = [
-         { key: "key", value: "tl-receipt" },
-         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-       ]
+
+
+        if (receiptQueryString[2].value==="NEW")
+        { 
+          queryStr = [
+          { key: "key", value: "tl-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]; 
+       }        
+       else 
+        { queryStr = [
+          { key: "key", value: "tl-receipt-renewal" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ];
+        }    
+
        }
       else{
         queryStr = [

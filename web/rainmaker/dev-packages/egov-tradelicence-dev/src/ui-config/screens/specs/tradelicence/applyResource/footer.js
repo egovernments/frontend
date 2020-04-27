@@ -1053,7 +1053,9 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "applicationType", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationType") },
+    
       ]
       download(receiptQueryString);
     },
@@ -1064,7 +1066,9 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString =  [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "applicationType", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationType") }
+    
       ]
       download(receiptQueryString,"print");
     },
