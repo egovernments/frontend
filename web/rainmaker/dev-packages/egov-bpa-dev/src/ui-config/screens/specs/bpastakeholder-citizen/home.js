@@ -24,7 +24,9 @@ const hideBPACard = () => {
     "BPA_ARCHITECT",
     "BPA_ENGINEER",
     "BPA_BUILDER",
-    "BPA_STRUCTURALENGINEER"
+    "BPA_STRUCTURALENGINEER",
+    "BPA_SUPERVISOR",
+    "BPA_TOWNPLANNER"
   ]);
 };
 

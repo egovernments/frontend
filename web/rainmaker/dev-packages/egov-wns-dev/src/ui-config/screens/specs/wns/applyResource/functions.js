@@ -16,6 +16,12 @@ export const propertySearchApiCall = async (state, dispatch) => {
       []
     )
   );
+  dispatch(
+    prepareFinalObject(
+      "applyScreen.property",
+      {}
+    )
+  );
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
@@ -28,14 +34,22 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
     }
     try {
-      if (process.env.REACT_APP_NAME === "Citizen") {
+      let allowCitizenToSearchOtherProperties = get(
+        state
+          .screenConfiguration
+          .preparedFinalObject
+          .applyScreenMdmsData["ws-services-masters"],
+        "PropertySearch", []
+      )
+        .map(a => a.code === "allowCitizenToUseAnyProperty")[0];
+      if (
+        process.env.REACT_APP_NAME === "Citizen" &&
+        !allowCitizenToSearchOtherProperties
+      ) {
         queryObject.push({ key: "mobileNumber", value: JSON.parse(getUserInfo()).mobileNumber })
       }
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
-        if (!_.isEmpty(get(state, "screenConfiguration.preparedFinalObject.applyScreen.property", {}))) {
-          dispatch(prepareFinalObject("applyScreen.property", {}))
-        }
         dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
         showHideFields(dispatch, true);
       } else {
