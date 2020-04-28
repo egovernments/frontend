@@ -1,7 +1,11 @@
-import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import React from "react";
-import store from "ui-redux/store";
 import { getEpochForDate, getTextToLocalMapping, sortByEpoch } from "../../utils";
+
+const url = getQueryArg(
+  window.location.href,
+  "redirectUrl"
+);
 
 export const searchPropertyTable = {
   uiFramework: "custom-molecules",
@@ -75,8 +79,8 @@ export const searchPropertyTable = {
 
 const getSelect=data=>{
   if(process.env.REACT_APP_NAME == "Citizen"){
-    window.location.href=`/citizen/wns/apply?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+    window.location.href=`/citizen${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
   }else{
-    window.location.href=`/employee/wns/apply?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+    window.location.href=`/employee${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
   }
 }

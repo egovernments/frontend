@@ -20,7 +20,7 @@ export const propertyID = getCommonContainer({
     placeholder: { labelKey: "WS_PROPERTY_ID_PLACEHOLDER" },
     gridDefination: { xs: 12, sm: 5, md: 5 },
     required: true,
-    props:{
+    props: {
       style: {
         width: "100%"
       }
@@ -65,6 +65,7 @@ export const propertyID = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "AddLinkForProperty",
+    props: { url: "/wns/apply" },
     gridDefination: { xs: 12, sm: 4, md: 4 }
   }
 })
@@ -77,11 +78,11 @@ const propertyDetails = getCommonContainer({
     {
       jsonPath:
         "applyScreen.property.propertyType",
-        callBack: handleNA,
-        localePrefix: {
-          moduleName: "WS",
-          masterName: "PROPTYPE"
-        }
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      }
 
     }
   ),
@@ -89,13 +90,14 @@ const propertyDetails = getCommonContainer({
     {
       labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
     },
-    { jsonPath: "applyScreen.property.usageCategory",
-    callBack: handleNA,
-    localePrefix: {
-      moduleName: "WS",
-      masterName: "PROPUSGTYPE"
+    {
+      jsonPath: "applyScreen.property.usageCategory",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPUSGTYPE"
+      }
     }
-  }
   ),
   propertySubUsageType: getLabelWithValue(
     {
@@ -104,8 +106,8 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath: "applyScreen.property.propertySubUsageType",
-    callBack: handleNA
-  }
+      callBack: handleNA
+    }
   ),
   plotSize: getLabelWithValue(
     {
@@ -122,18 +124,20 @@ const propertyDetails = getCommonContainer({
       labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL",
       labelName: "Number Of Floors"
     },
-    { jsonPath: "applyScreen.property.noOfFloors",
-    callBack: handleNA
-  }
+    {
+      jsonPath: "applyScreen.property.noOfFloors",
+      callBack: handleNA
+    }
   ),
   rainwaterHarvestingFacility: getLabelWithValue(
     {
       labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
       labelName: "Rainwater Harvesting Facility"
     },
-    { jsonPath: "applyScreen.property.rainWaterHarvesting",
-    callBack: handleNA
-  }
+    {
+      jsonPath: "applyScreen.property.rainWaterHarvesting",
+      callBack: handleNA
+    }
   )
 })
 
