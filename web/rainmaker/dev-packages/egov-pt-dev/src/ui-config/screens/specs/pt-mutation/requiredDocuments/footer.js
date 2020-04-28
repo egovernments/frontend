@@ -1,7 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
 const printDiv = () => {
@@ -24,7 +24,7 @@ export const startApplyFlow = (state, dispatch) => {
   dispatch(setRoute(applyUrl));
 };
 
-export const startMutationApplyFlow= (state, dispatch) =>{
+export const startMutationApplyFlow = (state, dispatch) => {
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("Property", {}));
   const consumerCode = getQueryArg(
@@ -63,7 +63,7 @@ export const footer = {
         variant: "outlined",
         color: "primary",
         style: {
-         minWidth: "180px",
+          minWidth: "180px",
           height: "48px",
           marginRight: "16px"
         }
@@ -86,7 +86,7 @@ export const footer = {
         variant: "contained",
         color: "primary",
         style: {
-         minWidth: "180px",
+          minWidth: "180px",
           height: "48px",
           marginRight: "45px"
         }

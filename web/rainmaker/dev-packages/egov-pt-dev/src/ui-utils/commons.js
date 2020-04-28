@@ -1,22 +1,15 @@
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
-  toggleSnackbar,
-  toggleSpinner
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import html2canvas from "html2canvas";
 import jp from "jsonpath";
+import jsPDF from "jspdf";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
-import DATA from "./documents";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -604,7 +597,7 @@ export const getBoundaryData = async (
       )
     );
     if (code) {
-      
+
       let data = payload.TenantBoundary[0].boundary;
       let messageObject =
         data &&

@@ -1,10 +1,10 @@
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { getPropertyInfoScreenUrl } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { startMutationApplyFlow } from "./requiredDocuments/footer";
-import { getPropertyInfoScreenUrl } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
 
 const header = getCommonHeader({
     labelName: "Property Tax",
@@ -29,8 +29,8 @@ const screenConfig = {
             action: "condition",
             callBack: startMutationApplyFlow
         })
-        set(mutationDocumentUIChildren, 'children.footer.children.header.children.header.children.key.props.labelKey','PTM_REQ_DOCS_HEADER')
-        set(mutationDocumentUIChildren, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey','PTM_COMMON_BUTTON_APPLY')
+        set(mutationDocumentUIChildren, 'children.header.children.header.children.key.props.labelKey', 'PTM_REQ_DOCS_HEADER')
+        set(mutationDocumentUIChildren, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey', 'PTM_COMMON_BUTTON_APPLY')
         set(
             action,
             "screenConfig.components.adhocDialog.children.popup",
