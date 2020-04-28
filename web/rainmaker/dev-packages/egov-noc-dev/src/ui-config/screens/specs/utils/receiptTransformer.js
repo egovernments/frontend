@@ -374,7 +374,7 @@ export const loadMdmsData = async tenantId => {
     response.MdmsRes.tenant.tenants.length > 0
   ) {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
-      return item.code == tenantid;
+      return item.code == tenantId;
     });
     /** START Corporation name generation logic */
     const ulbGrade = get(ulbData, "city.ulbGrade", "NA")
