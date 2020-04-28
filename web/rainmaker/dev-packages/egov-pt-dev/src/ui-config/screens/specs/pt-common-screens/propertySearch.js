@@ -129,7 +129,9 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  window.location.href = "/pt-common-screens/register-property";
+                  let link="/pt-common-screens/register-property";
+                  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+                  window.location.href = `${moduleName}${link}`
                 }
               },
             }
