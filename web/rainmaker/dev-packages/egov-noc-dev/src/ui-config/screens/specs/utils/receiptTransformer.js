@@ -1,19 +1,10 @@
-import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTransformedLocale, getTranslatedLabel, getUlbGradeLabel, getUserDataFromUuid, transformById } from "egov-ui-framework/ui-utils/commons";
+import { getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import store from "../../../../ui-redux/store";
-import { getMdmsData, getReceiptData, getFinancialYearDates, searchMdmsData } from "../utils";
-import {
-  getLocalization,
-  getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getUlbGradeLabel,
-  getTranslatedLabel,
-  transformById,
-  getTransformedLocale,
-  getUserDataFromUuid
-} from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { getReceiptData, searchMdmsData } from "../utils";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -53,7 +44,7 @@ export const getMessageFromLocalization = code => {
 export const loadUlbLogo = tenantid => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS");
     var ctx = canvas.getContext("2d");
     canvas.height = this.height;
@@ -359,15 +350,15 @@ export const loadMdmsData = async tenantId => {
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
   let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: tenantId,
-        moduleDetails: [
-          { moduleName: "tenant", masterDetails: [{ name: "tenants" }] }
-        ]
-      }
-    };
-  let response = await  searchMdmsData(mdmsBody);
- 
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        { moduleName: "tenant", masterDetails: [{ name: "tenants" }] }
+      ]
+    }
+  };
+  let response = await searchMdmsData(mdmsBody);
+
   if (
     response &&
     response.MdmsRes &&
