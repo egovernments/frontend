@@ -3,12 +3,38 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { getCommonApplyFooter, deviationValidation } from "../../utils";
+import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import {
   submitBpaApplication,
   updateBpaApplication
 } from "../../../../../ui-utils/commons";
+import { 
+  toggleSnackbar, 
+  handleScreenConfigurationFieldChange as handleField 
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import _ from "lodash";
+
+
+
+export const showRisktypeWarning = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
+  );
+  dispatch(
+    handleField(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.div.children.selectButton",
+      "visible",
+      false
+    )
+  )
+};
+
 
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);
@@ -21,15 +47,81 @@ const callBackForNext = async (state, dispatch) => {
   let hasFieldToaster = false;
 
   if(activeStep === 0) {
-    deviationValidation(state, dispatch)
-  }
-
-  if (activeStep !== 4) {
-    if (isFormValid) {
-      let responseStatus = "success";
-      responseStatus === "success" && changeStep(state, dispatch);
+    const riskTypes = {LOW: 0, MEDIUM : 1, HIGH: 2};
+    let ocEdcrRiskType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPA.riskType"
+    );
+    let edcrRisktype = get(
+      state.screenConfiguration.preparedFinalObject,
+      "bpaDetails.riskType"
+    );
+    let ocEdcrKathaNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      "ocScrutinyDetails.planDetail.planInformation.khataNo"
+    );
+    let edcrKathaNo =  get(
+      state.screenConfiguration.preparedFinalObject,
+      "scrutinyDetails.planDetail.planInformation.khataNo"
+    );
+    let ocEdcrPlotNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      "ocScrutinyDetails.planDetail.planInformation.plotNo"
+    );
+    let edcrPlotNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      "scrutinyDetails.planDetail.planInformation.plotNo"
+    );
+    if(ocEdcrKathaNo && edcrKathaNo && ocEdcrPlotNo && edcrPlotNo) {
+        if(ocEdcrPlotNo == edcrPlotNo && ocEdcrKathaNo == edcrKathaNo) {
+            console.log("all are ok");
+        } else {
+          let errorMessage = {};
+          if(ocEdcrKathaNo != edcrKathaNo && ocEdcrPlotNo == edcrPlotNo) {
+            errorMessage = {
+              labelName: "Khata number from permit order XXXX(permit order number) is not matching with the khata number from occupancy certificate. You cannot proceed with the application",
+              labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+            };
+          } else if (ocEdcrPlotNo != edcrPlotNo && ocEdcrKathaNo == edcrKathaNo) {
+            errorMessage = {
+              labelName: "Plot number from permit order XXXX(permit order number) is not matching with the Plot number from occupancy certificate. You cannot proceed with the application",
+              labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+            };
+          } else if(ocEdcrPlotNo != edcrPlotNo && ocEdcrKathaNo != edcrKathaNo) {
+            errorMessage = {
+              labelName: "Khata No and plot No from permit order XXXX(permit order number) is not matching with the Khata No and plot No from occupancy certificate. You cannot proceed with the application",
+              labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+            };
+          }
+          dispatch(toggleSnackbar(true, errorMessage, "error"));
+          return
+        }
+    }
+    if(riskTypes[edcrRisktype] < riskTypes[ocEdcrRiskType]) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "The Risk type from permit order XXXX(permit order number) to occupancy certificate application is changed from Low to high .You cannot proceed with the application.",
+            labelKey: "BPA_RISK_TYPE_VALIDATION_ERROR"
+          },
+          "error"
+        )
+      );
+      return
+    } else if (riskTypes[edcrRisktype] > riskTypes[ocEdcrRiskType]) {
+      showRisktypeWarning(state, dispatch, activeStep);
+    } else {
+      changeStep(state, dispatch);
     }
   }
+
+  // if (activeStep !== 4) {
+  //   if (isFormValid) {
+  //     let responseStatus = "success";
+  //     responseStatus === "success" && changeStep(state, dispatch);
+  //   }
+  // }
 };
 
 export const changeStep = (

@@ -1,7 +1,8 @@
 import {
   getCommonContainer,
   getCommonHeader,
-  getStepperObject
+  getStepperObject,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getQueryArg,
@@ -14,8 +15,6 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
 import get from "lodash/get";
-import jp from "jsonpath";
-import { edcrHttpRequest } from "../../../../ui-utils/api";
 import {
   basicDetails,
   buildingPlanScrutinyDetails,
@@ -24,15 +23,13 @@ import {
 } from "./applyResource/scrutinyDetails";
 import { documentAndNocDetails } from './applyResource/documentAndNocDetails';
 import { summaryDetails } from "./summary";
-import { footer } from "./applyResource/footer";
-import {
-  getAppSearchResults
-} from "../../../../ui-utils/commons";
+import { footer, showRisktypeWarning } from "./applyResource/footer";
 import {
   getBpaMdmsData,
   getOcEdcrDetails,
   getTodaysDateInYYYMMDD
 } from "../utils";
+import { changeStep } from "./applyResource/footer";
 
 
 export const stepsData = [
@@ -154,6 +151,18 @@ const getMdmsData = async (action, state, dispatch) => {
   dispatch(prepareFinalObject("BPA.applicationType", applicationType));
 };
 
+const procedToNextStep = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
+  );
+  changeStep(state, dispatch, "", 1);
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
@@ -232,7 +241,86 @@ const screenConfig = {
         formwizardThirdStep,
         footer
       }
-    }
+    },
+    cityPickerDialog :{
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "md"
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
+          },
+          children: {
+            popup: getCommonContainer({
+              header: getCommonHeader({
+                labelName: "The Risk type in permit order XXXX is high where as the risk type in occupancy is Low , do you want to continue",
+                labelKey: "BPA_RISK_TYPE_VALIDATION_WARNING"
+              }),
+              riskTypeWarning: getCommonContainer({
+                div: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Div",
+                  children: {
+                    selectButton: {
+                      componentPath: "Button",
+                      props: {
+                        variant: "contained",
+                        color: "primary",
+                        style: {
+                          width: "40px",
+                          height: "20px",
+                          marginRight: "4px",
+                          marginTop: "16px"
+                        }
+                      },
+                      children: {
+                        previousButtonLabel: getLabel({
+                          labelName: "YES",
+                          labelKey: "BPA_ADD_HOC_CHARGES_POPUP_BUTTON_YES"
+                        })
+                      },
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: procedToNextStep
+                      }
+                    },
+                    cancelButton: {
+                      componentPath: "Button",
+                      props: {
+                        variant: "outlined",
+                        color: "primary",
+                        style: {
+                          width: "40px",
+                          height: "20px",
+                          marginRight: "4px",
+                          marginTop: "16px"
+                        }
+                      },
+                      children: {
+                        previousButtonLabel: getLabel({
+                          labelName: "NO",
+                          labelKey: "BPA_ADD_HOC_CHARGES_POPUP_BUTTON_NO"
+                        })
+                      },
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: showRisktypeWarning
+                      }
+                    }
+                  }
+                }
+              })
+            })
+          }
+        }
+      }
+    },
   }
 };
 

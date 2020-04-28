@@ -279,20 +279,20 @@ export const validateForm = (state, dispatch) => {
     screenKey
   );
 
-  if(screenKey == "ocapply") {
-    let applicantName = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Scrutiny[0].applicantName", ""
-    )
-    if(applicantName) {
-      let errorMessage = {
-        labelName: "Please fill all date and permit number and click on search",
-        labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      return;
-    }
-  }
+  // if(screenKey == "ocapply") {
+  //   let applicantName = get(
+  //     state.screenConfiguration.preparedFinalObject,
+  //     "Scrutiny[0].applicantName", ""
+  //   )
+  //   if(applicantName) {
+  //     let errorMessage = {
+  //       labelName: "Please fill all date and permit number and click on search",
+  //       labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+  //     };
+  //     dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  //     return;
+  //   }
+  // }
 
   let filedata = get(
     state.screenConfiguration.preparedFinalObject,
