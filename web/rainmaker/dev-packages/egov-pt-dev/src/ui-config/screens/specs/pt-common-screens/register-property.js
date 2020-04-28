@@ -226,6 +226,7 @@ const screenConfig = {
 
       const queryObj = [{ key: "tenantId", value: tenantId }];
        getBoundaryData(action, state, dispatch, queryObj);
+       if(process.env.REACT_APP_NAME != "Citizen"){
        let props = get(
          action.screenConfig,
          "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city.props",
@@ -244,6 +245,7 @@ const screenConfig = {
            tenantId
          )
        );
+         }
        const mohallaLocalePrefix = {
          moduleName: tenantId,
          masterName: "REVENUE"

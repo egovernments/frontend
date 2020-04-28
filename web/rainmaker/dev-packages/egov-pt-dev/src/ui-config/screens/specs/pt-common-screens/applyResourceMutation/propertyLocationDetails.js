@@ -113,55 +113,55 @@ export const propertyLocationDetails = getCommonCard({
     }
 
   },
-    localityOrMohalla: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
-      componentPath: "AutosuggestContainer",
-      jsonPath: "Property.locationDetails.locality.code",//db sake
-      required: true,
-      props: {
-        style: {
-          width: "100%",
-          cursor: "pointer"
-        },
-        label: {
-          labelName:"Locality/Mohalla",
-              labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA"
-            },
-            placeholder: {
-              labelName:"Enter Mohalla",
-              labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
-            },
-            jsonPath: "Property.locationDetails.locality.code",//db sake
-        sourceJsonPath: "applyScreenMdmsData.tenant.localities",
-        labelsFromLocalisation: true,
-        suggestions: [],
-        fullwidth: true,
-        required: true,
-        inputLabelProps: {
-          shrink: true
-        },
-        gridDefination: {
-              xs: 12,
-              sm: 6
-            },
-      },
-    },
-    // localityOrMohalla:getSelectField({
-    //   label: {
-    //     labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA"
-    //   },
-    //   placeholder: {
-    //     labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
-    //   },
-    //   sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+    // localityOrMohalla: {
+    //   uiFramework: "custom-containers-local",
+    //   moduleName: "egov-tradelicence",
+    //   componentPath: "AutosuggestContainer",
     //   jsonPath: "Property.locationDetails.locality.code",//db sake
     //   required: true,
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 6
+    //   props: {
+    //     style: {
+    //       width: "100%",
+    //       cursor: "pointer"
+    //     },
+    //     label: {
+    //       labelName:"Locality/Mohalla",
+    //           labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA"
+    //         },
+    //         placeholder: {
+    //           labelName:"Enter Mohalla",
+    //           labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
+    //         },
+    //         jsonPath: "Property.locationDetails.locality.code",//db sake
+    //     sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+    //     labelsFromLocalisation: true,
+    //     suggestions: [],
+    //     fullwidth: true,
+    //     inputLabelProps: {
+    //       shrink: true
+    //     },
+    //     gridDefination: {
+    //           xs: 12,
+    //           sm: 6,
+          
+    //         },
     //   },
-    // }),
+    // },
+    localityOrMohalla:getSelectField({
+      label: {
+        labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA"
+      },
+      placeholder: {
+        labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
+      },
+      sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+      jsonPath: "Property.locationDetails.locality.code",//db sake
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+    }),
 
     
     doorNo: getTextField({
