@@ -2861,17 +2861,19 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 };
 
 const riskType = (state, dispatch) => {
+  let path = window.location.href.includes("oc-bpa")
+  let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+    `${scrutinytype}.planDetail.virtualBuilding.occupancyTypes[0].type.name`
   );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.plot.area"
+    `${scrutinytype}.planDetail.plot.area`
   );
   let buildingBlocks = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.blocks"
+    `${scrutinytype}.planDetail.blocks`
   );
   let blocks = buildingBlocks.map(item => {
     return item && item.building && item.building.buildingHeight;
@@ -2883,7 +2885,7 @@ const riskType = (state, dispatch) => {
   );
   let block = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
+    `${scrutinytype}.planDetail.blocks[0].building.occupancies[0].typeHelper.type`, []
   );
   // dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
