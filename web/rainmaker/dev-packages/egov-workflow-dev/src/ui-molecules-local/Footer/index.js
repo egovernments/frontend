@@ -219,16 +219,16 @@ class Footer extends React.Component {
         })
        const rolecheck= rolearray.length>0? true: false;
     if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
-      // const editButton = {
-      //   label: "Edit",
-      //   labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
-      //   link: () => {
-      //     this.props.setRoute(
-      //       `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-      //     );
-      //   }
-      // };
-      // downloadMenu && downloadMenu.push(editButton);
+       const editButton = {
+         label: "Edit",
+         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
+         link: () => {
+           this.props.setRoute(
+             `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+           );
+         }
+       };
+       downloadMenu && downloadMenu.push(editButton);
       const submitButton = {
         label: "Submit",
         labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
