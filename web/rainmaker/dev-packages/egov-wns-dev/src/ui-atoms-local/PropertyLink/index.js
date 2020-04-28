@@ -15,12 +15,13 @@ const clickHereStyles = {
   color: "#FE7A51"
 }
 
-function AddLinkForProperty() {
+function AddLinkForProperty(props) {
+  const { url } = props;
   let link = process
     .env
     .REACT_APP_NAME === "Citizen" ?
-    "citizen/pt-common-screens/propertySearch" :
-    "employee/pt-common-screens/propertySearch";
+    `${window.origin}/citizen/pt-common-screens/propertySearch?redirectUrl=${url}` :
+    `${window.origin}/employee/pt-common-screens/propertySearch?redirectUrl=${url}`;
   return (
     <div style={styles}>
       <LabelContainer

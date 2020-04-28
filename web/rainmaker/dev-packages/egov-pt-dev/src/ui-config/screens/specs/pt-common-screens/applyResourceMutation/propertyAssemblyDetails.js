@@ -10,6 +10,33 @@ import {
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from 'lodash/get';
 
+
+const rendersubUsageType=(usageType,propType,dispatch,state)=>{
+  let subTypeValues=get(
+    state.screenConfiguration.preparedFinalObject,
+      "searchScreenMdmsData.PropertyTax.subUsageType"
+  );
+  let subUsage;
+  if(propType==="BUILTUP.SHAREDPROPERTY"){
+  if(usageType==="MIXED"){
+    subUsage= subTypeValues;
+  }else{
+    subUsage=subTypeValues.filter(cur=>{
+      return (cur.code.startsWith(usageType))
+    })
+  }
+}else{
+  subUsage=[];
+}
+dispatch(
+  prepareFinalObject(
+    "propsubusagetypeForSelectedusageCategory",
+    subUsage
+  ) 
+)
+
+}
+
 export const propertyAssemblyDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -40,6 +67,15 @@ export const propertyAssemblyDetails = getCommonCard({
         xs: 12,
         sm: 12,
         md: 6
+      },
+      afterFieldChange:async(action,state,dispatch)=>{
+        let usageType=get(state.screenConfiguration.preparedFinalObject,
+        "Property.assemblyDetails.usageType");
+        if(usageType){
+          rendersubUsageType(usageType,action.value,dispatch,state)
+
+        }
+
       }
     }),
     totalLandArea: getTextField({
@@ -97,26 +133,7 @@ export const propertyAssemblyDetails = getCommonCard({
           state.screenConfiguration.preparedFinalObject,
           "Property.assemblyDetails.propertyType"
         );
-        let subTypeValues=get(
-          state.screenConfiguration.preparedFinalObject,
-            "searchScreenMdmsData.PropertyTax.subUsageType"
-        );
-        let subUsage;
-        if(propType==="BUILTUP.SHAREDPROPERTY"){
-        if(action.value==="MIXED"){
-          subUsage= subTypeValues;
-        }else{
-          subUsage=subTypeValues.filter(cur=>{
-            return (cur.code.startsWith(action.value))
-          })
-        }
-      }
-        dispatch(
-          prepareFinalObject(
-            "propsubusagetypeForSelectedusageCategory",
-            subUsage
-          ) 
-        )
+        rendersubUsageType(action.value,propType,dispatch,state)
       }
     }),
     subUsageType: getSelectField({

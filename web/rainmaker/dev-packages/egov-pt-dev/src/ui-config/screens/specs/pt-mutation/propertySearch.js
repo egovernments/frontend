@@ -10,10 +10,10 @@ import { showHideAdhocPopup } from "../utils";
 import "./index.css";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
+import { startApplyFlow } from "./requiredDocuments/footer";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
-import { startApplyFlow } from "./requiredDocuments/footer";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -54,18 +54,18 @@ const getMDMSData = async (action, dispatch) => {
       []
     );
 
-    let documentUi=getRequiredDocuments(documents);
-    set(documentUi, 'children.footer.children.header.children.header.children.key.props.labelKey','PT_REQ_DOCS_HEADER')
-    set(documentUi, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey','PT_COMMON_BUTTON_APPLY')
+    let documentUi = getRequiredDocuments(documents);
+    set(documentUi, 'children.header.children.header.children.key.props.labelKey', 'PT_REQ_DOCS_HEADER')
+    set(documentUi, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey', 'PT_COMMON_BUTTON_APPLY')
     set(documentUi, 'children.footer.children.footer.children.applyButton.onClickDefination', {
       action: "condition",
       callBack: startApplyFlow
-  })
-  set(
-    action,
-    "screenConfig.components.adhocDialog.children.popup",
-    documentUi
-  );
+    })
+    set(
+      action,
+      "screenConfig.components.adhocDialog.children.popup",
+      documentUi
+    );
 
 
 

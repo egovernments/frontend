@@ -10,8 +10,12 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import get from "lodash/get";
 import set from "lodash/set";
-import { validateFields } from "../utils";
+import { validateFields, getLicenseDetails } from "../utils";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getBpaSearchResults } from "../../../../ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { edcrHttpRequest } from "../../../../ui-utils/api";
+import { convertDateToEpoch } from "../utils";
 
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
@@ -23,6 +27,20 @@ export const fetchData = async (
 ) => {
   dispatch(prepareFinalObject("searchResults", []));
   dispatch(prepareFinalObject("myApplicationsCount", 0));
+
+  const mdmsRes = await getMdmsDataForOc(dispatch);
+  let tenants =
+    mdmsRes &&
+    mdmsRes.MdmsRes &&
+    mdmsRes.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "BPAAPPLY") return true;
+    });
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      tenants
+    )
+  );
 
   const response = await getSearchResultsfromEDCR(action, state, dispatch);
   try {
@@ -52,19 +70,24 @@ export const uuidv4 = () => {
   return require("uuid/v4")();
 };
 
-const moveToSuccess = (dispatch, edcrDetail) => {
+const moveToSuccess = (dispatch, edcrDetail, isOCApp) => {
   const applicationNo = edcrDetail.transactionNumber;
 
   const tenantId = edcrDetail.tenantId;
+  const edcrNumber = get(edcrDetail, "edcrNumber"); 
 
-  const purpose = "apply";
+  const purpose = isOCApp ? "ocapply" :"apply";
   let status = edcrDetail.status === "Accepted" ? "success" : "rejected";
   if(edcrDetail.status == "Aborted") {
     status = "aborted";
   }
+  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
+  if(isOCApp) {
+    url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
+  }
   dispatch(
     setRoute(
-      `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`
+      url
     )
   );
 };
@@ -139,9 +162,23 @@ const scrutinizePlan = async (state, dispatch) => {
   try {
     dispatch(toggleSpinner());
 
+    let { screenConfiguration } = state;
+    let { preparedFinalObject } = screenConfiguration;
+    let isOCApp = window.location.href.includes("ocapply");
+    let tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
+
+    let userInfo = { id: userUUid, tenantId: userTenant }, edcrNumber = "";
+
+    if (isOCApp) { 
+      tenantId = getQueryArg(window.location.href, "tenantId");
+      userInfo = { id: userUUid, tenantId: tenantId },
+      edcrNumber =  get(state.screenConfiguration.preparedFinalObject, "bpaDetails.edcrNumber");
+     }
+    else { userInfo = { id: userUUid, tenantId: userTenant } }
+
     let edcrRequest = {
       transactionNumber: "",
-      edcrNumber: "",
+      edcrNumber: edcrNumber,
       planFile: null,
       tenantId: "",
       RequestInfo: {
@@ -154,32 +191,36 @@ const scrutinizePlan = async (state, dispatch) => {
         key: "",
         msgId: "",
         correlationId: "",
-        userInfo: {
-          id: userUUid,
-          tenantId: userTenant
-        }
+        userInfo: userInfo
       }
     };
     //generate trx no
     const transactionNumber = uuidv4();
     //
-    let { screenConfiguration } = state;
-    let { preparedFinalObject } = screenConfiguration;
-    const tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
     const applicantName = get(preparedFinalObject, "Scrutiny[0].applicantName");
     const file = get(preparedFinalObject, "Scrutiny[0].buildingPlan[0]");
+    const permitNumber = get(preparedFinalObject, "Scrutiny[0].permitNumber");
+    const permitDate = get(preparedFinalObject, "Scrutiny[0].permitDate");
 
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
     edcrRequest = { ...edcrRequest, applicantName };
+
+    let url = `/edcr/rest/dcr/scrutinizeplan?tenantId=${tenantId}`;
+    if(isOCApp) {
+      url = `/edcr/rest/dcr/scrutinizeocplan?tenantId=${tenantId}`;
+      edcrRequest = { ...edcrRequest, permitDate };
+      edcrRequest = { ...edcrRequest, permitNumber };
+    }
+
     var bodyFormData = new FormData();
     bodyFormData.append("edcrRequest", JSON.stringify(edcrRequest));
     bodyFormData.append("planFile", file);
-    let EDCRHost = "";
+
 
     let response = await axios({
       method: "post",
-      url: `${EDCRHost}/edcr/rest/dcr/scrutinizeplan?tenantId=${tenantId}`,
+      url: url,
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" }
     });
@@ -188,7 +229,7 @@ const scrutinizePlan = async (state, dispatch) => {
       if (data.edcrDetail) {
         dispatch(prepareFinalObject("edcrDetail", data.edcrDetail));
         dispatch(toggleSpinner());
-        moveToSuccess(dispatch, data.edcrDetail[0]);
+        moveToSuccess(dispatch, data.edcrDetail[0], isOCApp);
       }
     }
   } catch (e) {
@@ -230,11 +271,28 @@ export const resetFields = (state, dispatch) => {
 };
 
 export const validateForm = (state, dispatch) => {
+  let screenKey = window.location.href.includes("ocapply") ? "ocapply": "apply";
   let isInputDataValid = validateFields(
     "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children",
     state,
-    dispatch
+    dispatch,
+    screenKey
   );
+
+  if(screenKey == "ocapply") {
+    let applicantName = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Scrutiny[0].applicantName", ""
+    )
+    if(!applicantName) {
+      let errorMessage = {
+        labelName: "Please fill date and permit number and click on search",
+        labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return;
+    }
+  }
 
   let filedata = get(
     state.screenConfiguration.preparedFinalObject,
@@ -299,3 +357,132 @@ export const fetchMDMSData = async (action, state, dispatch) => {
   }
   dispatch(prepareFinalObject("applyScreenMdmsData.tenantData", TenantList));
 };
+
+export const fetchMDMSOCData = async (action, state, dispatch) => {
+  const mdmsRes = await getMdmsDataForOc(dispatch);
+  if(mdmsRes && mdmsRes.MdmsRes) {
+    dispatch(prepareFinalObject("applyScreenMdmsData", mdmsRes.MdmsRes));
+  }
+};
+
+export const getMdmsDataForOc = async () => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [{ name: "citymodule" }]
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [{name: "ServiceType"}]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let permitNum = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Scrutiny[0].permitNumber`,
+    ""
+  );
+  let permitDate = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Scrutiny[0].permitDate`,
+    ""
+  );
+  if(!permitDate || !permitNum) {
+    let errorMessage = {
+      labelName: "Please fill all date and permit number and click on search",
+      labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "permitNos", value: permitNum },
+    { key: "permitDate", value: convertDateToEpoch(permitDate) }
+  ];
+  const response = await getBpaSearchResults(queryObject);
+
+  if (get(response, "Bpa[0].edcrNumber") == undefined) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "No Records Found",
+          labelKey: "BPA_NO_REC_FOUND_LABEL"
+        },
+        "error"
+      )
+    );
+    return;
+  }
+
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
+    "search", []
+  );
+
+  let primaryOwnerArray = response.Bpa[0].owners.filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
+  dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
+  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
+  let SHLicenseDetails = await getLicenseDetails(state,dispatch);
+  dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
+};
+
+export const resetOCFields = (state, dispatch) => {
+  const applicantName = get(
+    state.screenConfiguration.preparedFinalObject, 
+    "Scrutiny[0].applicantName"
+    );
+  let filedata = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Scrutiny[0].buildingPlan[0]"
+  );
+
+  if(applicantName || (typeof filedata === "object" && !Array.isArray(filedata))) {
+    window.location.reload();
+  }
+
+  dispatch(
+    handleField(
+      "ocapply",
+      "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.buildingPermitDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "ocapply",
+      "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.buildingPermitNum",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(prepareFinalObject("Scrutiny[0].buildingPlan[0]", []));
+  dispatch(prepareFinalObject("Scrutiny[0].permitDate", ""));
+  dispatch(prepareFinalObject("Scrutiny[0].permitNumber", ""));
+  dispatch(prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux[0]", []));
+}

@@ -40,8 +40,9 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import jp from "jsonpath";
-import { download } from "egov-common/ui-utils/commons";
 import axios from "axios";
+import { getBpaSearchResults } from "../../../../ui-utils/commons";
+import _ from "lodash";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -2153,14 +2154,29 @@ export const setFilteredTradeTypes = (
 };
 
 export const showCityPicker = (state, dispatch) => {
-  let toggle = get(
-    state.screenConfiguration.screenConfig["home"],
-    "components.cityPickerDialog.props.open",
-    false
+  const ocCityPicker = get(
+    state.screenConfiguration.screenConfig,
+    "home.components.cityPickerDialogForOC.props.open", false
   );
-  dispatch(
-    handleField("home", "components.cityPickerDialog", "props.open", !toggle)
-  );
+  if(ocCityPicker) {
+    let toggle = get(
+      state.screenConfiguration.screenConfig["home"],
+      "components.cityPickerDialogForOC.props.open",
+      false
+    );
+    dispatch(
+      handleField("home", "components.cityPickerDialogForOC", "props.open", !toggle)
+    );
+  } else {
+    let toggle = get(
+      state.screenConfiguration.screenConfig["home"],
+      "components.cityPickerDialog.props.open",
+      false
+    );
+    dispatch(
+      handleField("home", "components.cityPickerDialog", "props.open", !toggle)
+    );
+  }
 };
 /*
 export const applyForm = (state, dispatch) => {
@@ -2845,17 +2861,19 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 };
 
 const riskType = (state, dispatch) => {
+  let path = window.location.href.includes("oc-bpa")
+  let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+    `${scrutinytype}.planDetail.virtualBuilding.occupancyTypes[0].type.name`
   );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.plot.area"
+    `${scrutinytype}.planDetail.plot.area`
   );
   let buildingBlocks = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.blocks"
+    `${scrutinytype}.planDetail.blocks`
   );
   let blocks = buildingBlocks.map(item => {
     return item && item.building && item.building.buildingHeight;
@@ -2867,7 +2885,7 @@ const riskType = (state, dispatch) => {
   );
   let block = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
+    `${scrutinytype}.planDetail.blocks[0].building.occupancies[0].typeHelper.type`, []
   );
   // dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
@@ -3575,21 +3593,44 @@ export const applyForm = (state, dispatch) => {
     "citiesByModule.citizenTenantId"
   );
 
-  const isTradeDetailsValid = validateFields(
-    "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
-    state,
-    dispatch,
-    "home"
+  const ocCityPicker = get(
+    state.screenConfiguration.screenConfig,
+    "home.components.cityPickerDialogForOC.props.open", false
   );
-
-  if (isTradeDetailsValid) {
-    window.location.href =
-      process.env.NODE_ENV === "production"
-        ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
-        : process.env.REACT_APP_SELF_RUNNING === true
-          ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
-          : `/egov-bpa/apply?tenantId=${tenantId}`;
-  };
+  if(ocCityPicker) {
+    const isOcCityValid = validateFields(
+      "components.cityPickerDialogForOC.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "home"
+    );
+  
+    if (isOcCityValid) {
+      window.location.href =
+        process.env.NODE_ENV === "production"
+          ? `/citizen/oc-bpa/apply?tenantId=${tenantId}`
+          : process.env.REACT_APP_SELF_RUNNING === true
+            ? `/egov-ui-framework/oc-bpa/apply?tenantId=${tenantId}`
+            : `/oc-bpa/apply?tenantId=${tenantId}`;
+    };
+  } else {
+    const isTradeDetailsValid = validateFields(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "home"
+    );
+  
+    if (isTradeDetailsValid) {
+      window.location.href =
+        process.env.NODE_ENV === "production"
+          ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
+          : process.env.REACT_APP_SELF_RUNNING === true
+            ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
+            : `/egov-bpa/apply?tenantId=${tenantId}`;
+    };
+  }
+  
   city(state, dispatch, tenantId);
 };
 
@@ -3631,15 +3672,14 @@ export const setNameOfUser = (action, state, dispatch) => {
 
 export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
   try {
-    let payload = null;
-    payload = await httpRequest(
+    let payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
       "_search",
       [],
       mdmsBody
     );
-    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    return payload;
   } catch (e) {
     console.log(e);
   }
@@ -4587,23 +4627,44 @@ const getFloorDetails = (index) => {
   }
 };
 
-export const setProposedBuildingData = async (state, dispatch, action) => {
-  const response = get(
-    state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
-    []
-  );
+export const setProposedBuildingData = async (state, dispatch, action, value) => {
+  
+  let response, occupancyType, BPA;
   let getLocalLabels = get( state, "app.localizationLabels");
-  let occupancyType = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
-    []
-  );
-  const BPA = get (
-    state,
-    "screenConfiguration.preparedFinalObject.BPA",
-    {}
-  );
+
+  if(value == "ocApply") {
+    response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.ocScrutinyDetails.planDetail.blocks",
+      []
+    );
+    occupancyType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+      []
+    );
+    BPA = get (
+      state,
+      "screenConfiguration.preparedFinalObject.BPA",
+      {}
+    );
+  } else {
+    response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
+      []
+    );
+    occupancyType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+      []
+    );
+    BPA = get (
+      state,
+      "screenConfiguration.preparedFinalObject.BPA",
+      {}
+    );
+  }
   
   let subOccupancyType = occupancyType.filter(item => {
     return item.active;
@@ -4685,3 +4746,306 @@ export const getConditionsInPermitList = async (action, state, dispatch) => {
   
   dispatch(prepareFinalObject( "BPA.additionalDetails.pendingapproval" ,finalPermitList));
 }
+
+export const getLicenseDetails = async (state, dispatch) => {
+
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let userInfo = JSON.parse(getUserInfo());
+  const id = get(userInfo, "id");
+  const queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "id",
+      value: id
+    }
+  ];
+
+  try {
+    const License = await httpRequest(
+      "post",
+      "/tl-services/v1/BPAREG/_search",
+      "", [],
+      queryObject
+    );
+    for (let i = 0; i <= License.Licenses.length; i++) {
+      if (License.Licenses[i].status === "APPROVED") {
+        let name = License.Licenses[i].tradeLicenseDetail.owners[0].name;
+        let tradeType = License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType;
+        let licenseNumber = License.Licenses[i].licenseNumber;
+        let tradeTypeWithLocalization = getTextToLocalMapping(`TRADELICENSE_TRADETYPE_${tradeType.split('.')[0].toUpperCase()}`);
+        return `${name}/${tradeTypeWithLocalization}/${licenseNumber}`;
+        // return `${License.Licenses[i].tradeLicenseDetail.owners[0].name}/${License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType}/${License.Licenses[i].licenseNumber}`;
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const ocuupancyType = (state, dispatch) => {
+  let occupancyDataObj = get(
+    state.screenConfiguration.preparedFinalObject,
+    "ocScrutinyDetails.planDetail.occupancies[0].typeHelper.type", []
+  );
+  let occupancyData = [];
+  occupancyData.push({code: occupancyDataObj.code});
+  dispatch(prepareFinalObject("applyScreenMdmsData.BPA.occupancyData", occupancyData));
+}
+
+export const deviationValidation = (action, state, dispatch) => {
+  const APPROVED = "Approved";
+  const ALLOW = "Validate and allow";
+  const REJECT = "Validate and restrict";
+  const INCOMPLETEINFO = "Not enough details";
+
+  let ocScrutinyDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "ocScrutinyDetails", {}
+  );
+  let scrutinyDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "scrutinyDetails", {}
+  );
+  let ocEDCRDetails = {};
+  ocEDCRDetails.edcrDetail = [];
+  ocEDCRDetails.edcrDetail[0] = ocScrutinyDetails;
+
+  let eDCRDetails = {};
+  eDCRDetails.edcrDetail = [];
+  eDCRDetails.edcrDetail[0] = scrutinyDetails;
+
+  let validationParams = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.BPA.DeviationParams"
+  )
+
+  let validationResponse = APPROVED;
+  let planParam = [],
+    ocParam = [];
+
+  for (let paramRecord of validationParams) {
+
+    let firstIndex = paramRecord.paramPath.indexOf("[");
+    let lastIndex = paramRecord.paramPath.lastIndexOf("[");
+
+    if (firstIndex !== lastIndex) {// To check if the record has multiple sub records like blocks
+      let firstpath = paramRecord.paramPath.substring(0, lastIndex);
+      let secondpath = paramRecord.paramPath.substring(lastIndex + 4);
+      let planRecs = _.get(eDCRDetails, firstpath, []);
+      let ocRecs = _.get(ocEDCRDetails, firstpath, []);
+      planRecs.forEach((element, i) => {
+        planParam.push(_.get(planRecs[i], secondpath, null));
+        ocParam.push(_.get(ocRecs[i], secondpath, null));
+      });
+    } else {
+      planParam.push(_.get(eDCRDetails, paramRecord.paramPath, null));
+      ocParam.push(_.get(ocEDCRDetails, paramRecord.paramPath, null));
+    }
+    if (planParam && ocParam && planParam.length === ocParam.length) {
+      for (let i = 0; i < planParam.length; i++) {
+        let diff = 0;
+        if (paramRecord.calculationType === "number") {
+          diff = Math.abs(ocParam[i] - planParam[i]);
+        } else {
+          //(paramRecord.calculationType==="percentage"){
+          diff = (Math.abs(ocParam[i] - planParam[i]) / planParam[i]) * 100;
+        }
+
+        if (diff > paramRecord.tolerancelimit) {
+          if (paramRecord.restrictionType === REJECT) {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.footer.children.nextButton",
+                "props.disabled",
+                true
+              )
+            );
+            dispatch(
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "System has to validate and restrict the user from creating the application.",
+                  labelKey: "BPA_TOLERANCE_LIMIT_ERROR"
+                },
+                "error"
+              )
+            );
+          } else {
+            validationResponse = ALLOW;
+          }
+        }
+      }
+    } else {
+      validationResponse = INCOMPLETEINFO;
+      break;
+    }
+  }
+  return validationResponse;
+};
+
+
+export const getPermitDetails = async (permitNumber, tenantId) => {
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "permitNos", value: permitNumber }
+  ];
+
+  const response = await getBpaSearchResults(queryObject);
+
+  if (response.Bpa.length > 0)
+    return response.Bpa[0];
+  else
+    return 'NOPERMIT';
+
+};
+
+export const getOcEdcrDetails = async (state, dispatch, action) => {
+  try {
+    const scrutinyNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `BPA.edcrNumber`,
+      ""
+    ) || getQueryArg(window.location.href, "edcrNumber");
+
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+
+    //check format
+    if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Scrutiny Number!",
+            labelKey: "BPA_INCORRECT_SCRUTINY_NUMBER"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //get oc edcr details
+    let ocpayload = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+      scrutinyNo +
+      "&tenantId=" + tenantId,
+      {}
+    );
+
+    //get permit details for oc edcr using permitNumber
+    const bpaDetails = await getPermitDetails(get(ocpayload, "edcrDetail[0].permitNumber"), tenantId);
+    if (bpaDetails === 'NOPERMIT') {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Permit Number!",
+            labelKey: "BPA_INCORRECT_PERMIT_NUMBER"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //Check oc edcr date validity less than today
+    const todayDate = new Date();
+    if (get(ocpayload, "edcrDetail[0].permitDate") > todayDate) {  //to be checked for the date comparison
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Invalid Permit Date!",
+            labelKey: "BPA_INVALID_PERMIT"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //get permit edcr details
+    let edcrPayload = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+      bpaDetails.edcrNumber +
+      "&tenantId=" + tenantId,
+      {}
+    );
+
+    if (get(ocpayload, "edcrDetail[0].tenantId") !== get(edcrPayload, "edcrDetail[0].tenantId")) {//check city using tenantId- is this correct
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Invalid City!",
+            labelKey: "BPA_INVALID_PERMIT_CITY"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //check duplicates
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId,
+      },
+      {
+        key: "edcrNumbers",
+        value: scrutinyNo,
+      }
+    ];
+    const bpaSearch = await httpRequest(
+      "post",
+      "bpa-services/_search",
+      "",
+      queryObject
+    );
+
+    let data = bpaSearch.Bpa.map((data, index) => {
+      if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED' && index > 0) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Application Number already exists",
+              labelKey: "APPLICATION_NUMBER_ALREADY_EXISTS"
+            },
+            "error"
+          )
+        );
+        return;
+      }
+    });
+
+    let primaryOwnerArray = bpaDetails.owners.filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+    set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
+
+    dispatch(prepareFinalObject("ocScrutinyDetails", get(ocpayload, "edcrDetail[0]")));
+    dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
+    deviationValidation(action, state, dispatch);
+    dispatch(prepareFinalObject("bpaDetails", bpaDetails));
+    setProposedBuildingData(state, dispatch, action, "ocApply");
+    let SHLicenseDetails = await getLicenseDetails(state,dispatch);
+    dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
+    riskType(state, dispatch);
+    ocuupancyType(state, dispatch);
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "info"
+      )
+    );
+  }
+};

@@ -1,13 +1,7 @@
-import {
-  getCommonHeader,
-  getBreak,
-  getCommonTitle,
-  getCommonParagraph,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getCommonGrayCard, getLabelOnlyValue } from "../../utils";
 import { footer } from "./footer";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   header: {
@@ -69,6 +63,9 @@ const generateDocument = item => {
   // Add documents in individual grey cards
   let docs = {};
   if (item.hasOwnProperty("dropdownData")) {
+    item.dropdownData = item.dropdownData.filter(item => {
+      return item.active;
+    });
     docs = item.dropdownData.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
@@ -81,6 +78,9 @@ const generateDocument = item => {
       return obj;
     }, {});
   } else if (item.hasOwnProperty("options")) {
+    item.options = item.options.filter(item => {
+      return item.active;
+    });
     docs = item.options.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
@@ -97,13 +97,13 @@ const generateDocument = item => {
   // Add description to individual grey cards
   let subParagraph = item.description
     ? getCommonParagraph(
-        {
-          labelKey: getTransformedLocale(`PT_${item.description}_NOTE`)
-        },
-        {
-          style: styles.description
-        }
-      )
+      {
+        labelKey: getTransformedLocale(`PT_${item.description}_NOTE`)
+      },
+      {
+        style: styles.description
+      }
+    )
     : {};
 
   return getCommonGrayCard({

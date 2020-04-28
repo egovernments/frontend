@@ -1006,6 +1006,7 @@ export const getModuleName = () => {
     if (pathName.indexOf("inbox") > -1) {return "rainmaker-common";}
     else if (pathName.indexOf("property-tax") > -1){return "rainmaker-pt,rainmaker-pgr";}
     else if (pathName.indexOf("pt-mutation") > -1) {return "rainmaker-pt,rainmaker-pgr";}
+    else if (pathName.indexOf("pt-common-screens") > -1) {return "rainmaker-pt";}
     else if (pathName.indexOf("all-complaints") > -1) {return "rainmaker-pgr";}
     else if (pathName.indexOf("wns") > -1) {return "rainmaker-ws";}
     else if (pathName.indexOf("tradelicence") > -1) {return "rainmaker-tl";}
@@ -1017,7 +1018,9 @@ export const getModuleName = () => {
     else if (pathName.indexOf("pay") > -1) {return "rainmaker-noc";}
     else if (pathName.indexOf("abg") > -1) {return "rainmaker-abg";}
     else if (pathName.indexOf("uc") > -1) {return "rainmaker-uc";}
-    else if (pathName.indexOf("bpastakeholder") > -1) {return "rainmaker-bpa,rainmakerbpa-reg";}
+    else if (pathName.indexOf("bpastakeholder") > -1 || pathName.indexOf("edcrscrutiny") > -1 ||
+            pathName.indexOf("egov-bpa") > -1 || pathName.indexOf("oc-bpa") > -1 ) 
+            {return "rainmaker-bpa,rainmaker-bpareg";}
     else {
       return "rainmaker-common"; 
     }
