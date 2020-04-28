@@ -68,6 +68,10 @@ export const propertyAssemblyDetails = getCommonCard({
         sm: 12,
         md: 6
       },
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },
       afterFieldChange:async(action,state,dispatch)=>{
         let usageType=get(state.screenConfiguration.preparedFinalObject,
         "Property.assemblyDetails.usageType");
@@ -128,6 +132,10 @@ export const propertyAssemblyDetails = getCommonCard({
         sm: 12,
         md: 6
       },
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPUSGTYPE"
+      },
       beforeFieldChange: async (action, state, dispatch) => {
         let propType=get(
           state.screenConfiguration.preparedFinalObject,
@@ -153,6 +161,10 @@ export const propertyAssemblyDetails = getCommonCard({
         xs: 12,
         sm: 12,
         md: 6
+      },
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPUSGTYPE"
       }
     })
   })
