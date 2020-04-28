@@ -279,20 +279,20 @@ export const validateForm = (state, dispatch) => {
     screenKey
   );
 
-  // if(screenKey == "ocapply") {
-  //   let applicantName = get(
-  //     state.screenConfiguration.preparedFinalObject,
-  //     "Scrutiny[0].applicantName", ""
-  //   )
-  //   if(applicantName) {
-  //     let errorMessage = {
-  //       labelName: "Please fill all date and permit number and click on search",
-  //       labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
-  //     };
-  //     dispatch(toggleSnackbar(true, errorMessage, "warning"));
-  //     return;
-  //   }
-  // }
+  if(screenKey == "ocapply") {
+    let applicantName = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Scrutiny[0].applicantName", ""
+    )
+    if(!applicantName) {
+      let errorMessage = {
+        labelName: "Please fill date and permit number and click on search",
+        labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return;
+    }
+  }
 
   let filedata = get(
     state.screenConfiguration.preparedFinalObject,
@@ -464,4 +464,25 @@ export const resetOCFields = (state, dispatch) => {
   if(applicantName || (typeof filedata === "object" && !Array.isArray(filedata))) {
     window.location.reload();
   }
+
+  dispatch(
+    handleField(
+      "ocapply",
+      "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.buildingPermitDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "ocapply",
+      "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.buildingPermitNum",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(prepareFinalObject("Scrutiny[0].buildingPlan[0]", []));
+  dispatch(prepareFinalObject("Scrutiny[0].permitDate", ""));
+  dispatch(prepareFinalObject("Scrutiny[0].permitNumber", ""));
+  dispatch(prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux[0]", []));
 }

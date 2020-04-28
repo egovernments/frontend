@@ -50,7 +50,7 @@ class downloadFile extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-  const { jsonPath, value } = ownprops;
+  let { jsonPath, value, linkDetail } = ownprops;
   const { screenConfiguration, app } = state;
   const { localizationLabels } = app;
   const { preparedFinalObject } = screenConfiguration;
@@ -58,7 +58,7 @@ const mapStateToProps = (state, ownprops) => {
     value === undefined ? get(preparedFinalObject, jsonPath) : value;
     if(jsonPath == "ocScrutinyDetails.permitNumber") {
       let tenantId = getQueryArg(window.location.href, "tenantId");
-      let permitNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo");
+      let permitNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo", "");
       let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
       let url = `${window.location.origin}/egov-bpa/search-preview?applicationNumber=${permitNumber}&tenantId=${tenantId}`;
       if(process.env.NODE_ENV === "production") {
@@ -66,9 +66,15 @@ const mapStateToProps = (state, ownprops) => {
           url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${permitNumber}&tenantId=${tenantId}`;
         }
       }
-      fieldValue = url;
+      if(permitNumber) {
+        fieldValue = url;
+        linkDetail = {
+          labelName: permitNumber,
+          labelKey: permitNumber
+        }
+      }
     }
-  return { value: fieldValue, localizationLabels };
+  return { value: fieldValue, localizationLabels, linkDetail };
 };
 
 export default withStyles(styles)(connect(mapStateToProps)(downloadFile));
