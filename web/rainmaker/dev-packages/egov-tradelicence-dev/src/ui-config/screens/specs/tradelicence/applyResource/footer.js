@@ -681,7 +681,7 @@ export const footerReview = (
           },
           children: {
            
-            /*resubmitButton: {
+          resubmitButton: {
               componentPath: "Button",
               props: {
                 variant: "contained",
@@ -707,7 +707,7 @@ export const footerReview = (
                 rolePath: "user-info.roles",
                 roles: ["TL_CEMP", "CITIZEN"]
               }
-            },*/  
+            },
             editButton: {
               componentPath: "Button",
               props: {
