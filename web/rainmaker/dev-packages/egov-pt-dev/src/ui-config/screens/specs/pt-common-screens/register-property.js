@@ -213,7 +213,7 @@ const screenConfig = {
     getMDMSPropertyData(dispatch);
     dispatch(
       prepareFinalObject(
-        "Property.assemblyDetails",
+        "Property",
         {}
       )
     );
@@ -241,7 +241,7 @@ const screenConfig = {
        );
        dispatch(
          prepareFinalObject(
-           "Property.locationDetails.city",
+           "Property.city",
            tenantId
          )
        );
