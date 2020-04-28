@@ -6,6 +6,9 @@ import { TextArea } from "modules/common";
 const RequestReassignForm = ({ form, onSubmit, options, ontextAreaChange, handleOptionChange, optionSelected, commentValue }) => {
   const fields = form.fields || {};
   const submit = form.submit;
+  if(fields.textarea && fields.textarea.hasOwnProperty("value")){
+    delete fields.textarea.value
+  }
   return (
     <div>
       <div className="custom-padding-for-screens">
