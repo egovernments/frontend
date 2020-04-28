@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
-import { getMdmsData, getReceiptData, getFinancialYearDates } from "../utils";
+import { getMdmsData, getReceiptData, getFinancialYearDates, searchMdmsData } from "../utils";
 import {
   getLocalization,
   getLocale
@@ -352,28 +352,22 @@ export const loadReceiptData = async (consumerCode, tenant) => {
   store.dispatch(prepareFinalObject("receiptDataForPdf", data));
 };
 
-export const loadMdmsData = async tenantid => {
+export const loadMdmsData = async tenantId => {
   let localStorageLabels = JSON.parse(
     window.localStorage.getItem(`localization_${getLocale()}`)
   );
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: `${tenantid}`
-    },
-    {
-      key: "moduleName",
-      value: "tenant"
-    },
-    {
-      key: "masterName",
-      value: "tenants"
-    }
-  ];
-  let response = await getMdmsData(queryObject);
-
+  let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenantId,
+        moduleDetails: [
+          { moduleName: "tenant", masterDetails: [{ name: "tenants" }] }
+        ]
+      }
+    };
+  let response = await  searchMdmsData(mdmsBody);
+ 
   if (
     response &&
     response.MdmsRes &&

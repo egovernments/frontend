@@ -484,6 +484,25 @@ export const getMdmsData = async queryObject => {
   }
 };
 
+export const searchMdmsData = async mdmsBody => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+
+
+
 export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
