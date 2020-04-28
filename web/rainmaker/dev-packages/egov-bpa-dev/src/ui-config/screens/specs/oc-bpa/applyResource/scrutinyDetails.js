@@ -228,8 +228,8 @@ export const basicDetails = getCommonCard({
           labelKey: "EDCR_BUILDING_PERMIT_NUM_LABEL"
         },
         linkDetail: {
-          labelName: "PB-BP-2020-04-15-002055",
-          labelKey: "PB-BP-2020-04-15-002055"
+          labelName: "",
+          labelKey: ""
         },
         jsonPath: "ocScrutinyDetails.permitNumber",
       },

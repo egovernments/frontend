@@ -2154,14 +2154,29 @@ export const setFilteredTradeTypes = (
 };
 
 export const showCityPicker = (state, dispatch) => {
-  let toggle = get(
-    state.screenConfiguration.screenConfig["home"],
-    "components.cityPickerDialog.props.open",
-    false
+  const ocCityPicker = get(
+    state.screenConfiguration.screenConfig,
+    "home.components.cityPickerDialogForOC.props.open", false
   );
-  dispatch(
-    handleField("home", "components.cityPickerDialog", "props.open", !toggle)
-  );
+  if(ocCityPicker) {
+    let toggle = get(
+      state.screenConfiguration.screenConfig["home"],
+      "components.cityPickerDialogForOC.props.open",
+      false
+    );
+    dispatch(
+      handleField("home", "components.cityPickerDialogForOC", "props.open", !toggle)
+    );
+  } else {
+    let toggle = get(
+      state.screenConfiguration.screenConfig["home"],
+      "components.cityPickerDialog.props.open",
+      false
+    );
+    dispatch(
+      handleField("home", "components.cityPickerDialog", "props.open", !toggle)
+    );
+  }
 };
 /*
 export const applyForm = (state, dispatch) => {
