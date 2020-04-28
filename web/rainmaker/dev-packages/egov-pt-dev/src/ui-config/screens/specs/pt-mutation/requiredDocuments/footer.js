@@ -26,6 +26,7 @@ export const startApplyFlow = (state, dispatch) => {
 
 export const startMutationApplyFlow= (state, dispatch) =>{
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
+  dispatch(prepareFinalObject("Property", {}));
   const consumerCode = getQueryArg(
     window.location.href,
     "consumerCode"
