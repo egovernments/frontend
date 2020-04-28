@@ -14,6 +14,7 @@ import { propertySearch} from "./searchResource/searchFunctions";
 
 
 export const resetFields = (state, dispatch) => {
+  if (process.env.REACT_APP_NAME == "Citizen") {
     dispatch(
       handleField(
         "propertySearch",
@@ -26,6 +27,7 @@ export const resetFields = (state, dispatch) => {
       "searchScreen.tenantId",
       ''
     ))
+  }
 
   dispatch(
     handleField(
@@ -95,10 +97,10 @@ export const searchPropertyDetails = getCommonCard({
       jsonPath: "searchScreen.tenantId",
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       required: true,
-      // props: {
-      //   required: true,
-      //   disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-      // },
+      props: {
+        required: true,
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+      },
       gridDefination: {
         xs: 12,
         sm: 4

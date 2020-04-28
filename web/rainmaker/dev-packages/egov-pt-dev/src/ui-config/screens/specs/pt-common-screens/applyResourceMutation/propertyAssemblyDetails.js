@@ -10,6 +10,33 @@ import {
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from 'lodash/get';
 
+
+const rendersubUsageType=(usageType,propType,dispatch,state)=>{
+  let subTypeValues=get(
+    state.screenConfiguration.preparedFinalObject,
+      "searchScreenMdmsData.PropertyTax.subUsageType"
+  );
+  let subUsage;
+  if(propType==="BUILTUP.SHAREDPROPERTY"){
+  if(usageType==="MIXED"){
+    subUsage= subTypeValues;
+  }else{
+    subUsage=subTypeValues.filter(cur=>{
+      return (cur.code.startsWith(usageType))
+    })
+  }
+}else{
+  subUsage=[];
+}
+dispatch(
+  prepareFinalObject(
+    "propsubusagetypeForSelectedusageCategory",
+    subUsage
+  ) 
+)
+
+}
+
 export const propertyAssemblyDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -35,15 +62,20 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       jsonPath:
         "Property.assemblyDetails.propertyType",
-      // localePrefix: {
-      //   moduleName: "PropertyTax",
-      //   masterName: "PropertyType"
-      // },
       sourceJsonPath: "searchScreenMdmsData.PropertyTax.PropertyType",
       gridDefination: {
         xs: 12,
         sm: 12,
         md: 6
+      },
+      afterFieldChange:async(action,state,dispatch)=>{
+        let usageType=get(state.screenConfiguration.preparedFinalObject,
+        "Property.assemblyDetails.usageType");
+        if(usageType){
+          rendersubUsageType(usageType,action.value,dispatch,state)
+
+        }
+
       }
     }),
     totalLandArea: getTextField({
@@ -52,14 +84,13 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_LAND_AREA"
       },
       props: {
-        className: "applicant-details-error"
       },
       placeholder: {
         labelName: "Select Total Land Area",
         labelKey: "PT_COMMON_TOTAL_LAND_AREA_PLACEHOLDER"
       },
       required: true,
-      pattern: getPattern("Amount"),
+      pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Property.assemblyDetails.totalLandArea"
     }),
@@ -69,14 +100,13 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_CONSTRUCTED_AREA"
       },
       props: {
-        className: "applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Total Constructed Area",
         labelKey: "PT_COMMON_TOTAL_CONSTRUCTED_AREA_PLACEHOLDER"
       },
       required: true,
-      pattern: getPattern("amount"),
+      pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Property.assemblyDetails.totalConstructedArea"
     }),
@@ -92,10 +122,6 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       jsonPath:
         "Property.assemblyDetails.usageType",
-      // localePrefix: {
-      //   moduleName: "PropertyTax",
-      //   masterName: "UsageCategory"
-      // },
       sourceJsonPath: "searchScreenMdmsData.PropertyTax.UsageType",
       gridDefination: {
         xs: 12,
@@ -103,42 +129,13 @@ export const propertyAssemblyDetails = getCommonCard({
         md: 6
       },
       beforeFieldChange: async (action, state, dispatch) => {
-        console.log("===>action",action)
-        if (action.value === "NONRESIDENTIAL.COMMERCIAL") {
-          dispatch(
-            prepareFinalObject(
-              "propsubusagetypeForSelectedusageCategory",
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                "searchScreenMdmsData.PropertyTax.Commercial"
-              )
-            )
-          )
-        }else if(action.value === "NONRESIDENTIAL.INDUSTRIAL") {
-          dispatch(
-            prepareFinalObject(
-              "propsubusagetypeForSelectedusageCategory",
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                "searchScreenMdmsData.PropertyTax.Industrial"
-              )
-            )
-          )
-        }else if(action.value === "NONRESIDENTIAL.INSTITUTIONAL"){
-          dispatch(
-            prepareFinalObject(
-              "propsubusagetypeForSelectedusageCategory",
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                "searchScreenMdmsData.PropertyTax.Institutional"
-              )
-            )
-          )
-        }
+        let propType=get(
+          state.screenConfiguration.preparedFinalObject,
+          "Property.assemblyDetails.propertyType"
+        );
+        rendersubUsageType(action.value,propType,dispatch,state)
       }
     }),
-   
-    
     subUsageType: getSelectField({
       label: {
         labelName: "Sub Usage Type",
@@ -151,10 +148,6 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       jsonPath:
         "Property.assemblyDetails.subUsageType",
-      // localePrefix: {
-      //   moduleName: "PropertyTax",
-      //   masterName: "ReasonForTransfer"
-      // },
       sourceJsonPath: "propsubusagetypeForSelectedusageCategory",
       gridDefination: {
         xs: 12,

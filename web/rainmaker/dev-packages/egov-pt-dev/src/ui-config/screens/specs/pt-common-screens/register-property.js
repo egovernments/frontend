@@ -20,6 +20,9 @@ import get from "lodash/get";
 
 import { propertyOwnershipDetails } from './applyResourceMutation/propertyOwnershipDetails';
 import commonConfig from "config/common.js";
+import {
+  getBoundaryData
+} from "../../../../ui-utils/commons";
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -55,14 +58,14 @@ const getMDMSPropertyData = async (dispatch) => {
           {name:"UsageCategorySubMinor"}
           ]
         }
-      ]
+      ],
+      
     }
   }
   try {
     let payload=null;
      payload = await httpRequest("post","/egov-mdms-service/v1/_search","_search",[],mdmsBody);
-  let PropertyType=[];let subUsageType=[]; let UsageType=[];let Commercial=[];let Industrial=[]; let Institutional=[]; let Mixed=[];
-  console.log("===>payload",payload)
+  let PropertyType=[]; let UsageType=[];
   payload.MdmsRes.PropertyTax.PropertyType.filter(item=>{
     if(item.name!="Built Up"){
       PropertyType.push({
@@ -86,38 +89,27 @@ payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
     }
 })
 payload.MdmsRes.PropertyTax.UsageType=UsageType;
-
+let array1 = [];
+let array2 = [];
 payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
-  if(item.code.split(".").includes("COMMERCIAL") && item.code.split(".").length>2){
-    Commercial.push({
-      active:item.active,
-        name:item.name,
-        code:item.code,
-        fromFY:item.fromFY
-    })
-  }else if(item.code.split(".").includes("INDUSTRIAL") && item.code.split(".").length>2){
-    Industrial.push({
-      active:item.active,
-        name:item.name,
-        code:item.code,
-        fromFY:item.fromFY
-    })
-  }else if(item.code.split(".").includes("INSTITUTIONAL") && item.code.split(".").length>2){
-    Institutional.push({
-      active:item.active,
-        name:item.name,
-        code:item.code,
-        fromFY:item.fromFY
-    })
-  }
+ let itemCode = item.code.split(".");
+ const codeLength = itemCode.length;
+    if(codeLength>3){
+      array1.push(item);
+    }else if(codeLength===3){
+      array2.push(item);
+    }
 })
-payload.MdmsRes.PropertyTax.Commercial=Commercial;
-payload.MdmsRes.PropertyTax.Industrial=Industrial;
-payload.MdmsRes.PropertyTax.Institutional=Institutional;
-// payload.MdmsRes.PropertyTax.Institutional=Mixed;
+array1.forEach(item=>{
+array2 = array2.filter(item1=>{
+  return (!(item.code.includes(item1.code)));
+})
+});
+array1 = array2.concat(array1);
 
+payload.MdmsRes.PropertyTax.subUsageType=array1;
 
-    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
   }
@@ -138,7 +130,6 @@ const getMdmsData = async (action, state, dispatch) => {
           moduleName: "egov-location",
           masterDetails: [
             {
-              // hierarchyTypeCode=REVENUE&boundaryType=Locality
               name: "TenantBoundary"
             }
           ]
@@ -164,8 +155,6 @@ const getMdmsData = async (action, state, dispatch) => {
       mdmsBody
     );
 
-    console.log("==payload",payload);
-
     let OwnerShipCategory = get(
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
@@ -186,7 +175,14 @@ const getMdmsData = async (action, state, dispatch) => {
     
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
-    payload.MdmsRes['common-masters'].mollaha = 
+    const localities = get(
+      state.screenConfiguration,
+      "preparedFinalObject.applyScreenMdmsData.tenant.localities",
+      []
+    );
+    if (localities && localities.length > 0) {
+      payload.MdmsRes.tenant.localities = localities;
+    }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -206,6 +202,9 @@ const getFirstListFromDotSeparated = list => {
   });
   return list;
 };
+export const getData = async (action, state, dispatch) => {
+  await getMdmsData(action, state, dispatch);
+    }
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -219,37 +218,47 @@ const screenConfig = {
       )
     );
 
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
-      'none'
-    );
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
-      'none'
-    );
-
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "egov-pt");
 
+    getData(action, state, dispatch).then(responseAction => {
+      let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+
+      const queryObj = [{ key: "tenantId", value: tenantId }];
+       getBoundaryData(action, state, dispatch, queryObj);
+       if(process.env.REACT_APP_NAME != "Citizen"){
+       let props = get(
+         action.screenConfig,
+         "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city.props",
+         {}
+       );
+       props.value = tenantId;
+       props.disabled = true;
+       set(
+         action.screenConfig,
+         "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city.props",
+         props
+       );
+       dispatch(
+         prepareFinalObject(
+           "Property.locationDetails.city",
+           tenantId
+         )
+       );
+         }
+       const mohallaLocalePrefix = {
+         moduleName: tenantId,
+         masterName: "REVENUE"
+       };
+       set(
+         action.screenConfig,
+         "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla.props.localePrefix",
+         mohallaLocalePrefix
+       );
+    });
+
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(() => {
-      // Set Dropdowns Data
-      let buildingUsageTypeData = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
-        []
-      );
-      buildingUsageTypeData = getFirstListFromDotSeparated(
-        buildingUsageTypeData
-      );
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.DropdownsData.BuildingUsageType",
-          buildingUsageTypeData
-        )
-      );
       let ownershipCategory = get(
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
@@ -263,40 +272,6 @@ const screenConfig = {
         )
       );
     });
-
-    // Set defaultValues of radiobuttons and selectors
-    let noOfBuildings = get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings",
-      "SINGLE"
-    );
-    set(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings",
-      noOfBuildings
-    );
-    let nocType = get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
-      "PROVISIONAL"
-    );
-    set(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
-      nocType
-    );
-    if (
-      get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
-      ) === "PROVISIONAL"
-    ) {
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber.props.style",
-        { visibility: "hidden" }
-      );
-    }
 
     return action;
   },

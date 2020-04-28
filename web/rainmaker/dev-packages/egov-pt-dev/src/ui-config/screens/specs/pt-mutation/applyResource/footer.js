@@ -682,7 +682,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "NOC_COMMON_BUTTON_PREV_STEP"
+        labelKey: "PT_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {

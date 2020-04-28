@@ -139,7 +139,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -174,7 +174,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -249,7 +249,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -364,7 +364,7 @@ const searchApiCall = async (state, dispatch, index) => {
       // const response = searchSampleResponse();
 
       let propertyData = response.Properties.map(item => ({
-        [getTextToLocalMapping("Property Tax Unique Id")]:
+        [getTextToLocalMapping("Unique Property ID")]:
           item.propertyId || "-",
         [getTextToLocalMapping("Owner Name")]: item.owners[0].name || "-",
         [getTextToLocalMapping("Guardian Name")]:
@@ -382,7 +382,7 @@ const searchApiCall = async (state, dispatch, index) => {
         //   item.applicationNo || "-",
         [getTextToLocalMapping("Application No")]:
           item || "-",
-        [getTextToLocalMapping("Property Tax Unique Id")]: item || "-",
+        [getTextToLocalMapping("Unique Property ID")]: item || "-",
         [getTextToLocalMapping("Application Type")]:
           item.creationReason ? getTextToLocalMapping("PT." + item.creationReason) : "NA",
         [getTextToLocalMapping("Owner Name")]:
