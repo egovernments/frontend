@@ -1018,6 +1018,10 @@ export const getModuleName = () => {
     else if (pathName.indexOf("pay") > -1) {return "rainmaker-noc";}
     else if (pathName.indexOf("abg") > -1) {return "rainmaker-abg";}
     else if (pathName.indexOf("uc") > -1) {return "rainmaker-uc";}
+    else if (pathName.indexOf("pgr-home") > -1) {return "rainmaker-pgr";}
+    else if (pathName.indexOf("tradelicence-citizen") > -1) {return "rainmaker-tl";}
+    else if (pathName.indexOf("complaint-details") > -1) {return "rainmaker-pgr";}
+    else if (pathName.indexOf("create-complaint") > -1) {return "rainmaker-pgr";}
     else if (pathName.indexOf("bpastakeholder") > -1 || pathName.indexOf("edcrscrutiny") > -1 ||
             pathName.indexOf("egov-bpa") > -1 || pathName.indexOf("oc-bpa") > -1 ) 
             {return "rainmaker-bpa,rainmaker-bpareg";}

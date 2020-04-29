@@ -11,7 +11,6 @@ import { getBpaMapLocator } from "../../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { showHideBpaMapPopup, geBpatDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
@@ -109,9 +108,6 @@ export const bpaLocationDetails = getCommonCard(
                 "props.localePrefix",
                 mohallaLocalePrefix
               )
-            );
-            dispatch(
-              fetchLocalizationLabel(getLocale(), action.value, action.value)
             );
           } catch (e) {
             console.log(e);
