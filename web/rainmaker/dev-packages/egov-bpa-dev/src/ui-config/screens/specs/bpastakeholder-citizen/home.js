@@ -30,6 +30,10 @@ const hideBPACard = () => {
   ]);
 };
 
+const displayView = () => {
+  return hideBPACard() ? "my-applications" : "my-applications-stakeholder";
+}
+
 const cardItems = [
   {
     label: {
@@ -69,7 +73,7 @@ const cardItems = [
       labelName: "My Applications"
     },
     icon: <FormIcon />,
-    route: "my-applications"
+    route: displayView()
   }
 ];
 
