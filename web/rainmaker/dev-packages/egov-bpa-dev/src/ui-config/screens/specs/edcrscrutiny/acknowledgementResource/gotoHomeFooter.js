@@ -30,30 +30,6 @@ const getRedirectionOCURL = () => {
 };
 
 export const gotoHomeFooter = getCommonApplyFooter({
-  ocCreateApp: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      },
-      // disabled: true
-    },
-    children: {
-      downloadReceiptButtonLabel: getLabel({
-        labelName: "CREATE OCUPANCY CERTIFICATE APPLICATION",
-        labelKey: "EDCR_OC_CREATE_APP_BUTTON"
-      })
-    },
-    onClickDefination: {
-      action: "page_change",
-       path: getRedirectionOCURL()
-    },
-    visible : false
-  },
   gotoHome: {
     componentPath: "Button",
     props: {
@@ -77,5 +53,29 @@ export const gotoHomeFooter = getCommonApplyFooter({
     // path:`tradelicence/apply?applicationNumber=PB-TL-2019-12-04-003839&tenantId=pb.nawanshahr&action=edit`
        path: getRedirectionURL()
     }
+  },
+  ocCreateApp: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      },
+      // disabled: true
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "CREATE OCUPANCY CERTIFICATE APPLICATION",
+        labelKey: "EDCR_OC_CREATE_APP_BUTTON"
+      })
+    },
+    onClickDefination: {
+      action: "page_change",
+       path: getRedirectionOCURL()
+    },
+    visible : false
   }
 });

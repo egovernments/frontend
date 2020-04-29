@@ -13,6 +13,7 @@ import { documentList } from "./documentList";
 import { fetchMDMSOCData, getBuildingDetails, resetOCFields, submitFields } from "./functions";
 import set from "lodash/set";
 import { getTodaysDateInYMD } from "../utils";
+import { dropdown } from "./apply";
 
 const header = getCommonHeader({
   labelName: "Occupancy Certificate eDCR Scrutiny",
@@ -52,7 +53,6 @@ export const ocScrutinyDetailsContainer = getCommonGrayCard({
       },
       jsonPath: "bpaDetails.edcrNumber"
     }),
-  
     uploadedfile: {
       uiFramework: "custom-atoms-local",
       moduleName: "egov-bpa",
@@ -102,7 +102,20 @@ export const ocScrutinyDetailsContainer = getCommonGrayCard({
 
 const buildingInfoCard = getCommonCard({
   buildingPlanCardContainer: getCommonContainer({
-    inputdetails: getCommonContainer({
+      dropdown,
+      dummyDiv1: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        visible: true,
+        props: {
+          disabled: true
+        }
+      },
       buildingPermitDate: getDateField({
         label: {
           labelName: "Building Permit Date",
@@ -160,27 +173,7 @@ const buildingInfoCard = getCommonCard({
           md: 6
         }
       }),
-      city: getTextField({
-        label: {
-          labelName: "City",
-          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-        },
-        localePrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        },
-        optionLabel: "name",
-        jsonPath: "bpaDetails.tenantId",
-        props: {
-          disabled: true,
-          className: "tl-trade-type"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        }
-      }),
+      inputdetails: getCommonContainer({
       applicantName: getTextField({
         label: {
           labelName: "Applicant Name",
@@ -276,7 +269,6 @@ const buildingInfoCard = getCommonCard({
         jsonPath: "bpaDetails.appliedBy"
       }),
     }),
-
     ocScrutinyDetailsContainer,
     dummyDiv2: {
       uiFramework: "custom-atoms",
@@ -285,7 +277,7 @@ const buildingInfoCard = getCommonCard({
         xs: 12,
         sm: 12
       },
-      visible: true,
+      visible: false,
       props: {
         disabled: true
       },
@@ -391,6 +383,21 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     set(state, "screenConfiguration.moduleName", "ocScrutiny");
     fetchMDMSOCData(action, state, dispatch);
+    set(
+      action,
+      "screenConfig.components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.buttonContainer.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.ocScrutinyDetailsContainer.visible",
+      false
+    );
     return action;
   },
   components: {
