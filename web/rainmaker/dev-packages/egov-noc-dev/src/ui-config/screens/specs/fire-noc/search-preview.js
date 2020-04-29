@@ -16,7 +16,6 @@ import {
   getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../utils/index";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -348,7 +347,6 @@ const screenConfig = {
     //   { key: "services", value: "FIRENOC" }
     // ];
  
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     // searchBill(dispatch, applicationNumber, tenantId);
   //  createBill(queryObject1,dispatch)
   //  .then(payload=>{

@@ -14,7 +14,6 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
@@ -257,9 +256,6 @@ export const propertyLocationDetails = getCommonCard(
               )
             );
 
-            dispatch(
-              fetchLocalizationLabel(getLocale(), action.value, action.value)
-            );
           } catch (e) {
             console.log(e);
           }

@@ -77,15 +77,18 @@ class ActionMenuComp extends Component {
     this.wrapperRef = node;
   }
 
+  fetchLocales = ()=>{
+    setModule(getModuleName());
+    const tenantId = getTenantId();
+    this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+  }
+
   componentDidMount() {
     // for better reusability moving out
     this.initialMenuUpdate();
   }
   initialMenuUpdate() {
     let pathParam = {};
-    setModule(getModuleName());
-    const tenantId = getTenantId();
-    this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
     const menuPath = fetchFromLocalStorage("menuPath");
     pathParam = {
       path: "",
@@ -111,7 +114,8 @@ class ActionMenuComp extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.activeRoutePath != this.props.activeRoutePath) {
+    if (nextProps && nextProps.activeRoutePath !== "null" && nextProps.activeRoutePath != this.props.activeRoutePath) {
+      this.fetchLocales();
       this.initialMenuUpdate();
       this.setState({
         searchText: "",
@@ -252,7 +256,7 @@ class ActionMenuComp extends Component {
   render() {
     let { role, actionListArr, activeRoutePath, updateActiveRoute, toggleDrawer, menuDrawerOpen } = this.props;
     let { searchText, path, menuItems } = this.state;
-    let { changeLevel, menuChange } = this;
+    let { changeLevel, menuChange, fetchLocales } = this;
     let actionList = actionListArr;
     let menuTitle = path.split(".");
     let activeItmem = localStorageGet("menuName");

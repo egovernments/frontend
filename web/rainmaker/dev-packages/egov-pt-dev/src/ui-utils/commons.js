@@ -560,7 +560,7 @@ export const getBoundaryData = async (
       process.env.REACT_APP_NAME === "Employee"
         ? get(
           state.screenConfiguration.preparedFinalObject,
-          "Property.locationDetails.city"
+          "Property.city"
         )
         : getQueryArg(window.location.href, "tenantId");
 
@@ -607,7 +607,7 @@ export const getBoundaryData = async (
       if (messageObject)
         dispatch(
           prepareFinalObject(
-            "Property.locationDetails.locality.code",
+            "Property.address.locality.code",
             messageObject.name
           )
         );
