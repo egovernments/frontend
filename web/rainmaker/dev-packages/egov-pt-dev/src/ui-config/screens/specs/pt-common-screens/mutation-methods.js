@@ -175,16 +175,16 @@ export const searchPropertyDetails = getCommonCard({
       resetButton: {
         componentPath: "Button",
         gridDefination: {
-          xs: 12,
+          xs: 6,
           sm: 6
           // align: "center"
         },
         props: {
           variant: "outlined",
           style: {
-            color: "black",
-            borderColor: "black",
-            width: "220px",
+            color: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            width: "70%",
             height: "48px",
             margin: "8px",
             float: "right"
@@ -204,8 +204,8 @@ export const searchPropertyDetails = getCommonCard({
       searchButton: {
         componentPath: "Button",
         gridDefination: {
-          xs: 12,
-          sm: 6
+          xs: 6,
+          sm: 6,
           // align: "center"
         },
         props: {
@@ -215,7 +215,7 @@ export const searchPropertyDetails = getCommonCard({
             margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: "70%",
             height: "48px"
           }
         },
