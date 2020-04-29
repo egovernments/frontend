@@ -7,6 +7,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from 'lodash/get';
+import set from "lodash/set";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 const rendersubUsageType = (usageType, propType, dispatch, state) => {
@@ -14,6 +16,7 @@ const rendersubUsageType = (usageType, propType, dispatch, state) => {
     state.screenConfiguration.preparedFinalObject,
     "searchScreenMdmsData.PropertyTax.subUsageType"
   );
+  
   let subUsage;
   if (propType === "BUILTUP.SHAREDPROPERTY") {
     if (usageType === "MIXED") {
@@ -25,6 +28,15 @@ const rendersubUsageType = (usageType, propType, dispatch, state) => {
     }
   } else {
     subUsage = [];
+     set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", "");
+     dispatch(
+      handleField(
+        "register-property",
+        "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType.props",
+        "required",
+        false
+      )
+     )
   }
   dispatch(
     prepareFinalObject(
@@ -156,6 +168,9 @@ export const propertyAssemblyDetails = getCommonCard({
         xs: 12,
         sm: 12,
         md: 6
+      },
+      props:{
+       
       },
       localePrefix: {
         moduleName: "COMMON",
