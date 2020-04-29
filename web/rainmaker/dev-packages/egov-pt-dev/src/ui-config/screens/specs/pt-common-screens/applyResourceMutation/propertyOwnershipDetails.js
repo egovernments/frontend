@@ -8,9 +8,11 @@ import {
   getTextField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import "./index.css";
+import { validateFields } from 'egov-ui-framework/ui-utils/commons';
+import { prepareFinalObject } from 'egov-ui-framework/ui-redux/screen-configuration/utils';
 
 const showComponent = (
   dispatch,
@@ -55,7 +57,7 @@ const institutionTypeInformation = () => {
           },
           required: true,
           pattern: getPattern("Name"),
-          jsonPath: "Property.institutionTemp.institutionName"
+          jsonPath: "Property.institution.name"
         }),
 
         privateInstitutionTypeDetails: getSelectField({
@@ -68,8 +70,7 @@ const institutionTypeInformation = () => {
             labelKey: "PT_COMMON_INSTITUTION_TYPE_PLACEHOLDER"
           },
           required: true,
-          jsonPath:
-            "Property.institutionTemp.institutionType",
+          jsonPath: "Property.institution.type",
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerShipCategory"
@@ -115,7 +116,7 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Name"),
-          jsonPath: "Property.institutionTemp.name"
+          jsonPath: "Property.owners[0].name"
         }),
 
         authorisedDesignationValue: getTextField({
@@ -132,7 +133,7 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Name"),
-          jsonPath: "Property.institutionTemp.designation"
+          jsonPath: "Property.institution.designation"
         }),
         authorisedMobile: getTextField({
           label: {
@@ -147,8 +148,8 @@ const institutionInformation = () => {
             labelKey: "PT_COMMON_AUTHORISED_MOBILE_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Number"),
-          jsonPath: "Property.institutionTemp.mobileNumber"
+          pattern: getPattern("MobileNo"),
+          jsonPath: "Property.owners[0].mobileNumber"
         }),
         authorisedLandline: getTextField({
           label: {
@@ -164,7 +165,7 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Landline"),
-          jsonPath: "Property.institutionTemp.landlineNumber"
+          jsonPath: "Property.institution.landlineNumber"
         }),
         authorisedAddress: getTextField({
           label: {
@@ -180,7 +181,7 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Address"),
-          jsonPath: "Property.institutionTemp.correspondenceAddress"
+          jsonPath: "Property.owners[0].permanentAddress"
         }),
       })
     })
@@ -214,8 +215,7 @@ const commonApplicantInformation = () => {
         },
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath:
-          "Property.ownersTemp[0].mobileNumber",
+        jsonPath: "Property.owners[0].mobileNumber",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -234,7 +234,7 @@ const commonApplicantInformation = () => {
         required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
-        jsonPath: "Property.ownersTemp[0].name",
+        jsonPath: "Property.owners[0].name",
         props: {
           className: "applicant-details-error"
         },
@@ -252,8 +252,7 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         },
-        jsonPath:
-          "Property.ownersTemp[0].gender",
+        jsonPath: "Property.owners[0].gender",
         props: {
           label: { name: "Gender", key: "PT_COMMON_GENDER_LABEL" },
           className: "applicant-details-error",
@@ -293,8 +292,7 @@ const commonApplicantInformation = () => {
         required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
-        jsonPath:
-          "Property.ownersTemp[0].fatherOrHusbandName",
+        jsonPath: "Property.owners[0].fatherOrHusbandName",
         gridDefination: {
           xs: 12,
           sm: 4,
@@ -314,8 +312,7 @@ const commonApplicantInformation = () => {
           labelKey: "PT_COMMON_APPLICANT_RELATIONSHIP_PLACEHOLDER"
         },
         required: true,
-        jsonPath:
-          "Property.ownersTemp[0].relationship",
+        jsonPath: "Property.owners[0].relationship",
         data: [{ code: "FATHER" }, { code: "HUSBAND" }],
         localePrefix: {
           moduleName: "common-masters",
@@ -326,29 +323,6 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 2,
           md: 2
-        }
-      }),
-      specialApplicantCategory: getSelectField({
-        label: {
-          labelName: "Special Applicant Category",
-          labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Special Applicant Category",
-          labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-        },
-        jsonPath:
-          "Property.ownersTemp[0].ownerType",
-        required: true,
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerType"
-        },
-        sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
         }
       }),
       applicantAddress: getTextField({
@@ -363,8 +337,7 @@ const commonApplicantInformation = () => {
         pattern: getPattern("Address"),
         required: true,
         errorMessage: "Invalid Address",
-        jsonPath:
-          "Property.ownersTemp[0].permanentAddress",
+        jsonPath: "Property.owners[0].permanentAddress",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -373,7 +346,41 @@ const commonApplicantInformation = () => {
         props: {
           className: "applicant-details-error"
         }
-      })
+      }),
+      specialApplicantCategory: getSelectField({
+        label: {
+          labelName: "Special Applicant Category",
+          labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Special Applicant Category",
+          labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
+        },
+        jsonPath: "Property.owners[0].ownerType",
+        required: true,
+        localePrefix: {
+          moduleName: "common-masters",
+          masterName: "OwnerType"
+        },
+        sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        }
+      }),
+      sameAsPropertyAddress: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "CheckboxContainerPTCommon",
+        gridDefination: { xs: 12, sm: 12, md: 12 },
+        props: {
+          labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
+          jsonPath: "sameAsPeropertyAddress",
+          required: false
+        },
+        type: "array"
+      },
     })
   });
 };
@@ -404,8 +411,7 @@ export const propertyOwnershipDetails = getCommonCard({
             labelName: "Select Ownership Type",
             labelKey: "PT_COMMON_SELECT_OWNERSHIP_TYPE"
           },
-          jsonPath:
-            "Property.ownershipCategoryTemp",
+          jsonPath: "Property.ownershipCategory",
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerShipCategory"
@@ -600,7 +606,7 @@ export const propertyOwnershipDetails = getCommonCard({
               labelKey: "PT_COMMON_ADD_APPLICANT_LABEL"
             },
             sourceJsonPath:
-              "Property.ownersTemp",
+              "Property.owners",
             prefixSourceJsonPath:
               "children.cardContent.children.applicantCard.children"
           },

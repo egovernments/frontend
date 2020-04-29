@@ -28,91 +28,91 @@ export const propertyLocationDetails = getCommonCard({
   propertyLocationDetailsContainer: getCommonContainer({
     city: {
       ...getSelectField({
-      label: {
-        labelKey: "PT_COMMON_CITY"
-      },
-      placeholder: {
-        labelKey: "PT_COMMON_CITY_PLACEHOLDER"
-      },
-      labelPrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-      jsonPath: "Property.locationDetails.city",//db sake
-      required: true,
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-    }),
-    beforeFieldChange: async (action, state, dispatch) => {
-      //Below only runs for citizen - not required here in employee
+        label: {
+          labelKey: "PT_COMMON_CITY"
+        },
+        placeholder: {
+          labelKey: "PT_COMMON_CITY_PLACEHOLDER"
+        },
+        labelPrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+        jsonPath: "Property.address.city",//db sake
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+      }),
+      beforeFieldChange: async (action, state, dispatch) => {
+        //Below only runs for citizen - not required here in employee
 
-      dispatch(
-        prepareFinalObject(
-          "Property.locationDetails.city",
-          action.value
-        )
-      );
-      try {
-        let payload = await httpRequest(
-          "post",
-          "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-          "_search",
-          [{ key: "tenantId", value: action.value }],
-          {}
-        );
-        const mohallaData =
-          payload &&
-          payload.TenantBoundary[0] &&
-          payload.TenantBoundary[0].boundary &&
-          payload.TenantBoundary[0].boundary.reduce((result, item) => {
-            result.push({
-              ...item,
-              name: `${action.value
-                .toUpperCase()
-                .replace(
-                  /[.]/g,
-                  "_"
-                )}_REVENUE_${item.code
-                .toUpperCase()
-                .replace(/[._:-\s\/]/g, "_")}`
-            });
-            return result;
-          }, []);
         dispatch(
           prepareFinalObject(
-            "applyScreenMdmsData.tenant.localities",
-            mohallaData
+            "Property.address.city",
+            action.value
           )
         );
-        dispatch(
-          handleField(
-            "register-property",
-            "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
-            "props.suggestions",
-            mohallaData
-          )
-        );
-        const mohallaLocalePrefix = {
-          moduleName: action.value,
-          masterName: "REVENUE"
-        };
-        dispatch(
-          handleField(
-            "register-property",
-            "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
-            "props.localePrefix",
-            mohallaLocalePrefix
-          )
-        );
-      } catch (e) {
-        console.log(e);
+        try {
+          let payload = await httpRequest(
+            "post",
+            "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+            "_search",
+            [{ key: "tenantId", value: action.value }],
+            {}
+          );
+          const mohallaData =
+            payload &&
+            payload.TenantBoundary[0] &&
+            payload.TenantBoundary[0].boundary &&
+            payload.TenantBoundary[0].boundary.reduce((result, item) => {
+              result.push({
+                ...item,
+                name: `${action.value
+                  .toUpperCase()
+                  .replace(
+                    /[.]/g,
+                    "_"
+                  )}_REVENUE_${item.code
+                    .toUpperCase()
+                    .replace(/[._:-\s\/]/g, "_")}`
+              });
+              return result;
+            }, []);
+          dispatch(
+            prepareFinalObject(
+              "applyScreenMdmsData.tenant.localities",
+              mohallaData
+            )
+          );
+          dispatch(
+            handleField(
+              "register-property",
+              "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
+              "props.suggestions",
+              mohallaData
+            )
+          );
+          const mohallaLocalePrefix = {
+            moduleName: action.value,
+            masterName: "REVENUE"
+          };
+          dispatch(
+            handleField(
+              "register-property",
+              "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
+              "props.localePrefix",
+              mohallaLocalePrefix
+            )
+          );
+        } catch (e) {
+          console.log(e);
+        }
       }
-    }
 
-  },
+    },
     // localityOrMohalla: {
     //   uiFramework: "custom-containers-local",
     //   moduleName: "egov-tradelicence",
@@ -143,11 +143,11 @@ export const propertyLocationDetails = getCommonCard({
     //     gridDefination: {
     //           xs: 12,
     //           sm: 6,
-          
+
     //         },
     //   },
     // },
-    localityOrMohalla:getSelectField({
+    localityOrMohalla: getSelectField({
       label: {
         labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA"
       },
@@ -155,7 +155,7 @@ export const propertyLocationDetails = getCommonCard({
         labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
       },
       sourceJsonPath: "applyScreenMdmsData.tenant.localities",
-      jsonPath: "Property.locationDetails.locality.code",//db sake
+      jsonPath: "Property.address.locality.code",//db sake
       required: true,
       gridDefination: {
         xs: 12,
@@ -163,7 +163,6 @@ export const propertyLocationDetails = getCommonCard({
       },
     }),
 
-    
     doorNo: getTextField({
       label: {
         labelKey: "PT_COMMON_DOOR_NO_LABEL"
@@ -175,10 +174,10 @@ export const propertyLocationDetails = getCommonCard({
         xs: 12,
         sm: 6
       },
-      required: false,
+      required: true,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_DOOR_NO",
-      jsonPath: "Property.locationDetails.doorNo"
+      jsonPath: "Property.address.doorNo"
     }),
     buildingOrColonyName: getTextField({
       label: {
@@ -191,10 +190,10 @@ export const propertyLocationDetails = getCommonCard({
         xs: 12,
         sm: 6
       },
-      required: false,
+      required: true,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_BUILDING_COLONY",
-      jsonPath: "Property.locationDetails.buildingName"
+      jsonPath: "Property.address.buildingName"
     })
   })
 });
