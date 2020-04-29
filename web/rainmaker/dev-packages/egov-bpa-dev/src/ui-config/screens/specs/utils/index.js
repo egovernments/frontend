@@ -4904,6 +4904,40 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
 };
 
+const permitNumberLink = async (state, disatch) => {
+
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let appNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo", "");
+  let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+  let url = `${window.location.origin}/egov-bpa/search-preview?applicationNumber=${appNumber}&tenantId=${tenantId}`;
+  let  linkDetail = {
+    labelName: "",
+    labelKey: ""
+  }
+  if(process.env.NODE_ENV === "production") {
+    if(checkingApp){
+      url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${appNumber}&tenantId=${tenantId}`;
+    }
+  }
+  if(appNumber) {
+    linkDetail = {
+      labelName: appNumber,
+      labelKey: appNumber
+    }
+    disatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    disatch(prepareFinalObject("ocScrutinyDetails.permitNumber", url));
+  } else {
+    disatch(prepareFinalObject("ocScrutinyDetails.permitNumber", ""));
+  }
+}
+
 export const getOcEdcrDetails = async (state, dispatch, action) => {
   try {
     const scrutinyNo = get(
@@ -5039,6 +5073,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
     riskType(state, dispatch);
     ocuupancyType(state, dispatch);
+    await permitNumberLink(state, dispatch, action)
   } catch (e) {
     dispatch(
       toggleSnackbar(

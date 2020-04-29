@@ -54,17 +54,17 @@ export const BPAApplication = getCommonCard({
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "NOC_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "BPA_HOME_SEARCH_RESULTS_DESC"
   }),
   appBPAHomeSearchResultsContainer: getCommonContainer({
     bpaNo: getTextField({
       label: {
         labelName: "Application number",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Application number",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -78,11 +78,11 @@ export const BPAApplication = getCommonCard({
     ownerMobNo: getTextField({
       label: {
         labelName: "Mobile Number",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
       },
       placeholder: {
         labelName: "Enter your mobile No.",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -98,10 +98,10 @@ export const BPAApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
     }),
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "NOC_FROM_DATE_LABEL" },
+      label: { labelName: "From Date", labelKey: "BPA_FROM_DATE_LABEL" },
       placeholder: {
         labelName: "From Date",
-        labelKey: "NOC_FROM_DATE_PLACEHOLDER"
+        labelKey: "BPA_FROM_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.fromDate",
       gridDefination: {
@@ -113,10 +113,10 @@ export const BPAApplication = getCommonCard({
       required: false
     }),
     toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
+      label: { labelName: "To Date", labelKey: "BPA_TO_DATE_LABEL" },
       placeholder: {
         labelName: "To Date",
-        labelKey: "NOC_TO_DATE_PLACEHOLDER"
+        labelKey: "BPA_TO_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.toDate",
       gridDefination: {
@@ -200,7 +200,7 @@ export const BPAApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Reset",
-            labelKey: "NOC_HOME_SEARCH_RESET_BUTTON"
+            labelKey: "BPA_HOME_SEARCH_RESET_BUTTON"
           })
         },
         onClickDefination: {

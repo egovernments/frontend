@@ -30,6 +30,30 @@ const getRedirectionOCURL = () => {
 };
 
 export const gotoHomeFooter = getCommonApplyFooter({
+  gotoHome: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "GO TO HOME",
+        labelKey: "BPA_HOME_BUTTON"
+      })
+    },
+    onClickDefination: {
+      action: "page_change",
+    //  path: `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`
+    // path:`tradelicence/apply?applicationNumber=PB-TL-2019-12-04-003839&tenantId=pb.nawanshahr&action=edit`
+       path: getRedirectionURL()
+    }
+  },
   ocCreateApp: {
     componentPath: "Button",
     props: {
@@ -53,29 +77,5 @@ export const gotoHomeFooter = getCommonApplyFooter({
        path: getRedirectionOCURL()
     },
     visible : false
-  },
-  gotoHome: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      downloadReceiptButtonLabel: getLabel({
-        labelName: "GO TO HOME",
-        labelKey: "TL_COMMON_BUTTON_HOME"
-      })
-    },
-    onClickDefination: {
-      action: "page_change",
-    //  path: `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`
-    // path:`tradelicence/apply?applicationNumber=PB-TL-2019-12-04-003839&tenantId=pb.nawanshahr&action=edit`
-       path: getRedirectionURL()
-    }
   }
 });

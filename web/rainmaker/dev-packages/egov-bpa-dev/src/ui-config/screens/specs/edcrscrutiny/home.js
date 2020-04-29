@@ -33,10 +33,7 @@ const cardItems = [
       labelName: "Occupancy Certificate eDCR Scrutiny For New Building"
     },
     icon: <EDCRIcon />,
-    route: {
-      screenKey: "home",
-      jsonPath: "components.cityPickerDialog"
-    }
+    route: "ocapply"
   },
   {
     label: {
