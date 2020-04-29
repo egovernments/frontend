@@ -34,7 +34,7 @@ export const propertyLocationDetails = getCommonCard({
         placeholder: {
           labelKey: "PT_COMMON_CITY_PLACEHOLDER"
         },
-        labelPrefix: {
+        localePrefix: {
           moduleName: "TENANT",
           masterName: "TENANTS"
         },

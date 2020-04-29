@@ -241,7 +241,7 @@ const screenConfig = {
        );
        dispatch(
          prepareFinalObject(
-           "Property.city",
+           "Property.address.city",
            tenantId
          )
        );
