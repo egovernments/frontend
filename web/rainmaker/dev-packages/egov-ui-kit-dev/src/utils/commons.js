@@ -1009,7 +1009,7 @@ export const getModuleName = () => {
     else if (pathName.indexOf("pt-common-screens") > -1) {return "rainmaker-pt";}
     else if (pathName.indexOf("all-complaints") > -1) {return "rainmaker-pgr";}
     else if (pathName.indexOf("wns") > -1) {return "rainmaker-ws";}
-    else if (pathName.indexOf("tradelicence") > -1) {return "rainmaker-tl";}
+    else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) {return "rainmaker-tl";}
     else if (pathName.indexOf("hrms") > -1) {return "rainmaker-hr";}
     else if (pathName.indexOf("fire-noc") > -1) {return "rainmaker-noc";}
     else if (pathName.indexOf("dss/home") > -1) {return "rainmaker-dss";}
@@ -1019,7 +1019,6 @@ export const getModuleName = () => {
     else if (pathName.indexOf("abg") > -1) {return "rainmaker-abg";}
     else if (pathName.indexOf("uc") > -1) {return "rainmaker-uc";}
     else if (pathName.indexOf("pgr-home") > -1) {return "rainmaker-pgr";}
-    else if (pathName.indexOf("tradelicence-citizen") > -1) {return "rainmaker-tl";}
     else if (pathName.indexOf("complaint-details") > -1) {return "rainmaker-pgr";}
     else if (pathName.indexOf("create-complaint") > -1) {return "rainmaker-pgr";}
     else if (pathName.indexOf("my-complaints") > -1) {return "rainmaker-pgr";}
