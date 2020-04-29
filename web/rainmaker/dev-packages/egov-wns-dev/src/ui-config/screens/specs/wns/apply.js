@@ -409,8 +409,8 @@ const screenConfig = {
       }
     }
 
-    const tenantId = getTenantId();
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    // const tenantId = getTenantId();
+    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     prepareDocumentsUploadData(state, dispatch);
     return action;
   },
