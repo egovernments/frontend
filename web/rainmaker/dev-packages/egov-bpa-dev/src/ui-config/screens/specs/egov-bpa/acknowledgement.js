@@ -81,16 +81,16 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Submitted Successfully",
-              labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
-              labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_SUB"
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           }),
@@ -123,7 +123,7 @@ const getAcknowledgementCard = (
                   },
                   div2: getLabel({
                     labelName: "DOWNLOAD CONFIRMATION FORM",
-                    labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+                    labelKey: "BPA_APPLICATION_BUTTON_DOWN_CONF"
                   })
 
                 },
@@ -160,7 +160,7 @@ const getAcknowledgementCard = (
                   },
                   div2: getLabel({
                     labelName: "PRINT CONFIRMATION FORM",
-                    labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+                    labelKey: "BPA_APPLICATION_BUTTON_PRINT_CONF"
                   })
 
                 },
@@ -215,7 +215,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -253,7 +253,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -292,7 +292,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -322,12 +322,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Payment has been collected successfully!",
-              labelKey: "NOC_PAYMENT_COLLECTION_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_CONFIRMATION_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding Payment Collection has been sent to building owner at registered Mobile No.",
-              labelKey: "NOC_PAYMENT_SUCCESS_MESSAGE_SUB"
+              labelKey: "BPA_PAYMENT_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Payment Receipt No.",
@@ -463,12 +463,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Payment has failed!",
-              labelKey: "NOC_PAYMENT_FAILURE_MESSAGE_MAIN"
+              labelKey: "BPA_PAYMENT_FAILED"
             },
             body: {
               labelName:
                 "A notification regarding payment failure has been sent to the building owner and applicant.",
-              labelKey: "NOC_PAYMENT_FAILURE_MESSAGE_SUB"
+              labelKey: "BPA_PAYMENT_FAILURE_MESSAGE_SUB"
             }
           })
         }
@@ -487,15 +487,15 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Marked Successfully",
-              labelKey: "NOC_MARK_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_MARK_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName: "Application has been marked successfully",
-              labelKey: "NOC_APPLICATION_MARKED_SUCCESS"
+              labelKey: "BPA_APPLICATION_MARKED_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -515,7 +515,7 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Forwarded Successfully",
-              labelKey: "NOC_FORWARD_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_FORWARD_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName: "Application has been forward successfully",
@@ -523,7 +523,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })

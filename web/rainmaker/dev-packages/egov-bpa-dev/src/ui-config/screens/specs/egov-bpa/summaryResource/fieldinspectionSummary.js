@@ -111,7 +111,7 @@ const fieldInspectionMultiItem = () => {
           documents: [],
           buttonLabel: {
             labelName: "UPLOAD FILE",
-            labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+            labelKey: "BPA_DOC_DET_BTN_UPLOAD_FILE"
           },
           inputProps: {
             accept: "image/*, .pdf, .png, .jpeg"
@@ -142,7 +142,7 @@ const fieldInspectionMultiItem = () => {
           jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
           buttonLabel: {
             labelName: "UPLOAD FILE",
-            labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+            labelKey: "BPA_DOC_DET_BTN_UPLOAD_FILE"
           },
           inputProps: {
             accept: "image/*, .pdf, .png, .jpeg",
@@ -173,7 +173,7 @@ export const fieldinspectionSummary = getCommonContainer({
       isReviewPage: false,
       addItemLabel: {
         labelName: "Add Another Field Inspection Report",
-        labelKey: ""
+        labelKey: "BPA_ADD_ANOTHER_FI_REPORT_LABEL"
       },
       prefixSourceJsonPath: "children.cardContent.children.fiCard.children",
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",

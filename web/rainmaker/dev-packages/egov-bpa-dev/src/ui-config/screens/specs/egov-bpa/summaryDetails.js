@@ -12,7 +12,7 @@ import { estimateSummary } from "./summaryResource/estimateSummary";
 export const bpaSummaryDetails = getCommonCard({
   header: getCommonTitle({
     labelName: "Please review your Application and Submit",
-    labelKey: "TL_SUMMARY_HEADER"
+    labelKey: "BPA_SUMMARY_HEADER"
   }),
   estimateSummary: estimateSummary,
   basicSummary: basicSummary,

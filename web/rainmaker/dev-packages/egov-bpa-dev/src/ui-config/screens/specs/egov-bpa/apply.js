@@ -722,7 +722,7 @@ const screenConfig = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "SELECT",
-                          labelKey: "TL_CITIZEN_SELECT"
+                          labelKey: "BPA_CITIZEN_SELECT_BUTTON"
                         })
                       },
                       onClickDefination: {
@@ -745,7 +745,7 @@ const screenConfig = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "CANCEL",
-                          labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
+                          labelKey: "BPA_CITIZEN_CANCEL_BUTTON"
                         })
                       },
                       onClickDefination: {

@@ -41,7 +41,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "NOC_COMMON_BUTTON_HOME"
+        labelKey: "BPA_HOME_BUTTON"
       })
     },
     // Check this onClickDefinition later again
@@ -88,7 +88,7 @@ export const applicationSuccessFooter = (
         //downloadReceiptButtonLabel: getLabel
         goToHomeButtonLabel: getLabel({
           labelName: "GO TO HOME",
-          labelKey: "NOC_COMMON_BUTTON_HOME"
+          labelKey: "BPA_HOME_BUTTON"
         })
       },
       // Check this onClickDefinition later again
@@ -112,7 +112,7 @@ export const applicationSuccessFooter = (
       children: {
         downloadFormButtonLabel: getLabel({
           labelName: "DOWNLOAD CONFIRMATION FORM",
-          labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+          labelKey: "BPA_APPLICATION_BUTTON_DOWN_CONF"
         })
       },
       onClickDefination: {
@@ -137,7 +137,7 @@ export const applicationSuccessFooter = (
       children: {
         printFormButtonLabel: getLabel({
           labelName: "PRINT CONFIRMATION FORM",
-          labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+          labelKey: "BPA_APPLICATION_BUTTON_PRINT_CONF"
         })
       },
       onClickDefination: {
@@ -162,7 +162,7 @@ export const applicationSuccessFooter = (
       children: {
         proceedToPaymentButtonLabel: getLabel({
           labelName: "Proceed to payment",
-          labelKey: "NOC_PROCEED_PAYMENT"
+          labelKey: "BPA_PROCEED_PAYMENT"
         })
       },
       //Add onClickDefination and RoleDefination later
@@ -195,7 +195,7 @@ export const applicationSuccessFooter = (
       children: {
         submitButtonLabel: getLabel({
           labelName: "MAKE PAYMENT",
-          labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+          labelKey: "BPA_CITIZEN_MAKE_PAYMENT"
         })
       },
       onClickDefination: {
@@ -233,7 +233,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "TL_COMMON_BUTTON_HOME"
+        labelKey: "BPA_HOME_BUTTON"
       })
     },
     // Check this onClickDefinition later again
