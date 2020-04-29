@@ -57,13 +57,13 @@ export const fetchData = async (
     });
   dispatch(
     prepareFinalObject(
-      "applyScreenMdmsData.common-masters.citiesByModule.TL",
-      tenants
+      "applyScreenMdmsData", mdmsRes.MdmsRes
     )
   );
   dispatch(
     prepareFinalObject(
-      "applyScreenMdmsData", mdmsRes.MdmsRes
+      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      tenants
     )
   );
   try {
