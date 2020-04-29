@@ -2,38 +2,36 @@ import {
   getCommonCard,
   getCommonContainer,
   getCommonTitle,
-  getPattern,
   getSelectField,
-  getTextField,
-  getBreak
+  getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from 'lodash/get';
 
 
-const rendersubUsageType=(usageType,propType,dispatch,state)=>{
-  let subTypeValues=get(
+const rendersubUsageType = (usageType, propType, dispatch, state) => {
+  let subTypeValues = get(
     state.screenConfiguration.preparedFinalObject,
-      "searchScreenMdmsData.PropertyTax.subUsageType"
+    "searchScreenMdmsData.PropertyTax.subUsageType"
   );
   let subUsage;
-  if(propType==="BUILTUP.SHAREDPROPERTY"){
-  if(usageType==="MIXED"){
-    subUsage= subTypeValues;
-  }else{
-    subUsage=subTypeValues.filter(cur=>{
-      return (cur.code.startsWith(usageType))
-    })
+  if (propType === "BUILTUP.SHAREDPROPERTY") {
+    if (usageType === "MIXED") {
+      subUsage = subTypeValues;
+    } else {
+      subUsage = subTypeValues.filter(cur => {
+        return (cur.code.startsWith(usageType))
+      })
+    }
+  } else {
+    subUsage = [];
   }
-}else{
-  subUsage=[];
-}
-dispatch(
-  prepareFinalObject(
-    "propsubusagetypeForSelectedusageCategory",
-    subUsage
-  ) 
-)
+  dispatch(
+    prepareFinalObject(
+      "propsubusagetypeForSelectedusageCategory",
+      subUsage
+    )
+  )
 
 }
 
@@ -60,22 +58,25 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_PROPERTY_TYPE_PLACEHOLDER"
       },
       required: true,
-      jsonPath:
-        "Property.assemblyDetails.propertyType",
+      jsonPath: "Property.propertyType",
       sourceJsonPath: "searchScreenMdmsData.PropertyTax.PropertyType",
       gridDefination: {
         xs: 12,
         sm: 12,
         md: 6
       },
-      afterFieldChange:async(action,state,dispatch)=>{
-        let usageType=get(state.screenConfiguration.preparedFinalObject,
-        "Property.assemblyDetails.usageType");
-        if(usageType){
-          rendersubUsageType(usageType,action.value,dispatch,state)
-
+      localePrefix: {
+        moduleName: "COMMON",
+        masterName: "PROPTYPE"
+      },
+      afterFieldChange: async (action, state, dispatch) => {
+        let usageType = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Property.usageCategory"
+        );
+        if (usageType) {
+          rendersubUsageType(usageType, action.value, dispatch, state)
         }
-
       }
     }),
     totalLandArea: getTextField({
@@ -92,7 +93,7 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "Property.assemblyDetails.totalLandArea"
+      jsonPath: "Property.landArea"
     }),
     totalConstructedArea: getTextField({
       label: {
@@ -108,7 +109,7 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "Property.assemblyDetails.totalConstructedArea"
+      jsonPath: "Property.totalConstructedArea"
     }),
     usageType: getSelectField({
       label: {
@@ -120,20 +121,23 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_USAGE_TYPE_PLACEHOLDER"
       },
       required: true,
-      jsonPath:
-        "Property.assemblyDetails.usageType",
+      jsonPath: "Property.usageCategory",
       sourceJsonPath: "searchScreenMdmsData.PropertyTax.UsageType",
       gridDefination: {
         xs: 12,
         sm: 12,
         md: 6
       },
+      localePrefix: {
+        moduleName: "COMMON",
+        masterName: "PROPUSGTYPE"
+      },
       beforeFieldChange: async (action, state, dispatch) => {
-        let propType=get(
+        let propType = get(
           state.screenConfiguration.preparedFinalObject,
-          "Property.assemblyDetails.propertyType"
+          "Property.propertyType"
         );
-        rendersubUsageType(action.value,propType,dispatch,state)
+        rendersubUsageType(action.value, propType, dispatch, state)
       }
     }),
     subUsageType: getSelectField({
@@ -146,14 +150,17 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_SUB_USAGE_TYPE_PLACEHOLDER"
       },
       required: true,
-      jsonPath:
-        "Property.assemblyDetails.subUsageType",
+      jsonPath: "Property.subUsageCategory",
       sourceJsonPath: "propsubusagetypeForSelectedusageCategory",
       gridDefination: {
         xs: 12,
         sm: 12,
         md: 6
-      }
+      },
+      localePrefix: {
+        moduleName: "COMMON",
+        masterName: "PROPSUBUSGTYPE"
+      },
     })
   })
 }); 

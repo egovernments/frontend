@@ -54,5 +54,10 @@ const HeaderContainer = Loadable({
   loading: () => <Loading />
 });
 
-export { CustomTabContainer, LabelContainer, CheckboxContainer, DownloadFileContainer, EstimateCardContainer, AutosuggestContainer, DocumentListContainer, PaymentRedirectPage, ViewBreakupContainer, DialogContainer, HeaderContainer };
+const CheckboxContainerPTCommon = Loadable({
+  loader: () => import("./CheckboxContainerPTCommon"),
+  loading: () => <Loading />
+});
+
+export { CustomTabContainer, LabelContainer, CheckboxContainer, DownloadFileContainer, EstimateCardContainer, AutosuggestContainer, DocumentListContainer, PaymentRedirectPage, ViewBreakupContainer, DialogContainer, HeaderContainer, CheckboxContainerPTCommon };
 
