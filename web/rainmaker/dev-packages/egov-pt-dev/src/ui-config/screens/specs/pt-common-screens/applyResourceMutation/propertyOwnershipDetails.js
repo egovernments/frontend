@@ -8,11 +8,9 @@ import {
   getTextField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import "./index.css";
-import { validateFields } from 'egov-ui-framework/ui-utils/commons';
-import { prepareFinalObject } from 'egov-ui-framework/ui-redux/screen-configuration/utils';
 
 const showComponent = (
   dispatch,
@@ -183,6 +181,19 @@ const institutionInformation = () => {
           pattern: getPattern("Address"),
           jsonPath: "Property.owners[0].permanentAddress"
         }),
+        sameAsPropertyAddress: {
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-pt",
+          componentPath: "CheckboxContainerPTCommon",
+          gridDefination: { xs: 12, sm: 12, md: 12 },
+          props: {
+            labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
+            jsonPath: "sameAsPeropertyAddress",
+            required: false,
+            destinationJsonPath: "Property.owners[0].permanentAddress"
+          },
+          type: "array"
+        },
       })
     })
 };
@@ -377,7 +388,8 @@ const commonApplicantInformation = () => {
         props: {
           labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
           jsonPath: "sameAsPeropertyAddress",
-          required: false
+          required: false,
+          destinationJsonPath: "Property.owners[0].permanentAddress"
         },
         type: "array"
       },

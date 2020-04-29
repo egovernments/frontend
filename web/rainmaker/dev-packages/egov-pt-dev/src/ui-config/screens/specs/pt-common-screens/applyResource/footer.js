@@ -13,7 +13,6 @@ import { toggleSnackbar } from 'egov-ui-framework/ui-redux/screen-configuration/
 
 const callBackForApply = async (state, dispatch) => {
 
-  let tenantId = getQueryArg(window.location.href, "tenantId");
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state,
@@ -32,12 +31,12 @@ const callBackForApply = async (state, dispatch) => {
     dispatch,
     "register-property"
   );
-  let isPropertyOwnerDetailsValid = validateFields(
-    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children",
-    state,
-    dispatch,
-    "register-property"
-  );
+  // let isPropertyOwnerDetailsValid = validateFields(
+  //   "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children",
+  //   state,
+  //   dispatch,
+  //   "register-property"
+  // );
   if (
     isAssemblyDetailsValid &&
     isPropertyLocationDetailsValid
@@ -73,13 +72,6 @@ const callBackForApply = async (state, dispatch) => {
       propertyPayload.owners = [
         ...propertyPayload.owners
       ]
-    } else if (
-      propertyPayload
-        .ownershipCategory
-        .includes("INDIVIDUAL")
-    ) {
-      // propertyPayload.institution.type = propertyPayload.ownershipCategory;
-      propertyPayload.owners = [...propertyPayload.owners]
     }
     set(propertyPayload, "channel", "SYSTEM");
     set(propertyPayload, "source", "MUNICIPAL_RECORDS");
@@ -87,7 +79,6 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
     propertyPayload.tenantId = propertyPayload.address.city;
     propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
-    propertyPayload.ownershipCategory = propertyPayload.ownershipCategory;
     try {
       propertyPayload.creationReason = 'CREATE';
       let payload = null;
