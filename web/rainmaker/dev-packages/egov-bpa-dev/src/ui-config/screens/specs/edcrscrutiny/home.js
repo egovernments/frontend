@@ -3,7 +3,6 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import { fetchData } from "./functions";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import EDCRIcon from "../../../../ui-atoms-local/Icons/EDCRIcon";
-import { cityPicker } from "./citypicker";
 import "../utils/index.css";
 
 const header = getCommonHeader(
