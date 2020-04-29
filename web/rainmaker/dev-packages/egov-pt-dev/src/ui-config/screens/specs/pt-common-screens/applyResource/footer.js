@@ -19,8 +19,26 @@ const callBackForApply = async (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.Property"
   );
-  let isAssemblyDetailsValid = validateFields(
-    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children",
+  let isAssemblyDetailsPropType = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.propertyType",
+    state,
+    dispatch,
+    "register-property"
+  );
+  let isAssemblyDetailsConstructedArea = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.totalConstructedArea",
+    state,
+    dispatch,
+    "register-property"
+  );
+  let isAssemblyDetailsusageType = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.usageType",
+    state,
+    dispatch,
+    "register-property"
+  );
+  let isAssemblyDetailstotalLandArea = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.totalLandArea",
     state,
     dispatch,
     "register-property"
@@ -39,7 +57,7 @@ const callBackForApply = async (state, dispatch) => {
     "register-property"
   );
   if (
-    isAssemblyDetailsValid &&
+    isAssemblyDetailsPropType && isAssemblyDetailsConstructedArea &&isAssemblyDetailstotalLandArea&&isAssemblyDetailsusageType&&
     isPropertyLocationDetailsValid
   ) {
     propertyPayload.owners.map(owner => {
