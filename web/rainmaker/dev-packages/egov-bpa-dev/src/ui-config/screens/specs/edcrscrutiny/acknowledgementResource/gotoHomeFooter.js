@@ -44,7 +44,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
     children: {
       downloadReceiptButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "TL_COMMON_BUTTON_HOME"
+        labelKey: "BPA_HOME_BUTTON"
       })
     },
     onClickDefination: {

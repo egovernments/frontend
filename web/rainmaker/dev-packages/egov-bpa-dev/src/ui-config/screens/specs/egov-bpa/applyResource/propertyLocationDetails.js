@@ -33,14 +33,14 @@ export const bpaLocationDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "City",
-            labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+            labelKey: "BPA_CITY_LABEL"
           },
           localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
           },
           optionLabel: "name",
-          placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
+          placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_CITY" },
           sourceJsonPath: "citiesByModule.TL.tenants",
           jsonPath: "BPA.address.city",
           required: true,
@@ -155,14 +155,14 @@ export const bpaLocationDetails = getCommonCard(
         visible : false,
         label: {
           labelName: "Door/House No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+          labelKey: "BPA_DETAILS_DOOR_NO_LABEL"
         },
         props: {
           className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_DOOR_NO_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "BPA.address.doorNo"
@@ -170,14 +170,14 @@ export const bpaLocationDetails = getCommonCard(
       tradeLocBuilidingName: getTextField({
         label: {
           labelName: "Building/Colony Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
+          labelKey: "BPA_DETAILS_BLDG_NAME_LABEL"
         },
         props: {
           className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_BLDG_NAME_PLACEHOLDER"
         },
         pattern: getPattern("BuildingStreet"),
         jsonPath: "BPA.address.buildingName"
@@ -185,14 +185,14 @@ export const bpaLocationDetails = getCommonCard(
       tradeLocStreetName: getTextField({
         label: {
           labelName: "Street Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
+          labelKey: "BPA_DETAILS_SRT_NAME_LABEL"
         },
         props: {
           className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Street Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_SRT_NAME_PLACEHOLDER"
         },
         pattern: getPattern("BuildingStreet"),
         jsonPath: "BPA.address.street"
@@ -210,11 +210,11 @@ export const bpaLocationDetails = getCommonCard(
           },
           label: {
             labelName: "Mohalla",
-            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+            labelKey: "BPA_DETAILS_MOHALLA_LABEL"
           },
           placeholder: {
             labelName: "Select Mohalla",
-            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
+            labelKey: "BPA_DETAILS_MOHALLA_PLACEHOLDER"
           },
           jsonPath: "BPA.address.locality.code",
           sourceJsonPath: "mohalla.tenant.localities",
@@ -234,14 +234,14 @@ export const bpaLocationDetails = getCommonCard(
       tradeLocPincode: getTextField({
         label: {
           labelName: "Pincode",
-          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+          labelKey: "BPA_DETAILS_PIN_LABEL"
         },
         props: {
           className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Pincode",
-          labelKey: "TL_NEW_TRADE_DETAILS_PIN_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_PIN_PLACEHOLDER"
         },
         pattern: getPattern("Pincode"),
         jsonPath: "BPA.address.pincode"
@@ -270,11 +270,11 @@ export const bpaLocationDetails = getCommonCard(
             ...getTextField({
               label: {
                 labelName: "GIS Coordinates",
-                labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_LABEL"
+                labelKey: "BPA_DETAILS_GIS_CORD_LABEL"
               },
               placeholder: {
                 labelName: "Select your trade location on map",
-                labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_PLACEHOLDER"
+                labelKey: "BPA_DETAILS_GIS_CORD_PLACEHOLDER"
               },
               jsonPath: "BPA.address.geoLocation.latitude",
               iconObj: {

@@ -121,7 +121,7 @@ export const tradeDocumentDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Required Documents",
-      labelKey: "TL_NEW-UPLOAD-DOCS_HEADER"
+      labelKey: "BPA_DOCUMENT_DETAILS_HEADER"
     },
     {
       style: {
@@ -132,7 +132,7 @@ export const tradeDocumentDetails = getCommonCard({
   paragraph: getCommonParagraph({
     labelName:
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
+    labelKey: "BPA_DOCUMENT_DETAILS_SUBTEXT"
   }),
   documentList
 });
