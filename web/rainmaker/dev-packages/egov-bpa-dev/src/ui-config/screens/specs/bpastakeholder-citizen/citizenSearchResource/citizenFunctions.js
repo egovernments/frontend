@@ -364,7 +364,7 @@ export const clearFilter = (state, dispatch, action) => {
   dispatch(
     handleField(
       "my-applications-stakeholder",
-      "components.div.children.filterCard.children.Status",
+      "components.div.children.filterCard.children.applicationStatus",
       "props.value",
       ""
     )

@@ -92,7 +92,7 @@ const screenConfig = {
               fieldChange(action, state, dispatch);
             }
           },
-          Status: {
+          applicationStatus : {
             ...getSelectField({
               label: {
                 labelName: "Status",
@@ -103,7 +103,7 @@ const screenConfig = {
                 labelName: "Select Status",
                 labelKey: "APP_STATUS_PLACEHOLDER"
               },
-              jsonPath: "filterData[0].Status",
+              jsonPath: "filterData[0]." + [getBpaTextToLocalMapping("Status")],
               data: [{ code: "PENDINGPAYMENT" }, { code: "PENDINGDOCVERIFICATION" }, { code: "REJECTED" }, { code: "PENDINGAPPROVAL" }, { code: "APPROVED" }, { code: "INITIATED" }, { code: "CITIZEN_APPROVAL_INPROCESS" }, { code: "INPROGRESS" }, { code: "PENDING_FEE" }, { code: "DOC_VERIFICATION_INPROGRESS" }, { code: "FIELDINSPECTION_INPROGRESS" }, { code: "NOC_VERIFICATION_INPROGRESS" }, { code: "APPROVAL_INPROGRESS" }, { code: "PERMIT REVOCATION" }, { code: "PENDING_APPL_FEE" }, { code: "PENDING_SANC_FEE_PAYMENT" }, { code: "CITIZEN_ACTION_PENDING_AT_DOC_VERIF" }, { code: "CITIZEN_ACTION_PENDING_AT_FI_VERIF" }, { code: "CITIZEN_ACTION_PENDING_AT_NOC_VERIF" }],
               props: {
                 style: { marginLeft: "20px" }
