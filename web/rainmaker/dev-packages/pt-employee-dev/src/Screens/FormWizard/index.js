@@ -140,7 +140,7 @@ class FormWizard extends Component {
     getImportantDates(this);
     try {
       let currentDraft;
-     
+
         let searchPropertyResponse = await httpRequest(
           "property-services/property/_search",
           "_search",
@@ -195,7 +195,7 @@ class FormWizard extends Component {
             prepareFormData: propertyResponse //prepareFormData2,
           }
         };
-     
+
       this.setState({
         draftByIDResponse: currentDraft
       });
@@ -378,8 +378,14 @@ class FormWizard extends Component {
         const {
           tenantId: id
         } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
+        let ulbLogo;
+        cities.forEach((city)=>{
+          if (city.key===id) {
+            ulbLogo=city.logoId;
+          }
+        })
 
-        let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
+        let receiptImageUrl = ulbLogo;
         this.convertImgToDataURLviaCanvas(
           receiptImageUrl,
           function(data) {
@@ -1638,7 +1644,7 @@ class FormWizard extends Component {
           Assessment: assessment
         }
       );
-     
+
       const assessmentNumber= get(assessPropertyResponse, "Assessments[0].assessmentNumber",'');
       if (action === "re-assess") {
         store.dispatch(
@@ -1722,7 +1728,7 @@ class FormWizard extends Component {
             }else{
               this.props.history.push(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
             }
-            
+
             // if ((action === "assess") || (action === "re-assess")) {
             //   this.assessProperty(action, propertyResponse.Properties);
             // } else {
@@ -2121,6 +2127,8 @@ const mapStateToProps = state => {
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
+  const { generalMDMSDataById } = common;
+    const {cities}=common;
   const { preparedFinalObject } = screenConfiguration;
   const { documentsUploadRedux, newProperties = [], propertiesEdited = false } = preparedFinalObject;
   return {
@@ -2129,6 +2137,8 @@ const mapStateToProps = state => {
     prepareFormData: common.prepareFormData,
     common,
     app,
+    generalMDMSDataById,
+    cities,
     documentsUploadRedux,
     newProperties,
     propertiesEdited

@@ -1,3 +1,4 @@
+// please remove s3 refernces
 export const cityModuleMockJson = {
     "ResponseInfo": null,
     "MdmsRes": {
