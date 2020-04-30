@@ -491,7 +491,7 @@ class FormWizardDataEntry extends Component {
       fetchGeneralMDMSData,
       history,
       cities,
-      finalData
+      finalData      
     } = this.props;
     let { search } = location;
     let { resetForm } = this;
