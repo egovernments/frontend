@@ -228,7 +228,7 @@ export const BPAApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "NOC_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "BPA_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
           })
         },
         onClickDefination: {
