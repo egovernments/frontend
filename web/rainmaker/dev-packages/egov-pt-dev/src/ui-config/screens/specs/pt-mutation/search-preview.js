@@ -1,7 +1,6 @@
 import { getCommonCard, getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
 import get from "lodash/get";
 import set from "lodash/set";
