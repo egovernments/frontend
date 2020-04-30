@@ -168,7 +168,7 @@ export const tradeLicenseApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "BPA_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
           })
         },
         onClickDefination: {
