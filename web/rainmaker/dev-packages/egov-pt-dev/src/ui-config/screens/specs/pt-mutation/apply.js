@@ -2,7 +2,7 @@
 import { getCommonCard, getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -274,7 +274,7 @@ const getPropertyData = async (action, state, dispatch) => {
 };
 
 const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
-  let tenantId = 'pb'
+  let tenantId = getCommonTenant()
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -311,7 +311,7 @@ const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) =
 
 };
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+  let tenantId = getCommonTenant()
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
