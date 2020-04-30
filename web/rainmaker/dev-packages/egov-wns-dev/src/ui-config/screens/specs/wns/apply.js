@@ -2,7 +2,6 @@ import {
   getStepperObject,
   getCommonHeader,
   getCommonCard,
-  getCommonGrayCard,
   getCommonContainer,
   getCommonTitle,
   getCommonParagraph,
@@ -27,8 +26,6 @@ import {
   findAndReplace,
   prefillDocuments
 } from "../../../../ui-utils/commons";
-import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewOwner } from "./applyResource/reviewOwner";
@@ -188,8 +185,7 @@ export const getMdmsData = async dispatch => {
 export const getData = async (action, state, dispatch) => {
   const applicationNo = getQueryArg(window.location.href, "applicationNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  const propertyID=getQueryArg(window.location.href,"propertyId");
-
+  const propertyID = getQueryArg(window.location.href, "propertyId");
   await getMdmsData(dispatch);
   if (applicationNo) {
     //Edit/Update Flow ----
@@ -301,11 +297,11 @@ export const getData = async (action, state, dispatch) => {
         dispatch
       );
     }
-  }else if(propertyID){
+  } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
-    let payload=await getPropertyResults(queryObject,dispatch);
-    let propertyObj=payload.Properties[0];
-    dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, "null", "NA")));
+    let payload = await getPropertyResults(queryObject, dispatch);
+    let propertyObj = payload.Properties[0];
+    dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
     dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
   }
 };
@@ -366,11 +362,11 @@ const screenConfig = {
     getData(action, state, dispatch).then(() => { });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
-    const propertyId=getQueryArg(window.location.href,"propertyId");
+    const propertyId = getQueryArg(window.location.href, "propertyId");
 
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
-    if(propertyId){
+    if (propertyId) {
       togglePropertyFeilds(action, true);
       if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
         toggleWaterFeilds(action, true);
@@ -382,7 +378,7 @@ const screenConfig = {
         toggleWaterFeilds(action, true);
         toggleSewerageFeilds(action, false);
       }
-    }else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+    } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
       togglePropertyFeilds(action, true);
       if (applicationNumber.includes("SW")) {
         dispatch(prepareFinalObject("applyScreen.water", false));

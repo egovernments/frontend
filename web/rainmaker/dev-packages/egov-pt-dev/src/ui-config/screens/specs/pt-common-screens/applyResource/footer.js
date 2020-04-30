@@ -11,6 +11,8 @@ import store from "ui-redux/store";
 import set from 'lodash/set';
 import { toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
 
+let redirectUrl = getQueryArg(window.location.href, "redirectUrl");
+
 const callBackForApply = async (state, dispatch) => {
 
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
@@ -56,7 +58,10 @@ const callBackForApply = async (state, dispatch) => {
   //   "register-property"
   // );
   if (
-    isAssemblyDetailsPropType && isAssemblyDetailsConstructedArea &&isAssemblyDetailstotalLandArea&&isAssemblyDetailsusageType&&
+    isAssemblyDetailsPropType &&
+    isAssemblyDetailsConstructedArea &&
+    isAssemblyDetailstotalLandArea &&
+    isAssemblyDetailsusageType &&
     isPropertyLocationDetailsValid
   ) {
     propertyPayload.owners.map(owner => {
@@ -71,7 +76,6 @@ const callBackForApply = async (state, dispatch) => {
     ) {
       propertyPayload.owners.map(owner => {
         owner.status = "ACTIVE";
-        owner.ownerType = 'NONE';
       })
       propertyPayload.owners = [...propertyPayload.owners]
     } else if (
@@ -109,14 +113,14 @@ const callBackForApply = async (state, dispatch) => {
 
       );
       if (payload) {
-      	 store.dispatch(handleField("register-property","components.adhocDialog","props.open",true));
-      	 setTimeout(function(){
-		store.dispatch(
-		  setRoute(
-		    `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${propertyPayload.tenantId}`
-		  )
-		);
-	}, 3000);
+        store.dispatch(handleField("register-property", "components.adhocDialog", "props.open", true));
+        setTimeout(() => {
+          store.dispatch(
+            setRoute(
+              `${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`
+            )
+          );
+        }, 3000);
       }
       else {
         store.dispatch(
