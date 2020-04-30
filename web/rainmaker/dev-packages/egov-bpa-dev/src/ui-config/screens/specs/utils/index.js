@@ -2354,7 +2354,7 @@ export const getTextToLocalMapping = label => {
     case "Application No":
       return getLocaleLabels(
         "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
+        "BPA_COMMON_TABLE_COL_APP_NO",
         localisationLabels
       );
 
@@ -3388,28 +3388,28 @@ export const getBpaTextToLocalMapping = label => {
     case "Application No":
       return getLocaleLabels(
         "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
+        "BPA_COMMON_TABLE_COL_APP_NO",
         localisationLabels
       );
 
     case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
-        "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+        "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL",
         localisationLabels
       );
 
     case "Application Date":
       return getLocaleLabels(
         "Application Date",
-        "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+        "BPA_COMMON_TABLE_COL_APP_DATE_LABEL",
         localisationLabels
       );
 
     case "Status":
       return getLocaleLabels(
         "Status",
-        "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+        "BPA_COMMON_TABLE_COL_STATUS_LABEL",
         localisationLabels
       );
 

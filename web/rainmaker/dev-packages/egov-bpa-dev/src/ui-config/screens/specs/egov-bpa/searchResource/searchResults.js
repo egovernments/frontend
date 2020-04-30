@@ -39,17 +39,17 @@ export const textToLocalMapping = {
   ),
   "Owner Name": getLocaleLabels(
     "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+    "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   "Application Date": getLocaleLabels(
     "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+    "BPA_COMMON_TABLE_COL_APP_DATE_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   Status: getLocaleLabels(
     "Status",
-    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+    "BPA_COMMON_TABLE_COL_STATUS_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   INITIATED: getLocaleLabels(

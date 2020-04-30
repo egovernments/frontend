@@ -58,7 +58,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "BPA_APPLICATION_NO_CODE"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })

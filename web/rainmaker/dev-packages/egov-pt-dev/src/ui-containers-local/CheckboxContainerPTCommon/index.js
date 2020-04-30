@@ -7,8 +7,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from '@material-ui/core/FormGroup';
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import FormControl from "@material-ui/core/FormControl";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import get from 'lodash/get';
 
 const styles = {
   root: {
@@ -41,11 +42,73 @@ class CheckboxLabels extends React.Component {
     checkedG: false
   };
 
-  handleChange = name => event => {
-    const { jsonPath, approveCheck } = this.props;
-    this.setState({ [name]: event.target.checked }, () =>
-      approveCheck(jsonPath, this.state.checkedG)
+  validator = () => {
+    const { preparedFinalObject } = this.props;
+    let city = get(
+      preparedFinalObject,
+      "Property.address.city"
     );
+    let locality = get(
+      preparedFinalObject,
+      "Property.address.locality.code"
+    );
+    let doorNo = get(
+      preparedFinalObject,
+      "Property.address.doorNo"
+    );
+    let buildingName = get(
+      preparedFinalObject,
+      "Property.address.buildingName"
+    );
+    if (
+      !_.isUndefined(city) &&
+      !_.isUndefined(locality) &&
+      !_.isUndefined(doorNo) &&
+      !_.isUndefined(buildingName)
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  handleChange = name => event => {
+    const {
+      jsonPath,
+      approveCheck,
+      destinationJsonPath,
+      preparedFinalObject,
+      raiseSnackbarAlert
+    } = this.props;
+
+    let city = get(
+      preparedFinalObject,
+      "Property.address.city"
+    );
+    let locality = get(
+      preparedFinalObject,
+      "Property.address.locality.code"
+    );
+    let doorNo = get(
+      preparedFinalObject,
+      "Property.address.doorNo"
+    );
+    let buildingName = get(
+      preparedFinalObject,
+      "Property.address.buildingName"
+    );
+    if (this.validator()) {
+      let finalAddress = doorNo + ", " + buildingName + ", " + locality + ", " + city.split(".")[1];
+      this.setState({ [name]: event.target.checked }, () => {
+        approveCheck(jsonPath, this.state.checkedG);
+      });
+      approveCheck(destinationJsonPath, finalAddress);
+    } else {
+      raiseSnackbarAlert(
+        "PT_COMMON_PROPERTY_LOCATION_FIELD_REQUIRED",
+        "warning"
+      );
+    }
   };
 
   render() {
@@ -92,7 +155,23 @@ const mapStateToProps = (state, ownprops) => {
 const mapDispatchToProps = dispatch => {
   return {
     approveCheck: (jsonPath, value) => {
-      dispatch(prepareFinalObject(jsonPath, value));
+      dispatch(
+        prepareFinalObject(
+          jsonPath,
+          value
+        )
+      );
+    },
+    raiseSnackbarAlert: (labelKey, value) => {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelKey: labelKey,
+          },
+          value
+        )
+      );
     }
   };
 };

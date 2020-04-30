@@ -183,7 +183,7 @@ class MapLocator extends Component {
             children={
               <LabelContainer
                 labelName={"Close"}
-                labelKey={"TL_MAP_CLOSE_LABEL"}
+                labelKey={"BPA_MAP_CLOSE_LABEL"}
               />
             }
             style={{
@@ -202,7 +202,7 @@ class MapLocator extends Component {
             children={
               <LabelContainer
                 labelName={"Pick"}
-                labelKey={"TL_MAP_PICK_LABEL"}
+                labelKey={"BPA_MAP_PICK_LABEL"}
               />
             }
             style={{
