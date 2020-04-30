@@ -46,7 +46,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "SUBMIT",
-        labelKey: "NOC_COMMON_BUTTON_SUBMIT"
+        labelKey: "BPA_COMMON_BUTTON_SUBMIT"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
