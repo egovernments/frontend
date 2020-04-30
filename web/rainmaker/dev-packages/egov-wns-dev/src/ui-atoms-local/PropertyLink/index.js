@@ -4,7 +4,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 const styles = {
   color: "rgba(0, 0, 0, 0.87)",
   marginLeft: "3%",
-  marginTop: "5%",
+  marginTop: "8%",
   lineHeight: "35px",
   fontSize: "16px"
 };
