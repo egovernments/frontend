@@ -9,7 +9,7 @@ import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons"
 import { httpRequest } from "../../../../../ui-utils";
 import store from "ui-redux/store";
 import set from 'lodash/set';
-import { toggleSnackbar } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
+import { toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
 
 const callBackForApply = async (state, dispatch) => {
 
@@ -109,11 +109,14 @@ const callBackForApply = async (state, dispatch) => {
 
       );
       if (payload) {
-        store.dispatch(
-          setRoute(
-            `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${propertyPayload.tenantId}`
-          )
-        );
+      	 store.dispatch(handleField("register-property","components.adhocDialog","props.open",true));
+      	 setTimeout(function(){
+		store.dispatch(
+		  setRoute(
+		    `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${propertyPayload.tenantId}`
+		  )
+		);
+	}, 3000);
       }
       else {
         store.dispatch(
