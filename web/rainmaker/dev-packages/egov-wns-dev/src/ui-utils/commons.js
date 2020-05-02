@@ -1536,7 +1536,7 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
     try {
         httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
             const queryStr = [
-                { key: "key", value: "consolidatedbill" },
+                { key: "key", value: "ws-bill" },
                 { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
             ]
             let data = [];

@@ -53,7 +53,7 @@ class SuccessPTPopupContainer extends React.Component {
 			    			</h3>
 			    			<p style= {{ color: "black"}}>
 			    				<LabelContainer
-			    					labelName={"Redirecting to Water &amp; Sewerage Application"}
+			    					labelName={"Redirecting to Water & Sewerage Application"}
 			    					labelKey={"PT_COMMON_REDIRECTING_TO_WATER_&_SEWERAGE_APPLICATION"}
 			    				/> 
 			    			</p>
