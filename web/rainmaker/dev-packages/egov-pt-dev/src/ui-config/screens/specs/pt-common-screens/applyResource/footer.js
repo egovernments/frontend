@@ -12,6 +12,7 @@ import set from 'lodash/set';
 import { toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
 
 let redirectUrl = getQueryArg(window.location.href, "redirectUrl");
+let screenKey = "register-property"
 
 const callBackForApply = async (state, dispatch) => {
 
@@ -20,49 +21,70 @@ const callBackForApply = async (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.Property"
   );
+
+  let isAssemblyDetailsValid = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children",
+    state,
+    dispatch,
+    screenKey
+  );
+
   let isAssemblyDetailsPropType = validateFields(
     "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.propertyType",
     state,
     dispatch,
-    "register-property"
+    screenKey
   );
   let isAssemblyDetailsConstructedArea = validateFields(
     "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.totalConstructedArea",
     state,
     dispatch,
-    "register-property"
+    screenKey
   );
   let isAssemblyDetailsusageType = validateFields(
     "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.usageType",
     state,
     dispatch,
-    "register-property"
+    screenKey
   );
   let isAssemblyDetailstotalLandArea = validateFields(
     "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.totalLandArea",
     state,
     dispatch,
-    "register-property"
+    screenKey
   );
 
   let isPropertyLocationDetailsValid = validateFields(
     "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children",
     state,
     dispatch,
-    "register-property"
+    screenKey
   );
-  // let isPropertyOwnerDetailsValid = validateFields(
-  //   "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children",
-  //   state,
-  //   dispatch,
-  //   "register-property"
-  // );
+  
+  let isPropertyOwnerDetailsTypeSelection = validateFields(
+     "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
+     state,
+     dispatch,
+     screenKey
+   );
+  
+  let isPropertyOwnerDetailsValid = validateFields(   
+             "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
+     state,
+     dispatch,
+     screenKey
+   );
+   
+    
   if (
+    isAssemblyDetailsValid &&
     isAssemblyDetailsPropType &&
     isAssemblyDetailsConstructedArea &&
     isAssemblyDetailstotalLandArea &&
     isAssemblyDetailsusageType &&
-    isPropertyLocationDetailsValid
+    isPropertyLocationDetailsValid &&
+    isPropertyOwnerDetailsTypeSelection &&
+    isPropertyOwnerDetailsValid
   ) {
     propertyPayload.owners.map(owner => {
       if (!_.isUndefined(owner.status)) {
@@ -113,7 +135,7 @@ const callBackForApply = async (state, dispatch) => {
 
       );
       if (payload) {
-        store.dispatch(handleField("register-property", "components.adhocDialog", "props.open", true));
+        store.dispatch(handleField(screenKey, "components.adhocDialog", "props.open", true));
         setTimeout(() => {
           store.dispatch(
             setRoute(
