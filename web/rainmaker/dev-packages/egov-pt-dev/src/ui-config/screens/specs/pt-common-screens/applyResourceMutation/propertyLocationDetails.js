@@ -146,6 +146,10 @@ export const propertyLocationDetails = getCommonCard({
 
             },
       },
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
     },
     // localityOrMohalla: getSelectField({
     //   label: {

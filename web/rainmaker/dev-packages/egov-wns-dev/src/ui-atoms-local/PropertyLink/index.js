@@ -17,11 +17,7 @@ const clickHereStyles = {
 
 function AddLinkForProperty(props) {
   const { url } = props;
-  let link = process
-    .env
-    .REACT_APP_NAME === "Citizen" ?
-    `${window.origin}/citizen/pt-common-screens/propertySearch?redirectUrl=${url}` :
-    `${window.origin}/employee/pt-common-screens/propertySearch?redirectUrl=${url}`;
+  let link = window.location.origin+"/"+process.env.REACT_APP_NAME.toLowerCase()+`/pt-common-screens/propertySearch?redirectUrl=${url}`
   return (
     <div style={styles}>
       <LabelContainer
