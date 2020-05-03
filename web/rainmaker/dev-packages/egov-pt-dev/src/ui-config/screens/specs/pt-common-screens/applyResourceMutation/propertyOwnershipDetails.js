@@ -192,7 +192,9 @@ const institutionInformation = () => {
             required: false,
             destinationJsonPath: "Property.owners[0].permanentAddress"
           },
-          type: "array"
+          required:false,
+          type: "array",
+          jsonPath: "Property.sameAsPeropertyAddress"
         },
       })
     })
@@ -284,7 +286,7 @@ const commonApplicantInformation = () => {
               value: "TRANSGENDER"
             }
           ],
-
+          jsonPath: "Property.owners[0].gender",
           required: true,
           errorMessage: "Required",
         },
