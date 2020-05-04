@@ -384,7 +384,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "applicationType", "NEW");
     }
 
-    if (queryObject[0].applicationNumber) {
+    if (queryObject[0].applicationNumber !== null) {
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       if(isEditRenewal ){
