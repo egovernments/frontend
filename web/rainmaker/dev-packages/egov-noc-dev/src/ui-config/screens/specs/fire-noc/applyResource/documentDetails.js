@@ -43,32 +43,13 @@ export const documentDetails = getCommonCard({
           }
         },
         {
-          name: "Address Proof ",
-          required: true,
-          jsonPath: "noc.documents.addressProof",
-          selector: {
-            inputLabel: "Select Document",
-            menuItems: [
-              { value: "ELECTRICITYBILL", label: "Electricity Bill" },
-              { value: "DL", label: "Driving License" },
-              { value: "VOTERID", label: "Voter ID Card" }
-            ]
-          }
-        },
-        {
-          name: "Site Plan ",
+          name: "Property Tax Receipt ",
+          required: false,
           jsonPath: "Trade[0].businessProof"
         },
         {
-          name: "Ground Floor Plan ",
-          jsonPath: "Trade[0].businessProof"
-        },
-        {
-          name: "Owner's Checklist as per NBC ",
-          jsonPath: "Trade[0].businessProof"
-        },
-        {
-          name: "Copy of Provisional fire NoC ",
+          name: "Old NOC document(If You Have) ",
+          required: false,
           jsonPath: "Trade[0].businessProof"
         }
       ],
