@@ -3550,7 +3550,43 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_CITIZEN_ACTION_PENDING_AT_NOC_VERIF",
         localisationLabels
     );
-    }
+    case "BPA_COL_APP_STATUS" :
+      return getLocaleLabels(
+        "Application Status",
+        "BPA_COL_APP_STATUS",
+        localisationLabels
+      );
+    case "BPA_COL_MODULE_SERVICE" : 
+      return getLocaleLabels(
+        "Module/Service",
+        "BPA_COL_MODULE_SERVICE",
+        localisationLabels
+      );
+    case "BPA_COMMON_SLA" : 
+      return getLocaleLabels(
+        "SLA(Days Remaining)",
+        "BPA_COMMON_SLA",
+        localisationLabels
+      );
+    case "BPA_COL_ASSIGNEDTO" : 
+      return getLocaleLabels(
+        "Assigned To",
+        "BPA_COL_ASSIGNEDTO",
+        localisationLabels
+      );
+    case "BPAREG_SERVICE" :
+      return getLocaleLabels(
+        "Stake Holder",
+        "BPAREG_SERVICE",
+        localisationLabels
+      );
+    case "BPA_APPLY_SERVICE" :
+      return getLocaleLabels(
+        "BPA Apply",
+        "BPA_APPLY_SERVICE",
+        localisationLabels
+      );
+  }
 };
 
 export const showApplyCityPicker = (state, dispatch) => {

@@ -44,7 +44,7 @@ export const fetchData = async (
   state,
   dispatch,
   fromMyApplicationPage = false,
-  isStakeholder = false
+  fromStakeHolderPage = false
 ) => {
   const response = await getSearchResults();
   const bpaResponse = await getBpaSearchResults();
@@ -67,179 +67,159 @@ export const fetchData = async (
     )
   );
   try {
-    /*Mseva 1.0 */
-    // let data =
-    //   response &&
-    //   response.Licenses.map(item => ({
-    //     [get(textToLocalMapping, "Application No")]:
-    //       item.applicationNumber || "-",
-    //     [get(textToLocalMapping, "License No")]: item.licenseNumber || "-",
-    //     [get(textToLocalMapping, "Trade Name")]: item.tradeName || "-",
-    //     [get(textToLocalMapping, "Owner Name")]:
-    //       item.tradeLicenseDetail.owners[0].name || "-",
-    //     [get(textToLocalMapping, "Application Date")]:
-    //       convertEpochToDate(item.applicationDate) || "-",
-    //     tenantId: item.tenantId,
-    //     [get(textToLocalMapping, "Status")]:
-    //       get(textToLocalMapping, item.status) || "-"
-    //   }));
+      var searchConvertedArray = [];
+      var sortConvertedArray = [];
+      if (response && response.Licenses && response.Licenses.length > 0) {
+        const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
 
-    // dispatch(
-    //   handleField(
-    //     "home",
-    //     "components.div.children.applyCard.children.searchResults",
-    //     "props.data",
-    //     data
-    //   )
-    // );
-    /*Mseva 2.0 */
+        response.Licenses.forEach(element => {
+          let service = getTextToLocalMapping(
+            "MODULE_" + get(element, "businessService")
+          );
 
-    var searchConvertedArray = [];
-    var sortConvertedArray = [];
-    if (response && response.Licenses && response.Licenses.length > 0) {
-      const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
-
-      response.Licenses.forEach(element => {
-        let service = getTextToLocalMapping(
-          "MODULE_" + get(element, "businessService")
-        );
-
-        let status = getTextToLocalMapping(
-          "WF_ARCHITECT_" + get(element, "status")
-        );
-        let modifiedTime = element.auditDetails.lastModifiedTime;
-        let licensetypeFull =
-          element.tradeLicenseDetail.tradeUnits[0].tradeType;
-        if (licensetypeFull.split(".").length > 1) {
-          service +=
-            " - " +
-            getTextToLocalMapping(
-              `TRADELICENSE_TRADETYPE_${getTransformedLocale(
-                licensetypeFull.split(".")[0]
-              )}`
-            );
-        }
-        // service +=
-        //   " - " +
-        //   getTextToLocalMapping(
-        //     `TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull)}`
-        //   );
-        if(!isStakeholder) {
-          searchConvertedArray.push({
-            applicationNumber: get(element, "applicationNumber", null),
-            ownername: get(element, "tradeLicenseDetail.owners[0].name", null),
-            businessService: service,
-            serviceType: "BPAREG",
-            assignedTo: get(
-              businessIdToOwnerMapping[element.applicationNumber],
-              "assignee",
-              null
-            ),
-            status,
-            sla: get(
-              businessIdToOwnerMapping[element.applicationNumber],
-              "sla",
-              null
-            ),
-            tenantId: get(element, "tenantId", null),
-            modifiedTime: modifiedTime,
-            sortNumber: 0
-          });
-        } else {
-          searchConvertedArray.push({
-            [getBpaTextToLocalMapping("Application No")]: get(element, "applicationNumber", null) || "-",
-            [getBpaTextToLocalMapping("Owner Name")]: get(element, "tradeLicenseDetail.owners[0].name", null) || "-",
-            [getBpaTextToLocalMapping("Application Date")]: convertEpochToDate(parseInt(get(element,"auditDetails.createdTime"))) ||
-                    "-",
-            tenantId: get(element, "tenantId", null) || "-",
-            [getBpaTextToLocalMapping("Status")]: element.status || "-",            
-            modifiedTime: modifiedTime,
-            sortNumber: 1,
-            applicationType : "Stake Holder"
-          })
-        }
-      });
-
-    }
-    
-    if(bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0){
-
-    const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
-    bpaResponse.Bpa.forEach(element => {
-      let status = getTextToLocalMapping(
-        "WF_BPA_" + get(element, "status")
-      );
-      let service = getTextToLocalMapping(
-        "BPA_APPLICATIONTYPE_" + get(element, "applicationType")
-      );
-      service += " - "+getTextToLocalMapping(
-        "BPA_SERVICETYPE_" + get(element, "serviceType")
-      );
-      let modifiedTime = element.auditDetails.lastModifiedTime;
-      let primaryowner = "-";
-      let owners = get(element, "owners", [])
-      owners.map(item=>{
-        if(item.isPrimaryOwner)
-        {
-          primaryowner = item.name;
-        }
-      });
-      if(!isStakeholder){
-        searchConvertedArray.push({
-          applicationNumber: get(element, "applicationNo", null),
-          ownername: primaryowner,
-          businessService: service,
-          assignedTo: get(
-            businessIdToOwnerMappingForBPA[element.applicationNo],
-            "assignee",
-            null
-          ),
-          status,
-          sla: get(
-            businessIdToOwnerMappingForBPA[element.applicationNo],
-            "sla",
-            null
-          ),
-          tenantId: get(element, "tenantId", null),
-          modifiedTime: modifiedTime,
-          sortNumber: 1,
-          type: element.riskType
-        })
-      } else {
-        searchConvertedArray.push({
-          [getBpaTextToLocalMapping("Application No")]: get(element, "applicationNo", null) || "-",
-          [getBpaTextToLocalMapping("Owner Name")]: primaryowner || "-",
-          [getBpaTextToLocalMapping("Application Date")]: convertEpochToDate(parseInt(get(element,"auditDetails.createdTime"))) ||
-                  "-",
-          tenantId: element.tenantId,
-          [getBpaTextToLocalMapping("Status")]: element.status || "-",            
-          modifiedTime: modifiedTime,            
-          sortNumber: 1,
-          applicationType : "BPA Apply",
-          serviceType : element.serviceType
-        })
+          let status = getTextToLocalMapping(
+            "WF_ARCHITECT_" + get(element, "status")
+          );
+          let modifiedTime = element.auditDetails.lastModifiedTime;
+          let licensetypeFull =
+            element.tradeLicenseDetail.tradeUnits[0].tradeType;
+          if (licensetypeFull.split(".").length > 1) {
+            service +=
+              " - " +
+              getTextToLocalMapping(
+                `TRADELICENSE_TRADETYPE_${getTransformedLocale(
+                  licensetypeFull.split(".")[0]
+                )}`
+              );
+          }
+          if(!fromStakeHolderPage) {
+            searchConvertedArray.push({
+              applicationNumber: get(element, "applicationNumber", null),
+              ownername: get(element, "tradeLicenseDetail.owners[0].name", null),
+              businessService: service,
+              serviceType: "BPAREG",
+              assignedTo: get(
+                businessIdToOwnerMapping[element.applicationNumber],
+                "assignee",
+                null
+              ),
+              status,
+              sla: get(
+                businessIdToOwnerMapping[element.applicationNumber],
+                "sla",
+                null
+              ),
+              tenantId: get(element, "tenantId", null),
+              modifiedTime: modifiedTime,
+              sortNumber: 0
+            });
+          } else {
+            searchConvertedArray.push({
+              [getBpaTextToLocalMapping("Application No")]: element.applicationNumber || "-",
+              [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")]: status || "-",
+              modifiedTime: modifiedTime,
+              sortNumber: 1,
+              applicationType: getBpaTextToLocalMapping("BPAREG_SERVICE"),
+              [getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE")]: "Registration \n Stakeholder Registration",
+              [getBpaTextToLocalMapping("BPA_COMMON_SLA")]: get(
+                businessIdToOwnerMapping[element.applicationNumber],
+                "sla",
+                null
+              ) || "-",
+              [getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO")]: get(
+                businessIdToOwnerMapping[element.applicationNumber],
+                "assignee",
+                null
+              ) || "-"
+            })
+          }
+        });
       }
-    });
+      
+      if(bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0){
+        const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
+        bpaResponse.Bpa.forEach(element => {
+          let status = getTextToLocalMapping(
+            "WF_BPA_" + get(element, "status")
+          );
+          let service = getTextToLocalMapping(
+            "BPA_APPLICATIONTYPE_" + get(element, "applicationType")
+          );
+          service += " - "+getTextToLocalMapping(
+            "BPA_SERVICETYPE_" + get(element, "serviceType")
+          );
+          let modifiedTime = element.auditDetails.lastModifiedTime;
+          let primaryowner = "-";
+          let owners = get(element, "owners", [])
+          owners.map(item=>{
+            if(item.isPrimaryOwner)
+            {
+              primaryowner = item.name;
+            }
+          });
+          if(!fromStakeHolderPage){
+            searchConvertedArray.push({
+              applicationNumber: get(element, "applicationNo", null),
+              ownername: primaryowner,
+              businessService: service,
+              assignedTo: get(
+                businessIdToOwnerMappingForBPA[element.applicationNo],
+                "assignee",
+                null
+              ),
+              status,
+              sla: get(
+                businessIdToOwnerMappingForBPA[element.applicationNo],
+                "sla",
+                null
+              ),
+              tenantId: get(element, "tenantId", null),
+              modifiedTime: modifiedTime,
+              sortNumber: 1,
+              type: element.riskType
+            })
+          } else {
+            searchConvertedArray.push({
+              [getBpaTextToLocalMapping("Application No")]: element.applicationNo || "-",
+              [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")]: status || "-",
+              modifiedTime: modifiedTime,
+              sortNumber: 1,
+              applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
+              serviceType : element.serviceType,
+              [getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE")] : "BPA \n Building permit new construction",
+              [getBpaTextToLocalMapping("BPA_COMMON_SLA")]: get(
+                businessIdToOwnerMappingForBPA[element.applicationNo],
+                "sla",
+                null
+              ) || "-",
+              [getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO")]: get(
+                businessIdToOwnerMappingForBPA[element.applicationNo],
+                "assignee",
+                null
+              ) || "-"
+            })
+          }
+        });
+      }
+
+      sortConvertedArray = [].slice.call(searchConvertedArray).sort(function(a,b){ 
+        return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
+      });
+
+      dispatch(prepareFinalObject("searchResults", sortConvertedArray));
+      storeData(sortConvertedArray, dispatch, fromMyApplicationPage, fromStakeHolderPage);    
+    } catch (error) {
+      console.log(error);
     }
-
-    sortConvertedArray = [].slice.call(searchConvertedArray).sort(function(a,b){ 
-      return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
-     });
-
-    dispatch(prepareFinalObject("searchResults", sortConvertedArray));
-    storeData(sortConvertedArray, dispatch, fromMyApplicationPage, isStakeholder);
-  } catch (error) {
-    console.log(error);
-  }
 };
 
-const storeData = (data, dispatch, fromMyApplicationPage, isStakeholder) => {
+const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) => {
   dispatch(
     prepareFinalObject("myApplicationsCount", data.length)
   );
   const myApplicationsCount = data.length;
 
-  if (isStakeholder) {
+  if (fromStakeHolderPage) {
     dispatch(
       handleField(
         "my-applications-stakeholder",
@@ -255,9 +235,8 @@ const storeData = (data, dispatch, fromMyApplicationPage, isStakeholder) => {
         myApplicationsCount ? [myApplicationsCount] : [0]
       )
     );
-  }
+  } else if(fromMyApplicationPage){
 
-  if (fromMyApplicationPage && !isStakeholder) {
     dispatch(
       handleField(
         "my-applications",
@@ -275,7 +254,7 @@ export const fieldChange = (action, state, dispatch) => {
   if (value) {
     var filterName = action.componentJsonpath.slice(action.componentJsonpath.lastIndexOf(".") + 1, action.componentJsonpath.length);
 
-    if (filterName === "applicationType" && value === "BPA Apply") {
+    if (filterName === "applicationType" && value === getBpaTextToLocalMapping("BPA_APPLY_SERVICE")) {
       dispatch(
         handleField(
           "my-applications-stakeholder",
@@ -285,7 +264,7 @@ export const fieldChange = (action, state, dispatch) => {
         )
       );
     }
-    if (filterName === "applicationType" && value === "Stake Holder") {
+    if (filterName === "applicationType" && value === getBpaTextToLocalMapping("BPAREG_SERVICE")) {
       dispatch(
         handleField(
           "my-applications-stakeholder",
@@ -319,7 +298,7 @@ export const fieldChange = (action, state, dispatch) => {
         bpaDetails = bpaDetails.filter(details => details[`${dataFilter}`] === filterValue);
     }
 
-    storeData(bpaDetails, dispatch, true, true);
+    storeData(bpaDetails, dispatch, false, true);
   }
 };
 
@@ -332,7 +311,7 @@ export const clearFilter = (state, dispatch, action) => {
     {}
   );
 
-  storeData(bpaDetails, dispatch, true, true);
+  storeData(bpaDetails, dispatch, false, true);
   dispatch(
     prepareFinalObject("filterData", [])
   );
