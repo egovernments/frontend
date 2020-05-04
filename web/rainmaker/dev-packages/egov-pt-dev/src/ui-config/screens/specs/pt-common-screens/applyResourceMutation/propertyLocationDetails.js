@@ -143,11 +143,11 @@ export const propertyLocationDetails = getCommonCard({
         inputLabelProps: {
           shrink: true
         },
-        gridDefination: {
-              xs: 12,
-              sm: 6,
-
-            },
+        
+      },
+      gridDefination:{
+        xs: 12,
+        sm: 6,
       },
     },
 
