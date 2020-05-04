@@ -299,7 +299,17 @@ const screenConfig = {
         formwizardFirstStep,
         footer
       }
-    }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "SuccessPTPopupContainer",
+      props: {
+        open: false,
+        maxWidth: "md",
+        screenKey: "register-property"
+      }
+    }    
   }
 };
 
