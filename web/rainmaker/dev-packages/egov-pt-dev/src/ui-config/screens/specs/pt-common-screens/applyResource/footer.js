@@ -213,6 +213,14 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.tenantId = propertyPayload.address.city;
     propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
     try {
+      if(propertyPayload.propertyType === 'BUILTUP.SHAREDPROPERTY') {
+        let unit = {};
+        unit.usageCategory = propertyPayload.subUsageCategory;
+        unit.occupancyType = "SELFOCCUPIED";
+        unit.constructionDetail = {};
+        propertyPayload.units = [];
+        propertyPayload.units.push(unit);
+      }
       propertyPayload.creationReason = 'CREATE';
       let payload = null;
       payload = await httpRequest(
