@@ -431,7 +431,7 @@ export const propertyOwnershipDetails = getCommonCard({
             masterName: "OwnerShipCategory"
           },
           required: true,
-          sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
+          sourceJsonPath: "OwnershipCategory",
           gridDefination: {
             xs: 12,
             sm: 12,

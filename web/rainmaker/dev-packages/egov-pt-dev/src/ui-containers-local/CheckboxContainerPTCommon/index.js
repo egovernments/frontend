@@ -101,8 +101,10 @@ class CheckboxLabels extends React.Component {
       let finalAddress = doorNo + ", " + buildingName + ", " + locality + ", " + city.split(".")[1];
       this.setState({ [name]: event.target.checked }, () => {
         approveCheck(jsonPath, this.state.checkedG);
-      });
-      approveCheck(destinationJsonPath, finalAddress);
+        finalAddress = (this.state.checkedG)?finalAddress:''
+        approveCheck(destinationJsonPath, finalAddress);
+      });      
+      
     } else {
       raiseSnackbarAlert(
         "PT_COMMON_PROPERTY_LOCATION_FIELD_REQUIRED",
