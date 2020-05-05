@@ -29,7 +29,7 @@ import generatePdf from "../utils/generatePdfForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
-import { documentsSummary } from "./summaryResource/documentsSummary";
+import { previewSummary } from "./summaryResource/previewSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
@@ -589,7 +589,7 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.previewSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
     set(
@@ -605,11 +605,6 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.plotAndBoundaryInfoSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
       false
     );
     set(
@@ -741,7 +736,7 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
-          documentsSummary: documentsSummary,
+          previewSummary: previewSummary,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,
           permitListSummary : permitListSummary

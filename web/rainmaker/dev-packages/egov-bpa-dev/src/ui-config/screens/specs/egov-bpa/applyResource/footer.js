@@ -172,14 +172,14 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
   }
   generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
   prepareDocumentsDetailsView(state, dispatch);
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard",            
-      "visible",
-      false
-    )
-  )
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.applyDocSummary.children.cardContent.children.uploadedDocumentDetailsCard",            
+  //     "visible",
+  //     false
+  //   )
+  // )
 }
 
 const callBackForNext = async (state, dispatch) => {
