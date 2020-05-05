@@ -810,8 +810,36 @@ export const tradeDetails = getCommonCard(
         }),
         beforeFieldChange: (action, state, dispatch) => {
           let noOfYears = parseInt(action.value)
-          let startDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).startDate
-          let endDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).endDate
+
+          let renewalValidation = get(
+            state.screenConfiguration.preparedFinalObject,
+            `applyScreenMdmsData.TradeLicense.ApplicationType[1]`,
+            []
+          );
+
+          let validFromData = get(
+            state.screenConfiguration.preparedFinalObject,
+            `Licenses[0].validFrom`,
+            []
+          );
+
+          let startDate = null;
+          let endDate = null;
+
+
+          if(renewalValidation === "NEW")
+          {
+             startDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).startDate
+             endDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).endDate
+
+          }
+          else
+          {
+             startDate = getFinancialYearDates("yyyy-mm-dd", validFromData+1000 , noOfYears).startDate
+             endDate = getFinancialYearDates("yyyy-mm-dd", validFromData+1000 , noOfYears).endDate
+
+          }
+
           dispatch(
             pFO(
               `Licenses[0].validFrom`,convertDateToEpoch(startDate,"")
@@ -822,7 +850,8 @@ export const tradeDetails = getCommonCard(
           dispatch(
             pFO(
               `Licenses[0].financialYear`, startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length-2)
-            ));              
+            )); 
+             
         }
 
       },
