@@ -1256,7 +1256,7 @@ export const validateFields = (
             ...fields[variable],
             value: get(
               state.screenConfiguration.preparedFinalObject,
-              fields[variable].jsonPath
+              fields[variable].jsonPath ? fields[variable].jsonPath:fields[variable].props.jsonPath
             )
           },
           dispatch,

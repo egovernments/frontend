@@ -120,7 +120,7 @@ export const validate = (
   if (!skipPrepareFormData) {
     dispatch(prepareFO(componentObject.jsonPath, componentObject.value));
   }
-  if (componentObject.jsonPath && validatedObject.isFieldValid) {
+  if ((componentObject.jsonPath || componentObject.props.jsonPath) && validatedObject.isFieldValid) {
     if (!componentObject.isFieldValid) {
       isFormValid = true;
       dispatch(
