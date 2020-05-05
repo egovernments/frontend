@@ -4,8 +4,7 @@ import {
   getBreak,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { BPAApplication } from "./searchResource/bpaApplication";
-import { showHideAdhocPopup, resetFields } from "../utils";
+import { BPAApplication, resetFields } from "./searchResource/bpaApplication";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchResults } from "./searchResource/searchResults";

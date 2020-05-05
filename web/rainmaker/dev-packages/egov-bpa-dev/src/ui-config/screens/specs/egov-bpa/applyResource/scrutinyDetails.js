@@ -163,7 +163,7 @@ export const proposedBuildingDetails = getCommonCard({
           return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
         });
         dispatch(handleField("apply", path, "props.data", subOccupancyType));
-        dispatch(prepareFinalObject("BPA.additionalDetails.isCharitableTrustBuilding", false));
+        // dispatch(prepareFinalObject("BPA.additionalDetails.isCharitableTrustBuilding", false));
       }
     },
   }),
