@@ -267,7 +267,7 @@ const screenConfig = {
       //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
       dispatch(
         prepareFinalObject(
-          "applyScreenMdmsData.DropdownsData.OwnershipCategory",
+          "OwnershipCategory",
           ownershipCategory
         )
       );
