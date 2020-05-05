@@ -11,6 +11,8 @@ import {
 import "./index.css";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 
 export const propertyLocationDetails = getCommonCard({
@@ -48,6 +50,7 @@ export const propertyLocationDetails = getCommonCard({
       }),
       beforeFieldChange: async (action, state, dispatch) => {
         //Below only runs for citizen - not required here in employee
+        dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
 
         dispatch(
           prepareFinalObject(
@@ -140,32 +143,13 @@ export const propertyLocationDetails = getCommonCard({
         inputLabelProps: {
           shrink: true
         },
-        gridDefination: {
-              xs: 12,
-              sm: 6,
-
-            },
+        
       },
-      gridDefination: {
+      gridDefination:{
         xs: 12,
-        sm: 6
+        sm: 6,
       },
     },
-    // localityOrMohalla: getSelectField({
-    //   label: {
-    //     labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA"
-    //   },
-    //   placeholder: {
-    //     labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
-    //   },
-    //   sourceJsonPath: "applyScreenMdmsData.tenant.localities",
-    //   jsonPath: "Property.address.locality.code",//db sake
-    //   required: true,
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 6
-    //   },
-    // }),
 
     doorNo: getTextField({
       label: {
