@@ -81,6 +81,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
               await processBills(estimate, viewBillTooltip, dispatch);
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+              estimate.Calculation[0].appStatus = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"); 
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
             }
           } 
@@ -97,6 +98,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
               await processBills(estimate, viewBillTooltip, dispatch);
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+              estimate.Calculation[0].appStatus = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"); 
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
             }
           }
@@ -507,7 +509,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
 
         // viewBreakUp 
         estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
-
+        estimate.Calculation[0].appStatus = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"); 
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
@@ -543,6 +545,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
         await processBills(estimate, viewBillTooltip, dispatch);
         // viewBreakUp 
         estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+        estimate.Calculation[0].appStatus = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"); 
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
