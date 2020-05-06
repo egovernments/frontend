@@ -362,6 +362,19 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
         }
       ],
       alignment: "left"
+    },
+    {
+      text: [
+        {
+          text: "Application Status ",
+          bold: true
+        },
+        {
+          text: transformedData.applicationStatus,
+          bold: false
+        }
+      ],
+      alignment: "right"
     }
   ];
   let nocDetails = [
@@ -377,8 +390,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
           [
             {
               text: "NOC Type",
-              border: [true, true, false, false],
-              style: "noc-table-key"
+              border: [true, true, false, false]
             },
             {
               text: "Provisional NOC No.",
@@ -959,7 +971,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
   transformedData.applicationDate
   }, Buildings: ${transformedData.propertyType}, Applicant: ${
   transformedData.owners[0].name
-  }, Address: ${transformedData.address}`;
+  },,Application Stauts:${transformedData.applicationStatus
+  } Address: ${transformedData.address}`;
 
   if (transformedData.ownershipType.startsWith("INSTITUTION")) {
     applicantDetails = [];
@@ -1163,7 +1176,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       transformedData.issuedDate
       }, Valid Till: ${transformedData.validTo}, Buildings: ${
       transformedData.propertyType
-      }, Applicant: ${transformedData.owners[0].name}`;
+      },Applicant: ${transformedData.owners[0].name}`;
       break;
   }
 
