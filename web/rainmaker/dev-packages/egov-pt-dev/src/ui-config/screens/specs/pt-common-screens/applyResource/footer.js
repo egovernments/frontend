@@ -142,6 +142,14 @@ const callBackForApply = async (state, dispatch) => {
       }
 	   
 	}else if(propertyPayload.ownershipCategory === 'INSTITUTIONALGOVERNMENT' || propertyPayload.ownershipCategory === 'INSTITUTIONALPRIVATE'){	   
+    dispatch(
+      handleField(
+        screenKey,
+        "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails",
+        "required",
+         true
+      )
+    );
 	   let isPropertyOwnerInstitutionTypeValid = validateFields(   
 	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
 	     state,

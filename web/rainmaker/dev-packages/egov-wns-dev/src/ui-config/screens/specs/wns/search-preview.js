@@ -172,7 +172,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
     );
-
+    // for showing addPenaltyRebateButton
+    if(process.env.REACT_APP_NAME !== "Citizen" && (appStatus !=="PENDING_FOR_CONNECTION_ACTIVATION" && appStatus !== 'CONNECTION_ACTIVATED')){
+      
+      dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.taskDetails.children.cardContent.children.estimate.children.cardContent.children.addPenaltyRebateButton",
+            "visible",
+            true
+          )
+        );
+    }
     const printCont = downloadPrintContainer(
       action,
       state,
@@ -325,7 +336,7 @@ const estimate = getCommonGrayCard({
       action: "condition",
       callBack: showHideAdhocPopup
     },
-    visible: process.env.REACT_APP_NAME !== "Citizen"
+    visible: false
   },
 });
 
