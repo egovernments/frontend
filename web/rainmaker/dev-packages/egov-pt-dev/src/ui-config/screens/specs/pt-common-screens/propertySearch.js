@@ -11,6 +11,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 // import { showHideAdhocPopup } from "../utils";
 import { resetFields } from "./mutation-methods";
+import "./index.css"
 import {searchPropertyDetails} from "./mutation-methods"
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
