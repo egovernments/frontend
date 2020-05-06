@@ -245,10 +245,17 @@ class ActionDialog extends React.Component {
                           height: "48px",
                           marginRight: "45px"
                         }}
-                        onClick={() =>
+                        onClick={() =>{
+                          let approverElement= document.getElementById("approverrName");
+                          if(approverElement!=null){
                           document.getElementById("approverrName").value=="Select assignee Name"?
                           alert("Please select Assignee Name")
                           :onButtonClick(buttonLabel, isDocRequired)
+                          }
+                          else{
+                            onButtonClick(buttonLabel, isDocRequired)
+                          }
+                        }
                       }
                       >
                         <LabelContainer
