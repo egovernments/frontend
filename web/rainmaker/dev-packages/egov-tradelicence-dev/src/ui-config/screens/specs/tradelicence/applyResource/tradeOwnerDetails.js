@@ -452,9 +452,9 @@ export const tradeOwnerDetails = getCommonCard({
                 true
               )
             );
-            dispatch(
-              pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
-            );
+            // dispatch(
+            //   pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
+            // );
           }
         } catch (e) {
           console.log(e);
