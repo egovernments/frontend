@@ -86,7 +86,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     data.applicationNumber = nullToNa(
       get(response, "FireNOCs[0].fireNOCDetails.applicationNumber", "NA")
     );
-    data.applicationStatus = get(response, "FireNOCs[0].fireNOCDetails.status");
+    data.applicationStatus = getMessageFromLocalization(nullToNa('NOC_'+get(response, "FireNOCs[0].fireNOCDetails.status")));
     data.applicationDate = nullToNa(
       epochToDate(
         get(response, "FireNOCs[0].fireNOCDetails.applicationDate", "NA")
