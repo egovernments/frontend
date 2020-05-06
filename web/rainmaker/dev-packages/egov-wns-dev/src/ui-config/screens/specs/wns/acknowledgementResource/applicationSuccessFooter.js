@@ -163,17 +163,17 @@ export const applicationSuccessFooter = (
     gotoHome: {
       componentPath: "Button",
       props: {
-        variant: "outlined",
+        variant: "contained",
         color: "primary",
         style: {
-          minWidth: "25%",
+          minWidth: "15%",
           height: "48px",
           marginRight: "16px"
         }
       },
       children: {
         downloadReceiptButtonLabel: getLabel({
-          labelName: "GO TO HOME",
+          labelName: "HOME",
           labelKey: "WS_COMMON_BUTTON_HOME"
         })
       },
@@ -188,7 +188,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "25%",
+          minWidth: "15%",
           height: "48px",
           marginRight: "16px"
         }
@@ -211,7 +211,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "25%",
+          minWidth: "15%",
           height: "48px",
           marginRight: "16px"
         }

@@ -7,6 +7,7 @@ import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
+import "./index.css";
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
