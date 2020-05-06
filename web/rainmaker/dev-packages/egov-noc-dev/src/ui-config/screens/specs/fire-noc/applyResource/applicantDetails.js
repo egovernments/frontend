@@ -295,36 +295,6 @@ const commonApplicantInformation = () => {
         props:{
           className:"applicant-details-error"
         }
-      }),
-      specialApplicantCategory: getSelectField({
-        label: {
-          labelName: "Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-        },
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
-        // data: [
-        //   {
-        //     code: "A"
-        //   },
-        //   {
-        //     code: "B"
-        //   }
-        // ],
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerType"
-        },
-        sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        }
       })
     })
   });
