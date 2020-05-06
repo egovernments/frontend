@@ -12,7 +12,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
 
-const resetFields = (state, dispatch) => {
+export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
@@ -128,6 +128,7 @@ export const BPAApplication = getCommonCard({
       required: false
     }),
     applicationType: getSelectField({
+      visible: false,
       label: {
         labelName: "Application Type",
         labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
@@ -140,19 +141,15 @@ export const BPAApplication = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
-      props: {
-         className : "tl-trade-type"
-      },
       jsonPath: "searchScreen.applicationType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
-      required: true,
       gridDefination: {
         xs: 12,
-        sm: 12,
-        md: 6
-      }
+        sm: 4
+      },
     }),
     serviceType: getSelectField({
+      visible: false,
       label: {
         labelName: "Service type",
         labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
@@ -165,17 +162,12 @@ export const BPAApplication = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
-      props:{
-        className:"textfield-enterable-selection"
-      },
-      required: true,
       jsonPath: "searchScreen.serviceType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
       gridDefination: {
         xs: 12,
-        sm: 12,
-        md: 6
-      }
+        sm: 4
+      },
     }),
   }),
   button: getCommonContainer({

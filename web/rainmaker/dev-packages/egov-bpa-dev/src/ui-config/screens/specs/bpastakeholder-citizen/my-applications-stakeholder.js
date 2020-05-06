@@ -23,7 +23,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications-stakeholder",
   beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch, true, true);
+    fetchData(action, state, dispatch, false, true);
     return action;
   },
   components: {
@@ -49,11 +49,11 @@ const screenConfig = {
               },
               data: [
                 {
-                  code: "BPA Apply",
+                  code: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
                   label: "BPA"
                 },
                 {
-                  code: "Stake Holder",
+                  code: getBpaTextToLocalMapping("BPAREG_SERVICE"),
                   label: "Stakeholder"
                 }
               ],
@@ -92,7 +92,7 @@ const screenConfig = {
               fieldChange(action, state, dispatch);
             }
           },
-          Status: {
+          applicationStatus : {
             ...getSelectField({
               label: {
                 labelName: "Status",
@@ -103,8 +103,8 @@ const screenConfig = {
                 labelName: "Select Status",
                 labelKey: "APP_STATUS_PLACEHOLDER"
               },
-              jsonPath: "filterData[0].Status",
-              data: [{ code: "PENDINGPAYMENT" }, { code: "PENDINGDOCVERIFICATION" }, { code: "REJECTED" }, { code: "PENDINGAPPROVAL" }, { code: "APPROVED" }, { code: "INITIATED" }, { code: "CITIZEN_APPROVAL_INPROCESS" }, { code: "INPROGRESS" }, { code: "PENDING_FEE" }, { code: "DOC_VERIFICATION_INPROGRESS" }, { code: "FIELDINSPECTION_INPROGRESS" }, { code: "NOC_VERIFICATION_INPROGRESS" }, { code: "APPROVAL_INPROGRESS" }, { code: "PERMIT REVOCATION" }, { code: "PENDING_APPL_FEE" }, { code: "PENDING_SANC_FEE_PAYMENT" }, { code: "CITIZEN_ACTION_PENDING_AT_DOC_VERIF" }, { code: "CITIZEN_ACTION_PENDING_AT_FI_VERIF" }, { code: "CITIZEN_ACTION_PENDING_AT_NOC_VERIF" }],
+              jsonPath: "filterData[0]." + [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")],
+              data: [{ code: getBpaTextToLocalMapping("PENDINGPAYMENT") }, { code: getBpaTextToLocalMapping("REJECTED") }, { code: getBpaTextToLocalMapping("APPROVED") }, { code: getBpaTextToLocalMapping("INITIATED") }, { code: getBpaTextToLocalMapping("CITIZEN_APPROVAL_INPROCESS") }, { code: getBpaTextToLocalMapping("INPROGRESS") }, { code: getBpaTextToLocalMapping("PENDING_FEE") }, { code: getBpaTextToLocalMapping("DOC_VERIFICATION_INPROGRESS") }, { code: getBpaTextToLocalMapping("FIELDINSPECTION_INPROGRESS") }, { code: getBpaTextToLocalMapping("NOC_VERIFICATION_INPROGRESS") }, { code: getBpaTextToLocalMapping("APPROVAL_INPROGRESS") }, { code: getBpaTextToLocalMapping("PENDING_APPL_FEE") }, { code: getBpaTextToLocalMapping("PENDING_SANC_FEE_PAYMENT") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_DOC_VERIF") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_FI_VERIF") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_NOC_VERIF") }],
               props: {
                 style: { marginLeft: "20px" }
               },
@@ -155,30 +155,10 @@ const screenConfig = {
           props: {
             columns: [
               getBpaTextToLocalMapping("Application No"),
-              getBpaTextToLocalMapping("Owner Name"),
-              getBpaTextToLocalMapping("Application Date"),
-              getBpaTextToLocalMapping("Status"),
-              // {
-              //   name: getBpaTextToLocalMapping("Status"),
-              //   options: {
-              //     filter: false,
-              //     customBodyRender: value => (
-              //       <span
-              //         style={
-              //           value === "APPROVED" ? { color: "green" } : { color: "red" }
-              //         }
-              //       >
-              //         {getBpaTextToLocalMapping(value)}
-              //       </span>
-              //     )
-              //   }
-              // },
-              {
-                name: "tenantId",
-                options: {
-                  display: false
-                }
-              }
+              getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE"),
+              getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO"),
+              getBpaTextToLocalMapping("BPA_COMMON_SLA"),
+              getBpaTextToLocalMapping("BPA_COL_APP_STATUS")
             ],
             title: getBpaTextToLocalMapping("Search Results for BPA Applications"),
             // jsonPath: "searchResults",
