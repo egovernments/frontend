@@ -7,7 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import get from "lodash/get";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -64,7 +64,8 @@ const onIconClick = (state, dispatch, index) => {
 };
 
 export const payeeDetails = getCommonContainer({
-  paidBy: getSelectField({
+  paidBy:{
+    ... getSelectField({
     label: {
       labelName: "Paid By",
       labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
@@ -81,9 +82,55 @@ export const payeeDetails = getCommonContainer({
         code: "Others"
       }
     ],
-    jsonPath: "ReceiptTemp[0].Bill[0].payer",
+    jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
     required: true
   }),
+  beforeFieldChange: (action, state, dispatch) => {
+    if(action.value=='Owner'){
+      let paidbyName = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",[]);
+      let paidbyMobileNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",[]);
+      dispatch(
+        handleField(
+          "pay",
+          "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerName",
+          "props.value",
+          paidbyName
+        )
+      );
+      dispatch(
+        handleField(
+          "pay",
+          "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerMobileNo",
+          "props.value",
+          paidbyMobileNumber
+        )
+      );
+    }
+    else{
+      dispatch(
+        handleField(
+          "pay",
+          "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerName",
+          "props.value",
+          ""
+        )
+      );
+      dispatch(
+        handleField(
+          "pay",
+          "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerMobileNo",
+          "props.value",
+          ""
+        )
+      );
+    }
+  
+    }
+  },
   payerName: getTextField({
     label: {
       labelName: "Payer Name",
@@ -93,7 +140,7 @@ export const payeeDetails = getCommonContainer({
       labelName: "Enter Payer Name",
       labelKey: "NOC_PAYMENT_PAYER_NAME_PLACEHOLDER"
     },
-    jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
+    jsonPath: "ReceiptTemp[0].Bill[0].payer",
     required: true
   }),
   payerMobileNo: getTextField({
