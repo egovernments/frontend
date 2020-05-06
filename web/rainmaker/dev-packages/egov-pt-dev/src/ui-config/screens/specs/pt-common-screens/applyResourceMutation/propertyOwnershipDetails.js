@@ -10,6 +10,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import set from "lodash/set";
 import "./index.css";
 
 const showComponent = (
@@ -515,6 +517,30 @@ export const propertyOwnershipDetails = getCommonCard({
             );
 
           } else if (action.value.includes("INSTITUTIONAL")) {
+            dispatch(
+              handleField(
+                "register-property",
+                path,
+                "required",
+                false
+              )
+            );
+
+            dispatch(
+              handleField(
+                "register-property",
+                path,
+                "props.value",
+                ''
+              )
+            );
+            set(state.screenConfiguration.preparedFinalObject,"Property.institution.type", "");
+            dispatch(
+                prepareFinalObject(
+                  "Property.institution.type",
+                  ""
+                )
+              )
             showComponent(
               dispatch,
               singleApplicantContainerJsonPath,
