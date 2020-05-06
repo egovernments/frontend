@@ -967,12 +967,12 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       ]
     }
   ];
-  let qrText = `Application: ${transformedData.applicationNumber}, Date: ${
+  let qrText = `Application: ${transformedData.applicationNumber},\n Date: ${
   transformedData.applicationDate
-  }, Buildings: ${transformedData.propertyType}, Applicant: ${
+  },\n Buildings: ${transformedData.propertyType},\n Applicant: ${
   transformedData.owners[0].name
-  },,Application Stauts:${transformedData.applicationStatus
-  } Address: ${transformedData.address}`;
+  },\nApplication Status:${transformedData.applicationStatus
+  },\n Address: ${transformedData.address}`;
 
   if (transformedData.ownershipType.startsWith("INSTITUTION")) {
     applicantDetails = [];
