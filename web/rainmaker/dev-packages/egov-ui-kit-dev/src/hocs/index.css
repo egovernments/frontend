@@ -149,3 +149,35 @@
   align-items: center;
   justify-content: center;
 }
+
+.rainmaker-action-menu::-webkit-scrollbar {
+  width: 0.25em;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar-track {
+  background-color: transparent;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+   
+.rainmaker-action-menu::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  outline: 1px solid transparent;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+/* Track below and above */
+.rainmaker-action-menu::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+}
+
+/* Corner */
+.rainmaker-action-menu::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* Resizer */
+.rainmaker-action-menu::-webkit-scrollbar-resizer {
+  background-color: transparent;
+}

@@ -12,6 +12,7 @@ import { logout } from "egov-ui-kit/redux/auth/actions";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import SortDialog from "../common/common/Header/components/SortDialog";
 import { setModule, getTenantId, getLocale } from "../utils/localStorageUtils";
+import "./index.css";
 
 const withAuthorization = (options = {}) => (Component) => {
   class Wrapper extends React.Component {
@@ -173,7 +174,7 @@ const withAuthorization = (options = {}) => (Component) => {
             {!hideActionMenu && authenticated && (
               <div>
                 <div className={`col-xs-2 action-menu-drawer show-action-menu ${drawerClsName}`} id="menu-container">
-                  <div className="rainmaker-action-menu" style={{height: "83vh", width: "101%", overflowX: "scroll", overflowY: "scroll"}}>
+                  <div className="rainmaker-action-menu" style={{height: "85vh", width: "101%", overflowX: "scroll", overflowY: "scroll"}}>
                     <ActionMenu
                       role={role}
                       toggleDrawer={(menuItmeClick = true) => {
