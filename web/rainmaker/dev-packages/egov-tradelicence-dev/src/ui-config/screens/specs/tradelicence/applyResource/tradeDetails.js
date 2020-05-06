@@ -827,16 +827,16 @@ export const tradeDetails = getCommonCard(
           let endDate = null;
 
 
-          if(renewalValidation === "NEW")
+          if(renewalValidation === "RENEWAL")
           {
-             startDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).startDate
-             endDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).endDate
+             startDate = getFinancialYearDates("yyyy-mm-dd", validFromData+1000 , noOfYears).startDate
+             endDate = getFinancialYearDates("yyyy-mm-dd", validFromData+1000 , noOfYears).endDate
 
           }
           else
           {
-             startDate = getFinancialYearDates("yyyy-mm-dd", validFromData+1000 , noOfYears).startDate
-             endDate = getFinancialYearDates("yyyy-mm-dd", validFromData+1000 , noOfYears).endDate
+             startDate = getFinancialYearDates("yyyy-mm-dd", null , noOfYears).startDate
+             endDate = getFinancialYearDates("yyyy-mm-dd", null, noOfYears).endDate
 
           }
 
