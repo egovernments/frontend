@@ -112,3 +112,56 @@
     overflow: scroll;
   }
 }
+
+#SubmitButton {
+  color: #ffffff !important;
+  background-color: #696969 !important;
+  border-radius: 2px !important;
+  width: 300px !important;
+  height: 48px !important; }
+
+#ResetButton {
+  color: #ffffff !important;
+  width: 300px !important;
+  height: 50px !important;
+  border: 1px solid #fe7a51 !important;
+  border-radius: 2px !important; }
+
+@media only screen and (max-width: 768px) {
+  #SubmitButton {
+    color: #ffffff !important;
+    background-color: #696969 !important;
+    border-radius: 2px !important;
+    width: 200px !important; }
+  #ResetButton {
+    color: #ffffff !important;
+    border-radius: 2px !important;
+    border: 1px solid #fe7a51 !important;
+    border-radius: 2px !important;
+    width: 200px !important; } }
+
+@media only screen and (max-width: 600px) {
+  #SubmitButton {
+    color: #ffffff !important;
+    background-color: #696969 !important;
+    border-radius: 2px !important;
+    width: 150px !important; }
+  #ResetButton {
+    color: #ffffff !important;
+    border-radius: 2px !important;
+    border: 1px solid #fe7a51 !important;
+    border-radius: 2px !important;
+    width: 150px !important; } }
+
+@media only screen and (max-width: 320px) {
+  #SubmitButton {
+    color: #ffffff !important;
+    background-color: #696969 !important;
+    border-radius: 2px !important;
+    width: 100px !important; }
+  #ResetButton {
+    color: #ffffff !important;
+    border-radius: 2px !important;
+    border: 1px solid #fe7a51 !important;
+    border-radius: 2px !important;
+    width: 100px !important; } }

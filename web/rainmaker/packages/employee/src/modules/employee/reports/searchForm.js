@@ -646,7 +646,15 @@ class ShowForm extends Component {
       );
     } else {
       return (
-        get(metaData, "reportDetails.reportName") && <div className="report-title">{this.getReportTitle(metaData.reportDetails.reportName)}</div>
+        get(metaData, "reportDetails.reportName") && 
+        
+        //<div className="report-title">{this.getReportTitle(metaData.reportDetails.reportName)}</div>
+        <Label
+        label={metaData.reportDetails.reportName.toUpperCase()}
+       // label={metaData.reportDetails.reportName}
+        labelStyle={{ marginLeft: "16px", marginTop: "8px", color: "#484848" }}
+        fontSize={20}
+      />
       );
     }
   };
@@ -671,22 +679,42 @@ class ShowForm extends Component {
                   <Grid container spacing={8}>{this.handleFormFields()}</Grid>
                   <Row>
                     <div style={{ marginTop: "16px", textAlign: "center" }} className="col-xs-12">
-                      <RaisedButton
-                        // style={{ height: "48px",borderRadius: "2px", width: "80%", backgroundColor: "rgba(0, 0, 0, 0.6)" }}
-                        type="submit"
-                        //disabled={!isFormValid}
-                        primary={true}
-                        label={buttonText}
-                      />
-                      <RaisedButton
-                        style={{ marginLeft: "8px" }}
+                      
+
+                       <RaisedButton id ='ResetButton'
+                    
+
                         type="button"
-                        //disabled={!isFormValid}
-                        // primary={true}
+
                         onClick={(e) => {
                           this.resetFields();
                         }}
                         label={<LabelContainer labelName="RESET" labelKey="REPORTS_SEARCH_RESET_LABEL" />}
+
+                       
+                      />
+                      
+                       <RaisedButton id ='SubmitButton'
+                         type="submit"
+
+                         style = {{
+                          marginLeft: "10px" 
+
+                         }}
+                         
+
+
+                        //disabled={!isFormValid}
+                        // primary={true}
+
+                         primary={true}
+
+                         label={buttonText} 
+                        
+                         labelStyle={{ marginTop:"50px"  }}
+
+                        // label={<LabelContainer  labelName="SUBMIT" labelKey="REPORTS_SEARCH_SUBMIT_LABEL" />}
+                     
                       />
                     </div>
                   </Row>
