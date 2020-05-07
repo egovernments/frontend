@@ -181,7 +181,7 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Address"),
-          jsonPath: "Property.owners[0].permanentAddress"
+          jsonPath: "Property.owners[0].correspondenceAddress"
         }),
         sameAsPropertyAddress: {
           uiFramework: "custom-containers-local",
@@ -192,7 +192,7 @@ const institutionInformation = () => {
             labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
             jsonPath: "sameAsPeropertyAddress",
             required: false,
-            destinationJsonPath: "Property.owners[0].permanentAddress"
+            destinationJsonPath: "Property.owners[0].correspondenceAddress"
           },
           required:false,
           type: "array",
@@ -352,7 +352,7 @@ const commonApplicantInformation = () => {
         pattern: getPattern("Address"),
         required: true,
         errorMessage: "Invalid Address",
-        jsonPath: "Property.owners[0].permanentAddress",
+        jsonPath: "Property.owners[0].correspondenceAddress",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -393,7 +393,7 @@ const commonApplicantInformation = () => {
           labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
           jsonPath: "sameAsPeropertyAddress",
           required: false,
-          destinationJsonPath: "Property.owners[0].permanentAddress"
+          destinationJsonPath: "Property.owners[0].correspondenceAddress"
         },
         type: "array"
       },
