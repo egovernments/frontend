@@ -51,7 +51,6 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 export const getSearchResults = async (queryObject, dispatch) => {
   try {
-    console.log(queryObject, "Query Object ___________________===========================================================================---------------")
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
