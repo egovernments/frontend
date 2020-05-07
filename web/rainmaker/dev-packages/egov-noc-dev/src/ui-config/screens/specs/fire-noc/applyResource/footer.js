@@ -16,6 +16,10 @@ import {
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  furnishNocResponse,
+  getSearchResults
+} from "../../../../../ui-utils/commons";
 
 const setReviewPageRoute = (state, dispatch) => {
 
@@ -154,6 +158,30 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = false;
+
+  if (activeStep === 0) {
+    let fireNOCNumber = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].provisionFireNOCNumber",
+      ""
+    );
+    if(fireNOCNumber !=''){
+      
+      let response = await getSearchResults([
+        { key: "fireNOCNumber", value: fireNOCNumber }
+      ]);
+
+      if(response===''){
+        isFormValid=false;
+       }
+
+       if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
+          if (response.FireNOCs.length === 0) {
+            isFormValid=false;
+          }
+        }
+      }
+    }
 
   if (activeStep === 1) {  
     let isPropertyLocationCardValid = validateFields(
