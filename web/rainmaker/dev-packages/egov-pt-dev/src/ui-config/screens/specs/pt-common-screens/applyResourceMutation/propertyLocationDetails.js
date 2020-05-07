@@ -164,7 +164,7 @@ export const propertyLocationDetails = getCommonCard({
       },
       required: true,
       pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_DOOR_NO",
+      errorMessage: "PT_COMMON_ERR_INVALID_DOOR_NO",
       jsonPath: "Property.address.doorNo"
     }),
     buildingOrColonyName: getTextField({
@@ -180,7 +180,7 @@ export const propertyLocationDetails = getCommonCard({
       },
       required: true,
       pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_BUILDING_COLONY",
+      errorMessage: "PT_COMMON_ERR_INVALID_BUILDING_COLONY",
       jsonPath: "Property.address.buildingName"
     })
   })
