@@ -116,6 +116,7 @@ const callBackForApply = async (state, dispatch) => {
      screenKey
    );
   let isPropertyOwnerDetailsValid = true;
+  let multiOwnerItems;
   if(propertyPayload.ownershipCategory){
   	if(propertyPayload.ownershipCategory === 'INDIVIDUAL.SINGLEOWNER'){
 	  isPropertyOwnerDetailsValid = validateFields(   
@@ -126,18 +127,20 @@ const callBackForApply = async (state, dispatch) => {
 	   );
 	}else if(propertyPayload.ownershipCategory === 'INDIVIDUAL.MULTIPLEOWNERS'){
 	   
-	   let multiOwnerItems = get(
+	   multiOwnerItems = get(
 		    state,
 		    "screenConfiguration.screenConfig.register-property.components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items"
 		  );
-     if(multiOwnerItems && multiOwnerItems.length > 0){
+      if(multiOwnerItems && multiOwnerItems.length > 0){
   	   for(var i=0;i < multiOwnerItems.length;i++){
-      	   isPropertyOwnerDetailsValid = validateFields(   
-      	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items["+i+"].item"+i+".children.cardContent.children.applicantCard.children",
-      	     state,
-      	     dispatch,
-      	     screenKey
-      	   );
+           if(multiOwnerItems[i] && !multiOwnerItems[i].hasOwnProperty('isDeleted')){
+        	   isPropertyOwnerDetailsValid = validateFields(   
+        	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items["+i+"].item"+i+".children.cardContent.children.applicantCard.children",
+        	     state,
+        	     dispatch,
+        	     screenKey
+        	   );
+            }
         }
       }
 	   
@@ -183,6 +186,29 @@ const callBackForApply = async (state, dispatch) => {
     isPropertyOwnerDetailsTypeSelection &&
     isPropertyOwnerDetailsValid
   ) {
+    if(multiOwnerItems && multiOwnerItems.length > 0){
+      let checkmultiownerCount=multiOwnerItems.length;
+      for(var i=0;i < multiOwnerItems.length;i++){        
+        if(multiOwnerItems[i] && multiOwnerItems[i].hasOwnProperty('isDeleted')){
+          checkmultiownerCount--;
+        }
+      }
+      if(checkmultiownerCount<2){
+        dispatch(
+          toggleSnackbar(
+            true, {
+            labelKey: "PT_COMMON_ONE_MORE_OWNER_INFROMATION_REQUIRED",
+            labelName: "One more owner information required"
+          },
+            "warning"
+          )
+        )
+        return false;
+      }
+    }
+    for( var i = propertyPayload.owners.length-1; i--;){
+      if (propertyPayload.owners[i].hasOwnProperty('isDeleted')) propertyPayload.owners.splice(i, 1);
+    }
     propertyPayload.owners.map(owner => {
       if (!_.isUndefined(owner.status)) {
         owner.status = "INACTIVE"
@@ -251,20 +277,27 @@ const callBackForApply = async (state, dispatch) => {
         }, 3000);
       }
       else {
-        store.dispatch(
-          setRoute(
-            `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${propertyPayload.tenantId}`
+        dispatch(
+          toggleSnackbar(
+            true, {
+            labelKey: "PT_COMMON_FAILED_TO_REGISTER_PROPERTY",
+            labelName: "Failed to register property"
+          },
+            "warning"
           )
-        );
+        )
       }
     } catch (e) {
       console.log(e);
-      store.dispatch(
-        setRoute(
-          `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${propertyPayload.tenantId}
-        `
+      dispatch(
+        toggleSnackbar(
+          true, {
+          labelKey: "PT_COMMON_FAILED_TO_REGISTER_PROPERTY",
+          labelName: "Failed to register property"
+        },
+          "warning"
         )
-      );
+      )
     }
   } else {
     dispatch(
