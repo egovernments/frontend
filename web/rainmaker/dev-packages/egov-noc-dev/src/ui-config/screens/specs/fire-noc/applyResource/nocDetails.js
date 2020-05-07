@@ -26,7 +26,6 @@ const loadProvisionalNocData = async (state, dispatch) => {
     ""
   );
 
-
   if (!fireNOCNumber.match(getPattern("FireNOCNo"))) {
     dispatch(
       toggleSnackbar(
@@ -44,12 +43,10 @@ const loadProvisionalNocData = async (state, dispatch) => {
   let response = await getSearchResults([
     { key: "fireNOCNumber", value: fireNOCNumber }
   ]);
-
   response = furnishNocResponse(response);
 
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
- 
 
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
@@ -203,6 +200,7 @@ export const nocDetails = getCommonCard({
               { display: "visible" }
              )
           );
+          
         }  
       }
     },
