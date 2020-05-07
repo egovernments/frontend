@@ -142,8 +142,10 @@ const formConfig = {
       }
       let city = get(state, "form.complaint.fields.city.value");
       let mohalla = get(state, "form.complaint.fields.mohalla.value");
+      let mohallaDropdown = get(state, "form.complaint.fields.mohalla.dropDownData");
       if (!city) {
         dispatch(handleFieldChange("complaint", "city", tenantId));
+        dispatch(setFieldProperty("complaint", "mohalla", "dropDownData", mohallaDropdown));
       } else {
         if (city) {
           dispatch(handleFieldChange("complaint", "city", city));
