@@ -150,8 +150,24 @@
   justify-content: center;
 }
 
+.rainmaker-action-menu {
+  height: 85vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.rainmaker-action-menu:hover {
+  height: 85vh;
+  width: 100%;
+  overflow: scroll;
+}
+
 .rainmaker-action-menu::-webkit-scrollbar {
-  width: 0.25em;
+  width: 0.5em;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar:horizontal {
+  height: 0.5em;
 }
 
 .rainmaker-action-menu::-webkit-scrollbar-track {
@@ -159,12 +175,13 @@
   -webkit-border-radius: 10px;
   border-radius: 10px;
 }
-   
+
 .rainmaker-action-menu::-webkit-scrollbar-thumb {
-  background-color: transparent;
-  outline: 1px solid transparent;
+  background-color:rgb(117, 117, 117);
+  outline: 0;
   -webkit-border-radius: 10px;
   border-radius: 10px;
+  width: 0.5em;
 }
 
 /* Track below and above */
