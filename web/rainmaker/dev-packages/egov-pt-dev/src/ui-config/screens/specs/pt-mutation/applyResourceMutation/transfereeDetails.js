@@ -652,7 +652,7 @@ export const transfereeDetails = getCommonCard({
 
             // }
 
-            addOwner(state, dispatch);
+            addItemInMultiselect(state, dispatch);
 
           }
         },
@@ -710,21 +710,15 @@ export const transfereeDetails = getCommonCard({
 });
 
 
-const addOwner = (state, dispatch) => {
+export const addItemInMultiselect = (state, dispatch, dynamicInput = {}) => {
   const {
     screenKey = "apply",
-
     sourceJsonPath = "Property.ownersTemp",
     prefixSourceJsonPath = "children.cardContent.children.applicantCard.children",
     componentJsonpath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo",
-
-
-
-  } = {};
+  } = dynamicInput;
   const screenConfig = get(state, "screenConfiguration.screenConfig", {});
-
-
-  const scheama = get(screenConfig, "apply.components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.scheama", {});
+  const scheama = get(screenConfig, `${screenKey}.${componentJsonpath}.props.scheama`, {});
   const items = get(screenConfig, `${screenKey}.${componentJsonpath}.props.items`, []);
   const itemsLength = items.length;
 
