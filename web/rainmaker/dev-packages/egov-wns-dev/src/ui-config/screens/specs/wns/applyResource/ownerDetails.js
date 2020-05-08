@@ -7,7 +7,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "../viewBillResource/footer";
-import { handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 
 export const ownerDetailsHeader = getCommonContainer({
   header: getCommonHeader({
@@ -68,7 +68,7 @@ export const dateOfBirth = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.property.owners[0].dob",
-    callBack: handleNA
+    callBack: convertEpochToDateAndHandleNA
   }
 )
 export const Relationship = getLabelWithValue(
@@ -202,7 +202,7 @@ export const getOwnerDetails = (isEditable = true) => {
               },
               {
                 jsonPath: "applyScreen.property.owners[0].dob",
-                callBack: handleNA
+                callBack: convertEpochToDateAndHandleNA
               }
             ),
             email: getLabelWithValue(

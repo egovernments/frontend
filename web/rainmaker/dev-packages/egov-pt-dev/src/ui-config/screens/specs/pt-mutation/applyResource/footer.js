@@ -294,7 +294,11 @@ const validateMobileNumber = (state) => {
     })
   } else {
 
-    const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    let newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    if(newOwners&&newOwners.length&&newOwners.length>1){
+      newOwners=newOwners.filter(object=>{
+        return !(object.isDeleted===false)})
+        }
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
     const names = owners.map(owner => {
       return owner.name

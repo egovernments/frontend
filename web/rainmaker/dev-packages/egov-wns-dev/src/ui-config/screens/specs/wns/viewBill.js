@@ -1,15 +1,19 @@
-import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import get from "lodash/get";
 import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails } from "../../../../ui-utils/commons";
 import set from "lodash/set";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { createEstimateData } from "../utils";
-import { getFeesEstimateCard } from "../utils";
+import { 
+  createEstimateData,
+  getFeesEstimateCard,
+  showHideAdhocPopup
+ } from "../utils";
 import { getProperty } from "./viewBillResource/propertyDetails";
 import { getOwner } from "./viewBillResource/ownerDetails";
 import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
+import { adhocPopupViewBill } from "./applyResource/adhocPopupViewBill";
 
 let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId")
@@ -37,7 +41,7 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
         }
         if (groupBillDetails.length >= bills.billAccountDetails.length) {
           let arrayData = groupBillDetails.sort((a, b) => parseInt(a.order) - parseInt(b.order))
-          obj = { bill: arrayData, fromPeriod: bills.fromPeriod, toPeriod: bills.toPeriod }
+          obj = { bill: arrayData, fromPeriod: bills.fromPeriod, toPeriod: bills.toPeriod,demandId: bills.demandId }
           viewBillTooltip.push(obj)
         }
         if (viewBillTooltip.length >= data.Bill[0].billDetails.length) {
@@ -159,6 +163,23 @@ let headerrow = getCommonContainer({
 const estimate = getCommonGrayCard({
   header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }),
   estimateSection: getFeesEstimateCard({ sourceJsonPath: "viewBillToolipData" }),
+  addPenaltyRebateButton: {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: showHideAdhocPopup
+    },
+    visible: true
+  }
 });
 
 const propertyDetails = getProperty();
@@ -195,6 +216,19 @@ const screenConfig = {
         },
         viewBill,
         viewBillFooter
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "pay"
+      },
+      children: {
+        popup: adhocPopupViewBill
       }
     }
   }
