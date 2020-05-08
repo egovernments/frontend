@@ -7,7 +7,6 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
-import { convertEpochToDate } from "../../utils";
 import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 
 const getHeader = label => {
@@ -317,7 +316,6 @@ const ownerDetails = {
               },
               {
                 jsonPath: "WaterConnection[0].property.owners[0].dob",
-                callBack: convertEpochToDate,
                 callBack: convertEpochToDateAndHandleNA
               }
             ),
