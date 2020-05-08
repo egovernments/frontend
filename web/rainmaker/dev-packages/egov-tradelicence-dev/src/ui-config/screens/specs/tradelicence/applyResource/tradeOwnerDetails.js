@@ -7,7 +7,8 @@ import {
   getSelectField,
   getCommonContainer,
   getDateField,
-  getPattern
+  getPattern,
+  getCheckBoxwithLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -430,7 +431,8 @@ export const ownerInfoInstitutional = {
         pattern: getPattern("Address"),
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
       }),
-      relationType
+      relationType,
+      
     })
   }),
   visible: false
@@ -507,6 +509,7 @@ const OwnerInfoCard = {
           pattern: getPattern("Address"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
         }),
+
         // economicalStatus,
         // bplCard: getTextField({
         //   label: {
@@ -534,6 +537,16 @@ const OwnerInfoCard = {
           pattern: getPattern("PAN"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
         }),
+        ownerPAN1:{ 
+          ...getCheckBoxwithLabel({
+              labelName: "Address as select address Dropdowns",
+              labelKey: "TL_NEW_OWNER_DETAILS_ADDRESS"
+             
+        }),
+        
+      },
+
+        
         // OrganizationName: getTextField({
         //   label: {
         //     labelName: "Organization Name",
