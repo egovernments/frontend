@@ -6,7 +6,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -295,7 +295,9 @@ export const dateOfBirth = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_DOB_LABEL"
   },
-  { jsonPath: "applyScreen.property.owners[0].dob", callBack: handleNA }
+  { jsonPath: "applyScreen.property.owners[0].dob",
+    callBack: convertEpochToDateAndHandleNA
+  }
 )
 
 export const fatherName = getLabelWithValue(
