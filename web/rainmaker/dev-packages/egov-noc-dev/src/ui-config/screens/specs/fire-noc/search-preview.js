@@ -78,7 +78,7 @@ const titlebar = getCommonContainer({
       }
     }
   }
-}); 
+});
 
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
@@ -301,9 +301,8 @@ const setSearchResponse = async (
     { key: "applicationNumber", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", []))); 
+  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
- debugger;
 
   let checkdocs = get(
     state,
@@ -319,9 +318,9 @@ const setSearchResponse = async (
     ""
   );
 
-  console.log("appliacationStatus", appliacationStatus); 
+  console.log("appliacationStatus", appliacationStatus);
 
-  if(appliacationStatus==='INITIATED')  
+  if(appliacationStatus==='INITIATED')
   {
 
    /* set(
@@ -338,7 +337,7 @@ const setSearchResponse = async (
         true
       )
     )
-  }    
+  }
   else
   {
     dispatch(
@@ -381,13 +380,13 @@ const setSearchResponse = async (
   }
 
 
-    
+
  let value = get(
   state.screenConfiguration.preparedFinalObject,
   "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
 
     if( value === 'Rural')
-    {           
+    {
       dispatch(
         handleField(
           "search-preview",
@@ -395,10 +394,10 @@ const setSearchResponse = async (
           "visible",
           false
         )
-      );  
+      );
 
-    }       
-    else {   
+    }
+    else {
 
       dispatch(
         handleField(
@@ -407,25 +406,25 @@ const setSearchResponse = async (
           "visible",
           false
         )
-      );     
-  } 
+      );
+  }
 
-  
+
 
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
 
-  
+
   let utenantId = get(
     state.screenConfiguration.preparedFinalObject,
     "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
     ""
   );
 
-  
+
     await loadPdfGenerationData(applicationNumber, tenantId);
-   
-  
+
+
   setDownloadMenu(state, dispatch);
 };
 
@@ -442,7 +441,7 @@ const screenConfig = {
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
-    
+
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
     const queryObject = [
@@ -485,7 +484,7 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-    
+
 /*     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
@@ -493,11 +492,11 @@ const screenConfig = {
     );  */
 
 
- 
 
 
- 
-      
+
+
+
 
     return action;
   },
@@ -541,11 +540,11 @@ const screenConfig = {
           institutionSummary: institutionSummary,
           documentsSummary: documentsSummary
         }),
-       
+
       /*  citizenSubmitFooter:
        process.env.REACT_APP_NAME === "Citizen" ? citizenSubmitFooter : {},  */
-       citizenFooter: 
-       process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {},         
+       citizenFooter:
+       process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {},
       }
     }
   }
