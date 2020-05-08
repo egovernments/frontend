@@ -67,6 +67,23 @@ export const fetchData = async (
     )
   );
   try {
+    if(window.location.href.includes("bpastakeholder-citizen/home")) {
+      let myApplicationsCount = 0;
+      if(response && response.Licenses) {
+        myApplicationsCount += response.Licenses.length
+      }
+      if(bpaResponse && bpaResponse.Bpa) {
+        myApplicationsCount += bpaResponse.Bpa.length
+      }
+      dispatch(
+        handleField(
+          "my-applications",
+          "components.div.children.header.children.key",
+          "props.dynamicArray",
+          myApplicationsCount ? [myApplicationsCount] : [0]
+        )
+      );
+    } else {
       var searchConvertedArray = [];
       var sortConvertedArray = [];
       if (response && response.Licenses && response.Licenses.length > 0) {
@@ -207,7 +224,8 @@ export const fetchData = async (
       });
 
       dispatch(prepareFinalObject("searchResults", sortConvertedArray));
-      storeData(sortConvertedArray, dispatch, fromMyApplicationPage, fromStakeHolderPage);    
+      storeData(sortConvertedArray, dispatch, fromMyApplicationPage, fromStakeHolderPage); 
+    }   
     } catch (error) {
       console.log(error);
     }
