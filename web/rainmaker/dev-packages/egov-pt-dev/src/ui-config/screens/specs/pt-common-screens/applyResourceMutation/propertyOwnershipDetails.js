@@ -183,7 +183,7 @@ const institutionInformation = () => {
           required: true,
           pattern: getPattern("Address"),
           jsonPath: "Property.owners[0].correspondenceAddress"
-        }),
+        })/*,
         sameAsPropertyAddress: {
           uiFramework: "custom-containers-local",
           moduleName: "egov-pt",
@@ -198,7 +198,7 @@ const institutionInformation = () => {
           required:false,
           type: "array",
           jsonPath: "Property.sameAsPeropertyAddress"
-        },
+        },*/
       })
     })
 };
@@ -384,7 +384,7 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         }
-      }),
+      })/*,
       sameAsPropertyAddress: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-pt",
@@ -397,7 +397,7 @@ const commonApplicantInformation = () => {
           destinationJsonPath: "Property.owners[0].correspondenceAddress"
         },
         type: "array"
-      },
+      },*/
     })
   });
 };
