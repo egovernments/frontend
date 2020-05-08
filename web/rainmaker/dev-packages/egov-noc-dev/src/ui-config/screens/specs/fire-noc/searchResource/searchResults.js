@@ -42,6 +42,11 @@ export const textToLocalMapping = {
     "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
+  "Building Name": getLocaleLabels(
+    "Building Name",
+    "NOC_COMMON_TABLE_COL_BUILDINGNAME_LABEL",
+    getTransformedLocalStorgaeLabels()
+  ),
   "Application Date": getLocaleLabels(
     "Application Date",
     "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
@@ -116,6 +121,7 @@ export const searchResults = {
       getTextToLocalMapping("NOC No"),
       getTextToLocalMapping("NOC Type"),
       getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Building Name"),
       getTextToLocalMapping("Application Date"),
       {
         name: getTextToLocalMapping("Status"),
@@ -171,16 +177,16 @@ export const searchResults = {
 
 const onRowClick = rowData => {
   console.log(rowData,"rowdataforsearch")
-  switch (rowData[5]) {
+  switch (rowData[6]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
+        rowData[7]
       }`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[6]}`;
+      }&tenantId=${rowData[7]}`;
       break;
   }
 };

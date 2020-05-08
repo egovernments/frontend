@@ -88,7 +88,98 @@ const propertyDetails = {
               masterName: "BuildingSubType"
             },
           }
-        )
+        ),
+        buildingLandArea: getLabelWithValue(
+          {
+            labelName: "Land Area",
+            labelKey: "NOC_PROPERTY_DETAILS_LAND_AREA_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].landArea",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingLandArea"
+            // },
+          }
+        ),
+        buildingCoveredArea: getLabelWithValue(
+          {
+            labelName: "Total Covered Area",
+            labelKey: "NOC_PROPERTY_DETAILS_COVERED_AREA_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingCoveredArea"
+            // },
+          }
+        ),
+        buildingParkingArea: getLabelWithValue(
+          {
+            labelName: "Parking Area",
+            labelKey: "NOC_PROPERTY_DETAILS_PARKING_AREA_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
+        buildingleftSurrounding: getLabelWithValue(
+          {
+            labelName: "Left surrounding",
+            // labelKey: "NOC_PROPERTY_DETAILS_LEFT_SURROUNDING_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].leftSurrounding",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
+        buildingrightSurrounding: getLabelWithValue(
+          {
+            labelName: "Right surrounding",
+            // labelKey: "NOC_PROPERTY_DETAILS_RIGHT_SURROUNDING_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].rightSurrounding",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
+        buildingfrontSurrounding: getLabelWithValue(
+          {
+            labelName: "Front surrounding",
+            // labelKey: "NOC_PROPERTY_DETAILS_FRONT_SURROUNDING_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].frontSurrounding",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
+        buildingbackSurrounding: getLabelWithValue(
+          {
+            labelName: "Back surrounding",
+            // labelKey: "NOC_PROPERTY_DETAILS_BACK_SURROUNDING_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].backSurrounding",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
       })
     }),
     items: [],

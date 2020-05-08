@@ -112,6 +112,24 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "FireNOCs",
       []
     );
+    let landArea = parseInt(get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.buildings[0].landArea",
+      []
+    ));
+
+    let totalCoveredArea = parseInt(get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea",
+      []
+    ));
+
+    let parkingArea = parseInt(get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+      []
+    ));
+
 
     
     let areaType = get(
@@ -119,8 +137,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
       []
     );
-
-   debugger;
 
        let tenantId = get(
         state.screenConfiguration.preparedFinalObject,
@@ -140,6 +156,24 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
+
+    set(
+      payload[0],
+      `fireNOCDetails.buildings[0].landArea`,
+      landArea
+    );
+
+    set(
+      payload[0],
+      `fireNOCDetails.buildings[0].totalCoveredArea`,
+      totalCoveredArea
+    );
+
+    set(
+      payload[0],
+      `fireNOCDetails.buildings[0].parkingArea`,
+      parkingArea
+    );
 
     let village = get(
       state.screenConfiguration.preparedFinalObject,

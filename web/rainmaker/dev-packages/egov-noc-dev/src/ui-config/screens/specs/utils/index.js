@@ -878,6 +878,13 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
+    case "Building Name":
+      return getLocaleLabels(
+        "Building Name",
+        "NOC_COMMON_TABLE_COL_BUILDINGNAME_LABEL",
+        localisationLabels
+      );
+
     case "Application Date":
       return getLocaleLabels(
         "Application Date",

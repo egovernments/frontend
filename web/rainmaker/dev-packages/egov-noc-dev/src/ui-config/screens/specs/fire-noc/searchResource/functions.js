@@ -121,6 +121,14 @@ export const searchApiCall = async (state, dispatch) => {
           item.fireNOCDetails.fireNOCType || "-",
           [getTextToLocalMapping("Owner Name")]:
           get(item, "fireNOCDetails.applicantDetails.owners[0].name") || "-",
+
+      
+        [getTextToLocalMapping("Building Name")]:item.fireNOCDetails.buildings.map(function(myIndex) {
+
+          return myIndex.name;
+   
+          })|| "-",
+
         [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
           "-",
