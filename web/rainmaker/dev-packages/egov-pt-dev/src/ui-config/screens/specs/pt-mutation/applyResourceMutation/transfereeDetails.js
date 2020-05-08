@@ -269,8 +269,9 @@ const commonApplicantInformation = () => {
             }
             showComponent(dispatch, categoryDocumentJsonPath, true);
             showComponent(dispatch, specialCategoryDocumentTypeJsonPath, true);
-
-            dispatch(handleField("apply", categoryDocumentThirdStepJsonPath, "display", "block"));
+            
+            dispatch(handleField("apply",  specialCategoryDocumentTypeJsonPath, "props.disabled", true));
+            dispatch(handleField("apply", categoryDocumentTypeThirdStepJsonPath, "display", "block"));
             dispatch(handleField("apply", categoryDocumentTypeThirdStepJsonPath, "display", "block"));
 
           }
