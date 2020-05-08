@@ -599,10 +599,10 @@ export const downloadPrintContainer = (
       printMenu = [applicationPrintObject];
       break;
     case "PENDING_APPROVAL_FOR_CONNECTION":
+    case "PENDING_FOR_PAYMENT":
       downloadMenu = [applicationDownloadObject, wsEstimateDownloadObject];
       printMenu = [applicationPrintObject, wsEstimatePrintObject];
       break;
-    case "PENDING_FOR_PAYMENT":
     case "PENDING_FOR_CONNECTION_ACTIVATION":
     case "CONNECTION_ACTIVATED":
       downloadMenu = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];

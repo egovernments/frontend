@@ -8,9 +8,10 @@ import {
   getTextField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
+import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import "./index.css";
 
@@ -181,8 +182,8 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Address"),
-          jsonPath: "Property.owners[0].permanentAddress"
-        }),
+          jsonPath: "Property.owners[0].correspondenceAddress"
+        })/*,
         sameAsPropertyAddress: {
           uiFramework: "custom-containers-local",
           moduleName: "egov-pt",
@@ -192,12 +193,12 @@ const institutionInformation = () => {
             labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
             jsonPath: "sameAsPeropertyAddress",
             required: false,
-            destinationJsonPath: "Property.owners[0].permanentAddress"
+            destinationJsonPath: "Property.owners[0].correspondenceAddress"
           },
           required:false,
           type: "array",
           jsonPath: "Property.sameAsPeropertyAddress"
-        },
+        },*/
       })
     })
 };
@@ -352,7 +353,7 @@ const commonApplicantInformation = () => {
         pattern: getPattern("Address"),
         required: true,
         errorMessage: "Invalid Address",
-        jsonPath: "Property.owners[0].permanentAddress",
+        jsonPath: "Property.owners[0].correspondenceAddress",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -383,7 +384,7 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         }
-      }),
+      })/*,
       sameAsPropertyAddress: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-pt",
@@ -393,10 +394,10 @@ const commonApplicantInformation = () => {
           labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
           jsonPath: "sameAsPeropertyAddress",
           required: false,
-          destinationJsonPath: "Property.owners[0].permanentAddress"
+          destinationJsonPath: "Property.owners[0].correspondenceAddress"
         },
         type: "array"
-      },
+      },*/
     })
   });
 };
@@ -615,6 +616,8 @@ export const propertyOwnershipDetails = getCommonCard({
                 `screenConfiguration.screenConfig.register-property.${institutionTypeContainerJsonPath}.props.style`
               )
             );
+
+            addItemInMultiselect(state, dispatch);
           }
         },
       },
@@ -670,3 +673,60 @@ export const propertyOwnershipDetails = getCommonCard({
     }
   })
 });
+
+
+
+export const addItemInMultiselect = (state, dispatch, dynamicInput = {}) => {
+  const {
+    screenKey = "register-property",
+    sourceJsonPath = "Property.owners",
+    prefixSourceJsonPath = "children.cardContent.children.applicantCard.children",
+    componentJsonpath = "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo",
+  } = dynamicInput;
+  const screenConfig = get(state, "screenConfiguration.screenConfig", {});
+  const scheama = get(screenConfig, `${screenKey}.${componentJsonpath}.props.scheama`, {});
+  const items = get(screenConfig, `${screenKey}.${componentJsonpath}.props.items`, []);
+  const itemsLength = items.length;
+
+  if (sourceJsonPath) {
+    let multiItemContent = get(scheama, prefixSourceJsonPath, {});
+    for (var variable in multiItemContent) {
+      if (
+        multiItemContent.hasOwnProperty(variable) &&
+        multiItemContent[variable].props &&
+        multiItemContent[variable].props.jsonPath
+      ) {
+        let prefixJP = multiItemContent[variable].props.jsonPathUpdatePrefix
+          ? multiItemContent[variable].props.jsonPathUpdatePrefix
+          : sourceJsonPath;
+        let splitedJsonPath = multiItemContent[variable].props.jsonPath.split(
+          prefixJP
+        );
+        if (splitedJsonPath.length > 1) {
+          let propertyName = splitedJsonPath[1].split("]");
+          if (propertyName.length > 1) {
+            multiItemContent[
+              variable
+            ].jsonPath = `${prefixJP}[${itemsLength}]${propertyName[1]}`;
+            multiItemContent[
+              variable
+            ].props.jsonPath = `${prefixJP}[${itemsLength}]${
+              propertyName[1]
+              }`;
+            multiItemContent[variable].index = itemsLength;
+          }
+        }
+      }
+    }
+
+    set(scheama, prefixSourceJsonPath, multiItemContent);
+  }
+  items[itemsLength] = cloneDeep(
+    addComponentJsonpath(
+      { [`item${itemsLength}`]: scheama },
+      `${componentJsonpath}.props.items[${itemsLength}]`
+    )
+  );
+  dispatch(handleField(screenKey, componentJsonpath, `props.items`, items));
+
+}
