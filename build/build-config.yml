@@ -28,7 +28,6 @@ config:
       image-name: employee-mcs
 
 -   name: builds/frontend/ui-uploader
-
     build:
     - work-dir: web/ui-uploader/
       image-name: ui-uploader

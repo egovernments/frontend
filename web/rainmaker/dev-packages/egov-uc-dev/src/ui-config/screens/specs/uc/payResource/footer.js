@@ -1,9 +1,8 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { ifUserRoleExists } from "../../utils";
+import { ifUserRoleExists,convertDateToEpoch ,validateFields} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getSelectedTabIndex } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertDateToEpoch, validateFields } from "../../utils";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   toggleSnackbar,
@@ -60,7 +59,115 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) => {
         goBack(state, dispatch);
       }
-    }
+    },
+    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+  },
+  posButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        width: "379px",
+        height: "48px ",
+        right: "19px ",
+        position: "relative",
+        borderRadius: "0px "
+      }
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "POS COLLECT",
+        labelKey: "UC_BUTTON_POS_COLLECT"
+      }),
+      nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        dispatch(toggleSpinner());
+        window.posOnSuccess=(posResponse={})=>{
+          dispatch(toggleSpinner());
+          callBackForPay(state,dispatch)
+        }
+
+        window.posOnFailure=(posResponse={})=>
+        {
+          dispatch(toggleSpinner());
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Payment failure",
+                labelKey: "ERR_FILL_POS_PAYMENT_FAILURE"
+              },
+              "danger"
+            )
+          );
+        }
+        const paymentData={
+          instrumentType:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentType.name"
+          ),
+          paymentAmount:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.amount"
+          ),
+          customerName:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].paidBy"
+          ),
+          customerMobile:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].payerMobileNumber"
+          ),
+          message:"Pos payment",
+          emailId:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].payerEmail"
+          ),
+          amountDetails:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails"
+          ),
+          billNumber:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails[0].billNumber"
+          ),
+          consumerCode:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails[0].consumerCode"
+          ),
+          businessService:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails[0].businessService"
+          ),
+          collectorName:"",
+          collectorId:"",
+          instrumentDate:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentDate"
+          ),
+          instrumentNumber:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentNumber"
+          )
+        }
+        try {
+          window.mSewaApp && window.mSewaApp.sendPaymentData("paymentData",JSON.stringify(paymentData));
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    },
+    visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   nextButton: {
     componentPath: "Button",
@@ -91,12 +198,14 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) => {
         callBackForPay(state, dispatch);
       }
-    }
+    },
+    visible: process.env.REACT_APP_NAME === "Citizen" || JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   }
 });
 
 const callBackForPay = async (state, dispatch) => {
-  const { href } = window.location;
+  // const { href } = window.location;
+  dispatch(toggleSpinner());
   let isFormValid = true;
 
   // --- Validation related -----//
@@ -253,7 +362,6 @@ const callBackForPay = async (state, dispatch) => {
   //---------------- Create Receipt ------------------//
   if (isFormValid) {
     try {
-      dispatch(toggleSpinner());
       let response = await httpRequest(
         "post",
         "collection-services/receipts/_create",
@@ -277,11 +385,11 @@ const callBackForPay = async (state, dispatch) => {
       dispatch(prepareFinalObject("receiptSearchResponse", response));
       dispatch(prepareFinalObject("Demands[0].hasReceipt", true));
       // moveToSuccess(href, dispatch, receiptNumber);
-      dispatch(
-        setRoute(
-          `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
-        )
-      );
+      const path =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `/egov-ui-framework/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
+          : `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`;
+      dispatch(setRoute(`${path}`));
       dispatch(toggleSpinner());
     } catch (e) {
       dispatch(toggleSpinner());
@@ -289,6 +397,7 @@ const callBackForPay = async (state, dispatch) => {
       console.log(e);
     }
   } else {
+    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
@@ -327,9 +436,13 @@ const goBack = (state, dispatch) => {
   );
   const demandId = demand.id || null;
   if (demandId) {
-    const serviceType = get(demand, "serviceType");
-    const serviceCategory = get(demand, "businessService");
+    // const serviceType = get(demand, "serviceType");
+    // const serviceCategory = get(demand, "businessService");
     // const businessService = get(demand[0], "businessService")
   }
-  dispatch(setRoute(`/uc/newCollection`));
+  const path =
+    process.env.REACT_APP_SELF_RUNNING === "true"
+      ? `/egov-ui-framework/uc/newCollection`
+      : `/uc/newCollection`;
+  dispatch(setRoute(`${path}`));
 };

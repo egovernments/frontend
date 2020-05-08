@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { FeesEstimateCard } from "../../ui-molecules-local";
 import { connect } from "react-redux";
-import get from "lodash/get";
+// import get from "lodash/get";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 class EstimateCardContainer extends Component {

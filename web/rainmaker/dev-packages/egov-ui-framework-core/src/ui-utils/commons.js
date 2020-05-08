@@ -7,11 +7,12 @@ import {
   localStorageGet,
   getLocalization,
   getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
+} from "./localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import commonConfig from "config/common.js";
+import store from "../ui-redux/store"
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -33,6 +34,7 @@ export const addComponentJsonpath = (components, jsonPath = "components") => {
   }
   return components;
 };
+
 
 export const getQueryArg = (url, name) => {
   if (!url) url = window.location.href;
@@ -514,6 +516,48 @@ export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
     });
   }
 }
+
+export const getSearchResults = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "collection-services/receipts/_search",
+      "",
+      queryObject
+    );
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
+export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
+  if (labelKey) {
+    let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
+    if (!translatedLabel || labelKey === translatedLabel) {
+      return label;
+    } else {
+      return translatedLabel;
+    }
+  } else {
+    return label;
+  }
+};
+
+export const transformLocalizationLabels = (localizationLabels) => {
+  let labelsById = transformById(localizationLabels, "code");
+  return labelsById;
+};
+
+
 
 if (window)
 {

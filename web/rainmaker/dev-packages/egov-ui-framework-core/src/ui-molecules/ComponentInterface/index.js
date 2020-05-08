@@ -7,12 +7,22 @@ import remoteComponents from "ui-config/commonConfig/remote-component-paths";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet } from "../../ui-utils/localStorageUtils";
 class ComponentInterface extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { module: null };
+    this.state = { module: null,error: null, errorInfo: null };
   }
+
+  componentDidCatch(error, errorInfo) {
+    // Catch errors in any components below and re-render with error message
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    })
+    // You can also log error messages to an error reporting service here
+  }
+
   componentDidMount() {
     const { componentPath, uiFramework, moduleName } = this.props;
     let LoadableComponent = null;
@@ -110,25 +120,16 @@ class ComponentInterface extends React.Component {
       roleDefination = {},
       applicationStatus
     } = this.props;
-    //console.log("props applicationStatus is....", applicationStatus);
 
-    // if (visible && !isEmpty(roleDefination)) {
-    //   const splitList = get(roleDefination, "rolePath").split(".");
-    //   const localdata = JSON.parse(localStorageGet(splitList[0]));
-    //   const localRoles = get(
-    //     localdata,
-    //     splitList.slice(1).join("."),
-    //     localdata
-    //   );
+    if (this.state.errorInfo) {
+      // Error path
+      console.error("Egov-ui-framework-error",this.state.error && this.state.error.toString());
+      console.error("Egov-ui-framework-errorInfo",this.state.errorInfo.componentStack);
+      console.error("Egov-ui-framework-component-details",this.props);
 
-    //   const roleCodes = localRoles.map(elem => {
-    //     return get(elem, "code");
-    //   });
-    //   const roles = get(roleDefination, "roles");
-    //   let found = roles.some(elem => roleCodes.includes(elem));
-    //   visible = found;
-    // }
 
+      return null;
+    }
     if (visible && !isEmpty(roleDefination)) {
       const splitList = get(roleDefination, "rolePath").split(".");
       const localdata = JSON.parse(localStorageGet(splitList[0]));
