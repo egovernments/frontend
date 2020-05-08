@@ -1,35 +1,15 @@
-import {
-  getCommonCard,
-  getCommonContainer,
-  getCommonHeader,
-  getLabelWithValue
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrlFromAPI,
-  getQueryArg,
-  getTransformedLocale,
-  setBusinessServiceDataToLocalStorage,
-  getFileUrl
-} from "egov-ui-framework/ui-utils/commons";
-import { checkValueForNA } from "../utils/index";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { searchBill, generateBill ,createBill} from "../utils/index";
+import { checkValueForNA, generateBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
-import {
-  applicantSummary,
-  institutionSummary
-} from "./summaryResource/applicantSummary";
+import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
@@ -163,7 +143,7 @@ const prepareUoms = (state, dispatch) => {
         {
           jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${
             item.code
-          }`,
+            }`,
           callBack: checkValueForNA,
         }
       );
@@ -333,13 +313,13 @@ const setSearchResponse = async (
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
-  beforeInitScreen:  (action, state, dispatch) => {
+  beforeInitScreen: (action, state, dispatch) => {
     let applicationNumber =
-    getQueryArg(window.location.href, "applicationNumber") ||
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.applicationNumber"
-    );
+      getQueryArg(window.location.href, "applicationNumber") ||
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.applicationNumber"
+      );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     generateBill(dispatch, applicationNumber, tenantId);
     // const queryObject1 = [
@@ -347,29 +327,28 @@ const screenConfig = {
     //   { key: "consumerCode", value: applicationNumber },
     //   { key: "services", value: "FIRENOC" }
     // ];
- 
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    // searchBill(dispatch, applicationNumber, tenantId);
-  //  createBill(queryObject1,dispatch)
-  //  .then(payload=>{
-  //   console.log("2323232>>>....billData",payload);
-  //   let billData = get(payload, "Bill[0]") ;
-  //   console.log("2323232>>>....billData",billData);
-  //   if (billData) {
-  //     const estimateData = 
-  //     (billData);
-  //     estimateData &&
-  //       estimateData.length &&
-  //       dispatch(
-  //         prepareFinalObject(
-  //           "applyScreenMdmsData.estimateCardData",
-  //           estimateData
-  //         )
-  //       );
-  //       console.log("asdsasd",estimateData);
-  //   }
 
-  // })
+    // searchBill(dispatch, applicationNumber, tenantId);
+    //  createBill(queryObject1,dispatch)
+    //  .then(payload=>{
+    //   console.log("2323232>>>....billData",payload);
+    //   let billData = get(payload, "Bill[0]") ;
+    //   console.log("2323232>>>....billData",billData);
+    //   if (billData) {
+    //     const estimateData = 
+    //     (billData);
+    //     estimateData &&
+    //       estimateData.length &&
+    //       dispatch(
+    //         prepareFinalObject(
+    //           "applyScreenMdmsData.estimateCardData",
+    //           estimateData
+    //         )
+    //       );
+    //       console.log("asdsasd",estimateData);
+    //   }
+
+    // })
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 

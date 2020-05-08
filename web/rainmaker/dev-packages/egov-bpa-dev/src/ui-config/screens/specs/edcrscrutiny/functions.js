@@ -13,7 +13,6 @@ import set from "lodash/set";
 import { validateFields, getLicenseDetails } from "../utils";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
 import { convertDateToEpoch } from "../utils";
 
@@ -27,20 +26,6 @@ export const fetchData = async (
 ) => {
   dispatch(prepareFinalObject("searchResults", []));
   dispatch(prepareFinalObject("myApplicationsCount", 0));
-
-  const mdmsRes = await getMdmsDataForOc(dispatch);
-  let tenants =
-    mdmsRes &&
-    mdmsRes.MdmsRes &&
-    mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-      if (item.code === "BPAAPPLY") return true;
-    });
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.common-masters.citiesByModule.TL",
-      tenants
-    )
-  );
 
   const response = await getSearchResultsfromEDCR(action, state, dispatch);
   try {
@@ -169,8 +154,7 @@ const scrutinizePlan = async (state, dispatch) => {
 
     let userInfo = { id: userUUid, tenantId: userTenant }, edcrNumber = "";
 
-    if (isOCApp) { 
-      tenantId = getQueryArg(window.location.href, "tenantId");
+    if (isOCApp) {
       userInfo = { id: userUUid, tenantId: tenantId },
       edcrNumber =  get(state.screenConfiguration.preparedFinalObject, "bpaDetails.edcrNumber");
      }
@@ -200,7 +184,7 @@ const scrutinizePlan = async (state, dispatch) => {
     const applicantName = get(preparedFinalObject, "Scrutiny[0].applicantName");
     const file = get(preparedFinalObject, "Scrutiny[0].buildingPlan[0]");
     const permitNumber = get(preparedFinalObject, "Scrutiny[0].permitNumber");
-    const permitDate = get(preparedFinalObject, "Scrutiny[0].permitDate");
+    const permitDate = get(preparedFinalObject, "bpaDetails.applicationDate");
 
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
@@ -361,6 +345,10 @@ export const fetchMDMSData = async (action, state, dispatch) => {
 export const fetchMDMSOCData = async (action, state, dispatch) => {
   const mdmsRes = await getMdmsDataForOc(dispatch);
   if(mdmsRes && mdmsRes.MdmsRes) {
+    let tenants = mdmsRes.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "BPAAPPLY") return true;
+    });
+    mdmsRes.MdmsRes.tenantData = tenants.tenants;
     dispatch(prepareFinalObject("applyScreenMdmsData", mdmsRes.MdmsRes));
   }
 };
@@ -395,8 +383,77 @@ export const getMdmsDataForOc = async () => {
   }
 };
 
+const visibleHiddenSearchFields = async (state, dispatch, isTrue) => {
+  if(isTrue) {
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.buttonContainer",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.ocScrutinyDetailsContainer",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.dummyDiv2",
+        "visible",
+        true
+      )
+    );
+  } else {
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.buttonContainer",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.ocScrutinyDetailsContainer",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.dummyDiv2",
+        "visible",
+        false
+      )
+    );
+  }
+}
+
 export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
-  let tenantId = getQueryArg(window.location.href, "tenantId");
   let permitNum = get(
     state.screenConfiguration.preparedFinalObject,
     `Scrutiny[0].permitNumber`,
@@ -407,9 +464,14 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     `Scrutiny[0].permitDate`,
     ""
   );
-  if(!permitDate || !permitNum) {
+  let tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Scrutiny[0].tenantId`,
+    ""
+  );
+  if(!permitDate || !permitNum || !tenantId) {
     let errorMessage = {
-      labelName: "Please fill all date and permit number and click on search",
+      labelName: "Please fill all date, permit number and city then click on search",
       labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -424,6 +486,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
   const response = await getBpaSearchResults(queryObject);
 
   if (get(response, "Bpa[0].edcrNumber") == undefined) {
+    visibleHiddenSearchFields(state, dispatch, false);
     dispatch(
       toggleSnackbar(
         true,
@@ -443,11 +506,28 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     "search", []
   );
 
+  let SHLicenseDetails = await getLicenseDetails(state,dispatch);
+  
+  if(get(edcrRes,"edcrDetail[0]") && SHLicenseDetails) {
+    visibleHiddenSearchFields(state, dispatch, true);
+  } else {
+    visibleHiddenSearchFields(state, dispatch, false);
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "No Records Found",
+          labelKey: "BPA_NO_REC_FOUND_LABEL"
+        },
+        "error"
+      )
+    );
+    return;
+  }
   let primaryOwnerArray = response.Bpa[0].owners.filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
   dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
   dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
-  let SHLicenseDetails = await getLicenseDetails(state,dispatch);
   dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
 };
 

@@ -12,6 +12,7 @@ import { logout } from "egov-ui-kit/redux/auth/actions";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import SortDialog from "../common/common/Header/components/SortDialog";
 import { setModule, getTenantId, getLocale } from "../utils/localStorageUtils";
+import "./index.css";
 
 const withAuthorization = (options = {}) => (Component) => {
   class Wrapper extends React.Component {
@@ -26,6 +27,7 @@ const withAuthorization = (options = {}) => (Component) => {
       titleObject: [],
       sortPopOpen: false,
       menuDrawerOpen: true,
+      localeFetched: false
     };
     style = {
       iconStyle: {
@@ -43,10 +45,18 @@ const withAuthorization = (options = {}) => (Component) => {
       }
     }
 
-    componentDidMount() {
-      setModule(getModuleName());
-      const tenantId = getTenantId();
-      this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+    fetchLocale = () => {
+      const { localeFetched } = this.state;
+      if (!localeFetched) {
+        setModule(getModuleName());
+        const tenantId = getTenantId();
+        this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+        this.setState({localeFetched:true});
+      }
+    }
+
+    componentWillReceiveProps() {
+      this.fetchLocale();
     }
 
     roleFromUserInfo = (userInfo, role) => {

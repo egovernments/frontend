@@ -886,7 +886,7 @@ export const applyForWater = async (state, dispatch) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
     try {
-        const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
         if (method === "UPDATE") {
             queryObject.additionalDetails.appCreatedDate = get(
@@ -923,7 +923,7 @@ export const applyForSewerage = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
     try {
-        const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
         let response;
         set(queryObject, "tenantId", tenantId);
         if (method === "UPDATE") {
@@ -962,7 +962,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) { method = "UPDATE" } else { method = "CREATE" };
     try {
-        const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
         set(queryObject, "tenantId", tenantId);
         if (method === "UPDATE") {
@@ -1536,7 +1536,7 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
     try {
         httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
             const queryStr = [
-                { key: "key", value: "consolidatedbill" },
+                { key: "key", value: "ws-bill" },
                 { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
             ]
             let data = [];

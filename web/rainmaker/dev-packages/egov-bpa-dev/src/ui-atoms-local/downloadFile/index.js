@@ -50,31 +50,13 @@ class downloadFile extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-  let { jsonPath, value, linkDetail } = ownprops;
+  let { jsonPath, value } = ownprops;
   const { screenConfiguration, app } = state;
   const { localizationLabels } = app;
   const { preparedFinalObject } = screenConfiguration;
   let fieldValue =
     value === undefined ? get(preparedFinalObject, jsonPath) : value;
-    if(jsonPath == "ocScrutinyDetails.permitNumber") {
-      let tenantId = getQueryArg(window.location.href, "tenantId");
-      let permitNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo", "");
-      let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
-      let url = `${window.location.origin}/egov-bpa/search-preview?applicationNumber=${permitNumber}&tenantId=${tenantId}`;
-      if(process.env.NODE_ENV === "production") {
-        if(checkingApp){
-          url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${permitNumber}&tenantId=${tenantId}`;
-        }
-      }
-      if(permitNumber) {
-        fieldValue = url;
-        linkDetail = {
-          labelName: permitNumber,
-          labelKey: permitNumber
-        }
-      }
-    }
-  return { value: fieldValue, localizationLabels, linkDetail };
+  return { value: fieldValue, localizationLabels };
 };
 
 export default withStyles(styles)(connect(mapStateToProps)(downloadFile));

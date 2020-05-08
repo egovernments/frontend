@@ -2355,7 +2355,7 @@ export const getTextToLocalMapping = label => {
     case "Application No":
       return getLocaleLabels(
         "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
+        "BPA_COMMON_TABLE_COL_APP_NO",
         localisationLabels
       );
 
@@ -2862,17 +2862,19 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 };
 
 const riskType = (state, dispatch) => {
+  let path = window.location.href.includes("oc-bpa")
+  let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+    `${scrutinytype}.planDetail.virtualBuilding.occupancyTypes[0].type.name`
   );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.plot.area"
+    `${scrutinytype}.planDetail.plot.area`
   );
   let buildingBlocks = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.blocks"
+    `${scrutinytype}.planDetail.blocks`
   );
   let blocks = buildingBlocks.map(item => {
     return item && item.building && item.building.buildingHeight;
@@ -2884,7 +2886,7 @@ const riskType = (state, dispatch) => {
   );
   let block = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
+    `${scrutinytype}.planDetail.blocks[0].building.occupancies[0].typeHelper.type`, []
   );
   // dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
@@ -3387,28 +3389,28 @@ export const getBpaTextToLocalMapping = label => {
     case "Application No":
       return getLocaleLabels(
         "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
+        "BPA_COMMON_TABLE_COL_APP_NO",
         localisationLabels
       );
 
     case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
-        "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+        "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL",
         localisationLabels
       );
 
     case "Application Date":
       return getLocaleLabels(
         "Application Date",
-        "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+        "BPA_COMMON_TABLE_COL_APP_DATE_LABEL",
         localisationLabels
       );
 
     case "Status":
       return getLocaleLabels(
         "Status",
-        "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+        "BPA_COMMON_TABLE_COL_STATUS_LABEL",
         localisationLabels
       );
 
@@ -3549,7 +3551,43 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_CITIZEN_ACTION_PENDING_AT_NOC_VERIF",
         localisationLabels
     );
-    }
+    case "BPA_COL_APP_STATUS" :
+      return getLocaleLabels(
+        "Application Status",
+        "BPA_COL_APP_STATUS",
+        localisationLabels
+      );
+    case "BPA_COL_MODULE_SERVICE" : 
+      return getLocaleLabels(
+        "Module/Service",
+        "BPA_COL_MODULE_SERVICE",
+        localisationLabels
+      );
+    case "BPA_COMMON_SLA" : 
+      return getLocaleLabels(
+        "SLA(Days Remaining)",
+        "BPA_COMMON_SLA",
+        localisationLabels
+      );
+    case "BPA_COL_ASSIGNEDTO" : 
+      return getLocaleLabels(
+        "Assigned To",
+        "BPA_COL_ASSIGNEDTO",
+        localisationLabels
+      );
+    case "BPAREG_SERVICE" :
+      return getLocaleLabels(
+        "Stake Holder",
+        "BPAREG_SERVICE",
+        localisationLabels
+      );
+    case "BPA_APPLY_SERVICE" :
+      return getLocaleLabels(
+        "BPA Apply",
+        "BPA_APPLY_SERVICE",
+        localisationLabels
+      );
+  }
 };
 
 export const showApplyCityPicker = (state, dispatch) => {
@@ -4987,6 +5025,40 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
 };
 
+const permitNumberLink = async (state, disatch) => {
+
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let appNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo", "");
+  let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+  let url = `${window.location.origin}/egov-bpa/search-preview?applicationNumber=${appNumber}&tenantId=${tenantId}`;
+  let  linkDetail = {
+    labelName: "",
+    labelKey: ""
+  }
+  if(process.env.NODE_ENV === "production") {
+    if(checkingApp){
+      url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${appNumber}&tenantId=${tenantId}`;
+    }
+  }
+  if(appNumber) {
+    linkDetail = {
+      labelName: appNumber,
+      labelKey: appNumber
+    }
+    disatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    disatch(prepareFinalObject("ocScrutinyDetails.permitNumber", url));
+  } else {
+    disatch(prepareFinalObject("ocScrutinyDetails.permitNumber", ""));
+  }
+}
+
 export const getOcEdcrDetails = async (state, dispatch, action) => {
   try {
     const scrutinyNo = get(
@@ -5122,6 +5194,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
     riskType(state, dispatch);
     ocuupancyType(state, dispatch);
+    await permitNumberLink(state, dispatch, action)
   } catch (e) {
     dispatch(
       toggleSnackbar(

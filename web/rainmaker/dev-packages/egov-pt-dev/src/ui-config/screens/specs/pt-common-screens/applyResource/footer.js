@@ -1,7 +1,6 @@
 import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import { getCommonApplyFooter } from "../../utils";
@@ -9,161 +8,307 @@ import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import store from "ui-redux/store";
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import set from 'lodash/set';
+import { toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
+import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+
+let redirectUrl = getQueryArg(window.location.href, "redirectUrl");
+let screenKey = "register-property"
+
+
+let validateFields = (
+  objectJsonPath,
+  state,
+  dispatch,
+  screen = "apply"
+) => {
+  const fields = get(
+    state.screenConfiguration.screenConfig[screen],
+    objectJsonPath,
+    {}
+  );
+  let isFormValid = true;
+  for (var variable in fields) {
+    if (fields.hasOwnProperty(variable)) {
+      if (
+        fields[variable] &&
+        fields[variable].props &&
+        (fields[variable].props.disabled === undefined ||
+          !fields[variable].props.disabled) &&
+        !validate(
+          screen,
+          {
+            ...fields[variable],
+            value: get(
+              state.screenConfiguration.preparedFinalObject,
+              fields[variable].jsonPath
+            )
+          },
+          dispatch,
+          true
+        )
+      ) {
+      	// Needs to remove and find better solutions
+      	if(isFormValid && variable == 'sameAsPropertyAddress'){
+      		isFormValid = true
+      	}else{      	
+        	isFormValid = false;
+        }
+      }
+    }
+  }
+  return isFormValid;
+};
+
 
 const callBackForApply = async (state, dispatch) => {
 
-  let tenantId = getQueryArg(window.location.href, "tenantId");
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
-    state, "screenConfiguration.preparedFinalObject.Property");
+    state,
+    "screenConfiguration.preparedFinalObject.Property"
+  );
 
-  if (process.env.REACT_APP_NAME === "Citizen" && propertyPayload && !propertyPayload.declaration) {
-    const errorMessage = {
-      labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_CITIZEN_DECLARATION_TOAST"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    return;
-  }
+  let isAssemblyDetailsValid = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children",
+    state,
+    dispatch,
+    screenKey
+  );
 
+  let isAssemblyDetailsPropType = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.propertyType",
+    state,
+    dispatch,
+    screenKey
+  );
+  let isAssemblyDetailsConstructedArea = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.totalConstructedArea",
+    state,
+    dispatch,
+    screenKey
+  );
+  let isAssemblyDetailsusageType = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.usageType",
+    state,
+    dispatch,
+    screenKey
+  );
+  let isAssemblyDetailstotalLandArea = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.totalLandArea",
+    state,
+    dispatch,
+    screenKey
+  );
 
-  let documentsUploadRedux = get(
-    state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
-  propertyPayload.workflow = {
-    "businessService": "PT.MUTATION",
-    tenantId,
-    "action": "OPEN",
-    "moduleName": "PT"
-  },
-    propertyPayload.owners.map(owner => {
-      owner.status = "INACTIVE";
+  let isPropertyLocationDetailsValid = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children",
+    state,
+    dispatch,
+    screenKey
+  );
+  
 
-    })
-
-  propertyPayload.ownersTemp.map(owner => {
-    if (owner.documentUid && owner.documentType) {
-      owner.documents = [{}]
-      owner.documents[0].fileStoreId = owner.documentUid;
-      owner.documents[0].documentType = owner.documentType;
-      owner.documents[0].documentUid = owner.documentUid;
-    }
-  })
-  propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
-    propertyPayload.additionalDetails.documentDate);
-
-  if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
-    propertyPayload.ownersTemp.map(owner => {
-      owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
-    })
-    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
-    delete propertyPayload.ownersTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
-    propertyPayload.ownersTemp.map(owner => {
-      owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
-    })
-    propertyPayload.institution = null;
-    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
-    delete propertyPayload.ownersTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
-    propertyPayload.owners[0].altContactNumber = propertyPayload.institutionTemp.landlineNumber;
-    propertyPayload.institution = {};
-    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
-    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
-    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
-    propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
-
-    propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
-    propertyPayload.institutionTemp.ownerType = "NONE";
-    propertyPayload.institutionTemp.status = "ACTIVE";
-    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
-    propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
-    delete propertyPayload.institutionTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
-    propertyPayload.institution = {};
-    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
-    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
-    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
-    propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
-
-    propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
-    propertyPayload.institutionTemp.ownerType = "NONE";
-    propertyPayload.institutionTemp.status = "ACTIVE";
-    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
-    propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
-    delete propertyPayload.institutionTemp;
-  }
-  propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
-  delete propertyPayload.ownershipCategoryTemp;
-  let newDocuments = Object.values(documentsUploadRedux).map(document => {
-    let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
-    return {
-      documentType: documentValue,
-      fileStoreId: document.documents[0].fileStoreId,
-      documentUid: document.documents[0].fileStoreId,
-      auditDetails: null,
-      status: "ACTIVE"
-    }
-  })
-  let oldDocuments = [];
-  oldDocuments = propertyPayload.documents && Array.isArray(propertyPayload.documents) && propertyPayload.documents.filter(document => {
-    return (document.documentType.includes('USAGEPROOF') || document.documentType.includes('OCCUPANCYPROOF') || document.documentType.includes('CONSTRUCTIONPROOF'))
-  })
-  oldDocuments = oldDocuments || [];
-  propertyPayload.documents = [...newDocuments, ...oldDocuments];
-
-  try {
-    let queryObject = [
-      {
-        key: "tenantId",
-        value: tenantId
-      },
-      {
-        key: "propertyIds",
-        value: consumerCode
+  let isPropertyOwnerDetailsTypeSelection = validateFields(
+     "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
+     state,
+     dispatch,
+     screenKey
+   );
+  let isPropertyOwnerDetailsValid = true;
+  let multiOwnerItems;
+  if(propertyPayload.ownershipCategory){
+  	if(propertyPayload.ownershipCategory === 'INDIVIDUAL.SINGLEOWNER'){
+	  isPropertyOwnerDetailsValid = validateFields(   
+	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
+	     state,
+	     dispatch,
+	     screenKey
+	   );
+	}else if(propertyPayload.ownershipCategory === 'INDIVIDUAL.MULTIPLEOWNERS'){
+	   
+	   multiOwnerItems = get(
+		    state,
+		    "screenConfiguration.screenConfig.register-property.components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items"
+		  );
+      if(multiOwnerItems && multiOwnerItems.length > 0){
+  	   for(var i=0;i < multiOwnerItems.length;i++){
+           if(multiOwnerItems[i] && !multiOwnerItems[i].hasOwnProperty('isDeleted')){
+        	   isPropertyOwnerDetailsValid = validateFields(   
+        	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items["+i+"].item"+i+".children.cardContent.children.applicantCard.children",
+        	     state,
+        	     dispatch,
+        	     screenKey
+        	   );
+            }
+        }
       }
-    ];
-    propertyPayload.creationReason = 'MUTATION';
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/property-services/property/_update",
-      "_update",
-      queryObject,
-      { Property: propertyPayload }
-
-    );
-    // dispatch(prepareFinalObject("Properties", payload.Properties));
-    // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
-    if (payload) {
-      store.dispatch(
-        setRoute(
-          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${tenantId}
-          `
-        )
-      );
-    }
-    else {
-      store.dispatch(
-        setRoute(
-          `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
-          `
-        )
-      );
-    }
-  } catch (e) {
-    console.log(e);
-    store.dispatch(
-      setRoute(
-        `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
-        `
+	   
+	}else if(propertyPayload.ownershipCategory === 'INSTITUTIONALGOVERNMENT' || propertyPayload.ownershipCategory === 'INSTITUTIONALPRIVATE'){	   
+    dispatch(
+      handleField(
+        screenKey,
+        "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails",
+        "required",
+         true
       )
     );
+	   let isPropertyOwnerInstitutionTypeValid = validateFields(   
+	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
+	     state,
+	     dispatch,
+	     screenKey
+	   );	   
+	   let isPropertyOwnerInstitutionInfoValid = validateFields(   
+	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.institutionDetailsContainer.children",
+	     state,
+	     dispatch,
+	     screenKey
+	   );
+	   
+	   isPropertyOwnerDetailsValid = (isPropertyOwnerInstitutionTypeValid)?isPropertyOwnerInstitutionInfoValid:false
+	}
+  }else{
+    isPropertyOwnerDetailsValid = validateFields(   
+  "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
+       state,
+       dispatch,
+       screenKey
+     );
+  }
+  if (
+    isAssemblyDetailsValid &&
+    isAssemblyDetailsPropType &&
+    isAssemblyDetailsConstructedArea &&
+    isAssemblyDetailstotalLandArea &&
+    isAssemblyDetailsusageType &&
+    isPropertyLocationDetailsValid &&
+    isPropertyOwnerDetailsTypeSelection &&
+    isPropertyOwnerDetailsValid
+  ) {
+    if(multiOwnerItems && multiOwnerItems.length > 0){
+      let checkmultiownerCount=multiOwnerItems.length;
+      for(var i=0;i < multiOwnerItems.length;i++){        
+        if(multiOwnerItems[i] && multiOwnerItems[i].hasOwnProperty('isDeleted')){
+          checkmultiownerCount--;
+        }
+      }
+      if(checkmultiownerCount<2){
+        dispatch(
+          toggleSnackbar(
+            true, {
+            labelKey: "PT_COMMON_ONE_MORE_OWNER_INFROMATION_REQUIRED",
+            labelName: "One more owner information required"
+          },
+            "warning"
+          )
+        )
+        return false;
+      }
+    }
+    for( var i = propertyPayload.owners.length-1; i--;){
+      if (propertyPayload.owners[i].hasOwnProperty('isDeleted')) propertyPayload.owners.splice(i, 1);
+    }
+    propertyPayload.owners.map(owner => {
+      if (!_.isUndefined(owner.status)) {
+        owner.status = "INACTIVE"
+      }
+    })
+    if (
+      propertyPayload
+        .ownershipCategory
+        .includes("INDIVIDUAL")
+    ) {
+      propertyPayload.owners.map(owner => {
+        owner.status = "ACTIVE";
+      })
+      propertyPayload.owners = [...propertyPayload.owners]
+    } else if (
+      propertyPayload
+        .ownershipCategory
+        .includes("INSTITUTIONALPRIVATE") ||
+      propertyPayload
+        .ownershipCategory
+        .includes("INSTITUTIONALGOVERNMENT")
+    ) {
+      propertyPayload.owners.map(owner => {
+        owner.status = "ACTIVE";
+        owner.ownerType = 'NONE';
+        owner.altContactNumber = propertyPayload.institution.landlineNumber;
+      })
+      propertyPayload.owners = [
+        ...propertyPayload.owners
+      ]
+    }
+    set(propertyPayload, "channel", "SYSTEM");
+    set(propertyPayload, "source", "MUNICIPAL_RECORDS");
+    set(propertyPayload, "noOfFloors", 1);
+    propertyPayload.landArea = parseInt(propertyPayload.landArea);
+    propertyPayload.tenantId = propertyPayload.address.city;
+    propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
+    try {
+      if(propertyPayload.propertyType === 'BUILTUP.SHAREDPROPERTY') {
+        let unit = {};
+        unit.usageCategory = propertyPayload.subUsageCategory;
+        unit.occupancyType = "SELFOCCUPIED";
+        unit.constructionDetail = {};
+        propertyPayload.units = [];
+        propertyPayload.units.push(unit);
+      }
+      propertyPayload.creationReason = 'CREATE';
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/property-services/property/_create",
+        "_update",
+        [],
+        { Property: propertyPayload }
+
+      );
+      if (payload) {
+        store.dispatch(handleField(screenKey, "components.adhocDialog", "props.open", true));
+        setTimeout(() => {
+          window.location.href=window.location.origin + '/'+process.env.REACT_APP_NAME.toLowerCase() +`${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`
+          /*store.dispatch(
+            setRoute(
+              `${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`
+            )
+          );*/
+        }, 3000);
+      }
+      else {
+        dispatch(
+          toggleSnackbar(
+            true, {
+            labelKey: "PT_COMMON_FAILED_TO_REGISTER_PROPERTY",
+            labelName: "Failed to register property"
+          },
+            "warning"
+          )
+        )
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(
+        toggleSnackbar(
+          true, {
+          labelKey: "PT_COMMON_FAILED_TO_REGISTER_PROPERTY",
+          labelName: "Failed to register property"
+        },
+          "warning"
+        )
+      )
+    }
+  } else {
+    dispatch(
+      toggleSnackbar(
+        true, {
+        labelKey: "PT_COMMON_REQUIRED_FIELDS",
+        labelName: "Please fill Required details"
+      },
+        "warning"
+      )
+    )
   }
 }
 

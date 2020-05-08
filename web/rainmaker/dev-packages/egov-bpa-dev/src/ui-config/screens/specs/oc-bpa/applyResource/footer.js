@@ -35,6 +35,91 @@ export const showRisktypeWarning = (state, dispatch) => {
   )
 };
 
+const kathaNoAndPlotNoValidation = (state, dispatch) => {
+  let ocEdcrKathaNo = get(
+    state.screenConfiguration.preparedFinalObject,
+    "ocScrutinyDetails.planDetail.planInformation.khataNo"
+  );
+  let edcrKathaNo = get(
+    state.screenConfiguration.preparedFinalObject,
+    "scrutinyDetails.planDetail.planInformation.khataNo"
+  );
+  let ocEdcrPlotNo = get(
+    state.screenConfiguration.preparedFinalObject,
+    "ocScrutinyDetails.planDetail.planInformation.plotNo"
+  );
+  let edcrPlotNo = get(
+    state.screenConfiguration.preparedFinalObject,
+    "scrutinyDetails.planDetail.planInformation.plotNo"
+  );
+  if (ocEdcrKathaNo && edcrKathaNo && ocEdcrPlotNo && edcrPlotNo) {
+    if (ocEdcrPlotNo == edcrPlotNo && ocEdcrKathaNo == edcrKathaNo) {
+      return true;
+    } else {
+      let errorMessage = {};
+      if (ocEdcrKathaNo != edcrKathaNo && ocEdcrPlotNo == edcrPlotNo) {
+        errorMessage = {
+          labelName: "Khata number from permit order XXXX(permit order number) is not matching with the khata number from occupancy certificate. You cannot proceed with the application",
+          labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+        };
+      } else if (ocEdcrPlotNo != edcrPlotNo && ocEdcrKathaNo == edcrKathaNo) {
+        errorMessage = {
+          labelName: "Plot number from permit order XXXX(permit order number) is not matching with the Plot number from occupancy certificate. You cannot proceed with the application",
+          labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+        };
+      } else if (ocEdcrPlotNo != edcrPlotNo && ocEdcrKathaNo != edcrKathaNo) {
+        errorMessage = {
+          labelName: "Khata No and plot No from permit order XXXX(permit order number) is not matching with the Khata No and plot No from occupancy certificate. You cannot proceed with the application",
+          labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+        };
+      }
+      dispatch(toggleSnackbar(true, errorMessage, "error"));
+      return false;
+    }
+  }
+}
+
+const riskTypeValidation = (state, dispatch) => {
+  const riskTypes = { LOW: 0, MEDIUM: 1, HIGH: 2 };
+  let ocEdcrRiskType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.riskType"
+  );
+  let edcrRisktype = get(
+    state.screenConfiguration.preparedFinalObject,
+    "bpaDetails.riskType"
+  );
+  if (riskTypes[edcrRisktype] < riskTypes[ocEdcrRiskType]) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "The Risk type from permit order XXXX(permit order number) to occupancy certificate application is changed from Low to high .You cannot proceed with the application.",
+          labelKey: "BPA_RISK_TYPE_VALIDATION_ERROR"
+        },
+        "error"
+      )
+    );
+    return
+  } else if (riskTypes[edcrRisktype] > riskTypes[ocEdcrRiskType]) {
+    showRisktypeWarning(state, dispatch, activeStep);
+  } else {
+    const riskTypeValid = get(
+      state,
+      "screenConfiguration.preparedFinalObject.BPA.riskType",
+      []
+    );
+    if (riskTypeValid.length === 0) {
+      let errorMessage = {
+        labelName: "Please search scrutiny details linked to the scrutiny number",
+        labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return false;
+    }
+    return true;
+  }
+}
 
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);
@@ -59,86 +144,11 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     } else {
-      const riskTypes = {LOW: 0, MEDIUM : 1, HIGH: 2};
-      let ocEdcrRiskType = get(
-        state.screenConfiguration.preparedFinalObject,
-        "BPA.riskType"
-      );
-      let edcrRisktype = get(
-        state.screenConfiguration.preparedFinalObject,
-        "bpaDetails.riskType"
-      );
-      let ocEdcrKathaNo = get(
-        state.screenConfiguration.preparedFinalObject,
-        "ocScrutinyDetails.planDetail.planInformation.khataNo"
-      );
-      let edcrKathaNo =  get(
-        state.screenConfiguration.preparedFinalObject,
-        "scrutinyDetails.planDetail.planInformation.khataNo"
-      );
-      let ocEdcrPlotNo = get(
-        state.screenConfiguration.preparedFinalObject,
-        "ocScrutinyDetails.planDetail.planInformation.plotNo"
-      );
-      let edcrPlotNo = get(
-        state.screenConfiguration.preparedFinalObject,
-        "scrutinyDetails.planDetail.planInformation.plotNo"
-      );
-      if(ocEdcrKathaNo && edcrKathaNo && ocEdcrPlotNo && edcrPlotNo) {
-          if(ocEdcrPlotNo == edcrPlotNo && ocEdcrKathaNo == edcrKathaNo) {
-              console.log("all are ok");
-          } else {
-            let errorMessage = {};
-            if(ocEdcrKathaNo != edcrKathaNo && ocEdcrPlotNo == edcrPlotNo) {
-              errorMessage = {
-                labelName: "Khata number from permit order XXXX(permit order number) is not matching with the khata number from occupancy certificate. You cannot proceed with the application",
-                labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
-              };
-            } else if (ocEdcrPlotNo != edcrPlotNo && ocEdcrKathaNo == edcrKathaNo) {
-              errorMessage = {
-                labelName: "Plot number from permit order XXXX(permit order number) is not matching with the Plot number from occupancy certificate. You cannot proceed with the application",
-                labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
-              };
-            } else if(ocEdcrPlotNo != edcrPlotNo && ocEdcrKathaNo != edcrKathaNo) {
-              errorMessage = {
-                labelName: "Khata No and plot No from permit order XXXX(permit order number) is not matching with the Khata No and plot No from occupancy certificate. You cannot proceed with the application",
-                labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
-              };
-            }
-            dispatch(toggleSnackbar(true, errorMessage, "error"));
-            return
-          }
+      let isKathaNoAndPlotNoValidation = await kathaNoAndPlotNoValidation(state, dispatch);
+      let isRiskTypeValidation = await riskTypeValidation(state, dispatch);
+      if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
+        return false;
       }
-      if(riskTypes[edcrRisktype] < riskTypes[ocEdcrRiskType]) {
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "The Risk type from permit order XXXX(permit order number) to occupancy certificate application is changed from Low to high .You cannot proceed with the application.",
-              labelKey: "BPA_RISK_TYPE_VALIDATION_ERROR"
-            },
-            "error"
-          )
-        );
-        return
-      } else if (riskTypes[edcrRisktype] > riskTypes[ocEdcrRiskType]) {
-        showRisktypeWarning(state, dispatch, activeStep);
-      } else {
-        // changeStep(state, dispatch);
-        const riskTypeValid = get(
-          state,
-          "screenConfiguration.preparedFinalObject.BPA.riskType",
-          []
-        );
-        if(riskTypeValid.length === 0){
-          let errorMessage = {
-            labelName: "Please search scrutiny details linked to the scrutiny number",
-            labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
-          };
-          dispatch(toggleSnackbar(true, errorMessage, "warning")); 
-          return;
-        }
-      } 
     }
   }
 
@@ -312,7 +322,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "TL_COMMON_BUTTON_PREV_STEP"
+        labelKey: "BPA_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -335,7 +345,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "TL_COMMON_BUTTON_NXT_STEP"
+        labelKey: "BPA_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",

@@ -11,11 +11,17 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 // import { showHideAdhocPopup } from "../utils";
 import { resetFields } from "./mutation-methods";
+import "./index.css"
 import {searchPropertyDetails} from "./mutation-methods"
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
+
+const url = getQueryArg(
+  window.location.href,
+  "redirectUrl"
+);
 
 const getMDMSData = async (dispatch) => {
   const mdmsBody = {
@@ -131,7 +137,7 @@ const screenConfig = {
                 callBack: () => {
                   let link="/pt-common-screens/register-property";
                   let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
-                  window.location.href = `${moduleName}${link}`
+                  window.location.href = `${moduleName}${link}?redirectUrl=${url}`
                 }
               },
             }

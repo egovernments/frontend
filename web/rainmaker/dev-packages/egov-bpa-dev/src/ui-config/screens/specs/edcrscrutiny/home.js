@@ -3,7 +3,6 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import { fetchData } from "./functions";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import EDCRIcon from "../../../../ui-atoms-local/Icons/EDCRIcon";
-import { cityPicker } from "./citypicker";
 import "../utils/index.css";
 
 const header = getCommonHeader(
@@ -33,10 +32,7 @@ const cardItems = [
       labelName: "Occupancy Certificate eDCR Scrutiny For New Building"
     },
     icon: <EDCRIcon />,
-    route: {
-      screenKey: "home",
-      jsonPath: "components.cityPickerDialog"
-    }
+    route: "ocapply"
   },
   {
     label: {
@@ -70,26 +66,6 @@ const tradeLicenseSearchAndResult = {
           props: {
             items: cardItems,
             history: {}
-          }
-        }
-      }
-    },
-    cityPickerDialog: {
-      componentPath: "Dialog",
-      props: {
-        open: false,
-        maxWidth: "md"
-      },
-      children: {
-        dialogContent: {
-          componentPath: "DialogContent",
-          props: {
-            classes: {
-              root: "city-picker-dialog-style"
-            }
-          },
-          children: {
-            popup: cityPicker
           }
         }
       }

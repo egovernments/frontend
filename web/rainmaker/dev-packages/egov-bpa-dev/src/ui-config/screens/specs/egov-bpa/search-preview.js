@@ -17,7 +17,6 @@ import {
   getTransformedLocale,
   setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -60,8 +59,8 @@ const titlebar = {
   children: {
     leftContainerH:getCommonContainer({
       header: getCommonHeader({
-        labelName: "Task Details",
-        labelKey: "NOC_TASK_DETAILS_HEADER"
+        labelName: "Application details",
+        labelKey: "BPA_TASK_DETAILS_HEADER"
       }),
       applicationNumber: {
         uiFramework: "custom-atoms-local",
@@ -109,7 +108,7 @@ const titlebar2 = {
         componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+            label: {labelName : "DOWNLOAD" , labelKey :"BPA_DOWNLOAD"},
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", style: { height: "60px", color : "#FE7A51", marginRight : 10 }, className: "tl-download-button" },
@@ -122,7 +121,7 @@ const titlebar2 = {
         componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+            label: {labelName : "PRINT" , labelKey :"BPA_PRINT"},
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },            
@@ -567,7 +566,6 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));    
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
     const queryObject = [

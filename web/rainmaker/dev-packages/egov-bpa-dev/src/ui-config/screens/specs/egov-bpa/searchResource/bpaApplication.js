@@ -12,7 +12,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
 
-const resetFields = (state, dispatch) => {
+export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
@@ -54,17 +54,17 @@ export const BPAApplication = getCommonCard({
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "NOC_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "BPA_HOME_SEARCH_RESULTS_DESC"
   }),
   appBPAHomeSearchResultsContainer: getCommonContainer({
     bpaNo: getTextField({
       label: {
         labelName: "Application number",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Application number",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -78,11 +78,11 @@ export const BPAApplication = getCommonCard({
     ownerMobNo: getTextField({
       label: {
         labelName: "Mobile Number",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
       },
       placeholder: {
         labelName: "Enter your mobile No.",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -98,10 +98,10 @@ export const BPAApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
     }),
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "NOC_FROM_DATE_LABEL" },
+      label: { labelName: "From Date", labelKey: "BPA_FROM_DATE_LABEL" },
       placeholder: {
         labelName: "From Date",
-        labelKey: "NOC_FROM_DATE_PLACEHOLDER"
+        labelKey: "BPA_FROM_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.fromDate",
       gridDefination: {
@@ -113,10 +113,10 @@ export const BPAApplication = getCommonCard({
       required: false
     }),
     toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
+      label: { labelName: "To Date", labelKey: "BPA_TO_DATE_LABEL" },
       placeholder: {
         labelName: "To Date",
-        labelKey: "NOC_TO_DATE_PLACEHOLDER"
+        labelKey: "BPA_TO_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.toDate",
       gridDefination: {
@@ -128,6 +128,7 @@ export const BPAApplication = getCommonCard({
       required: false
     }),
     applicationType: getSelectField({
+      visible: false,
       label: {
         labelName: "Application Type",
         labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
@@ -140,19 +141,15 @@ export const BPAApplication = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
-      props: {
-         className : "tl-trade-type"
-      },
       jsonPath: "searchScreen.applicationType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
-      required: true,
       gridDefination: {
         xs: 12,
-        sm: 12,
-        md: 6
-      }
+        sm: 4
+      },
     }),
     serviceType: getSelectField({
+      visible: false,
       label: {
         labelName: "Service type",
         labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
@@ -165,17 +162,12 @@ export const BPAApplication = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
-      props:{
-        className:"textfield-enterable-selection"
-      },
-      required: true,
       jsonPath: "searchScreen.serviceType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
       gridDefination: {
         xs: 12,
-        sm: 12,
-        md: 6
-      }
+        sm: 4
+      },
     }),
   }),
   button: getCommonContainer({
@@ -200,7 +192,7 @@ export const BPAApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Reset",
-            labelKey: "NOC_HOME_SEARCH_RESET_BUTTON"
+            labelKey: "BPA_HOME_SEARCH_RESET_BUTTON"
           })
         },
         onClickDefination: {
@@ -228,7 +220,7 @@ export const BPAApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "NOC_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "BPA_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
           })
         },
         onClickDefination: {

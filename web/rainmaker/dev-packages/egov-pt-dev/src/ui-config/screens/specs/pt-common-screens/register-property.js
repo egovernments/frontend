@@ -213,7 +213,7 @@ const screenConfig = {
     getMDMSPropertyData(dispatch);
     dispatch(
       prepareFinalObject(
-        "Property.assemblyDetails",
+        "Property",
         {}
       )
     );
@@ -241,7 +241,7 @@ const screenConfig = {
        );
        dispatch(
          prepareFinalObject(
-           "Property.locationDetails.city",
+           "Property.address.city",
            tenantId
          )
        );
@@ -267,7 +267,7 @@ const screenConfig = {
       //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
       dispatch(
         prepareFinalObject(
-          "applyScreenMdmsData.DropdownsData.OwnershipCategory",
+          "OwnershipCategory",
           ownershipCategory
         )
       );
@@ -299,7 +299,17 @@ const screenConfig = {
         formwizardFirstStep,
         footer
       }
-    }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "SuccessPTPopupContainer",
+      props: {
+        open: false,
+        maxWidth: "md",
+        screenKey: "register-property"
+      }
+    }    
   }
 };
 

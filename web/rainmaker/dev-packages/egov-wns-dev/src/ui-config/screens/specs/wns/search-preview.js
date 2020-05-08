@@ -40,6 +40,8 @@ let service = getQueryArg(window.location.href, "service");
 const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 
+
+
 const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_TASK_DETAILS"
@@ -53,12 +55,24 @@ const headerrow = getCommonContainer({
         number: applicationNumber
       }
     }
-  })
+  }),
+  connection: getCommonContainer({
+  connectionNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ConsumerNoContainer",
+    props: {
+      number: ""
+    }
+  }
+
+})
 });
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
   if (applicationNumber) {
+    
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
@@ -67,6 +81,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
        let estimate;
+       if(parsedObject.applicationStatus.applicationStatus==="CONNECTION_ACTIVATED"){
+        let connectionNumber= parsedObject.connectionNo;
+        set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.props.number",connectionNumber );
+      }else{
+        set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible",false ); 
+      }
       if(parsedObject.applicationStatus==="PENDING_FOR_FIELD_INSPECTION"){
         let queryObjectForEst = [{
           applicationNo: applicationNumber,
@@ -81,6 +101,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
               await processBills(estimate, viewBillTooltip, dispatch);
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+              estimate.Calculation[0].appStatus = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"); 
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
             }
           } 
@@ -97,6 +118,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
               await processBills(estimate, viewBillTooltip, dispatch);
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+              estimate.Calculation[0].appStatus = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"); 
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
             }
           }
@@ -150,7 +172,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
     );
-
+    // for showing addPenaltyRebateButton
+    if(process.env.REACT_APP_NAME !== "Citizen" && (appStatus !=="PENDING_FOR_CONNECTION_ACTIVATION" && appStatus !== 'CONNECTION_ACTIVATED')){
+      
+      dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.taskDetails.children.cardContent.children.estimate.children.cardContent.children.addPenaltyRebateButton",
+            "visible",
+            true
+          )
+        );
+    }
     const printCont = downloadPrintContainer(
       action,
       state,
@@ -303,7 +336,7 @@ const estimate = getCommonGrayCard({
       action: "condition",
       callBack: showHideAdhocPopup
     },
-    visible: process.env.REACT_APP_NAME !== "Citizen"
+    visible: false
   },
 });
 
@@ -358,11 +391,13 @@ const screenConfig = {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
     //To set the application no. at the  top
     set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number", applicationNumber);
     // if (status !== "pending_payment") {
     //   set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
     // }
+   
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: serviceModuleName }
@@ -490,6 +525,12 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
     }
+    if(payload.WaterConnection[0].applicationStatus==="CONNECTION_ACTIVATED"){
+      let connectionNumber= payload.WaterConnection[0].connectionNo;
+      set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.props.number",connectionNumber );
+    }else{
+      set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible",false ); 
+    }
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
       await setDocuments(
@@ -507,7 +548,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
 
         // viewBreakUp 
         estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
-
+        estimate.Calculation[0].appStatus = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"); 
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
@@ -517,6 +558,13 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     payload.SewerageConnections[0].service = service;
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
+    }
+    //connection number display
+    if(payload.SewerageConnections[0].applicationStatus==="CONNECTION_ACTIVATED"){
+      let connectionNumber= payload.SewerageConnections[0].connectionNo;
+      set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.props.number",connectionNumber );
+    }else{
+      set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible",false ); 
     }
 
     // to set documents 
@@ -543,6 +591,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
         await processBills(estimate, viewBillTooltip, dispatch);
         // viewBreakUp 
         estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+        estimate.Calculation[0].appStatus = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"); 
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }

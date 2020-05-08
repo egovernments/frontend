@@ -182,8 +182,8 @@ export const searchPropertyDetails = getCommonCard({
         props: {
           variant: "outlined",
           style: {
-            color: "black",
-            borderColor: "black",
+            color: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
             width: "220px",
             height: "48px",
             margin: "8px",
@@ -205,7 +205,7 @@ export const searchPropertyDetails = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 6,
           // align: "center"
         },
         props: {

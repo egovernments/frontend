@@ -726,7 +726,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "TL_COMMON_BUTTON_PREV_STEP"
+        labelKey: "BPA_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -749,7 +749,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "TL_COMMON_BUTTON_NXT_STEP"
+        labelKey: "BPA_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
