@@ -24,14 +24,12 @@ import {
   prepareFinalObject as pFO,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
-import { convertEpochToDate } from "../../utils";
+import { convertEpochToDate,getAllDataFromBillingSlab } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getAllDataFromBillingSlab } from "../../utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons"
-
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
@@ -677,7 +675,6 @@ const accessoriesCard = {
             pattern: getPattern("UOMValue"),
             props: {
               disabled: true,
-              setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue"
             },
             required: true,
@@ -733,20 +730,20 @@ const accessoriesCard = {
   type: "array"
 };
 
-export const tradeDetails = getCommonCard(
-  {
-    header: getCommonTitle(
-      {
-        labelName: "Trade Details",
-        labelKey: "TL_NEW_TRADE_DETAILS_PROV_DET_HEADER"
-      },
-      {
-        style: {
-          marginBottom: 18
-        }
+export const tradeDetails = getCommonCard({
+  header: getCommonTitle(
+    {
+      labelName: "Trade Details",
+      labelKey: "TL_NEW_TRADE_DETAILS_PROV_DET_HEADER"
+    },
+    {
+      style: {
+        marginBottom: 18
       }
-    ),
-    tradeDetailsConatiner: getCommonContainer({
+    }
+  ),
+  tradeDetailsConatiner: getCommonContainer(
+    {
       financialYear: {
         ...getSelectField({
           label: {
@@ -758,26 +755,17 @@ export const tradeDetails = getCommonCard(
             labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
           },
           required: true,
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           jsonPath: "Licenses[0].financialYear",
           sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
           gridDefination: {
             xs: 12,
             sm: 6
-          }
+          },
+          // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          // props: {
+          //   disabled: true
+          // }
         })
-      },
-      dummyDiv: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-        props: {
-          disabled: true
-        }
       },
       applicationType: {
         ...getSelectField({
@@ -795,7 +783,7 @@ export const tradeDetails = getCommonCard(
             masterName: "ApplicationType"
           },
           jsonPath:
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+            "Licenses[0].applicationType",
           sourceJsonPath: "applyScreenMdmsData.TradeLicense.ApplicationType",
           gridDefination: {
             xs: 12,
@@ -803,10 +791,19 @@ export const tradeDetails = getCommonCard(
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
-          getAllDataFromBillingSlab(process.env.REACT_APP_NAME === "Citizen"?getQueryArg(window.location.href, "tenantId"):getTenantId(), dispatch,[{
-            key:"applicationType",value:action.value
-          }]);
-          if (action.value === "APPLICATIONTYPE.RENEWAL") {
+          getAllDataFromBillingSlab(
+            process.env.REACT_APP_NAME === "Citizen"
+              ? getQueryArg(window.location.href, "tenantId")
+              : getTenantId(),
+            dispatch,
+            [
+              {
+                key: "applicationType",
+                value: action.value.split(".")[1]
+              }
+            ]
+          );
+          if (action.value.split(".")[1] === "RENEWAL") {
             dispatch(
               handleField(
                 "apply",
@@ -1127,6 +1124,21 @@ export const tradeDetails = getCommonCard(
           }
         })
       },
+      tradeNoOfEmployee: getTextField({
+        label: {
+          labelName: "No. Of Employee",
+          labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+        },
+        props: {
+          className: "applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter No. Of Employee",
+          labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
+        },
+        pattern: getPattern("NoOfEmp"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
+      })
       // MarketType: {
       //   ...getSelectField({
       //     label: {
@@ -1165,17 +1177,17 @@ export const tradeDetails = getCommonCard(
       //   jsonPath:
       //       "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
       // }),
-    }),
-
-    tradeUnitCard
-    // accessoriesCard
-  },
-  {
-    style: {
-      overflow: "visible"
+    },
+    {
+      style:
+        getQueryArg(window.location.href, "action") === "EDITRENEWAL"
+          ? { "pointer-events": "none" }
+          : {}
     }
-  }
-);
+  ),
+  tradeUnitCard
+  // accessoriesCard
+});
 
 const setFieldsOnAddItem = (state, multiItemContent) => {
   const preparedFinalObject = JSON.parse(

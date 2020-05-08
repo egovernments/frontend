@@ -10,18 +10,63 @@ import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
+import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
-
+const tenant= getTenantId();
 const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
   dispatch(prepareFinalObject("LicensesTemp", []));
-  dispatch(setRoute("/tradelicence/apply"));
+  dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
+
+
+const getMdmsData = async (dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "TradeLicense",
+          masterDetails: [
+            { name: "ApplicationType" }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    let types = [];
+    if(payload && payload.MdmsRes){
+      types =  get(payload.MdmsRes, "TradeLicense.ApplicationType").map((item,index) => {
+        return {
+          code : item.code.split(".")[1]
+        }
+      });
+    }
+     dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.searchScreen.applicationType",
+        types
+      )
+    );
+  }catch (e) {
+    console.log(e);
+  }
+}
 
 const header = getCommonHeader({
   labelName: "Trade License",
@@ -31,26 +76,27 @@ const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: "NewTL" });
-    const { states } = data || [];
 
-    if (states && states.length > 0) {
-      const status = states.map((item, index) => {
-        return {
-          code: item.state
-        };
-      });
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.searchScreen.status",
-          status.filter(item => item.code != null)
-        )
-      );
-    }
+    // const businessServiceData = JSON.parse(
+    //   localStorageGet("businessServiceData")
+    // );
+    // const data = find(businessServiceData, { businessService: "NewTL" });
+    // const { states } = data || [];
 
+    // if (states && states.length > 0) {
+    //   const status = states.map((item, index) => {
+    //     return {
+    //       code: item.state
+    //     };
+    //   });
+    //   dispatch(
+    //     prepareFinalObject(
+    //       "applyScreenMdmsData.searchScreen.status",
+    //       status.filter(item => item.code != null)
+    //     )
+    //   );
+    // }
+    getMdmsData(dispatch);
     return action;
   },
   components: {

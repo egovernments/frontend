@@ -6,8 +6,8 @@ import {
   localStorageGet,
   getLocalization,
   getLocale
-} from "./localStorageUtils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -208,16 +208,16 @@ export const getLocaleLabels = (label, labelKey, localizationLabels) => {
 };
 
 export const replaceStrInPath = (inputString, search, replacement) => {
-  String.prototype.replaceAll = function(search, replacement) {
+  String.prototype.replaceAll = function (search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, "g"), replacement);
   };
   return inputString.replaceAll(search, replacement);
 };
 
-export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
+export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: tenantId? tenantId : commonConfig.tenantId },
+    { key: "tenantId", value: tenantId||commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -248,6 +248,64 @@ const getAllFileStoreIds = async ProcessInstances => {
   );
 };
 
+
+export const getFileUrl = (linkText="") => {
+  const linkList = linkText.split(",");
+  let fileURL = '';
+  linkList&&linkList.map(link => {
+    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
+      fileURL = link;
+    }
+  })
+  return fileURL;
+}
+
+export const setDocuments = async (
+  payload,
+  sourceJsonPath,
+  destJsonPath,
+  dispatch,
+  businessService
+) => {
+  const uploadedDocData = get(payload, sourceJsonPath);
+
+  const fileStoreIds =
+    uploadedDocData &&
+    uploadedDocData
+      .map(item => {
+        return item.fileStoreId;
+      })
+      .join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  const reviewDocData =
+    uploadedDocData &&
+    uploadedDocData.map((item, index) => {
+      return {
+        title: `${businessService}_${item.documentType}` || "",
+        link:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            getFileUrl(fileUrlPayload[item.fileStoreId])) ||
+          "",
+        linkText: "View",
+        name:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            decodeURIComponent(
+              getFileUrl(fileUrlPayload[item.fileStoreId])
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`
+      };
+    });
+  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
+};
+
+
 export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
   const fileStoreIdByAction = await getAllFileStoreIds(ProcessInstances);
   const fileUrlPayload = await getFileUrlFromAPI(
@@ -257,17 +315,18 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
   processInstances.map(item => {
     if (item.documents && item.documents.length > 0) {
       item.documents.forEach(i => {
-        i.link = fileUrlPayload[i.fileStoreId].split(",")[0];
-        i.title = `TL_${i.documentType}`;
-        i.name = decodeURIComponent(
-          fileUrlPayload[i.fileStoreId]
-            .split(",")[0]
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        );
-        i.linkText = "View";
+        if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
+          i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
+          i.title = `TL_${i.documentType}`;
+          i.name = decodeURIComponent(
+            getFileUrl(fileUrlPayload[i.fileStoreId])
+              .split("?")[0]
+              .split("/")
+              .pop()
+              .slice(13)
+          );
+          i.linkText = "View";
+        }
       });
     }
   });
@@ -279,6 +338,7 @@ export const setBusinessServiceDataToLocalStorage = async (
   dispatch
 ) => {
   try {
+    dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
       "egov-workflow-v2/egov-wf/businessservice/_search",
@@ -306,7 +366,9 @@ export const setBusinessServiceDataToLocalStorage = async (
         )
       );
     }
+    dispatch(toggleSpinner());
   } catch (e) {
+    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
@@ -379,7 +441,7 @@ export const handleFileUpload = (event, handleDocument, props, docName="") => {
 
 //localizations
 export const getTransformedLocale = label => {
-  return label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+  return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
 export const appendModulePrefix = (value, localePrefix) => {
@@ -564,7 +626,7 @@ export const getUserDataFromUuid = async bodyObject => {
   }
 };
 
-export const getCommonPayUrl = (dispatch , applicationNo, tenantId) => {
-    const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
-      dispatch(setRoute(url));
+export const getCommonPayUrl = (dispatch, applicationNo, tenantId) => {
+  const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
+  dispatch(setRoute(url));
 };

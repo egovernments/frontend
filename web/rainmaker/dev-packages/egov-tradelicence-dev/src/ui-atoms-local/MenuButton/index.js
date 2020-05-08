@@ -20,7 +20,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 2
   },
   button: {
-    margin: theme.spacing.unit
+    border : "1px solid #FE7A51"
   },
   leftIcon: {
     marginRight: theme.spacing.unit
@@ -57,7 +57,7 @@ class MenuListComposition extends React.Component {
     return (
       <div className={classes.root} data-html2canvas-ignore={true}>
         <div>
-          <Button
+          <Button className={classes.button}
             buttonRef={node => {
               this.anchorEl = node;
             }}
@@ -71,7 +71,7 @@ class MenuListComposition extends React.Component {
               <span style={{marginLeft:30 ,color : data.props.color}}> |  </span>
             <Icon className={classes.rightIcon} iconName={data.rightIcon} color={data.props.color}/>
           </Button>
-          <Popper className="menu-list-item5" open={open} anchorEl={this.anchorEl} transition disablePortal>
+          <Popper open={open} anchorEl={this.anchorEl} style={{zIndex:100}} transition disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow
                 {...TransitionProps}

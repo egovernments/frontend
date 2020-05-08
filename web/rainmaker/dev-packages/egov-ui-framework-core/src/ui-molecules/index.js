@@ -148,6 +148,18 @@ const SingleApplication = Loadable({
   loading: () => <Loading />
 });
 
+const MenuButton = Loadable({
+  loader: () => import("./MenuButton"),
+  loading: () => <Loading />
+});
+
+const DownloadPrintButton = Loadable({
+  loader: () => import("./DownloadPrintButton"),
+  loading: () => <Loading />
+});
+
+
+
 export {
   RenderRoutes,
   Map,
@@ -179,5 +191,7 @@ export {
   TaskStatusComponents,
   UploadMultipleFiles,
   LandingPage,
-  SingleApplication
+  SingleApplication,
+  MenuButton,
+  DownloadPrintButton
 };

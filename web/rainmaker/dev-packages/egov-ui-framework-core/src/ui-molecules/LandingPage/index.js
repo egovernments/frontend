@@ -8,10 +8,7 @@ import { Link } from "react-router-dom";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import LabelContainer from "../../ui-containers/LabelContainer";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
-} from "../../ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
 const styles = theme => ({
@@ -67,8 +64,14 @@ class LandingPage extends React.Component {
     return (
       <Grid container className="landing-page-main-grid">
         {items.map(obj => {
-          return (
-            <Grid className={classes.item} item xs={6} sm={6} align="center">
+          return !obj.hide ? (
+            <Grid
+              className={classes.item}
+              item
+              xs={12 / items.length}
+              sm={12 / items.length}
+              align="center"
+            >
               <Card
                 className={`${classes.paper} module-card-style`}
                 onClick={() => this.onCardCLick(obj.route)}
@@ -89,7 +92,7 @@ class LandingPage extends React.Component {
                 </CardContent>
               </Card>
             </Grid>
-          );
+          ) : null;
         })}
       </Grid>
     );
@@ -103,7 +106,7 @@ const mapStateToProps = state => {
     state.screenConfiguration.preparedFinalObject,
     "myApplicationsCount"
   );
-  return { screenConfig, moduleName,applicationCount };
+  return { screenConfig, moduleName, applicationCount };
 };
 
 const mapDispatchToProps = dispatch => {

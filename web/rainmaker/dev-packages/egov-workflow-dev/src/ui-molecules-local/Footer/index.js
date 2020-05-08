@@ -1,22 +1,25 @@
 import React from "react";
-import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { ActionDialog } from "../";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import MenuButton from "egov-ui-framework/ui-atoms/MenuButton";
+import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
+import {getNextFinancialYearForRenewal,getSearchResults} from "../../ui-utils/commons"
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
+import set from "lodash/set";
+import isEmpty from "lodash/isEmpty";
 import "./index.css";
 
 class Footer extends React.Component {
   state = {
     open: false,
     data: {},
-    employeeList: []
+    employeeList: [],
+    //responseLength: 0
   };
 
   getDownloadData = () => {
@@ -56,11 +59,20 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
-    handleFieldChange(`${dataPath}[0].comment`, "");
-    handleFieldChange(`${dataPath}[0].assignee`, "");
+
+    if (dataPath === "BPA") {
+      handleFieldChange(`${dataPath}.comment`, "");
+      handleFieldChange(`${dataPath}.assignees`, "");
+    } else {
+      handleFieldChange(`${dataPath}[0].comment`, "");
+      handleFieldChange(`${dataPath}[0].assignee`, []);
+    }
+
     if (item.isLast) {
-      const url = process.env.NODE_ENV === "development" ? item.buttonUrl : item.buttonUrl ;
-      //window.location.href = `${window.origin}/${url}`;
+      const url =
+        process.env.NODE_ENV === "development"
+          ? item.buttonUrl
+          : item.buttonUrl;
       setRoute(url);
       return;
     }
@@ -102,53 +114,143 @@ class Footer extends React.Component {
     });
   };
 
+  renewTradelicence = async (financialYear, tenantId) => {
+    const {setRoute , state} = this.props;
+    const licences = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses`
+    );
+
+    const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
+
+    const wfCode = "DIRECTRENEWAL";
+    set(licences[0], "action", "INITIATE");
+    set(licences[0], "workflowCode", wfCode);
+    set(licences[0], "applicationType", "RENEWAL");
+    set(licences[0],"financialYear" ,nextFinancialYear);
+
+  const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
+      Licenses: licences
+    })
+     const renewedapplicationNo = get(
+      response,
+      `Licenses[0].applicationNumber`
+    );
+    const licenseNumber = get(
+      response,
+      `Licenses[0].licenseNumber`
+    );
+    setRoute(
+      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+    );
+  };
   render() {
     const {
-      color,
-      variant,
       contractData,
       handleFieldChange,
       onDialogButtonClick,
       dataPath,
-      moduleName
+      moduleName,
+      state,
+      dispatch
     } = this.props;
     const { open, data, employeeList } = this.state;
-    const { getPrintData, getDownloadData } = this;
-    let visibility = moduleName === "FIRENOC" ? "hidden" : "visible";
+    const status = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].status`
+    );
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].applicationType`
+    );
+    const applicationNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].applicationNumber`
+    );
+    const tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].tenantId`
+    );
+    const financialYear = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].financialYear`
+    );
+    const licenseNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].licenseNumber`
+    );
+
+    const downloadMenu =
+      contractData &&
+      contractData.map(item => {
+        const { buttonLabel, moduleName } = item;
+        return {
+          labelName: { buttonLabel },
+          labelKey: `WF_${moduleName.toUpperCase()}_${buttonLabel}`,
+          link: () => {
+            this.openActionDialog(item);
+          }
+        };
+      });
+      if(moduleName === "NewTL"){
+        const responseLength = get(
+          state.screenConfiguration.preparedFinalObject,
+          `licenseCount`,
+          1
+        );
+      const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
+          if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
+          return true;
+        })
+       const rolecheck= rolearray.length>0? true: false;
+    if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
+      const editButton = {
+        label: "Edit",
+        labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
+        link: () => {
+          this.props.setRoute(
+            `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+          );
+        }
+      };
+      downloadMenu && downloadMenu.push(editButton);
+      const submitButton = {
+        label: "Submit",
+        labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
+        link: () => {
+          this.renewTradelicence(financialYear, tenantId);
+        }
+      };
+      downloadMenu && downloadMenu.push(submitButton);
+    }
+  }
+
+
+    const buttonItems = {
+      label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
+      rightIcon: "arrow_drop_down",
+      props: {
+        variant: "outlined",
+        style: {
+          marginRight: 15,
+          backgroundColor: "#FE7A51",
+          color: "#fff",
+          border: "none",
+          height: "60px",
+          width: "200px"
+        }
+      },
+      menu: downloadMenu
+    };
     return (
-      <div
-        className="apply-wizard-footer"
-        id="custom-atoms-footer"
-        style={{ textAlign: "right" }}
-      >
-        <Container >
-          <Item xs={12} sm={12} className="wf-footer-container">
-            {contractData &&
-              contractData.map(item => {
-                const { buttonLabel, moduleName } = item;
-                return (
-                  <Button
-                    color={color}
-                    variant={variant}
-                    className="wf-footer-button"
-                    onClick={() => this.openActionDialog(item)}
-                    style={{
-                   //   minWidth: "200px",
-                      height: "48px",
-                      marginRight: "45px",
-                      borderRadius:"inherit",
-                      display: buttonLabel === "REFER" ? "none" : "initial"
-                    }}
-                  >
-                    <LabelContainer
-                      labelName={buttonLabel}
-                      labelKey={`WF_${moduleName.toUpperCase()}_${buttonLabel}`}
-                    />
-                  </Button>
-                );
-              })}
-          </Item>
-        </Container>
+      <div className="apply-wizard-footer" id="custom-atoms-footer">
+        {!isEmpty(downloadMenu) && (
+          <Container>
+            <Item xs={12} sm={12} className="wf-footer-container">
+              <MenuButton data={buttonItems} />
+            </Item>
+          </Container>
+        )}
         <ActionDialog
           open={open}
           onClose={this.onClose}
@@ -173,7 +275,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Footer);
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);

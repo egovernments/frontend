@@ -535,11 +535,19 @@ export const getPattern = type => {
       return /^[a-zA-z0-9\s\\/\-]$/i;
     case "ElectricityConnNo":
       return /^[0-9]{15}$/i;
+    case "DocumentNo":
+      return /^[0-9]{1,15}$/i; 
     case "eventName":
       return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
     case "eventDescription":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
     case "FireNOCNo":
       return /^[a-zA-Z0-9-]*$/i;
+    case "consumerNo":
+      return /^[a-zA-Z0-9/-]*$/i;
   }
+};
+
+export const checkValueForNA = value => {
+  return value && value !== "null" ? value : "NA";
 };

@@ -17,6 +17,18 @@ export const searchResults = {
       getTextToLocalMapping("Trade Name"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Application Date"),
+      getTextToLocalMapping("Financial Year"),
+      {
+        name: getTextToLocalMapping("Application Type"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span>
+              {getTextToLocalMapping(value)}
+            </span>
+          )
+        }
+      },
       {
         name: getTextToLocalMapping("Status"),
         options: {
@@ -32,13 +44,19 @@ export const searchResults = {
           )
         }
       },
-
       {
         name: "tenantId",
         options: {
           display: false
         }
-      }
+      },
+      {
+        name:"status1",
+        options: {
+          display: false
+        }
+      },
+
     ],
     title: getTextToLocalMapping(
       "Search Results for Trade License Applications"
@@ -73,16 +91,17 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[5]) {
+  switch (rowData[7]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
+        rowData[8]
       }`;
+      // }&action=edit`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[6]}`;
+      }&tenantId=${rowData[8]}`;
       break;
   }
 };

@@ -1,3 +1,5 @@
+
+
 const appName = process.env.REACT_APP_NAME;
 
 //GET methods
@@ -47,7 +49,6 @@ export const clearUserDetails = () => {
       window.localStorage.removeItem(key);
     }
   });
-  //this is the recent change done as per the audit team
   window.localStorage.removeItem("user-info");
 };
 //Role specific get-set Methods

@@ -12,14 +12,17 @@ import "./index.css";
 const styles = (theme) => ({
   webRoot: {
     flexGrow: 1,
-    width: "12.5%",
+    width: "10%",
+    padding:"1%"
   },
   mobileRoot: {
     flexGrow: 1,
+    padding:'1%',
     width: "25%",
   },
   mobileRoot1: {
     flexGrow: 1,
+    padding:'1%',
     width: "33%",
   },
   paper: {
@@ -62,7 +65,6 @@ class ServiceList extends React.Component {
     }else{
       list = menu && menu.filter((item) => item.url === "card");
     }
-    
     this.setState({
       actionList: list,
     });
