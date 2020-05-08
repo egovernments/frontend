@@ -57,7 +57,24 @@ export const fetchData = async (
     )
   );
   try {
-    /*Mseva 1.0 */
+    if(window.location.href.includes("bpastakeholder-citizen/home")) {
+      let myApplicationsCount = 0;
+      if(response && response.Licenses) {
+        myApplicationsCount += response.Licenses.length
+      }
+      if(bpaResponse && bpaResponse.Bpa) {
+        myApplicationsCount += bpaResponse.Bpa.length
+      }
+      dispatch(
+        handleField(
+          "my-applications",
+          "components.div.children.header.children.key",
+          "props.dynamicArray",
+          myApplicationsCount ? [myApplicationsCount] : [0]
+        )
+      );
+    } else {
+      /*Mseva 1.0 */
     // let data =
     //   response &&
     //   response.Licenses.map(item => ({
@@ -200,6 +217,7 @@ export const fetchData = async (
           myApplicationsCount ? [myApplicationsCount] : [0]
         )
       );
+    }
     }
   } catch (error) {
     console.log(error);

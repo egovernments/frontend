@@ -4773,7 +4773,7 @@ export const setProposedBuildingData = async (state, dispatch, action, value) =>
         sOccupancyType.forEach(subOcData => {
           occupancyTypeCheck.push({
             value : subOcData,
-            label : getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${subOcData}`, getLocalLabels )
+            label : getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, getLocalLabels )
           });
         });
       }
