@@ -8,7 +8,7 @@ import {
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
 import { convertEpochToDate } from "../../utils";
-import { handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -312,12 +312,13 @@ const ownerDetails = {
             ),
             dateOfBirth: getLabelWithValue(
               {
+                labelName: "Date Of Birth",
                 labelKey: "WS_OWN_DETAIL_DOB_LABEL"
               },
               {
                 jsonPath: "WaterConnection[0].property.owners[0].dob",
                 callBack: convertEpochToDate,
-                callBack: handleNA
+                callBack: convertEpochToDateAndHandleNA
               }
             ),
             fatherName: getLabelWithValue(
