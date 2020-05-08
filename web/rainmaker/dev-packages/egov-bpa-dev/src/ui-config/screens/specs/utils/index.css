@@ -70,3 +70,9 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
 #material-ui-ocScrutinyDetailsContainer {
   width: 100% !important;
 }
+
+@media only screen and (min-width: 768px){
+  .wf-wizard-footer {
+    z-index: 110px !important;
+  }
+}

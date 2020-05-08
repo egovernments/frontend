@@ -27,6 +27,7 @@ const UploadMultipleFile = ({
                     <UploadedDocument
                       document={document}
                       removeDocument={()=>removeDocument(documentIndex)}
+                      disabled={!document.isClickable}
                     />
                   )}
                 </div>

@@ -6,7 +6,7 @@ import {
 import { basicSummary } from "./summaryResource/basicSummary";
 import { scrutinySummary } from './summaryResource/scrutinySummary';
 import { applicantSummary } from "./summaryResource/applicantSummary";
-import { documentsSummary } from "./summaryResource/documentsSummary";
+import { applyDocSummary } from "./summaryResource/applyDocSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 
 export const bpaSummaryDetails = getCommonCard({
@@ -18,6 +18,6 @@ export const bpaSummaryDetails = getCommonCard({
   basicSummary: basicSummary,
   scrutinySummary: scrutinySummary,
   applicantSummary: applicantSummary,
-  documentsSummary: documentsSummary
+  applyDocSummary: applyDocSummary
 });
   
