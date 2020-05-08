@@ -25,8 +25,10 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
+import set from "lodash/set";
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
@@ -861,7 +863,10 @@ export const tradeDetails = getCommonCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
+            set(state.screenConfiguration.preparedFinalObject,"LicensesTemp[0].renewal", true);
+            dispatch(toggleSpinner());
             fillOldLicenseData(state, dispatch);
+            
           }
         }
       },
