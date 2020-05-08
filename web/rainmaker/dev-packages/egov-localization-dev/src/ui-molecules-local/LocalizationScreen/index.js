@@ -1,6 +1,7 @@
 import React, { PureComponent, forwardRef } from "react";
 import MaterialTable from "material-table";
 // import axios from "axios";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import * as XLSX from "xlsx";
 import { SheetJSFT } from "./utils/types";
 import { make_cols } from "./utils/makeColumns";
@@ -38,6 +39,7 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+
 
 const tableIcons = {
   Add: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
@@ -99,7 +101,7 @@ class ApiTable extends PureComponent {
     id: 0,
     newData: {},
     // data: [],
-
+    isFileSelected:true,
     selectedState: "",
     name: [],
     multiSelect: [],
@@ -168,7 +170,7 @@ class ApiTable extends PureComponent {
         const payload = await httpRequest(
           "post",
           `egov-mdms-service/v1/_search?tenantId=${
-            tenantId ? tenantId : getTenantId()
+          tenantId ? tenantId : getTenantId()
           }`,
           "_search",
           [],
@@ -335,10 +337,11 @@ class ApiTable extends PureComponent {
     const files = e.target.files;
     console.log(files, "files");
     if (files && files[0]) {
-      this.setState({ file: files[0] }, () => {
+      this.setState({ file: files[0], isFileSelected:false }, () => {
         handleFile();
       });
     }
+    
   };
 
   handleChangeMulti = event => {
@@ -441,15 +444,15 @@ class ApiTable extends PureComponent {
   render() {
     // console.log("matchData", this.state.matchData);
 
-    const { data = [], newSearch = [] } = this.state;
+    const { data = [], newSearch = [], isFileSelected} = this.state;
     let filterModule = [];
     let filterLocale = [];
 
 
     newSearch !== []
       && newSearch.forEach((da, key) => {
-          filterModule.push(da.module);
-        })
+        filterModule.push(da.module);
+      })
 
 
     let filtermoduleUnique = {};
@@ -462,8 +465,8 @@ class ApiTable extends PureComponent {
 
     newSearch !== []
       && newSearch.forEach((da, key) => {
-          filterLocale.push(da.locale);
-        })
+        filterLocale.push(da.locale);
+      })
 
 
     let filterLocaleUnique = {};
@@ -475,10 +478,10 @@ class ApiTable extends PureComponent {
     });
 
     const columns = [
-      { title: "Code", field: "code" },
-      { title: "Message", field: "message" },
-      { title: "Module", field: "module", lookup: filtermoduleUnique },
-      { title: "Locale", field: "locale", lookup: filterLocaleUnique }
+      { title: getLocaleLabels("Code", "LC_CODE_KEY"), field: "code" },
+      { title: getLocaleLabels("Message", "LC_MESSAGE_KEY"), field: "message" },
+      { title: getLocaleLabels("Module", "LC_MODULE_KEY"), field: "module", lookup: filtermoduleUnique },
+      { title: getLocaleLabels("Locale", "LC_LOCALE_KEY"), field: "locale", lookup: filterLocaleUnique }
     ];
 
     const enabled = this.state.locale.length >= 1;
@@ -488,7 +491,7 @@ class ApiTable extends PureComponent {
         <Grid container justify="center" alignItems="center">
           <Grid container item md={5} sm={6} xs={11}>
             <Typography variant="h4" style={{ margin: "1em 0em" }}>
-              Search localization
+              {getLocaleLabels("Search localization", "LC_MAIN_HEADER")}
             </Typography>
           </Grid>
 
@@ -528,11 +531,12 @@ class ApiTable extends PureComponent {
 
             <Button
               variant="contained"
+              disabled={isFileSelected}
               onClick={() => this.cmpreUpload(newSearch, data)}
               style={{ background: "#fe7a51", color: "#fff" }}
-            >
-              Upload
+            > {getLocaleLabels("Upload", "LC_UPLOAD_KEY")}
             </Button>
+             
             <br />
             <Grid
               container
@@ -548,13 +552,15 @@ class ApiTable extends PureComponent {
           <Grid item md={11} sm={11} xs={11}>
             <Card style={{ marginBottom: "2rem" }}>
               <Typography variant="h5" style={{ margin: "1em" }}>
-                Search for Localization
+                {getLocaleLabels("Search For Localization", "LC_SEARCH_FOR_LOCALIZATION")}
               </Typography>
 
               <Grid container style={{ margin: "2rem" }}>
                 <Grid item md={4} sm={6} xs={10}>
                   <FormControl style={{ width: "70%" }}>
-                    <InputLabel>Tenant Id</InputLabel>
+                    <InputLabel>
+                      {getLocaleLabels("Tenant Id", "LC_TENANT_ID")}
+                    </InputLabel>
                     <Select
                       open={this.state.open}
                       onClose={this.handleClose}
@@ -572,7 +578,9 @@ class ApiTable extends PureComponent {
 
                 <Grid item md={4} sm={6} xs={10}>
                   <FormControl style={{ width: "70%" }}>
-                    <InputLabel htmlFor="select-multiple">Module</InputLabel>
+                    <InputLabel htmlFor="select-multiple">
+                      {getLocaleLabels("Module", "LC_MODULE_TYPE_KEY")}
+                    </InputLabel>
                     <Select
                       multiple
                       value={this.state.multiSelect}
@@ -597,7 +605,7 @@ class ApiTable extends PureComponent {
 
                 <Grid item md={4} sm={6} xs={10}>
                   <FormControl style={{ width: "70%" }}>
-                    <InputLabel>Locale</InputLabel>
+                    <InputLabel>{getLocaleLabels("Locale", "LC_LOCALE_KEY")}</InputLabel>
                     <Select
                       open={this.state.open}
                       onClose={this.handleClose}
@@ -631,11 +639,12 @@ class ApiTable extends PureComponent {
                     onClick={this.onReset}
                   >
                     {" "}
-                    reset
+                    {getLocaleLabels("reset", "LC_RESET_KEY")}
                   </Button>
                 </Grid>
 
                 <Grid item md={6} sm={6} xs={12}>
+                  
                   <Button
                     variant="contained"
                     style={{
@@ -649,7 +658,7 @@ class ApiTable extends PureComponent {
                     disabled={!enabled}
                   >
                     {" "}
-                    search
+                    {getLocaleLabels("Search", "LC_SEARCH_KEY")}
                   </Button>
                 </Grid>
               </Grid>
@@ -660,7 +669,7 @@ class ApiTable extends PureComponent {
         <Grid container justify="center" alignItems="center">
           <Grid item md={11} sm={11} xs={11}>
             <MaterialTable
-              title={`Localization Search Results ( ${newSearch.length} )`}
+              title={`${getLocaleLabels("Localization Search Results", "LC_SEARCH_RESULTS_KEY")}( ${newSearch.length} )`}
               options={{
                 filtering: true,
                 sorting: true,
