@@ -226,6 +226,93 @@ const getBuildings = (data) => {
           border: [false, false, true, false],
         },
       ]);
+
+
+      retbuildings.push([
+      {
+        text: "Land Area",
+        border: [true, false, false, false]
+      },
+      {
+        text: "Total Covered Area",
+        border: [false, false, false, false]
+      },
+      {
+        text: "Parking Area",
+        border: [false, false, false, false]
+      },
+      {
+        text: "Left Surrounding",
+        border: [false, false, true, false]
+      }
+    ]);
+
+    retbuildings.push([
+      {
+        text: data.landArea,
+        style: "receipt-table-value",
+        border: [true, false, false, false]
+      },
+      {
+        text: data.totalCoveredArea,
+        style: "receipt-table-value",
+        border: [false, false, false, false]
+      },
+      {
+        text: data.parkingArea,
+        style: "receipt-table-value",
+        border: [false, false, false, false]
+      },
+      {
+        text: data.leftSurrounding,
+        style: "receipt-table-value",
+        border: [false, false, true, false]
+      }
+    ]);
+
+    retbuildings.push([
+      {
+        text: "Right Surrounding",
+        border: [true, false, false, false]
+      },
+      {
+        text: "Back Surrounding",
+        border: [false, false, false, false]
+      },
+      {
+        text: "Front Surrounding",
+        border: [false, false, false, false]
+      },
+      {
+        text: "",
+        border: [false, false, true, false]
+      }
+    ]);
+
+    retbuildings.push([
+      {
+        text: data.rightSurrounding,
+        style: "receipt-table-value",
+        border: [true, false, false, false]
+      },
+      {
+        text: data.backSurrounding,
+        style: "receipt-table-value",
+        border: [false, false, false, false]
+      },
+      {
+        text: data.frontSurrounding,
+        style: "receipt-table-value",
+        border: [false, false, false, false]
+      },
+      {
+        text: "",
+        style: "receipt-table-value",
+        border: [false, false, true, false]
+      }
+    ]);
+
+
       let headerrow = [];
       let valuerow = [];
       for (let [uomkey, uomvalue] of Object.entries(building.uoms)) {

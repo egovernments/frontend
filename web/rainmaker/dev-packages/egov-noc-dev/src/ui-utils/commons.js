@@ -87,6 +87,17 @@ export const getSearchResults = async (queryObject, dispatch) => {
         );
       }
     }
+
+    
+
+    response.FireNOCs.forEach(firenoc=>{
+
+      set(firenoc,`fireNOCDetails.buildings[0].landArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].landArea")));
+      // set(firenoc,`fireNOCDetails.buildings[0].parkingArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].parkingArea")));
+      set(firenoc,`fireNOCDetails.buildings[0].totalCoveredArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].totalCoveredArea")));
+
+    });
+
     return response;
   } catch (error) {
     store.dispatch(
@@ -124,11 +135,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       []
     ));
 
-    let parkingArea = parseInt(get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
-      []
-    ));
+    // let parkingArea = parseInt(get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+    //   []
+    // ));
 
 
     
@@ -169,11 +180,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       totalCoveredArea
     );
 
-    set(
-      payload[0],
-      `fireNOCDetails.buildings[0].parkingArea`,
-      parkingArea
-    );
+    // set(
+    //   payload[0],
+    //   `fireNOCDetails.buildings[0].parkingArea`,
+    //   parkingArea
+    // );
 
     let village = get(
       state.screenConfiguration.preparedFinalObject,
@@ -367,7 +378,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         "/firenoc-services/v1/_create",
         "",
         [],
-        { FireNOCs: payload }
+        { FireNOCs: payload }        
       );
       console.log(response,"Create Response")
       response = furnishNocResponse(response);
@@ -379,7 +390,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         "/firenoc-services/v1/_update",
         "",
         [],
-        { FireNOCs: payload }
+        { FireNOCs: payload }        
       );
       response = furnishNocResponse(response);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));

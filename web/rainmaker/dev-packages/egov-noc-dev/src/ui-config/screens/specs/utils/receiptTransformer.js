@@ -125,7 +125,35 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "NA")
     );
     let buildings = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
-    
+
+    data.landArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].landArea", "NA")
+    );
+
+    data.totalCoveredArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea", "NA")
+    );
+
+    data.parkingArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea", "NA")
+    );
+
+    data.leftSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].leftSurrounding", "NA")
+    );
+
+    data.rightSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].rightSurrounding", "NA")
+    );
+
+    data.backSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].backSurrounding", "NA")
+    );
+
+    data.frontSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].frontSurrounding", "NA")
+    );
+
     console.log("buildings", buildings);
 
     data.buildings = buildings.map(building => {

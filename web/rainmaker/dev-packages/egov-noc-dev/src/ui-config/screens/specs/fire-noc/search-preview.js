@@ -303,7 +303,6 @@ const setSearchResponse = async (
   // const response = sampleSingleSearch();
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
-
   let checkdocs = get(
     state,
     "screenConfiguration.preparedFinalObject.documentsPreview",

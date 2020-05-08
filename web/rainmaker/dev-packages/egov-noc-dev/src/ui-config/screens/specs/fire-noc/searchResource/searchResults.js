@@ -176,7 +176,6 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  console.log(rowData,"rowdataforsearch")
   switch (rowData[6]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
