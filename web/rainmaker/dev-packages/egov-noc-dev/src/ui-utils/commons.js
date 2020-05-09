@@ -93,7 +93,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
     response.FireNOCs.forEach(firenoc=>{
 
       set(firenoc,`fireNOCDetails.buildings[0].landArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].landArea")));
-      // set(firenoc,`fireNOCDetails.buildings[0].parkingArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].parkingArea")));
+      set(firenoc,`fireNOCDetails.buildings[0].parkingArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].parkingArea")));
       set(firenoc,`fireNOCDetails.buildings[0].totalCoveredArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].totalCoveredArea")));
 
     });
@@ -135,13 +135,30 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       []
     ));
 
-    // let parkingArea = parseInt(get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
-    //   []
-    // ));
+   let parkingArea = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+      []
+    )
 
+    if(parkingArea.length === 0)
+    {
 
+      parkingArea = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+        []
+      )
+      parkingArea = 0
+    }
+    else{
+
+      parkingArea = parseInt(get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+        []
+      ));
+    }
     
     let areaType = get(
       state.screenConfiguration.preparedFinalObject,
@@ -179,12 +196,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       `fireNOCDetails.buildings[0].totalCoveredArea`,
       totalCoveredArea
     );
-
-    // set(
-    //   payload[0],
-    //   `fireNOCDetails.buildings[0].parkingArea`,
-    //   parkingArea
-    // );
+    set(
+      payload[0],
+      `fireNOCDetails.buildings[0].parkingArea`,
+      parkingArea
+    );
 
     let village = get(
       state.screenConfiguration.preparedFinalObject,
