@@ -4227,6 +4227,10 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     obj.fileStoreId = doc.fileStoreId;
     obj.linkText = "View";
     obj.wfState = doc.wfState;
+    if(doc.auditDetails){
+      obj["createdTime"] = doc.auditDetails.createdTime;
+    }
+    
     obj["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
@@ -4255,7 +4259,8 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       obj.createdBy = "BPA Noc Verifier"    
     } else {
       obj.createdBy = "BPA Architect"
-    }   
+    }  
+    obj['auditDetails'] = doc.auditDetails; 
     documentsPreview.push(obj);
     return obj;
   });
@@ -4303,10 +4308,8 @@ documentCards && Object.keys(documentCards).map((doc)=>{
  }
  cards.push(card);
 });
-console.log('required from final cards', requiredDocsFromMdms)
 if(requiredDocsFromMdms.length > 0){
   const allCards = [].concat(...requiredDocsFromMdms.map(({cards}) => cards || []));
-  console.log('allCards',allCards);
 
   allCards && allCards.map((mdmsCard)=>{
     let found = false;

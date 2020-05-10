@@ -169,7 +169,22 @@ const UploadCard = (props) => {
   } = props;
   return (
     <Grid container={true} style={relpos}>
-      <Grid item={true} xs={4} sm={2} md={1} className={cellstyle}>
+       {(!props.isFromPreview)?
+          <Grid item={true} xs={4} sm={2} md={1} className={cellstyle}>
+            {docItem && docItem.documents && docItem.documents.length > 0 ?
+            <div className={classes.documentSuccess}>
+            <Icon>
+              <i class="material-icons">done</i>
+            </Icon>
+          </div>
+            :
+            <div className={classes.documentIcon}>
+            <span>{docIndex + 1}</span>
+          </div>
+            }
+          </Grid>:""
+        } 
+      {/* <Grid item={true} xs={4} sm={2} md={1} className={cellstyle}>
         {(!props.isFromPreview)?<div>
           {docItem && docItem.documents && docItem.documents.length > 0 ? (
           <div className={classes.documentSuccess}>
@@ -184,7 +199,7 @@ const UploadCard = (props) => {
         )}
         </div>:""}
        
-      </Grid>
+      </Grid> */}
       <Grid
         item={true}
         xs={10}
@@ -231,15 +246,7 @@ const UploadCard = (props) => {
         style={{ display: "inline-block !important;" }}
       >
         <div className="upload_btn">
-          {        
-          (props.isFromPreview)?<Button
-              color="primary"
-              style={{ float: "right" }}
-              onClick={() => props.toggleEditClick(docIndex)}
-            >
-              Upload
-            </Button>:""
-          }
+         
           <UploadMultipleFile
             classes={props.classes}
             handleFileUpload={(e) =>
@@ -255,6 +262,15 @@ const UploadCard = (props) => {
           />
         </div>
       </Grid>
+      {(props.isFromPreview)?
+          <Grid item xs={12}>
+           <Button
+              color="primary"
+              style={{ float: "right" }}
+              onClick={() => props.toggleEditClick(docIndex)}
+            >Upload</Button>
+        </Grid>:""
+        }
     </Grid>
   );
 };

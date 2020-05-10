@@ -61,7 +61,7 @@
     "egov-abg": "babel dev-packages/egov-abg-dev/src --out-dir packages/lib/egov-abg --copy-files",
     "egov-hrms": "babel dev-packages/egov-hrms-dev/src --out-dir packages/lib/egov-hrms --copy-files",   
     "egov-common": "babel dev-packages/egov-common-dev/src --out-dir packages/lib/egov-common --copy-files",
-    "egov-bpa": "babel dev-packages/egov-bpa-dev/src --out-dir packages/lib/egov-bpa --copy-files",
+    "egov-bpa": "babel  -w dev-packages/egov-bpa-dev/src --out-dir packages/lib/egov-bpa --copy-files",
     "egov-noc": "babel dev-packages/egov-noc-dev/src --out-dir packages/lib/egov-noc --copy-files",
     "egov-wns": "babel dev-packages/egov-wns-dev/src --out-dir packages/lib/egov-wns --copy-files",
     "go": "yarn && yarn run build-css-employee && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules && yarn run transpile-employee-modules && lerna bootstrap",

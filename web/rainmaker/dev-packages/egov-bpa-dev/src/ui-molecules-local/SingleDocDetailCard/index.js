@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import classNames from "classnames";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = {
   whiteCard: {
@@ -31,10 +32,10 @@ const cellstyle = {
 };
 
 const tablestyle = {
-  display: "inline-grid",
-  alignItems: "end",
-  //maxWidth: "23.3%",
-  marginTop: "auto",
+  display:"flex",
+  alignItems:"center",
+  //maxWidth: "32.8%"
+
 };
 
 const documentTitle = {
@@ -52,7 +53,7 @@ const documentTitleOrg = {
   fontSize: "12px",
   fontWeight: 400,
   letterSpacing: "0.67px",
-  lineHeight: "8px",
+  lineHeight: "10px",
   background: "#FEF0E7",
   borderRadius: "20px",
   padding: 10,
@@ -80,11 +81,21 @@ const documentTitlegrey = {
 
 const fontStyle = {
   fontSize: "12px",
+  position:"absolute",
+  float:"left",
+  clear:"left",
+  paddingTop:"32px"
 };
 const marginStyle = {
   fontSize: "12px",
   margin: "auto",
 };
+
+const documentStyle = {
+  fontSize: "12px",
+  margin: "auto",
+};
+
 function SingleDocDetailCard(props) {
   const { classes, docItem, docIndex, name, ...rest } = props;
   return (
@@ -104,7 +115,7 @@ function SingleDocDetailCard(props) {
           <div style={documentTitlegrey}>{docIndex + 1}</div>
         </Grid>
         <Grid xs={12} sm={6} style={tablestyle}>
-          <div>
+          <div style={{float:"left",position:"absolute",paddingBottom:"8px"}}>
             <LabelContainer
               labelName={getTransformedLocale(docItem.documentCode)}
               labelKey={getTransformedLocale(docItem.documentCode)}
@@ -112,13 +123,16 @@ function SingleDocDetailCard(props) {
             />
           </div>
           <div style={fontStyle}>
+            <span>
             {!docItem.dropDownValues ? "" : docItem.dropDownValues.value}
+            </span>
+         
           </div>
         </Grid>
 
         <Grid xs={9} className={classes.subtext}>
           {docItem.documents && docItem.documents.length > 0 ? (
-            <span>
+            <div>
               {docItem.documents.map((doc) => (
                 <Grid
                   xs={7}
@@ -126,17 +140,20 @@ function SingleDocDetailCard(props) {
                     display: "inline-block",
                     marginRight: "3px",
                     padding: "2px 0px 10px",
+                    
                   }}
                 >
-                  <Typography style={marginStyle}>
-                    <span style={documentTitleOrg}>{doc.fileName}</span>
-                  </Typography>
-                </Grid>
+                   <Tooltip title={doc.fileName} arrow>
+                  <div title={doc.fileName} style={documentTitleOrg}>
+                    {doc.fileName}
+                  </div>
+                  </Tooltip>
+                 </Grid>
               ))}
-            </span>
+            </div>
           ) : (
             <Grid xs={7}>
-              <Typography style={marginStyle}>No Documents Uploaded</Typography>
+              <Typography style={documentStyle}>No Documents Uploaded</Typography>
             </Grid>
           )}
         </Grid>

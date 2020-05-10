@@ -15,9 +15,7 @@ import UploadCard from "../../ui-molecules-local/UploadCard";
 class PreviewContainer extends Component {
   state = {
     uploadedDocIndex: 0,
-    editableDocuments: Array(this.props.finalCardsforPreview.length).fill({
-      editable: false,
-    }),
+    editableDocuments: null
   };
   constructor(props) {
     super(props);
@@ -29,9 +27,11 @@ class PreviewContainer extends Component {
   }
   static getDerivedStateFromProps(props, state) {
     if (
-      state.editableDocuments == null &&
+      (state.editableDocuments == null &&
       props.finalCardsforPreview &&
-      props.finalCardsforPreview.length > 0
+      props.finalCardsforPreview.length > 0)||
+      (state.editableDocuments !=null && state.editableDocuments.length >0 && props.finalCardsforPreview.length>0 && 
+        (state.editableDocuments.length != props.finalCardsforPreview.length))
     ) {
       state.editableDocuments = Array(props.finalCardsforPreview.length).fill({
         editable: false,
@@ -46,7 +46,7 @@ class PreviewContainer extends Component {
           {this.state.editableDocuments &&
             this.state.editableDocuments.length > 0 &&
             (this.state.editableDocuments[key].editable ? (
-              <UploadCard
+              <div style={{backgroundColor:"rgb(255,255,255)", padding:"10px"}}><UploadCard
                 docItem={card}
                 docIndex={key}
                 key={key.toString()}
@@ -59,7 +59,7 @@ class PreviewContainer extends Component {
                 toggleEditClick={this.toggleEditClick}
                 isFromPreview={true}
                 {...rest}
-              />
+              /></div>
             ) : (
               <MultiDocDetailCard
                 docItem={card}
@@ -117,7 +117,15 @@ class PreviewContainer extends Component {
       bpaDetails,
     } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
-    console.log("file", file);
+    let documentCode = finalCardsforPreview[uploadedDocIndex].dropDownValues.value;
+    if(!documentCode){
+      let documentMenu = finalCardsforPreview[uploadedDocIndex].dropDownValues.menu;
+      if(documentMenu && documentMenu.length > 0){
+        documentCode = documentMenu[0].code;
+      } else {
+        documentCode = finalCardsforPreview[uploadedDocIndex].documentCode
+      }
+    }
     let appDocumentList = [];
     let fileObj = {
       fileName: file.name,
@@ -126,8 +134,8 @@ class PreviewContainer extends Component {
       fileUrl: Object.values(fileUrl)[0],
       isClickable: true,
       link: Object.values(fileUrl)[0],
-      title: finalCardsforPreview[uploadedDocIndex].dropDownValues.value,
-      documentType: finalCardsforPreview[uploadedDocIndex].dropDownValues.value,
+      title: documentCode,
+      documentType: documentCode
     };
     if (
       finalCardsforPreview[uploadedDocIndex] &&

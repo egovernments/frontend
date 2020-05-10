@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import groupBy from "lodash/groupBy";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+
 //import "./index.css";
 
 const styles = {
@@ -31,7 +32,13 @@ const styles = {
     wordWrap: "break-word",
   },
 };
-
+const marginStyle1 = {
+  fontSize: "14px",
+  fontWeight: "500",
+  color: "rgba(0, 0, 0, 0.87)",
+  fontFamily: "Roboto",
+  maxWidth: "12%",
+};
 const cellstyle = {
   display: "flex",
   alignItems: "center",
@@ -85,6 +92,16 @@ const documentTitlegrey = {
 
 const fontStyle = {
   fontSize: "12px",
+  fontWeight: "500",
+  color: "rgba(0, 0, 0, 0.87)",
+  fontFamily: "Roboto",
+};
+
+const titleStyle = {
+  fontSize: "10px",
+  fontWeight: "500",
+  color: "rgba(120,110,110,0.64)",
+  fontFamily: "Roboto",
 };
 
 const marginStyle = {
@@ -101,136 +118,126 @@ const floatStyle = {
   fontFamily: "Roboto",
   width: "100%",
 };
-
+const requiredIcon = (
+  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>
+    *
+  </sup>
+);
 function MultiDocDetailCard(props) {
-  debugger;
   const { classes, docItem, docIndex, name, ...rest } = props;
-  console.log(props, "singleprops");
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={3}  className={
+                props.backgroundGrey
+                  ? classNames(classes.whiteCard, "background-grey")
+                  : classes.whiteCard
+              }>
         <Grid
           item={true}
-          md={12}
           xs={12}
-          sm={12}
           className={
             props.backgroundGrey
               ? classNames(classes.whiteCard, "background-grey")
               : classes.whiteCard
           }
         >
-          {docItem.documents && docItem.documents.length > 0 ? (
-            <div style={{ width: "100%" }}>
-              <div style={floatStyle}>
-                {getTransformedLocale(docItem.documentCode)}
-                {docItem.readOnly ? (
-                  ""
-                ) : (
-                  <Button
-                    color="primary"
-                    style={{ float: "right" }}
-                    onClick={() => props.toggleEditClick(docIndex)}
-                  >
-                    Upload
-                  </Button>
-                )}
-              </div>
-              {docItem.documents.map((doc) => (
-                <div
-                  style={{
-                    display: "inline-flex",
-                    width: "91%",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div>
-                    <div>File</div>
-                    <div>
-                      <Typography style={marginStyle}>
-                        <div style={marginStyle}>
-                          {!doc.name ? "" : doc.name}
-                        </div>
-                      </Typography>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div>Uploaded By</div>
-                    <div>
-                      <Typography style={marginStyle}>
-                        <div style={marginStyle}>
-                          {!doc.createdBy ? "" : doc.createdBy}
-                        </div>
-                      </Typography>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div>
-                      <div>Uploaded Date</div>
-                    </div>
-                    <div>
-                      <Typography style={marginStyle}>
-                        <div style={marginStyle}>
-                          {!doc.createdTime
-                            ? ""
-                            : doc.createdTime.toLocaleDateString()}
-                        </div>
-                      </Typography>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div>
-                      <Button
-                        color="primary"
-                        onClick={() => {
-                          debugger;
-                          window.open(doc.link, "_blank");
-                        }}
-                      >
-                        View File
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div
-              style={{
-                width: "100%",
-                display: "inline-flex",
-                justifyContent: "space-between",
-              }}
+          <Grid item xs={6}>
+            <Typography
+              variant="subtitle1"
+              style={{ fontWeight: "bold", fontSize: "12px" }}
             >
-              <div style={marginStyle}>
-                {getTransformedLocale(docItem.documentCode)}
-              </div>
-              <div style={marginStyle}>No Documents Uploaded</div>
-              <div>
-                {docItem.readOnly ? (
-                  ""
-                ) : (
+              {getTransformedLocale(docItem.documentCode)}
+              {docItem.required}
+              <span>{requiredIcon}</span>
+
+            </Typography>
+            
+          </Grid>
+          <Grid item xs={3}>
+            {!docItem.documents || docItem.documents == null || docItem.documents.length == 0 ? (
+              <Typography
+                variant="subtitle1"
+                style={{ fontWeight: "bold", fontSize: "12px" }}
+              >
+                No Documents Uploaded
+              </Typography>
+            ) : (
+              ""
+            )}
+          </Grid>
+          <Grid item xs={3}>
+            {docItem.readOnly ? (
+              ""
+            ) : (
+              <Button
+                color="primary"
+                style={{ float: "right" }}
+                onClick={() => props.toggleEditClick(docIndex)}
+              >
+                Upload
+              </Button>
+            )}
+          </Grid>
+          
+        </Grid>
+        {docItem.documents &&
+            docItem.documents.length > 0 &&
+            docItem.documents.map((doc) => {
+              return(<React.Fragment 
+              >
+                <Grid item xs={3}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    style={titleStyle}
+                  >
+                    File
+                  </Typography>
+                  <div style={fontStyle}>
+                    {!doc.name ? "" : doc.name}
+                  </div>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    style={titleStyle}
+                  >
+                    Uploaded By
+                  </Typography>
+                  <div style={fontStyle}>
+                    {!doc.createdBy ? "" : doc.createdBy}
+                  </div>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    style={titleStyle}
+                  >
+                    Uploaded Time
+                  </Typography>
+                  <div style={fontStyle}>
+                    {!doc.createdTime ? "" : doc.createdTime.toLocaleDateString()}
+                  </div>
+                </Grid>
+                <Grid item xs={3}>
                   <Button
                     color="primary"
-                    style={{ float: "right" }}
-                    onClick={() => props.toggleEditClick(docIndex)}
+                    onClick={() => {
+                      window.open(doc.link, "_blank");
+                    }}
                   >
-                    Upload
+                    View File
                   </Button>
-                )}
-              </div>
-            </div>
-          )}
-        </Grid>
+                </Grid>
+              </React.Fragment>)
+            })}
       </Grid>
     </React.Fragment>
   );
 }
 
-MultiDocDetailCard.propTypes = {
-};
+MultiDocDetailCard.propTypes = {};
 
 export default withStyles(styles)(MultiDocDetailCard);
