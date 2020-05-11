@@ -77,7 +77,7 @@ const mapStateToProps = (state, ownprops) => {
   if (jsonPath) {
     fieldValue = get(preparedFinalObject, jsonPath);
     if (fieldValue && callBack && typeof callBack === "function") {
-      fieldValue = callBack(fieldValue);
+      fieldValue = callBack(fieldValue, state);
     }
   }
   return { fieldValue, localizationLabels };

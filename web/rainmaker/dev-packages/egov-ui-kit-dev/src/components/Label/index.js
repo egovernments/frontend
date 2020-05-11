@@ -43,7 +43,7 @@ const labelText = (label, labelStyle, labelClassName, required, secondaryText, i
       }
     } else {
       return (
-        <div data-localization={label} className={`label-text ${labelClassName}`} style={labelStyle}>
+        <div data-localization={label} className={`label-text ${labelClassName}`} style={labelStyle} style={{ textIndent: 2 }}>
           {label} {secondaryText}
           {required && <span style={{ color: "red" }}> *</span>}
         </div>

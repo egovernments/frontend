@@ -3,12 +3,11 @@ import { connect } from "react-redux";
 import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Boxboard } from "./components/actionItems";
-
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 const iconStyle = {
   width: "48px",
   height: "46.02px",
 };
-
 class Inbox extends Component {
   state = {
     actionList: [],
@@ -26,14 +25,13 @@ class Inbox extends Component {
         hasWorkflow: false,
       });
     }
-
     const list = menu && menu.filter((item) => item.url === "card");
     this.setState({
       actionList: list,
     });
   }
   render() {
-    const { name } = this.props;
+    const { name, setRoute } = this.props;
     const { actionList, hasWorkflow } = this.state;
     return (
       <div>
@@ -41,24 +39,25 @@ class Inbox extends Component {
           <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
           <Label className="landingPageUser" label={name} />
         </div>
-
-        {actionList && <Boxboard data={actionList} />}
+        {actionList && <Boxboard data={actionList} setRoute={setRoute} />}
         {hasWorkflow && <TableData />}
       </div>
     );
   }
 }
-
 const mapStateToProps = (state) => {
   const { auth, app } = state;
   const { menu } = app;
   const { userInfo } = auth;
   const name = auth && userInfo.name;
-
   return { name, menu };
 };
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setRoute: (route) => dispatch(setRoute(route)),
+  };
+};
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Inbox);

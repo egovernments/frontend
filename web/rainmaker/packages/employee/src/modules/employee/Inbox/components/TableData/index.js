@@ -98,7 +98,10 @@ class TableData extends Component {
     try {
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
-      const assignedData = _.orderBy(_.filter(responseData.ProcessInstances, (item) => _.get(item.assignee, "uuid") === uuid), [
+      //debugger;
+      const assignedData = _.orderBy(_.filter(responseData.ProcessInstances, (item) => _.get(item.assignee, "uuid") === uuid), 
+      
+      [
         "businesssServiceSla",
       ]);
       const allData = _.orderBy(_.get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
@@ -139,7 +142,7 @@ class TableData extends Component {
     }
     prepareFinalObject("InboxData", inboxData);
 
-    this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }, { key: "businessService", value: "newTL" }]);
+    this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
   };
 
   onModuleFilter = (event) => {
@@ -197,6 +200,9 @@ class TableData extends Component {
               </MenuItem>
               <MenuItem value={"PT"}>
                 <Label label="CS_COMMON_INBOX_PT" />
+              </MenuItem>
+              <MenuItem value={"FIRENOC"}>
+                <Label label="CS_COMMON_INBOX_FIRENOC" />
               </MenuItem>
             </Select>
           </div>

@@ -92,7 +92,8 @@ class ComponentInterface extends React.Component {
                   module => module[componentPath]
                 )
               : import("ui-containers-local").then(
-                  module => module[componentPath]
+                  module => module[componentPath],
+                  console.log(module,"module")
                 ),
           loading: () => <LinearProgress />
         });
@@ -149,7 +150,7 @@ class ComponentInterface extends React.Component {
         const businessServiceData = JSON.parse(
           localStorageGet("businessServiceData")
         );
-        const data = find(businessServiceData, { businessService: "NewTL" });
+        const data = find(businessServiceData, { businessService: roleDefination.moduleName || "NewTL"  });
         //let found = actions.some(item => roleCodes.includes(item));
 
         const filteredData =
@@ -208,7 +209,9 @@ class ComponentInterface extends React.Component {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
-  const applicationStatus = get(preparedFinalObject, "Licenses[0].status");
+//  const applicationStatus = get(preparedFinalObject, "Licenses[0].status");
+ const applicationStatus = get(preparedFinalObject, "Licenses[0].status") || get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.status");
+
   return { applicationStatus };
 };
 
