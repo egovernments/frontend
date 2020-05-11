@@ -5,6 +5,8 @@ import {
   getEpochForDate,
   getBpaTextToLocalMapping
 } from "../utils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 
 const header = getCommonHeader(
@@ -37,11 +39,11 @@ const screenConfig = {
             ...getSelectField({
               label: {
                 labelName: "Application Type",
-                labelKey: "SELECT_APPLICATION_TYPE_LABEL"
+                labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
               },
               placeholder: {
                 labelName: "Select Application Type",
-                labelKey: "APPLICATION_TYPE_PLACEHOLDER"
+                labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_PLACEHOLDER"
               },
               jsonPath: "filterData[0].applicationType",
               props: {
@@ -70,11 +72,11 @@ const screenConfig = {
             ...getSelectField({
               label: {
                 labelName: "Service Type",
-                labelKey: "SELECT_SERVICE_TYPE_LABEL"
+                labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
               },
               placeholder: {
                 labelName: "Select Service Type",
-                labelKey: "SERVICE_TYPE_PLACEHOLDER"
+                labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_PLACEHOLDER"
               },
               optionLabel: "name",
               sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
@@ -96,12 +98,12 @@ const screenConfig = {
             ...getSelectField({
               label: {
                 labelName: "Status",
-                labelKey: "SELECT_STATUS_LABEL"
+                labelKey: "BPA_STATUS_LABEL"
               },
               optionLabel: "name",
               placeholder: {
                 labelName: "Select Status",
-                labelKey: "APP_STATUS_PLACEHOLDER"
+                labelKey: "BPA_STATUS_PLACEHOLDER"
               },
               jsonPath: "filterData[0]." + [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")],
               data: [{ code: getBpaTextToLocalMapping("PENDINGPAYMENT") }, { code: getBpaTextToLocalMapping("REJECTED") }, { code: getBpaTextToLocalMapping("APPROVED") }, { code: getBpaTextToLocalMapping("INITIATED") }, { code: getBpaTextToLocalMapping("CITIZEN_APPROVAL_INPROCESS") }, { code: getBpaTextToLocalMapping("INPROGRESS") }, { code: getBpaTextToLocalMapping("PENDING_FEE") }, { code: getBpaTextToLocalMapping("DOC_VERIFICATION_INPROGRESS") }, { code: getBpaTextToLocalMapping("FIELDINSPECTION_INPROGRESS") }, { code: getBpaTextToLocalMapping("NOC_VERIFICATION_INPROGRESS") }, { code: getBpaTextToLocalMapping("APPROVAL_INPROGRESS") }, { code: getBpaTextToLocalMapping("PENDING_APPL_FEE") }, { code: getBpaTextToLocalMapping("PENDING_SANC_FEE_PAYMENT") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_DOC_VERIF") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_FI_VERIF") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_NOC_VERIF") }],
@@ -158,7 +160,25 @@ const screenConfig = {
               getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE"),
               getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO"),
               getBpaTextToLocalMapping("BPA_COMMON_SLA"),
-              getBpaTextToLocalMapping("BPA_COL_APP_STATUS")
+              getBpaTextToLocalMapping("BPA_COL_APP_STATUS"),
+              {
+                name: "tenantId",
+                options: {
+                  display: false
+                }
+              },
+              {
+                name: "serviceType",
+                options: {
+                  display: false
+                }
+              },
+              {
+                name: "type",
+                options: {
+                  display: false
+                }
+              }
             ],
             title: getBpaTextToLocalMapping("Search Results for BPA Applications"),
             // jsonPath: "searchResults",
@@ -196,16 +216,23 @@ const screenConfig = {
 };
 
 const onRowClick = rowData => {
-  const state = rowData[3];
-  const applicationNumber = rowData[0];
-  const tenantId = rowData[4];
-  switch (state) {
-    case "INITIATED":
-      window.location.href = `/egov-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      break;
-    default:
-      window.location.href = `/egov-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      break;
+  const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+  if (rowData[6] === "BPAREG") {
+    switch (rowData[4]) {
+      case "INITIATED":
+        window.location.href = `${environment}/bpastakeholder/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
+        break;
+      default:
+        window.location.href = `${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
+    }
+  } else {
+    switch (rowData[4]) {
+      case "Initiated":
+      window.location.href = `${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
+        break;
+      default:
+      window.location.href = `${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}&type=${rowData[7]}`
+    }
   }
 };
 
