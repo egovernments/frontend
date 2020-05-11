@@ -28,7 +28,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import set from "lodash/set";
 import get from "lodash/get";
@@ -44,6 +44,7 @@ import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData } fr
 import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
@@ -306,7 +307,6 @@ const setSearchResponse = async (
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
   let bpaDocs = [];
-  
   if (docs && docs.length > 0) {
     docs.forEach(section => {
       section.cards.forEach(doc => {
@@ -317,8 +317,6 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           docObj.isDocumentRequired = false;
         }
         else {
-          docObj.isDocumentRequired = doc.required;          
-        docObj.isDocumentRequired = doc.required;
           docObj.isDocumentRequired = doc.required;          
         }
         docObj.isDocumentTypeRequired = doc.required;
@@ -334,7 +332,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
     let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
     let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
     uploadedDocs.forEach(upDoc => {
-      bpaDocs.forEach(bpaDoc => {
+      bpaDocs.forEach((bpaDoc,index) => {
         let bpaDetailsDoc;
         if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
         if(bpaDetailsDoc == bpaDoc.documentCode) {
@@ -351,8 +349,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           `Document - ${index + 1}`;
           bpaDoc.dropDownValues = {};
           bpaDoc.dropDownValues.value =  upDoc.documentType;
-          if(bpaDoc.previewdocuments ){
-            bpaDoc.previewdocuments.push(
+          if(bpaDoc.documents ){
+            bpaDoc.documents.push(
               {
                 title: getTransformedLocale(bpaDoc.dropDownValues.value),
                 dropDownValues : bpaDoc.dropDownValues.value,    
@@ -361,11 +359,12 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileName : name,
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
-                wfState: upDoc.wfState                                
+                wfState: upDoc.wfState ,
+                isClickable:false                               
               }
             );
           }else{
-            bpaDoc.previewdocuments = [
+            bpaDoc.documents = [
               {
                 title: getTransformedLocale(bpaDoc.dropDownValues.value),
                 dropDownValues : bpaDoc.dropDownValues.value,             
@@ -374,7 +373,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileName : name,
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
-                wfState: upDoc.wfState                                
+                wfState: upDoc.wfState,
+                isClickable:false                                
               }
             ];
           }
@@ -412,8 +412,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
       
     bpaDocs.forEach(doc => {
 
-      if (doc.previewdocuments && doc.previewdocuments.length > 0) {
-          doc.previewdocuments.forEach(docDetail =>{
+      if (doc.documents && doc.documents.length > 0) {
+          doc.documents.forEach(docDetail =>{
             docDetail["link"] = fileUrls[docDetail.fileStoreId];
             return docDetail;
           });
@@ -590,7 +590,7 @@ const screenConfig = {
       // prepareDocumentsUploadData(state, dispatch);
       // prepareNOCUploadData(state, dispatch);
     });
-
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
 
     // Code to goto a specific step through URL

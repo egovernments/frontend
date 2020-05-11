@@ -43,6 +43,7 @@ import jp from "jsonpath";
 import axios from "axios";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import _ from "lodash";
+import groupBy from "lodash/groupBy";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -3935,7 +3936,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     );
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     let commonDocTypes = payload.MdmsRes["common-masters"].DocumentType;
-
+    dispatch(prepareFinalObject("commonDocuments", commonDocTypes));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -4226,6 +4227,10 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     obj.fileStoreId = doc.fileStoreId;
     obj.linkText = "View";
     obj.wfState = doc.wfState;
+    if(doc.auditDetails){
+      obj["createdTime"] = doc.auditDetails.createdTime;
+    }
+    
     obj["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
@@ -4254,20 +4259,103 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       obj.createdBy = "BPA Noc Verifier"    
     } else {
       obj.createdBy = "BPA Architect"
-    }   
+    }  
+    obj['auditDetails'] = doc.auditDetails; 
     documentsPreview.push(obj);
     return obj;
   });
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
-  
-  let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
-    prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
+    prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
+  } else {
+    prepareFinalCards(state, dispatch, documentsPreview, [] )
   }
+ 
+
+};
+const getRequiredMdmsCards = (state, dispatch) => {
+  const bpaDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA",
+    {}
+  );
+
+  let documentMapping = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping",
+    []
+  );
+
+  let documentType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
 };
 
-export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments) => {
+
+const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms) =>{
+ // let mdmsCards = getRequiredMdmsCards(state, dispatch);
+  let cards = [];
+let documentCards = groupBy(documentsPreview, 'title');
+documentCards && Object.keys(documentCards).map((doc)=>{
+ let card ={
+    documentCode: getDocumentCode(doc),
+    documents:documentCards[doc],
+    readOnly:true
+ }
+ cards.push(card);
+});
+if(requiredDocsFromMdms.length > 0){
+  const allCards = [].concat(...requiredDocsFromMdms.map(({cards}) => cards || []));
+
+  allCards && allCards.map((mdmsCard)=>{
+    let found = false;
+    mdmsCard.documentCode = getTransformedLocale(mdmsCard.code);
+    for(var i=0; i<cards.length; i++){
+      if(mdmsCard.documentCode == cards[i].documentCode){
+        cards[i].readOnly = false;
+        let mergedCard = {...cards[i], ...mdmsCard};
+        cards[i] = {...mergedCard};
+        found = true;
+      }
+    }
+    
+    if(!found){
+      mdmsCard.readOnly = false;
+      cards.push(mdmsCard)
+    }
+  });
+}
+/**
+ * @Todo should be handled at component level
+ */
+cards.map(card=>{
+  if(card.documents){
+    card.documents.map(item=>{
+      if(!item.fileName){
+        item.fileName = item.name;
+      }
+    })
+  }
+});
+dispatch(prepareFinalObject("finalCardsforPreview", cards));
+
+}
+/**
+ * 
+ * @param {String} documentType 
+ * Eg: APPL_ADDRESSPROOF_ELECTRICITYBILL 
+ * retrun APPL_ADDRESSPROOF
+ */
+const getDocumentCode = (documentType) =>{
+  var code = getTransformedLocale(documentType);
+  code = code.substring(0,code.lastIndexOf("_"));
+     return code;
+}
+export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments, documentsPreview) => {
   let applicationDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping",
@@ -4290,7 +4378,7 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
     appState = "INITIATED";
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.documentDetailsCard.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.applyDocSummary.children.cardContent.children.documentDetailsCard.visible",
       false
     );
   }
@@ -4353,8 +4441,7 @@ if(tempDoc) {
     documentsContract.push(tempDoc[key]);
   });
 }
-
-
+let finalDocuments = [];
   if (documentsContract && documentsContract.length > 0) {
 
     let documentsCodes = [], nocBpaDocuments = [];
@@ -4417,7 +4504,7 @@ if(tempDoc) {
       });
     });
 
-    let finalDocuments = [];
+    
     if(finalDocs && finalDocs.length > 0) {
       finalDocs.forEach(fDoc => {
         if(fDoc && fDoc.cards && fDoc.cards.length > 0) {
@@ -4436,17 +4523,18 @@ if(tempDoc) {
         }
       })
     }
-
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if (finalDocuments && finalDocuments.length > 0 && (isEmployee || bpaStatusAction) ) {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
-        true
-      );
+      // set(
+      //   action,
+      //   "screenConfig.components.div.children.body.children.cardContent.children.applyDocSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
+      //   true
+      // );
       dispatch(prepareFinalObject("documentsContract", finalDocuments));
     }
   }
+  console.log('requiredDocsFromMdms', finalDocuments)
+  prepareFinalCards(state, dispatch, documentsPreview, finalDocuments);
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
@@ -4726,7 +4814,7 @@ export const setProposedBuildingData = async (state, dispatch, action, value) =>
         sOccupancyType.forEach(subOcData => {
           occupancyTypeCheck.push({
             value : subOcData,
-            label : getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${subOcData}`, getLocalLabels )
+            label : getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, getLocalLabels )
           });
         });
       }
