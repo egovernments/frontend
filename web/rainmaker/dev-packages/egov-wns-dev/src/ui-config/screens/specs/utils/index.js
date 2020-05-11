@@ -559,6 +559,7 @@ export const convertEpochToDateAndHandleNA = dateEpoch => {
     dateEpoch !== undefined &&
     dateEpoch !== null &&
     dateEpoch !== "" &&
+    dateEpoch !== "NA" &&
     dateEpoch !== 0
   ) {
     let convertedToDate = convertEpochToDate(dateEpoch);
