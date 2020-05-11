@@ -9,6 +9,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import groupBy from "lodash/groupBy";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import Tooltip from '@material-ui/core/Tooltip';
+import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 
 
 //import "./index.css";
@@ -229,7 +230,7 @@ function MultiDocDetailCard(props) {
                   </Typography>
                   
                   <div style={fontStyle}>
-                    {!doc.createdTime ? "" : (new Date(doc.createdTime).toDateString())}
+                    {!doc.createdTime ? "" : convertEpochToDate(doc.createdTime)}
                   </div>
                 </Grid>
                 <Grid item xs={3}>
