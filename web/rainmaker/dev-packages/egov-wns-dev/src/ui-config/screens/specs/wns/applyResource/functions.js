@@ -50,7 +50,18 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
-        dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
+        let propertyData = response.Properties[0];
+        let contractedCorAddress = propertyData.address.doorNo + "," + propertyData.address.buildingName + "," + propertyData.address.locality.name + "," + propertyData.address.city 
+        for(var i=0; i<propertyData.owners.length;i++){ 
+          if(propertyData.owners[i].correspondenceAddress == 'NA'){
+            if(propertyData.owners[i].permanentAddress == 'NA'){
+              propertyData.owners[i].correspondenceAddress = contractedCorAddress;
+            }else{
+              propertyData.owners[i].correspondenceAddress = propertyData.owners[i].permanentAddress;
+            }
+          }    
+        }
+        dispatch(prepareFinalObject("applyScreen.property", propertyData))
         showHideFields(dispatch, true);
       } else {
         showHideFields(dispatch, false);
