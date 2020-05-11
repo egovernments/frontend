@@ -173,7 +173,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
     );
     // for showing addPenaltyRebateButton
-    if(process.env.REACT_APP_NAME !== "Citizen" && (appStatus !=="PENDING_FOR_CONNECTION_ACTIVATION" && appStatus !== 'CONNECTION_ACTIVATED')){
+    if(process.env.REACT_APP_NAME !== "Citizen" && (appStatus !== 'PENDING_FOR_PAYMENT' && appStatus !=="PENDING_FOR_CONNECTION_ACTIVATION" && appStatus !== 'CONNECTION_ACTIVATED')){
       
       dispatch(
           handleField(
