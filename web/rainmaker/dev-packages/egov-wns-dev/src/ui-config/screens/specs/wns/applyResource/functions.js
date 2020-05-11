@@ -50,28 +50,32 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
-        let propertyData = response.Properties[0];
-        let contractedCorAddress = "";
+        if(response.Properties[0].status === 'INACTIVE'){
+          dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROP_STATUS_INACTIVE", labelName: "Property Status is INACTIVE" }, "warning"));
+        }else{
+          let propertyData = response.Properties[0];
+          let contractedCorAddress = "";
 
-        if(propertyData.address.doorNo !== null && propertyData.address.doorNo !== ""){
-          contractedCorAddress += propertyData.address.doorNo + ", ";
+          if(propertyData.address.doorNo !== null && propertyData.address.doorNo !== ""){
+            contractedCorAddress += propertyData.address.doorNo + ", ";
+          }
+          if(propertyData.address.buildingName !== null && propertyData.address.buildingName !== ""){
+            contractedCorAddress += propertyData.address.buildingName + ", ";
+          }        
+          contractedCorAddress += propertyData.address.locality.name + ", " + propertyData.address.city;
+
+          for(var i=0; i<propertyData.owners.length;i++){ 
+            if(propertyData.owners[i].correspondenceAddress == 'NA' || propertyData.owners[i].correspondenceAddress == null || propertyData.owners[i].correspondenceAddress == ""){
+              if(propertyData.owners[i].permanentAddress == 'NA' || propertyData.owners[i].permanentAddress == null || propertyData.owners[i].permanentAddress == ""){
+                propertyData.owners[i].correspondenceAddress = contractedCorAddress;
+              }else{
+                propertyData.owners[i].correspondenceAddress = propertyData.owners[i].permanentAddress;
+              }
+            }    
+          }
+          dispatch(prepareFinalObject("applyScreen.property", propertyData))
+          showHideFields(dispatch, true);
         }
-        if(propertyData.address.buildingName !== null && propertyData.address.buildingName !== ""){
-          contractedCorAddress += propertyData.address.buildingName + ", ";
-        }        
-        contractedCorAddress += propertyData.address.locality.name + ", " + propertyData.address.city;
-
-        for(var i=0; i<propertyData.owners.length;i++){ 
-          if(propertyData.owners[i].correspondenceAddress == 'NA' || propertyData.owners[i].correspondenceAddress == null || propertyData.owners[i].correspondenceAddress == ""){
-            if(propertyData.owners[i].permanentAddress == 'NA' || propertyData.owners[i].permanentAddress == null || propertyData.owners[i].permanentAddress == ""){
-              propertyData.owners[i].correspondenceAddress = contractedCorAddress;
-            }else{
-              propertyData.owners[i].correspondenceAddress = propertyData.owners[i].permanentAddress;
-            }
-          }    
-        }
-        dispatch(prepareFinalObject("applyScreen.property", propertyData))
-        showHideFields(dispatch, true);
       } else {
         showHideFields(dispatch, false);
         dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROP_NOT_FOUND", labelName: "No Property records found" }, "warning"));
