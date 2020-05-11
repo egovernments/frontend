@@ -83,7 +83,7 @@ function BpaFeesEstimateCard(props) {
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
   return (
     <Grid container>
-      <Grid xs={12} sm={7}>
+      <Grid item={true} xs={12} sm={7}>
         <LabelContainer
           labelName={estimate.header.labelName}
           labelKey={estimate.header.labelKey}

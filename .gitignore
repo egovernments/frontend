@@ -3,6 +3,5 @@ node_modules/
 .idea/
 .DS_Store
 keystore/
-
 web/rainmaker/yarn.lock
 *.css

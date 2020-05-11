@@ -172,7 +172,8 @@ export const getOwnerDetails = (isEditable = true) => {
               },
               {
                 jsonPath:
-                  "applyScreen.property.owners[0].mobileNumber"
+                  "applyScreen.property.owners[0].mobileNumber",
+                  callBack: handleNA
               }),
             ownerName: getLabelWithValue(
               {
@@ -181,7 +182,7 @@ export const getOwnerDetails = (isEditable = true) => {
               },
               {
                 jsonPath: "applyScreen.property.owners[0].name",
-                // callBack: handleNA
+                callBack: handleNA
               }
             ),
             gender: getLabelWithValue(
@@ -190,7 +191,8 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
               },
               {
-                jsonPath: "applyScreen.property.owners[0].gender"
+                jsonPath: "applyScreen.property.owners[0].gender",
+                callBack: handleNA
               }
             ),
             dateOfBirth: getLabelWithValue(
@@ -209,7 +211,8 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
               },
               {
-                jsonPath: "applyScreen.property.owners[0].emailId"
+                jsonPath: "applyScreen.property.owners[0].emailId",
+                callBack: handleNA
               }
             ),
             fatherName: getLabelWithValue(
@@ -219,6 +222,7 @@ export const getOwnerDetails = (isEditable = true) => {
               },
               {
                 jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName",
+                callBack: handleNA
               }
             ),
             Relationship: getLabelWithValue(
@@ -226,7 +230,8 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelName: "Relationship",
                 labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
               },
-              { jsonPath: "applyScreen.property.owners[0].relationship" }
+              { jsonPath: "applyScreen.property.owners[0].relationship",
+              callBack: handleNA }
             ),
             //   ownerCategory,
 
@@ -235,14 +240,16 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelName: "Correspondence Address",
                 labelKey: "WS_OWN_DETAIL_CROSADD"
               },
-              { jsonPath: "applyScreen.property.owners[0].correspondenceAddress" }
+              { jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
+              callBack: handleNA}
             ),
             specialApplicantCategory: getLabelWithValue(
               {
                 labelName: "Special Applicant Category",
                 labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
               },
-              { jsonPath: "applyScreen.property.owners[0].ownerType" }
+              { jsonPath: "applyScreen.property.owners[0].ownerType",
+              callBack: handleNA }
             )
           }),
         }),

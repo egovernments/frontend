@@ -64,11 +64,19 @@ class BpaCheckboxContainer extends React.Component {
       ...rest
     } = this.props;
 
-    let translatedLabel = getLocaleLabels(
-      label.labelName,
-      label.labelKey,
-      localizationLabels
-    );
+    let translatedLabel = "";
+    if (label && label.labelKey && Array.isArray(label.labelKey)) {
+      label.labelKey.forEach(key => {
+        translatedLabel += getLocaleLabels(key, key, localizationLabels) + " ";
+      })
+    } else {
+      translatedLabel = getLocaleLabels(
+        label.labelName,
+        label.labelKey,
+        localizationLabels
+      );
+    }
+    
 
     return (
       <FormGroup row>
