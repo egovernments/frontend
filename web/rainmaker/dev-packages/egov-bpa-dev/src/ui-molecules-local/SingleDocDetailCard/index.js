@@ -59,6 +59,11 @@ const documentTitleOrg = {
   padding: 10,
   display: "inline-block",
   margiTop: 10,
+  width:100,
+  overflow: "hidden", 
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  textAlign: "center"
 };
 
 const documentTitlegrey = {

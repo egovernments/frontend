@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import groupBy from "lodash/groupBy";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 //import "./index.css";
 
@@ -95,6 +97,10 @@ const fontStyle = {
   fontWeight: "500",
   color: "rgba(0, 0, 0, 0.87)",
   fontFamily: "Roboto",
+  width:150,
+  overflow: "hidden", 
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis"
 };
 
 const titleStyle = {
@@ -193,9 +199,11 @@ function MultiDocDetailCard(props) {
                   >
                     File
                   </Typography>
+                  <Tooltip title={!doc.name ? "" : doc.name} arrow>
                   <div style={fontStyle}>
                     {!doc.name ? "" : doc.name}
                   </div>
+                  </Tooltip>
                 </Grid>
                 <Grid item xs={3}>
                   <Typography
@@ -205,9 +213,11 @@ function MultiDocDetailCard(props) {
                   >
                     Uploaded By
                   </Typography>
+                  <Tooltip title={!doc.createdBy ? "" : doc.createdBy} arrow>
                   <div style={fontStyle}>
                     {!doc.createdBy ? "" : doc.createdBy}
                   </div>
+                  </Tooltip>
                 </Grid>
                 <Grid item xs={3}>
                   <Typography
@@ -217,8 +227,9 @@ function MultiDocDetailCard(props) {
                   >
                     Uploaded Time
                   </Typography>
+                  
                   <div style={fontStyle}>
-                    {!doc.createdTime ? "" : doc.createdTime.toLocaleDateString()}
+                    {!doc.createdTime ? "" : (new Date(doc.createdTime).toDateString())}
                   </div>
                 </Grid>
                 <Grid item xs={3}>

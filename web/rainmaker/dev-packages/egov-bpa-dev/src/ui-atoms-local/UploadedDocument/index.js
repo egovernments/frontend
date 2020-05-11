@@ -16,7 +16,10 @@ const UploadedDocument = props => {
         justifyContent: "space-between"
       }}
     >
+      <div style={{width:100,overflow: "hidden", whiteSpace: "nowrap",textOverflow: "ellipsis"}}>
       {document.fileName}
+      </div>
+     
       {!disabled && <Icon
         style={{ color: "#E54D42", marginLeft: "16px" }}
         onClick={removeDocument}
