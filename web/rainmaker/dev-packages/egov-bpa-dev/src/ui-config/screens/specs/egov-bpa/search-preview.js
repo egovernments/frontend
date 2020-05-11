@@ -43,6 +43,7 @@ import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fieldSummary } from "./summaryResource/fieldSummary";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -555,6 +556,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
+  dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
 const screenConfig = {

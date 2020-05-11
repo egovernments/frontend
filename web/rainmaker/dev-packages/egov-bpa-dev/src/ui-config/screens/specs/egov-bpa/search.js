@@ -23,6 +23,7 @@ import {
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { showApplyCityPicker, applyForm } from "../utils";
 import { getBpaMdmsData, getTenantMdmsData } from "../utils";
+import { httpRequest } from "../../../../ui-utils/api";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
