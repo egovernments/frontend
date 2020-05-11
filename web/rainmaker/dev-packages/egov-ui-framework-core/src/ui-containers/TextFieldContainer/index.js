@@ -78,6 +78,7 @@ class TextFieldContainer extends React.Component {
       : "";
     if (dropdownData.length > 0) {
       return (
+        <div>
         <TextfieldWithIcon
           label={translatedLabel}
           placeholder={translatedPlaceholder}
@@ -109,7 +110,12 @@ class TextFieldContainer extends React.Component {
                   )}
                 </MenuItem>
               ))}
+
         </TextfieldWithIcon>
+                {title && !isEmpty(title) && infoIcon && (
+            <Tooltip val={title} icon={infoIcon} />
+          )}
+        </div>
       );
     } else {
       return this.props.select ? (

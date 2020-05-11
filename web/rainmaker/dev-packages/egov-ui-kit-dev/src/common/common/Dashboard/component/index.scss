@@ -12,6 +12,19 @@
   display: flex !important;
   padding: 0px 5px !important;
 }
+.landingPageUser .label-text {
+  color: rgba(0, 0, 0, 0.8700000047683716);
+  font-size: 24px !important;
+  padding-top: 20px;
+  padding-left: 17px;
+  margin-left: 5px;
+}
+
+@media only screen and (max-width: 768px) {
+  .landing-page-main-container {
+    padding-top: 60px !important;
+  }
+}
 
 .parentCard {
   background-color: red !important;

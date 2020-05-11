@@ -60,7 +60,7 @@ class ActionDialog extends React.Component {
   //       "error"
   //     );
   //   } else {
-  //     handleFieldChange("Licenses[0].assignee", e.target.value);
+  //     handleFieldChange("${dataPath}.assignee", e.target.value);
   //   }
   // };
 
@@ -86,14 +86,18 @@ class ActionDialog extends React.Component {
   };
 
   render() {
-    const {
+    let {
       open,
       onClose,
       dropDownData,
       handleFieldChange,
       onButtonClick,
-      dialogData
+      dialogData,
+      dataPath
+
     } = this.props;
+
+    //console.log("datapath props",this.props )
     const {
       buttonLabel,
       showEmployeeList,
@@ -106,7 +110,13 @@ class ActionDialog extends React.Component {
     if (window.innerWidth <= 768) {
       fullscreen = true;
     }
+   // debugger;
+    dataPath =
+      dataPath === "FireNOCs"
+        ? `${dataPath}[0].fireNOCDetails`
+        : `${dataPath}[0]`;
     return (
+
       <Dialog
         fullScreen={fullscreen}
         open={open}
@@ -170,12 +180,14 @@ class ActionDialog extends React.Component {
                         hasLocalization={false}
                         //onChange={e => this.onEmployeeClick(e)}
                         onChange={e =>
+                          {
                           handleFieldChange(
-                            "Licenses[0].assignee",
+                            `${dataPath}.assignee`,
                             e.target.value
                           )
                         }
-                        jsonPath="Licenses[0].assignee"
+                        }
+                        jsonPath={`${dataPath}.assignee`}
                       />
                     </Grid>
                   )}
@@ -184,9 +196,9 @@ class ActionDialog extends React.Component {
                       InputLabelProps={{ shrink: true }}
                       label={fieldConfig.comments.label}
                       onChange={e =>
-                        handleFieldChange("Licenses[0].comment", e.target.value)
+                        handleFieldChange(`${dataPath}.comment`, e.target.value)
                       }
-                      jsonPath="Licenses[0].comment"
+                      jsonPath={`${dataPath}.comment`}
                       placeholder={fieldConfig.comments.placeholder}
                     />
                   </Grid>
@@ -233,7 +245,7 @@ class ActionDialog extends React.Component {
                         accept: "image/*, .pdf, .png, .jpeg"
                       }}
                       buttonLabel={{ labelName: "UPLOAD FILES" }}
-                      jsonPath="Licenses[0].wfDocuments"
+                      jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
                     <Grid sm={12} style={{ textAlign: "right" }}>
