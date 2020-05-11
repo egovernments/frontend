@@ -1,6 +1,6 @@
 import React from "react";
 import { UploadFile } from "egov-ui-framework/ui-atoms";
-import UploadedDocument from "../../ui-atoms-local"
+import UploadedDocument from "../../ui-atoms-local/UploadedDocument"
 import "./index.scss";
 
 const UploadMultipleFile = ({
