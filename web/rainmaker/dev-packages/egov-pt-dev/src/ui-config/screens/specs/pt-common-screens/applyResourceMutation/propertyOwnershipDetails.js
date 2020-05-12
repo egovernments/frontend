@@ -183,7 +183,7 @@ const institutionInformation = () => {
           required: true,
           pattern: getPattern("Address"),
           jsonPath: "Property.owners[0].correspondenceAddress"
-        })/*,
+        }),
         sameAsPropertyAddress: {
           uiFramework: "custom-containers-local",
           moduleName: "egov-pt",
@@ -191,14 +191,14 @@ const institutionInformation = () => {
           gridDefination: { xs: 12, sm: 12, md: 12 },
           props: {
             labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
-            jsonPath: "sameAsPeropertyAddress",
+            jsonPath: "Property.owners[0].sameAsPeropertyAddress",
             required: false,
-            destinationJsonPath: "Property.owners[0].correspondenceAddress"
+            destinationJsonPath: "correspondenceAddress"
           },
           required:false,
           type: "array",
-          jsonPath: "Property.sameAsPeropertyAddress"
-        },*/
+          jsonPath: "Property.owners[0].sameAsPeropertyAddress"
+        },
       })
     })
 };
@@ -384,7 +384,7 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         }
-      })/*,
+      }),
       sameAsPropertyAddress: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-pt",
@@ -392,12 +392,13 @@ const commonApplicantInformation = () => {
         gridDefination: { xs: 12, sm: 12, md: 12 },
         props: {
           labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
-          jsonPath: "sameAsPeropertyAddress",
+          jsonPath: "Property.owners[0].sameAsPeropertyAddress",
           required: false,
-          destinationJsonPath: "Property.owners[0].correspondenceAddress"
+          destinationJsonPath: "correspondenceAddress"
         },
-        type: "array"
-      },*/
+        type: "array",
+        jsonPath: "Property.owners[0].sameAsPeropertyAddress"
+      },
     })
   });
 };
