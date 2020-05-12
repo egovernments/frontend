@@ -209,12 +209,12 @@ export const tradeLocationDetails = getCommonCard(
           // className: "tradelicense-mohalla-apply"
         },
         beforeFieldChange: async (action, state, dispatch) => {
-          // dispatch(
-          //   prepareFinalObject(
-          //     "Licenses[0].tradeLicenseDetail.address.locality.name",
-          //     action.value && action.value.label
-          //   )
-          // );
+          dispatch(
+            prepareFinalObject(
+              "Licenses[0].tradeLicenseDetail.address.locality.name",
+              action.value && action.value.label
+            )
+          );
         },
         gridDefination: {
           xs: 12,

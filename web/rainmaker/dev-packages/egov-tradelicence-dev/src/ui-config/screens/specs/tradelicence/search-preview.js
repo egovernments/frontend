@@ -14,7 +14,7 @@ import {
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,getBoundaryData } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
   setMultiOwnerForSV,
@@ -153,12 +153,12 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     fetchFromReceipt
   );
   //Fetch Bill and populate estimate card
-  // const code = get(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: tenantId }];
-  // // getBoundaryData(action, state, dispatch, queryObj, code);
+  const code = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.address.locality.code"
+  );
+  const queryObj = [{ key: "tenantId", value: tenantId }];
+  getBoundaryData(action, state, dispatch, queryObj, code);
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
