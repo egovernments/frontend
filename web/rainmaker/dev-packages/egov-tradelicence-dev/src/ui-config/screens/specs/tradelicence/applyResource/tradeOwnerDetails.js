@@ -538,7 +538,6 @@ const OwnerInfoCard = {
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
         }),
         
-      },
 
         
         // OrganizationName: getTextField({
