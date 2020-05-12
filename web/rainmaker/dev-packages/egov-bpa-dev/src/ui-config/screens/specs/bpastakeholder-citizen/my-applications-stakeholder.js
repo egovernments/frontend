@@ -362,7 +362,7 @@ export const changePage = async (tableState) => {
 
 const onRowClick = rowData => {
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
-  let origin = window.location.origin;
+  const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   if (rowData[6] === "BPAREG") {
     switch (rowData[4]) {
       case "INITIATED":

@@ -277,7 +277,7 @@ export const fieldChange = (action, state, dispatch) => {
   if (value) {
     var filterName = action.componentJsonpath.slice(action.componentJsonpath.lastIndexOf(".") + 1, action.componentJsonpath.length);
 
-    if (filterName === "applicationType" && value === getBpaTextToLocalMapping("BPA_APPLY_SERVICE")) {
+    if (filterName === "applicationType" && value === "BPA_APPLY_SERVICE") {
       dispatch(
         handleField(
           "my-applications-stakeholder",
@@ -287,7 +287,7 @@ export const fieldChange = (action, state, dispatch) => {
         )
       );
     }
-    if (filterName === "applicationType" && value === getBpaTextToLocalMapping("BPAREG_SERVICE")) {
+    if (filterName === "applicationType" && value === "BPAREG_SERVICE") {
       dispatch(
         handleField(
           "my-applications-stakeholder",
