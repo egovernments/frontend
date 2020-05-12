@@ -217,21 +217,26 @@ const screenConfig = {
 
 const onRowClick = rowData => {
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+  let origin = window.location.origin;
   if (rowData[6] === "BPAREG") {
     switch (rowData[4]) {
       case "INITIATED":
-        window.location.href = `${environment}/bpastakeholder/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
+        window.location.assign(`${origin}/${environment}/bpastakeholder/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`)
+        // window.location.href = `${origin}/${environment}/bpastakeholder/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
         break;
       default:
-        window.location.href = `${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
+        window.location.assign(`${origin}/${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`)
+        // window.location.href = `${origin}/${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
     }
   } else {
     switch (rowData[4]) {
       case "Initiated":
-      window.location.href = `${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
+       window.location.assign(`${origin}/${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
+      // window.location.href = `${origin}/${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
         break;
       default:
-      window.location.href = `${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}&type=${rowData[7]}`
+       window.location.assign(`${origin}/${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}&type=${rowData[7]}`);
+      // window.location.href = `${origin}/${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}&type=${rowData[7]}`
     }
   }
 };
