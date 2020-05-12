@@ -5,61 +5,15 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import store from "ui-redux/store";
 import set from 'lodash/set';
 import { toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+
 
 let redirectUrl = getQueryArg(window.location.href, "redirectUrl");
 let screenKey = "register-property"
-
-
-let validateFields = (
-  objectJsonPath,
-  state,
-  dispatch,
-  screen = "apply"
-) => {
-  const fields = get(
-    state.screenConfiguration.screenConfig[screen],
-    objectJsonPath,
-    {}
-  );
-  let isFormValid = true;
-  for (var variable in fields) {
-    if (fields.hasOwnProperty(variable)) {
-      if (
-        fields[variable] &&
-        fields[variable].props &&
-        (fields[variable].props.disabled === undefined ||
-          !fields[variable].props.disabled) &&
-        !validate(
-          screen,
-          {
-            ...fields[variable],
-            value: get(
-              state.screenConfiguration.preparedFinalObject,
-              fields[variable].jsonPath
-            )
-          },
-          dispatch,
-          true
-        )
-      ) {
-      	// Needs to remove and find better solutions
-      	if(isFormValid && variable == 'sameAsPropertyAddress'){
-      		isFormValid = true
-      	}else{      	
-        	isFormValid = false;
-        }
-      }
-    }
-  }
-  return isFormValid;
-};
-
 
 const callBackForApply = async (state, dispatch) => {
 
