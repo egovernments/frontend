@@ -1,11 +1,12 @@
-
+import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 // import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { getApplicationType,setRoute } from "egov-ui-kit/utils/commons";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-import React from "react";
+
 // import store from "ui-redux/store";
-import { getEpochForDate, getTextToLocalMapping, sortByEpoch } from "../../utils";
+import { getEpochForDate, getTextToLocalMapping, sortByEpoch, getStatusKey } from "../../utils";
 
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
@@ -116,7 +117,8 @@ export const searchPropertyTable = {
     // data: [],
     columns: [
       {
-        name: getTextToLocalMapping("Unique Property ID"),
+        name: "Unique Property ID",
+        labelKey: "PT_COMMON_TABLE_COL_PT_ID",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -131,22 +133,23 @@ export const searchPropertyTable = {
           )
         }
       },
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Guardian Name"),
-      getTextToLocalMapping("Existing Property Id"),
-      getTextToLocalMapping("Address"),
+      {name: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
+      {name: "Guardian Name", labelKey: "PT_GUARDIAN_NAME"},
+      {name: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
+      {name: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
-        name: getTextToLocalMapping("Status"),
+        name: "Status",
+        labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
+            <LabelContainer
               style={
                 value === "ACTIVE" ? { color: "green" } : { color: "red" }
               }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
@@ -157,7 +160,8 @@ export const searchPropertyTable = {
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for PT Applications"),
+    title: {labelKey:"PT_HOME_PROPERTY_RESULTS_TABLE_HEADING", labelName:"Search Results for Properties"},
+    rows:"",
     options: {
       filter: false,
       download: false,
@@ -197,7 +201,8 @@ export const searchApplicationTable = {
     // data: [],
     columns: [
       {
-        name: getTextToLocalMapping("Application No"),
+        name: "Application No",
+        labelKey: "PT_COMMON_TABLE_COL_APP_NO",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -216,7 +221,8 @@ export const searchApplicationTable = {
         }
       },
       {
-        name: getTextToLocalMapping("Unique Property ID"),
+        name: "Unique Property ID",
+        labelKey: "PT_COMMON_TABLE_COL_PT_ID",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -233,21 +239,22 @@ export const searchApplicationTable = {
           )
         }
       },
-      getTextToLocalMapping("Application Type"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Address"),
+      {name: "Application Type", labelKey: "PT_COMMON_TABLE_COL_APP_TYPE"},
+      {name: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
+      {name: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
-        name: getTextToLocalMapping("Status"),
+        name: "Status",
+        labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
+            <LabelContainer
               style={
                 value === "ACTIVE" ? { color: "green" } : { color: "red" }
               }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
@@ -266,7 +273,8 @@ export const searchApplicationTable = {
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for PT Applications"),
+    title: {labelKey:"PT_HOME_APPLICATION_RESULTS_TABLE_HEADING", labelName:"Search Results for Property Application"},
+    rows:"",
     options: {
       filter: false,
       download: false,
