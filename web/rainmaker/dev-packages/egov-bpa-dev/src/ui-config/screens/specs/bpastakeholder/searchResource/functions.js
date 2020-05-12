@@ -202,29 +202,42 @@ export const getWorkFlowData = async Licenses => {
 
 export const getWorkFlowDataForBPA = async Licenses => {
   var businessIds = [];
+  let tenantMap = {};
+  let processInstanceArray = [];
   Licenses.forEach(item => {
-    businessIds.push(item.applicationNo);
+    var appNums = tenantMap[item.tenantId] || [];
+    appNums.push(item.applicationNo);
+    tenantMap[item.tenantId] = appNums;
   });
-  const queryObject = [
-    {
-      key: "tenantId",
-      value: process.env.REACT_APP_DEFAULT_TENANT_ID
-    },
-    {
-      key: "businessIds",
-      value: businessIds
+
+  for(var key in tenantMap) {
+    const queryObject = [
+      {
+        key: "tenantId",
+        value: key
+      },
+      {
+        key: "businessIds",
+        value: tenantMap[key]
+      }
+    ];
+    try {
+      const payload = await httpRequest(
+        "post",
+        "egov-workflow-v2/egov-wf/process/_search",
+        "",
+        queryObject
+      );
+      processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
+     
+    } catch (error) {
+      console.log(error);
+      return [];
     }
-  ];
-  try {
-    const payload = await httpRequest(
-      "post",
-      "egov-workflow-v2/egov-wf/process/_search",
-      "",
-      queryObject
-    );
+    
     var businessIdToOwnerMapping = {};
-    payload.ProcessInstances.filter(
-      record => record.moduleName.includes("BPA.")
+    processInstanceArray.filter(
+      record => record.moduleName.includes("bpa-services")
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
         assignee: item.assignes && item.assignes.name,
@@ -232,8 +245,5 @@ export const getWorkFlowDataForBPA = async Licenses => {
       };
     });
     return businessIdToOwnerMapping;
-  } catch (error) {
-    console.log(error);
-    return [];
   }
 };

@@ -9,8 +9,9 @@ import get from "lodash/get";
 import { getWorkFlowData,getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
 import { getTextToLocalMapping, convertEpochToDate, getBpaTextToLocalMapping} from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { changePage } from "../my-applications-stakeholder";
 
-const getMdmsData = async () => {
+export const getMdmsData = async () => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -311,16 +312,15 @@ export const fieldChange = (action, state, dispatch) => {
     );
     let bpaDetails = get(
       screenConfiguration.preparedFinalObject,
-      "searchResults",
-      {}
+      "searchResults", []
     );
     for (const dataFilter in filterData[0]) {
       var filterValue = filterData[0][`${dataFilter}`]
       if (filterValue)
-        bpaDetails = bpaDetails.filter(details => details[`${dataFilter}`] === filterValue);
+        bpaDetails = bpaDetails && bpaDetails.filter(details => details[`${dataFilter}`] === filterValue);
     }
-
-    storeData(bpaDetails, dispatch, false, true);
+    let tableState = {};
+    changePage(tableState, bpaDetails);
   }
 };
 
