@@ -1,7 +1,8 @@
 import React from "react";
 import Field from "egov-ui-kit/utils/field";
 import { Link } from "react-router-dom";
-import { Button, Card, Image ,Icon} from "components";
+import { Card, Image ,Icon} from "components";
+import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import Hidden from "@material-ui/core/Hidden";
@@ -42,12 +43,26 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
           </div>
           <Button
             {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+            onClick={() => {
+              startSMSRecevier();
+            }}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button
+            {...submit}
             fullWidth={true}
             primary={true}
             onClick={(e) => {
               startSMSRecevier();
             }}
-          />
+          /> */}
           {enableWhatsApp&&
            <Hidden mdUp>
           <div>
@@ -97,12 +112,26 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
           </div>
           <Button
             {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+            onClick={() => {
+              startSMSRecevier();
+            }}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button
+            {...submit}
             fullWidth={true}
             primary={true}
             onClick={(e) => {
               startSMSRecevier();
             }}
-          />
+          /> */}
           {enableWhatsApp&&
            <Hidden mdUp>
           <div>
@@ -154,12 +183,27 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
           </div>
           <Button
             {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+            onClick={() => {
+              startSMSRecevier();
+            }}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button
+            {...submit}
             fullWidth={true}
             primary={true}
             onClick={(e) => {
               startSMSRecevier();
             }}
-          />
+          /> */}
+          
    </div>
      <div className="login-vl-divider">
        <div className ="login-circle-web">
