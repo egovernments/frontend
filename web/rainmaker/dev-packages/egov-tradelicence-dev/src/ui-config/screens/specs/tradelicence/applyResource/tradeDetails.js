@@ -831,7 +831,6 @@ export const tradeDetails = getCommonCard(
           {
              startDate = getFinancialYearDates("yyyy-mm-dd", validFromData+1000 , noOfYears).startDate
              endDate = getFinancialYearDates("yyyy-mm-dd", validFromData+1000 , noOfYears).endDate
-
           }
           else
           {
