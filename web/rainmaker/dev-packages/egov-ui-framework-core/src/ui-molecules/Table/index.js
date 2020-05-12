@@ -4,6 +4,8 @@ import get from "lodash/get";
 import PropTypes from "prop-types";
 import cloneDeep from "lodash/cloneDeep";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { LabelContainer } from "../../ui-containers";
+import { getLocaleLabels } from "../../ui-utils/commons";
 import "./index.css";
 
 class Table extends React.Component {
@@ -50,7 +52,7 @@ class Table extends React.Component {
         // Object.keys(columns).forEach(column => {
         columns.forEach(column => {
           // Handling the case where column name is an object with options
-          column = typeof column === "object" ? get(column, "name") : column;
+          column = typeof column === "object" ? get(column, "labelKey") : column;
           let columnValue = get(curr, `${column}`, "");
           if (get(columns, `${column}.format`, "")) {
             columnValue = columns[column].format(curr);
@@ -74,6 +76,16 @@ class Table extends React.Component {
     this.updateTable(data, columns);
   }
 
+  getTranslatedHeader = (columns) => {
+    if(columns) {
+      const colArray = [];
+      columns.map((item,key)=>{
+        columns[key].name = <LabelContainer labelKey={item.labelKey} labelName={item.labelKey} />
+      })
+      return columns;
+    }
+  }
+
   updateTable = (data, columns) => {
     // const updatedData = this.formatData(data, columns);
     // Column names should be array not keys of an object!
@@ -83,7 +95,7 @@ class Table extends React.Component {
     this.setState({
       data: updatedData,
       // columns: Object.keys(columns)
-      columns: fixedColumns
+      columns: this.getTranslatedHeader(fixedColumns)
     });
   };
 
@@ -100,13 +112,20 @@ class Table extends React.Component {
     }
   };
 
+  getTabelTitle = (title) => {
+    return getLocaleLabels(
+      title.labelName,
+      title.labelKey
+    );
+  }
+
   render() {
     const { data, columns } = this.state;
-    const { options, title, customSortDate } = this.props;
+    const { options, title, rows, customSortDate } = this.props;
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable
-          title={title}
+          title={this.getTabelTitle(title) + " ("+rows+")"}
           data={data}
           columns={columns}
           options={{

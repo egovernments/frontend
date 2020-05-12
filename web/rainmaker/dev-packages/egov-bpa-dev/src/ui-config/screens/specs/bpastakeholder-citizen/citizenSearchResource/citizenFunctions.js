@@ -9,8 +9,9 @@ import get from "lodash/get";
 import { getWorkFlowData,getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
 import { getTextToLocalMapping, convertEpochToDate, getBpaTextToLocalMapping} from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { changePage } from "../my-applications-stakeholder";
 
-const getMdmsData = async () => {
+export const getMdmsData = async () => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -134,8 +135,6 @@ export const fetchData = async (
             searchConvertedArray.push({
               [getBpaTextToLocalMapping("Application No")]: element.applicationNumber || "-",
               [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")]: status || "-",
-              modifiedTime: modifiedTime,
-              sortNumber: 1,
               applicationType: getBpaTextToLocalMapping("BPAREG_SERVICE"),
               [getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE")]: "Registration \n Stakeholder Registration",
               [getBpaTextToLocalMapping("BPA_COMMON_SLA")]: get(
@@ -147,7 +146,11 @@ export const fetchData = async (
                 businessIdToOwnerMapping[element.applicationNumber],
                 "assignee",
                 null
-              ) || "-"
+              ) || "-",
+              modifiedTime: modifiedTime,
+              sortNumber: 1,
+              serviceType: "BPAREG",
+              tenantId: get(element, "tenantId", null)
             })
           }
         });
@@ -199,10 +202,7 @@ export const fetchData = async (
             searchConvertedArray.push({
               [getBpaTextToLocalMapping("Application No")]: element.applicationNo || "-",
               [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")]: status || "-",
-              modifiedTime: modifiedTime,
-              sortNumber: 1,
               applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
-              serviceType : element.serviceType,
               [getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE")] : "BPA \n Building permit new construction",
               [getBpaTextToLocalMapping("BPA_COMMON_SLA")]: get(
                 businessIdToOwnerMappingForBPA[element.applicationNo],
@@ -213,7 +213,12 @@ export const fetchData = async (
                 businessIdToOwnerMappingForBPA[element.applicationNo],
                 "assignee",
                 null
-              ) || "-"
+              ) || "-",
+              modifiedTime: modifiedTime,
+              sortNumber: 1,
+              serviceType : element.serviceType,
+              tenantId: get(element, "tenantId", null),
+              type: element.riskType
             })
           }
         });
@@ -307,16 +312,15 @@ export const fieldChange = (action, state, dispatch) => {
     );
     let bpaDetails = get(
       screenConfiguration.preparedFinalObject,
-      "searchResults",
-      {}
+      "searchResults", []
     );
     for (const dataFilter in filterData[0]) {
       var filterValue = filterData[0][`${dataFilter}`]
       if (filterValue)
-        bpaDetails = bpaDetails.filter(details => details[`${dataFilter}`] === filterValue);
+        bpaDetails = bpaDetails && bpaDetails.filter(details => details[`${dataFilter}`] === filterValue);
     }
-
-    storeData(bpaDetails, dispatch, false, true);
+    let tableState = {};
+    changePage(tableState, bpaDetails);
   }
 };
 
