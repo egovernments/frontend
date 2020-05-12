@@ -537,12 +537,6 @@ const OwnerInfoCard = {
           pattern: getPattern("PAN"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
         }),
-        ownerPAN1:{ 
-          ...getCheckBoxwithLabel({
-              labelName: "Address as select address Dropdowns",
-              labelKey: "TL_NEW_OWNER_DETAILS_ADDRESS"
-             
-        }),
         
       },
 
