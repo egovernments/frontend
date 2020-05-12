@@ -499,19 +499,19 @@ const callBackForNext = async (state, dispatch) => {
             };
             dispatch(toggleSnackbar(true, errorMessage, "warning")); 
           }else{
-            let licenceType = get(
-              state.screenConfiguration.preparedFinalObject , 
-              "applyScreenMdmsData.licenceTypes", []
-              );
-            let bpaStatus = get(
-              state.screenConfiguration.preparedFinalObject,
-              "BPA.status", ""
-            )
-            if(licenceType && licenceType.length > 1 && !bpaStatus) {
-              showApplyLicencePicker(state, dispatch, activeStep);
-            } else {
+            // let licenceType = get(
+            //   state.screenConfiguration.preparedFinalObject , 
+            //   "applyScreenMdmsData.licenceTypes", []
+            //   );
+            // let bpaStatus = get(
+            //   state.screenConfiguration.preparedFinalObject,
+            //   "BPA.status", ""
+            // )
+            // if(licenceType && licenceType.length > 1 && !bpaStatus) {
+            //   showApplyLicencePicker(state, dispatch, activeStep);
+            // } else {
               responseStatus === "success" && changeStep(state, dispatch);
-            }
+            //}
           }
         }else{
           responseStatus === "success" && changeStep(state, dispatch);
