@@ -226,7 +226,7 @@ function MultiDocDetailCard(props) {
                     gutterBottom
                     style={titleStyle}
                   >
-                    Uploaded Time
+                    Uploaded Date
                   </Typography>
                   
                   <div style={fontStyle}>

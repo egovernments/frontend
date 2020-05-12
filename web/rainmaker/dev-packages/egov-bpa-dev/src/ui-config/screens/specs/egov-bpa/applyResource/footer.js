@@ -499,7 +499,8 @@ const callBackForNext = async (state, dispatch) => {
             };
             dispatch(toggleSnackbar(true, errorMessage, "warning")); 
           }else{
-            let licenceType = get(
+            responseStatus === "success" && changeStep(state, dispatch);
+            /*let licenceType = get(
               state.screenConfiguration.preparedFinalObject , 
               "applyScreenMdmsData.licenceTypes", []
               );
@@ -511,7 +512,7 @@ const callBackForNext = async (state, dispatch) => {
               showApplyLicencePicker(state, dispatch, activeStep);
             } else {
               responseStatus === "success" && changeStep(state, dispatch);
-            }
+            }*/
           }
         }else{
           responseStatus === "success" && changeStep(state, dispatch);
