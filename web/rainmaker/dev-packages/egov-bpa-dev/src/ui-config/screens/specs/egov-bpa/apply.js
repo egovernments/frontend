@@ -493,7 +493,7 @@ const selectLicenceType = (state, dispatch) => {
     }
   }
 
-if(isTrue) {
+/*if(isTrue) {
   let toggle = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.cityPickerDialog.props.open",
@@ -503,7 +503,7 @@ if(isTrue) {
     handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
   );
   changeStep(state, dispatch, "", 1);
-}
+}*/
 }
 
 const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJsonpath)=>{
@@ -665,7 +665,7 @@ const screenConfig = {
         footer
       }
     },
-    cityPickerDialog :{
+    /*cityPickerDialog :{
       componentPath: "Dialog",
       props: {
         open: false,
@@ -760,7 +760,7 @@ const screenConfig = {
           }
         }
       }
-    },
+    },*/
   }
 };
 
