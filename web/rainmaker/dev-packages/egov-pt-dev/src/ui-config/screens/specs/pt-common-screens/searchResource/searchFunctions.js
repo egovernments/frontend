@@ -70,7 +70,7 @@ const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Owner Name")]: item.owners.map(owner=>owner.name).join(",") || "-",
         [getTextToLocalMapping("Address")]:
           getAddress(item) || "-",
-        [getTextToLocalMapping("Action")]: "SELECT",
+        [getTextToLocalMapping("Action")]: (item.status !== 'INACTIVE')?"SELECT":"INACTIVE",
         tenantId: item.tenantId
       }));
 

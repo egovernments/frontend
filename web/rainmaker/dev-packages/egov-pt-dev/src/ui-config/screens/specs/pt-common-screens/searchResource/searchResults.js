@@ -35,8 +35,11 @@ export const searchPropertyTable = {
         options: {
           filter: false,
           customBodyRender: (value,data) =>{
+            let styleSelect = {}
+                styleSelect.color = "red"
+                styleSelect.cursor= (data.rowData[3] !== "INACTIVE")?"pointer":"initial";
           return(
-             <span style={{ color: "red", cursor: "pointer" }} onClick={() => { getSelect(data)}}>
+             <span style={styleSelect} onClick={() => { getSelect(data)}}>
               {value}
             </span>
           )
@@ -78,6 +81,10 @@ export const searchPropertyTable = {
 };
 
 const getSelect=data=>{
+  if(data.rowData[3] === 'INACTIVE'){
+    return false;
+  }
+
   if(process.env.REACT_APP_NAME == "Citizen"){
     window.location.href=`/citizen${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
   }else{
