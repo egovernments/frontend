@@ -117,12 +117,12 @@ export const searchApiCall = async (state, dispatch) => {
       const uiConfigs = get(state.screenConfiguration.preparedFinalObject , "applyScreenMdmsData.uiCommonConfig");
       try {
         let data = response.map(item => ({
-          [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
-          [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-          [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
-          [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
-          [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
-          [getTextToLocalMapping("Status")]: item.status || "-",
+          ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+          ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
+          ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+          ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
+          ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
+          ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
           ["receiptKey"]:  get(uiConfigs.filter(item => item.code === item.businessService) , "0.receiptKey" , "consolidatedreceipt"),
           ["tenantId"]: item.tenantId || "-"
         }));
