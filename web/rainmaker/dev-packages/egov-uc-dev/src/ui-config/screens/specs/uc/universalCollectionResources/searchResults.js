@@ -1,8 +1,7 @@
 import React from "react";
 import {
   sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
+  getEpochForDate
 } from "../../utils";
 import {download} from "egov-common/ui-utils/commons"
 
@@ -14,7 +13,10 @@ export const searchResults = {
     columns: [
 
       {
-        name : getTextToLocalMapping("Receipt No."),
+        name : {
+          labelName: "Receipt No.",
+          labelKey: "UC_COMMON_TABLE_COL_RECEIPT_NO"
+        },
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -30,13 +32,26 @@ export const searchResults = {
           )
         }
       },
-
-      
-      getTextToLocalMapping("Payee Name"),
-      getTextToLocalMapping("Service Type"),
-      getTextToLocalMapping("Date"),
-      getTextToLocalMapping("Amount[INR]"),
-      getTextToLocalMapping("Status"),
+      {
+        labelName: "Payee Name",
+        labelKey: "UC_COMMON_TABLE_COL_PAYEE_NAME"
+      },
+      {
+        labelName: "Service Type",
+        labelKey: "UC_SERVICE_TYPE_LABEL"
+      },
+      {
+        labelName: "Date",
+        labelKey: "UC_COMMON_TABLE_COL_DATE"
+      },
+      {
+        labelName: "Amount[INR]",
+        labelKey: "UC_COMMON_TABLE_COL_AMOUNT"
+      },
+      {
+        labelName: "Status",
+        labelKey: "UC_COMMON_TABLE_COL_STATUS"
+      },
       {
         name: "receiptKey",
         options: {

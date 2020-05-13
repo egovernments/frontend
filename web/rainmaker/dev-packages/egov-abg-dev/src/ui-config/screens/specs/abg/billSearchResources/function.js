@@ -3,7 +3,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { getGroupBillSearch } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
-import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
+import { convertEpochToDate } from "../../utils/index";
 
 
 export const searchApiCall = async (state, dispatch) => {
@@ -118,14 +118,14 @@ export const searchApiCall = async (state, dispatch) => {
 
     try {
       let data = billTableData.map(item => ({
-        [getTextToLocalMapping("Bill No.")]: item.billNumber || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
         "Consumer Code": item.consumerCode || "-",
-        [getTextToLocalMapping("Consumer Name")]: item.consumerName || "-",
-        [getTextToLocalMapping("Bill Date")]:
+        ['ABG_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_DATE']:
           convertEpochToDate(item.billDate) || "-",
-        [getTextToLocalMapping("Bill Amount(Rs)")]: item.billAmount || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        [getTextToLocalMapping("Action")]: item.action || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: item.billAmount || "-",
+        ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
         businessService: searchScreenObject.businesService,
         receiptKey: get(configObject[0], "receiptKey"),
         billKey: get(configObject[0], "billKey"),
@@ -153,10 +153,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Bill"
-          )} (${data.length})`
+          "props.rows",
+          response.billTableData.length
         )
       );
 
