@@ -515,41 +515,44 @@ class ActionMenuComp extends Component {
           <div className="clearfix" />
 
           <div style={{ paddingLeft: "-24px" }}>{showMenuItem()}</div>
-          {toggleDrawer ? (
-            <div className="sideMenuItem drawer-collapse-menu-item">
-              {/* <Tooltip
-                id={"menu-toggle-tooltip"}
-                title={<Label defaultLabel={"Expand Menu"} label={menuDrawerOpen ? "" : "COMMON_ACTION_TEST_EXPAND_MENU"} />}
-                placement="right"
-              > */}
-              <MenuItem
-                innerDivStyle={styles.defaultMenuItemStyle}
-                style={{ whiteSpace: "initial" }}
-                onClick={() => {
-                  toggleDrawer && toggleDrawer(false);
-                }}
-                leftIcon={
-                  menuDrawerOpen ? (
-                    <ChevronLeftIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
-                  ) : (
-                    <ChevronRightIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
-                  )
-                }
-                primaryText={
-                  <Label
-                    className="menuStyle"
-                    defaultLabel="COMMON_ACTION_TEST_COLLAPSE"
-                    label={menuDrawerOpen ? "COMMON_ACTION_TEST_COLLAPSE" : ""}
-                   //  color="rgba(255, 255, 255, 0.87)"
+          {
+          // toggleDrawer ? (
+          //   <div className="sideMenuItem drawer-collapse-menu-item">
+          //     {/* <Tooltip
+          //       id={"menu-toggle-tooltip"}
+          //       title={<Label defaultLabel={"Expand Menu"} label={menuDrawerOpen ? "" : "COMMON_ACTION_TEST_EXPAND_MENU"} />}
+          //       placement="right"
+          //     > */}
+          //     <MenuItem
+          //       innerDivStyle={styles.defaultMenuItemStyle}
+          //       style={{ whiteSpace: "initial" }}
+          //       onClick={() => {
+          //         toggleDrawer && toggleDrawer(false);
+          //       }}
+          //       leftIcon={
+          //         menuDrawerOpen ? (
+          //           <ChevronLeftIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
+          //         ) : (
+          //           <ChevronRightIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
+          //         )
+          //       }
+          //       primaryText={
+          //         <Label
+          //           className="menuStyle"
+          //           defaultLabel="COMMON_ACTION_TEST_COLLAPSE"
+          //           label={menuDrawerOpen ? "COMMON_ACTION_TEST_COLLAPSE" : ""}
+          //          //  color="rgba(255, 255, 255, 0.87)"
 
-                  />
-                }
-              />
-              {/* </Tooltip> */}
-            </div>
-          ) : (
-            ""
-          )}
+          //         />
+          //       }
+          //     />
+          //     {/* </Tooltip> */}
+          //   </div>
+          // ) : (
+          //   ""
+          // )
+          }
+
         </Menu>
       </div>
     ) : null;
