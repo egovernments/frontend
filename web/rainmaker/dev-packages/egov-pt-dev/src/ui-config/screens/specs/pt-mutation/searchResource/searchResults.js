@@ -154,7 +154,8 @@ export const searchPropertyTable = {
         }
       },
       {
-        name: "tenantId",
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false
         }
@@ -259,7 +260,8 @@ export const searchApplicationTable = {
         }
       },
       {
-        name: "tenantId",
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false,
         }
