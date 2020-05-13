@@ -75,6 +75,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
     store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
+    store.dispatch(toggleSpinner());
     store.dispatch(
       toggleSnackbar(
         true,
