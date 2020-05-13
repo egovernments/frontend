@@ -1004,9 +1004,8 @@ export const printPdf = async (link) => {
 export const getModuleName = () => {
   const pathName = window.location.pathname;
   if (pathName.indexOf("inbox") > -1) { return "rainmaker-common"; }
-  else if (pathName.indexOf("property-tax") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
-  else if (pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
-  else if (pathName.indexOf("pt-common-screens") > -1) { return "rainmaker-pt"; }
+  else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
+  else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("public-search") > -1) { return "rainmaker-pt"; }
   else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
   else if (pathName.indexOf("wns") > -1) { return "rainmaker-ws"; }
   else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) { return "rainmaker-tl"; }
