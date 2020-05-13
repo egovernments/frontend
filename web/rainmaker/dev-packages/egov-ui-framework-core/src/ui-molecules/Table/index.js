@@ -78,7 +78,6 @@ class Table extends React.Component {
 
   getTranslatedHeader = (columns) => {
     if(columns) {
-      const colArray = [];
       columns.map((item,key)=>{
         columns[key].name = <LabelContainer labelKey={item.labelKey} labelName={item.labelKey} />
       })
