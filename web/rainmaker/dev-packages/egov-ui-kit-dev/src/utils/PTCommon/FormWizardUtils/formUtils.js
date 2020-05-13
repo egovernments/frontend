@@ -1,5 +1,6 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";
+import { assessProperty, createProperty } from "./formActionUtils";
 
 const extractFromString = (str, index) => {
   if (!str) {

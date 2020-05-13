@@ -1,6 +1,9 @@
 import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { checkValueForNA } from "../utils/index";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
