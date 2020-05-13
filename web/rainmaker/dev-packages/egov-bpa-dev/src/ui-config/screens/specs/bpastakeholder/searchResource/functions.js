@@ -108,21 +108,14 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       response.Licenses.sort((item1, item2) => item1.applicationDate > item2.applicationDate ? -1 : 1)
       let data = response.Licenses.map(item => ({
-        [getTextToLocalMapping("Application No")]:
-          item.applicationNumber || "-",
-        [getTextToLocalMapping("Applicant Name")]:
-          item.tradeLicenseDetail.owners[0].name || "-",
-        [getTextToLocalMapping("Licensee Type")]:
-          getTextToLocalMapping(
-            `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType.split('.')[0].toUpperCase()}`
-          ) || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        [getTextToLocalMapping("Owner Name")]:
-          get(businessIdToOwnerMapping[item.applicationNumber], "assignee") ||
-          "-",
-        [getTextToLocalMapping("Application Date")]:
-          convertEpochToDate(item.applicationDate) || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
+        ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNumber || "-",
+        ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.tradeLicenseDetail.owners[0].name || "-",
+        ["BPA_COMMON_TABLE_COL_LICENSEE_TYPE"]: getTextToLocalMapping(
+          `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType.split('.')[0].toUpperCase()}`
+        ) || "-",
+        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
+        ["BPA_COMMON_TABLE_COL_ASSIGN_TO"]: get(businessIdToOwnerMapping[item.applicationNumber], "assignee") || "-",
+        ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]:  convertEpochToDate(item.applicationDate) || "-",        
         ["tenantId"]: item.tenantId
       }));
 
@@ -138,10 +131,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Stakeholder Registration Applications"
-          )} (${response.Licenses.length})`
+          "props.rows",
+          response.Licenses.length
         )
       );
       showHideTable(true, dispatch);
