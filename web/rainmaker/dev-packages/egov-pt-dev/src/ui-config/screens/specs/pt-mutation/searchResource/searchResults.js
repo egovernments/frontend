@@ -117,7 +117,7 @@ export const searchPropertyTable = {
     // data: [],
     columns: [
       {
-        name: "Unique Property ID",
+        labelName: "Unique Property ID",
         labelKey: "PT_COMMON_TABLE_COL_PT_ID",
         options: {
           filter: false,
@@ -133,12 +133,12 @@ export const searchPropertyTable = {
           )
         }
       },
-      {name: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
-      {name: "Guardian Name", labelKey: "PT_GUARDIAN_NAME"},
-      {name: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
-      {name: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
+      {labelName: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
+      {labelName: "Guardian Name", labelKey: "PT_GUARDIAN_NAME"},
+      {labelName: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
+      {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
-        name: "Status",
+        labelName: "Status",
         labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
@@ -201,7 +201,7 @@ export const searchApplicationTable = {
     // data: [],
     columns: [
       {
-        name: "Application No",
+        labelName: "Application No",
         labelKey: "PT_COMMON_TABLE_COL_APP_NO",
         options: {
           filter: false,
@@ -221,7 +221,7 @@ export const searchApplicationTable = {
         }
       },
       {
-        name: "Unique Property ID",
+        labelName: "Unique Property ID",
         labelKey: "PT_COMMON_TABLE_COL_PT_ID",
         options: {
           filter: false,
@@ -239,11 +239,11 @@ export const searchApplicationTable = {
           )
         }
       },
-      {name: "Application Type", labelKey: "PT_COMMON_TABLE_COL_APP_TYPE"},
-      {name: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
-      {name: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
+      {labelName: "Application Type", labelKey: "PT_COMMON_TABLE_COL_APP_TYPE"},
+      {labelName: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
+      {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
-        name: "Status",
+        labelName: "Status",
         labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,

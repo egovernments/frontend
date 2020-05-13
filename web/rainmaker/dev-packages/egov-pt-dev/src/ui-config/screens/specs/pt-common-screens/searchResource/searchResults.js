@@ -1,6 +1,7 @@
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import React from "react";
-import { getEpochForDate, getTextToLocalMapping, sortByEpoch } from "../../utils";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getEpochForDate, sortByEpoch, getStatusKey } from "../../utils";
 
 const url = getQueryArg(
   window.location.href,
@@ -15,7 +16,8 @@ export const searchPropertyTable = {
   props: {
     columns: [
       {
-       name: getTextToLocalMapping("Unique Property Id"),  
+       name: "Unique Property ID",
+       labelKey: "PT_COMMON_TABLE_COL_PT_ID",  
        options: {
         filter: false,
         customBodyRender: (value) =>{
@@ -28,10 +30,12 @@ export const searchPropertyTable = {
       }
     },
      
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Address"),
+
+      {name: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
+      {name: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
-        name: getTextToLocalMapping("Action"),
+        name: "Status",
+        labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: (value,data) =>{
@@ -39,9 +43,10 @@ export const searchPropertyTable = {
                 styleSelect.color = "red"
                 styleSelect.cursor= (data.rowData[3] !== "INACTIVE")?"pointer":"initial";
           return(
-             <span style={styleSelect} onClick={() => { getSelect(data)}}>
-              {value}
-            </span>
+            <LabelContainer style={styleSelect} onClick={() => { getSelect(data)}}
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />             
           )
         }
         }
@@ -52,8 +57,9 @@ export const searchPropertyTable = {
           display: false
         }
       }
-    ],
-    title: getTextToLocalMapping("Search Results for Properties"),
+    ],    
+    title: {labelKey:"PT_HOME_PROPERTY_RESULTS_TABLE_HEADING", labelName:"Search Results for Properties"},
+    rows:"",
     options: {
       filter: false,
       download: false,

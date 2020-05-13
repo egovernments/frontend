@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Field from "egov-ui-kit/utils/field";
-import { Button, Card, Image,Icon} from "components";
+import { Card, Image,Icon} from "components";
+import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
 import { CityPicker } from "modules/common";
 import Hidden from "@material-ui/core/Hidden";
@@ -44,13 +45,27 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
             </Link>
           </div>
           <Button
+                {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+            onClick={() => {
+              startSMSRecevier();
+            }}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button
             primary={true}
             fullWidth={true}
             {...submit}
             onClick={(e) => {
               startSMSRecevier();
             }}
-          />
+          /> */}
           {enableWhatsApp&&
         <Hidden mdUp>
           <div>
@@ -101,13 +116,27 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
             </Link>
           </div>
           <Button
+                {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+            onClick={() => {
+              startSMSRecevier();
+            }}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button
             primary={true}
             fullWidth={true}
             {...submit}
             onClick={(e) => {
               startSMSRecevier();
             }}
-          />
+          /> */}
          
           <div>
         <div className="register-hl-divider">
@@ -159,13 +188,28 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
             </Link>
           </div>
           <Button
+                {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+            onClick={() => {
+              startSMSRecevier();
+            }}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button
             primary={true}
            fullWidth={true}
             {...submit}
             onClick={(e) => {
               startSMSRecevier();
             }}
-          />
+          /> */}
+
      </div>
     
      <div className="register-vl-divider">
