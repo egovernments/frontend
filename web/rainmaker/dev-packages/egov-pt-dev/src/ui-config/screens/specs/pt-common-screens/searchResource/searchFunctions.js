@@ -1,7 +1,10 @@
+
+import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../../utils/index";
+import { convertDateToEpoch,  validateFields } from "../../utils/index";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch)
@@ -65,12 +68,12 @@ const searchApiCall = async (state, dispatch) => {
     try {
       const response = await getSearchResults(queryObject);
       let propertyData = response.Properties.map(item => ({
-        [getTextToLocalMapping("Unique Property Id")]:
+        ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.owners.map(owner=>owner.name).join(",") || "-",
-        [getTextToLocalMapping("Address")]:
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners.map(owner=>owner.name).join(",") || "-",
+        ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
-        [getTextToLocalMapping("Action")]: (item.status !== 'INACTIVE')?"SELECT":"INACTIVE",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: (item.status !== 'INACTIVE')?"SELECT":"INACTIVE",
         tenantId: item.tenantId
       }));
 
@@ -86,10 +89,8 @@ const searchApiCall = async (state, dispatch) => {
         handleField(
           "propertySearch",
           "components.div.children.searchPropertyTable",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Properties"
-          )} (${response.Properties.length})`
+          "props.rows",
+          response.Properties.length
         )
       );
 
