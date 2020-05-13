@@ -96,17 +96,11 @@ export const searchApiCall = async (state, dispatch) => {
       // const response = searchSampleResponse();
 
       let data = response.Bpa.map(item => ({
-        [getBpaTextToLocalMapping("Application No")]: item.applicationNo || "-",
-        // [getBpaTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
-        // [getBpaTextToLocalMapping("NOC Type")]:
-        //   item.fireNOCDetails.fireNOCType || "-",
-        [getBpaTextToLocalMapping("Owner Name")]:
-          get(item, "owners[0].name") || "-",
-        [getBpaTextToLocalMapping("Application Date")]:
-          convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) ||
-          "-",
-        tenantId: item.tenantId,
-        [getBpaTextToLocalMapping("Status")]: item.status || "-"
+        ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo || "-",
+        ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: get(item, "owners[0].name") || "-",
+        ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) || "-",
+        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
+        tenantId: item.tenantId
       }));
 
       // if (data && data.length > 0) {
@@ -130,10 +124,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          `${getBpaTextToLocalMapping(
-            "Search Results for BPA Applications"
-          )} (${response.Bpa.length})`
+          "props.rows",
+          response.Bpa.length
         )
       );
       //showHideProgress(false, dispatch);
