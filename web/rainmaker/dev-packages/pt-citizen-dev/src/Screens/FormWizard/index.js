@@ -1225,15 +1225,6 @@ class FormWizard extends Component {
       alert("Please check the declaration box to proceed futher");
       return;
     }
-    let propertyData = { ...this.props.prepareFormData };
-    const teanantValue=  get(
-       propertyData,
-      "Properties[0].tenantId");
-   
-  if(teanantValue=='pb.zirakpur'){
-   alert("First collect UID from MC Office!");
-   return;
-  }
 
     if (totalAmountToBePaid % 1 !== 0) {
       alert("Amount cannot be a fraction!");
