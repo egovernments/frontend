@@ -437,11 +437,22 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
 
-    setSearchResponse(state, dispatch, applicationNumber, tenantId);
+    setSearchResponse(state, dispatch, applicationNumber, tenantId).then(() =>{
+      let currentcity = get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+      );
+      let value = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+      var mtenantid = value === 'Urban'? currentcity : tenantId;
+
+      dispatch(fetchLocalizationLabel(getLocale(), mtenantid, mtenantid));
+    });
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
