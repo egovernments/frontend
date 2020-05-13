@@ -224,38 +224,38 @@ const showHideApplicationTable = (booleanHideOrShow, dispatch) => {
 
 const showConnectionResults = (connections, dispatch) => {
   let data = connections.map(item => ({
-    [getTextToLocalMapping("Service")]: item.service,
-    [getTextToLocalMapping("Consumer No")]: item.connectionNo,
-    [getTextToLocalMapping("Owner Name")]: item.name,
-    [getTextToLocalMapping("Status")]: item.status,
-    [getTextToLocalMapping("Due")]: item.due,
-    [getTextToLocalMapping("Address")]: item.address,
-    [getTextToLocalMapping("Due Date")]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
+    ["WS_COMMON_TABLE_COL_SERVICE_LABEL"]: item.service,
+    ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
+    ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
+    ["WS_COMMON_TABLE_COL_STATUS_LABEL"]: item.status,
+    ["WS_COMMON_TABLE_COL_DUE_LABEL"]: item.due,
+    ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
+    ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
     ["connectionType"]: item.connectionType
   }));
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
-  dispatch(handleField("search", "components.div.children.searchResults", "props.title",
-    `${getTextToLocalMapping("Search Results for Water & Sewerage Connections")} (${connections.length})`
+  dispatch(handleField("search", "components.div.children.searchResults", "props.rows",
+    connections.length
   ));
   showHideConnectionTable(true, dispatch);
 }
 
 const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
-    [getTextToLocalMapping("Consumer No")]: item.connectionNo,
-    [getTextToLocalMapping("Application No")]: item.applicationNo,
-    [getTextToLocalMapping("Application Type")]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
-    [getTextToLocalMapping("Owner Name")]: item.name,
-    [getTextToLocalMapping("Application Status")]: item.applicationStatus.split("_").join(" "),
-    [getTextToLocalMapping("Address")]: item.address,
+    ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
+    ["WS_COMMON_TABLE_COL_APP_NO_LABEL"]: item.applicationNo,
+    ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
+    ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
+    ["WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
+    ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
     ["service"]: item.service,
     ["connectionType"]: item.connectionType,
   }));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
-  dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.title",
-    `${getTextToLocalMapping("Search Results for Water & Sewerage Application")} (${connections.length})`
+  dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.rows",
+    connections.length
   ));
   showHideApplicationTable(true, dispatch);
 }

@@ -16,7 +16,7 @@ const instance = axios.create({
 });
 
 const wrapRequestBody = (requestBody, action) => {
-  const authToken = getAccessToken();
+  const authToken = requestBody.authToken === false ? "" : getAccessToken();
   let RequestInfo = {
     apiId: "Mihy",
     ver: ".01",
@@ -25,9 +25,9 @@ const wrapRequestBody = (requestBody, action) => {
     did: "1",
     key: "",
     msgId: `20170310130900|${getLocale()}`,
-    requesterId: "",
-    authToken
+    requesterId: ""
   };
+  if(authToken) RequestInfo.authToken = authToken;
   return Object.assign(
     {},
     {

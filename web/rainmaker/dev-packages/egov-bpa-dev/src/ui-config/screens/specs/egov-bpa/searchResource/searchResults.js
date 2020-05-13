@@ -111,11 +111,17 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getBpaTextToLocalMapping("Application No"),
-      getBpaTextToLocalMapping("Owner Name"),
-      getBpaTextToLocalMapping("Application Date"),
       {
-        name: getBpaTextToLocalMapping("Status"),
+        name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        name: "Owner Name", labelKey: "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"
+      },
+      {
+        name: "Application Date", labelKey: "BPA_COMMON_TABLE_COL_APP_DATE_LABEL"
+      },
+      {
+        name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -131,12 +137,14 @@ export const searchResults = {
       },
       {
         name: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false
         }
       }
     ],
-    title: getBpaTextToLocalMapping("Search Results for BPA Applications"),
+    title: { labelKey: "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName: "Search Results for BPA Applications"},
+    rows: "",
     options: {
       filter: false,
       download: false,

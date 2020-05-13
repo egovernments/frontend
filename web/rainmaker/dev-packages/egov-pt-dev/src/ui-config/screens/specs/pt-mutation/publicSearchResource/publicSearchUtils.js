@@ -63,14 +63,25 @@ export const getSearchResults = async requestPayload => {
 };
 
 export const getPayload = searchScreenObject => {
-  const requestPayload = {
-    ownerName: searchScreenObject.ownerName,
-    mobileNumber: searchScreenObject.mobileNumber,
-    propertyId: searchScreenObject.ids,
-    locality: searchScreenObject.locality.code,
-    tenantId: searchScreenObject.tenantId
-  };
-  return requestPayload;
+  let querryObject = [];
+  if(searchScreenObject){
+    if(searchScreenObject.ownerName){
+      querryObject.push({key:"ownerName", value: searchScreenObject.ownerName});
+    }
+    if(searchScreenObject.mobileNumber){
+      querryObject.push({key:"mobileNumber", value: searchScreenObject.mobileNumber});
+    }
+    if(searchScreenObject.ids){
+      querryObject.push({key:"propertyIds", value: searchScreenObject.ids});
+    }
+    if(searchScreenObject.locality){
+      querryObject.push({key:"locality", value: searchScreenObject.locality.code});
+    }
+    if(searchScreenObject.tenantId){
+      querryObject.push({key:"tenantId", value: searchScreenObject.tenantId});
+    }
+  }
+  return querryObject;
 };
 
 export const getTenantName = (tenantId, state) => {

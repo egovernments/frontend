@@ -46,16 +46,15 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const getSearchResults = async (queryObject, dispatch) => {
+export const getSearchResults = async (queryObject, requestBody) => {
   try {
-
-
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/property-services/property/_search",
       "",
-      queryObject
+      queryObject,
+      requestBody
     );
     response && response.Properties && response.Properties.map(property => {
       if (property.status == "INWORKFLOW") {
@@ -75,6 +74,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
     store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
+    store.dispatch(toggleSpinner());
     store.dispatch(
       toggleSnackbar(
         true,

@@ -34,7 +34,7 @@ export const searchPropertyDetails = {
           },
           placeholder: {
             labelName: "Select ULB",
-            labelKey: "ABG_ULB_PLACEHOLDER"
+            labelKey: "PT_ULB_CITY_PLACEHOLDER"
           },
 
           localePrefix: {
