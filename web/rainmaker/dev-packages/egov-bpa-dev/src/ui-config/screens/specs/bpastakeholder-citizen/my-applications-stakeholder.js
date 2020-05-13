@@ -170,25 +170,38 @@ const screenConfig = {
           componentPath: "Table",
           props: {
             columns: [
-              getBpaTextToLocalMapping("Application No"),
-              getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE"),
-              getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO"),
-              getBpaTextToLocalMapping("BPA_COMMON_SLA"),
-              getBpaTextToLocalMapping("Status"),
+              {
+                name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
+              },
+              {
+                name: "Module/Service", labelKey: "BPA_COL_MODULE_SERVICE"
+              },
+              {
+                name: "Assigned To", labelKey: "BPA_COL_ASSIGNEDTO"
+              },
+              {
+                name: "SLA(Days Remaining)", labelKey: "BPA_COMMON_SLA"
+              },
+              {
+                name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL"
+              },
               {
                 name: "tenantId",
+                labelKey: "tenantId",
                 options: {
                   display: false
                 }
               },
               {
                 name: "serviceType",
+                labelKey: "serviceType",
                 options: {
                   display: false
                 }
               },
               {
                 name: "type",
+                labelKey: "type",
                 options: {
                   display: false
                 }
@@ -305,12 +318,12 @@ export const changePage = async (tableState) => {
           }
         });
         searchConvertedArray.push({
-          [getBpaTextToLocalMapping("Application No")]: element.applicationNo || "-",
-          [getBpaTextToLocalMapping("Status")]: status || "-",
+          ["BPA_COMMON_TABLE_COL_APP_NO"]: element.applicationNo || "-",
+          ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
+          ["BPA_COL_MODULE_SERVICE"]: "BPA \n Building permit new construction",
+          ["BPA_COMMON_SLA"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "sla", null) || "-",
+          ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "assignee", null) || "-",
           applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
-          [getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE")]: "BPA \n Building permit new construction",
-          [getBpaTextToLocalMapping("BPA_COMMON_SLA")]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "sla", null) || "-",
-          [getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO")]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "assignee", null) || "-",
           modifiedTime: modifiedTime,
           sortNumber: 1,
           serviceType: element.serviceType,
@@ -333,12 +346,12 @@ export const changePage = async (tableState) => {
           service += " - " + getTextToLocalMapping(`TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull.split(".")[0])}`);
         }
         searchConvertedArray.push({
-          [getBpaTextToLocalMapping("Application No")]: element.applicationNumber || "-",
-          [getBpaTextToLocalMapping("Status")]: status || "-",
+          ["BPA_COMMON_TABLE_COL_APP_NO"]: element.applicationNumber || "-",
+          ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
+          ["BPA_COL_MODULE_SERVICE"]: "Registration \n Stakeholder Registration",
+          ["BPA_COMMON_SLA"]: get(businessIdToOwnerMapping[element.applicationNumber], "sla", null) || "-",
+          ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMapping[element.applicationNumber], "assignee", null) || "-",
           applicationType: getBpaTextToLocalMapping("BPAREG_SERVICE"),
-          [getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE")]: "Registration \n Stakeholder Registration",
-          [getBpaTextToLocalMapping("BPA_COMMON_SLA")]: get(businessIdToOwnerMapping[element.applicationNumber], "sla", null) || "-",
-          [getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO")]: get(businessIdToOwnerMapping[element.applicationNumber], "assignee", null) || "-",
           modifiedTime: modifiedTime,
           sortNumber: 1,
           serviceType: "BPAREG",
