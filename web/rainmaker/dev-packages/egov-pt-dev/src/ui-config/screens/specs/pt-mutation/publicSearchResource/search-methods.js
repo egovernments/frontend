@@ -109,7 +109,7 @@ const searchApiCall = async (state, dispatch) => {
     //  showHideProgress(true, dispatch);
     const querryObject = getPayload(searchScreenObject);
     try {
-      const response = await getSearchResults(querryObject);
+      const response = await getSearchResults(querryObject, {"authToken":false});
       // const response = searchResponse;
 
       let propertyData = response.Properties.map(item => ({
