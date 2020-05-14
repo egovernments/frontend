@@ -207,7 +207,11 @@ const screenConfig = {
                 }
               }
             ],
-            title: getBpaTextToLocalMapping("Search Results for BPA Applications"),
+            title: {
+              labelName: "Search Results for BPA Applications",
+              labelKey: "BPA_SEARCH_RESULTS_FOR_APP"
+            },
+            rows: "",
             options: {
               filter: false,
               download: false,
@@ -371,6 +375,14 @@ export const changePage = async (tableState) => {
       "props.data",
       sortConvertedArray
     ));
+    store.dispatch(
+      handleField(
+        "my-applications-stakeholder",
+        "components.div.children.applicationsCard",
+        "props.rows",
+        sortConvertedArray.length
+      )
+    );
 };
 
 const onRowClick = rowData => {

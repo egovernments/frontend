@@ -4803,7 +4803,7 @@ export const setProposedBuildingData = async (state, dispatch, action, value) =>
         {
           [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
           [getBpaTextToLocalMapping("Level")]: item.number,
-          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
           [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
           [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
           [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
