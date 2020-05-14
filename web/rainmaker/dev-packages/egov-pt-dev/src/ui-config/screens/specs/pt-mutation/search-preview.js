@@ -23,6 +23,7 @@ import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils";
 import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
+import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import { searchBill, showHideMutationDetailsCard, getpayments, downloadCertificateForm, downloadReceitForm, prepareDocumentsView } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
@@ -429,7 +430,7 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
 const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getCommonTenant(),
       moduleDetails: [
         {
           moduleName: "PropertyTax",
