@@ -13,10 +13,8 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: {
-          labelName: "Bill No.",
-          labelKey: "ABG_COMMON_TABLE_COL_BILL_NO"
-        },
+        labelName: "Bill No.",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -31,7 +29,8 @@ export const searchResults = {
         }
       },
       {
-        name: "Consumer Code",
+        labelName: "Consumer Code",
+        labelKey: "Consumer Code",
         options: {
           display: false
         }
@@ -49,10 +48,8 @@ export const searchResults = {
         labelKey: "ABG_COMMON_TABLE_COL_BILL_AMOUNT"
       },
       {
-        name : {
-          labelName: "Status",
-          labelKey: "ABG_COMMON_TABLE_COL_STATUS"
-        },
+        labelName: "Status",
+        labelKey: "ABG_COMMON_TABLE_COL_STATUS",
         options:{
           filter: false,
           customBodyRender: value => (
@@ -64,10 +61,8 @@ export const searchResults = {
         }
       },
       {
-        name: {
-          labelName: "Action",
-          labelKey: "ABG_COMMON_TABLE_COL_ACTION"
-        },
+        labelName: "Action",
+        labelKey: "ABG_COMMON_TABLE_COL_ACTION",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -110,37 +105,43 @@ export const searchResults = {
         }
       },
       {
-        name: "businessService",
+        labelKey: "businessService",
+        labelName: "businessService",
         options: {
           display: false
         }
       },
       {
-        name: "receiptKey",
+        labelKey: "receiptKey",
+        labelName: "receiptKey",
         options: {
           display: false
         }
       },
       {
-        name: "billKey",
+        labelName: "billKey",
+        labelKey: "billKey",
         options: {
           display: false
         }
       },
       {
-        name: "tenantId",
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false
         }
       },
       {
-        name: "Bill Id",
+        labelName: "Bill Id",
+        labelKey: "Bill Id",
         options: {
           display: false
         }
       },
       {
-        name: "billSearchUrl",
+        labelName: "billSearchUrl",
+        labelKey: "billSearchUrl",
         options: {
           display: false
         }
