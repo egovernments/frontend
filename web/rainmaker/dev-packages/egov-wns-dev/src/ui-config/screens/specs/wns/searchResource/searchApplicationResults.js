@@ -62,7 +62,7 @@ export const searchApplicationResults = {
         }
       },
       {name : "Owner Name",labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-      {name : "Application Status",labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL" },
+      {name : "Application Status",labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL" },
       {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
       {
         name: "tenantId",
@@ -83,7 +83,7 @@ export const searchApplicationResults = {
         }
       }
     ],
-    title: {labelKey:"WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Connections"},
+    title: {labelKey:"WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Application"},
     options: {
       filter: false,
       download: false,
