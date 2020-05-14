@@ -1,7 +1,8 @@
 import React from "react";
 import {
   sortByEpoch,
-  getEpochForDate
+  getEpochForDate,
+  getTextToLocalMapping
 } from "../../utils";
 import { download, downloadBill } from "egov-common/ui-utils/commons";
 import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";

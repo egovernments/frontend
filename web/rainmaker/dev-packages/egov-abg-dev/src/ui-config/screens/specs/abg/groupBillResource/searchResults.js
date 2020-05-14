@@ -1,6 +1,6 @@
 import React from "react";
 import get from "lodash/get";
-import { sortByEpoch, getEpochForDate,getTextToLocalMapping } from "../../utils";
+import { sortByEpoch, getEpochForDate } from "../../utils";
 import { generateSingleBill } from "../../utils/receiptPdf";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";

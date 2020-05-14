@@ -152,7 +152,8 @@ export const searchResults = {
         }
       },
       {
-        name: "tenantId",
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false
         }
