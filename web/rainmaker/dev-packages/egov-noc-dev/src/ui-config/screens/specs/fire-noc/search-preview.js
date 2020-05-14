@@ -437,7 +437,7 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
-    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
 
@@ -451,7 +451,7 @@ const screenConfig = {
         "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
       var mtenantid = value === 'Urban'? currentcity : tenantId;
 
-      dispatch(fetchLocalizationLabel(getLocale(), mtenantid, mtenantid));
+      dispatch(fetchLocalizationLabel(getLocale(), `${mtenantid}`, mtenantid));
     });
 
     const queryObject = [
