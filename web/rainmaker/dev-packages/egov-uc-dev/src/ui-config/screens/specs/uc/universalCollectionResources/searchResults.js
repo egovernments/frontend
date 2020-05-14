@@ -87,7 +87,10 @@ export const searchResults = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20]
+      rowsPerPageOptions: [10, 15, 20],
+      onRowClick: (row, index) => {
+        generateReciept(row);
+      }
     },
     customSortColumn: {
       column: "Date",
