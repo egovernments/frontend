@@ -437,7 +437,7 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
 
