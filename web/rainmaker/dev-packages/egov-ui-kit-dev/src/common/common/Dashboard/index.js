@@ -23,8 +23,6 @@ const onButton2Click = (item, history) => {
 
   console.log('item values ', item);
 
-  debugger;
-
   if (process.env.REACT_APP_NAME === "Citizen") {
     if (item.moduleTitle === "PT_PAYMENT_STEP_HEADER1") {
       history && history.push("property-tax/how-it-works");

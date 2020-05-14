@@ -53,7 +53,6 @@ class InboxData extends React.Component {
   };
 
   getModuleLink = async (item, row, index) => {
-    debugger;
     const { prepareFinalObject } = this.props;
     const status = row[2].text && row[2].text.props.defaultLabel;
     const taskId = index === 1 && item.text;

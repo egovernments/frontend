@@ -82,7 +82,6 @@ export const getCheckbox = (content, jsonPath, props = {}) => {
 };
 
 export const getTextToLocalMapping = label => {
-  // debugger;
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
     case "Application No":
@@ -1712,7 +1711,6 @@ export const updateDropDowns = async (
   //   "applyScreenMdmsData.TradeLicense.TradeType",
   //   []
   // );
-  // // debugger;
   // const tradeTypeDropdownData =
   //   tradeTypes &&
   //   Object.keys(tradeTypes).map(item => {

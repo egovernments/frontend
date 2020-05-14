@@ -4853,7 +4853,6 @@ const generatePdf = async (state, dispatch, type) => {
       break;
     case "certificate_download":
       fileName = `noc_certificate_${transformedData.fireNOCNumber}`;
-     // debugger;
       if(transformedData.nocType=="NEW")
       {
       application_data = await newgetApplicationData(

@@ -162,8 +162,6 @@ class WorkFlowContainer extends React.Component {
       });
 
       if (payload) {
-       // debugger;
-       // console.log("prasad workflow payload",payload )
         let path = "";
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";

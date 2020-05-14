@@ -110,7 +110,6 @@ class ActionDialog extends React.Component {
     if (window.innerWidth <= 768) {
       fullscreen = true;
     }
-   // debugger;
     dataPath =
       dataPath === "FireNOCs"
         ? `${dataPath}[0].fireNOCDetails`
