@@ -531,7 +531,7 @@ class WorkFlowContainer extends React.Component {
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
-          <TaskStatusContainer ProcessInstances={ProcessInstances} />
+          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName}/>
         )}
         {showFooter &&
           <Footer
