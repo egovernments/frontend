@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import get from "lodash/get";
 import { Dialog, DialogContent } from "@material-ui/core";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import CloseIcon from "@material-ui/icons/Close";
+import IconButton from "@material-ui/core/IconButton";
 
 class DialogContainer extends React.Component {
   handleClose = () => {
@@ -14,11 +16,24 @@ class DialogContainer extends React.Component {
       false
     );
   };
+  style={
+    width: "auto",
+    justifyContent: "flex-end",
+  }
+
 
   render() {
-    const { open, maxWidth, children } = this.props;
+    const { open, maxWidth, children,classes,onClose } = this.props;
     return (
       <Dialog open={open} maxWidth={maxWidth} onClose={this.handleClose}>
+        <IconButton
+          aria-label="Close"
+          onClick={this.handleClose}
+          className="dialog-close-buttonStyele"
+          style={this.style}
+        >
+          <CloseIcon/>
+        </IconButton>  
         <DialogContent children={children} />
       </Dialog>
     );
