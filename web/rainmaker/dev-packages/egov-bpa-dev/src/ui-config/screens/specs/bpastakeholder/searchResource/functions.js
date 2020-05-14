@@ -17,10 +17,11 @@ const convertMillisecondsToDays = (milliseconds) => {
 }
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
+  
   let queryObject = [
     {
       key: "tenantId",
-      value: getTenantId()//process.env.REACT_APP_DEFAULT_TENANT_ID
+      value: (getTenantId().lastIndexOf(".") >0 ? getTenantId().substr(0,getTenantId().lastIndexOf(".")) : getTenantId())
     },
     { key: "offset", value: "0" },
     { key: "limit", value: "100" }
@@ -172,7 +173,7 @@ export const getWorkFlowData = async Licenses => {
   const queryObject = [
     {
       key: "tenantId",
-      value: getTenantId()//process.env.REACT_APP_DEFAULT_TENANT_ID
+      value: (getTenantId().lastIndexOf(".") >0 ? getTenantId().substr(0,getTenantId().lastIndexOf(".")) : getTenantId())
     },
     {
       key: "businessIds",
