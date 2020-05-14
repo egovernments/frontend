@@ -467,7 +467,9 @@ const screenConfig = {
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
           props:{
-            moduleName:"NewTL"
+            moduleName:"NewTL",
+            dataPath: "Licenses",
+            updateUrl: "/tl-services/v1/_update"
           },
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
         },
