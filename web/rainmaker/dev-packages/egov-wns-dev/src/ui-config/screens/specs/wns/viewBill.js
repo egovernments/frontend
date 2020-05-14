@@ -255,7 +255,8 @@ const screenConfig = {
       },
       children: {
         popup: adhocPopupViewBill
-      }
+      },
+      visible: process.env.REACT_APP_NAME !== "Citizen"
     }
   }
 };
