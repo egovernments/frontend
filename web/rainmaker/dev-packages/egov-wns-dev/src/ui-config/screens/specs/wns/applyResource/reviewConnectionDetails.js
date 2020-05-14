@@ -209,7 +209,14 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "applyScreen.property.propertySubUsageType", callBack: handleNA }
+          { 
+            jsonPath: "applyScreen.property.units[0].usageCategory", 
+            callBack: handleNA,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPSUBUSGTYPE"
+            }
+          }
         ),
         reviewPlotSize: getLabelWithValue(
           {

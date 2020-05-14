@@ -45,7 +45,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     serviceUrl = "ws-calculator/waterCalculator/_applyAdhocTax";
     httpmethod = "post";
   } else {
-    serviceUrl = "sw-calculator/sewerageCalculator/__applyAdhocTax"
+    serviceUrl = "sw-calculator/sewerageCalculator/_applyAdhocTax"
     httpmethod = "get";
   }
 try{
@@ -62,7 +62,8 @@ try{
   );
 
   if(WSpayload){
-      window.location.reload();
+    showHideAdhocPopup(state, dispatch, "viewBill");
+    window.location.reload();
   }else {
       dispatch(
         toggleSnackbar(
@@ -203,7 +204,9 @@ export const adhocPopupViewBill = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: showHideAdhocPopup
+              callBack: (state, dispatch) => {
+                showHideAdhocPopup(state, dispatch, "viewBill");
+              }
             }
           }
         }
@@ -402,7 +405,9 @@ export const adhocPopupViewBill = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: showHideAdhocPopup
+          callBack: (state, dispatch) => {
+            showHideAdhocPopup(state, dispatch, "viewBill");
+          }
         }
       },
       addButton: {

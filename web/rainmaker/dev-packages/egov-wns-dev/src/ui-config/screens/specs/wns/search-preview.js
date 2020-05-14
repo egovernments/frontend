@@ -334,7 +334,9 @@ const estimate = getCommonGrayCard({
     },
     onClickDefination: {
       action: "condition",
-      callBack: showHideAdhocPopup
+      callBack: (state, dispatch) => {
+        showHideAdhocPopup(state, dispatch, "search-preview");
+      }
     },
     visible: false
   },
@@ -403,7 +405,8 @@ const screenConfig = {
       { key: "businessServices", value: serviceModuleName }
     ];
 
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch)
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopup);
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
@@ -498,10 +501,10 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: "sm",
-        screenKey: "pay"
+        screenKey: "search-preview"
       },
       children: {
-        popup: adhocPopup
+        popup: {}
       }
     },
   }

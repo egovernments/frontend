@@ -105,8 +105,12 @@ const propertyDetails = getCommonContainer({
       labelName: "Property Sub Usage Type"
     },
     {
-      jsonPath: "applyScreen.property.propertySubUsageType",
-      callBack: handleNA
+      jsonPath: "applyScreen.property.units[0].usageCategory",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPSUBUSGTYPE"
+      }
     }
   ),
   plotSize: getLabelWithValue(
