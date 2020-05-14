@@ -34,8 +34,8 @@ export const searchPropertyTable = {
       {name: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
       {name: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
-        name: "Status",
-        labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
+        name: "Action",
+        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
         options: {
           filter: false,
           customBodyRender: (value,data) =>{

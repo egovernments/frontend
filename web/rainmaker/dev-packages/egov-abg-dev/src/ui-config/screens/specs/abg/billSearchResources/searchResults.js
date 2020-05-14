@@ -1,8 +1,7 @@
 import React from "react";
 import {
   sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
+  getEpochForDate
 } from "../../utils";
 import { download, downloadBill } from "egov-common/ui-utils/commons";
 import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
@@ -14,7 +13,10 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: getTextToLocalMapping("Bill No."),
+        name: {
+          labelName: "Bill No.",
+          labelKey: "ABG_COMMON_TABLE_COL_BILL_NO"
+        },
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -34,11 +36,23 @@ export const searchResults = {
           display: false
         }
       },
-      getTextToLocalMapping("Consumer Name"),
-      getTextToLocalMapping("Bill Date"),
-      getTextToLocalMapping("Bill Amount(Rs)"),
       {
-        name : getTextToLocalMapping("Status"),
+        labelName: "Consumer Name",
+        labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_NAME"
+      },
+      {
+        labelName: "Bill Date",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"
+      },
+      {
+        labelName: "Bill Amount(Rs)",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_AMOUNT"
+      },
+      {
+        name : {
+          labelName: "Status",
+          labelKey: "ABG_COMMON_TABLE_COL_STATUS"
+        },
         options:{
           filter: false,
           customBodyRender: value => (
@@ -50,7 +64,10 @@ export const searchResults = {
         }
       },
       {
-        name: getTextToLocalMapping("Action"),
+        name: {
+          labelName: "Action",
+          labelKey: "ABG_COMMON_TABLE_COL_ACTION"
+        },
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -129,7 +146,11 @@ export const searchResults = {
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for Bill"),
+    title: {
+      labelName: "Search Results for Bill",
+      labelKey: "BILL_GENIE_SEARCH_TABLE_HEADER"
+    },
+    rows : "",
     options: {
       filter: false,
       download: false,
