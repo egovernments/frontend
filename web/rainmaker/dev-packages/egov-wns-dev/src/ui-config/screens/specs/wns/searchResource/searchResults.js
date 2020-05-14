@@ -73,12 +73,14 @@ export const searchResults = {
       },
       {
         name: "tenantId",
+        labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
         options: {
           display: false
         }
       },
       {
         name: "connectionType",
+        labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
         options: {
           display: false
         }

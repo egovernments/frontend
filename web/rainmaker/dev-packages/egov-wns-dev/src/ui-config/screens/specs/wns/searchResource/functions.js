@@ -72,14 +72,14 @@ const renderSearchConnectionTable = async (state, dispatch) => {
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
-        let queryObjectForWaterFetchBill;
-        if (element.service === "WATER") {
-          queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
-        } else {
-          queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
-        }
-        let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
         if (element.connectionNo !== "NA" && element.connectionNo !== null) {
+          let queryObjectForWaterFetchBill;
+          if (element.service === "WATER") {
+            queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
+          } else {
+            queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
+          }
+          let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
           billResults ? billResults.Bill.map(bill => {
             finalArray.push({
               due: bill.totalAmount,
@@ -231,8 +231,8 @@ const showConnectionResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_DUE_LABEL"]: item.due,
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
-    ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
-    ["connectionType"]: item.connectionType
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: JSON.parse(getUserInfo()).tenantId,
+    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }));
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.rows",
@@ -249,9 +249,9 @@ const showApplicationResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
     ["WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
-    ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
-    ["service"]: item.service,
-    ["connectionType"]: item.connectionType,
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: JSON.parse(getUserInfo()).tenantId,
+    ["WS_COMMON_TABLE_COL_SERVICE_LABEL"]: item.service,
+    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
   }));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.rows",
