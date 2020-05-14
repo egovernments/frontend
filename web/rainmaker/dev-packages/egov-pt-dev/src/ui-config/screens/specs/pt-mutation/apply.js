@@ -21,7 +21,7 @@ import {
 } from "./summaryResource/transferorSummary1";
 import { propertyDetails } from "./applyResource/propertyDetails";
 import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
-
+import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -303,7 +303,7 @@ const getPropertyData = async (action, state, dispatch) => {
 };
 
 const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
-  let tenantId = 'pb'
+  let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -410,7 +410,7 @@ const getMdmsData = async (action, state, dispatch) => {
 };
 
 const getMdmsTransferReasonData = async (action, state, dispatch) => {
-  let tenantId = 'pb'
+  let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
