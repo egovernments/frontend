@@ -406,6 +406,9 @@ export const getTenantForLatLng = async (lat, lng) => {
       //throw and error
       throw new Error(error.message);
     }
+  }else{
+
+    return commonConfig.tenantId;
   }
 };
 
