@@ -17,8 +17,13 @@ class DialogContainer extends React.Component {
     );
   };
   style={
-    width: "auto",
-    justifyContent: "flex-end",
+    position: "absolute",
+    top: "0",
+    right: "0"
+  }
+  style2={
+    paddingTop: "10px",
+
   }
 
 
@@ -34,7 +39,7 @@ class DialogContainer extends React.Component {
         >
           <CloseIcon/>
         </IconButton>  
-        <DialogContent children={children} />
+        <DialogContent children={children} style={this.style2}/>
       </Dialog>
     );
   }
