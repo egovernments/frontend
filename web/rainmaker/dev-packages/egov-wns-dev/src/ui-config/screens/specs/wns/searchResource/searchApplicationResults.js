@@ -66,18 +66,21 @@ export const searchApplicationResults = {
       {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
       {
         name: "tenantId",
+        labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
         options: {
           display: false
         }
       },
       {
         name: "service",
+        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL", 
         options: {
           display: false
         }
       },
       {
         name: "connectionType",
+        labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
         options: {
           display: false
         }
