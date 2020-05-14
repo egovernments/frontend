@@ -153,7 +153,10 @@ function MultiDocDetailCard(props) {
               variant="subtitle1"
               style={{ fontWeight: "bold", fontSize: "12px" }}
             >
-              {getTransformedLocale(docItem.documentCode)}
+            <LabelContainer
+              labelKey={getTransformedLocale(docItem.documentCode)}
+            />
+              {/* {getTransformedLocale(docItem.documentCode)} */}
               {docItem.required}
               <span>{requiredIcon}</span>
 

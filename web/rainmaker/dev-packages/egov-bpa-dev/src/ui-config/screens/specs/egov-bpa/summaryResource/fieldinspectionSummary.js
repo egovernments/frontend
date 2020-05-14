@@ -7,7 +7,7 @@ import {
   getTimeField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-import { getTranslatedLabel, transformById } from "egov-ui-framework/ui-utils/commons";
+import { getTranslatedLabel, transformById, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const localizationLabels = JSON.parse(getLocalization(`localization_${getLocale()}`));
@@ -178,7 +178,7 @@ export const fieldinspectionSummary = getCommonContainer({
       prefixSourceJsonPath: "children.cardContent.children.fiCard.children",
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
       headerJsonPath : "children.cardContent.children.fiCard.children.header.children.header.children.key.props.label",
-      headerName : getTranslatedLabel("BPA_FI_REPORT", transfomedKeys),
+      headerName : getLocaleLabels( "FI Report", "BPA_FI_REPORT") //getTranslatedLabel("BPA_FI_REPORT", transfomedKeys),
     },
     gridDefination: {
       xs: 12,
