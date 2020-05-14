@@ -567,6 +567,15 @@ export const convertEpochToDateAndHandleNA = dateEpoch => {
   } else { return "NA"; }
 }
 
+export const handlePropertySubUsageType = params => {
+  params = handleNA(params);
+  if (params !== "NA" && params.split(".").length > 1) {
+    return params;  
+  } else {
+    return "NA";
+  }
+}
+
 export const handleNA = params => {
   if (params !== undefined && params !== null && params !== "" && params!==0) {
     return params;

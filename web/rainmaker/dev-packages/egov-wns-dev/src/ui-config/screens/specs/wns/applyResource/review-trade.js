@@ -7,7 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
-import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -208,7 +208,7 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "WaterConnection[0].property.usageCategory",
-            callBack: handleNA,
+            callBack: handlePropertySubUsageType,
             localePrefix: {
               moduleName: "WS",
               masterName: "PROPUSGTYPE"
