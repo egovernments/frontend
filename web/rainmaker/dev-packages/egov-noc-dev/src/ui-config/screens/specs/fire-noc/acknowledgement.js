@@ -23,6 +23,9 @@ import get from "lodash/get";
 import { getCurrentFinancialYear } from "../utils";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
@@ -67,7 +70,7 @@ const getAcknowledgementCard = (
   applicationNumber,
   secondNumber,
   tenant,
-  utenantId  
+  utenantId
 ) => {
   if (purpose === "apply" && status === "success") {
     loadPdfGenerationData(applicationNumber, tenant);
@@ -107,7 +110,7 @@ const getAcknowledgementCard = (
                   div1: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
-                 
+
                     props:{
                       iconName: "cloud_download",
                     style:{
@@ -142,7 +145,7 @@ const getAcknowledgementCard = (
                   div1: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
-                 
+
                     props:{
                       iconName: "local_printshop",
                       style:{
@@ -486,13 +489,13 @@ const screenConfig = {
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
       ""
     );
-  
-    
+
+
 
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
 
-
+    dispatch(fetchLocalizationLabel(getLocale(), tenant, tenant));
     let value = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
@@ -528,7 +531,7 @@ const screenConfig = {
      set(action, "screenConfig.components.div.children", data);
 
     }
-    
+
     return action;
   }
 };
