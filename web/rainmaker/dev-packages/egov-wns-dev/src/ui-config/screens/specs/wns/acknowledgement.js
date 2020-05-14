@@ -21,6 +21,7 @@ import {
   downloadAndPrintForNonApply
 } from "../../../../ui-utils/commons";
 import set from "lodash/set";
+import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getMdmsData } from './apply';
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -84,7 +85,8 @@ const getAcknowledgementCard = (
   applicationNumberWater,
   applicationNumberSewerage,
   secondNumber,
-  tenant
+  tenant,
+  consumerNo
 ) => {
   if (purpose === "apply" && status === "success" && applicationNumberWater && applicationNumberSewerage) {
     return {
@@ -506,11 +508,13 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "activate" && status === "success") {
+
     return {
       commonHeader: commonHeader(state,
         dispatch,
         applicationNumber,
-        tenant),
+        tenant,
+        consumerNo),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -531,7 +535,12 @@ const getAcknowledgementCard = (
               labelName: "Application No.",
               labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             },
-            number: applicationNumber
+            number: applicationNumber,
+            tailTextOne: {
+              labelName: "Consumer No",
+              labelKey: "WS_COMMON_CONSUMER_NO_LABEL"
+            },
+            newNumber: consumerNo,
           })
         }
       },
@@ -762,36 +771,48 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     pageReset(dispatch);
     fetchData(dispatch)
+    .then(() => {
+        const purpose = getQueryArg(window.location.href, "purpose");
+        const status = getQueryArg(window.location.href, "status");
+        // const service = getQueryArg(window.location.href, "service");
+        const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+        const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
+        const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
+        const secondNumber = getQueryArg(window.location.href, "secondNumber");
+        const tenant = getQueryArg(window.location.href, "tenantId");
+        let consumerNo = ""
+        if (applicationNumber.includes("WS")) {
+          consumerNo = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].connectionNo");
+        } else if (applicationNumber.includes("SW")) {
+          consumerNo = get(state,"screenConfiguration.preparedFinalObject.SewerageConnection[0].connectionNo");
+        }
+        if (applicationNumberSewerage && applicationNumberWater) {
+          const cardOne = getAcknowledgementCard(state, dispatch, purpose, status, applicationNumber, applicationNumberWater, applicationNumberSewerage, secondNumber, tenant);
+          set(action, "screenConfig.components.div.children", cardOne);
+        } else {
+          const data = getAcknowledgementCard(
+            state,
+            dispatch,
+            purpose,
+            status,
+            applicationNumber,
+            applicationNumberWater, 
+            applicationNumberSewerage,
+            secondNumber,
+            // financialYear,
+            tenant,
+            consumerNo
+          );
+          set(action, "screenConfig.components.div.children", data);
+        }
+      })
       .then(() => getMdmsData(dispatch))
       .then(() => prepareDocumentsUploadData(state, dispatch))
       .then(() => prepareDocUploadRedux(state, dispatch))
       .then(() => prepareDocumentsUploadRedux(state, dispatch))
       .then(() => downloadAndPrintForNonApply(state, dispatch))
-      .catch(error => console.log(error))
-    const purpose = getQueryArg(window.location.href, "purpose");
-    const status = getQueryArg(window.location.href, "status");
-    // const service = getQueryArg(window.location.href, "service");
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-    const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
-    const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
-    const secondNumber = getQueryArg(window.location.href, "secondNumber");
-    const tenant = getQueryArg(window.location.href, "tenantId");
-    if (applicationNumberSewerage && applicationNumberWater) {
-      const cardOne = getAcknowledgementCard(state, dispatch, purpose, status, applicationNumber, applicationNumberWater, applicationNumberSewerage, secondNumber, tenant);
-      set(action, "screenConfig.components.div.children", cardOne);
-    } else {
-      const data = getAcknowledgementCard(
-        state,
-        dispatch,
-        purpose,
-        status,
-        applicationNumber,
-        secondNumber,
-        // financialYear,
-        tenant
-      );
-      set(action, "screenConfig.components.div.children", data);
-    }
+      
+      .catch(error => console.log(error))    
     return action;
   }
 };
