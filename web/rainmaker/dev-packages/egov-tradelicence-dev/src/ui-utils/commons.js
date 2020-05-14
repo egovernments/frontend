@@ -234,7 +234,7 @@ export const getBoundaryData = async (
           "Licenses[0].tradeLicenseDetail.address.city"
         )
         : getQueryArg(window.location.href, "tenantId");
-
+          
     const mohallaData =
       payload &&
       payload.TenantBoundary[0] &&
@@ -244,13 +244,12 @@ export const getBoundaryData = async (
           ...item,
           name: `${tenantId
             .toUpperCase()
-            .replace(/[.]/g, "_")}_REVENUE_${item.code
+            .replace(/[.]/g, "_")}_ADMIN_${item.code
               .toUpperCase()
               .replace(/[._:-\s\/]/g, "_")}`
         });
         return result;
       }, []);
-
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.tenant.localities",
