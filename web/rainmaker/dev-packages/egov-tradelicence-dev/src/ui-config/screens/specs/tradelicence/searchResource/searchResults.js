@@ -68,13 +68,15 @@ export const searchResults = {
         }
       },
       {
-        name: "tenantId",
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false
         }
       },
       {
-        name:"status1",
+        labelName: "status1",
+        labelKey: "status1",
         options: {
           display: false
         }

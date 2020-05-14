@@ -1,7 +1,8 @@
 import React from "react";
 import {
   sortByEpoch,
-  getEpochForDate
+  getEpochForDate,
+  getTextToLocalMapping
 } from "../../utils";
 import { download, downloadBill } from "egov-common/ui-utils/commons";
 import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
@@ -31,7 +32,8 @@ export const searchResults = {
         }
       },
       {
-        name: "Consumer Code",
+        labelName: "Consumer Code",
+        labelKey: "Consumer Code",
         options: {
           display: false
         }
@@ -110,37 +112,43 @@ export const searchResults = {
         }
       },
       {
-        name: "businessService",
+        labelName: "businessService",
+        labelKey: "businessService",
         options: {
           display: false
         }
       },
       {
-        name: "receiptKey",
+        labelName: "receiptKey",
+        labelKey: "receiptKey",
         options: {
           display: false
         }
       },
       {
-        name: "billKey",
+        labelName: "billKey",
+        labelKey: "billKey",
         options: {
           display: false
         }
       },
       {
-        name: "tenantId",
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false
         }
       },
       {
-        name: "Bill Id",
+        labelName: "Bill Id",
+        labelKey: "Bill Id",
         options: {
           display: false
         }
       },
       {
-        name: "billSearchUrl",
+        labelName: "billSearchUrl",
+        labelKey: "billSearchUrl",
         options: {
           display: false
         }

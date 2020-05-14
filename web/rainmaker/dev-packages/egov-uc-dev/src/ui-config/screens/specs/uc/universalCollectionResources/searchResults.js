@@ -53,13 +53,15 @@ export const searchResults = {
         labelKey: "UC_COMMON_TABLE_COL_STATUS"
       },
       {
-        name: "receiptKey",
+        labelName: "receiptKey",
+        labelKey: "receiptKey",
         options: {
           display: false
         }
       },
       {
-        name: "tenantId",
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false
         }

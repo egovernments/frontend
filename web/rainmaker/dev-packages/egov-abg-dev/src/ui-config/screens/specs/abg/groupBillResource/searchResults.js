@@ -1,6 +1,6 @@
 import React from "react";
 import get from "lodash/get";
-import { sortByEpoch, getEpochForDate,getTextToLocalMapping } from "../../utils";
+import { sortByEpoch, getEpochForDate } from "../../utils";
 import { generateSingleBill } from "../../utils/receiptPdf";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
@@ -91,7 +91,10 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: getTextToLocalMapping("Bill No."),
+        name: {
+          labelName: "Bill No.",
+          labelKey: "ABG_COMMON_TABLE_COL_BILL_NO"
+        },
         options: {
           filter: false,
           customBodyRender: value => (
@@ -100,21 +103,32 @@ export const searchResults = {
             </div>
           )
         }
-      },  
-      getTextToLocalMapping("Consumer ID"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Bill Date"),
-      getTextToLocalMapping("Status"),
+      },
       {
-        name: "tenantId",
+        labelName: "Consumer ID",
+        labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_ID"
+      },
+      {
+        labelName: "Owner Name",
+        labelKey: "ABG_COMMON_TABLE_COL_OWN_NAME"
+      },
+      {
+        labelName: "Bill Date",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"
+      },
+      {
+        labelName: "Status",
+        labelKey: "ABG_COMMON_TABLE_COL_STATUS"
+      },
+      {
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false
         }
       }
     ], 
-    title: getTextToLocalMapping(
-      "Search Results for Trade License Applications"
-    ),  
+    title: '',  
     options: {
       filter: false,
       download: false,
