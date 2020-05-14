@@ -91,10 +91,8 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: {
-          labelName: "Bill No.",
-          labelKey: "ABG_COMMON_TABLE_COL_BILL_NO"
-        },
+        labelKey:"ABG_COMMON_TABLE_COL_BILL_NO",
+        labelName:"Bill No.",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -103,23 +101,11 @@ export const searchResults = {
             </div>
           )
         }
-      },
-      {
-        labelName: "Consumer ID",
-        labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_ID"
-      },
-      {
-        labelName: "Owner Name",
-        labelKey: "ABG_COMMON_TABLE_COL_OWN_NAME"
-      },
-      {
-        labelName: "Bill Date",
-        labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"
-      },
-      {
-        labelName: "Status",
-        labelKey: "ABG_COMMON_TABLE_COL_STATUS"
-      },
+      },  
+      {labelName: "Consumer ID", labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_ID"},
+      {labelName: "Owner Name", labelKey: "ABG_COMMON_TABLE_COL_OWN_NAME"},
+      {labelName: "Bill Date", labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"},
+      {labelName: "Status", labelKey: "ABG_COMMON_TABLE_COL_STATUS"},
       {
         labelName: "tenantId",
         labelKey: "tenantId",
@@ -128,7 +114,8 @@ export const searchResults = {
         }
       }
     ], 
-    title: '',  
+    title: {labelName: "Search Results for Group Bills", labelKey: "BILL_GENIE_GROUP_SEARCH_HEADER"}, 
+    rows: "", 
     options: {
       filter: false,
       download: false,

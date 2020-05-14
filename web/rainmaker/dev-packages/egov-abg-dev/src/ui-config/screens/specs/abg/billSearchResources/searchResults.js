@@ -14,10 +14,8 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: {
-          labelName: "Bill No.",
-          labelKey: "ABG_COMMON_TABLE_COL_BILL_NO"
-        },
+        labelName: "Bill No.",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -51,10 +49,8 @@ export const searchResults = {
         labelKey: "ABG_COMMON_TABLE_COL_BILL_AMOUNT"
       },
       {
-        name : {
-          labelName: "Status",
-          labelKey: "ABG_COMMON_TABLE_COL_STATUS"
-        },
+        labelName: "Status",
+        labelKey: "ABG_COMMON_TABLE_COL_STATUS",
         options:{
           filter: false,
           customBodyRender: value => (
@@ -66,10 +62,8 @@ export const searchResults = {
         }
       },
       {
-        name: {
-          labelName: "Action",
-          labelKey: "ABG_COMMON_TABLE_COL_ACTION"
-        },
+        labelName: "Action",
+        labelKey: "ABG_COMMON_TABLE_COL_ACTION",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -112,15 +106,15 @@ export const searchResults = {
         }
       },
       {
-        labelName: "businessService",
         labelKey: "businessService",
+        labelName: "businessService",
         options: {
           display: false
         }
       },
       {
-        labelName: "receiptKey",
         labelKey: "receiptKey",
+        labelName: "receiptKey",
         options: {
           display: false
         }

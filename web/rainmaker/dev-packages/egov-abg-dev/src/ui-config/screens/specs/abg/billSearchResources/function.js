@@ -154,7 +154,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResults",
           "props.rows",
-          response.billTableData.length
+          billTableData.length
         )
       );
 
