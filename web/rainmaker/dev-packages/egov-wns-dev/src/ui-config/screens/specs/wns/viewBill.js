@@ -93,6 +93,20 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.WaterConnection[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);
         }
+
+        if (payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === 'NA' || payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === null || payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === undefined) {
+          payload.WaterConnection[0].additionalDetails.adhocPenaltyComment = "";
+        }
+        if (payload.WaterConnection[0].additionalDetails.adhocRebateComment === 'NA' || payload.WaterConnection[0].additionalDetails.adhocRebateComment === null || payload.WaterConnection[0].additionalDetails.adhocRebateComment === undefined) {
+          payload.WaterConnection[0].additionalDetails.adhocRebateComment = "";
+        }
+        if (payload.WaterConnection[0].additionalDetails.adhocPenaltyReason === 'NA' || payload.WaterConnection[0].additionalDetails.adhocPenaltyReason === null || payload.WaterConnection[0].additionalDetails.adhocPenaltyReason === undefined) {
+          payload.WaterConnection[0].additionalDetails.adhocPenaltyReason = "";
+        }
+        if (payload.WaterConnection[0].additionalDetails.adhocRebateReason === 'NA' || payload.WaterConnection[0].additionalDetails.adhocRebateReason === null || payload.WaterConnection[0].additionalDetails.adhocRebateReason === undefined) {
+          payload.WaterConnection[0].additionalDetails.adhocRebateReason = "";
+        }
+
         dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
         dispatch(prepareFinalObject("consumptionDetails[0]", meterReadingsData.meterReadings[0]))
@@ -113,6 +127,18 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.SewerageConnections[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);//propertyUsageType from Mdms
         }
+        if (payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === null || payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === undefined) {
+          payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment = "";
+        }
+        if (payload.SewerageConnections[0].additionalDetails.adhocRebateComment === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocRebateComment === null || payload.SewerageConnections[0].additionalDetails.adhocRebateComment === undefined) {
+          payload.SewerageConnections[0].additionalDetails.adhocRebateComment = "";
+        }
+        if (payload.SewerageConnections[0].additionalDetails.adhocPenaltyReason === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocPenaltyReason === null || payload.SewerageConnections[0].additionalDetails.adhocPenaltyReason === undefined) {
+          payload.SewerageConnections[0].additionalDetails.adhocPenaltyReason = "";
+        }
+        if (payload.SewerageConnections[0].additionalDetails.adhocRebateReason === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocRebateReason === null || payload.SewerageConnections[0].additionalDetails.adhocRebateReason === undefined) {
+          payload.SewerageConnections[0].additionalDetails.adhocRebateReason = "";
+        }
         dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
       }

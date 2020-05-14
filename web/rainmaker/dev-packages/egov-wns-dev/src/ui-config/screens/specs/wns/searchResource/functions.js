@@ -247,7 +247,7 @@ const showApplicationResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_APP_NO_LABEL"]: item.applicationNo,
     ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
     ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
-    ["WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
+    ["WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
     ["service"]: item.service,
