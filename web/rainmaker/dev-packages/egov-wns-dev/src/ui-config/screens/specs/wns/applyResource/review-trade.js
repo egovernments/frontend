@@ -221,8 +221,13 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "WaterConnection[0].property.propertySubUsageType",
-          callBack: handleNA}
+          { jsonPath: "WaterConnection[0].property.units[0].usageCategory",
+            callBack: handleNA,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPSUBUSGTYPE"
+            }
+          }
         ),
         reviewPlotSize: getLabelWithValue(
           {
