@@ -6,7 +6,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -196,11 +196,13 @@ const getPropertyDetails = {
             labelName: "Property Usage Type",
             labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "applyScreen.property.usageCategory", callBack: handleNA,
-          localePrefix: {
-            moduleName: "WS",
-            masterName: "PROPUSGTYPE"
-          }
+          { 
+	    jsonPath: "applyScreen.property.usageCategory", 
+	    callBack: handlePropertySubUsageType,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPUSGTYPE"
+            }
        }
         ),
 

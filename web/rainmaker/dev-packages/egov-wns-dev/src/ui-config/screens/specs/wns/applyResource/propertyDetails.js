@@ -7,7 +7,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { propertySearchApiCall } from './functions';
-import { handleNA } from '../../utils';
+import { handlePropertySubUsageType, handleNA } from '../../utils';
 
 export const propertyHeader = getCommonSubHeader({
   labelKey: "WS_COMMON_PROP_DETAIL",
@@ -92,7 +92,7 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath: "applyScreen.property.usageCategory",
-      callBack: handleNA,
+      callBack: handlePropertySubUsageType,
       localePrefix: {
         moduleName: "WS",
         masterName: "PROPUSGTYPE"
