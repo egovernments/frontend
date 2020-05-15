@@ -1,3 +1,4 @@
+import commonConfig from "config/common.js";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";
 
@@ -294,5 +295,5 @@ export const getPropertyInfoScreenUrl = (propertyId,tenantId) => {
 }
 
 export const getCommonTenant = () => {
-  return process.env.REACT_APP_DEFAULT_TENANT_ID;
+  return commonConfig.tenantId;
 }

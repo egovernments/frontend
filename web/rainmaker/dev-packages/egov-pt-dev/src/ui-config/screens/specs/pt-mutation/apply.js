@@ -22,7 +22,6 @@ import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResour
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 import { transferorInstitutionSummary as ti1, transferorSummary as ts1 } from "./summaryResource/transferorSummary1";
 
-
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
   { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
@@ -274,7 +273,7 @@ const getPropertyData = async (action, state, dispatch) => {
 };
 
 const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
-  let tenantId = getCommonTenant()
+  let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -311,7 +310,7 @@ const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) =
 
 };
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getCommonTenant()
+  let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -381,7 +380,7 @@ const getMdmsData = async (action, state, dispatch) => {
 };
 
 const getMdmsTransferReasonData = async (action, state, dispatch) => {
-  let tenantId = 'pb'
+  let tenantId = getCommonTenant()
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -545,8 +544,7 @@ const screenConfig = {
       let ownershipCategory = get(
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
-        []
-      );
+        []);
       //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
       dispatch(
         prepareFinalObject(
