@@ -4948,11 +4948,23 @@ const generatePdf = async (state, dispatch, type) => {
       pdfMake.createPdf(application_data).download(fileName);
       break;
     case "certificate_print":
-      application_data = await getApplicationData(
-        transformedData,
-        ulbLogo,
-        "certificate"
-      );
+    fileName = `noc_certificate_${transformedData.fireNOCNumber}`;
+    if(transformedData.nocType=="NEW")
+    {
+    application_data = await newgetApplicationData(
+      transformedData,
+      ulbLogo,
+      "certificate"
+    );
+   }
+   else
+   {
+    application_data = await provisionApplicationData(
+      transformedData,
+      ulbLogo,
+      "certificate"
+    );
+   }
       application_data && pdfMake.createPdf(application_data).print();
       break;
 
