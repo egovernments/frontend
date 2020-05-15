@@ -28,6 +28,7 @@ const wrapRequestBody = (requestBody, action) => {
     requesterId: ""
   };
   if(authToken) RequestInfo.authToken = authToken;
+  delete requestBody.authToken;
   return Object.assign(
     {},
     {

@@ -29,11 +29,11 @@ export const searchPropertyTable = {
         labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
         options: {
           filter: false,
-          customBodyRender: (value) =>
+          customBodyRender: (value, tableMeta) =>
             value > 0 ? (
               <span
                 onClick={() => {
-                  payAmount();
+                  payAmount(tableMeta);
                 }}
                 style={{
                   color: "#FE7A51",
@@ -88,7 +88,12 @@ export const searchPropertyTable = {
   },
 };
 
-const payAmount = () => {
-  const url = "commonPayUrl";
-  setRoute(url);
+const payAmount = (tableMeta) => {
+  const appName =
+    process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee";
+  const url =
+    process.env.NODE_ENV === "development"
+      ? `/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`
+      : `/${appName}/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`;
+    setRoute(url);
 };
