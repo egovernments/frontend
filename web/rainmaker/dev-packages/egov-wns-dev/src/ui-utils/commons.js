@@ -1743,7 +1743,8 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                 }
                 //console.log(i);
             }            
-            wnsConnection[0].slaDate = wnsConnection[0].connectionExecutionDate;
+            let connectionExecutionDate = new Date(wnsConnection[0].connectionExecutionDate);             
+            wnsConnection[0].slaDate = connectionExecutionDate.setDate(connectionExecutionDate.getDate() + (wnsConnection[0].sla/86400000));
         }
 
 
