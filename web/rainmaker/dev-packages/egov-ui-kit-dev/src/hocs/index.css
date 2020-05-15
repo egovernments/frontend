@@ -116,6 +116,11 @@
   height: 49px;
 }
 
+.public-search-logo > img {
+  width: 250px;
+  height: 35px;
+}
+
 .appbar-municipal-label .label-text {
   text-transform: uppercase !important;
 }

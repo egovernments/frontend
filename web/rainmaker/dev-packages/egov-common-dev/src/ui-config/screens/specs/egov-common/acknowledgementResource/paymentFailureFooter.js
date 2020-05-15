@@ -1,4 +1,5 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import { ifUserRoleExists } from "../../utils";
 
 const getCommonApplyFooter = children => {
@@ -13,7 +14,7 @@ const getCommonApplyFooter = children => {
 };
 
 export const paymentFailureFooter = (consumerCode, tenant) => {
-    const redirectionURL = "/egov-common/pay";
+    const redirectionURL = isPublicSearch() ? "/withoutAuth/egov-common/pay" : "/egov-common/pay";
     const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
     return getCommonApplyFooter({
         gotoHome: {
