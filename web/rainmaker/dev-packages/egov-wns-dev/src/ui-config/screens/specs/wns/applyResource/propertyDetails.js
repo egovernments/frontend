@@ -92,7 +92,7 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath: "applyScreen.property.usageCategory",
-      callBack: handlePropertySubUsageType,
+      callBack: handleNA,
       localePrefix: {
         moduleName: "WS",
         masterName: "PROPUSGTYPE"
@@ -106,7 +106,7 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath: "applyScreen.property.units[0].usageCategory",
-      callBack: handleNA,
+      callBack: handlePropertySubUsageType,
       localePrefix: {
         moduleName: "WS",
         masterName: "PROPSUBUSGTYPE"
