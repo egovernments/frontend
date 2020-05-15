@@ -1720,6 +1720,33 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             }
         }
 
+        if(type === 'sanctionLetter'){
+            const slaDetails = await httpRequest(
+                "post",
+                `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
+                "_search"
+            );
+
+            var states = [], findSLA = false; 
+            for(var i=0; i<slaDetails.BusinessServices.length; i++){ 
+                states = slaDetails.BusinessServices[i].states;
+                if(findSLA) break; 
+                if(states.length > 0){
+                    for(var j=0; j<states.length; j++){
+                        if(states[j]['state'] && states[j]['state'] !== undefined && states[j]['state'] !== null && states[j]['state'] !== "" && states[j]['state'] === 'PENDING_FOR_CONNECTION_ACTIVATION'){
+                            //console.log(states[j]['sla']);
+                            wnsConnection[0].sla = states[j]['sla'];
+                            findSLA = true;
+                            break;
+                        }
+                    }
+                }
+                //console.log(i);
+            }            
+            wnsConnection[0].slaDate = wnsConnection[0].connectionExecutionDate;
+        }
+
+
         if (type === 'application') {
             if (wnsConnection[0].service === "WATER") {
                 if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
@@ -1738,7 +1765,6 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                 }
             }
         }
-
         await httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, obj, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
                 res.filestoreIds[0]
