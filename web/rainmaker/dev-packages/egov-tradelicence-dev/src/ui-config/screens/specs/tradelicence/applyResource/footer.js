@@ -620,13 +620,13 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
   );
   let startDate = getFinancialYearDates("yyyy-mm-dd", endTime + 1000, noOfYears).startDate
   let endDate = getFinancialYearDates("yyyy-mm-dd", endTime + 1000, noOfYears).endDate
-  //const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
+  const nextFinancialYear = startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length - 2);
 
   const wfCode = "DIRECTRENEWAL";
   set(licences[0], "action", "INITIATE");
   set(licences[0], "workflowCode", wfCode);
   set(licences[0], "applicationType", "RENEWAL");
-  set(licences[0],"financialYear" ,startDate.split("-")[0] + "-" + endDate.split("-")[0].slice(endDate.split("-")[0].length - 2));
+  set(licences[0],"financialYear" ,nextFinancialYear);
   set(licences[0],"validFrom" ,convertDateToEpoch(startDate, ""));
   set(licences[0],"validTo" ,convertDateToEpoch(endDate, "dayend"));
 
@@ -1053,9 +1053,7 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "applicationType", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationType") },
-    
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }    
       ]
       download(receiptQueryString);
     },
@@ -1066,9 +1064,7 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString =  [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "applicationType", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationType") }
-    
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }    
       ]
       download(receiptQueryString,"print");
     },
