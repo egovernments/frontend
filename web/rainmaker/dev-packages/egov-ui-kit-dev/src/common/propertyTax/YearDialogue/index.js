@@ -11,6 +11,8 @@ import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import commonConfig from "config/common.js";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import "./index.css";
+import get from "lodash/get";
+import {  orderBy } from "lodash";
 
 // const getYearList = () => {
 //   let today = new Date();
@@ -66,8 +68,8 @@ class YearDialog extends Component {
   };
 
   render() {
-    let { open, closeDialogue, getYearList, history, form, removeForm, urlToAppend } = this.props;
-    return getYearList ? (
+    let { open, closeDialogue,getYearList, SortedYearList, history, form, removeForm, urlToAppend } = this.props;
+    return SortedYearList ? (
       <Dialog
         open={open}
         children={[
@@ -76,9 +78,9 @@ class YearDialog extends Component {
               <Label label="PT_PROPERTY_TAX_WHICH_YEAR_QUESTIONS" fontSize="16px" color="#484848" />
             </div>
             <div className="year-range-botton-cont">
-              {getYearList &&
-                Object.values(getYearList).map((item, index) => (
-                  <YearDialogueHOC key={index} label={item} history={history} resetFormWizard={this.resetForm} urlToAppend={urlToAppend} />
+              {SortedYearList.map((item, index) => (
+                  console.log(item.name,"itemjai"),
+                  <YearDialogueHOC key={index} label={item.name} history={history} resetFormWizard={this.resetForm} urlToAppend={urlToAppend} />
                 ))}
             </div>
           </div>,
@@ -98,7 +100,8 @@ const mapStateToProps = (state) => {
   const { generalMDMSDataById } = common;
   const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
   const getYearList = FinancialYear && Object.keys(FinancialYear);
-  return { getYearList, form };
+  var SortedYearList = orderBy(FinancialYear, ["name"], ["desc"]);
+  return { SortedYearList,getYearList, form };
 };
 
 const mapDispatchToProps = (dispatch) => {
