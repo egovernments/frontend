@@ -80,7 +80,8 @@ class App extends Component {
 
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
     const isPublicSearch = location && location.pathname && location.pathname.includes("/withoutAuth/pt-mutation/public-search");
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy && !isPublicSearch) {
+    const isPublicSearchPay = location && location.pathname && location.pathname.includes("/withoutAuth/egov-common/pay");
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy && !isPublicSearch && !isPublicSearchPay) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }
