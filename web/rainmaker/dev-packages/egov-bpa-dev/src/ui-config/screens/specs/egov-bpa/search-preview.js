@@ -22,7 +22,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear } from "../utils/index";
+import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -354,12 +354,53 @@ const setDownloadMenu = (action, state, dispatch) => {
   /** END */
 };
 
+const getRequiredMdmsDetails = async (state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "DocumentType"
+            }
+          ]
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [
+            {
+              name: "DocTypeMapping"
+            },
+            {
+              name: "CheckList"
+            },
+            {
+              name: "RiskTypeComputation"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+}
+
 const setSearchResponse = async (
   state,
   dispatch,
   applicationNumber,
   tenantId, action
 ) => {
+  await getRequiredMdmsDetails(state, dispatch);
   const response = await getAppSearchResults([
     {
       key: "tenantId",
@@ -368,9 +409,150 @@ const setSearchResponse = async (
     { key: "applicationNos", value: applicationNumber }
   ]);
 
-  const edcrNumber = response.Bpa["0"].edcrNumber;
-  const status = response.Bpa["0"].status;
-  const riskType = response.Bpa["0"].riskType;
+  const edcrNumber = get(response, "Bpa[0].edcrNumber");
+  const status = get(response, "Bpa[0].status");
+  response.Bpa[0] = {
+    "landInfo": {
+      "address": {
+        "city": "pb.amritsar",
+        "locality": {
+          "code": "SUN04"
+        },
+        "buildingName": "building name",
+        "street": "street name",
+        "pincode": "123123",
+        "geoLocation": {
+          "latitude": 30.7333,
+          "longitude": 76.7794
+        }
+      },
+      "ownerShipMajorType": "INDIVIDUAL",
+      "owners": [
+        {
+          "id": 28069,
+          "userName": "9949565422",
+          "salutation": null,
+          "name": "Sushama Manohar",
+          "gender": "MALE",
+          "mobileNumber": "9949565422",
+          "emailId": "kole@gmail.com",
+          "altContactNumber": null,
+          "pan": "AINPM9083T",
+          "aadhaarNumber": null,
+          "permanentAddress": ",,,123,123",
+          "permanentCity": "pb.amritsar",
+          "permanentPinCode": "123123",
+          "correspondenceAddress": "Whitefield",
+          "correspondenceCity": null,
+          "correspondencePinCode": null,
+          "addresses": [
+            {
+              "pinCode": "123123",
+              "city": "pb.amritsar",
+              "address": ",,,123,123",
+              "type": "PERMANENT",
+              "id": 56058,
+              "tenantId": "pb",
+              "userId": 28069,
+              "addressType": "PERMANENT",
+              "lastModifiedBy": null,
+              "lastModifiedDate": null
+            },
+            {
+              "pinCode": null,
+              "city": null,
+              "address": "Whitefield",
+              "type": "CORRESPONDENCE",
+              "id": 56052,
+              "tenantId": "pb",
+              "userId": 28069,
+              "addressType": "CORRESPONDENCE",
+              "lastModifiedBy": null,
+              "lastModifiedDate": null
+            }
+          ],
+          "active": true,
+          "locale": null,
+          "type": "CITIZEN",
+          "accountLocked": false,
+          "accountLockedDate": 0,
+          "fatherOrHusbandName": "qwewq",
+          "signature": null,
+          "bloodGroup": null,
+          "photo": null,
+          "identificationMark": null,
+          "createdBy": 27879,
+          "lastModifiedBy": 1,
+          "tenantId": "pb",
+          "roles": [
+            {
+              "code": "BPA_ARCHITECT",
+              "name": "BPA Architect",
+              "tenantId": "pb"
+            },
+            {
+              "code": "CITIZEN",
+              "name": "Citizen",
+              "tenantId": "pb"
+            },
+            {
+              "code": "BPA_ENGINEER",
+              "name": "BPA Engineer",
+              "tenantId": "pb"
+            }
+          ],
+          "uuid": "f9c088f1-46f9-40b2-8c67-133a9eff0bb0",
+          "createdDate": 1581678060000,
+          "lastModifiedDate": 1589385000000,
+          "dob": "1994-01-08",
+          "pwdExpiryDate": 1591533060000,
+          "isPrimaryOwner": true,
+          "relationship": "FATHER"
+        }
+      ],
+      "ownershipCategory": "INDIVIDUAL.SINGLEOWNER",
+      "unit": [
+        {
+          "blockIndex": 0,
+          "usageCategory": "A-R,A-SR",
+          "floorNo": "1",
+          "unitType": "Block"
+        }
+      ]
+    },
+    "edcrNumber": "DCR52020BAL3V",
+    "riskType": "LOW",
+    "applicationType": "BUILDING_PLAN_SCRUTINY",
+    "serviceType": "NEW_CONSTRUCTION",
+    "occupancyType": "A",
+    "remarks": "remarks",
+    "additionalDetails": {
+      "holdingNo": "holding number",
+      "registrationDetails": "land reg"
+    },
+    "tenantId": "pb.amritsar",
+    "workflow": {
+      "action": "INITIATE"
+    },
+    "accountId": "f9c088f1-46f9-40b2-8c67-133a9eff0bb0",
+    "documents": null
+  };
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "search", []
+    );
+
+  dispatch( prepareFinalObject( `scrutinyDetails`, edcrRes.edcrDetail[0] ));
+
+  await edcrDetailsToBpaDetails(state, dispatch);
+
+  let riskType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.riskType"
+  );
   let businessServicesValue = "BPA";
   if (riskType === "LOW") {
     businessServicesValue = "BPA_LOW";
@@ -467,22 +649,10 @@ const setSearchResponse = async (
     }
   }
 
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  
   if(response && response.Bpa["0"] && response.Bpa["0"].documents) {
     dispatch(prepareFinalObject("documentsTemp", response.Bpa["0"].documents));
   }
-    let edcrRes = await edcrHttpRequest(
-      "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-      "search", []
-      );
-
-  dispatch(
-    prepareFinalObject(
-      `scrutinyDetails`,
-      edcrRes.edcrDetail[0]
-    )
-  );
 
   if ( response && response.Bpa["0"] && response.Bpa["0"].permitOrderNo ) {
     dispatch(
@@ -518,7 +688,7 @@ const setSearchResponse = async (
   if (
     get(
       response,
-      "BPA.ownershipCategory",
+      "BPA.landInfo.ownershipCategory",
       ""
     ).startsWith("INSTITUTION")
   ) {

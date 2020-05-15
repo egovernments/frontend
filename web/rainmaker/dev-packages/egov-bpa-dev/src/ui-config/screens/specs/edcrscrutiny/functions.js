@@ -524,7 +524,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     );
     return;
   }
-  let primaryOwnerArray = response.Bpa[0].owners.filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  let primaryOwnerArray = get(response, "Bpa[0].landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
   dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
   dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
