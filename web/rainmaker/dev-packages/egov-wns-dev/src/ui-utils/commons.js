@@ -1735,7 +1735,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                     for(var j=0; j<states.length; j++){
                         if(states[j]['state'] && states[j]['state'] !== undefined && states[j]['state'] !== null && states[j]['state'] !== "" && states[j]['state'] === 'PENDING_FOR_CONNECTION_ACTIVATION'){
                             //console.log(states[j]['sla']);
-                            wnsConnection[0].sla = states[j]['sla'];
+                            wnsConnection[0].sla = states[j]['sla']/86400000;
                             findSLA = true;
                             break;
                         }
@@ -1744,7 +1744,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                 //console.log(i);
             }            
             let connectionExecutionDate = new Date(wnsConnection[0].connectionExecutionDate);             
-            wnsConnection[0].slaDate = connectionExecutionDate.setDate(connectionExecutionDate.getDate() + (wnsConnection[0].sla/86400000));
+            wnsConnection[0].slaDate = connectionExecutionDate.setDate(connectionExecutionDate.getDate() + wnsConnection[0].sla);
         }
 
 
