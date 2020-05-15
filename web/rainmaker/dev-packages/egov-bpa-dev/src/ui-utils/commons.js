@@ -79,7 +79,7 @@ export const getBpaSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/bpa-services/_search?offset=0&limit=-1",
+      "/bpa-services/v1/bpa/_search?offset=0&limit=-1",
       "",
       queryObject
     );
@@ -127,7 +127,7 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/bpa-services/_search",
+      "/bpa-services/v1/bpa/_search",
       "",
       queryObject
     );
@@ -324,7 +324,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/_create",
+        "bpa-services/v1/bpa/_create",
         "",
         [],
         { BPA: payload }
@@ -335,7 +335,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/_update",
+        "bpa-services/v1/bpa/_update",
         "",
         [],
         { BPA: payload }

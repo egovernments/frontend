@@ -3022,7 +3022,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     ];
     const bpaSearch = await httpRequest(
       "post",
-      "bpa-services/_search",
+      "bpa-services/v1/bpa/_search",
       "",
       queryObject
     );
@@ -5152,7 +5152,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     ];
     const bpaSearch = await httpRequest(
       "post",
-      "bpa-services/_search",
+      "bpa-services/v1/bpa/_search",
       "",
       queryObject
     );

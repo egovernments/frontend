@@ -194,7 +194,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update"
           }
         },
         sendToArchPickerDialog :{
