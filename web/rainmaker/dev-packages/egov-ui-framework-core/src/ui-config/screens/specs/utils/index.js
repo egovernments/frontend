@@ -2,6 +2,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "../../../..
 import { getTranslatedLabel } from "../../../../ui-utils/commons";
 import { validate } from "../../../../ui-redux/screen-configuration/utils";
 import { getUserInfo } from "../../../../ui-utils/localStorageUtils";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 
 import get from "lodash/get";
