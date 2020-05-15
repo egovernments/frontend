@@ -110,7 +110,7 @@ span[class^="MuiFormLabel-asterisk"] {
   position: fixed !important;
   bottom: 0;
   right: 0;
-  width: 83.33vw;
+  width: 100%;
   text-align: right;
 }
 
@@ -190,7 +190,7 @@ span[class^="MuiFormLabel-asterisk"] {
     position: fixed !important;
     bottom: 0;
     right: 0;
-    width: 83.33vw;
+    width: 100%;
     text-align: right;
 }
 }
@@ -255,7 +255,7 @@ span[class^="MuiFormLabel-asterisk"] {
         bottom: 0;
         right: 0;
         z-index: 1;
-        width: 83.33vw;
+        width: 100%;
         text-align: right;
         overflow: inherit !important;
     }
