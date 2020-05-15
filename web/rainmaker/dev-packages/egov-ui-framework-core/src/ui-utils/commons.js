@@ -630,3 +630,7 @@ export const getTodaysDateInYMD = () => {
   date = `${date.getFullYear()}-${month}-${day}`;
   return date;
 };
+
+export const isPublicSearch = () => {
+  return location && location.pathname && location.pathname.includes("/withoutAuth");
+}

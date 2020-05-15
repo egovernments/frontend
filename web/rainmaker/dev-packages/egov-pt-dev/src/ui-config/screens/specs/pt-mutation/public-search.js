@@ -101,18 +101,15 @@ const screenConfig = {
         }
       },
       children: {
-        header: {
-          uiFramework: "custom-containers-local",
-          componentPath: "HeaderContainer",
-          moduleName: "egov-pt",
-          props: {
-            msevaLogo: msevaLogo
-          }
-        },
+        // header: {
+        //   uiFramework: "custom-containers-local",
+        //   componentPath: "HeaderContainer",
+        //   moduleName: "egov-pt",
+        //   props: {
+        //     msevaLogo: msevaLogo
+        //   }
+        // },
         searchPropertyDetails,
-        breakAfterSearch0: getBreak(),
-        breakAfterSearch1: getBreak(),
-        breakAfterSearch2: getBreak(),
         breakAfterSearch3: getBreak(),
         searchPropertyTable,
         breakAfterSearch4: getBreak()
