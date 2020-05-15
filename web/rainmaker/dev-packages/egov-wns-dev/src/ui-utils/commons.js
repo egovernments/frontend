@@ -1621,6 +1621,17 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 };
 // to download application 
 export const downloadApp = async (wnsConnection, type, mode = "download") => {
+    let estFileStrID = wnsConnection[0].additionalDetails.estimationFileStoreId
+    let sanFileStrID = wnsConnection[0].additionalDetails.sanctionFileStoreId
+
+    if(type === 'estimateNotice' && estFileStrID !== undefined && estFileStrID !== null){
+        downloadReceiptFromFilestoreID(estFileStrID, mode)
+        return false;
+    }else if(type === 'sanctionLetter' && sanFileStrID !== undefined && sanFileStrID !== null){
+        downloadReceiptFromFilestoreID(sanFileStrID, mode)
+        return false;
+    }
+
     let tenantName = wnsConnection[0].property.tenantId;
     tenantName = tenantName.split('.')[1];
 
@@ -1733,6 +1744,11 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                 res.filestoreIds[0]
                 if (res && res.filestoreIds && res.filestoreIds.length > 0) {
                     res.filestoreIds.map(fileStoreId => {
+                        if(type === "sanctionLetter"){  
+                            store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.sanctionFileStoreId", fileStoreId));
+                        }else if(type === "estimateNotice"){
+                            store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.estimationFileStoreId", fileStoreId));
+                        }
                         downloadReceiptFromFilestoreID(fileStoreId, mode)
                     })
                 } else {

@@ -1,36 +1,10 @@
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
+  prepareFinalObject,
+  toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-
-export const applyMohallaData = (mohallaData, tenantId, dispatch) => {
-  dispatch(
-    prepareFinalObject("applyScreenMdmsData.tenant.localities", mohallaData)
-  );
-  dispatch(
-    handleField(
-      "public-search",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.locality",
-      "props.data",
-      mohallaData
-      // payload.TenantBoundary && payload.TenantBoundary[0].boundary
-    )
-  );
-  const mohallaLocalePrefix = {
-    moduleName: tenantId,
-    masterName: "REVENUE"
-  };
-  dispatch(
-    handleField(
-      "public-search",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.locality",
-      "props.localePrefix",
-      mohallaLocalePrefix
-    )
-  );
-};
 
 export const ComponentJsonPath = {
   ulbCity:
@@ -42,15 +16,55 @@ export const ComponentJsonPath = {
   ownerMobNo:
     "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.ownerMobNo",
   propertyID:
-    "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.propertyID"
+    "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.propertyID",
 };
 
-export const getSearchResults = async requestPayload => {
+export const applyMohallaData = (mohallaData, tenantId, dispatch) => {
+  dispatch(
+    prepareFinalObject("applyScreenMdmsData.tenant.localities", mohallaData)
+  );
+  dispatch(
+    handleField(
+      "public-search",
+      ComponentJsonPath.locality,
+      "props.data",
+      mohallaData
+      // payload.TenantBoundary && payload.TenantBoundary[0].boundary
+    )
+  );
+  dispatch(
+    handleField("public-search", ComponentJsonPath.locality, "props.value", "")
+  );
+  dispatch(
+    handleField("public-search", ComponentJsonPath.locality, "props.error", false)
+  );
+  dispatch(
+    handleField("public-search", ComponentJsonPath.locality, "isFieldValid", true)
+  );
+  dispatch(
+    handleField("public-search", ComponentJsonPath.locality, "props.errorMessage", "")
+  );
+  dispatch(prepareFinalObject("searchScreen.locality.code", ""));
+  const mohallaLocalePrefix = {
+    moduleName: tenantId,
+    masterName: "REVENUE",
+  };
+  dispatch(
+    handleField(
+      "public-search",
+      ComponentJsonPath.locality,
+      "props.localePrefix",
+      mohallaLocalePrefix
+    )
+  );
+};
+
+export const getSearchResults = async (requestPayload) => {
   const PUBLIC_SEARCH = {
     GET: {
       URL: "egov-searcher/property-services/propertyopensearch/_get",
-      ACTION: "_get"
-    }
+      ACTION: "_get",
+    },
   };
   const searchResponse = await httpRequest(
     "post",
@@ -62,23 +76,35 @@ export const getSearchResults = async requestPayload => {
   return searchResponse;
 };
 
-export const getPayload = searchScreenObject => {
+export const getPayload = (searchScreenObject) => {
   let querryObject = [];
-  if(searchScreenObject){
-    if(searchScreenObject.ownerName){
-      querryObject.push({key:"ownerName", value: searchScreenObject.ownerName});
+  if (searchScreenObject) {
+    if (searchScreenObject.ownerName) {
+      querryObject.push({
+        key: "ownerName",
+        value: searchScreenObject.ownerName,
+      });
     }
-    if(searchScreenObject.mobileNumber){
-      querryObject.push({key:"mobileNumber", value: searchScreenObject.mobileNumber});
+    if (searchScreenObject.mobileNumber) {
+      querryObject.push({
+        key: "mobileNumber",
+        value: searchScreenObject.mobileNumber,
+      });
     }
-    if(searchScreenObject.ids){
-      querryObject.push({key:"propertyIds", value: searchScreenObject.ids});
+    if (searchScreenObject.ids) {
+      querryObject.push({ key: "propertyIds", value: searchScreenObject.ids });
     }
-    if(searchScreenObject.locality){
-      querryObject.push({key:"locality", value: searchScreenObject.locality.code});
+    if (searchScreenObject.locality) {
+      querryObject.push({
+        key: "locality",
+        value: searchScreenObject.locality.code,
+      });
     }
-    if(searchScreenObject.tenantId){
-      querryObject.push({key:"tenantId", value: searchScreenObject.tenantId});
+    if (searchScreenObject.tenantId) {
+      querryObject.push({
+        key: "tenantId",
+        value: searchScreenObject.tenantId,
+      });
     }
   }
   return querryObject;
@@ -86,7 +112,86 @@ export const getPayload = searchScreenObject => {
 
 export const getTenantName = (tenantId, state) => {
   const cityObject = get(state.common, "cities", []);
-  if(cityObject && cityObject.length > 0) {
-	return cityObject[cityObject.findIndex(item =>item.key.indexOf(tenantId) !== -1)].name;
+  if (cityObject && cityObject.length > 0) {
+    return cityObject[
+      cityObject.findIndex((item) => item.key.indexOf(tenantId) !== -1)
+    ].name;
+  }
+};
+
+export const fetchBill = async (
+  dispatch,
+  response,
+  tenantId,
+  billBusinessService
+) => {
+  const consumerCodes = [];
+  response.Properties.map((item) => {
+    consumerCodes.push(item.propertyId);
+  });
+  const billData = await generateBill(
+    dispatch,
+    consumerCodes,
+    tenantId,
+    billBusinessService
+  );
+
+  console.log("billData------", billData);
+};
+
+export const generateBill = async (
+  dispatch,
+  consumerCodes,
+  tenantId,
+  businessService
+) => {
+  try {
+    if (consumerCodes && consumerCodes.length > 0 && tenantId) {
+      const queryObj = [
+        {
+          key: "tenantId",
+          value: tenantId,
+        },
+      ];
+      if (businessService) {
+        queryObj.push({
+          key: "businessService",
+          value: businessService,
+        });
+      }
+      const payload = await getBill(queryObj, consumerCodes, dispatch);
+      return payload;
+    }
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "error"
+      )
+    );
+    console.log(e);
+  }
+};
+
+export const getBill = async (queryObject, consumerCodes, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject,
+      { consumerCode: consumerCodes }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
   }
 };

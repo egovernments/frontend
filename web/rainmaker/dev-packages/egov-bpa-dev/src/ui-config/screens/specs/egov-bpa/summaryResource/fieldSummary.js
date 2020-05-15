@@ -5,6 +5,7 @@ import {
   getCommonContainer,
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const getHeader = label => {
   return {
@@ -108,7 +109,7 @@ export const fieldSummary = getCommonContainer({
       prefixSourceJsonPath: "children.cardContent.children",
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
       headerJsonPath : "children.cardContent.children.header.children.header.children.key.props.label",
-      headerName : "BPA_FI_REPORT"
+      headerName : getLocaleLabels( "FI Report", "BPA_FI_REPORT")
     },
     type: "array"
   }

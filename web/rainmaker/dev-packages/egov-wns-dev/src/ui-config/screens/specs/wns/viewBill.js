@@ -202,9 +202,11 @@ const estimate = getCommonGrayCard({
     },
     onClickDefination: {
       action: "condition",
-      callBack: showHideAdhocPopup
+      callBack: (state, dispatch) => {
+        showHideAdhocPopup(state, dispatch, "viewBill");
+      }
     },
-    visible: true
+    visible: process.env.REACT_APP_NAME !== "Citizen"
   }
 });
 
@@ -225,6 +227,7 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.consumerCode.props.number",
       consumerCode
     );
+    set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopupViewBill);
     beforeInitFn(action, state, dispatch, consumerCode);
     return action;
   },
@@ -251,11 +254,12 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: "sm",
-        screenKey: "pay"
+        screenKey: "viewBill"
       },
       children: {
-        popup: adhocPopupViewBill
-      }
+        popup: {}
+      },
+      visible: process.env.REACT_APP_NAME !== "Citizen"
     }
   }
 };

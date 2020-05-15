@@ -10,7 +10,6 @@ import FormControl from "@material-ui/core/FormControl";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { getTextToLocalMapping } from "../../ui-config/screens/specs/utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from 'lodash/get';
 
 const styles = {
@@ -100,7 +99,7 @@ class CheckboxLabels extends React.Component {
           preparedFinalObject,
           "Property.address.buildingName"
         );
-      let finalAddress = doorNo + ", " + buildingName + ", " + getTextToLocalMapping(getTenantId().toUpperCase().replace(/[.]/g,"_") + '_REVENUE_' + locality) + ", " + city.split(".")[1];
+      let finalAddress = doorNo + ", " + buildingName + ", " + getTextToLocalMapping(city.toUpperCase().replace(/[.]/g,"_") + '_REVENUE_' + locality) + ", " + city.split(".")[1];
       this.setState({ [name]: event.target.checked }, () => {
         approveCheck(jsonPath, this.state.checkedG);
         finalAddress = (this.state.checkedG)?finalAddress:''

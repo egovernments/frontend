@@ -452,13 +452,13 @@ export const getIconStyle = key => {
   return style[key];
 };
 
-export const showHideAdhocPopup = (state, dispatch) => {
+export const showHideAdhocPopup = (state, dispatch, screenKey) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["pay"],
+    state.screenConfiguration.screenConfig[screenKey],
     "components.adhocDialog.props.open",
     false
   );
-  dispatch(handleField("pay", "components.adhocDialog", "props.open", !toggle));
+  dispatch(handleField(screenKey, "components.adhocDialog", "props.open", !toggle));
 };
 
 export const getButtonVisibility = (status, button) => {
@@ -565,6 +565,15 @@ export const convertEpochToDateAndHandleNA = dateEpoch => {
     let convertedToDate = convertEpochToDate(dateEpoch);
     return convertedToDate;
   } else { return "NA"; }
+}
+
+export const handlePropertySubUsageType = params => {
+  params = handleNA(params);
+  if (params !== "NA" && params.split(".").length > 1) {
+    return params;  
+  } else {
+    return "NA";
+  }
 }
 
 export const handleNA = params => {
