@@ -262,6 +262,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     let userInfo = JSON.parse(getUserInfo());
     let accountId = get(userInfo, "uuid");
     set(payload, "tenantId", tenantId);
+    set(payload, "landInfo.tenantId", tenantId);
     set(payload, "workflow.action", status);
     set(payload, "accountId", accountId);
 
@@ -300,17 +301,17 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
     // Set Dates to Epoch
 
-    let owners = get(payload, "landinfo.owners", []);
+    let owners = get(payload, "landInfo.owners", []);
     owners.forEach((owner, index) => {
       set(
         payload,
-        `landinfo.owners[${index}].dob`,
+        `landInfo.owners[${index}].dob`,
         convertDateToEpoch(get(owner, "dob"))
       );
     });
 
     let authOwners = [];
-    let multiOwners = get (payload, "landinfo.owners", []);
+    let multiOwners = get (payload, "landInfo.owners", []);
     if(multiOwners && multiOwners.length > 0) {
       multiOwners.forEach(owner => {
         if(owner && owner.isDeleted != false) {
@@ -319,7 +320,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       })
     }
     
-    // set(payload, "landinfo.owners", authOwners);
+    set(payload, "landInfo.owners", authOwners);
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
