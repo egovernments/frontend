@@ -1624,10 +1624,10 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
     let estFileStrID = wnsConnection[0].additionalDetails.estimationFileStoreId
     let sanFileStrID = wnsConnection[0].additionalDetails.sanctionFileStoreId
 
-    if(type === 'estimateNotice' && estFileStrID !== null){
+    if(type === 'estimateNotice' && estFileStrID !== undefined && estFileStrID !== null){
         downloadReceiptFromFilestoreID(estFileStrID, mode)
         return false;
-    }else if(type === 'sanctionLetter' && sanFileStrID !== null){
+    }else if(type === 'sanctionLetter' && sanFileStrID !== undefined && sanFileStrID !== null){
         downloadReceiptFromFilestoreID(sanFileStrID, mode)
         return false;
     }
