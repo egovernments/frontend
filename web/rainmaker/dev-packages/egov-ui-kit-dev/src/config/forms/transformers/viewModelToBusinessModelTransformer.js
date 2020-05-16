@@ -32,7 +32,7 @@ const transformer = (formKey, form = {}, state = {}) => {
       formData.services[0] = filteredServiceData;
       return formData;
     },
-    comment: (form, state) => {
+    comment: () => {
       const formData = prepareFormData(form);
       const serviceRequestId = decodeURIComponent(window.location.pathname.split("/").pop());
       const serviceData = state.complaints.byId[serviceRequestId];
