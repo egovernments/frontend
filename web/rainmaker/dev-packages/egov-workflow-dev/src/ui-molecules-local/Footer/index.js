@@ -15,7 +15,7 @@ class Footer extends React.Component {
   state = {
     open: false,
     data: {},
-    employeeList: []
+    employeeList: [],
   };
   getDownloadData = () => {
     const { dataPath, state } = this.props;
@@ -29,7 +29,7 @@ class Footer extends React.Component {
       leftIcon: "cloud_download",
       rightIcon: "arrow_drop_down",
       props: { variant: "outlined", style: { marginLeft: 10 } },
-      menu: getDownloadItems(status, applicationNumber, state).downloadMenu
+      menu: getDownloadItems(status, applicationNumber, state).downloadMenu,
       // menu: ["One ", "Two", "Three"]
     };
   };
@@ -46,10 +46,10 @@ class Footer extends React.Component {
       rightIcon: "arrow_drop_down",
       props: { variant: "outlined", style: { marginLeft: 10 } },
       // menu: ["One ", "Two", "Three"]
-      menu: getDownloadItems(status, applicationNumber, state).printMenu
+      menu: getDownloadItems(status, applicationNumber, state).printMenu,
     };
   };
-  openActionDialog = async item => {
+  openActionDialog = async (item) => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
     handleFieldChange(`${dataPath}[0].comment`, "");
@@ -64,12 +64,12 @@ class Footer extends React.Component {
       const queryObj = [
         {
           key: "roles",
-          value: item.roles
+          value: item.roles,
         },
         {
           key: "tenantId",
-          value: tenantId
-        }
+          value: tenantId,
+        },
       ];
       const payload = await httpRequest(
         "post",
@@ -83,7 +83,7 @@ class Footer extends React.Component {
           const name = get(item, "user.name");
           return {
             value: item.uuid,
-            label: name
+            label: name,
           };
         });
     }
@@ -91,7 +91,7 @@ class Footer extends React.Component {
   };
   onClose = () => {
     this.setState({
-      open: false
+      open: false,
     });
   };
   render() {
@@ -102,7 +102,7 @@ class Footer extends React.Component {
       handleFieldChange,
       onDialogButtonClick,
       dataPath,
-      moduleName
+      moduleName,
     } = this.props;
     const { open, data, employeeList } = this.state;
     const { getPrintData, getDownloadData } = this;
@@ -114,9 +114,26 @@ class Footer extends React.Component {
         style={{ textAlign: "right" }}
       >
         <Container>
+          {
+            // temprorary bad code
+            visibility === "visible" && (
+              <Item xs={12} sm={4} style={{ paddingLeft: "20px" }}>
+                <Container>
+                  <Item xs={12} sm={6}>
+                    <MenuButton data={getDownloadData()} />
+                  </Item>
+
+                  <Item xs={12} sm={6}>
+                    <MenuButton data={getPrintData()} />
+                  </Item>
+                </Container>
+              </Item>
+            )
+          }
+
           <Item xs={12} sm={12}>
             {contractData &&
-              contractData.map(item => {
+              contractData.map((item) => {
                 const { buttonLabel, moduleName } = item;
                 return (
                   <Button
@@ -127,7 +144,7 @@ class Footer extends React.Component {
                       minWidth: "200px",
                       height: "48px",
                       marginRight: "45px",
-                      display: buttonLabel === "REFER" ? "none" : "initial"
+                      display: buttonLabel === "REFER" ? "none" : "initial",
                     }}
                   >
                     <LabelContainer
@@ -152,15 +169,12 @@ class Footer extends React.Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return { state };
 };
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    setRoute: url => dispatch(setRoute(url))
+    setRoute: (url) => dispatch(setRoute(url)),
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Footer);
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);
