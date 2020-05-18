@@ -86,6 +86,10 @@ span[class^="MuiFormLabel-asterisk"] {
     display: none;
 }
 
+div[class^="MuiTooltip-tooltip"] {
+    font-size: 14px;
+}
+
 
 /* div[class^="MuiGrid-item"]   {
     padding-right: 80px

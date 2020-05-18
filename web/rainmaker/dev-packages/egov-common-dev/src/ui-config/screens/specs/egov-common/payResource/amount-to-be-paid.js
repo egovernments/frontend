@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import { validateAmountInput, dispatchHandleField } from "./utils";
+import "./index.css";
 
 const AmountToBePaid = getCommonGrayCard({
   header: getCommonSubHeader({

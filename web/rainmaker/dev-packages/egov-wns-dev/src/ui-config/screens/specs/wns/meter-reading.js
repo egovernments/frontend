@@ -65,19 +65,30 @@ const setAutopopulatedvalues = async (state, dispatch) => {
             let yearOfLastMeter = prevBillingPeriod.trim().split("-")[1];
             let prevDate = prevBillingPeriod.replace(/ .*/, '');
             let getDatefromString = new Date(prevDate + '-1-01').getMonth() + 1
+            // Added for billing Period
+            prevBillingPeriod = prevBillingPeriod.trim().split("-")[1].trim()
+            let dateStr = prevBillingPeriod.split('/')
+            let newDF = new Date(dateStr[1] + '-' + dateStr[0] + '-' +dateStr[2]);
+            newDF = newDF.setDate(newDF.getDate() + 1);
+            newDF = new Date(newDF)
+            let lastDate = new Date(newDF.getFullYear(), newDF.getMonth() + 1, 0)
+            let firstDate = newDF.getDate() + '/' + (newDF.getMonth()+1) + '/' + newDF.getFullYear()
+            lastDate = lastDate.getDate() + '/' + (lastDate.getMonth()+1) + '/' + lastDate.getFullYear()
+            console.log(firstDate + ' - ' + lastDate);
             if (getDatefromString > 11) {
                 date.setMonth(0)
-                const month = date.toLocaleString('default', { month: 'short' });
-                prevBillingPeriod = month + ' - ' + (parseInt(yearOfLastMeter) + 1)
-                consumptionDetails['billingPeriod'] = prevBillingPeriod
+                /*const month = date.toLocaleString('default', { month: 'short' });
+                prevBillingPeriod = month + ' - ' + (parseInt(yearOfLastMeter) + 1)*/
+                consumptionDetails['billingPeriod'] = firstDate + ' - ' + lastDate
                 consumptionDetails['lastReading'] = 0
                 consumptionDetails['consumption'] = 0;
                 consumptionDetails['lastReadingDate'] = '';
-            } else {
+            } else {                
+                /*
                 date.setMonth(getDatefromString)
                 const month = date.toLocaleString('default', { month: 'short' });
-                prevBillingPeriod = month + ' - ' + yearOfLastMeter
-                consumptionDetails['billingPeriod'] = prevBillingPeriod
+                prevBillingPeriod = month + ' - ' + yearOfLastMeter*/
+                consumptionDetails['billingPeriod'] = firstDate + ' - ' + lastDate
             }
         }
         consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReading`);
