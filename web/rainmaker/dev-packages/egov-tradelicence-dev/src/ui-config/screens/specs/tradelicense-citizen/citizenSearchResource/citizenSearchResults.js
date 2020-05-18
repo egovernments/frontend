@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import get from "lodash/get";
 import { textToLocalMapping } from "./citizenFunctions";
 import { sortByEpoch, getEpochForDate,getTextToLocalMapping } from "../../utils";
+import { getSearchResults } from "../../../../../ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -40,7 +41,7 @@ export const searchResults = {
           display: false
         }
       }],
-      title: getTextToLocalMapping("MY_APPLICATIONS"),
+      title: getTextToLocalMapping("TL_MY_APPLICATIONS"),
     options: {
       filter: false,
       download: false,
