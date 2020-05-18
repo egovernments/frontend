@@ -73,6 +73,14 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
   if (applicationNumber) {
     
+    // hiding the Additional details for citizen. ,,
+    if(process.env.REACT_APP_NAME === "Citizen" && (appStatus === 'INITIATED' || appStatus ==="PENDING_FOR_CITIZEN_ACTION" || appStatus !== 'PENDING_FOR_DOCUMENT_VERIFICATION')){
+      set(
+        action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.props.style",
+        { display: "none" }
+      ); 
+    }
+
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
     } else {
@@ -408,6 +416,7 @@ const screenConfig = {
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopup);
     beforeInitFn(action, state, dispatch, applicationNumber);
+
     return action;
   },
 
@@ -534,6 +543,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     }else{
       set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible",false ); 
     }
+
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
       await setDocuments(
