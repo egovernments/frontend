@@ -13,7 +13,7 @@ export const searchResults = {
   props: {
     data: [],
     columns: [
-      getTextToLocalMapping("Application No"), 
+      getTextToLocalMapping("Application No"),
       getTextToLocalMapping("License No"),
       getTextToLocalMapping("Trade Name"),
       getTextToLocalMapping("Owner Name"),
@@ -109,7 +109,7 @@ export const searchResults = {
 
 const onRowClick = rowData => {
   switch (rowData[5]) {
-    case "INITIATED":
+    case "Pending Application":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
       }`;
