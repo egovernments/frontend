@@ -15,6 +15,8 @@ import { transferorInstitutionSummary, transferorSummary } from "./searchPreview
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
+import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+
 const titlebar = getCommonContainer({
   header: getCommonHeader({
     labelName: "Application Details",
@@ -348,7 +350,7 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
 const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getCommonTenant(),
       moduleDetails: [
         {
           moduleName: "PropertyTax",
