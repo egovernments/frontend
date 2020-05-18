@@ -129,6 +129,7 @@ export const fetchBill = async (
   response.Properties.map((item) => {
     consumerCodes.push(item.propertyId);
   });
+  console.log("consumerCodes------", consumerCodes.join(","));
   const billData = await generateBill(
     dispatch,
     consumerCodes,
@@ -153,13 +154,17 @@ export const generateBill = async (
           value: tenantId,
         },
       ];
+      queryObj.push({
+        key: "consumerCode",
+        value: consumerCodes.join(","),
+      });
       if (businessService) {
         queryObj.push({
           key: "businessService",
           value: businessService,
         });
       }
-      const payload = await getBill(queryObj, consumerCodes, dispatch);
+      const payload = await getBill(queryObj, dispatch);
       return payload;
     }
   } catch (e) {
@@ -174,14 +179,13 @@ export const generateBill = async (
   }
 };
 
-export const getBill = async (queryObject, consumerCodes, dispatch) => {
+export const getBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
       "/billing-service/bill/v2/_fetchbill",
       "",
-      queryObject,
-      { consumerCode: consumerCodes }
+      queryObject
     );
     return response;
   } catch (error) {
@@ -195,3 +199,29 @@ export const getBill = async (queryObject, consumerCodes, dispatch) => {
     console.log(error, "fetxh");
   }
 };
+
+export const getPropertyWithBillAmount = (propertyResponse, billResponse) => {
+  try {
+    if(billResponse && billResponse.Bill && billResponse.Bill.length > 0) {
+      propertyResponse.Properties.map((item, key) => {
+        billResponse.Bill.map(bill => {
+          if(bill.consumerCode === item.propertyId) {
+            propertyResponse.Properties[key].totalAmount = bill.totalAmount;
+          }
+        });
+      });
+      return propertyResponse;
+    } else {
+      return propertyResponse;
+    }
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "Bill Error");
+  }
+}

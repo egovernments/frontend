@@ -111,6 +111,42 @@ class Table extends React.Component {
     }
   };
 
+  getLabelContainer = (labelKey, labelName) => {
+    return <LabelContainer labelKey={labelKey} labelName={labelName} />
+  }
+
+  getTableTextLabel = () => {
+    const textLabels = {
+      body: {
+        noMatch: this.getLabelContainer("COMMON_TABLE_NO_RECORD_FOUND", "Sorry, no matching records found"),
+        toolTip: this.getLabelContainer("COMMON_TABLE_SORT", "Sort"),
+      },
+      pagination: {
+        next: this.getLabelContainer("COMMON_TABLE_NEXT_PAGE", "Next Page"),
+        previous: this.getLabelContainer("COMMON_TABLE_PREVIOUS_PAGE", "Previous Page"),
+        rowsPerPage: this.getLabelContainer("COMMON_TABLE_ROWS_PER_PAGE", "Rows per page:"),
+        // displayRows: this.getLabelContainer("COMMON_TABLE_OF", "of")
+      },
+      toolbar: {
+        search: this.getLabelContainer("COMMON_TABLE_SEARCH", "Search"),
+        downloadCsv: this.getLabelContainer("COMMON_TABLE_DOWNLOAD_CSV", "Download CSV"),
+        print: this.getLabelContainer("COMMON_TABLE_PRINT", "Print"),
+        viewColumns: this.getLabelContainer("COMMON_TABLE_VIEW_COLUMNS", "View Columns"),
+        filterTable: this.getLabelContainer("COMMON_TABLE_FILTER", "Filter Table")
+      },
+      filter: {
+        all: this.getLabelContainer("COMMON_TABLE_ALL", "All"),
+        title: this.getLabelContainer("COMMON_TABLE_FILTERS", "FILTERS"),
+        reset: this.getLabelContainer("COMMON_TABLE_RESET", "RESET")
+      },
+      viewColumns: {
+        title: this.getLabelContainer("COMMON_TABLE_SHOW_COLUMNS", "Show Columns"),
+        titleAria: this.getLabelContainer("COMMON_TABLE_SHOW_HIDE_TABLE", "Show/Hide Table Columns")
+      }
+    }
+    return textLabels;
+  }
+
   getTabelTitle = (title) => {
     return getLocaleLabels(
       title.labelName,
@@ -121,6 +157,7 @@ class Table extends React.Component {
   render() {
     const { data, columns } = this.state;
     const { options, title, rows, customSortDate } = this.props;
+    options.textLabels = this.getTableTextLabel();
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable
