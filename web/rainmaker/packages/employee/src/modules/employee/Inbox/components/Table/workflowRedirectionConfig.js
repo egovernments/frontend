@@ -6,6 +6,11 @@ export const getWFConfig = (module,businessService) => {
         INITIATED: "/tradelicence/apply",
         DEFAULT: "/tradelicence/search-preview",
       };
+      case "DIRECTRENEWAL":
+          return {
+            INITIATED: "/tradelicence/apply",
+            DEFAULT: "/tradelicence/search-preview",
+          };
       case "EDITRENEWAL":
           return {
             INITIATED: "/tradelicence/apply",
