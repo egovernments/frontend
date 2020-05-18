@@ -10,7 +10,7 @@ import {
 } from "./publicSearchUtils";
 import { validateFields } from "../../utils/index";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import { ComponentJsonPath, fetchBill } from "./publicSearchUtils";
+import { ComponentJsonPath, fetchBill, getPropertyWithBillAmount } from "./publicSearchUtils";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch);
@@ -109,17 +109,18 @@ const searchApiCall = async (state, dispatch) => {
     //  showHideProgress(true, dispatch);
     const querryObject = getPayload(searchScreenObject);
     try {
-      const response = await getSearchResults(querryObject, {"authToken":false});
+      const response = await getSearchResults(querryObject);
       // const response = searchResponse;
-      const finalResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
+      const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
+      const finalResponse = getPropertyWithBillAmount(response, billResponse);
       console.log("finalResponse-------", finalResponse);
-      let propertyData = response.Properties.map(item => ({
+      let propertyData = finalResponse.Properties.map(item => ({
         ["PT_MUTATION_PID"]: item.propertyId || "-",
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
         ["PT_COMMON_COL_ADDRESS"]: getAddress(item) || "-",
         ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
-        ["PT_AMOUNT_DUE"]: 5000 || "-",
-        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: 5000 || "-",
+        ["PT_AMOUNT_DUE"]: item.totalAmount || "-",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: item.totalAmount || "-",
         ["tenantId"]: item.tenantId || "-"
       }));
 
