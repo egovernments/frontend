@@ -12,13 +12,23 @@ const styles = theme => ({
 });
 
 class HowItWorks extends React.Component {
+
+  HandleHowIW = () => {
+
+    let hwitws = window.location.href;
+    let HIWurl = hwitws.replace ("/home" ,"/how-it-works");
+    window.location.href = HIWurl
+
+  };
+
   render() {
     const { classes } = this.props;     
     return (
       <div className={classes.root}>
         <List component="nav">
           <ListItem button>
-            <ListItemText primary="How it Works?" />
+            <ListItemText primary="How it Works?" onClick={this.HandleHowIW}
+ />
           </ListItem>
         </List>
       </div>
