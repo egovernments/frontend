@@ -114,7 +114,7 @@ export const UCSearchCard = getCommonCard({
           xs: 12,
           sm: 4
         },
-        sourceJsonPath: "searchScreenMdmsData.serviceCategory"
+        sourceJsonPath: "searchScreenMdmsData.serviceCategories"
       }),
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
