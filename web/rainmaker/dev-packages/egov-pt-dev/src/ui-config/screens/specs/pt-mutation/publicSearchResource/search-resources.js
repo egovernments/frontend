@@ -8,6 +8,8 @@ import {
   getCommonParagraph,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "../../../../../ui-utils";
 import { propertySearch, resetFields } from "./search-methods";
 import { getMohallaData } from "egov-ui-kit/utils/commons";
@@ -64,6 +66,7 @@ export const searchPropertyDetails = {
           // );
           if (action.value) {
             try {
+              dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
               let payload = await httpRequest(
                 "post",
                 "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
@@ -245,11 +248,5 @@ export const searchPropertyDetails = {
         top: "60px"
       }
     }
-  }),
-  props: {
-    style: {
-      position: "relative",
-      top: "60px"
-    }
-  }
+  })
 };

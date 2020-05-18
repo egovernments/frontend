@@ -208,7 +208,7 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "WaterConnection[0].property.usageCategory",
-            callBack: handlePropertySubUsageType,
+            callBack: handleNA,
             localePrefix: {
               moduleName: "WS",
               masterName: "PROPUSGTYPE"
@@ -222,7 +222,7 @@ const getPropertyDetails = {
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
           { jsonPath: "WaterConnection[0].property.units[0].usageCategory",
-            callBack: handleNA,
+            callBack: handlePropertySubUsageType,
             localePrefix: {
               moduleName: "WS",
               masterName: "PROPSUBUSGTYPE"
