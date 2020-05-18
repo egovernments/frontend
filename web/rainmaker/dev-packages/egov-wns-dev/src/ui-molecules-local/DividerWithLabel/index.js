@@ -31,6 +31,11 @@ class DividerWithLabel extends Component {
       label.labelKey,
       localizationLabels
     );
+   
+    if(label.labelKey === "WS_TASK_PROP_OWN_HEADER"){
+      let componentJsonpath = this.props.componentJsonpath;
+      translatedLabel = translatedLabel + " "+ (parseInt(componentJsonpath.split('items[')[1][0])+1)
+    }
     return (
       <div style={dividerStyle}>
         <div style={{ ...labelStyle, ...labelProps.style }}>
@@ -42,10 +47,11 @@ class DividerWithLabel extends Component {
   }
 }
 
-const mapSateToProps = state => {
+const mapSateToProps = (state, ownprops) => {
   const { app } = state;
   const { localizationLabels } = app;
-  return { localizationLabels };
+  const { componentJsonpath } = ownprops;
+  return { localizationLabels, componentJsonpath};
 };
 
 export default connect(
