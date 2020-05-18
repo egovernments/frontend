@@ -74,10 +74,20 @@ const setAutopopulatedvalues = async (state, dispatch) => {
                 consumptionDetails['consumption'] = 0;
                 consumptionDetails['lastReadingDate'] = '';
             } else {
+                prevBillingPeriod = prevBillingPeriod.trim().split("-")[1].trim()
+                let dateStr = prevBillingPeriod.split('/')
+                let newDF = new Date(dateStr[1] + '-' + dateStr[0] + '-' +dateStr[2]);
+                newDF = newDF.setDate(newDF.getDate() + 1);
+                newDF = new Date(newDF)
+                let lastDate = new Date(newDF.getFullYear(), newDF.getMonth() + 1, 0)
+                let firstDate = newDF.getDate() + '/' + (newDF.getMonth()+1) + '/' + newDF.getFullYear()
+                lastDate = lastDate.getDate() + '/' + (lastDate.getMonth()+1) + '/' + lastDate.getFullYear()
+                console.log(firstDate + ' - ' + lastDate);
+                /*
                 date.setMonth(getDatefromString)
                 const month = date.toLocaleString('default', { month: 'short' });
-                prevBillingPeriod = month + ' - ' + yearOfLastMeter
-                consumptionDetails['billingPeriod'] = prevBillingPeriod
+                prevBillingPeriod = month + ' - ' + yearOfLastMeter*/
+                consumptionDetails['billingPeriod'] = firstDate + ' - ' + lastDate
             }
         }
         consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReading`);
