@@ -38,10 +38,8 @@ export const searchResults = {
         labelKey: "TL_COMMON_TABLE_COL_FIN_YEAR"
       },
       {
-        name: {
-          labelName: "Application Type",
-          labelKey: "TL_COMMON_TABLE_COL_APP_TYPE"
-        },
+        labelName: "Application Type",
+        labelKey: "TL_COMMON_TABLE_COL_APP_TYPE",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -52,10 +50,8 @@ export const searchResults = {
         }
       },
       {
-        name: {
-          labelName: "Status",
-          labelKey: "TL_COMMON_TABLE_COL_STATUS"
-        },
+        labelName: "Status",
+        labelKey: "TL_COMMON_TABLE_COL_STATUS",
         options: {
           filter: false,
           customBodyRender: value => (
