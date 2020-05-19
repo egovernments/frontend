@@ -59,7 +59,7 @@ export const searchApiCall = async (state, dispatch) => {
   }
   else {
     for (var key in searchScreenObject) {
-      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
+      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices" && searchScreenObject['businessServices'] != null) {
         queryObject.push({ key: key, value: searchScreenObject[key] });
       } else if (
         searchScreenObject.hasOwnProperty(key) &&
@@ -159,8 +159,8 @@ const checkEmptyFields = (searchScreenObject) => {
   return false;
 }
 const checkEmpty = (value) => {
-  value=typeof (value) == "string" ? value.trim(): value;
-  if (value && value != null && value.length > 0 ) {
+  value = typeof (value) == "string" ? value.trim() : value;
+  if (value && value != null && value.length > 0) {
     return false;
   }
   return true;
