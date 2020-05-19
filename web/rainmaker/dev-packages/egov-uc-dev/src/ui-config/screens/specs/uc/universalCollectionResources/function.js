@@ -59,10 +59,10 @@ export const searchApiCall = async (state, dispatch) => {
   }
   else {
     for (var key in searchScreenObject) {
-      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
+      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices" && searchScreenObject['businessServices'] != null) {
         queryObject.push({ key: key, value: searchScreenObject[key] });
       } else if (
-        searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
         searchScreenObject[key].trim() !== ""
       ) {
         if (key === "fromDate") {
@@ -95,37 +95,38 @@ export const searchApiCall = async (state, dispatch) => {
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
         status: get(Payments[i], `paymentDetails[0].bill.status`),
-        businessService : get(Payments[i], `paymentDetails[0].bill.businessService`),
-        tenantId : get(Payments[i], `tenantId`),        };
-      }
-      const uiConfigs = get(state.screenConfiguration.preparedFinalObject , "applyScreenMdmsData.uiCommonConfig");
-      try {
-        let data = response.map(item => ({
-          ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
-          ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
-          ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
-          ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
-          ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
-          ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
-          ["receiptKey"]:  get(uiConfigs.filter(item => item.code === item.businessService) , "0.receiptKey" , "consolidatedreceipt"),
-          ["tenantId"]: item.tenantId || "-"
-        }));
-        dispatch(
-          handleField(
-            "search",
-            "components.div.children.searchResults",
-            "props.data",
-            data
-          )
-        );
-        dispatch(
-          handleField(
-            "search",
-            "components.div.children.searchResults",
-            "props.rows",
-            data.length
-          )
-        );
+        businessService: get(Payments[i], `paymentDetails[0].bill.businessService`),
+        tenantId: get(Payments[i], `tenantId`),
+      };
+    }
+    const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.uiCommonConfig");
+    try {
+      let data = response.map(item => ({
+        ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+        ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
+        ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
+        ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
+        ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ["receiptKey"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
+        ["tenantId"]: item.tenantId || "-"
+      }));
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.data",
+          data
+        )
+      );
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.rows",
+          data.length
+        )
+      );
 
       dispatch(
         handleField("search", "components.div.children.searchResults")
@@ -159,8 +160,8 @@ const checkEmptyFields = (searchScreenObject) => {
   return false;
 }
 const checkEmpty = (value) => {
-  value=typeof (value) == "string" ? value.trim(): value;
-  if (value && value != null && value.length > 0 ) {
+  value = typeof (value) == "string" ? value.trim() : value;
+  if (value && value != null && value.length > 0) {
     return false;
   }
   return true;
