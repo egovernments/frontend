@@ -40,7 +40,7 @@ import {
   prepareNOCUploadData,
   getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData, edcrDetailsToBpaDetails } from "../utils";
 import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";

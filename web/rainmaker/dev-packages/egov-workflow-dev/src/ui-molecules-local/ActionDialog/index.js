@@ -122,7 +122,7 @@ class ActionDialog extends React.Component {
       assigneePath=`${dataPath}.assignee[0]`;
     }
 
-    let wfDocumentsPath = "";
+    let wfDocumentsPath;
     if(dataPath === "BPA.workflow") {
       wfDocumentsPath = `${dataPath}.varificationDocuments`
     } else {

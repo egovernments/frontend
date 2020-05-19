@@ -249,7 +249,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     blocks[index].floorNo = block.floorNo;
     blocks[index].unitType = "Block";
     if(BPADetails.landInfo.unit && BPADetails.landInfo.unit[index] && BPADetails.landInfo.unit[index].id) {
-      blocks[index].id = BPADetails.units[index].id;
+      blocks[index].id = BPADetails.landInfo.unit[index].id;
     }
   })
 
