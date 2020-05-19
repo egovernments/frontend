@@ -1162,33 +1162,41 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
         const data = await getSearchResults(queryObject)
         let res = findAndReplace(data, null, "NA")
         let connectionType = res.WaterConnection[0].connectionType
-        let payload = {
-            "MdmsRes": {
-                "ws-services-masters": {
-                    "billingPeriod": [
-                        {
-                            "active": true,
-                            "connectionType": "Metered",
-                            "billingCycle": "monthly"
-                        },
-                        {
-                            "active": true,
-                            "connectionType": "Non Metered",
-                            "billingCycle": "quarterly"
-                        }
-                    ]
-                }
-            }
-        }
+        let mdmsBody = {
+                MdmsCriteria: {
+                    tenantId: commonConfig.tenantId,
+                    "moduleDetails": [
+                        {
+                            "moduleName": "ws-services-masters",
+                            "masterDetails": [
+                                {
+                                    "name": "billingPeriod",
+                                    "filter": "*"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+        try {
+            let payload = await httpRequest(
+                "post",
+                "/egov-mdms-service/v1/_search",
+                "_search",
+                [],
+                mdmsBody
+            );
 
-        let billingCycle;
-        payload.MdmsRes['ws-services-masters'].billingPeriod.map((x) => {
-            if (x.connectionType === connectionType) {
-                billingCycle = x.billingCycle
-            }
-        })
-        dispatch(prepareFinalObject("billingCycle", billingCycle));
-
+            let billingCycle;
+            payload.MdmsRes['ws-services-masters'].billingPeriod.map((x) => {
+                if (x.connectionType === connectionType) {
+                    billingCycle = x.billingCycle
+                }
+            })
+            dispatch(prepareFinalObject("billingCycle", billingCycle));
+        } catch (e) {
+            console.log(e);
+        }
     } catch (e) {
         console.log(e);
     }
