@@ -1,12 +1,12 @@
 import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getTransformedLocalStorgaeLabels, getStatusKey } from "egov-ui-framework/ui-utils/commons";
 // import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { getApplicationType,setRoute } from "egov-ui-kit/utils/commons";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 
 // import store from "ui-redux/store";
-import { getEpochForDate, getTextToLocalMapping, sortByEpoch, getStatusKey } from "../../utils";
+import { getEpochForDate, getTextToLocalMapping, sortByEpoch } from "../../utils";
 
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(

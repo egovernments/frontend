@@ -146,8 +146,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResult",
-          "props.title",
-          "Search Results for Payments (" + data.length + ")"
+          "props.rows",
+          data.length
         )
       );
 

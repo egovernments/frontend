@@ -13,7 +13,8 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getLocaleLabels,
-  getTransformedLocalStorgaeLabels
+  getTransformedLocalStorgaeLabels,
+  getStatusKey
 } from "egov-ui-framework/ui-utils/commons";
 
 const getLocalTextFromCode = localCode => {
@@ -134,10 +135,8 @@ export const searchResults = {
         labelKey: "NOC_COMMON_TABLE_COL_APP_DATE_LABEL"
       },
       {
-        name: {
-          labelName: "Status",
-          labelKey: "NOC_COMMON_TABLE_COL_STATUS_LABEL"
-        },
+        labelName: "Status",
+        labelKey: "NOC_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
