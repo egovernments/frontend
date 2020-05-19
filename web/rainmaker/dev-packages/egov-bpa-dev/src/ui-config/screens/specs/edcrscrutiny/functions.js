@@ -152,7 +152,7 @@ const scrutinizePlan = async (state, dispatch) => {
     let isOCApp = window.location.href.includes("ocapply");
     let tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
     let appliactionType = isOCApp ? "BUILDING_OC_PLAN_SCRUTINY" : "BUILDING_PLAN_SCRUTINY";
-    let applicationSubtype = "NEW_CONSTRUCTION";
+    let applicationSubType = "NEW_CONSTRUCTION";
 
     let userInfo = { id: userUUid, tenantId: userTenant }, edcrNumber = "";
 
@@ -192,7 +192,7 @@ const scrutinizePlan = async (state, dispatch) => {
     edcrRequest = { ...edcrRequest, transactionNumber };
     edcrRequest = { ...edcrRequest, applicantName };
     edcrRequest = { ...edcrRequest, appliactionType};
-    edcrRequest = { ...edcrRequest, applicationSubtype};
+    edcrRequest = { ...edcrRequest, applicationSubType};
 
     let url = `/edcr/rest/dcr/scrutinize?tenantId=${tenantId}`;
     if(isOCApp) {
