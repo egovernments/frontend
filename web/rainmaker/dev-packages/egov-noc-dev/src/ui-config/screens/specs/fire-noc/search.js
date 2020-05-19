@@ -79,6 +79,10 @@ const NOCSearchAndResult = {
         getRequiredDocuments(documents)
       );
     });
+    set(state,
+      "screenConfiguration.preparedFinalObject.searchScreen",
+      {}
+    );
     return action;
   },
   components: {
