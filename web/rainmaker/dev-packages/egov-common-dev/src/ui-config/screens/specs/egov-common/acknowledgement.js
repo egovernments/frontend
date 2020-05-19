@@ -10,7 +10,7 @@ import './index.css';
 
 
 const downloadprintMenu=(state,applicationNumber,tenantId,uiCommonPayConfig)=>{
-    const receiptKey = get(uiCommonPayConfig, "receiptKey")
+    const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
       let receiptDownloadObject = {
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
