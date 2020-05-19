@@ -155,7 +155,7 @@ const checkEmptyFields = (searchScreenObject) => {
   const businessServices = get(searchScreenObject, 'businessServices', null)
   const mobileNo = get(searchScreenObject, 'mobileNo', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
-  if (checkEmpty(businessServices) && checkEmpty(businessServices) && checkEmpty(businessServices)) { return true; }
+  if (checkEmpty(businessServices) && checkEmpty(mobileNo) && checkEmpty(receiptNumbers)) { return true; }
   return false;
 }
 const checkEmpty = (value) => {
