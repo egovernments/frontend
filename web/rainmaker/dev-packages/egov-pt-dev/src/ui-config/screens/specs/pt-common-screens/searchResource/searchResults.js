@@ -1,7 +1,7 @@
 import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getEpochForDate, sortByEpoch, getStatusKey } from "../../utils";
+import { getQueryArg, getStatusKey } from "egov-ui-framework/ui-utils/commons";
+import { getEpochForDate, sortByEpoch } from "../../utils";
 
 const url = getQueryArg(
   window.location.href,

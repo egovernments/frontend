@@ -124,7 +124,7 @@ export const UCSearchCard = getCommonCard({
         const selectedCategory = serviceCategory.find(
           item => item.code === action.value
         );
-        const serviceTypes = selectedCategory.child.map(item => item.code);
+        const serviceTypes = selectedCategory && selectedCategory.child && selectedCategory.child.map(item => item.code);
         dispatch(
           prepareFinalObject("searchScreen.businessCodes", serviceTypes)
         );

@@ -43,6 +43,11 @@ export const searchResult = {
         }
       }
     ],
+    title: {
+      labelName: "Search Results for Payments",
+      labelKey: "COMMON_TABLE_SEARCH_RESULT_PAYMENTS"
+    },
+    rows:"",
     options: {
       filter: false,
       download: false,
