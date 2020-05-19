@@ -883,49 +883,6 @@ export const getTextToLocalMapping = label => {
   }
 };
 
-export const getStatusKey = (status) => {
-  switch (status) {
-    case "ACTIVE":
-      return {labelName:"Active", labelKey:"PT_ACTIVE"};
-    case "INITIATED":
-      return {labelName: "Initiated", labelKey:"PT_INITIATED"};
-    case "APPLIED":
-      return {labelName:"Applied", labelKey:"PT_APPLIED"};
-    case "PAID":
-      return {labelName: "Paid", labelKey: "WF_NEWPT_PENDINGAPPROVAL"};
-
-    case "APPROVED":
-      return {labelName:"Approved", labelKey:"PT_APPROVED"};
-    case "REJECTED":
-      return {labelName:"Rejected", labelKey:"PT_REJECTED"};
-    case "CANCELLED":
-      return {labelName:"Cancelled", labelKey:"PT_CANCELLED"};
-    case "PENDINGAPPROVAL ":
-      return {labelName:
-        "Pending for Approval",
-        labelKey:
-        "WF_PT_PENDINGAPPROVAL"};
-    case "PENDINGPAYMENT":
-      return {labelName:
-        "Pending payment",
-        labelKey:
-        "WF_PT_PENDINGPAYMENT"};
-    case "DOCUMENTVERIFY":
-      return {labelName:
-        "Pending for Document Verification",
-        labelKey:"WF_PT_DOCUMENTVERIFY"};
-    case "FIELDINSPECTION":
-      return {labelKey:
-        "Pending for Field Inspection",labelName:
-        "WF_PT_FIELDINSPECTION"};
-      default:
-        return {
-          labelName:status, labelKey:status
-        }
-
-  }
-}
-
 export const checkValueForNA = value => {
   return value == null || value == undefined || value == '' ? "NA" : value;
 };

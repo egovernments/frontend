@@ -40,7 +40,7 @@ const resetFields = (state, dispatch) => {
         "search",
         "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.serviceType",
         "props.value",
-        []
+        ""
       )
     );
   dispatch(

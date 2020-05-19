@@ -13,10 +13,8 @@ export const searchResults = {
     columns: [
 
       {
-        name : {
-          labelName: "Receipt No.",
-          labelKey: "UC_COMMON_TABLE_COL_RECEIPT_NO"
-        },
+        labelName: "Receipt No.",
+        labelKey: "UC_COMMON_TABLE_COL_RECEIPT_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -67,6 +65,11 @@ export const searchResults = {
         }
       }
     ],
+    title: {
+      labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",
+      labelName: "Search Results for Receipt",
+    },
+    rows: "",
     options: {
       filter: false,
       download: false,
