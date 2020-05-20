@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "recompose";
 import MainRoutes from "ui-routes";
-//import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
+import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import Div from "egov-ui-framework/ui-atoms/HtmlElements/Div";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import "./index.scss";
@@ -20,14 +20,14 @@ class App extends React.Component {
   }
 
   render() {
-    const { authenticated } = this.props;
+    const { authenticated ,spinner} = this.props;
     const childProps = {
       isAuthenticated: authenticated
     };
     return (
       <Div className="App">
         <MainRoutes childProps={childProps} />
-        {/* {spinner && <LoadingIndicator/>} */}
+        {spinner && <LoadingIndicator/>}
       </Div>
     );
   }
