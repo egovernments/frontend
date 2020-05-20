@@ -219,7 +219,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
             finalArray.push({
               connectionNo: element.connectionNo,
               applicationNo: element.applicationNo,
-              name: (element.property)?element.property.owners[0].name:"",
+              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:"",
               applicationStatus: appStatus,
               address: handleAddress(element),
               service: element.service,
@@ -236,12 +236,14 @@ const renderSearchApplicationTable = async (state, dispatch) => {
 const handleAddress = (element) => {
   let city = (
     element.property &&
+    element.property !== "NA" &&
     element.property.address !== undefined &&
     element.property.address.city !== undefined &&
     element.property.address.city !== null
   ) ? element.property.address.city : "";
   let localityName = (
     element.property &&
+    element.property !== "NA" &&
     element.property.address.locality !== undefined &&
     element.property.address.locality !== null &&
     element.property.address.locality.name !== null
