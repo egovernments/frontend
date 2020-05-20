@@ -31,7 +31,7 @@ export const searchResults = {
       },
       {
         labelName: "Consumer Code",
-        labelKey: "Consumer Code",
+        labelKey: "PAYMENT_COMMON_CONSUMER_CODE",
         options: {
           display: false
         }
@@ -106,43 +106,43 @@ export const searchResults = {
         }
       },
       {
-        labelKey: "businessService",
-        labelName: "businessService",
+        labelKey: "BUSINESS_SERVICE",
+        labelName: "Business Service",
         options: {
           display: false
         }
       },
       {
-        labelKey: "receiptKey",
-        labelName: "receiptKey",
+        labelKey: "RECEIPT_KEY",
+        labelName: "Receipt Key",
         options: {
           display: false
         }
       },
       {
-        labelName: "billKey",
-        labelKey: "billKey",
+        labelName: "Bill Key",
+        labelKey: "BILL_KEY",
         options: {
           display: false
         }
       },
       {
-        labelName: "tenantId",
-        labelKey: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       },
       {
         labelName: "Bill Id",
-        labelKey: "Bill Id",
+        labelKey: "BILL_ID",
         options: {
           display: false
         }
       },
       {
-        labelName: "billSearchUrl",
-        labelKey: "billSearchUrl",
+        labelName: "Bill Search Url",
+        labelKey: "BILL_SEARCH_URL",
         options: {
           display: false
         }

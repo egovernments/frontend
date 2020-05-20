@@ -1,10 +1,11 @@
 import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import {
   sortByEpoch,
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getStatusKey} from "egov-ui-framework/ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -55,24 +56,26 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
-              style={value.includes("APPROVED") ? { color: "green" } : { color: "red" }}
-            >
-              {getLocaleLabels(value,value)}
-            </span>
+            <LabelContainer
+              style={
+                value.includes("APPROVED") ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
       {
-        labelName: "tenantId",
-        labelKey: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       },
       {
-        labelName: "status1",
-        labelKey: "status1",
+        labelName: "Status",
+        labelKey: "TL_COMMON_TABLE_COL_STATUS",
         options: {
           display: false
         }

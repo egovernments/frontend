@@ -40,8 +40,8 @@ export const searchResults = {
         name: "Assigned To", labelKey: "BPA_COMMON_TABLE_COL_ASSIGN_TO"
       },
       {
-        name: "tenantId",
-        labelKey: "tenantId",
+        name: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }

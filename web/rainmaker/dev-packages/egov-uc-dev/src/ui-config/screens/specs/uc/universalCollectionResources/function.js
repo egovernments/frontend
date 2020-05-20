@@ -108,8 +108,8 @@ export const searchApiCall = async (state, dispatch) => {
         ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
         ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
         ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ["receiptKey"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
-        ["tenantId"]: item.tenantId || "-"
+        ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
+        ["TENANT_ID"]: item.tenantId || "-"
       }));
       dispatch(
         handleField(

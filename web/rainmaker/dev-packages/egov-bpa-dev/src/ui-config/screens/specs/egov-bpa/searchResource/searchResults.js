@@ -136,8 +136,8 @@ export const searchResults = {
         }
       },
       {
-        name: "tenantId",
-        labelKey: "tenantId",
+        name: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }

@@ -118,7 +118,7 @@ export const searchApiCall = async (state, dispatch) => {
         ['NOC_COMMON_TABLE_COL_APP_DATE_LABEL']:
           convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
           "-",
-        ["tenantId"]: item.tenantId,
+        ["TENANT_ID"]: item.tenantId,
         ['NOC_COMMON_TABLE_COL_STATUS_LABEL']: item.fireNOCDetails.status || "-"
       }));
 
