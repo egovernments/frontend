@@ -117,7 +117,7 @@ export const searchApiCall = async (state, dispatch) => {
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
         ["BPA_COMMON_TABLE_COL_ASSIGN_TO"]: get(businessIdToOwnerMapping[item.applicationNumber], "assignee") || "-",
         ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]:  convertEpochToDate(item.applicationDate) || "-",        
-        ["tenantId"]: item.tenantId
+        ["TENANT_ID"]: item.tenantId
       }));
 
       dispatch(

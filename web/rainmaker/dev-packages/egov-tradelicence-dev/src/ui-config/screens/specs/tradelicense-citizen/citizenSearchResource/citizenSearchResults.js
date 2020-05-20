@@ -36,8 +36,8 @@ export const searchResults = {
         labelKey: "TL_COMMON_TABLE_COL_STATUS"
       },
       {
-        labelName: "tenantId",
-        labelKey: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }

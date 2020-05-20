@@ -121,7 +121,7 @@ const searchApiCall = async (state, dispatch) => {
         ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
         ["PT_AMOUNT_DUE"]: item.totalAmount || "-",
         ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: item.totalAmount || "-",
-        ["tenantId"]: item.tenantId || "-"
+        ["TENANT_ID"]: item.tenantId || "-"
       }));
 
       dispatch(

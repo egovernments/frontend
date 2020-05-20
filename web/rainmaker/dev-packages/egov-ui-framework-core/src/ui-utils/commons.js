@@ -668,8 +668,8 @@ export const getStatusKey = (status) => {
         labelKey:"DOCUMENTVERIFY"};
     case "FIELDINSPECTION":
       return {labelKey:
-        "Pending for Field Inspection",labelName:
-        "FIELDINSPECTION"};
+        "FIELDINSPECTION",labelName:
+        "Pending for Field Inspection"};
       default:
         return {
           labelName:status, labelKey:status
