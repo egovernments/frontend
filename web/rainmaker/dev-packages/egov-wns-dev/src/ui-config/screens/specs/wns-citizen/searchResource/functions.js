@@ -64,7 +64,7 @@ export const searchApiCall = async (state, dispatch) => {
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
-        if(element.connectionNo !== null && element.connectionNo!=='NA') {
+        if(element.property && element.connectionNo !== null && element.connectionNo!=='NA') {
 	  let queryObjectForWaterFetchBill;
           if (element.service === "WATER") {
             queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
@@ -78,9 +78,9 @@ export const searchApiCall = async (state, dispatch) => {
               dueDate: bill.billDetails[0].expiryDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: element.property.owners[0].name,
+              name: (element.property)?element.property.owners[0].name:'',
               status: element.status,
-              address: element.property.address.street,
+              address: (element.property)?element.property.address.street:'',
               tenantId: tenantId,
               connectionType: element.connectionType
             }
@@ -90,9 +90,9 @@ export const searchApiCall = async (state, dispatch) => {
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: element.property.owners[0].name,
+            name: (element.property)?element.property.owners[0].name:'',
             status: element.status,
-            address: element.property.address.street,
+            address: (element.property)?element.property.address.street:'',
             tenantId: tenantId,
             connectionType: element.connectionType
           })
