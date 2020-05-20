@@ -115,9 +115,9 @@ export const searchApiCall = async (state, dispatch) => {
           item.financialYear || "-",
           ['TL_COMMON_TABLE_COL_APP_TYPE']:
           `TL_TYPE_${item.applicationType}`  || "NEW",
-        ['TL_COMMON_TABLE_COL_STATUS']: `WF_${item.workflowCode.toUpperCase()}_${item.status}` || "-",
-        ["tenantId"]: item.tenantId,
-        ["status1"]: item.status || "-"
+        ['TL_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ["TENANT_ID"]: item.tenantId,
+        ["TL_COMMON_TABLE_COL_STATUS"]: item.status || "-"
       }));
       dispatch(
         handleField(

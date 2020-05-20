@@ -374,7 +374,7 @@ const searchApiCall = async (state, dispatch, index) => {
           item.oldPropertyId || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
-        ["tenantId"]: item.tenantId,
+        ["TENANT_ID"]: item.tenantId,
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
       }));
 
@@ -388,7 +388,7 @@ const searchApiCall = async (state, dispatch, index) => {
           item.owners[0].name || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
-        ["tenantId"]: item.tenantId,
+        ["TENANT_ID"]: item.tenantId,
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
         temporary: item
       }));

@@ -100,7 +100,7 @@ export const searchApiCall = async (state, dispatch) => {
         ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: get(item, "owners[0].name") || "-",
         ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) || "-",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
-        tenantId: item.tenantId
+        ["TENANT_ID"]: item.tenantId
       }));
 
       // if (data && data.length > 0) {

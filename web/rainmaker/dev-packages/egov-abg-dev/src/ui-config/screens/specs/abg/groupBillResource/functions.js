@@ -105,7 +105,7 @@ export const searchApiCall = async (state, dispatch) => {
         ["ABG_COMMON_TABLE_COL_BILL_DATE"]:
           convertEpochToDate(item.billDate) || "-",
         ["ABG_COMMON_TABLE_COL_STATUS"]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
-        tenantId: item.tenantId
+        ["TENANT_ID"]: item.tenantId
       }));
 
       dispatch(

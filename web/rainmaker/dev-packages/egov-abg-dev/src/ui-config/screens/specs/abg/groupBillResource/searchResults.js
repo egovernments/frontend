@@ -107,8 +107,8 @@ export const searchResults = {
       {labelName: "Bill Date", labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"},
       {labelName: "Status", labelKey: "ABG_COMMON_TABLE_COL_STATUS"},
       {
-        labelName: "tenantId",
-        labelKey: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }

@@ -126,12 +126,12 @@ export const searchApiCall = async (state, dispatch) => {
         ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: item.billAmount || "-",
         ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
-        businessService: searchScreenObject.businesService,
-        receiptKey: get(configObject[0], "receiptKey"),
-        billKey: get(configObject[0], "billKey"),
-        tenantId: item.tenantId,
-        "Bill Id": item.billId,
-        "billSearchUrl": searchScreenObject.url,
+        ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
+        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey"),
+        ["BILL_KEY"]: get(configObject[0], "billKey"),
+        ["TENANT_ID"]: item.tenantId,
+        ["BILL_ID"]: item.billId,
+        ["BILL_SEARCH_URL"]: searchScreenObject.url,
       }));
       dispatch(
         handleField(
