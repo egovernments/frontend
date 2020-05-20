@@ -100,7 +100,9 @@ export const getSearchResults = async queryObject => {
                 }
                 let payload = await getPropertyResultsWODispatch(queryObject1);
                 result.WaterConnection[i].property = payload.Properties[0];
-            }  
+            }else{
+                result.WaterConnection[i].property = null;
+            }    
         }
         return result;
     } catch (error) { console.log(error) }
@@ -126,7 +128,9 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
                 }                
                 let payload = await getPropertyResultsWODispatch(queryObject1);
                 result.SewerageConnections[i].property = payload.Properties[0];  
-            }
+            }else{
+                result.SewerageConnections[i].property = null;
+            }  
         }
         dispatch(toggleSpinner());
         return result;
