@@ -165,40 +165,43 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
 
       let appNo = "";
+      let combinedWFSearchResults = [];
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = findAndReplace(combinedSearchResults[i], null, "NA");
         if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
           appNo = appNo + element.applicationNo + ",";
         }
+        if(i % 50 === 0 || i === combinedSearchResults.length) {
+          //We are trying to fetch 50 WF objects at a time
+          appNo = appNo.substring(0, appNo.length-1);
+          const queryObj = [
+            { key: "businessIds", value: appNo },
+            { key: "history", value: true },
+            { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }
+          ];
+          let wfResponse = await getWorkFlowData(queryObj);
+          if(wfResponse !== null && wfResponse.ProcessInstances !== null) {
+            combinedWFSearchResults = combinedWFSearchResults.concat(wfResponse.ProcessInstances);
+          }
+          appNo = "";
+        }
       }
-      const queryObj = [
+      /*const queryObj = [
         { key: "businessIds", value: appNo },
         { key: "history", value: true },
         { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }
       ];
-      let Response = await getWorkFlowData(queryObj);
+      let Response = await getWorkFlowData(queryObj);*/
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = findAndReplace(combinedSearchResults[i], null, "NA");
         let appStatus;
         if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
-
-          appStatus = Response.ProcessInstances.filter(item => item.businessId.includes(element.applicationNo))[0]
-          if (appStatus !== undefined) {
-            if (appStatus.state !== undefined) {
-              appStatus = appStatus.state.applicationStatus;
-            }
-            else {
-              appStatus = "NA";
-            }
-
-          }
-          else {
+          appStatus = combinedWFSearchResults.filter(item => item.businessId.includes(element.applicationNo))[0]
+          if (appStatus !== undefined && appStatus.state !== undefined) {
+            appStatus = appStatus.state.applicationStatus;            
+          }else{
             appStatus = "NA";
           }
-          if(!element.property){
-            console.log(element);
-          }
-
           if (element.property && element.property.owners &&
             element.property.owners !== "NA" &&
             element.property.owners !== null &&
