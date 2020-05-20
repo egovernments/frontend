@@ -291,23 +291,3 @@ const showApplicationResults = (connections, dispatch) => {
   showHideApplicationTable(true, dispatch);
 }
 
-
-
-
-
-//extra code
-// let applicationStatus;
-//         if(element.applicationNo!=="NA" && element.applicationNo!==undefined ){
-//           const queryObj = [
-//             { key: "businessIds", value: element.applicationNo },
-//             { key: "history", value: true },
-//             { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }
-//           ];
-//           let Response =await getWorkFlowData(queryObj);
-//            let processInstanceAppStatus=Response.ProcessInstances[0].state.applicationStatus;
-//            if(!processInstanceAppStatus.split("_")){
-//             applicationStatus= processInstanceAppStatus;
-//            }else{
-//             applicationStatus= processInstanceAppStatus.split("_").join(" ");
-//            }
-//         }
