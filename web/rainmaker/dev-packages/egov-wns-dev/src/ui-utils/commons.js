@@ -150,6 +150,21 @@ export const fetchBill = async (queryObject, dispatch) => {
     }
 };
 
+//Workflow process instances for application status
+export const getWorkFlowData = async (queryObject) => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "egov-workflow-v2/egov-wf/process/_search",
+            "_search",
+            queryObject
+        );
+        return response;
+    } catch (error) {
+        console.log(error)
+    }
+};
+
 // api call to get my connection details
 export const getMyConnectionResults = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
@@ -1162,33 +1177,41 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
         const data = await getSearchResults(queryObject)
         let res = findAndReplace(data, null, "NA")
         let connectionType = res.WaterConnection[0].connectionType
-        let payload = {
-            "MdmsRes": {
-                "ws-services-masters": {
-                    "billingPeriod": [
-                        {
-                            "active": true,
-                            "connectionType": "Metered",
-                            "billingCycle": "monthly"
-                        },
-                        {
-                            "active": true,
-                            "connectionType": "Non Metered",
-                            "billingCycle": "quarterly"
-                        }
-                    ]
-                }
-            }
-        }
+        let mdmsBody = {
+                MdmsCriteria: {
+                    tenantId: commonConfig.tenantId,
+                    "moduleDetails": [
+                        {
+                            "moduleName": "ws-services-masters",
+                            "masterDetails": [
+                                {
+                                    "name": "billingPeriod",
+                                    "filter": "*"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+        try {
+            let payload = await httpRequest(
+                "post",
+                "/egov-mdms-service/v1/_search",
+                "_search",
+                [],
+                mdmsBody
+            );
 
-        let billingCycle;
-        payload.MdmsRes['ws-services-masters'].billingPeriod.map((x) => {
-            if (x.connectionType === connectionType) {
-                billingCycle = x.billingCycle
-            }
-        })
-        dispatch(prepareFinalObject("billingCycle", billingCycle));
-
+            let billingCycle;
+            payload.MdmsRes['ws-services-masters'].billingPeriod.map((x) => {
+                if (x.connectionType === connectionType) {
+                    billingCycle = x.billingCycle
+                }
+            })
+            dispatch(prepareFinalObject("billingCycle", billingCycle));
+        } catch (e) {
+            console.log(e);
+        }
     } catch (e) {
         console.log(e);
     }
@@ -1623,15 +1646,15 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 // to download application 
 export const downloadApp = async (wnsConnection, type, mode = "download") => {
     let estFileStrID = wnsConnection[0].additionalDetails.estimationFileStoreId
-    let sanFileStrID = wnsConnection[0].additionalDetails.sanctionFileStoreId
+    let sanFileStrID = wnsConnection[0].additionalDetails.sanctionFileStoreId
 
-    if(type === 'estimateNotice' && estFileStrID !== undefined && estFileStrID !== null){
-        downloadReceiptFromFilestoreID(estFileStrID, mode)
-        return false;
-    }else if(type === 'sanctionLetter' && sanFileStrID !== undefined && sanFileStrID !== null){
-        downloadReceiptFromFilestoreID(sanFileStrID, mode)
-        return false;
-    }
+    if (type === 'estimateNotice' && estFileStrID !== undefined && estFileStrID !== null) {
+        downloadReceiptFromFilestoreID(estFileStrID, mode)
+        return false;
+    } else if (type === 'sanctionLetter' && sanFileStrID !== undefined && sanFileStrID !== null) {
+        downloadReceiptFromFilestoreID(sanFileStrID, mode)
+        return false;
+    }
 
     let tenantName = wnsConnection[0].property.tenantId;
     tenantName = tenantName.split('.')[1];
@@ -1721,30 +1744,30 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             }
         }
 
-        if(type === 'sanctionLetter'){
+        if (type === 'sanctionLetter') {
             const slaDetails = await httpRequest(
                 "post",
                 `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
                 "_search"
             );
 
-            var states = [], findSLA = false; 
-            for(var i=0; i<slaDetails.BusinessServices.length; i++){ 
+            var states = [], findSLA = false;
+            for (var i = 0; i < slaDetails.BusinessServices.length; i++) {
                 states = slaDetails.BusinessServices[i].states;
-                if(findSLA) break; 
-                if(states.length > 0){
-                    for(var j=0; j<states.length; j++){
-                        if(states[j]['state'] && states[j]['state'] !== undefined && states[j]['state'] !== null && states[j]['state'] !== "" && states[j]['state'] === 'PENDING_FOR_CONNECTION_ACTIVATION'){
+                if (findSLA) break;
+                if (states.length > 0) {
+                    for (var j = 0; j < states.length; j++) {
+                        if (states[j]['state'] && states[j]['state'] !== undefined && states[j]['state'] !== null && states[j]['state'] !== "" && states[j]['state'] === 'PENDING_FOR_CONNECTION_ACTIVATION') {
                             //console.log(states[j]['sla']);
-                            wnsConnection[0].sla = states[j]['sla']/86400000;
+                            wnsConnection[0].sla = states[j]['sla'] / 86400000;
                             findSLA = true;
                             break;
                         }
                     }
                 }
                 //console.log(i);
-            }            
-            let connectionExecutionDate = new Date(wnsConnection[0].connectionExecutionDate);             
+            }
+            let connectionExecutionDate = new Date(wnsConnection[0].connectionExecutionDate);
             wnsConnection[0].slaDate = connectionExecutionDate.setDate(connectionExecutionDate.getDate() + wnsConnection[0].sla);
         }
 
@@ -1772,9 +1795,9 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                 res.filestoreIds[0]
                 if (res && res.filestoreIds && res.filestoreIds.length > 0) {
                     res.filestoreIds.map(fileStoreId => {
-                        if(type === "sanctionLetter"){  
+                        if (type === "sanctionLetter") {
                             store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.sanctionFileStoreId", fileStoreId));
-                        }else if(type === "estimateNotice"){
+                        } else if (type === "estimateNotice") {
                             store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.estimationFileStoreId", fileStoreId));
                         }
                         downloadReceiptFromFilestoreID(fileStoreId, mode)
