@@ -33,7 +33,7 @@ class DividerWithLabel extends Component {
       localizationLabels
     );
    
-    if(label.labelKey === "WS_TASK_PROP_OWN_HEADER" && this.props.propertyOwners.length > 1){
+    if(label.labelKey === "WS_TASK_PROP_OWN_HEADER" && this.props.propertyOwners &&  this.props.propertyOwners.length > 1){
       let componentJsonpath = this.props.componentJsonpath;
       translatedLabel = translatedLabel + " "+ (parseInt(componentJsonpath.split('items[')[1][0])+1)
     }

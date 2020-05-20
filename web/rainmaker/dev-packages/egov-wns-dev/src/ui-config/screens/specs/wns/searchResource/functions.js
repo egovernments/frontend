@@ -84,7 +84,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               dueDate: bill.billDetails[0].expiryDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: element.property.owners[0].name,
+              name: (element.property)?element.property.owners[0].name:'',
               status: element.status,
               address: handleAddress(element),
               connectionType: element.connectionType
@@ -94,7 +94,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: element.property.owners[0].name,
+            name: (element.property)?element.property.owners[0].name:'',
             status: element.status,
             address: handleAddress(element),
             connectionType: element.connectionType
@@ -195,8 +195,11 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           else {
             appStatus = "NA";
           }
+          if(!element.property){
+            console.log(element);
+          }
 
-          if (element.property.owners &&
+          if (element.property && element.property.owners &&
             element.property.owners !== "NA" &&
             element.property.owners !== null &&
             element.property.owners.length > 1) {
@@ -216,7 +219,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
             finalArray.push({
               connectionNo: element.connectionNo,
               applicationNo: element.applicationNo,
-              name: element.property.owners[0].name,
+              name: (element.property)?element.property.owners[0].name:"",
               applicationStatus: appStatus,
               address: handleAddress(element),
               service: element.service,
@@ -232,11 +235,13 @@ const renderSearchApplicationTable = async (state, dispatch) => {
 
 const handleAddress = (element) => {
   let city = (
+    element.property &&
     element.property.address !== undefined &&
     element.property.address.city !== undefined &&
     element.property.address.city !== null
   ) ? element.property.address.city : "";
   let localityName = (
+    element.property &&
     element.property.address.locality !== undefined &&
     element.property.address.locality !== null &&
     element.property.address.locality.name !== null
