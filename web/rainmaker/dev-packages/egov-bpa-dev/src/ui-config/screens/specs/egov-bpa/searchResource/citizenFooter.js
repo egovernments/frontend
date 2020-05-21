@@ -165,7 +165,8 @@ export const citizenFooter = getCommonApplyFooter({
     },
     roleDefination: {
       rolePath: "user-info.roles",
-      action: "APPROVE"
+      action: "APPROVE",
+      roles: ["CITIZEN"]
     }
   },
   submitButton: {
