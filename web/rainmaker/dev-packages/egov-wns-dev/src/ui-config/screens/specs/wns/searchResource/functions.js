@@ -1,11 +1,9 @@
-import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, fetchBill, getSearchResultsForSewerage } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch, getTextToLocalMapping, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { validateFields } from "../../utils";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { findAndReplace } from "../../../../../ui-utils/commons";
+import get from "lodash/get";
+import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData } from "../../../../../ui-utils/commons";
+import { validateFields } from "../../utils";
+import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
@@ -86,7 +84,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               dueDate: bill.billDetails[0].expiryDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: element.property.owners[0].name,
+              name: (element.property)?element.property.owners[0].name:'',
               status: element.status,
               address: handleAddress(element),
               connectionType: element.connectionType
@@ -96,7 +94,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: element.property.owners[0].name,
+            name: (element.property)?element.property.owners[0].name:'',
             status: element.status,
             address: handleAddress(element),
             connectionType: element.connectionType
@@ -165,33 +163,72 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e }) : []
       const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
+
+      let appNo = "";
+      let combinedWFSearchResults = [];
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = findAndReplace(combinedSearchResults[i], null, "NA");
-        if (element.property.owners &&
-          element.property.owners !== "NA" &&
-          element.property.owners !== null &&
-          element.property.owners.length > 1) {
-          let ownerName = "";
-          element.property.owners.forEach(ele => { ownerName = ownerName + ", " + ele.name })
-          finalArray.push({
-            connectionNo: element.connectionNo,
-            applicationNo: element.applicationNo,
-            name: ownerName.slice(2),
-            applicationStatus: element.applicationStatus,
-            address: handleAddress(element),
-            service: element.service,
-            connectionType: element.connectionType
-          })
-        } else {
-          finalArray.push({
-            connectionNo: element.connectionNo,
-            applicationNo: element.applicationNo,
-            name: element.property.owners[0].name,
-            applicationStatus: element.applicationStatus,
-            address: handleAddress(element),
-            service: element.service,
-            connectionType: element.connectionType
-          })
+        if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
+          appNo = appNo + element.applicationNo + ",";
+        }
+        if(i % 50 === 0 || i === (combinedSearchResults.length-1)) {
+          //We are trying to fetch 50 WF objects at a time
+          appNo = appNo.substring(0, appNo.length-1);
+          const queryObj = [
+            { key: "businessIds", value: appNo },
+            { key: "history", value: true },
+            { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }
+          ];
+          let wfResponse = await getWorkFlowData(queryObj);
+          if(wfResponse !== null && wfResponse.ProcessInstances !== null) {
+            combinedWFSearchResults = combinedWFSearchResults.concat(wfResponse.ProcessInstances);
+          }
+          appNo = "";
+        }
+      }
+      /*const queryObj = [
+        { key: "businessIds", value: appNo },
+        { key: "history", value: true },
+        { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }
+      ];
+      let Response = await getWorkFlowData(queryObj);*/
+      for (let i = 0; i < combinedSearchResults.length; i++) {
+        let element = findAndReplace(combinedSearchResults[i], null, "NA");
+        let appStatus;
+        if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
+          appStatus = combinedWFSearchResults.filter(item => item.businessId.includes(element.applicationNo))[0]
+          if (appStatus !== undefined && appStatus.state !== undefined) {
+            appStatus = appStatus.state.applicationStatus;            
+          }else{
+            appStatus = "NA";
+          }
+          if (element.property && element.property.owners &&
+            element.property.owners !== "NA" &&
+            element.property.owners !== null &&
+            element.property.owners.length > 1) {
+            let ownerName = "";
+            element.property.owners.forEach(ele => { ownerName = ownerName + ", " + ele.name })
+
+            finalArray.push({
+              connectionNo: element.connectionNo,
+              applicationNo: element.applicationNo,
+              name: ownerName.slice(2),
+              applicationStatus: appStatus,
+              address: handleAddress(element),
+              service: element.service,
+              connectionType: element.connectionType
+            })
+          } else {
+            finalArray.push({
+              connectionNo: element.connectionNo,
+              applicationNo: element.applicationNo,
+              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:"",
+              applicationStatus: appStatus,
+              address: handleAddress(element),
+              service: element.service,
+              connectionType: element.connectionType
+            })
+          }
         }
       }
       showApplicationResults(finalArray, dispatch)
@@ -201,11 +238,15 @@ const renderSearchApplicationTable = async (state, dispatch) => {
 
 const handleAddress = (element) => {
   let city = (
+    element.property &&
+    element.property !== "NA" &&
     element.property.address !== undefined &&
     element.property.address.city !== undefined &&
     element.property.address.city !== null
   ) ? element.property.address.city : "";
   let localityName = (
+    element.property &&
+    element.property !== "NA" &&
     element.property.address.locality !== undefined &&
     element.property.address.locality !== null &&
     element.property.address.locality.name !== null
@@ -259,3 +300,4 @@ const showApplicationResults = (connections, dispatch) => {
   ));
   showHideApplicationTable(true, dispatch);
 }
+
