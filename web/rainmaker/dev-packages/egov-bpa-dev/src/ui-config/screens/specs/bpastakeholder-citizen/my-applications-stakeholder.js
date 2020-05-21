@@ -317,7 +317,7 @@ export const changePage = async (tableState) => {
         let primaryowner = "-";
         let businessService = get(element, "businessService", null);
         let type; 
-        if(businessService == "BPA" ) { type = "HIGH" } else { type = "LOW" }
+        if(businessService == "BPA_LOW" ) { type = "LOW" } else { type = "HIGH" }
         let owners = get(element, "owners", [])
         owners.map(item => {
           if (item.isPrimaryOwner) {
