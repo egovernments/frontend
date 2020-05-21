@@ -483,7 +483,7 @@ const setSearchResponse = async (
 
     if(isTrue && owners && owners.length > 0) {
       owners.forEach(owner => {
-        if(owner.uuid === userInfo.uuid) {
+        if(owner.mobileNumber === userInfo.mobileNumber) { //owner.uuid === userInfo.uuid
           if(owner.roles && owner.roles.length > 0 ) {
             owner.roles.forEach(owrRole => {
               if(owrRole.code === archtect) {
