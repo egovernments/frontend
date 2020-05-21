@@ -80,7 +80,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (applicationNumber) {
     
     // hiding the Additional details for citizen. ,,
-    if(process.env.REACT_APP_NAME === "Citizen" && (appStatus === 'INITIATED' || appStatus ==="PENDING_FOR_CITIZEN_ACTION" || appStatus !== 'PENDING_FOR_DOCUMENT_VERIFICATION')){
+    if(process.env.REACT_APP_NAME === "Citizen" && processInstanceAppStatus && (processInstanceAppStatus === 'INITIATED' || processInstanceAppStatus ==="PENDING_FOR_CITIZEN_ACTION" || processInstanceAppStatus === 'PENDING_FOR_DOCUMENT_VERIFICATION')){
       set(
         action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.props.style",
         { display: "none" }
