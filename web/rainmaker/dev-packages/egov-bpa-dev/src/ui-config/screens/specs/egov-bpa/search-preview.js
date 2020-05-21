@@ -470,7 +470,7 @@ const setSearchResponse = async (
   if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
     let userInfo = JSON.parse(getUserInfo()),
     roles = get(userInfo, "roles"),
-    owners = get(response.Bpa["0"], "owners"),
+    owners = get(response.Bpa["0"].landInfo, "owners"),
     archtect = "BPA_ARCHITECT",
     isTrue = false, isOwner = true;
     if(roles && roles.length > 0) {
