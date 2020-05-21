@@ -781,9 +781,9 @@ const screenConfig = {
         const secondNumber = getQueryArg(window.location.href, "secondNumber");
         const tenant = getQueryArg(window.location.href, "tenantId");
         let consumerNo = ""
-        if (applicationNumber.includes("WS")) {
+        if (applicationNumber && applicationNumber.includes("WS")) {
           consumerNo = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].connectionNo");
-        } else if (applicationNumber.includes("SW")) {
+        } else if (applicationNumber && applicationNumber.includes("SW")) {
           consumerNo = get(state,"screenConfiguration.preparedFinalObject.SewerageConnection[0].connectionNo");
         }
         if (applicationNumberSewerage && applicationNumberWater) {
