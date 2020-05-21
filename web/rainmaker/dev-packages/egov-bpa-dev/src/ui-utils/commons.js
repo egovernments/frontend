@@ -78,6 +78,19 @@ export const getSearchResults = async queryObject => {
 
 export const getBpaSearchResults = async queryObject => {
   try {
+    if(queryObject && queryObject.length) {
+      let isTenantId = true;
+      queryObject.forEach(obj => {
+        if(obj.key === "tenantId"){
+          isTenantId = false
+        }
+      })
+      if(isTenantId) {
+        queryObject.push({key : "tenantId", value: getTenantId()})
+      }
+    } else {
+      queryObject = [{key : "tenantId", value: getTenantId()}];
+    }
     const response = await httpRequest(
       "post",
       "/bpa-services/v1/bpa/_search?offset=0&limit=-1",
@@ -126,6 +139,19 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 
 export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
+    if(queryObject && queryObject.length) {
+      let isTenantId = true;
+      queryObject.forEach(obj => {
+        if(obj.key === "tenantId"){
+          isTenantId = false
+        }
+      })
+      if(isTenantId) {
+        queryObject.push({key : "tenantId", value: getTenantId()})
+      }
+    } else {
+      queryObject = [{key : "tenantId", value: getTenantId()}];
+    }
     const response = await httpRequest(
       "post",
       "/bpa-services/v1/bpa/_search",

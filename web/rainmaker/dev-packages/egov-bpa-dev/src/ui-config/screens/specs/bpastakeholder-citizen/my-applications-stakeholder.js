@@ -315,6 +315,9 @@ export const changePage = async (tableState) => {
         service += " - " + getTextToLocalMapping("BPA_SERVICETYPE_" + get(element, "serviceType"));
         let modifiedTime = element.auditDetails.lastModifiedTime;
         let primaryowner = "-";
+        let businessService = get(element, "businessService", null);
+        let type; 
+        if(businessService == "BPA" ) { type = "HIGH" } else { type = "LOW" }
         let owners = get(element, "owners", [])
         owners.map(item => {
           if (item.isPrimaryOwner) {
@@ -330,9 +333,9 @@ export const changePage = async (tableState) => {
           applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
           modifiedTime: modifiedTime,
           sortNumber: 1,
-          serviceType: element.serviceType,
+          serviceType: get(element, "serviceType"),
           tenantId: get(element, "tenantId", null),
-          type: element.riskType
+          type: type
         })
       });
     }
