@@ -30,6 +30,7 @@ import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { edcrDetailsToBpaDetails } from "../ui-config/screens/specs/utils"
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -333,6 +334,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       // response = prepareOwnershipType(response);
       dispatch(prepareFinalObject("BPA", response.Bpa[0]));
       setApplicationNumberBox(state, dispatch);
+      await edcrDetailsToBpaDetails(state, dispatch);
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
