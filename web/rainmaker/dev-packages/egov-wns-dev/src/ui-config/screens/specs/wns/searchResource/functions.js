@@ -171,7 +171,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
         if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
           appNo = appNo + element.applicationNo + ",";
         }
-        if(i % 50 === 0 || i === combinedSearchResults.length) {
+        if(i % 50 === 0 || i === (combinedSearchResults.length-1)) {
           //We are trying to fetch 50 WF objects at a time
           appNo = appNo.substring(0, appNo.length-1);
           const queryObj = [
