@@ -85,6 +85,9 @@ export const getSearchResults = async queryObject => {
             "_search",
             queryObject
         );
+        if(response.WaterConnection && response.WaterConnection.length == 0){
+            return response;
+        }
         let result = findAndReplace(response, null, "NA");
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
@@ -116,7 +119,11 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
             "/sw-services/swc/_search",
             "_search",
             queryObject
-        );        
+        );
+        if(response.SewerageConnections && response.SewerageConnections.length == 0){
+            dispatch(toggleSpinner());
+            return response;
+        }        
         let result = findAndReplace(response, null, "NA");
         for(var i=0; i<result.SewerageConnections.length;i++){
             if(result.SewerageConnections[i].propertyId && result.SewerageConnections[i].propertyId !== null && result.SewerageConnections[i].propertyId !== "NA"){

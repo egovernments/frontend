@@ -53,6 +53,7 @@ export const searchPropertyTable = {
       },
       {
         name: "tenantId",
+        labelKey: "PT_COMMON_TABLE_COL_TENANTID_LABEL",
         options: {
           display: false
         }
