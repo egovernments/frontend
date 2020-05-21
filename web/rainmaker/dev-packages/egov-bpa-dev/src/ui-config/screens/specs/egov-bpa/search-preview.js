@@ -406,7 +406,7 @@ const setSearchResponse = async (
       key: "tenantId",
       value: tenantId
     },
-    { key: "applicationNos", value: applicationNumber }
+    { key: "applicationNo", value: applicationNumber }
   ]);
 
   const edcrNumber = get(response, "Bpa[0].edcrNumber");
