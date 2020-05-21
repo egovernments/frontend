@@ -525,10 +525,14 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 10
+                sm: 10,
+                  style: {
+                    width: "34vw",
+                    display: "contents"
+                },
               },
-              ...titlebar
-            }
+              ...titlebar,
+            },
           }
         },
         taskStatus: {
