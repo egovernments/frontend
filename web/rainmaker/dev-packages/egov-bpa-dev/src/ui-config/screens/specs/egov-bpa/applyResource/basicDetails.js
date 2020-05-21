@@ -136,7 +136,7 @@ export const basicDetails = getCommonCard({
         masterName: "BPA"
       },
       props:{
-        disabled: true,
+        // disabled: true,
         className : "tl-trade-type"
       },
       required: true,
