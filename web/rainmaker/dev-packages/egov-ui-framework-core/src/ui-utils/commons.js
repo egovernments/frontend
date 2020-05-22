@@ -6,7 +6,8 @@ import {
   localStorageGet,
   getLocalization,
   getLocale,
-  getTenantId
+  getTenantId,
+  getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";

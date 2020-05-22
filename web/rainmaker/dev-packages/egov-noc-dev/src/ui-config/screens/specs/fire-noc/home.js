@@ -53,7 +53,7 @@ const tradeLicenseSearchAndResult = {
         masterDetails: [{ name: "Documents" }]
       }
     ];
-    getRequiredDocData(dispatch, moduleDetails, state);
+    getRequiredDocData(action, dispatch, moduleDetails);
     return action;
   },
   components: {
