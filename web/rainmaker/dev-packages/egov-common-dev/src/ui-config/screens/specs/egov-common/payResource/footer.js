@@ -17,18 +17,11 @@ export const callPGService = async (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
   );
-  // let callbackUrl = `${
-  //   process.env.NODE_ENV === "production"
-  //     ? isPublicSearch() ? `${window.origin}/citizen/withoutAuth` : `${window.origin}/citizen`
-  //     : isPublicSearch() ? `${window.origin}/withoutAuth` : window.origin
-  // }/egov-common/paymentRedirectPage`;
-
+  
+  const url = isPublicSearch() ? "withoutAuth/egov-common/paymentRedirectPage" : "egov-common/paymentRedirectPage";
+  const redirectUrl = process.env.NODE_ENV === "production" ? `citizen/${url}` : url;
   // const businessService = getQueryArg(window.location.href, "businessService"); businessService
-  let callbackUrl = `${
-    process.env.NODE_ENV === "production"
-      ? `${window.origin}/citizen`
-      : window.origin
-    }/egov-common/paymentRedirectPage`;
+  let callbackUrl = `${window.origin}/${redirectUrl}`;
 
   const { screenConfiguration = {} } = state;
   const { preparedFinalObject = {} } = screenConfiguration;

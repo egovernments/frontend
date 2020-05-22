@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import cloneDeep from "lodash/cloneDeep";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { LabelContainer } from "../../ui-containers";
-import { getLocaleLabels } from "../../ui-utils/commons";
+import { getLocaleLabels, isPublicSearch } from "../../ui-utils/commons";
 import "./index.css";
 
 class Table extends React.Component {
@@ -22,7 +22,7 @@ class Table extends React.Component {
           root: {
             "&:nth-child(2)": {
               color: "#2196F3",
-              cursor: "pointer"
+              cursor: isPublicSearch() ? "auto":"pointer"
             }
           }
         },
