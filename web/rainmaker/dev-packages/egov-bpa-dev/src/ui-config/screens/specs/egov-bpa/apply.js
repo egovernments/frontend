@@ -40,7 +40,7 @@ import {
   prepareNOCUploadData,
   getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData, edcrDetailsToBpaDetails } from "../utils";
 import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";
@@ -61,10 +61,9 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Apply for building permit`, //later use getFinancialYearDates
+    labelName: `Apply for building permit`,
     labelKey: "BPA_APPLY_FOR_BUILDING_PERMIT_HEADER"
   }),
-  //applicationNumber: applicationNumberContainer()
   applicationNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-bpa",
@@ -96,8 +95,7 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    buildingPlanScrutinyDetails,
-   // blockWiseOccupancyAndUsageDetails,    
+    buildingPlanScrutinyDetails,  
     proposedBuildingDetails,
     demolitiondetails,
     abstractProposedBuildingDetails
@@ -148,7 +146,7 @@ const getMdmsData = async (action, state, dispatch) => {
   ) || getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(), //tenantId,
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -251,12 +249,26 @@ const setSearchResponse = async (
     { key: "applicationNos", value: applicationNumber }
   ]);
 
-  const edcrNumber = response.Bpa["0"].edcrNumber;
-  const ownershipCategory = response.Bpa["0"].ownershipCategory;
-  const appDate = response.Bpa["0"].auditDetails.createdTime;
-  const latitude = response.Bpa["0"].address.geoLocation.latitude;
-  const longitude = response.Bpa["0"].address.geoLocation.longitude;
-  const riskType = response.Bpa["0"].riskType;
+  const edcrNumber = get(response, "Bpa[0].edcrNumber");
+  const ownershipCategory = get(response, "Bpa[0].ownershipCategory");
+  const appDate = get(response, "Bpa[0].auditDetails.createdTime");
+  const latitude = get(response, "Bpa[0].address.geoLocation.latitude");
+  const longitude = get(response, "Bpa[0].address.geoLocation.longitude");
+
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "search", []
+    );
+
+  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0] ));
+  await edcrDetailsToBpaDetails(state, dispatch);
+
+  const riskType = get (
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.riskType"
+  )
   let bpaService = "BPA";
   if(riskType === "LOW") {
     bpaService = "BPA_LOW";
@@ -266,19 +278,9 @@ const setSearchResponse = async (
     { key: "businessServices", value: bpaService }
   ];
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-  
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
-  let edcrRes = await edcrHttpRequest(
-    "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-    "search", []
-    );
-
-  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0] ));
 
   if(ownershipCategory) {
-    let ownerShipMajorType =  dispatch(
-      prepareFinalObject( "BPA.ownerShipMajorType", ownershipCategory.split('.')[0] ));
+    dispatch(prepareFinalObject( "BPA.landInfo.ownerShipMajorType", ownershipCategory.split('.')[0] ));
   }
   
  if(latitude && longitude) {
@@ -291,17 +293,17 @@ const setSearchResponse = async (
     )
   );
   dispatch(prepareFinalObject(
-    "BPA.address.geoLocation.latitude",
+    "BPA.landInfo.address.geoLocation.latitude",
     latitude
   ));
   dispatch(prepareFinalObject(
-    "BPA.address.geoLocation.longitude",
+    "BPA.landInfo.address.geoLocation.longitude",
     longitude
   ));
  }
   dispatch(prepareFinalObject("BPAs.appdate", appDate));
-  const docs = await prepareDocumentsUploadData(state, dispatch);
-  const documentDetailsUploadRedux = await prepareDocumentDetailsUploadRedux(state, dispatch);
+  await prepareDocumentsUploadData(state, dispatch);
+  await prepareDocumentDetailsUploadRedux(state, dispatch);
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
@@ -547,7 +549,7 @@ const screenConfig = {
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "BPA");
     getTenantMdmsData(action, state, dispatch).then(response => {
-      dispatch(prepareFinalObject("BPA.address.city", tenantId));
+      dispatch(prepareFinalObject("BPA.landInfo.address.city", tenantId));
     });
 
     let isEdit = true;
@@ -581,14 +583,6 @@ const screenConfig = {
           ownershipCategory
         )
       );
-      let applicationType = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[0].code"
-      );
-      dispatch(prepareFinalObject("BPA.applicationType", applicationType));
-      // Set Documents Data (TEMP)
-      // prepareDocumentsUploadData(state, dispatch);
-      // prepareNOCUploadData(state, dispatch);
     });
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
@@ -654,7 +648,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update"
           }
           },
         formwizardFirstStep,

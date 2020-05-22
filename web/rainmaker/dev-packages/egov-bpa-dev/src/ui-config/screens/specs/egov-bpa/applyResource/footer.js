@@ -309,7 +309,7 @@ const callBackForNext = async (state, dispatch) => {
 
     let selectedApplicantType = get(
       state,
-      "screenConfiguration.preparedFinalObject.BPA.ownershipCategory",
+      "screenConfiguration.preparedFinalObject.BPA.landInfo.ownershipCategory",
       "SINGLE"
     );
     if (selectedApplicantType.includes("INSTITUTIONAL")) {
@@ -409,11 +409,11 @@ const callBackForNext = async (state, dispatch) => {
       if (activeStep === 2) {
         let checkingOwner = get(
           state.screenConfiguration.preparedFinalObject,
-          "BPA.ownershipCategory"
+          "BPA.landInfo.ownershipCategory"
         );
         let ownerDetails = get(
           state.screenConfiguration.preparedFinalObject,
-          "BPA.owners"
+          "BPA.landInfo.owners"
         );
         let bpaStatus = get(
           state.screenConfiguration.preparedFinalObject,
@@ -423,7 +423,7 @@ const callBackForNext = async (state, dispatch) => {
         if (checkingOwner && checkingOwner === "INDIVIDUAL.SINGLEOWNER") {
           let primaryOwner = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPA.owners[0].isPrimaryOwner"
+            "BPA.landInfo.owners[0].isPrimaryOwner"
           );
           if (primaryOwner && primaryOwner === true) {
             if (bpaStatus) {
@@ -450,7 +450,7 @@ const callBackForNext = async (state, dispatch) => {
           ownerDetails.forEach((owner, index) => {
             let primaryOwner = get(
               state.screenConfiguration.preparedFinalObject,
-              `BPA.owners[${index}].isPrimaryOwner`
+              `BPA.landInfo.owners[${index}].isPrimaryOwner`
             );
             if (primaryOwner && primaryOwner === true) {
               ownerPrimaryArray.push(primaryOwner)
