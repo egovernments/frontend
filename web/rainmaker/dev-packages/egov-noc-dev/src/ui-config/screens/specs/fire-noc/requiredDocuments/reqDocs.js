@@ -53,13 +53,13 @@ const header = getCommonHeader(
   }
 );
 
-const generateDocument = (item) => {
+const generateDocument = item => {
   // Add header to individual grey cards
   let subHeader =
     item.code &&
     getCommonTitle(
       {
-        labelKey: getTransformedLocale(`${modulePrefix}_${item.code}_HEADING`)
+        labelKey: getTransformedLocale(`NOC_${item.code}_HEADING`)
       },
       {
         style: styles.subHeader
@@ -72,7 +72,7 @@ const generateDocument = (item) => {
     docs = item.dropdownData.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`${modulePrefix}_${doc.code}_LABEL`)
+          labelKey: getTransformedLocale(`NOC_${doc.code}_LABEL`)
         },
         {
           style: styles.docs
@@ -84,7 +84,7 @@ const generateDocument = (item) => {
     docs = item.options.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`${modulePrefix}_${doc.code}_LABEL`)
+          labelKey: getTransformedLocale(`NOC_${doc.code}_LABEL`)
         },
         {
           style: styles.docs
@@ -98,7 +98,7 @@ const generateDocument = (item) => {
   let subParagraph = item.description
     ? getCommonParagraph(
         {
-          labelKey: getTransformedLocale(`${modulePrefix}_${item.description}_NOTE`)
+          labelKey: getTransformedLocale(`NOC_${item.description}_NOTE`)
         },
         {
           style: styles.description
@@ -114,15 +114,9 @@ const generateDocument = (item) => {
   });
 };
 
- const ModulePrefix={
-  "FireNoc":"NOC"
-}
-
-
-export const getRequiredDocuments = (documents, moduleName )=> {
-  const modulePrefix=ModulePrefix[moduleName];
+export const getRequiredDocuments = documents => {
   let doc = documents.map(item => {
-    return generateDocument(item, modulePrefix);
+    return generateDocument(item);
   });
   return getCommonContainer(
     {
