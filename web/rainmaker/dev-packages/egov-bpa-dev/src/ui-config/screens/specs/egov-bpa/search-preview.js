@@ -578,13 +578,13 @@ const setSearchResponse = async (
 
   setProposedBuildingData(state, dispatch);
 
-  if(get(response, "Bpa[0].validityDate")) {
+  if(get(response, "Bpa[0].additionalDetails.validityDate")) {
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
         "props.number",
-        convertEpochToDate(get(response, "Bpa[0].validityDate"))
+        convertEpochToDate(get(response, "Bpa[0].additionalDetails.validityDate"))
       )
     );
 
