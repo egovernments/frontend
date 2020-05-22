@@ -178,6 +178,9 @@ class WorkFlowContainer extends React.Component {
           data.workflow.varificationDocuments[i].fileStore = data.workflow.varificationDocuments[i].fileStoreId
         }
       }
+      if(get(data, "workflow.comment")) {
+        data.workflow.comments = get(data, "workflow.comment");
+      }
     }
     if (dataPath == 'Property') {
       if (data.workflow && data.workflow.wfDocuments) {
