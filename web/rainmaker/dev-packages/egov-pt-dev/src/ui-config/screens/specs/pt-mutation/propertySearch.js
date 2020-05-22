@@ -16,8 +16,6 @@ const tenant = getTenantId();
 //console.log(captureMutationDetails);
 
 const getMDMSData = async (action, dispatch) => {
-  const ten=commonConfig.tenantId;
-  debugger;
    const moduleDetails= [
         {
            moduleName: "PropertyTax", 
