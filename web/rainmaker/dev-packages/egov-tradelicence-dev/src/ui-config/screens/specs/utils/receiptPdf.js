@@ -295,7 +295,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.locality,
+                text:getMessageFromLocalization(transformedData.address),
                 border: borderValue
               }
             ]
@@ -800,7 +800,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           },
           {
             width: "*",
-            text: transformedData.address
+            text: getMessageFromLocalization(transformedData.address)
           }
         ]
       },

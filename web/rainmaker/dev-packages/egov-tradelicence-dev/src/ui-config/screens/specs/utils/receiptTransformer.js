@@ -118,6 +118,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     let localityname=`${getTransformedLocale(tenant)}_REVENUE_${res}`;
 
     data.locality=getMessageFromLocalization(localityname);
+    console.log("555555555555555555555",data.locality);
+
     // data.locality = get(
     //   response,
     //   "Licenses[0].tradeLicenseDetail.address.locality.name",
