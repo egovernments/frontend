@@ -528,13 +528,13 @@ const setSearchResponse = async (
     dispatch(prepareFinalObject("documentsTemp", response.Bpa["0"].documents));
   }
 
-  if ( response && response.Bpa["0"] && response.Bpa["0"].permitOrderNo ) {
+  if ( response && get(response, "Bpa[0].approvalNo") ) {
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header2.children.titlebar2.children.permitNumber",
         "props.number",
-        response.Bpa["0"].permitOrderNo
+        get(response, "Bpa[0].approvalNo")
       )
     );
   } else {
