@@ -170,7 +170,7 @@ export const fetchData = async (
           );
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let primaryowner = "-";
-          let owners = get(element, "owners", [])
+          let owners = get(element, "landInfo.owners", [])
           owners.map(item=>{
             if(item.isPrimaryOwner)
             {

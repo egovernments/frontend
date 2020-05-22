@@ -202,9 +202,6 @@ const buildingInfoCard = getCommonCard({
             masterName: "BPA"
           },
           props: {
-            className: "textfield-enterable-selection"
-          },
-          props: {
             disabled: true,
             className: "tl-trade-type"
           },

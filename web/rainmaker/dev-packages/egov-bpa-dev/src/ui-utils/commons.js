@@ -17,7 +17,7 @@ import {
   getFileUrlFromAPI,
   getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
@@ -30,6 +30,7 @@ import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { edcrDetailsToBpaDetails } from "../ui-config/screens/specs/utils"
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -77,9 +78,22 @@ export const getSearchResults = async queryObject => {
 
 export const getBpaSearchResults = async queryObject => {
   try {
+    if(queryObject && queryObject.length) {
+      let isTenantId = true;
+      queryObject.forEach(obj => {
+        if(obj.key === "tenantId"){
+          isTenantId = false
+        }
+      })
+      if(isTenantId) {
+        queryObject.push({key : "tenantId", value: getTenantId()})
+      }
+    } else {
+      queryObject = [{key : "tenantId", value: getTenantId()}];
+    }
     const response = await httpRequest(
       "post",
-      "/bpa-services/_search?offset=0&limit=-1",
+      "/bpa-services/v1/bpa/_search?offset=0&limit=-1",
       "",
       queryObject
     );
@@ -125,9 +139,22 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 
 export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
+    if(queryObject && queryObject.length) {
+      let isTenantId = true;
+      queryObject.forEach(obj => {
+        if(obj.key === "tenantId"){
+          isTenantId = false
+        }
+      })
+      if(isTenantId) {
+        queryObject.push({key : "tenantId", value: getTenantId()})
+      }
+    } else {
+      queryObject = [{key : "tenantId", value: getTenantId()}];
+    }
     const response = await httpRequest(
       "post",
-      "/bpa-services/_search",
+      "/bpa-services/v1/bpa/_search",
       "",
       queryObject
     );
@@ -246,23 +273,29 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     blocks[index].blockIndex = index;
     blocks[index].usageCategory = {};
     blocks[index].usageCategory = arry.join();
-    if(BPADetails.units && BPADetails.units[index] && BPADetails.units[index].id) {
-      blocks[index].id = BPADetails.units[index].id;
+    blocks[index].floorNo = block.floorNo;
+    blocks[index].unitType = "Block";
+    if(BPADetails.landInfo.unit && BPADetails.landInfo.unit[index] && BPADetails.landInfo.unit[index].id) {
+      blocks[index].id = BPADetails.landInfo.unit[index].id;
     }
   })
 
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let tenantId =
-      get(state, "screenConfiguration.preparedFinalObject.BPA.address.city") ||
+      get(state, "screenConfiguration.preparedFinalObject.BPA.landInfo.address.city") ||
       getQueryArg(window.location.href, "tenantId") ||
       getTenantId();
+    let userInfo = JSON.parse(getUserInfo());
+    let accountId = get(userInfo, "uuid");
     set(payload, "tenantId", tenantId);
-    set(payload, "action", status);
+    set(payload, "landInfo.tenantId", tenantId);
+    set(payload, "workflow.action", status);
+    set(payload, "accountId", accountId);
 
     // set(payload, "additionalDetails", null);
     // set(payload, "units", null);
-    set(payload, "units", blocks);
+    set(payload, "landInfo.unit", blocks);
 
     let documents;
     if (requiredDocuments && requiredDocuments.length > 0) {
@@ -280,32 +313,32 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         documents = requiredDocuments;
       }
       set(payload, "documents", documents);
-      set(payload, "wfDocuments", null);
+      set(payload, "workflow.varificationDocuments", null);
     } else if( method === 'CREATE') {
       documents = null;
     }
 
     payload.documents = documents;
 
-    // Set Channel and Financial Year
-    process.env.REACT_APP_NAME === "Citizen"
-      ? set(payload[0], "BPA.channel", "CITIZEN")
-      : set(payload[0], "BPA.channel", "COUNTER");
-    set(payload[0], "BPA.financialYear", "2019-20");
+    // // Set Channel and Financial Year
+    // process.env.REACT_APP_NAME === "Citizen"
+    //   ? set(payload[0], "BPA.channel", "CITIZEN")
+    //   : set(payload[0], "BPA.channel", "COUNTER");
+    // set(payload[0], "BPA.financialYear", "2019-20");
 
     // Set Dates to Epoch
 
-    let owners = get(payload, "owners", []);
+    let owners = get(payload, "landInfo.owners", []);
     owners.forEach((owner, index) => {
       set(
         payload,
-        `owners[${index}].dob`,
+        `landInfo.owners[${index}].dob`,
         convertDateToEpoch(get(owner, "dob"))
       );
     });
 
     let authOwners = [];
-    let multiOwners = get (payload, "owners", []);
+    let multiOwners = get (payload, "landInfo.owners", []);
     if(multiOwners && multiOwners.length > 0) {
       multiOwners.forEach(owner => {
         if(owner && owner.isDeleted != false) {
@@ -313,12 +346,13 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         }
       })
     }
-    payload.owners = authOwners;
+    
+    set(payload, "landInfo.owners", authOwners);
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/_create",
+        "bpa-services/v1/bpa/_create",
         "",
         [],
         { BPA: payload }
@@ -326,10 +360,11 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       // response = prepareOwnershipType(response);
       dispatch(prepareFinalObject("BPA", response.Bpa[0]));
       setApplicationNumberBox(state, dispatch);
+      await edcrDetailsToBpaDetails(state, dispatch);
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/_update",
+        "bpa-services/v1/bpa/_update",
         "",
         [],
         { BPA: payload }
@@ -516,10 +551,10 @@ export const prepareNOCUploadData = (state, dispatch) => {
 export const prepareOwnershipType = response => {
   console.log(response);
   // Handle applicant ownership dependent dropdowns
-  let ownershipCategory = get(response, "BPA.ownerShipType");
+  let ownershipCategory = get(response, "BPA.landInfo.ownerShipType");
   set(
     response,
-    "BPA.ownershipCategory",
+    "BPA.landInfo.ownershipCategory",
     ownershipCategory == undefined ? "SINGLE" : ownershipType.split(".")[0]
   );
   return response;
