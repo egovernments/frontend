@@ -17,7 +17,7 @@ const commonApplicantInformation = () => {
         },
         required: true,
         props: {
-          className: "applicant-details-error textfield-enterable-selection"
+          className: "applicant-details-error"
         },
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "BPA.tempAdded[0].conditions",

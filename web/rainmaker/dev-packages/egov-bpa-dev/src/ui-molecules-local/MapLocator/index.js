@@ -76,11 +76,11 @@ class MapLocator extends Component {
       `${add.lat}, ${add.lng}`
     );
     this.props.prepareFinalObject(
-      "BPA.address.geoLocation.latitude",
+      "BPA.landInfo.address.geoLocation.latitude",
       add.lat
     );
     this.props.prepareFinalObject(
-      "BPA.address.geoLocation.longitude",
+      "BPA.landInfo.address.geoLocation.longitude",
       add.lng
     );
 

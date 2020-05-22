@@ -151,6 +151,8 @@ const scrutinizePlan = async (state, dispatch) => {
     let { preparedFinalObject } = screenConfiguration;
     let isOCApp = window.location.href.includes("ocapply");
     let tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
+    let appliactionType = isOCApp ? "BUILDING_OC_PLAN_SCRUTINY" : "BUILDING_PLAN_SCRUTINY";
+    let applicationSubType = "NEW_CONSTRUCTION";
 
     let userInfo = { id: userUUid, tenantId: userTenant }, edcrNumber = "";
 
@@ -189,10 +191,12 @@ const scrutinizePlan = async (state, dispatch) => {
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
     edcrRequest = { ...edcrRequest, applicantName };
+    edcrRequest = { ...edcrRequest, appliactionType};
+    edcrRequest = { ...edcrRequest, applicationSubType};
 
-    let url = `/edcr/rest/dcr/scrutinizeplan?tenantId=${tenantId}`;
+    let url = `/edcr/rest/dcr/scrutinize?tenantId=${tenantId}`;
     if(isOCApp) {
-      url = `/edcr/rest/dcr/scrutinizeocplan?tenantId=${tenantId}`;
+      // url = `/edcr/rest/dcr/scrutinizeocplan?tenantId=${tenantId}`;
       edcrRequest = { ...edcrRequest, permitDate };
       edcrRequest = { ...edcrRequest, permitNumber };
     }
@@ -524,7 +528,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     );
     return;
   }
-  let primaryOwnerArray = response.Bpa[0].owners.filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  let primaryOwnerArray = get(response, "Bpa[0].landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
   dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
   dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));

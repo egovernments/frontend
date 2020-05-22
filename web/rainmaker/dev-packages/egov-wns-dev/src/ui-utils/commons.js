@@ -85,11 +85,52 @@ export const getSearchResults = async queryObject => {
             "_search",
             queryObject
         );
+        if(response.WaterConnection && response.WaterConnection.length == 0){
+            return response;
+        }
         let result = findAndReplace(response, null, "NA");
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
+        let uuidsArray =[];
+        let uuids = "";
+        let propertyArr = [];
+           for(var i=0; i<result.WaterConnection.length;i++){
+               if(result.WaterConnection[i].propertyId && result.WaterConnection[i].propertyId !== null && result.WaterConnection[i].propertyId !== "NA"){
+                   if(!uuidsArray.includes(result.WaterConnection[i]['propertyId'])){
+                       uuidsArray.push(result.WaterConnection[i]['propertyId']);
+                       uuids += result.WaterConnection[i]['propertyId'] + ",";                       
+                    }
+                    if(uuidsArray.length % 50 === 0 || (uuidsArray.length > 0 && i === (result.WaterConnection.length-1))) {
+                       let queryObject1 = [];
+                       uuids = uuids.substring(0, uuids.length-1);
+                       if (process.env.REACT_APP_NAME === "Citizen") {
+                           queryObject1 = [{ key: "uuids", value: uuids }];
+                       }else{
+                           queryObject1 = [{ key: "tenantId", value: getTenantId() }, { key: "uuids", value: uuids }];
+                       }
+                       let payload = await getPropertyResultsWODispatch(queryObject1);
+                       if(payload.Properties.length > 0){                                   
+                           for(var j=0; j< payload.Properties.length; j++) {
+                               propertyArr[payload.Properties[j].id] = payload.Properties[j]
+                           }                                   
+                        }
+                        uuids = "";
+                        uuidsArray = [];
+                    }
+               }else{
+                   result.WaterConnection[i].property = null;
+               }    
+            }
+            if(propertyArr.length > 0 ){
+               for(var i=0; i<result.WaterConnection.length;i++){
+                   if(result.WaterConnection[i].propertyId && result.WaterConnection[i].propertyId !== null && result.WaterConnection[i].propertyId !== "NA"){
+                       if(propertyArr[result.WaterConnection[i].propertyId])
+                           result.WaterConnection[i].property = propertyArr[result.WaterConnection[i].propertyId]
+                   }
+                }
+            }           
         return result;
     } catch (error) { console.log(error) }
 };
@@ -103,8 +144,52 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
             "_search",
             queryObject
         );
+        if(response.SewerageConnections && response.SewerageConnections.length == 0){
+            dispatch(toggleSpinner());
+            return response;
+        }        
+        let result = findAndReplace(response, null, "NA");
+        let uuidsArray =[];
+        let uuids = "";
+        let propertyArr = [];
+           for(var i=0; i<result.SewerageConnections.length;i++){
+               if(result.SewerageConnections[i].propertyId && result.SewerageConnections[i].propertyId !== null && result.SewerageConnections[i].propertyId !== "NA"){
+                   if(!uuidsArray.includes(result.SewerageConnections[i]['propertyId'])){
+                       uuidsArray.push(result.SewerageConnections[i]['propertyId']);
+                       uuids += result.SewerageConnections[i]['propertyId'] + ",";                       
+                    }
+                    if(uuidsArray.length % 50 === 0 || (uuidsArray.length > 0 && i === (result.SewerageConnections.length-1))) {
+                       let queryObject1 = [];
+                       uuids = uuids.substring(0, uuids.length-1);
+                       if (process.env.REACT_APP_NAME === "Citizen") {
+                           queryObject1 = [{ key: "uuids", value: uuids }];
+                       }else{
+                           queryObject1 = [{ key: "tenantId", value: getTenantId() }, { key: "uuids", value: uuids }];
+                       }
+                       let payload = await getPropertyResultsWODispatch(queryObject1);
+                       if(payload.Properties.length > 0){                                   
+                           for(var j=0; j< payload.Properties.length; j++) {
+                               propertyArr[payload.Properties[j].id] = payload.Properties[j]
+                           }                                   
+                        }
+                        uuids = "";
+                        uuidsArray = [];
+                    }
+               }else{
+                   result.SewerageConnections[i].property = null;
+               }    
+            }
+            if(propertyArr.length > 0 ){
+               for(var i=0; i<result.SewerageConnections.length;i++){
+                   if(result.SewerageConnections[i].propertyId && result.SewerageConnections[i].propertyId !== null && result.SewerageConnections[i].propertyId !== "NA"){
+                       if(propertyArr[result.SewerageConnections[i].propertyId])
+                           result.SewerageConnections[i].property = propertyArr[result.SewerageConnections[i].propertyId]
+                   }
+                }
+            }
+
         dispatch(toggleSpinner());
-        return findAndReplace(response, null, "NA");
+        return result;
     } catch (error) {
         dispatch(toggleSpinner());
         console.log(error)
@@ -333,6 +418,20 @@ export const getPropertyResults = async (queryObject, dispatch) => {
 
 };
 
+export const getPropertyResultsWODispatch = async (queryObject) => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/property-services/property/_search",
+            "_search",
+            queryObject
+        );
+        return findAndReplace(response, null, "NA");
+    } catch (error) {        
+        console.log(error);
+    }
+
+};
 
 
 

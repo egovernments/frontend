@@ -74,7 +74,7 @@ const searchApiCall = async (state, dispatch) => {
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: (item.status !== 'INACTIVE')?"SELECT":"INACTIVE",
-        tenantId: item.tenantId
+        ["PT_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId
       }));
 
       dispatch(

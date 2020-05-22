@@ -22,7 +22,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear } from "../utils/index";
+import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -354,23 +354,79 @@ const setDownloadMenu = (action, state, dispatch) => {
   /** END */
 };
 
+const getRequiredMdmsDetails = async (state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "DocumentType"
+            }
+          ]
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [
+            {
+              name: "DocTypeMapping"
+            },
+            {
+              name: "CheckList"
+            },
+            {
+              name: "RiskTypeComputation"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+}
+
 const setSearchResponse = async (
   state,
   dispatch,
   applicationNumber,
   tenantId, action
 ) => {
+  await getRequiredMdmsDetails(state, dispatch);
   const response = await getAppSearchResults([
     {
       key: "tenantId",
       value: tenantId
     },
-    { key: "applicationNos", value: applicationNumber }
+    { key: "applicationNo", value: applicationNumber }
   ]);
 
-  const edcrNumber = response.Bpa["0"].edcrNumber;
-  const status = response.Bpa["0"].status;
-  const riskType = response.Bpa["0"].riskType;
+  const edcrNumber = get(response, "Bpa[0].edcrNumber");
+  const status = get(response, "Bpa[0].status");
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "search", []
+    );
+
+  dispatch( prepareFinalObject( `scrutinyDetails`, edcrRes.edcrDetail[0] ));
+
+  await edcrDetailsToBpaDetails(state, dispatch);
+
+  let riskType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.riskType"
+  );
   let businessServicesValue = "BPA";
   if (riskType === "LOW") {
     businessServicesValue = "BPA_LOW";
@@ -414,7 +470,7 @@ const setSearchResponse = async (
   if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
     let userInfo = JSON.parse(getUserInfo()),
     roles = get(userInfo, "roles"),
-    owners = get(response.Bpa["0"], "owners"),
+    owners = get(response.Bpa["0"].landInfo, "owners"),
     archtect = "BPA_ARCHITECT",
     isTrue = false, isOwner = true;
     if(roles && roles.length > 0) {
@@ -427,7 +483,7 @@ const setSearchResponse = async (
 
     if(isTrue && owners && owners.length > 0) {
       owners.forEach(owner => {
-        if(owner.uuid === userInfo.uuid) {
+        if(owner.mobileNumber === userInfo.mobileNumber) { //owner.uuid === userInfo.uuid
           if(owner.roles && owner.roles.length > 0 ) {
             owner.roles.forEach(owrRole => {
               if(owrRole.code === archtect) {
@@ -467,30 +523,18 @@ const setSearchResponse = async (
     }
   }
 
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  
   if(response && response.Bpa["0"] && response.Bpa["0"].documents) {
     dispatch(prepareFinalObject("documentsTemp", response.Bpa["0"].documents));
   }
-    let edcrRes = await edcrHttpRequest(
-      "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-      "search", []
-      );
 
-  dispatch(
-    prepareFinalObject(
-      `scrutinyDetails`,
-      edcrRes.edcrDetail[0]
-    )
-  );
-
-  if ( response && response.Bpa["0"] && response.Bpa["0"].permitOrderNo ) {
+  if ( response && get(response, "Bpa[0].approvalNo") ) {
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header2.children.titlebar2.children.permitNumber",
         "props.number",
-        response.Bpa["0"].permitOrderNo
+        get(response, "Bpa[0].approvalNo")
       )
     );
   } else {
@@ -518,7 +562,7 @@ const setSearchResponse = async (
   if (
     get(
       response,
-      "BPA.ownershipCategory",
+      "BPA.landInfo.ownershipCategory",
       ""
     ).startsWith("INSTITUTION")
   ) {
@@ -534,13 +578,13 @@ const setSearchResponse = async (
 
   setProposedBuildingData(state, dispatch);
 
-  if(get(response, "Bpa[0].validityDate")) {
+  if(get(response, "Bpa[0].additionalDetails.validityDate")) {
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
         "props.number",
-        convertEpochToDate(get(response, "Bpa[0].validityDate"))
+        convertEpochToDate(get(response, "Bpa[0].additionalDetails.validityDate"))
       )
     );
 
@@ -688,7 +732,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update"
           }
         },
         sendToArchPickerDialog :{
