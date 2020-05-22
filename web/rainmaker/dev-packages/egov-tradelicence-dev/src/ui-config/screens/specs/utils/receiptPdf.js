@@ -1,9 +1,17 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import _ from "lodash";
+import { getMessageFromLocalization } from "./receiptTransformer";
 import { downloadPDFFileUsingBase64, printPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+const updateMohall=(data)=>{
+  if (data.address.search(data.mohalla)>-1) {
+    data.address=data.address.replace(data.mohalla,getMessageFromLocalization(data.mohalla))
+  }
+  return data;
+}
 
 let tableborder = {
   hLineColor: function(i, node) {
@@ -38,6 +46,7 @@ let payableInfoTable3 = ["*", "*", "*"];
 let accessoriesTable = ["24%", "76%"];
 
 const getReceiptData = (transformedData, ulbLogo) => {
+  transformedData=updateMohall(transformedData);
   let owners = transformedData.owners.map(owner => [
     {
       text: "Trade Owner Name",
@@ -648,6 +657,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
 };
 
 const getCertificateData = (transformedData, ulbLogo) => {
+  transformedData=updateMohall(transformedData)
   var tlCertificateData = {
     content: [
       {
@@ -995,6 +1005,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
 };
 
 const generateReceipt = async (state, dispatch, type) => {
+  transformedData=updateMohall(transformedData)
   let data1 = _.get(
     state.screenConfiguration.preparedFinalObject,
     "applicationDataForReceipt",

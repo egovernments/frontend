@@ -373,6 +373,7 @@ const screenConfig = {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     //To set the application no. at the  top
     set(
       action.screenConfig,
