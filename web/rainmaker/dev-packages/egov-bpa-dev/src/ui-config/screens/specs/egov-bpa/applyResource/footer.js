@@ -165,9 +165,9 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
 const getSummaryRequiredDetails = async (state, dispatch) => {
   const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
+  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.businessService");
   let businessService = "BPA.NC_APP_FEE"
-  if(riskType === "LOW") {
+  if(riskType === "BPA_LOW") {
     businessService = "BPA.LOW_RISK_PERMIT_FEE"
   }
   generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
