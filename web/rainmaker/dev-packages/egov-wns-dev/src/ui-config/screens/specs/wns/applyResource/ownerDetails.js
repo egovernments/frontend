@@ -9,6 +9,25 @@ import {
 import { changeStep } from "../viewBillResource/footer";
 import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 
+const getHeader = label => {
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-wns",
+    componentPath: "OwnerHeader",
+    props: {
+      className: "hr-generic-divider-label",
+      labelProps: {},
+      dividerProps: {},
+      label
+    },
+    type: "array"
+  };
+};
+
+export const propertyOwnerDetailsHeader = getHeader({
+  labelKey: "WS_OWNER_HEADER_LABEL"
+});
+
 export const ownerDetailsHeader = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_COMMON_OWN_DETAIL"
@@ -164,6 +183,7 @@ export const getOwnerDetails = (isEditable = true) => {
           //   componentPath: "MultiItem",
           //   props: {
           //     scheama: getCommonGrayCard({
+          div3: propertyOwnerDetailsHeader,
           viewFive: getCommonContainer({
             ownerMobileNumber: getLabelWithValue(
               {
