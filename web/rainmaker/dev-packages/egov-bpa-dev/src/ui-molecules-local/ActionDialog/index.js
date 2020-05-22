@@ -80,10 +80,10 @@ class ActionDialog extends React.Component {
     handleFieldChange  = (jsonPath, value) => {
       const { prepareFinalObject, bpaDetails } = this.props;
       if(bpaDetails &&  bpaDetails.workflow) {
-        bpaDetails.workflow.comment = value
+        bpaDetails.workflow.comments = value
       } else {
         bpaDetails.workflow = {};
-        bpaDetails.workflow.comment = value
+        bpaDetails.workflow.comments = value
       }
       
       prepareFinalObject(`BPA`, bpaDetails);
@@ -93,7 +93,7 @@ class ActionDialog extends React.Component {
       let { bpaDetails, applicationAction, toggleSnackbar, prepareFinalObject, applicationProcessInstances } = this.props;
       let applicationNumber = get(bpaDetails, "applicationNo");
       let tenantId = getQueryArg(window.location.href, "tenantId");
-      let comment = get(bpaDetails, "workflow.comment");
+      let comment = get(bpaDetails, "workflow.comments");
       set(bpaDetails, "workflow.action", applicationAction);
       if( get(bpaDetails,"status").includes("CITIZEN_ACTION_PENDING")) {
         let getId = get(applicationProcessInstances, "assigner.uuid");
@@ -170,9 +170,9 @@ class ActionDialog extends React.Component {
               error={error}
               helperText={errorMessage}
               onChange={e =>
-                handleFieldChange(`BPA.workflow.comment`, e.target.value)
+                handleFieldChange(`BPA.workflow.comments`, e.target.value)
               }
-              jsonPath={`BPA.workflow.comment`}
+              jsonPath={`BPA.workflow.comments`}
               placeholder={fieldConfig.comments.placeholder}
             />
           </Grid>
