@@ -119,7 +119,7 @@ const searchApiCall = async (state, dispatch) => {
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
         ["PT_COMMON_COL_ADDRESS"]: getAddress(item) || "-",
         ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
-        ["PT_AMOUNT_DUE"]: item.totalAmount || "-",
+        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
         ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: item.totalAmount || "-",
         ["TENANT_ID"]: item.tenantId || "-"
       }));

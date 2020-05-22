@@ -129,15 +129,13 @@ export const fetchBill = async (
   response.Properties.map((item) => {
     consumerCodes.push(item.propertyId);
   });
-  console.log("consumerCodes------", consumerCodes.join(","));
   const billData = await generateBill(
     dispatch,
     consumerCodes,
     tenantId,
     billBusinessService
   );
-
-  console.log("billData------", billData);
+  return billData;
 };
 
 export const generateBill = async (

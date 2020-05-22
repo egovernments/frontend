@@ -30,7 +30,7 @@ export const searchPropertyTable = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) =>
-            value > 0 ? (
+            (value > 0 && tableMeta.rowData[3] === "ACTIVE") ? (
               <span
                 onClick={() => {
                   payAmount(tableMeta);
