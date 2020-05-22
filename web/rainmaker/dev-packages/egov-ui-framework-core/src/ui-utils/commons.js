@@ -5,7 +5,8 @@ import {
   localStorageSet,
   localStorageGet,
   getLocalization,
-  getLocale
+  getLocale,
+  getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
@@ -14,6 +15,8 @@ import set from "lodash/set";
 import commonConfig from "config/common.js";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import  { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDocuments/reqDocs";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -677,3 +680,72 @@ export const getStatusKey = (status) => {
 
   }
 }
+
+export const getRequiredDocData = async (action, dispatch, moduleDetails)  => {
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails:moduleDetails
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    const moduleName=moduleDetails[0].moduleName;
+    let documents = get(
+      payload.MdmsRes,
+      `${moduleName}.Documents`,
+      []
+    );
+   
+   if(moduleName === "PropertyTax"){
+    payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+   }
+    const reqDocuments=getRequiredDocuments(documents, moduleName , footerCallBackForRequiredDataModal(moduleName));
+    set(
+      action,
+      "screenConfig.components.adhocDialog.children.popup",
+      reqDocuments
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const footerCallBackForRequiredDataModal=(moduleName)=>{
+  switch(moduleName){
+    case "FireNoc" :
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("FireNOCs", []));
+        const applyUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
+        dispatch(setRoute(applyUrl));
+      };
+    case "PropertyTax":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        const applyUrl = `/property-tax/assessment-form`;
+        dispatch(setRoute(applyUrl));
+      };
+  }
+}
+export const showHideAdhocPopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.adhocDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  );
+};

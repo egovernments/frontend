@@ -5,7 +5,8 @@ import {
   getCommonParagraph,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getCommonGrayCard, getLabelOnlyValue } from "../../utils";
+import { getCommonCaption, getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
+// import { getCommonGrayCard, getLabelOnlyValue } from "../../utils";
 import { footer } from "./footer";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
@@ -43,23 +44,75 @@ const styles = {
   }
 };
 
-const header = getCommonHeader(
-  {
-    labelName: "Required Documents-Fire NOC",
-    labelKey: "NOC_REQ_DOCS_HEADER"
-  },
-  {
-    style: styles.header
-  }
-);
+const getHeader = (modulePrifx)=>{
+  return getCommonHeader(
+    {
+      labelName: `Required Documents-${modulePrifx}`,
+      labelKey:getTransformedLocale(`${modulePrifx}_REQ_DOCS_HEADER`) 
+    },
+    {
+      style: styles.header
+    }
+  );
+} 
 
-const generateDocument = (item) => {
+ const getCommonGrayCard = children => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    children: {
+      body: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          ch1: getCommonCard(children, {
+            style: {
+              backgroundColor: "rgb(242, 242, 242)",
+              boxShadow: "none",
+              borderRadius: 0,
+              overflow: "visible"
+            }
+          })
+        },
+        gridDefination: {
+          xs: 12
+        }
+      }
+    },
+    gridDefination: {
+      xs: 12
+    }
+  };
+};
+
+ const getLabelOnlyValue = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 4
+    },
+    props: {
+      style: {
+        marginBottom: "16px"
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+
+const generateDocument = ( item, modulePrifx ) => {
   // Add header to individual grey cards
   let subHeader =
     item.code &&
     getCommonTitle(
       {
-        labelKey: getTransformedLocale(`${modulePrefix}_${item.code}_HEADING`)
+        labelKey: getTransformedLocale(`${modulePrifx}_${item.code}_HEADING`)
       },
       {
         style: styles.subHeader
@@ -72,7 +125,7 @@ const generateDocument = (item) => {
     docs = item.dropdownData.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`${modulePrefix}_${doc.code}_LABEL`)
+          labelKey: getTransformedLocale(`${modulePrifx}_${doc.code}_LABEL`)
         },
         {
           style: styles.docs
@@ -84,7 +137,7 @@ const generateDocument = (item) => {
     docs = item.options.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`${modulePrefix}_${doc.code}_LABEL`)
+          labelKey: getTransformedLocale(`${modulePrifx}_${doc.code}_LABEL`)
         },
         {
           style: styles.docs
@@ -98,7 +151,7 @@ const generateDocument = (item) => {
   let subParagraph = item.description
     ? getCommonParagraph(
         {
-          labelKey: getTransformedLocale(`${modulePrefix}_${item.description}_NOTE`)
+          labelKey: getTransformedLocale(`${modulePrifx}_${item.description}_NOTE`)
         },
         {
           style: styles.description
@@ -114,16 +167,12 @@ const generateDocument = (item) => {
   });
 };
 
- const ModulePrefix={
-  "FireNoc":"NOC"
-}
-
-
-export const getRequiredDocuments = (documents, moduleName )=> {
-  const modulePrefix=ModulePrefix[moduleName];
+export const getRequiredDocuments = ( documents, moduleName, footerCallback ) => {
   let doc = documents.map(item => {
-    return generateDocument(item, modulePrefix);
+    return generateDocument( item, moduleName );
   });
+  const header= getHeader(moduleName);
+  const footerChildElement= footer( footerCallback, moduleName );
   return getCommonContainer(
     {
       header: {
@@ -147,7 +196,7 @@ export const getRequiredDocuments = (documents, moduleName )=> {
         uiFramework: "custom-atoms",
         componentPath: "Container",
         children: {
-          footer
+          footerChildElement
         }
       }
     },
