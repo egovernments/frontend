@@ -124,9 +124,7 @@ export const getMdmsData = async dispatch => {
         {
           moduleName: "ws-services-masters", masterDetails: [
             { name: "Documents" },
-            { name: "waterSubSource" },
             { name: "waterSource" },
-            { name: "waterSourceWithSubSource" },
             { name: "connectionType" },
             { name: "PropertySearch" }
           ]
@@ -142,7 +140,7 @@ export const getMdmsData = async dispatch => {
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
       payload.MdmsRes['ws-services-calculation'].pipeSize = pipeSize;
       let waterSource = [], GROUND = [], SURFACE = [], BULKSUPPLY = [];
-      payload.MdmsRes['ws-services-masters'].waterSourceWithSubSource.forEach(obj => {
+      payload.MdmsRes['ws-services-masters'].waterSource.forEach(obj => {
         waterSource.push({
           code: obj.code.split(".")[0],
           name: obj.name,
