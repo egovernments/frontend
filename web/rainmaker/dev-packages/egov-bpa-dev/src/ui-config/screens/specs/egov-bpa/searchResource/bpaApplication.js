@@ -73,7 +73,7 @@ export const BPAApplication = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.applicationNos"
+      jsonPath: "searchScreen.applicationNo"
     }),
     ownerMobNo: getTextField({
       label: {
