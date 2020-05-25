@@ -2357,13 +2357,11 @@ export const triggerUpdateByKey = (state, key, value, dispatch) => {
   if(dispatch == "set"){
     set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.${key}`, value);
   } else {
-    console.info(key,"testtt-----------------------",value)
     dispatch(prepareFinalObject( `DynamicMdms.TradeLicense.tradeUnits.${key}`, value ));
   }
 }
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
   const tradeSubTypes = get( state, "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits", []);
-  console.info("testtt-----------------------",tradeSubTypes)
   if (tradeSubTypes.length > 0) {
     try {
       tradeSubTypes.forEach((tradeSubType, i) => {
