@@ -643,6 +643,8 @@ export const getStatusKey = (status) => {
   switch (status) {
     case "ACTIVE":
       return {labelName:"Active", labelKey:"ACTIVE"};
+    case "INACTIVE":
+      return {labelName:"Inactive", labelKey:"INACTIVE"};
     case "INITIATED":
       return {labelName: "Initiated", labelKey:"INITIATED"};
     case "APPLIED":
