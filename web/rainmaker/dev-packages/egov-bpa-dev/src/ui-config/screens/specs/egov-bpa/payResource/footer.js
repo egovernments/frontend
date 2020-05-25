@@ -156,7 +156,7 @@ const updatePayAction = async (
         key: "tenantId",
         value: tenantId
       },
-      { key: "applicationNos", value: applicationNo }
+      { key: "applicationNo", value: applicationNo }
     ]);
     set(response, "BPA.action", "PAY");
     response = await httpRequest(
