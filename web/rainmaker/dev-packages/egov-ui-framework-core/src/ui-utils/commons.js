@@ -728,6 +728,7 @@ const footerCallBackForRequiredDataModal=(moduleName)=>{
     case "FireNoc" :
       return (state, dispatch) => {
         dispatch(prepareFinalObject("FireNOCs", []));
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
         const applyUrl =
           process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
         dispatch(setRoute(applyUrl));
