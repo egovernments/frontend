@@ -246,11 +246,11 @@ const setSearchResponse = async (
       key: "tenantId",
       value: tenantId
     },
-    { key: "applicationNos", value: applicationNumber }
+    { key: "applicationNo", value: applicationNumber }
   ]);
 
   const edcrNumber = get(response, "Bpa[0].edcrNumber");
-  const ownershipCategory = get(response, "Bpa[0].ownershipCategory");
+  const ownershipCategory = get(response, "Bpa[0].landInfo.ownershipCategory");
   const appDate = get(response, "Bpa[0].auditDetails.createdTime");
   const latitude = get(response, "Bpa[0].address.geoLocation.latitude");
   const longitude = get(response, "Bpa[0].address.geoLocation.longitude");
