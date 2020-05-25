@@ -17,7 +17,8 @@ import {
   setFilteredTradeTypes,
   getUniqueItemsFromArray,
   fillOldLicenseData,
-  getTradeTypeDropdownData
+  getTradeTypeDropdownData,
+  updateMdmsDropDowns
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
@@ -28,6 +29,105 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import get from "lodash/get";
 import filter from "lodash/filter";
 import "./index.css";
+
+const tradeSubTypeChange = (reqObj) => {
+  try {
+      let { moduleName, rootBlockSub, keyValue, value, state, dispatch } = reqObj;
+      let keyValueRow = keyValue.replace(`.${value}`, ``);
+      let tradeSubTypes = get(
+        state.screenConfiguration.preparedFinalObject,
+        `DynamicMdms.${moduleName}.${rootBlockSub}${keyValueRow}`,
+        []
+      );
+      let currentObject = filter(tradeSubTypes, {
+        code: value
+      });
+      if (currentObject[0].uom !== null) {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
+            "props.value",
+            currentObject[0].uom
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "props.disabled",
+            false
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "props.required",
+            false
+          )
+        );
+
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "props.disabled",
+            true
+          )
+        );
+
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "props.value",
+            ""
+          )
+        );
+
+        dispatch(
+          pFO(
+            `Licenses[0].tradeLicenseDetail.tradeUnits[0].uom`,
+            null
+          )
+        );
+        dispatch(
+          pFO(
+            `Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue`,
+            null
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "props.error",
+            false
+          )
+        );
+     }
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
@@ -48,378 +148,401 @@ const tradeUnitCard = {
       ),
       tradeUnitCardContainer: getCommonContainer(
         {
-          tradeCategory: {
-            ...getSelectField({
-              label: {
-                labelName: "Trade Category",
-                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
-              },
-              placeholder: {
-                labelName: "Select Trade Category",
-                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_PLACEHOLDER"
-              },
-              required: true,
-              jsonPath: "LicensesTemp.tradeUnits[0].tradeType",
-              localePrefix: {
-                moduleName: "TRADELICENSE",
-                masterName: "TRADETYPE"
-              },
-              props: {
-                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-                setDataInField: true,
-                className:"applicant-details-error"
-              },
-              sourceJsonPath:
-                "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              }
-            }),
-            beforeFieldChange: (action, state, dispatch) => {
-              try {
-                dispatch(
-                  pFO(
-                    "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
-                    objectToDropdown(
-                      get(
-                        state.screenConfiguration.preparedFinalObject,
-                        `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${
-                          action.value
-                        }`,
-                        []
-                      )
-                    )
-                  )
-                );
-                let componentPath = action.componentJsonpath.split(".");
-
-                let index = action.componentJsonpath
-                  .split("[")[1]
-                  .split("]")[0];
-                componentPath.pop();
-                componentPath.push("tradeType");
-                componentPath = componentPath.join(".");
-                dispatch(
-                  handleField(
-                    "apply",
-                    componentPath,
-                    "props.data",
-                    objectToDropdown(
-                      get(
-                        state.screenConfiguration.preparedFinalObject,
-                        `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${
-                          action.value
-                        }`,
-                        []
-                      )
-                    )
-                  )
-                );
-                let tradeCat = get(
-                  state.screenConfiguration.preparedFinalObject,
-                  `LicensesTemp.tradeUnits[${parseInt(index)}].tradeType`
-                );
-                if (tradeCat != action.value) {
-                  dispatch(
-                    pFO(
-                      `LicensesTemp.tradeUnits[${parseInt(
-                        index
-                      )}].tradeSubType`,
-                      ""
-                    )
-                  );
-                  dispatch(
-                    pFO(
-                      `Licenses[0].tradeLicenseDetail.tradeUnits[${parseInt(
-                        index
-                      )}].tradeType`,
-                      ""
-                    )
-                  );
-                }
-              } catch (e) {
-                console.log(e);
-              }
-            }
-          },
-          tradeType: {
-            ...getSelectField({
-              label: {
-                labelName: "Trade Type",
-                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
-              },
-              placeholder: {
-                labelName: "Select Trade Type",
-                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_PLACEHOLDER"
-              },
-              required: true,
-              localePrefix: {
-                moduleName: "TRADELICENSE",
-                masterName: "TRADETYPE"
-              },
-              jsonPath: "LicensesTemp.tradeUnits[0].tradeSubType",
-              props: {
-                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-                className:"applicant-details-error"
-              },
-              sourceJsonPath:
-                "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              }
-            }),
-            beforeFieldChange: (action, state, dispatch) => {
-              try {
-                let cardIndex = action.componentJsonpath
-                  .split("items[")[1]
-                  .split("]")[0];
-                let tradeCategory = get(
-                  state.screenConfiguration.preparedFinalObject,
-                  `LicensesTemp.tradeUnits[${cardIndex}].tradeType`,
-                  ""
-                );
-                dispatch(
-                  pFO(
-                    "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
-                    get(
-                      state.screenConfiguration.preparedFinalObject,
-                      `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCategory}.${
-                        action.value
-                      }`,
-                      []
-                    )
-                  )
-                );
-                let componentPath = action.componentJsonpath.split(".");
-                componentPath.pop();
-                componentPath.push("tradeSubType");
-                componentPath = componentPath.join(".");
-                dispatch(
-                  handleField(
-                    "apply",
-                    componentPath,
-                    "props.data",
-                    get(
-                      state.screenConfiguration.preparedFinalObject,
-                      `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCategory}.${
-                        action.value
-                      }`,
-                      []
-                    )
-                  )
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-          },
-          tradeSubType: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-tradelicence",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-            required: true,
-            gridDefination: {
-              xs: 12,
-              sm: 4
-            },
+          dynamicMdms : {
+            uiFramework: "custom-containers",
+            componentPath: "DynamicMdmsContainer",
             props: {
-              style: {
-                width: "100%",
-                cursor: "pointer"
-              },
-              label: {
-                labelName: "Trade Sub-Type",
-                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
-              },
-              
-              placeholder: {
-                labelName: "Select Trade Sub-Type",
-                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
-              },
-              jsonPath:
-                "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-              sourceJsonPath:
-                "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
-              setDataInField: true,
-              labelsFromLocalisation: true,
-              localePrefix: {
-                moduleName: "TRADELICENSE",
-                masterName: "TRADETYPE"
-              },
-              fullwidth: true,
-              required: true,
-              inputLabelProps: {
-                shrink: true
-              }
-            },
-            beforeFieldChange: (action, state, dispatch) => {
-              try {
-                let cardIndex = action.componentJsonpath
-                  .split("items[")[1]
-                  .split("]")[0];
-                const tradeSubTypes = get(
-                  state.screenConfiguration,
-                  "preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits",
-                  []
-                );
-                const alreadySelected =
-                  tradeSubTypes &&
-                  tradeSubTypes.find((item, i) => {
-                    if (item.tradeType === action.value && cardIndex != i)
-                      return true;
-                  });
-                if (alreadySelected) {
-                  dispatch(
-                    toggleSnackbar(
-                      true,
-                      {
-                        labelName:
-                          "This trade type is already selected, Please select another",
-                        labelKey: "TL_TRADE_TYPE_ALREADY_SELECTED"
-                      },
-                      "warning"
-                    )
-                  );
-
-                  action.value = null;
-                } else {
-                  let tradeType = get(
-                    state.screenConfiguration.preparedFinalObject,
-                    `LicensesTemp.tradeUnits[${cardIndex}].tradeType`,
-                    ""
-                  );
-                  let tradeCategory = get(
-                    state.screenConfiguration.preparedFinalObject,
-                    `LicensesTemp.tradeUnits[${cardIndex}].tradeSubType`,
-                    ""
-                  );
-                  let tradeSubCategories = get(
-                    state.screenConfiguration.preparedFinalObject,
-                    `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeType}.${tradeCategory}`,
-                    []
-                  );
-                  tradeSubCategories = getUniqueItemsFromArray(
-                    tradeSubCategories,
-                    "code"
-                  );
-                  let currentObject = filter(tradeSubCategories, {
-                    code: action.value
-                  });
-                  if (currentObject[0].uom !== null) {
-                    dispatch(
-                      handleField(
-                        "apply",
-                        action.componentJsonpath.replace(
-                          "tradeSubType",
-                          "tradeUOM"
-                        ),
-                        "props.value",
-                        currentObject[0].uom
-                      )
-                    );
-                    dispatch(
-                      handleField(
-                        "apply",
-                        action.componentJsonpath.replace(
-                          "tradeSubType",
-                          "tradeUOMValue"
-                        ),
-                        "props.required",
-                        true
-                      )
-                    );
-                    dispatch(
-                      handleField(
-                        "apply",
-                        action.componentJsonpath.replace(
-                          "tradeSubType",
-                          "tradeUOMValue"
-                        ),
-                        "props.disabled",
-                        false
-                      )
-                    );
-                  } else {
-                    dispatch(
-                      handleField(
-                        "apply",
-                        action.componentJsonpath.replace(
-                          "tradeSubType",
-                          "tradeUOMValue"
-                        ),
-                        "props.required",
-                        false
-                      )
-                    );
-
-                    dispatch(
-                      handleField(
-                        "apply",
-                        action.componentJsonpath.replace(
-                          "tradeSubType",
-                          "tradeUOMValue"
-                        ),
-                        "props.disabled",
-                        true
-                      )
-                    );
-
-                    dispatch(
-                      handleField(
-                        "apply",
-                        action.componentJsonpath.replace(
-                          "tradeSubType",
-                          "tradeUOM"
-                        ),
-                        "props.value",
-                        ""
-                      )
-                    );
-                    dispatch(
-                      handleField(
-                        "apply",
-                        action.componentJsonpath.replace(
-                          "tradeSubType",
-                          "tradeUOMValue"
-                        ),
-                        "props.value",
-                        ""
-                      )
-                    );
-
-                    dispatch(
-                      pFO(
-                        `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].uom`,
-                        null
-                      )
-                    );
-                    dispatch(
-                      pFO(
-                        `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].uomValue`,
-                        null
-                      )
-                    );
-                    dispatch(
-                      handleField(
-                        "apply",
-                        action.componentJsonpath.replace(
-                          "tradeSubType",
-                          "tradeUOMValue"
-                        ),
-                        "props.error",
-                        false
-                      )
-                    );
-                  }
+              dropdownFields: [
+                {
+                  key : 'tradeCategory'
+                },
+                {
+                  key : 'tradeType'
+                },
+                {
+                  key : 'tradeSubType', 
+                  callBack: tradeSubTypeChange
                 }
-              } catch (e) {
-                console.log(e);
-              }
+              ],
+              moduleName: "TradeLicense",
+              masterName: "TradeType",
+              rootBlockSub : 'tradeUnits',
+              type : 'TL',
+              callBackEdit: updateMdmsDropDowns
             }
           },
+          // tradeCategory: {
+          //   ...getSelectField({
+          //     label: {
+          //       labelName: "Trade Category",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
+          //     },
+          //     placeholder: {
+          //       labelName: "Select Trade Category",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_PLACEHOLDER"
+          //     },
+          //     required: true,
+          //     jsonPath: "LicensesTemp.tradeUnits[0].tradeType",
+          //     localePrefix: {
+          //       moduleName: "TRADELICENSE",
+          //       masterName: "TRADETYPE"
+          //     },
+          //     props: {
+          //       jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
+          //       setDataInField: true,
+          //       className:"applicant-details-error"
+          //     },
+          //     sourceJsonPath:
+          //       "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+          //     gridDefination: {
+          //       xs: 12,
+          //       sm: 4
+          //     }
+          //   }),
+          //   beforeFieldChange: (action, state, dispatch) => {
+          //     try {
+          //       dispatch(
+          //         pFO(
+          //           "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
+          //           objectToDropdown(
+          //             get(
+          //               state.screenConfiguration.preparedFinalObject,
+          //               `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${
+          //                 action.value
+          //               }`,
+          //               []
+          //             )
+          //           )
+          //         )
+          //       );
+          //       let componentPath = action.componentJsonpath.split(".");
+
+          //       let index = action.componentJsonpath
+          //         .split("[")[1]
+          //         .split("]")[0];
+          //       componentPath.pop();
+          //       componentPath.push("tradeType");
+          //       componentPath = componentPath.join(".");
+          //       dispatch(
+          //         handleField(
+          //           "apply",
+          //           componentPath,
+          //           "props.data",
+          //           objectToDropdown(
+          //             get(
+          //               state.screenConfiguration.preparedFinalObject,
+          //               `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${
+          //                 action.value
+          //               }`,
+          //               []
+          //             )
+          //           )
+          //         )
+          //       );
+          //       let tradeCat = get(
+          //         state.screenConfiguration.preparedFinalObject,
+          //         `LicensesTemp.tradeUnits[${parseInt(index)}].tradeType`
+          //       );
+          //       if (tradeCat != action.value) {
+          //         dispatch(
+          //           pFO(
+          //             `LicensesTemp.tradeUnits[${parseInt(
+          //               index
+          //             )}].tradeSubType`,
+          //             ""
+          //           )
+          //         );
+          //         dispatch(
+          //           pFO(
+          //             `Licenses[0].tradeLicenseDetail.tradeUnits[${parseInt(
+          //               index
+          //             )}].tradeType`,
+          //             ""
+          //           )
+          //         );
+          //       }
+          //     } catch (e) {
+          //       console.log(e);
+          //     }
+          //   }
+          // },
+          // tradeType: {
+          //   ...getSelectField({
+          //     label: {
+          //       labelName: "Trade Type",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
+          //     },
+          //     placeholder: {
+          //       labelName: "Select Trade Type",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_PLACEHOLDER"
+          //     },
+          //     required: true,
+          //     localePrefix: {
+          //       moduleName: "TRADELICENSE",
+          //       masterName: "TRADETYPE"
+          //     },
+          //     jsonPath: "LicensesTemp.tradeUnits[0].tradeSubType",
+          //     props: {
+          //       jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
+          //       className:"applicant-details-error"
+          //     },
+          //     sourceJsonPath:
+          //       "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
+          //     gridDefination: {
+          //       xs: 12,
+          //       sm: 4
+          //     }
+          //   }),
+          //   beforeFieldChange: (action, state, dispatch) => {
+          //     try {
+          //       let cardIndex = action.componentJsonpath
+          //         .split("items[")[1]
+          //         .split("]")[0];
+          //       let tradeCategory = get(
+          //         state.screenConfiguration.preparedFinalObject,
+          //         `LicensesTemp.tradeUnits[${cardIndex}].tradeType`,
+          //         ""
+          //       );
+          //       dispatch(
+          //         pFO(
+          //           "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+          //           get(
+          //             state.screenConfiguration.preparedFinalObject,
+          //             `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCategory}.${
+          //               action.value
+          //             }`,
+          //             []
+          //           )
+          //         )
+          //       );
+          //       let componentPath = action.componentJsonpath.split(".");
+          //       componentPath.pop();
+          //       componentPath.push("tradeSubType");
+          //       componentPath = componentPath.join(".");
+          //       dispatch(
+          //         handleField(
+          //           "apply",
+          //           componentPath,
+          //           "props.data",
+          //           get(
+          //             state.screenConfiguration.preparedFinalObject,
+          //             `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCategory}.${
+          //               action.value
+          //             }`,
+          //             []
+          //           )
+          //         )
+          //       );
+          //     } catch (e) {
+          //       console.log(e);
+          //     }
+          //   }
+          // },
+          // tradeSubType: {
+          //   uiFramework: "custom-containers-local",
+          //   moduleName: "egov-tradelicence",
+          //   componentPath: "AutosuggestContainer",
+          //   jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+          //   required: true,
+          //   gridDefination: {
+          //     xs: 12,
+          //     sm: 4
+          //   },
+          //   props: {
+          //     style: {
+          //       width: "100%",
+          //       cursor: "pointer"
+          //     },
+          //     label: {
+          //       labelName: "Trade Sub-Type",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
+          //     },
+              
+          //     placeholder: {
+          //       labelName: "Select Trade Sub-Type",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
+          //     },
+          //     jsonPath:
+          //       "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+          //     sourceJsonPath:
+          //       "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+          //     setDataInField: true,
+          //     labelsFromLocalisation: true,
+          //     localePrefix: {
+          //       moduleName: "TRADELICENSE",
+          //       masterName: "TRADETYPE"
+          //     },
+          //     fullwidth: true,
+          //     required: true,
+          //     inputLabelProps: {
+          //       shrink: true
+          //     }
+          //   },
+          //   beforeFieldChange: (action, state, dispatch) => {
+          //     try {
+          //       let cardIndex = action.componentJsonpath
+          //         .split("items[")[1]
+          //         .split("]")[0];
+          //       const tradeSubTypes = get(
+          //         state.screenConfiguration,
+          //         "preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits",
+          //         []
+          //       );
+          //       const alreadySelected =
+          //         tradeSubTypes &&
+          //         tradeSubTypes.find((item, i) => {
+          //           if (item.tradeType === action.value && cardIndex != i)
+          //             return true;
+          //         });
+          //       if (alreadySelected) {
+          //         dispatch(
+          //           toggleSnackbar(
+          //             true,
+          //             {
+          //               labelName:
+          //                 "This trade type is already selected, Please select another",
+          //               labelKey: "TL_TRADE_TYPE_ALREADY_SELECTED"
+          //             },
+          //             "warning"
+          //           )
+          //         );
+
+          //         action.value = null;
+          //       } else {
+          //         let tradeType = get(
+          //           state.screenConfiguration.preparedFinalObject,
+          //           `LicensesTemp.tradeUnits[${cardIndex}].tradeType`,
+          //           ""
+          //         );
+          //         let tradeCategory = get(
+          //           state.screenConfiguration.preparedFinalObject,
+          //           `LicensesTemp.tradeUnits[${cardIndex}].tradeSubType`,
+          //           ""
+          //         );
+          //         let tradeSubCategories = get(
+          //           state.screenConfiguration.preparedFinalObject,
+          //           `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeType}.${tradeCategory}`,
+          //           []
+          //         );
+          //         tradeSubCategories = getUniqueItemsFromArray(
+          //           tradeSubCategories,
+          //           "code"
+          //         );
+          //         let currentObject = filter(tradeSubCategories, {
+          //           code: action.value
+          //         });
+          //         if (currentObject[0].uom !== null) {
+          //           dispatch(
+          //             handleField(
+          //               "apply",
+          //               action.componentJsonpath.replace(
+          //                 "tradeSubType",
+          //                 "tradeUOM"
+          //               ),
+          //               "props.value",
+          //               currentObject[0].uom
+          //             )
+          //           );
+          //           dispatch(
+          //             handleField(
+          //               "apply",
+          //               action.componentJsonpath.replace(
+          //                 "tradeSubType",
+          //                 "tradeUOMValue"
+          //               ),
+          //               "props.required",
+          //               true
+          //             )
+          //           );
+          //           dispatch(
+          //             handleField(
+          //               "apply",
+          //               action.componentJsonpath.replace(
+          //                 "tradeSubType",
+          //                 "tradeUOMValue"
+          //               ),
+          //               "props.disabled",
+          //               false
+          //             )
+          //           );
+          //         } else {
+          //           dispatch(
+          //             handleField(
+          //               "apply",
+          //               action.componentJsonpath.replace(
+          //                 "tradeSubType",
+          //                 "tradeUOMValue"
+          //               ),
+          //               "props.required",
+          //               false
+          //             )
+          //           );
+
+          //           dispatch(
+          //             handleField(
+          //               "apply",
+          //               action.componentJsonpath.replace(
+          //                 "tradeSubType",
+          //                 "tradeUOMValue"
+          //               ),
+          //               "props.disabled",
+          //               true
+          //             )
+          //           );
+
+          //           dispatch(
+          //             handleField(
+          //               "apply",
+          //               action.componentJsonpath.replace(
+          //                 "tradeSubType",
+          //                 "tradeUOM"
+          //               ),
+          //               "props.value",
+          //               ""
+          //             )
+          //           );
+          //           dispatch(
+          //             handleField(
+          //               "apply",
+          //               action.componentJsonpath.replace(
+          //                 "tradeSubType",
+          //                 "tradeUOMValue"
+          //               ),
+          //               "props.value",
+          //               ""
+          //             )
+          //           );
+
+          //           dispatch(
+          //             pFO(
+          //               `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].uom`,
+          //               null
+          //             )
+          //           );
+          //           dispatch(
+          //             pFO(
+          //               `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].uomValue`,
+          //               null
+          //             )
+          //           );
+          //           dispatch(
+          //             handleField(
+          //               "apply",
+          //               action.componentJsonpath.replace(
+          //                 "tradeSubType",
+          //                 "tradeUOMValue"
+          //               ),
+          //               "props.error",
+          //               false
+          //             )
+          //           );
+          //         }
+          //       }
+          //     } catch (e) {
+          //       console.log(e);
+          //     }
+          //   }
+          // },
           tradeUOM: getTextField({
             label: {
               labelName: "UOM (Unit of Measurement)",

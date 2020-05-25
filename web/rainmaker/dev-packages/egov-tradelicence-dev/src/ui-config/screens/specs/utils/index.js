@@ -3,7 +3,7 @@ import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { getCommonSubHeader, getLabel, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getLocaleLabels, getQueryArg, getTodaysDateInYMD, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getObjectKeys, getObjectValues, getLocaleLabels, getQueryArg, getTodaysDateInYMD, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
@@ -1366,7 +1366,7 @@ export const validateFields = (
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {
       if (
-        fields[variable] &&
+        fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" &&
         fields[variable].props &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
@@ -1680,6 +1680,8 @@ export const updateDropDowns = async (
   dispatch,
   queryValue
 ) => {
+
+  
   const structType = get(
     payload,
     "Licenses[0].tradeLicenseDetail.structureType"
@@ -1715,78 +1717,25 @@ export const updateDropDowns = async (
       console.log(e);
     }
   }
-
-  const tradeSubTypes = get(
-    payload,
-    "Licenses[0].tradeLicenseDetail.tradeUnits",
-    []
-  );
-
-  if (tradeSubTypes.length > 0) {
-    try {
-      tradeSubTypes.forEach((tradeSubType, i) => {
-        const tradeCat = tradeSubType.tradeType.split(".")[0];
-        const tradeType = tradeSubType.tradeType.split(".")[1];
-        set(payload, `LicensesTemp.tradeUnits[${i}].tradeType`, tradeCat);
-        set(payload, `LicensesTemp.tradeUnits[${i}].tradeSubType`, tradeType);
-
-        dispatch(
-          prepareFinalObject(
-            "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
-            objectToDropdown(
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCat}`,
-                []
-              )
-            )
-          )
-        );
-
-        dispatch(
-          prepareFinalObject(
-            "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
-            get(
-              state.screenConfiguration.preparedFinalObject,
-              `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCat}.${tradeType}`,
-              []
-            )
-          )
-        );
-        payload &&
-          dispatch(
-            prepareFinalObject(
-              `LicensesTemp.tradeUnits[${i}].tradeType`,
-              tradeCat
-            )
-          );
-
-        payload &&
-          dispatch(
-            prepareFinalObject(
-              `LicensesTemp.tradeUnits[${i}].tradeSubType`,
-              tradeType
-            )
-          );
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  }
   setOwnerShipDropDownFieldChange(state, dispatch, payload);
 };
 
 export const getDocList = (state, dispatch) => {
-  const tradeUnits = get(
+  // const tradeUnits = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "Licenses[0].tradeLicenseDetail.tradeUnits[0]"
+  // );
+  const tradeCategory = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.tradeUnits[0]"
+    "DynamicMdms.TradeLicense.tradeUnits.tradeCategory"
   );
 
   const documentObj = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.TradeLicense.documentObj");
   const documentTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.common-masters.DocumentType");
 
   const applicationType = getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "RENEWAL" : "NEW";
-  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
+  //const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
+  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeCategory);
 
   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
     documentTypes.find((document, index) => {
@@ -2403,4 +2352,36 @@ export const getTextToLocalMapping = label => {
 
 export const checkValueForNA = value => {
   return value ? value : "NA";
+};
+export const triggerUpdateByKey = (state, key, value, dispatch) => {
+  if(dispatch == "set"){
+    set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.${key}`, value);
+  } else {
+    console.info(key,"testtt-----------------------",value)
+    dispatch(prepareFinalObject( `DynamicMdms.TradeLicense.tradeUnits.${key}`, value ));
+  }
+}
+export const updateMdmsDropDowns = async ( state, dispatch ) => {
+  const tradeSubTypes = get( state, "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits", []);
+  console.info("testtt-----------------------",tradeSubTypes)
+  if (tradeSubTypes.length > 0) {
+    try {
+      tradeSubTypes.forEach((tradeSubType, i) => {
+        const tradeCat = tradeSubType.tradeType.split(".")[0];
+        const tradeType = tradeSubType.tradeType.split(".")[1];
+        triggerUpdateByKey(state, 'tradeCategory', tradeCat, 'set');
+        triggerUpdateByKey(state, 'tradeType', tradeType, 'set');
+        triggerUpdateByKey(state, 'tradeSubType', tradeSubType.tradeType, 'set');
+
+        triggerUpdateByKey(state, 'tradeTypeTransformed', getObjectKeys(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnitsTransformed.${tradeCat}`, [])) , dispatch);
+        triggerUpdateByKey(state, 'tradeSubTypeTransformed', getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnitsTransformed.${tradeCat}.${tradeType}`, [])) , dispatch);
+ 
+        triggerUpdateByKey(state, 'tradeCategory', tradeCat , dispatch);
+        triggerUpdateByKey(state, 'tradeType', tradeType , dispatch);
+        triggerUpdateByKey(state, 'tradeSubType', tradeSubType.tradeType , dispatch);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 };
