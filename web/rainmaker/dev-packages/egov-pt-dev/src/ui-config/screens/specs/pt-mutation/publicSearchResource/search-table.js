@@ -89,11 +89,5 @@ export const searchPropertyTable = {
 };
 
 const payAmount = (tableMeta) => {
-  const appName =
-    process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee";
-  const url =
-    process.env.NODE_ENV === "development"
-      ? `/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`
-      : `/${appName}/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`;
-    setRoute(url);
+    setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`);
 };
