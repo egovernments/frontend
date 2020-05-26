@@ -77,6 +77,54 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
     }
 };
 
+export const getPropertyObj = async (waterConnection) => {
+    let uuidsArray =[];
+    let uuids = "";
+    let propertyArr = [];
+   for(var i=0; i<waterConnection.length;i++){
+       if(waterConnection[i].propertyId && waterConnection[i].propertyId !== null && waterConnection[i].propertyId !== "NA"){
+           if(!uuidsArray.includes(waterConnection[i]['propertyId'])){
+               uuidsArray.push(waterConnection[i]['propertyId']);
+               uuids += waterConnection[i]['propertyId'] + ",";                       
+            }
+            if(uuidsArray.length % 50 === 0 || (uuidsArray.length > 0 && i === (waterConnection.length-1))) {
+               let queryObject1 = [];
+               uuids = uuids.substring(0, uuids.length-1);
+               if (process.env.REACT_APP_NAME === "Citizen") {
+                   queryObject1 = [{ key: "uuids", value: uuids }];
+               }else{
+                   queryObject1 = [{ key: "tenantId", value: getTenantId() }, { key: "uuids", value: uuids }];
+               }
+               let payload = await getPropertyResultsWODispatch(queryObject1);
+               if(payload.Properties.length > 0){                                   
+                   for(var j=0; j< payload.Properties.length; j++) {
+                       propertyArr[payload.Properties[j].id] = payload.Properties[j]
+                   }                                   
+                }
+                uuids = "";
+                uuidsArray = [];
+            }
+       }else{
+           waterConnection[i].property = null;
+       }    
+    }
+    let tempPropertyObj = null
+    if(Object.keys(propertyArr).length > 0 ){
+       for(var i=0; i<waterConnection.length;i++){
+           if(waterConnection[i].propertyId && waterConnection[i].propertyId !== null && waterConnection[i].propertyId !== "NA"){
+               if(propertyArr[waterConnection[i].propertyId]){
+                   tempPropertyObj = (propertyArr[waterConnection[i].propertyId])?propertyArr[waterConnection[i].propertyId]:null 
+                   waterConnection[i].property = tempPropertyObj;
+                   waterConnection[i].tenantId = (tempPropertyObj && tempPropertyObj.tenantId)?tempPropertyObj.tenantId:null;
+                   tempPropertyObj = null;
+               }
+           }
+        }
+    }
+    return waterConnection;
+}
+
+
 export const getSearchResults = async queryObject => {
     try {
         const response = await httpRequest(
@@ -93,49 +141,7 @@ export const getSearchResults = async queryObject => {
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
-        let uuidsArray =[];
-        let uuids = "";
-        let propertyArr = [];
-           for(var i=0; i<result.WaterConnection.length;i++){
-               if(result.WaterConnection[i].propertyId && result.WaterConnection[i].propertyId !== null && result.WaterConnection[i].propertyId !== "NA"){
-                   if(!uuidsArray.includes(result.WaterConnection[i]['propertyId'])){
-                       uuidsArray.push(result.WaterConnection[i]['propertyId']);
-                       uuids += result.WaterConnection[i]['propertyId'] + ",";                       
-                    }
-                    if(uuidsArray.length % 50 === 0 || (uuidsArray.length > 0 && i === (result.WaterConnection.length-1))) {
-                       let queryObject1 = [];
-                       uuids = uuids.substring(0, uuids.length-1);
-                       if (process.env.REACT_APP_NAME === "Citizen") {
-                           queryObject1 = [{ key: "uuids", value: uuids }];
-                       }else{
-                           queryObject1 = [{ key: "tenantId", value: getTenantId() }, { key: "uuids", value: uuids }];
-                       }
-                       let payload = await getPropertyResultsWODispatch(queryObject1);
-                       if(payload.Properties.length > 0){                                   
-                           for(var j=0; j< payload.Properties.length; j++) {
-                               propertyArr[payload.Properties[j].id] = payload.Properties[j]
-                           }                                   
-                        }
-                        uuids = "";
-                        uuidsArray = [];
-                    }
-               }else{
-                   result.WaterConnection[i].property = null;
-               }    
-            }
-            let tempPropertyObj = null
-            if(Object.keys(propertyArr).length > 0 ){
-               for(var i=0; i<result.WaterConnection.length;i++){
-                   if(result.WaterConnection[i].propertyId && result.WaterConnection[i].propertyId !== null && result.WaterConnection[i].propertyId !== "NA"){
-                       if(propertyArr[result.WaterConnection[i].propertyId]){
-                           tempPropertyObj = (propertyArr[result.WaterConnection[i].propertyId])?propertyArr[result.WaterConnection[i].propertyId]:null 
-                           result.WaterConnection[i].property = tempPropertyObj;
-                           result.WaterConnection[i].tenantId = (tempPropertyObj && tempPropertyObj.tenantId)?tempPropertyObj.tenantId:null;
-                           tempPropertyObj = null;
-                       }
-                   }
-                }
-            }           
+        result.WaterConnection = await getPropertyObj(result.WaterConnection); 
         return result;
     } catch (error) { console.log(error) }
 };
@@ -154,50 +160,7 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
             return response;
         }        
         let result = findAndReplace(response, null, "NA");
-        let uuidsArray =[];
-        let uuids = "";
-        let propertyArr = [];
-           for(var i=0; i<result.SewerageConnections.length;i++){
-               if(result.SewerageConnections[i].propertyId && result.SewerageConnections[i].propertyId !== null && result.SewerageConnections[i].propertyId !== "NA"){
-                   if(!uuidsArray.includes(result.SewerageConnections[i]['propertyId'])){
-                       uuidsArray.push(result.SewerageConnections[i]['propertyId']);
-                       uuids += result.SewerageConnections[i]['propertyId'] + ",";                       
-                    }
-                    if(uuidsArray.length % 50 === 0 || (uuidsArray.length > 0 && i === (result.SewerageConnections.length-1))) {
-                       let queryObject1 = [];
-                       uuids = uuids.substring(0, uuids.length-1);
-                       if (process.env.REACT_APP_NAME === "Citizen") {
-                           queryObject1 = [{ key: "uuids", value: uuids }];
-                       }else{
-                           queryObject1 = [{ key: "tenantId", value: getTenantId() }, { key: "uuids", value: uuids }];
-                       }
-                       let payload = await getPropertyResultsWODispatch(queryObject1);
-                       if(payload.Properties.length > 0){                                   
-                           for(var j=0; j< payload.Properties.length; j++) {
-                               propertyArr[payload.Properties[j].id] = payload.Properties[j]
-                           }                                   
-                        }
-                        uuids = "";
-                        uuidsArray = [];
-                    }
-               }else{
-                   result.SewerageConnections[i].property = null;
-               }    
-            }
-            let tempPropertyObj = null
-            if(Object.keys(propertyArr).length > 0 ){
-               for(var i=0; i<result.SewerageConnections.length;i++){
-                   if(result.SewerageConnections[i].propertyId && result.SewerageConnections[i].propertyId !== null && result.SewerageConnections[i].propertyId !== "NA"){
-                       if(propertyArr[result.SewerageConnections[i].propertyId]){
-                           tempPropertyObj = (propertyArr[result.SewerageConnections[i].propertyId])?propertyArr[result.SewerageConnections[i].propertyId]:null 
-                           result.SewerageConnections[i].property = tempPropertyObj;
-                           result.SewerageConnections[i].tenantId = (tempPropertyObj && tempPropertyObj.tenantId)?tempPropertyObj.tenantId:null;
-                           tempPropertyObj = null;
-                       }
-                   }
-                }
-            } 
-
+        result.SewerageConnections = await getPropertyObj(result.SewerageConnections); 
         dispatch(toggleSpinner());
         return result;
     } catch (error) {
@@ -272,6 +235,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
         );
 
         if (response.WaterConnection.length > 0) {
+            response.WaterConnection = await getPropertyObj(response.WaterConnection); 
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 response.WaterConnection[i].service = "Water"
                 if (response.WaterConnection[i].connectionNo !== null && response.WaterConnection[i].connectionNo !== undefined) {
@@ -319,6 +283,7 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
         );
 
         if (response.WaterConnection.length > 0) {
+            response.WaterConnection = await getPropertyObj(response.WaterConnection);
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 response.WaterConnection[i].service = "Water"
                 if (response.WaterConnection[i].applicationNo !== null && response.WaterConnection[i].applicationNo !== undefined) {
@@ -370,6 +335,7 @@ export const getSWMyApplicationResults = async (queryObject, dispatch) => {
             queryObject
         );
         if (response.SewerageConnections.length > 0) {
+            response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
             for (let i = 0; i < response.SewerageConnections.length; i++) {
                 response.SewerageConnections[i].service = "Sewerage"
                 if (response.SewerageConnections[i].applicationNo !== undefined && response.SewerageConnections[i].applicationNo !== null) {
