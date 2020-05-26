@@ -160,6 +160,19 @@ const callBackForApply = async (state, dispatch) => {
         return false;
       }
     }
+    // Property.landArea Property.totalConstructedArea
+    if(propertyPayload.totalConstructedArea > propertyPayload.landArea){
+      dispatch(
+         toggleSnackbar(
+           true, {
+           labelKey: "PT_COMMON_TOTAL_CONSTRUCTEDAREA_LESS_THAN_LANDAREA_REQUIRED",
+           labelName: "Total constructed area less than land area"
+         },
+           "warning"
+         )
+       )
+       return false;
+    }
     for( var i = propertyPayload.owners.length-1; i--;){
       if (propertyPayload.owners[i].hasOwnProperty('isDeleted')) propertyPayload.owners.splice(i, 1);
     }
