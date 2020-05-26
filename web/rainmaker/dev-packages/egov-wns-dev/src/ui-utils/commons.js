@@ -123,11 +123,16 @@ export const getSearchResults = async queryObject => {
                    result.WaterConnection[i].property = null;
                }    
             }
-            if(propertyArr.length > 0 ){
+            let tempPropertyObj = null
+            if(Object.keys(propertyArr).length > 0 ){
                for(var i=0; i<result.WaterConnection.length;i++){
                    if(result.WaterConnection[i].propertyId && result.WaterConnection[i].propertyId !== null && result.WaterConnection[i].propertyId !== "NA"){
-                       if(propertyArr[result.WaterConnection[i].propertyId])
-                           result.WaterConnection[i].property = propertyArr[result.WaterConnection[i].propertyId]
+                       if(propertyArr[result.WaterConnection[i].propertyId]){
+                           tempPropertyObj = (propertyArr[result.WaterConnection[i].propertyId])?propertyArr[result.WaterConnection[i].propertyId]:null 
+                           result.WaterConnection[i].property = tempPropertyObj;
+                           result.WaterConnection[i].tenantId = (tempPropertyObj && tempPropertyObj.tenantId)?tempPropertyObj.tenantId:null;
+                           tempPropertyObj = null;
+                       }
                    }
                 }
             }           
@@ -179,14 +184,19 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
                    result.SewerageConnections[i].property = null;
                }    
             }
-            if(propertyArr.length > 0 ){
+            let tempPropertyObj = null
+            if(Object.keys(propertyArr).length > 0 ){
                for(var i=0; i<result.SewerageConnections.length;i++){
                    if(result.SewerageConnections[i].propertyId && result.SewerageConnections[i].propertyId !== null && result.SewerageConnections[i].propertyId !== "NA"){
-                       if(propertyArr[result.SewerageConnections[i].propertyId])
-                           result.SewerageConnections[i].property = propertyArr[result.SewerageConnections[i].propertyId]
+                       if(propertyArr[result.SewerageConnections[i].propertyId]){
+                           tempPropertyObj = (propertyArr[result.SewerageConnections[i].propertyId])?propertyArr[result.SewerageConnections[i].propertyId]:null 
+                           result.SewerageConnections[i].property = tempPropertyObj;
+                           result.SewerageConnections[i].tenantId = (tempPropertyObj && tempPropertyObj.tenantId)?tempPropertyObj.tenantId:null;
+                           tempPropertyObj = null;
+                       }
                    }
                 }
-            }
+            } 
 
         dispatch(toggleSpinner());
         return result;
