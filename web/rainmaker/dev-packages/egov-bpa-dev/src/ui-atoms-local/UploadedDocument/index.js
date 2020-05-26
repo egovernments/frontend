@@ -2,11 +2,18 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
 import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles } from "@material-ui/core/styles";
+
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    fontSize: 13
+  }
+}))(Tooltip);
 
 const UploadedDocument = props => {
   const { document, removeDocument, disabled } = props;
   return (
-    <Tooltip title={document.fileName} arrow>
+    <LightTooltip title={document.fileName} arrow>
     <Button
       variant="outlined"
       style={{
@@ -27,7 +34,7 @@ const UploadedDocument = props => {
         <i class="material-icons">highlight_off</i>
       </Icon>}
     </Button>
-    </Tooltip>
+    </LightTooltip>
   );
 };
 

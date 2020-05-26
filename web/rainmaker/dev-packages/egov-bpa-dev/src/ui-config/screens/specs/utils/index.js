@@ -4175,7 +4175,6 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     ...applicantDocuments,
     ...otherDocuments
   ];
-
     let additionalDetail = BPA.additionalDetails, 
     fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
     if(additionalDetail && additionalDetail["fieldinspection_pending"] && additionalDetail["fieldinspection_pending"].length > 0) {
@@ -4232,20 +4231,26 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
             .slice(13)
         )) ||
       `Document - ${index + 1}`;
-    if (doc.wfState === "SEND_TO_CITIZEN") {
-      obj.createdBy = "BPA Architect"
-    }
-    else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
-      obj.createdBy = "BPA Document Verifier"
-    }
-    else if (doc.wfState === "FIELDINSPECTION_PENDING") {
-      obj.createdBy = "BPA Field Inspector"   
-    }
-    else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
-      obj.createdBy = "BPA Noc Verifier"    
-    } else {
-      obj.createdBy = "BPA Architect"
-    }  
+      obj.createdBy = getLoggedinUserRole(doc.wfState);
+      // if(!doc.createdBy){
+      //   if (doc.wfState === "SEND_TO_CITIZEN") {
+      //     obj.createdBy = "BPA Architect"
+      //   }
+      //   else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
+      //     obj.createdBy = "BPA Document Verifier"
+      //   }
+      //   else if (doc.wfState === "FIELDINSPECTION_PENDING") {
+      //     obj.createdBy = "BPA Field Inspector"   
+      //   }
+      //   else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
+      //     obj.createdBy = "BPA Noc Verifier"    
+      //   } else {
+      //     obj.createdBy = "BPA Architect"
+      //   }
+      // } else {
+      //   obj.createdBy = doc.createdBy
+      // }
+  
     obj['auditDetails'] = doc.auditDetails; 
     documentsPreview.push(obj);
     return obj;
@@ -4281,15 +4286,76 @@ const getRequiredMdmsCards = (state, dispatch) => {
   );
 };
 
+/**
+ * This method will be called to get the current role of logged-in user
+ * @param {String} wfState 
+ * @returns {String} currentRole
+ */
+export const getLoggedinUserRole = (wfState) =>{
+  let userInfo = JSON.parse(getUserInfo()), 
+  roles = get(userInfo, "roles"),
+  currentRole,
+  isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+
+  if (roles && roles.length == 1) {
+    currentRole = roles[0].name;
+
+  } else if (roles && roles.length > 1){
+    if(isEmployee){
+      if(wfState){
+        wfState = wfState.state;
+        if (wfState === "SEND_TO_CITIZEN") {
+          currentRole = "BPA Architect"
+        }
+        else if(wfState === "DOC_VERIFICATION_PENDING") {
+          currentRole = "BPA Document Verifier"
+        }
+        else if (wfState === "FIELDINSPECTION_PENDING") {
+          currentRole = "BPA Field Inspector"   
+        }
+        else if (wfState === "NOC_VERIFICATION_PENDING") {
+          currentRole = "BPA Noc Verifier"    
+        } else {
+          currentRole = "BPA Architect"
+        }
+      }
+      
+    }else{
+      currentRole = roles.find((code)=>code=="BPA_ARCHITECT")
+      if(!currentRole){
+        currentRole = roles[0].name;
+      } else {
+        currentRole = currentRole.name;
+      }
+    }
+  }
+  
+  return currentRole;
+}; 
 
 const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms) =>{
  // let mdmsCards = getRequiredMdmsCards(state, dispatch);
-  let cards = [];
-let documentCards = groupBy(documentsPreview, 'title');
+let cards = [];
+documentsPreview.forEach((item)=>{
+  item.documentCode = getDocumentCode(item.title)
+}
+)
+let documentCards = groupBy(documentsPreview, 'documentCode');
+let bpaDetails = get(
+  state.screenConfiguration.preparedFinalObject,
+  "BPA",
+  {}
+);
+let cardReadOnly = false;
+if(bpaDetails.status == "INPROGRESS"){
+  cardReadOnly = true;
+}
+
 documentCards && Object.keys(documentCards).map((doc)=>{
  let card ={
-    documentCode: getDocumentCode(doc),
+    documentCode:doc,
     documents:documentCards[doc],
+    wfState:documentCards[doc].wfState,
     readOnly:true
  }
  cards.push(card);
@@ -4302,7 +4368,7 @@ if(requiredDocsFromMdms.length > 0){
     mdmsCard.documentCode = getTransformedLocale(mdmsCard.code);
     for(var i=0; i<cards.length; i++){
       if(mdmsCard.documentCode == cards[i].documentCode){
-        cards[i].readOnly = false;
+        cards[i].readOnly = cardReadOnly;
         let mergedCard = {...cards[i], ...mdmsCard};
         cards[i] = {...mergedCard};
         found = true;
@@ -4310,7 +4376,7 @@ if(requiredDocsFromMdms.length > 0){
     }
     
     if(!found){
-      mdmsCard.readOnly = false;
+      mdmsCard.readOnly = cardReadOnly;
       cards.push(mdmsCard)
     }
   });
