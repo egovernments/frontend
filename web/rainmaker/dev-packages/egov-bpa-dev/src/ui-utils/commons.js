@@ -398,8 +398,13 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   );
 
   let documents = []
+  /**
+   * @TODO optimize logic further
+   */
   applicationDocuments.forEach(doc => {
-    if(doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType) { 
+    if( (doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType) 
+    || 
+    (doc.WFState == "INITIATED" && doc.applicationType === bpaDetails.applicationType)) { 
       documents.push(doc.docTypes);
     }
   });

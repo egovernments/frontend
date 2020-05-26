@@ -4,6 +4,11 @@ import {
   getStepperObject,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+import {
+  prepareDocumentsUploadData
+} from "../../../../ui-utils/commons";
+
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
@@ -146,9 +151,12 @@ const getMdmsData = async (action, state, dispatch) => {
   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   let applicationType = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[0].code"
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[1].code"
   );
+  debugger
   dispatch(prepareFinalObject("BPA.applicationType", applicationType));
+  await prepareDocumentsUploadData(state, dispatch);
+
 };
 
 const procedToNextStep = (state, dispatch) => {
