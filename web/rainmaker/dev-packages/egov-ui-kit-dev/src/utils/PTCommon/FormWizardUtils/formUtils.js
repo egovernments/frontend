@@ -2,7 +2,6 @@ import commonConfig from "config/common.js";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";
-import cloneDeep from "lodash/cloneDeep";
 
 const extractFromString = (str, index) => {
   if (!str) {
