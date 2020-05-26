@@ -166,6 +166,7 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
+  debugger
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -190,8 +191,65 @@ const callBackForNext = async (state, dispatch) => {
   //   }
   // }
 
-  if( activeStep === 1) {
-    getSummaryRequiredDetails(state, dispatch);
+  if (activeStep === 1) {
+    const documentsFormat = Object.values(
+      get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
+    );
+
+    let validateDocumentField = false;
+
+    if (documentsFormat && documentsFormat.length) {
+      for (let i = 0; i < documentsFormat.length; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(
+          documentsFormat[i],
+          "isDocumentTypeRequired"
+        );
+  
+        let documents = get(documentsFormat[i], "documents");
+        if (isDocumentRequired) {
+          if (documents && documents.length > 0) {
+            if (isDocumentTypeRequired) {
+              if (get(documentsFormat[i], "dropDownValues.value")) {
+                validateDocumentField = true;
+              } else {
+                dispatch(
+                  toggleSnackbar(
+                    true,
+                    { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
+                    "warning"
+                  )
+                );
+                validateDocumentField = false;
+                break;
+              }
+            } else {
+              validateDocumentField = true;
+            }
+          } else {
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
+                "warning"
+              )
+            );
+            validateDocumentField = false;
+            break;
+          }
+        } else {
+          validateDocumentField = true;
+        }
+      }
+      if (!validateDocumentField) {
+      isFormValid = false;
+      hasFieldToaster = true;
+      } else {
+        getSummaryRequiredDetails(state, dispatch);
+      }
+    } else {
+      getSummaryRequiredDetails(state, dispatch);
+    }
   }
 
   if (activeStep !== 4) {
