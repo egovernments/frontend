@@ -7,6 +7,12 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import Tooltip from '@material-ui/core/Tooltip';
 
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    fontSize: 13
+  },
+}))(Tooltip);
+
 const styles = {
   whiteCard: {
     width: "100%",
@@ -19,7 +25,11 @@ const styles = {
     marginTop: 16,
     display: "inline-flex",
   },
-
+  tooltip: {
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+    color: 'rgba(0, 0, 0, 0.87)',
+    fontSize: 13
+  },
   body2: {
     wordWrap: "break-word",
   },
@@ -148,11 +158,11 @@ function SingleDocDetailCard(props) {
                     
                   }}
                 >
-                   <Tooltip title={doc.fileName} arrow>
+                   <LightTooltip title={doc.fileName} arrow>
                   <div title={doc.fileName} style={documentTitleOrg}>
                     {doc.fileName}
                   </div>
-                  </Tooltip>
+                  </LightTooltip>
                  </Grid>
               ))}
             </div>
