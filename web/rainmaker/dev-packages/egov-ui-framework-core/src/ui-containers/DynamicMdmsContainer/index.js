@@ -6,10 +6,17 @@ import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
 import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 class DynamicMdmsContainer extends Component {
-  componentDidMount = async () => {
-    let { rootBlockSub, state, moduleName, masterName, type, dispatch, callBackEdit } = this.props;
+  state = {
+    selectedValues : []
+  }
+  componentDidMount = () => {
+    this.triggerInitilaApi();
+  }
+  triggerInitilaApi = async () => {
+    let { rootBlockSub, state, moduleName, masterName, type, dispatch, callBackEdit, isDependency, dropdownFields } = this.props;
     const isMdmsData = this.getValueByKey('.MdmsJson');
-    if(!isMdmsData || isMdmsData.length == 0 ){
+    const isDependencyCheck = isDependency ? get( state.screenConfiguration.preparedFinalObject , isDependency, false ) : true;
+    if(!isMdmsData || isMdmsData.length == 0 && isDependencyCheck){
       let reqObj = {
         setPath : `DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`  , 
         setTransformPath : `DynamicMdms.${moduleName}.${rootBlockSub}Transformed`, 
@@ -19,15 +26,35 @@ class DynamicMdmsContainer extends Component {
         type
       }
       await getMdmsJson(state, dispatch, reqObj);
-      this.triggerCallback(null, null);
-      getQueryArg(window.location.href, "action") == "edit" && callBackEdit(state, dispatch);
+      this.triggerCallback(null, null, null);
+      if(getQueryArg(window.location.href, "action") == "edit") {
+        callBackEdit(state, dispatch);
+        let selectedValues = []
+        dropdownFields.map((row) => {
+          selectedValues.push(this.getValueByKey(`.${row.key}`));
+        })
+        this.setState({ selectedValues });
+      }
     }
- 
+  }
+  componentWillUpdate () {
+    this.triggerInitilaApi();
   }
   onFieldChange = ( screenKey, componentJsonpath, property, value ) => {
-    let { dispatch } = this.props;
+    let { dispatch, dropdownFields } = this.props;
+    let { selectedValues } = this.state;
     dispatch(prepareFinalObject( componentJsonpath , value ));
-    this.triggerCallback(componentJsonpath, value);
+    let index = null;
+    if(componentJsonpath){
+      let last = componentJsonpath.substring(componentJsonpath.lastIndexOf(".") + 1, componentJsonpath.length);
+      index = dropdownFields.findIndex((row) => {
+        return row.key == last;
+      });
+      selectedValues.length > 0 && selectedValues.splice( index + 1 , selectedValues.length); 
+      selectedValues[index] = value;
+      this.setState({ selectedValues });
+      this.triggerCallback(componentJsonpath, value, index);
+    }
   }
   getValueByKey = (key) => {
     let { state, rootBlockSub, moduleName } = this.props;
@@ -49,31 +76,14 @@ class DynamicMdmsContainer extends Component {
     dropdownData = (dropdownFields.length - 1 ==  index ) ? getObjectValues(transformedData) : getObjectKeys(transformedData);
     this.setValueByKey(dropdownFields[index].key, dropdownData);
   }
-  triggerCallback = (componentJsonpath, value) => {
+  triggerCallback = (componentJsonpath, value, index) => {
     let { dropdownFields, rootBlockSub, moduleName, state, dispatch } = this.props;
-    let index = null;
     let keyValue = null;
-    if(componentJsonpath){
-      let last = componentJsonpath.substring(componentJsonpath.lastIndexOf(".") + 1, componentJsonpath.length);
-      index = dropdownFields.findIndex((row) => {
-        return row.key == last;
-      });
-    }
-    if(index == 0) {
-      keyValue = `Transformed.${value}`;
-    } else if(index == 1){
-      let target1 = this.getValueByKey(`.${dropdownFields[0].key}`);
-      keyValue = `Transformed.${target1}.${value}`
-    } else if(index == 2){
-      let target1 = this.getValueByKey(`.${dropdownFields[0].key}`);
-      let target2 = this.getValueByKey(`.${dropdownFields[1].key}`);
-      keyValue = `Transformed.${target1}.${target2}.${value}`;
-    } else if(index == 3){
-      let target1 = this.getValueByKey(`.${dropdownFields[0].key}`);
-      let target2 = this.getValueByKey(`.${dropdownFields[1].key}`);
-      let target3 = this.getValueByKey(`.${dropdownFields[2].key}`);
-      keyValue = `Transformed.${target1}.${target2}.${target3}.${value}`;
-    } else {
+    let { selectedValues } = this.state;
+    let transformedValue = selectedValues.join('.')
+    if(index == 0 || index) {
+      keyValue = `Transformed.${transformedValue}`;
+    } else{ 
       this.triggerValueByKey(null, 0);
     }
     if(componentJsonpath) {

@@ -124,6 +124,7 @@ const tradeSubTypeChange = (reqObj) => {
           )
         );
      }
+     dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", value));
   } catch (e) {
     console.log(e);
   }
@@ -168,7 +169,8 @@ const tradeUnitCard = {
               masterName: "TradeType",
               rootBlockSub : 'tradeUnits',
               type : 'TL',
-              callBackEdit: updateMdmsDropDowns
+              callBackEdit: updateMdmsDropDowns,
+              isDependency : "Licenses[0].tradeLicenseDetail.structureType"
             }
           },
           // tradeCategory: {
