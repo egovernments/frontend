@@ -119,7 +119,7 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       let data = billTableData.map(item => ({
         ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
-        "Consumer Code": item.consumerCode || "-",
+        ["PAYMENT_COMMON_CONSUMER_CODE"]: item.consumerCode || "-",
         ['ABG_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
         ['ABG_COMMON_TABLE_COL_BILL_DATE']:
           convertEpochToDate(item.billDate) || "-",
