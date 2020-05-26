@@ -8,7 +8,7 @@ import { setServiceCategory } from "../utils";
 import { UCSearchCard } from "./receiptsResources/ucSearch";
 //import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchResult } from "./receiptsResources/searchResult";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 // import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
@@ -50,10 +50,10 @@ const getMDMSData = async (action, state, dispatch) => {
       mdmsBody
     );
     // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    let serviceCategories = setServiceCategory(
-      get(payload, "MdmsRes.BillingService.BusinessService", []),
-      dispatch,"searchScreenMdmsData"
-    );
+    // let serviceCategories = setServiceCategory(
+    //   get(payload, "MdmsRes.BillingService.BusinessService", []),
+    //   dispatch,"searchScreenMdmsData"
+    // );
     // dispatch(
     //   prepareFinalObject(
     //     "searchScreenMdmsData.serviceCategory",
