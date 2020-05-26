@@ -3,7 +3,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { getGroupBillSearch } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
-import { convertEpochToDate } from "../../utils/index";
+import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 
 
 export const searchApiCall = async (state, dispatch) => {
@@ -70,9 +70,9 @@ export const searchApiCall = async (state, dispatch) => {
       ) {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
-      if (searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key] =="") {
-          delete searchScreenObject[key];
+      if (searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
+        searchScreenObject[key].trim() === "") {
+        delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
