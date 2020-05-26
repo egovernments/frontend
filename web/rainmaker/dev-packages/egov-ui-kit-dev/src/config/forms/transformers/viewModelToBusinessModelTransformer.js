@@ -144,6 +144,10 @@ const transformer = (formKey, form = {}, state = {}) => {
         const { latitude, longitude } = form.fields;
         const tenantId = await getTenantForLatLng(latitude.value, longitude.value);
         formData.services[0].tenantId = tenantId;
+        if(!formData.services[0].tenantId)
+        {
+          formData.services[0].tenantId=form.fields.city.value;
+        }
       } catch (error) {
         throw new Error(error.message);
       }
