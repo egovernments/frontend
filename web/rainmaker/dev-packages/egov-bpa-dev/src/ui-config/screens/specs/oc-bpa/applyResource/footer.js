@@ -3,7 +3,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields } from "../../utils";
+import { getCommonApplyFooter, validateFields, generateBillForBPA } from "../../utils";
 import "./index.css";
 import {
   submitBpaApplication,
@@ -11,9 +11,12 @@ import {
 } from "../../../../../ui-utils/commons";
 import { 
   toggleSnackbar, 
-  handleScreenConfigurationFieldChange as handleField 
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import _ from "lodash";
+import jp from "jsonpath";
+import { getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 
 
@@ -121,6 +124,41 @@ const riskTypeValidation = (state, dispatch) => {
   }
 }
 
+const prepareDocumentsDetailsView = async (state, dispatch) => {
+  let documentsPreview = [];
+  let reduxDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    {}
+  );
+  jp.query(reduxDocuments, "$.*").forEach(doc => {
+    if (doc.documents && doc.documents.length > 0 && doc.dropDownValues) {
+      doc.documents.forEach(docDetail =>{
+        documentsPreview.push({
+          title: getTransformedLocale(doc.documentCode),
+          name: docDetail.fileName,
+          fileStoreId: docDetail.fileStoreId,
+          linkText: "View",
+          link: docDetail.fileUrl && docDetail.fileUrl.split(",")[0]
+        })
+      });
+    }
+  });
+  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+};
+
+const getSummaryRequiredDetails = async (state, dispatch) => {
+  const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.businessService");
+  let businessService = "BPA.NC_APP_FEE"
+  if(riskType === "BPA_LOW") {
+    businessService = "BPA.LOW_RISK_PERMIT_FEE"
+  }
+  generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
+  prepareDocumentsDetailsView(state, dispatch);
+}
+
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);
   let activeStep = get(
@@ -131,25 +169,29 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  if(activeStep === 0) {
-    let isBasicDetailsCardValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children",
-      state,
-      dispatch
-    );
-    isBasicDetailsCardValid = true; 
-    if (
-      !isBasicDetailsCardValid
-    ) {
-      isFormValid = false;
-      hasFieldToaster = true;
-    } else {
-      let isKathaNoAndPlotNoValidation = await kathaNoAndPlotNoValidation(state, dispatch);
-      let isRiskTypeValidation = await riskTypeValidation(state, dispatch);
-      if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
-        return false;
-      }
-    }
+  // if(activeStep === 0) {
+  //   let isBasicDetailsCardValid = validateFields(
+  //     "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children",
+  //     state,
+  //     dispatch
+  //   );
+  //   isBasicDetailsCardValid = true; 
+  //   if (
+  //     !isBasicDetailsCardValid
+  //   ) {
+  //     isFormValid = false;
+  //     hasFieldToaster = true;
+  //   } else {
+  //     let isKathaNoAndPlotNoValidation = await kathaNoAndPlotNoValidation(state, dispatch);
+  //     let isRiskTypeValidation = await riskTypeValidation(state, dispatch);
+  //     if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
+  //       return false;
+  //     }
+  //   }
+  // }
+
+  if( activeStep === 1) {
+    getSummaryRequiredDetails(state, dispatch);
   }
 
   if (activeStep !== 4) {

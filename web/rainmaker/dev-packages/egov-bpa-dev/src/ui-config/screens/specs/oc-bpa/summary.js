@@ -9,7 +9,7 @@ import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
 export const summaryDetails = getCommonCard({
   header: getCommonTitle({
     labelName: "Please review your Application and Submit",
-    labelKey: "TL_SUMMARY_HEADER"
+    labelKey: "BPA_OC_SUMMARY_HEADER"
   }),
   estimateSummary: estimateSummary,
   scrutinySummary: scrutinySummary,

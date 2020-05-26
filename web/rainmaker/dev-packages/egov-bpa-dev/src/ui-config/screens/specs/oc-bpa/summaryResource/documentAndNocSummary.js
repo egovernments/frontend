@@ -1,7 +1,7 @@
 import {
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabel
+  getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "../applyResource/footer";
 
@@ -10,17 +10,17 @@ export const documentAndNocSummary = getCommonGrayCard({
     uiFramework: "custom-atoms",
     componentPath: "Container",
     props: {
-      style: { marginBottom: "10px" }
+      style: { marginBottom: "10px" },
     },
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 8,
         },
         ...getCommonSubHeader({
           labelName: "Document and NOC details",
-          labelKey: "BPA_DOCUMENT_AND_NOC_DETAILS_HEADER"
-        })
+          labelKey: "BPA_DOCUMENT_AND_NOC_DETAILS_HEADER",
+        }),
       },
       editSection: {
         componentPath: "Button",
@@ -28,34 +28,34 @@ export const documentAndNocSummary = getCommonGrayCard({
           color: "primary",
           style: {
             marginTop: "-10px",
-            marginRight: "-18px"
-          }
+            marginRight: "-18px",
+          },
         },
         gridDefination: {
           xs: 4,
-          align: "right"
+          align: "right",
         },
         children: {
           editIcon: {
             uiFramework: "custom-atoms",
             componentPath: "Icon",
             props: {
-              iconName: "edit"
-            }
+              iconName: "edit",
+            },
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
-          })
+            labelKey: "BPA_SUMMARY_EDIT",
+          }),
         },
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
             changeStep(state, dispatch, "", 1);
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   },
   documentDetailsCard: {
     uiFramework: "custom-containers",
@@ -66,19 +66,20 @@ export const documentAndNocSummary = getCommonGrayCard({
         body: {
           uiFramework: "custom-containers-local",
           moduleName: "egov-bpa",
-          componentPath: "DownloadFileContainer",
+          componentPath: "DocumentSummaryContainer",
           props: {
             sourceJsonPath: "documentDetailsPreview",
-            className: "noc-review-documents"
-          }
+            className: "noc-review-documents",
+          },
         },
       }),
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      prefixSourceJsonPath: "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
-      afterPrefixJsonPath: "children.value.children.key"
+      prefixSourceJsonPath:
+        "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
+      afterPrefixJsonPath: "children.value.children.key",
     },
-    type: "array"
-  }
+    type: "array",
+  },
 });

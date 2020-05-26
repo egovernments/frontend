@@ -5071,7 +5071,7 @@ export const deviationValidation = (action, state, dispatch) => {
 export const getPermitDetails = async (permitNumber, tenantId) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
-    { key: "permitNos", value: permitNumber }
+    { key: "approvalNo", value: permitNumber }
   ];
 
   const response = await getBpaSearchResults(queryObject);
@@ -5241,7 +5241,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     });
 
     let primaryOwnerArray = get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
-    set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
+    // set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
 
     dispatch(prepareFinalObject("ocScrutinyDetails", get(ocpayload, "edcrDetail[0]")));
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
@@ -5249,7 +5249,9 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
     setProposedBuildingData(state, dispatch, action, "ocApply");
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
-    dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
+    dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+    dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+    dispatch(prepareFinalObject(`BPA.approvalNo`, bpaDetails.approvalNo));
     riskType(state, dispatch);
     ocuupancyType(state, dispatch);
     await permitNumberLink(state, dispatch, action)

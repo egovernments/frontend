@@ -167,7 +167,7 @@ export const basicDetails = getCommonCard({
         className: "tl-trade-type"
       },
       pattern: getPattern("Name"),
-      jsonPath: "bpaDetails.applicantName"
+      jsonPath: "BPA.applicantName"
     }),
     stakeHolderName: getTextField({
       label: {
@@ -184,7 +184,7 @@ export const basicDetails = getCommonCard({
         className: "tl-trade-type"
       },
       pattern: getPattern("Name"),
-      jsonPath: "bpaDetails.appliedBy"
+      jsonPath: "BPA.appliedBy"
     }),
     remarks: getTextField({
       label: {
