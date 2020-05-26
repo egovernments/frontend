@@ -12,6 +12,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 
 
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    fontSize: 13
+  }
+}))(Tooltip);
 //import "./index.css";
 
 const styles = {
@@ -22,7 +27,7 @@ const styles = {
     paddingLeft: 8,
     paddingRight: 0,
     paddingTop: 11,
-    paddingBottom: 0,
+    paddingBottom: 10,
     marginRight: 16,
     marginTop: 16,
     display: "inline-flex",
@@ -203,11 +208,11 @@ function MultiDocDetailCard(props) {
                   >
                     File
                   </Typography>
-                  <Tooltip title={!doc.name ? "" : doc.name} arrow>
+                  <LightTooltip title={!doc.name ? "" : doc.name} arrow>
                   <div style={fontStyle}>
                     {!doc.name ? "" : doc.name}
                   </div>
-                  </Tooltip>
+                  </LightTooltip>
                 </Grid>
                 <Grid item xs={3}>
                   <Typography
@@ -217,11 +222,11 @@ function MultiDocDetailCard(props) {
                   >
                     Uploaded By
                   </Typography>
-                  <Tooltip title={!doc.createdBy ? "" : doc.createdBy} arrow>
+                  <LightTooltip title={!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : doc.additionalDetails.uploadedBy} arrow>
                   <div style={fontStyle}>
-                    {!doc.createdBy ? "" : doc.createdBy}
+                    {!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : doc.additionalDetails.uploadedBy}
                   </div>
-                  </Tooltip>
+                  </LightTooltip>
                 </Grid>
                 <Grid item xs={3}>
                   <Typography
@@ -233,7 +238,7 @@ function MultiDocDetailCard(props) {
                   </Typography>
                   
                   <div style={fontStyle}>
-                    {!doc.createdTime ? "" : convertEpochToDate(doc.createdTime)}
+                    {!(doc.additionalDetails && doc.additionalDetails.uploadedTime) ? "" :convertEpochToDate(doc.additionalDetails.uploadedTime)}
                   </div>
                 </Grid>
                 <Grid item xs={3}>

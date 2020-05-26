@@ -10,6 +10,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import MultiDocDetailCard from "../../ui-molecules-local/MultiDocDetailCard";
 import UploadCard from "../../ui-molecules-local/UploadCard";
+import {getLoggedinUserRole} from "../../ui-config/screens/specs/utils/index.js";
 
 
 class PreviewContainer extends Component {
@@ -107,7 +108,7 @@ class PreviewContainer extends Component {
     items[itemIndex] = item;
     this.setState({ editableDocuments: items });
   };
-
+  
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
     const {
@@ -115,6 +116,7 @@ class PreviewContainer extends Component {
       documentDetailsUploadRedux,
       finalCardsforPreview,
       bpaDetails,
+      wfState
     } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
     let documentCode = finalCardsforPreview[uploadedDocIndex].dropDownValues.value;
@@ -127,6 +129,7 @@ class PreviewContainer extends Component {
       }
     }
     let appDocumentList = [];
+
     let fileObj = {
       fileName: file.name,
       name: file.name,
@@ -135,7 +138,12 @@ class PreviewContainer extends Component {
       isClickable: true,
       link: Object.values(fileUrl)[0],
       title: documentCode,
-      documentType: documentCode
+      documentType: documentCode,
+      additionalDetails:{
+        uploadedBy: getLoggedinUserRole(wfState),
+        uploadedTime: new Date().getTime()
+      }
+      
     };
     if (
       finalCardsforPreview[uploadedDocIndex] &&
@@ -235,8 +243,12 @@ const mapStateToProps = (state, ownProps) => {
     []
   );
   const bpaDetails = get(screenConfiguration.preparedFinalObject, "BPA", {});
+  const wfState = get(
+    screenConfiguration.preparedFinalObject.applicationProcessInstances,
+    "state"
+  );
 
-  return { documentDetailsUploadRedux, finalCardsforPreview, bpaDetails };
+  return { documentDetailsUploadRedux, finalCardsforPreview, bpaDetails, wfState };
 };
 const mapDispatchToProps = (dispatch) => {
   return {

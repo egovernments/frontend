@@ -15,11 +15,10 @@ import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadMultipleFile } from "../../ui-molecules-local";
-import Typography from "@material-ui/core/Typography";
 import UploadCard from "../UploadCard"
 import "./index.css";
-
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import {getLoggedinUserRole} from "../../ui-config/screens/specs/utils/index.js";
 const themeStyles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
@@ -249,18 +248,23 @@ class BpaDocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails, bpaSendBackAcionStatus } = this.props;
+    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails, bpaSendBackAcionStatus, wfState } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
     let appDocumentList = {};
+    let fileObj  = {
+      fileName: file.name,
+      fileStoreId,
+      fileUrl: Object.values(fileUrl)[0],
+      isClickable:true,
+      additionalDetails:{
+        uploadedBy: getLoggedinUserRole(wfState),
+        uploadedTime: new Date().getTime()
+      }
+    };
     if (documentDetailsUploadRedux[uploadedDocIndex] &&
       documentDetailsUploadRedux[uploadedDocIndex].documents) {
 
-      documentDetailsUploadRedux[uploadedDocIndex].documents.push({
-        fileName: file.name,
-        fileStoreId,
-        fileUrl: Object.values(fileUrl)[0],
-        isClickable:true
-      });
+      documentDetailsUploadRedux[uploadedDocIndex].documents.push(fileObj);
       appDocumentList = {
         ...documentDetailsUploadRedux
       };
@@ -271,12 +275,7 @@ class BpaDocumentList extends Component {
         [uploadedDocIndex]: {
           ...documentDetailsUploadRedux[uploadedDocIndex],
           documents: [
-            {
-              fileName: file.name,
-              fileStoreId,
-              fileUrl: Object.values(fileUrl)[0],
-              isClickable:true
-            }
+            fileObj
           ]
         }
       }
@@ -471,8 +470,12 @@ const mapStateToProps = state => {
     "BPA",
     {}
   );
+  const wfState = get(
+    screenConfiguration.preparedFinalObject.applicationProcessInstances,
+    "state"
+  );
   let bpaSendBackAcionStatus = get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
-  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus };
+  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus, wfState };
 };
 
 const mapDispatchToProps = dispatch => {
