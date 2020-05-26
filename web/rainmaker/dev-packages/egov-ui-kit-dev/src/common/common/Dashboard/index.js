@@ -6,6 +6,10 @@ import "./index.css";
 
 const onButton1Click = (item, history, onPGRClick) => {
   const { route } = item;
+   if (item.moduleTitle === "ACTION_TEST_WATER_SEVERAGE") {
+    window.open("http://13.127.211.3:8080/wsbills/");
+  }
+
   history && history.push(route);
   // if (item.moduleTitle === "Property Tax") {
   //   history && history.push(route);
