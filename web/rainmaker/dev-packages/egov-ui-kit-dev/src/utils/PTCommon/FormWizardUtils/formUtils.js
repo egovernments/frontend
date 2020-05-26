@@ -298,8 +298,8 @@ export const getPropertyInfoScreenUrl = (propertyId, tenantId) => {
 export const getCommonTenant = () => {
   return commonConfig.tenantId;
 }
-//PT_ADHOC_REBATE ind 6
-//PT_ADHOC_PENALTY ind 9
+
+/* Get Estimate with rebate and penalty */
 export const getFormattedEstimate = (estimateResponse = [{}], adhocPenaltyAmt = 0, adhocExemptionAmt = 0) => {
 
   let { taxHeadEstimates, totalAmount, initialAmount, isAdhocAvailable = false } = estimateResponse[0];
