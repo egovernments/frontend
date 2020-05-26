@@ -1013,6 +1013,7 @@ export const applyForWater = async (state, dispatch) => {
     try {
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
+        queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId)?queryObject.property.tenantId:null;
         if (method === "UPDATE") {
             queryObject.additionalDetails.appCreatedDate = get(
                 state.screenConfiguration.preparedFinalObject,
@@ -1051,6 +1052,7 @@ export const applyForSewerage = async (state, dispatch) => {
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
         let response;
         set(queryObject, "tenantId", tenantId);
+        queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId)?queryObject.property.tenantId:null;
         if (method === "UPDATE") {
             queryObject.additionalDetails.appCreatedDate = get(
                 state.screenConfiguration.preparedFinalObject,
@@ -1090,6 +1092,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
         set(queryObject, "tenantId", tenantId);
+        queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId)?queryObject.property.tenantId:null;
         if (method === "UPDATE") {
             let queryObjectForUpdateWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
             let queryObjectForUpdateSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
