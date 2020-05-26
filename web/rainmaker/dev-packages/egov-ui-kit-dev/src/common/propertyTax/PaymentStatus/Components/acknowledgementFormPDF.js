@@ -15,25 +15,45 @@ pdfMake.fonts = {
 
 };
 
+let  ulbLogo={}
+const loadUlbLogo = tenantid => {
+  var img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.onload = function () {
+    var canvas = document.createElement("CANVAS");
+    var ctx = canvas.getContext("2d");
+    canvas.height = this.height;
+    canvas.width = this.width;
+    ctx.drawImage(this, 0, 0);
+    ulbLogo=canvas.toDataURL();
+    // store.dispatch(
+    //   prepareFinalObject("base64UlbLogoForPdf", canvas.toDataURL())
+    // );
+    canvas = null;
+  };
+  img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+};
 const generateAcknowledgementForm = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
   console.log('details--'+details);
   console.log(generalMDMSDataById);
+  
   let data;
   let { owners, address, propertyDetails,header } = details;
+  loadUlbLogo(address.tenantId);
   let dateArray=new Date(propertyDetails[0].assessmentDate).toDateString().split(' ');
   let assessmentDate=dateArray[2]+'-'+dateArray[1]+'-'+dateArray[3];
   let tableborder = {
-    hLineColor: function (i, node) {
-      return "#979797";
-    },
-    vLineColor: function (i, node) {
-      return "#979797";
-    },
     hLineWidth: function (i, node) {
-      return 0.5;
+      return i === 0 || i === node.table.body.length ? 0.1 : 0.1;
     },
     vLineWidth: function (i, node) {
-      return 0.5;
+      return i === 0 || i === node.table.widths.length ? 0.1 : 0.1;
+    },
+    hLineColor: function (i, node) {
+      return i === 0 || i === node.table.body.length ? "#979797" : "#979797";
+    },
+    vLineColor: function (i, node) {
+      return i === 0 || i === node.table.widths.length ? "#979797" : "#979797";
     },
   };
 
@@ -183,6 +203,37 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           font: "Camby"
          },
         content: [
+          {
+            style: "noc-head",
+            table: {
+              widths: [120, "*", 120],
+              body: [
+                [
+                  {
+                    image: ulbLogo,
+                    width: 60,
+                    height: 61.25,
+                    margin: [51, 12, 10, 10]
+                  },
+                  {
+                    stack: [
+                      { 
+                        text:  getLocaleLabels(("TENANT_TENANTS_"+address.tenantId.replace('.','_')).toUpperCase(),("TENANT_TENANTS_"+address.tenantId.replace('.','_')).toUpperCase()) +" "+ getLocaleLabels(("CORPORATION","PT_ACK_CORPORATION_HEADER").toUpperCase(),("CORPORATION","PT_ACK_CORPORATION_HEADER").toUpperCase()),
+                         style: "receipt-logo-header" 
+                        },
+                        {
+                          text: getLocaleLabels("PT_ACK_PROPERTY_TAX_ASSESS_ACKNOWLEDGEMENT","PT_ACK_PROPERTY_TAX_ASSESS_ACKNOWLEDGEMENT")|| "",
+                          style: "receipt-logo-sub-header",
+                        }
+                    ],
+                    alignment: "left",
+                    margin: [10, 23, 0, 0]
+                  }
+                ]
+              ]
+            },
+            layout: "noBorders"
+          },
           {
             style: "pt-reciept-citizen-table",
             margin: [0, 0, 0, 18],
@@ -400,18 +451,17 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           },
           "receipt-logo-header": {
             color: "#484848",
-            fontSize: 16,
-            bold: true,
-            decoration: "underline",
-            // decorationStyle: "solid",
-            decorationColor: "#484848",
+        fontFamily: "Roboto",
+        fontSize: 16,
+        bold: true,
+        letterSpacing: 0.74,
+        margin: [0, 0, 0, 5]
           },
           "receipt-logo-sub-header": {
             color: "#484848",
+            fontFamily: "Roboto",
             fontSize: 13,
-            decoration: "underline",
-            // decorationStyle: "solid",
-            decorationColor: "#484848",
+            letterSpacing: 0.6
           },
           "receipt-footer": {
             color: "#484848",
