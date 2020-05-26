@@ -4232,6 +4232,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
         )) ||
       `Document - ${index + 1}`;
       obj.createdBy = getLoggedinUserRole(doc.wfState);
+      obj.additionalDetails = doc.additionalDetails;
       // if(!doc.createdBy){
       //   if (doc.wfState === "SEND_TO_CITIZEN") {
       //     obj.createdBy = "BPA Architect"

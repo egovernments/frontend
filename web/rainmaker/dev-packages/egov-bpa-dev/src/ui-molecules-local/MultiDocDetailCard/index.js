@@ -238,7 +238,7 @@ function MultiDocDetailCard(props) {
                   </Typography>
                   
                   <div style={fontStyle}>
-                    {!(doc.additionalDetails && doc.additionalDetails.uploadedTime) ? "" :convertDateTimeToEpoch(doc.additionalDetails.uploadedTime)}
+                    {!(doc.additionalDetails && doc.additionalDetails.uploadedTime) ? "" :convertEpochToDate(doc.additionalDetails.uploadedTime)}
                   </div>
                 </Grid>
                 <Grid item xs={3}>

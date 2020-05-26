@@ -220,6 +220,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         doc.fileStore = docItem.fileStoreId;
         doc.fileName = docItem.fileName;
         doc.fileUrl = docItem.fileUrl;
+        doc.additionalDetails = docItem.additionalDetails;
         BPADocs && BPADocs.forEach(bpaDc => {
           if(bpaDc.fileStoreId ===  docItem.fileStoreId) {
             doc.id = bpaDc.id;
