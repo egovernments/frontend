@@ -380,7 +380,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   }
 };
 
-export const prepareDocumentsUploadData = (state, dispatch) => {
+export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
   let applicationDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping", //[0].docTypes
@@ -402,9 +402,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
    * @TODO optimize logic further
    */
   applicationDocuments.forEach(doc => {
-    if( (doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType) 
-    || 
-    (doc.WFState == "INITIATED" && doc.applicationType === bpaDetails.applicationType)) { 
+    if( (doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType)) { 
       documents.push(doc.docTypes);
     }
   });

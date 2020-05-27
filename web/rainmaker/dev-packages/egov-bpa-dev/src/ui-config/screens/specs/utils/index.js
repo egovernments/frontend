@@ -2863,7 +2863,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 
 export const edcrDetailsToBpaDetails = (state, dispatch) => {
 
-  riskType(state, dispatch);
+  getRiskType(state, dispatch);
   let path = window.location.href.includes("oc-bpa")
   let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
   
@@ -2881,8 +2881,11 @@ export const edcrDetailsToBpaDetails = (state, dispatch) => {
   dispatch(prepareFinalObject("BPA.serviceType", serviceType));
 }
 
-const riskType = (state, dispatch) => {
-  let path = window.location.href.includes("oc-bpa")
+export const getRiskType = (state, dispatch, forBPA) => {
+  let path = window.location.href.includes("oc-bpa");
+  if(forBPA){
+    path = false;
+  }
   let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
@@ -2933,6 +2936,7 @@ const riskType = (state, dispatch) => {
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
+  return scrutinyRiskType;
 };
 
 export const residentialType = (state, dispatch) => {

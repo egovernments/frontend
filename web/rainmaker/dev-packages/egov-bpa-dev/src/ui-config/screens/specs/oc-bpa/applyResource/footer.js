@@ -3,11 +3,12 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields, generateBillForBPA } from "../../utils";
+import {getRiskType, getCommonApplyFooter, validateFields, generateBillForBPA } from "../../utils";
 import "./index.css";
 import {
   submitBpaApplication,
-  updateBpaApplication
+  updateBpaApplication,
+  createUpdateOCBpaApplication
 } from "../../../../../ui-utils/commons";
 import { 
   toggleSnackbar, 
@@ -84,14 +85,17 @@ const kathaNoAndPlotNoValidation = (state, dispatch) => {
 
 const riskTypeValidation = (state, dispatch, activeStep) => {
   const riskTypes = { LOW: 0, MEDIUM: 1, HIGH: 2 };
-  let ocEdcrRiskType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "BPA.riskType"
-  );
-  let edcrRisktype = get(
-    state.screenConfiguration.preparedFinalObject,
-    "bpaDetails.riskType"
-  );
+
+  let ocEdcrRiskType = getRiskType(state, dispatch);
+  // get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "BPA.riskType"
+  // );
+  let edcrRisktype = getRiskType(state, dispatch, true);
+  // get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "bpaDetails.riskType"
+  // );
   if (riskTypes[edcrRisktype] < riskTypes[ocEdcrRiskType]) {
     dispatch(
       toggleSnackbar(
@@ -186,7 +190,9 @@ const callBackForNext = async (state, dispatch) => {
       let isRiskTypeValidation = await riskTypeValidation(state, dispatch, activeStep);
       if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
         return false;
-      }
+      } 
+      await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
+      prepareDocumentsUploadData(state, dispatch);
     }
   }
 
