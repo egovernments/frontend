@@ -2,95 +2,108 @@ import {
   getCommonHeader,
   getLabel,
   getBreak
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from 'egov-ui-framework/ui-config/screens/specs/utils'
+import { tradeLicenseApplication } from './searchResource/tradeLicenseApplication'
+import { setRoute } from 'egov-ui-framework/ui-redux/app/actions'
+import {
+  getQueryArg,
+  getRequiredDocData,
+  showHideAdhocPopup
+} from 'egov-ui-framework/ui-utils/commons'
+import { pendingApprovals } from './searchResource/pendingApprovals'
+import { prepareFinalObject } from 'egov-ui-framework/ui-redux/screen-configuration/actions'
 // import { progressStatus } from "./searchResource/progressStatus";
-import { searchResults } from "./searchResource/searchResults";
-import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
-import find from "lodash/find";
-import get from "lodash/get";
+import { searchResults } from './searchResource/searchResults'
+import {
+  localStorageGet,
+  getTenantId
+} from 'egov-ui-kit/utils/localStorageUtils'
+import { httpRequest } from '../../../../ui-utils'
+import find from 'lodash/find'
+import get from 'lodash/get'
 
-const hasButton = getQueryArg(window.location.href, "hasButton");
-let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
-const tenant= getTenantId();
+const hasButton = getQueryArg(window.location.href, 'hasButton')
+let enableButton = true
+enableButton = hasButton && hasButton === 'false' ? false : true
+const tenant = getTenantId()
 const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-  dispatch(prepareFinalObject("LicensesTemp", []));
-  dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
-};
+  dispatch(prepareFinalObject('Licenses', [{ licenseType: 'PERMANENT' }]))
+  dispatch(prepareFinalObject('LicensesTemp', []))
+  // dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
+}
 
-
-const getMdmsData = async (dispatch) => {
+const getMdmsData = async dispatch => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: getTenantId(),
       moduleDetails: [
         {
-          moduleName: "TradeLicense",
-          masterDetails: [
-            { name: "ApplicationType" }
-          ]
+          moduleName: 'TradeLicense',
+          masterDetails: [{ name: 'ApplicationType' }]
         }
       ]
     }
-  };
+  }
   try {
-    let payload = null;
+    let payload = null
     payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
+      'post',
+      '/egov-mdms-service/v1/_search',
+      '_search',
       [],
       mdmsBody
-    );
-    let types = [];
-    if(payload && payload.MdmsRes){
-      types =  get(payload.MdmsRes, "TradeLicense.ApplicationType").map((item,index) => {
-        return {
-          code : item.code.split(".")[1]
+    )
+    let types = []
+    if (payload && payload.MdmsRes) {
+      types = get(payload.MdmsRes, 'TradeLicense.ApplicationType').map(
+        (item, index) => {
+          return {
+            code: item.code.split('.')[1]
+          }
         }
-      });
-    }    
-     dispatch(
+      )
+    }
+    dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.searchScreen.applicationType",
+        'applyScreenMdmsData.searchScreen.applicationType',
         types
       )
-    );
-  }catch (e) {
-    console.log(e);
+    )
+  } catch (e) {
+    console.log(e)
   }
 }
 
 const header = getCommonHeader({
-  labelName: "Trade License",
-  labelKey: "TL_COMMON_TL"
-});
+  labelName: 'Trade License',
+  labelKey: 'TL_COMMON_TL'
+})
 const tradeLicenseSearchAndResult = {
-  uiFramework: "material-ui",
-  name: "search",
+  uiFramework: 'material-ui',
+  name: 'search',
   beforeInitScreen: (action, state, dispatch) => {
-    getMdmsData(dispatch);
-    return action;
+    getMdmsData(dispatch)
+    const moduleDetails = [
+      {
+        moduleName: 'TradeLicense',
+        masterDetails: [{ name: 'Documents' }]
+      }
+    ]
+    getRequiredDocData(action, dispatch, moduleDetails)
+    return action
   },
   components: {
     div: {
-      uiFramework: "custom-atoms",
-      componentPath: "Form",
+      uiFramework: 'custom-atoms',
+      componentPath: 'Form',
       props: {
-        className: "common-div-css",
-        id: "search"
+        className: 'common-div-css',
+        id: 'search'
       },
       children: {
         headerDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
+          uiFramework: 'custom-atoms',
+          componentPath: 'Container',
 
           children: {
             header: {
@@ -101,51 +114,51 @@ const tradeLicenseSearchAndResult = {
               ...header
             },
             newApplicationButton: {
-              componentPath: "Button",
+              componentPath: 'Button',
               gridDefination: {
                 xs: 12,
                 sm: 6,
-                align: "right"
+                align: 'right'
               },
               visible: enableButton,
               props: {
-                variant: "contained",
-                color: "primary",
+                variant: 'contained',
+                color: 'primary',
                 style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
+                  color: 'white',
+                  borderRadius: '2px',
+                  width: '250px',
+                  height: '48px'
                 }
               },
 
               children: {
                 plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
+                  uiFramework: 'custom-atoms',
+                  componentPath: 'Icon',
                   props: {
-                    iconName: "add",
+                    iconName: 'add',
                     style: {
-                      fontSize: "24px"
+                      fontSize: '24px'
                     }
                   }
                 },
 
                 buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION",
-                  labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
+                  labelName: 'NEW APPLICATION',
+                  labelKey: 'TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON'
                 })
               },
               onClickDefination: {
-                action: "condition",
+                action: 'condition',
                 callBack: (state, dispatch) => {
-                  pageResetAndChange(state, dispatch);
+                  pageResetAndChange(state, dispatch)
+                  showHideAdhocPopup(state, dispatch, 'search')
                 }
               },
               roleDefination: {
-                rolePath: "user-info.roles",
-                path : "tradelicence/apply"
-
+                rolePath: 'user-info.roles',
+                path: 'tradelicence/apply'
               }
             }
           }
@@ -155,8 +168,20 @@ const tradeLicenseSearchAndResult = {
         breakAfterSearch: getBreak(),
         searchResults
       }
+    },
+    adhocDialog: {
+      uiFramework: 'custom-containers',
+      componentPath: 'DialogContainer',
+      props: {
+        open: false,
+        maxWidth: false,
+        screenKey: 'search'
+      },
+      children: {
+        popup: {}
+      }
     }
   }
-};
+}
 
-export default tradeLicenseSearchAndResult;
+export default tradeLicenseSearchAndResult
