@@ -572,7 +572,7 @@ export const downloadPrintContainer = (
               label: { labelName: "DOWNLOAD", labelKey: "MT_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-download-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "pt-download-button" },
               menu: downloadMenu
             }
           }
