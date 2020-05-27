@@ -161,7 +161,7 @@ class Property extends Component {
 
     return (
       <Screen>
-        <BreadCrumbs url={urls.length > 0 ? urls : urlArray} pathname={pathname} history={history} />
+        <BreadCrumbs url={urls.length > 0 ? urls : urlArray} pathname={pathname} history={history} returnUrl={"/property-tax"}/>
         {
           <AssessmentList
             items={this.getAssessmentListItems(this.props)}

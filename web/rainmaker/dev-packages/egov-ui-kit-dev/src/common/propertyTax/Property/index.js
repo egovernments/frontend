@@ -210,7 +210,7 @@ class Property extends Component {
     let clsName = appName === "Citizen" ? "screen-with-bredcrumb" : "";
     return (
       <Screen className={clsName}>
-        {appName === "Citizen" && <BreadCrumbs url={urls.length > 0 ? urls : urlArray} pathname={pathname} history={history} />}
+        {appName === "Citizen" && <BreadCrumbs url={urls.length > 0 ? urls : urlArray} pathname={pathname} history={history} returnUrl={"/property-tax"}/>}
         {
           <AssessmentList
             onItemClick={this.onListItemClick}
