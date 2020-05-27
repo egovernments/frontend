@@ -154,9 +154,9 @@ export const searchApiCall = async (state, dispatch) => {
 
 const checkEmptyFields = (searchScreenObject) => {
   const businessServices = get(searchScreenObject, 'businessServices', null)
-  const mobileNo = get(searchScreenObject, 'mobileNo', null)
+  const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
-  if (checkEmpty(businessServices) && checkEmpty(mobileNo) && checkEmpty(receiptNumbers)) { return true; }
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)) { return true; }
   return false;
 }
 const checkEmpty = (value) => {
