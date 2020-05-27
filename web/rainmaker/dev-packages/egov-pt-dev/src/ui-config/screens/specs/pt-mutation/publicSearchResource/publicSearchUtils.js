@@ -81,7 +81,7 @@ export const getPayload = (searchScreenObject) => {
   if (searchScreenObject) {
     if (searchScreenObject.ownerName) {
       querryObject.push({
-        key: "ownerName",
+        key: "name",
         value: searchScreenObject.ownerName,
       });
     }
