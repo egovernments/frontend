@@ -11,6 +11,9 @@ import { getMapLocator } from "../../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { showHideMapPopup, getDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getBoundaryData } from "../../../../../ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 
 export const tradeLocationDetails = getCommonCard(
   {
@@ -209,12 +212,23 @@ export const tradeLocationDetails = getCommonCard(
           // className: "tradelicense-mohalla-apply"
         },
         beforeFieldChange: async (action, state, dispatch) => {
-          dispatch(
-            prepareFinalObject(
-              "Licenses[0].tradeLicenseDetail.address.locality.name",
-              action.value && action.value.label
-            )
-          );
+          // dispatch(
+          //   prepareFinalObject(
+          //     "Licenses[0].tradeLicenseDetail.address.locality.name",
+          //     action.value && action.value.label
+          //   )
+          // );
+        },
+        afterFieldChange: (action, state, dispatch) => {
+
+          const tenantId = getTenantId();
+          const queryObj = [{ key: "tenantId", value: tenantId }];
+            const code = get(
+              state.screenConfiguration.preparedFinalObject,
+              "Licenses[0].tradeLicenseDetail.address.locality.code",
+              null
+              );
+          getBoundaryData(action, state, dispatch, queryObj,code);
         },
         gridDefination: {
           xs: 12,

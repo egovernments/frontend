@@ -364,14 +364,7 @@ export const getReviewTrade = (isEditable = true) => {
           labelName: "Mohalla",
           labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
         },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
-            callBack: (value, state) => {       
-              const mtenanatId = getQueryArg(window.location.href, "tenantId");
-                 console.log("=================",mtenanatId);
-                 let res = value.replace("-", "_");
-                  return `${getTransformedLocale(mtenanatId)}_REVENUE_${res}`;
-                } 
-            }
+        { jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name"}
       ),
       reviewPincode: getLabelWithValue(
         {
