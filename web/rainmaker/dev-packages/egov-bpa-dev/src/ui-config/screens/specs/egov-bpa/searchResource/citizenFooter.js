@@ -133,7 +133,7 @@ export const citizenFooter = getCommonApplyFooter({
     roleDefination: {
       rolePath: "user-info.roles",
       action: "SEND_TO_ARCHITECT",
-      
+      // roles: ["CITIZEN"]
     }
   },
   approve: {

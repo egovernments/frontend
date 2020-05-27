@@ -247,55 +247,55 @@ const getAcknowledgementCard = (
               }
             },
           },
-          // PrintFormButton: {
-          //   uiFramework: "custom-atoms",
-          //   componentPath: "Div",
-          //   children: {
-          //     div1: {
-          //       uiFramework: "custom-atoms",
-          //       componentPath: "Icon",
+          PrintFormButton: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+              div1: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
 
-          //       props:{
-          //         iconName: "local_printshop",
-          //         style:{
-          //           marginTop: "7px",
-          //           marginRight: "8px",
-          //           marginLeft:"10px",
-          //         }
-          //     },
-          //      onClick: {
-          //       action: "condition",
-          //       callBack: () => {
-          //         generatePdfAndDownload(
-          //           state,
-          //           dispatch,
-          //           "print",
-          //           applicationNumber,
-          //           tenant
-          //         );
-          //       }
-          //     },
+                props:{
+                  iconName: "local_printshop",
+                  style:{
+                    marginTop: "7px",
+                    marginRight: "8px",
+                    marginLeft:"10px",
+                  }
+              },
+               onClick: {
+                action: "condition",
+                callBack: () => {
+                  generatePdfAndDownload(
+                    state,
+                    dispatch,
+                    "print",
+                    applicationNumber,
+                    tenant
+                  );
+                }
+              },
 
-          //     },
-          //     div2: getLabel({
-          //       labelName: "PRINT CONFIRMATION FORM",
-          //       labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
-          //     })
+              },
+              div2: getLabel({
+                labelName: "PRINT CONFIRMATION FORM",
+                labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+              })
 
-          //   },
-          //   onClickDefination: {
-          //     action: "condition",
-          //     callBack: () => {
-          //       generatePdfAndDownload(
-          //         state,
-          //         dispatch,
-          //         "print",
-          //         applicationNumber,
-          //         tenant
-          //       );
-          //     }
-          //   },
-          // }
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: () => {
+                generatePdfAndDownload(
+                  state,
+                  dispatch,
+                  "print",
+                  applicationNumber,
+                  tenant
+                );
+              }
+            },
+          }
 
         },
         props: {
