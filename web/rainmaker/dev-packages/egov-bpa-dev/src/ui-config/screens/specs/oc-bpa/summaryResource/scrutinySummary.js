@@ -101,7 +101,7 @@ export const scrutinySummary = getCommonGrayCard({
                 labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
             },
             {
-                jsonPath: "ocScrutinyDetails.appliactionType",
+                jsonPath: "BPA.applicationType",
                 callBack: checkValueForNA
             }
         ),
@@ -143,7 +143,7 @@ export const scrutinySummary = getCommonGrayCard({
                 labelKey: "EDCR_SCRUTINY_NAME_LABEL"
             },
             {
-                jsonPath: "bpaDetails.applicantName",
+                jsonPath: "BPA.applicantName",
                 callBack: checkValueForNA
             }
         ),
@@ -153,8 +153,7 @@ export const scrutinySummary = getCommonGrayCard({
                 labelKey: "EDCR_SH_NAME_LABEL"
             },
             {
-                jsonPath:
-                    "BPA.remarks",
+                jsonPath: "BPA.appliedBy",
                 callBack: checkValueForNA
             }
         ),

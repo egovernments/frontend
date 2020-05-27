@@ -186,7 +186,7 @@ const scrutinizePlan = async (state, dispatch) => {
     const applicantName = get(preparedFinalObject, "Scrutiny[0].applicantName");
     const file = get(preparedFinalObject, "Scrutiny[0].buildingPlan[0]");
     const permitNumber = get(preparedFinalObject, "Scrutiny[0].permitNumber");
-    const permitDate = get(preparedFinalObject, "bpaDetails.applicationDate");
+    const permitDate = get(preparedFinalObject, "bpaDetails.approvalDate");
 
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
@@ -484,7 +484,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
 
   let queryObject = [
     { key: "tenantId", value: tenantId },
-    { key: "permitNos", value: permitNum },
+    { key: "approvalNo", value: permitNum },
     { key: "permitDate", value: convertDateToEpoch(permitDate) }
   ];
   const response = await getBpaSearchResults(queryObject);
@@ -528,6 +528,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     );
     return;
   }
+  set(response, "Bpa[0].serviceType", "NEW_CONSTRUCTION")
   let primaryOwnerArray = get(response, "Bpa[0].landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
   dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
   dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));

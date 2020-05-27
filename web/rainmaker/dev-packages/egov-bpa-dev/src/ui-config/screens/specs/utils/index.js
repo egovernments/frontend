@@ -2864,15 +2864,17 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 export const edcrDetailsToBpaDetails = (state, dispatch) => {
 
   riskType(state, dispatch);
-
+  let path = window.location.href.includes("oc-bpa")
+  let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
+  
   let applicationType = get (
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.appliactionType11"
+    `${scrutinytype}.appliactionType`
   ) || "BUILDING_PLAN_SCRUTINY";
 
   let serviceType = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.planInformation.serviceType"
+    `${scrutinytype}.applicationSubType`
   ) || "NEW_CONSTRUCTION";
 
   dispatch(prepareFinalObject("BPA.applicationType", applicationType));
@@ -5252,7 +5254,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
     dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
     dispatch(prepareFinalObject(`BPA.approvalNo`, bpaDetails.approvalNo));
-    riskType(state, dispatch);
+    edcrDetailsToBpaDetails(state, dispatch);
     ocuupancyType(state, dispatch);
     await permitNumberLink(state, dispatch, action)
   } catch (e) {

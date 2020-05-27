@@ -82,7 +82,7 @@ const kathaNoAndPlotNoValidation = (state, dispatch) => {
   }
 }
 
-const riskTypeValidation = (state, dispatch) => {
+const riskTypeValidation = (state, dispatch, activeStep) => {
   const riskTypes = { LOW: 0, MEDIUM: 1, HIGH: 2 };
   let ocEdcrRiskType = get(
     state.screenConfiguration.preparedFinalObject,
@@ -166,30 +166,29 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  debugger
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  // if(activeStep === 0) {
-  //   let isBasicDetailsCardValid = validateFields(
-  //     "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children",
-  //     state,
-  //     dispatch
-  //   );
-  //   isBasicDetailsCardValid = true; 
-  //   if (
-  //     !isBasicDetailsCardValid
-  //   ) {
-  //     isFormValid = false;
-  //     hasFieldToaster = true;
-  //   } else {
-  //     let isKathaNoAndPlotNoValidation = await kathaNoAndPlotNoValidation(state, dispatch);
-  //     let isRiskTypeValidation = await riskTypeValidation(state, dispatch);
-  //     if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
-  //       return false;
-  //     }
-  //   }
-  // }
+  if(activeStep === 0) {
+    let isBasicDetailsCardValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children",
+      state,
+      dispatch
+    );
+    isBasicDetailsCardValid = true; 
+    if (
+      !isBasicDetailsCardValid
+    ) {
+      isFormValid = false;
+      hasFieldToaster = true;
+    } else {
+      let isKathaNoAndPlotNoValidation = await kathaNoAndPlotNoValidation(state, dispatch);
+      let isRiskTypeValidation = await riskTypeValidation(state, dispatch, activeStep);
+      if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
+        return false;
+      }
+    }
+  }
 
   if (activeStep === 1) {
     const documentsFormat = Object.values(

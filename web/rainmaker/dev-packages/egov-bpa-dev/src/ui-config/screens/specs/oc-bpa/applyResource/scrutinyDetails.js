@@ -76,7 +76,7 @@ export const basicDetails = getCommonCard({
         disabled: true,
       }
     },
-    applicationType: getTextField({
+    applicationType: getSelectField({
       label: {
         labelName: "Application Type",
         labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
@@ -85,8 +85,13 @@ export const basicDetails = getCommonCard({
         disabled: true,
         className: "tl-trade-type"
       },
-      jsonPath: "ocScrutinyDetails.appliactionType",
+      localePrefix: {
+        moduleName: "WF",
+        masterName: "BPA"
+      },
       required: true,
+      jsonPath: "BPA.applicationType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -122,6 +127,10 @@ export const basicDetails = getCommonCard({
       placeholder: {
         labelName: "Select service type",
         labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_PLACEHOLDER"
+      },
+      props: {
+        disabled: true,
+        className: "tl-trade-type"
       },
       localePrefix: {
         moduleName: "WF",

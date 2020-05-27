@@ -90,6 +90,10 @@ const getMdmsData = async (state, dispatch) => {
         payload.MdmsRes
       )
     );
+    dispatch(prepareFinalObject(
+      "searchScreen.applicationType", 
+      get(payload, "MdmsRes.BPA.ApplicationType[0].code")
+    ));
   } catch (e) {
     console.log(e);
   }
@@ -162,47 +166,47 @@ const BpaSearchAndResult = {
               },
               ...header
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
-                },
-                buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION",
-                  labelKey: "BPA_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  showApplyCityPicker(state, dispatch)
-                }
-              }
-            }
+            // newApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right"
+            //   },
+            //   visible: enableButton,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px"
+            //     }
+            //   },
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px"
+            //         }
+            //       }
+            //     },
+            //     buttonLabel: getLabel({
+            //       labelName: "NEW APPLICATION",
+            //       labelKey: "BPA_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       showApplyCityPicker(state, dispatch)
+            //     }
+            //   }
+            // }
           }
         },
         pendingApprovals,
