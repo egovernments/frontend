@@ -1585,6 +1585,7 @@ export const getSWMyConnectionResults = async (queryObject, dispatch) => {
             queryObject
         );
         if (response.SewerageConnections.length > 0) {
+            response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
             for (let i = 0; i < response.SewerageConnections.length; i++) {
                 response.SewerageConnections[i].service = "Sewerage"
                 if (response.SewerageConnections[i].connectionNo !== undefined && response.SewerageConnections[i].connectionNo !== null) {
