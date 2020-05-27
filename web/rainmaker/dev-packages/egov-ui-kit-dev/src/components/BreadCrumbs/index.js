@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 const style = { marginLeft: 10, marginTop: 2, cursor: "pointer" };
 const selStyle = { color: "#fe7a51" };
 
-const BreadCrumbs = ({ url, history }) => {
+const BreadCrumbs = ({ url, history,returnUrl }) => {
   return (
     <div className="rainmaker-displayInline" style={{ paddingLeft: 15 }}>
-      <Link to="/property-tax">
+      <Link to ={{pathname:returnUrl}}>
         <Icon action="action" name="home" color="#fe7a51" />
       </Link>
       {url &&
