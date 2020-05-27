@@ -15,7 +15,7 @@ class PTExample extends Component {
     const { urls, history } = this.props;
     return (
       <div className="col-sm-12 blockBox">
-        <BreadCrumbs url={urls} history={history} />
+        <BreadCrumbs url={urls} history={history} returnUrl={"/property-tax"}/>
         <Card
           id="home-complaint-card"
           className="clearfix"

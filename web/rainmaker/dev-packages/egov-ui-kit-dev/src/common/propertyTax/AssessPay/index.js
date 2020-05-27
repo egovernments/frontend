@@ -109,7 +109,7 @@ class AssessPay extends Component {
     let userType = getUserInfo().type;
     return (
       <Screen>
-        {userType === "CITIZEN" ? <BreadCrumbs url={urls} history={history} /> : []}
+        {userType === "CITIZEN" ? <BreadCrumbs url={urls} history={history} returnUrl={"/property-tax"}/> : []}
         <AssessmentList onItemClick={this.onListItemClick} innerDivStyle={innerDivStyle} items={getListItems()} history={history} />
         <YearDialogue open={this.state.dialogueOpen} history={history} closeDialogue={this.closeYearRangeDialogue} />
       </Screen>

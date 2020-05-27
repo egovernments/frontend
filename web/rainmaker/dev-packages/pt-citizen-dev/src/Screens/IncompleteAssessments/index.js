@@ -64,7 +64,7 @@ class IncompleteAssessments extends Component {
     const { urls, history, loading, sortedProperties } = this.props;
     return (
       <Screen loading={loading} className="screen-with-bredcrumb">
-        <BreadCrumbs url={urls} history={history} />
+        <BreadCrumbs url={urls} history={history} returnUrl={"/property-tax"}/>
         {sortedProperties && (
           <AssessmentList
             onItemClick={this.onListItemClick}
