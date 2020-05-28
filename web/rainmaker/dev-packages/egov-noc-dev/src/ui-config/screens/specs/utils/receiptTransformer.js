@@ -174,7 +174,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     );
     data.mohalla = nullToNa(
       getMessageFromLocalization(
-        `revenue.locality.${getTransformedLocale(
+        `PB_AMRITSAR_REVENUE_${getTransformedLocale(
           get(
             response,
             "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
