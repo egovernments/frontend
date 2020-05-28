@@ -1010,7 +1010,7 @@ export const getModuleName = () => {
   else if (pathName.indexOf("wns") > -1) { return "rainmaker-ws"; }
   else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) { return "rainmaker-tl"; }
   else if (pathName.indexOf("hrms") > -1) { return "rainmaker-hr"; }
-  else if (pathName.indexOf("fire-noc") > -1) { return "rainmaker-noc"; }
+  else if (pathName.indexOf("fire-noc") > -1) { return "rainmaker-noc,rainmaker-pgr"; }
   else if (pathName.indexOf("dss/home") > -1) { return "rainmaker-dss"; }
   else if (pathName.indexOf("language-selection") > -1) { return "rainmaker-common"; }
   else if (pathName.indexOf("login") > -1) { return "rainmaker-common"; }
