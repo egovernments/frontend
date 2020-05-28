@@ -419,6 +419,7 @@ export const proposedBuildingDetails = getCommonCard({
                 }
               ),
               subOccupancyType: {
+                visible: false,
                 uiFramework: "custom-containers-local",
                 moduleName: "egov-bpa",
                 componentPath: "AutosuggestContainer",

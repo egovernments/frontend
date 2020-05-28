@@ -5271,3 +5271,15 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     );
   }
 };
+
+export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails) => {
+  const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  const SHLicenseDetails = await getLicenseDetails(state,dispatch);
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const permitDetails = await getPermitDetails(get(bpaDetails, "approvalNo"), tenantId);
+  dispatch(prepareFinalObject(`bpaDetails`, permitDetails));
+  dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+  await permitNumberLink(state, dispatch);
+  await ocuupancyType(state, dispatch);
+}

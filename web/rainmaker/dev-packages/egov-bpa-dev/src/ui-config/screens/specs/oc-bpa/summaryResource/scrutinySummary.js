@@ -131,7 +131,7 @@ export const scrutinySummary = getCommonGrayCard({
                 labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
             },
             {
-                jsonPath: "BPAs.appdate",
+                jsonPath: "BPA.auditDetails.createdTime",
                 callBack: value => {
                     return convertEpochToDate(value) || checkValueForNA;
                 }
@@ -204,7 +204,7 @@ export const scrutinySummary = getCommonGrayCard({
                 labelKey: "BPA_EDCR_NO_LABEL"
             },
             {
-                jsonPath: "scrutinyDetails.edcrNumber"
+                jsonPath: "ocScrutinyDetails.edcrNumber"
             }
         ),
         uploadedfile: {
@@ -225,7 +225,7 @@ export const scrutinySummary = getCommonGrayCard({
                     labelName: "uploadedDiagram.dxf",
                     labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM_DXF"
                 },
-                jsonPath: "scrutinyDetails.updatedDxfFile",
+                jsonPath: "ocScrutinyDetails.updatedDxfFile",
             },
             type: "array"
         },
@@ -247,7 +247,7 @@ export const scrutinySummary = getCommonGrayCard({
                     labelName: "ScrutinyReport.pdf",
                     labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT_PDF"
                 },
-                jsonPath: "scrutinyDetails.planReport",
+                jsonPath: "ocScrutinyDetails.planReport",
             },
             type: "array"
         }
@@ -326,30 +326,30 @@ export const scrutinySummary = getCommonGrayCard({
                                         }
                                     }
                                 ),
-                                subOccupancyType: getLabelWithValue(
-                                    {
-                                        labelName: "Sub Occupancy Type",
-                                        labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
-                                    },
-                                    {
-                                        jsonPath: `edcr.blockDetail[0]`,
-                                        callBack: value => {
-                                            let returnVAlue;
-                                            if (value && value.occupancyType && value.occupancyType.length) {
-                                                returnVAlue = "";
-                                                let occupancy = value.occupancyType;
-                                                for (let tp = 0; tp < occupancy.length; tp++) {
-                                                    if (tp === (occupancy.length - 1)) {
-                                                        returnVAlue += occupancy[tp].label;//getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
-                                                    } else {
-                                                        returnVAlue += occupancy[tp].label + ","; //getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
-                                                    }
-                                                }
-                                            }
-                                            return returnVAlue || checkValueForNA;
-                                        },
-                                    }
-                                ),
+                                // subOccupancyType: getLabelWithValue(
+                                //     {
+                                //         labelName: "Sub Occupancy Type",
+                                //         labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+                                //     },
+                                //     {
+                                //         jsonPath: `edcr.blockDetail[0]`,
+                                //         callBack: value => {
+                                //             let returnVAlue;
+                                //             if (value && value.occupancyType && value.occupancyType.length) {
+                                //                 returnVAlue = "";
+                                //                 let occupancy = value.occupancyType;
+                                //                 for (let tp = 0; tp < occupancy.length; tp++) {
+                                //                     if (tp === (occupancy.length - 1)) {
+                                //                         returnVAlue += occupancy[tp].label;//getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
+                                //                     } else {
+                                //                         returnVAlue += occupancy[tp].label + ","; //getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
+                                //                     }
+                                //                 }
+                                //             }
+                                //             return returnVAlue || checkValueForNA;
+                                //         },
+                                //     }
+                                // ),
                                 proposedBuildingDetailsContainer: {
                                     uiFramework: "custom-molecules-local",
                                     moduleName: "egov-bpa",
@@ -411,7 +411,7 @@ export const scrutinySummary = getCommonGrayCard({
                 labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
             },
             {
-                jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
+                jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
                 callBack: checkValueForNA
             }
         ),
@@ -422,7 +422,7 @@ export const scrutinySummary = getCommonGrayCard({
             },
             {
                 jsonPath:
-                    "scrutinyDetails.planDetail.blocks[0].building.totalFloors",
+                    "ocScrutinyDetails.planDetail.blocks[0].building.totalFloors",
                 callBack: checkValueForNA
             }
         ),
@@ -433,7 +433,7 @@ export const scrutinySummary = getCommonGrayCard({
             },
             {
                 jsonPath:
-                    "scrutinyDetails.planDetail.blocks[0].building.buildingHeight",
+                    "ocScrutinyDetails.planDetail.blocks[0].building.buildingHeight",
                 callBack: checkValueForNA
             }
         )

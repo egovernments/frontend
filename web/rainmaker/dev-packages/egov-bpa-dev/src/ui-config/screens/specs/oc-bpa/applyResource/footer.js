@@ -8,7 +8,8 @@ import "./index.css";
 import {
   submitBpaApplication,
   updateBpaApplication,
-  createUpdateOCBpaApplication
+  createUpdateOCBpaApplication,
+  prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { 
   toggleSnackbar, 
@@ -18,7 +19,6 @@ import {
 import _ from "lodash";
 import jp from "jsonpath";
 import { getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-
 
 
 export const showRisktypeWarning = (state, dispatch) => {
@@ -154,12 +154,7 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
 const getSummaryRequiredDetails = async (state, dispatch) => {
   const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.businessService");
-  let businessService = "BPA.NC_APP_FEE"
-  if(riskType === "BPA_LOW") {
-    businessService = "BPA.LOW_RISK_PERMIT_FEE"
-  }
-  generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
+  generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_OC_APP_FEE");
   prepareDocumentsDetailsView(state, dispatch);
 }
 
@@ -191,7 +186,10 @@ const callBackForNext = async (state, dispatch) => {
       if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
         return false;
       } 
-      await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
+      isFormValid = await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
+      if (!isFormValid) {
+        hasFieldToaster = false;
+      }
       prepareDocumentsUploadData(state, dispatch);
     }
   }
@@ -259,6 +257,7 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep !== 4) {
     if (isFormValid) {
+      // createUpdateOCBpaApplication(state, dispatch, "INITIATE")
      changeStep(state, dispatch);
     } else if (hasFieldToaster) { 
       let errorMessage = {
