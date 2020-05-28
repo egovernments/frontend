@@ -755,7 +755,7 @@ const footerCallBackForRequiredDataModal = (moduleName) => {
         dispatch(prepareFinalObject("SewerageConnection", []));
         dispatch(prepareFinalObject("applyScreen", {}));
         dispatch(prepareFinalObject("searchScreen", {}));
-        const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/citizen/wns/apply` : `/employee/wns/apply`
+        const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
         dispatch(setRoute(applyUrl));
       };
   }
