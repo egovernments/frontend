@@ -944,7 +944,10 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
             let splittedString = payload.applyScreen.documents[key].documentType.split(".");
             if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
             else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
-            else { docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; }
+            else { 
+                docUploadRedux[key].dropdown = { value: payload.applyScreen.documents[key].documentType };
+                docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; 
+            }
             docUploadRedux[key].id = payload.applyScreen.documents[key].id;
             docUploadRedux[key].isDocumentRequired = true;
             docUploadRedux[key].isDocumentTypeRequired = true;
