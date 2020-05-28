@@ -1109,6 +1109,19 @@ export const updateBpaApplication = async (state, dispatch) => {
     dispatch(setRoute(acknowledgementUrl));
   }
 };
+export const updateOcBpaApplication = async (state, dispatch) => {
+  const bpaAction = "SEND_TO_CITIZEN";
+  let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (response) {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+  }
+};
 
 export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
   let applicationId = get(

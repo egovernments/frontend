@@ -7,7 +7,7 @@ import {getRiskType, getCommonApplyFooter, validateFields, generateBillForBPA } 
 import "./index.css";
 import {
   submitBpaApplication,
-  updateBpaApplication,
+  updateOcBpaApplication,
   createUpdateOCBpaApplication,
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
@@ -111,19 +111,19 @@ const riskTypeValidation = (state, dispatch, activeStep) => {
   } else if (riskTypes[edcrRisktype] > riskTypes[ocEdcrRiskType]) {
     showRisktypeWarning(state, dispatch, activeStep);
   } else {
-    const riskTypeValid = get(
-      state,
-      "screenConfiguration.preparedFinalObject.BPA.riskType",
-      []
-    );
-    if (riskTypeValid.length === 0) {
-      let errorMessage = {
-        labelName: "Please search scrutiny details linked to the scrutiny number",
-        labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      return false;
-    }
+    // const riskTypeValid = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.BPA.riskType",
+    //   []
+    // );
+    // if (riskTypeValid.length === 0) {
+    //   let errorMessage = {
+    //     labelName: "Please search scrutiny details linked to the scrutiny number",
+    //     labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
+    //   };
+    //   dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    //   return false;
+    // }
     return true;
   }
 }
@@ -174,7 +174,10 @@ const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    isBasicDetailsCardValid = true; 
+    /**
+     * @TODO There is a bug in validation after fixing that the below statement will be removed 
+     */
+    isBasicDetailsCardValid= true;
     if (
       !isBasicDetailsCardValid
     ) {
@@ -192,9 +195,7 @@ const callBackForNext = async (state, dispatch) => {
       }
       prepareDocumentsUploadData(state, dispatch);
     }
-  }
-
-  if (activeStep === 1) {
+  } else if (activeStep === 1) {
     const documentsFormat = Object.values(
       get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
     );
@@ -524,7 +525,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: updateBpaApplication
+      callBack: updateOcBpaApplication
     },
     visible: false
   }
