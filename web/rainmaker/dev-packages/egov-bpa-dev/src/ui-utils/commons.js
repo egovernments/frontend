@@ -1295,7 +1295,7 @@ export const submitOCBpaApplication = async (state, dispatch) => {
   let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  if (get(response, "status", "") === "success") {
+  if (response) {
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
         ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
