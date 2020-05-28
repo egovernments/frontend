@@ -87,12 +87,13 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
           meterReadingsData.meterReadings[0].currentReadingDate = convertEpochToDate(meterReadingsData.meterReadings[0].currentReadingDate)
           meterReadingsData.meterReadings[0].lastReading = meterReadingsData.meterReadings[0].lastReading === 0 ? "0" : meterReadingsData.meterReadings[0].lastReading
         }
+        /*
         if (payload.WaterConnection[0].property.usageCategory !== null && payload.WaterConnection[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.WaterConnection[0].property.usageCategory) + ")]"
           let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.WaterConnection[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);
-        }
+        }*/
 
         if (payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === 'NA' || payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === null || payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === undefined) {
           payload.WaterConnection[0].additionalDetails.adhocPenaltyComment = "";
@@ -121,12 +122,12 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
       if (payload.SewerageConnections.length > 0 && data.Bill.length > 0) {
         payload.SewerageConnections[0].service = service;
         await processBills(data, viewBillTooltip, dispatch);
-        if (payload.SewerageConnections[0].property.usageCategory !== null && payload.SewerageConnections[0].property.usageCategory !== undefined) {
+        /*if (payload.SewerageConnections[0].property.usageCategory !== null && payload.SewerageConnections[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.SewerageConnections[0].property.usageCategory) + ")]"
           let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.SewerageConnections[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);//propertyUsageType from Mdms
-        }
+        }*/
         if (payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === null || payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === undefined) {
           payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment = "";
         }
