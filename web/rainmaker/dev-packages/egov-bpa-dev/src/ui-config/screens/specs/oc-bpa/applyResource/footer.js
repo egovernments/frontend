@@ -3,18 +3,22 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields } from "../../utils";
+import {getRiskType, getCommonApplyFooter, validateFields, generateBillForBPA } from "../../utils";
 import "./index.css";
 import {
   submitBpaApplication,
-  updateBpaApplication
+  updateOcBpaApplication,
+  createUpdateOCBpaApplication,
+  prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { 
   toggleSnackbar, 
-  handleScreenConfigurationFieldChange as handleField 
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import _ from "lodash";
-
+import jp from "jsonpath";
+import { getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 
 export const showRisktypeWarning = (state, dispatch) => {
@@ -79,16 +83,19 @@ const kathaNoAndPlotNoValidation = (state, dispatch) => {
   }
 }
 
-const riskTypeValidation = (state, dispatch) => {
+const riskTypeValidation = (state, dispatch, activeStep) => {
   const riskTypes = { LOW: 0, MEDIUM: 1, HIGH: 2 };
-  let ocEdcrRiskType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "BPA.riskType"
-  );
-  let edcrRisktype = get(
-    state.screenConfiguration.preparedFinalObject,
-    "bpaDetails.riskType"
-  );
+
+  let ocEdcrRiskType = getRiskType(state, dispatch);
+  // get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "BPA.riskType"
+  // );
+  let edcrRisktype = getRiskType(state, dispatch, true);
+  // get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "bpaDetails.riskType"
+  // );
   if (riskTypes[edcrRisktype] < riskTypes[ocEdcrRiskType]) {
     dispatch(
       toggleSnackbar(
@@ -104,21 +111,51 @@ const riskTypeValidation = (state, dispatch) => {
   } else if (riskTypes[edcrRisktype] > riskTypes[ocEdcrRiskType]) {
     showRisktypeWarning(state, dispatch, activeStep);
   } else {
-    const riskTypeValid = get(
-      state,
-      "screenConfiguration.preparedFinalObject.BPA.riskType",
-      []
-    );
-    if (riskTypeValid.length === 0) {
-      let errorMessage = {
-        labelName: "Please search scrutiny details linked to the scrutiny number",
-        labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      return false;
-    }
+    // const riskTypeValid = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.BPA.riskType",
+    //   []
+    // );
+    // if (riskTypeValid.length === 0) {
+    //   let errorMessage = {
+    //     labelName: "Please search scrutiny details linked to the scrutiny number",
+    //     labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
+    //   };
+    //   dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    //   return false;
+    // }
     return true;
   }
+}
+
+const prepareDocumentsDetailsView = async (state, dispatch) => {
+  let documentsPreview = [];
+  let reduxDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    {}
+  );
+  jp.query(reduxDocuments, "$.*").forEach(doc => {
+    if (doc.documents && doc.documents.length > 0 && doc.dropDownValues) {
+      doc.documents.forEach(docDetail =>{
+        documentsPreview.push({
+          title: getTransformedLocale(doc.documentCode),
+          name: docDetail.fileName,
+          fileStoreId: docDetail.fileStoreId,
+          linkText: "View",
+          link: docDetail.fileUrl && docDetail.fileUrl.split(",")[0]
+        })
+      });
+    }
+  });
+  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+};
+
+const getSummaryRequiredDetails = async (state, dispatch) => {
+  const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_OC_APP_FEE");
+  prepareDocumentsDetailsView(state, dispatch);
 }
 
 const callBackForNext = async (state, dispatch) => {
@@ -137,7 +174,10 @@ const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    isBasicDetailsCardValid = true; 
+    /**
+     * @TODO There is a bug in validation after fixing that the below statement will be removed 
+     */
+    isBasicDetailsCardValid= true;
     if (
       !isBasicDetailsCardValid
     ) {
@@ -145,15 +185,80 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = true;
     } else {
       let isKathaNoAndPlotNoValidation = await kathaNoAndPlotNoValidation(state, dispatch);
-      let isRiskTypeValidation = await riskTypeValidation(state, dispatch);
+      let isRiskTypeValidation = await riskTypeValidation(state, dispatch, activeStep);
       if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
         return false;
+      } 
+      isFormValid = await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
+      if (!isFormValid) {
+        hasFieldToaster = false;
       }
+      prepareDocumentsUploadData(state, dispatch);
+    }
+  } else if (activeStep === 1) {
+    const documentsFormat = Object.values(
+      get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
+    );
+
+    let validateDocumentField = false;
+
+    if (documentsFormat && documentsFormat.length) {
+      for (let i = 0; i < documentsFormat.length; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(
+          documentsFormat[i],
+          "isDocumentTypeRequired"
+        );
+  
+        let documents = get(documentsFormat[i], "documents");
+        if (isDocumentRequired) {
+          if (documents && documents.length > 0) {
+            if (isDocumentTypeRequired) {
+              if (get(documentsFormat[i], "dropDownValues.value")) {
+                validateDocumentField = true;
+              } else {
+                dispatch(
+                  toggleSnackbar(
+                    true,
+                    { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
+                    "warning"
+                  )
+                );
+                validateDocumentField = false;
+                break;
+              }
+            } else {
+              validateDocumentField = true;
+            }
+          } else {
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
+                "warning"
+              )
+            );
+            validateDocumentField = false;
+            break;
+          }
+        } else {
+          validateDocumentField = true;
+        }
+      }
+      if (!validateDocumentField) {
+      isFormValid = false;
+      hasFieldToaster = true;
+      } else {
+        getSummaryRequiredDetails(state, dispatch);
+      }
+    } else {
+      getSummaryRequiredDetails(state, dispatch);
     }
   }
 
   if (activeStep !== 4) {
     if (isFormValid) {
+      // createUpdateOCBpaApplication(state, dispatch, "INITIATE")
      changeStep(state, dispatch);
     } else if (hasFieldToaster) { 
       let errorMessage = {
@@ -420,7 +525,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: updateBpaApplication
+      callBack: updateOcBpaApplication
     },
     visible: false
   }

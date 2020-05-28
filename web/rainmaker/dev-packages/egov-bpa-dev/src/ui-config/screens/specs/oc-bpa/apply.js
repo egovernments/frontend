@@ -4,9 +4,17 @@ import {
   getStepperObject,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+import {
+  prepareDocumentsUploadData,
+  getAppSearchResults
+} from "../../../../ui-utils/commons";
+
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
+  getFileUrlFromAPI,
+  getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -15,6 +23,7 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
 import get from "lodash/get";
+import jp from "jsonpath";
 import {
   basicDetails,
   buildingPlanScrutinyDetails,
@@ -27,10 +36,13 @@ import { footer, showRisktypeWarning } from "./applyResource/footer";
 import {
   getBpaMdmsData,
   getOcEdcrDetails,
-  getTodaysDateInYYYMMDD
+  getTodaysDateInYYYMMDD,
+  edcrDetailsToBpaDetails,
+  setProposedBuildingData,
+  applicantNameAppliedByMaping
 } from "../utils";
 import { changeStep } from "./applyResource/footer";
-
+import { edcrHttpRequest } from "../../../../ui-utils/api";
 
 export const stepsData = [
   { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
@@ -146,9 +158,11 @@ const getMdmsData = async (action, state, dispatch) => {
   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   let applicationType = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[0].code"
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[1].code"
   );
   dispatch(prepareFinalObject("BPA.applicationType", applicationType));
+  await prepareDocumentsUploadData(state, dispatch);
+
 };
 
 const procedToNextStep = (state, dispatch) => {
@@ -163,6 +177,128 @@ const procedToNextStep = (state, dispatch) => {
   changeStep(state, dispatch, "", 1);
 }
 
+const setSearchResponse = async (
+  state,
+  dispatch,
+  applicationNumber,
+  tenantId, action
+) => {
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "applicationNo", value: applicationNumber }
+  ]);
+  
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
+    "search", []
+    );
+
+  dispatch(prepareFinalObject(`ocScrutinyDetails`, edcrRes.edcrDetail[0] ));
+  dispatch(prepareFinalObject("BPAs.appdate", get(response, "Bpa[0].auditDetails.createdTime")));
+  await setProposedBuildingData(state, dispatch, "ocApply", "ocApply");
+  await edcrDetailsToBpaDetails(state, dispatch);
+  await applicantNameAppliedByMaping(state, dispatch, get(response, "Bpa[0]"));
+  await prepareDocumentDetailsUploadRedux(state, dispatch);
+};
+
+export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
+  let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
+  let bpaDocs = [];
+  if (docs && docs.length > 0) {
+    docs.forEach(section => {
+      section.cards.forEach(doc => {
+        let docObj = {};
+        docObj.documentType = section.code;
+        docObj.documentCode = doc.code;
+        if(uploadedDocs && uploadedDocs.length > 0) {
+          docObj.isDocumentRequired = false;
+        }
+        else {
+          docObj.isDocumentRequired = doc.required;          
+        }
+        docObj.isDocumentTypeRequired = doc.required;
+        bpaDocs.push(docObj);
+      })
+    });
+  }
+  
+  let bpaDetails = get (state.screenConfiguration.preparedFinalObject, "BPA");
+  let uploadedDocs = bpaDetails.documents;
+  
+  if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    uploadedDocs.forEach(upDoc => {
+      bpaDocs.forEach((bpaDoc,index) => {
+        let bpaDetailsDoc;
+        if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        if(bpaDetailsDoc == bpaDoc.documentCode) {
+          let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
+          let name = (fileUrls[upDoc.fileStoreId] && 
+            decodeURIComponent(
+              fileUrls[upDoc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues.value =  upDoc.documentType;
+          if(bpaDoc.documents ){
+            bpaDoc.documents.push(
+              {
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),
+                dropDownValues : bpaDoc.dropDownValues.value,    
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                wfState: upDoc.wfState ,
+                isClickable:false                               
+              }
+            );
+          }else{
+            bpaDoc.documents = [
+              {
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),
+                dropDownValues : bpaDoc.dropDownValues.value,             
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                wfState: upDoc.wfState,
+                isClickable:false                                
+              }
+            ];
+          }
+        }
+      })
+    })
+    let previewStoreIds = jp.query(bpaDocs, "$..[*].*.fileStoreId");
+    let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : {};
+      
+    bpaDocs.forEach(doc => {
+
+      if (doc.documents && doc.documents.length > 0) {
+          doc.documents.forEach(docDetail =>{
+            docDetail["link"] = fileUrls[docDetail.fileStoreId];
+            return docDetail;
+          });
+      }
+    });
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
+  }
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
@@ -170,19 +306,27 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
     set(state, "screenConfiguration.moduleName", "OCBPA");
-
-    const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
-    if(edcrNumber) {
-      dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
-      getOcEdcrDetails(state, dispatch)
-    }
+    const applicationNumber = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
     getMdmsData(action, state, dispatch);
-    const today = getTodaysDateInYYYMMDD();
-    dispatch(prepareFinalObject("BPAs.appdate", today));
+
+    if (applicationNumber) {
+      setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
+    } else {
+      const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+      if(edcrNumber) {
+        dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
+        getOcEdcrDetails(state, dispatch)
+      }
+      const today = getTodaysDateInYYYMMDD();
+      dispatch(prepareFinalObject("BPAs.appdate", today));
+    }
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "BPA" }
+      { key: "businessServices", value: "BPA_OC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 

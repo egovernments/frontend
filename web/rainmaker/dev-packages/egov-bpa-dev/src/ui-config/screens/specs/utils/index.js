@@ -2863,24 +2863,29 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 
 export const edcrDetailsToBpaDetails = (state, dispatch) => {
 
-  riskType(state, dispatch);
-
+  getRiskType(state, dispatch);
+  let path = window.location.href.includes("oc-bpa")
+  let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
+  
   let applicationType = get (
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.appliactionType11"
+    `${scrutinytype}.appliactionType`
   ) || "BUILDING_PLAN_SCRUTINY";
 
   let serviceType = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.planInformation.serviceType"
+    `${scrutinytype}.applicationSubType`
   ) || "NEW_CONSTRUCTION";
 
   dispatch(prepareFinalObject("BPA.applicationType", applicationType));
   dispatch(prepareFinalObject("BPA.serviceType", serviceType));
 }
 
-const riskType = (state, dispatch) => {
-  let path = window.location.href.includes("oc-bpa")
+export const getRiskType = (state, dispatch, forBPA) => {
+  let path = window.location.href.includes("oc-bpa");
+  if(forBPA){
+    path = false;
+  }
   let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
@@ -2931,6 +2936,7 @@ const riskType = (state, dispatch) => {
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
+  return scrutinyRiskType;
 };
 
 export const residentialType = (state, dispatch) => {
@@ -5071,7 +5077,7 @@ export const deviationValidation = (action, state, dispatch) => {
 export const getPermitDetails = async (permitNumber, tenantId) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
-    { key: "permitNos", value: permitNumber }
+    { key: "approvalNo", value: permitNumber }
   ];
 
   const response = await getBpaSearchResults(queryObject);
@@ -5241,7 +5247,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     });
 
     let primaryOwnerArray = get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
-    set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
+    // set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
 
     dispatch(prepareFinalObject("ocScrutinyDetails", get(ocpayload, "edcrDetail[0]")));
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
@@ -5249,8 +5255,10 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
     setProposedBuildingData(state, dispatch, action, "ocApply");
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
-    dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
-    riskType(state, dispatch);
+    dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+    dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+    dispatch(prepareFinalObject(`BPA.approvalNo`, bpaDetails.approvalNo));
+    edcrDetailsToBpaDetails(state, dispatch);
     ocuupancyType(state, dispatch);
     await permitNumberLink(state, dispatch, action)
   } catch (e) {
@@ -5263,3 +5271,15 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     );
   }
 };
+
+export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails) => {
+  const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  const SHLicenseDetails = await getLicenseDetails(state,dispatch);
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const permitDetails = await getPermitDetails(get(bpaDetails, "approvalNo"), tenantId);
+  dispatch(prepareFinalObject(`bpaDetails`, permitDetails));
+  dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+  await permitNumberLink(state, dispatch);
+  await ocuupancyType(state, dispatch);
+}

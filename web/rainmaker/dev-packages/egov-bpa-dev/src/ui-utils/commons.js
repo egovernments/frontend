@@ -380,7 +380,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   }
 };
 
-export const prepareDocumentsUploadData = (state, dispatch) => {
+export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
   let applicationDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping", //[0].docTypes
@@ -398,8 +398,11 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   );
 
   let documents = []
+  /**
+   * @TODO optimize logic further
+   */
   applicationDocuments.forEach(doc => {
-    if(doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType) { 
+    if( (doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType)) { 
       documents.push(doc.docTypes);
     }
   });
@@ -1099,6 +1102,213 @@ export const updateBpaApplication = async (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (get(response, "status", "") === "success") {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+  }
+};
+export const updateOcBpaApplication = async (state, dispatch) => {
+  const bpaAction = "SEND_TO_CITIZEN";
+  let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (response) {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+  }
+};
+
+export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
+  let applicationId = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.id"
+  );
+
+  let documentsUpdalod = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    []
+  );
+
+  let BPADocs = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.documents",
+    []
+  );
+
+  let method = applicationId ? "UPDATE" : "CREATE";
+
+  let documnts = [];
+  if (documentsUpdalod) {
+    Object.keys(documentsUpdalod).forEach(function (key) {
+      documnts.push(documentsUpdalod[key])
+    });
+  }
+
+  let requiredDocuments = [];
+  if (documnts && documnts.length > 0) {
+    documnts.forEach(documents => {
+      if (documents && documents.documents) {
+        documents.documents.forEach(docItem => {
+          if (documents.dropDownValues && documents.dropDownValues.value) {
+            let doc = {};
+            doc.documentType = documents.dropDownValues.value;
+            doc.fileStoreId = docItem.fileStoreId;
+            doc.fileStore = docItem.fileStoreId;
+            doc.fileName = docItem.fileName;
+            doc.fileUrl = docItem.fileUrl;
+            doc.additionalDetails = docItem.additionalDetails;
+            BPADocs && BPADocs.forEach(bpaDc => {
+              if (bpaDc.fileStoreId === docItem.fileStoreId) {
+                doc.id = bpaDc.id;
+              }
+            });
+            requiredDocuments.push(doc);
+          }
+        })
+      }
+    });
+
+    documnts.forEach(documents => {
+      if (documents && documents.previewdocuments) {
+        documents.previewdocuments.forEach(pDoc => {
+          let doc = {};
+          doc.documentType = pDoc.dropDownValues;
+          doc.fileStoreId = pDoc.fileStoreId;
+          doc.fileStore = pDoc.fileStoreId;
+          doc.fileName = pDoc.fileName;
+          doc.fileUrl = pDoc.fileUrl;
+          BPADocs && BPADocs.forEach(bpaDc => {
+            if (bpaDc.fileStoreId === pDoc.fileStoreId) {
+              doc.id = bpaDc.id;
+            }
+          });
+          requiredDocuments.push(doc);
+        })
+      }
+    });
+  }
+
+ // will use this later
+  // let subOccupancyData = get(
+  //   state, "screenConfiguration.preparedFinalObject.edcr.blockDetail"
+  // );
+  // let BPADetails = get(
+  //   state, "screenConfiguration.preparedFinalObject.BPA"
+  // );
+  // let blocks = [];
+  // subOccupancyData.forEach((block, index) => {
+  //   let arry = [];
+  //   block && block.occupancyType && block.occupancyType.length &&
+  //     block.occupancyType.forEach(occType => {
+  //       arry.push(occType.value);
+  //     })
+  //   blocks[index] = {};
+  //   blocks[index].blockIndex = index;
+  //   blocks[index].usageCategory = {};
+  //   blocks[index].usageCategory = arry.join();
+  //   blocks[index].floorNo = block.floorNo;
+  //   blocks[index].unitType = "Block";
+  //   if (BPADetails.landInfo && BPADetails.landInfo.unit && BPADetails.landInfo.unit[index] && BPADetails.landInfo.unit[index].id) {
+  //     blocks[index].id = BPADetails.landInfo.unit[index].id;
+  //   }
+  // })
+
+  try {
+    let payload = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
+    let tenantId = getQueryArg(window.location.href, "tenantId") || getTenantId();
+    let userInfo = JSON.parse(getUserInfo());
+    let accountId = get(userInfo, "uuid");
+    set(payload, "tenantId", tenantId);
+    set(payload, "workflow.action", status);
+    set(payload, "accountId", accountId);
+    // set(payload, "landInfo.tenantId", tenantId);
+    // set(payload, "landInfo.unit", blocks);
+
+    let documents;
+    if (requiredDocuments && requiredDocuments.length > 0) {
+      documents = requiredDocuments;
+    } else {
+      documents = null;
+    }
+
+    if (method === "UPDATE") {
+      if (status === "APPLY") {
+        documents = payload.documents
+      } else {
+        documents = payload.documents;
+        documents = requiredDocuments;
+      }
+      set(payload, "documents", documents);
+      set(payload, "workflow.varificationDocuments", null);
+    } else if (method === 'CREATE') {
+      documents = null;
+    }
+
+    payload.documents = documents;
+
+    // Set Dates to Epoch
+    let owners = get(payload, "landInfo.owners", []);
+    owners.forEach((owner, index) => {
+      set(
+        payload,
+        `landInfo.owners[${index}].dob`,
+        convertDateToEpoch(get(owner, "dob"))
+      );
+    });
+
+    let authOwners = [];
+    let multiOwners = get(payload, "landInfo.owners", []);
+    if (multiOwners && multiOwners.length > 0) {
+      multiOwners.forEach(owner => {
+        if (owner && owner.isDeleted != false) {
+          authOwners.push(owner);
+        }
+      })
+    }
+
+    set(payload, "landInfo.owners", authOwners);
+    let response;
+    if (method === "CREATE") {
+      response = await httpRequest(
+        "post",
+        "bpa-services/v1/bpa/_create",
+        "",
+        [],
+        { BPA: payload }
+      );
+      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      setApplicationNumberBox(state, dispatch);
+      await edcrDetailsToBpaDetails(state, dispatch);
+    } else if (method === "UPDATE") {
+      response = await httpRequest(
+        "post",
+        "bpa-services/v1/bpa/_update",
+        "",
+        [],
+        { BPA: payload }
+      );
+      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      await edcrDetailsToBpaDetails(state, dispatch);
+    }
+    return true;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return false;
+  }
+};
+
+export const submitOCBpaApplication = async (state, dispatch) => {
+  const bpaAction = "APPLY";
+  let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (response) {
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
         ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`

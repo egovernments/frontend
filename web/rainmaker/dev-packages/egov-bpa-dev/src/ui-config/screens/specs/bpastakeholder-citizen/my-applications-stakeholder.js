@@ -317,7 +317,7 @@ export const changePage = async (tableState) => {
         let primaryowner = "-";
         let businessService = get(element, "businessService", null);
         let type; 
-        if(businessService == "BPA_LOW" ) { type = "LOW" } else { type = "HIGH" }
+        if(businessService == "BPA_LOW" ) { type = "LOW" } else if(businessService == "BPA") { type = "HIGH" }
         let owners = get(element, "owners", [])
         owners.map(item => {
           if (item.isPrimaryOwner) {
@@ -333,7 +333,7 @@ export const changePage = async (tableState) => {
           applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
           modifiedTime: modifiedTime,
           sortNumber: 1,
-          serviceType: get(element, "serviceType"),
+          serviceType: businessService, //get(element, "serviceType"),
           tenantId: get(element, "tenantId", null),
           type: type
         })
@@ -399,13 +399,21 @@ const onRowClick = rowData => {
       default:
         window.location.assign(`${origin}${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`)
     }
-  } else {
+  } else if ((rowData[6] === "BPA") || rowData[6] == "BPA_LOW") {
     switch (rowData[4]) {
       case "Initiated":
         window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
         break;
       default:
         window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}&type=${rowData[7]}`);
+    }
+  } else {
+    switch (rowData[4]) {
+      case "Initiated":
+        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
+        break;
+      default:
+        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
     }
   }
 };
