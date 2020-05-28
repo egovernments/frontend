@@ -864,9 +864,7 @@ export const tradeDetails = getCommonCard({
           action: "condition",
           callBack: (state, dispatch) => {
             set(state.screenConfiguration.preparedFinalObject,"LicensesTemp[0].renewal", true);
-            dispatch(toggleSpinner());
             fillOldLicenseData(state, dispatch);
-            
           }
         }
       },

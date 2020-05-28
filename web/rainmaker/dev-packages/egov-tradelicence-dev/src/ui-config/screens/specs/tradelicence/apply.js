@@ -339,7 +339,7 @@ const screenConfig = {
         )
       );
       const isRenewal= get(state.screenConfiguration.preparedFinalObject,"LicensesTemp[0].renewal")?true:false;
-      isRenewal && dispatch(toggleSpinner());
+      isRenewal ;
       if(isRenewal){
         const accessories = get(state.screenConfiguration.preparedFinalObject , "Licenses[0].tradeLicenseDetail.accessories");
         const length =accessories ? accessories.length : 0;
