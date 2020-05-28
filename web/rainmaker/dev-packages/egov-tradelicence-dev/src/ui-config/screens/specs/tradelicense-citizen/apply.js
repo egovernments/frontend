@@ -71,6 +71,28 @@ const updateSearchResults = async (
     );
     dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
     dispatch(
+      prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+        "APPLICATIONTYPE.RENEWAL"
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
+        "props.value",
+        "APPLICATIONTYPE.RENEWAL"
+      )
+    );
+    dispatch(
       handleField(
         "apply",
         "components.div.children.headerDiv.children.header.children.applicationNumber",
