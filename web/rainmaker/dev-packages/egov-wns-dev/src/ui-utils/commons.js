@@ -1852,6 +1852,9 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
 
         if (type === 'application') {
+            if(wnsConnection[0].property && wnsConnection[0].property.units && wnsConnection[0].property.units.length > 0 && wnsConnection[0].property.units[0].usageCategory){
+               wnsConnection[0].property.propertySubUsageType = wnsConnection[0].property.units[0].usageCategory;
+            }
             if (wnsConnection[0].service === "WATER") {
                 if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
                     if (wnsConnection[0].property.rainWaterHarvesting === true) {
