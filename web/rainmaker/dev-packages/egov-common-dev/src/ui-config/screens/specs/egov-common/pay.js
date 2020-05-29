@@ -175,8 +175,8 @@ const screenConfig = {
                                 ...AmountToBePaid,
                                 visible: false
                             },
-                            capturePaymentDetails : ifUserRoleExists("CITIZEN") ? {} : capturePaymentDetails,
-                            g8Details : ifUserRoleExists("CITIZEN") ? {} : g8Details
+                            capturePaymentDetails : process.env.REACT_APP_NAME === "Citizen" ? {} : capturePaymentDetails,
+                            g8Details : process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details
                         })
                     }
                 },
