@@ -33,8 +33,27 @@ const declarationDetails = getCommonContainer({
   }
 });
 
+const declarationDetails2 = getCommonContainer({
+ 
+  firstStakeholder: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "BpaCheckboxContainer",
+    jsonPath: "BPA.isDeclared",
+    props: {
+      label: {
+        labelName: "I hereby declare that the measurements, specifications and other details and specifications mentioned above are correct, complete and true to the best of my knowledge and belief and that I shall abide by the approved plan and the provisions in the Act and Rules in undertaking the construction.I am responsible for any defects/errors/omissions made while submitting the application",
+        labelKey: "BPA_STAKEHOLDER_DECLARAION_LABEL"
+      },
+      jsonPath: "BPA.isDeclared",
+    },
+    visible: false,
+    type: "array"
+  }
+});
+
 export const declarationSummary = getCommonContainer({
-  headers: getCommonTitle(
+  headers: process.env.REACT_APP_NAME === "Citizen" ? getCommonTitle(
     {
       labelName: "Declaration",
       labelKey: "BPA_DECLARATION_TITLE"
@@ -45,7 +64,7 @@ export const declarationSummary = getCommonContainer({
         marginTop: 18
       }
     }
-  ),
+  ) : "",
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -55,7 +74,7 @@ export const declarationSummary = getCommonContainer({
       }
     },
     children: {
-      body: declarationDetails
+      body:  process.env.REACT_APP_NAME === "Citizen" ? declarationDetails : declarationDetails2
     }
   }
 });
