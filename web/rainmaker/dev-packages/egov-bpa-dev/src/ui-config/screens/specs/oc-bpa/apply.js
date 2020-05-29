@@ -57,8 +57,8 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Apply for building permit`,
-    labelKey: "BPA_APPLY_FOR_BUILDING_PERMIT_HEADER"
+    labelName: `Occupancy Certificate New Building Construction`,
+    labelKey: "BPA_APPLY_FOR_BUILDING_PERMIT_OC_HEADER"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
