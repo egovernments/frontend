@@ -17,6 +17,7 @@ import commonConfig from "config/common.js";
 import { searchPropertyDetails } from "./publicSearchResource/search-resources";
 import { applyMohallaData } from "./publicSearchResource/publicSearchUtils";
 import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import "./index.css";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -95,10 +96,6 @@ const screenConfig = {
       props: {
         className: "public-domain-search",
         id: "search",
-        style: {
-          paddingLeft: "16px",
-          paddingRight: "16px"
-        }
       },
       children: {
         // header: {
