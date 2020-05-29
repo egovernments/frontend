@@ -184,16 +184,17 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     } else {
-      let isKathaNoAndPlotNoValidation = await kathaNoAndPlotNoValidation(state, dispatch);
-      let isRiskTypeValidation = await riskTypeValidation(state, dispatch, activeStep);
-      if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
-        return false;
-      }
       let bpaStatus = get(
         state.screenConfiguration.preparedFinalObject,
         "BPA.status", ""
       );
-      if(!bpaStatus) {
+      if (!bpaStatus) {
+        let isKathaNoAndPlotNoValidation = await kathaNoAndPlotNoValidation(state, dispatch);
+        let isRiskTypeValidation = await riskTypeValidation(state, dispatch, activeStep);
+        if (!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
+          return false;
+        }
+
         isFormValid = await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
         if (!isFormValid) {
           hasFieldToaster = false;

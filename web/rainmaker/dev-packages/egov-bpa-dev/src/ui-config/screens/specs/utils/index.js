@@ -5257,7 +5257,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
     dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
     dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
-    dispatch(prepareFinalObject(`BPA.approvalNo`, bpaDetails.approvalNo));
+    // dispatch(prepareFinalObject(`BPA.approvalNo`, bpaDetails.approvalNo));
     edcrDetailsToBpaDetails(state, dispatch);
     ocuupancyType(state, dispatch);
     await permitNumberLink(state, dispatch, action)
