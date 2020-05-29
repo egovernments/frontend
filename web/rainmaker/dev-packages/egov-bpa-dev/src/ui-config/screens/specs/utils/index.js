@@ -3648,6 +3648,14 @@ const city = (state, dispatch, tenantId) => {
     );
   }
 };
+export const gotoHome = (state, dispatch) => {
+  showComparisonDialog(state, dispatch);
+  dispatch(
+    setRoute(
+      `/`
+    )
+    )
+};
 
 export const applyForm = (state, dispatch) => {
   const tenantId = get(
@@ -5026,7 +5034,7 @@ export const deviationValidation = (action, state, dispatch) => {
   let validationResponse = APPROVED;
   let planParam = [],
     ocParam = [];
-
+debugger
   for (let paramRecord of validationParams) {
 
     let firstIndex = paramRecord.paramPath.indexOf("[");
@@ -5057,14 +5065,7 @@ export const deviationValidation = (action, state, dispatch) => {
 
         if (diff > paramRecord.tolerancelimit) {
           if (paramRecord.restrictionType === REJECT) {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.footer.children.nextButton",
-                "props.disabled",
-                true
-              )
-            );
+           
             dispatch(
               toggleSnackbar(
                 true,
@@ -5088,7 +5089,20 @@ export const deviationValidation = (action, state, dispatch) => {
   return validationResponse;
 };
 
-
+export const showComparisonDialog = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialogofComparison.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialogofComparison", "props.open", !toggle)
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialogofComparison.popup", "props.open", !toggle)
+  );
+  
+};
 export const getPermitDetails = async (permitNumber, tenantId) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
@@ -5104,7 +5118,7 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
 };
 
-const permitNumberLink = async (state, disatch) => {
+const permitNumberLink = async (state, dispatch) => {
 
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let appNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo", "");
@@ -5124,7 +5138,7 @@ const permitNumberLink = async (state, disatch) => {
       labelName: appNumber,
       labelKey: appNumber
     }
-    disatch(
+    dispatch(
       handleField(
         "apply",
         "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
@@ -5132,7 +5146,7 @@ const permitNumberLink = async (state, disatch) => {
         linkDetail
       )
     );
-    disatch(
+    dispatch(
       handleField(
         "apply",
         "components.div.children.formwizardThirdStep.children.summaryDetails.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
@@ -5140,7 +5154,7 @@ const permitNumberLink = async (state, disatch) => {
         linkDetail
       )
     );
-    disatch(
+    dispatch(
       handleField(
         "search-preview",
         "components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
@@ -5148,9 +5162,9 @@ const permitNumberLink = async (state, disatch) => {
         linkDetail
       )
     );
-    disatch(prepareFinalObject("BPA.permitNumberLink", url));
+    dispatch(prepareFinalObject("BPA.permitNumberLink", url));
   } else {
-    disatch(prepareFinalObject("BPA.permitNumberLink", ""));
+    dispatch(prepareFinalObject("BPA.permitNumberLink", ""));
   }
 }
 
@@ -5219,7 +5233,42 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       );
       return;
     }
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.footer.children.nextButton",
+        "props.disabled",
+        true
+      )
+    );
+    /**
+     * Getting comparison report and validating it
+     */
+    let comparisionRes = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/occomparison?tenantId="+ tenantId+"&ocdcrNumber="+scrutinyNo+"&edcrNumber="+bpaDetails.edcrNumber,
+      "search", []
+    );  
+    let comparisionSuccess = false;
+    if(comparisionRes){
+      comparisionSuccess = comparisionRes.comparisonDetail.status == "Accepted" ? true : false;
+      dispatch(prepareFinalObject("comparisonDetails", comparisionRes.comparisonDetail));
 
+      if(!comparisionSuccess){
+        showComparisonDialog(state, dispatch)
+        dispatch(prepareFinalObject("comparisonDetails.report", comparisionRes.comparisonDetail.comparisonReport));
+        return 
+      }
+    }
+    
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.footer.children.nextButton",
+        "props.disabled",
+        false
+      )
+    );
     //get permit edcr details
     let edcrPayload = await edcrHttpRequest(
       "post",
@@ -5242,7 +5291,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       );
       return;
     }
-
+    
     //check duplicates
     let queryObject = [
       {
