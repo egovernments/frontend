@@ -243,8 +243,8 @@ export const basicDetails = getCommonCard({
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Building Plan Scrutiny Application Details",
-      labelKey: "BPA_APPLICATION_SCRUNITY_DETAILS_TITLE"
+      labelName: "OC Building Plan Scrutiny Application Details",
+      labelKey: "BPA_OC_APPLICATION_SCRUNITY_DETAILS_TITLE"
     },
     {
       style: {

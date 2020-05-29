@@ -193,8 +193,8 @@ export const scrutinySummary = getCommonGrayCard({
     }),
     break2: getBreak(),
     buildingPlanScrutinyHeaderDetails: getHeader({
-        labelName: "Building Plan Scrutiny Application Details",
-        labelKey: "BPA_APPLICATION_SCRUNITY_DETAILS_TITLE"
+        labelName: "OC Building Plan Scrutiny Application Details",
+        labelKey: "BPA_OC_APPLICATION_SCRUNITY_DETAILS_TITLE"
     }),
     breake3: getBreak(),
     buildingPlanScrutinyDetailsContainer: getCommonContainer({
