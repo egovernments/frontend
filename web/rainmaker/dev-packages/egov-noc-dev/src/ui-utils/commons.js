@@ -58,7 +58,6 @@ export const getSearchResults = async (queryObject, dispatch) => {
       "",
       queryObject
     );
-    console.log(response,"searchResponse");
     store.dispatch(toggleSpinner());
    if(response===''){
     store.dispatch(
@@ -142,6 +141,30 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       []
     )
 
+    let provisionalnocnumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].provisionFireNOCNumber",
+      []
+    )
+    if(provisionalnocnumber.length===0){
+
+      provisionalnocnumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].provisionFireNOCNumber",
+        []
+      )
+
+      var keyToDelete = "provisionFireNOCNumber";
+
+      const codefull = get(
+        state.screenConfiguration,
+        "preparedFinalObject"
+        );
+
+       delete codefull.FireNOCs[0][keyToDelete];
+
+    }
+
     if(parkingArea.length === 0)
     {
 
@@ -208,7 +231,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2",
       '');
 
-    console.log("village", village);
 
     set(
       payload[0],
@@ -388,7 +410,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     });
 
     let response;
-    console.log()
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
@@ -397,7 +418,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         [],
         { FireNOCs: payload }
       );
-      console.log(response,"Create Response")
       response = furnishNocResponse(response);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);

@@ -56,7 +56,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
   response = furnishNocResponse(response);
 
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  // dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
 
   // Set no of buildings radiobutton and eventually the cards
@@ -87,8 +87,6 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
   let District = get(response, "FireNOCs[0].fireNOCDetails.propertyDetails.address.city", "");
 
-  console.log("data fetching search field District ", District);
-
 
   dispatch(
     handleField(
@@ -100,8 +98,6 @@ const loadProvisionalNocData = async (state, dispatch) => {
   );
 
   let subDistrict = get(response, "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict", "");
-
-  console.log("data fetching search field subDistrict", subDistrict);
 
 
   dispatch(
