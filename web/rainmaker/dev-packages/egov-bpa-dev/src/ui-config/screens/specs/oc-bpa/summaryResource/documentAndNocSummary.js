@@ -60,7 +60,7 @@ export const documentAndNocSummary = getCommonGrayCard({
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
+            labelKey: "BPA_SUMMARY_EDIT"
           })
         },
         onClickDefination: {
