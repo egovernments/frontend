@@ -23,8 +23,8 @@ export const searchPropertyDetails = {
     }),
     subParagraph: getCommonParagraph({
       labelName:
-        "Provide at least one non-mandatory parameter to search for an application",
-      labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
+        "Provide at least one of the non-mandatory parameter to search for a property",
+      labelKey: "PT_HOME_SEARCH_PROPERTY_SUB_HEADING"
     }),
 
     searchPropertyContainer: getCommonContainer({
