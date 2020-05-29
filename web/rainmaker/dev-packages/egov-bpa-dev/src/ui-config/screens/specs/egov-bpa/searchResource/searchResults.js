@@ -141,6 +141,13 @@ export const searchResults = {
         options: {
           display: false
         }
+      },
+      {
+        name: "serviceType",
+        labelKey: "SERVICE_TYPE",
+        options: {
+          display: false
+        }
       }
     ],
     title: { labelKey: "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName: "Search Results for BPA Applications"},
@@ -178,12 +185,25 @@ const onRowClick = rowData => {
   const state = rowData[3];
   const applicationNumber = rowData[0];
   const tenantId = rowData[4];
-  switch (state) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      break;
-    default:
-      window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      break;
+  if(rowData[5] == "BPA_OC") {
+    const environment = process.env.NODE_ENV === "production" ? "employee" : "";
+    const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+    switch (state) {
+      case "INITIATED":
+        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        break;
+      default:
+        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        break;
+    }
+  } else {
+    switch (state) {
+      case "INITIATED":
+        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        break;
+      default:
+        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        break;
+    }
   }
 };

@@ -3,7 +3,13 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import {getRiskType, getCommonApplyFooter, validateFields, generateBillForBPA } from "../../utils";
+import {
+  getRiskType, 
+  getCommonApplyFooter, 
+  validateFields, 
+  generateBillForBPA,
+  applicantNameAppliedByMaping
+} from "../../utils";
 import "./index.css";
 import {
   submitBpaApplication,
@@ -154,8 +160,11 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
 const getSummaryRequiredDetails = async (state, dispatch) => {
   const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
+  const ocDetails = get(state.screenConfiguration.preparedFinalObject, "ocScrutinyDetails");
+  const bpaDetails = get(state.screenConfiguration.preparedFinalObject, "BPA")
   generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_OC_APP_FEE");
   prepareDocumentsDetailsView(state, dispatch);
+  applicantNameAppliedByMaping(state, dispatch, bpaDetails, ocDetails);
 }
 
 const callBackForNext = async (state, dispatch) => {

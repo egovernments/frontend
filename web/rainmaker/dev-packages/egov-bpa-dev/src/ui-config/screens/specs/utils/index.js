@@ -4728,8 +4728,10 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   bpaDetails.edcrDetail = payload.edcrDetail;
   let Bpa = bpaDetails;
   let permitPfKey = "buildingpermit";
-  if(bpaDetails && bpaDetails.riskType === "LOW") {
-    permitPfKey = "buildingpermit-low"
+  if(!window.location.href.includes("oc-bpa")) {
+    if(bpaDetails && bpaDetails.riskType === "LOW") {
+      permitPfKey = "buildingpermit-low"
+    }
   }
   let res = await httpRequest(
     "post",
@@ -4774,19 +4776,32 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
   );
 
   let payments = [];
-
-  if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
-    if ( serviceCode === "BPA.NC_APP_FEE") {
-      payments.push(paymentPayload.Payments[1]);
-    }
-
-    if (serviceCode === "BPA.NC_SAN_FEE" ) {
+  if(window.location.href.includes("oc-bpa")) { 
+    if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+      if ( serviceCode === "BPA.NC_OC_APP_FEE") {
+        payments.push(paymentPayload.Payments[1]);
+      }
+  
+      if (serviceCode === "BPA.NC_OC_SAN_FEE" ) {
+        payments.push(paymentPayload.Payments[0]);
+      }
+    } else {
       payments.push(paymentPayload.Payments[0]);
     }
   } else {
-    payments.push(paymentPayload.Payments[0]);
+    if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+      if ( serviceCode === "BPA.NC_APP_FEE") {
+        payments.push(paymentPayload.Payments[1]);
+      }
+  
+      if (serviceCode === "BPA.NC_SAN_FEE" ) {
+        payments.push(paymentPayload.Payments[0]);
+      }
+    } else {
+      payments.push(paymentPayload.Payments[0]);
+    }
   }
-
+  
 
   let res = await httpRequest(
     "post",
@@ -4934,13 +4949,13 @@ export const getConditionsInPermitList = async (action, state, dispatch) => {
 
 export const getLicenseDetails = async (state, dispatch) => {
 
-  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let tenantId = getTenantId();
   let userInfo = JSON.parse(getUserInfo());
   const id = get(userInfo, "id");
   const queryObject = [
     {
       key: "tenantId",
-      value: tenantId
+      value: tenantId.split('.')[0]
     },
     {
       key: "id",
@@ -5117,9 +5132,25 @@ const permitNumberLink = async (state, disatch) => {
         linkDetail
       )
     );
-    disatch(prepareFinalObject("ocScrutinyDetails.permitNumber", url));
+    disatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardThirdStep.children.summaryDetails.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    disatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    disatch(prepareFinalObject("BPA.permitNumberLink", url));
   } else {
-    disatch(prepareFinalObject("ocScrutinyDetails.permitNumber", ""));
+    disatch(prepareFinalObject("BPA.permitNumberLink", ""));
   }
 }
 
@@ -5257,7 +5288,6 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
     dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
     dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
-    // dispatch(prepareFinalObject(`BPA.approvalNo`, bpaDetails.approvalNo));
     edcrDetailsToBpaDetails(state, dispatch);
     ocuupancyType(state, dispatch);
     await permitNumberLink(state, dispatch, action)
@@ -5272,12 +5302,13 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
   }
 };
 
-export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails) => {
+export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, ocDetails) => {
   const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
-  const SHLicenseDetails = await getLicenseDetails(state,dispatch);
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  const permitDetails = await getPermitDetails(get(bpaDetails, "approvalNo"), tenantId);
+  const permitDetails = await getPermitDetails(get(ocDetails, "permitNumber"), tenantId);
+  let SHLicenseDetails = await getLicenseDetails(state,dispatch);
   dispatch(prepareFinalObject(`bpaDetails`, permitDetails));
+  if(!SHLicenseDetails) {SHLicenseDetails = "NA"}
   dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
   dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
   await permitNumberLink(state, dispatch);

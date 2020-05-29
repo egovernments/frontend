@@ -142,7 +142,7 @@ const setDownloadMenu = (action, state, dispatch) => {
   let certificateDownloadObject = {
     label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.NC_APP_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_APP_FEE");
     },
     leftIcon: "book"
   };
@@ -150,7 +150,7 @@ const setDownloadMenu = (action, state, dispatch) => {
   let receiptDownloadObject = {
     label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_SAN_FEE");
     },
     leftIcon: "receipt"
   };
@@ -178,22 +178,22 @@ const setDownloadMenu = (action, state, dispatch) => {
     leftIcon: "assignment"
   };
 
-  if (riskType === "LOW") {
-    switch (status) {
-      case "REVOCATED":
-        downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
-        break;
-      case "APPROVED":
-      case "DOC_VERIFICATION_INPROGRESS":
-      case "FIELDINSPECTION_INPROGRESS":
-      case "NOC_VERIFICATION_INPROGRESS":
-      case "APPROVAL_INPROGRESS":
-        downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
-        break;
-      default:
-        break;
-    }
-  } else {
+  // if (riskType === "LOW") {
+  //   switch (status) {
+  //     case "REVOCATED":
+  //       downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
+  //       break;
+  //     case "APPROVED":
+  //     case "DOC_VERIFICATION_INPROGRESS":
+  //     case "FIELDINSPECTION_INPROGRESS":
+  //     case "NOC_VERIFICATION_INPROGRESS":
+  //     case "APPROVAL_INPROGRESS":
+  //       downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // } else {
     switch (status) {
       case "APPROVED":
         downloadMenu = [
@@ -216,7 +216,7 @@ const setDownloadMenu = (action, state, dispatch) => {
       default:
         break;
     }
-  }
+  // }
   dispatch(
     handleField(
       "search-preview",
@@ -303,7 +303,7 @@ const setSearchResponse = async (
 
   dispatch(prepareFinalObject(`ocScrutinyDetails`, edcrRes.edcrDetail[0]));
   await edcrDetailsToBpaDetails(state, dispatch);
-  await applicantNameAppliedByMaping(state, dispatch, get(response, "Bpa[0]"));
+  await applicantNameAppliedByMaping(state, dispatch, get(response, "Bpa[0]"), get(edcrRes, "edcrDetail[0]"));
   await setProposedBuildingData(state, dispatch, "ocApply", "ocApply");
 
   let businessServicesValue = "BPA_OC";
