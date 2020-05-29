@@ -945,9 +945,9 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
             if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
             else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
             else { 
-                docUploadRedux[key].dropdown = { value: payload.applyScreen.documents[key].documentType };
-                docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; 
+                docUploadRedux[key].dropdown = { value: payload.applyScreen.documents[key].documentType }; 
             }
+            docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType;
             docUploadRedux[key].id = payload.applyScreen.documents[key].id;
             docUploadRedux[key].isDocumentRequired = true;
             docUploadRedux[key].isDocumentTypeRequired = true;
@@ -957,8 +957,26 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
         for (let i = 0; i < documentsUploadRedux.length; i++) {
             docs[i] = documentsUploadRedux[i][i];
         }
-        dispatch(prepareFinalObject("documentsUploadRedux", docs));
-        dispatch(prepareFinalObject(destJsonPath, docs));
+
+        var tempDoc = {},docType="";
+        var dList = payload.applyScreenMdmsData['sw-services-calculation'].Documents;
+        if(dList !== undefined && dList !==null){
+            for(var i=0;i<dList.length;i++){
+                for(var key in docs){
+                    docType = docs[key].documentType
+                    if(dList[i].code === docType.substring(0,docType.lastIndexOf("."))){
+                        tempDoc[i] = docs[key];
+                    }else if(dList[i].code === docType){
+                        tempDoc[i] = docs[key];
+                    }
+                }
+            }
+        }else{
+            tempDoc = docs;  
+        }
+
+        dispatch(prepareFinalObject("documentsUploadRedux", tempDoc));
+        dispatch(prepareFinalObject(destJsonPath, tempDoc));
     }
 };
 
