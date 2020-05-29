@@ -959,7 +959,7 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
         }
 
         var tempDoc = {},docType="";
-        var dList = payload.applyScreenMdmsData['sw-services-masters'].Documents;
+        var dList = payload.applyScreenMdmsData['ws-services-masters'].Documents;
         if(dList !== undefined && dList !==null){
             for(var i=0;i<dList.length;i++){
                 for(var key in docs){
