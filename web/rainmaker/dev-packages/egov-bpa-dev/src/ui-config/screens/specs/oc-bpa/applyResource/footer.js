@@ -188,12 +188,18 @@ const callBackForNext = async (state, dispatch) => {
       let isRiskTypeValidation = await riskTypeValidation(state, dispatch, activeStep);
       if(!isKathaNoAndPlotNoValidation || !isRiskTypeValidation) {
         return false;
-      } 
-      isFormValid = await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
-      if (!isFormValid) {
-        hasFieldToaster = false;
       }
-      prepareDocumentsUploadData(state, dispatch);
+      let bpaStatus = get(
+        state.screenConfiguration.preparedFinalObject,
+        "BPA.status", ""
+      );
+      if(!bpaStatus) {
+        isFormValid = await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
+        if (!isFormValid) {
+          hasFieldToaster = false;
+        }
+        prepareDocumentsUploadData(state, dispatch);
+      }
     }
   } else if (activeStep === 1) {
     const documentsFormat = Object.values(

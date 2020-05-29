@@ -28,6 +28,10 @@ import {
 import { citizenFooter } from "./searchResource/citizenFooter";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { documentAndNocSummary } from "./summaryResource/documentAndNocSummary";
+import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
+import { fieldSummary } from "./summaryResource/fieldSummary";
+import { permitListSummary } from "./summaryResource/permitListSummary";
+import { permitConditions } from "./summaryResource/permitConditions";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload, setProposedBuildingData } from "../utils/index";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -482,6 +486,26 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.documentAndNocSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.permitConditions.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
+      false
+    );
 
     return action;
   },
@@ -575,8 +599,12 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
+          fieldinspectionSummary: fieldinspectionSummary,
+          fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
-          documentAndNocSummary: documentAndNocSummary
+          documentAndNocSummary: documentAndNocSummary,
+          permitConditions: permitConditions,
+          permitListSummary: permitListSummary
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
