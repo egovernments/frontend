@@ -233,7 +233,7 @@ export const basicDetails = getCommonCard({
           labelName: "",
           labelKey: ""
         },
-        jsonPath: "ocScrutinyDetails.permitNumber",
+        jsonPath: "BPA.permitNumberLink",
       },
       type: "array"
     }

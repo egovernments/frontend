@@ -202,7 +202,8 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("BPAs.appdate", get(response, "Bpa[0].auditDetails.createdTime")));
   await setProposedBuildingData(state, dispatch, "ocApply", "ocApply");
   await edcrDetailsToBpaDetails(state, dispatch);
-  await applicantNameAppliedByMaping(state, dispatch, get(response, "Bpa[0]"));
+  await applicantNameAppliedByMaping(state, dispatch, get(response, "Bpa[0]"), get(edcrRes, "edcrDetail[0]"));
+  await prepareDocumentsUploadData(state, dispatch);
   await prepareDocumentDetailsUploadRedux(state, dispatch);
 };
 

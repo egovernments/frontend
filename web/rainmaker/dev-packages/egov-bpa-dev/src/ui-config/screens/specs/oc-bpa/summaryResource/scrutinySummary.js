@@ -147,16 +147,16 @@ export const scrutinySummary = getCommonGrayCard({
                 callBack: checkValueForNA
             }
         ),
-        // stakeHolderName: getLabelWithValue(
-        //     {
-        //         labelName: "Stake Holder Name",
-        //         labelKey: "EDCR_SH_NAME_LABEL"
-        //     },
-        //     {
-        //         jsonPath: "BPA.appliedBy",
-        //         callBack: checkValueForNA
-        //     }
-        // ),
+        stakeHolderName: getLabelWithValue(
+            {
+                labelName: "Stake Holder Name",
+                labelKey: "EDCR_SH_NAME_LABEL"
+            },
+            {
+                jsonPath: "BPA.appliedBy",
+                callBack: checkValueForNA
+            }
+        ),
         remarks: getLabelWithValue(
             {
                 labelName: "Remarks",
@@ -186,7 +186,7 @@ export const scrutinySummary = getCommonGrayCard({
                     labelName: "",
                     labelKey: ""
                 },
-                jsonPath: "ocScrutinyDetails.permitNumber",
+                jsonPath: "BPA.permitNumberLink",
             },
             type: "array"
         }
