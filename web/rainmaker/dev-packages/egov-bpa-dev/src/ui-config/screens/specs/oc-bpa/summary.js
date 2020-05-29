@@ -3,7 +3,7 @@ import {
     getCommonTitle
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { scrutinySummary } from './summaryResource/scrutinySummary';
-import { documentAndNocSummary } from "./summaryResource/documentAndNocSummary";
+import { applyDocSummary } from "./summaryResource/applyDocSummary";
 import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
 
 export const summaryDetails = getCommonCard({
@@ -13,6 +13,6 @@ export const summaryDetails = getCommonCard({
   }),
   estimateSummary: estimateSummary,
   scrutinySummary: scrutinySummary,
-  documentAndNocSummary: documentAndNocSummary
+  applyDocSummary: applyDocSummary
 });
   

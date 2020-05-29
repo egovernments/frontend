@@ -30,7 +30,7 @@ import {
   proposedBuildingDetails,
   abstractProposedBuildingDetails
 } from "./applyResource/scrutinyDetails";
-import { applyDocSummary } from './applyResource/documentAndNocDetails';
+import { documentAndNocDetails } from './applyResource/documentAndNocDetails';
 import { summaryDetails } from "./summary";
 import { footer, showRisktypeWarning } from "./applyResource/footer";
 import {
@@ -92,7 +92,7 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    applyDocSummary
+    documentAndNocDetails
   },
   visible: false
 };
