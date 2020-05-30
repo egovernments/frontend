@@ -102,7 +102,10 @@ const prepareDocumentsView = async (state, dispatch) => {
     firenoc,
     "$.fireNOCDetails.additionalDetail.documents.*"
   );
-  let allDocuments = [
+
+  try {
+
+      let allDocuments = [
     ...buildingDocuments,
     ...applicantDocuments[0],
     ...otherDocuments
@@ -115,6 +118,14 @@ const prepareDocumentsView = async (state, dispatch) => {
       linkText: "View"
     });
   });
+    
+  } catch (error) {
+
+    console.log("going to catch  block")
+
+    
+  }
+
   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
