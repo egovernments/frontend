@@ -43,6 +43,7 @@ import {
 } from "../utils";
 import { changeStep } from "./applyResource/footer";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
+import { comparisondialog } from "./comparisondialog";
 
 export const stepsData = [
   { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
@@ -462,6 +463,26 @@ const screenConfig = {
                 }
               })
             })
+          }
+        }
+      }
+    },
+    cityPickerDialogofComparison :{
+      componentPath: "Dialog",
+      props: {
+        open: false,
+       // maxWidth: "md"
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          // props: {
+          //   classes: {
+          //     root: "city-picker-dialog-style"
+          //   }
+          // },
+          children: {
+            popup: comparisondialog
           }
         }
       }
