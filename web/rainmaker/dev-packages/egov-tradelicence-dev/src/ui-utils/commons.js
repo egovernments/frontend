@@ -177,15 +177,15 @@ export const updatePFOforSearchResults = async (
       prepareFinalObject("Licenses[0].financialYear", nextYear));
   }
 
-  const licenseType = payload && get(payload, "Licenses[0].licenseType");
-  const structureSubtype =
-    payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-  const tradeTypes = setFilteredTradeTypes(
-    state,
-    dispatch,
-    licenseType,
-    structureSubtype
-  );
+  // const licenseType = payload && get(payload, "Licenses[0].licenseType");
+  // const structureSubtype =
+  //   payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
+  // const tradeTypes = setFilteredTradeTypes(
+  //   state,
+  //   dispatch,
+  //   licenseType,
+  //   structureSubtype
+  // );
   setDocsForEditFlow(state, dispatch);
   updateDropDowns(payload, action, state, dispatch, queryValue);
  

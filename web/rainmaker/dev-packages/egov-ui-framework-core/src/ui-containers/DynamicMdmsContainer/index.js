@@ -14,17 +14,18 @@ class DynamicMdmsContainer extends Component {
   }
   triggerInitilaApi = async () => {
     let { rootBlockSub, state, moduleName, masterName, type, dispatch, callBackEdit, isDependency, dropdownFields } = this.props;
-    const isMdmsData = this.getValueByKey('.MdmsJson');
     const isDependencyCheck = isDependency ? get( state.screenConfiguration.preparedFinalObject , isDependency, false ) : true;
-    if(!isMdmsData || isMdmsData.length == 0 && isDependencyCheck){
+    if(isDependencyCheck){
       let reqObj = {
         setPath : `DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`  , 
         setTransformPath : `DynamicMdms.${moduleName}.${rootBlockSub}Transformed`, 
-        dispatchPath : "DynamicMdms",
+        dispatchPath : `DynamicMdms.${moduleName}`,
         moduleName,
         name : masterName,
+        rootBlockSub,
         type
       }
+      dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, true ));
       await getMdmsJson(state, dispatch, reqObj);
       this.triggerCallback(null, null, null);
       if(getQueryArg(window.location.href, "action") == "edit") {
@@ -38,20 +39,30 @@ class DynamicMdmsContainer extends Component {
     }
   }
   componentWillUpdate () {
-    this.triggerInitilaApi();
+    let { state } = this.props;
+    const isMdmsApiTrigger = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
+    const isMdmsData = this.getValueByKey('.MdmsJson');
+    (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
   onFieldChange = ( screenKey, componentJsonpath, property, value ) => {
-    let { dispatch, dropdownFields } = this.props;
+    let { dispatch, dropdownFields, moduleName, rootBlockSub } = this.props;
     let { selectedValues } = this.state;
     dispatch(prepareFinalObject( componentJsonpath , value ));
     let index = null;
     if(componentJsonpath){
       let last = componentJsonpath.substring(componentJsonpath.lastIndexOf(".") + 1, componentJsonpath.length);
-      index = dropdownFields.findIndex((row) => {
+      index = dropdownFields && dropdownFields.findIndex((row) => {
         return row.key == last;
       });
       selectedValues.length > 0 && selectedValues.splice( index + 1 , selectedValues.length); 
       selectedValues[index] = value;
+      dropdownFields && dropdownFields.forEach((entry, i) => { 
+        let { key } = entry;
+        if(index < i){
+          let removeValuePath = `DynamicMdms.${moduleName}.${rootBlockSub}.${key}`;
+          dispatch(prepareFinalObject( removeValuePath , '' ));
+        }
+      });
       this.setState({ selectedValues });
       this.triggerCallback(componentJsonpath, value, index);
     }
@@ -59,7 +70,7 @@ class DynamicMdmsContainer extends Component {
   getValueByKey = (key) => {
     let { state, rootBlockSub, moduleName } = this.props;
     if(key){
-      return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}${key}`, []);
+      return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}${key}`);
     } else {
       return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}Transformed`, []);
     }
@@ -99,9 +110,11 @@ class DynamicMdmsContainer extends Component {
     let allObj = {} ;
     let moduleNameCaps = moduleName.toUpperCase();
     let masterNameCaps = masterName.toUpperCase();
-    dropdownFields.forEach((entry, i) => {  
-      let { key } = entry;
-      allObj[key] = dropdownFields.length - 1 == i ? 
+    let gridSm = ( 12 / dropdownFields.length ) <= 4 ? 4 : 6;
+    dropdownFields && dropdownFields.forEach((entry, i) => {  
+      let { key, fieldType, isDisabled } = entry;
+      
+      allObj[key] = fieldType == "autosuggest" ? 
       {
           uiFramework: "custom-containers",
           componentPath: "AutosuggestContainer",
@@ -110,7 +123,7 @@ class DynamicMdmsContainer extends Component {
           required: true,
           gridDefination: {
             xs: 12,
-            sm: 4
+            sm: gridSm
           },
           props: {
             style: {
@@ -157,16 +170,16 @@ class DynamicMdmsContainer extends Component {
           moduleName : moduleNameCaps ,
           props: {
             setDataInField: true,
-            className:"applicant-details-error"
+            className:"applicant-details-error",
+            disabled: isDisabled ? isDisabled : false
           },
           sourceJsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed`,
           gridDefination: {
             xs: 12,
-            sm: 4
+            sm: gridSm
           }
         })
-      }  
-        ;
+      };
     });
     return allObj; 
   }

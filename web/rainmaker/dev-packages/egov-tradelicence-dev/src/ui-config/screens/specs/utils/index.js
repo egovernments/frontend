@@ -2383,3 +2383,32 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
     }
   }
 };
+export const updateStructureTypes = async ( state, dispatch ) => {
+  const structType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.structureType"
+  );
+  if (structType) {
+    set(
+      state,
+      "screenConfiguration.preparedFinalObject.LicensesTemp[0].tradeLicenseDetail.structureType",
+      structType.split(".")[0]
+    );
+    try {
+      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureType`, structType.split(".")[0] ));
+      
+      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.structureTypesTransformed.${structType.split(".")[0]}`, [])) ));
+
+      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureSubType`, structType ));
+      payload &&
+        dispatch(
+          prepareFinalObject(
+            "LicensesTemp[0].tradeLicenseDetail.structureType",
+            payload.LicensesTemp[0].tradeLicenseDetail.structureType
+          )
+        );
+    } catch (e) {
+      console.log(e);
+    }    
+  }
+}

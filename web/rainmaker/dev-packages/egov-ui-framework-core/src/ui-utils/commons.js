@@ -801,9 +801,12 @@ export const getMdmsJson = async ( state, dispatch, reqObj) => {
       filterResult
     );
     payload = getTransformData(payload, setPath, setTransformPath);
-    dispatch(prepareFinalObject(dispatchPath, payload.DynamicMdms));
+    dispatch(prepareFinalObject(dispatchPath, get( payload, `DynamicMdms.${moduleName}`, [])));
+    //dispatch(prepareFinalObject(dispatchPath, payload.DynamicMdms));
+    dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, false ));
   } catch (e) {
     console.log(e);
+    dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, false ));
   }
 };
 export const getTransformData = (object, getPath, transerPath) => {

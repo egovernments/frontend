@@ -18,7 +18,8 @@ import {
   getUniqueItemsFromArray,
   fillOldLicenseData,
   getTradeTypeDropdownData,
-  updateMdmsDropDowns
+  updateMdmsDropDowns,
+  updateStructureTypes
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
@@ -129,6 +130,16 @@ const tradeSubTypeChange = (reqObj) => {
     console.log(e);
   }
 }
+const structureSubTypeChange = (reqObj) => {
+  try {
+    let { keyValue, value, dispatch } = reqObj;
+    let keyValueRow = keyValue.replace(`.${value}`, ``);
+    dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", value));
+    dispatch(pFO("LicensesTemp[0].tradeLicenseDetail.structureType", keyValueRow));
+  } catch (e){
+
+  }
+}  
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
@@ -161,8 +172,9 @@ const tradeUnitCard = {
                   key : 'tradeType'
                 },
                 {
-                  key : 'tradeSubType', 
-                  callBack: tradeSubTypeChange
+                  key : 'tradeSubType',
+                  callBack: tradeSubTypeChange,
+                  fieldType : "autosuggest"
                 }
               ],
               moduleName: "TradeLicense",
@@ -170,7 +182,7 @@ const tradeUnitCard = {
               rootBlockSub : 'tradeUnits',
               type : 'TL',
               callBackEdit: updateMdmsDropDowns,
-              isDependency : "Licenses[0].tradeLicenseDetail.structureType"
+              isDependency : "DynamicMdms.common-masters.structureTypes.structureSubType"
             }
           },
           // tradeCategory: {
@@ -1120,92 +1132,112 @@ export const tradeDetails = getCommonCard({
       }),
       visible: false
     },
-    tradeStructureType: {
-      ...getSelectField({
-        label: {
-          labelName: "Structure Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Structure Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_PLACEHOLDER"
-        },
-        props:{
-          className:"applicant-details-error",
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-        },
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "STRUCTURETYPE"
-        },
-        required: true,
-        jsonPath: "LicensesTemp[0].tradeLicenseDetail.structureType",
-        sourceJsonPath:
-          "applyScreenMdmsData.common-masters.StructureTypeTransformed"
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        try {
-          dispatch(
-            pFO(
-              "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
-              get(
-                state.screenConfiguration.preparedFinalObject
-                  .applyScreenMdmsData["common-masters"],
-                `StructureType.${action.value}`,
-                []
-              )
-            )
-          );
-          // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
-        } catch (e) {
-          console.log(e);
-        }
+    dynamicMdmsStructureType : {
+      uiFramework: "custom-containers",
+      componentPath: "DynamicMdmsContainer",
+      props: {
+        dropdownFields: [
+          {
+            key : 'structureType',
+            isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false
+          },
+          {
+            key : 'structureSubType',
+            callBack : structureSubTypeChange
+          }
+        ],
+        moduleName: "common-masters",
+        masterName: "StructureType",
+        rootBlockSub : 'structureTypes',
+        callBackEdit: updateStructureTypes
       }
     },
-    tradeStructureSubType: {
-      ...getSelectField({
-        label: {
-          labelName: "Structure Sub Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
-        },
-        props:{
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Select Structure Sub Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "STRUCTURETYPE"
-        },
-        jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-        sourceJsonPath:
-          "applyScreenMdmsData.common-masters.StructureSubTypeTransformed"
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        const tradeTypes = setFilteredTradeTypes(
-          state,
-          dispatch,
-          get(
-            state.screenConfiguration.preparedFinalObject,
-            "Licenses[0].licenseType",
-            "PERMANENT"
-          ),
-          action.value
-        );
-        const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
-        tradeTypeDropdownData &&
-          dispatch(
-            pFO(
-              "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-              tradeTypeDropdownData
-            )
-          );
-      }
-    },
+    // tradeStructureType: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Structure Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL"
+    //     },
+    //     placeholder: {
+    //       labelName: "Select Structure Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_PLACEHOLDER"
+    //     },
+    //     props:{
+    //       className:"applicant-details-error",
+    //       disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    //     },
+    //     localePrefix: {
+    //       moduleName: "common-masters",
+    //       masterName: "STRUCTURETYPE"
+    //     },
+    //     required: true,
+    //     jsonPath: "LicensesTemp[0].tradeLicenseDetail.structureType",
+    //     sourceJsonPath:
+    //       "applyScreenMdmsData.common-masters.StructureTypeTransformed"
+    //   }),
+    //   beforeFieldChange: (action, state, dispatch) => {
+    //     try {
+    //       dispatch(
+    //         pFO(
+    //           "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
+    //           get(
+    //             state.screenConfiguration.preparedFinalObject
+    //               .applyScreenMdmsData["common-masters"],
+    //             `StructureType.${action.value}`,
+    //             []
+    //           )
+    //         )
+    //       );
+    //       // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+    //   }
+    // },
+    // tradeStructureSubType: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Structure Sub Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
+    //     },
+    //     props:{
+    //       disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    //       className:"applicant-details-error"
+    //     },
+    //     placeholder: {
+    //       labelName: "Select Structure Sub Type",
+    //       labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_PLACEHOLDER"
+    //     },
+    //     required: true,
+    //     localePrefix: {
+    //       moduleName: "common-masters",
+    //       masterName: "STRUCTURETYPE"
+    //     },
+    //     jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
+    //     sourceJsonPath:
+    //       "applyScreenMdmsData.common-masters.StructureSubTypeTransformed"
+    //   }),
+    //   beforeFieldChange: (action, state, dispatch) => {
+    //     const tradeTypes = setFilteredTradeTypes(
+    //       state,
+    //       dispatch,
+    //       get(
+    //         state.screenConfiguration.preparedFinalObject,
+    //         "Licenses[0].licenseType",
+    //         "PERMANENT"
+    //       ),
+    //       action.value
+    //     );
+    //     const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
+    //     tradeTypeDropdownData &&
+    //       dispatch(
+    //         pFO(
+    //           "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+    //           tradeTypeDropdownData
+    //         )
+    //       );
+    //   }
+    // },
     tradeCommencementDate: getDateField({
       label: {
         labelName: "Trade Commencement Date",
