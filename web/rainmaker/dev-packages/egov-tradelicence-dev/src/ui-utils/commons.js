@@ -25,7 +25,7 @@ import set from "lodash/set";
 import {
   getQueryArg,
   getFileUrl,
-  getFileUrlFromAPI
+  getFileUrlFromAPI, getObjectKeys, getObjectValues
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
@@ -177,23 +177,6 @@ export const updatePFOforSearchResults = async (
       prepareFinalObject("Licenses[0].financialYear", nextYear));
   }
 
-  const licenseType = payload && get(payload, "Licenses[0].licenseType");
-  const structureSubtype =
-    payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-  const tradeTypes = setFilteredTradeTypes(
-    state,
-    dispatch,
-    licenseType,
-    structureSubtype
-  );
-  const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
-  tradeTypeDdData &&
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-        tradeTypeDdData
-      )
-    );
   setDocsForEditFlow(state, dispatch);
   updateDropDowns(payload, action, state, dispatch, queryValue);
  
@@ -382,6 +365,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
+      const selectedTradeSubType = get( state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
+      tradeUnits[0].tradeType = selectedTradeSubType;
       set(
         queryObject[0],
         "tradeLicenseDetail.tradeUnits",
@@ -475,12 +460,23 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
+      const selectedTradeCat = get(
+        state.screenConfiguration.preparedFinalObject,
+        "DynamicMdms.TradeLicense.tradeUnits.tradeCategory"
+      );
+      const selectedTradeType = get(
+        state.screenConfiguration.preparedFinalObject,
+        "DynamicMdms.TradeLicense.tradeUnits.tradeType"
+      );
+
       const tradeTemp = updatedtradeUnits.map((item, index) => {
         return {
-          tradeSubType: item.tradeType.split(".")[1],
-          tradeType: item.tradeType.split(".")[0]
+          tradeSubType: selectedTradeType || item.tradeType.split(".")[1],
+          tradeType: selectedTradeCat || item.tradeType.split(".")[0]
         };
       });
+
+      
       dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
       createOwnersBackup(dispatch, searchResponse);
     } else {
@@ -496,6 +492,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let mergedOwners =
         owners && owners.filter(item => !item.hasOwnProperty("isDeleted"));
 
+      const selectedTradeSubType = get(
+        state.screenConfiguration.preparedFinalObject,
+        "DynamicMdms.TradeLicense.tradeUnits.tradeSubType"
+      );
+
+      mergedTradeUnits[0].tradeType = selectedTradeSubType;
       set(queryObject[0], "tradeLicenseDetail.tradeUnits", mergedTradeUnits);
       set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
       set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);

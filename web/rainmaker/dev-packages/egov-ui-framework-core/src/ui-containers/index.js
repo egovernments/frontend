@@ -43,8 +43,13 @@ const AutosuggestContainer = Loadable({
   loading: () => <Loading />
 });
 
-const DialogContainer=Loadable({
+const DialogContainer = Loadable({
   loader: () => import("./DialogContainer"),
+  loading: () => <Loading />
+});
+
+const DynamicMdmsContainer = Loadable({
+  loader: () => import("./DynamicMdmsContainer"),
   loading: () => <Loading />
 });
 
@@ -57,5 +62,6 @@ export {
   CustomTabContainer,
   DownloadFileContainer,
   AutosuggestContainer,
-  DialogContainer
+  DialogContainer,
+  DynamicMdmsContainer
 };

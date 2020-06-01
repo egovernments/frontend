@@ -777,3 +777,74 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
     handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
   );
 };
+export const getObjectValues = objData => {
+  return (
+    objData &&
+    Object.values(objData).map(item => {
+      return item;
+    })
+  );
+};
+export const getObjectKeys = objData => {
+  return (
+    objData &&
+    Object.keys(objData).map(item => {
+      return { code: item, active: true };
+    })
+  );
+};
+export const getMdmsJson = async ( state, dispatch, reqObj) => {
+  let { setPath, setTransformPath, dispatchPath, moduleName, name, type } = reqObj;
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName,
+          masterDetails: [
+            { name }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    let result = get(payload, `MdmsRes.${moduleName}.${name}`, []);
+    let filterResult = type ? result.filter(item => item.type == type) : result ;
+    set(
+      payload,
+      setPath,
+      filterResult
+    );
+    payload = getTransformData(payload, setPath, setTransformPath);
+    dispatch(prepareFinalObject(dispatchPath, get( payload, `DynamicMdms.${moduleName}`, [])));
+    //dispatch(prepareFinalObject(dispatchPath, payload.DynamicMdms));
+    dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, false ));
+  } catch (e) {
+    console.log(e);
+    dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, false ));
+  }
+};
+export const getTransformData = (object, getPath, transerPath) => {
+  let data = get(object, getPath);
+  let transformedData = {};
+  var formTreeBase = (transformedData, row) => {
+     const splitList = row.code.split(".");
+     splitList.map(function(value, i){
+        transformedData = (i == splitList.length - 1) ? transformedData[value] = row : transformedData[value] || (transformedData[value]={});
+     });
+   }
+   data.map(a => {
+    formTreeBase(transformedData , a);
+   });
+  set(object, transerPath, transformedData);
+  return object;
+};
