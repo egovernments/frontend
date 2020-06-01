@@ -4726,6 +4726,9 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
 
+  let currentDate = new Date();
+  set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+currentDate.getDate()));
+
   let payload = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
@@ -4759,7 +4762,7 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   
 let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
   axios({
-    url: '/bpa-services/_permitorderedcr',
+    url: '/bpa-services/v1/bpa/_permitorderedcr',
     method: 'POST',
     responseType: 'blob',data
    // important
