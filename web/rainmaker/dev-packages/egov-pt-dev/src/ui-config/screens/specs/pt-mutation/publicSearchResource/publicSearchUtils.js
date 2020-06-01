@@ -5,6 +5,7 @@ import {
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { getSearchBillResult } from "../../../../../ui-utils/commons";
 
 export const ComponentJsonPath = {
   ulbCity:
@@ -81,7 +82,7 @@ export const getPayload = (searchScreenObject) => {
   if (searchScreenObject) {
     if (searchScreenObject.ownerName) {
       querryObject.push({
-        key: "ownerName",
+        key: "name",
         value: searchScreenObject.ownerName,
       });
     }
@@ -158,11 +159,11 @@ export const generateBill = async (
       });
       if (businessService) {
         queryObj.push({
-          key: "businessService",
+          key: "service",
           value: businessService,
         });
       }
-      const payload = await getBill(queryObj, dispatch);
+      const payload = await getSearchBillResult(queryObj, dispatch);
       return payload;
     }
   } catch (e) {

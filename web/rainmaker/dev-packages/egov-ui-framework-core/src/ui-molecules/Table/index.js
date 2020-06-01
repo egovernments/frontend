@@ -15,13 +15,32 @@ class Table extends React.Component {
     customSortOrder: "asc"
   };
 
+  getExtraTableStyle = () => {
+    const tableStyle = {
+      MUIDataTableToolbar: {
+        titleRoot: {
+          fontSize: "18px",
+          fontWeight: 600,
+          color: "rgba(0, 0, 0, 0.87)"
+        }
+      },
+      MUIDataTableHeadCell: {
+        data: {
+          fontSize: "14px !important",
+          fontWeight: "600 !important",
+          color: "rgba(0, 0, 0, 0.87) !important"
+        }
+      }
+    }
+    return isPublicSearch() ? tableStyle : {}
+  }
   getMuiTheme = () =>
     createMuiTheme({
       overrides: {
         MUIDataTableBodyCell: {
           root: {
             "&:nth-child(2)": {
-              color: "#2196F3",
+              color: isPublicSearch() ? "rgba(0, 0, 0, 0.87)": "#2196F3",
               cursor: isPublicSearch() ? "auto":"pointer"
             }
           }
@@ -40,7 +59,8 @@ class Table extends React.Component {
           body: {
             fontSize: 14
           }
-        }
+        },
+        ...this.getExtraTableStyle()
       }
     });
 

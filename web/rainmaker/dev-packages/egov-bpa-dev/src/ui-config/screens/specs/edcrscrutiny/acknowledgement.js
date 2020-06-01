@@ -146,17 +146,16 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Building plan eDCR scrutiny is Accepted",
+              labelName: "Occupancy Certificate eDCR Scrutiny is Accepted",
               labelKey: "EDCR_OC_ACKNOWLEDGEMENT_SUCCESS_MESSAGE"
             },
             body: {
-              labelName:
-                "This plan can now be used for creating permit application",
+              labelName: "This plan can now be used for creating oc permit application",
               labelKey: "EDCR_OC_ACKNOWLEDGEMENT_SUCCESS_COMMENT"
             },
             tailText: {
-              labelName: "Building Plan Scrutiny Number",
-              labelKey: "EDCR_NUMBER_LABEL"
+              labelName: "OC Plan Number",
+              labelKey: "EDCR_OC_NUMBER_LABEL"
             },
             number: edcrnumber
           })
@@ -175,7 +174,7 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Building plan eDCR is Not Accepted",
+              labelName: "Occupancy Certificate eDCR is Not Accepted",
               labelKey: "EDCR_OC_REJECTION_MESSAGE"
             },
             body: {
@@ -198,7 +197,7 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Building plan eDCR is Aborted",
+              labelName: "Occupancy Certificate eDCR is Aborted",
               labelKey: "EDCR_OC_ABORTED_MESSAGE"
             },
             body: {

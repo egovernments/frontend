@@ -474,7 +474,7 @@ const mapStateToProps = state => {
     screenConfiguration.preparedFinalObject.applicationProcessInstances,
     "state"
   );
-  let bpaSendBackAcionStatus = get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
+  let bpaSendBackAcionStatus =  get(bpaDetails, "status") && get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
   return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus, wfState };
 };
 

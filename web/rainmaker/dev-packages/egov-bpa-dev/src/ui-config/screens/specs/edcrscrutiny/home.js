@@ -36,7 +36,7 @@ const cardItems = [
   },
   {
     label: {
-      labelKey: "TL_MY_APPLICATIONS",
+      labelKey: "BPA_MY_APPLICATIONS",
       labelName: "My Applications"
     },
     icon: <FormIcon />,

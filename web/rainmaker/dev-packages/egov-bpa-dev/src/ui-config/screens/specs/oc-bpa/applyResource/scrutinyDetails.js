@@ -76,7 +76,7 @@ export const basicDetails = getCommonCard({
         disabled: true,
       }
     },
-    applicationType: getTextField({
+    applicationType: getSelectField({
       label: {
         labelName: "Application Type",
         labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
@@ -85,8 +85,13 @@ export const basicDetails = getCommonCard({
         disabled: true,
         className: "tl-trade-type"
       },
-      jsonPath: "ocScrutinyDetails.appliactionType",
+      localePrefix: {
+        moduleName: "WF",
+        masterName: "BPA"
+      },
       required: true,
+      jsonPath: "BPA.applicationType",
+      sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -122,6 +127,10 @@ export const basicDetails = getCommonCard({
       placeholder: {
         labelName: "Select service type",
         labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_PLACEHOLDER"
+      },
+      props: {
+        disabled: true,
+        className: "tl-trade-type"
       },
       localePrefix: {
         moduleName: "WF",
@@ -167,7 +176,7 @@ export const basicDetails = getCommonCard({
         className: "tl-trade-type"
       },
       pattern: getPattern("Name"),
-      jsonPath: "bpaDetails.applicantName"
+      jsonPath: "BPA.applicantName"
     }),
     stakeHolderName: getTextField({
       label: {
@@ -184,7 +193,7 @@ export const basicDetails = getCommonCard({
         className: "tl-trade-type"
       },
       pattern: getPattern("Name"),
-      jsonPath: "bpaDetails.appliedBy"
+      jsonPath: "BPA.appliedBy"
     }),
     remarks: getTextField({
       label: {
@@ -224,7 +233,7 @@ export const basicDetails = getCommonCard({
           labelName: "",
           labelKey: ""
         },
-        jsonPath: "ocScrutinyDetails.permitNumber",
+        jsonPath: "BPA.permitNumberLink",
       },
       type: "array"
     }
@@ -234,8 +243,8 @@ export const basicDetails = getCommonCard({
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Building Plan Scrutiny Application Details",
-      labelKey: "BPA_APPLICATION_SCRUNITY_DETAILS_TITLE"
+      labelName: "OC Building Plan Scrutiny Application Details",
+      labelKey: "BPA_OC_APPLICATION_SCRUNITY_DETAILS_TITLE"
     },
     {
       style: {
@@ -410,6 +419,7 @@ export const proposedBuildingDetails = getCommonCard({
                 }
               ),
               subOccupancyType: {
+                visible: false,
                 uiFramework: "custom-containers-local",
                 moduleName: "egov-bpa",
                 componentPath: "AutosuggestContainer",

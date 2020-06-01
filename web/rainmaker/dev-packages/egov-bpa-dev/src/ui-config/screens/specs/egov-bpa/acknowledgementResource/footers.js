@@ -64,8 +64,10 @@ export const applicationSuccessFooter = (
   let billbService
   if(businessService === "BPA_LOW") {
     billbService = "BPA.LOW_RISK_PERMIT_FEE"
-  } else {
+  } else if(businessService === "BPA"){
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+  } else if(businessService === "BPA_OC"){
+    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_OC_APP_FEE":"BPA.NC_OC_SAN_FEE");
   }
   let purpose = getQueryArg(window.location.href, "purpose");
   let isTrue = false;

@@ -94,3 +94,44 @@
     margin: 8px 0px !important;
     }
   }
+
+  @media only screen and (max-width: 768px) {
+    .pt-download-button {
+      margin-left: 5px;
+      margin-right: 1px;
+    }
+    .pt-print-button {
+      margin-left: 4px;
+    }
+    div#custom-atoms-rightdiv {
+      width: 100%;
+    }
+    .public-domain-search {
+      padding-top: 65px;
+      #material-ui-searchPropertyDetails{
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+        margin-top: 10px;
+        background-color: white !important;
+       }
+    }
+  }
+  
+  @media only screen and (min-width: 768px) {
+    .pt-download-button {
+      margin-left: 10px;
+    }
+    .pt-print-button {
+      margin-left: 5px;
+    }
+    .public-domain-search {
+      padding-left: 16px;
+      padding-right: 16px;
+      #material-ui-searchPropertyDetails{
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+        margin-top: 10px;
+        background-color: white !important;
+       }
+    }
+  }

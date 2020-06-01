@@ -2863,24 +2863,29 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 
 export const edcrDetailsToBpaDetails = (state, dispatch) => {
 
-  riskType(state, dispatch);
-
+  getRiskType(state, dispatch);
+  let path = window.location.href.includes("oc-bpa")
+  let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
+  
   let applicationType = get (
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.appliactionType11"
+    `${scrutinytype}.appliactionType`
   ) || "BUILDING_PLAN_SCRUTINY";
 
   let serviceType = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.planInformation.serviceType"
+    `${scrutinytype}.applicationSubType`
   ) || "NEW_CONSTRUCTION";
 
   dispatch(prepareFinalObject("BPA.applicationType", applicationType));
   dispatch(prepareFinalObject("BPA.serviceType", serviceType));
 }
 
-const riskType = (state, dispatch) => {
-  let path = window.location.href.includes("oc-bpa")
+export const getRiskType = (state, dispatch, forBPA) => {
+  let path = window.location.href.includes("oc-bpa");
+  if(forBPA){
+    path = false;
+  }
   let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
@@ -2931,6 +2936,7 @@ const riskType = (state, dispatch) => {
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
+  return scrutinyRiskType;
 };
 
 export const residentialType = (state, dispatch) => {
@@ -3641,6 +3647,14 @@ const city = (state, dispatch, tenantId) => {
       prepareFinalObject("BPAs[0].BPADetails.plotdetails.citytown", tenantId)
     );
   }
+};
+export const gotoHome = (state, dispatch) => {
+  showComparisonDialog(state, dispatch);
+  dispatch(
+    setRoute(
+      `/`
+    )
+    )
 };
 
 export const applyForm = (state, dispatch) => {
@@ -4722,8 +4736,10 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   bpaDetails.edcrDetail = payload.edcrDetail;
   let Bpa = bpaDetails;
   let permitPfKey = "buildingpermit";
-  if(bpaDetails && bpaDetails.riskType === "LOW") {
-    permitPfKey = "buildingpermit-low"
+  if(!window.location.href.includes("oc-bpa")) {
+    if(bpaDetails && bpaDetails.riskType === "LOW") {
+      permitPfKey = "buildingpermit-low"
+    }
   }
   let res = await httpRequest(
     "post",
@@ -4768,19 +4784,32 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
   );
 
   let payments = [];
-
-  if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
-    if ( serviceCode === "BPA.NC_APP_FEE") {
-      payments.push(paymentPayload.Payments[1]);
-    }
-
-    if (serviceCode === "BPA.NC_SAN_FEE" ) {
+  if(window.location.href.includes("oc-bpa")) { 
+    if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+      if ( serviceCode === "BPA.NC_OC_APP_FEE") {
+        payments.push(paymentPayload.Payments[1]);
+      }
+  
+      if (serviceCode === "BPA.NC_OC_SAN_FEE" ) {
+        payments.push(paymentPayload.Payments[0]);
+      }
+    } else {
       payments.push(paymentPayload.Payments[0]);
     }
   } else {
-    payments.push(paymentPayload.Payments[0]);
+    if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+      if ( serviceCode === "BPA.NC_APP_FEE") {
+        payments.push(paymentPayload.Payments[1]);
+      }
+  
+      if (serviceCode === "BPA.NC_SAN_FEE" ) {
+        payments.push(paymentPayload.Payments[0]);
+      }
+    } else {
+      payments.push(paymentPayload.Payments[0]);
+    }
   }
-
+  
 
   let res = await httpRequest(
     "post",
@@ -4928,13 +4957,13 @@ export const getConditionsInPermitList = async (action, state, dispatch) => {
 
 export const getLicenseDetails = async (state, dispatch) => {
 
-  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let tenantId = getTenantId();
   let userInfo = JSON.parse(getUserInfo());
   const id = get(userInfo, "id");
   const queryObject = [
     {
       key: "tenantId",
-      value: tenantId
+      value: tenantId.split('.')[0]
     },
     {
       key: "id",
@@ -5005,7 +5034,7 @@ export const deviationValidation = (action, state, dispatch) => {
   let validationResponse = APPROVED;
   let planParam = [],
     ocParam = [];
-
+debugger
   for (let paramRecord of validationParams) {
 
     let firstIndex = paramRecord.paramPath.indexOf("[");
@@ -5036,14 +5065,7 @@ export const deviationValidation = (action, state, dispatch) => {
 
         if (diff > paramRecord.tolerancelimit) {
           if (paramRecord.restrictionType === REJECT) {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.footer.children.nextButton",
-                "props.disabled",
-                true
-              )
-            );
+           
             dispatch(
               toggleSnackbar(
                 true,
@@ -5067,11 +5089,24 @@ export const deviationValidation = (action, state, dispatch) => {
   return validationResponse;
 };
 
-
+export const showComparisonDialog = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialogofComparison.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialogofComparison", "props.open", !toggle)
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialogofComparison.popup", "props.open", !toggle)
+  );
+  
+};
 export const getPermitDetails = async (permitNumber, tenantId) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
-    { key: "permitNos", value: permitNumber }
+    { key: "approvalNo", value: permitNumber }
   ];
 
   const response = await getBpaSearchResults(queryObject);
@@ -5083,7 +5118,7 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
 };
 
-const permitNumberLink = async (state, disatch) => {
+const permitNumberLink = async (state, dispatch) => {
 
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let appNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo", "");
@@ -5103,7 +5138,7 @@ const permitNumberLink = async (state, disatch) => {
       labelName: appNumber,
       labelKey: appNumber
     }
-    disatch(
+    dispatch(
       handleField(
         "apply",
         "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
@@ -5111,9 +5146,25 @@ const permitNumberLink = async (state, disatch) => {
         linkDetail
       )
     );
-    disatch(prepareFinalObject("ocScrutinyDetails.permitNumber", url));
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardThirdStep.children.summaryDetails.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    dispatch(prepareFinalObject("BPA.permitNumberLink", url));
   } else {
-    disatch(prepareFinalObject("ocScrutinyDetails.permitNumber", ""));
+    dispatch(prepareFinalObject("BPA.permitNumberLink", ""));
   }
 }
 
@@ -5182,7 +5233,42 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       );
       return;
     }
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.footer.children.nextButton",
+        "props.disabled",
+        true
+      )
+    );
+    /**
+     * Getting comparison report and validating it
+     */
+    let comparisionRes = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/occomparison?tenantId="+ tenantId+"&ocdcrNumber="+scrutinyNo+"&edcrNumber="+bpaDetails.edcrNumber,
+      "search", []
+    );  
+    let comparisionSuccess = false;
+    if(comparisionRes){
+      comparisionSuccess = comparisionRes.comparisonDetail.status == "Accepted" ? true : false;
+      dispatch(prepareFinalObject("comparisonDetails", comparisionRes.comparisonDetail));
 
+      if(!comparisionSuccess){
+        showComparisonDialog(state, dispatch)
+        dispatch(prepareFinalObject("comparisonDetails.report", comparisionRes.comparisonDetail.comparisonReport));
+        return 
+      }
+    }
+    
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.footer.children.nextButton",
+        "props.disabled",
+        false
+      )
+    );
     //get permit edcr details
     let edcrPayload = await edcrHttpRequest(
       "post",
@@ -5205,7 +5291,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       );
       return;
     }
-
+    
     //check duplicates
     let queryObject = [
       {
@@ -5241,7 +5327,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     });
 
     let primaryOwnerArray = get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
-    set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
+    // set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
 
     dispatch(prepareFinalObject("ocScrutinyDetails", get(ocpayload, "edcrDetail[0]")));
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
@@ -5249,8 +5335,9 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
     setProposedBuildingData(state, dispatch, action, "ocApply");
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
-    dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
-    riskType(state, dispatch);
+    dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+    dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+    edcrDetailsToBpaDetails(state, dispatch);
     ocuupancyType(state, dispatch);
     await permitNumberLink(state, dispatch, action)
   } catch (e) {
@@ -5263,3 +5350,16 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     );
   }
 };
+
+export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, ocDetails) => {
+  const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const permitDetails = await getPermitDetails(get(ocDetails, "permitNumber"), tenantId);
+  let SHLicenseDetails = await getLicenseDetails(state,dispatch);
+  dispatch(prepareFinalObject(`bpaDetails`, permitDetails));
+  if(!SHLicenseDetails) {SHLicenseDetails = "NA"}
+  dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+  await permitNumberLink(state, dispatch);
+  await ocuupancyType(state, dispatch);
+}
