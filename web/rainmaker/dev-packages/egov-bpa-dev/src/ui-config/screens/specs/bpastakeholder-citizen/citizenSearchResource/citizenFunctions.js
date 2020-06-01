@@ -162,11 +162,17 @@ export const fetchData = async (
           let status = getTextToLocalMapping(
             "WF_BPA_" + get(element, "status")
           );
+          let bService = get(element, "businessService");
+          let appType = "BUILDING_PLAN_SCRUTINY";
+          let serType = "NEW_CONSTRUCTION";
+          if(bService === "BPA_OC") {
+            appType = "BUILDING_OC_PLAN_SCRUTINY"
+          }
           let service = getTextToLocalMapping(
-            "BPA_APPLICATIONTYPE_" + get(element, "applicationType")
+            "BPA_APPLICATIONTYPE_" + appType
           );
           service += " - "+getTextToLocalMapping(
-            "BPA_SERVICETYPE_" + get(element, "serviceType")
+            "BPA_SERVICETYPE_" + serType
           );
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let primaryowner = "-";
