@@ -1680,62 +1680,20 @@ export const updateDropDowns = async (
   dispatch,
   queryValue
 ) => {
-
-  
-  const structType = get(
-    payload,
-    "Licenses[0].tradeLicenseDetail.structureType"
-  );
-  if (structType) {
-    set(
-      payload,
-      "LicensesTemp[0].tradeLicenseDetail.structureType",
-      structType.split(".")[0]
-    );
-    try {
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
-          get(
-            state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
-            "common-masters"
-            ],
-            `StructureType.${structType.split(".")[0]}`,
-            []
-          )
-        )
-      );
-
-      payload &&
-        dispatch(
-          prepareFinalObject(
-            "LicensesTemp[0].tradeLicenseDetail.structureType",
-            payload.LicensesTemp[0].tradeLicenseDetail.structureType
-          )
-        );
-    } catch (e) {
-      console.log(e);
-    }
-  }
   setOwnerShipDropDownFieldChange(state, dispatch, payload);
 };
 
 export const getDocList = (state, dispatch) => {
-  // const tradeUnits = get(
-  //   state.screenConfiguration.preparedFinalObject,
-  //   "Licenses[0].tradeLicenseDetail.tradeUnits[0]"
-  // );
-  const tradeCategory = get(
+  const tradeUnits = get(
     state.screenConfiguration.preparedFinalObject,
-    "DynamicMdms.TradeLicense.tradeUnits.tradeCategory"
+    "Licenses[0].tradeLicenseDetail.tradeUnits[0]"
   );
 
   const documentObj = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.TradeLicense.documentObj");
   const documentTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.common-masters.DocumentType");
 
   const applicationType = getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "RENEWAL" : "NEW";
-  //const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
-  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeCategory);
+  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
 
   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
     documentTypes.find((document, index) => {

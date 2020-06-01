@@ -177,15 +177,6 @@ export const updatePFOforSearchResults = async (
       prepareFinalObject("Licenses[0].financialYear", nextYear));
   }
 
-  // const licenseType = payload && get(payload, "Licenses[0].licenseType");
-  // const structureSubtype =
-  //   payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-  // const tradeTypes = setFilteredTradeTypes(
-  //   state,
-  //   dispatch,
-  //   licenseType,
-  //   structureSubtype
-  // );
   setDocsForEditFlow(state, dispatch);
   updateDropDowns(payload, action, state, dispatch, queryValue);
  
@@ -374,8 +365,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
-      const tradeSubTypeNew = get( state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
-      tradeUnits[0].tradeType = tradeSubTypeNew;
+      const selectedTradeSubType = get( state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
+      tradeUnits[0].tradeType = selectedTradeSubType;
       set(
         queryObject[0],
         "tradeLicenseDetail.tradeUnits",
@@ -469,19 +460,19 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
-      const tradeCatNew = get(
+      const selectedTradeCat = get(
         state.screenConfiguration.preparedFinalObject,
         "DynamicMdms.TradeLicense.tradeUnits.tradeCategory"
       );
-      const tradeTypeNew = get(
+      const selectedTradeType = get(
         state.screenConfiguration.preparedFinalObject,
         "DynamicMdms.TradeLicense.tradeUnits.tradeType"
       );
 
       const tradeTemp = updatedtradeUnits.map((item, index) => {
         return {
-          tradeSubType: tradeTypeNew || item.tradeType.split(".")[1],
-          tradeType: tradeCatNew || item.tradeType.split(".")[0]
+          tradeSubType: selectedTradeType || item.tradeType.split(".")[1],
+          tradeType: selectedTradeCat || item.tradeType.split(".")[0]
         };
       });
 
@@ -501,12 +492,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let mergedOwners =
         owners && owners.filter(item => !item.hasOwnProperty("isDeleted"));
 
-      const tradeSubTypeNew = get(
+      const selectedTradeSubType = get(
         state.screenConfiguration.preparedFinalObject,
         "DynamicMdms.TradeLicense.tradeUnits.tradeSubType"
       );
 
-      mergedTradeUnits[0].tradeType = tradeSubTypeNew;
+      mergedTradeUnits[0].tradeType = selectedTradeSubType;
       set(queryObject[0], "tradeLicenseDetail.tradeUnits", mergedTradeUnits);
       set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
       set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);
