@@ -105,7 +105,6 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "TradeLicense",
           masterDetails: [
-            //{ name: "TradeType", filter: `[?(@.type == "TL")]` },
             { name: "AccessoriesCategory" },
             { name: "ApplicationType" },
             { name: "documentObj" }
@@ -144,12 +143,6 @@ export const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    // set(
-    //   payload,
-    //   "MdmsRes.TradeLicense.MdmsTradeType",
-    //   get(payload, "MdmsRes.TradeLicense.TradeType", [])
-    // );
-    // payload = commonTransform(payload, "MdmsRes.TradeLicense.TradeType");
     payload = commonTransform(
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
