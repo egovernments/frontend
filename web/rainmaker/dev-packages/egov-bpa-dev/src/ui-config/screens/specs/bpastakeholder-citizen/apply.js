@@ -80,6 +80,7 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
     if (window.location.pathname.includes("openlink")) {
+      set(state, "screenConfiguration.moduleName", "BPAREG");
       set(action.screenConfig, "components.div.children.footer.props.style", {
         width: "100vw"
       });
