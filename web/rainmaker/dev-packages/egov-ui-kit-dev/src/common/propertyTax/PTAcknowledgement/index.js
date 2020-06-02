@@ -45,7 +45,7 @@ class PTAcknowledgement extends React.Component {
   };
   download(){
     const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;
-    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf);
+    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf,fileName=`pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
   }
   print(){
     const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;

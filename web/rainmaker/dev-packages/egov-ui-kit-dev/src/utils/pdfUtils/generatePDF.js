@@ -180,7 +180,7 @@ export const loadUlbLogo = tenantid => {
     };
     img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
-export const generatePDF = (logo, applicationData = {},type) => {
+export const generatePDF = (logo, applicationData = {},fileName) => {
     logo=logo||localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
@@ -403,8 +403,8 @@ export const generatePDF = (logo, applicationData = {},type) => {
     console.log(data,pdfFonts, 'daadya')
     pdfMake.vfs = pdfFonts.vfs;
     console.log(JSON.stringify(data), 'pdfdata')
-    if(type=="download"){
-        data && pdfMake.createPdf(data).download('pt-acknowledgement.pdf');
+    if(fileName!='print'){
+        data && pdfMake.createPdf(data).download(fileName);
     }else{
         data && pdfMake.createPdf(data).print();
     }

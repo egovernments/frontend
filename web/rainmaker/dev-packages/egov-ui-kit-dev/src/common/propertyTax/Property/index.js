@@ -276,7 +276,7 @@ class Property extends Component {
   };
   download(){
     const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;
-    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf);
+    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf,fileName=`pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
     // generatePDF(UlbLogoForPdf);
   }
   print(){
