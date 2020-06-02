@@ -165,8 +165,14 @@ export const fetchData = async (
           let bService = get(element, "businessService");
           let appType = "BUILDING_PLAN_SCRUTINY";
           let serType = "NEW_CONSTRUCTION";
+          let type;
           if(bService === "BPA_OC") {
             appType = "BUILDING_OC_PLAN_SCRUTINY"
+          }
+          if(bService === "BPA_LOW") {
+            type = "LOW"
+          } else {
+            type = "HIGH"
           }
           let service = getTextToLocalMapping(
             "BPA_APPLICATIONTYPE_" + appType
@@ -202,7 +208,8 @@ export const fetchData = async (
               tenantId: get(element, "tenantId", null),
               modifiedTime: modifiedTime,
               sortNumber: 1,
-              type: element.riskType
+              type: type,
+              serviceType: get(element, "businessService", null)
             })
           } else {
             searchConvertedArray.push({
