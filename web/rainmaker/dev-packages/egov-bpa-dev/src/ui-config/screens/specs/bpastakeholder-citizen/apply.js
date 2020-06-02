@@ -88,6 +88,7 @@ const screenConfig = {
       const tenantId = getTenantId();
       const locale = getLocale() || "en_IN";
       dispatch(fetchLocalizationLabel(locale, tenantId, tenantId));
+
     }
     const queryValue = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
