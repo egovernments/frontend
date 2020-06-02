@@ -499,6 +499,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
       break;
     default:
   }
+  pdfMake.vfs = pdfFonts.vfs;
   // data && pdfMake.createPdf(data).download(`${propertyDetails[0].assessmentNumber}.pdf`);
   data && pdfMake.createPdf(data).open();
 };

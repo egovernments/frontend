@@ -17,6 +17,8 @@ import PTInformation from "../AssessmentList/components/PTInformation";
 import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import "./index.css";
+import { generatePDF,loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 
 class PTAcknowledgement extends React.Component {
   state = {
@@ -36,11 +38,19 @@ class PTAcknowledgement extends React.Component {
       { key: "tenantId", value: tenantId },
     ]);
     this.setState({ propertyId: propertyId });
+    loadUlbLogo(tenantId);
   };
   onGoHomeClick = () => {
     process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/pt-mutation/propertySearch")) : store.dispatch(setRoute("/property-tax"));
   };
-
+  download(){
+    const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;
+    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf);
+  }
+  print(){
+    const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;
+    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf,'print');
+  }
   onAssessPayClick = () => {
     const propertyId = getQueryArg(window.location.href, "propertyId");
     const tenant = getQueryArg(window.location.href, "tenantId");
@@ -120,8 +130,8 @@ class PTAcknowledgement extends React.Component {
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        generatePdfFromDiv("download", propertyId, "#property-review-form");
-
+        // generatePdfFromDiv("download", propertyId, "#property-review-form");
+this.download();
         //this.downloadAcknowledgementForm();
         console.log("Download");
       },
@@ -131,7 +141,8 @@ class PTAcknowledgement extends React.Component {
     let tlCertificatePrintObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        generatePdfFromDiv("print", propertyId, "#property-review-form");
+        this.print();
+        // generatePdfFromDiv("print", propertyId, "#property-review-form");
         //console.log("Print");
       },
       leftIcon: "book",
@@ -563,8 +574,11 @@ const mapStateToProps = (state, ownProps) => {
   const { documentsUploaded } = selPropertyDetails || [];
   const { generalMDMSDataById } = common;
   const purpose = getQueryArg(window.location.href, "purpose");
+  const {preparedFinalObject}=screenConfiguration;
+  const { UlbLogoForPdf=''}=preparedFinalObject;
   return {
     propertiesById,
+    selPropertyDetails,
     common,
     app,
     generalMDMSDataById,

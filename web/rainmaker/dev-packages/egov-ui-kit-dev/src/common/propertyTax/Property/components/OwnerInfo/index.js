@@ -94,7 +94,7 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             }
             : {
               key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
-              value: getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`) || getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`)
+              value:subOwnershipCategory? getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`,localizationLabelsData) : getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`,localizationLabelsData)
               // (institution &&
               //   institution.type &&
               //   generalMDMSDataById &&

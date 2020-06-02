@@ -5,17 +5,19 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import store from "egov-ui-framework/ui-redux/store";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfFonts from "./vfs_fonts";
 pdfMake.vfs = pdfFonts.vfs;
-// pdfMake.fonts = {
-//   Camby:{
-//           normal: 'Cambay-Regular.ttf',
-//           bold: 'Cambay-Regular.ttf',
-//           italics: 'Cambay-Regular.ttf',
-//           bolditalics: 'Cambay-Regular.ttf'
-//   },
 
-// };
+pdfMake.fonts = {
+  Camby:{
+          normal: 'Cambay-Regular.ttf',
+          bold: 'Cambay-Regular.ttf',
+          italics: 'Cambay-Regular.ttf',
+          bolditalics: 'Cambay-Regular.ttf'
+  },
+
+};
 const getLabel = (value, type = 'key') => {
     let label = {}
     switch (type) {
@@ -78,7 +80,7 @@ const getMultiCard = (items = [], color = 'grey') => {
         if(item.header){
 
         let row = []
-        row.push(getLabel(item.header, 'header'))
+        row.push(getLabel(getLocaleLabels(item.header,item.header), 'header'))
         for (let i = 0; i < 3; i++) {
             row.push(getLabel(' ', 'header'))
         }
@@ -171,12 +173,15 @@ export const loadUlbLogo = tenantid => {
         ctx.drawImage(this, 0, 0);
         store.dispatch(
             prepareFinalObject("UlbLogoForPdf", canvas.toDataURL())
+            
         );
+        localStorage.setItem("UlbLogoForPdf",canvas.toDataURL());
         canvas = null;
     };
     img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
-export const generatePDF = (logo, applicationData = {}) => {
+export const generatePDF = (logo, applicationData = {},type) => {
+    logo=logo||localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
         hLineWidth: function (i, node) {
@@ -206,9 +211,9 @@ export const generatePDF = (logo, applicationData = {}) => {
     let receiptTableWidth = ["*", "*", "*", "*"];
 
     data = {
-        // defaultStyle: {
-        //   font: "Camby"
-        //  },
+        defaultStyle: {
+          font: "Camby"
+         },
         content: [
             {
                 style: "pdf-header",
@@ -247,12 +252,12 @@ export const generatePDF = (logo, applicationData = {}) => {
                     {
                         "text": [
                             {
-                                "text": getLocaleLabels(applicationData.additionalHeader, applicationData.additionalHeader),
-                                "bold": true
+                                "text": getLocaleLabels(applicationData.applicationNoHeader, applicationData.applicationNoHeader),
+                                bold: true
                             },
                             {
                                 "text": getLocaleLabels(applicationData.applicationNoValue, applicationData.applicationNoValue),
-                                "bold": false
+                                bold: false
                             }
                         ],
                         "alignment": "left"
@@ -261,11 +266,11 @@ export const generatePDF = (logo, applicationData = {}) => {
                         "text": [
                             {
                                 "text": getLocaleLabels(applicationData.additionalHeader, applicationData.additionalHeader),
-                                "bold": true
+                                bold: true
                             },
                             {
                                 "text": getLocaleLabels(applicationData.additionalHeaderValue, applicationData.additionalHeaderValue),
-                                "bold": false
+                                bold: false
                             }
                         ],
                         "alignment": "right"
@@ -286,9 +291,8 @@ export const generatePDF = (logo, applicationData = {}) => {
             },
             "pdf-header-text": {
                 "color": "#484848",
-                "fontFamily": "Roboto",
                 "fontSize": 20,
-                "bold": true,
+                bold: true,
                 "letterSpacing": 0.74,
                 "margin": [
                     0,
@@ -299,13 +303,12 @@ export const generatePDF = (logo, applicationData = {}) => {
             },
             "pdf-header-sub-text": {
                 "color": "#484848",
-                "fontFamily": "Roboto",
                 "fontSize": 15,
                 "letterSpacing": 0.6
             },
             "pdf-application-no": {
                 "fontSize": 12,
-                "bold": true,
+                bold: true,
                 "margin": [
                     -18,
                     8,
@@ -315,8 +318,8 @@ export const generatePDF = (logo, applicationData = {}) => {
                 "color": "#484848"
             },
             "pdf-card-title": {
-                "fontSize": 12,
-                "bold": true,
+                "fontSize": 11,
+                bold: true,
                 "margin": [
                     -18,
                     16,
@@ -328,7 +331,7 @@ export const generatePDF = (logo, applicationData = {}) => {
             },
             "pdf-table-card-white": {
                 "fillColor": "white",
-                "fontSize": 10,
+                "fontSize": 7,
                 "color": "#484848",
                 "margin": [
                     -20,
@@ -339,7 +342,7 @@ export const generatePDF = (logo, applicationData = {}) => {
             },
             "pdf-table-card": {
                 "fillColor": "#F2F2F2",
-                "fontSize": 8,
+                "fontSize": 7,
                 "color": "#484848",
                 "margin": [
                     -20,
@@ -350,18 +353,18 @@ export const generatePDF = (logo, applicationData = {}) => {
             },
             "pdf-card-key": {
                 "color": "rgba(0, 0, 0, 0.54)",
-                "fontSize": 8,
+                "fontSize": 7,
                 "margin": [
                     0,
-                    3,
+                    1,
                     0,
                     0
                 ]
             },
             "pdf-card-sub-header": {
                 "color": "rgba(0, 0, 0, 0.94)",
-                "fontSize": 10,
-                "bold": true,
+                "fontSize": 9,
+                bold: true,
                 "margin": [
                     0,
                     3,
@@ -370,13 +373,13 @@ export const generatePDF = (logo, applicationData = {}) => {
                 ]
             },
             "pdf-card-value": {
-                "fontSize": 12,
+                "fontSize": 11,
                 "color": "rgba(0, 0, 0, 0.87)",
                 "margin": [
                     0,
                     0,
                     0,
-                    3
+                    1
                 ]
             }
         },
@@ -397,9 +400,15 @@ export const generatePDF = (logo, applicationData = {}) => {
 
 
     // data && pdfMake.createPdf(data).download(`${propertyDetails[0].assessmentNumber}.pdf`);
-    console.log(data, 'daadya')
+    console.log(data,pdfFonts, 'daadya')
+    pdfMake.vfs = pdfFonts.vfs;
     console.log(JSON.stringify(data), 'pdfdata')
-    data && pdfMake.createPdf(data).open();
+    if(type=="download"){
+        data && pdfMake.createPdf(data).download('pt-acknowledgement.pdf');
+    }else{
+        data && pdfMake.createPdf(data).print();
+    }
+    
 };
 
 

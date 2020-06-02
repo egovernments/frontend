@@ -97,7 +97,7 @@ class Property extends Component {
       { key: "tenantId", value: this.props.match.params.tenantId },
     ]);
 
-    loadUlbLogo('pb.amritsar');
+    loadUlbLogo(this.props.match.params.tenantId);
   };
 
   onListItemClick = (item, index) => {
@@ -279,7 +279,11 @@ class Property extends Component {
     generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf);
     // generatePDF(UlbLogoForPdf);
   }
-
+  print(){
+    const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;
+    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf,'print');
+    // generatePDF(UlbLogoForPdf);
+  }
   render() {
     const {
       urls,
@@ -308,18 +312,7 @@ class Property extends Component {
     }
     return (
       <Screen className={clsName} loading={loading}>
-        <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} />
-        <Button
-              label={
-                <Label buttonLabel={true}
-                  label='Download' fontSize="16px"
-                  color="#fe7a51" />
-              }
-              onClick={() => this.download()}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
-            />
+        <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} download={()=>this.download()} print={()=>this.print()} />
         {
           <AssessmentList
             onItemClick={this.onListItemClick}
