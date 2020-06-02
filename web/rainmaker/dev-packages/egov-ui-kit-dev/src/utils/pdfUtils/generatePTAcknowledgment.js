@@ -4,7 +4,7 @@ import { getOwnerInfo } from "../../common/propertyTax/Property/components/Owner
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generatePDF } from "./generatePDF";
 
-export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf,fileName="download") => {
+export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "download") => {
 
     property.subOwnershipCategory = property.propertyDetails[0].subOwnershipCategory;
     const addressCard = getAddressItems(property);
@@ -14,13 +14,12 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     const unitCard = getUnitInfo(property['units'], property);
     let ownerInfoCard = ownerCard[0].items.filter(item => item);
     const documentCard = property.documentsUploaded.map(item => {
-        return { key: getLocaleLabels(item.title,item.title), value: item.name }
+        return { key: getLocaleLabels(item.title, item.title), value: item.name }
     })
     if (ownerCard.length > 1) {
         let items = [];
-
         ownerCard.map((owner, index) => {
-            items.push({ header: getLocaleLabels(`PT_OWNER_${index}`,`PT_OWNER_${index}`), items: owner.items.filter(item => item) })
+            items.push({ header: getLocaleLabels(`PT_OWNER_${index}`, `PT_OWNER_${index}`), items: owner.items.filter(item => item) })
         })
         ownerInfoCard = items
     }
@@ -32,7 +31,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
             if (unit.length > 1) {
                 let unitItem = { items: unit[0] }
                 if (property.propertySubType !== "SHAREDPROPERTY") {
-                    unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`,`PROPERTYTAX_FLOOR_${index}`);
+                    unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`, `PROPERTYTAX_FLOOR_${index}`);
                 }
                 let subItems = [];
                 unit.map((subUnit, ind) => {
@@ -40,7 +39,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
                         subItems.push(...subUnit);
                     } else {
                         if (subUnit.length == 3) {
-                            subUnit.unshift({ key: ' ', value: getLocaleLabels(`PT_UNIT_${ind}`,`PT_UNIT_${ind}`) })
+                            subUnit.unshift({ key: ' ', value: getLocaleLabels(`PT_UNIT_${ind}`, `PT_UNIT_${ind}`) })
                         } else {
                             for (let i = subUnit.length; i < 4; i++) {
                                 subUnit.push({ key: ' ', value: ' ' })
@@ -57,7 +56,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
             } else {
                 let unitItem = { items: unit[0] }
                 if (property.propertySubType !== "SHAREDPROPERTY") {
-                    unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`,`PROPERTYTAX_FLOOR_${index}`);
+                    unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`, `PROPERTYTAX_FLOOR_${index}`);
                 }
                 unitItems.push(unitItem)
             }
@@ -65,7 +64,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
         })
         unitInfoCard = unitItems
     }
-    
+
     let pdfData = {
         header: "PT_ACKNOWLEDGEMENT", tenantId: "pb.amritsar", applicationNoHeader:
             'PT_PROPERRTYID', additionalHeader: "PT_APPLICATION_NO", applicationNoValue:
@@ -76,6 +75,6 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
             { header: 'PT_OWNERSHIP_INFO_SUB_HEADER', items: ownerInfoCard, type: ownerCard.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'PT_COMMON_DOCS', items: documentCard }]
     }
-    
-    generatePDF(UlbLogoForPdf, pdfData,fileName);
+
+    generatePDF(UlbLogoForPdf, pdfData, fileName);
 }

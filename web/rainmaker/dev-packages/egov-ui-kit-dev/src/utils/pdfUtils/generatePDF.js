@@ -1,21 +1,17 @@
 import commonConfig from "config/common.js";
-//import pdfFonts from "pdfmake/build/vfs_fonts";
-// import pdfFonts from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/vfs_fonts";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "egov-ui-framework/ui-redux/store";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import pdfMake from "pdfmake/build/pdfmake";
-// import pdfFonts from "pdfmake/build/vfs_fonts";
 import pdfFonts from "./vfs_fonts";
 pdfMake.vfs = pdfFonts.vfs;
-
 pdfMake.fonts = {
-  Camby:{
-          normal: 'Cambay-Regular.ttf',
-          bold: 'Cambay-Regular.ttf',
-          italics: 'Cambay-Regular.ttf',
-          bolditalics: 'Cambay-Regular.ttf'
-  },
+    Camby: {
+        normal: 'Cambay-Regular.ttf',
+        bold: 'Cambay-Regular.ttf',
+        italics: 'Cambay-Regular.ttf',
+        bolditalics: 'Cambay-Regular.ttf'
+    },
 
 };
 const getLabel = (value, type = 'key') => {
@@ -77,16 +73,15 @@ const getMultiCard = (items = [], color = 'grey') => {
     let card = []
 
     items.map(item => {
-        if(item.header){
-
-        let row = []
-        row.push(getLabel(getLocaleLabels(item.header,item.header), 'header'))
-        for (let i = 0; i < 3; i++) {
-            row.push(getLabel(' ', 'header'))
+        if (item.header) {
+            let row = []
+            row.push(getLabel(getLocaleLabels(item.header, item.header), 'header'))
+            for (let i = 0; i < 3; i++) {
+                row.push(getLabel(' ', 'header'))
+            }
+            card.push(row);
         }
-        card.push(row);
-    }
-    const newCard = getCard(item.items, color);
+        const newCard = getCard(item.items, color);
         card.push(...newCard.table.body);
     })
 
@@ -173,15 +168,15 @@ export const loadUlbLogo = tenantid => {
         ctx.drawImage(this, 0, 0);
         store.dispatch(
             prepareFinalObject("UlbLogoForPdf", canvas.toDataURL())
-            
+
         );
-        localStorage.setItem("UlbLogoForPdf",canvas.toDataURL());
+        localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
         canvas = null;
     };
     img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
-export const generatePDF = (logo, applicationData = {},fileName) => {
-    logo=logo||localStorage.getItem("UlbLogoForPdf");
+export const generatePDF = (logo, applicationData = {}, fileName) => {
+    logo = logo || localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
         hLineWidth: function (i, node) {
@@ -212,8 +207,8 @@ export const generatePDF = (logo, applicationData = {},fileName) => {
 
     data = {
         defaultStyle: {
-          font: "Camby"
-         },
+            font: "Camby"
+        },
         content: [
             {
                 style: "pdf-header",
@@ -384,7 +379,6 @@ export const generatePDF = (logo, applicationData = {},fileName) => {
             }
         },
     };
-    console.log(data, 'daadya1')
     applicationData.cards.map(card => {
         switch (card.type) {
             case "singleItem":
@@ -399,16 +393,19 @@ export const generatePDF = (logo, applicationData = {},fileName) => {
     })
 
 
-    // data && pdfMake.createPdf(data).download(`${propertyDetails[0].assessmentNumber}.pdf`);
-    console.log(data,pdfFonts, 'daadya')
     pdfMake.vfs = pdfFonts.vfs;
-    console.log(JSON.stringify(data), 'pdfdata')
-    if(fileName!='print'){
-        data && pdfMake.createPdf(data).download(fileName);
-    }else{
-        data && pdfMake.createPdf(data).print();
+
+    try {
+        if (fileName != 'print') {
+            data && pdfMake.createPdf(data).download(fileName);
+        } else {
+            data && pdfMake.createPdf(data).print();
+        }
+    } catch (e) {
+        console.log(JSON.stringify(data), 'pdfdata');
+        console.log('error in generating pdf', e);
     }
-    
+
 };
 
 

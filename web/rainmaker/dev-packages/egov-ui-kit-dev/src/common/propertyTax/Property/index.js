@@ -9,9 +9,12 @@ import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { fetchAssessments, fetchProperties, fetchReceipt, fetchTotalBillAmount, getSingleAssesmentandStatus } from "egov-ui-kit/redux/properties/actions";
 import { generalMDMSDataRequestObj, getCommaSeperatedAddress, getGeneralMDMSDataDropdownName, getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
 import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
 import React, { Component } from "react";
@@ -21,9 +24,6 @@ import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import PropertyInformation from "./components/PropertyInformation";
 import "./index.css";
-import get from "lodash/get";
-import { generatePDF,loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
-import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 
 const innerDivStyle = {
   padding: "0",
@@ -274,15 +274,13 @@ class Property extends Component {
   closeYearRangeDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
-  download(){
-    const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;
-    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf,fileName=`pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
-    // generatePDF(UlbLogoForPdf);
+  download() {
+    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
+    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
   }
-  print(){
-    const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;
-    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf,'print');
-    // generatePDF(UlbLogoForPdf);
+  print() {
+    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
+    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, 'print');
   }
   render() {
     const {
@@ -312,7 +310,7 @@ class Property extends Component {
     }
     return (
       <Screen className={clsName} loading={loading}>
-        <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} download={()=>this.download()} print={()=>this.print()} />
+        <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} download={() => this.download()} print={() => this.print()} />
         {
           <AssessmentList
             onItemClick={this.onListItemClick}
@@ -438,7 +436,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
       //   return "NA";
       // }
       if (floor[dataKey] === "NONRESIDENTIAL") {
-        return generalMDMSDataById["UsageCategoryMinor"]&& generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]]&& generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name ? generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name : "NA";
+        return generalMDMSDataById["UsageCategoryMinor"] && generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]] && generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name ? generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name : "NA";
       } else {
         return generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][floor[dataKey]].name : "NA";
       }
@@ -467,9 +465,9 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
             value: generalMDMSDataById
               ? propertyDetails.propertySubType
                 ? generalMDMSDataById["PropertySubType"] && generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType]
-                  ?  get(generalMDMSDataById,`PropertySubType.${propertyDetails.propertySubType}.name`,"NA"):'NA'
-                : generalMDMSDataById["PropertyType"]&& generalMDMSDataById["PropertyType"][propertyDetails.propertyType]
-                  ?  get(generalMDMSDataById,`PropertyType.${propertyDetails.propertyType}.name`,"NA"):"NA":"NA"
+                  ? get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, "NA") : 'NA'
+                : generalMDMSDataById["PropertyType"] && generalMDMSDataById["PropertyType"][propertyDetails.propertyType]
+                  ? get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA") : "NA" : "NA"
           },
           {
             key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
@@ -618,9 +616,9 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { app, common ,screenConfiguration} = state;
-  const {preparedFinalObject}=screenConfiguration;
-    const { UlbLogoForPdf=''}=preparedFinalObject;
+  const { app, common, screenConfiguration } = state;
+  const { preparedFinalObject } = screenConfiguration;
+  const { UlbLogoForPdf = '' } = preparedFinalObject;
   const { urls, localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
@@ -628,7 +626,7 @@ const mapStateToProps = (state, ownProps) => {
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
-  loading = loading==false && Object.keys(selPropertyDetails).length > 0 ? false : true;
+  loading = loading == false && Object.keys(selPropertyDetails).length > 0 ? false : true;
   const { documentsUploaded } = selPropertyDetails || [];
   const latestPropertyDetails = getLatestPropertyDetails(selPropertyDetails.propertyDetails);
   const pendingAssessments = getPendingAssessments(selPropertyDetails, singleAssessmentByStatus);
