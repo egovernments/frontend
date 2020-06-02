@@ -276,7 +276,7 @@ class FormWizard extends Component {
       }
     }
   };
-   loadUlbLogo = tenantid => {
+  loadUlbLogo = tenantid => {
     var img = new Image();
     img.crossOrigin = "Anonymous";
     img.onload = function () {
@@ -285,15 +285,11 @@ class FormWizard extends Component {
       canvas.height = this.height;
       canvas.width = this.width;
       ctx.drawImage(this, 0, 0);
-      
-      // store.dispatch(
-      //   prepareFinalObject("base64UlbLogoForPdf", canvas.toDataURL())
-      // );
-      // console.log(ulbLogo,'ge-ulbLogo');
-     store.dispatch(
+
+      store.dispatch(
         prepareFinalObject("base64UlbLogoForPdf", canvas.toDataURL())
-      ); 
-      
+      );
+
       canvas = null;
     };
     img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
@@ -1745,7 +1741,7 @@ class FormWizard extends Component {
   };
   downloadAcknowledgementForm = () => {
     const { imageUrl } = this.state;
-    const { common, app = {}, prepareFormData,base64UlbLogoForPdf } = this.props;
+    const { common, app = {}, prepareFormData, base64UlbLogoForPdf } = this.props;
     const { Properties = [] } = prepareFormData;
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
@@ -1761,7 +1757,7 @@ class FormWizard extends Component {
       header,
       propertyId
     }
-    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl,null,base64UlbLogoForPdf);
+    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, null, base64UlbLogoForPdf);
   }
 
   render() {
@@ -1823,7 +1819,7 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {}, ptDocumentCount = 0 ,base64UlbLogoForPdf=''} = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {}, ptDocumentCount = 0, base64UlbLogoForPdf = '' } = preparedFinalObject;
   let requiredDocCount = ptDocumentCount;
 
   return {
