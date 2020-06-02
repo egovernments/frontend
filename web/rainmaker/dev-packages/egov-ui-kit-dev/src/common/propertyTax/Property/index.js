@@ -22,6 +22,8 @@ import YearDialogue from "../YearDialogue";
 import PropertyInformation from "./components/PropertyInformation";
 import "./index.css";
 import get from "lodash/get";
+import { generatePDF,loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 
 const innerDivStyle = {
   padding: "0",
@@ -94,6 +96,8 @@ class Property extends Component {
       { key: "consumerCodes", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
     ]);
+
+    loadUlbLogo('pb.amritsar');
   };
 
   onListItemClick = (item, index) => {
@@ -270,6 +274,11 @@ class Property extends Component {
   closeYearRangeDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
+  download(){
+    const {UlbLogoForPdf,selPropertyDetails,generalMDMSDataById}=this.props;
+    generatePTAcknowledgment(selPropertyDetails,generalMDMSDataById,UlbLogoForPdf);
+    // generatePDF(UlbLogoForPdf);
+  }
 
   render() {
     const {
@@ -300,6 +309,17 @@ class Property extends Component {
     return (
       <Screen className={clsName} loading={loading}>
         <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} />
+        <Button
+              label={
+                <Label buttonLabel={true}
+                  label='Download' fontSize="16px"
+                  color="#fe7a51" />
+              }
+              onClick={() => this.download()}
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+              buttonStyle={{ border: "1px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
+            />
         {
           <AssessmentList
             onItemClick={this.onListItemClick}
@@ -605,7 +625,9 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { app, common } = state;
+  const { app, common ,screenConfiguration} = state;
+  const {preparedFinalObject}=screenConfiguration;
+    const { UlbLogoForPdf=''}=preparedFinalObject;
   const { urls, localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
@@ -661,7 +683,8 @@ const mapStateToProps = (state, ownProps) => {
     totalBillAmountDue,
     documentsUploaded,
     Assessments,
-    loading
+    loading,
+    UlbLogoForPdf
   };
 };
 

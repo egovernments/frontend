@@ -141,7 +141,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //       ]
 //     );
 //   };
-const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
+export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   const { units = [], noOfFloors } = propertyDetails || {};
 
   return (
@@ -181,7 +181,7 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   );
 };
 
-const getUnitInfo = (units = [], propertyDetails) => {
+export const getUnitInfo = (units = [], propertyDetails) => {
   units = units || [];
   let floors = [];
   units.map((unit, index) => {

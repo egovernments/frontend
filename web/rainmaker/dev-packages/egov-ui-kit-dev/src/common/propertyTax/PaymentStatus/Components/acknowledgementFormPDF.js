@@ -1,6 +1,7 @@
 import pdfMake from "pdfmake/build/pdfmake";
 //import pdfFonts from "pdfmake/build/vfs_fonts";
 import pdfFonts from "./vfs_fonts";
+import commonConfig from "config/common.js";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
 import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
 pdfMake.vfs = pdfFonts.vfs;
@@ -29,11 +30,13 @@ const loadUlbLogo = tenantid => {
     // store.dispatch(
     //   prepareFinalObject("base64UlbLogoForPdf", canvas.toDataURL())
     // );
+    console.log(ulbLogo,'ge-ulbLogo');
+    
     canvas = null;
   };
   img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
-const generateAcknowledgementForm = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
+const generateAcknowledgementForm = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt,logo) => {
   console.log('details--'+details);
   console.log(generalMDMSDataById);
   
@@ -197,7 +200,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           ]
           : newArray;
       };
-
+      console.log(logo,'ulbLogo');
       data = {
         defaultStyle: {
           font: "Camby"
@@ -210,7 +213,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
               body: [
                 [
                   {
-                    image: ulbLogo,
+                    image: logo,
                     width: 60,
                     height: 61.25,
                     margin: [51, 12, 10, 10]
@@ -227,7 +230,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                         }
                     ],
                     alignment: "left",
-                    margin: [10, 23, 0, 0]
+                    margin: [10, 13, 0, 0]
                   }
                 ]
               ]
@@ -417,6 +420,42 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
         ],
 
         styles: {
+          "noc-head": {
+            fillColor: "#F2F2F2",
+            margin: [-70, -41, -81, 10]
+          },
+          "receipt-logo-header": {
+            color: "#484848",
+            fontFamily: "Roboto",
+            fontSize: 16,
+            bold: true,
+            letterSpacing: 0.74,
+            margin: [0, 0, 0, 5]
+          },
+          "receipt-logo-sub-header": {
+            color: "#484848",
+            fontFamily: "Roboto",
+            fontSize: 13,
+            letterSpacing: 0.6
+          },
+          "noc-subhead": {
+            fontSize: 12,
+            bold: true,
+            margin: [-18, 8, 0, 0],
+            color: "#484848"
+          },
+          "noc-title": {
+            fontSize: 10,
+            bold: true,
+            margin: [-18, 16, 8, 8],
+            color: "#484848",
+            fontWeight: 500
+          },
+          "noc-table": {
+            fontSize: 10,
+            color: "#484848",
+            margin: [-20, -2, -8, -8]
+          },
           "pt-reciept-citizen-subheader": {
             fontSize: 12,
             bold: true,
@@ -448,20 +487,6 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           },
           "receipt-table-value": {
             color: "#484848",
-          },
-          "receipt-logo-header": {
-            color: "#484848",
-        fontFamily: "Roboto",
-        fontSize: 16,
-        bold: true,
-        letterSpacing: 0.74,
-        margin: [0, 0, 0, 5]
-          },
-          "receipt-logo-sub-header": {
-            color: "#484848",
-            fontFamily: "Roboto",
-            fontSize: 13,
-            letterSpacing: 0.6
           },
           "receipt-footer": {
             color: "#484848",
