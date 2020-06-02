@@ -119,11 +119,11 @@ class Footer extends React.Component {
             visibility === "visible" && (
               <Item xs={12} sm={4} style={{ paddingLeft: "20px" }}>
                 <Container>
-                  <Item xs={12} sm={6}>
+                  <Item xs={6} sm={6}>
                     <MenuButton data={getDownloadData()} />
                   </Item>
 
-                  <Item xs={12} sm={6}>
+                  <Item xs={6} sm={6}>
                     <MenuButton data={getPrintData()} />
                   </Item>
                 </Container>
