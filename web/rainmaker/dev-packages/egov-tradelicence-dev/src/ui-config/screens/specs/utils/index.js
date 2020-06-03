@@ -11,6 +11,8 @@ import isUndefined from "lodash/isUndefined";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils/api";
 import "./index.css";
+import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -2223,26 +2225,37 @@ export const showCityPicker = (state, dispatch) => {
   );
 };
 
-export const applyForm = (state, dispatch) => {
+export const applyForm = (state, dispatch, action) => {
   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
     "citiesByModule.citizenTenantId"
   );
-
+  const reqDocUi=get( state, "screenConfiguration.screenConfig.home.components.adhocDialog.children.popup", []);
+  set(reqDocUi, 'children.footer.children.footerChildElement.children.applyButton.onClickDefination', {
+  action: "condition",
+    callBack: (state, dispatch) => {
+      dispatch(prepareFinalObject('documentsUploadRedux', {}))
+      const applyUrl = process.env.NODE_ENV === "production"
+        ? `/citizen/tradelicense-citizen/apply?tenantId=${tenantId}`
+        : process.env.REACT_APP_SELF_RUNNING === true
+          ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+          : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+      dispatch(setRoute(applyUrl))
+    }
+  })
+  set(
+    action,
+    "screenConfig.components.adhocDialog.children.popup",
+    reqDocUi
+  );
   const isTradeDetailsValid = validateFields(
     "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
     state,
     dispatch,
     "home"
   );
-
   if (isTradeDetailsValid) {
-    window.location.href =
-      process.env.NODE_ENV === "production"
-        ? `/citizen/tradelicense-citizen/apply?tenantId=${tenantId}`
-        : process.env.REACT_APP_SELF_RUNNING === true
-          ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
-          : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+    showReqDocPopup(state, dispatch, "home");
   }
 };
 
