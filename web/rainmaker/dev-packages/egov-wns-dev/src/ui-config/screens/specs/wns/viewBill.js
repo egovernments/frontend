@@ -28,9 +28,9 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
       let cessKey = element.taxHeadCode
       let body;
       if (service === "WATER") {
-        body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+        body = { "MdmsCriteria": { "tenantId": getTenantId(), "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
       } else {
-        body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+        body = { "MdmsCriteria": { "tenantId": getTenantId(), "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
       }
       let res = await getDescriptionFromMDMS(body, dispatch)
       if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
