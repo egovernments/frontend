@@ -7,14 +7,14 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import {toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "../../ui-redux/app/actions";
+import {toggleSnackbar} from "../../ui-redux/screen-configuration/actions";
 import "./index.css";
 import { checkValueForNA } from "../../ui-config/screens/specs/utils";
-import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { epochToDate, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
+import { localStorageSet } from "../../ui-utils/localStorageUtils";
+import { httpRequest } from "../../ui-utils/api";
+import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
+import { epochToDate, navigateToApplication, getApplicationType } from "../../ui-utils/commons";
 import orderBy from "lodash/orderBy";
 
 
@@ -96,7 +96,7 @@ class SingleApplication extends React.Component {
             );
           }
       }
-    
+
 
   render() {
     const { searchResults, onActionClick, classes } = this.props;
@@ -120,7 +120,7 @@ class SingleApplication extends React.Component {
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />
                       </Grid>
-                      
+
                       <Grid item xs={6}>
                         <Label
                           labelKey={item.fireNOCDetails.fireNOCType}
@@ -128,7 +128,7 @@ class SingleApplication extends React.Component {
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
                       </Grid>
-                    </Grid> 
+                    </Grid>
                     <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
@@ -175,7 +175,7 @@ class SingleApplication extends React.Component {
                         />
                       </Grid>
                     </Grid>
-                 
+
                   </div>
                 </CardContent>
               </Card>
@@ -211,7 +211,7 @@ const mapStateToProps = state => {
   let searchResults = orderBy(
     searchResultsRaw,
     ["auditDetails.lastModifiedTime"],
-    ["desc"]);  
+    ["desc"]);
     searchResults=searchResults?searchResults:searchResultsRaw ;
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, searchResults };

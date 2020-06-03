@@ -1,9 +1,12 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import _ from "lodash";
+import { getMessageFromLocalization } from "./receiptTransformer";
 import { downloadPDFFileUsingBase64, printPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+
 
 let tableborder = {
   hLineColor: function(i, node) {
@@ -286,7 +289,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.locality,
+                text:transformedData.address,
                 border: borderValue
               }
             ]

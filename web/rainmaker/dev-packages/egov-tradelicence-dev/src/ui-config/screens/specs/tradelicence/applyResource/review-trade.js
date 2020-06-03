@@ -7,6 +7,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
+import { getTransformedLocale ,getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 import { convertEpochToDate } from "../../utils";
 
@@ -363,7 +364,7 @@ export const getReviewTrade = (isEditable = true) => {
           labelName: "Mohalla",
           labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
         },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name" }
+        { jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name"}
       ),
       reviewPincode: getLabelWithValue(
         {

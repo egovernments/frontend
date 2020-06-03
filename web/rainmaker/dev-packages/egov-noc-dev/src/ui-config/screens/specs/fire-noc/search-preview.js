@@ -102,7 +102,10 @@ const prepareDocumentsView = async (state, dispatch) => {
     firenoc,
     "$.fireNOCDetails.additionalDetail.documents.*"
   );
-  let allDocuments = [
+
+  try {
+
+      let allDocuments = [
     ...buildingDocuments,
     ...applicantDocuments[0],
     ...otherDocuments
@@ -115,6 +118,14 @@ const prepareDocumentsView = async (state, dispatch) => {
       linkText: "View"
     });
   });
+    
+  } catch (error) {
+
+    console.log("going to catch  block")
+
+    
+  }
+
   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
@@ -437,11 +448,22 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
 
-    setSearchResponse(state, dispatch, applicationNumber, tenantId);
+    setSearchResponse(state, dispatch, applicationNumber, tenantId).then(() =>{
+      let currentcity = get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+      );
+      let value = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+      var mtenantid = value === 'Urban'? currentcity : tenantId;
+
+      dispatch(fetchLocalizationLabel(getLocale(), `${mtenantid}`, mtenantid));
+    });
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
@@ -514,10 +536,14 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 10
+                sm: 10,
+                  style: {
+                    width: "34vw",
+                    display: "contents"
+                },
               },
-              ...titlebar
-            }
+              ...titlebar,
+            },
           }
         },
         taskStatus: {

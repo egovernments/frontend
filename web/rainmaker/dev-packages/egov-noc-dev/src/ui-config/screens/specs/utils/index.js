@@ -216,8 +216,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     ? `&applicationNumber=${applicationNumber}`
     : ``;
 
-/*   debugger;
-
+/* 
   let tenantId = getTenantId();
 
   console.log("tenantId", tenantId);
@@ -577,7 +576,6 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
 };
 
 export const createEstimateData = billObject => {
- // debugger;
 
   const billDetails = billObject && billObject.billDetails;
   let fees =
@@ -637,12 +635,10 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
         { key: "services", value: "FIRENOC" }
       ];
       const payload = await createBill(queryObj,dispatch);
-    //  debugger;
 
       // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-      //  debugger;
         const estimateData = createEstimateData(payload.Bill[0]);
         estimateData &&
           estimateData.length &&
@@ -834,7 +830,6 @@ export const getRequiredDocData = async (action, state, dispatch) => {
         [],
         mdmsBody
       );
-  //    debugger;
    
       dispatch(
         prepareFinalObject(

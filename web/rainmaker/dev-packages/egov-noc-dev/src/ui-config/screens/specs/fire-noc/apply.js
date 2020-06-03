@@ -174,7 +174,6 @@ const getMdmsData = async (action, state, dispatch) => {
       mdmsBody
     );
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    console.log(payload,"payloadData");
 
   } catch (e) {
     console.log(e);

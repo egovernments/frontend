@@ -1125,7 +1125,7 @@ export const generateReciept = async rowData => {
   } else {
     const data = allReceipts.Receipt.find(
       item =>
-        get(item, "Bill[0].billDetails[0].receiptNumber", "") === rowData["Receipt No"]
+        get(item, "Bill[0].billDetails[0].receiptNumber", "") === rowData["Receipt No"]||rowData[0]
     );
     if (isEmpty(data)) {
       return;
@@ -1185,7 +1185,7 @@ export const generateCitizenReciept = async rowData => {
   );
   let citizenReceipt_data = {};
   const data = allReceipts.Receipt.find(
-    item => get(item, "Bill[0].billDetails[0].receiptNumber", "") === rowData["Receipt No"]
+    item => get(item, "Bill[0].billDetails[0].receiptNumber", "") === rowData["Receipt No"]||rowData[0]
   );
   if (isEmpty(data)) {
     return;

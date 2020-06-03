@@ -84,7 +84,7 @@ class AssessPay extends Component {
     const { urls, history } = this.props;
     return (
       <Screen className="screen-with-bredcrumb">
-        <BreadCrumbs url={urls} history={history} />
+        <BreadCrumbs url={urls} history={history} returnUrl={"/property-tax"}/>
         <AssessmentList onItemClick={this.onListItemClick} innerDivStyle={innerDivStyle} items={this.state.items} history={this.props.history} />
         <YearDialogue open={this.state.dialogueOpen} history={history} closeDialogue={this.closeYearRangeDialogue} />
       </Screen>

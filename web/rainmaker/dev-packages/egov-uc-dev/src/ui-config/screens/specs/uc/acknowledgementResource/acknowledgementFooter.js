@@ -29,9 +29,9 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-        minWidth: "200px",
+        // minWidth: "200px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "13px"
       }
     },
     children: {
@@ -56,7 +56,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "13px"
       }
     },
     children: {

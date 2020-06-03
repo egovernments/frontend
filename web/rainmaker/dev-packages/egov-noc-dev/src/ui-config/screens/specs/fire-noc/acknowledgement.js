@@ -1,16 +1,7 @@
-import {
-  getCommonHeader,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {CloudDownloadIcon} from '@material-ui/icons/CloudDownload';
-import {PrintIcon} from '@material-ui/icons/Print';
-import {
-  applicationSuccessFooter,
-  paymentSuccessFooter,
-  gotoHomeFooter,
-  approvalSuccessFooter,
-  paymentFailureFooter
-} from "./acknowledgementResource/footers";
+import { getCommonHeader, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { CloudDownloadIcon } from '@material-ui/icons/CloudDownload';
+import { PrintIcon } from '@material-ui/icons/Print';
+import { applicationSuccessFooter, paymentSuccessFooter, gotoHomeFooter, approvalSuccessFooter, paymentFailureFooter } from "./acknowledgementResource/footers";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
@@ -23,6 +14,9 @@ import get from "lodash/get";
 import { getCurrentFinancialYear } from "../utils";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
@@ -40,22 +34,22 @@ export const header = getCommonContainer({
 });
 
 
-const getHeader=(applicationNumber)=>{
-return getCommonContainer({
-  header: getCommonHeader({
-    labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "NOC_COMMON_APPLY_FIRE_NOC_HEADER_LABEL"
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-noc",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number:applicationNumber
-    },
-    visible: true
-  }
-})
+const getHeader = (applicationNumber) => {
+  return getCommonContainer({
+    header: getCommonHeader({
+      labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+      labelKey: "NOC_COMMON_APPLY_FIRE_NOC_HEADER_LABEL"
+    }),
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-noc",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: applicationNumber
+      },
+      visible: true
+    }
+  })
 }
 
 
@@ -67,12 +61,12 @@ const getAcknowledgementCard = (
   applicationNumber,
   secondNumber,
   tenant,
-  utenantId  
+  utenantId
 ) => {
   if (purpose === "apply" && status === "success") {
     loadPdfGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
+      header: getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -85,8 +79,7 @@ const getAcknowledgementCard = (
               labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
-              labelName:
-                "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
+              labelName: "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
               labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
@@ -107,14 +100,14 @@ const getAcknowledgementCard = (
                   div1: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
-                 
-                    props:{
+
+                    props: {
                       iconName: "cloud_download",
-                    style:{
-                      marginTop: "7px",
-                      marginRight: "8px",
-                    }
-                  },
+                      style: {
+                        marginTop: "7px",
+                        marginRight: "8px",
+                      }
+                    },
                     onClick: {
                       action: "condition",
                       callBack: () => {
@@ -142,21 +135,21 @@ const getAcknowledgementCard = (
                   div1: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
-                 
-                    props:{
+
+                    props: {
                       iconName: "local_printshop",
-                      style:{
+                      style: {
                         marginTop: "7px",
                         marginRight: "8px",
-                        marginLeft:"10px",
+                        marginLeft: "10px",
                       }
-                  },
-                   onClick: {
-                    action: "condition",
-                    callBack: () => {
-                      generatePdf(state, dispatch, "application_print");
-                    }
-                  },
+                    },
+                    onClick: {
+                      action: "condition",
+                      callBack: () => {
+                        generatePdf(state, dispatch, "application_print");
+                      }
+                    },
 
                   },
                   div2: getLabel({
@@ -177,6 +170,7 @@ const getAcknowledgementCard = (
             props: {
               style: {
                 display: "flex",
+                cursor: "pointer"
 
               }
             },
@@ -210,8 +204,7 @@ const getAcknowledgementCard = (
               labelKey: "NOC_PAYMENT_COLLECTION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
-              labelName:
-                "A notification regarding Payment Collection has been sent to building owner at registered Mobile No.",
+              labelName: "A notification regarding Payment Collection has been sent to building owner at registered Mobile No.",
               labelKey: "NOC_PAYMENT_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
@@ -240,8 +233,7 @@ const getAcknowledgementCard = (
               labelKey: "NOC_APPROVAL_CHECKLIST_MESSAGE_HEAD"
             },
             body: {
-              labelName:
-                "A notification regarding Fire NOC Approval has been sent to building owner at registered Mobile No.",
+              labelName: "A notification regarding Fire NOC Approval has been sent to building owner at registered Mobile No.",
               labelKey: "NOC_APPROVAL_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
@@ -269,8 +261,7 @@ const getAcknowledgementCard = (
               labelKey: "NOC_APPROVAL_REJ_MESSAGE_HEAD"
             },
             body: {
-              labelName:
-                "A notification regarding Fire NOC Rejection has been sent to building owner at registered Mobile No.",
+              labelName: "A notification regarding Fire NOC Rejection has been sent to building owner at registered Mobile No.",
               labelKey: "NOC_APPROVAL_REJ_MESSAGE_SUBHEAD"
             }
           })
@@ -293,8 +284,7 @@ const getAcknowledgementCard = (
               labelKey: "Fire_NOC_CANCELLED_MESSAGE_HEAD"
             },
             body: {
-              labelName:
-                "A notification regarding Fire NOC cancellation has been sent to building owner at registered Mobile No.",
+              labelName: "A notification regarding Fire NOC cancellation has been sent to building owner at registered Mobile No.",
               labelKey: "Fire_NOC_CANCELLED_MESSAGE_SUBHEAD"
             },
             tailText: {
@@ -322,8 +312,7 @@ const getAcknowledgementCard = (
               labelKey: "NOC_PAYMENT_FAILURE_MESSAGE_MAIN"
             },
             body: {
-              labelName:
-                "A notification regarding payment failure has been sent to the building owner and applicant.",
+              labelName: "A notification regarding payment failure has been sent to the building owner and applicant.",
               labelKey: "NOC_PAYMENT_FAILURE_MESSAGE_SUB"
             }
           })
@@ -486,34 +475,31 @@ const screenConfig = {
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
       ""
     );
-  
-    
+
+
 
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
 
-
+    dispatch(fetchLocalizationLabel(getLocale(), tenant, tenant));
     let value = get(
       state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
-      if ( value === 'Urban' )
-      {
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType", []);
+    if (value === 'Urban') {
       const data = getAcknowledgementCard(
-      state,
-      dispatch,
-      purpose,
-      status,
-      applicationNumber,
-      secondNumber,
-      tenant,
-      utenantId
+        state,
+        dispatch,
+        purpose,
+        status,
+        applicationNumber,
+        secondNumber,
+        tenant,
+        utenantId
 
-    );
-    setApplicationData(dispatch, applicationNumber, tenant);
-    set(action, "screenConfig.components.div.children", data);
-    }
-    else
-    {
+      );
+      setApplicationData(dispatch, applicationNumber, tenant);
+      set(action, "screenConfig.components.div.children", data);
+    } else {
       const data = getAcknowledgementCard(
         state,
         dispatch,
@@ -525,10 +511,10 @@ const screenConfig = {
         tenant
       );
       setApplicationData(dispatch, applicationNumber, tenant);
-     set(action, "screenConfig.components.div.children", data);
+      set(action, "screenConfig.components.div.children", data);
 
     }
-    
+
     return action;
   }
 };

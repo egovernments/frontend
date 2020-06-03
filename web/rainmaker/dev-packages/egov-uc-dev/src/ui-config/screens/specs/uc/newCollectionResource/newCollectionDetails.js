@@ -326,18 +326,18 @@ export const newCollectionDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Demands[0].taxPeriodTo"
         }),
-        dummyDivTwo: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          },
-          visible: true,
-          props: {
-            disabled: true
-          }
-        }
+        // dummyDivTwo: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Div",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 6
+        //   },
+        //   visible: true,
+        //   props: {
+        //     disabled: true
+        //   }
+        // }
       },
       {
         style: {

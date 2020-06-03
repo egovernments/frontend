@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import get from "lodash/get";
 import { textToLocalMapping } from "./citizenFunctions";
-import { sortByEpoch, getEpochForDate } from "../../utils";
+import { sortByEpoch, getEpochForDate,getTextToLocalMapping } from "../../utils";
+import { getSearchResults } from "../../../../../ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -11,51 +12,46 @@ export const searchResults = {
   // moduleName: "egov-tradelicence",
   props: {
     data: [],
-    columns: {
-      [get(textToLocalMapping, "Application No")]: {
-        format: rowData => {
-          return (
-            <Link to={onRowClick(rowData)}>
-              {rowData[get(textToLocalMapping, "Application No")]}
-            </Link>
-          );
+    columns: [
+      getTextToLocalMapping("Application No"),
+      getTextToLocalMapping("License No"),
+      getTextToLocalMapping("Trade Name"),
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Application Date"),
+      getTextToLocalMapping("Status"),
+      // {
+      //   name: getTextToLocalMapping("Status"),
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: value => (
+
+      //       <span
+      //         style={
+      //           value === "APPROVED" ? { color: "green" } : { color: "red" }
+      //         }
+      //       >
+      //         {getTextToLocalMapping(value)}
+      //       </span>
+      //     )
+      //   }
+      // },
+      {
+        name: "tenantId",
+        options: {
+          display: false
         }
-      },
-      [get(textToLocalMapping, "License No")]: {},
-      [get(textToLocalMapping, "Trade Name")]: {},
-      [get(textToLocalMapping, "Owner Name")]: {},
-      [get(textToLocalMapping, "Application Date")]: {},
-      [get(textToLocalMapping, "Status")]: {
-        format: rowData => {
-          let value = rowData[get(textToLocalMapping, "Status")];
-          let color = "";
-          if (value.indexOf(get(textToLocalMapping, "APPROVED")) !== -1) {
-            color = "green";
-          } else {
-            color = "red";
-          }
-          return (
-            <span
-              style={{
-                color: color,
-                fontSize: "14px",
-                fontWeight: 400
-              }}
-            >
-              {value}
-            </span>
-          );
-        }
-      }
-    },
-    title: get(textToLocalMapping, "MY_APPLICATIONS"),
+      }],
+      title: getTextToLocalMapping("TL_MY_APPLICATIONS"),
     options: {
       filter: false,
       download: false,
       responsive: "scroll",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20]
+      rowsPerPageOptions: [10, 15, 20],
+      onRowClick: (row, index) => {
+        onRowClick(row);
+      }
     },
     customSortColumn: {
       column: "Application Date",
@@ -75,37 +71,59 @@ export const searchResults = {
   }
 };
 
-const onRowClick = rowData => {
-  switch (rowData[get(textToLocalMapping, "Status")]) {
-    case get(textToLocalMapping, "APPLIED"):
-    case get(textToLocalMapping, "PENDINGPAYMENT"):
-      return `/tradelicence/search-preview?status=pending_payment&role=approver&applicationNumber=${
-        rowData[get(textToLocalMapping, "Application No")]
-      }&tenantId=${rowData["tenantId"]}`;
-    case get(textToLocalMapping, "APPROVED"):
-      return `/tradelicence/search-preview?status=approved&role=approver&applicationNumber=${
-        rowData[get(textToLocalMapping, "Application No")]
-      }&tenantId=${rowData["tenantId"]}`;
+// const onRowClick = rowData => {
+//   switch (rowData[get(textToLocalMapping, "Status")]) {
+//     case get(textToLocalMapping, "APPLIED"):
+//     case get(textToLocalMapping, "PENDINGPAYMENT"):
+//       return `/tradelicence/search-preview?status=pending_payment&role=approver&applicationNumber=${
+//         rowData[get(textToLocalMapping, "Application No")]
+//       }&tenantId=${rowData["tenantId"]}`;
+//     case get(textToLocalMapping, "APPROVED"):
+//       return `/tradelicence/search-preview?status=approved&role=approver&applicationNumber=${
+//         rowData[get(textToLocalMapping, "Application No")]
+//       }&tenantId=${rowData["tenantId"]}`;
 
-    case get(textToLocalMapping, "PAID"):
-    case get(textToLocalMapping, "PENDINGAPPROVAL"):
-    case get(textToLocalMapping, "FIELDINSPECTION"):
-      return `/tradelicence/search-preview?status=pending_approval&role=approver&applicationNumber=${
-        rowData[get(textToLocalMapping, "Application No")]
-      }&tenantId=${rowData["tenantId"]}`;
-    case get(textToLocalMapping, "CANCELLED"):
-      return `/tradelicence/search-preview?status=cancelled&role=approver&applicationNumber=${
-        rowData[get(textToLocalMapping, "Application No")]
-      }&tenantId=${rowData["tenantId"]}`;
-    case get(textToLocalMapping, "INITIATED"):
-      return `/tradelicense-citizen/apply?applicationNumber=${
-        rowData[get(textToLocalMapping, "Application No")]
-      }&tenantId=${rowData["tenantId"]}`;
-    case get(textToLocalMapping, "REJECTED"):
-      return `/tradelicence/search-preview?status=rejected&role=approver&applicationNumber=${
-        rowData[get(textToLocalMapping, "Application No")]
-      }&tenantId=${rowData["tenantId"]}`;
+//     case get(textToLocalMapping, "PAID"):
+//     case get(textToLocalMapping, "PENDINGAPPROVAL"):
+//     case get(textToLocalMapping, "FIELDINSPECTION"):
+//       return `/tradelicence/search-preview?status=pending_approval&role=approver&applicationNumber=${
+//         rowData[get(textToLocalMapping, "Application No")]
+//       }&tenantId=${rowData["tenantId"]}`;
+//     case get(textToLocalMapping, "CANCELLED"):
+//       return `/tradelicence/search-preview?status=cancelled&role=approver&applicationNumber=${
+//         rowData[get(textToLocalMapping, "Application No")]
+//       }&tenantId=${rowData["tenantId"]}`;
+//     case get(textToLocalMapping, "INITIATED"):
+//       return `/tradelicense-citizen/apply?applicationNumber=${
+//         rowData[get(textToLocalMapping, "Application No")]
+//       }&tenantId=${rowData["tenantId"]}`;
+//     case get(textToLocalMapping, "REJECTED"):
+//       return `/tradelicence/search-preview?status=rejected&role=approver&applicationNumber=${
+//         rowData[get(textToLocalMapping, "Application No")]
+//       }&tenantId=${rowData["tenantId"]}`;
+//     default:
+//       return `/tradelicense-citizen/home`;
+//   }
+// };
+
+
+const onRowClick = rowData => {
+  switch (rowData[5]) {
+    case "Pending Application":
+      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+        rowData[6]
+      }`;
+      break;
     default:
-      return `/tradelicense-citizen/home`;
+
+    let curl = window.location.href;
+    console.log(curl,"curl")
+    let url = curl.replace ("tradelicense-citizen/home" ,"tradelicence");
+    console.log(url,"url")
+
+      window.location.href = `${url}/search-preview?applicationNumber=${
+        rowData[0]
+      }&tenantId=${rowData[6]}`;
+      break;
   }
 };

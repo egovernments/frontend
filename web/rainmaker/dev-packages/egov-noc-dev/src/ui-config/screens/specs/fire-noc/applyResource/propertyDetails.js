@@ -351,7 +351,7 @@ const commonBuildingData = buildingType => {
           labelKey: "NOC_PROPERTY_DETAILS_LAND_AREA_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("TradeName"),
+        // pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
 
         jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].landArea",
@@ -368,6 +368,7 @@ const commonBuildingData = buildingType => {
           md: 6
         },
         props:{
+          type: "number",
           className:"applicant-details-error"
         }
       })
@@ -383,7 +384,7 @@ const commonBuildingData = buildingType => {
           labelKey: "NOC_PROPERTY_DETAILS_COVERED_AREA_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("TradeName"),
+        // pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea",
         // props: {
@@ -413,7 +414,7 @@ const commonBuildingData = buildingType => {
           labelKey: "NOC_PROPERTY_DETAILS_PARKING_AREA_PLACEHOLDER"
         },
         // required: true,
-        pattern: getPattern("TradeName"),
+        // pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
         // props: {

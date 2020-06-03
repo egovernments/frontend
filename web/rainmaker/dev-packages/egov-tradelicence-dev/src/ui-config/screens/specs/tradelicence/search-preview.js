@@ -14,13 +14,15 @@ import {
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,getBoundaryData } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
   getDialogButton
 } from "../utils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+
 
 import { footerReview } from "./applyResource/footer";
 import {
@@ -32,6 +34,7 @@ import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -128,6 +131,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     );
   }
 
+
   await setDocuments(
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -153,15 +157,16 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     fetchFromReceipt
   );
   //Fetch Bill and populate estimate card
-  // const code = get(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: tenantId }];
-  // // getBoundaryData(action, state, dispatch, queryObj, code);
+  const code = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.address.locality.code"
+  );
+  const queryObj = [{ key: "tenantId", value: tenantId }];
+  getBoundaryData(action, state, dispatch, queryObj, code);
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+  dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
@@ -368,6 +373,7 @@ const screenConfig = {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     //To set the application no. at the  top
     set(
       action.screenConfig,
@@ -461,6 +467,11 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
+          props:{
+            moduleName:"NewTL",
+            dataPath: "Licenses",
+            updateUrl: "/tl-services/v1/_update"
+          },
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
         },
         tradeReviewDetails

@@ -6,6 +6,10 @@ import "./index.css";
 
 const onButton1Click = (item, history, onPGRClick) => {
   const { route } = item;
+   if (item.moduleTitle === "ACTION_TEST_WATER_SEVERAGE") {
+    window.open("http://13.127.211.3:8080/wsbills/");
+  }
+
   history && history.push(route);
   // if (item.moduleTitle === "Property Tax") {
   //   history && history.push(route);
@@ -22,8 +26,6 @@ const onButton1Click = (item, history, onPGRClick) => {
 const onButton2Click = (item, history) => {
 
   console.log('item values ', item);
-
-  debugger;
 
   if (process.env.REACT_APP_NAME === "Citizen") {
     if (item.moduleTitle === "PT_PAYMENT_STEP_HEADER1") {

@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { Icon, FloatingButton } from "components";
 import { Complaints } from "modules/common";
 import { Screen } from "modules/common";
+import { BreadCrumbs } from "components";
+import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { fetchComplaints } from "egov-ui-kit/redux/complaints/actions";
 import { resetFiles } from "egov-ui-kit/redux/form/actions";
 import {
@@ -20,7 +22,10 @@ class MyComplaints extends Component {
   componentDidMount = async () => {
     let { fetchComplaints, resetFiles, renderCustomTitle } = this.props;
     //const numberOfComplaints = transformedComplaints && transformedComplaints.length;
-    fetchComplaints([]);
+    const { addBreadCrumbs, userInfo } = this.props;
+    fetchComplaints([{ key: "accountId", value: userInfo.uuid }]); //Unnecessary API call to prevent page break on reload
+    renderCustomTitle && addBreadCrumbs({ renderCustomTitle: renderCustomTitle, path: window.location.pathname });
+    // fetchComplaints([]);
     if (this.props.form && this.props.form.complaint) {
       resetFiles("complaint");
     }
@@ -52,7 +57,7 @@ class MyComplaints extends Component {
   };
 
   render() {
-    let { transformedComplaints, history, fetchSuccess } = this.props;
+    let { urls, transformedComplaints, history, fetchSuccess } = this.props;
     let { onComplaintClick } = this;
 
     return (
@@ -61,6 +66,7 @@ class MyComplaints extends Component {
         className="citizen-screen-bottom-padding-clear form-without-button-cont-generic"
       >
         <div className="complaints-main-container clearfix">
+        <BreadCrumbs url={urls} history={history} returnUrl={"/pgr-home"}/>
           <Complaints
             onComplaintClick={onComplaintClick}
             complaints={transformedComplaints}
@@ -152,6 +158,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    addBreadCrumbs: (url) => dispatch(addBreadCrumbs(url)),
     fetchComplaints: criteria => dispatch(fetchComplaints(criteria)),
     resetFiles: formKey => dispatch(resetFiles(formKey))
   };

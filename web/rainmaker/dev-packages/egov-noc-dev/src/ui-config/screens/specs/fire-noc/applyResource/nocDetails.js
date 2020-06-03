@@ -43,9 +43,20 @@ const loadProvisionalNocData = async (state, dispatch) => {
   let response = await getSearchResults([
     { key: "fireNOCNumber", value: fireNOCNumber }
   ]);
+
+  if (!response) {
+    dispatch(
+      prepareFinalObject(
+        "FireNOCs[0].provisionFireNOCNumber",
+        null
+      )
+    );
+    return
+  }
+
   response = furnishNocResponse(response);
 
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  // dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
 
   // Set no of buildings radiobutton and eventually the cards
@@ -76,8 +87,6 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
   let District = get(response, "FireNOCs[0].fireNOCDetails.propertyDetails.address.city", "");
 
-  console.log("data fetching search field District ", District);
-
 
   dispatch(
     handleField(
@@ -89,8 +98,6 @@ const loadProvisionalNocData = async (state, dispatch) => {
   );
 
   let subDistrict = get(response, "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict", "");
-
-  console.log("data fetching search field subDistrict", subDistrict);
 
 
   dispatch(
@@ -172,7 +179,7 @@ export const nocDetails = getCommonCard({
             label: "NOC_TYPE_NEW_RADIOBUTTON"
           },
           {
-            code: "PROVISIONAL",             
+            code: "PROVISIONAL",
             label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
           }
         ],
@@ -181,7 +188,7 @@ export const nocDetails = getCommonCard({
       }),
 
       beforeFieldChange: (action, state, dispatch) => {
-        
+
       if (action.value === "PROVISIONAL") {
           dispatch(
             handleField(
@@ -191,7 +198,7 @@ export const nocDetails = getCommonCard({
               { visibility: "hidden" }
             )
           );
-        } else { 
+        } else {
           dispatch(
             handleField(
               "apply",
@@ -200,8 +207,8 @@ export const nocDetails = getCommonCard({
               { display: "visible" }
              )
           );
-          
-        }  
+
+        }
       }
     },
     provisionalNocNumber: {
@@ -213,7 +220,7 @@ export const nocDetails = getCommonCard({
         placeholder: {
           labelName: "Enter Provisional fire NoC number",
           labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_PLACEHOLDER"
-        },      
+        },
         pattern: getPattern("FireNOCNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         // required: true,

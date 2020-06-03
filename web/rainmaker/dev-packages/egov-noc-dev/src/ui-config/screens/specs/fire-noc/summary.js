@@ -123,6 +123,10 @@ const screenConfig = {
     let value = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+    let currentcity = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",[]);
+    var mtenantid = value === 'Urban'? currentcity : tenantId;
 
     if( value === 'Urban')
     {           
@@ -145,7 +149,7 @@ const screenConfig = {
 
     generateBill(dispatch, applicationNumber, tenantId);
     prepareDocumentsView(state, dispatch);
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    dispatch(fetchLocalizationLabel(getLocale(), mtenantid, mtenantid));
     return action;
   },
   components: {

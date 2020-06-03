@@ -71,7 +71,7 @@ class MyProperties extends Component {
     const { urls, history, transformedProperties, loading } = this.props;
     return (
       <Screen loading={loading}  className="screen-with-bredcrumb">
-        <BreadCrumbs url={urls} history={history}/>
+        <BreadCrumbs url={urls} history={history} returnUrl={"/property-tax"}/>
         <AssessmentList
           // pageTitle={`My Properties (${numProperties})`}
           onItemClick={this.onListItemClick}

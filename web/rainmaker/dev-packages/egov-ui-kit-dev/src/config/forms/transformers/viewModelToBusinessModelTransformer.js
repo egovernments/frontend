@@ -32,7 +32,7 @@ const transformer = (formKey, form = {}, state = {}) => {
       formData.services[0] = filteredServiceData;
       return formData;
     },
-    comment: (form, state) => {
+    comment: () => {
       const formData = prepareFormData(form);
       const serviceRequestId = decodeURIComponent(window.location.pathname.split("/").pop());
       const serviceData = state.complaints.byId[serviceRequestId];
@@ -80,7 +80,6 @@ const transformer = (formKey, form = {}, state = {}) => {
       const { previousRoute } = state.app;
       const { fields: otpFields } = form;
       let fields;
-   //   debugger;
       if (previousRoute.endsWith("register")) {
         fields = state.form["register"].fields;
         fields = {
@@ -145,6 +144,10 @@ const transformer = (formKey, form = {}, state = {}) => {
         const { latitude, longitude } = form.fields;
         const tenantId = await getTenantForLatLng(latitude.value, longitude.value);
         formData.services[0].tenantId = tenantId;
+        if(!formData.services[0].tenantId)
+        {
+          formData.services[0].tenantId=form.fields.city.value;
+        }
       } catch (error) {
         throw new Error(error.message);
       }

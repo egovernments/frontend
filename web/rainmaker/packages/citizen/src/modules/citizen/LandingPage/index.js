@@ -85,6 +85,16 @@ class LandingPage extends Component {
       route: "fire-noc/home",
       iconStyle: { width: "50px", height: "50px", marginBottom: "10px", fill: "rgba(0, 0, 0, 0.60)" },
     },
+    WNS: {
+      moduleTitle: "ACTION_TEST_WATER_SEVERAGE",
+      moduleDescription: "CS_LANDING_PAGE_WATER_DESCRIPTION",
+      button1: "ACTION_TEST_WATER",
+      // button2: "CS_HOME_HEADER_HOW_IT_WORKS",
+      id: "citizen-tl-landingpage-button",
+      iconAction: "social",
+      iconName: "people",
+      iconStyle: { width: "50px", height: "50px", marginBottom: "10px", fill: "rgba(0, 0, 0, 0.60)" },
+    },
   };
 
   render() {

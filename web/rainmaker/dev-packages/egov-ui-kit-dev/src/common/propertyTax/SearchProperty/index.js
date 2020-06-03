@@ -148,7 +148,7 @@ class SearchProperty extends Component {
     }
     return (
       <Screen loading={loading}>
-        {userType === "CITIZEN" ? <BreadCrumbs url={urls.length > 0 ? urls : urlArray} history={history} /> : []}
+        {userType === "CITIZEN" ? <BreadCrumbs url={urls.length > 0 ? urls : urlArray} history={history} returnUrl={"/property-tax"}/> : []}
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} />
         {tableData.length > 0 && showTable ? <PropertyTable tableData={tableData} onActionClick={this.onActionClick} /> : null}
         {showTable && tableData.length === 0 && (

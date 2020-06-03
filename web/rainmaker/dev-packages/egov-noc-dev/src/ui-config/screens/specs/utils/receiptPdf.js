@@ -8,10 +8,16 @@ import pdfFonts from "./vfs_fonts";
 import QRCode from "qrcode";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getMessageFromLocalization } from "./receiptTransformer";
-
+// import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js"
 //pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 //import pdfMakeCustom from "pdfmake/build/pdfmake";
+const updateMohall=(data)=>{
+  if (data.address.search(data.mohalla)>-1) {
+    data.address=data.address.replace(data.mohalla,getMessageFromLocalization(data.mohalla))
+  }
+  return data;
+}
 
 const getOwners = data => {
   let retowners = [];
@@ -116,25 +122,25 @@ const getOwners = data => {
           border: [false, false, true, false]
         }
       ],
-      [
-        {
-          text: "",
-          border: [true, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, false, false]
-        },
-        {
-          text: "",
-          border: [false, false, false, false]
-        },
-
-        {
-          text: "",
-          border: [false, false, true, false]
-        }
-      ],
+      // [
+      //   {
+      //     text: "",
+      //     border: [true, false, false, false]
+      //   },
+      //   {
+      //     text: "",
+      //     border: [false, false, false, false]
+      //   },
+      //   {
+      //     text: "",
+      //     border: [false, false, false, false]
+      //   },
+      //
+      //   {
+      //     text: "",
+      //     border: [false, false, true, false]
+      //   }
+      // ],
       [
         {
           text: "Correspondence Address",
@@ -377,6 +383,7 @@ const getBuildings = data => {
 };
 const getApplicationData = async (transformedData, ulbLogo, type) => {
   console.log("transformedData33", transformedData)
+  transformedData=updateMohall(transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
       return i === 0 || i === node.table.body.length ? 0.1 : 0.1;
@@ -585,7 +592,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               text: "Door/House No.",
               border: [false, false, false, false]
             },
-            
+
             {
               text: "Street Name",
               border: [false, false, false, false]
@@ -617,9 +624,9 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               text: transformedData.gis,
               style: "receipt-table-value",
              border: [false, false, true, false]
-             
 
-            },            
+
+            },
           ],
           [
 
@@ -659,7 +666,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
             },
 
             {
-              text: transformedData.mohalla,
+              text: getMessageFromLocalization(transformedData.mohalla),
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -715,7 +722,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, true, true]
             },
-          ] 
+          ]
 
         ]
       },
@@ -993,6 +1000,21 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     }
   ];
 
+  let disclaimers = [
+    {
+         "text":"\n\nNote:",
+         "style":"header",
+         "bold":true
+      },
+      {
+         "ol":[
+            "This documents is not proof of Property Ownership or Copy of NOC.",
+            "This is computer genereted document,hence requires no signature.",
+            "Payment is subjected to verification.Scrutiny by competitive authority."
+         ]
+      }
+    ]
+
   let citizengeneratedApprovedBy = [
     {
       style: "receipt-approver",
@@ -1020,7 +1042,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
           alignment: "right"
         }
       ]
-    }      
+    }
  ] ;
   let generatedApprovedBy = [
     {
@@ -1069,6 +1091,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 
   switch (type) {
     case "application":
+      disclaimers=[]
       applicantInformation = [];
       amountPaid = [];
       paymentInformation = [];
@@ -1134,6 +1157,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       break;
     case "certificate":
       headerText = "Certificate";
+      disclaimers=[]
       nocSubheadOne = [
         {
           text: [
@@ -1193,7 +1217,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       applicantDetails = [];
       documents = [];
 
-     
+
       citizengeneratedApprovedBy = [
         {
           style: "receipt-approver",
@@ -1221,7 +1245,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               alignment: "right"
             }
           ]
-        }      
+        }
      ] ;
 
       generatedApprovedBy = [
@@ -1251,7 +1275,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               alignment: "right"
             }
           ]
-        }      
+        }
      ] ;
 
       qrText = `Application: ${
@@ -1273,7 +1297,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     defaultStyle: {
       font: "raavi",
 
-     
+
     },
     content: [
       {
@@ -1332,95 +1356,140 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
      ...institutionDetails,
      ...amountPaid,
      ...paymentInformation,
-     ...process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy
-
+     ...process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy,
+     ...disclaimers
     ],
     footer: [],
-    styles: {
-      "noc-head": {
-        fillColor: "#F2F2F2",
-        margin: [-70, -41, -81, 0]
+    "styles":{
+      "noc-head":{
+         "fillColor":"#F2F2F2",
+         "margin":[
+            -70,
+            -41,
+            -81,
+            0
+         ]
       },
-      "noc-head-new": {
-        fontSize: 8,
-        fillColor: "#F2F2F2",
-        margin: [0, 0, 0, 0]
+      "noc-head-new":{
+         "fontSize":7,
+         "fillColor":"#F2F2F2",
+         "margin":[
+            0,
+            0,
+            0,
+            0
+         ]
       },
-      "receipt-logo-header": {
-        color: "#484848",
-        fontFamily: "raavi",
-        fontSize: 16,
-        bold: true,
-        letterSpacing: 0.74,
-        margin: [0, 0, 0, 5]
+      "receipt-logo-header":{
+         "color":"#484848",
+         "fontFamily":"raavi",
+         "fontSize":14,
+         "bold":true,
+         "letterSpacing":0.74,
+         "margin":[
+            0,
+            0,
+            0,
+            5
+         ]
       },
-      "receipt-logo-sub-header": {
-        color: "#484848",
-        fontFamily: "raavi",
-        fontSize: 13,
-        letterSpacing: 0.6
+      "receipt-logo-sub-header":{
+         "color":"#484848",
+         "fontFamily":"raavi",
+         "fontSize":11,
+         "letterSpacing":0.6
       },
-      "noc-subhead": {
-        fontSize: 12,
-        bold: true,
-        margin: [-18, 8, 0, 0],
-        color: "#484848"
+      "noc-subhead":{
+         "fontSize":9,
+         "bold":true,
+         "margin":[
+            -18,
+            8,
+            0,
+            0
+         ],
+         "color":"#484848"
       },
-      "noc-title": {
-        fontSize: 10,
-        bold: true,
-        margin: [-18, 16, 8, 8],
-        color: "#484848",
-        fontWeight: 500
+      "noc-title":{
+         "fontSize":8,
+         "bold":true,
+         "margin":[
+            -18,
+            16,
+            8,
+            8
+         ],
+         "color":"#484848",
+         "fontWeight":500
       },
-      "noc-table": {
-        fontSize: 10,
-        color: "#484848",
-        margin: [-20, -2, -8, -8]
+      "noc-table":{
+         "fontSize":9,
+         "color":"#484848",
+         "margin":[
+            -20,
+            -2,
+            -8,
+            -8
+         ]
       },
-      "receipt-header-details": {
-        fontSize: 9,
-        margin: [0, 0, 0, 8],
-        color: "#484848"
+      "receipt-header-details":{
+         "fontSize":8,
+         "margin":[
+            0,
+            0,
+            0,
+            8
+         ],
+         "color":"#484848"
       },
-      "noc-table-key": {
-        color: "#484848",
-        bold: false,
-        fontSize: 10
+      "noc-table-key":{
+         "color":"#484848",
+         "bold":false,
+         "fontSize":9
       },
-      "receipt-table-value": {
-        color: "#484848",
-        bold: true,
-        fontSize: 10
+      "receipt-table-value":{
+         "color":"#484848",
+         "bold":true,
+         "fontSize":9
       },
-      "receipt-table-firestation": {
-        color: "#484848",
-        bold: true,
-        fontSize: 10
+      "receipt-table-firestation":{
+         "color":"#484848",
+         "bold":true,
+         "fontSize":9
       },
-      "receipt-footer": {
-        color: "#484848",
-        fontSize: 8,
-        margin: [-6, 15, -15, -10]
+      "receipt-footer":{
+         "color":"#484848",
+         "fontSize":7,
+         "margin":[
+            -6,
+            15,
+            -15,
+            -10
+         ]
       },
-      "receipt-no": {
-        color: "#484848",
-        fontSize: 10
+      "receipt-no":{
+         "color":"#484848",
+         "fontSize":9
       },
-      "receipt-approver": {
-        fontSize: 12,
-        bold: true,
-        margin: [-20, 30, -10, 0],
-        color: "#484848"
+      "receipt-approver":{
+         "fontSize":11,
+         "bold":true,
+         "margin":[
+            -20,
+            30,
+            -10,
+            0
+         ],
+         "color":"#484848"
       }
-    },
-   
+   }
   };
   return dd;
 };
 
 const newgetApplicationData = async (transformedData, ulbLogo, type) => {
   console.log("new type certificate data", transformedData)
+  transformedData=updateMohall(transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
       return i === 0 || i === node.table.body.length ? 0.1 : 0.1;
@@ -1492,7 +1561,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
       alignment: "left"
     }
   ];
-  let nocDetails = [  
+  let nocDetails = [
     {
       style: "noc-table",
       table: {
@@ -1545,7 +1614,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
       text: "",
       style: "noc-title"
     }];
- 
+
 
 
   let propertyDetails = [
@@ -1626,7 +1695,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               text: "Door/House No.",
               border: [false, false, false, false]
             },
-            
+
             {
               text: "Street Name",
               border: [false, false, false, false]
@@ -1660,7 +1729,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, false, true]
 
-            },            
+            },
           ],
           [
 
@@ -1700,7 +1769,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             },
 
             {
-              text: transformedData.mohalla,
+              text: getMessageFromLocalization(transformedData.mohalla),
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -1756,7 +1825,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, true, true]
             },
-          ] 
+          ]
 
         ]
       },
@@ -2061,7 +2130,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
           alignment: "right"
         }
       ]
-    }      
+    }
  ] ;
 
   let generatedApprovedBy = [
@@ -2175,11 +2244,11 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
       break;
     case "certificate":
       headerText = "Certificate";
-     
+
       applicantDetails = [];
       documents = [];
 
-     
+
       citizengeneratedApprovedBy = [
         {
           style: "receipt-approver",
@@ -2207,7 +2276,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               alignment: "right"
             }
           ]
-        }      
+        }
      ] ;
 
       generatedApprovedBy = [
@@ -2237,7 +2306,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               alignment: "right"
             }
           ]
-        }      
+        }
      ] ;
 
       qrText = `Application: ${
@@ -2253,14 +2322,14 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
   // Generate QR code base64 image
   let qrcode = await QRCode.toDataURL(qrText);
 
- 
+
   let dd = {
     defaultStyle: {
       font: "raavi",
     },
-   
-    content: [    
-      {      
+
+    content: [
+      {
         style: "noc-head-new",
         table: {
           widths: [120, "*", 120],
@@ -2272,11 +2341,11 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
                // height: 61.25,
                 height :60,
                 margin: [31, 12, 10, 10],
-                border: [true, true, false, false],            
+                border: [true, true, false, false],
 
               },
               {
-                stack: [                    
+                stack: [
                   {
                        text: [{ text:"Punjab Fire Services" , bold:true },],
                     style: "receipt-logo-header",
@@ -2294,7 +2363,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
                     alignment: "center",
                   },
                   {
-                     text: [{ text:"ਫਾਇਰ ਸੇਫਟੀ ਪਮਾਣ ਪੱਤਰ" , bold:true },], 
+                     text: [{ text:"ਫਾਇਰ ਸੇਫਟੀ ਪਮਾਣ ਪੱਤਰ" , bold:true },],
                     style: "receipt-logo-sub-header",
                     alignment: "center",
                   }
@@ -2325,7 +2394,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
                 ], */
                 alignment: "left",
                 margin: [10, 23, 0, 0],
-                border: [false, true, false, false],            
+                border: [false, true, false, false],
 
               },
               {
@@ -2334,580 +2403,580 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
                 height: 70,
                 margin: [20, 8, 8, 8],
                 alignment: "right",
-                border: [false, true, true, false],          
+                border: [false, true, true, false],
 
               }
-             
-            ],          
+
+            ],
     /*         [
               {
                 text: `NOC No ${transformedData.fireNOCNumber}`,
-                border: [true, false, false, false],            
+                border: [true, false, false, false],
                 alignment: "left"
- 
+
               },
               {
 
                 text: `NOC Type: ${transformedData.nocType}`,
-                border: [false, false, false, false],            
+                border: [false, false, false, false],
                 alignment: "center"
               },
               {
 
                 text: `Dated ${transformedData.issuedDate}`,
-                border: [false, false, true, false],            
+                border: [false, false, true, false],
                 alignment: "right"
               }
-             
+
             ],  */
 
-         
-                       
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*", '*', '*'],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 //text: `NOC No: ${transformedData.fireNOCNumber}`,
-                text: [  "NOC No: " , 
-                { text: `${transformedData.fireNOCNumber}`, 
-                bold:true },  
+                text: [  "NOC No: " ,
+                { text: `${transformedData.fireNOCNumber}`,
+                bold:true },
                 ],
-                border: [true, false, false, false],            
+                border: [true, false, false, false],
                 alignment: "left",
                 style:"noc-table-nocnumber"
- 
+
               },
               {
 
                // text: `NOC Type: ${transformedData.nocType}`,
-                text: [  "NOC Type: " , 
-                { text: `${transformedData.nocType}`, 
-                bold:true },  
+                text: [  "NOC Type: " ,
+                { text: `${transformedData.nocType}`,
+                bold:true },
                 ],
-                border: [false, false, false, false],            
+                border: [false, false, false, false],
                 alignment: "center"
               },
               {
 
                 //text: `Dated: ${transformedData.issuedDate}`,
-                text: [  "Dated: " , 
-                { text: `${transformedData.issuedDate}`, 
-                bold:true },  
+                text: [  "Dated: " ,
+                { text: `${transformedData.issuedDate}`,
+                bold:true },
                 ],
-                border: [false, false, true, false],            
+                border: [false, false, true, false],
                 alignment: "right"
               }
-             
+
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
+          body: [
+
             [
-             
+
               {
                 text: ["                        Certified that the ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " at " , { text:`${transformedData.address}`, bold:true }, "comprised of ", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " basements and ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (Upper floor) owned/occupied by ",{ text:`${transformedData.owners[0].name}`, bold:true }, " have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ", { text:`${transformedData.issuedDate}`, bold:true }, " in the presence of ", { text:`${transformedData.owners[0].name}`, bold:true }, " (Name of the owner or his representative) and that the building/premises is fit for occupancy group " , { text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ", { text:`${transformedData.NBCSubGroup}`, bold:true }, " (As per NBC) for period of ", { text:"one year", bold:true }, " from issue date. Subject to the following conditions."],
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "justify",
                 preserveLeadingSpaces: true
 
 
               },
-             
+
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
+          body: [
+
             [
-             
+
               {
                 text: ["Issued on ",{ text:`${transformedData.issuedDate}`, bold:true }," at ", { text:`${transformedData.corporationName}`, bold:true }],
 
                // text: `Issued on ${transformedData.issuedDate} at ${transformedData.corporationName}`,
 
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left"
               },
-             
+
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: ["                        ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " ਜੋ ਿਕ ",{ text:`${transformedData.address}`, bold:true }, " ਸਮੇਤ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " ਬੇਸਮਟ ਅਤੇ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (ਪਰਲੀ ਮੰਿਜ਼ਲ) ਮਲਕੀਅਤ/ਕਾਬਜ਼ਦਾਰ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " ਨੰ ੂਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪਭਾਵੀ ਅਤੇ ਬਚਾਅ ਦੇ ਰਾਟਰੀ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਿਜਸ ਨੰ ੂਸਬੰਧਤ ਅੱਗਬੁਝਾਊ ਅਿਧਕਾਰੀ ਵੱਲ ਪ ਮਾਿਣਤ ਕੀਤਾ ਿਗਆ ",{ text:`${transformedData.issuedDate}`, bold:true }, " ਮੋਜੂਦਗੀ ਿਵੱਚ ",{ text:`${transformedData.owners[0].name}`, bold:true }, " (ਮਾਲਕ ਦਾ ਨਾਮ ਜਉਸ ਦਾ ਪਤੀਿਨਧੀ) ਅਤੇ ਇਮਾਰਤ / ਿਬਲਿਡੰਗ ਆਬਾਦੀ ਲਈ ਯੋਗ ਹੈ। Occupancy Group ",{ text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ",{ text:`${transformedData.NBCSubGroup}`, bold:true }, " (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੇ ਪਭਾਵੀ ਸਮਤ ",{ text:"ਇੱਕ ਸਾਲ", bold:true }, " ਤੱਕ। ਿਜਸ ਲਈ ਿਨਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਹਨ।"],
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "justify",
                 preserveLeadingSpaces: true
-                
 
-              },            
+
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                // text: `ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ${transformedData.issuedDate}  ਿਕੱਥੇ ${transformedData.corporationName}.`,
                 text: ["ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ",{ text:`${transformedData.issuedDate}`, bold:true },"  ਿਕੱਥੇ ", { text:`${transformedData.corporationName}`, bold:true },"."],
 
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left"
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 margin: [10, 0, 0, 0],
 
                 text: "1. Fire Safety arrangements shall be kept in working condition at all times",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left"
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "ਹਰ ਸਮਅੱਗ ਤਬਚਾਅ ਦੇਯੰਤਰਾਂਨੰੂਚਾਲੂ /ਚੰਗੀ ਹਾਲਤ ਿਵੱਚ ਰੱਿਖਆ ਜਾਵੇ।",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "2. No, alteration/ addition/ change in use of occupancy is allowed.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: "ਿਕਸਵੀ ਤਰਦੇ ਬਦਲਾਅ/ ਵਾਧੇ/ ਕਾਬਜਕਾਰ ਿਵੱਚ ਬਦਲਾਵ ਦੀ ਮਨਾਹੀ ਹੈ।",      
-                border: [true, false, true, false],            
+                text: "ਿਕਸਵੀ ਤਰਦੇ ਬਦਲਾਅ/ ਵਾਧੇ/ ਕਾਬਜਕਾਰ ਿਵੱਚ ਬਦਲਾਵ ਦੀ ਮਨਾਹੀ ਹੈ।",
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "3. Occupants/ owner should have trained staff to operate the operaon of fire safety system provided there in.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: "ਉਪਲੱਬਧ ਅੱਗ ਬੁਝਾਉਣ ਦੇ ਯੰਤਰ ਦੀ ਵਰਤ ਤ ਰਿਹਣ ਵਾਲੇ ਲੋਕ / ਮਾਲਕ ਨੰ ੂ ਜਾਣੂੰ ਕਰਵਾਇਆ ਜਾਣਾਯਕੀਨੀ ਬਣਾਇਆ ਜਾਵੇ।",            
-                border: [true, false, true, false],            
+                text: "ਉਪਲੱਬਧ ਅੱਗ ਬੁਝਾਉਣ ਦੇ ਯੰਤਰ ਦੀ ਵਰਤ ਤ ਰਿਹਣ ਵਾਲੇ ਲੋਕ / ਮਾਲਕ ਨੰ ੂ ਜਾਣੂੰ ਕਰਵਾਇਆ ਜਾਣਾਯਕੀਨੀ ਬਣਾਇਆ ਜਾਵੇ।",
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "4. Fire Officer can check the arrangements of fire safety at any me, this cerficate will be withdrawn without any noce if any deficiency is found.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: "ਫਾਇਰ ਿਬਗੇਡ ਅਿਧਕਾਰੀ ਿਕਸੇ ਵੀ ਵਕਤ ਇਨ ਸਾਰੇ ਪਬੰਧ ਨੰ ੂ ਚੈਕ ਕਰ ਸਕਦਾ ਹੈ, ਜੇ ਕਰ ਕੋਈ ਕਮੀ ਪਾਈਗਈ ਤ ਿਬਨ ਿਕਸੇ ਨਿਟਸ ਦੇ ਇਹ ਸਰਟੀਿਫਕੇਟ ਰੱਦ ਸਮਿਝਆ ਜਾਵੇਗਾ।",      
-                border: [true, false, true, false],            
+                text: "ਫਾਇਰ ਿਬਗੇਡ ਅਿਧਕਾਰੀ ਿਕਸੇ ਵੀ ਵਕਤ ਇਨ ਸਾਰੇ ਪਬੰਧ ਨੰ ੂ ਚੈਕ ਕਰ ਸਕਦਾ ਹੈ, ਜੇ ਕਰ ਕੋਈ ਕਮੀ ਪਾਈਗਈ ਤ ਿਬਨ ਿਕਸੇ ਨਿਟਸ ਦੇ ਇਹ ਸਰਟੀਿਫਕੇਟ ਰੱਦ ਸਮਿਝਆ ਜਾਵੇਗਾ।",
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "5.Occupants/ owner should apply for renewal of fire safety cerficate one month prior to expiry of this cerficate.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "ਮਾਲਕ ਜਾਰੀ ਕੀਤੇ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਸਰਟੀਿਫਕੇਟ ਦੀ ਿਮਤੀ ਖਤਮ ਹੋਣ ਤ ਇੱਕ ਮਹੀਨਾ ਪਿਹਲ ਰੀਨੀਊਕਰਵਾਉਣ ਲਈ ਪਾਬੰਦ ਹੋਵੇਗਾ।",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "* Above Details cannot be used as ownership proof.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 color: "#FF0000",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: [{ text:"ਉਪਰੋਕਤ ਦਰਸਾਈ ਗਈ ਜਾਣਕਾਰੀ ਨੰੂਮਾਲਕਾਨਾ ਦੇ ਸਬੂਤ ਵਜ ਨਹ ਵਰਿਤਆ ਜਾਵੇਗਾ।", bold:true  }],              
-                border: [true, false, true, false],            
+                text: [{ text:"ਉਪਰੋਕਤ ਦਰਸਾਈ ਗਈ ਜਾਣਕਾਰੀ ਨੰੂਮਾਲਕਾਨਾ ਦੇ ਸਬੂਤ ਵਜ ਨਹ ਵਰਿਤਆ ਜਾਵੇਗਾ।", bold:true  }],
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "This is digitaly created cerificate, no signatue are needed",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: [{ text:"ਇਹ ਿਡਜੀਟਲੀ (ਕੰਿਪਊਟਰਾਈਜ਼ਡ) ਿਤਆਰ ਕੀਤਾ ਿਗਆ ਸਰਟੀਿਫਕੇਟ ਹੈ, ਿਜਸ ਿਵੱਚ ਦਸਤਖਤ ਦੀ ਕੋਈ ਲੋੜ ਨਹ ਹੈ।", bold:true  }],              
-                border: [true, false, true, true],            
+                text: [{ text:"ਇਹ ਿਡਜੀਟਲੀ (ਕੰਿਪਊਟਰਾਈਜ਼ਡ) ਿਤਆਰ ਕੀਤਾ ਿਗਆ ਸਰਟੀਿਫਕੇਟ ਹੈ, ਿਜਸ ਿਵੱਚ ਦਸਤਖਤ ਦੀ ਕੋਈ ਲੋੜ ਨਹ ਹੈ।", bold:true  }],
+                border: [true, false, true, true],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
 
-     
-       
-     
-       
+
+
+
+
 
      /* ...space,
      ...space,
@@ -2943,9 +3012,9 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
      ...paymentInformation, */
      //...process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy
 
-   
+
     ],
-   
+
     footer: [],
     styles: {
       "noc-head": {
@@ -2958,7 +3027,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
         margin: [0, 0, 0, 0],
       },
 
-     
+
       "receipt-logo-header": {
         color: "#484848",
         fontFamily: "raavi",
@@ -3039,6 +3108,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
 
 const provisionApplicationData = async (transformedData, ulbLogo, type) => {
   console.log("provisional certificate", transformedData)
+  transformedData=updateMohall(transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
       return i === 0 || i === node.table.body.length ? 0.1 : 0.1;
@@ -3110,7 +3180,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
       alignment: "left"
     }
   ];
-  let nocDetails = [  
+  let nocDetails = [
     {
       style: "noc-table",
       table: {
@@ -3119,9 +3189,9 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
           [
             {
             //  text: `NOC No: ${transformedData.fireNOCNumber}`,
-              text: [  "NOC No:" , 
-              { text: `${transformedData.fireNOCNumber}`, 
-              bold:true },  
+              text: [  "NOC No:" ,
+              { text: `${transformedData.fireNOCNumber}`,
+              bold:true },
                ],
               border: [false, false, false, false],
               //style: "noc-table-key"
@@ -3129,7 +3199,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
 
             },
             {
-              text: `NOC Type: ${transformedData.nocType}`,              
+              text: `NOC Type: ${transformedData.nocType}`,
               border: [false, false, false, false],
               alignment: "center"
             },
@@ -3167,10 +3237,10 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
       text: "",
       style: "noc-title"
     }];
- 
 
- 
- 
+
+
+
 
 
   let propertyDetails = [
@@ -3251,7 +3321,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               text: "Door/House No.",
               border: [false, false, false, false]
             },
-            
+
             {
               text: "Street Name",
               border: [false, false, false, false]
@@ -3285,7 +3355,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value",
               border: [false, false, false, true]
 
-            },            
+            },
           ],
           [
 
@@ -3325,7 +3395,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             },
 
             {
-              text: transformedData.mohalla,
+              text: getMessageFromLocalization(transformedData.mohalla),
               style: "receipt-table-value",
               border: [false, false, false, false]
             },
@@ -3381,7 +3451,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, false, true, true]
             },
           ]
- 
+
         ]
       },
       layout: borderLayout
@@ -3685,7 +3755,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
           alignment: "right"
         }
       ]
-    }      
+    }
  ] ;
 
   let generatedApprovedBy = [
@@ -3858,7 +3928,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
       applicantDetails = [];
       documents = [];
 
-     
+
       citizengeneratedApprovedBy = [
         {
           style: "receipt-approver",
@@ -3886,7 +3956,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               alignment: "right"
             }
           ]
-        }      
+        }
      ] ;
 
       generatedApprovedBy = [
@@ -3916,7 +3986,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               alignment: "right"
             }
           ]
-        }      
+        }
      ] ;
 
       qrText = `Application: ${
@@ -3932,15 +4002,15 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
   // Generate QR code base64 image
   let qrcode = await QRCode.toDataURL(qrText);
 
- 
+
   let dd = {
     defaultStyle: {
       font: "raavi",
-     
+
     },
-   
-    content: [    
-      {      
+
+    content: [
+      {
         style: "noc-head-new",
         table: {
           widths: [120, "*", 120],
@@ -3952,7 +4022,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
                 // height: 61.25,
                 height :60,
                 margin: [30, 12, 10, 10],
-                border: [true, true, false, false],            
+                border: [true, true, false, false],
 
               },
               {
@@ -3974,14 +4044,14 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
                     alignment: "center",
                   },
                   {
-                     text: [{ text:"ਫਾਇਰ ਸੇਫਟੀ ਪਮਾਣ ਪੱਤਰ" , bold:true },], 
+                     text: [{ text:"ਫਾਇਰ ਸੇਫਟੀ ਪਮਾਣ ਪੱਤਰ" , bold:true },],
                     style: "receipt-logo-sub-header",
                     alignment: "center",
                   }
                 ],
                 alignment: "left",
                 margin: [10, 23, 0, 0],
-                border: [false, true, false, false],            
+                border: [false, true, false, false],
 
               },
               {
@@ -3990,659 +4060,659 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
                 height: 70,
                 margin: [10, 8, 8, 8],
                 alignment: "right",
-                border: [false, true, true, false],          
+                border: [false, true, true, false],
 
               }
-             
-            ],          
+
+            ],
     /*         [
               {
                 text: `NOC No ${transformedData.fireNOCNumber}`,
-                border: [true, false, false, false],            
+                border: [true, false, false, false],
                 alignment: "left"
- 
+
               },
               {
 
                 text: `NOC Type: ${transformedData.nocType}`,
-                border: [false, false, false, false],            
+                border: [false, false, false, false],
                 alignment: "center"
               },
               {
 
                 text: `Dated ${transformedData.issuedDate}`,
-                border: [false, false, true, false],            
+                border: [false, false, true, false],
                 alignment: "right"
               }
-             
+
             ],  */
 
-         
-                       
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*", '*', '*'],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: [  "NOC No: " , 
-                  { text: `${transformedData.fireNOCNumber}`, 
-                  bold:true },  
+                text: [  "NOC No: " ,
+                  { text: `${transformedData.fireNOCNumber}`,
+                  bold:true },
                 ],
-                border: [true, false, false, false],            
+                border: [true, false, false, false],
                 alignment: "left"
- 
+
               },
               {
-                text: [  "NOC Type: " , 
-                  { text: `${transformedData.nocType}`, 
-                  bold:true },  
+                text: [  "NOC Type: " ,
+                  { text: `${transformedData.nocType}`,
+                  bold:true },
                 ],
 
                 //text: `NOC Type: ${transformedData.nocType}`,
-                border: [false, false, false, false],            
+                border: [false, false, false, false],
                 alignment: "center"
               },
               {
-                text: [  "Dated: " , 
-                  { text: `${transformedData.issuedDate}`, 
-                  bold:true },  
+                text: [  "Dated: " ,
+                  { text: `${transformedData.issuedDate}`,
+                  bold:true },
                 ],
-                
+
                 //text: `Dated: ${transformedData.issuedDate}`,
-                border: [false, false, true, false],            
+                border: [false, false, true, false],
                 alignment: "right"
               }
-             
+
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
+          body: [
+
             [
-             
+
               {
                 text:  ["                        Certified that the ", { text:`${transformedData.buildings[0].name}`, bold:true }, " at ", { text:`${transformedData.address}`, bold:true }, "has been inspected by the fire officer. This site is vacant/under-construction and is aaccessible to fire brigade. As per proposed drawing, building is to be constructed with", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " basements and ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (Upper floor). Fire department has examined the fire safety layout plan/drawing and found to be fit for occupancy group ", { text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ", { text:`${transformedData.NBCSubGroup}`, bold:true }, " (as per NBC)."],
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "justify",
                 textIndent : 50,
                 preserveLeadingSpaces: true
-               
+
               },
-             
+
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
+          body: [
+
             [
-             
+
               {
                 text: ["Issued on ",{ text:`${transformedData.issuedDate}`, bold:true }," at ", { text:`${transformedData.corporationName}`, bold:true }],
-   
-                    border: [true, false, true, false],            
+
+                    border: [true, false, true, false],
                 alignment: "left",
-               
+
               },
-             
+
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: ["                        ਤਸਦੀਕ ਕੀਤਾ ਜਦਾ ਹੈ ਿਕ ",  { text:`${transformedData.buildings[0].name}`, bold:true }, " ਪਤਾ ", { text:`${transformedData.address}`, bold:true }, " ਦੀ ਫਾਇਰ ਅਫਸਰ ਵਲ  ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਿਬਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਿਬਕ ", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " ਬੇਸਮਟ ਅਤੇ ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " ਮੰਿਜਲ ਹਨ। ਫਾਇਰ ਿਵਭਾਗ ਵਲ  ਿਬਨ ਕਰਤਾ ਦੁਆਰਾ ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੰ ੂਘੋਿਖਆ ਿਗਆ ਅਤੇ ਨ ਨਲ ਿਬਲਿਡੰਗ ਕੋਡ ਅਨੁਸਾਰ ਗਰੁੱਪ ", { text:`${transformedData.NBCGroup}`, bold:true }, " ਸਬਡਵੀਜਨ ", { text:`${transformedData.NBCSubGroup}`, bold:true }, "  ਿਵੱਚ ਪੈਦਾ ਹੈ।"] ,
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "justify",
-                preserveLeadingSpaces: true,               
+                preserveLeadingSpaces: true,
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: ["ਜਾਰੀ ਕਰਨ ਦੀ ਿਮਤੀ ",{ text:`${transformedData.issuedDate}`, bold:true },"  ਿਕੱਥੇ ", { text:`${transformedData.corporationName}`, bold:true },"."],
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
-               
-               
-              },            
+
+
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: [{ text:"Provisional NOC", bold:true  }, " is issued subject to following conditions:"],
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: [{ text:"ਪਵੀਜਨਲ ਐਨ.ਓ.ਸੀ", bold:true  }, " ਹੇਠ ਿਲਖੀਆ eਰਤfi ਦੇ ਆਧਾਰ ਤੇ ਜਾਰੀ ਕੀਤਾ ਜfiਦਾ ਹੈ।"],
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left"
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 margin: [10, 0, 0, 0],
 
                 text: "1. Occupant/Owner must install/provide fire safety arrangements as per submitted fire layout plan/drawing during construction.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left"
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: "ਕਾਬਜਕਾਰ/ਮਾਲਕ ਵਲਜਮਕਰਵਾਏ ਗਏ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਅਨੁਸਾਰ ਫਾਇਰ ਸੇਫਟੀ ਦੇ ਪਬੰਧ ਕਰਨ ਲਾਜਮੀ ਹੋਣਗੇ।",                            
-                border: [true, false, true, false],            
+                text: "ਕਾਬਜਕਾਰ/ਮਾਲਕ ਵਲਜਮਕਰਵਾਏ ਗਏ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਅਨੁਸਾਰ ਫਾਇਰ ਸੇਫਟੀ ਦੇ ਪਬੰਧ ਕਰਨ ਲਾਜਮੀ ਹੋਣਗੇ।",
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "2. Occupant/Owner must obtain the final NOC from fire department on completion of building construction before occupancy.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: "ਕਾਬਜਕਾਰ/ਮਾਲਕ ਵਲ” ਇਸ ਪ˛ੋਜੈਕਟ ਦੀ ਉਸਾਰੀ ਉਪਰੰ ਤ ਫਾਇਰ ਸੇਫਟੀ ਸਬੰ ਧੀ ਫਾਇਰ ਐਨ.ਓ.ਸੀ ਲੈਣਾ ਹੋਵੇਗਾ।",      
-                border: [true, false, true, false],            
+                text: "ਕਾਬਜਕਾਰ/ਮਾਲਕ ਵਲ” ਇਸ ਪ˛ੋਜੈਕਟ ਦੀ ਉਸਾਰੀ ਉਪਰੰ ਤ ਫਾਇਰ ਸੇਫਟੀ ਸਬੰ ਧੀ ਫਾਇਰ ਐਨ.ਓ.ਸੀ ਲੈਣਾ ਹੋਵੇਗਾ।",
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "3. Fire department may ask for additional arrangements (if necessary) aGer the completion of construction of building.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: "ਫਾਇਰ ਿਵਭਾਗ ਵਲ” ਿਬਲਿਡੰ ਗ ਦੀ ਉਸਾਰੀ ਦਾ ਕੰ ਮ ਮੁਕੰ ਮਲ ਹੋਣ ਤੇ ਫਾਇਰ ਸੇਫਟੀ ਦਾ ਵਾਧੂ ਪ˛ਬੰ ਧ (ਜੇਕਰ ਲੋੜ ਹੋਵੇ) ਕਰਨ ਲਈ ਿਕਹਾ ਜਾ ਸਕਦਾ ਹੈ।",            
-                border: [true, false, true, false],            
+                text: "ਫਾਇਰ ਿਵਭਾਗ ਵਲ” ਿਬਲਿਡੰ ਗ ਦੀ ਉਸਾਰੀ ਦਾ ਕੰ ਮ ਮੁਕੰ ਮਲ ਹੋਣ ਤੇ ਫਾਇਰ ਸੇਫਟੀ ਦਾ ਵਾਧੂ ਪ˛ਬੰ ਧ (ਜੇਕਰ ਲੋੜ ਹੋਵੇ) ਕਰਨ ਲਈ ਿਕਹਾ ਜਾ ਸਕਦਾ ਹੈ।",
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "4. During construction, ﬁre safety arrangements should be provided as per requirements of NBC.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
-                text: "ਐਨ.ਬੀ.ਸੀ ਅਨੁਸਾਰ ਿਬਲਿਡੰ ਗ ਦੀ ਉਸਾਰੀ ਸਮ” ਫਾਇਰ ਸੇਫਟੀ ਦੇ ਲੋੜੀਦੇ ਪ˛ਬੰ ਧ ਕਰਨ`  ਜਰੂਰੀ ਹੋਣਗੇ।",      
-                border: [true, false, true, false],            
+                text: "ਐਨ.ਬੀ.ਸੀ ਅਨੁਸਾਰ ਿਬਲਿਡੰ ਗ ਦੀ ਉਸਾਰੀ ਸਮ” ਫਾਇਰ ਸੇਫਟੀ ਦੇ ਲੋੜੀਦੇ ਪ˛ਬੰ ਧ ਕਰਨ`  ਜਰੂਰੀ ਹੋਣਗੇ।",
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "5. In case of any change/alteration in the building plan, owner/occupant must re-apply for the provisional certiﬁcate.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "ਜੇਕਰ ਕਾਬਜਕਾਰ/ਮਾਲਕ ਵਲ” ਕੋਈ ਵੀ ਤਬਦੀਲੀ ਕੀਤੀ ਜfiਦੀ ਹੈ ਤfi ਦੁਬਾਰਾ ਤੋ ਪ˛ੋਵੀਜਨਲ ਐਨ.ਓ.ਸੀ ਲਈ ਅਪਲਾਈ ਕਰਨਾ ਪਵੇਗਾ।",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "6. Fire department reserves the right to withdraw this issued certificate, if any change in fire/building layout plan is made without notice to fire department.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "ਜੇਕਰ ਕਾਬਜਕਾਰ/ਮਾਲਕ ਵਲ” ਿਬਨਾ ਫਾਇਰ ਿਵਭਾਗ ਦੀ ਮੰ ਨਜੂਰੀ ਤ” ਲੇਆਊਟ ਪਲਾਨ ਿਵਚ ਕੋਈ ਤਬਦੀਲੀ ਕੀਤੀ ਜfiਦੀ ਹੈ ਤfi ਜਾਰੀ ਕੀਤਾ ਿਗਆ ਸਰਟੀਿਫਕੇਟ ਵਾਪਸ ਲੈਣ ਦਾ ਹੱ ਕ ਰਾਖਵfi ਹੋਵੇਗਾ।",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "* Above Details cannot be used as ownership proof.",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 color: "#FF0000",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: [{ text:"ਉਪਰੋਕਤ ਦਰਸਾਈ ਗਈ ਜਾਣਕਾਰੀ ਨੰੂਮਾਲਕਾਨਾ ਦੇ ਸਬੂਤ ਵਜ ਨਹ ਵਰਿਤਆ ਜਾਵੇਗਾ।", bold:true  }],
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                 text: "This is digitaly created cerificate, no signatue are needed",
-                border: [true, false, true, false],            
+                border: [true, false, true, false],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
-      {      
+      {
         style: "noc-head-new",
         table: {
           widths: ["*"],
-          body: [          
-           
-            [            
+          body: [
+
+            [
               {
                // text: "ਇਹ ਿਡਜੀਟਲੀ (ਕੰਿਪਊਟਰਾਈਜ਼ਡ) ਿਤਆਰ ਕੀਤਾ ਿਗਆ ਸਰਟੀਿਫਕੇਟ ਹੈ, ਿਜਸ ਿਵੱਚ ਦਸਤਖਤ ਦੀ ਕੋਈ ਲੋੜ ਨਹ ਹੈ।",
                 text: [{ text:"ਇਹ ਿਡਜੀਟਲੀ (ਕੰਿਪਊਟਰਾਈਜ਼ਡ) ਿਤਆਰ ਕੀਤਾ ਿਗਆ ਸਰਟੀਿਫਕੇਟ ਹੈ, ਿਜਸ ਿਵੱਚ ਦਸਤਖਤ ਦੀ ਕੋਈ ਲੋੜ ਨਹ ਹੈ।", bold:true  }],
-                border: [true, false, true, true],            
+                border: [true, false, true, true],
                 alignment: "left",
                 margin: [10, 0, 0, 0],
 
-              },            
+              },
            ],
-           
-           
-                       
+
+
+
           ]
         },
-   
+
         layout: {},
       },
 
@@ -4650,9 +4720,9 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
 
 
 
-   
+
     ],
-   
+
     footer: [],
     styles: {
       "noc-head": {
@@ -4810,7 +4880,7 @@ const generatePdf = async (state, dispatch, type) => {
     ...mdmsData,
     ...auditorData
   };
- 
+
   switch (type) {
     case "application_download":
       let fileName = `noc_application_${transformedData.applicationNumber}`;
@@ -4853,7 +4923,6 @@ const generatePdf = async (state, dispatch, type) => {
       break;
     case "certificate_download":
       fileName = `noc_certificate_${transformedData.fireNOCNumber}`;
-     // debugger;
       if(transformedData.nocType=="NEW")
       {
       application_data = await newgetApplicationData(
@@ -4879,11 +4948,23 @@ const generatePdf = async (state, dispatch, type) => {
       pdfMake.createPdf(application_data).download(fileName);
       break;
     case "certificate_print":
-      application_data = await getApplicationData(
-        transformedData,
-        ulbLogo,
-        "certificate"
-      );
+    fileName = `noc_certificate_${transformedData.fireNOCNumber}`;
+    if(transformedData.nocType=="NEW")
+    {
+    application_data = await newgetApplicationData(
+      transformedData,
+      ulbLogo,
+      "certificate"
+    );
+   }
+   else
+   {
+    application_data = await provisionApplicationData(
+      transformedData,
+      ulbLogo,
+      "certificate"
+    );
+   }
       application_data && pdfMake.createPdf(application_data).print();
       break;
 

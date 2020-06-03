@@ -127,3 +127,15 @@ span[class^="MuiFormLabel-asterisk"] {
     margin: 30px 16px 88px 16px;
   }
 }
+@media only screen and (max-width: 768px) {
+  .common-div-css {
+   padding-bottom: 70px!important;
+  }
+}
+@media only screen and (max-width: 375px){
+  .apply-wizard-footer  {
+
+    width: 97.33vw !important;
+
+}
+}

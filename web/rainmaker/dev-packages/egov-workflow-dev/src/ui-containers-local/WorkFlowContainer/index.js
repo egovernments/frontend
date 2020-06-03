@@ -162,13 +162,11 @@ class WorkFlowContainer extends React.Component {
       });
 
       if (payload) {
-       // debugger;
-       // console.log("prasad workflow payload",payload )
         let path = "";
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         const licenseNumber = get(payload, path, "");
-        const value = this.getPurposeString(label); 
+        const value = this.getPurposeString(label);
         window.location.href = `acknowledgement?${value}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
       }
     } catch (e) {
@@ -221,8 +219,8 @@ class WorkFlowContainer extends React.Component {
       switch (action) {
 
         case "APPLY":
-          return `/fire-noc/acknowledgement?purpose=apply&status=success&applicationNumber=${businessId}&tenantId=${tenant}`; 
-   
+          return `/fire-noc/acknowledgement?purpose=apply&status=success&applicationNumber=${businessId}&tenantId=${tenant}`;
+
         case "PAY":
           return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
 
@@ -361,7 +359,8 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = get(data[data.length - 1], "nextActions", []).filter(
-      item => item.action != "ADHOC"
+      //bad code new to cleanup
+      item => (item.action != "ADHOC")
     );
     let applicationStatus = get(
       data[data.length - 1],
@@ -372,7 +371,8 @@ class WorkFlowContainer extends React.Component {
     actions = actions.map(item => {
       return {
         buttonLabel: item.action,
-        moduleName: data[data.length - 1].businessService,
+        // moduleName: data[data.length - 1].businessService,
+        moduleName,
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, moduleName),
         dialogHeader: getHeaderName(item.action),

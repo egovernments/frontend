@@ -1,5 +1,4 @@
 import get from "lodash/get";
-import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertEpochToDate } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
 import {
@@ -11,6 +10,8 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
+import { getSearchResults } from "../../../../../ui-utils/commons";
+import {  getTextToLocalMapping } from "../../utils";
 
 const getMdmsData = async () => {
   let mdmsBody = {
@@ -76,11 +77,23 @@ export const fetchData = async (action, state, dispatch) => {
         data
       )
     );
-  } catch (error) {
+
+        if (response && response.Licenses && response.Licenses.length > 0) {
+          dispatch(
+            handleField(
+              "home",
+              "components.div.children.applyCard.children.searchResults",
+              "props.title",
+              `My Applications(${response.Licenses.length})`
+            )
+          );
+    
+  }
+}
+  catch (error) {
     console.log(error);
   }
 };
-
 export const textToLocalMapping = {
   "Application No": getLocaleLabels(
     "Application No",

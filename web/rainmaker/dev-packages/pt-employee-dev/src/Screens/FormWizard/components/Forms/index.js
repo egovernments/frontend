@@ -134,7 +134,7 @@ const OwnerInformation = ({
                 <ToolTipUi id={"form-wizard-tooltip"} title={fields["ownerCategoryId"].toolTipMessage} />
               )}
             </div>
-            <div className="col-sm-6" style={{ paddingBottom: "4px", paddingTop: "2px" }}>
+            <div className="col-sm-6" style={{ paddingBottom: "4px", paddingTop: "2px",bottom:"7px" }}>
               <Field fieldKey="ownerEmail" field={fields["ownerEmail"]} handleFieldChange={handleFieldChange} disabled={disabled} />
             </div>
             <div className="col-sm-6" style={{ paddingBottom: "8px" }}>

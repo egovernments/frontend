@@ -110,7 +110,7 @@ class PaymentStatus extends Component {
                 <Label
                   label="PT_DOWNLOAD_RECEIPT"
                   color="#fe7a51"
-                  labelStyle={{ textAlign: "center", fontWeight: 500, fontSize: "16px", cursor: "pointer" }}
+                  labelStyle={{ textAlign: "center",color:"#fe7a51 !important", fontWeight: 500, fontSize: "16px", cursor: "pointer" }}
                 />
               </div>
             )}

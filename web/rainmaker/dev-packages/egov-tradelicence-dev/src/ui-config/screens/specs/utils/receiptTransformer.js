@@ -109,11 +109,22 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     data.streetName = nullToNa(
       get(response, "Licenses[0].tradeLicenseDetail.address.street", "NA")
     );
-    data.locality = get(
+    let localitycode = get(
       response,
-      "Licenses[0].tradeLicenseDetail.address.locality.name",
+     "Licenses[0].tradeLicenseDetail.address.locality.code",
       "NA"
     );
+    let res = localitycode.replace("-", "_");
+    let localityname=`${getTransformedLocale(tenant)}_REVENUE_${res}`;
+
+    data.locality=getMessageFromLocalization(localityname);
+    console.log("555555555555555555555",data.locality);
+
+    // data.locality = get(
+    //   response,
+    //   "Licenses[0].tradeLicenseDetail.address.locality.name",
+    //   "NA"
+    // );
     let cityCode = nullToNa(
       get(response, "Licenses[0].tradeLicenseDetail.address.tenantId", "NA")
     );
