@@ -1200,7 +1200,11 @@ export const createEstimateData = async (
     }
   ];
   const currentStatus = LicenseData.status;
-  const isPAID = isApplicationPaid(currentStatus);
+  let isPAID = isApplicationPaid(currentStatus);
+  if(process.env.REACT_APP_NAME !== "Citizen" && 
+  window.location.pathname.indexOf("/bpastakeholder/search-preview") > -1) {
+    isPAID = true
+  }
   // const payload = getFromReceipt
   //   ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
   //   : await getBill(queryObj);
