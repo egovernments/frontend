@@ -10,7 +10,10 @@ class DynamicMdmsContainer extends Component {
     selectedValues : []
   }
   componentDidMount = () => {
-    this.triggerInitilaApi();
+    let { state, moduleName, rootBlockSub } = this.props;
+    const isMdmsApiTrigger = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
+    const isMdmsData = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
+    (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
   triggerInitilaApi = async () => {
     let { rootBlockSub, state, moduleName, masterName, type, dispatch, callBackEdit, isDependency, dropdownFields } = this.props;
@@ -18,8 +21,8 @@ class DynamicMdmsContainer extends Component {
     if(isDependencyCheck){
       let reqObj = {
         setPath : `DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`  , 
-        setTransformPath : `DynamicMdms.${moduleName}.${rootBlockSub}Transformed`, 
-        dispatchPath : `DynamicMdms.${moduleName}`,
+        setTransformPath : `DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}Transformed`, 
+        dispatchPath : `DynamicMdms.${moduleName}.${rootBlockSub}`,
         moduleName,
         name : masterName,
         rootBlockSub,
@@ -39,9 +42,9 @@ class DynamicMdmsContainer extends Component {
     }
   }
   componentWillUpdate () {
-    let { state } = this.props;
+    let { state, moduleName, rootBlockSub } = this.props;
     const isMdmsApiTrigger = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
-    const isMdmsData = this.getValueByKey('.MdmsJson');
+    const isMdmsData = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
     (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
   onFieldChange = ( screenKey, componentJsonpath, property, value ) => {
@@ -70,9 +73,9 @@ class DynamicMdmsContainer extends Component {
   getValueByKey = (key) => {
     let { state, rootBlockSub, moduleName } = this.props;
     if(key){
-      return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}${key}`);
+      return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}${key}`);
     } else {
-      return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}Transformed`, []);
+      return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}Transformed`, []);
     }
    
   }

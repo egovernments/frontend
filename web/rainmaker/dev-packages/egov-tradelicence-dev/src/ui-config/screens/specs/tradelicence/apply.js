@@ -114,7 +114,6 @@ export const getMdmsData = async (action, state, dispatch) => {
           moduleName: "common-masters",
           masterDetails: [
             { name: "OwnerType" },
-            { name: "OwnerShipCategory" },
             { name: "DocumentType" },
             { name: "UOM" },
           ]
@@ -142,17 +141,6 @@ export const getMdmsData = async (action, state, dispatch) => {
       "_search",
       [],
       mdmsBody
-    );
-    payload = commonTransform(
-      payload,
-      "MdmsRes.common-masters.OwnerShipCategory"
-    );
-    set(
-      payload,
-      "MdmsRes.common-masters.OwnerShipCategoryTransformed",
-      objectToDropdown(
-        get(payload, "MdmsRes.common-masters.OwnerShipCategory", [])
-      )
     );
     const localities = get(
       state.screenConfiguration,

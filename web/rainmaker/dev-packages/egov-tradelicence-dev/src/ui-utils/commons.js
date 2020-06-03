@@ -15,7 +15,6 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getTranslatedLabel,
-  updateDropDowns,
   ifUserRoleExists
 } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -178,7 +177,6 @@ export const updatePFOforSearchResults = async (
   }
 
   setDocsForEditFlow(state, dispatch);
-  updateDropDowns(payload, action, state, dispatch, queryValue);
  
   setApplicationNumberBox(state, dispatch);
 

@@ -10,7 +10,6 @@ import {
   setMultiOwnerForApply,
   setValidToFromVisibilityForApply,
   getDocList,
-  setOwnerShipDropDownFieldChange,
   createEstimateData,
   validateFields,
   downloadAcknowledgementForm,
@@ -101,9 +100,6 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
-    const data = get(state.screenConfiguration, "preparedFinalObject");
-    setOwnerShipDropDownFieldChange(state, dispatch, data);
-
     const isTradeDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
       state,
