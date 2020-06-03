@@ -187,6 +187,7 @@ const scrutinizePlan = async (state, dispatch) => {
     const file = get(preparedFinalObject, "Scrutiny[0].buildingPlan[0]");
     const permitNumber = get(preparedFinalObject, "Scrutiny[0].permitNumber");
     const permitDate = get(preparedFinalObject, "bpaDetails.approvalDate");
+    const comparisonEdcrNumber = get(preparedFinalObject, "bpaDetails.edcrNumber");
 
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
@@ -196,9 +197,9 @@ const scrutinizePlan = async (state, dispatch) => {
 
     let url = `/edcr/rest/dcr/scrutinize?tenantId=${tenantId}`;
     if(isOCApp) {
-      // url = `/edcr/rest/dcr/scrutinizeocplan?tenantId=${tenantId}`;
       edcrRequest = { ...edcrRequest, permitDate };
       edcrRequest = { ...edcrRequest, permitNumber };
+      edcrRequest = { ...edcrRequest, comparisonEdcrNumber };
     }
 
     var bodyFormData = new FormData();
