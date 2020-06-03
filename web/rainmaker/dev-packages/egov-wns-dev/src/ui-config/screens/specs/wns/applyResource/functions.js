@@ -6,7 +6,8 @@ import { getUserInfo,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
   showHideFields(dispatch, false);
-  let queryObject = [{ key: "tenantId", value: getTenantId() }];
+  let tenantId = process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
+  let queryObject = [{ key: "tenantId", value: tenantId }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   dispatch(
     handleField(
