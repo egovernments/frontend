@@ -34,6 +34,7 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
 import { getWorkFlowData } from "../../../../ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -654,9 +655,9 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
     let cessKey = element.taxHeadCode
     let body;
     if (service === "WATER" ||appNumber.includes("WS")) {
-      body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+      body = { "MdmsCriteria": { "tenantId": getTenantId(), "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
     } else {
-      body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+      body = { "MdmsCriteria": { "tenantId": getTenantId(), "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
     }
     let res = await getDescriptionFromMDMS(body, dispatch)
     if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
