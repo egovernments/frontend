@@ -12,6 +12,7 @@ import {
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { changeStep } from "../applyResource/footer";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const getHeader = label => {
     return {
@@ -248,9 +249,9 @@ export const scrutinySummary = getCommonGrayCard({
                                     let occupancy = value.occupancyType;
                                     for (let tp = 0; tp < occupancy.length; tp++) {
                                         if (tp === (occupancy.length - 1)) {
-                                            returnVAlue += occupancy[tp].label;//getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
+                                            returnVAlue += getLocaleLabels(getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`), getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)) //occupancy[tp].label;
                                         } else {
-                                            returnVAlue += occupancy[tp].label + ","; //getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
+                                            returnVAlue += getLocaleLabels(getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`), getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)) + "," //occupancy[tp].label + ",";
                                         }
                                     }
                                 }
