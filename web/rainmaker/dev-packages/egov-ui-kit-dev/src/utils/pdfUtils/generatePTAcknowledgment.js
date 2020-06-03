@@ -3,15 +3,16 @@ import { getAssessmentInfo, getUnitInfo } from "../../common/propertyTax/Propert
 import { getOwnerInfo } from "../../common/propertyTax/Property/components/OwnerInfo";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generatePDF } from "./generatePDF";
+import get from "lodash/get";
 
 export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "download") => {
 
-    property.subOwnershipCategory = property.propertyDetails[0].subOwnershipCategory;
+    property.subOwnershipCategory = get(property,'propertyDetails[0].subOwnershipCategory','');
     const addressCard = getAddressItems(property);
     property.owners = property.owners.filter(owner => owner.status == "ACTIVE")
     const ownerCard = getOwnerInfo(property, generalMDMSDataById);
-    const assessmentCard = getAssessmentInfo(property.propertyDetails[0], generalMDMSDataById);
-    const unitCard = getUnitInfo(property['units'], property);
+    const assessmentCard = getAssessmentInfo(get(property,'propertyDetails[0]',{}), generalMDMSDataById);
+    const unitCard = getUnitInfo(get(property,"propertyDetails[0].units",[]), property);
     let ownerInfoCard = ownerCard[0].items.filter(item => item);
     const documentCard = property.documentsUploaded.map(item => {
         return { key: getLocaleLabels(item.title, item.title), value: item.name }
@@ -26,11 +27,10 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     let unitInfoCard = []
     if (unitCard.length >= 1) {
         let unitItems = [];
-
         unitCard.map((unit, index) => {
             if (unit.length > 1) {
                 let unitItem = { items: unit[0] }
-                if (property.propertySubType !== "SHAREDPROPERTY") {
+                if (get(property,'propertyDetails[0].propertySubType','') !== "SHAREDPROPERTY") {
                     unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`, `PROPERTYTAX_FLOOR_${index}`);
                 }
                 let subItems = [];
@@ -55,7 +55,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
 
             } else {
                 let unitItem = { items: unit[0] }
-                if (property.propertySubType !== "SHAREDPROPERTY") {
+                if (get(property,'propertyDetails[0].propertySubType','') !== "SHAREDPROPERTY") {
                     unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`, `PROPERTYTAX_FLOOR_${index}`);
                 }
                 unitItems.push(unitItem)
