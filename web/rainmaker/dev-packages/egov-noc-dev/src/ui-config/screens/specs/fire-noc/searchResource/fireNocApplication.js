@@ -504,283 +504,283 @@ export const NOCApplication = getCommonCard({
     }
    },
 
-    district: {
-      ...getSelectField({
-      label: {
-        labelName: "District",
-        labelKey: "NOC_PROPERTY_DISTRICT_LABEL"
-      },
-      localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      placeholder: {
-        labelName: "Select District",
-        labelKey: "NOC_PROPERTY_DISTRICT_PLACEHOLDER"
-      },
-      sourceJsonPath: "applyScreenMdmsData.tenant.District",
-      jsonPath: "searchScreen.city",
+  //   district: {
+  //     ...getSelectField({
+  //     label: {
+  //       labelName: "District",
+  //       labelKey: "NOC_PROPERTY_DISTRICT_LABEL"
+  //     },
+  //     localePrefix: {
+  //       moduleName: "TENANT",
+  //       masterName: "TENANTS"
+  //     },
+  //     placeholder: {
+  //       labelName: "Select District",
+  //       labelKey: "NOC_PROPERTY_DISTRICT_PLACEHOLDER"
+  //     },
+  //     sourceJsonPath: "applyScreenMdmsData.tenant.District",
+  //     jsonPath: "searchScreen.city",
 
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      visible:false,
+  //     gridDefination: {
+  //       xs: 12,
+  //       sm: 4
+  //     },
+  //     visible:false,
 
-    }),
-    beforeFieldChange: async (action, state, dispatch) => {
-      dispatch(
-        prepareFinalObject(
-          "searchScreen.city",
-          action.value
-        )
-      );       
+  //   }),
+  //   beforeFieldChange: async (action, state, dispatch) => {
+  //     dispatch(
+  //       prepareFinalObject(
+  //         "searchScreen.city",
+  //         action.value
+  //       )
+  //     );       
 
-      if(action.value){
+  //     if(action.value){
         
 
      
-        let fireStationsList = get(
-          state,
-          "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
-          []
-        );
+  //       let fireStationsList = get(
+  //         state,
+  //         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+  //         []
+  //       );
         
-        console.log("fireStationsList", fireStationsList);
+  //       console.log("fireStationsList", fireStationsList);
 
-        const districtData= get(
-          state.screenConfiguration,
-          "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
-          []
-        );
+  //       const districtData= get(
+  //         state.screenConfiguration,
+  //         "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
+  //         []
+  //       );
 
-        console.log("districtData", districtData);
+  //       console.log("districtData", districtData);
 
 
-        let districtlist = districtData.filter((districtlists)=>{
+  //       let districtlist = districtData.filter((districtlists)=>{
          
-            return districtlists.city.districtTenantCode===action.value
+  //           return districtlists.city.districtTenantCode===action.value
           
-        });
+  //       });
 
-       console.log("tenanats list",districtlist );
+  //      console.log("tenanats list",districtlist );
 
-         let tenantids = districtlist.map((districtlists)=>{             
-          return districtlists.code          
-         });
+  //        let tenantids = districtlist.map((districtlists)=>{             
+  //         return districtlists.code          
+  //        });
 
-         let urbanids = districtlist.map((districtlists)=>{             
-          return districtlists.code          
-         });
+  //        let urbanids = districtlist.map((districtlists)=>{             
+  //         return districtlists.code          
+  //        });
 
-        console.log("tenant ids", urbanids); 
+  //       console.log("tenant ids", urbanids); 
         
    
        
-       let urbanlist = []
+  //      let urbanlist = []
 
-        for (let i=0;i<urbanids.length;i++)
-          {
-                urbanlist.push({
+  //       for (let i=0;i<urbanids.length;i++)
+  //         {
+  //               urbanlist.push({
                 
-                  code:urbanids[i],
+  //                 code:urbanids[i],
 
-                      })
-            }
+  //                     })
+  //           }
 
-        console.log("urbanlist",urbanlist);
+  //       console.log("urbanlist",urbanlist);
 
 
 
-        const subDistrictLists=[]; 
+  //       const subDistrictLists=[]; 
 
-        const firestationtenantidlist=[];
+  //       const firestationtenantidlist=[];
 
-        const fireStations = [];
+  //       const fireStations = [];
  
-       for(var i=0;i<tenantids.length;i++)
-        {
-         const fireStations = fireStationsList.filter(firestation => {       
+  //      for(var i=0;i<tenantids.length;i++)
+  //       {
+  //        const fireStations = fireStationsList.filter(firestation => {       
                            
-          return tenantids.includes(firestation.baseTenantId);   
+  //         return tenantids.includes(firestation.baseTenantId);   
 
-            // return tenantids[i].indexOf(firestation.baseTenantId) !== -1 
+  //           // return tenantids[i].indexOf(firestation.baseTenantId) !== -1 
 
-            // return firestation.baseTenantId === tenantids[i]; 
+  //           // return firestation.baseTenantId === tenantids[i]; 
 
-            //return 'code' in districtlist[i];
+  //           //return 'code' in districtlist[i];
 
-          }); 
+  //         }); 
 
-          if(fireStations[i]){
+  //         if(fireStations[i]){
 
-            // firestationtenantidlist.push({code:fireStations[0].baseTenantId}); 
+  //           // firestationtenantidlist.push({code:fireStations[0].baseTenantId}); 
 
-            for(var j=0;j<fireStations[i].subDistrict.length;j++){
-            //subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
-                subDistrictLists.push(fireStations[i].subDistrict[j]);  
-              }
-            }
+  //           for(var j=0;j<fireStations[i].subDistrict.length;j++){
+  //           //subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
+  //               subDistrictLists.push(fireStations[i].subDistrict[j]);  
+  //             }
+  //           }
 
-        }  
+  //       }  
 
-        //console.log('filtered fireStations', fireStations);     
+  //       //console.log('filtered fireStations', fireStations);     
       
-        let value = get(
-          state.screenConfiguration.preparedFinalObject,
-          "searchScreen.areaType",[]);
+  //       let value = get(
+  //         state.screenConfiguration.preparedFinalObject,
+  //         "searchScreen.areaType",[]);
 
-      if( value === 'Urban')
-      {
+  //     if( value === 'Urban')
+  //     {
 
-        const ulblist=[]; 
+  //       const ulblist=[]; 
 
-        const firestationtenantidlist=[];
+  //       const firestationtenantidlist=[];
 
-        const fireStations = [];
+  //       const fireStations = [];
  
-       for(var i=0;i<tenantids.length;i++)
-        {
-         const fireStations = fireStationsList.filter(firestation => {       
+  //      for(var i=0;i<tenantids.length;i++)
+  //       {
+  //        const fireStations = fireStationsList.filter(firestation => {       
                            
-          return tenantids.includes(firestation.baseTenantId);   
+  //         return tenantids.includes(firestation.baseTenantId);   
 
-            // return tenantids[i].indexOf(firestation.baseTenantId) !== -1 
+  //           // return tenantids[i].indexOf(firestation.baseTenantId) !== -1 
 
-            // return firestation.baseTenantId === tenantids[i]; 
+  //           // return firestation.baseTenantId === tenantids[i]; 
 
-            //return 'code' in districtlist[i];
+  //           //return 'code' in districtlist[i];
 
-          }); 
+  //         }); 
 
-          if(fireStations[i]){
+  //         if(fireStations[i]){
 
-            // firestationtenantidlist.push({code:fireStations[0].baseTenantId}); 
+  //           // firestationtenantidlist.push({code:fireStations[0].baseTenantId}); 
 
-            for(var j=0;j<fireStations[i].ulb.length;j++){
+  //           for(var j=0;j<fireStations[i].ulb.length;j++){
 
-            //subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
+  //           //subDistrictLists.push({code:fireStations[0].subDistrict[j]});  
 
-                 ulblist.push(fireStations[i].ulb[j]);  
-              }
-            }
+  //                ulblist.push(fireStations[i].ulb[j]);  
+  //             }
+  //           }
 
-        }  
+  //       }  
          
          
       
-        dispatch(
-          handleField(
-            "search",
-            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.citySearch",
-           "props.data",
-           ulblist
-          )
-        );
+  //       dispatch(
+  //         handleField(
+  //           "search",
+  //           "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.citySearch",
+  //          "props.data",
+  //          ulblist
+  //         )
+  //       );
 
-      }   else {
+  //     }   else {
         
 
-       console.log("subdistrict list",subDistrictLists );        
+  //      console.log("subdistrict list",subDistrictLists );        
         
       
 
-        dispatch(
-          handleField(
-            "search",
-            "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.subDistrict",         
-            "props.data",
-            subDistrictLists
-          )
-        );
-      } 
+  //       dispatch(
+  //         handleField(
+  //           "search",
+  //           "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.subDistrict",         
+  //           "props.data",
+  //           subDistrictLists
+  //         )
+  //       );
+  //     } 
         
-      }
-    }
-  },
+  //     }
+  //   }
+  // },
 
-    subDistrict: {
-      ...getSelectField({
-      label: {
-        labelName: "SubDistrict",
-        labelKey: "NOC_PROPERTY_SUBDISTRICT_LABEL"
-      },
-     /*   localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      }, */
-      placeholder: {
-        labelName: "Select SubDistrict",
-        labelKey: "NOC_PROPERTY_SUBDISTRICT_PLACEHOLDER"
-      },
-      sourceJsonPath: "applyScreenMdmsData.tenant.SubDistrict",
-      jsonPath: "searchScreen.subDistrict",
+  //   subDistrict: {
+  //     ...getSelectField({
+  //     label: {
+  //       labelName: "SubDistrict",
+  //       labelKey: "NOC_PROPERTY_SUBDISTRICT_LABEL"
+  //     },
+  //    /*   localePrefix: {
+  //       moduleName: "TENANT",
+  //       masterName: "TENANTS"
+  //     }, */
+  //     placeholder: {
+  //       labelName: "Select SubDistrict",
+  //       labelKey: "NOC_PROPERTY_SUBDISTRICT_PLACEHOLDER"
+  //     },
+  //     sourceJsonPath: "applyScreenMdmsData.tenant.SubDistrict",
+  //     jsonPath: "searchScreen.subDistrict",
 
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      visible:false,
-    }),
+  //     gridDefination: {
+  //       xs: 12,
+  //       sm: 4
+  //     },
+  //     visible:false,
+  //   }),
 
-    afterFieldChange: (action, state, dispatch) => {
+  //   afterFieldChange: (action, state, dispatch) => {
 
-      let fireStationsList = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
-        []
-      );
+  //     let fireStationsList = get(
+  //       state,
+  //       "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+  //       []
+  //     );
       
-      let fireStations = fireStationsList.filter(firestation => {
-        return firestation.subDistrict 
-      });
+  //     let fireStations = fireStationsList.filter(firestation => {
+  //       return firestation.subDistrict 
+  //     });
 
-      let props_value ;
+  //     let props_value ;
        
-      for(var i=0;i<fireStations.length;i++)
-      {
-        for(var j=0;j<fireStations[i].subDistrict.length;j++)
-        {
-          if(fireStations[i].subDistrict[j].code==action.value)
-        {
-          props_value = fireStations[i].baseTenantId;
-        }
-       }
-      }
+  //     for(var i=0;i<fireStations.length;i++)
+  //     {
+  //       for(var j=0;j<fireStations[i].subDistrict.length;j++)
+  //       {
+  //         if(fireStations[i].subDistrict[j].code==action.value)
+  //       {
+  //         props_value = fireStations[i].baseTenantId;
+  //       }
+  //      }
+  //     }
 
-     console.log("props value", props_value);            
+  //    console.log("props value", props_value);            
       
-      set(
-        state,
-        "screenConfiguration.preparedFinalObject.searchScreen.subDistrict",
-        props_value
-      );
-    }
+  //     set(
+  //       state,
+  //       "screenConfiguration.preparedFinalObject.searchScreen.subDistrict",
+  //       props_value
+  //     );
+  //   }
 
-  },
+  // },
 
 
-    citySearch: getSelectField({
-      label: {
-        labelName: "City",
-        labelKey: "NOC_PROPERTY_CITY_LABEL"
-      },
-      localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      placeholder: {
-        labelName: "Select City",
-        labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
-      },
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.tenantData",
-      jsonPath: "searchScreen.subDistrict",
+    // citySearch: getSelectField({
+    //   label: {
+    //     labelName: "City",
+    //     labelKey: "NOC_PROPERTY_CITY_LABEL"
+    //   },
+    //   localePrefix: {
+    //     moduleName: "TENANT",
+    //     masterName: "TENANTS"
+    //   },
+    //   placeholder: {
+    //     labelName: "Select City",
+    //     labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
+    //   },
+    //   sourceJsonPath: "applyScreenMdmsData.searchScreen.tenantData",
+    //   jsonPath: "searchScreen.subDistrict",
 
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   }
+    // }),
     
 
 
