@@ -37,7 +37,7 @@ const tradeSubTypeChange = (reqObj) => {
       let keyValueRow = keyValue.replace(`.${value}`, ``);
       let tradeSubTypes = get(
         state.screenConfiguration.preparedFinalObject,
-        `DynamicMdms.${moduleName}.${rootBlockSub}${keyValueRow}`,
+        `DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}${keyValueRow}`,
         []
       );
       let currentObject = filter(tradeSubTypes, {
@@ -137,7 +137,7 @@ const structureSubTypeChange = (reqObj) => {
     dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", value));
     dispatch(pFO("LicensesTemp[0].tradeLicenseDetail.structureType", keyValueRow));
   } catch (e){
-
+    console.log(e);
   }
 }  
 

@@ -825,7 +825,7 @@ export const getMdmsJson = async ( state, dispatch, reqObj) => {
       filterResult
     );
     payload = getTransformData(payload, setPath, setTransformPath);
-    dispatch(prepareFinalObject(dispatchPath, get( payload, `DynamicMdms.${moduleName}`, [])));
+    dispatch(prepareFinalObject(dispatchPath, get( payload, dispatchPath, [])));
     //dispatch(prepareFinalObject(dispatchPath, payload.DynamicMdms));
     dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, false ));
   } catch (e) {
