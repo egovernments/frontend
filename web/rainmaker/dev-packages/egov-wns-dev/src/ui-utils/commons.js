@@ -1643,6 +1643,35 @@ export const getSWMyConnectionResults = async (queryObject, dispatch) => {
 
 };
 
+export const billingPeriodMDMS = (toPeriod,payloadbillingPeriod,service) => {
+    const connectionType = getQueryArg(window.location.href, "connectionType");
+    let demandExipryDate = 0;
+    if (service === 'WATER' &&
+        payloadbillingPeriod['ws-services-masters'] && 
+        payloadbillingPeriod['ws-services-masters'].billingPeriod !== undefined && 
+        payloadbillingPeriod['ws-services-masters'].billingPeriod  !== null) {
+      payloadbillingPeriod['ws-services-masters'].billingPeriod.forEach(obj => {
+        if(obj.connectionType === 'Metered' && connectionType === "Metered") {
+          demandExipryDate = obj.demandExpiryDate;
+        } else if (obj.connectionType === 'Non Metered' && connectionType === "Non Metered") {
+          demandExipryDate = obj.demandExpiryDate;
+        }
+      }); 
+    }               
+    
+    if (service === 'SEWERAGE' &&
+        payloadbillingPeriod['sw-services-calculation'] && 
+        payloadbillingPeriod['sw-services-calculation'].billingPeriod !== undefined && 
+        payloadbillingPeriod['sw-services-calculation'].billingPeriod  !== null) {
+      payloadbillingPeriod['sw-services-calculation'].billingPeriod.forEach(obj => {
+        if (obj.connectionType === 'Non Metered') {
+          demandExipryDate = obj.demandExpiryDate;
+        }
+      }); 
+    }
+    return toPeriod + demandExipryDate;
+}
+
 export const downloadBill = (receiptQueryString, mode = "download") => {
     const FETCHBILL = {
         GET: {
