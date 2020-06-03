@@ -4,6 +4,7 @@ import store from "egov-ui-framework/ui-redux/store";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
+import get from "lodash/get";
 pdfMake.vfs = pdfFonts.vfs;
 pdfMake.fonts = {
     Camby: {
@@ -155,6 +156,18 @@ const getMultiItemCard = (header, items, color = 'grey') => {
 
 
     return cardWithHeader;
+}
+
+export const generateKeyValue = (preparedFinalObject, containerObject) => {
+    let keyValue = []
+    Object.keys(containerObject).map(keys => {
+        const labelObject = containerObject[keys].children.label.children.key.props;
+        const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
+        const valueObject = containerObject[keys].children.value.children.key.props;
+        const value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        keyValue.push({ key, value });
+    })
+    return keyValue;
 }
 
 export const loadUlbLogo = tenantid => {
@@ -399,7 +412,8 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
         if (fileName != 'print') {
             data && pdfMake.createPdf(data).download(fileName);
         } else {
-            data && pdfMake.createPdf(data).print();
+            // data && pdfMake.createPdf(data).print();
+            data && pdfMake.createPdf(data).open();
         }
     } catch (e) {
         console.log(JSON.stringify(data), 'pdfdata');

@@ -16,6 +16,8 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
 import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -83,7 +85,12 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject",{}),get(
+          state,
+          "common.generalMDMSDataById",{}));
+      // generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
@@ -397,6 +404,7 @@ const screenConfig = {
       })
     }
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
+    loadUlbLogo(tenantId);
     const queryObject = [
       { key: "tenantId", value: tenantId },
       // { key: "businessServices", value: "PT.MUTATION" }
