@@ -1,7 +1,7 @@
 import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
+import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
@@ -56,7 +56,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+      // generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
 
     },
     leftIcon: "assignment"
@@ -68,7 +71,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
       // const documents = LicensesTemp[0].reviewDocData;
       // set(Licenses[0],"additionalDetails.documents",documents)
       // downloadAcknowledgementForm(Licenses,'print');
-      generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print');
+      // generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
 
     },
     leftIcon: "assignment"
@@ -110,7 +116,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
             label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", visibility,marginRight:"5px" }, className: "pt-download-button" },
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", visibility, marginRight: "5px" }, className: "pt-download-button" },
             menu: downloadMenu
           }
         }
@@ -777,16 +783,15 @@ const setApplicationData = async (state, dispatch, applicationNumber, tenant) =>
   }
 
   dispatch(prepareFinalObject("Property", property));
-  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  // dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   prepareDocumentsView(state, dispatch);
-
   // prepareUoms(state, dispatch);
   // await loadPdfGenerationData(applicationNumber, tenantId);
   // setDownloadMenu(state, dispatch, tenantId, applicationNumber);
   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
 export const setData = async (state, dispatch, applicationNumber, tenantId) => {
- 
+
   const response = await getSearchResults([
     {
       key: "tenantId",
@@ -837,8 +842,8 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
   ) {
     property.institutionTemp = property.institution;
 
- 
-  } 
+
+  }
 
 
   let transfereeOwners = get(
@@ -849,15 +854,15 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
     property,
     "ownersInit", []
   );
- 
+
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
     const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
-    
+
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
     if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
-    } 
+    }
   }
 
 

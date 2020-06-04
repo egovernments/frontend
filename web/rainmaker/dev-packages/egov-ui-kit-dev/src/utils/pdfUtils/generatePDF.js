@@ -2,9 +2,9 @@ import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "egov-ui-framework/ui-redux/store";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
+import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
-import get from "lodash/get";
 pdfMake.vfs = pdfFonts.vfs;
 pdfMake.fonts = {
     Camby: {
@@ -156,18 +156,18 @@ const getMultiItemCard = (header, items, color = 'grey') => {
     return cardWithHeader;
 }
 
-export const getMultiItems=(preparedFinalObject,cardInfo,sourceArrayJsonPath)=>{
-    let multiItem=[];
-for(let i=0;i<get(preparedFinalObject,sourceArrayJsonPath,[]).length;i++){
-    let items=[];
-    items= generateKeyValue(preparedFinalObject,cardInfo);
-    preparedFinalObject[sourceArrayJsonPath].shift();
-    multiItem.push({items});
+export const getMultiItems = (preparedFinalObject, cardInfo, sourceArrayJsonPath) => {
+    let multiItem = [];
+    for (let i = 0; i < get(preparedFinalObject, sourceArrayJsonPath, []).length; i++) {
+        let items = [];
+        items = generateKeyValue(preparedFinalObject, cardInfo);
+        preparedFinalObject[sourceArrayJsonPath].shift();
+        multiItem.push({ items });
+    }
+    return multiItem;
 }
-return multiItem;    
-}
-export const getMultipleItemCard=(itemsInfo,itemHeader="COMMON_OWNER")=>{
-    let multipleItems= itemsInfo[0].items.filter(item => item);
+export const getMultipleItemCard = (itemsInfo, itemHeader = "COMMON_OWNER") => {
+    let multipleItems = itemsInfo[0].items.filter(item => item);
     if (itemsInfo.length > 1) {
         let items = [];
         itemsInfo.map((item, index) => {
@@ -177,7 +177,7 @@ export const getMultipleItemCard=(itemsInfo,itemHeader="COMMON_OWNER")=>{
     }
     return multipleItems;
 }
-export const getDocumentsCard =(documentsUploadRedux)=>{
+export const getDocumentsCard = (documentsUploadRedux) => {
     return documentsUploadRedux.map(item => {
         return { key: getLocaleLabels(item.title, item.title), value: item.name }
     })
@@ -419,20 +419,20 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     applicationData.cards.map(card => {
         switch (card.type) {
             case "singleItem":
-                if(!card.hide){
+                if (!card.hide) {
                     data.content.push(...getCardWithHeader(card.header, card.items, card.color));
                 }
                 break;
             case "multiItem":
-                if(!card.hide){
-                data.content.push(...getMultiItemCard(card.header, card.items, card.color));
+                if (!card.hide) {
+                    data.content.push(...getMultiItemCard(card.header, card.items, card.color));
                 }
                 break;
             default:
-                if(!card.hide){
-                data.content.push(...getCardWithHeader(card.header, card.items, card.color));
+                if (!card.hide) {
+                    data.content.push(...getCardWithHeader(card.header, card.items, card.color));
                 }
-            }
+        }
     })
 
 
@@ -442,8 +442,8 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
         if (fileName != 'print') {
             data && pdfMake.createPdf(data).download(fileName);
         } else {
-            // data && pdfMake.createPdf(data).print();
-            data && pdfMake.createPdf(data).open();
+            data && pdfMake.createPdf(data).print();
+            // data && pdfMake.createPdf(data).open();
         }
     } catch (e) {
         console.log(JSON.stringify(data), 'pdfdata');

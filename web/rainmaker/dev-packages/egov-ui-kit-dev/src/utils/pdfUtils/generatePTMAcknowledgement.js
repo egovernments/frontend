@@ -6,7 +6,7 @@ import get from "lodash/get";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
-export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "print") => {
+export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
 
     const mutationDetails = generateKeyValue(preparedFinalObject, mutationSummaryDetails);
     const registrationDetails = generateKeyValue(preparedFinalObject, registrationSummaryDetails);
@@ -14,6 +14,36 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "prin
     let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
     let property = get(preparedFinalObject, 'Property', {});
 
+    let transfereeOwners = get(
+        property,
+        "ownersTemp", []
+    );
+    let transferorOwners = get(
+        property,
+        "ownersInit", []
+    );
+    let transfereeOwnersDid = true;
+    let transferorOwnersDid = true;
+    transfereeOwners.map(owner => {
+        if (owner.ownerType != 'NONE') {
+            transfereeOwnersDid = false;
+        }
+    })
+    transferorOwners.map(owner => {
+        if (owner.ownerType != 'NONE') {
+            transferorOwnersDid = false;
+        }
+
+    })
+
+    if (transfereeOwnersDid) {
+        delete transfereeSummaryDetails.ownerSpecialDocumentType
+        delete transfereeSummaryDetails.ownerSpecialDocumentID
+    }
+    if (transferorOwnersDid) {
+        delete transferorSummaryDetails.ownerSpecialDocumentType
+        delete transferorSummaryDetails.ownerDocumentId
+    }
     let transferorDetails = []
     let transferorDetailsInfo = []
     if (get(property, "ownershipCategoryInit", "").startsWith("INSTITUTION")) {

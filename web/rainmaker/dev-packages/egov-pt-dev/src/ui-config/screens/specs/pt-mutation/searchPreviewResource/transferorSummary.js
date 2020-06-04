@@ -2,7 +2,7 @@ import { getCommonContainer, getCommonGrayCard, getCommonSubHeader, getLabelWith
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
 
-export const transferorSummaryDetails={
+export const transferorSummaryDetails = {
   ownerName: getLabelWithValue(
     {
       labelName: "Name",
@@ -110,7 +110,7 @@ export const transferorSummaryDetails={
     }
   )
 }
-export const transferorInstitutionSummaryDetails={
+export const transferorInstitutionSummaryDetails = {
   institutionName: getLabelWithValue(
     {
       labelName: "Name of Institution",

@@ -5,7 +5,7 @@ import { getOwnerInfo } from "../../common/propertyTax/Property/components/Owner
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generatePDF, getDocumentsCard, getOwnerCard, getMultipleItemCard } from "./generatePDF";
 
-export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "download") => {
+export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "acknowledgement.pdf") => {
 
     property.subOwnershipCategory = get(property, 'propertyDetails[0].subOwnershipCategory', '');
 
