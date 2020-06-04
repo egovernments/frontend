@@ -6,7 +6,6 @@ import { getRequiredDocData } from "../utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
-import { pbkdf2 } from "crypto";
 
 const header = getCommonHeader(
   {
