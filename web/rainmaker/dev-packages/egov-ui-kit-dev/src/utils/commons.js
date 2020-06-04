@@ -1026,6 +1026,23 @@ export const getModuleName = () => {
   }
 }
 
+export const businessServiceInfo = async (mdmsBody, businessService) => {
+  const payload = await httpRequest(
+    "/egov-mdms-service/v1/_search",
+    "_search",
+    [],
+    mdmsBody
+  );
+  let businessServiceInfoItem = null;
+  const businessServiceArray = payload.MdmsRes.BillingService.BusinessService;
+    businessServiceArray && businessServiceArray.map(item => {
+        if (item.code == businessService) {
+          businessServiceInfoItem = item;
+        }
+    });
+    return businessServiceInfoItem;
+}
+
 export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessService) => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -1039,20 +1056,8 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
     }
   };
   try {
-    let payload = null;
-    payload = await httpRequest(
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
-    // dispatch(prepareFinalObject("businessServiceMdmsData", payload.MdmsRes));
-    const businessServiceArray = payload.MdmsRes.BillingService.BusinessService;
-    businessServiceArray && businessServiceArray.map(item => {
-        if (item.code == businessService) {
-            dispatch(prepareFinalObject("businessServiceInfo", item));
-        }
-    })
+    const businessService = await businessServiceInfo(mdmsBody, businessService);
+    dispatch(prepareFinalObject("businessServiceInfo", businessService));
   } catch (e) {
     console.log(e);
   }
