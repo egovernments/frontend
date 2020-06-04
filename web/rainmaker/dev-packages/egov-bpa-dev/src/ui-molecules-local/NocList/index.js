@@ -17,6 +17,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
 import Typography from "@material-ui/core/Typography";
+import UploadCard from "../UploadCard"
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -182,6 +183,10 @@ class NocList extends Component {
                   ? card.dropDownValues.required
                   : false
               };
+              if(card && card.dropDownValues && card.dropDownValues.menu && card.dropDownValues.menu.length == 1) {
+                nocDocumentsUploadRedux[index].dropDownValues = {};
+                nocDocumentsUploadRedux[index].dropDownValues.value = card.dropDownValues.menu[0].code
+              }
             }
             index++;
           }
@@ -242,7 +247,8 @@ class NocList extends Component {
       nocDocumentsUploadRedux[uploadedDocIndex].documents.push({
         fileName: file.name,
         fileStoreId,
-        fileUrl: Object.values(fileUrl)[0]
+        fileUrl: Object.values(fileUrl)[0],
+        isClickable:true
       });
       nocDocuments = {
         ...nocDocumentsUploadRedux
@@ -256,7 +262,8 @@ class NocList extends Component {
             {
               fileName: file.name,
               fileStoreId,
-              fileUrl: Object.values(fileUrl)[0]
+              fileUrl: Object.values(fileUrl)[0],
+              isClickable: true
             }
           ]
         }
@@ -310,89 +317,34 @@ class NocList extends Component {
   };
 
   getUploadCard = (card, key) => {
-    const { classes } = this.props;
+    const { classes, ...rest } = this.props;
     const { nocDocumentsUploadRedux } =  this.state;
     let value = (nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].dropDownValues) ? nocDocumentsUploadRedux[key].dropDownValues.value : "";
     let jsonPath = `${this.props.jsonPath}-${key+1}`;
+    if(nocDocumentsUploadRedux[key]){
+      card.documents = nocDocumentsUploadRedux[key].documents;
+      let mergedDropDownValue = {...card.dropDownValues, ...nocDocumentsUploadRedux[key].dropDownValues}
+      card.dropDownValues = mergedDropDownValue;
+    }
     return (
-      <Grid container={true}>
-        <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents && nocDocumentsUploadRedux[key].documents.length ? (
-            <div className={classes.documentSuccess}>
-              <Icon>
-                <i class="material-icons">done</i>
-              </Icon>
-            </div>
-          ) : (
-              <div className={classes.documentIcon}>
-                <span>{key + 1}</span>
-              </div>
-            )}
-        </Grid>
-        <Grid
-          item={true}
-          xs={10}
-          sm={5}
-          md={4}
-          align="left"
-          className={classes.descriptionDiv}
-        >
-          <LabelContainer
-            labelKey={getTransformedLocale(card.name)}
-            style={styles.documentName}
-          />
-          {card.required && requiredIcon}
-          <Typography variant="caption">
-            <LabelContainer
-              labelKey={getTransformedLocale("BPA_UPLOAD_RESTRICTIONS")}
-            />
-          </Typography>
-        </Grid>
-        <Grid item={true} xs={12} sm={6} md={4}>
-          {card.dropDownValues && (
-            <TextFieldContainer
-              select={true}
-              label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
-              placeholder={{ labelKey: card.dropDownValues.label }}
-              data={card.dropDownValues.menu}
-              optionValue="code"
-              optionLabel="label"
-              required={card.required}
-              autoSelect={true}
-              onChange={event => this.handleChange(key, event)}
-              value = {value}
-            />
-          )}
-        </Grid>
-        <Grid
-          item={true}
-          xs={12}
-          sm={12}
-          // md={4}
-          className={classes.fileUploadDiv}
-        >
-          <UploadSingleFile
-            classes={this.props.classes}
-            handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props)
-            }
-            uploaded={
-              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents && nocDocumentsUploadRedux[key].documents.length > 0
-                ? true
-                : false
-            }
-            removeDocument={() => this.removeDocument(key)}
-            documents={
-              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents
-            }
-            onButtonClick={() => this.onUploadClick(key)}
-            inputProps={this.props.inputProps}
-            buttonLabel={this.props.buttonLabel}
-            id={jsonPath}
-          />
-        </Grid>
-      </Grid>
-    );
+      <React.Fragment>  
+         <UploadCard
+           docItem={card}
+           docIndex={key}
+           key={key.toString()}
+           handleDocument ={this.handleDocument}
+           removeDocument={this.removeDocument}
+           onUploadClick={this.onUploadClick}
+           handleFileUpload={this.handleFileUpload}
+           handleChange={this.handleChange}
+           uploadedDocIndex = {this.state.uploadedDocIndex}
+           toggleEditClick = {this.toggleEditClick}
+           ids = {jsonPath}
+           jsonPath = {`nocDocumentsUploadRedux`}
+           {...rest}
+         />
+      </React.Fragment>
+      );
   };
 
   render() {

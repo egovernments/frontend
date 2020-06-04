@@ -399,6 +399,7 @@ class BpaDocumentList extends Component {
            handleChange={this.handleChange}
            uploadedDocIndex = {this.state.uploadedDocIndex}
            toggleEditClick = {this.toggleEditClick}
+           jsonPath = {`documentDetailsUploadRedux`}
            {...rest}
          />
       </React.Fragment>
