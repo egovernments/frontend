@@ -1320,7 +1320,7 @@ export const getMeterReadingData = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: "pb.amritsar"
+            value: process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId()
         },
         {
             key: "connectionNos",
@@ -1348,7 +1348,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: "pb.amritsar"
+            value: process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId()
         },
         {
             key: "businessServices",
@@ -1387,7 +1387,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: "pb.amritsar"
+            value: process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId()
         },
         {
             key: "businessServices",
