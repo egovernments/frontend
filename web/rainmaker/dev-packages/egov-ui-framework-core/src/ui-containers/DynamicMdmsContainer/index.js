@@ -31,7 +31,7 @@ class DynamicMdmsContainer extends Component {
       dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, true ));
       await getMdmsJson(state, dispatch, reqObj);
       this.triggerCallback(null, null, null);
-      if(getQueryArg(window.location.href, "action") == "edit") {
+      if(getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL") {
         callBackEdit(state, dispatch);
         let selectedValues = []
         dropdownFields.map((row) => {
