@@ -1,6 +1,7 @@
 import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -893,6 +894,7 @@ const screenConfig = {
     const moduleName = getQueryArg(window.location.href, "moduleName");
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
+    loadUlbLogo(tenant);
     setData(state, dispatch, applicationNumber, tenant);
     setApplicationData(state, dispatch, applicationNumber, tenant);
     const data = getAcknowledgementCard(
