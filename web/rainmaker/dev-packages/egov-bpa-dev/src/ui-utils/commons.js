@@ -771,7 +771,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     set(queryObject[0], "businessService", "BPAREG");
 
     let tenantId = getTenantId();
-    if(tenantId == "null") {
+    if((tenantId == "null") || (tenantId == null)) {
       tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
     }
 
