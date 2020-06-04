@@ -3,7 +3,7 @@ import get from "lodash/get";
 import { getAssessmentInfo, getUnitInfo } from "../../common/propertyTax/Property/components/AssessmentInfo";
 import { getOwnerInfo } from "../../common/propertyTax/Property/components/OwnerInfo";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
-import { generatePDF, getDocumentsCard, getOwnerCard } from "./generatePDF";
+import { generatePDF, getDocumentsCard, getOwnerCard, getMultipleItemCard } from "./generatePDF";
 
 export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "download") => {
 
@@ -47,10 +47,11 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
         unitInfoCard = unitItems
     }
     property.owners = property.owners.filter(owner => owner.status == "ACTIVE")
+    property.owners.push(  property.owners[0])
     const ownerInfo = getOwnerInfo(property, generalMDMSDataById);
 
     const addressCard = getAddressItems(property);
-    const ownerCard = getOwnerCard(ownerInfo);
+    const ownerCard = getMultipleItemCard(ownerInfo,'PT_OWNER');
     const assessmentCard = getAssessmentInfo(get(property, 'propertyDetails[0]', {}), generalMDMSDataById);
     const documentCard = getDocumentsCard(property.documentsUploaded);
 

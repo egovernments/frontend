@@ -294,7 +294,7 @@ const setSearchResponse = async (
 
 
     const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
-    previousActiveProperty
+    
 
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
     if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {

@@ -786,6 +786,7 @@ const setApplicationData = async (state, dispatch, applicationNumber, tenant) =>
   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
 export const setData = async (state, dispatch, applicationNumber, tenantId) => {
+ 
   const response = await getSearchResults([
     {
       key: "tenantId",
@@ -793,9 +794,77 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
     },
     { key: "acknowledgementIds", value: applicationNumber }
   ]);
+  const properties = get(response, "Properties", []);
+  const propertyId = get(response, "Properties[0].propertyId", []);
 
+  const auditResponse = await getSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "propertyIds", value: propertyId }, {
+      key: "audit",
+      value: true
+    }
+  ]);
+  let property = (properties && properties.length > 0 && properties[0]) || {};
+
+
+  if (property && property.owners && property.owners.length > 0) {
+    let ownersTemp = [];
+    let owners = [];
+    property.owners.map(owner => {
+      owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+      owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
+      if (owner.status == "ACTIVE") {
+        ownersTemp.push(owner);
+      } else {
+        owners.push(owner);
+      }
+    });
+    property.ownersInit = owners;
+    property.ownersTemp = ownersTemp;
+  }
+  property.ownershipCategoryTemp = property.ownershipCategory;
+  property.ownershipCategoryInit = 'NA';
+  // Set Institution/Applicant info card visibility
+  if (
+    get(
+      response,
+      "Properties[0].ownershipCategory",
+      ""
+    ).startsWith("INSTITUTION")
+  ) {
+    property.institutionTemp = property.institution;
+
+ 
+  } 
+
+
+  let transfereeOwners = get(
+    property,
+    "ownersTemp", []
+  );
+  let transferorOwners = get(
+    property,
+    "ownersInit", []
+  );
+ 
+  if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+    const propertiesAudit = get(auditResponse, "Properties", []);
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+    
+    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+      property.institutionInit = previousActiveProperty.institution;
+    } 
+  }
+
+
+  // auditResponse
+  dispatch(prepareFinalObject("Property", property));
+  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
-
 }
 const screenConfig = {
   uiFramework: "material-ui",

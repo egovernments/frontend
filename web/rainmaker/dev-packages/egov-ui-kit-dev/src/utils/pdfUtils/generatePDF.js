@@ -153,20 +153,29 @@ const getMultiItemCard = (header, items, color = 'grey') => {
     }] : [];
 
     cardWithHeader.push(getMultiCard(items, color))
-
-
     return cardWithHeader;
 }
-export const getOwnerCard=(ownerInfo)=>{
-    let ownerCard= ownerInfo[0].items.filter(item => item);
-    if (ownerInfo.length > 1) {
+
+export const getMultiItems=(preparedFinalObject,cardInfo,sourceArrayJsonPath)=>{
+    let multiItem=[];
+for(let i=0;i<get(preparedFinalObject,sourceArrayJsonPath,[]).length;i++){
+    let items=[];
+    items= generateKeyValue(preparedFinalObject,cardInfo);
+    preparedFinalObject[sourceArrayJsonPath].shift();
+    multiItem.push({items});
+}
+return multiItem;    
+}
+export const getMultipleItemCard=(itemsInfo,itemHeader="COMMON_OWNER")=>{
+    let multipleItems= itemsInfo[0].items.filter(item => item);
+    if (itemsInfo.length > 1) {
         let items = [];
-        ownerInfo.map((owner, index) => {
-            items.push({ header: getLocaleLabels(`PT_OWNER_${index}`, `PT_OWNER_${index}`), items: owner.items.filter(item => item) })
+        itemsInfo.map((item, index) => {
+            items.push({ header: `${getLocaleLabels(itemHeader, itemHeader)} - ${index}`, items: item.items.filter(element => element) })
         })
-        ownerCard = items
+        multipleItems = items
     }
-    return ownerCard;
+    return multipleItems;
 }
 export const getDocumentsCard =(documentsUploadRedux)=>{
     return documentsUploadRedux.map(item => {
