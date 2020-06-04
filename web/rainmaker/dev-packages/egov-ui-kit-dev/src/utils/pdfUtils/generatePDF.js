@@ -157,7 +157,22 @@ const getMultiItemCard = (header, items, color = 'grey') => {
 
     return cardWithHeader;
 }
-
+export const getOwnerCard=(ownerInfo)=>{
+    let ownerCard= ownerInfo[0].items.filter(item => item);
+    if (ownerInfo.length > 1) {
+        let items = [];
+        ownerInfo.map((owner, index) => {
+            items.push({ header: getLocaleLabels(`PT_OWNER_${index}`, `PT_OWNER_${index}`), items: owner.items.filter(item => item) })
+        })
+        ownerCard = items
+    }
+    return ownerCard;
+}
+export const getDocumentsCard =(documentsUploadRedux)=>{
+    return documentsUploadRedux.map(item => {
+        return { key: getLocaleLabels(item.title, item.title), value: item.name }
+    })
+}
 export const generateKeyValue = (preparedFinalObject, containerObject) => {
     let keyValue = []
     Object.keys(containerObject).map(keys => {
@@ -395,14 +410,20 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     applicationData.cards.map(card => {
         switch (card.type) {
             case "singleItem":
-                data.content.push(...getCardWithHeader(card.header, card.items, card.color));
+                if(!card.hide){
+                    data.content.push(...getCardWithHeader(card.header, card.items, card.color));
+                }
                 break;
             case "multiItem":
+                if(!card.hide){
                 data.content.push(...getMultiItemCard(card.header, card.items, card.color));
+                }
                 break;
             default:
+                if(!card.hide){
                 data.content.push(...getCardWithHeader(card.header, card.items, card.color));
-        }
+                }
+            }
     })
 
 
