@@ -2,6 +2,7 @@ import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "egov-ui-framework/ui-redux/store";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
+import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
 pdfMake.vfs = pdfFonts.vfs;
@@ -152,9 +153,45 @@ const getMultiItemCard = (header, items, color = 'grey') => {
     }] : [];
 
     cardWithHeader.push(getMultiCard(items, color))
-
-
     return cardWithHeader;
+}
+
+export const getMultiItems = (preparedFinalObject, cardInfo, sourceArrayJsonPath) => {
+    let multiItem = [];
+    for (let i = 0; i < get(preparedFinalObject, sourceArrayJsonPath, []).length; i++) {
+        let items = [];
+        items = generateKeyValue(preparedFinalObject, cardInfo);
+        preparedFinalObject[sourceArrayJsonPath].shift();
+        multiItem.push({ items });
+    }
+    return multiItem;
+}
+export const getMultipleItemCard = (itemsInfo, itemHeader = "COMMON_OWNER") => {
+    let multipleItems = itemsInfo[0].items.filter(item => item);
+    if (itemsInfo.length > 1) {
+        let items = [];
+        itemsInfo.map((item, index) => {
+            items.push({ header: `${getLocaleLabels(itemHeader, itemHeader)} - ${index}`, items: item.items.filter(element => element) })
+        })
+        multipleItems = items
+    }
+    return multipleItems;
+}
+export const getDocumentsCard = (documentsUploadRedux) => {
+    return documentsUploadRedux.map(item => {
+        return { key: getLocaleLabels(item.title, item.title), value: item.name }
+    })
+}
+export const generateKeyValue = (preparedFinalObject, containerObject) => {
+    let keyValue = []
+    Object.keys(containerObject).map(keys => {
+        const labelObject = containerObject[keys].children.label.children.key.props;
+        const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
+        const valueObject = containerObject[keys].children.value.children.key.props;
+        const value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        keyValue.push({ key, value });
+    })
+    return keyValue;
 }
 
 export const loadUlbLogo = tenantid => {
@@ -382,13 +419,19 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     applicationData.cards.map(card => {
         switch (card.type) {
             case "singleItem":
-                data.content.push(...getCardWithHeader(card.header, card.items, card.color));
+                if (!card.hide) {
+                    data.content.push(...getCardWithHeader(card.header, card.items, card.color));
+                }
                 break;
             case "multiItem":
-                data.content.push(...getMultiItemCard(card.header, card.items, card.color));
+                if (!card.hide) {
+                    data.content.push(...getMultiItemCard(card.header, card.items, card.color));
+                }
                 break;
             default:
-                data.content.push(...getCardWithHeader(card.header, card.items, card.color));
+                if (!card.hide) {
+                    data.content.push(...getCardWithHeader(card.header, card.items, card.color));
+                }
         }
     })
 
@@ -400,6 +443,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
             data && pdfMake.createPdf(data).download(fileName);
         } else {
             data && pdfMake.createPdf(data).print();
+            // data && pdfMake.createPdf(data).open();
         }
     } catch (e) {
         console.log(JSON.stringify(data), 'pdfdata');
