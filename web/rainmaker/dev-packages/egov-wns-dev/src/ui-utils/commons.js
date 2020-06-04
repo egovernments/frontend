@@ -1564,6 +1564,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                             payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting = 'SCORE_NO'
                         }
                     }
+                    payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
@@ -1581,7 +1582,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                         { key: "key", value: "ws-consolidatedsewerageconnection" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
-
+                    payloadReceiptDetails.SewerageConnections = await getPropertyObj(payloadReceiptDetails.SewerageConnections);
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
