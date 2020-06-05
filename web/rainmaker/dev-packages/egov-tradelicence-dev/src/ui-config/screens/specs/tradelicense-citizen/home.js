@@ -5,6 +5,8 @@ import { cityPicker } from "./citypicker";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import "../utils/index.css";
+import { getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
+
 const header = getCommonHeader(
   {
     labelName: "Trade License",
@@ -44,6 +46,13 @@ const tradeLicenseSearchAndResult = {
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
     fetchData(action, state, dispatch);
+    const moduleDetails = [
+      {
+        moduleName: 'TradeLicense',
+        masterDetails: [{ name: 'Documents' }]
+      }
+    ];
+    getRequiredDocData(action, dispatch, moduleDetails,state);
     return action;
   },
   components: {
@@ -164,6 +173,18 @@ const tradeLicenseSearchAndResult = {
             popup: cityPicker
           }
         }
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: false,
+        screenKey: "home"
+      },
+      children: {
+        popup: {}
       }
     }
   }

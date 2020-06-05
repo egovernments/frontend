@@ -1320,7 +1320,7 @@ export const getMeterReadingData = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: "pb.amritsar"
+            value: getTenantId()
         },
         {
             key: "connectionNos",
@@ -1348,7 +1348,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: "pb.amritsar"
+            value: getTenantId()
         },
         {
             key: "businessServices",
@@ -1387,7 +1387,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: "pb.amritsar"
+            value: getTenantId()
         },
         {
             key: "businessServices",
@@ -1564,6 +1564,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                             payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting = 'SCORE_NO'
                         }
                     }
+                    payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
@@ -1581,7 +1582,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                         { key: "key", value: "ws-consolidatedsewerageconnection" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
-
+                    payloadReceiptDetails.SewerageConnections = await getPropertyObj(payloadReceiptDetails.SewerageConnections);
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
@@ -1643,6 +1644,35 @@ export const getSWMyConnectionResults = async (queryObject, dispatch) => {
 
 };
 
+export const billingPeriodMDMS = (toPeriod,payloadbillingPeriod,service) => {
+    const connectionType = getQueryArg(window.location.href, "connectionType");
+    let demandExipryDate = 0;
+    if (service === 'WATER' &&
+        payloadbillingPeriod['ws-services-masters'] && 
+        payloadbillingPeriod['ws-services-masters'].billingPeriod !== undefined && 
+        payloadbillingPeriod['ws-services-masters'].billingPeriod  !== null) {
+      payloadbillingPeriod['ws-services-masters'].billingPeriod.forEach(obj => {
+        if(obj.connectionType === 'Metered' && connectionType === "Metered") {
+          demandExipryDate = obj.demandExpiryDate;
+        } else if (obj.connectionType === 'Non Metered' && connectionType === "Non Metered") {
+          demandExipryDate = obj.demandExpiryDate;
+        }
+      }); 
+    }               
+    
+    if (service === 'SEWERAGE' &&
+        payloadbillingPeriod['sw-services-calculation'] && 
+        payloadbillingPeriod['sw-services-calculation'].billingPeriod !== undefined && 
+        payloadbillingPeriod['sw-services-calculation'].billingPeriod  !== null) {
+      payloadbillingPeriod['sw-services-calculation'].billingPeriod.forEach(obj => {
+        if (obj.connectionType === 'Non Metered') {
+          demandExipryDate = obj.demandExpiryDate;
+        }
+      }); 
+    }
+    return toPeriod + demandExipryDate;
+}
+
 export const downloadBill = (receiptQueryString, mode = "download") => {
     const FETCHBILL = {
         GET: {
@@ -1657,7 +1687,18 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
         },
     };
 
+    const requestBody = { 
+        "MdmsCriteria": { 
+            "tenantId": getTenantId(),
+              "moduleDetails": [            
+                { "moduleName": "ws-services-masters", "masterDetails": [{ "name": "billingPeriod" }]},
+                { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" }]}
+              ]
+            }
+        }
+    
     try {
+       
         httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
             const queryStr = [
                 { key: "key", value: "ws-bill" },
@@ -1677,13 +1718,40 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
             payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
 
             payloadReceiptDetails.Bill[0].arrearAmount = previousArrears.toFixed(2);
+            httpRequest("post","/egov-mdms-service/v1/_search","_search", [],requestBody).then((payloadbillingPeriod) => {
+                console.log(payloadbillingPeriod);
+                let waterMeteredDemandExipryDate =0,waterNonMeteredDemandExipryDate=0,sewerageNonMeteredDemandExpiryDate=0;
+                const service = (payloadReceiptDetails.Bill && payloadReceiptDetails.Bill.length>0 && payloadReceiptDetails.Bill[0].businessService)?payloadReceiptDetails.Bill[0].businessService:'WS';
+                if (service === 'WS' && 
+                    payloadbillingPeriod.MdmsRes['ws-services-masters'] && 
+                    payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== undefined && 
+                    payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod  !== null) {
+                  payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod.forEach(obj => {
+                    if(obj.connectionType === 'Metered' && getQueryArg(window.location.href, "connectionType") === "Metered") {
+                      payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod+obj.demandExpiryDate;
+                    } else if (obj.connectionType === 'Non Metered' && getQueryArg(window.location.href, "connectionType") === "Non Metered") {
+                      payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
+                    }
+                  }); 
+                }               
+                
+                if (service === "SW" && 
+                    payloadbillingPeriod.MdmsRes['sw-services-calculation'] && 
+                    payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== undefined && 
+                    payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod  !== null) {
+                  payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod.forEach(obj => {
+                    if (obj.connectionType === 'Non Metered') {
+                      payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
+                    }
+                  }); 
+                }
 
-            httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-                .then(res => {
-                    downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
+                httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                    .then(res => {
+                        downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
                 });
+            })
         })
-
     } catch (exception) {
         alert('Some Error Occured while downloading Bill!');
     }
