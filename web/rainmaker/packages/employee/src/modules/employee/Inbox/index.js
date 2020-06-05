@@ -54,7 +54,7 @@ class Inbox extends Component {
 
   render() {
     const { name, history, setRoute, menu,Loading } = this.props;
-    const { actionList, hasWorkflow } = this.state;
+    const { hasWorkflow } = this.state;
     const a = menu ? menu.filter(item => item.url === "quickAction") : [];
     const downloadMenu = a.map((obj, index) => {
       return {
