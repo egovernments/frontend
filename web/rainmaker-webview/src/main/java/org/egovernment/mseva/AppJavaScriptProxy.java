@@ -160,7 +160,7 @@ public class AppJavaScriptProxy  {
 		try {
 			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
 			sendPaymentIntent.setType("text/plain");
-			sendPaymentIntent.setClassName("ritika.com.myapplication", "ritika.com.myapplication.MainActivity");
+			sendPaymentIntent.setClassName("org.custom.posapp", "org.custom.posapp.MainActivity");
 			sendPaymentIntent.putExtra(name,stringifiedJSON);
 			this.activity.startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
 
