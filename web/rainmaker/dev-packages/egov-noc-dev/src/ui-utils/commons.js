@@ -88,14 +88,17 @@ export const getSearchResults = async (queryObject, dispatch) => {
       }
     }
 
-
-
     response.FireNOCs.forEach(firenoc=>{
 
-      set(firenoc,`fireNOCDetails.buildings[0].landArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].landArea")));
-      set(firenoc,`fireNOCDetails.buildings[0].parkingArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].parkingArea")));
-      set(firenoc,`fireNOCDetails.buildings[0].totalCoveredArea`,parseInt(get(firenoc,"fireNOCDetails.buildings[0].totalCoveredArea")));
+      let buildings = firenoc.fireNOCDetails.buildings;
 
+      for(let i=0;i<buildings.length;i++){
+
+        buildings[i].landArea = parseInt(buildings[i].landArea);
+        buildings[i].parkingArea = parseInt(buildings[i].parkingArea);
+        buildings[i].totalCoveredArea = parseInt(buildings[i].totalCoveredArea);
+
+      }
     });
 
     return response;
