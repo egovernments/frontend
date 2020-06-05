@@ -38,7 +38,7 @@ const themeStyles = theme => ({
     border: "#d6d6d6",
    // borderStyle: "solid",
     borderWidth: "1px",
-    paddingLeft: "1px"    
+    paddingLeft: "1px"
   },
   documentIcon: {
     backgroundColor: "#FFFFFF",
@@ -365,7 +365,7 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
-  return { documentsUploadRedux, moduleName };
+  return { documentsUploadRedux,moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

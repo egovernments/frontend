@@ -175,7 +175,18 @@ class SingleApplication extends React.Component {
                         />
                       </Grid>
                     </Grid>
-
+                      <div>
+                        <Label
+                          // labelKey="NOC_VIEW_DETAILS"
+                          labelName = "View Details"
+                          textTransform={"uppercase"}
+                          style={{
+                            color: "#fe7a51",
+                            fontSize: 14,
+                            textTransform: "uppercase"
+                          }}
+                        />
+                      </div>
                   </div>
                 </CardContent>
               </Card>

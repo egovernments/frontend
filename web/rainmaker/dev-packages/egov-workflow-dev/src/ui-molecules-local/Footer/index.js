@@ -144,7 +144,7 @@ class Footer extends React.Component {
                       minWidth: "200px",
                       height: "48px",
                       marginRight: "45px",
-                      display: (buttonLabel === "REFER" || buttonLabel === "APPLY" ) ? "none" : "initial",
+                      display: (buttonLabel === "REFER" || buttonLabel === "APPLY" || (visibility==="hidden" && buttonLabel==="REJECT")) ? "none" : "initial",
                     }}
                   >
                     <LabelContainer

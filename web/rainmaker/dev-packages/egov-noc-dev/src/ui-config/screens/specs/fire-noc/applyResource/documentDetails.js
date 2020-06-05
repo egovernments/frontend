@@ -57,9 +57,9 @@ export const documentDetails = getCommonCard({
         labelName: "UPLOAD FILE",
         labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
       },
-      // description: "Only .jpg and .pdf files. 6MB max file size.",
+      description: "Only .pdf files. 6MB max file size.",
       inputProps: {
-        accept: "image/*, .pdf, .png, .jpeg"
+        accept: ".pdf"
       },
       maxFileSize: 6000
     },
