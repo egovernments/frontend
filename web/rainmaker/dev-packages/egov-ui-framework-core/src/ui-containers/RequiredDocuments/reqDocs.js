@@ -172,8 +172,8 @@ const generateDocument = ( item, modulePrifx ) => {
   return getCommonGrayCard({
     subHeader: subHeader,
     break: getBreak(),
-    subParagraph1: subParagraph1,
-    break1: getBreak(),
+    subParagraph1: modulePrifx === "TradeLicense" ? {} : subParagraph1,
+    break1: modulePrifx === "TradeLicense" ? {} : getBreak(),
     docs: getCommonContainer({ ...docs }),
     subParagraph: subParagraph
   });
