@@ -7,6 +7,12 @@ import { getAddressItems } from "../../common/propertyTax/Property/components/Pr
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
 export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
+    registrationSummaryDetails.transferReason.localiseValue=true;
+
+    transferorSummaryDetails.ownerType.localiseValue=true;
+    transfereeSummaryDetails.ownerType.localiseValue=true;
+    transfereeInstitutionSummaryDetails.institutionType.localiseValue=true;
+    transferorInstitutionSummaryDetails.institutionType.localiseValue=true;
 
     const mutationDetails = generateKeyValue(preparedFinalObject, mutationSummaryDetails);
     const registrationDetails = generateKeyValue(preparedFinalObject, registrationSummaryDetails);

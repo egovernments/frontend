@@ -188,7 +188,8 @@ export const generateKeyValue = (preparedFinalObject, containerObject) => {
         const labelObject = containerObject[keys].children.label.children.key.props;
         const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
         const valueObject = containerObject[keys].children.value.children.key.props;
-        const value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        value=containerObject[keys].localiseValue?getLocaleLabels(value,value):value;
         keyValue.push({ key, value });
     })
     return keyValue;
@@ -405,7 +406,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 ]
             },
             "pdf-card-value": {
-                "fontSize": 11,
+                "fontSize": 9,
                 "color": "rgba(0, 0, 0, 0.87)",
                 "margin": [
                     0,
