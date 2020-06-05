@@ -179,7 +179,7 @@ export const OwnerInfoCard = {
           }
         }
       ),
-      tradeUnitCardContainerOwnerInfo: getCommonContainer({
+      tradeUnitCardContainer: getCommonContainer({
         getOwnerMobNoField: getTextField({
           label: {
             labelName: "Mobile No.",
