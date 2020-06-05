@@ -21,7 +21,7 @@ const UploadSingleFile = ({
             onClick: onButtonClick
           }}
           handleFileUpload={handleFileUpload}
-          inputProps={{ multiple: false, ...inputProps }}
+          inputProps={{ multiple: false,...inputProps }}
           classes={classes}
           buttonLabel={buttonLabel}
         />
