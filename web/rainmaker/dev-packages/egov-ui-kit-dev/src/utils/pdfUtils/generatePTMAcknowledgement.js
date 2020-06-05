@@ -38,11 +38,11 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
 
     if (transfereeOwnersDid) {
         delete transfereeSummaryDetails.ownerSpecialDocumentType
-        delete transfereeSummaryDetails.ownerSpecialDocumentID
+        delete transfereeSummaryDetails.ownerDocumentId
     }
     if (transferorOwnersDid) {
         delete transferorSummaryDetails.ownerSpecialDocumentType
-        delete transferorSummaryDetails.ownerDocumentId
+        delete transferorSummaryDetails.ownerSpecialDocumentID
     }
     let transferorDetails = []
     let transferorDetailsInfo = []
