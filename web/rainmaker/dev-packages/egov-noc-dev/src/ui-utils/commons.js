@@ -123,23 +123,47 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "FireNOCs",
       []
     );
-    let landArea = parseInt(get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.buildings[0].landArea",
-      []
-    ));
 
-    let totalCoveredArea = parseInt(get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea",
-      []
-    ));
 
-   let parkingArea = get(
+
+    let newbuildings = get(
       state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+      "FireNOCs[0].fireNOCDetails.buildings",
       []
-    )
+    );
+    newbuildings.map(index =>{
+        
+          set(
+          index,
+        `landArea`,
+        parseInt(index.landArea)
+      ); 
+
+      set(
+        index,
+      `totalCoveredArea`,
+      parseInt(index.totalCoveredArea)
+    ); 
+
+  if(!index.parkingArea)
+  {
+    set(
+      index,
+    `parkingArea`,
+    0
+  ); 
+
+  }
+  else
+  {
+    set(
+      index,
+    `parkingArea`,
+    parseInt(index.parkingArea)
+  ); 
+  }
+
+    })
 
     let provisionalnocnumber = get(
       state.screenConfiguration.preparedFinalObject,
@@ -165,25 +189,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 
     }
 
-    if(parkingArea.length === 0)
-    {
-
-      parkingArea = get(
-        state.screenConfiguration.preparedFinalObject,
-        "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
-        []
-      )
-      parkingArea = 0
-    }
-    else{
-
-      parkingArea = parseInt(get(
-        state.screenConfiguration.preparedFinalObject,
-        "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
-        []
-      ));
-    }
-
     let areaType = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
@@ -196,14 +201,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         getTenantId()
        );
 
- /*    else
-    {
-       tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
-      getTenantId()
-     );
-    } */
 
 
     set(payload[0], "tenantId", tenantId);
@@ -211,20 +208,10 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 
     set(
       payload[0],
-      `fireNOCDetails.buildings[0].landArea`,
-      landArea
+      `fireNOCDetails.buildings`,
+      newbuildings
     );
 
-    set(
-      payload[0],
-      `fireNOCDetails.buildings[0].totalCoveredArea`,
-      totalCoveredArea
-    );
-    set(
-      payload[0],
-      `fireNOCDetails.buildings[0].parkingArea`,
-      parkingArea
-    );
 
     let village = get(
       state.screenConfiguration.preparedFinalObject,
