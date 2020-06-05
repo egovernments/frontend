@@ -76,7 +76,7 @@ const NOCSearchAndResult = {
       dispatch(
         prepareFinalObject(
           "searchScreenMdmsData.searchScreen.status",
-          status.filter(item => item.code != null)
+          status.filter(item => item.code != null && item.code!="REJECTED")
         )
       ); 
 
