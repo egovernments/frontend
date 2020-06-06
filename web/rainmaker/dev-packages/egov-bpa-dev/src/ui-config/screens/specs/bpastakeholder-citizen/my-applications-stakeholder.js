@@ -59,7 +59,6 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications-stakeholder",
   beforeInitScreen: (action, state, dispatch) => {
-    // fetchData(action, state, dispatch, false, true);
     getMdmsData(dispatch).then(data => {
       dispatch( prepareFinalObject( "applyScreenMdmsData", data.MdmsRes ));
     });
