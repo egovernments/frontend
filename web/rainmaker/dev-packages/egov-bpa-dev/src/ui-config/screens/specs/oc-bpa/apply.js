@@ -14,7 +14,8 @@ import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
   getFileUrlFromAPI,
-  getTransformedLocale
+  getTransformedLocale,
+  orderWfProcessInstances
 } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -42,7 +43,7 @@ import {
   applicantNameAppliedByMaping
 } from "../utils";
 import { changeStep } from "./applyResource/footer";
-import { edcrHttpRequest } from "../../../../ui-utils/api";
+import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
 import { comparisondialog } from "./comparisondialog";
 
 export const stepsData = [
@@ -301,10 +302,39 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   }
 }
 
+const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJsonpath)=>{
+  const queryObject = [
+    { key: "businessIds", value: applicationNumber },
+    { key: "history", value: true },
+    { key: "tenantId", value: tenantId }
+  ];
+  let processInstances =[];
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
+    );
+    if (payload && payload.ProcessInstances.length > 0) {
+      processInstances= orderWfProcessInstances(
+        payload.ProcessInstances
+      );      
+      dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances",processInstances));
+      
+      let sendToArchitect = (processInstances && processInstances.length>1 && processInstances[processInstances.length-1].action)||"";
+      
+      if(sendToArchitect =="SEND_TO_ARCHITECT"){
+        dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
+      }
+     
+    }
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
-  beforeInitScreen: (action, state, dispatch) => {
+  beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
+    dispatch(prepareFinalObject("BPA", {}));
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
     set(state, "screenConfiguration.moduleName", "OCBPA");
@@ -331,6 +361,7 @@ const screenConfig = {
       { key: "businessServices", value: "BPA_OC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
@@ -382,6 +413,18 @@ const screenConfig = {
           }
         },
         stepper,
+        taskStatus: {
+          moduleName: "egov-workflow",
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",          
+          visible: false,
+          componentJsonpath:'components.div.children.taskStatus',
+          props: {
+            dataPath: "BPA",
+            moduleName: "BPA",
+            updateUrl: "/bpa-services/v1/bpa/_update"
+          }
+          },
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
