@@ -15,6 +15,7 @@ import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
 import { convertDateToEpoch } from "../utils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
@@ -45,6 +46,58 @@ export const fetchData = async (
           )
         );
       }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const fetchDataForStakeHolder = async (
+  action,
+  state,
+  dispatch,
+  fromMyApplicationPage = false
+) => {
+  dispatch(prepareFinalObject("searchResults", []));
+  dispatch(prepareFinalObject("myApplicationsCount", 0));
+
+  const response = await getSearchResultsfromEDCR(action, state, dispatch);
+  try {
+    if (response && response.edcrDetail && response.edcrDetail.length > 0) {
+      dispatch(prepareFinalObject("searchResults", response.edcrDetail));
+      dispatch( prepareFinalObject("myApplicationsCount", response.edcrDetail.length));
+
+      let searchConvertedArray = [];
+      response.edcrDetail.forEach(element => {
+        searchConvertedArray.push({
+            ["EDCR_COMMON_TABLE_APPL_NO"]: element.applicationNumber || "-",
+            ["EDCR_COMMON_TABLE_SCRUTINY_NO"]: element.edcrNumber || "-",
+            ["EDCR_COMMON_TABLE_CITY_LABEL"]: element.tenantId || "-",
+            ["EDCR_COMMON_TABLE_APPL_NAME"]: element.planDetail.planInformation.applicantName || "-",
+            ["EDCR_COMMON_TABLE_COL_STATUS"]: element.status || "-",
+            ["EDCR_DOWNLOAD_REPORT"]: getLocaleLabels("DOWNLOAD SCRUTINY REPORT", "EDCR_DOWNLOAD_REPORT"),
+            ["EDCR_DOWNLOAD_BUILDING_PLAN"]: getLocaleLabels("DOWNLOAD BUILDING PLAN(DXF)", "EDCR_DOWNLOAD_BUILDING_PLAN"),
+            ["EDCR_DOWNLOAD_REPORT1"]: element.planReport,
+            ["EDCR_DOWNLOAD_BUILDING_PLAN1"]: element.dxfFile,
+        })
+    });
+
+      dispatch(
+        handleField(
+          "my-applications-stakeholder",
+          "components.div.children.applicationsCard",
+          "props.data",
+          searchConvertedArray
+        ));
+      dispatch(
+        handleField(
+          "my-applications-stakeholder",
+          "components.div.children.applicationsCard",
+          "props.rows",
+          searchConvertedArray.length
+        )
+      );
     }
   } catch (error) {
     console.log(error);

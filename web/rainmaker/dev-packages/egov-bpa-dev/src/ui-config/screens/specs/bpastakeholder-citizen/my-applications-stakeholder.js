@@ -360,7 +360,7 @@ export const changePage = async (tableState) => {
           ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMapping[element.applicationNumber], "assignee", null) || "-",
           applicationType: getBpaTextToLocalMapping("BPAREG_SERVICE"),
           modifiedTime: modifiedTime,
-          sortNumber: 1,
+          sortNumber: 0,
           serviceType: "BPAREG",
           tenantId: get(element, "tenantId", null)
         })
