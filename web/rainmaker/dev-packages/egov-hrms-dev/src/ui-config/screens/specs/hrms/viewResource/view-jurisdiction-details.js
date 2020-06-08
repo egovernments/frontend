@@ -6,6 +6,10 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import get from "lodash/get";
+import { convertEpochToDate, checkValueForNA } from "../../utils";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+
 
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
@@ -38,14 +42,84 @@ const jurisdictionCard = {
         ),
         reviewBoundary: getLabelWithValue(
           { labelName: "Boundary", labelKey: "HR_BOUNDARY_LABEL" },
+
           {
-            jsonPath: "Employee[0].jurisdictions[0].boundary",
-            localePrefix: {
+            jsonPath: "Employee[0].jurisdictions[0].boundary",           
+            /* localePrefix: {
               moduleName: "TENANT",
               masterName: "TENANTS"
-            }
+            } */         
+    
+          callBack: (value, state) => {       
+           
+            let tenantID =  get(
+              state.screenConfiguration.preparedFinalObject,
+              "Employee[0].tenantId",
+              null
+              );
+               let boundary_type =  get(
+              state.screenConfiguration.preparedFinalObject,
+              "Employee[0].jurisdictions[0].boundaryType",
+              null
+              );
+              console.log("Prasad Boundary TYpe",boundary_type );
+              console.log("Prasad tenantID",tenantID );
+
+              if(boundary_type == "Zone")
+                {
+                //let temp =  tenantID.toUpperCase()."_REVENUE_ZONE_".value;
+                let result = `${tenantID
+                  .toUpperCase()
+                  .replace(
+                    /[.]/g,
+                    "_"
+                  )}_REVENUE_ZONE_${value
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                  return result;
+                }                 
+                else if(boundary_type == "City")
+                {
+                  //return "TENANT_TENANTS_".tenantID.toUpperCase();    
+                  let result = `TENANT_TENANTS_${tenantID
+                    .toUpperCase()
+                    .replace(/[._:-\s\/]/g, "_")}`;
+                  return result;              
+                }
+                else if(boundary_type === "Locality")
+                {
+                  
+                  let result = `${tenantID
+                    .toUpperCase()
+                    .replace(
+                      /[.]/g,
+                      "_"
+                    )}_REVENUE_${value
+                    .toUpperCase()
+                    .replace(/[._:-\s\/]/g, "_")}`;
+
+                  return result;
+
+                }
+                else if(boundary_type === "Block")
+                {
+                 // return tenantID.toUpperCase()."_REVENUE_BLOCK".value;
+                  let result = `${tenantID
+                    .toUpperCase()
+                    .replace(
+                      /[.]/g,
+                      "_"
+                    )}_REVENUE_BLOCK_${value
+                    .toUpperCase()
+                    .replace(/[._:-\s\/]/g, "_")}`;
+                    return result;
+                }          
+
+              } 
           }
-        )
+       
+        ),
+         
       })
     }),
 

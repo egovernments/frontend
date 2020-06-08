@@ -18,6 +18,8 @@ class LabelContainer extends React.Component {
       ...rest
     } = this.props;
 
+    debugger;
+
     let translatedLabel = getLocaleLabels(
       labelName,
       labelKey,
@@ -71,25 +73,16 @@ class LabelContainer extends React.Component {
 const mapStateToProps = (state, ownprops) => {
   let fieldValue = "";
   const { localizationLabels } = state.app;
-  const { jsonPath, callBack ,localePrefix={}} = ownprops;
+  const { jsonPath, callBack } = ownprops;
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
   if (jsonPath) {
     fieldValue = get(preparedFinalObject, jsonPath);
-    if (callBack && typeof callBack === "function") {
-      fieldValue = callBack(fieldValue);
+    if (fieldValue && callBack && typeof callBack === "function") {
+      fieldValue = callBack(fieldValue, state);
     }
   }
-  if(localePrefix && !isEmpty(localePrefix))
-  {
-      const {isJsonPath}=localePrefix;
-      if(isJsonPath)
-      {
-        localePrefix.moduleName=get(preparedFinalObject,localePrefix.moduleName,"");
-      }
-
-  }
-  return { fieldValue, localizationLabels,localePrefix };
+  return { fieldValue, localizationLabels };
 };
 
 export default connect(
