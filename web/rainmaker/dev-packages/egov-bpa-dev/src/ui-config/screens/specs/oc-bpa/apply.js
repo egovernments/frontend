@@ -337,7 +337,7 @@ const screenConfig = {
     dispatch(prepareFinalObject("BPA", {}));
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-    set(state, "screenConfiguration.moduleName", "OCBPA");
+    set(state, "screenConfiguration.moduleName", "BPA");
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
