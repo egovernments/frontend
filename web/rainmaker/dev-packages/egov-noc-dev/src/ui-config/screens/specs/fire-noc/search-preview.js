@@ -338,7 +338,7 @@ const setSearchResponse = async (
         printCont
       )
   }  
-
+  generateBill(dispatch, applicationNumber, tenantId, status);
 };
 
 const screenConfig = {
@@ -353,43 +353,13 @@ const screenConfig = {
       );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     generateBill(dispatch, applicationNumber, tenantId);
-    // const queryObject1 = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "consumerCode", value: applicationNumber },
-    //   { key: "services", value: "FIRENOC" }
-    // ];
-
-    // searchBill(dispatch, applicationNumber, tenantId);
-    //  createBill(queryObject1,dispatch)
-    //  .then(payload=>{
-    //   console.log("2323232>>>....billData",payload);
-    //   let billData = get(payload, "Bill[0]") ;
-    //   console.log("2323232>>>....billData",billData);
-    //   if (billData) {
-    //     const estimateData = 
-    //     (billData);
-    //     estimateData &&
-    //       estimateData.length &&
-    //       dispatch(
-    //         prepareFinalObject(
-    //           "applyScreenMdmsData.estimateCardData",
-    //           estimateData
-    //         )
-    //       );
-    //       console.log("asdsasd",estimateData);
-    //   }
-
-    // })
-    
-    setSearchResponse(action,state, dispatch, applicationNumber, tenantId);
- 
-
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "FIRENOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
+    setSearchResponse(action,state, dispatch, applicationNumber, tenantId);
     // Hide edit buttons
     set(
       action,
