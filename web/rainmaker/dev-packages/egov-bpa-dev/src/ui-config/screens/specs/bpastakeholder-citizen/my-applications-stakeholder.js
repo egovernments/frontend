@@ -349,10 +349,10 @@ export const changePage = async (tableState) => {
   
   if ((typeOfService === "BUILDING_PLAN_SCRUTINY") || typeOfService === "BUILDING_OC_PLAN_SCRUTINY") {
     let userInfo = JSON.parse(getUserInfo());
-    let uuid = get(userInfo, "uuid");
+    let mobileNumber = get(userInfo, "mobileNumber");
     queryObj.push({
       key: "requestor",
-      value: uuid
+      value: mobileNumber
     });
     const bpaResponse = await getAppSearchResults(queryObj);
     if (bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0) {

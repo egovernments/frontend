@@ -108,7 +108,7 @@ export const uuidv4 = () => {
   return require("uuid/v4")();
 };
 
-const moveToSuccess = (dispatch, edcrDetail, isOCApp) => {
+const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
   const applicationNo = edcrDetail.transactionNumber;
 
   const tenantId = edcrDetail.tenantId;
@@ -121,6 +121,20 @@ const moveToSuccess = (dispatch, edcrDetail, isOCApp) => {
   }
   let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
   if(isOCApp) {
+    let ocApplyPath = get (
+      state.screenConfiguration,
+      "screenConfig.acknowledgement.components.div.children.gotoHomeFooter.children.ocCreateApp.onClickDefination.path", ""
+    );
+    if(ocApplyPath) {
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.gotoHomeFooter.children.ocCreateApp",
+          "onClickDefination.path",
+          `/oc-bpa/apply?tenantId=${tenantId}&edcrNumber=${edcrNumber}`
+        )
+      );
+    }
     url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
   }
   dispatch(
@@ -271,7 +285,7 @@ const scrutinizePlan = async (state, dispatch) => {
       if (data.edcrDetail) {
         dispatch(prepareFinalObject("edcrDetail", data.edcrDetail));
         dispatch(toggleSpinner());
-        moveToSuccess(dispatch, data.edcrDetail[0], isOCApp);
+        moveToSuccess(state, dispatch, data.edcrDetail[0], isOCApp);
       }
     }
   } catch (e) {

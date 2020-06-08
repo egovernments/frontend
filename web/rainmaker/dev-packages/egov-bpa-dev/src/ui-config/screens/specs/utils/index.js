@@ -5120,7 +5120,7 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
   const response = await getBpaSearchResults(queryObject);
 
-  if (response.Bpa.length > 0)
+  if (response && response.Bpa && response.Bpa.length > 0)
     return response.Bpa[0];
   else
     return 'NOPERMIT';

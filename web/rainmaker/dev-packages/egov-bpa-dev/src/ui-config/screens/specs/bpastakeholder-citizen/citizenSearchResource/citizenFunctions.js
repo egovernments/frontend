@@ -49,11 +49,11 @@ export const fetchData = async (
   fromStakeHolderPage = false
 ) => {
   let userInfo = JSON.parse(getUserInfo());
-  let uuid = get(userInfo, "uuid");
+  let mobileNumber = get(userInfo, "mobileNumber");
   const queryObj = [
     {
       key: "requestor",
-      value: uuid
+      value: mobileNumber
     }
   ];
   const response = await getSearchResults();
