@@ -405,7 +405,7 @@ export const proposedBuildingDetails = getCommonCard({
         props: {
           hasAddItem: false,
           scheama: getCommonContainer({
-            applicantContainer: getCommonContainer({
+            buildingDetailsContainer: getCommonContainer({
 
               header: getLabel(
                 "Block",
