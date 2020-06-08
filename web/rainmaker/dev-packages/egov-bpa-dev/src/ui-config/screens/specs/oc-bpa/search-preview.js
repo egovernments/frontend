@@ -90,7 +90,7 @@ const titlebar2 = {
     permitNumber: {
       uiFramework: "custom-atoms-local",
       moduleName: "egov-bpa",
-      componentPath: "PermitNumber",
+      componentPath: "ocPermitNumber",
       gridDefination: {},
       props: {
         number: "NA"
