@@ -163,7 +163,7 @@ export {
   AppCarosel,
   AppSubOption,
   Stepper,
-  //Carousel,
+  // Carousel,
   StepperStaticVertical,
   TextfieldWithIcon,
   StepperStaticVerticalWithTab,

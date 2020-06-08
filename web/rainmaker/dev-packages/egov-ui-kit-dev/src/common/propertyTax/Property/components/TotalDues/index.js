@@ -14,7 +14,7 @@ const labelStyle = {
   paddingRight: "20px",
 };
 
-const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
+const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history ,hasOnlinePayment}) => {
   const envURL='/egov-common/pay';
   const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
   return (
@@ -35,7 +35,7 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
           {/* <TotalDuesButton labelText="PT_TOTALDUES_VIEW" /> */}
         </div>
       )}
-      {totalBillAmountDue > 0 && (
+      {totalBillAmountDue > 0 && hasOnlinePayment && (
         <div className="col-xs-6 col-sm-3 flex-child " >
           <div style={{ float: "right" }}>
           <TotalDuesButton labelText="PT_TOTALDUES_PAY" onClickAction={() => {
