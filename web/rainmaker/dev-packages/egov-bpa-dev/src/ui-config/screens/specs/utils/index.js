@@ -2866,7 +2866,6 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 };
 
 export const edcrDetailsToBpaDetails = (state, dispatch) => {
-
   getRiskType(state, dispatch);
   let path = window.location.href.includes("oc-bpa")
   let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
@@ -2939,6 +2938,7 @@ export const getRiskType = (state, dispatch, forBPA) => {
   //   ];
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
+  
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
   return scrutinyRiskType;
 };
@@ -5041,7 +5041,7 @@ export const deviationValidation = (action, state, dispatch) => {
   let validationResponse = APPROVED;
   let planParam = [],
     ocParam = [];
-debugger
+if(validationParams){
   for (let paramRecord of validationParams) {
 
     let firstIndex = paramRecord.paramPath.indexOf("[");
@@ -5093,6 +5093,8 @@ debugger
       break;
     }
   }
+}
+ 
   return validationResponse;
 };
 

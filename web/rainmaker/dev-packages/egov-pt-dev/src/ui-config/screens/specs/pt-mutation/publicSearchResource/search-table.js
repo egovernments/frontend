@@ -28,7 +28,7 @@ export const searchPropertyTable = {
           filter: false,
           customBodyRender: (value, tableMeta) =>
             (value > 0 && tableMeta.rowData[3] === "ACTIVE") ? getPayButton( tableMeta) : (
-              value === 0 && tableMeta.rowData[7] ? getPayButton(tableMeta) : ""
+              value === 0 && tableMeta.rowData[3] === "ACTIVE" && tableMeta.rowData[7] ? getPayButton(tableMeta) : ""
             ),
         },
       },

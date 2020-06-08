@@ -9,6 +9,9 @@ import {
   getDateField,
   getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { documentList } from "./documentList";
 import { fetchMDMSOCData, getBuildingDetails, resetOCFields, submitFields } from "./functions";
 import set from "lodash/set";
@@ -378,6 +381,30 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "ocapply",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.buildingPermitDate",
+        "props.value",
+        null
+      )
+    );
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.buildingPermitNum",
+        "props.value",
+        null
+      )
+    );
+    dispatch(
+      handleField(
+        "ocapply",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.dropdown",
+        "props.value",
+        null
+      )
+    );
     set(state, "screenConfiguration.moduleName", "ocScrutiny");
     fetchMDMSOCData(action, state, dispatch);
     set(

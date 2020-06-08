@@ -15,6 +15,7 @@ import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
 import { convertDateToEpoch } from "../utils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
@@ -45,6 +46,58 @@ export const fetchData = async (
           )
         );
       }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const fetchDataForStakeHolder = async (
+  action,
+  state,
+  dispatch,
+  fromMyApplicationPage = false
+) => {
+  dispatch(prepareFinalObject("searchResults", []));
+  dispatch(prepareFinalObject("myApplicationsCount", 0));
+
+  const response = await getSearchResultsfromEDCR(action, state, dispatch);
+  try {
+    if (response && response.edcrDetail && response.edcrDetail.length > 0) {
+      dispatch(prepareFinalObject("searchResults", response.edcrDetail));
+      dispatch( prepareFinalObject("myApplicationsCount", response.edcrDetail.length));
+
+      let searchConvertedArray = [];
+      response.edcrDetail.forEach(element => {
+        searchConvertedArray.push({
+            ["EDCR_COMMON_TABLE_APPL_NO"]: element.applicationNumber || "-",
+            ["EDCR_COMMON_TABLE_SCRUTINY_NO"]: element.edcrNumber || "-",
+            ["EDCR_COMMON_TABLE_CITY_LABEL"]: element.tenantId || "-",
+            ["EDCR_COMMON_TABLE_APPL_NAME"]: element.planDetail.planInformation.applicantName || "-",
+            ["EDCR_COMMON_TABLE_COL_STATUS"]: element.status || "-",
+            ["EDCR_DOWNLOAD_REPORT"]: getLocaleLabels("DOWNLOAD SCRUTINY REPORT", "EDCR_DOWNLOAD_REPORT"),
+            ["EDCR_DOWNLOAD_BUILDING_PLAN"]: getLocaleLabels("DOWNLOAD BUILDING PLAN(DXF)", "EDCR_DOWNLOAD_BUILDING_PLAN"),
+            ["EDCR_DOWNLOAD_REPORT1"]: element.planReport,
+            ["EDCR_DOWNLOAD_BUILDING_PLAN1"]: element.dxfFile,
+        })
+    });
+
+      dispatch(
+        handleField(
+          "my-applications-stakeholder",
+          "components.div.children.applicationsCard",
+          "props.data",
+          searchConvertedArray
+        ));
+      dispatch(
+        handleField(
+          "my-applications-stakeholder",
+          "components.div.children.applicationsCard",
+          "props.rows",
+          searchConvertedArray.length
+        )
+      );
     }
   } catch (error) {
     console.log(error);
@@ -474,7 +527,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     `Scrutiny[0].tenantId`,
     ""
   );
-  if(!permitDate || !permitNum || !tenantId) {
+  if (!permitDate || !permitNum || !tenantId) {
     let errorMessage = {
       labelName: "Please fill all date, permit number and city then click on search",
       labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
@@ -505,36 +558,53 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     return;
   }
 
-  let edcrRes = await edcrHttpRequest(
-    "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
-    "search", []
-  );
+  const dateFromApi = new Date(get(response, "Bpa[0].approvalDate"));
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  let date = `${year}-${month}-${day}`;
+  if (permitNum === get(response, "Bpa[0].approvalNo") && date === permitDate) {
 
-  let SHLicenseDetails = await getLicenseDetails(state,dispatch);
-  
-  if(get(edcrRes,"edcrDetail[0]") && SHLicenseDetails) {
-    visibleHiddenSearchFields(state, dispatch, true);
-  } else {
-    visibleHiddenSearchFields(state, dispatch, false);
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "No Records Found",
-          labelKey: "BPA_NO_REC_FOUND_LABEL"
-        },
-        "error"
-      )
+    let edcrRes = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
+      "search", []
     );
+
+    let SHLicenseDetails = await getLicenseDetails(state, dispatch);
+
+    if (get(edcrRes, "edcrDetail[0]") && SHLicenseDetails) {
+      visibleHiddenSearchFields(state, dispatch, true);
+    } else {
+      visibleHiddenSearchFields(state, dispatch, false);
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "No Records Found",
+            labelKey: "BPA_NO_REC_FOUND_LABEL"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+    set(response, "Bpa[0].serviceType", "NEW_CONSTRUCTION")
+    let primaryOwnerArray = get(response, "Bpa[0].landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true);
+    dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
+    dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
+    dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
+    dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
+  } else {
+    let errorMessage = {
+      labelName: "Please select approval date",
+      labelKey: "ERR_FILL_EDCR_PERMIT_INCORRECT_DATE"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
     return;
   }
-  set(response, "Bpa[0].serviceType", "NEW_CONSTRUCTION")
-  let primaryOwnerArray = get(response, "Bpa[0].landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
-  dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
-  dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
-  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
-  dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
 };
 
 export const resetOCFields = (state, dispatch) => {
