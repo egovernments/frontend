@@ -922,7 +922,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
           ],
           [
             {
-              text: transformedData.collectedAmnt,
+              text: transformedData.nocFee,
               border: [true, true, true, true],
               alignment: "center"
             },
