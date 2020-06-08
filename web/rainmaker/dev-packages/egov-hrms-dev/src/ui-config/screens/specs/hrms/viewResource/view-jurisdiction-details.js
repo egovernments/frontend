@@ -62,8 +62,6 @@ const jurisdictionCard = {
               "Employee[0].jurisdictions[0].boundaryType",
               null
               );
-              console.log("Prasad Boundary TYpe",boundary_type );
-              console.log("Prasad tenantID",tenantID );
 
               if(boundary_type == "Zone")
                 {
