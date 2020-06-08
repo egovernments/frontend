@@ -7,7 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { convertEpochToDateAndHandleNA, handleNA } from "../../utils";
-
+import { serviceConst } from "../../../../../ui-utils/commons";
 const service = getQueryArg(window.location.href, "service")
 
 const getHeader = label => {
@@ -297,9 +297,9 @@ const activationDetails = getCommonContainer({
 });
 
 export const renderService = () => {
-  if (service === "WATER") {
+  if (service === serviceConst.WATER) {
     return getCommonContainer({ reviewConnectionType, reviewNumberOfTaps, reviewWaterSource, reviewWaterSubSource, reviewPipeSize });
-  } else if (service === "SEWERAGE") {
+  } else if (service === serviceConst.SEWERAGE) {
     return getCommonContainer({ reviewConnectionType, reviewWaterClosets,reviewNoOfToilets })
   }
 }

@@ -5,6 +5,7 @@ import {
     getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { serviceConst } from "../../../../../ui-utils/commons";
 
 const service = getQueryArg(window.location.href, "service")
 
@@ -86,9 +87,9 @@ export const getConnectionDetails = () => {
 }
 
 export const renderService = () => {
-    if (service === "WATER") {
+    if (service === serviceConst.WATER) {
         return getCommonContainer({ taskApplicationType, taskNumberOfTapsPropsed, taskPipeSizeProposed });
-    } else if (service === "SEWERAGE") {
+    } else if (service === serviceConst.SEWERAGE) {
         return getCommonContainer({ taskApplicationType, taskNoOfClosets, taskNoOfToilets })
     }
 }

@@ -9,6 +9,15 @@ import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists, updateDropDowns } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
+export const serviceConst = {
+    "water" : "water",
+    "WATER" : "WATER",
+    "Water" : "Water",
+    "sewerage" : "sewerage",
+    "Sewerage" : "Sewerage",
+    "SEWERAGE" : "SEWERAGE"
+}
+
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
@@ -237,7 +246,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
         if (response.WaterConnection.length > 0) {
             response.WaterConnection = await getPropertyObj(response.WaterConnection); 
             for (let i = 0; i < response.WaterConnection.length; i++) {
-                response.WaterConnection[i].service = "Water"
+                response.WaterConnection[i].service = serviceConst.Water
                 if (response.WaterConnection[i].connectionNo !== null && response.WaterConnection[i].connectionNo !== undefined) {
                     try {
                         const data = await httpRequest(
@@ -285,7 +294,7 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
         if (response.WaterConnection.length > 0) {
             response.WaterConnection = await getPropertyObj(response.WaterConnection);
             for (let i = 0; i < response.WaterConnection.length; i++) {
-                response.WaterConnection[i].service = "Water"
+                response.WaterConnection[i].service = serviceConst.Water
                 if (response.WaterConnection[i].applicationNo !== null && response.WaterConnection[i].applicationNo !== undefined) {
                     try {
                         const data = await httpRequest(
@@ -1497,7 +1506,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
     const service = getQueryArg(window.location.href, "service")
 
     switch (service) {
-        case 'WATER':
+        case serviceConst.WATER:
             try {
                 httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then(async (payloadReceiptDetails) => {
                     const queryStr = [
@@ -1523,7 +1532,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                 alert('Some Error Occured while downloading!');
             }
             break;
-        case 'SEWERAGE':
+        case serviceConst.SEWERAGE:
             try {
                 httpRequest("post", FETCHSWCONNECTIONDETAILS.GET.URL, FETCHSWCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then(async (payloadReceiptDetails) => {
                     const queryStr = [
@@ -1557,7 +1566,7 @@ export const getSWMyResults = async (queryObject, consumer, dispatch) => {
         if (response.SewerageConnections.length > 0) {
             response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
             for (let i = 0; i < response.SewerageConnections.length; i++) {
-                response.SewerageConnections[i].service = "Sewerage"
+                response.SewerageConnections[i].service = serviceConst.Sewerage
                 let consumerCode = ""
                 if(consumer === 'APPLICATION'){
                     consumerCode = response.SewerageConnections[i].applicationNo
@@ -1601,7 +1610,7 @@ export const getSWMyResults = async (queryObject, consumer, dispatch) => {
 export const billingPeriodMDMS = (toPeriod,payloadbillingPeriod,service) => {
     const connectionType = getQueryArg(window.location.href, "connectionType");
     let demandExipryDate = 0;
-    if (service === 'WATER' &&
+    if (service === serviceConst.WATER &&
         payloadbillingPeriod['ws-services-masters'] && 
         payloadbillingPeriod['ws-services-masters'].billingPeriod !== undefined && 
         payloadbillingPeriod['ws-services-masters'].billingPeriod  !== null) {
@@ -1614,7 +1623,7 @@ export const billingPeriodMDMS = (toPeriod,payloadbillingPeriod,service) => {
       }); 
     }               
     
-    if (service === 'SEWERAGE' &&
+    if (service === serviceConst.SEWERAGE &&
         payloadbillingPeriod['sw-services-calculation'] && 
         payloadbillingPeriod['sw-services-calculation'].billingPeriod !== undefined && 
         payloadbillingPeriod['sw-services-calculation'].billingPeriod  !== null) {
@@ -1786,7 +1795,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
     let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
     let apiUrl, appService, estKey, queryObjectForEst
-    if (wnsConnection[0].service === "WATER") {
+    if (wnsConnection[0].service === serviceConst.WATER) {
 
         // for Estimate api 
         if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
@@ -1898,7 +1907,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
             if(wnsConnection[0].property && wnsConnection[0].property.units && wnsConnection[0].property.units.length > 0 && wnsConnection[0].property.units[0].usageCategory){
                wnsConnection[0].property.propertySubUsageType = wnsConnection[0].property.units[0].usageCategory;
             }
-            if (wnsConnection[0].service === "WATER") {
+            if (wnsConnection[0].service === serviceConst.WATER) {
                 if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
                     if (wnsConnection[0].property.rainWaterHarvesting === true) {
                         wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'

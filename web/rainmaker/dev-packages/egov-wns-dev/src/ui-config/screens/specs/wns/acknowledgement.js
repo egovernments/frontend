@@ -18,7 +18,8 @@ import {
   prepareDocumentsUploadRedux,
   prepareDocumentsUploadData,
   prepareDocUploadRedux,
-  downloadAndPrintForNonApply
+  downloadAndPrintForNonApply,
+  serviceConst
 } from "../../../../ui-utils/commons";
 import set from "lodash/set";
 import get from "lodash/get";
@@ -732,7 +733,7 @@ const getWaterData = async (dispatch, applicationNumber, tenantId) => {
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
   try { waterResponse = await getSearchResults(queryObject); } catch (error) { console.log(error); waterResponse = [] };
   if (waterResponse && waterResponse.WaterConnection !== undefined && waterResponse.WaterConnection.length > 0) {
-    waterResponse.WaterConnection[0].service = "WATER";
+    waterResponse.WaterConnection[0].service = serviceConst.WATER;
     dispatch(prepareFinalObject("WaterConnection", findAndReplace(waterResponse.WaterConnection, "NA", null)));
   } else { dispatch(prepareFinalObject("WaterConnection", [])); }
 }
@@ -742,7 +743,7 @@ const getSewerageData = async (dispatch, applicationNumber, tenantId) => {
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
   try { sewerResponse = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.log(error); sewerResponse = [] };
   if (sewerResponse && sewerResponse.SewerageConnections !== undefined && sewerResponse.SewerageConnections.length > 0) {
-    sewerResponse.SewerageConnections[0].service = "SEWERAGE";
+    sewerResponse.SewerageConnections[0].service = serviceConst.SEWERAGE;
     dispatch(prepareFinalObject("SewerageConnection", findAndReplace(sewerResponse.SewerageConnections, "NA", null)));
   } else { dispatch(prepareFinalObject("SewerageConnection", [])); }
 }

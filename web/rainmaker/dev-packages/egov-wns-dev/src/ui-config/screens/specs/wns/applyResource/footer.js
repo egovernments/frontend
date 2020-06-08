@@ -19,6 +19,7 @@ import {
   validateFeildsForBothWaterAndSewerage,
   validateFeildsForWater,
   validateFeildsForSewerage,
+  serviceConst
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
@@ -233,7 +234,7 @@ const callBackForNext = async (state, dispatch) => {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
-                    "Sewerage"
+                    serviceConst.Sewerage
                   )
                 );
                 await applyForSewerage(state, dispatch);
@@ -241,7 +242,7 @@ const callBackForNext = async (state, dispatch) => {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
-                    "Water"
+                    serviceConst.Water
                   )
                 );
                 await applyForWater(state, dispatch);
@@ -258,12 +259,12 @@ const callBackForNext = async (state, dispatch) => {
               dispatch(
                 prepareFinalObject(
                   "applyScreen.service",
-                  "Water"
+                  serviceConst.Water
                 )
               );
               if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
             } else if (sewerChecked) {
-              dispatch(prepareFinalObject("applyScreen.service", "Sewerage"))
+              dispatch(prepareFinalObject("applyScreen.service", serviceConst.Sewerage))
               if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
             }
           }
