@@ -221,6 +221,8 @@ const prepareDocumentsView = async (state, dispatch) => {
     return doc;
   });
   dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documents", documentsPreview));
+ 
 };
 
 const prepareUoms = (state, dispatch) => {
