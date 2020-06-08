@@ -2236,7 +2236,7 @@ export const applyForm = (state, dispatch, action) => {
     callBack: (state, dispatch) => {
       dispatch(prepareFinalObject('documentsUploadRedux', {}))
       const applyUrl = process.env.NODE_ENV === "production"
-        ? `/citizen/tradelicense-citizen/apply?tenantId=${tenantId}`
+        ? `/tradelicense-citizen/apply?tenantId=${tenantId}`
         : process.env.REACT_APP_SELF_RUNNING === true
           ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
           : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
