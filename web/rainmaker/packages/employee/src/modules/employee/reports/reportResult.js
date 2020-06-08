@@ -79,11 +79,9 @@ class ShowField extends Component {
 
   getExportOptions = () => {
     let _this = this;
-    let flag = false;
 
     for (let key in _this.state.ck) {
       if (_this.state.ck[key]) {
-        flag = true;
         break;
       }
     }
@@ -503,11 +501,9 @@ class ShowField extends Component {
                   </td>
                 )}
                 {dataItem.map((item, itemIndex) => {
-                  var columnObj = {};
                   //array for particular row
                   var respHeader = reportHeaderObj[itemIndex];
                   if (respHeader.showColumn) {
-                    columnObj = {};
                     return (
                       <td
                         key={itemIndex}
