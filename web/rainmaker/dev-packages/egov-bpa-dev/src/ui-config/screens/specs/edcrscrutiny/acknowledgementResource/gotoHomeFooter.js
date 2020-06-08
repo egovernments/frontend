@@ -27,7 +27,7 @@ const getRedirectionURL = () => {
 const getRedirectionOCURL = () => {
   let state = store.getState();
   let tenantId = getQueryArg(window.location.href, "tenantId");
-  let edcrNumber = get( state.screenConfiguration.preparedFinalObject, "edcrDetail.edcrNumber", "");
+  let edcrNumber = get( state.screenConfiguration.preparedFinalObject, "edcrDetail[0].edcrNumber", "");
   if(!edcrNumber) {
     edcrNumber = getQueryArg(window.location.href, "edcrNumber");
   }
