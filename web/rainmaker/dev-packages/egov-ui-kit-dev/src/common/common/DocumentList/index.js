@@ -194,6 +194,11 @@ class DocumentList extends Component {
                 docsUploaded[index]['dropdown']['value'] = card.dropdown.value;
               }
             }
+            if (card.dropdown && card.dropdown.value) {
+              docsUploaded[index]=docsUploaded[index]?docsUploaded[index]:{};
+              docsUploaded[index]['dropdown'] = docsUploaded[index]['dropdown']?docsUploaded[index]['dropdown']:{};
+              docsUploaded[index]['dropdown']['value'] = card.dropdown.value;
+            }
             index++;
           }
         });
@@ -202,6 +207,9 @@ class DocumentList extends Component {
       Object.keys(docsUploaded).map((key, index) => {
         Object.keys(docsUploaded[key]).map((item, index) => {
           if (docsUploaded[key] && documentsUploadRedux[key]) {
+            documentsUploadRedux[key][item] = docsUploaded[key][item];
+          }else if(docsUploaded[key] && !documentsUploadRedux[key]){
+            documentsUploadRedux[key]={}
             documentsUploadRedux[key][item] = docsUploaded[key][item];
           }
         });
