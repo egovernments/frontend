@@ -98,23 +98,6 @@ export const getUploadFile = {
   }
 };
 
-export const getUploadFilesMultiple = jsonPath => {
-  return {
-    uiFramework: "custom-molecules",
-    componentPath: "UploadMultipleFiles",
-    props: {
-      maxFiles: 4,
-      jsonPath: jsonPath,
-      inputProps: {
-        accept: "image/*, .pdf, .png, .jpeg"
-      },
-      buttonLabel: "UPLOAD FILES",
-      maxFileSize: 5000,
-      moduleName: "TL"
-    }
-  };
-};
-
 export const getRadioButton = (buttons, jsonPath, defaultValue) => {
   return {
     uiFramework: "custom-containers",
