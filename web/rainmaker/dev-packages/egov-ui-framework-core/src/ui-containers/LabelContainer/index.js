@@ -18,7 +18,6 @@ class LabelContainer extends React.Component {
       ...rest
     } = this.props;
 
-    debugger;
 
     let translatedLabel = getLocaleLabels(
       labelName,
