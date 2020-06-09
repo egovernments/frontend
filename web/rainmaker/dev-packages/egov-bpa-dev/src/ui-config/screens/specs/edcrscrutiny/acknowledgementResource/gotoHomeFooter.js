@@ -35,6 +35,17 @@ const getRedirectionOCURL = () => {
   return url;
 };
 
+const getRedirectionBPAURL = () => {
+  let state = store.getState();
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let edcrNumber = get( state.screenConfiguration.preparedFinalObject, "edcrDetail[0].edcrNumber", "");
+  if(!edcrNumber) {
+    edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+  }
+  let url = `/egov-bpa/apply?tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
+  return url;
+};
+
 export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
@@ -79,6 +90,29 @@ export const gotoHomeFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "page_change",
        path: getRedirectionOCURL()
+    },
+    visible : false
+  },
+  bpaCreateApp: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      },
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "CREATE BUILDING PLAN APPLICATION",
+        labelKey: "EDCR_CREATE_APP_BUTTON"
+      })
+    },
+    onClickDefination: {
+      action: "page_change",
+       path: getRedirectionBPAURL()
     },
     visible : false
   }

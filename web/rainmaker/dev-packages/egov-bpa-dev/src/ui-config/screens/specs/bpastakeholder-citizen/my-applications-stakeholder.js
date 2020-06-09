@@ -62,7 +62,12 @@ const screenConfig = {
     getMdmsData(dispatch).then(data => {
       dispatch( prepareFinalObject( "applyScreenMdmsData", data.MdmsRes ));
     });
-    getAllBusinessServicesDataForStatus(action, state, dispatch);
+
+    /**
+    * @Todo set for status (commeting the code beacuase of the removing of status)
+    */
+
+    // getAllBusinessServicesDataForStatus(action, state, dispatch);
     dispatch(prepareFinalObject("filterData[0].applicationType", "BUILDING_PLAN_SCRUTINY"));
     changePage();
     return action;
@@ -108,7 +113,7 @@ const screenConfig = {
               ],
               gridDefination: {
                 xs: 12,
-                sm: 3
+                sm: 4
               }
             }),
             afterFieldChange: (action, state, dispatch) => {
@@ -137,7 +142,7 @@ const screenConfig = {
               },
               gridDefination: {
                 xs: 12,
-                sm: 3
+                sm: 4
               }
             }),
             afterFieldChange: (action, state, dispatch) => {
@@ -146,6 +151,7 @@ const screenConfig = {
           },
           applicationStatus: {
             ...getSelectField({
+              visible: false,
               label: {
                 labelName: "Status",
                 labelKey: "BPA_STATUS_LABEL"
@@ -177,7 +183,7 @@ const screenConfig = {
             componentPath: "Button",
             gridDefination: {
               xs: 12,
-              sm: 3
+              sm: 4
             },
             props: {
               variant: "contained",

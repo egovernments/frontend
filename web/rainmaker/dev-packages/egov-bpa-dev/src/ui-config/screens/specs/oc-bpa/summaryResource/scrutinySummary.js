@@ -290,11 +290,11 @@ export const scrutinySummary = getCommonGrayCard({
                         labelKey: "BPA_OCCUPANCY_TYPE"
                     },
                     {
-                        jsonPath: "BPA.occupancyType",
                         localePrefix: {
                             moduleName: "BPA",
                             masterName: "OCCUPANCYTYPE"
                         },
+                        jsonPath: "ocScrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
                         callBack: checkValueForNA
                     }
                 ),
