@@ -21,7 +21,7 @@ class Icon extends React.Component {
         switch (type.toLowerCase()) {
             case 'overview':
             case 'dss_overview':
-                return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '50px', height: '50px', color: 'white' }}></SVG>
+                return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             case 'property tax':
             case 'dss_property_tax':
                 return <SVG src={PropertyTaxIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>

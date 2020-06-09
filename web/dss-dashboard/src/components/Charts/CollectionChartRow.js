@@ -68,9 +68,17 @@ class CollectionChartRow extends React.Component {
 		if (data) {
 			let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
 			let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
-
+			let value = "";
+			if(data.insight_data.value){
+				if(data.insight_data.value.includes("last year")){
+					value = data.insight_data.value.replace("last year" , "LY");
+				}else if(data.insight_data.value.includes("last month")){
+					value = data.insight_data.value.replace("last month" , "LM");
+				}
+			}
+			
 			return (
-				<div className={classes.root} style={{ width: "100%" }}>
+				<div style={{ width: "100%",height: "32px", fontSize: "20px", fontWeight: "500" }}>
 					{/* <span className={classes.values}>
 						
 						<NFormatter value={data.value} nType={data.valueSymbol} />
@@ -83,19 +91,22 @@ class CollectionChartRow extends React.Component {
 							</React.Fragment>
 						}
 					</span> */}
-
-					<div style={{ minWidth: "25%", textAlign: "left" }}>
-						<NFormatter value={data.value} nType={data.valueSymbol} />
+					<div style={{ textAlign: "right" }}>
+						<div>
+							<span><NFormatter value={data.value} nType={data.valueSymbol} /></span>
+							{/* <NFormatter value={data.value} nType={data.valueSymbol} /> */}
+						</div>
+						{data.insight_data &&
+						<div>
+							<React.Fragment>
+								<span style={{ marginLeft: "2vh",fontSize:'initial',paddingRight: "8px" }}>
+									<img src={insightIcon} style={{ height: "15px", color: insightColor }} />
+								</span>
+								<span style={{ color: insightColor, fontSize: '14px'  }}>{value}</span>
+							</React.Fragment>
+						</div>
+						}
 					</div>
-					{data.insight_data &&
-						<React.Fragment>
-							<span style={{ marginLeft: "2vh",fontSize:'initial' }}>
-								<img src={insightIcon} style={{ height: "15px", color: insightColor }} />
-							</span>
-							<span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh"  }}>{`${data.insight_data.value}`}</span>
-						</React.Fragment>
-					}
-
 				</div>
 			);
 		}

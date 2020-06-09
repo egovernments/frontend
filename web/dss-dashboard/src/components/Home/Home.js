@@ -106,41 +106,34 @@ class Home extends React.Component {
         }
         if (data.vizType.toUpperCase() === 'COLLECTION') {
             return (
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.paper} style={{ paddingBottom: '5px' }}>
-                    <Paper className={classes.paperStyle} onClick={() => this.handleOnClick(pageId)}>
-                        <div className={classes.paperContainer}>
-                            <div>
-                                <Paper className={classes.iconPaper}>
-                                    <div >
-                                        <Icons type={data.name}></Icons>
-                                    </div>
-                                </Paper>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.paper} style={{ paddingBottom: '5px' }}>
+                 <Card color="blue" bgColor={"rgba(33, 150, 243, 0.24)"} page={pageId}>
+                        <CardHeader color="rose" icon page={pageId || 'overview'}>
+                            <CardIcon  color="rose" bgColor={"#2196F3"}>
+                                <Icons type={data.name}></Icons>
+                            </CardIcon>
+                            <div style={{ textAlign: 'left', color: 'black', }}>
+                                <Typography className={classes.cardTitle}>{strings[data.name] || data.name}</Typography>
                             </div>
-                            <div className={classes.paperValues}>
-                                <Grid container spacing={24}>
-                                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                        <div style={{ textAlign: 'left', color: 'black' }}>
-                                            {/* <h3 style={{ padding: '5px', margin: '0px' }}>{strings[data.name] || data.name}</h3> */}
-                                            <Typography className={classes.paperTitle}>{strings[data.name] || data.name}</Typography>
 
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                        <Grid container spacing={24}>
-                                            {
-                                                data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-                                                    return <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.customCard}><CustomCard key={d.id} moduleLevel={moduleLevel} chartData={d} filters={filters} type="overview" page={window.location.pathname || ''}></CustomCard></Grid>
-                                                })
-                                            }
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-
-                            </div>
-                        </div>
-
-                    </Paper>
-                </Grid>
+                        </CardHeader>
+                        <CardBody page={pageId || 'overview'}>
+                            <Grid container spacing={24}>
+                                {
+                                    data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
+                                        return (
+                                            <Grid item xs={6} sm={12} md={3} lg={3} xl={3} className={classes.customCard}>
+                                                <CustomCard key={d.id} moduleLevel={moduleLevel} chartData={d} filters={filters} type="overview" page={window.location.pathname || ''}></CustomCard>
+                                            </Grid>
+                                        )  
+                                    })
+                                }   
+                            </Grid>
+                        </CardBody>
+                </Card>
+            </Grid>
+            
+                                            
             )
         }
         else {
@@ -151,7 +144,8 @@ class Home extends React.Component {
                         <CardHeader color="rose" icon page={pageId || 'overview'}>
                             <CardIcon color="rose" bgColor={iconColor}>
                                 <Icons type={data.name}></Icons>
-                            </CardIcon><div style={{ textAlign: 'left', color: 'black', }}>
+                            </CardIcon>
+                            <div style={{ textAlign: 'left', color: 'black', }}>
                                 <Typography className={classes.cardTitle}>{strings[data.name] || data.name}</Typography>
                             </div>
 
@@ -160,8 +154,7 @@ class Home extends React.Component {
                             <Grid container spacing={24}>
                                 {
                                     data && data.charts && Array.isArray(data.charts) && data.charts.length > 0 && data.charts.map((d, i) => {
-
-                                        return <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.customCard}>
+                                        return <Grid item xs={6} sm={12} md={6} lg={6} xl={6} className={classes.customCard}>
                                             <CustomCard chartLabelName={chartLabelName} key={d.id} moduleLevel={moduleLevel} chartData={d} filters={filters} type="module" page={window.location.pathname || ''}></CustomCard></Grid>
                                     })
                                 }
@@ -234,8 +227,8 @@ class Home extends React.Component {
                     <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={classes.pageHeader}>
                         {this.props.strings[dashboardName] || dashboardName}
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={6} xl={6} style={{ textAlign: 'right', justifyContent: 'flex-end' }}>
-                        {isMobile && <div id="divNotToPrint" data-html2canvas-ignore="true" className={classes.posit}>
+                   <Grid item xs={12} sm={12} md={6} lg={6} xl={6} style={{ textAlign: 'right', justifyContent: 'flex-end' }}>
+                        {/* {isMobile && <div id="divNotToPrint" data-html2canvas-ignore="true" className={classes.posit}>
 
                             <Menu type="download" bgColor="white" color="black" fileHeader="SURE Dashboard" fileName={dashboardName}></Menu>
                             {!this.state.dontShowHeader &&
@@ -247,7 +240,7 @@ class Home extends React.Component {
                                 </Button>
                             }
                         </div>
-                        }
+                        } */}
 
                         {!isMobile && <div id="divNotToPrint" className={classes.acbtn} style={{ display: 'flex', justifyContent: 'flex-end', }}>
                             <CustomizedMenus key="download" fileName={dashboardName} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard" />
@@ -259,6 +252,10 @@ class Home extends React.Component {
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <Typography className={classes.filter}>{this.getTitleText(strings)}</Typography>
                 </Grid>
+                {isMobile && <div id="divNotToPrint" className={classes.acbtn} style={{ display: 'flex', justifyContent: 'flex-end', }}>
+                    <CustomizedMenus key="download" fileName={dashboardName} fileHeader="State Wide Urban Real-Time Executive (SURE) Dashboard" />
+                    <CustomizedShare key="share" fileName={dashboardName} />
+                </div>}
 
                 {/* {tabsInitData.visualizations && Array.isArray(tabsInitData.visualizations) && tabsInitData.visualizations.length > 0 && this.gettingData(tabsInitData.visualizations)} */}
                 {tabsInitData.visualizations && Array.isArray(tabsInitData.visualizations) && tabsInitData.visualizations.length > 0 && tabsInitData.visualizations.map((k, v) => {

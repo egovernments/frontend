@@ -497,6 +497,9 @@ button:focus {
 }
 
 @media (max-width: 768px) {
+    .MuiCardContent-root {
+        padding: 20px 8px !important;
+    }
     .tableHeading {
         display: flex;
         /* flex-direction: row-reverse; */

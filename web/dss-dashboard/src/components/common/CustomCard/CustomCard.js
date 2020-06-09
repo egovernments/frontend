@@ -8,7 +8,9 @@ import style from './Style';
 import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import getChartOptions from '../../../actions/getChartOptions';
-import ChartsAPI from '../../../actions/charts/chartsAPI'
+import ChartsAPI from '../../../actions/charts/chartsAPI';
+import Arrow_Downward from "../../../images/arrows/Arrow_Downward.svg";
+import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg';
 import NFormatter from '../numberFormater';
 
 class CustomCard extends React.Component {
@@ -47,13 +49,24 @@ class CustomCard extends React.Component {
                 "label": _.chain(this.props).get('chartData').get("name").value(),
                 "valueSymbol": d.headerSymbol,
                 "value": d.headerValue,
-                "plots": d.plots
+                "plots": d.plots,
+                "insight_data": d.insight ? d.insight : ''
             }
         }).first().value() || null;
 
         if (data) {
+            let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
+            let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
+            let value = "";
+			if(data.insight_data.value){
+				if(data.insight_data.value.includes("last year")){
+					value = data.insight_data.value.replace("last year" , "LY");
+				}else if(data.insight_data.value.includes("last month")){
+					value = data.insight_data.value.replace("last month" , "LM");
+				}
+            }
+                   
             let label = data.label ? (strings[data.label] ? strings[data.label] : data.label) : '';
-
             return (
                 <Grid container spacing={24}>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -67,9 +80,19 @@ class CustomCard extends React.Component {
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                         <Typography className={classes.value}>
                             <NFormatter value={data.value} nType={data.valueSymbol} />
-
                         </Typography>
                     </Grid>
+                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{"textAlign" : "left"}}>
+                        {
+                            <React.Fragment>
+                                <span style={{fontSize:'initial' }}>
+                                    <img src={insightIcon} style={{ height: "15px", color: insightColor }} />
+                                </span>
+                                <span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh"  }}>{value}</span>
+                            </React.Fragment>
+                        }
+                    </Grid>
+
 
                 </Grid>
             )

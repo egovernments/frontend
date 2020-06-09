@@ -4,7 +4,8 @@ const styles = theme => ({
         fontSize: '24px', 
         fontWeight: '500',
         flex: 1, 
-        textAlign: 'left'
+        textAlign: 'left',
+        wordBreak: "break-word"
     },
     dashboard: {
         display: 'flex',

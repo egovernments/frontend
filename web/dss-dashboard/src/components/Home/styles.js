@@ -14,6 +14,7 @@ const styles = theme => ({
         fontWeight: '500',
         flex: 1,
         textAlign: 'left',
+        wordBreak: "break-word"
     },
     posit: {
         display: 'flex',
@@ -90,12 +91,13 @@ const styles = theme => ({
         padding: '5px'
     },
     iconPaper: {
-        backgroundColor: '#2196F3',
-        color: 'white',
-        height: '73px',
-        width: '93px',
-        verticalAlign: 'middle',
-        paddingTop: '20px'
+        // backgroundColor: '#2196F3',
+        // color: 'white',
+        // height: '73px',
+        // width: '93px',
+        // verticalAlign: 'middle',
+        // paddingTop: '20px'
+        marginTop:"-20px"
     },
     paperContainer: {
         display: 'flex',
@@ -142,9 +144,9 @@ const styles = theme => ({
         paper: {
             padding: '10px 5px 10px 5px !important',
         },
-        customCard: {
-            padding: '15px'
-        },
+        // customCard: {
+        //     padding: '15px'
+        // },
         actions: {
             margin: '10px 5px 10px 5px !important',
         },

@@ -33,7 +33,9 @@ const styles = theme => ({
         display: 'flex',
         fontSize: variables.fs_14,
         fontFamily: variables.primaryFont,
-        color: variables.black
+        color: variables.black,
+        wordBreak: "break-word"
+
 
     },
     collectionChart: {
