@@ -9,12 +9,8 @@ import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists, updateDropDowns } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
-export const serviceConst = {
-    "water" : "water",
+export const serviceConst = {    
     "WATER" : "WATER",
-    "Water" : "Water",
-    "sewerage" : "sewerage",
-    "Sewerage" : "Sewerage",
     "SEWERAGE" : "SEWERAGE"
 }
 
@@ -246,7 +242,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
         if (response.WaterConnection.length > 0) {
             response.WaterConnection = await getPropertyObj(response.WaterConnection); 
             for (let i = 0; i < response.WaterConnection.length; i++) {
-                response.WaterConnection[i].service = serviceConst.Water
+                response.WaterConnection[i].service = _.capitalize(serviceConst.WATER)
                 if (response.WaterConnection[i].connectionNo !== null && response.WaterConnection[i].connectionNo !== undefined) {
                     try {
                         const data = await httpRequest(
@@ -294,7 +290,7 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
         if (response.WaterConnection.length > 0) {
             response.WaterConnection = await getPropertyObj(response.WaterConnection);
             for (let i = 0; i < response.WaterConnection.length; i++) {
-                response.WaterConnection[i].service = serviceConst.Water
+                response.WaterConnection[i].service = _.capitalize(serviceConst.WATER)
                 if (response.WaterConnection[i].applicationNo !== null && response.WaterConnection[i].applicationNo !== undefined) {
                     try {
                         const data = await httpRequest(
@@ -1566,7 +1562,7 @@ export const getSWMyResults = async (queryObject, consumer, dispatch) => {
         if (response.SewerageConnections.length > 0) {
             response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
             for (let i = 0; i < response.SewerageConnections.length; i++) {
-                response.SewerageConnections[i].service = serviceConst.Sewerage
+                response.SewerageConnections[i].service = _.capitalize(serviceConst.SEWERAGE)
                 let consumerCode = ""
                 if(consumer === 'APPLICATION'){
                     consumerCode = response.SewerageConnections[i].applicationNo

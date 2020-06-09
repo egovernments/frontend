@@ -234,7 +234,7 @@ const callBackForNext = async (state, dispatch) => {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
-                    serviceConst.Sewerage
+                    _.capitalize(serviceConst.SEWERAGE)
                   )
                 );
                 await applyForSewerage(state, dispatch);
@@ -242,7 +242,7 @@ const callBackForNext = async (state, dispatch) => {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
-                    serviceConst.Water
+                    _.capitalize(serviceConst.WATER)
                   )
                 );
                 await applyForWater(state, dispatch);
@@ -259,12 +259,12 @@ const callBackForNext = async (state, dispatch) => {
               dispatch(
                 prepareFinalObject(
                   "applyScreen.service",
-                  serviceConst.Water
+                  _.capitalize(serviceConst.WATER)
                 )
               );
               if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
             } else if (sewerChecked) {
-              dispatch(prepareFinalObject("applyScreen.service", serviceConst.Sewerage))
+              dispatch(prepareFinalObject("applyScreen.service", _.capitalize(serviceConst.SEWERAGE)))
               if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
             }
           }
