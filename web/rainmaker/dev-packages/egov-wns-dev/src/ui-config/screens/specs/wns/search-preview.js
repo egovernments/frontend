@@ -33,12 +33,12 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
-import { getWorkFlowData } from "../../../../ui-utils/commons";
+import { getWorkFlowData, serviceConst } from "../../../../ui-utils/commons";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
-const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
+const serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 const headerrow = getCommonContainer({
   header: getCommonHeader({
@@ -91,7 +91,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       (await searchResults(action, state, dispatch, applicationNumber,processInstanceAppStatus));
     } else {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
-      applyScreenObject.applicationNo.includes("WS")?applyScreenObject.service="WATER":applyScreenObject.service="SEWERAGE";
+      applyScreenObject.applicationNo.includes("WS")?applyScreenObject.service=serviceConst.WATER:applyScreenObject.service=serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
        let estimate;
@@ -529,7 +529,7 @@ const screenConfig = {
 const searchResults = async (action, state, dispatch, applicationNumber,processInstanceAppStatus) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
-  if (service === "WATER") {
+  if (service === serviceConst.WATER) {
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
     payload.WaterConnection[0].service = service;
@@ -571,7 +571,7 @@ const searchResults = async (action, state, dispatch, applicationNumber,processI
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
-  } else if (service === "SEWERAGE") {
+  } else if (service === serviceConst.SEWERAGE) {
     payload = [];
     payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
     payload.SewerageConnections[0].service = service;
@@ -653,14 +653,14 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
   data.Calculation[0].taxHeadEstimates.forEach(async element => {
     let cessKey = element.taxHeadCode
     let body;
-    if (service === "WATER" ||appNumber.includes("WS")) {
+    if (service === serviceConst.WATER ||appNumber.includes("WS")) {
       body = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
     } else {
       body = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
     }
     let res = await getDescriptionFromMDMS(body, dispatch)
     if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
-      if (service === "WATER" || appNumber.includes("WS")) { des = res.MdmsRes["ws-services-calculation"]; }
+      if (service === serviceConst.WATER || appNumber.includes("WS")) { des = res.MdmsRes["ws-services-calculation"]; }
       else { des = res.MdmsRes["sw-services-calculation"]; }
       if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
         groupBillDetails.push({ key: cessKey, value: des[cessKey][0].description, amount: element.estimateAmount, order: element.order })
