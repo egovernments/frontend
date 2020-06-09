@@ -330,12 +330,12 @@ const setSearchResponse = async (
   await applicantNameAppliedByMaping(state, dispatch, get(response, "Bpa[0]"), get(edcrRes, "edcrDetail[0]"));
   await setProposedBuildingData(state, dispatch, "ocApply", "ocApply");
 
-  let businessServicesValue = "BPA_OC";
-  const queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "businessServices", value: businessServicesValue }
-  ];
-  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  // let businessServicesValue = "BPA_OC";
+  // const queryObject = [
+  //   { key: "tenantId", value: tenantId },
+  //   { key: "businessServices", value: businessServicesValue }
+  // ];
+  // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   if (status && status == "INPROGRESS") {
     let userInfo = JSON.parse(getUserInfo()), roles = get(userInfo, "roles"), isArchitect = false;
@@ -491,6 +491,12 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    let businessServicesValue = "BPA_OC";
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: businessServicesValue }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
     // const queryObject = [
