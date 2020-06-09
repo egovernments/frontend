@@ -117,8 +117,11 @@ const screenConfig = {
         false
       );
     }
-
-    generateBill(dispatch, applicationNumber, tenantId);
+    let status = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
+    );
+    generateBill(dispatch, applicationNumber, tenantId, status);
     prepareDocumentsView(state, dispatch);
     return action;
   },
