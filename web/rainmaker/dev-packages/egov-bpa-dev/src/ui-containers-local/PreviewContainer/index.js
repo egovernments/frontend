@@ -59,6 +59,7 @@ class PreviewContainer extends Component {
                 uploadedDocIndex={this.state.uploadedDocIndex}
                 toggleEditClick={this.toggleEditClick}
                 isFromPreview={true}
+                jsonPath = {`documentDetailsUploadRedux`}
                 {...rest}
               /></div>
             ) : (
