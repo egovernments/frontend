@@ -105,7 +105,7 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "TradeLicense",
           masterDetails: [
-            { name: "TradeType", filter: `[?(@.type == "TL")]` },
+            { name: "TradeType" },
             { name: "AccessoriesCategory" },
             { name: "ApplicationType" },
             { name: "documentObj" }
