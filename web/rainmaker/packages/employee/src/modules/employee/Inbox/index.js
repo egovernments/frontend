@@ -9,6 +9,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions"
 import "./index.css";
 
 class Inbox extends Component {
@@ -60,7 +61,11 @@ class Inbox extends Component {
       return {
         labelName: obj.displayName,
         labelKey: `ACTION_TEST_${obj.displayName.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
-        link: () => setRoute(obj.navigationURL)
+        link: () =>{  
+          if (obj.displayName === "Apply TL" ){
+            this.props.setRequiredDocumentFlag();
+          }
+          setRoute(obj.navigationURL)}
       }
     })
     const {isLoading}=Loading;
@@ -109,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setRoute: url => dispatch(setRoute(url)),
     fetchLocalizationLabel: (locale,tenantId,module) => dispatch(fetchLocalizationLabel(locale,tenantId,module)),
+    setRequiredDocumentFlag: () => dispatch(prepareFinalObject("isRequiredDocuments", true))
   };
 }
 

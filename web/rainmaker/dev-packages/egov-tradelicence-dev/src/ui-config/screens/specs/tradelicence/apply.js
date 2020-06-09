@@ -21,7 +21,7 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getRequiredDocData, showHideAdhocPopup  } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 import { tradeDetails } from "./applyResource/tradeDetails";
@@ -305,7 +305,15 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     const tenantId = getTenantId();
+    const moduleDetails = [
+      {
+        moduleName: "TradeLicense",
+        masterDetails: [{ name: "Documents" }]
+      }
+    ];
+    getRequiredDocData(action, dispatch, moduleDetails, true);
     const URL=window.location.href
     const URLsplit=URL.split("/")
     if(URLsplit[URLsplit.length-1]=="apply"){
@@ -348,8 +356,19 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       );
+      if(isRequiredDocuments){
+        setTimeout(() => {
+          showHideAdhocPopup(state, dispatch, 'apply');
+        }, 1000)
+        dispatch(
+          prepareFinalObject(
+            "isRequiredDocuments",
+            false
+          )
+        );
+      }
     });
-
+    
     return action;
   },
 
@@ -390,6 +409,18 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "apply"
+      }
+    },
+    adhocDialog: {
+      uiFramework: 'custom-containers',
+      componentPath: 'DialogContainer',
+      props: {
+        open: false,
+        maxWidth: false,
+        screenKey: 'apply'
+      },
+      children: {
+        popup: {}
       }
     }
   }
