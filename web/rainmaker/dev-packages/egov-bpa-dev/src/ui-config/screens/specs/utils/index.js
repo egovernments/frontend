@@ -5382,4 +5382,5 @@ export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, 
   dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
   await permitNumberLink(state, dispatch);
   await ocuupancyType(state, dispatch);
+  await residentialType(state, dispatch);
 }

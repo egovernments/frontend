@@ -297,6 +297,11 @@ export const fieldChange = async (action, state, dispatch) => {
   const { screenConfiguration } = state;
   var value = action.value;
   let bService = "BPA";
+
+  /**
+  * @Todo we are not using this condition - removing the status in my applications
+  */
+
   if (action.value === "BUILDING_PLAN_SCRUTINY" || action.value === "BUILDING_OC_PLAN_SCRUTINY" || action.value === "BPAREG_SERVICE") {
     if (action.value === "BUILDING_PLAN_SCRUTINY") {
       bService = "BPA_OC";
