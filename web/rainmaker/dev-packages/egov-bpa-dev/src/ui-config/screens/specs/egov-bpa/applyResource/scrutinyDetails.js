@@ -335,7 +335,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
               labelName: "Total Buildup Area (sq.mtrs)",
               labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
             },
-            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
+            jsonPath: "scrutinyDetails.planDetail.virtualBuilding.totalBuitUpArea",
             props: {
               disabled: 'true',
               className: "tl-trade-type"
