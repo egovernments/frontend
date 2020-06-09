@@ -7,6 +7,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
+import set from "lodash/set";
+
 import { convertEpochToDate, checkValueForNA } from "../../utils";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
@@ -65,8 +67,7 @@ const jurisdictionCard = {
 
               if(boundary_type == "Zone")
                 {
-                //let temp =  tenantID.toUpperCase()."_REVENUE_ZONE_".value;
-                let result = `${tenantID
+                /* let result = `${tenantID
                   .toUpperCase()
                   .replace(
                     /[.]/g,
@@ -74,43 +75,108 @@ const jurisdictionCard = {
                   )}_REVENUE_ZONE_${value
                   .toUpperCase()
                   .replace(/[._:-\s\/]/g, "_")}`;
-                  return result;
+                  return result; */
+
+                  let tenantBoundary = get(
+                    state.screenConfiguration.preparedFinalObject,
+                    `createScreenMdmsData.egov-location.TenantBoundary`,
+                    []
+                  );
+
+                  let crawlingData = get(
+                    tenantBoundary[0],
+                    "boundary.children",
+                    []
+                  );                  
+
+                  if(crawlingData[0].code===value)
+                   return crawlingData[0].code 
+
                 }                 
                 else if(boundary_type == "City")
                 {
-                  //return "TENANT_TENANTS_".tenantID.toUpperCase();    
                   let result = `TENANT_TENANTS_${tenantID
                     .toUpperCase()
                     .replace(/[._:-\s\/]/g, "_")}`;
-                  return result;              
+                  return result;  
+
                 }
                 else if(boundary_type === "Locality")
                 {
                   
-                  let result = `${tenantID
+                  /* let result = `${tenantID
                     .toUpperCase()
                     .replace(
                       /[.]/g,
                       "_"
                     )}_REVENUE_${value
                     .toUpperCase()
-                    .replace(/[._:-\s\/]/g, "_")}`;
+                    .replace(/[._:-\s\/]/g, "_")}`; */
+                    let tenantBoundary = get(
+                      state.screenConfiguration.preparedFinalObject,
+                      `createScreenMdmsData.egov-location.TenantBoundary`,
+                      []
+                    );
+  
+                    let crawlingData = get(
+                      tenantBoundary[0],
+                      "boundary.children",
+                      []
+                    );
+                    let list = get(
+                      crawlingData[0],
+                      "children",
+                      []
+                    );
+                    
+                    let locality_value;
 
-                  return result;
+                    for(let i=0;i<list.length;i++)
+                    {
+                      for(let j=0;j<list[i].children.length;j++)
+                    {
+                       if(list[i].children[j].code==value)
+                       {
+                         locality_value = list[i].children[j].name;
+                       }
+                    }
+                      
+                    }
+                    
+
+                  return locality_value;
 
                 }
                 else if(boundary_type === "Block")
                 {
-                 // return tenantID.toUpperCase()."_REVENUE_BLOCK".value;
-                  let result = `${tenantID
+                  /* let result = `${tenantID
                     .toUpperCase()
                     .replace(
                       /[.]/g,
                       "_"
                     )}_REVENUE_BLOCK_${value
                     .toUpperCase()
-                    .replace(/[._:-\s\/]/g, "_")}`;
-                    return result;
+                    .replace(/[._:-\s\/]/g, "_")}`; */
+
+                   let tenantBoundary = get(
+                      state.screenConfiguration.preparedFinalObject,
+                      `createScreenMdmsData.egov-location.TenantBoundary`,
+                      []
+                    );
+  
+                    let crawlingData = get(
+                      tenantBoundary[0],
+                      "boundary.children",
+                      []
+                    );
+                    let list = get(
+                      crawlingData[0],
+                      "children",
+                      []
+                    );
+                    const result = list.filter(list => list.code === value);                    
+    
+                    return result[0].name;
                 }          
 
               } 
