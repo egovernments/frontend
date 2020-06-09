@@ -4743,10 +4743,13 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   bpaDetails.edcrDetail = payload.edcrDetail;
   let Bpa = bpaDetails;
   let permitPfKey = "buildingpermit";
+
   if(!window.location.href.includes("oc-bpa")) {
     if(bpaDetails && bpaDetails.riskType === "LOW") {
       permitPfKey = "buildingpermit-low"
     }
+  } else if(window.location.href.includes("oc-bpa")) {
+    permitPfKey = "occupancy-certificate"
   }
   let res = await httpRequest(
     "post",
