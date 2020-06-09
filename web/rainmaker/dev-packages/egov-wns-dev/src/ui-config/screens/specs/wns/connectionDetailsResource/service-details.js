@@ -7,14 +7,14 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-
+import { serviceConst } from "../../../../../ui-utils/commons";
 const tenantId = JSON.parse(getUserInfo()).tenantId
 const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")
 
 export const renderService = () => {
-  if (service === "WATER") {
+  if (service === serviceConst.WATER) {
     if (connectionType === "Metered") {
       return getCommonContainer({
         serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].service" }),
@@ -51,7 +51,7 @@ export const renderService = () => {
         numberOfTaps: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" }, { jsonPath: "WaterConnection[0].noOfTaps" })
       })
     }
-  } else if (service === "SEWERAGE") {
+  } else if (service === serviceConst.SEWERAGE) {
     return getCommonContainer({
       serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].service" }),
       connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate" }),
