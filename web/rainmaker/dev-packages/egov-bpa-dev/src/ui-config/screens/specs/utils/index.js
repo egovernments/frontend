@@ -5131,6 +5131,7 @@ const permitNumberLink = async (state, dispatch) => {
 
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let appNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo", "");
+  let permitNumber = get(state.screenConfiguration.preparedFinalObject, "ocScrutinyDetails.permitNumber", "");
   let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
   let url = `${window.location.origin}/egov-bpa/search-preview?applicationNumber=${appNumber}&tenantId=${tenantId}`;
   let  linkDetail = {
@@ -5144,8 +5145,8 @@ const permitNumberLink = async (state, dispatch) => {
   }
   if(appNumber) {
     linkDetail = {
-      labelName: appNumber,
-      labelKey: appNumber
+      labelName: permitNumber,
+      labelKey: permitNumber
     }
     dispatch(
       handleField(
