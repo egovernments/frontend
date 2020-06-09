@@ -363,7 +363,7 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
                         },
                         {
-                            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
+                            jsonPath: "scrutinyDetails.planDetail.virtualBuilding.totalBuitUpArea",
                             callBack: checkValueForNA
                         }
                     ),
