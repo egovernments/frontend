@@ -22,6 +22,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getEmployeeData } from "./viewResource/functions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },
@@ -299,6 +301,9 @@ const screenConfig = {
     //       "PERMANENT"
     //     );
     //   });
+    const locale = getLocale();
+
+    dispatch(fetchLocalizationLabel(locale, tenantId, tenantId));
 
     return action;
   },

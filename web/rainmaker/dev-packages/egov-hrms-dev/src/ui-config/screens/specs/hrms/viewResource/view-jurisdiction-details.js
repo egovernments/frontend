@@ -67,7 +67,7 @@ const jurisdictionCard = {
 
               if(boundary_type == "Zone")
                 {
-                /* let result = `${tenantID
+                 let result = `${tenantID
                   .toUpperCase()
                   .replace(
                     /[.]/g,
@@ -75,22 +75,9 @@ const jurisdictionCard = {
                   )}_REVENUE_ZONE_${value
                   .toUpperCase()
                   .replace(/[._:-\s\/]/g, "_")}`;
-                  return result; */
+                  
 
-                  let tenantBoundary = get(
-                    state.screenConfiguration.preparedFinalObject,
-                    `createScreenMdmsData.egov-location.TenantBoundary`,
-                    []
-                  );
-
-                  let crawlingData = get(
-                    tenantBoundary[0],
-                    "boundary.children",
-                    []
-                  );                  
-
-                  if(crawlingData[0].code===value)
-                   return crawlingData[0].code 
+                   return result 
 
                 }                 
                 else if(boundary_type == "City")
@@ -104,79 +91,31 @@ const jurisdictionCard = {
                 else if(boundary_type === "Locality")
                 {
                   
-                  /* let result = `${tenantID
+                  let result = `${tenantID
                     .toUpperCase()
                     .replace(
                       /[.]/g,
                       "_"
                     )}_REVENUE_${value
                     .toUpperCase()
-                    .replace(/[._:-\s\/]/g, "_")}`; */
-                    let tenantBoundary = get(
-                      state.screenConfiguration.preparedFinalObject,
-                      `createScreenMdmsData.egov-location.TenantBoundary`,
-                      []
-                    );
-  
-                    let crawlingData = get(
-                      tenantBoundary[0],
-                      "boundary.children",
-                      []
-                    );
-                    let list = get(
-                      crawlingData[0],
-                      "children",
-                      []
-                    );
-                    
-                    let locality_value;
-
-                    for(let i=0;i<list.length;i++)
-                    {
-                      for(let j=0;j<list[i].children.length;j++)
-                    {
-                       if(list[i].children[j].code==value)
-                       {
-                         locality_value = list[i].children[j].name;
-                       }
-                    }
-                      
-                    }
-                    
-
-                  return locality_value;
+                    .replace(/[._:-\s\/]/g, "_")}`; 
+                    return result;
+                  
 
                 }
                 else if(boundary_type === "Block")
                 {
-                  /* let result = `${tenantID
+                   let result = `${tenantID
                     .toUpperCase()
                     .replace(
                       /[.]/g,
                       "_"
                     )}_REVENUE_BLOCK_${value
                     .toUpperCase()
-                    .replace(/[._:-\s\/]/g, "_")}`; */
+                    .replace(/[._:-\s\/]/g, "_")}`; 
 
-                   let tenantBoundary = get(
-                      state.screenConfiguration.preparedFinalObject,
-                      `createScreenMdmsData.egov-location.TenantBoundary`,
-                      []
-                    );
-  
-                    let crawlingData = get(
-                      tenantBoundary[0],
-                      "boundary.children",
-                      []
-                    );
-                    let list = get(
-                      crawlingData[0],
-                      "children",
-                      []
-                    );
-                    const result = list.filter(list => list.code === value);                    
-    
-                    return result[0].name;
+                   
+                    return result;
                 }          
 
               } 
