@@ -115,9 +115,9 @@ class DynamicMdmsContainer extends Component {
     let masterNameCaps = masterName.toUpperCase();
     let gridSm = ( 12 / dropdownFields.length ) <= 4 ? 4 : 6;
     dropdownFields && dropdownFields.forEach((entry, i) => {  
-      let { key, fieldType, isDisabled } = entry;
+      let { key, fieldType, isDisabled, className } = entry;
       
-      allObj[key] = fieldType == "autosuggest" ? 
+      allObj[key] = (fieldType == "autosuggest") ? 
       {
           uiFramework: "custom-containers",
           componentPath: "AutosuggestContainer",
@@ -133,6 +133,7 @@ class DynamicMdmsContainer extends Component {
               width: "100%",
               cursor: "pointer"
             },
+            className: className,
             label: {
               labelKey: moduleNameCaps + '_' + key.toUpperCase() + '_LABEL'
             },

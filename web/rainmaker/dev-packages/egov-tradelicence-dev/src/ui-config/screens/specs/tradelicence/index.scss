@@ -7,3 +7,9 @@
     }
       
   }
+
+.autocomplete-dropdown {
+      position: absolute !important;
+      z-index: 1900;
+      min-width: 80%;
+  }

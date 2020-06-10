@@ -15,6 +15,7 @@ import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
 import { pageResetAndChange } from "../utils";
+import "./index.css"
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
