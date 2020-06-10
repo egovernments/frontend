@@ -66,7 +66,7 @@ const RenderScreen = ({
         if (beforeFieldChange && typeof beforeFieldChange === "function") {
           extraProps = {
             ...extraProps,
-            hasDependant: true
+            hasdependant: 'true'
           };
         }
         if (!isEmpty(components[componentKey].children)) {

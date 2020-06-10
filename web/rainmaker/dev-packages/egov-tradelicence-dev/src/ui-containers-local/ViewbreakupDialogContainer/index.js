@@ -33,34 +33,36 @@ const getMultiItem = (billingslabData, classes, style) => {
     if (item.type === "trade") labelCategory = "TRADETYPE";
     else if ((item.type = "accessories")) labelCategory = "ACCESSORIESCATEGORY";
     return (
-      <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={10}>
-          <LabelContainer
-            labelKey={`TRADELICENSE_${labelCategory}_${item.category
-              .toUpperCase()
-              .replace(/[.:-\s\/]/g, "_")}`}
-            style={{
-              color: "rgba(0, 0, 0, 0.6000000238418579)",
-              fontSize: "14px",
-              fontWeigt: 400,
-              lineSpacing: "17px"
-            }}
-          />
-        </Grid>
-        <Grid sm={2}>
-          <Label
-            label={
-              labelCategory === "TRADETYPE"
-                ? `Rs ${item.rate}`
-                : `Rs ${item.total}`
-            }
-            style={{
-              color: "rgba(0, 0, 0, 0.8700000047683716)",
-              fontSize: "14px",
-              fontWeigt: 400,
-              lineSpacing: "17px"
-            }}
-          />
+      <Grid container>
+        <Grid key={index} item sm={12}>
+          <Grid sm={10}>
+            <LabelContainer
+              labelKey={`TRADELICENSE_${labelCategory}_${item.category
+                .toUpperCase()
+                .replace(/[.:-\s\/]/g, "_")}`}
+              style={{
+                color: "rgba(0, 0, 0, 0.6000000238418579)",
+                fontSize: "14px",
+                fontWeigt: 400,
+                lineSpacing: "17px"
+              }}
+            />
+          </Grid>
+          <Grid sm={2}>
+            <Label
+              label={
+                labelCategory === "TRADETYPE"
+                  ? `Rs ${item.rate}`
+                  : `Rs ${item.total}`
+              }
+              style={{
+                color: "rgba(0, 0, 0, 0.8700000047683716)",
+                fontSize: "14px",
+                fontWeigt: 400,
+                lineSpacing: "17px"
+              }}
+            />
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -80,66 +82,70 @@ class ViewBreakupContainer extends React.Component {
 
   getGridItem = (total, classes, style) => {
     return (
-      <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={10}>
-          <LabelContainer
-            labelName={"Total"}
-            labelKey={"PT_FORM4_TOTAL"}
-            style={
-              style
-                ? style
-                : {
-                    color: "rgba(0, 0, 0, 0.8700000047683716)",
-                    fontSize: "14px",
-                    fontWeigt: 400,
-                    lineSpacing: "17px"
-                  }
-            }
-          />
-        </Grid>
-        <Grid sm={2}>
-          <LabelContainer
-            labelName={`Rs ${total}`}
-            style={
-              style
-                ? style
-                : {
-                    color: "rgba(0, 0, 0, 0.8700000047683716)",
-                    fontSize: "14px",
-                    fontWeigt: 400,
-                    lineSpacing: "17px"
-                  }
-            }
-          />
+      <Grid container>
+        <Grid item sm={12}>
+          <Grid sm={10}>
+            <LabelContainer
+              labelName={"Total"}
+              labelKey={"PT_FORM4_TOTAL"}
+              style={
+                style
+                  ? style
+                  : {
+                      color: "rgba(0, 0, 0, 0.8700000047683716)",
+                      fontSize: "14px",
+                      fontWeigt: 400,
+                      lineSpacing: "17px"
+                    }
+              }
+            />
+          </Grid>
+          <Grid sm={2}>
+            <LabelContainer
+              labelName={`Rs ${total}`}
+              style={
+                style
+                  ? style
+                  : {
+                      color: "rgba(0, 0, 0, 0.8700000047683716)",
+                      fontSize: "14px",
+                      fontWeigt: 400,
+                      lineSpacing: "17px"
+                    }
+              }
+            />
+          </Grid>
         </Grid>
       </Grid>
     );
   };
   getRebatePenalty = (label,total, classes, style) => {
     return (
-      <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={10}>
-          <LabelContainer
-            labelName={label}
-            labelKey={label}
-            style={{
-              color: "rgba(0, 0, 0, 0.8700000047683716)",
-              fontSize: "14px",
-              fontWeigt: 400,
-              lineSpacing: "17px"
-            }}
-          />
-        </Grid>
-        <Grid sm={2}>
-          <LabelContainer
-            labelName={`Rs ${total}`}
-            style={{
-              color: "rgba(0, 0, 0, 0.8700000047683716)",
-              fontSize: "14px",
-              fontWeigt: 400,
-              lineSpacing: "17px"
-            }}
-          />
+      <Grid container>
+        <Grid item sm={12}>
+          <Grid sm={10}>
+            <LabelContainer
+              labelName={label}
+              labelKey={label}
+              style={{
+                color: "rgba(0, 0, 0, 0.8700000047683716)",
+                fontSize: "14px",
+                fontWeigt: 400,
+                lineSpacing: "17px"
+              }}
+            />
+          </Grid>
+          <Grid sm={2}>
+            <LabelContainer
+              labelName={`Rs ${total}`}
+              style={{
+                color: "rgba(0, 0, 0, 0.8700000047683716)",
+                fontSize: "14px",
+                fontWeigt: 400,
+                lineSpacing: "17px"
+              }}
+            />
+          </Grid>
         </Grid>
       </Grid>
     );

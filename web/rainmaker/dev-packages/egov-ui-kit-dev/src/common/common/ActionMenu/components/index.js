@@ -114,7 +114,7 @@ class ActionMenuComp extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.activeRoutePath !== "null" && nextProps.activeRoutePath != this.props.activeRoutePath) {
+    if (nextProps && nextProps.activeroutepath !== "null" && nextProps.activeroutepath != this.props.activeroutepath) {
       this.fetchLocales();
       this.initialMenuUpdate();
       this.setState({
@@ -254,7 +254,7 @@ class ActionMenuComp extends Component {
   }
 
   render() {
-    let { role, actionListArr, activeRoutePath, updateActiveRoute, toggleDrawer, menuDrawerOpen } = this.props;
+    let { role, actionListArr, activeroutepath, updateActiveRoute, toggleDrawer, menuDrawerOpen } = this.props;
     let { searchText, path, menuItems } = this.state;
     let { changeLevel, menuChange, fetchLocales } = this;
     let actionList = actionListArr;
@@ -270,7 +270,7 @@ class ActionMenuComp extends Component {
           }
           if (!item.url) {
             return (
-              <div className="sideMenuItem">
+              <div className="sideMenuItem" key={index}>
                 {/* <Tooltip
                   id={"menu-toggle-tooltip"}
                   title={<Label defaultLabel={menuDrawerOpen ? "" : item.name} label={menuDrawerOpen ? "" : `ACTION_TEST_${item.name}`} />}

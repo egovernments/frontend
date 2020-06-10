@@ -216,7 +216,7 @@ const tradeUnitCard = {
             required: true,
             props: {
               disabled: true,
-              setDataInField: true,
+              setdatainfield: 'true',
               jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue"
             },
             pattern: getPattern("UOMValue"),
@@ -474,7 +474,7 @@ const accessoriesCard = {
             pattern: getPattern("NoOfEmp"),
             props: {
               className:"applicant-details-error",
-              setDataInField: true,
+              setdatainfield: 'true',
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count",
               disabled: true
             },
@@ -801,7 +801,7 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
       preparedFinalObject,
       multiItemContent[variable].props.jsonPath
     );
-    if (multiItemContent[variable].props.setDataInField && value) {
+    if (multiItemContent[variable].props.setdatainfield && value) {
       if (
         multiItemContent[variable].props.jsonPath.split(".")[0] ===
           "LicensesTemp" &&
@@ -849,7 +849,7 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
       }
     }
     if (
-      multiItemContent[variable].props.setDataInField &&
+      multiItemContent[variable].props.setdatainfield &&
       multiItemContent[variable].props.disabled
     ) {
       if (

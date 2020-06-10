@@ -6,7 +6,7 @@ const MihyIcon = props => {
   const { iconName, color, iconSize, size = "24px", ...rest } = props;
   return (
     <Icon color={color} style={{ fontSize: size }} {...rest}>
-      <i class="material-icons" style={{ fontSize: iconSize }}>
+      <i className="material-icons" style={{ fontSize: iconSize }}>
         {iconName}
       </i>
     </Icon>

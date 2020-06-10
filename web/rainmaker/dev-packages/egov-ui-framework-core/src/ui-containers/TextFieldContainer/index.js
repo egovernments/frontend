@@ -13,8 +13,8 @@ import {
 
 class TextFieldContainer extends React.Component {
   componentDidMount() {
-    const { hasDependant, onChange, value } = this.props;
-    if (hasDependant && value) {
+    const { hasdependant, onChange, value } = this.props;
+    if (hasdependant && value) {
       onChange({ target: { value } });
     }
   }

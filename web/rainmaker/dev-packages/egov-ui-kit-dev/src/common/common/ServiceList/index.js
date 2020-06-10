@@ -75,11 +75,11 @@ class ServiceList extends React.Component {
     return (
       <Grid container>
         <Hidden smUp>
-          {actionList.map((service) => {
+          {actionList.map((service, index) => {
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
 
             return (
-              <Grid className={(actionList.length===6 ||actionList.length===5 || actionList.length===9 )? classes.mobileRoot1:classes.mobileRoot } item align="center">
+              <Grid key={index} className={(actionList.length===6 ||actionList.length===5 || actionList.length===9 )? classes.mobileRoot1:classes.mobileRoot } item align="center">
                 <Card
                   className={classes.paper}
                   onClick={(e) => {

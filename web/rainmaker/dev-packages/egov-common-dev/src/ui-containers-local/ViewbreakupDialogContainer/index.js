@@ -30,28 +30,30 @@ const closeIcon = "close";
 const getMultiItem = (billingslabData, classes, style) => {
   return billingslabData.map((item, index) => {
     return (
-      <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={10}>
-          <LabelContainer
-            labelKey={`TL_${item.category}`}
-            style={{
-              color: "rgba(0, 0, 0, 0.6000000238418579)",
-              fontSize: "14px",
-              fontWeigt: 400,
-              lineSpacing: "17px"
-            }}
-          />
-        </Grid>
-        <Grid sm={2}>
-          <Label
-            label={`Rs ${item.rate}`}
-            style={{
-              color: "rgba(0, 0, 0, 0.8700000047683716)",
-              fontSize: "14px",
-              fontWeigt: 400,
-              lineSpacing: "17px"
-            }}
-          />
+      <Grid container>
+        <Grid key={index} item sm={12}>
+          <Grid sm={10}>
+            <LabelContainer
+              labelKey={`TL_${item.category}`}
+              style={{
+                color: "rgba(0, 0, 0, 0.6000000238418579)",
+                fontSize: "14px",
+                fontWeigt: 400,
+                lineSpacing: "17px"
+              }}
+            />
+          </Grid>
+          <Grid sm={2}>
+            <Label
+              label={`Rs ${item.rate}`}
+              style={{
+                color: "rgba(0, 0, 0, 0.8700000047683716)",
+                fontSize: "14px",
+                fontWeigt: 400,
+                lineSpacing: "17px"
+              }}
+            />
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -71,37 +73,39 @@ class ViewBreakupContainer extends React.Component {
 
   getGridItem = (total, classes, style) => {
     return (
-      <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={10}>
-          <LabelContainer
-            labelName={"Total"}
-            labelKey={"PT_FORM4_TOTAL"}
-            style={
-              style
-                ? style
-                : {
-                    color: "rgba(0, 0, 0, 0.8700000047683716)",
-                    fontSize: "14px",
-                    fontWeigt: 400,
-                    lineSpacing: "17px"
-                  }
-            }
-          />
-        </Grid>
-        <Grid sm={2}>
-          <Label
-            label={`Rs ${total}`}
-            style={
-              style
-                ? style
-                : {
-                    color: "rgba(0, 0, 0, 0.8700000047683716)",
-                    fontSize: "14px",
-                    fontWeigt: 400,
-                    lineSpacing: "17px"
-                  }
-            }
-          />
+      <Grid container>
+        <Grid item sm={12}>
+          <Grid sm={10}>
+            <LabelContainer
+              labelName={"Total"}
+              labelKey={"PT_FORM4_TOTAL"}
+              style={
+                style
+                  ? style
+                  : {
+                      color: "rgba(0, 0, 0, 0.8700000047683716)",
+                      fontSize: "14px",
+                      fontWeigt: 400,
+                      lineSpacing: "17px"
+                    }
+              }
+            />
+          </Grid>
+          <Grid sm={2}>
+            <Label
+              label={`Rs ${total}`}
+              style={
+                style
+                  ? style
+                  : {
+                      color: "rgba(0, 0, 0, 0.8700000047683716)",
+                      fontSize: "14px",
+                      fontWeigt: 400,
+                      lineSpacing: "17px"
+                    }
+              }
+            />
+          </Grid>
         </Grid>
       </Grid>
     );

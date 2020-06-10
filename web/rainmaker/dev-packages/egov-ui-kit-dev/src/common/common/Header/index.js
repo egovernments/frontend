@@ -155,7 +155,7 @@ class Header extends Component {
       searchButton,
       helpButton,
       notificationButton,
-      activeRoutePath,
+      activeroutepath,
       hasLocalisation,
       notificationsCount,
       isUserSetting = true,
@@ -187,7 +187,7 @@ class Header extends Component {
           sortDialogOpen={onSortClick}
           history={this.props.history}
           handleItemClick={_handleItemClick}
-          activeRoutePath={activeRoutePath}
+          activeroutepath={activeroutepath}
           hasLocalisation={hasLocalisation}
           notificationsCount={notificationsCount}
           isUserSetting={isUserSetting}

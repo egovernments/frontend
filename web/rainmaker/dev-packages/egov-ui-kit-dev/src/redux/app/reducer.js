@@ -24,7 +24,7 @@ const initialState = {
     error: true,
   },
   localizationLabels,
-  activeRoutePath: "",
+  activeroutepath: "",
   notificationObj: {
     notificationCount: 0,
     loading: false,
@@ -85,7 +85,7 @@ const appReducer = (state = initialState, action) => {
       return { ...state, uiCommonConstants: action.payload };
     }
     case actionTypes.UPDATE_ACTIVE_ROUTE_PATH: {
-      return { ...state, activeRoutePath: action.routePath };
+      return { ...state, activeroutepath: action.routePath };
     }
     case actionTypes.SET_PREVIOUS_ROUTE: {
       return { ...state, previousRoute: action.route };

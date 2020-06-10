@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import { RadioButton } from "components";
 import { getComplaintDisplayOrder } from "egov-ui-kit/redux/complaints/actions";
-
+import { getLocaleLabelFromTitle } from "egov-ui-kit/utils/commons";
 const styles = {
   logoutContentStyle: { textAlign: "center", padding: "24px 20px" },
 
@@ -69,19 +69,11 @@ class SortDialog extends Component {
   render() {
     const { closeSortDialog, sortPopOpen, getComplaintDisplayOrder } = this.props;
     const { handleChange, onConfirmClick } = this;
-
+    const DialogTitle = getLocaleLabelFromTitle('ES_DIALOG_SORT_BY');
     return (
       <Dialog
         open={sortPopOpen}
-        title={
-          <Label
-            label="ES_DIALOG_SORT_BY"
-            bold={true}
-            color="rgba(0, 0, 0, 0.8700000047683716)"
-            fontSize="20px"
-            labelStyle={{ padding: "16px 0px 0px 24px" }}
-          />
-        }
+        title={DialogTitle}
         children={[
           <div style={{ paddingTop: "22px", paddingLeft: "8px" }}>
             <RadioButton

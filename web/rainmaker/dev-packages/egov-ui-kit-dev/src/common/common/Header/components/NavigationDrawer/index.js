@@ -86,9 +86,9 @@ const NavigationDrawer = ({
         {window && window.outerWidth <= 768 && isUserSetting && <ActionMenu role={role} />}
         {/* <Divider light /> */}
         <LanguageSelection fetchLocalizationLabel={fetchLocalizationLabel} />
-        {isUserSetting && CommonMenuItems.map((item) => {
+        {isUserSetting && CommonMenuItems.map((item, i) => {
           return (
-            <div className="sideMenuItem">
+            <div className="sideMenuItem" key={i}>
               <MenuItem
                 innerDivStyle={styles.defaultMenuItemStyle}
                 style={{ whiteSpace: "initial" }}

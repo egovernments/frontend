@@ -33,14 +33,14 @@ class ActionMenu extends Component {
   };
 
   render() {
-    let { actionListArr, activeRoutePath, updateActiveRoute, toggleDrawer, menuDrawerOpen } = this.props;
+    let { actionListArr, activeroutepath, updateActiveRoute, toggleDrawer, menuDrawerOpen } = this.props;
     let transformedRole = "";
     // actionListArr.push({url:"https://www.google.com",navigationURL:"newTab",path:"test.new tab"});
     return actionListArr && actionListArr.length > 0 ? (
       <ActionMenuComp
         role={transformedRole}
         actionListArr={actionListArr}
-        activeRoutePath={activeRoutePath}
+        activeroutepath={activeroutepath}
         toggleDrawer={toggleDrawer}
         menuDrawerOpen={menuDrawerOpen}
         updateActiveRoute={updateActiveRoute}
@@ -51,9 +51,9 @@ class ActionMenu extends Component {
 
 const mapStateToProps = ({ app }) => {
   const actionListArr = app.menu || [];
-  const activeRoutePath = app.activeRoutePath;
+  const activeroutepath = app.activeroutepath;
 
-  return { actionListArr, activeRoutePath };
+  return { actionListArr, activeroutepath };
 };
 
 const mapDispatchToProps = (dispatch) => ({

@@ -142,7 +142,7 @@ class DynamicMdmsContainer extends Component {
             },
             jsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.${key}`,
             sourceJsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed`,
-            setDataInField: true,
+            setdatainfield: 'true',
             labelsFromLocalisation: true,
             localePrefix: {
               moduleName: moduleNameCaps,
@@ -172,7 +172,7 @@ class DynamicMdmsContainer extends Component {
           },
           moduleName : moduleNameCaps ,
           props: {
-            setDataInField: true,
+            setdatainfield: 'true',
             className:"applicant-details-error",
             disabled: isDisabled ? isDisabled : false
           },
