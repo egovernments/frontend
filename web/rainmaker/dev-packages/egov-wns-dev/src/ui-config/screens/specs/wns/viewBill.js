@@ -10,6 +10,7 @@ import { getProperty } from "./viewBillResource/propertyDetails";
 import { getOwner } from "./viewBillResource/ownerDetails";
 import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId")
@@ -21,10 +22,11 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
     bills.billAccountDetails.forEach(async element => {
       let cessKey = element.taxHeadCode
       let body;
+      let tenantId = process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
       if (service === "WATER") {
-        body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+        body = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
       } else {
-        body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+        body = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
       }
       let res = await getDescriptionFromMDMS(body, dispatch)
       if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
@@ -74,6 +76,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
     data = await fetchBill(queryObjectForFetchBill, dispatch);
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
       if (payload.WaterConnection.length > 0 && data.Bill.length > 0) {
+        let propTenantId = payload.WaterConnection[0].property.tenantId.split(".")[0];
         payload.WaterConnection[0].service = service
         await processBills(data, viewBillTooltip, dispatch);
         if (meterReadingsData !== null && meterReadingsData !== undefined && meterReadingsData.meterReadings.length > 0) {
@@ -85,7 +88,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
         }
         if (payload.WaterConnection[0].property.usageCategory !== null && payload.WaterConnection[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.WaterConnection[0].property.usageCategory) + ")]"
-          let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
+          let propertyUsageTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.WaterConnection[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);
         }
@@ -101,11 +104,12 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
     let viewBillTooltip = []
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
       if (payload.SewerageConnections.length > 0 && data.Bill.length > 0) {
+        let propTenantId = payload.SewerageConnections[0].property.tenantId.split(".")[0];
         payload.SewerageConnections[0].service = service;
         await processBills(data, viewBillTooltip, dispatch);
         if (payload.SewerageConnections[0].property.usageCategory !== null && payload.SewerageConnections[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.SewerageConnections[0].property.usageCategory) + ")]"
-          let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
+          let propertyUsageTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.SewerageConnections[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);//propertyUsageType from Mdms
         }

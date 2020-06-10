@@ -7,6 +7,7 @@ import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
@@ -21,7 +22,7 @@ const pageResetAndChange = (state, dispatch) => {
 };
 
 const queryObject = [
-  { key: "tenantId", value: 'pb.amritsar' },
+  { key: "tenantId", value: getTenantId() },
   { key: "businessServices", value: 'NewWS1' }
 ];
 

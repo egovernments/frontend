@@ -26,11 +26,12 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   if (service === "SEWERAGE") {
     let payloadData = await getSearchResultsForSewerage(queryObject, dispatch);
     if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
+      let propTenantId = payloadData.SewerageConnections[0].property.tenantId.split(".")[0];
       payloadData.SewerageConnections[0].service = service
 
       if (payloadData.SewerageConnections[0].property.propertyType !== undefined) {
         const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadData.SewerageConnections[0].property.propertyType) + ")]"
-        let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
+        let propertyTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
         const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
         if (mdmsPropertyType !== undefined && mdmsPropertyType !== null && mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== undefined && mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== null) {
           payloadData.SewerageConnections[0].property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
@@ -48,7 +49,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 
       if (payloadData.SewerageConnections[0].property.usageCategory !== undefined) {
         const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadData.SewerageConnections[0].property.usageCategory) + ")]"
-        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
+        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
         const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
         if (mdmsPropertyUsageType !== undefined && mdmsPropertyUsageType !== null && mdmsPropertyUsageType.MdmsRes.PropertyTax.PropertyType !== undefined && mdmsPropertyUsageType.MdmsRes.PropertyTax.PropertyType[0].name !== null) {
           payloadData.SewerageConnections[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
@@ -62,6 +63,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   } else if (service === "WATER") {
     let payloadData = await getSearchResults(queryObject);
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
+      let propTenantId = payloadData.WaterConnection[0].property.tenantId.split(".")[0];
       payloadData.WaterConnection[0].service = service;
       if (payloadData.WaterConnection[0].connectionExecutionDate !== undefined) {
         payloadData.WaterConnection[0].connectionExecutionDate = convertEpochToDate(payloadData.WaterConnection[0].connectionExecutionDate)
@@ -73,7 +75,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       if (payloadData.WaterConnection[0].pipeSize === 0) { payloadData.WaterConnection[0].pipeSize = "0" }
       if (payloadData.WaterConnection[0].property.propertyType !== undefined) {
         const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadData.WaterConnection[0].property.propertyType) + ")]"
-        let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
+        let propertyTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
         const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
         payloadData.WaterConnection[0].property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== undefined ? mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name : "NA";//propertyType from Mdms
       }
@@ -83,7 +85,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 
       if (payloadData.WaterConnection[0].property.usageCategory !== undefined) {
         const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadData.WaterConnection[0].property.usageCategory) + ")]"
-        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
+        let propertyUsageTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
         const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
         if (mdmsPropertyUsageType !== undefined && mdmsPropertyUsageType !== null && mdmsPropertyUsageType.MdmsRes.PropertyTax.PropertyType !== undefined && mdmsPropertyUsageType.MdmsRes.PropertyTax.PropertyType[0].name !== null) {
           payloadData.WaterConnection[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
