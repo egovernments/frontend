@@ -82,7 +82,7 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
-      if (searchScreenObject.hasOwnProperty(key) && key === "businessCodes") {
+      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
         queryObject.push({ key: key, value: searchScreenObject[key] });
       } else if (
         searchScreenObject.hasOwnProperty(key) &&

@@ -105,7 +105,6 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "TradeLicense",
           masterDetails: [
-            { name: "TradeType", filter: `[?(@.type == "TL")]` },
             { name: "AccessoriesCategory" },
             { name: "ApplicationType" },
             { name: "documentObj" }
@@ -115,7 +114,6 @@ export const getMdmsData = async (action, state, dispatch) => {
           moduleName: "common-masters",
           masterDetails: [
             { name: "OwnerType" },
-            { name: "OwnerShipCategory" },
             { name: "DocumentType" },
             { name: "UOM" },
           ]
@@ -143,23 +141,6 @@ export const getMdmsData = async (action, state, dispatch) => {
       "_search",
       [],
       mdmsBody
-    );
-    set(
-      payload,
-      "MdmsRes.TradeLicense.MdmsTradeType",
-      get(payload, "MdmsRes.TradeLicense.TradeType", [])
-    );
-    payload = commonTransform(payload, "MdmsRes.TradeLicense.TradeType");
-    payload = commonTransform(
-      payload,
-      "MdmsRes.common-masters.OwnerShipCategory"
-    );
-    set(
-      payload,
-      "MdmsRes.common-masters.OwnerShipCategoryTransformed",
-      objectToDropdown(
-        get(payload, "MdmsRes.common-masters.OwnerShipCategory", [])
-      )
     );
     const localities = get(
       state.screenConfiguration,

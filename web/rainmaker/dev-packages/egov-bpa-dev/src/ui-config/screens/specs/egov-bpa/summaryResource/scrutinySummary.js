@@ -195,11 +195,11 @@ export const scrutinySummary = getCommonGrayCard({
                     labelKey: "BPA_OCCUPANCY_TYPE"
                 },
                 {
-                    jsonPath: "BPA.occupancyType",
                     localePrefix: {
                         moduleName: "BPA",
                         masterName: "OCCUPANCYTYPE"
                       },
+                    jsonPath: "scrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
                     callBack: checkValueForNA
                 }
             ),
@@ -363,7 +363,7 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
                         },
                         {
-                            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
+                            jsonPath: "scrutinyDetails.planDetail.virtualBuilding.totalBuitUpArea",
                             callBack: checkValueForNA
                         }
                     ),

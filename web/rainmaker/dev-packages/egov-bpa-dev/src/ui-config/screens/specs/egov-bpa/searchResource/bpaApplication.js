@@ -59,14 +59,14 @@ export const resetFields = (state, dispatch) => {
       getApplicationTypeData
     )
   );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.serviceType",
-      "props.value",
-      ""
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.serviceType",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
 };
 
 export const BPAApplication = getCommonCard({
@@ -159,6 +159,7 @@ export const BPAApplication = getCommonCard({
           labelName: "Select Application Type",
           labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_PLACEHOLDER"
         },
+        required: true,
         localePrefix: {
           moduleName: "WF",
           masterName: "BPA"
@@ -187,6 +188,7 @@ export const BPAApplication = getCommonCard({
           });
           if(filterServiceTypeArray && filterServiceTypeArray.length) return false
         });
+        dispatch(prepareFinalObject("searchScreen.serviceType", get(filterServiceTypeArray[0], "code")));
         dispatch(handleField("search", path, "props.data", filterServiceTypeArray));
       }
     },
@@ -203,8 +205,8 @@ export const BPAApplication = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
+      required: true,
       jsonPath: "searchScreen.serviceType",
-      // sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
       gridDefination: {
         xs: 12,
         sm: 4

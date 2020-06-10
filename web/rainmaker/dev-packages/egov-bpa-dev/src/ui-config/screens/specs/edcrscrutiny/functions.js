@@ -119,7 +119,7 @@ const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
   if(edcrDetail.status == "Aborted") {
     status = "aborted";
   }
-  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
+  // let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
   if(isOCApp) {
     let ocApplyPath = get (
       state.screenConfiguration,
@@ -135,8 +135,23 @@ const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
         )
       );
     }
-    url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
+  } else {
+    let ocApplyPath = get (
+      state.screenConfiguration,
+      "screenConfig.acknowledgement.components.div.children.gotoHomeFooter.children.bpaCreateApp.onClickDefination.path", ""
+    );
+    if(ocApplyPath) {
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.gotoHomeFooter.children.bpaCreateApp",
+          "onClickDefination.path",
+          `/egov-bpa/apply?tenantId=${tenantId}&edcrNumber=${edcrNumber}`
+        )
+      );
+    }
   }
+  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
   dispatch(
     setRoute(
       url
