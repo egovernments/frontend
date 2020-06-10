@@ -555,18 +555,12 @@ class FormWizard extends Component {
 
         const isProperyAddressFormValid = validateForm(form.propertyAddress);
         if (isProperyAddressFormValid) {
-          if(form.propertyAddress.fields.city.value!='pb.zirakpur')
-          {
           callDraft(this);
           this.setState({
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
           });
-          }
-            else
-            {
-                alert("First collect UID from MC Office!");
-            }
+      
         } else {
           displayFormErrorsAction("propertyAddress");
         }
