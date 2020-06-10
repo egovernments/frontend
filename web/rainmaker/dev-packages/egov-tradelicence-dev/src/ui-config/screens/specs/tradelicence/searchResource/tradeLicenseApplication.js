@@ -83,19 +83,9 @@ export const tradeLicenseApplication = getCommonCard({
   }),
   applicationTypeAndToFromDateContainer: getCommonContainer({
     applicationType: {
-      ...getSelectField({
-        label: {
-          labelName: "Application Type",
-          labelKey: "TL_APPLICATION_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Application Type",
-          labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "TradeLicense",
-          masterName: "ApplicationType"
-        },
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "AutosuggestContainer",
         jsonPath:
           "searchScreen.applicationType",
         sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
@@ -104,9 +94,35 @@ export const tradeLicenseApplication = getCommonCard({
           sm: 4
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error autocomplete-dropdown",
+          labelsFromLocalisation: true,
+          suggestions: [],
+          jsonPath:
+          "searchScreen.applicationType",
+          sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+          label: {
+            labelName: "Application Type",
+            labelKey: "TL_APPLICATION_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Application Type",
+            labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "TradeLicense",
+            masterName: "ApplicationType"
+          },
+          style: {
+            width: "100%",
+            cursor: "pointer"
+          },
+          fullwidth: true,
+          required: false,
+          isClearable:true,
+          inputLabelProps: {
+            shrink: true
+          }
         }
-      })
     },
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },

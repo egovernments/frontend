@@ -5,16 +5,26 @@ import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
-pdfMake.vfs = pdfFonts.vfs;
-pdfMake.fonts = {
+
+
+const vfs={ ...pdfFonts.vfs}
+const font= {
     Camby: {
         normal: 'Cambay-Regular.ttf',
         bold: 'Cambay-Regular.ttf',
-        italics: 'Cambay-Regular.ttf',
-        bolditalics: 'Cambay-Regular.ttf'
-    },
+        italics: 'Roboto-Regular.ttf',
+        bolditalics: 'Cambay-Regular.ttf',
 
+    },
+    Roboto:{
+        normal:'Roboto-Regular.ttf',
+        bold: 'Roboto-Regular.ttf',
+        italics: 'Roboto-Regular.ttf',
+        bolditalics: 'Roboto-Regular.ttf',
+    }
 };
+pdfMake.vfs =vfs;
+pdfMake.fonts =font;
 const getLabel = (value, type = 'key') => {
     let label = {}
     switch (type) {
@@ -290,7 +300,8 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                             },
                             {
                                 "text": getLocaleLabels(applicationData.applicationNoValue, applicationData.applicationNoValue),
-                                bold: false
+                                italics: true,
+                                "style":"pdf-application-no-value"
                             }
                         ],
                         "alignment": "left"
@@ -303,7 +314,8 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                             },
                             {
                                 "text": getLocaleLabels(applicationData.additionalHeaderValue, applicationData.additionalHeaderValue),
-                                bold: false
+                                italics: true,
+                                "style":"pdf-application-no-value"
                             }
                         ],
                         "alignment": "right"
@@ -321,6 +333,18 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     -81,
                     10
                 ]
+            },
+            "pdf-application-no-value":{
+                "fontSize": 12,
+                "font":"Roboto",
+                italics: true,
+                "margin": [
+                    -18,
+                    8,
+                    0,
+                    0
+                ],
+                "color": "#484848"
             },
             "pdf-header-text": {
                 "color": "#484848",
@@ -437,8 +461,8 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     })
 
 
-    pdfMake.vfs = pdfFonts.vfs;
-
+    pdfMake.vfs =vfs;
+    pdfMake.fonts =font;
     try {
         if (fileName != 'print') {
             data && pdfMake.createPdf(data).download(fileName);

@@ -1056,8 +1056,8 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
     }
   };
   try {
-    const businessService = await businessServiceInfo(mdmsBody, businessService);
-    dispatch(prepareFinalObject("businessServiceInfo", businessService));
+    const businessServiceItem = await businessServiceInfo(mdmsBody, businessService);
+    dispatch(prepareFinalObject("businessServiceInfo", businessServiceItem));
   } catch (e) {
     console.log(e);
   }

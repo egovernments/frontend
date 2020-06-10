@@ -259,6 +259,14 @@ const screenConfig = {
                 true
               )
             )
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.bpaCreateApp",
+                "visible",
+                false
+              )
+            )
           } else if (purpose == "apply" && status == "success") {
             dispatch(
               handleField(
@@ -266,6 +274,14 @@ const screenConfig = {
                 "components.div.children.gotoHomeFooter.children.bpaCreateApp",
                 "visible",
                 true
+              )
+            )
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.ocCreateApp",
+                "visible",
+                false
               )
             )
           } else {

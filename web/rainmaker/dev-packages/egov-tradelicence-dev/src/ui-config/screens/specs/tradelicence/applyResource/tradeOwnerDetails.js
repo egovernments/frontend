@@ -763,11 +763,15 @@ export const tradeOwnerDetails = getCommonCard({
         dropdownFields: [
           {
             key : 'ownership',
-            callBack: ownerShipChange
+            callBack: ownerShipChange,
+            fieldType : "autosuggest",
+            className:"applicant-details-error autocomplete-dropdown",
           },
           {
             key : 'subOwnership',
-            callBack: subOwnerShipChange
+            callBack: subOwnerShipChange,
+            fieldType : "autosuggest",
+            className:"applicant-details-error autocomplete-dropdown",
           }
         ],
         moduleName: "common-masters",

@@ -166,10 +166,14 @@ const tradeUnitCard = {
             props: {
               dropdownFields: [
                 {
-                  key : 'tradeCategory'
+                  key : 'tradeCategory',
+                  fieldType : "autosuggest",
+                  className:"applicant-details-error autocomplete-dropdown",
                 },
                 {
-                  key : 'tradeType'
+                  key : 'tradeType',
+                  fieldType : "autosuggest",
+                  className:"applicant-details-error autocomplete-dropdown",
                 },
                 {
                   key : 'tradeSubType',
@@ -288,7 +292,11 @@ const accessoriesCard = {
       },
       accessoriesCardContainer: getCommonContainer({
         accessoriesName: {
-          ...getSelectField({
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "AutosuggestContainer",
+          props: {
+            className:"accesories-name-dropdown",
             label: {
               labelName: "Accessories",
               labelKey: "TL_NEW_TRADE_DETAILS_ACC_LABEL"
@@ -301,15 +309,24 @@ const accessoriesCard = {
               moduleName: "TRADELICENSE",
               masterName: "ACCESSORIESCATEGORY"
             },
+            labelsFromLocalisation: true,
+            required: false,
+            inputLabelProps: {
+              shrink: true
+            },
             jsonPath:
-              "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
-            sourceJsonPath:
-              "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
-            gridDefination: {
-              xs: 12,
-              sm: 4
-            }
-          }),
+            "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
+          sourceJsonPath:
+            "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
+          },
+          jsonPath:
+            "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
+          sourceJsonPath:
+            "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          },
           beforeFieldChange: (action, state, dispatch) => {
             try {
               let accessories = get(
@@ -521,26 +538,34 @@ export const tradeDetails = getCommonCard({
   ),
   tradeDetailsConatiner: getCommonContainer({
     financialYear: {
-      ...getSelectField({
-        label: {
-          labelName: "Financial Year",
-          labelKey: "TL_FINANCIAL_YEAR_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Financial Year",
-          labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
-        },
-        required: true,
+      uiFramework: "custom-containers-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "AutosuggestContainer",
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
          props:{
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
+          className: "autocomplete-dropdown",
+          suggestions: [],
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          label: {
+            labelName: "Financial Year",
+            labelKey: "TL_FINANCIAL_YEAR_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Financial Year",
+            labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
+          },
+          required: true,
+          jsonPath: "Licenses[0].financialYear",
+          sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
+          inputLabelProps: {
+            shrink: true
+          }
         },
         gridDefination: {
           xs: 12,
           sm: 6
         }
-      })
     },
     oldLicenseNo: getTextField({
       label: {
@@ -707,11 +732,15 @@ export const tradeDetails = getCommonCard({
         dropdownFields: [
           {
             key : 'structureType',
-            isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false
+            isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            fieldType : "autosuggest",
+            className:"applicant-details-error autocomplete-dropdown",
           },
           {
             key : 'structureSubType',
-            callBack : structureSubTypeChange
+            callBack : structureSubTypeChange,
+            fieldType : "autosuggest",
+            className:"applicant-details-error autocomplete-dropdown",
           }
         ],
         moduleName: "common-masters",
