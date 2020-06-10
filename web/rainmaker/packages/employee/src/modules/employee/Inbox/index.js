@@ -62,7 +62,7 @@ class Inbox extends Component {
         labelName: obj.displayName,
         labelKey: `ACTION_TEST_${obj.displayName.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
         link: () =>{  
-          if (obj.displayName === "Apply TL" ){
+          if (obj.navigationURL === "tradelicence/apply" ){
             this.props.setRequiredDocumentFlag();
           }
           setRoute(obj.navigationURL)}

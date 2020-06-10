@@ -15,7 +15,8 @@ import {
   objectToDropdown,
   getCurrentFinancialYear,
   getnextFinancialYear,
-  getAllDataFromBillingSlab
+  getAllDataFromBillingSlab,
+  pageResetAndChange
 } from "../utils";
 import {
   prepareFinalObject,
@@ -47,11 +48,6 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
-export const pageResetAndChange = (state, dispatch,tenantId) => {
-  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-  dispatch(prepareFinalObject("LicensesTemp", []));
- dispatch(setRoute(`/tradelicence/apply?tenantId=${tenantId}`));
-};
 export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
@@ -307,13 +303,6 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     const tenantId = getTenantId();
-    const moduleDetails = [
-      {
-        moduleName: "TradeLicense",
-        masterDetails: [{ name: "Documents" }]
-      }
-    ];
-    getRequiredDocData(action, dispatch, moduleDetails, true);
     const URL=window.location.href
     const URLsplit=URL.split("/")
     if(URLsplit[URLsplit.length-1]=="apply"){
@@ -357,15 +346,17 @@ const screenConfig = {
         "PERMANENT"
       );
       if(isRequiredDocuments){
-        setTimeout(() => {
-          showHideAdhocPopup(state, dispatch, 'apply');
-        }, 1000)
-        dispatch(
-          prepareFinalObject(
-            "isRequiredDocuments",
-            false
-          )
-        );
+        const moduleDetails = [
+          {
+            moduleName: "TradeLicense",
+            masterDetails: [{ name: "Documents" }]
+          }
+        ];
+        getRequiredDocData(action, dispatch, moduleDetails, true).then(()=>{
+           setTimeout(() => {
+            showHideAdhocPopup(state, dispatch, 'apply');
+          });
+        });
       }
     });
     

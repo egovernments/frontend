@@ -333,7 +333,7 @@ class ActionMenuComp extends Component {
                       id={item.name.toUpperCase().replace(/[\s]/g, "-") + "-" + index}
                       onClick={() => {
                         //  localStorageSet("menuPath", item.path);
-                        if (item.name === "Apply TL"){
+                        if ( item.navigationURL === "tradelicence/apply" ){
                           this.props.setRequiredDocumentFlag()
                         }
                         updateActiveRoute(item.path, item.name);

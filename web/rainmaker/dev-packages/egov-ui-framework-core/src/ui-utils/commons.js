@@ -765,14 +765,9 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
           dispatch(
             handleField("apply", "components.adhocDialog", "props.open", false)
           );
+          dispatch(prepareFinalObject("isRequiredDocuments", false));
         };
-      }else{
-        return (state, dispatch) => {
-          dispatch(prepareFinalObject('documentsUploadRedux', {}))
-          const applyUrl = `/tradelicence/apply?tenantId=${tenant}`
-          dispatch(setRoute(applyUrl))
-        }
-      }
+      }   
   }
 }
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {

@@ -14,18 +14,12 @@ import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils
 import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
+import { pageResetAndChange } from "../utils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
-const tenant= getTenantId();
-const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-  dispatch(prepareFinalObject("LicensesTemp", []));
-  // dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
-};
-
-
+const tenant = getTenantId();
 const getMdmsData = async (dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -83,7 +77,7 @@ const tradeLicenseSearchAndResult = {
         masterDetails: [{ name: 'Documents' }]
       }
     ];
-    getRequiredDocData(action, dispatch, moduleDetails);
+    getRequiredDocData(action, dispatch, moduleDetails, true);
     return action;
   },
   components: {
@@ -146,8 +140,8 @@ const tradeLicenseSearchAndResult = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  pageResetAndChange(state, dispatch);
-                  showHideAdhocPopup(state, dispatch, 'search')
+                  dispatch(prepareFinalObject("isRequiredDocuments", true))
+                  pageResetAndChange(state, dispatch, tenant);
                 }
               },
               roleDefination: {
