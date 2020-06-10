@@ -214,8 +214,8 @@ const screenConfig = {
                             }
                         ],
                         title: {
-                            labelName: "Search Results for BPA Applications",
-                            labelKey: "BPA_SEARCH_RESULTS_FOR_APP"
+                            labelName: "Search Results for eDCR Applications",
+                            labelKey: "BPA_EDCR_SEARCH_RESULTS_FOR_APP"
                         },
                         rows: "",
                         options: {
