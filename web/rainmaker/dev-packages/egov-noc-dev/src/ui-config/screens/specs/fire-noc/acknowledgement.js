@@ -40,7 +40,7 @@ export const header = getCommonContainer({
   }
 });
 
-const downloadprintMenu = (state, dispatch) => {
+const downloadprintMenu = (state, dispatch,purpose) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
@@ -55,10 +55,36 @@ const downloadprintMenu = (state, dispatch) => {
     },
     leftIcon: "assignment"
   };
+  let certificateDownloadObject = {
+    label: { labelName: "Certificate", labelKey: "NOC_CERTIFICATE" },
+    link: () => {
+      generatePdf(state, dispatch, "certificate_download");
+    },
+    leftIcon: "assignment"
+  };
+  let certificatePrintObject = {
+    label: { labelName: "Certificate", labelKey: "NOC_CERTIFICATE" },
+    link: () => {
+      generatePdf(state, dispatch, "certificate_print");
+    },
+    leftIcon: "assignment"
+  };
    let downloadMenu = [];
    let printMenu = [];
-   downloadMenu = [ applicationDownloadObject];
-   printMenu = [applicationPrintObject];
+   switch(purpose){
+     case "apply":
+     downloadMenu = [ applicationDownloadObject];
+     printMenu = [applicationPrintObject];
+     break;
+     case "approve":
+     downloadMenu = [certificateDownloadObject];
+     printMenu = [ certificatePrintObject];
+     break;
+     default:
+     break;
+
+   }
+   
 
 
    return {
@@ -134,7 +160,7 @@ const getAcknowledgementCard = (
     loadPdfGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
-      headerdownloadprint: downloadprintMenu(state, dispatch),
+      headerdownloadprint: downloadprintMenu(state, dispatch,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -204,6 +230,7 @@ const getAcknowledgementCard = (
     loadPdfGenerationData(applicationNumber, tenant);
     return {
       header,
+      headerdownloadprint: downloadprintMenu(state, dispatch,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
