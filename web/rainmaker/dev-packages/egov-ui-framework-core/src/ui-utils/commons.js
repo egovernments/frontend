@@ -692,7 +692,7 @@ export const getStatusKey = (status) => {
   }
 }
 
-export const getRequiredDocData = async (action, dispatch, moduleDetails) => {
+export const getRequiredDocData = async (action, dispatch, moduleDetails, closePopUp) => {
   let tenantId =
     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   let mdmsBody = {
@@ -720,7 +720,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails) => {
     if (moduleName === "PropertyTax") {
       payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
     }
-    const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName));
+    const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName, closePopUp));
     set(
       action,
       "screenConfig.components.adhocDialog.children.popup",
@@ -733,7 +733,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails) => {
   }
 };
 
-const footerCallBackForRequiredDataModal = (moduleName) => {
+const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
   const tenant = getTenantId();
   switch (moduleName) {
     case "FireNoc":
@@ -760,11 +760,14 @@ const footerCallBackForRequiredDataModal = (moduleName) => {
         dispatch(setRoute(applyUrl));
       };
     case 'TradeLicense':
-      return (state, dispatch) => {
-        dispatch(prepareFinalObject('documentsUploadRedux', {}))
-        const applyUrl = `/tradelicence/apply?tenantId=${tenant}`
-        dispatch(setRoute(applyUrl))
-      }
+      if( closePopUp){
+        return (state, dispatch) => {
+          dispatch(
+            handleField("apply", "components.adhocDialog", "props.open", false)
+          );
+          dispatch(prepareFinalObject("isRequiredDocuments", false));
+        };
+      }   
   }
 }
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
