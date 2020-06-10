@@ -52,8 +52,8 @@ const saveData = async (state, dispatch) => {
                 toggleSnackbar(
                     true,
                     {
-                        labelName: "Please fill valid fields to start search",
-                        labelKey: "Future date invaild"
+                        labelName: "Reading date should not be less than from date and not be greater than to date",
+                        labelKey: "ERR_CURRENT_READING_DATE_SHOULD_NOT_BE_LESS_THAN_FROM_DATE_AND_NOT_GREATER_THAN_TO_DATE"
                     },
                     "warning"
                 )
