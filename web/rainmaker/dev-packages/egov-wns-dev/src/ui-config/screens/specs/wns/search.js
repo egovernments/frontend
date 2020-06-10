@@ -32,7 +32,7 @@ const header = getCommonHeader({
 });
 
 const queryObject = [
-  { key: "tenantId", value: 'pb.amritsar' },
+  { key: "tenantId", value: getTenantId() },
   { key: "businessServices", value: 'NewWS1' }
 ];
 
