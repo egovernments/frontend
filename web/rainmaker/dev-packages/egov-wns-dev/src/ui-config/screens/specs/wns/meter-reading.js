@@ -42,31 +42,29 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         consumptionDetails['consumption'] = 0;
         consumptionDetails['lastReadingDate'] = convertEpochToDate(new Date().setMonth(new Date().getMonth() - 1));
     } else {
-        let prevBillingPeriod = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].billingPeriod`);
-        let tempprevBillingPeriod = prevBillingPeriod.trim().split("-")[1].trim()
-        let dateStr = tempprevBillingPeriod.split('/');
+        let prevBillingPeriod = checkBillingPeriod[0].billingPeriod;
+        let lastReadingDate = convertEpochToDate(checkBillingPeriod[0].currentReadingDate)
+        let dateStr = lastReadingDate.split('/');
         let newDF = new Date(dateStr[1] + '-' + dateStr[0] + '-' +dateStr[2]);
-        newDF = newDF.setDate(newDF.getDate() + 1);
-        newDF = new Date(newDF)
+        let todayDate = new Date().valueOf();
         if (billingFrequency === "quarterly") {
-            let quarter = Math.floor((newDF.getMonth() / 3));
-            let firstDate = new Date(newDF.getFullYear(), quarter * 3, 1);
-            let endDate = new Date(firstDate.getFullYear(), firstDate.getMonth() + 3, 0);
-            firstDate = firstDate.getDate() + '/' + (firstDate.getMonth()+1) + '/' + firstDate.getFullYear()
-            endDate = endDate.getDate() + '/' + (endDate.getMonth()+1) + '/' + endDate.getFullYear()
-            consumptionDetails['billingPeriod'] = firstDate + " - " + endDate            
+            let lastDF = newDF.setDate(newDF.getDate() + 90);
+            lastDF = (lastDF <= todayDate)?lastDF:todayDate;
+            lastDF = new Date(lastDF)
+            let endDate = ("0" + lastDF.getDate()).slice(-2) + '/' + ("0" + (lastDF.getMonth() + 1)).slice(-2) + '/' + lastDF.getFullYear()
+            consumptionDetails['billingPeriod'] = lastReadingDate + " - " + endDate            
         }
         if (billingFrequency === "monthly") {
             // Added for billing Period           
-            let lastDate = new Date(newDF.getFullYear(), newDF.getMonth() + 1, 0)
-            let firstDate = newDF.getDate() + '/' + (newDF.getMonth()+1) + '/' + newDF.getFullYear()
-            lastDate = lastDate.getDate() + '/' + (lastDate.getMonth()+1) + '/' + lastDate.getFullYear()
-            console.log(firstDate + ' - ' + lastDate);
-            consumptionDetails['billingPeriod'] = firstDate + ' - ' + lastDate            
+            let lastDF = newDF.setDate(newDF.getDate() + 90);
+            lastDF = (lastDF <= todayDate)?lastDF:todayDate;
+            lastDF = new Date(lastDF)
+            let endDate = ("0" + lastDF.getDate()).slice(-2) + '/' + ("0" + (lastDF.getMonth() + 1)).slice(-2) + '/' + lastDF.getFullYear()
+            consumptionDetails['billingPeriod'] = lastReadingDate + ' - ' + endDate            
         }
-        consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReading`);
+        consumptionDetails['lastReading'] = checkBillingPeriod[0].currentReading
         consumptionDetails['consumption'] = ''
-        consumptionDetails['lastReadingDate'] = convertEpochToDate(get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate`))
+        consumptionDetails['lastReadingDate'] = lastReadingDate
     }
 
     dispatch(

@@ -35,6 +35,37 @@ const saveData = async (state, dispatch) => {
         );
         return;
     }
+
+    data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
+    
+    // Validation for Billing Period
+    if(data.billingPeriod !== undefined){
+        var fromToDateArr = data.billingPeriod.split(' - ')
+        var fromDateArr = fromToDateArr[0].split('/')
+        var fromDateTimestamp = new Date(fromDateArr[1] + '-' + fromDateArr[0] + '-' + fromDateArr[2]).valueOf()
+
+        var toDateArr = fromToDateArr[1].split('/')
+        var toDateTimestamp = new Date(toDateArr[1] + '-' + toDateArr[0] + '-' + toDateArr[2]).valueOf()
+        var curreadingTimestamp = new Date(data.currentReadingDate).valueOf();
+        if(!(curreadingTimestamp > fromDateTimestamp && curreadingTimestamp < toDateTimestamp)){
+            dispatch(
+                toggleSnackbar(
+                    true,
+                    {
+                        labelName: "Please fill valid fields to start search",
+                        labelKey: "Future date invaild"
+                    },
+                    "warning"
+                )
+            );
+            return;
+        }
+        let curreadingDate = new Date(curreadingTimestamp);
+        let endDate = ("0" + curreadingDate.getDate()).slice(-2) + '/' + ("0" + (curreadingDate.getMonth() + 1)).slice(-2) + '/' + curreadingDate.getFullYear()
+        data.billingPeriod = fromToDateArr[0] + " - " + endDate  
+    }
+ 
+
     if (!data.meterStatus) {
         data.meterStatus = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
     }
@@ -43,7 +74,6 @@ const saveData = async (state, dispatch) => {
     }
     data.connectionNo = getQueryArg(window.location.href, "connectionNos")
     data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
-    data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
     let lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")
     // console.log(lastReadingDate, "lastReadingDate")
     if (lastReadingDate !== undefined && lastReadingDate !== null && lastReadingDate !== '') {
