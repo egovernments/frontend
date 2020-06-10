@@ -46,27 +46,23 @@ export const resetFields = (state, dispatch) => {
       ""
     )
   );
-  let getApplicationTypeData = get(
-    state.screenConfiguration.preparedFinalObject, 
-    "applyScreenMdmsData.BPA.ApplicationType[0].code"
-    );
-
+  
   dispatch(
     handleField(
       "search",
       "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.applicationType",
       "props.value",
-      getApplicationTypeData
+      ""
     )
   );
-  // dispatch(
-  //   handleField(
-  //     "search",
-  //     "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.serviceType",
-  //     "props.value",
-  //     ""
-  //   )
-  // );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.serviceType",
+      "props.value",
+      ""
+    )
+  );
 };
 
 export const BPAApplication = getCommonCard({
@@ -188,7 +184,7 @@ export const BPAApplication = getCommonCard({
           });
           if(filterServiceTypeArray && filterServiceTypeArray.length) return false
         });
-        dispatch(prepareFinalObject("searchScreen.serviceType", get(filterServiceTypeArray[0], "code")));
+        // dispatch(prepareFinalObject("searchScreen.serviceType", get(filterServiceTypeArray[0], "code")));
         dispatch(handleField("search", path, "props.data", filterServiceTypeArray));
       }
     },
