@@ -262,20 +262,20 @@ const screenConfig = {
               responsive: "stacked",
               selectableRows: false,
               hover: true,
-              rowsPerPageOptions: [10, 15, 20],
-              pagination: true,
+            //  rowsPerPageOptions: [10, 15, 20],
+             // pagination: true,
               onRowClick: (row, index) => {
                 onRowClick(row);
               },
-              serverSide: true,
-              count: 10000,
-              onTableChange: (action, tableState) => {
-                switch (action) {
-                  case 'changePage':
-                    changePage(tableState);
-                    break;
-                }
-              }
+              serverSide: false,
+              //count: 10000,
+              // onTableChange: (action, tableState) => {
+              //   switch (action) {
+              //     case 'changePage':
+              //       changePage(tableState);
+              //       break;
+              //   }
+              // }
             },
             customSortColumn: {
               column: "Application Date",
@@ -319,11 +319,11 @@ export const changePage = async (tableState) => {
   const queryObj = [
     {
       key: "limit",
-      value: get(tableState, "rowsPerPage") || 10
+      value: -1
     },
     {
       key: "offset",
-      value: get(tableState, "page") * get(tableState, "rowsPerPage") || 0
+      value: 0
     }
   ];
   if ((typeOfService == "BUILDING_PLAN_SCRUTINY") || (typeOfService == "BUILDING_OC_PLAN_SCRUTINY")) {
