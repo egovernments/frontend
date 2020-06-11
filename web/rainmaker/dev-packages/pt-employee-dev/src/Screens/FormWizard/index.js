@@ -301,7 +301,8 @@ class FormWizard extends Component {
       renderCustomTitleForPt,
       showSpinner,
       hideSpinner,
-      fetchGeneralMDMSData, history
+      fetchGeneralMDMSData, history,
+      prepareFinalObject
     } = this.props;
     let { search } = location;
     showSpinner();
@@ -379,6 +380,7 @@ class FormWizard extends Component {
 
     renderCustomTitleForPt({ titleObject });
     hideSpinner();
+    prepareFinalObject('propertiesEdited', false);
   };
 
   handleRemoveOwner = (index, formKey) => {
@@ -480,12 +482,14 @@ class FormWizard extends Component {
       importantDates,
       valueSelected,
       partialAmountError,
-      assessedPropertyDetails
+      assessedPropertyDetails,
+      purpose
     } = this.state;
     const { onRadioButtonChange, updateTotalAmount } = this;
     const { location, propertiesEdited } = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
+    const disableOwner = !formWizardConstants[purpose].canEditOwner;
 
     switch (selected) {
       case 0:
@@ -514,7 +518,7 @@ class FormWizard extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC disabled={propertiesEdited} />
+            <OwnershipTypeHOC disabled={disableOwner} />
             {getOwnerDetails(ownerType)}
           </div>
         );
