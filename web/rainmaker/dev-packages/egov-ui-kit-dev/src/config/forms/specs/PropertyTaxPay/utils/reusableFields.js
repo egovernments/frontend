@@ -14,7 +14,7 @@ import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 let floorDropDownData = [];
 
 for (var i = 1; i <= 25; i++) {
-  floorDropDownData.push({ label: i, value: i });
+  floorDropDownData.push({ label: i.toString(), value: i });
 }
 
 export const plotSize = {
@@ -44,7 +44,7 @@ export const floorCount = {
   floorCount: {
     id: "assessment-number-of-floors",
     jsonPath: "Properties[0].propertyDetails[0].noOfFloors",
-    type: "singleValueList",
+    type: "autoSuggestDropdown",
     floatingLabelText: "PT_FORM2_NUMBER_OF_FLOORS",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     toolTip: true,
@@ -78,7 +78,7 @@ export const subUsageType = {
   subUsageType: {
     id: "assessment-subUsageType",
     jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryDetail",
-    type: "singleValueList",
+    type: "autoSuggestDropdown",
     localePrefix: "PROPERTYTAX_BILLING_SLAB",
     floatingLabelText: "PT_FORM2_SUB_USAGE_TYPE",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
@@ -102,7 +102,7 @@ export const occupancy = {
   occupancy: {
     id: "assessment-occupancy",
     jsonPath: "Properties[0].propertyDetails[0].units[0].occupancyType",
-    type: "singleValueList",
+    type: "autoSuggestDropdown",
     localePrefix: { moduleName: "PropertyTax", masterName: "OccupancyType" },
     floatingLabelText: "PT_FORM2_OCCUPANCY",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
@@ -197,7 +197,7 @@ export const measuringUnit = {
 export const floorName = {
   floorName: {
     id: "floorName",
-    type: "singleValueList",
+    type: "autoSuggestDropdown",
     floatingLabelText: "PT_FORM2_SELECT_FLOOR",
     localePrefix: { moduleName: "PropertyTax", masterName: "Floor" },
     hintText: "PT_FORM2_SELECT_FLOOR",
@@ -512,7 +512,7 @@ export const mohalla = {
   mohalla: {
     id: "mohalla",
     jsonPath: "Properties[0].address.locality.code",
-    type: "singleValueList",
+    type: "autoSuggestDropdown",
     floatingLabelText: "PT_PROPERTY_DETAILS_MOHALLA",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     fullWidth: true,

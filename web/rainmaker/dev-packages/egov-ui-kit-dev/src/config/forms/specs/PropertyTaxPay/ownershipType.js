@@ -11,7 +11,7 @@ const formConfig = {
     typeOfOwnership: {
       id: "typeOfOwnership",
       jsonPath: "Properties[0].propertyDetails[0].subOwnershipCategory",
-      type: "singleValueList",
+      type: "autoSuggestDropdown",
       floatingLabelText: "PT_FORM3_OWNERSHIP_TYPE",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       hintText: "PT_FORM3_OWNERSHIP_TYPE_PLACEHOLDER",
