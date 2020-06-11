@@ -156,7 +156,7 @@ const setDownloadMenu = (action, state, dispatch) => {
   };
 
   let receiptDownloadObject = {
-    label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
+    label: { labelName: "Deviation Penality Receipt", labelKey: "BPA_OC_DEV_PEN_RECEIPT" },
     link: () => {
       downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_SAN_FEE");
     },
@@ -164,7 +164,7 @@ const setDownloadMenu = (action, state, dispatch) => {
   };
 
   let applicationDownloadObject = {
-    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
+    label: { labelName: "Occupancy Certificate", labelKey: "BPA_OC_CERTIFICATE" },
     link: () => {
       permitOrderNoDownload(action, state, dispatch);
     },
