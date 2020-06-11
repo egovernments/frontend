@@ -72,7 +72,7 @@ export const fetchDataForStakeHolder = async (
       response.edcrDetail.forEach(element => {
         searchConvertedArray.push({
             ["EDCR_COMMON_TABLE_APPL_NO"]: element.applicationNumber || "-",
-            ["EDCR_COMMON_TABLE_SCRUTINY_NO"]: element.edcrNumber || "-",
+            ["EDCR_COMMON_TABLE_SCRUTINY_NO"]: (element.edcrNumber === "null" ? "NA" : element.edcrNumber)  || "NA",
             ["EDCR_COMMON_TABLE_CITY_LABEL"]: (element.tenantId).split('.')[1] || "-",
             ["EDCR_COMMON_TABLE_APPL_NAME"]: element.planDetail.planInformation.applicantName || "-",
             ["EDCR_COMMON_TABLE_COL_STATUS"]: element.status || "-",
