@@ -7,7 +7,8 @@ import {
 
 import {
   prepareDocumentsUploadData,
-  getAppSearchResults
+  getAppSearchResults,
+  createUpdateOCBpaApplication
 } from "../../../../ui-utils/commons";
 
 import {
@@ -167,7 +168,7 @@ const getMdmsData = async (action, state, dispatch) => {
 
 };
 
-const procedToNextStep = (state, dispatch) => {
+const procedToNextStep = async (state, dispatch) => {
   let toggle = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.cityPickerDialog.props.open",
@@ -176,7 +177,11 @@ const procedToNextStep = (state, dispatch) => {
   dispatch(
     handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
   );
-  changeStep(state, dispatch, "", 1);
+  var isFormValid = await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
+  if(isFormValid) {
+    prepareDocumentsUploadData(state, dispatch);
+    changeStep(state, dispatch, "", 1);
+  }
 }
 
 const setSearchResponse = async (
