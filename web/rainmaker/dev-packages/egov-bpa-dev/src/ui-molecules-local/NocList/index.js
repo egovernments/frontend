@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
 import Typography from "@material-ui/core/Typography";
 import UploadCard from "../UploadCard"
+import {getLoggedinUserRole} from "../../ui-config/screens/specs/utils/index.js";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -216,6 +217,8 @@ class NocList extends Component {
           doc.fileStore = docs.fileStoreId;
           doc.fileName = docs.fileName;
           doc.fileUrl = docs.fileUrl;
+          doc.isClickable = true;
+          doc.additionalDetails = docs.additionalDetails;
           if (doc.id) {
             doc.id = docs.id;
           }
@@ -240,7 +243,7 @@ class NocList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex, nocDocumentsUploadRedux } = this.state;
-    const { prepareFinalObject, bpaDetails } = this.props;
+    const { prepareFinalObject, bpaDetails, wfState } = this.props;
     const fileUrl = getFileUrlFromAPI(fileStoreId).then(fileUrl);
     let nocDocuments = {};
     if (nocDocumentsUploadRedux[uploadedDocIndex] && nocDocumentsUploadRedux[uploadedDocIndex].documents) {
@@ -248,7 +251,11 @@ class NocList extends Component {
         fileName: file.name,
         fileStoreId,
         fileUrl: Object.values(fileUrl)[0],
-        isClickable:true
+        isClickable:true,
+        additionalDetails:{
+          uploadedBy: getLoggedinUserRole(wfState),
+          uploadedTime: new Date().getTime()
+        }
       });
       nocDocuments = {
         ...nocDocumentsUploadRedux
@@ -263,7 +270,11 @@ class NocList extends Component {
               fileName: file.name,
               fileStoreId,
               fileUrl: Object.values(fileUrl)[0],
-              isClickable: true
+              isClickable: true,
+              additionalDetails:{
+                uploadedBy: getLoggedinUserRole(wfState),
+                uploadedTime: new Date().getTime()
+              }
             }
           ]
         }
@@ -398,8 +409,12 @@ const mapStateToProps = state => {
     screenConfiguration.preparedFinalObject,
     "BPA",
     {}
-  )
-  return { moduleName, bpaDetails };
+  );
+  const wfState = get(
+    screenConfiguration.preparedFinalObject.applicationProcessInstances,
+    "state"
+  );
+  return { moduleName, bpaDetails, wfState };
 };
 
 const mapDispatchToProps = dispatch => {
