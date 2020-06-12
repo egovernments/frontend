@@ -280,7 +280,7 @@ const setDownloadMenu = (action, state, dispatch) => {
 
   if (riskType === "LOW") {
     switch (status) {
-      case "REVOCATED":
+      case "PERMIT REVOCATION":
         downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
         break;
       case "APPROVED":
