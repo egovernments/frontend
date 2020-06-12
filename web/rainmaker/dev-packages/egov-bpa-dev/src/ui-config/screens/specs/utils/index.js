@@ -3462,10 +3462,10 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_REJECTED", 
         localisationLabels
       );
-    case "REVOCATED":
+    case "PERMIT REVOCATION":
       return getLocaleLabels(
-        "Revocated", 
-        "WF_BPA_REVOCATED", 
+        "PERMIT REVOCATION", 
+        "WF_BPA_PERMIT REVOCATION", 
         localisationLabels
       );
     case "CANCELLED":
