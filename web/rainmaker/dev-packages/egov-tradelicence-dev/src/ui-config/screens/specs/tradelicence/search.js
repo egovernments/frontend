@@ -149,7 +149,7 @@ const tradeLicenseSearchAndResult = {
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                path : "tradelicence/apply"
+                path : "tradelicence/search?action=apply"
 
               }
             }
