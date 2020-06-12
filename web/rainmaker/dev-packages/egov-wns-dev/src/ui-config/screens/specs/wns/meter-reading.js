@@ -35,8 +35,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         consumptionDetails['consumption'] = ''
         consumptionDetails['lastReadingDate'] = lastReadingDate
     }catch (e) { 
-        console.log(e); 
-        //TODO - Show error saying "Failed to parse meter reading data."
+        console.log(e);         
         dispatch(
             toggleSnackbar(
                 true,
