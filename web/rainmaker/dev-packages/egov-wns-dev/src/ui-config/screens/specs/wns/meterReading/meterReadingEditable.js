@@ -40,14 +40,13 @@ const saveData = async (state, dispatch) => {
     
     // Validation for Billing Period
     if(data.billingPeriod !== undefined){
-        var fromToDateArr = data.billingPeriod.split(' - ')
-        var fromDateArr = fromToDateArr[0].split('/')
-        var fromDateTimestamp = new Date(fromDateArr[1] + '-' + fromDateArr[0] + '-' + fromDateArr[2]).valueOf()
-
-        var toDateArr = fromToDateArr[1].split('/')
-        var toDateTimestamp = new Date(toDateArr[1] + '-' + toDateArr[0] + '-' + toDateArr[2]).valueOf()
-        var curreadingTimestamp = new Date(data.currentReadingDate).valueOf();
-        if(!(curreadingTimestamp > fromDateTimestamp && curreadingTimestamp < toDateTimestamp)){
+        var selectedDate = new Date(new Date(data.currentReadingDate).toDateString());
+        let fromDate = new Date(data.billingPeriod.split(' - ')[0].replace(/(\d{2})\/(\d{2})\/(\d{4})/,"$2/$1/$3"));
+        let toDate = new Date(new Date().toDateString());
+        console.log("*****************************");
+        console.log( "CurrentReadingDate -> " + selectedDate+ ", FromDate -> " + fromDate + ", ToDate-> " + toDate);
+        if(!(selectedDate > fromDate && selectedDate <= toDate))
+        {
             dispatch(
                 toggleSnackbar(
                     true,
@@ -60,17 +59,12 @@ const saveData = async (state, dispatch) => {
             );
             return;
         }
-        let curreadingDate = new Date(curreadingTimestamp);
-        let endDate = ("0" + curreadingDate.getDate()).slice(-2) + '/' + ("0" + (curreadingDate.getMonth() + 1)).slice(-2) + '/' + curreadingDate.getFullYear()
-        data.billingPeriod = fromToDateArr[0] + " - " + endDate  
+        let endDate = ("0" + selectedDate.getDate()).slice(-2) + '/' + ("0" + (selectedDate.getMonth() + 1)).slice(-2) + '/' + selectedDate.getFullYear()
+        data.billingPeriod = data.billingPeriod.split(' - ')[0] + " - " + endDate  
     }
- 
 
     if (!data.meterStatus) {
         data.meterStatus = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
-    }
-    if (!data.currentReadingDate) {
-        data.currentReadingDate = new Date().getTime()
     }
     data.connectionNo = getQueryArg(window.location.href, "connectionNos")
     data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");

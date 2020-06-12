@@ -9,6 +9,7 @@ import { getMdmsDataForMeterStatus } from "../../../../ui-utils/commons"
 import { getMdmsDataForAutopopulated } from "../../../../ui-utils/commons"
 import get from "lodash/get";
 import { convertEpochToDate } from "../utils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const addMeterReading = async (state, dispatch) => {
     dispatch(toggleSpinner());
@@ -25,46 +26,28 @@ const setAutopopulatedvalues = async (state, dispatch) => {
     let date = new Date();
     let status = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
     let checkBillingPeriod = await get(state, "screenConfiguration.preparedFinalObject.consumptionDetails");
-    if (checkBillingPeriod === undefined || checkBillingPeriod === []) {
-        let presYear = date.getFullYear();
-        if (billingFrequency === "quarterly") {
-            presYear = date.getFullYear();
-            let prevYear = date.getFullYear() - 1;
-            consumptionDetails['billingPeriod'] = 'Q1-' + prevYear + '-' + presYear.toString().substring(2);
-        }
-        if (billingFrequency === "monthly") {
-            date.setMonth(new Date().getMonth())
-            const month = date.toLocaleString('default', { month: 'short' });
-            let prevBillingPeriod = month + ' - ' + presYear
-            consumptionDetails['billingPeriod'] = prevBillingPeriod
-        }
-        consumptionDetails['lastReading'] = 0;
-        consumptionDetails['consumption'] = 0;
-        consumptionDetails['lastReadingDate'] = convertEpochToDate(new Date().setMonth(new Date().getMonth() - 1));
-    } else {
-        let prevBillingPeriod = checkBillingPeriod[0].billingPeriod;
-        let lastReadingDate = convertEpochToDate(checkBillingPeriod[0].currentReadingDate)
-        let dateStr = lastReadingDate.split('/');
-        let newDF = new Date(dateStr[1] + '-' + dateStr[0] + '-' +dateStr[2]);
-        let todayDate = new Date().valueOf();
-        if (billingFrequency === "quarterly") {
-            let lastDF = newDF.setDate(newDF.getDate() + 90);
-            lastDF = (lastDF <= todayDate)?lastDF:todayDate;
-            lastDF = new Date(lastDF)
-            let endDate = ("0" + lastDF.getDate()).slice(-2) + '/' + ("0" + (lastDF.getMonth() + 1)).slice(-2) + '/' + lastDF.getFullYear()
-            consumptionDetails['billingPeriod'] = lastReadingDate + " - " + endDate            
-        }
-        if (billingFrequency === "monthly") {
-            // Added for billing Period           
-            let lastDF = newDF.setDate(newDF.getDate() + 90);
-            lastDF = (lastDF <= todayDate)?lastDF:todayDate;
-            lastDF = new Date(lastDF)
-            let endDate = ("0" + lastDF.getDate()).slice(-2) + '/' + ("0" + (lastDF.getMonth() + 1)).slice(-2) + '/' + lastDF.getFullYear()
-            consumptionDetails['billingPeriod'] = lastReadingDate + ' - ' + endDate            
-        }
+    try {
+        let lastReadingDate = convertEpochToDate(checkBillingPeriod[0].currentReadingDate);
+        let lastDF = new Date();
+        let endDate = ("0" + lastDF.getDate()).slice(-2) + '/' + ("0" + (lastDF.getMonth() + 1)).slice(-2) + '/' + lastDF.getFullYear()
+        consumptionDetails['billingPeriod'] = lastReadingDate + " - " + endDate
         consumptionDetails['lastReading'] = checkBillingPeriod[0].currentReading
         consumptionDetails['consumption'] = ''
         consumptionDetails['lastReadingDate'] = lastReadingDate
+    }catch (e) { 
+        console.log(e); 
+        //TODO - Show error saying "Failed to parse meter reading data."
+        dispatch(
+            toggleSnackbar(
+                true,
+                {
+                    labelName: "Failed to parse meter reading data.",
+                    labelKey: "ERR_FAILED_TO_PARSE_METER_READING_DATA"
+                },
+                "warning"
+            )
+        );
+        return;
     }
 
     dispatch(
