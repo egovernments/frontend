@@ -762,10 +762,12 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
     case 'TradeLicense':
       if( closePopUp){
         return (state, dispatch) => {
+          const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
           dispatch(
-            handleField("apply", "components.adhocDialog", "props.open", false)
+            handleField("search", "components.adhocDialog", "props.open", false)
           );
-          dispatch(prepareFinalObject("isRequiredDocuments", false));
+          dispatch(setRoute(applyUrl));
+          // dispatch(prepareFinalObject("isRequiredDocuments", false));
         };
       }   
   }

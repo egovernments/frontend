@@ -141,8 +141,10 @@ const tradeLicenseSearchAndResult = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  dispatch(prepareFinalObject("isRequiredDocuments", true))
-                  pageResetAndChange(state, dispatch, tenant);
+                   
+                  showHideAdhocPopup(state, dispatch, 'search');
+                  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+                  dispatch(prepareFinalObject("LicensesTemp", []));
                 }
               },
               roleDefination: {
@@ -163,7 +165,7 @@ const tradeLicenseSearchAndResult = {
       uiFramework: 'custom-containers',
       componentPath: 'DialogContainer',
       props: {
-        open: false,
+        open: getQueryArg(window.location.href, "action")==='apply'?true:false,
         maxWidth: false,
         screenKey: 'search'
       },

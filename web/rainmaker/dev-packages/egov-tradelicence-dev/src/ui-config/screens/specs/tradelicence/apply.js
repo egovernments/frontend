@@ -301,7 +301,7 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
-    let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
+    // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     const tenantId = getTenantId();
     const URL=window.location.href
     const URLsplit=URL.split("/")
@@ -345,19 +345,19 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       );
-      if(isRequiredDocuments){
-        const moduleDetails = [
-          {
-            moduleName: "TradeLicense",
-            masterDetails: [{ name: "Documents" }]
-          }
-        ];
-        getRequiredDocData(action, dispatch, moduleDetails, true).then(()=>{
-           setTimeout(() => {
-            showHideAdhocPopup(state, dispatch, 'apply');
-          });
-        });
-      }
+      // if(isRequiredDocuments){
+      //   const moduleDetails = [
+      //     {
+      //       moduleName: "TradeLicense",
+      //       masterDetails: [{ name: "Documents" }]
+      //     }
+      //   ];
+      //   getRequiredDocData(action, dispatch, moduleDetails, true).then(()=>{
+      //      setTimeout(() => {
+      //       showHideAdhocPopup(state, dispatch, 'apply');
+      //     });
+      //   });
+      // }
     });
     
     return action;
@@ -401,19 +401,20 @@ const screenConfig = {
         maxWidth: "md",
         screenKey: "apply"
       }
-    },
-    adhocDialog: {
-      uiFramework: 'custom-containers',
-      componentPath: 'DialogContainer',
-      props: {
-        open: false,
-        maxWidth: false,
-        screenKey: 'apply'
-      },
-      children: {
-        popup: {}
-      }
     }
+    // ,
+    // adhocDialog: {
+    //   uiFramework: 'custom-containers',
+    //   componentPath: 'DialogContainer',
+    //   props: {
+    //     open: false,
+    //     maxWidth: false,
+    //     screenKey: 'apply'
+    //   },
+    //   children: {
+    //     popup: {}
+    //   }
+    // }
   }
 };
 
