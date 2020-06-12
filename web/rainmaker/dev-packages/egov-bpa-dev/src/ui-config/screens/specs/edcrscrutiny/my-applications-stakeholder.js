@@ -267,45 +267,4 @@ const onCellClick = (row, index) => {
     }
 };
 
-export const changePage = async (tableState) => {
-    let state = store.getState();
-    let searchResults = get(
-        state.screenConfiguration.preparedFinalObject,
-        "searchResults"
-    );
-    let searchConvertedArray = [];
-    if (searchResults) {
-        if (searchResults && searchResults.length > 0) {
-            searchResults.forEach(element => {
-                searchConvertedArray.push({
-                    ["EDCR_COMMON_TABLE_APPL_NO"]: element.applicationNumber || "-",
-                    ["EDCR_COMMON_TABLE_SCRUTINY_NO"]: element.edcrNumber || "-",
-                    ["EDCR_COMMON_TABLE_CITY_LABEL"]: element.tenantId || "-",
-                    ["EDCR_COMMON_TABLE_APPL_NAME"]: element.planDetail.planInformation.applicantName || "-",
-                    ["EDCR_COMMON_TABLE_COL_STATUS"]: element.status || "-",
-                    ["EDCR_DOWNLOAD_REPORT"]: getLocaleLabels("DOWNLOAD SCRUTINY REPORT", "EDCR_DOWNLOAD_REPORT"),
-                    ["EDCR_DOWNLOAD_BUILDING_PLAN"]: getLocaleLabels("DOWNLOAD BUILDING PLAN(DXF)", "EDCR_DOWNLOAD_BUILDING_PLAN"),
-                    ["EDCR_DOWNLOAD_REPORT1"]: element.planReport,
-                    ["EDCR_DOWNLOAD_BUILDING_PLAN1"]: element.dxfFile,
-                })
-            });
-        }
-    }
-    store.dispatch(
-        handleField(
-            "my-applications-stakeholder",
-            "components.div.children.applicationsCard",
-            "props.data",
-            searchConvertedArray
-        ));
-    store.dispatch(
-        handleField(
-            "my-applications-stakeholder",
-            "components.div.children.applicationsCard",
-            "props.rows",
-            searchConvertedArray.length
-        )
-    );
-};
-
 export default screenConfig;

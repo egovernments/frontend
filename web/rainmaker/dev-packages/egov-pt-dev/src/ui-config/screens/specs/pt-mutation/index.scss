@@ -2,18 +2,10 @@
     background-color: transparent !important;
   box-shadow: none !important;
   margin-top: 0px !important; 
-      div{
-          div{
-            background-color: transparent;
-          }
-      }
 }
-
-// #material-ui-propertySearchTabs{
-//     div{
-//     padding:0px !important;
-//     }
-//   }
+div[class^="NavPills-root"] {
+  background-color: transparent;
+}
 
 #material-ui-popup{
     height: 100%;
@@ -135,3 +127,7 @@
        }
     }
   }
+  .autocomplete-dropdown {
+    min-width: 80%;
+    position: absolute;
+    z-index: 1900; }

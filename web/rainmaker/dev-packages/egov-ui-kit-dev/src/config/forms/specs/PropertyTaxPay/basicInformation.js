@@ -14,7 +14,7 @@ const formConfig = {
     typeOfUsage: {
       id: "typeOfUsage",
       jsonPath: "Properties[0].propertyDetails[0].usageCategoryMinor",
-      type: "singleValueList",
+      type: "autoSuggestDropdown",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       floatingLabelText: "PT_COMMONS_PROPERTY_USAGE_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
@@ -36,7 +36,7 @@ const formConfig = {
     typeOfBuilding: {
       id: "typeOfBuilding",
       jsonPath: "Properties[0].propertyDetails[0].propertySubType",
-      type: "singleValueList",
+      type: "autoSuggestDropdown",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       floatingLabelText: "PT_COMMONS_PROPERTY_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",

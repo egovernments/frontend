@@ -232,7 +232,7 @@ const buildingInfoCard = getCommonCard({
           className: "tl-trade-type"
         },
         pattern: getPattern("Name"),
-        jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea"
+        jsonPath: "scrutinyDetails.planDetail.virtualBuilding.totalBuitUpArea"
       }),
       buildingHeight: getTextField({
         label: {

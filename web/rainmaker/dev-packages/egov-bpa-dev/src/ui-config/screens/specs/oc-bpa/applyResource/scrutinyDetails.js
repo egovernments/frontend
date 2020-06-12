@@ -495,7 +495,7 @@ export const proposedBuildingDetails = getCommonCard({
           }),
           items: [],
           isReviewPage: true,
-          prefixSourceJsonPath: "children.applicantContainer.children",
+          prefixSourceJsonPath: "children.buildingDetailsContainer.children",
           sourceJsonPath: "edcr.blockDetail",
         },
         type: "array"
