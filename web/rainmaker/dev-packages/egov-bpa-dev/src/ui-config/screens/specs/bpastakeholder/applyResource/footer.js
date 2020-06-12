@@ -293,10 +293,11 @@ export const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
       let tenantIdInLocastorage = getTenantId();
-      if (!tenantIdInLocastorage || tenantIdInLocastorage == "null")
+      if (!tenantIdInLocastorage || tenantIdInLocastorage == "null"){
         let tenantId = window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")  || process.env.REACT_APP_DEFAULT_TENANT_ID;
         setTenantId(tenantId)
         localStorage.setItem("Citizen.tenant-id", tenantId);
+      }
     }
   }
 
