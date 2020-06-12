@@ -14,6 +14,8 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
+import "./index.css";
+
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -42,7 +44,8 @@ export const newCollectionFooter = getCommonApplyFooter({
         minWidth: "200px",
         height: "48px",
         marginRight: "16px"
-      }
+      },
+      className: "ucButton"      
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
@@ -140,7 +143,7 @@ const createDemand = async (state, dispatch) => {
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
     )
-  );
+  );  
   set(demands[0], "consumerType", demands[0].businessService);
   demands[0].demandDetails &&
     demands[0].demandDetails.forEach(item => {
