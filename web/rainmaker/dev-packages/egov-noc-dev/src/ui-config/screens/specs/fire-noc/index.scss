@@ -32,3 +32,16 @@
       width: 150px;
     }
   }
+  #material-ui-applicantDetails {
+    overflow: visible;
+  }
+  .autocomplete-dropdown {
+    min-width: 80%;
+    position: absolute;
+    z-index: 1900;
+    max-height: 150px;
+    overflow: auto;
+  }
+  .autocomplete-dropdown div {
+    overflow: hidden;
+  }
