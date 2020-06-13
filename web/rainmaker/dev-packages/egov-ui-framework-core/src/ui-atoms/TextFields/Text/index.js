@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
 const MihyText=(props)=> {
-    const {id,value,label,fullWidth,...rest} = props;
-
+    const {id,value,label,fullWidth, cityDropdown,...rest} = props;
+    let txtValue = (value == null) ? '' : value;
     return (
         <TextField
           id={id}
           label={label}
-          value={value}
+          value={txtValue}
           fullWidth={true}
           FormHelperTextProps={{ style: { fontSize: "1.4rem" } }}
           {...rest}
@@ -19,8 +19,7 @@ const MihyText=(props)=> {
 
 MihyText.propTypes = {
   id: PropTypes.string.isRequired,
-  label:PropTypes.string.isRequired,
-  value:PropTypes.string
+  label:PropTypes.string.isRequired
 };
 
 MihyText.defaultProps= {
