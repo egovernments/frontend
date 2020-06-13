@@ -129,9 +129,7 @@ class ActionDialog extends React.Component {
             <Container
               children={
                 <Grid
-                  container="true"
-                  spacing={12}
-                  marginTop={16}
+                  container
                   className="action-container"
                 >
                   <Grid
@@ -245,7 +243,7 @@ class ActionDialog extends React.Component {
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
-                    <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
+                    <Grid item sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}
                         color={"primary"}

@@ -53,6 +53,7 @@ const MySnackbarContent = props => {
   const { classes, className, message, onClose, variant, ...other } = props;
   const { labelName, labelKey } = message;
   const Icon = variantIcon[variant];
+  console.info(classes.message,"message",message);
   return (
     <SnackbarContent
       className={classNames(classes[variant], className)}
@@ -82,7 +83,7 @@ const MySnackbarContent = props => {
 MySnackbarContent.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  message: PropTypes.node,
+  // message: PropTypes.node,
   onClose: PropTypes.func,
   variant: PropTypes.oneOf(["success", "warning", "error", "info"]).isRequired
 };

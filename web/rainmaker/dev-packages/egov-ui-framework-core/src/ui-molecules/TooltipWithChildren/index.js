@@ -15,7 +15,7 @@ function SimpleTooltips(props) {
   return (
     <div>
       <Tooltip {...toolTipProps}>
-        <div className={classes.divContianer}>
+        <div className={(classes && classes.divContianer) ? classes.divContianer : ''}>
           {children}
           <Icon iconName="info"></Icon>
         </div>
@@ -23,9 +23,5 @@ function SimpleTooltips(props) {
     </div>
   );
 }
-
-SimpleTooltips.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default withStyles(styles)(SimpleTooltips);

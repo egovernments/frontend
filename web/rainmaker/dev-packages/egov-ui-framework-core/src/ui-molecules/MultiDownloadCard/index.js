@@ -39,12 +39,12 @@ const documentTitle = {
 function MultiCardDownloadGrid(props) {
   const { classes, data, ...rest } = props;
   return (
-    <Grid container {...rest}>
+    <Grid container >
       {data && data.length && data.map((item, key) => {
         return (
           <Grid
+            key={key}
             item
-            container
             xs={6}
             sm={4}
             className={
@@ -53,7 +53,7 @@ function MultiCardDownloadGrid(props) {
                 : classes.whiteCard
             }
           >
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <LabelContainer
                 labelName={item.title}
                 labelKey={item.title}
@@ -61,10 +61,10 @@ function MultiCardDownloadGrid(props) {
               />
             </Grid>
             <Grid container>
-              <Grid xs={6} className={classes.subtext}>
+              <Grid item xs={6} className={classes.subtext}>
                 <Typography className={classes.body2}>{item.name}</Typography>
               </Grid>
-              <Grid xs={6} align="right">
+              <Grid item xs={6} align="right">
                 <Button href={item.link} color="primary">
                   {item.linkText}
                 </Button>
@@ -77,11 +77,11 @@ function MultiCardDownloadGrid(props) {
   );
 }
 
-MultiCardDownloadGrid.propTypes = {
-  title: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  link: PropTypes.array.isRequired,
-  linktext: PropTypes.array.isRequired
-};
+// MultiCardDownloadGrid.propTypes = {
+//   // title: PropTypes.string.isRequired,
+//   name: PropTypes.string.isRequired,
+//   link: PropTypes.array.isRequired,
+//   linktext: PropTypes.array.isRequired
+// };
 
 export default withStyles(styles)(MultiCardDownloadGrid);

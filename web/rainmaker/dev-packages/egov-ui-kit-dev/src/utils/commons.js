@@ -1,6 +1,6 @@
 import axios from "axios";
 import commonConfig from "config/common.js";
-import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { getFileUrlFromAPI, getTransformedLocalStorgaeLabels ,getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
@@ -1062,3 +1062,12 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
     console.log(e);
   }
 };
+
+export const getLocaleLabelFromTitle = (title) => {
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+  return getLocaleLabels(
+    "",
+    title,
+    localisationLabels
+  );
+}

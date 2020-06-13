@@ -53,7 +53,7 @@ const DocumentList = props => {
                 {document.uploaded ? (
                   <div className={classes.documentSuccess}>
                     <Icon>
-                      <i class="material-icons">done</i>
+                      <i className="material-icons">done</i>
                     </Icon>
                   </div>
                 ) : (
@@ -87,7 +87,7 @@ const DocumentList = props => {
                   >
                     {document.fileName}
                     <Icon style={{ color: "#E54D42", marginLeft: "16px" }}>
-                      <i class="material-icons">highlight_off</i>
+                      <i className="material-icons">highlight_off</i>
                     </Icon>
                   </Button>
                 ) : (

@@ -2,11 +2,7 @@ import React from "react";
 import { Dialog, Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
-
-const styles = {
-  logoutContentStyle: { textAlign: "center", padding: "24px 20px" },
-};
-
+import { getLocaleLabelFromTitle } from "egov-ui-kit/utils/commons";
 const LogoutDialog = ({ logout, closeLogoutDialog, logoutPopupOpen, oktext, canceltext, title, body }) => {
   const actions = [
     <Button
@@ -26,18 +22,11 @@ const LogoutDialog = ({ logout, closeLogoutDialog, logoutPopupOpen, oktext, canc
       style={{ boxShadow: "none" }}
     />,
   ];
+  const DialogTitle = getLocaleLabelFromTitle(title);
   return (
     <Dialog
       open={logoutPopupOpen}
-      title={
-        <Label
-          label={title}
-          bold={true}
-          color="rgba(0, 0, 0, 0.8700000047683716)"
-          fontSize="20px"
-          labelStyle={{ padding: "16px 0px 0px 24px" }}
-        />
-      }
+      title={DialogTitle}
       children={[
         <Label label={body} color="rgba(0, 0, 0, 0.6000000238418579)" labelStyle={{ padding: "16px 0px 0px 12px" }} />,
       ]}

@@ -631,9 +631,9 @@ class TableData extends Component {
             textColor="primary"
             style={{ borderBottom: "1px solid rgb(211, 211, 211)", textColor: "red", backgroundColor: "white", }}
           >
-            {tabData.map((item) => {
+            {tabData.map((item, index) => {
               return (
-                <Tab className={`inbox-tab ${classes.textColorPrimary}`} label={<Label label={item.label} dynamicArray={item.dynamicArray} />} />
+                <Tab key={index} className={`inbox-tab ${classes.textColorPrimary}`} label={<Label label={item.label} dynamicArray={item.dynamicArray} />} />
               );
             })}
           </Tabs>

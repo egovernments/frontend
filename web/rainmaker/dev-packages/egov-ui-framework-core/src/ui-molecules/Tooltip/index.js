@@ -22,15 +22,11 @@ function SimpleTooltips(props) {
             display: "inline"
           }}
         >
-          <i class="material-icons">{icon}</i>
+          <i className="material-icons">{icon}</i>
         </Icon>
       </Tooltip>
     </div>
   );
 }
-
-SimpleTooltips.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default SimpleTooltips;

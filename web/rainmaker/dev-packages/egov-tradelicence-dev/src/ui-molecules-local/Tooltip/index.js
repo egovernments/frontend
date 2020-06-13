@@ -20,15 +20,11 @@ function SimpleTooltips(props) {
     <div {...rest}>
       <Tooltip title={translatedLabel}>
         <Icon style={{ color: "rgba(0, 0, 0, 0.3799999952316284)" }}>
-          <i class="material-icons">info_circle</i>
+          <i className="material-icons">info_circle</i>
         </Icon>
       </Tooltip>
     </div>
   );
 }
-
-SimpleTooltips.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default SimpleTooltips;

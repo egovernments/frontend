@@ -81,13 +81,11 @@ class RadioButtonsGroup extends React.Component {
       <div className={classes.root}>
         {/* <FormControl component="fieldset" className={classes.formControl}> */}
         <FormControl
-        required={required}
-        error={error}
-        helperText={helperText}
+          required={required}
+          error={error}
           id={id}
           component="fieldset"
           className={classes.formControl}
-          required={required}
         >
           <FormLabel className={classes.formLabel}>
             {label && label.key && (
