@@ -53,7 +53,6 @@ const MySnackbarContent = props => {
   const { classes, className, message, onClose, variant, ...other } = props;
   const { labelName, labelKey } = message;
   const Icon = variantIcon[variant];
-  console.info(classes.message,"message",message);
   return (
     <SnackbarContent
       className={classNames(classes[variant], className)}
