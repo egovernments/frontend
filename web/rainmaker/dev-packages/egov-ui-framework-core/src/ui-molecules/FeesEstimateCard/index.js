@@ -54,7 +54,7 @@ function FeesEstimateCard(props) {
   const total = totalAmount(estimate.fees);
   return (
     <Grid container>
-      <Grid xs={12} sm={7}>
+      <Grid xs={12} item sm={7}>
         <Typography variant="subheading">{estimate.header}</Typography>
         <div style={{ marginTop: 48, maxWidth: 400 }}>
           <Grid container>
@@ -65,19 +65,19 @@ function FeesEstimateCard(props) {
                 ""
               );
               let textLeft = fee.name ? (
-                <Grid container xs={8}>
+                <Grid item xs={8}>
                   <Typography>{fee.name}</Typography>
                   {tooltip}
                 </Grid>
               ) : (
-                <Grid xs={8} />
+                <Grid item xs={8} />
               );
               let textRight = fee.value ? (
-                <Grid xs={4} align="right">
+                <Grid item xs={4} align="right">
                   <Typography>{fee.value}</Typography>
                 </Grid>
               ) : (
-                <Grid xs={4} />
+                <Grid item xs={4} />
               );
               return (
                 <Grid container>
@@ -98,7 +98,7 @@ function FeesEstimateCard(props) {
           </Grid>
         </div>
       </Grid>
-      <Grid xs={12} sm={5}>
+      <Grid item xs={12} sm={5}>
         <Typography variant="body2" align="right">
           Total Amount
         </Typography>
@@ -121,12 +121,12 @@ function FeesEstimateCard(props) {
             }
             if (item.textRight) {
               textRight = (
-                <Grid xs={colRight}>
+                <Grid item xs={colRight}>
                   <Typography>{item.textRight}</Typography>
                 </Grid>
               );
             } else {
-              textRight = <Grid xs={colRight} />;
+              textRight = <Grid item xs={colRight} />;
             }
             return (
               <Grid container>

@@ -8,24 +8,9 @@ import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/ut
 import get from "lodash/get";
 import "./index.css";
 
-const data = [
-  {
-    name: "Aadharcarg.pdf",
-    title: "Proof of identity",
-    linkText: "View",
-    link: ""
-  },
-  {
-    name: "Pan.pdf",
-    title: "Proof of identity",
-    linkText: "View",
-    link: ""
-  }
-];
-
 const TaskStatusComponents = ({ currentObj, index }) => {
   return (
-    <Grid container={true} sm={12}>
+    <Grid container>
       <Grid item sm={2} style={{ paddingRight: 20 }}>
         <Typography variant="caption">
           <LabelContainer labelName="Date" labelKey="TL_DATE_LABEL" />

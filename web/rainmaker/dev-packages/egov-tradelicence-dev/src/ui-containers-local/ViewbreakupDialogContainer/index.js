@@ -33,9 +33,9 @@ const getMultiItem = (billingslabData, classes, style) => {
     if (item.type === "trade") labelCategory = "TRADETYPE";
     else if ((item.type = "accessories")) labelCategory = "ACCESSORIESCATEGORY";
     return (
-      <Grid container>
-        <Grid key={index} item sm={12}>
-          <Grid sm={10}>
+      <Grid key={index} container>
+        <Grid item sm={12}>
+          <Grid item sm={10}>
             <LabelContainer
               labelKey={`TRADELICENSE_${labelCategory}_${item.category
                 .toUpperCase()
@@ -48,7 +48,7 @@ const getMultiItem = (billingslabData, classes, style) => {
               }}
             />
           </Grid>
-          <Grid sm={2}>
+          <Grid item sm={2}>
             <Label
               label={
                 labelCategory === "TRADETYPE"
@@ -84,7 +84,7 @@ class ViewBreakupContainer extends React.Component {
     return (
       <Grid container>
         <Grid item sm={12}>
-          <Grid sm={10}>
+          <Grid item sm={10}>
             <LabelContainer
               labelName={"Total"}
               labelKey={"PT_FORM4_TOTAL"}
@@ -100,7 +100,7 @@ class ViewBreakupContainer extends React.Component {
               }
             />
           </Grid>
-          <Grid sm={2}>
+          <Grid item sm={2}>
             <LabelContainer
               labelName={`Rs ${total}`}
               style={
@@ -123,7 +123,7 @@ class ViewBreakupContainer extends React.Component {
     return (
       <Grid container>
         <Grid item sm={12}>
-          <Grid sm={10}>
+          <Grid item sm={10}>
             <LabelContainer
               labelName={label}
               labelKey={label}
@@ -135,7 +135,7 @@ class ViewBreakupContainer extends React.Component {
               }}
             />
           </Grid>
-          <Grid sm={2}>
+          <Grid item sm={2}>
             <LabelContainer
               labelName={`Rs ${total}`}
               style={{
@@ -183,6 +183,7 @@ class ViewBreakupContainer extends React.Component {
         open={open}
         onClose={handleClose}
         fullWidth={true}
+        key='1'
         children={[
           accessoriesTotal > 0 || tradeTotal > 0 ? (
             <div style={{ padding: "16px" }}>

@@ -64,7 +64,7 @@ function FeesEstimateCard(props) {
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
   return (
     <Grid container>
-      <Grid xs={12} sm={7}>
+      <Grid item xs={12} sm={7}>
         {/* <Typography variant="subheading">{estimate.header}</Typography> */}
         <div style={{ marginTop: 48, maxWidth: 600 }}>
           <Grid container>
@@ -75,7 +75,7 @@ function FeesEstimateCard(props) {
                 ""
               );
               let textLeft = fee.name ? (
-                <Grid container xs={8}>
+                <Grid item xs={8}>
                   <LabelContainer
                     labelName={fee.name.labelName}
                     labelKey={fee.name.labelKey}
@@ -84,10 +84,10 @@ function FeesEstimateCard(props) {
                   {tooltip}
                 </Grid>
               ) : (
-                <Grid xs={8} />
+                <Grid item xs={8} />
               );
               let textRight = fee.value ? (
-                <Grid xs={4} align="right">
+                <Grid item xs={4} align="right">
                   <LabelContainer
                     labelName={fee.value}
                     labelKey={fee.value}
@@ -95,7 +95,7 @@ function FeesEstimateCard(props) {
                   />
                 </Grid>
               ) : (
-                <Grid xs={4} align="right">
+                <Grid item xs={4} align="right">
                   <LabelContainer
                     labelName={0}
                     labelKey={0}
@@ -133,7 +133,7 @@ function FeesEstimateCard(props) {
           </Grid>
         </div>
       </Grid>
-      <Grid xs={12} sm={5}>
+      <Grid item xs={12} sm={5}>
         <Typography
           variant="body2"
           align="right"
@@ -170,21 +170,21 @@ function FeesEstimateCard(props) {
               let colRight = item.textLeft ? 6 : 12;
               if (item.textLeft) {
                 textLeft = (
-                  <Grid xs={colLeft}>
+                  <Grid item xs={colLeft}>
                     <Typography>{item.textLeft}</Typography>
                   </Grid>
                 );
               } else {
-                textLeft = <Grid xs={colLeft} />;
+                textLeft = <Grid item xs={colLeft} />;
               }
               if (item.textRight) {
                 textRight = (
-                  <Grid xs={colRight}>
+                  <Grid item xs={colRight}>
                     <Typography>{item.textRight}</Typography>
                   </Grid>
                 );
               } else {
-                textRight = <Grid xs={colRight} />;
+                textRight = <Grid item xs={colRight} />;
               }
               return (
                 <Grid container>
