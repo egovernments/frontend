@@ -114,6 +114,18 @@ const transformer = (formKey, form = {}, state = {}) => {
           },
         };
       }
+      else if(previousRoute.indexOf("smsLink==true") > 0) {
+        fields = {
+          password: {
+            jsonPath:"login.password",
+            value: otpFields.otp.value,
+          },
+          username: {
+            jsonPath: "login.username",
+            value: otpFields.otp.phone,
+          },
+        };
+      }
       return prepareFormData({ ...form, fields });
     },
     employeeOTP: () => {
@@ -157,6 +169,7 @@ const transformer = (formKey, form = {}, state = {}) => {
 
   if (formKey in transformers) {
     try {
+      console.log("===========", );
       return transformers[formKey]();
     } catch (error) {
       throw new Error(error.message);
