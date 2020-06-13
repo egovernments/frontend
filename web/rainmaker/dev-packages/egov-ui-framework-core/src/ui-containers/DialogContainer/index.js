@@ -5,6 +5,8 @@ import { Dialog } from "@material-ui/core";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 class DialogContainer extends React.Component {
   handleClose = () => {
@@ -15,6 +17,9 @@ class DialogContainer extends React.Component {
       "props.open",
       false
     );
+    if(getQueryArg(window.location.href, "action")==='apply'?true:false){
+      this.props.setRoute(window.location.pathname);
+    };
   };
 
   render() {
@@ -43,10 +48,11 @@ const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   const { screenKey } = ownProps;
   const { screenConfig } = screenConfiguration;
-  const open = get(
+  let open = get(
     screenConfig,
     `${screenKey}.components.adhocDialog.props.open`
   );
+  open=open||getQueryArg(window.location.href, "action")==='apply'?true:false;
 
   return {
     open,
@@ -56,7 +62,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return { handleField: (a, b, c, d) => dispatch(handleField(a, b, c, d)) };
+  return { handleField: (a, b, c, d) => dispatch(handleField(a, b, c, d)),
+    setRoute:(url)=>dispatch(setRoute(url))
+  
+  };
 };
 
 export default connect(
