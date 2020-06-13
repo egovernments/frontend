@@ -181,7 +181,6 @@ class DocumentList extends Component {
     const { classes, documents, documentTypePrefix } = this.props;
     
     const { uploadedIndex } = this.state;
-    console.log("prpsssss",uploadedIndex);
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&
@@ -197,7 +196,7 @@ class DocumentList extends Component {
                     {uploadedIndex.indexOf(key) > -1 ? (
                       <div className={classes.documentSuccess}>
                         <Icon>
-                          <i class="material-icons">done</i>
+                          <i className="material-icons">done</i>
                         </Icon>
                       </div>
                     ) : (

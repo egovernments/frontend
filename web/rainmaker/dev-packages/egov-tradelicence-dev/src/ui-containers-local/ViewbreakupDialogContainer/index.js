@@ -183,7 +183,6 @@ class ViewBreakupContainer extends React.Component {
         open={open}
         onClose={handleClose}
         fullWidth={true}
-        key='1'
         children={[
           accessoriesTotal > 0 || tradeTotal > 0 ? (
             <div style={{ padding: "16px" }}>
@@ -193,7 +192,7 @@ class ViewBreakupContainer extends React.Component {
               >
                 <Icon style={closebuttonStyle}>
                   {" "}
-                  <i class="material-icons">{closeIcon} </i>
+                  <i className="material-icons">{closeIcon} </i>
                 </Icon>
               </div>
               <div style={{ paddingBottom: "16px", paddingTop: "8px" }}>

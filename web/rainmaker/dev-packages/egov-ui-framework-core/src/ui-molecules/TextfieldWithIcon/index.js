@@ -8,6 +8,7 @@ import isEmpty from "lodash/isEmpty";
 
 function InputWithIcon(props) {
   const { label, iconObj, ...rest } = props;
+  console.info("props",props);
   const extraProps =
     !isEmpty(iconObj) &&
     (iconObj.position === "end"
