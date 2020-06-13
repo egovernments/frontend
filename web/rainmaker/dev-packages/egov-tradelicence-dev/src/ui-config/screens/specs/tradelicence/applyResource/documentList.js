@@ -9,28 +9,6 @@ export const documentList = {
     },
     inputProps : [
       {
-        type : "OWNERIDPROOF",
-        description: {
-          labelName: "Only .jpg and .pdf files. 6MB max file size.",
-          labelKey: "TL_UPLOAD_RESTRICTIONS"
-        },
-        formatProps :{
-          accept : "image/*, .pdf, .png, .jpeg",
-        }, 
-        maxFileSize: 6000
-      },
-      {
-        type : "OWNERSHIPPROOF",
-        description: {
-          labelName: "Only .jpg and .pdf files. 6MB max file size.",
-          labelKey: "TL_UPLOAD_RESTRICTIONS"
-        },
-        formatProps :{
-          accept : "image/*, .pdf, .png, .jpeg",
-        },        
-        maxFileSize: 6000
-      },
-      {
         type : "OWNERPHOTO",
         description: {
           labelName: "Only .png and .jpeg 6MB max file size.",
@@ -42,7 +20,18 @@ export const documentList = {
         maxFileSize: 3000
       },
       {
-        type : "OLDLICENCENO",
+        type : "OWNERSHIPPROOF",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        }, 
+        maxFileSize: 6000
+      },
+      {
+        type : "AADHARCARD",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -51,7 +40,96 @@ export const documentList = {
           accept : "image/*, .pdf, .png, .jpeg",
         },        
         maxFileSize: 6000
-      }
+      },
+      
+      {
+        type : "PANCARD",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
+      }, 
+      {
+        type : "REGCERT",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
+      }, 
+      {
+        type : "PTAX",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
+      }, 
+      {
+        type : "BLUPRNT",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
+      }, 
+      {
+        type : "NBNOC1",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
+      }, 
+      {
+        type : "NBNOC2",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
+      }, 
+      {
+        type : "PLANCERT",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
+      }, 
+      {
+        type : "BULDPHOTO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
+      }, 
     ],
     documentTypePrefix: "TL_",
   }
