@@ -362,7 +362,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
                 wfState: upDoc.wfState ,
-                isClickable:false                               
+                isClickable:false,    
+                additionalDetails: upDoc.additionalDetails                           
               }
             );
           }else{
@@ -376,7 +377,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
                 wfState: upDoc.wfState,
-                isClickable:false                                
+                isClickable:false,
+                additionalDetails: upDoc.additionalDetails                                                                           
               }
             ];
           }
