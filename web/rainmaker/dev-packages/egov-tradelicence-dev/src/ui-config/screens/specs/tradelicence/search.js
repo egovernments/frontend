@@ -120,7 +120,6 @@ const tradeLicenseSearchAndResult = {
                   height: "48px"
                 }
               },
-
               children: {
                 plusIconInsideButton: {
                   uiFramework: "custom-atoms",
@@ -132,7 +131,6 @@ const tradeLicenseSearchAndResult = {
                     }
                   }
                 },
-
                 buttonLabel: getLabel({
                   labelName: "NEW APPLICATION",
                   labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
@@ -165,7 +163,7 @@ const tradeLicenseSearchAndResult = {
       uiFramework: 'custom-containers',
       componentPath: 'DialogContainer',
       props: {
-        open: getQueryArg(window.location.href, "action")==='apply'?true:false,
+        open: getQueryArg(window.location.href, "action")==='showRequiredDocuments'?true:false,
         maxWidth: false,
         screenKey: 'search'
       },

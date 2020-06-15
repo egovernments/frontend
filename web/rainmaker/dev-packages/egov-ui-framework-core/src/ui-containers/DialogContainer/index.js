@@ -17,7 +17,7 @@ class DialogContainer extends React.Component {
       "props.open",
       false
     );
-    if(getQueryArg(window.location.href, "action")==='apply'?true:false){
+    if(getQueryArg(window.location.href, "action")==='showRequiredDocuments'?true:false){
       this.props.setRoute(window.location.pathname);
     };
   };
@@ -52,7 +52,7 @@ const mapStateToProps = (state, ownProps) => {
     screenConfig,
     `${screenKey}.components.adhocDialog.props.open`
   );
-  open=open||getQueryArg(window.location.href, "action")==='apply'?true:false;
+  open=open||getQueryArg(window.location.href, "action")==='showRequiredDocuments'?true:false;
 
   return {
     open,
@@ -63,8 +63,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return { handleField: (a, b, c, d) => dispatch(handleField(a, b, c, d)),
-    setRoute:(url)=>dispatch(setRoute(url))
-  
+    setRoute:(url)=>dispatch(setRoute(url)) 
   };
 };
 
