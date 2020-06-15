@@ -34,7 +34,6 @@ const getMultiItem = (billingslabData, classes, style) => {
     else if ((item.type = "accessories")) labelCategory = "ACCESSORIESCATEGORY";
     return (
       <Grid key={index} container>
-        <Grid item sm={12}>
           <Grid item sm={10}>
             <LabelContainer
               labelKey={`TRADELICENSE_${labelCategory}_${item.category
@@ -63,7 +62,6 @@ const getMultiItem = (billingslabData, classes, style) => {
               }}
             />
           </Grid>
-        </Grid>
       </Grid>
     );
   });
@@ -83,7 +81,6 @@ class ViewBreakupContainer extends React.Component {
   getGridItem = (total, classes, style) => {
     return (
       <Grid container>
-        <Grid item sm={12}>
           <Grid item sm={10}>
             <LabelContainer
               labelName={"Total"}
@@ -115,14 +112,12 @@ class ViewBreakupContainer extends React.Component {
               }
             />
           </Grid>
-        </Grid>
       </Grid>
     );
   };
   getRebatePenalty = (label,total, classes, style) => {
     return (
       <Grid container>
-        <Grid item sm={12}>
           <Grid item sm={10}>
             <LabelContainer
               labelName={label}
@@ -146,7 +141,6 @@ class ViewBreakupContainer extends React.Component {
               }}
             />
           </Grid>
-        </Grid>
       </Grid>
     );
   };

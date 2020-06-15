@@ -30,9 +30,8 @@ const closeIcon = "close";
 const getMultiItem = (billingslabData, classes, style) => {
   return billingslabData.map((item, index) => {
     return (
-      <Grid container>
-        <Grid key={index} item sm={12}>
-          <Grid sm={10}>
+      <Grid key={index} container>
+          <Grid item sm={10}>
             <LabelContainer
               labelKey={`TL_${item.category}`}
               style={{
@@ -43,7 +42,7 @@ const getMultiItem = (billingslabData, classes, style) => {
               }}
             />
           </Grid>
-          <Grid sm={2}>
+          <Grid item sm={2}>
             <Label
               label={`Rs ${item.rate}`}
               style={{
@@ -54,7 +53,6 @@ const getMultiItem = (billingslabData, classes, style) => {
               }}
             />
           </Grid>
-        </Grid>
       </Grid>
     );
   });
@@ -74,8 +72,7 @@ class ViewBreakupContainer extends React.Component {
   getGridItem = (total, classes, style) => {
     return (
       <Grid container>
-        <Grid item sm={12}>
-          <Grid sm={10}>
+          <Grid item sm={10}>
             <LabelContainer
               labelName={"Total"}
               labelKey={"PT_FORM4_TOTAL"}
@@ -91,7 +88,7 @@ class ViewBreakupContainer extends React.Component {
               }
             />
           </Grid>
-          <Grid sm={2}>
+          <Grid item sm={2}>
             <Label
               label={`Rs ${total}`}
               style={
@@ -106,7 +103,6 @@ class ViewBreakupContainer extends React.Component {
               }
             />
           </Grid>
-        </Grid>
       </Grid>
     );
   };
