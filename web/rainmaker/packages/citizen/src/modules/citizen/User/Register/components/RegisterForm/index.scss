@@ -50,7 +50,8 @@
 }
 @media only screen and (min-width: 768px) {
   .register-cardwidth{
-    margin-left: 20%;
+    // margin-left: 20%; // DC commented to hide QR scan, uncomment this once QR scan is up
+     margin-left: 35%;
     width: 25%;
 
   }

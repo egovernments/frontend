@@ -68,7 +68,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
         </div>
       }
     />
-     {enableWhatsApp&&
+     {/* {enableWhatsApp&&
     <Hidden smDown>
      <div className="register-vl-divider">
        <div className ="register-circle-web">
@@ -83,7 +83,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
        </div>
     </div>
     </Hidden>
-}
+} */}
     </div>
   );
 };

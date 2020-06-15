@@ -65,7 +65,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
         </div>
       }
     />
-    {enableWhatsApp&&
+    {/* {enableWhatsApp&&
       <Hidden smDown>
      <div className="login-vl-divider">
        <div className ="login-circle-web">
@@ -79,7 +79,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
        </div>
     </div>
     </Hidden>
-}
+} */}
     </div>
 
   );
