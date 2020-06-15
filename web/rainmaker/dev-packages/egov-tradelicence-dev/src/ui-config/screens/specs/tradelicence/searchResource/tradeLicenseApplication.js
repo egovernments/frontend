@@ -112,10 +112,6 @@ export const tradeLicenseApplication = getCommonCard({
             moduleName: "TradeLicense",
             masterName: "ApplicationType"
           },
-          style: {
-            width: "100%",
-            cursor: "pointer"
-          },
           fullwidth: true,
           required: false,
           isClearable:true,
@@ -157,58 +153,66 @@ export const tradeLicenseApplication = getCommonCard({
     })
   }),
   appStatusContainer: getCommonContainer({
-    applicationNo: getSelectField({
-      label: {
-        labelName: "Application status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
-      },
-      required: false,
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "NEWTL"
+    applicationNo: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "Application status",
+          labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Application Status",
+          labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+        },
+        required: false,
+        localePrefix: {
+          moduleName: "WF",
+          masterName: "NEWTL"
+        },
+        className: "autocomplete-dropdown",
+        labelsFromLocalisation: true,
+        isClearable:true,
+        data:[
+          {
+            code : "INITIATED"
+          },
+          {
+            code : "APPLIED"
+          },
+          {
+            code : "FIELDINSPECTION"
+          },
+          {
+            code : "PENDINGAPPROVAL"
+          },
+          {
+            code : "PENDINGPAYMENT"
+          },
+          {
+            code : "APPROVED"
+          },
+          {
+            code : "CITIZENACTIONREQUIRED"
+          },     
+          {
+            code : "EXPIRED"
+          },
+          {
+            code : "CANCELLED"
+          },
+          {
+            code : "REJECTED"
+          }
+        ],
       },
       jsonPath: "searchScreen.status",
-      data:[
-        {
-          code : "INITIATED"
-        },
-        {
-          code : "APPLIED"
-        },
-        {
-          code : "FIELDINSPECTION"
-        },
-        {
-          code : "PENDINGAPPROVAL"
-        },
-        {
-          code : "PENDINGPAYMENT"
-        },
-        {
-          code : "APPROVED"
-        },
-        {
-          code : "CITIZENACTIONREQUIRED"
-        },     
-        {
-          code : "EXPIRED"
-        },
-        {
-          code : "CANCELLED"
-        },
-        {
-          code : "REJECTED"
-        }
-      ],
       gridDefination: {
         xs: 12,
         sm: 4
       }
-    }),
+    },
 
   }),
   
@@ -262,5 +266,10 @@ export const tradeLicenseApplication = getCommonCard({
         }
       }
     })
-  })
+  }),
+},
+{
+  style: {
+    overflow: "visible"
+  },
 });
