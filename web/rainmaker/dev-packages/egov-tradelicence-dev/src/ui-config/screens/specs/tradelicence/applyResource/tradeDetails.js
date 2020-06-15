@@ -1150,7 +1150,8 @@ export const tradeDetails = getCommonCard({
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},
   ),
   tradeUnitCard,
-  accessoriesCard
+  //Commented by Minju for removing accessory on 13/06/2020
+  //accessoriesCard
 });
 
 const setFieldsOnAddItem = (state, multiItemContent) => {
