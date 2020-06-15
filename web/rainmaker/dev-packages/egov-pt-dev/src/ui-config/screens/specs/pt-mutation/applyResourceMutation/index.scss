@@ -35,10 +35,12 @@
     position: absolute;
     z-index: 1900;
     max-height: 150px;
-    overflow: auto;
+    overflow: hidden;
   }
   .autocomplete-dropdown div {
-    overflow: hidden;
+	min-width: 80%;
+	max-height: 150px;
+    overflow: auto;
   }
 
   
