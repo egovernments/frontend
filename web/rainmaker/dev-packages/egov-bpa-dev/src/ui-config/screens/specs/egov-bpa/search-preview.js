@@ -423,21 +423,6 @@ const setSearchResponse = async (
 
   await edcrDetailsToBpaDetails(state, dispatch);
 
-  let riskType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "BPA.riskType"
-  );
-  let businessServicesValue = "BPA";
-  if (riskType === "LOW") {
-    businessServicesValue = "BPA_LOW";
-  }
-
-  const queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "businessServices", value: businessServicesValue }
-  ];
-  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
   let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
 
   if (status && status == "INPROGRESS") {
@@ -609,18 +594,26 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
+    let type = getQueryArg(
+      window.location.href,
+      "type"
+    );
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
-
+    let businessServicesValue = "BPA";
+    if (type === "LOW") {
+      businessServicesValue = "BPA_LOW";
+    }
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "BPA" }
+      { key: "businessServices", value: businessServicesValue }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
+
     // Hide edit buttons
 
     set(

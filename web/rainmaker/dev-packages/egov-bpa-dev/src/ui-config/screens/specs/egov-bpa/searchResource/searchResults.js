@@ -197,12 +197,16 @@ const onRowClick = rowData => {
         break;
     }
   } else {
+    let type = "HIGH";
+    if(rowData[5] == "BPA_LOW") {
+      type = "LOW"
+    }
     switch (state) {
       case "INITIATED":
-        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
         break;
       default:
-        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
         break;
     }
   }
