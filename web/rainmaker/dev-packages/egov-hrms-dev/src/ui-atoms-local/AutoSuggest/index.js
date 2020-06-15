@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
-import "./index.css";
+// import "./index.css";
 
 const getSuggestions = suggestions => {
   return (
