@@ -7,6 +7,8 @@ import { withStyles } from "@material-ui/core/styles";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 class DialogContainer extends React.Component {
   handleClose = () => {
@@ -24,9 +26,12 @@ class DialogContainer extends React.Component {
 
   render() {
     const { open, maxWidth, children } = this.props;
-   const DialogContent = withStyles(theme => ({
+  
+    const DialogContent = withStyles(theme => ({
       root: {
-        paddingBottom: 0
+        paddingBottom: 0,
+        position: "relative",
+        top: 10
       }
     }))(MuiDialogContent);
 
@@ -35,9 +40,28 @@ class DialogContainer extends React.Component {
         zIndex: 13333    
         }
     }))(Dialog);
+
+    const CloseButton = withStyles(theme => ({
+      root: {
+        justifyContent: "flex-end",
+        float: "right",
+        paddingRight: 20,
+        zIndex: 1333,
+        right: 20,
+        paddingTop: 10,
+        position: "absolute",
+        "&:hover": {
+          backgroundColor: "#FFF"
+        }
+      }
+    }))(IconButton);
+    
     
     return (
       <DialogContainer open={open} maxWidth={maxWidth} onClose={this.handleClose}>
+        <CloseButton aria-label="Close" >
+          <CloseIcon onClick={this.handleClose} />
+        </CloseButton>
         <DialogContent children={children} />
       </DialogContainer>
     );
