@@ -178,6 +178,9 @@ export const getRequiredDocuments = ( documents, moduleName, footerCallback ) =>
       header: {
         uiFramework: "custom-atoms",
         componentPath: "Container",
+        props:{
+          className:"fixedHeader"
+        },
         children: {
           header
         }
@@ -195,6 +198,9 @@ export const getRequiredDocuments = ( documents, moduleName, footerCallback ) =>
       footer: {
         uiFramework: "custom-atoms",
         componentPath: "Container",
+        props:{
+          className:"footerSticky"
+        },
         children: {
           footerChildElement
         }

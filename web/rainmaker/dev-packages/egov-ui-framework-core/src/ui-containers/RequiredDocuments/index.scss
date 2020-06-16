@@ -34,3 +34,20 @@
     overflow: inherit !important;
   }
   }
+
+.footerSticky {
+  position: sticky;
+  bottom: 2px;
+}
+
+.fixedHeader {
+  position: sticky;
+  background: white;
+  top: 0px;
+  padding-top: 10px;
+}
+
+#documents-div{
+  padding-bottom: 0px;
+}
+
