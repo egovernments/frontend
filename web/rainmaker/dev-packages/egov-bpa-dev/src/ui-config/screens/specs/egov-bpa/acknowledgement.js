@@ -70,7 +70,15 @@ const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId,
    let applicationDownloadObject = {
     label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
-      permitOrderNoDownload(action, state, dispatch);
+      permitOrderNoDownload(action, state, dispatch, "Download");
+      // generatePdf(state, dispatch, "application_download");
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
+    link: () => {
+      permitOrderNoDownload(action, state, dispatch, "Print");
       // generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
@@ -93,12 +101,13 @@ const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId,
     case "BPA.NC_SAN_FEE":
     case "BPA.NC_OC_SAN_FEE":    
     downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+    printMenu = [receiptPrintObject, applicationPrintObject];    
     break;   
     default:
     downloadMenu = [receiptDownloadObject];    
+    printMenu = [receiptPrintObject];
     break;    
   }
-   printMenu = [receiptPrintObject];
 
    return {
        uiFramework: "custom-atoms",
