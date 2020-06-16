@@ -148,7 +148,6 @@ const tradeLicenseSearchAndResult = {
               roleDefination: {
                 rolePath: "user-info.roles",
                 path : "tradelicence/search?action=showRequiredDocuments"
-
               }
             }
           }
