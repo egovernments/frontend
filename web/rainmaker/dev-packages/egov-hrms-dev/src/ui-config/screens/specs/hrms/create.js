@@ -22,6 +22,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getEmployeeData } from "./viewResource/functions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },
@@ -202,7 +203,7 @@ const getYearsList = (startYear, state, dispatch) => {
   startYear = startYear || 1980;
 
   while (startYear <= currentYear) {
-    years.push({ value: (startYear++).toString() });
+    years.push({ code: (startYear++).toString(), name: (startYear++).toString() });
   }
 
   dispatch(prepareFinalObject("yearsList", years));
