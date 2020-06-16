@@ -754,6 +754,7 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
     case 'TradeLicense':
       if (closePopUp) {
         return (state, dispatch) => {
+          dispatch(prepareFinalObject("Licenses", []));
           const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
           dispatch(
             handleField("search", "components.adhocDialog", "props.open", false)
