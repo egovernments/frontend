@@ -147,7 +147,7 @@ const tradeLicenseSearchAndResult = {
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                path : "tradelicence/search?action=apply"
+                path : "tradelicence/search?action=showRequiredDocuments"
 
               }
             }
@@ -165,7 +165,8 @@ const tradeLicenseSearchAndResult = {
       props: {
         open: getQueryArg(window.location.href, "action")==='showRequiredDocuments'?true:false,
         maxWidth: false,
-        screenKey: 'search'
+        screenKey: 'search',
+        reRouteURL:'/tradelicence/search'
       },
       children: {
         popup: {}

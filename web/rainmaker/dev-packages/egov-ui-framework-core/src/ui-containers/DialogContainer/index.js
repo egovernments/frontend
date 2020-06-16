@@ -10,7 +10,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 class DialogContainer extends React.Component {
   handleClose = () => {
-    const { screenKey } = this.props;
+    const { screenKey ,reRouteURL='/'} = this.props;
     this.props.handleField(
       screenKey,
       `components.adhocDialog`,
@@ -18,7 +18,7 @@ class DialogContainer extends React.Component {
       false
     );
     if(getQueryArg(window.location.href, "action")==='showRequiredDocuments'?true:false){
-      this.props.setRoute(window.location.pathname);
+      this.props.setRoute(reRouteURL);
     };
   };
 
@@ -52,7 +52,7 @@ const mapStateToProps = (state, ownProps) => {
     screenConfig,
     `${screenKey}.components.adhocDialog.props.open`
   );
-  open=open||getQueryArg(window.location.href, "action")==='showRequiredDocuments'?true:false;
+  open=open || getQueryArg(window.location.href, "action") === 'showRequiredDocuments'?true:false;
 
   return {
     open,
