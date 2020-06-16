@@ -12,7 +12,7 @@ import { searchResults } from "./searchResource/searchResults";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { showCityPicker, getAdminRole, createEmployee } from "../utils";
 import { cityPicker } from "./createResource/cityPicker";
-import "./index.css";
+
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
