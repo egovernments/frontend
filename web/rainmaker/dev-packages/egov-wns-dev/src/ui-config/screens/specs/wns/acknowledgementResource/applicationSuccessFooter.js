@@ -6,6 +6,7 @@ import { ifUserRoleExists } from "../../utils";
 import { downloadApp } from '../../../../../ui-utils/commons';
 import get from 'lodash/get';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -145,7 +146,11 @@ const handleAppDownloadAndPrint = (state, action) => {
   if (applicationNumberWater && applicationNumberSewerage) {
     WaterConnection[0].pdfDocuments = filteredDocs;
     SewerageConnection[0].pdfDocuments = filteredDocs;
-    downloadApp(WaterConnection, "application", action);
+    generateWSAcknowledgement(get(
+      state,
+      "screenConfiguration.preparedFinalObject", {}), `application.pdf`);
+    // downloadApp(WaterConnection, 'application');
+    // downloadApp(WaterConnection, "application", action);
     downloadApp(SewerageConnection, "application", action);
   } else if (applicationNumber) {
     if (applicationNumber.includes("WS")) {
