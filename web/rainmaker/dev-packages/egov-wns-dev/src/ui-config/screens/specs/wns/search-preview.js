@@ -9,6 +9,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject, preparedFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -421,6 +422,7 @@ const screenConfig = {
 
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopup);
+    loadUlbLogo(tenantId);
     beforeInitFn(action, state, dispatch, applicationNumber);
 
     return action;

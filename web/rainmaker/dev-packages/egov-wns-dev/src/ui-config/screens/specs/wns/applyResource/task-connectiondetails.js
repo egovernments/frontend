@@ -28,40 +28,40 @@ export const connectionDetailsHeader = getHeader({
     labelKey: "WS_COMMON_CONNECTION_DETAILS"
 });
 
-export const taskApplicationType = getLabelWithValue(
-    {
-        labelKey: "WS_APPLY_FOR"
-    },
-    {
-        jsonPath: "WaterConnection[0].service",
-    })
+// export const taskApplicationType = getLabelWithValue(
+//     {
+//         labelKey: "WS_APPLY_FOR"
+//     },
+//     {
+//         jsonPath: "WaterConnection[0].service",
+//     })
 
-export const taskNumberOfTapsPropsed = getLabelWithValue(
-    {
-        labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
-    },
-    {
-        jsonPath: "WaterConnection[0].proposedTaps",
-    })
-export const taskPipeSizeProposed = getLabelWithValue(
-    {
-        labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
-    },
-    { jsonPath: "WaterConnection[0].proposedPipeSize" })
+// export const taskNumberOfTapsPropsed = getLabelWithValue(
+//     {
+//         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
+//     },
+//     {
+//         jsonPath: "WaterConnection[0].proposedTaps",
+//     })
+// export const taskPipeSizeProposed = getLabelWithValue(
+//     {
+//         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+//     },
+//     { jsonPath: "WaterConnection[0].proposedPipeSize" })
 
-export const taskNoOfClosets = getLabelWithValue(
-    {
-        labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
-    },
-    { jsonPath: "WaterConnection[0].proposedWaterClosets" }
-);
+// export const taskNoOfClosets = getLabelWithValue(
+//     {
+//         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
+//     },
+//     { jsonPath: "WaterConnection[0].proposedWaterClosets" }
+// );
 
-export const taskNoOfToilets = getLabelWithValue(
-    {
-        labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
-    },
-    { jsonPath: "WaterConnection[0].proposedToilets" }
-);
+// export const taskNoOfToilets = getLabelWithValue(
+//     {
+//         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
+//     },
+//     { jsonPath: "WaterConnection[0].proposedToilets" }
+// );
 
 
 export const getConnectionDetails = () => {
@@ -86,10 +86,60 @@ export const getConnectionDetails = () => {
     });
 }
 
+ export const connectionDetailsWater={
+    taskApplicationType : getLabelWithValue(
+        {
+            labelName:"Apply For",
+            labelKey: "WS_APPLY_FOR"
+        },
+        {
+            jsonPath: "WaterConnection[0].service",
+        }),
+    
+     taskNumberOfTapsPropsed : getLabelWithValue(
+        {
+            labelName:"No of Taps Proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
+        },
+        {
+            jsonPath: "WaterConnection[0].proposedTaps",
+        }),
+     taskPipeSizeProposed : getLabelWithValue(
+        {
+            labelName:"No of pipe size proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+        },
+        { jsonPath: "WaterConnection[0].proposedPipeSize" })
+
+}
+ export const connectionDetailsSewerage={
+    taskApplicationType : getLabelWithValue(
+        {
+            labelName:"Apply For",
+            labelKey: "WS_APPLY_FOR"
+        },
+        {
+            jsonPath: "WaterConnection[0].service",
+        }),
+    taskNoOfClosets : getLabelWithValue(
+        {
+            labelName:"No of closets proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
+        },
+        { jsonPath: "WaterConnection[0].proposedWaterClosets" }
+    ),
+     taskNoOfToilets : getLabelWithValue(
+        {
+            labelName:"No of toilets proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
+        },
+        { jsonPath: "WaterConnection[0].proposedToilets" }
+    )
+
+}
+
+export const connectionDetails=(service === serviceConst.WATER)?connectionDetailsWater:connectionDetailsSewerage;
+
 export const renderService = () => {
-    if (service === serviceConst.WATER) {
-        return getCommonContainer({ taskApplicationType, taskNumberOfTapsPropsed, taskPipeSizeProposed });
-    } else if (service === serviceConst.SEWERAGE) {
-        return getCommonContainer({ taskApplicationType, taskNoOfClosets, taskNoOfToilets })
-    }
+    return getCommonContainer(connectionDetails)
 }
