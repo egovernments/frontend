@@ -326,9 +326,9 @@ class GlobalFilter extends Component {
 
             <FormControl fullWidth className={classes.formControl}>
                 <div className={classes.list}>
-                    <SVG src={icondepartment} className={classes.CloseButton}>
+                    {/* <SVG src={icondepartment} className={classes.CloseButton}>
 
-                    </SVG>
+                    </SVG> */}
                     <Input
                         id="adornment-amount"
                         value={(_.get(this.state, "filterData.duration.title") || this.state.value)}
