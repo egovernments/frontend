@@ -244,10 +244,10 @@ export const getWSMyResults = async (queryObject, consumer, dispatch) => {
                 response.WaterConnection[i].service = _.capitalize(serviceConst.WATER)
                 let consumerCode = "", bService=""
                 if(consumer === 'APPLICATION'){
-                    consumerCode = response.SewerageConnections[i].applicationNo
+                    consumerCode = response.WaterConnection[i].applicationNo
                     bService = 'WS.ONE_TIME_FEE'
                 }else if(consumer === 'CONNECTION'){
-                    consumerCode = response.SewerageConnections[i].connectionNo
+                    consumerCode = response.WaterConnection[i].connectionNo
                     bService = 'WS'
                 }
                 if (consumerCode !== null && consumerCode !== undefined) {
