@@ -107,6 +107,9 @@ const mapStateToProps = state => {
       }
 
       document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
+      document.dropdown.menu.map((item,key)=>{
+        document.dropdown.menu[key].name = item.label;
+      })
       if (document.dropdown.menu.length == 1) {
         document.dropdown.value = get(document, 'dropdown.menu[0].code', '');
       }
