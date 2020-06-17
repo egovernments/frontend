@@ -14,7 +14,9 @@ div[class^=MUIDataTableHeadCell-data] {
 table tbody  tr  td {
   padding:4px 8px 4px 24px !important;
 }
-
+table thead  tr  th {
+  padding:4px 40px 4px 24px !important;
+}
 @media only screen and (max-width: 960px) {
   table tbody tr td {
     width: 50% !important;
