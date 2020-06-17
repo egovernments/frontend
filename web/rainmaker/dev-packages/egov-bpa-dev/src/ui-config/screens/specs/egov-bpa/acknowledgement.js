@@ -12,18 +12,23 @@ import {
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
-import { getCurrentFinancialYear } from "../utils";
+import get from "lodash/get";
+import { getCurrentFinancialYear, permitOrderNoDownload } from "../utils";
+import { download, getAppSearchResults } from "../../../../ui-utils/commons";
+import {
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for BPA (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "BPA_COMMON_APPLY_BPA_HEADER_LABEL"
+    labelName: `Payment Information (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+    labelKey: "COMMON_PAY_SCREEN_HEADER"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-bpa",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "applicationNumber")
+      number: getQueryArg(window.location.href, "consumerCode")
     },
     visible: true
   }
@@ -48,16 +53,114 @@ return getCommonContainer({
 })
 }
 
+const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId, uiCommonPayConfig, businessService) => {
+  const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
+   let receiptDownloadObject = {
+       label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
+       link: () => {
+           const receiptQueryString = [
+               { key: "receiptNumbers", value: applicationNumber },
+               { key: "tenantId", value: tenantId }
+           ]
+           download(receiptQueryString, "download", receiptKey, state);
+
+       },
+       leftIcon: "receipt"
+   };
+   let applicationDownloadObject = {
+    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
+    link: () => {
+      permitOrderNoDownload(action, state, dispatch, "Download");
+      // generatePdf(state, dispatch, "application_download");
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
+    link: () => {
+      permitOrderNoDownload(action, state, dispatch, "Print");
+      // generatePdf(state, dispatch, "application_download");
+    },
+    leftIcon: "assignment"
+  };
+   let receiptPrintObject = {
+       label: { labelName: "PRINT RECEIPT", labelKey: "COMMON_PRINT_RECEIPT" },
+       link: () => {
+           const receiptQueryString = [
+               { key: "receiptNumbers", value: applicationNumber },
+               { key: "tenantId", value: tenantId }
+           ]
+           download(receiptQueryString, "print", receiptKey, state);
+       },
+       leftIcon: "receipt"
+   };
+   let downloadMenu = [];
+   let printMenu = [];
+   switch (businessService) {
+    case "BPA.LOW_RISK_PERMIT_FEE":
+    case "BPA.NC_SAN_FEE":
+    case "BPA.NC_OC_SAN_FEE":    
+    downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+    printMenu = [receiptPrintObject, applicationPrintObject];    
+    break;   
+    default:
+    downloadMenu = [receiptDownloadObject];    
+    printMenu = [receiptPrintObject];
+    break;    
+  }
+
+   return {
+       uiFramework: "custom-atoms",
+       componentPath: "Div",
+       props: {
+           className: "downloadprint-commonmenu",
+           style: { textAlign: "right", display: "flex" }
+       },
+       children: {
+           downloadMenu: {
+               uiFramework: "custom-molecules",
+               componentPath: "DownloadPrintButton",
+               props: {
+                   data: {
+                       label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+                       leftIcon: "cloud_download",
+                       rightIcon: "arrow_drop_down",
+                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "tl-download-button" },
+                       menu: downloadMenu
+                   }
+               }
+           },
+           printMenu: {
+               uiFramework: "custom-molecules",
+               componentPath: "DownloadPrintButton",
+               props: {
+                   data: {
+                       label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+                       leftIcon: "print",
+                       rightIcon: "arrow_drop_down",
+                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+                       menu: printMenu
+                   }
+               }
+           }
+
+       },
+   }
+
+}
 
 const getAcknowledgementCard = (
+  action,
   state,
   dispatch,
   purpose,
   status,
   applicationNumber,
   secondNumber,
-  tenant
+  tenant,
+  businessService
 ) => {
+  const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");  
   if (purpose === "APPLY" && status === "success") {
     return {
       header:getHeader(applicationNumber),
@@ -212,6 +315,7 @@ const getAcknowledgementCard = (
   }  else if (purpose === "pay" && status === "success") {
     return {
       header,
+      headerdownloadprint: downloadprintMenu(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService),      
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -232,7 +336,7 @@ const getAcknowledgementCard = (
               labelName: "Payment Receipt No.",
               labelKey: "BPA_PMT_RCPT_NO"
             },
-            // number: secondNumber,
+            number: secondNumber,
             tailText: {
               labelName: "Payment Receipt No.",
               labelKey: "BPA_PMT_RCPT_NO"
@@ -488,6 +592,17 @@ const getAcknowledgementCard = (
   }
 };
 
+const getBpaDetails = async ( action, state, dispatch, applicationNumber, tenantId ) => {
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "applicationNo", value: applicationNumber }
+  ]);
+  console.log(response, "ressss");
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));  
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -503,20 +618,23 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
-    const applicationNumber = getQueryArg(
-      window.location.href,
-      "applicationNumber"
-    );
-    const secondNumber = getQueryArg(window.location.href, "secondNumber");
+    const applicationNumber = getQueryArg(window.location.href,"consumerCode") || getQueryArg(window.location.href,"applicationNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
+    const secondNumber = getQueryArg(window.location.href, "receiptNumber");
+    const businessService = getQueryArg(window.location.href, "businessService");
+    if(purpose && purpose === "pay") {
+      getBpaDetails(action, state, dispatch, applicationNumber, tenant);
+    }
     const data = getAcknowledgementCard(
+      action,
       state,
       dispatch,
       purpose,
       status,
       applicationNumber,
       secondNumber,
-      tenant
+      tenant,
+      businessService
     );
     set(action, "screenConfig.components.div.children", data);
     return action;

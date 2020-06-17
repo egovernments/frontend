@@ -44,6 +44,7 @@ import axios from "axios";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import _ from "lodash";
 import groupBy from "lodash/groupBy";
+import { printPdf } from "egov-ui-kit/utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -4725,11 +4726,11 @@ export const revocationPdfDownload = async(action, state, dispatch) => {
   window.open(pdfDownload[fileStoreId]);
 }
 
-export const permitOrderNoDownload = async(action, state, dispatch) => {
+export const permitOrderNoDownload = async(action, state, dispatch, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
-
+  
   let currentDate = new Date();
   set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+currentDate.getDate()));
 
@@ -4764,7 +4765,12 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if(mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  }
+  else {
+    printPdf(pdfDownload[fileStoreId]);    
+  }
 
   
 let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
