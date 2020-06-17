@@ -24,6 +24,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "ackno
      if (WaterConnection.property.owners.length>1) {
         ownerDetailInfo = getMultiItems(preparedFinalObject, propertyOwnerDetail, 'WaterConnection[0].property.owners')
         console.log("===ownerDetailInfo",ownerDetailInfo)
+        ownerDetail = getMultipleItemCard(ownerDetailInfo, 'WS_OWNER');
         // ownerDetail = getMultipleItemCard(ownerDetailInfo, 'PT_OWNER')
     } else {
          ownerDetail = generateKeyValue(preparedFinalObject, propertyOwnerDetail);
@@ -40,7 +41,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "ackno
         cards: [
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_DETAILS_HEADER", items: propertyDetail },
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOCATION_DETAILS_HEADER", items: locationDetail },
-            { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER", items: ownerDetail },
+            { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER", items: ownerDetail, type: ownerDetailInfo.length > 1 ? 'multiItem' : 'singleItem'  },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_DETAILS_HEADER', items: connectionDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENTS_DETAILS_HEADER', items: documentCard },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ADDITIONAL_CONNECTION_HEADER', items: additionDetail },
