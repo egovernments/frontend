@@ -140,7 +140,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               name: (element.property)?element.property.owners[0].name:'',
               status: element.status,
               address: handleAddress(element),
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              tenantId:element.tenantId
             })
           }) : finalArray.push({
             due: 'NA',
@@ -150,7 +151,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             name: (element.property)?element.property.owners[0].name:'',
             status: element.status,
             address: handleAddress(element),
-            connectionType: element.connectionType
+            connectionType: element.connectionType,
+            tenantId:element.tenantId
           })
         }
 
@@ -269,7 +271,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
               applicationStatus: appStatus,
               address: handleAddress(element),
               service: element.service,
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              tenantId: element.tenantId
             })
           } else {
             finalArray.push({
@@ -279,7 +282,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
               applicationStatus: appStatus,
               address: handleAddress(element),
               service: element.service,
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              tenantId: element.tenantId
             })
           }
         }
@@ -325,7 +329,7 @@ const showConnectionResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_DUE_LABEL"]: item.due,
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
-    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: getTenantIdCommon(),
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }));
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
@@ -343,7 +347,7 @@ const showApplicationResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
     ["WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
-    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: getTenantIdCommon(),
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
     ["WS_COMMON_TABLE_COL_SERVICE_LABEL"]: item.service,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
   }));
