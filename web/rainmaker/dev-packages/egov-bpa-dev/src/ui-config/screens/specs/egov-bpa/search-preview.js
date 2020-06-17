@@ -219,117 +219,108 @@ const setDownloadMenu = (action, state, dispatch) => {
   );
   let downloadMenu = [];
   let printMenu = [];
-  let certificateDownloadObject = {
+  let appFeeDownloadObject = {
     label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.NC_APP_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_APP_FEE", "Download");
     },
     leftIcon: "book"
   };
-  let certificatePrintObject = {
+  let appFeePrintObject = {
     label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "certificate_print");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_APP_FEE", "Print");
     },
     leftIcon: "book"
   };
-  let receiptDownloadObject = {
+  let sanFeeDownloadObject = {
     label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE", "Download");
     },
     leftIcon: "receipt"
   };
-  let receiptPrintObject = {
+  let sanFeePrintObject = {
     label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_print");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE", "Print");
     },
     leftIcon: "receipt"
   };
-  let applicationDownloadObject = {
+  let permitOrderDownloadObject = {
     label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
-      permitOrderNoDownload(action, state, dispatch);
-      // generatePdf(state, dispatch, "application_download");
+      permitOrderNoDownload(action, state, dispatch, "Download");
     },
     leftIcon: "assignment"
   };
-  let applicationPrintObject = {
+  let permitOrderPrintObject = {
     label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
-      generatePdf(state, dispatch, "application_print");
+      permitOrderNoDownload(action, state, dispatch, "Print");
     },
     leftIcon: "assignment"
   };
-  let paymentReceiptDownload = {
+  let lowAppFeeDownloadObject = {
     label: { labelName: "Fee Receipt", labelKey: "BPA_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE", "Download");
     },
     leftIcon: "book"
   };
-  let revocationPdfDownlaod = {
+  let lowAppFeePrintObject = {
+    label: { labelName: "Fee Receipt", labelKey: "BPA_FEE_RECEIPT" },
+    link: () => {
+      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE", "Print");
+    },
+    leftIcon: "book"
+  };
+  let revocationPdfDownlaodObject = {
     label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
     link: () => {
-      revocationPdfDownload(action, state, dispatch);
-      // generatePdf(state, dispatch, "application_download");
+      revocationPdfDownload(action, state, dispatch, "Download");
+    },
+    leftIcon: "assignment"
+  };
+  let revocationPdfPrintObject = {
+    label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
+    link: () => {
+      revocationPdfDownload(action, state, dispatch, "Print");
     },
     leftIcon: "assignment"
   };
 
   if (riskType === "LOW") {
     switch (status) {
-      case "PERMIT REVOCATION":
-        downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
-        break;
-      case "APPROVED":
       case "DOC_VERIFICATION_INPROGRESS":
       case "FIELDINSPECTION_INPROGRESS":
       case "NOC_VERIFICATION_INPROGRESS":
       case "APPROVAL_INPROGRESS":
-        downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+      case "APPROVED":
+        downloadMenu = [lowAppFeeDownloadObject, permitOrderDownloadObject];
+        printMenu = [lowAppFeePrintObject, permitOrderPrintObject];
+        break;
+      case "PERMIT REVOCATION":
+        downloadMenu = [lowAppFeeDownloadObject, revocationPdfDownlaodObject];
+        printMenu = [lowAppFeePrintObject, revocationPdfPrintObject];    
         break;
       default:
         break;
     }
   } else {
     switch (status) {
-      case "APPROVED":
-        downloadMenu = [
-          certificateDownloadObject,
-          receiptDownloadObject,
-          applicationDownloadObject
-        ];
-        printMenu = [];
-        break;
       case "DOC_VERIFICATION_INPROGRESS" :
-      downloadMenu = [certificateDownloadObject];
-        break;
       case "FIELDINSPECTION_INPROGRESS" :
-      downloadMenu = [certificateDownloadObject];
-        break;
       case "NOC_VERIFICATION_INPROGRESS" :
-      downloadMenu = [certificateDownloadObject];
-        break;
       case "APPROVAL_INPROGRESS" : 
-      downloadMenu = [certificateDownloadObject];
-       break;
       case "PENDING_SANC_FEE_PAYMENT" :
-      downloadMenu = [certificateDownloadObject];
-      break;
-      printMenu = [];
-      case "DOCUMENTVERIFY":
-      case "FIELDINSPECTION":
-      case "PENDINGAPPROVAL":
       case "REJECTED":
-        downloadMenu = [certificateDownloadObject];
-        printMenu = [];
+      downloadMenu = [appFeeDownloadObject];
+      printMenu = [appFeePrintObject];
         break;
-      case "CANCELLED":
-      case "PENDINGPAYMENT":
-        downloadMenu = [applicationDownloadObject];
-        printMenu = [];
+      case "APPROVED":
+        downloadMenu = [ appFeeDownloadObject, sanFeeDownloadObject, permitOrderDownloadObject ];
+        printMenu = [appFeePrintObject, sanFeePrintObject, permitOrderPrintObject];
         break;
       default:
         break;

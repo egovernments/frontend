@@ -38,6 +38,7 @@ import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import "../egov-bpa/applyResource/index.scss";
 import "../egov-bpa/applyResource/index.css";
+import { printPdf } from "egov-ui-kit/utils/commons";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -133,10 +134,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
-  let riskType = get(
-    state,
-    "screenConfiguration.preparedFinalObject.BPA.riskType"
-  );
+  
   let comparisonDetails = get(
     state,
     "screenConfiguration.preparedFinalObject.comparisonDetails"
@@ -147,45 +145,54 @@ const setDownloadMenu = (action, state, dispatch) => {
   }
   let downloadMenu = [];
   let printMenu = [];
-  let certificateDownloadObject = {
+  let appFeeDownloadObject = {
     label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_APP_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_APP_FEE", "Download");
+    },
+    leftIcon: "book"
+  };
+  let appFeePrintObject = {
+    label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
+    link: () => {
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_APP_FEE", "Print");
     },
     leftIcon: "book"
   };
 
-  let receiptDownloadObject = {
+  let sanFeeDownloadObject = {
     label: { labelName: "Deviation Penality Receipt", labelKey: "BPA_OC_DEV_PEN_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_SAN_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_SAN_FEE", "Download");
     },
     leftIcon: "receipt"
   };
 
-  let applicationDownloadObject = {
-    label: { labelName: "Occupancy Certificate", labelKey: "BPA_OC_CERTIFICATE" },
+  let sanFeePrintObject = {
+    label: { labelName: "Deviation Penality Receipt", labelKey: "BPA_OC_DEV_PEN_RECEIPT" },
     link: () => {
-      permitOrderNoDownload(action, state, dispatch);
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_SAN_FEE", "Print");
     },
-    leftIcon: "assignment"
+    leftIcon: "receipt"
   };
 
-  let paymentReceiptDownload = {
-    label: { labelName: "Fee Receipt", labelKey: "BPA_FEE_RECEIPT" },
+  let occupancyCertificateDownloadObject = {
+    label: { labelName: "Occupancy Certificate", labelKey: "BPA_OC_CERTIFICATE" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE");
-    },
-    leftIcon: "book"
-  };
-  let revocationPdfDownlaod = {
-    label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
-    link: () => {
-      revocationPdfDownload(action, state, dispatch);
+      permitOrderNoDownload(action, state, dispatch, "Download");
     },
     leftIcon: "assignment"
   };
-  let comparisonReportDownloadObject = {}
+  let occupancyCertificatePrintObject = {
+    label: { labelName: "Occupancy Certificate", labelKey: "BPA_OC_CERTIFICATE" },
+    link: () => {
+      permitOrderNoDownload(action, state, dispatch, "Print");
+    },
+    leftIcon: "receipt"
+  };
+
+  let comparisonReportDownloadObject = {};
+  let comparisonReportPrintObject = {};
   if(comparisonReport){
     comparisonReportDownloadObject = {
       label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
@@ -194,33 +201,28 @@ const setDownloadMenu = (action, state, dispatch) => {
       },
       leftIcon: "assignment"
     }
+    comparisonReportPrintObject = {
+      label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
+      link: () => {
+        let comparisonReports = comparisonReport.replace(/http/g, "https");;
+        printPdf(comparisonReports);
+      },
+      leftIcon: "assignment"
+    }
   }
-  
 
-  // if (riskType === "LOW") {
-  //   switch (status) {
-  //     case "REVOCATED":
-  //       downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
-  //       break;
-  //     case "APPROVED":
-  //     case "DOC_VERIFICATION_INPROGRESS":
-  //     case "FIELDINSPECTION_INPROGRESS":
-  //     case "NOC_VERIFICATION_INPROGRESS":
-  //     case "APPROVAL_INPROGRESS":
-  //       downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // } else {
     switch (status) {
       case "APPROVED":
         downloadMenu = [
-          certificateDownloadObject,
-          receiptDownloadObject,
-          applicationDownloadObject
+          appFeeDownloadObject,
+          sanFeeDownloadObject,
+          occupancyCertificateDownloadObject
         ];
-        printMenu = [];
+        printMenu = [
+          appFeePrintObject,
+          sanFeePrintObject,
+          occupancyCertificatePrintObject
+        ];
         break;
       case "DOC_VERIFICATION_INPROGRESS":
       case "FIELDINSPECTION_INPROGRESS":
@@ -229,17 +231,16 @@ const setDownloadMenu = (action, state, dispatch) => {
       case "PENDING_SANC_FEE_PAYMENT":
       case "PENDINGAPPROVAL":
       case "REJECTED":
-        downloadMenu = [certificateDownloadObject];
-        printMenu = [];
+        downloadMenu = [ appFeeDownloadObject ];
+        printMenu = [ appFeePrintObject ];
         break;
       default:
         break;
     }
-  // }
 
   if(comparisonReport){
     downloadMenu.push(comparisonReportDownloadObject);
-    printMenu.push(comparisonReportDownloadObject);
+    printMenu.push(comparisonReportPrintObject);
   }
   dispatch(
     handleField(

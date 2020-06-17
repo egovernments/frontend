@@ -325,21 +325,21 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Payment has been collected successfully!",
-              labelKey: "BPA_CONFIRMATION_MESSAGE_MAIN"
+              labelKey: "CITIZEN_SUCCESS_BPA_NC_APP_FEE_PAYMENT_MESSAGE"
             },
             body: {
               labelName:
                 "A notification regarding Payment Collection has been sent to building owner at registered Mobile No.",
-              labelKey: "BPA_PAYMENT_SUCCESS_MESSAGE_SUB"
+              labelKey: "CITIZEN_SUCCESS_BPA_NC_APP_FEE_PAYMENT_MESSAGE_DETAIL"
             },
             tailText: {
               labelName: "Payment Receipt No.",
-              labelKey: "BPA_PMT_RCPT_NO"
+              labelKey: "CITIZEN_SUCCESS_BPA_NC_APP_FEE_PAYMENT_RECEIPT_NO"
             },
             number: secondNumber,
             tailText: {
               labelName: "Payment Receipt No.",
-              labelKey: "BPA_PMT_RCPT_NO"
+              labelKey: "CITIZEN_SUCCESS_BPA_NC_APP_FEE_PAYMENT_RECEIPT_NO"
             },
             // number: secondNumber
           })

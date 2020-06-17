@@ -4706,7 +4706,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   }
 }
 
-export const revocationPdfDownload = async(action, state, dispatch) => {
+export const revocationPdfDownload = async(action, state, dispatch, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
@@ -4723,7 +4723,11 @@ export const revocationPdfDownload = async(action, state, dispatch) => {
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if(mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  } else {
+    printPdf(pdfDownload[fileStoreId]);    
+  }
 }
 
 export const permitOrderNoDownload = async(action, state, dispatch, mode = "Download") => {
@@ -4785,11 +4789,15 @@ let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
     link.href = url;
     link.setAttribute('download', 'permitorderedcr.pdf');
     document.body.appendChild(link);
-    link.click();
+    if(mode && mode === "Download") {
+      link.click();
+    } else {
+      printPdf(link);
+    }
   });
 }
 
-export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) => {
+export const downloadFeeReceipt = async(state, dispatch, status, serviceCode, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
@@ -4840,7 +4848,12 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if (mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  } else {
+    printPdf(pdfDownload[fileStoreId]);
+  }
+  
 }
 
 const getFloorDetails = (index) => {
