@@ -5,6 +5,7 @@ import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
+import { set } from "lodash";
 
 
 const vfs={ ...pdfFonts.vfs}
@@ -168,12 +169,17 @@ const getMultiItemCard = (header, items, color = 'grey') => {
 
 export const getMultiItems = (preparedFinalObject, cardInfo, sourceArrayJsonPath) => {
     let multiItem = [];
-    for (let i = 0; i < get(preparedFinalObject, sourceArrayJsonPath, []).length; i++) {
+    let removedElements=[];
+    const arrayLength=get(preparedFinalObject, sourceArrayJsonPath, []).length;
+    for (let i = 0; i < arrayLength; i++) {
         let items = [];
         items = generateKeyValue(preparedFinalObject, cardInfo);
-        preparedFinalObject[sourceArrayJsonPath].shift();
+        let sourceArray=get(preparedFinalObject,sourceArrayJsonPath,[]);
+        removedElements.push(sourceArray.shift());
+        set(preparedFinalObject,sourceArrayJsonPath,sourceArray);
         multiItem.push({ items });
     }
+    set(preparedFinalObject,sourceArrayJsonPath,removedElements);
     return multiItem;
 }
 export const getMultipleItemCard = (itemsInfo, itemHeader = "COMMON_OWNER") => {
@@ -295,11 +301,11 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     {
                         "text": [
                             {
-                                "text": getLocaleLabels(applicationData.applicationNoHeader, applicationData.applicationNoHeader),
+                                "text": applicationData.applicationNoHeader?getLocaleLabels(applicationData.applicationNoHeader, applicationData.applicationNoHeader):'',
                                 bold: true
                             },
                             {
-                                "text": getLocaleLabels(applicationData.applicationNoValue, applicationData.applicationNoValue),
+                                "text":applicationData.applicationNoValue? getLocaleLabels(applicationData.applicationNoValue, applicationData.applicationNoValue):'',
                                 italics: true,
                                 "style":"pdf-application-no-value"
                             }
@@ -309,11 +315,11 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     {
                         "text": [
                             {
-                                "text": getLocaleLabels(applicationData.additionalHeader, applicationData.additionalHeader),
+                                "text": applicationData.additionalHeader?getLocaleLabels(applicationData.additionalHeader, applicationData.additionalHeader):'',
                                 bold: true
                             },
                             {
-                                "text": getLocaleLabels(applicationData.additionalHeaderValue, applicationData.additionalHeaderValue),
+                                "text": applicationData.additionalHeaderValue?getLocaleLabels(applicationData.additionalHeaderValue, applicationData.additionalHeaderValue):'',
                                 italics: true,
                                 "style":"pdf-application-no-value"
                             }
