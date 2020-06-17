@@ -1271,7 +1271,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
         let queryObject = [
             {
                 key: "tenantId",
-                value: JSON.parse(getUserInfo()).tenantId
+                value: getTenantIdCommon()
             },
             { key: "offset", value: "0" },
             { key: "connectionNumber", value: connectionNo }

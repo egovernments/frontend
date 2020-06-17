@@ -1,4 +1,4 @@
-import { getPastPaymentDetials } from "../../../../../ui-utils/commons";
+import { getPastPaymentDetials, getTenantIdCommon } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
@@ -9,7 +9,7 @@ export const fetchData = async (action, state, dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: JSON.parse(getUserInfo()).tenantId
+            value: getTenantIdCommon()
         }]
     const response = await getPastPaymentDetials(queryObject);
      try {

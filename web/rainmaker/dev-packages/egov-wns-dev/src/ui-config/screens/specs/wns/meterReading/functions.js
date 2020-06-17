@@ -1,6 +1,6 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getConsumptionDetails } from "../../../../..//ui-utils/commons";
+import { getConsumptionDetails, getTenantIdCommon } from "../../../../../ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
@@ -19,7 +19,7 @@ export const searchApiCall = async (state, dispatch) => {
   let queryObject = [
     {
       key: "tenantId",
-      value: JSON.parse(getUserInfo()).tenantId
+      value: getTenantIdCommon()
     },
     {
       "connectionNos": getQueryArg(window.location.href, "connectionNos")
