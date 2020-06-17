@@ -31,13 +31,13 @@ class DialogContainer extends React.Component {
       root: {
         paddingBottom: 0,
         position: "relative",
-        top: 10
+        top: 0
       }
     }))(MuiDialogContent);
 
     const DialogContainer = withStyles(theme => ({
       root: {
-        zIndex: 13333    
+        zIndex: 13333
         }
     }))(Dialog);
 
