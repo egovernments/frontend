@@ -8,7 +8,6 @@ import { generatePDF, getDocumentsCard, getOwnerCard, getMultipleItemCard } from
 export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "acknowledgement.pdf") => {
 
     property.subOwnershipCategory = get(property, 'propertyDetails[0].subOwnershipCategory', '');
-
     const unitCard = getUnitInfo(get(property, "propertyDetails[0].units", []), property);
     let unitInfoCard = []
     if (unitCard.length >= 1) {
@@ -48,14 +47,13 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     }
     property.owners = property.owners.filter(owner => owner.status == "ACTIVE")
     const ownerInfo = getOwnerInfo(property, generalMDMSDataById);
-
     const addressCard = getAddressItems(property);
     const ownerCard = getMultipleItemCard(ownerInfo,'PT_OWNER');
     const assessmentCard = getAssessmentInfo(get(property, 'propertyDetails[0]', {}), generalMDMSDataById);
     const documentCard = getDocumentsCard(property.documentsUploaded);
 
     let pdfData = {
-        header: "PT_ACKNOWLEDGEMENT", tenantId: "pb.amritsar",
+        header: "PT_ACKNOWLEDGEMENT", tenantId: property.tenantId,
         applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
         additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
         cards: [
