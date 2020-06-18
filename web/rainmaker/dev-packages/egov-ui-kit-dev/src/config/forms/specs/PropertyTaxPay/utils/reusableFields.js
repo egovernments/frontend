@@ -447,7 +447,7 @@ export const beforeInitFormForPlot = {
 export const city = {
   city: {
     id: "city",
-    jsonPath: "PropertiesTemp[0].address.city",
+    jsonPath: "Properties[0].address.city",
     required: true,
     localePrefix: { moduleName: "tenant", masterName: "tenants" },
     type: "AutocompleteDropdown",
