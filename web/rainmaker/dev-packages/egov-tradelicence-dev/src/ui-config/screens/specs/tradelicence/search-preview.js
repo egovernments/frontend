@@ -3,7 +3,8 @@ import {
   getCommonCard,
   getCommonTitle,
   getCommonGrayCard,
-  getCommonContainer
+  getCommonContainer,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -24,7 +25,8 @@ import { downloadPrintContainer,footerReviewTop  } from "./applyResource/footer"
 import {
   getFeesEstimateCard,
   getHeaderSideText,
-  getTransformedStatus
+  getTransformedStatus,
+  showHideAdhocPopup
 } from "../utils";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
@@ -35,6 +37,7 @@ import set from "lodash/set";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale} from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
+import { adhocPopup } from "./applyResource/adhocPopup";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -162,7 +165,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-
+    if (status !== "FIELDINSPECTION") {
+       dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+          "visible",
+          false
+        )
+      );
+    }
     const financialYear = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
@@ -471,6 +483,28 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
+  addPenaltyRebateButton: {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: "ADD GARBAGE CHARGES",
+        labelKey: "TL_PAYMENT_ADD_RBT_PEN"
+      })
+    },
+     onClickDefination: {
+       action: "condition",
+       callBack: showHideAdhocPopup
+     },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      roles: ["TL_FIELD_INSPECTOR"]
+    },
+    visible: (getQueryArg(window.location.href, "tenantId")==='pb.secunderabad')? true:false
+  },
   viewBreakupButton: getDialogButton(
     "VIEW BREAKUP",
     "TL_PAYMENT_VIEW_BREAKUP",
@@ -580,6 +614,19 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "search-preview"
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "search-preview"
+      },
+      children: {
+        popup: adhocPopup
       }
     }
   }

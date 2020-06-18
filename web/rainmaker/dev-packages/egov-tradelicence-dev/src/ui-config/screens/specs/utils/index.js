@@ -429,11 +429,11 @@ export const getIconStyle = key => {
 
 export const showHideAdhocPopup = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["pay"],
+    state.screenConfiguration.screenConfig["search-preview"],
     "components.adhocDialog.props.open",
     false
   );
-  dispatch(handleField("pay", "components.adhocDialog", "props.open", !toggle));
+  dispatch(handleField("search-preview", "components.adhocDialog", "props.open", !toggle));
 };
 
 export const getButtonVisibility = (status, button) => {
@@ -1111,7 +1111,6 @@ const getEstimateData = (ResponseData, isPaid, LicenseData) => {
             }
           });
       }
-
       return result;
     }, []);
     return [
@@ -1126,7 +1125,7 @@ const getBillingSlabData = async (
   dispatch,
   billingSlabIds,
   tenantId,
-  accessories
+  accessories,tradeUnits
 ) => {
   const { accesssoryBillingSlabIds, tradeTypeBillingSlabIds } =
     billingSlabIds || {};
@@ -1166,9 +1165,20 @@ const getBillingSlabData = async (
         response.billingSlab.reduce(
           (result, item) => {
             if (item.tradeType) {
-              tradeTotal = tradeTotal + item.rate;
+              const count = tradeUnits.find(
+                tradeUnit =>
+                  item.tradeType === tradeUnit.tradeType
+              ).uomValue;
+              const UOM = tradeUnits.find(
+                tradeUnit =>
+                  item.tradeType === tradeUnit.tradeType
+              ).uom;
+              tradeTotal = tradeTotal + item.rate * count;
               result.tradeUnitData.push({
                 rate: item.rate,
+                tradeTotal:tradeTotal,
+                UOM,
+                count:count,
                 category: item.tradeType,
                 type: "trade"
               });
@@ -1321,6 +1331,7 @@ export const createEstimateData = async (
   );
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
+  const tradeUnits = get(LicenseData, "tradeLicenseDetail.tradeUnits", []);
   if (payload) {
     const getBillResponse = await calculateBill(getBillQueryObj);
     getBillResponse &&
@@ -1329,8 +1340,14 @@ export const createEstimateData = async (
         dispatch,
         getBillResponse.billingSlabIds,
         tenantId,
-        accessories
+        accessories,tradeUnits
       );
+      set(
+        payload,
+        "billResponse",
+        getBillResponse.billResponse
+      );
+    
   }
 
   /** Waiting for estimate to load while downloading confirmation form */
