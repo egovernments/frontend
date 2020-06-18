@@ -1,6 +1,5 @@
 import React from "react";
 import { TextField, MobileNumberField, SingleCheckbox, DropDown, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
-import { LABELS } from "./constants";
 import { AutosuggestContainer } from "egov-ui-framework/ui-containers";
 
 const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
