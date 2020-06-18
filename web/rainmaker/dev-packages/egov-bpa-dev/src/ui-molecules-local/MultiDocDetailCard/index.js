@@ -131,7 +131,7 @@ const floatStyle = {
   width: "100%",
 };
 const requiredIcon = (
-  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>
+  <sup style={{ color: "#e82a2a", fontSize: "12px", paddingLeft: "5px" }}>
     *
   </sup>
 );
@@ -161,10 +161,10 @@ function MultiDocDetailCard(props) {
             <LabelContainer
               labelKey={getTransformedLocale(docItem.documentCode)}
             />
-              {/* {getTransformedLocale(docItem.documentCode)} */}
-              {docItem.required}
-              <span>{requiredIcon}</span>
-
+              {/* {getTransformedLocale(docItem.documentCode)} */}            
+              {(!docItem.documents || docItem.documents == null || docItem.documents.length == 0) && (docItem.required) ? (
+              <span>{requiredIcon}</span>) : (null)}
+              
             </Typography>
             
           </Grid>
