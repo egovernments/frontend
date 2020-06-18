@@ -11,12 +11,17 @@ const formConfig = {
     typeOfOwnership: {
       id: "typeOfOwnership",
       jsonPath: "Properties[0].propertyDetails[0].subOwnershipCategory",
-      type: "autoSuggestDropdown",
+      type: "AutocompleteDropdown",
       floatingLabelText: "PT_FORM3_OWNERSHIP_TYPE",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
+      labelsFromLocalisation: false,
       hintText: "PT_FORM3_OWNERSHIP_TYPE_PLACEHOLDER",
       numcols: 6,
       required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
         const { value } = sourceField;
         const institutedropDown = updateInstituteType(state, value);
