@@ -1,9 +1,9 @@
-import { getPastPaymentDetials, getTenantIdCommon } from "../../../../../ui-utils/commons";
+import { getPastPaymentDetials } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 export const fetchData = async (action, state, dispatch) => {
     let queryObject = [

@@ -6,8 +6,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { getTenantIdCommon } from "../../../../../ui-utils/commons";
+import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getTenantIdCommon()
 const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
