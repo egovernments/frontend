@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
-import { LabelContainer, TextFieldContainer } from "egov-ui-framework/ui-containers";
+import { LabelContainer, TextFieldContainer, AutosuggestContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getTransformedLocale, handleFileUpload } from "egov-ui-framework/ui-utils/commons";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -306,7 +306,7 @@ class DocumentList extends Component {
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropdown && (
-            <TextFieldContainer
+            <AutosuggestContainer
               select={true}
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
@@ -317,6 +317,8 @@ class DocumentList extends Component {
               required={true}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
+              className= "autocomplete-dropdown"
+              labelsFromLocalisation= {true}
             />
           )}
         </Grid>

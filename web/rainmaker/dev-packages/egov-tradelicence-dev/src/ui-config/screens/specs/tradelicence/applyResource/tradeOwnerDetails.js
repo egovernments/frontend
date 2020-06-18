@@ -277,34 +277,44 @@ export const OwnerInfoCard = {
           required: true,
           type: "array"
         },
-        getOwnerGenderField: getSelectField({
-          label: {
-            labelName: "Gender",
-            labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+        getOwnerGenderField: {
+          uiFramework: "custom-containers",
+          componentPath: "RadioGroupContainer",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
           },
-          placeholder: {
-            labelName: "Select Gender",
-            labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
+          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+          props: {
+            label: {
+              name: "Gender",
+              key: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+            },
+            buttons: [
+              {
+                labelName: "Male",
+                labelKey: "COMMON_GENDER_MALE",
+                value: "MALE"
+              },
+              {
+                label: "Female",
+                labelKey: "COMMON_GENDER_FEMALE",
+                value: "FEMALE"
+              },
+              {
+                label: "Others",
+                labelKey: "COMMON_GENDER_TRANSGENDER",
+                value: "OTHERS"
+              }
+            ],
+            jsonPath:
+              "Licenses[0].tradeLicenseDetail.owners[0].gender",
+            required: true
           },
           required: true,
-          optionValue: "code",
-          optionLabel: "label",
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-          data: [
-            {
-              code: "MALE",
-              label: "COMMON_GENDER_MALE"
-            },
-            {
-              code: "FEMALE",
-              label: "COMMON_GENDER_FEMALE"
-            },
-            {
-              code: "OTHERS",
-              label: "COMMON_GENDER_TRANSGENDER"
-            }
-          ]
-        }),
+          type: "array"
+        },
         ownerDOB: {
           ...getDateField({
             label: {

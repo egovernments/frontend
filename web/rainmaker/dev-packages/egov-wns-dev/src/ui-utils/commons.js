@@ -228,56 +228,7 @@ export const getWorkFlowData = async (queryObject) => {
     }
 };
 
-// api call to get my connection details
-export const getMyConnectionResults = async (queryObject, dispatch) => {
-    dispatch(toggleSpinner());
-    try {
-        const response = await httpRequest(
-            "post",
-            "/ws-services/wc/_search",
-            "_search",
-            queryObject
-        );
-
-        if (response.WaterConnection.length > 0) {
-            response.WaterConnection = await getPropertyObj(response.WaterConnection); 
-            for (let i = 0; i < response.WaterConnection.length; i++) {
-                response.WaterConnection[i].service = _.capitalize(serviceConst.WATER)
-                if (response.WaterConnection[i].connectionNo !== null && response.WaterConnection[i].connectionNo !== undefined) {
-                    try {
-                        const data = await httpRequest(
-                            "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
-                            "_fetchbill",
-                            // queryObject
-                        );
-                        if (data && data !== undefined) {
-                            if (data.Bill !== undefined && data.Bill.length > 0) {
-                                response.WaterConnection[i].due = data.Bill[0].totalAmount
-                            }
-
-                        } else {
-                            response.WaterConnection[i].due = 0
-                        }
-
-                    } catch (err) {
-                        console.log(err)
-                        response.WaterConnection[i].due = "NA"
-                    }
-                }
-            }
-            // });
-        }
-        dispatch(toggleSpinner());
-        return findAndReplace(response, null, "NA");
-    } catch (error) {
-        dispatch(toggleSpinner());
-        console.log(error);
-    }
-
-};
-
-export const getMyApplicationResults = async (queryObject, dispatch) => {
+export const getWSMyResults = async (queryObject, consumer, dispatch) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -291,11 +242,19 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
             response.WaterConnection = await getPropertyObj(response.WaterConnection);
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 response.WaterConnection[i].service = _.capitalize(serviceConst.WATER)
-                if (response.WaterConnection[i].applicationNo !== null && response.WaterConnection[i].applicationNo !== undefined) {
+                let consumerCode = "", bService=""
+                if(consumer === 'APPLICATION'){
+                    consumerCode = response.WaterConnection[i].applicationNo
+                    bService = 'WS.ONE_TIME_FEE'
+                }else if(consumer === 'CONNECTION'){
+                    consumerCode = response.WaterConnection[i].connectionNo
+                    bService = 'WS'
+                }
+                if (consumerCode !== null && consumerCode !== undefined) {
                     try {
                         const data = await httpRequest(
                             "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].applicationNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS.ONE_TIME_FEE`,
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=${bService}`,
                             "_fetchbill",
                             // queryObject
                         );
@@ -1563,17 +1522,19 @@ export const getSWMyResults = async (queryObject, consumer, dispatch) => {
             response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
             for (let i = 0; i < response.SewerageConnections.length; i++) {
                 response.SewerageConnections[i].service = _.capitalize(serviceConst.SEWERAGE)
-                let consumerCode = ""
+                let consumerCode = "", bService=""
                 if(consumer === 'APPLICATION'){
                     consumerCode = response.SewerageConnections[i].applicationNo
+                    bService = 'SW.ONE_TIME_FEE'
                 }else if(consumer === 'CONNECTION'){
                     consumerCode = response.SewerageConnections[i].connectionNo
+                    bService = 'SW'
                 }
-                if (response.SewerageConnections[i].connectionNo !== undefined && response.SewerageConnections[i].connectionNo !== null) {
+                if (consumerCode !== undefined && consumerCode !== null) {
                     try {
                         const data = await httpRequest(
                             "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=${bService}`,
                             "_fetchbill",
                             // queryObject
                         );
