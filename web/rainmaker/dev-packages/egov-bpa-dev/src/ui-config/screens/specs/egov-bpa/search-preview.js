@@ -605,6 +605,11 @@ const screenConfig = {
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
+   if(get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS"){  
+     // TODO if required to show for architect before apply, 
+     //this condition should extend to OR with status INPROGRESS
+      generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+   }
     // Hide edit buttons
 
     set(
@@ -662,6 +667,13 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
       false
     );
+  
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
+        (get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS")
+      );
+
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
@@ -760,7 +772,7 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          // estimateSummary: estimateSummary,
+          estimateSummary: estimateSummary,
           fieldSummary: fieldSummary,
           fieldinspectionSummary: fieldinspectionSummary,
           basicSummary: basicSummary,

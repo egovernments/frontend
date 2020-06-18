@@ -364,7 +364,7 @@ export const changePage = async (tableState) => {
     if (bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0) {
       const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
       bpaResponse.Bpa.forEach(element => {
-        let status = getTextToLocalMapping("WF_BPA_" + get(element, "status"));
+        let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[element.applicationNo], "state", null));
         let service = getTextToLocalMapping("BPA_APPLICATIONTYPE_" + get(element, "applicationType"));
         service += " - " + getTextToLocalMapping("BPA_SERVICETYPE_" + get(element, "serviceType"));
         let modifiedTime = element.auditDetails.lastModifiedTime;
