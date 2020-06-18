@@ -330,10 +330,7 @@ class WorkFlowContainer extends React.Component {
     let bservice = "";
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
-<<<<<<< HEAD
       bservice = "FIRENOC";
-=======
->>>>>>> master
     } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC") {
       baseUrl = "egov-bpa";
       if (moduleName === "BPA") {
