@@ -7,6 +7,32 @@ import { generateKeyValue, generatePDF, getDocumentsCard, getEstimateCardDetails
 
 export const generateTLAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
 
+
+
+    tradeLocationDetails.reviewMohalla.localiseValue=true;
+    tradeLocationDetails.reviewCity.localiseValue=true;
+
+    tradetypeDetails.reviewTradeCategory.localiseValue=true;
+    tradetypeDetails.reviewTradeType.localiseValue=true;
+    tradetypeDetails.reviewTradeSubtype.localiseValue=true;
+
+    tradeAccessoriesDetails.reviewAccessoryType.localiseValue=true;
+
+    tradeReviewDetails.reviewApplicationType.localiseValue=true;
+    tradeReviewDetails.reviewLicenceType.localiseValue=true;
+    tradeReviewDetails.reviewStructureType.localiseValue=true;
+    tradeReviewDetails.reviewSubStructureType.localiseValue=true;
+
+    tradeOwnerDetailstradeOwnerDetails.reviewOwnerGender.localiseValue=true;
+    tradeOwnerDetails.reviewownershipType.localiseValue=true;
+    tradeOwnerDetails.reviewsubOwnership.localiseValue=true;
+    tradeOwnerDetails.reviewOwnerSpecialCat.localiseValue=true;
+    tradeOwnerDetails.reviewRelationship.localiseValue=true;
+    // "reviewownershipType"
+    // "reviewsubOwnership"
+    // "reviewRelationship"
+    // "reviewOwnerGender"
+
     let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
     let License = get(preparedFinalObject, 'Licenses[0]', {});
 

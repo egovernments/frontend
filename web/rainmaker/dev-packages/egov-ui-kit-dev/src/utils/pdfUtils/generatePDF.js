@@ -6,6 +6,8 @@ import { set } from "lodash";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
+import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
+
 
 
 const vfs = { ...pdfFonts.vfs }
@@ -226,6 +228,9 @@ export const getDocumentsCard = (documentsUploadRedux) => {
         return { key: getLocaleLabels(item.title, item.title), value: item.name }
     })
 }
+
+
+
 export const generateKeyValue = (preparedFinalObject, containerObject) => {
     let keyValue = []
     Object.keys(containerObject).map(keys => {
@@ -233,6 +238,7 @@ export const generateKeyValue = (preparedFinalObject, containerObject) => {
         const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
         const valueObject = containerObject[keys].children.value.children.key.props;
         let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        value=value!=='NA'&&valueObject.localePrefix?appendModulePrefix(value,valueObject.localePrefix):value;
         value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
         keyValue.push({ key, value });
     })
