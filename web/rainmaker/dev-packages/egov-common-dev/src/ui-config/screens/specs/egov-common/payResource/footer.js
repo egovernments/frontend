@@ -9,6 +9,7 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
 import "./index.css";
+import { prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const callPGService = async (state, dispatch) => {
   const isAdvancePaymentAllowed =get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
@@ -233,7 +234,7 @@ const callBackForPay = async (state, dispatch) => {
   }
  
   // --- Validation related -----//
-
+  dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
   const selectedPaymentType = get(
     state.screenConfiguration.preparedFinalObject,
     "ReceiptTemp[0].instrument.instrumentType.name"
