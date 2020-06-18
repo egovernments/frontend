@@ -8,18 +8,14 @@ import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMult
 
 export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
     registrationSummaryDetails.transferReason.localiseValue=true;
-
     transferorSummaryDetails.ownerType.localiseValue=true;
     transfereeSummaryDetails.ownerType.localiseValue=true;
     transfereeInstitutionSummaryDetails.institutionType.localiseValue=true;
     transferorInstitutionSummaryDetails.institutionType.localiseValue=true;
-
     const mutationDetails = generateKeyValue(preparedFinalObject, mutationSummaryDetails);
     const registrationDetails = generateKeyValue(preparedFinalObject, registrationSummaryDetails);
-
     let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
     let property = get(preparedFinalObject, 'Property', {});
-
     let transfereeOwners = get(
         property,
         "ownersTemp", []
@@ -39,7 +35,6 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
         if (owner.ownerType != 'NONE') {
             transferorOwnersDid = false;
         }
-
     })
 
     if (transfereeOwnersDid) {
@@ -71,13 +66,9 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
         transfereeDetails = getMultipleItemCard(transferorDetailsInfo, 'PT_OWNER')
     }
 
-
     const addressCard = getAddressItems(get(preparedFinalObject, 'Property', {}));
-
     const documentsUploadRedux = get(preparedFinalObject, 'documentsUploadRedux', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
-
-
     let pdfData = {
         header: "PTM_ACKNOWLEDGEMENT", tenantId: property.tenantId,
         applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
