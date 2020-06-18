@@ -91,7 +91,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
         let element = combinedSearchResults[i];
         if (element.connectionNo !== "NA" && element.connectionNo !== null) {
           let queryObjectForWaterFetchBill;
-          if (element.service === "WATER") {
+          if (element.service === serviceConst.WATER) {
             queryObjectForWaterFetchBill = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
           } else {
             queryObjectForWaterFetchBill = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
