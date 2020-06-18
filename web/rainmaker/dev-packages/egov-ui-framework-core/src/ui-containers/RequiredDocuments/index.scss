@@ -38,11 +38,18 @@
 
 .footerSticky {
   position: sticky;
-  bottom: 3px;
-  margin-bottom: 0;
+  bottom: 2px;
 }
 
+.fixedHeader {
+  position: sticky;
+  background: white;
+  top: 0px;
+  padding-top: 10px;
+}
+
+
 #documents-div{
-  padding-bottom: 24px;
+  padding-bottom: 0px;
 }
 

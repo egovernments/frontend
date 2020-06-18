@@ -1,7 +1,6 @@
 import {
   getCommonCard,
   getTextField,
-  getSelectField,
   getCommonContainer,
   getPattern,
   getDateField
@@ -25,7 +24,10 @@ export const newCollectionDetailsCard = getCommonCard(
     searchContainer: getCommonContainer(
       {
         City: {
-          ...getSelectField({
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-uc",
+          componentPath: "AutosuggestContainer",
+          props:{
             label: {
               labelName: "City",
               labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
@@ -39,16 +41,18 @@ export const newCollectionDetailsCard = getCommonCard(
               labelName: "Select City",
               labelKey: "TL_SELECT_CITY"
             },
-            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
-            // "applyScreenMdmsData.common-masters.citiesByModule.UC.tenants",
-            jsonPath: "Demands[0].tenantId",
             required: true,
-            props: {
-              required: true,
-              value: tenantId,
-              disabled: true
-            }
-          }),
+            value: tenantId,
+            disabled: true,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
+            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
+          },
+          jsonPath: "Demands[0].tenantId",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
           beforeFieldChange: async (action, state, dispatch) => {
             const citiesByModule = get(
               state,
@@ -153,7 +157,8 @@ export const newCollectionDetailsCard = getCommonCard(
           jsonPath: "Demands[0].consumerName"
         }),
         serviceCategory: {
-          uiFramework: "custom-containers",
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-uc",
           componentPath: "AutosuggestContainer",
           jsonPath: "Demands[0].businessService",
           gridDefination: {
@@ -161,10 +166,7 @@ export const newCollectionDetailsCard = getCommonCard(
             sm: 6
           },
           props: {
-            style: {
-              width: "100%",
-              cursor: "pointer"
-            },
+            className: "autocomplete-dropdown",
             label: {
               labelName: "Service Category",
               labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -182,11 +184,6 @@ export const newCollectionDetailsCard = getCommonCard(
             jsonPath: "Demands[0].businessService",
             sourceJsonPath: "applyScreenMdmsData.serviceCategories",
             labelsFromLocalisation: true,
-            suggestions: [],
-            fullwidth: true,
-            inputLabelProps: {
-              shrink: true
-            }
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
@@ -249,7 +246,10 @@ export const newCollectionDetailsCard = getCommonCard(
           }
         },
         serviceType: {
-          ...getSelectField({
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-uc",
+          componentPath: "AutosuggestContainer",
+          props: {
             label: {
               labelName: "Service Type",
               labelKey: "UC_SERVICE_TYPE_LABEL"
@@ -264,13 +264,15 @@ export const newCollectionDetailsCard = getCommonCard(
             },
             required: true,
             visible: false,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
             sourceJsonPath: "applyScreenMdmsData.serviceTypes",
-            jsonPath: "Demands[0].serviceType",
-            gridDefination: {
-              xs: 12,
-              sm: 6
-            }
-          }),
+          },
+          jsonPath: "Demands[0].serviceType",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
           beforeFieldChange: async (action, state, dispatch) => {
             const demandId = get(
               state.screenConfiguration.preparedFinalObject,

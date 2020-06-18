@@ -2412,7 +2412,7 @@ export const getTextToLocalMapping = label => {
       );
 
     case "INITIATED":
-      return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
+      return getLocaleLabels("Initiated,", "WF_BPA_INITIATED", localisationLabels);
     case "APPLIED":
       return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
@@ -2428,11 +2428,11 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
     case "APPROVED":
-      return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
+      return getLocaleLabels("Approved", "WF_BPA_APPROVED", localisationLabels);
     case "REJECTED":
-      return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
+      return getLocaleLabels("Rejected", "WF_BPA_REJECTED", localisationLabels);
     case "CANCELLED":
-      return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
+      return getLocaleLabels("Cancelled", "WF_BPA_CANCELLED", localisationLabels);
     case "PENDINGAPPROVAL":
       return getLocaleLabels(
         "Pending for Approval",
@@ -3462,10 +3462,10 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_REJECTED", 
         localisationLabels
       );
-    case "REVOCATED":
+    case "PERMIT REVOCATION":
       return getLocaleLabels(
-        "Revocated", 
-        "WF_BPA_REVOCATED", 
+        "PERMIT REVOCATION", 
+        "WF_BPA_PERMIT REVOCATION", 
         localisationLabels
       );
     case "CANCELLED":

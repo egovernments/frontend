@@ -63,7 +63,7 @@ class DynamicMdmsContainer extends Component {
         let { key } = entry;
         if(index < i){
           let removeValuePath = `DynamicMdms.${moduleName}.${rootBlockSub}.${key}`;
-          dispatch(prepareFinalObject( removeValuePath , '' ));
+          dispatch(prepareFinalObject( removeValuePath , 'none' ));
         }
       });
       this.setState({ selectedValues });
