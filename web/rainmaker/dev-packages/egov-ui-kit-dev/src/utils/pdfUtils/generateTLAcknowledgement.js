@@ -23,7 +23,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
     tradeReviewDetails.reviewStructureType.localiseValue=true;
     tradeReviewDetails.reviewSubStructureType.localiseValue=true;
 
-    tradeOwnerDetailstradeOwnerDetails.reviewOwnerGender.localiseValue=true;
+    tradeOwnerDetails.reviewOwnerGender.localiseValue=true;
     tradeOwnerDetails.reviewownershipType.localiseValue=true;
     tradeOwnerDetails.reviewsubOwnership.localiseValue=true;
     tradeOwnerDetails.reviewOwnerSpecialCat.localiseValue=true;
