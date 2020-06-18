@@ -74,7 +74,7 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
 const fetchMDMSForBillPeriod = async(action,state,dispatch) => {
   const requestBody = { 
     "MdmsCriteria": { 
-        "tenantId": getTenantId(),
+        "tenantId": tenantId,
           "moduleDetails": [            
             { "moduleName": "ws-services-masters", "masterDetails": [{ "name": "billingPeriod" }]},
             { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" }]}
