@@ -68,7 +68,7 @@ export const searchApiCall = async (state, dispatch) => {
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key] === ""
       ) {
-        searchScreenObject[key];
+        delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
