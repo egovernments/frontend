@@ -104,9 +104,7 @@ export const fetchData = async (
             "MODULE_" + get(element, "businessService")
           );
 
-          let status = getTextToLocalMapping(
-            "WF_ARCHITECT_" + get(element, "status")
-          );
+          let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMapping[element.applicationNo], "state", null));
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let licensetypeFull =
             element.tradeLicenseDetail.tradeUnits[0].tradeType;
