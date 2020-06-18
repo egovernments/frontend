@@ -38,7 +38,13 @@ import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
 import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
-import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload, setProposedBuildingData } from "../utils/index";
+import { 
+  permitOrderNoDownload, 
+  downloadFeeReceipt, 
+  revocationPdfDownload, 
+  setProposedBuildingData,
+  generateBillForBPA
+ } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -403,6 +409,16 @@ const setSearchResponse = async (
   const edcrNumber = get(response, "Bpa[0].edcrNumber");
   const status = get(response, "Bpa[0].status");
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  if(get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS"){  
+    // TODO if required to show for architect before apply, 
+    //this condition should extend to OR with status INPROGRESS
+     generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+  }
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
+    (get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS")
+  );
 
   let edcrRes = await edcrHttpRequest(
     "post",
@@ -605,11 +621,7 @@ const screenConfig = {
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
-   if(get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS"){  
-     // TODO if required to show for architect before apply, 
-     //this condition should extend to OR with status INPROGRESS
-      generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
-   }
+
     // Hide edit buttons
 
     set(
@@ -667,13 +679,6 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
       false
     );
-  
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
-        (get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS")
-      );
-
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
