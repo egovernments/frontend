@@ -640,7 +640,7 @@ export const ownerInfoInstitutional = {
 
 const ownerShipChange = (reqObj) => {
   try {
-    let { value, dispatch } = reqObj;
+    let { value, dispatch, state } = reqObj;
       if (value === "INDIVIDUAL") {
         if (get( state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.institution")) {
           dispatch(pFO("Licenses[0].tradeLicenseDetail.institution", null));
@@ -678,11 +678,10 @@ const ownerShipChange = (reqObj) => {
             true
           )
         );
-        dispatch(
-          pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
-        );
       }
-
+      dispatch(
+        pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
+      );
   } catch (e){
     console.log(e);
   }
