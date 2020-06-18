@@ -1,18 +1,16 @@
 import {
-  getCommonGrayCard,
+  getCommonContainer, getCommonGrayCard,
   getCommonSubHeader,
-  getCommonContainer,
-  getLabelWithValue,
-  getDivider,
-  getLabel
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { changeStep } from "./footer";
-import {
-  getQueryArg
-} from "egov-ui-framework/ui-utils/commons";
 
-import { convertEpochToDate, checkValueForNA } from "../../utils";
-export const tradeAccessoriesDetails={
+
+  getDivider,
+  getLabel, getLabelWithValue
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { checkValueForNA, convertEpochToDate } from "../../utils";
+import { changeStep } from "./footer";
+
+export const tradeAccessoriesDetails = {
   reviewAccessoryType: getLabelWithValue(
     {
       labelName: "Accesory Type",
@@ -68,7 +66,7 @@ const accessoriesCard = {
   },
   type: "array"
 };
-export const tradetypeDetails={
+export const tradetypeDetails = {
   reviewTradeCategory: getLabelWithValue(
     {
       labelName: "Trade Category",
@@ -97,7 +95,7 @@ export const tradetypeDetails={
         masterName: "TRADETYPE"
       },
       callBack: value => {
-        return value ?  value.split(".")[1] : "NA";
+        return value ? value.split(".")[1] : "NA";
       }
     }
   ),
@@ -150,7 +148,7 @@ const tradeTypeCard = {
   },
   type: "array"
 };
-export const tradeReviewDetails={
+export const tradeReviewDetails = {
   reviewApplicationType: getLabelWithValue(
     {
       labelName: "Application Type",
@@ -190,24 +188,24 @@ export const tradeReviewDetails={
       labelName: "Trade Name",
       labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
     },
-    { jsonPath: "Licenses[0].tradeName"}
+    { jsonPath: "Licenses[0].tradeName" }
   ),
   reviewFromDate: getLabelWithValue(
-    { labelName: "From Date",labelKey : "TL_COMMON_FROM_DATE_LABEL" },
+    { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
     {
       jsonPath: "Licenses[0].validFrom",
       callBack: convertEpochToDate
     }
   ),
   reviewToDate: getLabelWithValue(
-    { labelName: "To Date",labelKey : "TL_COMMON_TO_DATE_LABEL" },
+    { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
     {
       jsonPath: "Licenses[0].validTo",
       callBack: convertEpochToDate
     }
   ),
   reviewStructureType: getLabelWithValue(
-    { labelName: "Structure Type" ,labelKey : "TL_STRUCTURE_TYPE"},
+    { labelName: "Structure Type", labelKey: "TL_STRUCTURE_TYPE" },
     {
       jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
       localePrefix: {
@@ -215,12 +213,12 @@ export const tradeReviewDetails={
         masterName: "STRUCTURETYPE"
       },
       callBack: value => {
-        return  value ? value.split(".")[0] : "NA";
+        return value ? value.split(".")[0] : "NA";
       }
     }
   ),
   reviewSubStructureType: getLabelWithValue(
-    { labelName: "Structure Sub Type", labelKey : "TL_STRUCTURE_SUB_TYPE" },
+    { labelName: "Structure Sub Type", labelKey: "TL_STRUCTURE_SUB_TYPE" },
     {
       jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
       localePrefix: {
@@ -254,9 +252,9 @@ export const tradeReviewDetails={
       labelName: "Operational Area",
       labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
     },
-    { 
-      jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea", 
-      callBack: checkValueForNA 
+    {
+      jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea",
+      callBack: checkValueForNA
     }
   ),
   reviewNoOfEmployee: getLabelWithValue(
@@ -264,14 +262,14 @@ export const tradeReviewDetails={
       labelName: "No of Employees",
       labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
     },
-    { 
+    {
       jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees",
-      callBack: checkValueForNA 
+      callBack: checkValueForNA
     }
   )
 }
 
-export const tradeLocationDetails={
+export const tradeLocationDetails = {
   reviewPropertyID: getLabelWithValue(
     {
       labelName: "Property Assessment ID",
@@ -319,9 +317,9 @@ export const tradeLocationDetails={
       labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
     },
     {
-      jsonPath:"Licenses[0].tradeLicenseDetail.address.locality.code",
+      jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
       localePrefix: {
-        moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase():"",
+        moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : "",
         masterName: "REVENUE"
       }, callBack: checkValueForNA
     }
@@ -341,7 +339,7 @@ export const tradeLocationDetails={
     {
       jsonPath:
         "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo",
-        callBack: checkValueForNA
+      callBack: checkValueForNA
     }
   )
 }

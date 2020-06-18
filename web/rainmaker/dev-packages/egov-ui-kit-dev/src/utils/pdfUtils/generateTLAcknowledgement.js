@@ -2,7 +2,7 @@ import { tradeOwnerDetails } from "egov-tradelicence/ui-config/screens/specs/tra
 import { tradeAccessoriesDetails, tradeLocationDetails, tradeReviewDetails, tradetypeDetails } from "egov-tradelicence/ui-config/screens/specs/tradelicence/applyResource/review-trade";
 import get from "lodash/get";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
-import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard, getEstimateCardDetails } from "./generatePDF";
+import { generateKeyValue, generatePDF, getDocumentsCard, getEstimateCardDetails, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
 
 
@@ -79,7 +79,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
 
 
 
-const estimateDetails=getEstimateCardDetails(get(preparedFinalObject,'LicensesTemp[0].estimateCardData', []))
+    const estimateDetails = getEstimateCardDetails(get(preparedFinalObject, 'LicensesTemp[0].estimateCardData', []))
 
 
 
@@ -103,7 +103,7 @@ const estimateDetails=getEstimateCardDetails(get(preparedFinalObject,'LicensesTe
     } else if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length > 1) {
 
         tradeAccessoriesSummaryInfo = getMultiItems(preparedFinalObject, tradeAccessoriesDetails, 'Licenses[0].tradeLicenseDetail.accessories')
-        tradeAccessoriesSummary = getMultipleItemCard(tradeAccessoriesSummaryInfo,  "TL_TRADE_ACCESSORY");
+        tradeAccessoriesSummary = getMultipleItemCard(tradeAccessoriesSummaryInfo, "TL_TRADE_ACCESSORY");
     }
     let tradeOwnerSummary = []
     let tradeOwnerSummaryInfo = []
@@ -116,7 +116,7 @@ const estimateDetails=getEstimateCardDetails(get(preparedFinalObject,'LicensesTe
     }
 
     const tradeLocationSummary = generateKeyValue(preparedFinalObject, tradeLocationDetails);
-    
+
     // tradeInstitutionDetails
 
     let pdfData = {
@@ -124,14 +124,14 @@ const estimateDetails=getEstimateCardDetails(get(preparedFinalObject,'LicensesTe
         applicationNoHeader: 'TL_PDF_LICENSE_NO', applicationNoValue: License.licenseNumber,
         additionalHeader: "TL_PDF_APPLICATION_NO", additionalHeaderValue: License.applicationNumber,
         cards: [
-            {  items: estimateDetails,type:'estimate' },
+            { items: estimateDetails, type: 'estimate' },
             // { header: 'PT_MUTATION_TRANSFEROR_DETAILS', items: transferorDetails, type: transferorDetailsInfo.length > 1 ? 'multiItem' : 'singleItem' },
 
             { header: "TL_COMMON_TR_DETAILS", items: tradeReviewSummary },
 
-            {header:'-1', items: tradeTypeSummary, type: tradeTypeSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
-            {header:'-1', items: tradeAccessoriesSummary, type: tradeAccessoriesSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
-            {header:'-1', items: tradeLocationSummary },
+            { header: '-1', items: tradeTypeSummary, type: tradeTypeSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
+            { header: '-1', items: tradeAccessoriesSummary, type: tradeAccessoriesSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
+            { header: '-1', items: tradeLocationSummary },
 
             { header: "TL_COMMON_OWN_DETAILS", items: tradeOwnerSummary, type: tradeOwnerSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
 

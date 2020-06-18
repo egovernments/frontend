@@ -1,13 +1,13 @@
 import {
-  getCommonGrayCard,
+  getCommonContainer, getCommonGrayCard,
   getCommonSubHeader,
-  getCommonContainer,
-  getLabelWithValue,
-  getLabel
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDate, checkValueForNA } from "../../utils";
 
+
+  getLabel, getLabelWithValue
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { checkValueForNA, convertEpochToDate } from "../../utils";
 import { changeStep } from "./footer";
+
 
 export const reviewownershipType = getLabelWithValue(
   {
@@ -115,7 +115,7 @@ export const reviewOwnerPAN = getLabelWithValue(
 
 
 
-export const tradeOwnerDetails={
+export const tradeOwnerDetails = {
   reviewownershipType,
   reviewsubOwnership,
   reviewOwnerPhoneNo,
@@ -140,7 +140,7 @@ export const tradeOwnerDetails={
     {
       jsonPath:
         "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
-        callBack: checkValueForNA
+      callBack: checkValueForNA
     }
   ),
   reviewOwnerSpecialCat: getLabelWithValue(
@@ -158,7 +158,7 @@ export const tradeOwnerDetails={
     }
   )
 }
-export const tradeInstitutionDetails={
+export const tradeInstitutionDetails = {
   reviewownershipType,
   reviewsubOwnership,
   reviewOwnerPhoneNo,
@@ -170,7 +170,7 @@ export const tradeInstitutionDetails={
     {
       jsonPath:
         "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber",
-        callBack: checkValueForNA
+      callBack: checkValueForNA
     }
   ),
   reviewOwnerName: getLabelWithValue(
@@ -178,7 +178,7 @@ export const tradeInstitutionDetails={
       labelName: "Name of the Authorised Person",
       labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
     },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"}
+    { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
   ),
   reviewDesignation: getLabelWithValue(
     {
@@ -188,7 +188,7 @@ export const tradeInstitutionDetails={
     {
       jsonPath:
         "Licenses[0].tradeLicenseDetail.institution.designation",
-        callBack: checkValueForNA
+      callBack: checkValueForNA
     }
   ),
   reviewOwnerFatherName,
@@ -205,7 +205,7 @@ export const tradeInstitutionDetails={
     {
       jsonPath:
         "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
-        callBack: checkValueForNA
+      callBack: checkValueForNA
     }
   )
 }
