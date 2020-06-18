@@ -5,6 +5,7 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
@@ -137,6 +138,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+
+  loadUlbLogo(tenantId);
+
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&

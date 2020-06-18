@@ -28,6 +28,7 @@ import jsPDF from "jspdf";
 import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
+import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -1033,7 +1034,8 @@ export const downloadPrintContainer = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses);
+      // downloadAcknowledgementForm(Licenses);
+      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject);
     },
     leftIcon: "assignment"
   };

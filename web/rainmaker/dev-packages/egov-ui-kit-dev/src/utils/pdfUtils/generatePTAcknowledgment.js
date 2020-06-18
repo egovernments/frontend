@@ -55,7 +55,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     const documentCard = getDocumentsCard(property.documentsUploaded);
 
     let pdfData = {
-        header: "PT_ACKNOWLEDGEMENT", tenantId: "pb.amritsar",
+        header: "PT_ACKNOWLEDGEMENT", tenantId: property.tenantId,
         applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
         additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
         cards: [

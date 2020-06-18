@@ -79,7 +79,7 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
 
 
     let pdfData = {
-        header: "PTM_ACKNOWLEDGEMENT", tenantId: "pb.amritsar",
+        header: "PTM_ACKNOWLEDGEMENT", tenantId: property.tenantId,
         applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
         additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
         cards: [
