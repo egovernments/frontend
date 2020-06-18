@@ -1817,7 +1817,7 @@ export const getDocList = (state, dispatch) => {
           maxFileSize : item.maxFileSize,
           required :transformedDocObj.required,
           formatProps : {
-            accept : item&&item.allowedformt&&itm.allowerdformat.join()
+            accept : item.allowedFormat.join(",")
           },
           description : `COMMON_${item.code}_DESCRIPTION`,
           statement : `COMMON_${item.code}_STATEMENT`
