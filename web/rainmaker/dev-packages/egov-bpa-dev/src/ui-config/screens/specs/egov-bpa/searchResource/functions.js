@@ -4,9 +4,10 @@ import { getAppSearchResults, getBpaSearchResults } from "../../../../../ui-util
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResults";
-import { validateFields, getBpaTextToLocalMapping } from "../../utils";
+import { validateFields, getBpaTextToLocalMapping, getTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -114,6 +115,7 @@ export const searchApiCall = async (state, dispatch) => {
     }
     try {
       const response = await getBpaSearchResults(queryObject);
+      const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(get(response, "Bpa"));
       // const response = searchSampleResponse();
 
       let data = response.Bpa.map(item => ({
@@ -122,7 +124,7 @@ export const searchApiCall = async (state, dispatch) => {
             return items.isPrimaryOwner ? items.name : "";
           }),
         ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) || "-",
-        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
+        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[item.applicationNo], "state", null)),
         ["TENANT_ID"]: item.tenantId,
         ["SERVICE_TYPE"]: get(item, "businessService")
       }));

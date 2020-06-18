@@ -127,10 +127,10 @@ export const searchResults = {
           customBodyRender: value => (
             <span
               style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
+                value === "Approved" ? { color: "green" } : { color: "red" }
               }
             >
-              {getBpaTextToLocalMapping(value)}
+              {value}
             </span>
           )
         }
