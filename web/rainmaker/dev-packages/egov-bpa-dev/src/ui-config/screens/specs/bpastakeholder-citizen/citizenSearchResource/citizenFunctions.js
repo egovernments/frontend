@@ -166,9 +166,8 @@ export const fetchData = async (
       if(bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0){
         const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
         bpaResponse.Bpa.forEach(element => {
-          let status = getTextToLocalMapping(
-            "WF_BPA_" + get(element, "status")
-          );
+          let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[element.applicationNo], "state", null));
+          let applicationStatus = get(element, "status");
           let bService = get(element, "businessService");
           let appType = "BUILDING_PLAN_SCRUTINY";
           let serType = "NEW_CONSTRUCTION";
@@ -216,7 +215,8 @@ export const fetchData = async (
               modifiedTime: modifiedTime,
               sortNumber: 1,
               type: type,
-              serviceType: get(element, "businessService", null)
+              serviceType: get(element, "businessService", null),
+              appStatus: applicationStatus
             })
           } else {
             searchConvertedArray.push({

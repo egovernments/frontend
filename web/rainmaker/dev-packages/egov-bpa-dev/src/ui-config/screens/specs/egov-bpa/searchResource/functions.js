@@ -126,7 +126,8 @@ export const searchApiCall = async (state, dispatch) => {
         ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) || "-",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[item.applicationNo], "state", null)),
         ["TENANT_ID"]: item.tenantId,
-        ["SERVICE_TYPE"]: get(item, "businessService")
+        ["SERVICE_TYPE"]: get(item, "businessService"),
+        ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: item.status || ""
       }));
 
       // if (data && data.length > 0) {
