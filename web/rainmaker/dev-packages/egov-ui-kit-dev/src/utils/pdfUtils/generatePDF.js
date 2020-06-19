@@ -1,12 +1,12 @@
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "egov-ui-framework/ui-redux/store";
+import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
-import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
 
 
 
@@ -120,7 +120,7 @@ const getMultiCard = (items = [], color = 'grey') => {
             card.push(row);
         }
         const newCard = getCard(item.items, color);
-        card.push(...newCard.table.body);
+        card.push(...newCard.stack[0].table.body);
     })
 
     let tableCard = {
@@ -161,17 +161,21 @@ const getCard = (keyValues = [], color = 'grey') => {
         card.push([...values]);
     }
     let tableCard = {
-        "style": color == "grey" ? "pdf-table-card" : "pdf-table-card-white",
-        "table": {
-            "widths": [
-                125,
-                125,
-                125,
-                125
-            ],
-            "body": [...card]
-        },
-        "layout": {}
+
+        stack: [
+            {
+                "style": color == "grey" ? "pdf-table-card" : "pdf-table-card-white",
+                "table": {
+                    "widths": [
+                        125,
+                        125,
+                        125,
+                        125
+                    ],
+                    "body": [...card]
+                },
+                "layout": {}
+            }]
     }
     return tableCard;
 }
@@ -238,7 +242,7 @@ export const generateKeyValue = (preparedFinalObject, containerObject) => {
         const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
         const valueObject = containerObject[keys].children.value.children.key.props;
         let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
-        value=value!=='NA'&&valueObject.localePrefix?appendModulePrefix(value,valueObject.localePrefix):value;
+        value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
         value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
         keyValue.push({ key, value });
     })
@@ -433,7 +437,23 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 ]
             }
         ],
+        pageBreakBefore: function (currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
+            //check if signature part is completely on the last page, add pagebreak if not
 
+            let nodeLength = followingNodesOnPage.length;
+            followingNodesOnPage.map((node, ind) => {
+                if (node.style == 'pdf-table-card') {
+                    nodeLength = ind;
+                }
+            })
+            if (currentNode.startPosition.verticalRatio > 0.80 && currentNode.style == 'pdf-card-title') {
+                return true;
+            }
+            if (currentNode.startPosition.verticalRatio > 0.75 && currentNode.style == 'pdf-card-title' && nodeLength > 19) {
+                return true;
+            }
+            return false;
+        },
         styles: {
             "pdf-header": {
                 "fillColor": "#F2F2F2",
@@ -574,7 +594,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 }
         }
     })
-    
+
     pdfMake.vfs = vfs;
     pdfMake.fonts = font;
     try {
