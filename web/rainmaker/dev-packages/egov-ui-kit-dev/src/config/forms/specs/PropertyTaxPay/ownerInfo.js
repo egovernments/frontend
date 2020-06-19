@@ -63,10 +63,15 @@ const formConfig = {
     ownerRelationship: {
       id: "ownerRelationship",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].relationship",
-      type: "autoSuggestDropdown",
+      type: "AutocompleteDropdown",
       localePrefix: "PT_RELATION",
+      labelsFromLocalisation: false,
       floatingLabelText: "PT_FORM3_RELATIONSHIP",
       hintText: "",
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       dropDownData: [{ label: "Father", value: "FATHER" }, { label: "Husband", value: "HUSBAND" }],
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     },
@@ -75,10 +80,14 @@ const formConfig = {
       required: true,
       localePrefix: { moduleName: "PropertyTax", masterName: "OwnerType" },
       jsonPath: "Properties[0].propertyDetails[0].owners[0].ownerType",
-      type: "autoSuggestDropdown",
+      type: "AutocompleteDropdown",
       floatingLabelText: "PT_FORM3_SPECIAL_CATEGORY",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       dropDownData: [],
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       fullWidth: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
@@ -171,7 +180,7 @@ const formConfig = {
       jsonPath: "Properties[0].propertyDetails[0].owners[0].document.documentType",
       required: true,
       localePrefix: { moduleName: "PropertyTax", masterName: "OwnerTypeDocument" },
-      type: "autoSuggestDropdown",
+      type: "AutocompleteDropdown",
       floatingLabelText: "PT_FORM3_DOCUMENT_ID_TYPE",
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
@@ -180,6 +189,10 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       dropDownData: [],
       hideField: true,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
         const { value } = sourceField;
         if (value === "Aadhar") {
