@@ -11,7 +11,6 @@ import "./index.css";
 import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
-
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
     {
