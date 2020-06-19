@@ -303,7 +303,7 @@ const getPropertyData = async (action, state, dispatch) => {
 };
 
 const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
-  let tenantId = getCommonTenant();
+  let tenantId = "pb";
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -343,7 +343,7 @@ const getMdmsData = async (action, state, dispatch) => {
   let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: "pb",
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -410,7 +410,7 @@ const getMdmsData = async (action, state, dispatch) => {
 };
 
 const getMdmsTransferReasonData = async (action, state, dispatch) => {
-  let tenantId = getCommonTenant();
+  let tenantId = "pb";
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
