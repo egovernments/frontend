@@ -11,10 +11,14 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 
 class AutoSuggestor extends Component {
+ 
   onSelect = value => {
-    const { onChange } = this.props;
-    //Storing multiSelect values not handled yet
-    onChange({ target: { value: value ? value.value: null } });
+    const { onChange,isMulti } = this.props;
+    if(isMulti){
+      onChange({ target: { value: value } });
+    }else{
+      onChange({ target: { value: value ? value.value: null } });
+    }    
   };
 
   render() {

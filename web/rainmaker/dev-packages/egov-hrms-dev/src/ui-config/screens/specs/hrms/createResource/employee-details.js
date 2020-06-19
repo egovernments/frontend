@@ -268,7 +268,10 @@ export const professionalDetails = getCommonCard(
         jsonPath: "Employee[0].user.roles",
         required: true,
         props: {
-          className:"autocomplete-dropdown",
+          style: {
+            width: "100%",
+            cursor: "pointer"
+          },
           label: { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
           placeholder: {
             labelName: "Select Role",
@@ -277,12 +280,17 @@ export const professionalDetails = getCommonCard(
           jsonPath: "Employee[0].user.roles",
           sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
           labelsFromLocalisation: true,
+          suggestions: [],
+          fullwidth: true,
           required: true,
+          inputLabelProps: {
+            shrink: true
+          },
           localePrefix: {
             moduleName: "ACCESSCONTROL_ROLES",
             masterName: "ROLES"
           },
-          isMultiSelect: true,
+          isMulti: true,
         },
         gridDefination: {
           xs: 12,
