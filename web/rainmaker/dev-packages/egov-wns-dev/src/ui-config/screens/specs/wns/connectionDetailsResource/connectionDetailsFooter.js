@@ -17,52 +17,59 @@ const callDownload = (state, dispatch, mode) => {
 
 
 
-export const connectionDetailsFooter = getCommonApplyFooter({
-  downloadButton: {
-    componentPath: "Button",
+export const connectionDetailsFooter = {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
     props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
+      style: { textAlign: "right", marginBottom: "20px" }
     },
     children: {
-      downloadButton: getLabel({
-        labelKey: "WS_COMMON_BUTTON_DOWNLOAD"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        callDownload(state, dispatch, "download");
+      downloadButton: {
+        componentPath: "Button",
+        props: {
+          variant: "outlined",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px",
+            marginRight: "16px"
+          }
+        },
+        children: {
+          downloadButton: getLabel({
+            labelKey: "WS_COMMON_BUTTON_DOWNLOAD"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            callDownload(state, dispatch, "download");
+          }
+        },
+      },
+      payButton: {
+        componentPath: "Button",
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px",
+            marginRight: "16px"
+          }
+        },
+        children: {
+          printButton: getLabel({
+            labelKey: "WS_COMMON_BUTTON_PRINT"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            callDownload(state, dispatch, "print");
+          }
+        },
+        // visible: false
       }
-    },
-  },
-  payButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      printButton: getLabel({
-        labelKey: "WS_COMMON_BUTTON_PRINT"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        callDownload(state, dispatch, "print");
-      }
-    },
-    // visible: false
-  },
-});
+    }
+}

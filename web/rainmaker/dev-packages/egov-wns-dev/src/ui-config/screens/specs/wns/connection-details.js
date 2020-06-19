@@ -143,6 +143,7 @@ const screenConfig = {
         id: "connection-details"
       },
       children: {
+        connectionDetailsFooter,
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
@@ -197,8 +198,7 @@ const screenConfig = {
             }
           }
         },
-        connectionDetails,
-        connectionDetailsFooter
+        connectionDetails
       }
     }
   }

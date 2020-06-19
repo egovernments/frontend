@@ -16,6 +16,10 @@ export const showSearches = getCommonContainer({
         {
           tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "WS_SEARCH_APPLICATIONS" },
           tabContent: { searchApplications }
+        },
+        {
+          tabButton: { labelName: "SEARCH DEMO", labelKey: "WS_SEARCH_DEMO" },
+          tabContent: { wnsApplication }
         }
       ]
     },

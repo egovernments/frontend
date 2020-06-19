@@ -483,6 +483,18 @@ class WorkFlowContainer extends React.Component {
       };
     });
     actions = actions.filter(item => item.buttonLabel !== 'INITIATE');
+    if (data[0].moduleName === "sw-services") {
+      actions.push({
+        buttonLabel: "CANCEL",
+        moduleName: "NewSW1",
+        isLast: false,
+        buttonUrl: "",
+        dialogHeader: { labelName: "Cancel Application", labelKey: "Cancel Application" },
+        showEmployeeList: true,
+        roles: "SW_FIELD_INSPECTOR",
+        isDocRequired: false
+      });
+    }
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,

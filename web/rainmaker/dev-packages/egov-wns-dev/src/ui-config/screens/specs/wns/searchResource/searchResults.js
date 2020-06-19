@@ -1,9 +1,7 @@
 import React from "react";
-import { sortByEpoch, getEpochForDate } from "../../utils";
+import { sortByEpoch, getEpochForDate, ifUserRoleExists } from "../../utils";
 import './index.css'
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
-
-
 export const searchResults = {
   uiFramework: "custom-molecules",
   moduleName: "egov-wns",
@@ -46,7 +44,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, data) => {
-            if (data.rowData[4] !== undefined && typeof data.rowData[4] === 'number') {
+            if (data.rowData[4] !== undefined && typeof data.rowData[4] === 'number' && (ifUserRoleExists("SW_APPROVER") || ifUserRoleExists("SW_CEMP"))) {
               return (
                 <div className="linkStyle" onClick={() => getViewBillDetails(data)} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
                   <LabelContainer
