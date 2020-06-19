@@ -1,9 +1,16 @@
 import React from "react";
 import { TextField, MobileNumberField, SingleCheckbox, DropDown, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
+import { AutosuggestContainer } from "egov-ui-framework/ui-containers";
 
 const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
   const renderField = () => {
     const { type, tooltip, label, hideField, Icon, iconRedirectionURL, ...fieldProps } = field;
+    if(fieldProps.dropDownData && fieldProps.dropDownData.length > 0) {
+      fieldProps.dropDownData.map((data,key)=>{
+        fieldProps.dropDownData[key].code = data.value;
+        fieldProps.dropDownData[key].name = data.label;
+      });
+    }
     if (hideField) return null;
     switch (type) {
       case "textfield":
@@ -54,6 +61,32 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             dataSource={fieldProps && fieldProps.dropDownData}
             onChange={(chosenRequest, index) => {
               handleFieldChange(fieldKey, chosenRequest.value);
+            }}
+          />
+        );
+
+        case "AutocompleteDropdown":
+        return (
+          <AutosuggestContainer
+            id={fieldProps.id}
+            type={fieldProps.type}
+            required={fieldProps.required}
+            jsonPath={fieldProps.jsonPath}
+            localePrefix={fieldProps.localePrefix}
+            data={fieldProps && fieldProps.dropDownData}
+            className="autocomplete-dropdown"
+            label={{labelKey: fieldProps.floatingLabelText }}
+            placeholder={{labelKey: fieldProps.hintText}}
+            labelsFromLocalisation={fieldProps.labelsFromLocalisation}
+            gridDefination={fieldProps.gridDefination}
+            toolTip={fieldProps.toolTip}
+            toolTipMessage={fieldProps.toolTipMessage}
+            boundary={fieldProps.boundary}
+            errorMessage={fieldProps.errorMessage}
+            errorStyle={fieldProps.errorStyle}
+            pattern={fieldProps.pattern}
+            onChange={(chosenRequest, index) => {
+              handleFieldChange(fieldKey, chosenRequest.target.value, fieldProps.jsonPath);
             }}
           />
         );
