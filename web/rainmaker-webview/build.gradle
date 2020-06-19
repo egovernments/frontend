@@ -131,7 +131,7 @@ android {
 //			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/employee/user/login"'
 
 			//UAT
-			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee"'
+			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee-mcs"'
 
 // 			buildConfigField 'String', 'url', '"https://bihar-uat.egovernments.org"'
 
