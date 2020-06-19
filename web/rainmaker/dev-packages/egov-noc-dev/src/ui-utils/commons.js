@@ -227,9 +227,15 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "fireNOCDetails.propertyDetails.address.addressLine2",
       village
     );
-
-
-
+    let tenantIDFireNOCDetaails =  get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].tenantId",
+      '');
+      set(
+        payload[0],
+        "fireNOCDetails.tenantId",
+        tenantIDFireNOCDetaails
+      );
     // Get uploaded documents from redux
     let reduxDocuments = get(
       state,
