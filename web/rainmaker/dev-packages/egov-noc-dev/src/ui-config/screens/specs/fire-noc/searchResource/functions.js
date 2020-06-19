@@ -125,7 +125,8 @@ export const searchApiCall = async (state, dispatch) => {
       
         [getTextToLocalMapping("Building Name")]:item.fireNOCDetails.buildings.map(function(myIndex) {
 
-          return myIndex.name;
+          return myIndex.name.concat(" ");
+
    
           })|| "-",
 

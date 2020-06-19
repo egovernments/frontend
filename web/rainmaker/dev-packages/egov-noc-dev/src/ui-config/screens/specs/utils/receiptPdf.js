@@ -4842,6 +4842,9 @@ const generatePdf = async (state, dispatch, type) => {
     "mdmsDataForPdf",
     {}
   );
+
+  console.log(mdmsData,"mdmsData")
+
   let ulbLogo = get(
     state.screenConfiguration.preparedFinalObject,
     "base64UlbLogoForPdf",
@@ -4852,6 +4855,8 @@ const generatePdf = async (state, dispatch, type) => {
     "userDataForPdf",
     {}
   );
+
+  console.log(auditorData,"auditorData")
 /*    if (isEmpty(applicationData)) {
     console.log("Error in application data");
     return;

@@ -81,7 +81,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     { key: "applicationNumber", value: applicationNumber }
   ];
   let response = await getSearchResults(queryObject);
-
   if (response && response.FireNOCs && response.FireNOCs.length > 0) {
     data.applicationNumber = nullToNa(
       get(response, "FireNOCs[0].fireNOCDetails.applicationNumber", "NA")
@@ -616,6 +615,15 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     }
   ];
   let response = await getReceiptData(queryObject);
+
+   
+   data.collectedAmnt = nullToNa(
+    get(
+      response,
+      "Receipt[1].Bill[0].billDetails[0].amountPaid",
+      "NA"
+    )
+  );
 
   if (response && response.Receipt && response.Receipt.length > 0) {
     data.receiptNumber = nullToNa(
