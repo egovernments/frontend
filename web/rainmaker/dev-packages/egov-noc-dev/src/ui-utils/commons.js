@@ -87,7 +87,14 @@ export const getSearchResults = async (queryObject, dispatch) => {
         );
       }
     }
+  
+ let mycity = response.FireNOCs[0].tenantId
 
+        set(
+          response.FireNOCs[0].fireNOCDetails,
+        "tenantId",
+        mycity
+      );
     response.FireNOCs.forEach(firenoc=>{
 
       let buildings = firenoc.fireNOCDetails.buildings;
@@ -126,8 +133,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "FireNOCs",
       []
     );
-
-
 
     let newbuildings = get(
       state.screenConfiguration.preparedFinalObject,
@@ -203,9 +208,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         "FireNOCs[0].tenantId",
         getTenantId()
        );
-
-
-
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
 
