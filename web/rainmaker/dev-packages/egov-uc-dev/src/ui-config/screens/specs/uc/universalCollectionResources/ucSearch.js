@@ -156,7 +156,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNo"
+      jsonPath: "searchScreen.mobileNumber"  
     }),
 
     fromDate: getDateField({
