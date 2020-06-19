@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { getItemStatus } from "../common/AssessmentList"
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import "./index.css";
 
 const secondaryTextLabelStyle = {

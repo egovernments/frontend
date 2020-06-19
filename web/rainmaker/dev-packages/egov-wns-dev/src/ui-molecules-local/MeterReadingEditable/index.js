@@ -11,7 +11,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';
 import Button from '@material-ui/core/Button';
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
-import {addMeterReading} from '../../ui-config/screens/specs/wns/meterReading/functions'
+//import {addMeterReading} from '../../ui-config/screens/specs/wns/meterReading/functions'
 
 const styles = {
     card: {
@@ -47,7 +47,7 @@ class MeterReading extends React.Component {
         this.createBody.currentReading = parseFloat(val).toFixed(2);
 
     }
-    onSelectFieldChange(event, key, payload, history, item) {
+    onSelectFieldChange(event, key, payload) {
         // console.log(event)
         console.log(this.createBody)
     }
@@ -59,7 +59,7 @@ class MeterReading extends React.Component {
     saveMeterReading() {
         // console.log(this.createBody)
         // console.log("this.createBody")
-        addMeterReading(this.createBody);
+        // addMeterReading(this.createBody);
     }
 
     render() {
@@ -101,7 +101,7 @@ class MeterReading extends React.Component {
                                     style={styles.customWidth}
                                     hintStyle={styles.hintStyle}
                                     onChange={(event, key, payload) =>
-                                        this.onSelectFieldChange(event, key, payload, history, item)
+                                        this.onSelectFieldChange(event, key, payload)
                                     }
                                 ></SelectField>
                             </Grid>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "components";
+import Button from "@material-ui/core/Button";
 import Label from "egov-ui-kit/utils/translationNode";
 import YearDialogue from "../YearDialogue";
 import "./index.css";

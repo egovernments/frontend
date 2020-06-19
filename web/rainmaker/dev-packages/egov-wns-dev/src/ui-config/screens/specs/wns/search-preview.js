@@ -21,7 +21,7 @@ import {
   convertDateToEpoch,
   showHideAdhocPopup
 } from "../utils";
-import { footerReview } from "./applyResource/footer";
+//import { footerReview } from "./applyResource/footer";
 import { downloadPrintContainer } from "../wns/acknowledgement";
 import {
   getFeesEstimateOverviewCard,

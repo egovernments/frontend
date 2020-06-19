@@ -1,8 +1,6 @@
-import {addComponentJsonpath} from "./commons";
 import {httpRequest,loginRequest,logoutRequest} from "./api";
 
-export {
-  addComponentJsonpath,
+export {  
   httpRequest,
   loginRequest,
   logoutRequest

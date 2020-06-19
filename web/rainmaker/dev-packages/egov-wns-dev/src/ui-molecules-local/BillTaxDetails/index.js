@@ -1,6 +1,6 @@
 import React from "react";
 import get from "lodash/get";
-import { Divider } from "components";
+import { Divider } from "material-ui/Divider";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Card, CardHeader, CardText } from "material-ui/Card";
 import isUndefined from "lodash/isUndefined";

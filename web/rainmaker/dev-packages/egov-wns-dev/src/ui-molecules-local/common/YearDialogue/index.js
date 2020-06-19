@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Dialog } from "components";
+import Dialog from "@material-ui/core/Dialog";
 import SingleButtonForm from "./components/SingleButtonForm";
 import Label from "egov-ui-kit/utils/translationNode";
 import formHoc from "egov-ui-kit/hocs/form";

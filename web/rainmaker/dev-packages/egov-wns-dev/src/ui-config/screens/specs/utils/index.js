@@ -4,6 +4,7 @@ import {
   getCommonSubHeader,
   getCommonCard,
   getCommonCaption,
+  getRadioButtonGroup
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
@@ -1162,7 +1163,7 @@ const getBillingSlabData = async (
     } catch (e) {
       dispatch(
         toggleSnackbar(
-          open,
+          true,
           {
             lableName: "Billing Slab error!",
             labelKey: "ERR_BILLING_SLAB_ERROR"

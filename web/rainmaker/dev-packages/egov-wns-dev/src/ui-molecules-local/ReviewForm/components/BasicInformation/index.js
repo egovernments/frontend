@@ -1,6 +1,6 @@
 import React from "react";
 import Field from "egov-ui-kit/utils/field";
-import { Card } from "components";
+import Card from "@material-ui/core/Card";
 
 import "./index.css";
 

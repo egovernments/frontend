@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "components";
+import Card from "@material-ui/core/Card";
 import Label from "egov-ui-kit/utils/translationNode";
 
 import "./index.css";

@@ -1,5 +1,6 @@
 import React from "react";
-import { Dialog, Button } from "components";
+import Dialog from "@material-ui/core/Dialog";
+import Button from "@material-ui/core/Button";
 import Label from "egov-ui-kit/utils/translationNode";
 
 const CalculationDetails = ({ open, closeDialogue, data }) => {

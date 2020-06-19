@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon } from "components";
+import Icon from "@material-ui/core/Icon";
 import PropertyAddress from "./components/PropertyAddress";
 import PaymentAmountDetails from "./components/PaymentAmountDetails";
 import CalculationDetails from "./components/CalculationDetails";
@@ -15,8 +15,8 @@ import {
   findCorrectDateObjPenaltyIntrest
 } from "egov-ui-kit/utils/PTCommon";
 import Label from "egov-ui-kit/utils/translationNode";
-
-import { SingleCheckbox } from "components";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import SingleCheckbox from "@material-ui/core/SingleCheckbox";
 import "./index.css";
 const defaultIconStyle = {
   fill: "#767676",

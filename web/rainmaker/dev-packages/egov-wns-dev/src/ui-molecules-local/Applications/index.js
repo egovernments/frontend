@@ -6,6 +6,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import "./index.css"

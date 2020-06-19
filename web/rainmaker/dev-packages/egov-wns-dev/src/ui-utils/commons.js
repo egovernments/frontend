@@ -5,6 +5,7 @@ import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDo
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
+import _ from "lodash";
 import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists, updateDropDowns } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
@@ -1922,7 +1923,6 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         }
         await httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, obj, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
-                res.filestoreIds[0]
                 if (res && res.filestoreIds && res.filestoreIds.length > 0) {
                     res.filestoreIds.map(fileStoreId => {
                         if (type === "sanctionLetter") {

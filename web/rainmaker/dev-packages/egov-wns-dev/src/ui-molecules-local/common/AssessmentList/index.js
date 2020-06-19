@@ -1,5 +1,6 @@
 import React from "react";
-import { Icon, Button } from "components";
+import Icon from "@material-ui/core/Icon";
+import Button from "@material-ui/core/Button";
 import Label from "egov-ui-kit/utils/translationNode";
 import PTList from "./components/PTList";
 import BlankAssessment from "../BlankAssessment";
@@ -63,7 +64,7 @@ export const getItemStatus = (due, paid, tenantId, consumerCode, history = "") =
     case "Payment failed":
       return (
         <div className="assessment-displayInline" style={{ marginTop: "10px" }}>
-          <Label label={item.status} labelStyle={{ marginLeft: "5px" }} color={"#e74c3c"} />
+          <Label llabelStyle={{ marginLeft: "5px" }} color={"#e74c3c"} />
           <Icon action="alert" name="warning" style={styles.paidIconStyle} color={"#e74c3c"} />
         </div>
       );
@@ -83,28 +84,7 @@ export const getItemStatus = (due, paid, tenantId, consumerCode, history = "") =
         </div>
       );
       break;
-    case "ASSESS & PAY":
-      return (
-        <div className="assessment-displayInline">
-          <Button
-            label={<Label buttonLabel={true} label="PT_PAYMENT_ASSESS_AND_PAY" fontSize="12px" />}
-            primary={true}
-            onClick={(e) => {
-
-              history.push(
-                `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.assessmentNo}&isReassesment=true&propertyId=${
-                item.propertyId
-                }&tenantId=${item.tenantId}`
-              );
-            }}
-            style={{
-              height: 20,
-              lineHeight: "auto",
-              minWidth: "inherit",
-            }}
-          />
-        </div>
-      );
+    
     default:
       return "";
   }

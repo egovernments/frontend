@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "components";
+import Button from "@material-ui/core/Button";
 import "./index.css";
 
 const SingleButtonForm = ({ label, form, handleFieldChange, history, resetFormWizard, urlToAppend }) => {

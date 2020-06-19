@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "components";
+import Icon from "@material-ui/core/Icon";
 import Label from "egov-ui-kit/utils/translationNode";
 
 const defaultIconStyle = {

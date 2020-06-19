@@ -1,5 +1,7 @@
 import React from "react";
-import { Card, Divider, Icon } from "components";
+import Card from "@material-ui/core/Card";
+import Divider from "@material-ui/core/Divider";
+import Icon from "@material-ui/core/Icon";
 import Label from "egov-ui-kit/utils/translationNode";
 import { ActionFooter } from "modules/common";
 import FloatingActionButton from "material-ui/FloatingActionButton";

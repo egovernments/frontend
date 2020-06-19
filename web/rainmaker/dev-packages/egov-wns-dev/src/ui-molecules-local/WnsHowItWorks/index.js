@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import { Card, Button } from "components";
+import {  React, Component } from "react";
+import Card from "@material-ui/core/Card";
+import Button from "@material-ui/core/Button";
 import Screen from "egov-ui-kit/common/common/Screen";
 import Label from "egov-ui-kit/utils/translationNode";
 import { List, ListItem } from "material-ui/List";
