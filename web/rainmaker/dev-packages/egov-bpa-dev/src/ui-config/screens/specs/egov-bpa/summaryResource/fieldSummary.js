@@ -50,7 +50,10 @@ const fieldSummaryContent = () => {
         },
         {
           jsonPath:
-            "BPA.additionalDetails.fieldinspection_pending[0].date"
+            "BPA.additionalDetails.fieldinspection_pending[0].date",
+            callBack: value => {
+              return modifyDateFormat(value);
+            }
         }
       ),
       fieldSummaryTime: getLabelWithValue(
@@ -60,7 +63,10 @@ const fieldSummaryContent = () => {
         },
         {
           jsonPath:
-            "BPA.additionalDetails.fieldinspection_pending[0].time"
+            "BPA.additionalDetails.fieldinspection_pending[0].time",
+          callBack: value => {
+            return modifyTimeFormat(value);
+          }
         }
       )
     }),
@@ -114,3 +120,35 @@ export const fieldSummary = getCommonContainer({
     type: "array"
   }
 });
+
+const modifyTimeFormat = (value) => {
+  if(value) {
+    var time = 12 - Number(value.split(':')[0]);
+    if(time < 0 ) {
+      time = time * -1;
+      return time + ":" + value.split(':')[1] + " PM";
+    } else if(time == 0) {
+      return 12 + ":" + value.split(':')[1] + " PM";
+    } else if(time == 12) {
+      return 12 + ":" + value.split(':')[1] + " AM";
+    } else {
+        return value + " AM";
+    }
+  } else {
+    return "NA";
+  }  
+}
+
+const modifyDateFormat = (value) => {
+  if(value) {
+    var dateFromApi = new Date(value);
+    var month = dateFromApi.getMonth() + 1;
+    var day = dateFromApi.getDate();
+    var year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return day + "-" + month + "-" + year;
+  } else {
+    return "NA";
+  }
+}
