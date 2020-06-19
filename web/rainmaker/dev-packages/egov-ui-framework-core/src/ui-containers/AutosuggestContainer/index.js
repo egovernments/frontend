@@ -63,6 +63,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
   return (
     suggestions &&
     suggestions.length > 0 &&
+    Array.isArray(suggestions) &&
     suggestions.map((option, key) => {
       option.name = getLocaleLabels(
         option.code,
