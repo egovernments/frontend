@@ -78,8 +78,8 @@ export const basicDetails = getCommonCard({
     },
     applicationType: getSelectField({
       label: {
-        labelName: "Occupancy certificate",
-        labelKey: "BPA_BASIC_DETAILS_OCC_CERT_LABEL"
+        labelName: "Application Type",
+        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
       },
       props: {
         disabled: true,

@@ -97,8 +97,8 @@ export const scrutinySummary = getCommonGrayCard({
         ),
         applicationtype: getLabelWithValue(
             {
-                labelName: "Occupancy certificate",
-                labelKey: "BPA_BASIC_DETAILS_OCC_CERT_LABEL"
+                labelName: "Application Type",
+                labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
             },
             {
                 jsonPath: "BPA.applicationType",
