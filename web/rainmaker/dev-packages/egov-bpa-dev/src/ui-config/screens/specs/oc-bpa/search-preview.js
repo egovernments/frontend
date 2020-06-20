@@ -32,6 +32,7 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { permitListSummary } from "./summaryResource/permitListSummary";
 import { permitConditions } from "./summaryResource/permitConditions";
+import { declarations } from "./summaryResource/declarations";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload, setProposedBuildingData } from "../utils/index";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -307,6 +308,7 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId, action
 ) => {
+  let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
   await getRequiredMdmsDetails(state, dispatch);
   const response = await getAppSearchResults([
     {
@@ -367,7 +369,7 @@ const setSearchResponse = async (
     }
   }
 
-  if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
+  if (status && status === "CITIZEN_APPROVAL_INPROCESS" && isCitizen) {
     let userInfo = JSON.parse(getUserInfo()),
       roles = get(userInfo, "roles"),
       owners = get(response.Bpa["0"].landInfo, "owners"),
@@ -407,7 +409,7 @@ const setSearchResponse = async (
       dispatch(
         handleField(
           "search-preview",
-          "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+          "components.div.children.body.children.cardContent.children.declarations.children.headers",
           "visible",
           true
         )
@@ -415,7 +417,7 @@ const setSearchResponse = async (
       dispatch(
         handleField(
           "search-preview",
-          "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.citizen",
+          "components.div.children.body.children.cardContent.children.declarations.children.header.children.body.children.citizenApproval",
           "visible",
           true
         )
@@ -635,7 +637,8 @@ const screenConfig = {
           scrutinySummary: scrutinySummary,
           documentAndNocSummary: documentAndNocSummary,
           permitConditions: permitConditions,
-          permitListSummary: permitListSummary
+          permitListSummary: permitListSummary,
+          declarations: declarations
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }

@@ -78,8 +78,8 @@ export const basicDetails = getCommonCard({
     },
     applicationType: getSelectField({
       label: {
-        labelName: "Application Type",
-        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
+        labelName: "Occupancy certificate",
+        labelKey: "BPA_BASIC_DETAILS_OCC_CERT_LABEL"
       },
       props: {
         disabled: true,
@@ -243,8 +243,8 @@ export const basicDetails = getCommonCard({
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "OC Building Plan Scrutiny Application Details",
-      labelKey: "BPA_OC_APPLICATION_SCRUNITY_DETAILS_TITLE"
+      labelName: "Occupancy certificate scrutiny details",
+      labelKey: "BPA_OC_CER_SCRUNITY_DETAILS_TITLE"
     },
     {
       style: {
@@ -335,8 +335,8 @@ export const proposedBuildingDetails = getCommonCard({
         },
       children: {
         proposedLabel: getLabel({
-          labelName: "Proposed Building Details",
-          labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
+          labelName: "Actual Building details",
+          labelKey: "BPA_ACTUAL_BUILDING_DETAILS_LABEL"
         })
       },
       gridDefination: {
@@ -509,8 +509,8 @@ export const proposedBuildingDetails = getCommonCard({
 export const abstractProposedBuildingDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Proposed Building Abstract",
-      labelKey: "BPA_PROPOSED_BUILDING_ABSTRACT_HEADER"
+      labelName: "Actual building abstract",
+      labelKey: "BPA_ACTUAL_BUILDING_ABSTRACT_HEADER"
     },
     {
       style: {

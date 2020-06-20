@@ -97,8 +97,8 @@ export const scrutinySummary = getCommonGrayCard({
         ),
         applicationtype: getLabelWithValue(
             {
-                labelName: "Application Type",
-                labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
+                labelName: "Occupancy certificate",
+                labelKey: "BPA_BASIC_DETAILS_OCC_CERT_LABEL"
             },
             {
                 jsonPath: "BPA.applicationType",
@@ -193,8 +193,8 @@ export const scrutinySummary = getCommonGrayCard({
     }),
     break2: getBreak(),
     buildingPlanScrutinyHeaderDetails: getHeader({
-        labelName: "OC Building Plan Scrutiny Application Details",
-        labelKey: "BPA_OC_APPLICATION_SCRUNITY_DETAILS_TITLE"
+        labelName: "Occupancy certificate scrutiny details",
+        labelKey: "BPA_OC_CER_SCRUNITY_DETAILS_TITLE"
     }),
     breake3: getBreak(),
     buildingPlanScrutinyDetailsContainer: getCommonContainer({
@@ -254,8 +254,8 @@ export const scrutinySummary = getCommonGrayCard({
     }),
     breake4: getBreak(),
     proposedBuildingDetails: getHeader({
-        labelName: "Proposed Building Details",
-        labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
+        labelName: "Actual Building details",
+        labelKey: "BPA_ACTUAL_BUILDING_DETAILS_LABEL"
     }),
     break5: getBreak(),
     proposedBuildingDetailsConatiner: getCommonCard({
@@ -272,8 +272,8 @@ export const scrutinySummary = getCommonGrayCard({
             },
             children: {
                 proposedLabel: getLabel({
-                    labelName: "Proposed Building Details",
-                    labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
+                    labelName: "Actual Building details",
+                    labelKey: "BPA_ACTUAL_BUILDING_DETAILS_LABEL"
                 })
             }
         },
@@ -400,8 +400,8 @@ export const scrutinySummary = getCommonGrayCard({
     }),
     break6: getBreak(),
     proposedBuildingAbstractDetails: getHeader({
-        labelName: "Proposed Building Abstract",
-        labelKey: "BPA_PROPOSED_BUILDING_ABSTRACT_HEADER"
+        labelName: "Actual building abstract",
+        labelKey: "BPA_ACTUAL_BUILDING_ABSTRACT_HEADER"
     }),
     break7: getBreak(),
     proposedBuildingAbstractContainer : getCommonContainer({
