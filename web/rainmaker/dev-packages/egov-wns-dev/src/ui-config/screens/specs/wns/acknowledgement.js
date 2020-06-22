@@ -608,16 +608,16 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
-      let filteredDocs = DocumentsData;
-      filteredDocs.map((val) => {
-        if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
-          val.title = "WS_OWNER.IDENTITYPROOF";
-        } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
-          val.title = "WS_OWNER.ADDRESSPROOF";
-        }
-      });
-      WaterConnection[0].pdfDocuments = filteredDocs;
+      // const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
+      // let filteredDocs = DocumentsData;
+      // filteredDocs.map((val) => {
+      //   if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
+      //     val.title = "WS_OWNER.IDENTITYPROOF";
+      //   } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
+      //     val.title = "WS_OWNER.ADDRESSPROOF";
+      //   }
+      // });
+      // WaterConnection[0].pdfDocuments = filteredDocs;
       generateWSAcknowledgement(get(
         state,
         "screenConfiguration.preparedFinalObject", {}), `application.pdf`);
@@ -628,16 +628,16 @@ export const downloadPrintContainer = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
-      let filteredDocs = DocumentsData;
-      filteredDocs.map((val) => {
-        if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
-          val.title = "WS_OWNER.IDENTITYPROOF";
-        } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
-          val.title = "WS_OWNER.ADDRESSPROOF";
-        }
-      });
-      WaterConnection[0].pdfDocuments = filteredDocs;
+      // const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
+      // let filteredDocs = DocumentsData;
+      // filteredDocs.map((val) => {
+      //   if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
+      //     val.title = "WS_OWNER.IDENTITYPROOF";
+      //   } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
+      //     val.title = "WS_OWNER.ADDRESSPROOF";
+      //   }
+      // });
+      // WaterConnection[0].pdfDocuments = filteredDocs;
       generateWSAcknowledgement(get(
         state,
         "screenConfiguration.preparedFinalObject", {}), 'print');
