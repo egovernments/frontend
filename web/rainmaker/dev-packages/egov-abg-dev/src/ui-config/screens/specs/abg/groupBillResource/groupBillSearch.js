@@ -116,6 +116,7 @@ export const abgSearchCard = getCommonCard({
             masterName : "BusinessService"
           },
           labelsFromLocalisation: true,
+          isClearable: true,
           className:"autocomplete-dropdown",
           jsonPath: "searchCriteria.businesService",
           sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
