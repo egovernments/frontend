@@ -47,7 +47,7 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId }))
+  dispatch(prepareFinalObject("searchScreen", { tenantId: "" ,businesService:""}))
 };
 
 export const billSearchCard = getCommonCard({
@@ -80,6 +80,7 @@ export const billSearchCard = getCommonCard({
         },
         required: true,
         labelsFromLocalisation: true,
+        isClearable: true,
         className:"autocomplete-dropdown",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         jsonPath: "searchScreen.tenantId",
@@ -108,6 +109,7 @@ export const billSearchCard = getCommonCard({
         required: true,
         labelsFromLocalisation: true,
         className:"autocomplete-dropdown",
+        isClearable: true,
         jsonPath: "searchScreen.businesService",
         localePrefix: {
           moduleName: "BillingService",
