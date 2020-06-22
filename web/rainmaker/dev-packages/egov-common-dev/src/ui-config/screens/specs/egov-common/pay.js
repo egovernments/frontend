@@ -44,7 +44,7 @@ export const getHeader = (state) => {
 
 
 const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBusinessService) => {
-    await getBusinessServiceMdmsData(dispatch, 'pb');
+    await getBusinessServiceMdmsData(dispatch, tenantId);
 
     await generateBill(dispatch, consumerCode, tenantId, billBusinessService);
 
