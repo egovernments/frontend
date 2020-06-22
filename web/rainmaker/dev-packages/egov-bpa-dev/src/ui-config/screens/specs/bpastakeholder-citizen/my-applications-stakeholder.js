@@ -186,11 +186,11 @@ const screenConfig = {
               sm: 4
             },
             props: {
-              variant: "contained",
+              variant: "outlined",
               style: {
-                color: "white",
+                color: "black",
                 margin: "8px",
-                backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+                // backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
                 borderRadius: "2px",
                 width: "220px",
                 height: "48px"
