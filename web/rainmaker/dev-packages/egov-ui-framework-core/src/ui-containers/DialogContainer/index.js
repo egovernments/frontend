@@ -45,10 +45,10 @@ class DialogContainer extends React.Component {
       root: {
         justifyContent: "flex-end",
         float: "right",
-        paddingRight: 20,
+        paddingRight: 0,
         zIndex: 1333,
         right: 20,
-        paddingTop: 10,
+        paddingTop: 0,
         position: "absolute",
         "&:hover": {
           backgroundColor: "#FFF"
