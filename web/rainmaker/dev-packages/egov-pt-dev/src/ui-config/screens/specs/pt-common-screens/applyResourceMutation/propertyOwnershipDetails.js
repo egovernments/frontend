@@ -134,7 +134,7 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Name"),
-          jsonPath: "Property.institution.designation"
+          jsonPath: "Property.owners[0].designation"
         }),
         authorisedMobile: getTextField({
           label: {
@@ -166,7 +166,7 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Landline"),
-          jsonPath: "Property.institution.landlineNumber"
+          jsonPath: "Property.owners[0].landlineNumber"
         }),
         authorisedAddress: getTextField({
           label: {
@@ -669,7 +669,23 @@ export const propertyOwnershipDetails = getCommonCard({
       },
       children: {
         institutionType: institutionTypeInformation(),
-        institutionInfo: institutionInformation()
+        institutionInfo: {
+          uiFramework: "custom-containers",
+          componentPath: "MultiItem",
+          props: {
+            scheama: institutionInformation(),
+            items: [],
+            addItemLabel: {
+              labelName: "Add Applicant",
+              labelKey: "PT_COMMON_ADD_INSTITUATION_LABEL"
+            },
+            sourceJsonPath:
+              "Property.owners",
+            prefixSourceJsonPath:
+              "children.cardContent.children.institutionDetailsContainer.children"
+          },
+          type: "array"
+        }
       }
     }
   })
