@@ -326,30 +326,30 @@ export const scrutinySummary = getCommonGrayCard({
                                         }
                                     }
                                 ),
-                                // subOccupancyType: getLabelWithValue(
-                                //     {
-                                //         labelName: "Sub Occupancy Type",
-                                //         labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
-                                //     },
-                                //     {
-                                //         jsonPath: `edcr.blockDetail[0]`,
-                                //         callBack: value => {
-                                //             let returnVAlue;
-                                //             if (value && value.occupancyType && value.occupancyType.length) {
-                                //                 returnVAlue = "";
-                                //                 let occupancy = value.occupancyType;
-                                //                 for (let tp = 0; tp < occupancy.length; tp++) {
-                                //                     if (tp === (occupancy.length - 1)) {
-                                //                         returnVAlue += occupancy[tp].label;//getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
-                                //                     } else {
-                                //                         returnVAlue += occupancy[tp].label + ","; //getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
-                                //                     }
-                                //                 }
-                                //             }
-                                //             return returnVAlue || checkValueForNA;
-                                //         },
-                                //     }
-                                // ),
+                                subOccupancyType: getLabelWithValue(
+                                    {
+                                        labelName: "Sub Occupancy Type",
+                                        labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+                                    },
+                                    {
+                                        jsonPath: `edcr.blockDetail[0]`,
+                                        callBack: value => {
+                                            let returnVAlue;
+                                            if (value && value.occupancyType && value.occupancyType.length) {
+                                                returnVAlue = "";
+                                                let occupancy = value.occupancyType;
+                                                for (let tp = 0; tp < occupancy.length; tp++) {
+                                                    if (tp === (occupancy.length - 1)) {
+                                                        returnVAlue += occupancy[tp].label;//getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
+                                                    } else {
+                                                        returnVAlue += occupancy[tp].label + ","; //getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
+                                                    }
+                                                }
+                                            }
+                                            return returnVAlue || "NA";
+                                        },
+                                    }
+                                ),
                                 proposedBuildingDetailsContainer: {
                                     uiFramework: "custom-molecules-local",
                                     moduleName: "egov-bpa",

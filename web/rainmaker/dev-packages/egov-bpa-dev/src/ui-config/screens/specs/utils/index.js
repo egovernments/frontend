@@ -3027,7 +3027,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         value: tenantId,
       },
       {
-        key: "edcrNumbers",
+        key: "edcrNumber",
         value: scrutinyNo,
       }
     ];
@@ -3038,8 +3038,9 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       queryObject
     );
     let isData = true;
-    let data = bpaSearch.Bpa.map((data, index) => {
-      if(data.edcrNumber === scrutinyNo) {
+    bpaSearch.Bpa && bpaSearch.Bpa.length > 0 && 
+    bpaSearch.Bpa.forEach((data, index) => {
+      if(data.edcrNumber === scrutinyNo && data.status !== 'REJECTED') {
         dispatch(
           toggleSnackbar(
             true,
@@ -5339,7 +5340,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
         value: tenantId,
       },
       {
-        key: "edcrNumbers",
+        key: "edcrNumber",
         value: scrutinyNo,
       }
     ];
@@ -5350,8 +5351,9 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       queryObject
     );
 
-    let data = bpaSearch.Bpa.map((data, index) => {
-      if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED' && index > 0) {
+    bpaSearch.Bpa && bpaSearch.Bpa.length > 0 &&
+    bpaSearch.Bpa.forEach((data, index) => {
+      if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED') {
         dispatch(
           toggleSnackbar(
             true,
@@ -5373,6 +5375,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
     deviationValidation(action, state, dispatch);
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
+    dispatch(prepareFinalObject(`BPA.landInfo`, get(bpaDetails, "landInfo", {})));
     setProposedBuildingData(state, dispatch, action, "ocApply");
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
     dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));

@@ -423,6 +423,15 @@ const setSearchResponse = async (
         )
       )
     }
+  } else {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarations.children.headers",
+        "visible",
+        false
+      )
+    );
   }
 
 
