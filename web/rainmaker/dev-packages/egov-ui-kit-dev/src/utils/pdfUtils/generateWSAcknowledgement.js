@@ -5,11 +5,13 @@ import get from "lodash/get";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
 export const generateWSAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
+    propertyDetails.reviewPropertyType.localiseValue=true;
+    propertyDetails.reviewPropertyUsageType.localiseValue=true;
+    propertyDetails.reviewPropertySubUsageType.localiseValue=true;
+    propertyOwnerDetail.gender.localiseValue=true;
     const propertyDetail = generateKeyValue(preparedFinalObject, propertyDetails);
     const locationDetail = generateKeyValue(preparedFinalObject, locationDetails);
-    // const ownerDetail = generateKeyValue(preparedFinalObject, propertyOwnerDetail);
     const connectionDetail = generateKeyValue(preparedFinalObject, connectionDetails);
-
     const additionDetail = generateKeyValue(preparedFinalObject, additionDetails);
     const plumberDetail = generateKeyValue(preparedFinalObject, plumberDetails);
     const roadDetail = generateKeyValue(preparedFinalObject, roadDetails);
@@ -23,13 +25,10 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "ackno
     let ownerDetailInfo = []
      if (WaterConnection.property.owners.length>1) {
         ownerDetailInfo = getMultiItems(preparedFinalObject, propertyOwnerDetail, 'WaterConnection[0].property.owners')
-        console.log("===ownerDetailInfo",ownerDetailInfo)
         ownerDetail = getMultipleItemCard(ownerDetailInfo, 'WS_OWNER');
-        // ownerDetail = getMultipleItemCard(ownerDetailInfo, 'PT_OWNER')
     } else {
          ownerDetail = generateKeyValue(preparedFinalObject, propertyOwnerDetail);
     }
-    console.log("===ownerDetail",ownerDetail);
     const documentsUploadRedux = get(preparedFinalObject, 'DocumentsData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     
@@ -47,10 +46,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "ackno
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ADDITIONAL_CONNECTION_HEADER', items: additionDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLUMBER_DETAILS_HEADER', items: plumberDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetail },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ACTIVATION_DETAILS_HEADER', items: activateDetail },
-            
-        //     {  header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER", items: ownerDetail, type: ownerDetail.length > 1 ? 'multiItem' : 'singleItem' },
-  
+            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ACTIVATION_DETAILS_HEADER', items: activateDetail }  
             ]
     }
 
