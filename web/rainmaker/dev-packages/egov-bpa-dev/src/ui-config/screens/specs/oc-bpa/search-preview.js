@@ -469,24 +469,24 @@ const setSearchResponse = async (
     )
   );
 
-  if (get(response, "Bpa[0].additionalDetails.validityDate")) {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
-        "props.number",
-        convertEpochToDate(get(response, "Bpa[0].additionalDetails.validityDate"))
-      )
-    );
+  // if (get(response, "Bpa[0].additionalDetails.validityDate")) {
+  //   dispatch(
+  //     handleField(
+  //       "search-preview",
+  //       "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
+  //       "props.number",
+  //       convertEpochToDate(get(response, "Bpa[0].additionalDetails.validityDate"))
+  //     )
+  //   );
 
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote.visible",
-        true
-      )
-    );
-  }
+  //   dispatch(
+  //     handleField(
+  //       "search-preview",
+  //       "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote.visible",
+  //       true
+  //     )
+  //   );
+  // }
 
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
