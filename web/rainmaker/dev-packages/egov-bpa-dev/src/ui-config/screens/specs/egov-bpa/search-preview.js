@@ -25,7 +25,7 @@ import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
 import { previewSummary } from "./summaryResource/previewSummary";
@@ -212,6 +212,31 @@ const prepareDocumentsView = async (state, dispatch) => {
 // const prepareDocumentsUploadRedux = (state, dispatch) => {
 //   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
 // };
+
+const sendToArchDownloadMenu = (action, state, dispatch) => {
+  let downloadMenu = [];
+  let sendToArchObject = {
+    label: { labelName: "SEND TO ARCHITECT", labelKey: "BPA_SEND_TO_ARCHITECT_BUTTON", },
+    link: () => {
+      updateBpaApplication(state, dispatch, "SEND_TO_ARCHITECT");
+    },
+  };
+  let ApproveObject = {
+    label: { labelName: "Approve", labelKey: "BPA_APPROVE_BUTTON" },
+    link: () => {
+      updateBpaApplication(state, dispatch, "APPROVE");
+    },
+  };
+  downloadMenu = [ sendToArchObject, ApproveObject ];  
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.citizenFooter.children.sendToArch.children.buttons.children.downloadMenu",
+      "props.data.menu",
+      downloadMenu
+    )
+  );
+}
 
 const setDownloadMenu = (action, state, dispatch) => {
   /** MenuButton data based on status */
@@ -419,7 +444,16 @@ const setSearchResponse = async (
     "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
     (get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS")
   );
-
+  if(get(response, "Bpa[0].status") == "INPROGRESS"){    
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.citizenFooter.children.sendToArch",
+      "visible",
+      false
+    )
+  );
+  }
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -594,6 +628,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
+  sendToArchDownloadMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 

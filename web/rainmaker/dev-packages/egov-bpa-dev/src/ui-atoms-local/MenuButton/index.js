@@ -56,7 +56,7 @@ class MenuListComposition extends React.Component {
   render() {
     const { classes, data } = this.props;
     const { open } = this.state;
-
+    
     return (
       <div className={classes.root} data-html2canvas-ignore={true}>
         <div>
@@ -92,10 +92,14 @@ class MenuListComposition extends React.Component {
                         const { labelName, labelKey } = item.label;
                         return (
                           <MenuItem key={key} onClick={item.link}>
-                            <Icon
+                            {item.leftIcon && <Icon
                               className={classes.leftIcon}
                               iconName={item.leftIcon}
-                            />
+                            />}
+                            {/* <Icon
+                              className={classes.leftIcon}
+                              iconName={item.leftIcon}
+                            /> */}
                             <LabelContainer
                               labelName={labelName}
                               labelKey={labelKey}

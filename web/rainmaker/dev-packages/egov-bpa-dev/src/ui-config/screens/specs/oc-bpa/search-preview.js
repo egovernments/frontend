@@ -25,7 +25,7 @@ import {
   edcrDetailsToBpaDetails,
   applicantNameAppliedByMaping
 } from "../utils/index";
-import { citizenFooter } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { documentAndNocSummary } from "./summaryResource/documentAndNocSummary";
 import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
@@ -128,7 +128,30 @@ const titlebar2 = {
     })
   }
 }
-
+const sendToArchDownloadMenu = (action, state, dispatch) => {
+  let downloadMenu = [];
+  let sendToArchObject = {
+    label: { labelName: "SEND TO ARCHITECT", labelKey: "BPA_SEND_TO_ARCHITECT_BUTTON", },
+    link: () => {
+      updateBpaApplication(state, dispatch, "SEND_TO_ARCHITECT");
+    },
+  };
+  let ApproveObject = {
+    label: { labelName: "Approve", labelKey: "BPA_APPROVE_BUTTON" },
+    link: () => {
+      updateBpaApplication(state, dispatch, "APPROVE");
+    },
+  };
+  downloadMenu = [ sendToArchObject, ApproveObject ];  
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.citizenFooter.children.sendToArch.children.buttons.children.downloadMenu",
+      "props.data.menu",
+      downloadMenu
+    )
+  );
+}
 const setDownloadMenu = (action, state, dispatch) => {
   /** MenuButton data based on status */
   let status = get(
@@ -321,7 +344,16 @@ const setSearchResponse = async (
   const edcrNumber = get(response, "Bpa[0].edcrNumber");
   const status = get(response, "Bpa[0].status");
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
-
+  if(get(response, "Bpa[0].status") == "INPROGRESS"){    
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.citizenFooter.children.sendToArch",
+        "visible",
+        false
+      )
+    );
+    }
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -491,6 +523,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
+  sendToArchDownloadMenu(action, state, dispatch);  
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
