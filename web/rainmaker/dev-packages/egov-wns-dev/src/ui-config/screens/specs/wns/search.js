@@ -10,6 +10,7 @@ import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
 import "./index.css";
 import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils/api";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -17,7 +18,7 @@ const getMDMSData = (action, dispatch) => {
       moduleName: "ws-services-masters",
       masterDetails: [
         { name: "Documents" }
-      ]
+      ] 
     }
   ]
   try {
@@ -31,10 +32,28 @@ const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
 
-const queryObject = [
-  { key: "tenantId", value: getTenantId() },
-  { key: "businessServices", value: 'NewWS1' }
-];
+
+
+const getBusinessService=async(dispatch)=>{
+  const queryObject = [
+    { key: "tenantId", value: getTenantId() },
+    { key: "businessServices", value: 'NewWS1' } 
+  ];
+  const payload = await httpRequest(
+    "post",
+    "egov-workflow-v2/egov-wf/businessservice/_search",
+    "_search",
+    queryObject
+  );
+  if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1") {
+      const { states } = payload.BusinessServices[0] || [];
+      if (states && states.length > 0) {
+        const status = states.map((item) => { return { code: item.state } });
+        const applicationStatus = status.filter(item => item.code != null);
+        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
+      }
+    }
+}
 
 const employeeSearchResults = {
   uiFramework: "material-ui",
@@ -43,19 +62,7 @@ const employeeSearchResults = {
     getMDMSData(action, dispatch);
     resetFieldsForConnection(state, dispatch);
     resetFieldsForApplication(state, dispatch);
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    if (businessServiceData[0].businessService === "NewWS1" || businessServiceData[0].businessService === "NewSW1") {
-      const data = find(businessServiceData, { businessService: businessServiceData[0].businessService });
-      const { states } = data || [];
-      if (states && states.length > 0) {
-        const status = states.map((item) => { return { code: item.state } });
-        const applicationStatus = status.filter(item => item.code != null);
-        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
-      }
-    }
+    getBusinessService(dispatch);
     const applicationType = [{ code: "New Water connection", code: "New Water connection" }, { code: "New Sewerage Connection", code: "New Sewerage Connection" }]
     dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
 
