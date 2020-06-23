@@ -18,6 +18,7 @@ const instance = axios.create({
 
 const wrapRequestBody = (requestBody, action) => {
   const authToken = getAccessToken();
+  const locale= getLocale();
   let RequestInfo = {
     apiId: "Mihy",
     ver: ".01",
@@ -25,7 +26,7 @@ const wrapRequestBody = (requestBody, action) => {
     action: action,
     did: "1",
     key: "",
-    msgId: `20170310130900|${getLocale()}`,
+    msgId: `20170310130900|${locale?locale:"en_IN"}`,
     requesterId: "",
     authToken
   };
