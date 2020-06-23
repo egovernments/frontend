@@ -232,7 +232,7 @@ export const scrutinySummary = getCommonGrayCard({
                                                     }
                                                 }
                                             }
-                                            return returnVAlue || checkValueForNA;
+                                            return returnVAlue || "NA";
                                         },
                                     }
                                 ),
