@@ -2,8 +2,6 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {CloudDownloadIcon} from '@material-ui/icons/CloudDownload';
-import {PrintIcon} from '@material-ui/icons/Print';
 import {
   applicationSuccessFooter,
   paymentSuccessFooter,
@@ -11,16 +9,12 @@ import {
   approvalSuccessFooter,
   paymentFailureFooter
 } from "./acknowledgementResource/footers";
-// import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generatePdf from "../utils/receiptPdf";
 import { Icon } from "egov-ui-framework/ui-atoms";
-// import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import set from "lodash/set";
 import get from "lodash/get";
-import { getCurrentFinancialYear } from "../utils";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import getAcknowledgementCard from "egov-ui-framework/ui-containers/acknowledgementResource/acknowledgementUtils"
@@ -113,16 +107,16 @@ const screenConfig = {
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const{downloadMenu, printMenu}=downloadprintMenuConfig(state, dispatch, purpose);
-    const data = getAcknowledgementCard(
+    const config={
       state,
       dispatch,
       purpose,
       status,
       applicationNumber,
       secondNumber,
-      tenant, 
+      tenant,
       loadPdfGenerationData,
-      "Fire Noc",
+      moduleName:"Fire Noc",
       downloadMenu,
       printMenu,
       applicationSuccessFooter,
@@ -130,7 +124,8 @@ const screenConfig = {
       gotoHomeFooter,
       approvalSuccessFooter,
       paymentFailureFooter
-    );
+    }
+    const data = getAcknowledgementCard(config);
     setApplicationData(dispatch, applicationNumber, tenant);
     set(action, "screenConfig.components.div.children", data);
     return action;

@@ -116,7 +116,7 @@ const getHeader = (applicationNumber, moduleName) => {
   })
 }
 
-export const getAcknowledgementCard = (
+export const getAcknowledgementCard = ({
   state,
   dispatch,
   purpose,
@@ -133,7 +133,7 @@ export const getAcknowledgementCard = (
   gotoHomeFooter,
   approvalSuccessFooter,
   paymentFailureFooter
-) => {
+}) => {
   if (purpose === "apply" && status === "success") {
     { loadPdfGenerationData && loadPdfGenerationData(applicationNumber, tenant);}
     return {
