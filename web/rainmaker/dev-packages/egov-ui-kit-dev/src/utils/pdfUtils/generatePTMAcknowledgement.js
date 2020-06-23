@@ -81,6 +81,5 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
             { header: "PT_MUTATION_REGISTRATION_DETAILS", items: registrationDetails },
             { header: 'PT_SUMMARY_DOCUMENTS_HEADER', items: documentCard }]
     }
-
     generatePDF(UlbLogoForPdf, pdfData, fileName);
 }

@@ -1,37 +1,33 @@
-import { tradeOwnerDetails } from "egov-tradelicence/ui-config/screens/specs/tradelicence/applyResource/review-owner";
+import { tradeInstitutionDetails, tradeOwnerDetails } from "egov-tradelicence/ui-config/screens/specs/tradelicence/applyResource/review-owner";
 import { tradeAccessoriesDetails, tradeLocationDetails, tradeReviewDetails, tradetypeDetails } from "egov-tradelicence/ui-config/screens/specs/tradelicence/applyResource/review-trade";
 import get from "lodash/get";
 import { generateKeyValue, generatePDF, getDocumentsCard, getEstimateCardDetails, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
-
-
 export const generateTLAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
 
+    tradeLocationDetails.reviewMohalla.localiseValue = true;
+    tradeLocationDetails.reviewCity.localiseValue = true;
 
+    tradetypeDetails.reviewTradeCategory.localiseValue = true;
+    tradetypeDetails.reviewTradeType.localiseValue = true;
+    tradetypeDetails.reviewTradeSubtype.localiseValue = true;
 
-    tradeLocationDetails.reviewMohalla.localiseValue=true;
-    tradeLocationDetails.reviewCity.localiseValue=true;
+    tradeAccessoriesDetails.reviewAccessoryType.localiseValue = true;
 
-    tradetypeDetails.reviewTradeCategory.localiseValue=true;
-    tradetypeDetails.reviewTradeType.localiseValue=true;
-    tradetypeDetails.reviewTradeSubtype.localiseValue=true;
+    tradeReviewDetails.reviewApplicationType.localiseValue = true;
+    tradeReviewDetails.reviewLicenceType.localiseValue = true;
+    tradeReviewDetails.reviewStructureType.localiseValue = true;
+    tradeReviewDetails.reviewSubStructureType.localiseValue = true;
 
-    tradeAccessoriesDetails.reviewAccessoryType.localiseValue=true;
-
-    tradeReviewDetails.reviewApplicationType.localiseValue=true;
-    tradeReviewDetails.reviewLicenceType.localiseValue=true;
-    tradeReviewDetails.reviewStructureType.localiseValue=true;
-    tradeReviewDetails.reviewSubStructureType.localiseValue=true;
-
-    tradeOwnerDetails.reviewOwnerGender.localiseValue=true;
-    tradeOwnerDetails.reviewownershipType.localiseValue=true;
-    tradeOwnerDetails.reviewsubOwnership.localiseValue=true;
-    tradeOwnerDetails.reviewOwnerSpecialCat.localiseValue=true;
-    tradeOwnerDetails.reviewRelationship.localiseValue=true;
-    // "reviewownershipType"
-    // "reviewsubOwnership"
-    // "reviewRelationship"
-    // "reviewOwnerGender"
+    tradeOwnerDetails.reviewOwnerGender.localiseValue = true;
+    tradeOwnerDetails.reviewownershipType.localiseValue = true;
+    tradeOwnerDetails.reviewsubOwnership.localiseValue = true;
+    tradeOwnerDetails.reviewOwnerSpecialCat.localiseValue = true;
+    tradeOwnerDetails.reviewRelationship.localiseValue = true;
+    
+    tradeInstitutionDetails.reviewRelationship.localiseValue = true;
+    tradeInstitutionDetails.reviewownershipType.localiseValue = true;
+    tradeInstitutionDetails.reviewsubOwnership.localiseValue = true;
 
     let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
     let License = get(preparedFinalObject, 'Licenses[0]', {});
@@ -56,9 +52,13 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
 
     let tradeOwnerSummary = []
     let tradeOwnerSummaryInfo = []
-    if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.owners', []).length === 1) {
+
+    const ownershipType = get(License, "tradeLicenseDetail.subOwnerShipCategory", "");
+    if (ownershipType.startsWith("INSTITUTION")) {
+        tradeOwnerSummary = generateKeyValue(preparedFinalObject, tradeInstitutionDetails);
+    } else if (ownershipType.includes("SINGLEOWNER")) {
         tradeOwnerSummary = generateKeyValue(preparedFinalObject, tradeOwnerDetails);
-    } else if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.owners', []).length > 1) {
+    } else {
         tradeOwnerSummaryInfo = getMultiItems(preparedFinalObject, tradeOwnerDetails, 'Licenses[0].tradeLicenseDetail.owners')
         tradeOwnerSummary = getMultipleItemCard(tradeOwnerSummaryInfo, 'TL_OWNER');
     }
@@ -70,7 +70,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
     const tradeLocationSummary = generateKeyValue(preparedFinalObject, tradeLocationDetails);
 
     let pdfData = {
-        header: "TL_TRADE_APPLICATION", tenantId: "pb.amritsar",
+        header: "TL_TRADE_APPLICATION", tenantId: License.tradeLicenseDetail.address.tenantId,
         applicationNoHeader: 'TL_PDF_LICENSE_NO', applicationNoValue: License.licenseNumber,
         additionalHeader: "TL_PDF_APPLICATION_NO", additionalHeaderValue: License.applicationNumber,
         cards: [

@@ -182,7 +182,7 @@ const getCard = (keyValues = [], color = 'grey') => {
 const getCardWithHeader = (header, keyValue, color) => {
     let cardWithHeader = header ? [{
         "text": header == '-1' ? " " : getLocaleLabels(header, header),
-        "style": header == '-1' ? "pdf" : "pdf-card-title"
+        "style": header == '-1' ? "pdf-card-no-title" : "pdf-card-title"
     }] : [];
     cardWithHeader.push(getCard(keyValue, color))
     return cardWithHeader;
@@ -516,6 +516,12 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 "color": "#484848",
                 "fontWeight": 500
             },
+            "pdf-card-no-title": {
+                "fontSize": 11,
+                bold: true,
+                "color": "#484848",
+                "fontWeight": 500
+            },
             "pdf-table-card-white": {
                 "fillColor": "white",
                 "fontSize": 7,
@@ -540,7 +546,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
             },
             "pdf-card-key": {
                 "color": "rgba(0, 0, 0, 0.54)",
-                "fontSize": 7,
+                "fontSize": 8,
                 "margin": [
                     0,
                     1,
@@ -560,7 +566,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 ]
             },
             "pdf-card-value": {
-                "fontSize": 9,
+                "fontSize": 10,
                 "color": "rgba(0, 0, 0, 0.87)",
                 "margin": [
                     0,
