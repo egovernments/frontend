@@ -4,7 +4,7 @@ import {plumberDetails, roadDetails, activateDetails, additionDetails} from "ego
 import get from "lodash/get";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
-export const generateWSAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
+export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print") => {
     propertyDetails.reviewPropertyType.localiseValue=true;
     propertyDetails.reviewPropertyUsageType.localiseValue=true;
     propertyDetails.reviewPropertySubUsageType.localiseValue=true;
@@ -51,4 +51,5 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "ackno
     }
 
     generatePDF(UlbLogoForPdf, pdfData, fileName);
+    return true;
 }
