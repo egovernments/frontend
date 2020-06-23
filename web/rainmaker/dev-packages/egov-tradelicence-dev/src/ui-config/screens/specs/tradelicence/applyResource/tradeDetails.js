@@ -31,6 +31,25 @@ import get from "lodash/get";
 import filter from "lodash/filter";
 import "./index.css";
 
+
+const tradeCategoryChange = (reqObj) => {
+  try {
+      let { dispatch } = reqObj;
+      dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", ''));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+const tradeTypeChange = (reqObj) => {
+  try {
+      let { dispatch } = reqObj;
+      dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", ''));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 const tradeSubTypeChange = (reqObj) => {
   try {
       let { moduleName, rootBlockSub, keyValue, value, state, dispatch } = reqObj;
@@ -169,11 +188,13 @@ const tradeUnitCard = {
                   key : 'tradeCategory',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
+                  callBack: tradeCategoryChange
                 },
                 {
                   key : 'tradeType',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
+                  callBack: tradeTypeChange
                 },
                 {
                   key : 'tradeSubType',

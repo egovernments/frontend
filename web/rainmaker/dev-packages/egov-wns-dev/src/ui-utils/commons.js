@@ -2,7 +2,7 @@ import commonConfig from "config/common.js";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
@@ -98,7 +98,7 @@ export const getPropertyObj = async (waterConnection) => {
                if (process.env.REACT_APP_NAME === "Citizen") {
                    queryObject1 = [{ key: "uuids", value: uuids }];
                }else{
-                   queryObject1 = [{ key: "tenantId", value: getTenantId() }, { key: "uuids", value: uuids }];
+                   queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "uuids", value: uuids }];
                }
                let payload = await getPropertyResultsWODispatch(queryObject1);
                if(payload.Properties.length > 0){                                   
@@ -228,56 +228,7 @@ export const getWorkFlowData = async (queryObject) => {
     }
 };
 
-// api call to get my connection details
-export const getMyConnectionResults = async (queryObject, dispatch) => {
-    dispatch(toggleSpinner());
-    try {
-        const response = await httpRequest(
-            "post",
-            "/ws-services/wc/_search",
-            "_search",
-            queryObject
-        );
-
-        if (response.WaterConnection.length > 0) {
-            response.WaterConnection = await getPropertyObj(response.WaterConnection); 
-            for (let i = 0; i < response.WaterConnection.length; i++) {
-                response.WaterConnection[i].service = _.capitalize(serviceConst.WATER)
-                if (response.WaterConnection[i].connectionNo !== null && response.WaterConnection[i].connectionNo !== undefined) {
-                    try {
-                        const data = await httpRequest(
-                            "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
-                            "_fetchbill",
-                            // queryObject
-                        );
-                        if (data && data !== undefined) {
-                            if (data.Bill !== undefined && data.Bill.length > 0) {
-                                response.WaterConnection[i].due = data.Bill[0].totalAmount
-                            }
-
-                        } else {
-                            response.WaterConnection[i].due = 0
-                        }
-
-                    } catch (err) {
-                        console.log(err)
-                        response.WaterConnection[i].due = "NA"
-                    }
-                }
-            }
-            // });
-        }
-        dispatch(toggleSpinner());
-        return findAndReplace(response, null, "NA");
-    } catch (error) {
-        dispatch(toggleSpinner());
-        console.log(error);
-    }
-
-};
-
-export const getMyApplicationResults = async (queryObject, dispatch) => {
+export const getWSMyResults = async (queryObject, consumer, dispatch) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -291,11 +242,19 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
             response.WaterConnection = await getPropertyObj(response.WaterConnection);
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 response.WaterConnection[i].service = _.capitalize(serviceConst.WATER)
-                if (response.WaterConnection[i].applicationNo !== null && response.WaterConnection[i].applicationNo !== undefined) {
+                let consumerCode = "", bService=""
+                if(consumer === 'APPLICATION'){
+                    consumerCode = response.WaterConnection[i].applicationNo
+                    bService = 'WS.ONE_TIME_FEE'
+                }else if(consumer === 'CONNECTION'){
+                    consumerCode = response.WaterConnection[i].connectionNo
+                    bService = 'WS'
+                }
+                if (consumerCode !== null && consumerCode !== undefined) {
                     try {
                         const data = await httpRequest(
                             "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].applicationNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS.ONE_TIME_FEE`,
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=${bService}`,
                             "_fetchbill",
                             // queryObject
                         );
@@ -396,7 +355,7 @@ export const updatePFOforSearchResults = async (
 ) => {
     let queryObject = [{
         key: "tenantId",
-        value: tenantId ? tenantId : getTenantId()
+        value: tenantId ? tenantId : getTenantIdCommon()
     },
     { key: "applicationNumber", value: queryValue }
     ];
@@ -1221,7 +1180,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
         let queryObject = [
             {
                 key: "tenantId",
-                value: JSON.parse(getUserInfo()).tenantId
+                value: getTenantIdCommon()
             },
             { key: "offset", value: "0" },
             { key: "connectionNumber", value: connectionNo }
@@ -1273,7 +1232,7 @@ export const getMeterReadingData = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: getTenantId()
+            value: getTenantIdCommon()
         },
         {
             key: "connectionNos",
@@ -1301,7 +1260,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: getTenantId()
+            value: getTenantIdCommon()
         },
         {
             key: "businessServices",
@@ -1340,7 +1299,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: getTenantId()
+            value: getTenantIdCommon()
         },
         {
             key: "businessServices",
@@ -1563,17 +1522,19 @@ export const getSWMyResults = async (queryObject, consumer, dispatch) => {
             response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
             for (let i = 0; i < response.SewerageConnections.length; i++) {
                 response.SewerageConnections[i].service = _.capitalize(serviceConst.SEWERAGE)
-                let consumerCode = ""
+                let consumerCode = "", bService=""
                 if(consumer === 'APPLICATION'){
                     consumerCode = response.SewerageConnections[i].applicationNo
+                    bService = 'SW.ONE_TIME_FEE'
                 }else if(consumer === 'CONNECTION'){
                     consumerCode = response.SewerageConnections[i].connectionNo
+                    bService = 'SW'
                 }
-                if (response.SewerageConnections[i].connectionNo !== undefined && response.SewerageConnections[i].connectionNo !== null) {
+                if (consumerCode !== undefined && consumerCode !== null) {
                     try {
                         const data = await httpRequest(
                             "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=${bService}`,
                             "_fetchbill",
                             // queryObject
                         );
@@ -1648,7 +1609,7 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
 
     const requestBody = { 
         "MdmsCriteria": { 
-            "tenantId": getTenantId(),
+            "tenantId": getTenantIdCommon(),
               "moduleDetails": [            
                 { "moduleName": "ws-services-masters", "masterDetails": [{ "name": "billingPeriod" }]},
                 { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" }]}
@@ -1789,7 +1750,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
     wnsConnection[0].tenantName = tenantName.toUpperCase();
     const appNo = wnsConnection[0].applicationNo;
 
-    let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
+    let queryStr = [{ key: "tenantId", value: getTenantIdCommon().split('.')[0] }];
     let apiUrl, appService, estKey, queryObjectForEst
     if (wnsConnection[0].service === serviceConst.WATER) {
 
@@ -1805,7 +1766,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         appService = "ws-applicationwater";
         queryObjectForEst = [{
             applicationNo: appNo,
-            tenantId: getTenantId(),
+            tenantId: getTenantIdCommon(),
             waterConnection: wnsConnection[0]
         }]
 
@@ -1814,7 +1775,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         appService = "ws-applicationsewerage";
         queryObjectForEst = [{
             applicationNo: appNo,
-            tenantId: getTenantId(),
+            tenantId: getTenantIdCommon(),
             sewerageConnection: wnsConnection[0]
         }]
     }

@@ -1,42 +1,20 @@
-import {
-  getStepperObject,
-  getCommonHeader,
-  getCommonCard,
-  getCommonContainer,
-  getCommonTitle,
-  getCommonParagraph
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import commonConfig from "config/common.js";
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import {
-  commonTransform,
-  objectToDropdown,
-  getCurrentFinancialYear,
-  getnextFinancialYear,
-  getAllDataFromBillingSlab,
-  pageResetAndChange
-} from "../utils";
-import {
-  prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, getRequiredDocData, showHideAdhocPopup  } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest } from "../../../../ui-utils";
+import { getBoundaryData, updatePFOforSearchResults } from "../../../../ui-utils/commons";
+import { getAllDataFromBillingSlab, getCurrentFinancialYear, pageResetAndChange } from "../utils";
+import { documentList } from "./applyResource/documentList";
 import { footer } from "./applyResource/footer";
-import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 import { tradeDetails } from "./applyResource/tradeDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
-import { documentList } from "./applyResource/documentList";
-import { httpRequest } from "../../../../ui-utils";
-import {
-  updatePFOforSearchResults,
-  getBoundaryData
-} from "../../../../ui-utils/commons";
-import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import commonConfig from "config/common.js";
+import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
+
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
@@ -52,15 +30,15 @@ export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-          labelName: `Apply for New Trade License ${
-            process.env.REACT_APP_NAME === "Citizen"
-              ? "(" + getCurrentFinancialYear() + ")"
-              : ""
+        labelName: `Apply for New Trade License ${
+          process.env.REACT_APP_NAME === "Citizen"
+            ? "(" + getCurrentFinancialYear() + ")"
+            : ""
           }`,
-         // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
-          labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR":"TL_COMMON_APPL_NEW_LICENSE_YEAR"
-         
-        })
+        // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
+        labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR" : "TL_COMMON_APPL_NEW_LICENSE_YEAR"
+
+      })
       : {},
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -165,14 +143,14 @@ export const getData = async (action, state, dispatch) => {
   const applicationNo = queryValue
     ? queryValue
     : get(
-        state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].oldLicenseNumber",
-        null
-      );
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].oldLicenseNumber",
+      null
+    );
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
- 
+
   if (applicationNo) {
     //Edit/Update Flow ----
     const applicationType = get(
@@ -180,9 +158,9 @@ export const getData = async (action, state, dispatch) => {
       "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
       null
     );
-    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
+    const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
 
-    if(getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal ){
+    if (getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal) {
       dispatch(
         prepareFinalObject("Licenses", [
           {
@@ -198,8 +176,8 @@ export const getData = async (action, state, dispatch) => {
       );
     }
     // dispatch(prepareFinalObject("LicensesTemp", []));
-    await updatePFOforSearchResults(action, state, dispatch, applicationNo,tenantId);
-   
+    await updatePFOforSearchResults(action, state, dispatch, applicationNo, tenantId);
+
     if (!queryValue) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
@@ -301,12 +279,12 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
-    let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
+    // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     const tenantId = getTenantId();
-    const URL=window.location.href
-    const URLsplit=URL.split("/")
-    if(URLsplit[URLsplit.length-1]=="apply"){
-      pageResetAndChange(state,dispatch,tenantId)
+    const URL = window.location.href
+    const URLsplit = URL.split("/")
+    if (URLsplit[URLsplit.length - 1] == "apply") {
+      pageResetAndChange(state, dispatch, tenantId)
     }
     // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {
@@ -345,21 +323,9 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       );
-      if(isRequiredDocuments){
-        const moduleDetails = [
-          {
-            moduleName: "TradeLicense",
-            masterDetails: [{ name: "Documents" }]
-          }
-        ];
-        getRequiredDocData(action, dispatch, moduleDetails, true).then(()=>{
-           setTimeout(() => {
-            showHideAdhocPopup(state, dispatch, 'apply');
-          });
-        });
-      }
+
     });
-    
+
     return action;
   },
 
@@ -400,18 +366,6 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "apply"
-      }
-    },
-    adhocDialog: {
-      uiFramework: 'custom-containers',
-      componentPath: 'DialogContainer',
-      props: {
-        open: false,
-        maxWidth: false,
-        screenKey: 'apply'
-      },
-      children: {
-        popup: {}
       }
     }
   }

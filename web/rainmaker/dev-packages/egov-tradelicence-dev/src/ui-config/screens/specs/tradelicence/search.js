@@ -120,7 +120,6 @@ const tradeLicenseSearchAndResult = {
                   height: "48px"
                 }
               },
-
               children: {
                 plusIconInsideButton: {
                   uiFramework: "custom-atoms",
@@ -132,7 +131,6 @@ const tradeLicenseSearchAndResult = {
                     }
                   }
                 },
-
                 buttonLabel: getLabel({
                   labelName: "NEW APPLICATION",
                   labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
@@ -141,14 +139,15 @@ const tradeLicenseSearchAndResult = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  dispatch(prepareFinalObject("isRequiredDocuments", true))
-                  pageResetAndChange(state, dispatch, tenant);
+                   
+                  showHideAdhocPopup(state, dispatch, 'search');
+                  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+                  dispatch(prepareFinalObject("LicensesTemp", []));
                 }
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                path : "tradelicence/apply"
-
+                path : "tradelicence/search?action=showRequiredDocuments"
               }
             }
           }
@@ -163,9 +162,10 @@ const tradeLicenseSearchAndResult = {
       uiFramework: 'custom-containers',
       componentPath: 'DialogContainer',
       props: {
-        open: false,
+        open: getQueryArg(window.location.href, "action")==='showRequiredDocuments'?true:false,
         maxWidth: false,
-        screenKey: 'search'
+        screenKey: 'search',
+        reRouteURL:'/tradelicence/search'
       },
       children: {
         popup: {}

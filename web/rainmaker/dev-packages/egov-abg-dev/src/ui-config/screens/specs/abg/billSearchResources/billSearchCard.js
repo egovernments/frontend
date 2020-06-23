@@ -31,7 +31,23 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId }))
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(prepareFinalObject("searchScreen", { tenantId: "" ,businesService:""}))
 };
 
 export const billSearchCard = getCommonCard({
@@ -44,49 +60,69 @@ export const billSearchCard = getCommonCard({
     labelKey: "ABG_SEARCH_BILL_COMMON_SUB_HEADER"
   }),
   searchContainer: getCommonContainer({
-    ulb: getSelectField({
-      label: {
-        labelName: "ULB",
-        labelKey: "ABG_ULB_LABEL"
+    ulb: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-abg",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "ULB",
+          labelKey: "ABG_ULB_LABEL"
+        },
+        labelPrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        optionLabel: "name",
+        placeholder: {
+          labelName: "Select ULB",
+          labelKey: "ABG_ULB_PLACEHOLDER"
+        },
+        required: true,
+        labelsFromLocalisation: true,
+        isClearable: true,
+        className:"autocomplete-dropdown",
+        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+        jsonPath: "searchScreen.tenantId",
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       },
-      labelPrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      optionLabel: "name",
-      placeholder: {
-        labelName: "Select ULB",
-        labelKey: "ABG_ULB_PLACEHOLDER"
-      },
-      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+      
       jsonPath: "searchScreen.tenantId",
-      required: true,
-      disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       gridDefination: {
         xs: 12,
         sm: 4
       }
-    }),
-    serviceCategory: getSelectField({
-      label: {
-        labelName: "Service Category",
-        labelKey: "ABG_SERVICE_CATEGORY_LABEL"
+    },
+    serviceCategory: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-abg",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "Service Category",
+          labelKey: "ABG_SERVICE_CATEGORY_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Service Category",
+          labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
+        },
+        required: true,
+        labelsFromLocalisation: true,
+        className:"autocomplete-dropdown",
+        isClearable: true,
+        jsonPath: "searchScreen.businesService",
+        localePrefix: {
+          moduleName: "BillingService",
+          masterName: "BusinessService"
+        },
+        sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
       },
-      placeholder: {
-        labelName: "Select Service Category",
-        labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
-      },
-      required: true,
       jsonPath: "searchScreen.businesService",
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      localePrefix: {
-        moduleName: "BillingService",
-        masterName: "BusinessService"
-      },
-      sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
+      
       beforeFieldChange: (action, state, dispatch) => {
         const labelName = {
           labelKey: `ABG_${action.value}_CONSUMER_CODE_LABEL`,
@@ -113,7 +149,7 @@ export const billSearchCard = getCommonCard({
           )
         );
       }
-    }),
+    },
     consumerCode: getTextField({
       label: {
         labelName: "Consumer Code",

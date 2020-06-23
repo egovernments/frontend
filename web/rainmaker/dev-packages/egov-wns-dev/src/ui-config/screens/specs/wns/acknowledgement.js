@@ -21,6 +21,7 @@ import {
   downloadAndPrintForNonApply,
   serviceConst
 } from "../../../../ui-utils/commons";
+import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
 import set from "lodash/set";
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -607,35 +608,42 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
-      let filteredDocs = DocumentsData;
-      filteredDocs.map((val) => {
-        if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
-          val.title = "WS_OWNER.IDENTITYPROOF";
-        } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
-          val.title = "WS_OWNER.ADDRESSPROOF";
-        }
-      });
-      WaterConnection[0].pdfDocuments = filteredDocs;
-      downloadApp(WaterConnection, 'application');
+      // const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
+      // let filteredDocs = DocumentsData;
+      // filteredDocs.map((val) => {
+      //   if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
+      //     val.title = "WS_OWNER.IDENTITYPROOF";
+      //   } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
+      //     val.title = "WS_OWNER.ADDRESSPROOF";
+      //   }
+      // });
+      // WaterConnection[0].pdfDocuments = filteredDocs;
+      generateWSAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `application.pdf`);
+      // downloadApp(WaterConnection, 'application');
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
-      let filteredDocs = DocumentsData;
-      filteredDocs.map((val) => {
-        if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
-          val.title = "WS_OWNER.IDENTITYPROOF";
-        } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
-          val.title = "WS_OWNER.ADDRESSPROOF";
-        }
-      });
-      WaterConnection[0].pdfDocuments = filteredDocs;
-      downloadApp(WaterConnection, 'application', 'print');
+      // const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
+      // let filteredDocs = DocumentsData;
+      // filteredDocs.map((val) => {
+      //   if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
+      //     val.title = "WS_OWNER.IDENTITYPROOF";
+      //   } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
+      //     val.title = "WS_OWNER.ADDRESSPROOF";
+      //   }
+      // });
+      // WaterConnection[0].pdfDocuments = filteredDocs;
+      generateWSAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print');
     },
+    //   downloadApp(WaterConnection, 'application', 'print');
+    // },
     leftIcon: "assignment"
   };
   switch (appStatus) {
