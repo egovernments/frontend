@@ -83,6 +83,7 @@ const themeStyles = (theme) => ({
     fontWeight: 400,
     letterSpacing: "0.83px",
     lineHeight: "24px",
+    marginTop: "15px",
   },
   documentSuccess: {
     borderRadius: "100%",
@@ -93,6 +94,7 @@ const themeStyles = (theme) => ({
     alignItems: "center",
     backgroundColor: "#39CB74",
     color: "white",
+    marginTop: "15px",
   },
   button: {
     margin: theme.spacing.unit,
