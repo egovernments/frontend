@@ -16,6 +16,7 @@ import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { download } from "egov-common/ui-utils/commons";
 import "./index.css";
+import { generateNOCAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateNOCAcknowledgement";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -36,6 +37,10 @@ export const downloadPrintContainer = (
   dispatch
 ) => {
   /** MenuButton data based on status */
+
+  let preparedFinalObject = get(
+    state,
+    "screenConfiguration.preparedFinalObject",{});
   let status = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
@@ -81,7 +86,8 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_download");
+      generateNOCAcknowledgement(preparedFinalObject);
+      // generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
