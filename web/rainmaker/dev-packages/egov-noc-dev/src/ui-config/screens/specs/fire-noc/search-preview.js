@@ -87,7 +87,7 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generateNOCAcknowledgement(preparedFinalObject, `noc-acknowledgement-${FireNOCs[0].fireNOCDetails.applicationNumber}`);
+      generateNOCAcknowledgement(preparedFinalObject, `noc-acknowledgement-${get(preparedFinalObject,'FireNOCs[0].fireNOCDetails.applicationNumber','')}`);
       // generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"

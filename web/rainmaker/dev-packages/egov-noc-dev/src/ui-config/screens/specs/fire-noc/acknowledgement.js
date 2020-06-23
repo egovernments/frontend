@@ -42,7 +42,7 @@ const downloadprintMenu = (state, dispatch, purpose) => {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
       // generatePdf(state, dispatch, "application_download");
-      generateNOCAcknowledgement(preparedFinalObject, `noc-acknowledgement-${FireNOCs[0].fireNOCDetails.applicationNumber}`);
+      generateNOCAcknowledgement(preparedFinalObject, `noc-acknowledgement-${get(preparedFinalObject,'FireNOCs[0].fireNOCDetails.applicationNumber','')}`);
     },
     leftIcon: "assignment"
   };
