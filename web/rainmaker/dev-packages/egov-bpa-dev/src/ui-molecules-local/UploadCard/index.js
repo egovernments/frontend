@@ -270,7 +270,7 @@ const UploadCard = (props) => {
               color="primary"
               style={{ float: "right" }}
               onClick={() => props.toggleEditClick(docIndex)}
-            >Upload</Button>
+            >ADD FILES</Button>
         </Grid>:""
         }
     </Grid>
