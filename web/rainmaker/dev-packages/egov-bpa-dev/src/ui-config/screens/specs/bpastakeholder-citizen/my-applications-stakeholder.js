@@ -186,11 +186,11 @@ const screenConfig = {
               sm: 4
             },
             props: {
-              variant: "contained",
+              variant: "outlined",
               style: {
-                color: "white",
+                color: "black",
                 margin: "8px",
-                backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+                // backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
                 borderRadius: "2px",
                 width: "220px",
                 height: "48px"
@@ -249,7 +249,13 @@ const screenConfig = {
                 options: {
                   display: false
                 }
-              }
+              },
+              {
+                name: "appStatus", labelKey: "BPA_COMMON_TABLE_COL_APP_STATUS_LABEL",
+                options: {
+                  display: false
+                }
+              },
             ],
             title: {
               labelName: "Search Results for BPA Applications",
@@ -364,7 +370,7 @@ export const changePage = async (tableState) => {
     if (bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0) {
       const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
       bpaResponse.Bpa.forEach(element => {
-        let status = getTextToLocalMapping("WF_BPA_" + get(element, "status"));
+        let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[element.applicationNo], "state", null));
         let service = getTextToLocalMapping("BPA_APPLICATIONTYPE_" + get(element, "applicationType"));
         service += " - " + getTextToLocalMapping("BPA_SERVICETYPE_" + get(element, "serviceType"));
         let modifiedTime = element.auditDetails.lastModifiedTime;
@@ -384,6 +390,7 @@ export const changePage = async (tableState) => {
           ["BPA_COL_MODULE_SERVICE"]: businessService == "BPA_OC" ? "Occupancy Certificate New Building Construction" : "Building permit new construction",
           ["BPA_COMMON_SLA"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "sla", null) || "-",
           ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "assignee", null) || "-",
+          ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: element.status || "",
           applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
           modifiedTime: modifiedTime,
           sortNumber: 1,
@@ -454,16 +461,16 @@ const onRowClick = rowData => {
         window.location.assign(`${origin}${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`)
     }
   } else if ((rowData[6] === "BPA") || rowData[6] == "BPA_LOW") {
-    switch (rowData[4]) {
-      case "Initiated":
+    switch (rowData[8]) {
+      case "INITIATED":
         window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
         break;
       default:
         window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}&type=${rowData[7]}`);
     }
   } else {
-    switch (rowData[4]) {
-      case "Initiated":
+    switch (rowData[8]) {
+      case "INITIATED":
         window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
         break;
       default:

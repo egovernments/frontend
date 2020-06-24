@@ -15,8 +15,8 @@ import set from "lodash/set";
 import { getCurrentFinancialYear } from "../utils";
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for BPA (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "BPA_COMMON_APPLY_BPA_HEADER_LABEL"
+    labelName: `Application for Occupancy certificate`,
+    labelKey: "BPA_COMMON_APPLY_BPA_OC_HEADER_LABEL"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -33,8 +33,8 @@ export const header = getCommonContainer({
 const getHeader=(applicationNumber)=>{
 return getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for BPA (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "BPA_COMMON_APPLY_BPA_HEADER_LABEL"
+    labelName: `Application for Occupancy certificate`,
+    labelKey: "BPA_COMMON_APPLY_BPA_OC_HEADER_LABEL"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
