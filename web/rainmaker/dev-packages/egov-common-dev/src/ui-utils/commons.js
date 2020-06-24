@@ -491,7 +491,7 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
     if (mode === 'download') {
       downloadPdf(fileRes[fileStoreId]);
     } else if (mode === 'open') {
-      openPdf(fileRes[fileStoreId])
+      openPdf(fileRes[fileStoreId], '_self')
     }
     else {
       printPdf(fileRes[fileStoreId]);
