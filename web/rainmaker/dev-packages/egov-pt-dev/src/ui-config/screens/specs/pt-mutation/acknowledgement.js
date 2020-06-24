@@ -860,8 +860,8 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
     const propertiesAudit = get(auditResponse, "Properties", []);
     const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
 
-    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
-    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+    property.ownershipCategoryInit = previousActiveProperty ? previousActiveProperty.ownershipCategory : "";
+    if (previousActiveProperty && property.ownershipCategoryInit && property.ownershipCategoryInit.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
     }
   }
