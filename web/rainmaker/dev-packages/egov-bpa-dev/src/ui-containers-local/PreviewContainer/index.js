@@ -47,7 +47,7 @@ class PreviewContainer extends Component {
           {this.state.editableDocuments &&
             this.state.editableDocuments.length > 0 &&
             (this.state.editableDocuments[key].editable ? (
-              <div style={{backgroundColor:"rgb(255,255,255)", padding:"10px"}}><UploadCard
+              <div style={{backgroundColor:"rgb(255,255,255)", padding:"10px", marginTop: "16px" }}><UploadCard
                 docItem={card}
                 docIndex={key}
                 key={key.toString()}

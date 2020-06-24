@@ -16,7 +16,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 
 const requiredIcon = (
-  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>
+  <sup style={{ color: "#e82a2a", fontSize: "12px", paddingLeft: "5px" }}>
     *
   </sup>
 );
@@ -83,6 +83,7 @@ const themeStyles = (theme) => ({
     fontWeight: 400,
     letterSpacing: "0.83px",
     lineHeight: "24px",
+    marginTop: "15px",
   },
   documentSuccess: {
     borderRadius: "100%",
@@ -93,6 +94,7 @@ const themeStyles = (theme) => ({
     alignItems: "center",
     backgroundColor: "#39CB74",
     color: "white",
+    marginTop: "15px",
   },
   button: {
     margin: theme.spacing.unit,
@@ -270,7 +272,7 @@ const UploadCard = (props) => {
               color="primary"
               style={{ float: "right" }}
               onClick={() => props.toggleEditClick(docIndex)}
-            >Upload</Button>
+            >ADD FILES</Button>
         </Grid>:""
         }
     </Grid>

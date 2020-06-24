@@ -44,6 +44,7 @@ import axios from "axios";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import _ from "lodash";
 import groupBy from "lodash/groupBy";
+import { printPdf } from "egov-ui-kit/utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -3026,7 +3027,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         value: tenantId,
       },
       {
-        key: "edcrNumbers",
+        key: "edcrNumber",
         value: scrutinyNo,
       }
     ];
@@ -3037,8 +3038,9 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       queryObject
     );
     let isData = true;
-    let data = bpaSearch.Bpa.map((data, index) => {
-      if(data.edcrNumber === scrutinyNo) {
+    bpaSearch.Bpa && bpaSearch.Bpa.length > 0 && 
+    bpaSearch.Bpa.forEach((data, index) => {
+      if(data.edcrNumber === scrutinyNo && data.status !== 'REJECTED') {
         dispatch(
           toggleSnackbar(
             true,
@@ -4705,7 +4707,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   }
 }
 
-export const revocationPdfDownload = async(action, state, dispatch) => {
+export const revocationPdfDownload = async(action, state, dispatch, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
@@ -4722,14 +4724,18 @@ export const revocationPdfDownload = async(action, state, dispatch) => {
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if(mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  } else {
+    printPdf(pdfDownload[fileStoreId]);    
+  }
 }
 
-export const permitOrderNoDownload = async(action, state, dispatch) => {
+export const permitOrderNoDownload = async(action, state, dispatch, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
-
+  
   let currentDate = new Date();
   set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+currentDate.getDate()));
 
@@ -4764,7 +4770,12 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if(mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  }
+  else {
+    printPdf(pdfDownload[fileStoreId]);    
+  }
 
   
 let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
@@ -4779,11 +4790,15 @@ let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
     link.href = url;
     link.setAttribute('download', 'permitorderedcr.pdf');
     document.body.appendChild(link);
-    link.click();
+    if(mode && mode === "Download") {
+      link.click();
+    } else {
+      printPdf(link);
+    }
   });
 }
 
-export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) => {
+export const downloadFeeReceipt = async(state, dispatch, status, serviceCode, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
@@ -4834,7 +4849,12 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if (mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  } else {
+    printPdf(pdfDownload[fileStoreId]);
+  }
+  
 }
 
 const getFloorDetails = (index) => {
@@ -5320,7 +5340,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
         value: tenantId,
       },
       {
-        key: "edcrNumbers",
+        key: "edcrNumber",
         value: scrutinyNo,
       }
     ];
@@ -5331,8 +5351,9 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       queryObject
     );
 
-    let data = bpaSearch.Bpa.map((data, index) => {
-      if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED' && index > 0) {
+    bpaSearch.Bpa && bpaSearch.Bpa.length > 0 &&
+    bpaSearch.Bpa.forEach((data, index) => {
+      if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED') {
         dispatch(
           toggleSnackbar(
             true,
@@ -5354,6 +5375,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
     deviationValidation(action, state, dispatch);
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
+    dispatch(prepareFinalObject(`BPA.landInfo`, get(bpaDetails, "landInfo", {})));
     setProposedBuildingData(state, dispatch, action, "ocApply");
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
     dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));

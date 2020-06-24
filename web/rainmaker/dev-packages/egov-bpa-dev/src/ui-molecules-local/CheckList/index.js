@@ -88,7 +88,7 @@ const themeStyles = theme => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
-    paddingTop: "5px"
+    // paddingTop: "5px"
   }
 });
 
