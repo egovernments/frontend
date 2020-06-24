@@ -54,7 +54,13 @@ export const localStorageGet = (key, path) => {
   if (path) {
     const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
     value = get(data, path);
-  } else {
+  } 
+  else if(key==="businessServiceData")
+  {
+    value = window.localStorage.getItem(key) || null;
+
+  }
+  else {
     value = window.localStorage.getItem(appName + "." + key) || null;
   }
   return value;

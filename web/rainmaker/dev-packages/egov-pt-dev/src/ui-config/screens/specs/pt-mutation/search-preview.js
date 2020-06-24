@@ -430,7 +430,7 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
 const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getCommonTenant(),
+      tenantId: "pb",
       moduleDetails: [
         {
           moduleName: "PropertyTax",
