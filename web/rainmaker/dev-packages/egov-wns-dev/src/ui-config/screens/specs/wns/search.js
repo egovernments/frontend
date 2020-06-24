@@ -48,7 +48,7 @@ const getBusinessService=async(dispatch)=>{
   if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1") {
       const { states } = payload.BusinessServices[0] || [];
       if (states && states.length > 0) {
-        const status = states.map((item) => { return { code: item.state } });
+        const status = states.map((item) => { return { code: item.applicationStatus } });
         const applicationStatus = status.filter(item => item.code != null);
         dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
       }
