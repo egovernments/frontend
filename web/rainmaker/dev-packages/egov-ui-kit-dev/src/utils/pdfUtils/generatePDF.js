@@ -164,18 +164,14 @@ const getCard = (keyValues = [], color = 'grey') => {
 
         stack: [
             {
-                "style": color == "grey" ? "pdf-table-card" : "pdf-table-card-white",
-                "table": {
-                    "widths": [
-                        125,
-                        125,
-                        125,
-                        125
-                    ],
-                    "body": [...card]
-                },
-                "layout": {}
-            }]
+                ...getCustomCard([...card], [
+                    125,
+                    125,
+                    125,
+                    125
+                ], {}, color)
+            }
+        ]
     }
     return tableCard;
 }
@@ -266,7 +262,6 @@ let tableborder = {
 
 const getCustomCard = (body = [], width = [], layout = {}, color = 'grey') => {
     return {
-
         "style": color == "grey" ? "pdf-table-card" : "pdf-table-card-white",
         "table": {
             widths: width,
@@ -330,7 +325,6 @@ export const loadUlbLogo = tenantid => {
         ctx.drawImage(this, 0, 0);
         store.dispatch(
             prepareFinalObject("UlbLogoForPdf", canvas.toDataURL())
-
         );
         localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
         canvas = null;
@@ -355,13 +349,6 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
         },
     };
 
-    const transform = (value, masterName) => {
-        if (value) {
-            return generalMDMSDataById && generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][value].code : "NA";
-        } else {
-            return "NA";
-        }
-    };
 
     let borderKey = [true, true, false, true];
     let borderValue = [false, true, true, true];
@@ -616,7 +603,3 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     }
 
 };
-
-
-
-
