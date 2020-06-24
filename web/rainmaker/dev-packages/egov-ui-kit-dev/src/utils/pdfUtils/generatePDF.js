@@ -605,9 +605,34 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     pdfMake.fonts = font;
     try {
         if (fileName != 'print') {
-            data && pdfMake.createPdf(data).download(fileName);
+            if (isMobileApp()) {
+                const pdfDocGenerator = pdfMake.createPdf(data);
+                pdfDocGenerator.getBlob((blob) => {
+                    const fileURL = URL.createObjectURL(blob);
+                    var win = window.open(fileURL, '_blank');
+                    if (win) {
+                        win.focus();
+                    }
+                });
+            } else {
+                data && pdfMake.createPdf(data).download(fileName);
+            }
         } else {
-            data && pdfMake.createPdf(data).print();
+            if (isMobileApp()) {
+                const pdfDocGenerator = pdfMake.createPdf(data);
+                pdfDocGenerator.getBlob((blob) => {
+                    const fileURL = URL.createObjectURL(blob);
+                    var myWindow = window.open(fileURL);
+                    if (myWindow != undefined) {
+                        myWindow.addEventListener("load", event => {
+                            myWindow.focus();
+                            myWindow.print();
+                        });
+                    }
+                });
+            } else {
+                data && pdfMake.createPdf(data).print();
+            }
             // data && pdfMake.createPdf(data).open();
         }
     } catch (e) {
@@ -616,6 +641,11 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     }
 
 };
+
+export const isMobileApp = () => {
+    // return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    return window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp();
+}
 
 
 
