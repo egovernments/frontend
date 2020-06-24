@@ -95,7 +95,6 @@ class PaymentRedirect extends Component {
           if (businessService && businessService.indexOf("BPA") > -1) {
             moduleName = "egov-bpa"	
           }
-          console.log(businessService, "bbbb");
           const url = `/${moduleName}/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}&purpose=${"pay"}`;
           const ackSuccessUrl = isPublicSearch ? `/withoutAuth${url}` : url;
           this.props.setRoute(ackSuccessUrl);
