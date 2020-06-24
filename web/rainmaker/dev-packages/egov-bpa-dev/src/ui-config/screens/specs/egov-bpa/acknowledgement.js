@@ -230,12 +230,13 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      gotoHomeFooter
+      // applicationSuccessFooter: applicationSuccessFooter(
+      //   state,
+      //   dispatch,
+      //   applicationNumber,
+      //   tenant
+      // )
     };
   } else if (purpose === "APPROVE" && status === "success") {
     return {
@@ -267,12 +268,13 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      gotoHomeFooter
+      // applicationSuccessFooter: applicationSuccessFooter(
+      //   state,
+      //   dispatch,
+      //   applicationNumber,
+      //   tenant
+      // )
     };
   } else if (purpose === "SEND_TO_ARCHITECT" && status === "success") {
     return {
