@@ -11,6 +11,7 @@ import "./index.css";
 import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
+import commonConfig from "config/common.js";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -28,11 +29,34 @@ const getMDMSData = (action, dispatch) => {
   }
 };
 
+const getMDMSAppType = (dispatch) => {
+  // getMDMS data for ApplicationType
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+         {
+            moduleName: "ws-services-masters", masterDetails: [
+              { name: "ApplicationType" }
+            ]
+          }
+        ]
+      }
+    };
+    let applicationType = [];
+    try {
+      httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody).then((payload) => {        
+        if(payload && payload.MdmsRes['ws-services-masters'] && payload.MdmsRes['ws-services-masters'].ApplicationType !== undefined){
+          payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.code, name: obj.name}));          
+          dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
+        }
+      });
+    } catch (e) { console.log(e); }
+};
+
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
-
-
 
 const getBusinessService=async(dispatch)=>{
   const queryObject = [
@@ -63,9 +87,7 @@ const employeeSearchResults = {
     resetFieldsForConnection(state, dispatch);
     resetFieldsForApplication(state, dispatch);
     getBusinessService(dispatch);
-    const applicationType = [{ code: "New Water connection", code: "New Water connection" }, { code: "New Sewerage Connection", code: "New Sewerage Connection" }]
-    dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
-
+    getMDMSAppType(dispatch);
     return action;
   },
   components: {
