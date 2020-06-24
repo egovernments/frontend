@@ -208,8 +208,9 @@ export const scrutinySummary = getCommonGrayCard({
                                         jsonPath: "edcr.blockDetail[0].titleData",
                                         style: {
                                             width: "50%",
-                                            marginTop: "5px"
-                                        }
+                                            marginTop: "5px",
+                                            marginLeft: "7px"
+                                        } 
                                     }
                                 ),
                                 subOccupancyType: getLabelWithValue(
@@ -266,9 +267,12 @@ export const scrutinySummary = getCommonGrayCard({
                                             print: false,
                                             download: false,
                                             viewColumns: false,
+                                            rowHover: false
                                         }
                                     }
                                 },
+                                breakP: getBreak(),                              
+                                breakP1: getBreak(),                                
                             // }),
                         }),
                         items: [],
