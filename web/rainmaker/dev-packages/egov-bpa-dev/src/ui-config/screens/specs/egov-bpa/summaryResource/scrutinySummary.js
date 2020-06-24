@@ -200,7 +200,7 @@ export const scrutinySummary = getCommonGrayCard({
                     props: {
                         hasAddItem: false,
                         scheama: getCommonContainer({
-                            // blocksContainer: getCommonContainer({
+                            blocksContainer: getCommonContainer({
                                 header: getLabel(
                                     "Block",
                                     "",
@@ -273,7 +273,7 @@ export const scrutinySummary = getCommonGrayCard({
                                 },
                                 breakP: getBreak(),                              
                                 breakP1: getBreak(),                                
-                            // }),
+                            }),
                         }),
                         items: [],
                         isReviewPage: true,
