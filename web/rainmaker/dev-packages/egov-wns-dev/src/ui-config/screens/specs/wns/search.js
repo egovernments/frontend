@@ -47,7 +47,7 @@ const getMDMSAppType = (dispatch) => {
     try {
       httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody).then((payload) => {        
         if(payload && payload.MdmsRes['ws-services-masters'] && payload.MdmsRes['ws-services-masters'].ApplicationType !== undefined){
-          payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.name, name: obj.code}));          
+          payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.code, name: obj.name}));          
           dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
         }
       });
