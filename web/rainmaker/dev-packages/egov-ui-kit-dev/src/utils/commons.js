@@ -1004,20 +1004,24 @@ export const printPdf = async (link) => {
 
 
 export const openPdf = async (link, openIn = '_blank') => {
-  var response = await axios.get(link, {
-    responseType: "arraybuffer",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/pdf"
-    }
-  });
-  const file = new Blob([response.data], { type: "application/pdf" });
-  const fileURL = URL.createObjectURL(file);
-  var myWindow = window.open(fileURL, openIn);
-  if (myWindow != undefined) {
-    myWindow.addEventListener("load", event => {
-      myWindow.focus();
+  if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp()) {
+    downloadPdf(link, '_self');
+  } else {
+    var response = await axios.get(link, {
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/pdf"
+      }
     });
+    const file = new Blob([response.data], { type: "application/pdf" });
+    const fileURL = URL.createObjectURL(file);
+    var myWindow = window.open(fileURL, openIn);
+    if (myWindow != undefined) {
+      myWindow.addEventListener("load", event => {
+        myWindow.focus();
+      });
+    }
   }
 }
 
