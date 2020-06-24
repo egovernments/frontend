@@ -3,18 +3,29 @@
     display: block;
   }
 }
-.upload_btn {
+.bpa_doc_upload_btn,
+.preview_upload_btn {
   width: 100%; }
 
-.upload_btn > div > div > div {
-  width: 28%;
-  float: left; }
+.bpa_doc_upload_btn > div > div > div,
+.preview_upload_btn > div > div > div {
+  width: 14%;
+  float: left; 
+  padding-left: 8% !important;
+}
+.preview_upload_btn > div > div > div {
+  width: 14%;
+  float: left; 
+  padding-left: 0% !important;
+}
 
-.upload_btn > div > div > div > button {
+.bpa_doc_upload_btn > div > div > div > button,
+.preview_upload_btn > div > div > div > button {
   min-width: 33% !important;
   margin-bottom: 10px; }
 
-.upload_btn > div label {
+.bpa_doc_upload_btn > div label,
+.preview_upload_btn > div label {
   position: absolute;
   right: 0px;
   top: 0px; 

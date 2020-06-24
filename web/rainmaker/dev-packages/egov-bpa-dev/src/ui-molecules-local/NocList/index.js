@@ -352,6 +352,7 @@ class NocList extends Component {
            toggleEditClick = {this.toggleEditClick}
            ids = {jsonPath}
            jsonPath = {`nocDocumentsUploadRedux`}
+           specificStyles= "bpa_doc_upload_btn"
            {...rest}
          />
       </React.Fragment>

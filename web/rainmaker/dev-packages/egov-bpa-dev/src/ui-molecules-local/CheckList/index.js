@@ -51,7 +51,8 @@ const themeStyles = theme => ({
     fontSize: "20px",
     fontWeight: 400,
     letterSpacing: "0.83px",
-    lineHeight: "24px"
+    lineHeight: "24px",
+    marginTop: "12px"
   },
   documentSuccess: {
     borderRadius: "100%",
