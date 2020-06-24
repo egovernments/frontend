@@ -131,10 +131,12 @@ const transformer = (formKey, form = {}, state = {}) => {
     employeeOTP: () => {
       const formData = prepareFormData(form);
       const commonConfig = require("config/common").default;
-      formData.tenantId = commonConfig.tenantId;
       const { fields } = state.form.employeeForgotPasswd || {};
-
-      formData.userName = fields.username.value;
+      const {tenantId ={}} = fields;
+      formData.tenantId = tenantId.value || commonConfig.tenantId;
+      
+      //below code is commented without knowming the prior use of employee otp screen jaya
+      // formData.userName = fields.username.value;
       return formData;
     },
     employeeChangePassword: () => {
