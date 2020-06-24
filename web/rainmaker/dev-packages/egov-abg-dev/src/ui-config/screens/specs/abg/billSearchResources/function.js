@@ -153,7 +153,7 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search",
+          "billSearch",
           "components.div.children.searchResults",
           "props.rows",
           billTableData.length
