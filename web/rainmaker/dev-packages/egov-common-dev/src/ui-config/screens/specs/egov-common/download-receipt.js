@@ -1,7 +1,9 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { set } from "lodash";
 import get from "lodash/get";
 import { download } from "../../../../ui-utils/commons";
 import { getBusinessServiceMdmsData } from "../utils";
+import { getHeader } from "./pay";
 
 const loadMdms = async (action, state, dispatch, consumerCode, tenantId, billBusinessService, receiptNumber) => {
 
@@ -35,7 +37,8 @@ const screenConfig = {
         const tenantId = getQueryArg(window.location.href, "tenantId");
         const businessService = getQueryArg(window.location.href, "businessService");
         loadMdms(action, state, dispatch, consumerCode, tenantId, businessService, receiptNumber);
-
+        const data = getHeader(state);
+        set(action, "screenConfig.components.div.children", { data });
         return action;
     }
 };
