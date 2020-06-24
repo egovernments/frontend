@@ -110,10 +110,14 @@ class ActionDialog extends React.Component {
           { BPA: bpaDetails }
         );
         if (response && response.Bpa && response.Bpa.length > 0) {
+          let appPath = "egov-bpa";
+          if(get(response, "Bpa[0].businessService") === "BPA_OC") {
+            appPath = "oc-bpa"
+          }
           const acknowledgementUrl =
             process.env.REACT_APP_SELF_RUNNING === "true"
-              ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${applicationAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-              : `/egov-bpa/acknowledgement?purpose=${applicationAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+              ? `/egov-ui-framework/${appPath}/acknowledgement?purpose=${applicationAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+              : `/${appPath}/acknowledgement?purpose=${applicationAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
               this.props.setRoute(acknowledgementUrl);
         }
       } else {

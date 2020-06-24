@@ -79,7 +79,7 @@ export const applicationSuccessFooter = (
       componentPath: "Button",
       props: {
         className: "apply-wizard-footer1",
-        variant: "outlined",
+        variant: "contained",
         color: "primary",
         style: {
           minWidth: "180px",
@@ -349,7 +349,8 @@ export const paymentSuccessFooter = () => {
         callBack: (state, dispatch) => {
           generatePdf(state, dispatch, "receipt_download");
         }
-      }
+      },
+      visible: false            
     },
     printReceiptButton: {
       componentPath: "Button",
@@ -373,7 +374,8 @@ export const paymentSuccessFooter = () => {
         callBack: (state, dispatch) => {
           generatePdf(state, dispatch, "receipt_print");
         }
-      }
+      },
+      visible: false      
     },
     gotoHome: {
       componentPath: "Button",
@@ -399,7 +401,7 @@ export const paymentSuccessFooter = () => {
             ? `/egov-ui-framework/BPA/search`
             : `/`
       },
-       visible: false
+       visible: true
     }
   });
 };

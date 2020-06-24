@@ -25,7 +25,7 @@ import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
 import { previewSummary } from "./summaryResource/previewSummary";
@@ -38,7 +38,13 @@ import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
 import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
-import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload, setProposedBuildingData } from "../utils/index";
+import { 
+  permitOrderNoDownload, 
+  downloadFeeReceipt, 
+  revocationPdfDownload, 
+  setProposedBuildingData,
+  generateBillForBPA
+ } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -207,6 +213,31 @@ const prepareDocumentsView = async (state, dispatch) => {
 //   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
 // };
 
+const sendToArchDownloadMenu = (action, state, dispatch) => {
+  let downloadMenu = [];
+  let sendToArchObject = {
+    label: { labelName: "SEND TO ARCHITECT", labelKey: "BPA_SEND_TO_ARCHITECT_BUTTON", },
+    link: () => {
+      updateBpaApplication(state, dispatch, "SEND_TO_ARCHITECT");
+    },
+  };
+  let ApproveObject = {
+    label: { labelName: "Approve", labelKey: "BPA_APPROVE_BUTTON" },
+    link: () => {
+      updateBpaApplication(state, dispatch, "APPROVE");
+    },
+  };
+  downloadMenu = [ sendToArchObject, ApproveObject ];  
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.citizenFooter.children.sendToArch.children.buttons.children.downloadMenu",
+      "props.data.menu",
+      downloadMenu
+    )
+  );
+}
+
 const setDownloadMenu = (action, state, dispatch) => {
   /** MenuButton data based on status */
   let status = get(
@@ -219,117 +250,108 @@ const setDownloadMenu = (action, state, dispatch) => {
   );
   let downloadMenu = [];
   let printMenu = [];
-  let certificateDownloadObject = {
+  let appFeeDownloadObject = {
     label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.NC_APP_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_APP_FEE", "Download");
     },
     leftIcon: "book"
   };
-  let certificatePrintObject = {
+  let appFeePrintObject = {
     label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "certificate_print");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_APP_FEE", "Print");
     },
     leftIcon: "book"
   };
-  let receiptDownloadObject = {
+  let sanFeeDownloadObject = {
     label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE", "Download");
     },
     leftIcon: "receipt"
   };
-  let receiptPrintObject = {
+  let sanFeePrintObject = {
     label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_print");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE", "Print");
     },
     leftIcon: "receipt"
   };
-  let applicationDownloadObject = {
+  let permitOrderDownloadObject = {
     label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
-      permitOrderNoDownload(action, state, dispatch);
-      // generatePdf(state, dispatch, "application_download");
+      permitOrderNoDownload(action, state, dispatch, "Download");
     },
     leftIcon: "assignment"
   };
-  let applicationPrintObject = {
+  let permitOrderPrintObject = {
     label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
-      generatePdf(state, dispatch, "application_print");
+      permitOrderNoDownload(action, state, dispatch, "Print");
     },
     leftIcon: "assignment"
   };
-  let paymentReceiptDownload = {
+  let lowAppFeeDownloadObject = {
     label: { labelName: "Fee Receipt", labelKey: "BPA_FEE_RECEIPT" },
     link: () => {
-      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE");
+      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE", "Download");
     },
     leftIcon: "book"
   };
-  let revocationPdfDownlaod = {
+  let lowAppFeePrintObject = {
+    label: { labelName: "Fee Receipt", labelKey: "BPA_FEE_RECEIPT" },
+    link: () => {
+      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE", "Print");
+    },
+    leftIcon: "book"
+  };
+  let revocationPdfDownlaodObject = {
     label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
     link: () => {
-      revocationPdfDownload(action, state, dispatch);
-      // generatePdf(state, dispatch, "application_download");
+      revocationPdfDownload(action, state, dispatch, "Download");
+    },
+    leftIcon: "assignment"
+  };
+  let revocationPdfPrintObject = {
+    label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
+    link: () => {
+      revocationPdfDownload(action, state, dispatch, "Print");
     },
     leftIcon: "assignment"
   };
 
   if (riskType === "LOW") {
     switch (status) {
-      case "PERMIT REVOCATION":
-        downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
-        break;
-      case "APPROVED":
       case "DOC_VERIFICATION_INPROGRESS":
       case "FIELDINSPECTION_INPROGRESS":
       case "NOC_VERIFICATION_INPROGRESS":
       case "APPROVAL_INPROGRESS":
-        downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+      case "APPROVED":
+        downloadMenu = [lowAppFeeDownloadObject, permitOrderDownloadObject];
+        printMenu = [lowAppFeePrintObject, permitOrderPrintObject];
+        break;
+      case "PERMIT REVOCATION":
+        downloadMenu = [lowAppFeeDownloadObject, revocationPdfDownlaodObject];
+        printMenu = [lowAppFeePrintObject, revocationPdfPrintObject];    
         break;
       default:
         break;
     }
   } else {
     switch (status) {
-      case "APPROVED":
-        downloadMenu = [
-          certificateDownloadObject,
-          receiptDownloadObject,
-          applicationDownloadObject
-        ];
-        printMenu = [];
-        break;
       case "DOC_VERIFICATION_INPROGRESS" :
-      downloadMenu = [certificateDownloadObject];
-        break;
       case "FIELDINSPECTION_INPROGRESS" :
-      downloadMenu = [certificateDownloadObject];
-        break;
       case "NOC_VERIFICATION_INPROGRESS" :
-      downloadMenu = [certificateDownloadObject];
-        break;
       case "APPROVAL_INPROGRESS" : 
-      downloadMenu = [certificateDownloadObject];
-       break;
       case "PENDING_SANC_FEE_PAYMENT" :
-      downloadMenu = [certificateDownloadObject];
-      break;
-      printMenu = [];
-      case "DOCUMENTVERIFY":
-      case "FIELDINSPECTION":
-      case "PENDINGAPPROVAL":
       case "REJECTED":
-        downloadMenu = [certificateDownloadObject];
-        printMenu = [];
+      downloadMenu = [appFeeDownloadObject];
+      printMenu = [appFeePrintObject];
         break;
-      case "CANCELLED":
-      case "PENDINGPAYMENT":
-        downloadMenu = [applicationDownloadObject];
-        printMenu = [];
+      case "APPROVED":
+        downloadMenu = [ appFeeDownloadObject, sanFeeDownloadObject, permitOrderDownloadObject ];
+        printMenu = [appFeePrintObject, sanFeePrintObject, permitOrderPrintObject];
         break;
       default:
         break;
@@ -412,7 +434,26 @@ const setSearchResponse = async (
   const edcrNumber = get(response, "Bpa[0].edcrNumber");
   const status = get(response, "Bpa[0].status");
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
-
+  if(get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS"){  
+    // TODO if required to show for architect before apply, 
+    //this condition should extend to OR with status INPROGRESS
+     generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+  }
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
+    (get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS")
+  );
+  if(get(response, "Bpa[0].status") == "INPROGRESS"){    
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.citizenFooter.children.sendToArch",
+      "visible",
+      false
+    )
+  );
+  }
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -422,21 +463,6 @@ const setSearchResponse = async (
   dispatch( prepareFinalObject( `scrutinyDetails`, edcrRes.edcrDetail[0] ));
 
   await edcrDetailsToBpaDetails(state, dispatch);
-
-  let riskType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "BPA.riskType"
-  );
-  let businessServicesValue = "BPA";
-  if (riskType === "LOW") {
-    businessServicesValue = "BPA_LOW";
-  }
-
-  const queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "businessServices", value: businessServicesValue }
-  ];
-  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
 
@@ -602,6 +628,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
+  sendToArchDownloadMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
@@ -609,18 +636,27 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
+    let type = getQueryArg(
+      window.location.href,
+      "type"
+    );
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
-
+    let businessServicesValue = "BPA";
+    if (type === "LOW") {
+      businessServicesValue = "BPA_LOW";
+    }
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "BPA" }
+      { key: "businessServices", value: businessServicesValue }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
+
+
     // Hide edit buttons
 
     set(
@@ -776,7 +812,7 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          // estimateSummary: estimateSummary,
+          estimateSummary: estimateSummary,
           fieldSummary: fieldSummary,
           fieldinspectionSummary: fieldinspectionSummary,
           basicSummary: basicSummary,
