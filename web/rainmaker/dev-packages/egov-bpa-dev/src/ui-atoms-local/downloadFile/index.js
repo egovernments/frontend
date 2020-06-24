@@ -29,6 +29,9 @@ const styles = {
     },
     '&:visited':{
       color: 'rgb(245, 117, 66)',
+    },
+    '&:link':{
+      color: 'rgb(245, 117, 66)',
     }
 
   },
