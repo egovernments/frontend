@@ -344,13 +344,13 @@ const setSearchResponse = async (
   const edcrNumber = get(response, "Bpa[0].edcrNumber");
   const status = get(response, "Bpa[0].status");
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
-  if(get(response, "Bpa[0].status") == "INPROGRESS"){    
+  if(get(response, "Bpa[0].status") == "CITIZEN_APPROVAL_INPROCESS"){    
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.citizenFooter.children.sendToArch",
         "visible",
-        false
+        true
       )
     );
     }
