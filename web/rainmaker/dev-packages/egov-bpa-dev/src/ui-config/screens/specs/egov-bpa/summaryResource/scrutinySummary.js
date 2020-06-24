@@ -199,8 +199,8 @@ export const scrutinySummary = getCommonGrayCard({
                     componentPath: "MultiItem",
                     props: {
                         hasAddItem: false,
-                        scheama: getCommonGrayCard({
-                            blocksContainer: getCommonContainer({
+                        scheama: getCommonContainer({
+                            // blocksContainer: getCommonContainer({
                                 header: getLabel(
                                     "Block",
                                     "",
@@ -269,11 +269,11 @@ export const scrutinySummary = getCommonGrayCard({
                                         }
                                     }
                                 },
-                            }),
+                            // }),
                         }),
                         items: [],
                         isReviewPage: true,
-                        prefixSourceJsonPath: "children.cardContent.children.blocksContainer.children",
+                        prefixSourceJsonPath: "children.cardContent.children",
                         sourceJsonPath: "edcr.blockDetail",
                         afterPrefixJsonPath: "children.value.children.key"
                     },
