@@ -34,6 +34,11 @@ const formConfig = {
       pattern: "^([a-zA-Z0-9@])+$",
       value: "",
     },
+    type: {
+      id: "user-type",
+      jsonPath: "type",
+      value: "EMPLOYEE",
+    }
   },
   submit: {
     type: "submit",
