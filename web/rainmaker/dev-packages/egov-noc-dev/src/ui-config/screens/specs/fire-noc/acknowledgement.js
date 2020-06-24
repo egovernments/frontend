@@ -1,15 +1,5 @@
-import {
-  getCommonHeader,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  applicationSuccessFooter,
-  paymentSuccessFooter,
-  gotoHomeFooter,
-  approvalSuccessFooter,
-  paymentFailureFooter
-} from "./acknowledgementResource/footers";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+import { getQueryArg, ifUserRoleExists } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import generatePdf from "../utils/receiptPdf";
 import { Icon } from "egov-ui-framework/ui-atoms";
@@ -49,6 +39,7 @@ const downloadprintMenuConfig = (state, dispatch, purpose) => {
     },
     leftIcon: "assignment"
   };
+
   let downloadMenu = [];
   let printMenu = [];
   switch (purpose) {
@@ -85,6 +76,13 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 };
 
+const getRedirectionURL = () => {
+  const redirectionURL = ifUserRoleExists("CITIZEN")
+    ? "/fire-noc/home"
+    : "/inbox";
+  return redirectionURL;
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -97,6 +95,7 @@ const screenConfig = {
       }
     }
   },
+
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
@@ -107,6 +106,30 @@ const screenConfig = {
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const{downloadMenu, printMenu}=downloadprintMenuConfig(state, dispatch, purpose);
+
+    const footerUrlConfig={
+      gotoHome: {
+        url:getRedirectionURL(),
+        labelName: "GO TO HOME",
+        labelKey: "NOC_COMMON_BUTTON_HOME"
+      }
+    }
+    if(purpose === "apply" && status === "success"){
+      footerUrlConfig["proceedToPaymentButton"]= {
+        url: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
+        labelName: "Proceed to payment",
+        labelKey: "NOC_PROCEED_PAYMENT"
+      }
+    }
+    if(purpose === "pay" && status === "failure"){
+      footerUrlConfig["retryPayment"] = {
+        url: `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`,
+        labelName: "RETRY",
+        labelKey: "NOC_PAYMENT_RETRY"
+      }
+    }
+
+    loadPdfGenerationData(applicationNumber, tenant);
     const config={
       state,
       dispatch,
@@ -115,15 +138,10 @@ const screenConfig = {
       applicationNumber,
       secondNumber,
       tenant,
-      loadPdfGenerationData,
       moduleName:"Fire Noc",
+      footerUrlConfig,
       downloadMenu,
-      printMenu,
-      applicationSuccessFooter,
-      paymentSuccessFooter,
-      gotoHomeFooter,
-      approvalSuccessFooter,
-      paymentFailureFooter
+      printMenu
     }
     const data = getAcknowledgementCard(config);
     setApplicationData(dispatch, applicationNumber, tenant);

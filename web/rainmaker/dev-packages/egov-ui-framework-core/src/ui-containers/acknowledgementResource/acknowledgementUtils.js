@@ -2,9 +2,12 @@ import {
   getCommonHeader,
   getCommonCard,
   getCommonParagraph,
-  getCommonContainer
+  getCommonContainer,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import {  getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { construtCardCongtentObj } from "./cardCoontentConstants";
+import "./index.css";
 
 const style = {
   bodyBox: {
@@ -38,6 +41,47 @@ const style = {
     alignItems: "center"
   }
 };
+
+const getCommonApplyFooter = children => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      className: "apply-wizard-footer"
+    },
+    children
+  };
+};
+
+const constructFooterObj = (footerUrlConfig)=>{
+  const footerObj={}
+  for(let key in footerUrlConfig){
+    footerObj[key] = {
+      componentPath: "Button",
+      props: {
+        className: "apply-wizard-footer1",
+        variant: "outlined",
+        color: "primary",
+        style: {
+          minWidth: "180px",
+          height: "48px",
+        }
+      },
+      children: {
+        goToHomeButtonLabel: getLabel({
+          labelName: footerUrlConfig[key].labelName,
+          labelKey: footerUrlConfig[key].labelKey
+        })
+      },
+    onClickDefination: {
+      action: "page_change",
+      path: `${footerUrlConfig[key].url}`
+    }
+  }
+  }
+  return getCommonApplyFooter(footerObj);
+}
+
 
  const getCurrentFinancialYear = () => {
   let today = new Date();
@@ -116,6 +160,22 @@ const getHeader = (applicationNumber, moduleName) => {
   })
 }
 
+const getAcknowledgementCardContent = (purpose, status, applicationNumber,moduleName) => {
+  const ackCardContentObj = {
+    "icon" : status === "success" ? "done" : "close",
+    "backgroundColor" : "#39CB74",
+  };
+  let ackObj = construtCardCongtentObj(moduleName, purpose, status);
+  for (let key in ackObj) {
+    ackCardContentObj[key]={
+      labelName: ackObj[key].labelName,
+      labelKey: ackObj[key].labelKey
+    }
+  }
+  ackCardContentObj["number"] = applicationNumber
+  return ackCardContentObj
+}
+
 export const getAcknowledgementCard = ({
   state,
   dispatch,
@@ -124,18 +184,11 @@ export const getAcknowledgementCard = ({
   applicationNumber,
   secondNumber,
   tenant,
-  loadPdfGenerationData,
   moduleName,
+  footerUrlConfig,
   downloadMenu,
-  printMenu,
-  applicationSuccessFooter,
-  paymentSuccessFooter,
-  gotoHomeFooter,
-  approvalSuccessFooter,
-  paymentFailureFooter
+  printMenu
 }) => {
-  if (purpose === "apply" && status === "success") {
-    { loadPdfGenerationData && loadPdfGenerationData(applicationNumber, tenant);}
     return {
       header: getHeader(applicationNumber, moduleName),
       headerdownloadprint: downloadprintMenu( downloadMenu, printMenu),
@@ -143,289 +196,12 @@ export const getAcknowledgementCard = ({
         uiFramework: "custom-atoms",
         componentPath: "Div",
         children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application Submitted Successfully",
-              labelKey: getTransformedLocale(`${moduleName}_APPLICATION_SUCCESS_MESSAGE_MAIN`)
-            },
-            body: {
-              labelName:
-                "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
-              labelKey: getTransformedLocale(`${moduleName}_APPLICATION_SUCCESS_MESSAGE_SUB`)
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_APP_NO_LABEL`)
-            },
-            number: applicationNumber
-          }),
+          card:acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName))
         }
       },
-      iframeForPdf: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div"
-      },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
-    };
-  } else if (purpose === "pay" && status === "success") {
-    { loadPdfGenerationData && loadPdfGenerationData(applicationNumber, tenant); }
-    return {
-      header: getHeader(applicationNumber, moduleName),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Payment has been collected successfully!",
-              labelKey: getTransformedLocale(`${moduleName}_PAYMENT_COLLECTION_SUCCESS_MESSAGE_MAIN`)
-            },
-            body: {
-              labelName:
-                "A notification regarding Payment Collection has been sent to building owner at registered Mobile No.",
-              labelKey: getTransformedLocale(`${moduleName}_PAYMENT_SUCCESS_MESSAGE_SUB`)
-            },
-            tailText: {
-              labelName: "Payment Receipt No.",
-              labelKey: getTransformedLocale(`${moduleName}_PMT_RCPT_NO`)
-            },
-            number: secondNumber
-          })
-        }
-      },
-      paymentSuccessFooter: paymentSuccessFooter()
-    };
-  } else if (purpose === "approve" && status === "success") {
-    { loadPdfGenerationData && loadPdfGenerationData(applicationNumber, tenant); }
-    return {
-      header:getHeader(applicationNumber, moduleName),
-      headerdownloadprint: downloadprintMenu( downloadMenu, printMenu),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: `${moduleName} Approved Successfully`,
-              labelKey: getTransformedLocale(`${moduleName}_APPROVAL_CHECKLIST_MESSAGE_HEAD`)
-            },
-            body: {
-              labelName:
-                `A notification regarding ${moduleName}Approval has been sent to building owner at registered Mobile No.`,
-              labelKey: getTransformedLocale(`${moduleName}_APPROVAL_CHECKLIST_MESSAGE_SUB`)
-            },
-            tailText: {
-              labelName: `${moduleName} No.`,
-              labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_NOC_NO_LABEL`)
-            },
-            number: secondNumber
-          })
-        }
-      },
-      approvalSuccessFooter
-    };
-  } else if (purpose === "application" && status === "rejected") {
-    return {
-      header: getHeader(applicationNumber, moduleName),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "close",
-            backgroundColor: "#E54D42",
-            header: {
-              labelName: `${moduleName} Application Rejected`,
-              labelKey: getTransformedLocale(`${moduleName}_APPROVAL_REJ_MESSAGE_HEAD`)
-            },
-            body: {
-              labelName:
-                `A notification regarding ${moduleName} Rejection has been sent to building owner at registered Mobile No.`,
-              labelKey: getTransformedLocale(`${moduleName}_APPROVAL_REJ_MESSAGE_SUBHEAD`)
-            }
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "application" && status === "cancelled") {
-    return {
-      header: getHeader(applicationNumber, moduleName),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "close",
-            backgroundColor: "#E54D42",
-            header: {
-              labelName: `${moduleName} Cancelled`,
-              labelKey: getTransformedLocale(`${moduleName}_CANCELLED_MESSAGE_HEAD`)
-            },
-            body: {
-              labelName:
-              `A notification regarding ${moduleName} cancellation has been sent to building owner at registered Mobile No.`,
-              labelKey: getTransformedLocale(`${moduleName}_CANCELLED_MESSAGE_SUBHEAD`)
-            },
-            tailText: {
-              labelName: `${moduleName} No.`,
-              labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_NOC_NO_LABEL`)
-            },
-            number: secondNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "pay" && status === "failure") {
-    return {
-      header: getHeader(applicationNumber, moduleName),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "close",
-            backgroundColor: "#E54D42",
-            header: {
-              labelName: "Payment has failed!",
-              labelKey: getTransformedLocale(`${moduleName}_PAYMENT_FAILURE_MESSAGE_MAIN`)
-            },
-            body: {
-              labelName:
-                "A notification regarding payment failure has been sent to the building owner and applicant.",
-              labelKey: getTransformedLocale(`${moduleName}_PAYMENT_FAILURE_MESSAGE_SUB`)
-            }
-          })
-        }
-      },
-      paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant)
-    };
-  } else if (purpose === "mark" && status === "success") {
-    return {
-      header: getHeader(applicationNumber, moduleName),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application Marked Successfully",
-              labelKey: getTransformedLocale(`${moduleName}_MARK_SUCCESS_MESSAGE_MAIN`)
-            },
-            body: {
-              labelName: "Application has been marked successfully",
-              labelKey: getTransformedLocale(`${moduleName}_APPLICATION_MARKED_SUCCESS`)
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_APP_NO_LABEL`)
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "forward" && status === "success") {
-    return {
-      header: getHeader(applicationNumber, moduleName),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application Forwarded Successfully",
-              labelKey: getTransformedLocale(`${moduleName}_FORWARD_SUCCESS_MESSAGE_MAIN`)
-            },
-            body: {
-              labelName: "Application has been marked successfully",
-              labelKey: getTransformedLocale(`${moduleName}_APPLICATION_FORWARD_SUCCESS`)
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_APP_NO_LABEL`)
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "sendback" && status === "success") {
-    return {
-      header: getHeader(applicationNumber, moduleName),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application sent back Successfully",
-              labelKey: getTransformedLocale(`${moduleName}_SENDBACK_SUCCESS_MESSAGE_MAIN`)
-            },
-            body: {
-              labelName: "Application has been sent back successfully",
-              labelKey: getTransformedLocale(`${moduleName}_APPLICATION_SENDBACK_SUCCESS`)
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_APP_NO_LABEL`)
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "refer" && status === "success") {
-    return {
-      header: getHeader(applicationNumber, moduleName),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application referred Successfully",
-              labelKey: getTransformedLocale(`${moduleName}_REFER_SUCCESS_MESSAGE_MAIN`)
-            },
-            body: {
-              labelName: "Application has been referred successfully",
-              labelKey: getTransformedLocale(`${moduleName}_APPLICATION_REFER_SUCCESS`)
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_APP_NO_LABEL`)
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
+      applicationSuccessFooter: constructFooterObj(footerUrlConfig)
     };
   }
-};
 
 const acknowledgementCard = ({
   icon = "done",
