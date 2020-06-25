@@ -3618,6 +3618,24 @@ export const getBpaTextToLocalMapping = label => {
         "BPA_APPLY_SERVICE",
         localisationLabels
       );
+    case "WF_BPA_BUILDING_PLAN_SCRUTINY" : 
+      return getLocaleLabels(
+        "Building Plan Scrutiny",
+        "WF_BPA_BUILDING_PLAN_SCRUTINY",
+        localisationLabels
+      );
+    case "WF_BPA_BUILDING_OC_PLAN_SCRUTINY" : 
+      return getLocaleLabels(
+        "Building Plan OC Scrutiny",
+        "WF_BPA_BUILDING_OC_PLAN_SCRUTINY",
+        localisationLabels
+      );
+    case "WF_BPA_NEW_CONSTRUCTION" : 
+      return getLocaleLabels(
+        "New Contruction",
+        "WF_BPA_NEW_CONSTRUCTION",
+        localisationLabels
+      );
   }
 };
 
