@@ -79,7 +79,7 @@ export const applicationSuccessFooter = (
       componentPath: "Button",
       props: {
         className: "apply-wizard-footer1",
-        variant: "outlined",
+        variant: "contained",
         color: "primary",
         style: {
           minWidth: "180px",

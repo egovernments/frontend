@@ -1,29 +1,23 @@
-import {
-  getCommonHeader,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {CloudDownloadIcon} from '@material-ui/icons/CloudDownload';
-import {PrintIcon} from '@material-ui/icons/Print';
-import {
-  applicationSuccessFooter,
-  paymentSuccessFooter,
-  gotoHomeFooter,
-  approvalSuccessFooter,
-  paymentFailureFooter
-} from "./acknowledgementResource/footers";
-import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
+import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getSearchResults } from "../../../../ui-utils/commons";
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import generatePdf from "../utils/receiptPdf";
-import { Icon } from "egov-ui-framework/ui-atoms";
+import { generateNOCAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateNOCAcknowledgement";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import get from "lodash/get";
 // import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import set from "lodash/set";
-import get from "lodash/get";
+import { getSearchResults } from "../../../../ui-utils/commons";
 import { getCurrentFinancialYear } from "../utils";
+import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
+import {
+  applicationSuccessFooter,
+  approvalSuccessFooter, gotoHomeFooter,
+  paymentFailureFooter, paymentSuccessFooter
+} from "./acknowledgementResource/footers";
 import "./index.css";
+
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
@@ -40,18 +34,23 @@ export const header = getCommonContainer({
   }
 });
 
-const downloadprintMenu = (state, dispatch,purpose) => {
+const downloadprintMenu = (state, dispatch, purpose) => {
+  let preparedFinalObject = get(
+    state,
+    "screenConfiguration.preparedFinalObject", {});
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_download");
+      // generatePdf(state, dispatch, "application_download");
+      generateNOCAcknowledgement(preparedFinalObject, `noc-acknowledgement-${get(preparedFinalObject,'FireNOCs[0].fireNOCDetails.applicationNumber','')}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_print");
+      // generatePdf(state, dispatch, "application_print");
+      generateNOCAcknowledgement(preparedFinalObject, 'print');
     },
     leftIcon: "assignment"
   };
@@ -69,81 +68,78 @@ const downloadprintMenu = (state, dispatch,purpose) => {
     },
     leftIcon: "assignment"
   };
-   let downloadMenu = [];
-   let printMenu = [];
-   switch(purpose){
-     case "apply":
-     downloadMenu = [ applicationDownloadObject];
-     printMenu = [applicationPrintObject];
-     break;
-     case "approve":
-     downloadMenu = [certificateDownloadObject];
-     printMenu = [ certificatePrintObject];
-     break;
-     default:
-     break;
+  let downloadMenu = [];
+  let printMenu = [];
+  switch (purpose) {
+    case "apply":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case "approve":
+      downloadMenu = [certificateDownloadObject];
+      printMenu = [certificatePrintObject];
+      break;
+    default:
+      break;
+  }
 
-   }
-   
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      className: "downloadprint-commonmenu",
+      style: { textAlign: "right", display: "flex" }
+    },
+    children: {
+      downloadMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            leftIcon: "cloud_download",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+            menu: downloadMenu
+          }
+        }
+      },
+      printMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            leftIcon: "print",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+            menu: printMenu
+          }
+        }
+      }
 
-
-   return {
-       uiFramework: "custom-atoms",
-       componentPath: "Div",
-       props: {
-           className: "downloadprint-commonmenu",
-           style: { textAlign: "right", display: "flex" }
-       },
-       children: {
-           downloadMenu: {
-               uiFramework: "custom-molecules",
-               componentPath: "DownloadPrintButton",
-               props: {
-                   data: {
-                       label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-                       leftIcon: "cloud_download",
-                       rightIcon: "arrow_drop_down",
-                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px"}, className: "tl-download-button" },
-                       menu: downloadMenu
-                   }
-               }
-           },
-           printMenu: {
-               uiFramework: "custom-molecules",
-               componentPath: "DownloadPrintButton",
-               props: {
-                   data: {
-                       label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-                       leftIcon: "print",
-                       rightIcon: "arrow_drop_down",
-                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
-                       menu: printMenu
-                   }
-               }
-           }
-
-       },
-   }
+    },
+  }
 
 }
 
 
-const getHeader=(applicationNumber)=>{
-return getCommonContainer({
-  header: getCommonHeader({
-    labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "NOC_COMMON_APPLY_FIRE_NOC_HEADER_LABEL"
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-noc",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number:applicationNumber
-    },
-    visible: true
-  }
-})
+const getHeader = (applicationNumber) => {
+  return getCommonContainer({
+    header: getCommonHeader({
+      labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+      labelKey: "NOC_COMMON_APPLY_FIRE_NOC_HEADER_LABEL"
+    }),
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-noc",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: applicationNumber
+      },
+      visible: true
+    }
+  })
 }
 
 
@@ -159,8 +155,8 @@ const getAcknowledgementCard = (
   if (purpose === "apply" && status === "success") {
     loadPdfGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
-      headerdownloadprint: downloadprintMenu(state, dispatch,purpose),
+      header: getHeader(applicationNumber),
+      headerdownloadprint: downloadprintMenu(state, dispatch, purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -230,7 +226,7 @@ const getAcknowledgementCard = (
     loadPdfGenerationData(applicationNumber, tenant);
     return {
       header,
-      headerdownloadprint: downloadprintMenu(state, dispatch,purpose),
+      headerdownloadprint: downloadprintMenu(state, dispatch, purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -485,6 +481,8 @@ const screenConfig = {
     );
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
+
+    loadUlbLogo(tenant);
     const data = getAcknowledgementCard(
       state,
       dispatch,
