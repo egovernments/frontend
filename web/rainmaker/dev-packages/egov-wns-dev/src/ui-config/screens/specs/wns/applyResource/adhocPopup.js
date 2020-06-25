@@ -18,6 +18,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import _ from "lodash"
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 

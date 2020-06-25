@@ -8,6 +8,7 @@ export const showSearches = getCommonContainer({
     moduleName: "egov-wns",
     componentPath: "CustomTabContainer",
     props: {
+      tabIndex:0,
       tabs: [
         {
           tabButton: { labelName: "SEARCH CONNECTIONS", labelKey: "WS_SEARCH_CONNECTIONS" },

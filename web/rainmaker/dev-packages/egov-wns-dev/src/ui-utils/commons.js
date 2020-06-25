@@ -278,6 +278,104 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
 
 };
 
+export const getSWMyConnectionResults = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/sw-services/swc/_search",
+            "_search",
+            queryObject
+        );
+        if (response.SewerageConnections.length > 0) {
+            response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
+            for (let i = 0; i < response.SewerageConnections.length; i++) {
+                response.SewerageConnections[i].service = "Sewerage"
+                if (response.SewerageConnections[i].connectionNo !== undefined && response.SewerageConnections[i].connectionNo !== null) {
+                    try {
+                        const data = await httpRequest(
+                            "post",
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].connectionNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
+                            "_fetchbill",
+                            // queryObject
+                        );
+                        if (data && data !== undefined) {
+                            if (data.Bill !== undefined && data.Bill.length > 0) {
+                                response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                            }
+
+                        } else {
+                            response.SewerageConnections[i].due = 0
+                        }
+
+                    } catch (err) {
+                        console.log(err)
+                        response.SewerageConnections[i].due = "NA"
+                    }
+                }
+            }
+            // });
+        }
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
+export const getSWMyApplicationResults = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/sw-services/swc/_search",
+            // "/sw-services/swc/_search",
+            "_search",
+            queryObject
+        );
+        if (response.SewerageConnections.length > 0) {
+            response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
+            for (let i = 0; i < response.SewerageConnections.length; i++) {
+                response.SewerageConnections[i].service = "Sewerage"
+                if (response.SewerageConnections[i].applicationNo !== undefined && response.SewerageConnections[i].applicationNo !== null) {
+                    try {
+                        const data = await httpRequest(
+                            "post",
+                            `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].applicationNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW.ONE_TIME_FEE`,
+                            "_fetchbill",
+                            // queryObject
+                        );
+                        if (data && data !== undefined) {
+                            if (data.Bill !== undefined && data.Bill.length > 0) {
+                                if (data.Bill[0].totalAmount !== 0) {
+                                    response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                                } else {
+                                    response.SewerageConnections[i].due = "NA"
+                                }
+                            }
+
+                        } else {
+                            response.SewerageConnections[i].due = 0
+                        }
+
+                    } catch (err) {
+                        console.log(err)
+                        response.SewerageConnections[i].due = "NA"
+                    }
+                }
+            }
+            // });
+        }
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
 export const getMyApplicationResults = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {

@@ -8,6 +8,7 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { convertEpochToDateAndHandleNA, handleNA } from "../../utils";
 import { serviceConst } from "../../../../../ui-utils/commons";
+import { changeStep } from "./footer";
 const service = getQueryArg(window.location.href, "service")
 
 const getHeader = label => {

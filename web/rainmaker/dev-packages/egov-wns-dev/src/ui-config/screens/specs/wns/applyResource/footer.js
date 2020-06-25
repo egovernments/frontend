@@ -25,6 +25,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import set from 'lodash/set';
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import _ from 'lodash';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
@@ -34,6 +36,43 @@ const setReviewPageRoute = (state, dispatch) => {
   const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
   dispatch(setRoute(reviewUrl));
 };
+
+export const generatePdfFromDiv = (action, applicationNumber) => {
+  let target = document.querySelector("#custom-atoms-div");
+  html2canvas(target, {
+    onclone: function (clonedDoc) {
+      // clonedDoc.getElementById("custom-atoms-footer")[
+      //   "data-html2canvas-ignore"
+      // ] = "true";
+      clonedDoc.getElementById("custom-atoms-footer").style.display = "none";
+    }
+  }).then(canvas => {
+    var data = canvas.toDataURL("image/jpeg", 1);
+    var imgWidth = 200;
+    var pageHeight = 295;
+    var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    var heightLeft = imgHeight;
+    var doc = new jsPDF("p", "mm");
+    var position = 0;
+
+    doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      doc.addPage();
+      doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+    if (action === "download") {
+      doc.save(`preview-${applicationNumber}.pdf`);
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    }
+  });
+};
+
 const moveToReview = (state, dispatch) => {
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")

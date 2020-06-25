@@ -27,7 +27,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getMdmsData } from './apply';
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-
+let financialYearText = ""
 const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
