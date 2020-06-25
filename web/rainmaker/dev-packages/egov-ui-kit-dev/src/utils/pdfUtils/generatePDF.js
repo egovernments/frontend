@@ -593,30 +593,34 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     try {
         if (fileName != 'print') {
             if (isMobileApp()) {
-                const pdfDocGenerator = pdfMake.createPdf(data);
-                pdfDocGenerator.getBlob((blob) => {
-                    const fileURL = URL.createObjectURL(blob);
-                    var win = window.open(fileURL, '_blank');
-                    if (win) {
-                        win.focus();
-                    }
-                });
+                // const pdfDocGenerator = pdfMake.createPdf(data);
+                // pdfDocGenerator.getBlob((blob) => {
+                //     const fileURL = URL.createObjectURL(blob);
+                //     var win = window.open(fileURL, '_blank');
+                //     if (win) {
+                //         win.focus();
+                //     }
+                // });
+                const doc = pdfMake.createPdf(data); 
+                doc.getBase64((data) => { window.location.href = 'data:application/pdf;base64,' + data; });
             } else {
                 data && pdfMake.createPdf(data).download(fileName);
             }
         } else {
             if (isMobileApp()) {
-                const pdfDocGenerator = pdfMake.createPdf(data);
-                pdfDocGenerator.getBlob((blob) => {
-                    const fileURL = URL.createObjectURL(blob);
-                    var myWindow = window.open(fileURL);
-                    if (myWindow != undefined) {
-                        myWindow.addEventListener("load", event => {
-                            myWindow.focus();
-                            myWindow.print();
-                        });
-                    }
-                });
+                // const pdfDocGenerator = pdfMake.createPdf(data);
+                // pdfDocGenerator.getBlob((blob) => {
+                //     const fileURL = URL.createObjectURL(blob);
+                //     var myWindow = window.open(fileURL);
+                //     if (myWindow != undefined) {
+                //         myWindow.addEventListener("load", event => {
+                //             myWindow.focus();
+                //             myWindow.print();
+                //         });
+                //     }
+                // });
+                const doc = pdfMake.createPdf(data); 
+                doc.getBase64((data) => { window.location.href = 'data:application/pdf;base64,' + data; });
             } else {
                 data && pdfMake.createPdf(data).print();
             }
