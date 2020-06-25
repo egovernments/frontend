@@ -14,7 +14,7 @@ import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
-    fontSize: 13
+    fontSize: 12
   }
 }))(Tooltip);
 //import "./index.css";
@@ -113,7 +113,7 @@ const fontStyle = {
 };
 
 const titleStyle = {
-  fontSize: "13px",
+  fontSize: "12px",
   fontWeight: "500",
   color: "rgba(120,110,110,0.64)",
   fontFamily: "Roboto",

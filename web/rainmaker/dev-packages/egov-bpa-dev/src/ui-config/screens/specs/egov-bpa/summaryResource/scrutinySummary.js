@@ -144,7 +144,7 @@ export const scrutinySummary = getCommonGrayCard({
         labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
     }),
     break3: getBreak(),
-    proposedBuildingDetails: getCommonCard({
+    proposedBuildingDetailsSummary: getCommonCard({
         header: {
             uiFramework: "custom-atoms",
             componentPath: "Container",
@@ -199,7 +199,7 @@ export const scrutinySummary = getCommonGrayCard({
                     componentPath: "MultiItem",
                     props: {
                         hasAddItem: false,
-                        scheama: getCommonGrayCard({
+                        scheama: getCommonContainer({
                             blocksContainer: getCommonContainer({
                                 header: getLabel(
                                     "Block",
@@ -208,8 +208,9 @@ export const scrutinySummary = getCommonGrayCard({
                                         jsonPath: "edcr.blockDetail[0].titleData",
                                         style: {
                                             width: "50%",
-                                            marginTop: "5px"
-                                        }
+                                            marginTop: "5px",
+                                            marginLeft: "7px"
+                                        } 
                                     }
                                 ),
                                 subOccupancyType: getLabelWithValue(
@@ -266,20 +267,23 @@ export const scrutinySummary = getCommonGrayCard({
                                             print: false,
                                             download: false,
                                             viewColumns: false,
+                                            rowHover: false
                                         }
                                     }
                                 },
+                                breakP: getBreak(),                              
+                                breakP1: getBreak(),                                
                             }),
                         }),
                         items: [],
                         isReviewPage: true,
-                        prefixSourceJsonPath: "children.cardContent.children.blocksContainer.children",
+                        prefixSourceJsonPath: "children.blocksContainer.children",
                         sourceJsonPath: "edcr.blockDetail",
                         afterPrefixJsonPath: "children.value.children.key"
                     },
                     type: "array"
                 },
-                breakP: getBreak()
+                breakP2: getBreak()
             }
         }
     }),

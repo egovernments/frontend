@@ -431,29 +431,27 @@ const setSearchResponse = async (
     { key: "applicationNo", value: applicationNumber }
   ]);
 
-  const edcrNumber = get(response, "Bpa[0].edcrNumber");
-  const status = get(response, "Bpa[0].status");
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
-  if(get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS"){  
+  const edcrNumber = get(response, "BPA[0].edcrNumber");
+  const status = get(response, "BPA[0].status");
+  dispatch(prepareFinalObject("BPA", response.BPA[0]));
+  if(get(response, "BPA[0].status")=="CITIZEN_APPROVAL_INPROCESS"){  
     // TODO if required to show for architect before apply, 
     //this condition should extend to OR with status INPROGRESS
      generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+     dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.citizenFooter.children.sendToArch",
+        "visible",
+        true
+      )
+    );
   }
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
-    (get(response, "Bpa[0].status")=="CITIZEN_APPROVAL_INPROCESS")
+    (get(response, "BPA[0].status")=="CITIZEN_APPROVAL_INPROCESS")
   );
-  if(get(response, "Bpa[0].status") == "INPROGRESS"){    
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.div.children.citizenFooter.children.sendToArch",
-      "visible",
-      false
-    )
-  );
-  }
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -498,7 +496,7 @@ const setSearchResponse = async (
   if (status && status === "CITIZEN_APPROVAL_INPROCESS" && isCitizen) {
     let userInfo = JSON.parse(getUserInfo()),
     roles = get(userInfo, "roles"),
-    owners = get(response.Bpa["0"].landInfo, "owners"),
+    owners = get(response.BPA["0"].landInfo, "owners"),
     archtect = "BPA_ARCHITECT",
     isTrue = false, isOwner = true;
     if(roles && roles.length > 0) {
@@ -552,17 +550,17 @@ const setSearchResponse = async (
   }
 
   
-  if(response && response.Bpa["0"] && response.Bpa["0"].documents) {
-    dispatch(prepareFinalObject("documentsTemp", response.Bpa["0"].documents));
+  if(response && response.BPA["0"] && response.BPA["0"].documents) {
+    dispatch(prepareFinalObject("documentsTemp", response.BPA["0"].documents));
   }
 
-  if ( response && get(response, "Bpa[0].approvalNo") ) {
+  if ( response && get(response, "BPA[0].approvalNo") ) {
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header2.children.titlebar2.children.permitNumber",
         "props.number",
-        get(response, "Bpa[0].approvalNo")
+        get(response, "BPA[0].approvalNo")
       )
     );
   } else {
@@ -606,13 +604,13 @@ const setSearchResponse = async (
 
   setProposedBuildingData(state, dispatch);
 
-  if(get(response, "Bpa[0].additionalDetails.validityDate")) {
+  if(get(response, "BPA[0].additionalDetails.validityDate")) {
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
         "props.number",
-        convertEpochToDate(get(response, "Bpa[0].additionalDetails.validityDate"))
+        convertEpochToDate(get(response, "BPA[0].additionalDetails.validityDate"))
       )
     );
 

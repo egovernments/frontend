@@ -32,7 +32,7 @@ const styles = theme => ({
     fontSize: 20
   },
   iconSize: {
-    width : 175
+    width : "auto"
   }
 });
 

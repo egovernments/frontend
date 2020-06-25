@@ -88,9 +88,12 @@ const fieldInspectionMultiItem = () => {
         props: {
           className: "tl-trade-type",
           jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
-          jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].time"
+          jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].time",
+          defaultValue: "00:00",
+          style: { marginBottom: 10, paddingRight: 80 },
         },
         required : true,
+        defaultValue: "00:00",
         gridDefination: {
           xs: 12,
           sm: 12,

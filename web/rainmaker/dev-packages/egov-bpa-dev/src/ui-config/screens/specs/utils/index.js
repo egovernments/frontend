@@ -3038,8 +3038,8 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       queryObject
     );
     let isData = true;
-    bpaSearch.Bpa && bpaSearch.Bpa.length > 0 && 
-    bpaSearch.Bpa.forEach((data, index) => {
+    bpaSearch.BPA && bpaSearch.BPA.length > 0 && 
+    bpaSearch.BPA.forEach((data, index) => {
       if(data.edcrNumber === scrutinyNo && data.status !== 'REJECTED') {
         dispatch(
           toggleSnackbar(
@@ -3616,6 +3616,24 @@ export const getBpaTextToLocalMapping = label => {
       return getLocaleLabels(
         "BPA Apply",
         "BPA_APPLY_SERVICE",
+        localisationLabels
+      );
+    case "WF_BPA_BUILDING_PLAN_SCRUTINY" : 
+      return getLocaleLabels(
+        "Building Plan Scrutiny",
+        "WF_BPA_BUILDING_PLAN_SCRUTINY",
+        localisationLabels
+      );
+    case "WF_BPA_BUILDING_OC_PLAN_SCRUTINY" : 
+      return getLocaleLabels(
+        "Building Plan OC Scrutiny",
+        "WF_BPA_BUILDING_OC_PLAN_SCRUTINY",
+        localisationLabels
+      );
+    case "WF_BPA_NEW_CONSTRUCTION" : 
+      return getLocaleLabels(
+        "New Contruction",
+        "WF_BPA_NEW_CONSTRUCTION",
         localisationLabels
       );
   }
@@ -5143,8 +5161,8 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
   const response = await getBpaSearchResults(queryObject);
 
-  if (response && response.Bpa && response.Bpa.length > 0)
-    return response.Bpa[0];
+  if (response && response.BPA && response.BPA.length > 0)
+    return response.BPA[0];
   else
     return 'NOPERMIT';
 
@@ -5351,8 +5369,8 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       queryObject
     );
 
-    bpaSearch.Bpa && bpaSearch.Bpa.length > 0 &&
-    bpaSearch.Bpa.forEach((data, index) => {
+    bpaSearch.BPA && bpaSearch.BPA.length > 0 &&
+    bpaSearch.BPA.forEach((data, index) => {
       if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED') {
         dispatch(
           toggleSnackbar(
@@ -5395,7 +5413,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
 };
 
 export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, ocDetails) => {
-  const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners") && get(bpaDetails, "landInfo.owners").length > 0 && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
   const tenantId = getQueryArg(window.location.href, "tenantId");
   
   const permitDetails = await getPermitDetails(get(ocDetails, "permitNumber"), tenantId);
@@ -5404,7 +5422,7 @@ export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, 
   dispatch(prepareFinalObject(`bpaDetails`, permitDetails));
   if(!SHLicenseDetails) {SHLicenseDetails = "NA"}
   dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
-  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray && primaryOwnerArray[0] && primaryOwnerArray[0].name));
   await permitNumberLink(state, dispatch);
   await ocuupancyType(state, dispatch);
   await residentialType(state, dispatch);

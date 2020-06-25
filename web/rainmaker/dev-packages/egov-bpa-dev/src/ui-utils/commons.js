@@ -422,7 +422,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         { BPA: payload }
       );
       // response = prepareOwnershipType(response);
-      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
       setApplicationNumberBox(state, dispatch);
       await edcrDetailsToBpaDetails(state, dispatch);
     } else if (method === "UPDATE") {
@@ -434,7 +434,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         { BPA: payload }
       );
       // response = prepareOwnershipType(response);
-      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
     }
     return { status: "success", message: response };
   } catch (error) {
@@ -1348,7 +1348,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA: payload }
       );
-      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
       setApplicationNumberBox(state, dispatch);
       await edcrDetailsToBpaDetails(state, dispatch);
     } else if (method === "UPDATE") {
@@ -1359,7 +1359,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA: payload }
       );
-      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
       await edcrDetailsToBpaDetails(state, dispatch);
     }
     return true;

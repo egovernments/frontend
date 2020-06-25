@@ -127,7 +127,8 @@ export const citizenFooter = getCommonApplyFooter({
               },
               children: {
                 buttons : sendToArchContainer()
-              }
+              },
+              visible: false
   },
   submitButton: {
     componentPath: "Button",

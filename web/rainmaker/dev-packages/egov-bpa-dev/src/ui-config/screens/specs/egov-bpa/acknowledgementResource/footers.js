@@ -29,7 +29,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
     props: {
-      variant: "outlined",
+      variant: "contained",
       color: "primary",
       style: {
        // minWidth: "200px",
@@ -223,7 +223,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
     props: {
-      variant: "outlined",
+      variant: "contained",
       color: "primary",
       style: {
        // minWidth: "200px",

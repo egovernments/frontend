@@ -44,7 +44,7 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
   margin-top: 5px !important;
 }
 #material-ui-applicantContainer {
-  background: rgb(242, 242, 242) !important;
+  /* background: rgb(242, 242, 242) !important; */
   padding: 10px !important;
 }
 
@@ -101,3 +101,16 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
   .tl-print-button {
     margin-left: 5px;
     width: 150px; } }
+#material-ui-proposedBuildingDetailsSummary {
+  box-shadow: none !important;
+}
+#custom-atoms-multiCheckListContainers > div > div > div{
+  margin-bottom: -30px !important;
+}
+.mymuicontainer > div > div {
+  margin-bottom: 30px;
+}
+#material-ui-stakeholderMyappsConatiner > div {
+  margin: 20px;
+  width: 100%;
+}
