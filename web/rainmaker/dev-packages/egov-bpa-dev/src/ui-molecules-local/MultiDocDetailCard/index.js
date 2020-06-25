@@ -26,10 +26,12 @@ const styles = {
     backgroundColor: "#FFFFFF",
     paddingLeft: 8,
     paddingRight: 0,
-    paddingTop: 11,
+    paddingTop: 3,
     paddingBottom: 10,
     marginRight: 16,
     marginTop: 16,
+    marginBottom:16,
+    // marginBottom:4,
     display: "inline-flex",
   },
   // subtext: {
@@ -106,14 +108,17 @@ const fontStyle = {
   width:150,
   overflow: "hidden", 
   whiteSpace: "nowrap",
-  textOverflow: "ellipsis"
+  textOverflow: "ellipsis",
+  marginLeft:"7px",
 };
 
 const titleStyle = {
-  fontSize: "10px",
+  fontSize: "13px",
   fontWeight: "500",
   color: "rgba(120,110,110,0.64)",
   fontFamily: "Roboto",
+  marginLeft:"7px",
+  
 };
 
 const marginStyle = {
@@ -131,7 +136,7 @@ const floatStyle = {
   width: "100%",
 };
 const requiredIcon = (
-  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>
+  <sup style={{ color: "#e82a2a", fontSize: "12px", paddingLeft: "5px" }}>
     *
   </sup>
 );
@@ -161,10 +166,10 @@ function MultiDocDetailCard(props) {
             <LabelContainer
               labelKey={getTransformedLocale(docItem.documentCode)}
             />
-              {/* {getTransformedLocale(docItem.documentCode)} */}
-              {docItem.required}
-              <span>{requiredIcon}</span>
-
+              {/* {getTransformedLocale(docItem.documentCode)} */}            
+              {(!docItem.documents || docItem.documents == null || docItem.documents.length == 0) && (docItem.required) ? (
+              <span>{requiredIcon}</span>) : (null)}
+              
             </Typography>
             
           </Grid>

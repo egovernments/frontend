@@ -164,18 +164,14 @@ const getCard = (keyValues = [], color = 'grey') => {
 
         stack: [
             {
-                "style": color == "grey" ? "pdf-table-card" : "pdf-table-card-white",
-                "table": {
-                    "widths": [
-                        125,
-                        125,
-                        125,
-                        125
-                    ],
-                    "body": [...card]
-                },
-                "layout": {}
-            }]
+                ...getCustomCard([...card], [
+                    125,
+                    125,
+                    125,
+                    125
+                ], {}, color)
+            }
+        ]
     }
     return tableCard;
 }
@@ -266,7 +262,6 @@ let tableborder = {
 
 const getCustomCard = (body = [], width = [], layout = {}, color = 'grey') => {
     return {
-
         "style": color == "grey" ? "pdf-table-card" : "pdf-table-card-white",
         "table": {
             widths: width,
@@ -330,7 +325,6 @@ export const loadUlbLogo = tenantid => {
         ctx.drawImage(this, 0, 0);
         store.dispatch(
             prepareFinalObject("UlbLogoForPdf", canvas.toDataURL())
-
         );
         localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
         canvas = null;
@@ -400,13 +394,6 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
         },
     };
 
-    const transform = (value, masterName) => {
-        if (value) {
-            return generalMDMSDataById && generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][value].code : "NA";
-        } else {
-            return "NA";
-        }
-    };
 
     let borderKey = [true, true, false, true];
     let borderValue = [false, true, true, true];
@@ -626,9 +613,11 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     pdfMake.fonts = font;
     try {
         if (fileName != 'print') {
-            data && pdfMake.createPdf(data).download(fileName);
+            const pdfData = pdfMake.createPdf(data);
+            downloadPDFFileUsingBase64(pdfData, fileName);
         } else {
-            data && pdfMake.createPdf(data).print();
+            const pdfData = pdfMake.createPdf(data);
+            printPDFFileUsingBase64(pdfData, fileName);
             // data && pdfMake.createPdf(data).open();
         }
     } catch (e) {
@@ -637,3 +626,43 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     }
 
 };
+
+export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
+    if (typeof mSewaApp === "undefined")
+    {
+      // we are running in browser
+      receiptPDF.download(filename);
+    } else {
+      // we are running under webview
+      receiptPDF.getBase64(data => {
+        mSewaApp.downloadBase64File(data, filename);
+      });
+    }
+  }
+  
+  export const openPDFFileUsingBase64 = (receiptPDF, filename) => {
+    if (typeof mSewaApp === "undefined")
+    {
+      // we are running in browser
+      receiptPDF.open();
+    } else {
+      // we are running under webview
+      receiptPDF.getBase64(data => {
+        mSewaApp.downloadBase64File(data, filename);
+      });
+    }
+  }
+  
+  export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
+    if (typeof mSewaApp === "undefined")
+    {
+      // we are running in browser
+      receiptPDF.print();
+    } else {
+      // we are running under webview
+      receiptPDF.getBase64(data => {
+        mSewaApp.downloadBase64File(data, filename);
+      });
+    }
+  }
+
