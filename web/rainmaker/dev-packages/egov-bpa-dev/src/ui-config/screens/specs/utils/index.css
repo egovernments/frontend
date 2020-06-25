@@ -110,3 +110,8 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
 .mymuicontainer > div > div {
   margin-bottom: 30px;
 }
+#material-ui-stakeholderMyappsConatiner > div {
+  margin-left: 20px;
+  width: 100%;
+  margin-right: 20px;
+}

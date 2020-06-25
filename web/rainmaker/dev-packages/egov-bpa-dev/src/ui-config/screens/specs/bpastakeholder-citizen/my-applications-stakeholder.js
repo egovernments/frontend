@@ -208,7 +208,8 @@ const screenConfig = {
             }
           }
         }),
-        applicationsCard: {
+        stakeholderMyappsConatiner: getCommonContainer({
+          myApplicationsCard:{
           uiFramework: "custom-molecules",
           name: "my-applications-stakeholder",
           componentPath: "Table",
@@ -300,6 +301,7 @@ const screenConfig = {
             }
           }
         }
+        })
       }
     }
   }
@@ -435,14 +437,14 @@ export const changePage = async (tableState) => {
   store.dispatch(
     handleField(
       "my-applications-stakeholder",
-      "components.div.children.applicationsCard",
+      "components.div.children.stakeholderMyappsConatiner.children.myApplicationsCard",
       "props.data",
       sortConvertedArray
     ));
     store.dispatch(
       handleField(
         "my-applications-stakeholder",
-        "components.div.children.applicationsCard",
+        "components.div.children.stakeholderMyappsConatiner.children.myApplicationsCard",
         "props.rows",
         sortConvertedArray.length
       )
