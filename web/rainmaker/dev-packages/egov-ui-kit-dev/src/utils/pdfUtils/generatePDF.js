@@ -592,38 +592,11 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     pdfMake.fonts = font;
     try {
         if (fileName != 'print') {
-            if (isMobileApp()) {
-                // const pdfDocGenerator = pdfMake.createPdf(data);
-                // pdfDocGenerator.getBlob((blob) => {
-                //     const fileURL = URL.createObjectURL(blob);
-                //     var win = window.open(fileURL, '_blank');
-                //     if (win) {
-                //         win.focus();
-                //     }
-                // });
-                const doc = pdfMake.createPdf(data); 
-                doc.getBase64((data) => { window.location.href = 'data:application/pdf;base64,' + data; });
-            } else {
-                data && pdfMake.createPdf(data).download(fileName);
-            }
+            const pdfData = pdfMake.createPdf(data);
+            downloadPDFFileUsingBase64(pdfData, fileName);
         } else {
-            if (isMobileApp()) {
-                // const pdfDocGenerator = pdfMake.createPdf(data);
-                // pdfDocGenerator.getBlob((blob) => {
-                //     const fileURL = URL.createObjectURL(blob);
-                //     var myWindow = window.open(fileURL);
-                //     if (myWindow != undefined) {
-                //         myWindow.addEventListener("load", event => {
-                //             myWindow.focus();
-                //             myWindow.print();
-                //         });
-                //     }
-                // });
-                const doc = pdfMake.createPdf(data); 
-                doc.getBase64((data) => { window.location.href = 'data:application/pdf;base64,' + data; });
-            } else {
-                data && pdfMake.createPdf(data).print();
-            }
+            const pdfData = pdfMake.createPdf(data);
+            printPDFFileUsingBase64(pdfData, fileName);
             // data && pdfMake.createPdf(data).open();
         }
     } catch (e) {
@@ -633,10 +606,42 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
 
 };
 
-
-export const isMobileApp = () => {
-    // return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    return window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp();
-}
-
+export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
+    if (typeof mSewaApp === "undefined")
+    {
+      // we are running in browser
+      receiptPDF.download(filename);
+    } else {
+      // we are running under webview
+      receiptPDF.getBase64(data => {
+        mSewaApp.downloadBase64File(data, filename);
+      });
+    }
+  }
+  
+  export const openPDFFileUsingBase64 = (receiptPDF, filename) => {
+    if (typeof mSewaApp === "undefined")
+    {
+      // we are running in browser
+      receiptPDF.open();
+    } else {
+      // we are running under webview
+      receiptPDF.getBase64(data => {
+        mSewaApp.downloadBase64File(data, filename);
+      });
+    }
+  }
+  
+  export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
+    if (typeof mSewaApp === "undefined")
+    {
+      // we are running in browser
+      receiptPDF.print();
+    } else {
+      // we are running under webview
+      receiptPDF.getBase64(data => {
+        mSewaApp.downloadBase64File(data, filename);
+      });
+    }
+  }
 
