@@ -107,3 +107,6 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
 #custom-atoms-multiCheckListContainers > div > div > div{
   margin-bottom: -30px !important;
 }
+.mymuicontainer > div > div {
+  margin-bottom: 30px;
+}
