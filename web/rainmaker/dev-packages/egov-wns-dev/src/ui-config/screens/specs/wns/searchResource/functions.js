@@ -203,9 +203,9 @@ const renderSearchApplicationTable = async (state, dispatch) => {
     }
     try {
       let getSearchResult, getSearchResultForSewerage;
-      if (searchScreenObject.applicationType.toLowerCase().includes('new water') || searchScreenObject.applicationType.toLowerCase().includes('newwater')) {
+      if (searchScreenObject.applicationType && (searchScreenObject.applicationType.toLowerCase().includes('new water') || searchScreenObject.applicationType.toLowerCase().includes('newwater'))) {
         getSearchResult = getSearchResults(queryObject)
-      } else if (searchScreenObject.applicationType.toLowerCase().includes('new sewerage') || searchScreenObject.applicationType.toLowerCase().includes('newsewerage')) {
+      } else if (searchScreenObject.applicationType && (searchScreenObject.applicationType.toLowerCase().includes('new sewerage') || searchScreenObject.applicationType.toLowerCase().includes('newsewerage'))) {
         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       } else {
         getSearchResult = getSearchResults(queryObject),
