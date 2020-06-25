@@ -602,8 +602,7 @@ const getBpaDetails = async ( action, state, dispatch, applicationNumber, tenant
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
-  console.log(response, "ressss");
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));  
+  dispatch(prepareFinalObject("BPA", response.BPA[0]));  
 }
 const screenConfig = {
   uiFramework: "material-ui",

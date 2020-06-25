@@ -115,10 +115,10 @@ export const searchApiCall = async (state, dispatch) => {
     }
     try {
       const response = await getBpaSearchResults(queryObject);
-      const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(get(response, "Bpa"));
+      const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(get(response, "BPA"));
       // const response = searchSampleResponse();
 
-      let data = response.Bpa.map(item => ({
+      let data = response.BPA.map(item => ({
         ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo || "-",
         ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.landInfo && item.landInfo.owners && item.landInfo.owners.map(function( items ){
             return items.isPrimaryOwner ? items.name : "";
@@ -152,7 +152,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResults",
           "props.rows",
-          response.Bpa.length
+          response.BPA.length
         )
       );
       //showHideProgress(false, dispatch);

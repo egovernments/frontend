@@ -333,43 +333,43 @@ export const changePage = async (tableState) => {
     }
   ];
   if ((typeOfService == "BUILDING_PLAN_SCRUTINY") || (typeOfService == "BUILDING_OC_PLAN_SCRUTINY")) {
-    if (filterServiceType) {
-      queryObj.push({
-        key: "servicetype",
-        value: filterServiceType
-      });
-    } 
-    queryObj.push({
-      key: "applicationType",
-      value: typeOfService
-    });
+    // if (filterServiceType) {
+    //   queryObj.push({
+    //     key: "servicetype",
+    //     value: filterServiceType
+    //   });
+    // } 
+    // queryObj.push({
+    //   key: "applicationType",
+    //   value: typeOfService
+    // });
   }
 
   if (filterStatus) {
-    queryObj.push(
-      {
-        key: "status",
-        value: filterStatus
-      },
-      {
-        key: "tenantId",
-        value: getTenantId()
-      }
-    );
+    // queryObj.push(
+    //   {
+    //     key: "status",
+    //     value: filterStatus
+    //   },
+    //   {
+    //     key: "tenantId",
+    //     value: getTenantId()
+    //   }
+    // );
 
   }
   
   if ((typeOfService === "BUILDING_PLAN_SCRUTINY") || typeOfService === "BUILDING_OC_PLAN_SCRUTINY") {
     let userInfo = JSON.parse(getUserInfo());
     let mobileNumber = get(userInfo, "mobileNumber");
-    queryObj.push({
-      key: "requestor",
-      value: mobileNumber
-    });
+    // queryObj.push({
+    //   key: "requestor",
+    //   value: mobileNumber
+    // });
     const bpaResponse = await getAppSearchResults(queryObj);
-    if (bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0) {
-      const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
-      bpaResponse.Bpa.forEach(element => {
+    if (bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0) {
+      const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.BPA);
+      bpaResponse.BPA.forEach(element => {
         let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[element.applicationNo], "state", null));
         let service = getTextToLocalMapping("BPA_APPLICATIONTYPE_" + get(element, "applicationType"));
         service += " - " + getTextToLocalMapping("BPA_SERVICETYPE_" + get(element, "serviceType"));

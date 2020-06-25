@@ -50,12 +50,12 @@ export const fetchData = async (
 ) => {
   let userInfo = JSON.parse(getUserInfo());
   let mobileNumber = get(userInfo, "mobileNumber");
-  const queryObj = [
-    {
-      key: "requestor",
-      value: mobileNumber
-    }
-  ];
+  // const queryObj = [
+  //   {
+  //     key: "requestor",
+  //     value: mobileNumber
+  //   }
+  // ];
   const response = await getSearchResults();
   const bpaResponse = await getBpaSearchResults(queryObj);
   const mdmsRes = await getMdmsData(dispatch);
@@ -82,8 +82,8 @@ export const fetchData = async (
       if(response && response.Licenses) {
         myApplicationsCount += response.Licenses.length
       }
-      if(bpaResponse && bpaResponse.Bpa) {
-        myApplicationsCount += bpaResponse.Bpa.length
+      if(bpaResponse && bpaResponse.BPA) {
+        myApplicationsCount += bpaResponse.BPA.length
       }
       dispatch(
         handleField(
@@ -163,9 +163,9 @@ export const fetchData = async (
         });
       }
       
-      if(bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0){
-        const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
-        bpaResponse.Bpa.forEach(element => {
+      if(bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0){
+        const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.BPA);
+        bpaResponse.BPA.forEach(element => {
           let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[element.applicationNo], "state", null));
           let applicationStatus = get(element, "status");
           let bService = get(element, "businessService");
