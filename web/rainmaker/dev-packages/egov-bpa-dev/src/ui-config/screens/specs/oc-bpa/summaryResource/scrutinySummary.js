@@ -313,7 +313,7 @@ export const scrutinySummary = getCommonGrayCard({
                     componentPath: "MultiItem",
                     props: {
                         hasAddItem: false,
-                        scheama: getCommonGrayCard({
+                        scheama: getCommonContainer({
                             blocksContainer: getCommonContainer({
                                 header: getLabel(
                                     "Block",
@@ -322,7 +322,8 @@ export const scrutinySummary = getCommonGrayCard({
                                         jsonPath: "edcr.blockDetail[0].titleData",
                                         style: {
                                             width: "50%",
-                                            marginTop: "5px"
+                                            marginTop: "5px",
+                                            marginLeft: "7px"                                            
                                         }
                                     }
                                 ),
@@ -380,20 +381,23 @@ export const scrutinySummary = getCommonGrayCard({
                                             print: false,
                                             download: false,
                                             viewColumns: false,
+                                            rowHover: false                                            
                                         }
                                     }
                                 },
+                                breakP: getBreak(),                              
+                                breakP1: getBreak(),
                             }),
                         }),
                         items: [],
                         isReviewPage: true,
-                        prefixSourceJsonPath: "children.cardContent.children.blocksContainer.children",
+                        prefixSourceJsonPath: "children.blocksContainer.children",
                         sourceJsonPath: "edcr.blockDetail",
                         afterPrefixJsonPath: "children.value.children.key"
                     },
                     type: "array"
                 },
-                breakP: getBreak(),
+                breakP2: getBreak(),
                 breakq: getBreak()
             }
         }

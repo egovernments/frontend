@@ -247,7 +247,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "approve" && status === "success") {
     return {
-      header,
+      header: getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -405,7 +405,7 @@ const getAcknowledgementCard = (
     };
   } else if ((purpose === "forward" || purpose === "FORWARD") && status === "success") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",

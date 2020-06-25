@@ -283,7 +283,7 @@ export const scrutinySummary = getCommonGrayCard({
                     },
                     type: "array"
                 },
-                breakP: getBreak()
+                breakP2: getBreak()
             }
         }
     }),
