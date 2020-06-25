@@ -277,7 +277,7 @@ export const scrutinySummary = getCommonGrayCard({
                         }),
                         items: [],
                         isReviewPage: true,
-                        prefixSourceJsonPath: "children.cardContent.children",
+                        prefixSourceJsonPath: "children.blocksContainer.children",
                         sourceJsonPath: "edcr.blockDetail",
                         afterPrefixJsonPath: "children.value.children.key"
                     },
