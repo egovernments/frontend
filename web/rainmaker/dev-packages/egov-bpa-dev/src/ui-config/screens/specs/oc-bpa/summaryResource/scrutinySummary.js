@@ -173,9 +173,9 @@ export const scrutinySummary = getCommonGrayCard({
             moduleName: "egov-bpa",
             componentPath: "downloadFile",
             gridDefination: {
-                xs: 12,
-                sm: 12,
-                md: 6
+                xs: 3,
+                sm: 3,
+                md: 3
             },
             props: {
                 label: {
@@ -258,7 +258,7 @@ export const scrutinySummary = getCommonGrayCard({
         labelKey: "BPA_ACTUAL_BUILDING_DETAILS_LABEL"
     }),
     break5: getBreak(),
-    proposedBuildingDetailsConatiner: getCommonCard({
+    proposedBuildingDetailsSummary: getCommonCard({
         header: {
             uiFramework: "custom-atoms",
             componentPath: "Container",

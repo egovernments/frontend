@@ -101,7 +101,7 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
   .tl-print-button {
     margin-left: 5px;
     width: 150px; } }
-#material-ui-proposedBuildingDetails {
+#material-ui-proposedBuildingDetailsSummary {
   box-shadow: none !important;
 }
 #custom-atoms-multiCheckListContainers > div > div > div{

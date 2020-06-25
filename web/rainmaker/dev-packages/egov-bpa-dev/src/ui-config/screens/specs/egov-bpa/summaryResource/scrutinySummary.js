@@ -144,7 +144,7 @@ export const scrutinySummary = getCommonGrayCard({
         labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
     }),
     break3: getBreak(),
-    proposedBuildingDetails: getCommonCard({
+    proposedBuildingDetailsSummary: getCommonCard({
         header: {
             uiFramework: "custom-atoms",
             componentPath: "Container",
