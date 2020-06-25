@@ -51,6 +51,7 @@ export const searchPropertyDetails = {
           labelsFromLocalisation: true,
           required: true,
           disabled: false,
+          isClearable: true
         },
         jsonPath: "searchScreen.tenantId",
         gridDefination: {
@@ -102,6 +103,7 @@ export const searchPropertyDetails = {
             masterName: "TENANTS"
           },
           required: true,
+          isClearable: true,
           labelsFromLocalisation: true,
           jsonPath: "searchScreen.locality.code",
           sourceJsonPath: "applyScreenMdmsData.tenant.localities",
