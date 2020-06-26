@@ -23,7 +23,8 @@ import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { 
   requiredDocumentsData, 
   edcrDetailsToBpaDetails,
-  applicantNameAppliedByMaping
+  applicantNameAppliedByMaping,
+  generateBillForBPA
 } from "../utils/index";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
@@ -40,6 +41,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import "../egov-bpa/applyResource/index.scss";
 import "../egov-bpa/applyResource/index.css";
 import { printPdf } from "egov-ui-kit/utils/commons";
+import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -344,7 +346,10 @@ const setSearchResponse = async (
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const status = get(response, "BPA[0].status");
   dispatch(prepareFinalObject("BPA", response.BPA[0]));
-  if(get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS"){    
+  if(get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS"){
+    // TODO if required to show for architect before apply, 
+    //this condition should extend to OR with status INPROGRESS
+    generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_OC_APP_FEE");
     dispatch(
       handleField(
         "search-preview",
@@ -354,6 +359,12 @@ const setSearchResponse = async (
       )
     );
     }
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary",
+      "visible",
+      (get(response, "BPA[0].status")=="CITIZEN_APPROVAL_INPROCESS")
+    );
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -674,6 +685,7 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
+          estimateSummary: estimateSummary,
           fieldinspectionSummary: fieldinspectionSummary,
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,

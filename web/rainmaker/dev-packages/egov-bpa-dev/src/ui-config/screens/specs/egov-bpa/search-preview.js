@@ -437,7 +437,11 @@ const setSearchResponse = async (
   if(get(response, "BPA[0].status")=="CITIZEN_APPROVAL_INPROCESS"){  
     // TODO if required to show for architect before apply, 
     //this condition should extend to OR with status INPROGRESS
-     generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+    let businessService = "BPA.NC_APP_FEE";
+    if(get(response, "BPA[0].businessService") == "BPA_LOW") {
+      businessService = "BPA.LOW_RISK_PERMIT_FEE"
+    } 
+     generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
      dispatch(
       handleField(
         "search-preview",
