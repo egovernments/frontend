@@ -45,10 +45,15 @@ const EstimateOverviewCardContainer = Loadable({
   loader: () => import("./EstimateOverviewCardContainer"),
   loading: () => <Loading />
 });
+const LabelContainer = Loadable({
+  loader: () => import("./LabelContainer"),
+  loading: () => <Loading />
+});
 
 
 export {
   CustomTabContainer,
+  LabelContainer,
   CheckboxContainer,
   DownloadFileContainer,
   EstimateCardContainer,
