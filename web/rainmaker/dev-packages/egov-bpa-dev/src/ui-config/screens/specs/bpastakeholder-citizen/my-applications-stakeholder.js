@@ -148,7 +148,7 @@ export const fetchData = async (
       let primaryowner = "-";
       let businessService = get(element, "businessService", null);
       let type;
-      if (businessService == "BPA_LOW") { type = "LOW" } else if (businessService == "BPA") { type = "HIGH" }
+      if (businessService == "BPA_LOW") { type = "LOW" } else if ((businessService == "BPA") || (businessService == "BPA_OC")) { type = "HIGH" }
       let owners = get(element, "owners", [])
       owners.map(item => {
         if (item.isPrimaryOwner) {
@@ -219,7 +219,7 @@ export const fetchData = async (
   dispatch(
     handleField(
       "my-applications-stakeholder",
-      "components.div.children.applicationsCard",
+      "components.div.children.stakeholderMyappsConatiner.children.myApplicationsCard",
       "props.rows",
       sortConvertedArray.length
     )
@@ -232,26 +232,26 @@ const onRowClick = rowData => {
   if (rowData[7] === "BPAREG") {
     switch (rowData[4]) {
       case "INITIATED":
-        window.location.assign(`${origin}${environment}/bpastakeholder/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`)
+        window.location.assign(`${origin}${environment}/bpastakeholder/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`)
         break;
       default:
-        window.location.assign(`${origin}${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`)
+        window.location.assign(`${origin}${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`)
     }
   } else if ((rowData[7] === "BPA") || rowData[7] == "BPA_LOW") {
     switch (rowData[9]) {
       case "INITIATED":
-        window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
+        window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
         break;
       default:
-        window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}&type=${rowData[7]}`);
+        window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}`);
     }
   } else {
     switch (rowData[9]) {
       case "INITIATED":
-        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
+        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
         break;
       default:
-        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
+        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
     }
   }
 };
