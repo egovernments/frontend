@@ -62,6 +62,7 @@ export const callPGService = async (state, dispatch) => {
           txnAmount: get(billPayload, "Bill[0].billDetails[0].totalAmount"),
           module: "FIRENOC",
           taxAndPayments,
+          businessService:taxAndPayments[0].businessService,
           consumerCode: get(billPayload, "Bill[0].billDetails[0].consumerCode"),
           productInfo: "Fire NOC Payment",
           gateway: "AXIS",

@@ -836,6 +836,7 @@ class FormWizard extends Component {
               : totalAmountToBePaid,
             module: "PT",
             taxAndPayments,
+            businessService:taxAndPayments[0].businessService,
             billId: get(getBill, "Bill[0].id"),
             consumerCode: get(getBill, "Bill[0].billDetails[0].consumerCode"),
             productInfo: "Property Tax Payment",
