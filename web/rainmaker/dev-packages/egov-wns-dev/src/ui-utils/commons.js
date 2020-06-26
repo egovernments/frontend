@@ -6,7 +6,7 @@ import { getTenantId, getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/l
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists, updateDropDowns } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
 export const serviceConst = {    
@@ -342,134 +342,6 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
                 "error"
             )
         );
-    }
-};
-
-export const updatePFOforSearchResults = async (
-    action,
-    state,
-    dispatch,
-    queryValue,
-    queryValuePurpose,
-    tenantId
-) => {
-    let queryObject = [{
-        key: "tenantId",
-        value: tenantId ? tenantId : getTenantIdCommon()
-    },
-    { key: "applicationNumber", value: queryValue }
-    ];
-    const isPreviouslyEdited = getQueryArg(window.location.href, "edited");
-    const payload = !isPreviouslyEdited ?
-        await getSearchResults(queryObject) :
-        {
-            WaterConnection: get(state.screenConfiguration.preparedFinalObject, "WaterConnection")
-        };
-    getQueryArg(window.location.href, "action") === "edit" &&
-        (await setDocsForEditFlow(state));
-    if (payload) {
-        dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-    }
-    // const licenseType = payload && get(payload, "Licenses[0].licenseType");
-    // const structureSubtype =
-    //     payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-    // const tradeTypes = setFilteredTradeTypes(
-    //     state,
-    //     dispatch,
-    //     licenseType,
-    //     structureSubtype
-    // );
-    // const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
-    // tradeTypeDdData &&
-    //     dispatch(
-    //         prepareFinalObject(
-    //             "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-    //             tradeTypeDdData
-    //         )
-    //     );
-    updateDropDowns(payload, action, state, dispatch, queryValue);
-    if (queryValuePurpose !== "cancel") {
-        set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
-        set(payload, getHygeneLevelJson(queryValuePurpose), "yes");
-        set(payload, getLocalityHarmedJson(queryValuePurpose), "No");
-    }
-    set(payload, getCheckBoxJsonpath(queryValuePurpose), true);
-
-    setApplicationNumberBox(state, dispatch);
-
-    // createOwnersBackup(dispatch, payload);
-};
-
-export const getBoundaryData = async (
-    action,
-    state,
-    dispatch,
-    queryObject,
-    code) => {
-    try {
-        let payload = await httpRequest(
-            "post",
-            "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-            "_search",
-            queryObject, {}
-        );
-        const tenantId =
-            process.env.REACT_APP_NAME === "Employee" ?
-                get(
-                    state.screenConfiguration.preparedFinalObject,
-                    "Licenses[0].tradeLicenseDetail.address.city"
-                ) :
-                getQueryArg(window.location.href, "tenantId");
-
-        const mohallaData =
-            payload &&
-            payload.TenantBoundary[0] &&
-            payload.TenantBoundary[0].boundary &&
-            payload.TenantBoundary[0].boundary.reduce((result, item) => {
-                result.push({
-                    ...item,
-                    name: `${tenantId
-                        .toUpperCase()
-                        .replace(/[.]/g, "_")}_REVENUE_${item.code
-                            .toUpperCase()
-                            .replace(/[._:-\s\/]/g, "_")}`
-                });
-                return result;
-            }, []);
-
-        dispatch(
-            prepareFinalObject(
-                "applyScreenMdmsData.tenant.localities",
-                // payload.TenantBoundary && payload.TenantBoundary[0].boundary,
-                mohallaData
-            )
-        );
-
-        dispatch(
-            handleField(
-                "apply",
-                "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
-                "props.suggestions",
-                mohallaData
-            )
-        );
-        if (code) {
-            let data = payload.TenantBoundary[0].boundary;
-            let messageObject =
-                data &&
-                data.find(item => {
-                    return item.code == code;
-                });
-            if (messageObject)
-                dispatch(
-                    prepareFinalObject(
-                        "Licenses[0].tradeLicenseDetail.address.locality.name",
-                        messageObject.name
-                    )
-                );
-        }
-    } catch (e) {
-        console.log(e);
     }
 };
 
