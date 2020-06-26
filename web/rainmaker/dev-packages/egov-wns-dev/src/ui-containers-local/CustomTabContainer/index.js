@@ -1,7 +1,8 @@
 import React from "react";
 import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import CustomTab from "../../ui-molecules-local/CustomTab";
+// import CustomTab from "../../ui-molecules-local/CustomTab";
+import CustomTab from "egov-ui-framework/ui-molecules/CustomTab";
 import { connect } from "react-redux";
 import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";

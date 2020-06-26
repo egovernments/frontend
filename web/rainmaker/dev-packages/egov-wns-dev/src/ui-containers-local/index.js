@@ -8,10 +8,10 @@ const CustomTabContainer = Loadable({
   loader: () => import("./CustomTabContainer"),
   loading: () => <Loading />
 });
-const LabelContainer = Loadable({
-  loader: () => import("./LabelContainer"),
-  loading: () => <Loading />
-});
+// const LabelContainer = Loadable({
+//   loader: () => import("./LabelContainer"),
+//   loading: () => <Loading />
+// });
 
 const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
@@ -25,22 +25,22 @@ const EstimateCardContainer = Loadable({
   loader: () => import("./EstimateCardContainer"),
   loading: () => <Loading />
 });
-const AutosuggestContainer = Loadable({
-  loader: () => import("./AutosuggestContainer"),
-  loading: () => <Loading />
-});
+// const AutosuggestContainer = Loadable({
+//   loader: () => import("./AutosuggestContainer"),
+//   loading: () => <Loading />
+// });
 const DocumentListContainer = Loadable({
   loader: () => import("./DocumentListContainer"),
   loading: () => <Loading />
 });
-const PaymentRedirectPage = Loadable({
-  loader: () => import("./PaymentRedirectPage"),
-  loading: () => <Loading />
-});
-const ResubmitActionContainer = Loadable({
-  loader: () => import("./ResubmitActionContainer"),
-  loading: () => <Loading />
-});
+// const PaymentRedirectPage = Loadable({
+//   loader: () => import("./PaymentRedirectPage"),
+//   loading: () => <Loading />
+// });
+// const ResubmitActionContainer = Loadable({
+//   loader: () => import("./ResubmitActionContainer"),
+//   loading: () => <Loading />
+// });
 
 const DialogContainer = Loadable({
   loader: () => import("./DialogContainer"),
@@ -65,14 +65,14 @@ const EstimateOverviewCardContainer = Loadable({
 
 export {
   CustomTabContainer,
-  LabelContainer,
+  // LabelContainer,
   CheckboxContainer,
   DownloadFileContainer,
   EstimateCardContainer,
-  AutosuggestContainer,
+  // AutosuggestContainer,
   DocumentListContainer,
-  PaymentRedirectPage,
-  ResubmitActionContainer,
+  // PaymentRedirectPage,
+  // ResubmitActionContainer,
   ViewBreakupContainer,
   DialogContainer,
   RadioGroupContainer,

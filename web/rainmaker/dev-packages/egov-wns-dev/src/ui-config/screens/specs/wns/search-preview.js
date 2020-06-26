@@ -473,31 +473,31 @@ const screenConfig = {
             updateUrl: serviceUrl
           }
         },
-        actionDialog: {
-          uiFramework: "custom-containers-local",
-          componentPath: "ResubmitActionContainer",
-          moduleName: "egov-wns",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
-          props: {
-            open: true,
-            dataPath: "WaterConnection",
-            moduleName: serviceModuleName,
-            updateUrl: serviceUrl,
-            data: {
-              buttonLabel: "RESUBMIT",
-              moduleName: serviceModuleName,
-              isLast: false,
-              dialogHeader: {
-                labelName: "RESUBMIT Application",
-                labelKey: "WF_RESUBMIT_APPLICATION"
+        // actionDialog: {
+        //   uiFramework: "custom-containers-local",
+        //   componentPath: "ResubmitActionContainer",
+        //   moduleName: "egov-wns",
+        //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+        //   props: {
+        //     open: true,
+        //     dataPath: "WaterConnection",
+        //     moduleName: serviceModuleName,
+        //     updateUrl: serviceUrl,
+        //     data: {
+        //       buttonLabel: "RESUBMIT",
+        //       moduleName: serviceModuleName,
+        //       isLast: false,
+        //       dialogHeader: {
+        //         labelName: "RESUBMIT Application",
+        //         labelKey: "WF_RESUBMIT_APPLICATION"
 
-              },
-              showEmployeeList: false,
-              roles: "CITIZEN",
-              isDocRequired: false
-            }
-          }
-        },
+        //       },
+        //       showEmployeeList: false,
+        //       roles: "CITIZEN",
+        //       isDocRequired: false
+        //     }
+        //   }
+        // },
         taskDetails,
       }
     },
