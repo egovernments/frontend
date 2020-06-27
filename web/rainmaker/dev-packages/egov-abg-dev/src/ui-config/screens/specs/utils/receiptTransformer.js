@@ -1,13 +1,10 @@
-import get from "lodash/get";
+import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import orderBy from "lodash/orderBy";
 import store from "../../../../ui-redux/store";
 import { getMdmsData } from "../utils";
-import orderBy from "lodash/orderBy";
-import {
-  getTransformedLocalStorgaeLabels,
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -28,7 +25,7 @@ const epochToDate = et => {
 export const loadUlbLogo = tenantid => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS");
     var ctx = canvas.getContext("2d");
     canvas.height = this.height;
@@ -37,30 +34,30 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
 
 export const loadPtBillData = response => {
   // const ulbData = loadMdmsData(getTenantId())
-  let data = {};  
+  let data = {};
   let orderedResponse = orderBy(
     response.billDetails,
     "fromPeriod",
     "desc");
-    
-  let taxHeads = orderedResponse[0].billAccountDetails.reduce((acc,item,index) =>{
-    if(index<9){
+
+  let taxHeads = orderedResponse[0].billAccountDetails.reduce((acc, item, index) => {
+    if (index < 9) {
       acc[getLocaleLabels(
         "",
         item.taxHeadCode,
         getTransformedLocalStorgaeLabels()
-      )] = item.amount 
-    }     
+      )] = item.amount
+    }
     return acc
-  },[])
+  }, [])
   const fromDate = epochToDate(get(response, "billDetails[0].fromPeriod"));
   const toDate = epochToDate(get(response, "billDetails[0].toPeriod"));
-  data.header = get(store.getState() , "")
+  data.header = get(store.getState(), "")
   data.billPeriod = `${fromDate} - ${toDate}`;
   data.billDate = epochToDate(get(response, "billDate"));
   data.dueDate = epochToDate(get(response, "billDetails[0].expiryDate"));
@@ -104,7 +101,7 @@ export const loadMdmsData = async tenantid => {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
       return item.code == tenantid;
     });
-  
+
     /** START Corporation name generation logic */
     let ulbGrade = get(ulbData, "city.ulbGrade", "NA");
     let name = get(ulbData, "city.name", "NA");
