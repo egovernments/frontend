@@ -572,12 +572,6 @@ const screenConfig = {
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
-    // const queryObject = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "businessServices", value: "BPA_OC" }
-    // ];
-    // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
 
     set(
       action,
@@ -607,6 +601,11 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.declarations.children.headers.visible",
       false
     );
 

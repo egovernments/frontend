@@ -50,7 +50,7 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     bpaAction = "APPROVE",
     isCitizen = true;
   }
- let bpaStatusAction = bpaStatus.includes("CITIZEN_ACTION_PENDING")
+ let bpaStatusAction = bpaStatus && bpaStatus.includes("CITIZEN_ACTION_PENDING")
   if(bpaStatusAction) {
     bpaAction = "FORWARD",
     isCitizenBack = true;

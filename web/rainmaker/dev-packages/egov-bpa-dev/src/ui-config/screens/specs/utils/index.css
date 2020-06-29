@@ -114,3 +114,6 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
   margin: 20px 10px;
   width: 100%;
 }
+#material-ui-blocksContainer > div > div > table > thead > tr > th {
+  z-index: 0 !important;
+}

@@ -58,7 +58,7 @@ const getAcknowledgementCard = (
   secondNumber,
   tenant
 ) => {
-  if (purpose === "APPLY" && status === "success") {
+  if (purpose === "apply" && status === "success") {
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -231,12 +231,13 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      gotoHomeFooter
+      // applicationSuccessFooter: applicationSuccessFooter(
+      //   state,
+      //   dispatch,
+      //   applicationNumber,
+      //   tenant
+      // )
     };
   }  else if (purpose === "pay" && status === "success") {
     return {
