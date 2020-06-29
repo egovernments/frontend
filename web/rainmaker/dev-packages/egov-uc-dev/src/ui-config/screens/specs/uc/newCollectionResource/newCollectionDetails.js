@@ -1,21 +1,19 @@
 import {
   getCommonCard,
-  getTextField,
+
   getCommonContainer,
-  getPattern,
-  getDateField
+
+  getDateField, getPattern, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {setServiceCategory} from "../../utils"
 import get from "lodash/get";
+import { setServiceCategory } from "../../utils";
 
 const tenantId = getTenantId();
 
@@ -27,7 +25,7 @@ export const newCollectionDetailsCard = getCommonCard(
           uiFramework: "custom-containers-local",
           moduleName: "egov-uc",
           componentPath: "AutosuggestContainer",
-          props:{
+          props: {
             label: {
               labelName: "City",
               labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
@@ -187,16 +185,16 @@ export const newCollectionDetailsCard = getCommonCard(
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
-            if(get(state,'screenConfiguration.preparedFinalObject.Demands[0].serviceType',null)){
-            dispatch(
-              handleField(
-                "newCollection",
-                "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-               "props.value",
+            if (get(state, 'screenConfiguration.preparedFinalObject.Demands[0].serviceType', null)) {
+              dispatch(
+                handleField(
+                  "newCollection",
+                  "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+                  "props.value",
                   null
-              )
-            );
-              }
+                )
+              );
+            }
             //Set service type data and field if available.
             const serviceData = get(
               state.screenConfiguration,
