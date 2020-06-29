@@ -462,6 +462,19 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
+  let type = getQueryArg(
+    window.location.href,
+    "type", ""
+  );
+
+  if(!type) {
+    let businessService = get(response, "BPA[0].businessService");
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: businessService }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  }
 
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const status = get(response, "BPA[0].status");
@@ -672,7 +685,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let type = getQueryArg(
       window.location.href,
-      "type"
+      "type", ""
     );
     const applicationNumber = getQueryArg(
       window.location.href,
@@ -680,14 +693,17 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     let businessServicesValue = "BPA";
-    if (type === "LOW") {
-      businessServicesValue = "BPA_LOW";
+    if(type) {
+      if (type === "LOW") {
+        businessServicesValue = "BPA_LOW";
+      }
+      const queryObject = [
+        { key: "tenantId", value: tenantId },
+        { key: "businessServices", value: businessServicesValue }
+      ];
+      setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: businessServicesValue }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
 
