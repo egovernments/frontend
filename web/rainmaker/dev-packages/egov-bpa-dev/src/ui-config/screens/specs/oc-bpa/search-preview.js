@@ -379,8 +379,7 @@ const setSearchResponse = async (
     }
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary",
-      "visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
       (get(response, "BPA[0].status")=="CITIZEN_APPROVAL_INPROCESS")
     );
   let edcrRes = await edcrHttpRequest(
