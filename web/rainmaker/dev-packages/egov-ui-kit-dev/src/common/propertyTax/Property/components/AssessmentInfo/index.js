@@ -141,7 +141,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //       ]
 //     );
 //   };
-export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
+export const getAssessmentInfo = (propertyDetails, generalMDMSDataById,properties) => {
   const { units = [], noOfFloors } = propertyDetails || {};
 
   return (
@@ -177,6 +177,10 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
           key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
           value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
         },
+        {
+          key: getTranslatedLabel("PT_COMMONS_IS_RAINWATER_HARVESTING", localizationLabelsData),
+          value: get(properties,'additionalDetails.isRainwaterHarvesting', getTranslatedLabel("PT_COMMON_NO", localizationLabelsData))
+        },  
     ]
   );
 };
@@ -229,7 +233,7 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
-      assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
+      assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById,properties);
       if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
         hideSubsectionLabel = true;
       }
