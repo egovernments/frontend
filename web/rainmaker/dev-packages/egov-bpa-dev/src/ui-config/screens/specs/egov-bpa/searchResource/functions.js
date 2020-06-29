@@ -42,27 +42,6 @@ export const searchApiCall = async (state, dispatch) => {
   //     )
   //   );
   // } else
-  let serviceType = get (
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreen.serviceType", ""
-  );
-  let appType = get (
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreen.applicationType", ""
-  );
-  if(!serviceType || !appType) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please select applicationType and serviceType and search",
-          labelKey: "BPA_SEARCH_APP__SERVICE_TYPE_TOAST_MESSAGE"
-        },
-        "warning"
-      )
-    );
-    return 
-  }
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")

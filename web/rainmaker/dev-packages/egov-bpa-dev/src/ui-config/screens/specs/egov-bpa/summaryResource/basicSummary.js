@@ -111,6 +111,10 @@ export const basicSummary = getCommonGrayCard({
         labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
       },
       {
+        localePrefix: {
+          moduleName: "WF",
+          masterName: "BPA"
+        },
         jsonPath:
           "BPA.applicationType",
         callBack: checkValueForNA

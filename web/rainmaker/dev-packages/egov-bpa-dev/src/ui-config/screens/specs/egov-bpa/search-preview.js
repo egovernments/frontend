@@ -238,7 +238,7 @@ const sendToArchDownloadMenu = (action, state, dispatch) => {
   );
 }
 
-const setDownloadMenu = (action, state, dispatch) => {
+const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenantId) => {
   /** MenuButton data based on status */
   let status = get(
     state,
@@ -321,24 +321,54 @@ const setDownloadMenu = (action, state, dispatch) => {
     leftIcon: "assignment"
   };
 
+  let paymentPayload = await httpRequest(
+    "post",
+    `collection-services/payments/_search?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
+  );
+
   if (riskType === "LOW") {
+    if(paymentPayload && paymentPayload.Payments.length == 1) {
+      downloadMenu.push(lowAppFeeDownloadObject);
+      printMenu.push(lowAppFeePrintObject);
+    } 
     switch (status) {
       case "DOC_VERIFICATION_INPROGRESS":
       case "FIELDINSPECTION_INPROGRESS":
       case "NOC_VERIFICATION_INPROGRESS":
       case "APPROVAL_INPROGRESS":
       case "APPROVED":
-        downloadMenu = [lowAppFeeDownloadObject, permitOrderDownloadObject];
-        printMenu = [lowAppFeePrintObject, permitOrderPrintObject];
+        downloadMenu.push(permitOrderDownloadObject);
+        printMenu.push(permitOrderDownloadObject);
+        downloadMenu = downloadMenu;
+        printMenu = printMenu;
         break;
       case "PERMIT REVOCATION":
-        downloadMenu = [lowAppFeeDownloadObject, revocationPdfDownlaodObject];
-        printMenu = [lowAppFeePrintObject, revocationPdfPrintObject];    
+        downloadMenu.push(revocationPdfDownlaodObject);
+        printMenu.push(revocationPdfPrintObject);
+        downloadMenu = downloadMenu;
+        printMenu = printMenu;   
         break;
       default:
+        downloadMenu = [];
+        printMenu = [];    
         break;
     }
   } else {
+    
+    if(paymentPayload && paymentPayload.Payments.length == 1) {
+      if(get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_APP_FEE") {
+        downloadMenu.push(appFeeDownloadObject);
+        printMenu.push(appFeePrintObject);
+      } else if(get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_SAN_FEE"){
+        downloadMenu.push(sanFeeDownloadObject);
+        printMenu.push(sanFeePrintObject);
+      }
+    } else if (paymentPayload && paymentPayload.Payments.length == 2) {
+      downloadMenu.push(appFeeDownloadObject);
+      downloadMenu.push(sanFeeDownloadObject);
+      printMenu.push(appFeePrintObject);
+      printMenu.push(sanFeePrintObject);
+    }
     switch (status) {
       case "DOC_VERIFICATION_INPROGRESS" :
       case "FIELDINSPECTION_INPROGRESS" :
@@ -346,14 +376,16 @@ const setDownloadMenu = (action, state, dispatch) => {
       case "APPROVAL_INPROGRESS" : 
       case "PENDING_SANC_FEE_PAYMENT" :
       case "REJECTED":
-      downloadMenu = [appFeeDownloadObject];
-      printMenu = [appFeePrintObject];
+      downloadMenu = downloadMenu
+      printMenu = printMenu
         break;
       case "APPROVED":
-        downloadMenu = [ appFeeDownloadObject, sanFeeDownloadObject, permitOrderDownloadObject ];
-        printMenu = [appFeePrintObject, sanFeePrintObject, permitOrderPrintObject];
+        downloadMenu.push(permitOrderDownloadObject);
+        printMenu.push(permitOrderPrintObject);
         break;
       default:
+        downloadMenu = [];
+        printMenu = [];
         break;
     }
   }
@@ -437,7 +469,11 @@ const setSearchResponse = async (
   if(get(response, "BPA[0].status")=="CITIZEN_APPROVAL_INPROCESS"){  
     // TODO if required to show for architect before apply, 
     //this condition should extend to OR with status INPROGRESS
-     generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+    let businessService = "BPA.NC_APP_FEE";
+    if(get(response, "BPA[0].businessService") == "BPA_LOW") {
+      businessService = "BPA.LOW_RISK_PERMIT_FEE"
+    } 
+     generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
      dispatch(
       handleField(
         "search-preview",
@@ -625,7 +661,7 @@ const setSearchResponse = async (
 
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
-  setDownloadMenu(action, state, dispatch);
+  await setDownloadMenu(action, state, dispatch, applicationNumber, tenantId);
   sendToArchDownloadMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };

@@ -71,7 +71,7 @@ export const applicationSuccessFooter = (
   }
   let purpose = getQueryArg(window.location.href, "purpose");
   let isTrue = false;
-  if(purpose == "APPLY") {
+  if(purpose == "apply") {
     isTrue = true;
   }
   return getCommonApplyFooter({

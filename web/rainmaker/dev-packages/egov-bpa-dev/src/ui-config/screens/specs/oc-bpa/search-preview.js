@@ -23,7 +23,8 @@ import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { 
   requiredDocumentsData, 
   edcrDetailsToBpaDetails,
-  applicantNameAppliedByMaping
+  applicantNameAppliedByMaping,
+  generateBillForBPA
 } from "../utils/index";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
@@ -40,6 +41,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import "../egov-bpa/applyResource/index.scss";
 import "../egov-bpa/applyResource/index.css";
 import { printPdf } from "egov-ui-kit/utils/commons";
+import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -152,7 +154,7 @@ const sendToArchDownloadMenu = (action, state, dispatch) => {
     )
   );
 }
-const setDownloadMenu = (action, state, dispatch) => {
+const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenantId) => {
   /** MenuButton data based on status */
   let status = get(
     state,
@@ -235,16 +237,32 @@ const setDownloadMenu = (action, state, dispatch) => {
     }
   }
 
+  let paymentPayload = await httpRequest(
+    "post",
+    `collection-services/payments/_search?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
+  );
+
+  if(paymentPayload && paymentPayload.Payments.length == 1) {
+    if(get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_APP_FEE") {
+      downloadMenu.push(appFeeDownloadObject);
+      printMenu.push(appFeePrintObject);
+    } else if(get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_SAN_FEE"){
+      downloadMenu.push(sanFeeDownloadObject);
+      printMenu.push(sanFeePrintObject);
+    }
+  } else if (paymentPayload && paymentPayload.Payments.length == 2) {
+    downloadMenu.push(appFeeDownloadObject);
+    downloadMenu.push(sanFeeDownloadObject);
+    printMenu.push(appFeePrintObject);
+    printMenu.push(sanFeePrintObject);
+  }
+
     switch (status) {
       case "APPROVED":
         downloadMenu = [
-          appFeeDownloadObject,
-          sanFeeDownloadObject,
           occupancyCertificateDownloadObject
         ];
         printMenu = [
-          appFeePrintObject,
-          sanFeePrintObject,
           occupancyCertificatePrintObject
         ];
         break;
@@ -255,10 +273,12 @@ const setDownloadMenu = (action, state, dispatch) => {
       case "PENDING_SANC_FEE_PAYMENT":
       case "PENDINGAPPROVAL":
       case "REJECTED":
-        downloadMenu = [ appFeeDownloadObject ];
-        printMenu = [ appFeePrintObject ];
+        downloadMenu = downloadMenu;
+        printMenu = printMenu;
         break;
       default:
+        downloadMenu = [];
+        printMenu = [];
         break;
     }
 
@@ -344,7 +364,10 @@ const setSearchResponse = async (
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const status = get(response, "BPA[0].status");
   dispatch(prepareFinalObject("BPA", response.BPA[0]));
-  if(get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS"){    
+  if(get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS"){
+    // TODO if required to show for architect before apply, 
+    //this condition should extend to OR with status INPROGRESS
+    generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_OC_APP_FEE");
     dispatch(
       handleField(
         "search-preview",
@@ -354,6 +377,12 @@ const setSearchResponse = async (
       )
     );
     }
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary",
+      "visible",
+      (get(response, "BPA[0].status")=="CITIZEN_APPROVAL_INPROCESS")
+    );
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -522,7 +551,7 @@ const setSearchResponse = async (
 
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
-  setDownloadMenu(action, state, dispatch);
+  await setDownloadMenu(action, state, dispatch, applicationNumber, tenantId);
   sendToArchDownloadMenu(action, state, dispatch);  
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
@@ -674,6 +703,7 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
+          estimateSummary: estimateSummary,
           fieldinspectionSummary: fieldinspectionSummary,
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
