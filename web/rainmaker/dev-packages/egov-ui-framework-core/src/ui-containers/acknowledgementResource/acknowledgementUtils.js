@@ -57,7 +57,6 @@ const constructFooterObj = (footerUrlConfig)=>{
   const footerObj={}
   for(let key in footerUrlConfig){
     footerObj[key] = {
-      componentPath: "Button",
       props: {
         className: "apply-wizard-footer1",
         variant: "outlined",
@@ -65,13 +64,13 @@ const constructFooterObj = (footerUrlConfig)=>{
         style: {
           minWidth: "180px",
           height: "48px",
+          color: "#fff",
+          backgroundolor:" #FE7A51"
         }
       },
-      children: {
-        goToHomeButtonLabel: getLabel({
+      ButtonLabel:{
           labelName: footerUrlConfig[key].labelName,
           labelKey: footerUrlConfig[key].labelKey
-        })
       },
     onClickDefination: {
       action: "page_change",
@@ -79,7 +78,7 @@ const constructFooterObj = (footerUrlConfig)=>{
     }
   }
   }
-  return getCommonApplyFooter(footerObj);
+  return footerObj;
 }
 
 
@@ -189,17 +188,38 @@ export const getAcknowledgementCard = ({
   downloadMenu,
   printMenu
 }) => {
+  debugger;
+  console.log("ackBodyObject------ ", acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName)));
     return {
-      header: getHeader(applicationNumber, moduleName),
-      headerdownloadprint: downloadprintMenu( downloadMenu, printMenu),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card:acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName))
+      ackHeader: {
+        labelName: `Application for ${moduleName} (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+        labelKey: getTransformedLocale(`${moduleName}_COMMON_APPLY_HEADER_LABEL`),
+        downloadButton: true,
+        printButton: true,
+        applicationNumber,
+        downloadPrintContainerClass: "downloadprint-commonmenu",
+        downloadButtonProps : {
+            label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            leftIcon: "cloud_download",
+            rightIcon: "arrow_drop_down",
+            props: {
+              variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className:
+                "tl-download-button"
+            },
+            menu: downloadMenu
+        },
+        printButtonProps: {
+            label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            leftIcon: "print",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+            menu: printMenu
         }
       },
-      applicationSuccessFooter: constructFooterObj(footerUrlConfig)
+      ackBody: {
+        ...acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName))
+      },
+      ackFooter: [...footerUrlConfig]
     };
   }
 
@@ -211,71 +231,23 @@ const acknowledgementCard = ({
   tailText,
   number
 } = {}) => {
-  const tail = tailText
-    ? {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          text: getCommonHeader(tailText, { style: style.tailText }),
-          paragraph: getCommonHeader(
-            {
-              labelName: number
-            },
-            { style: style.tailNumber }
-          )
-        },
-        props: {
-          style: style.tailBox
-        }
-      }
-    : {};
-
-  return getCommonCard({
-    applicationSuccessContainer: getCommonContainer(
-      {
-        avatar: {
-          componentPath: "Avatar",
-          props: {
-            style: {
-              width: "72px",
-              height: "72px",
-              backgroundColor: backgroundColor
-            }
-          },
-          children: {
-            Icon: {
-              uiFramework: "custom-atoms",
-              componentPath: "Icon",
-              props: {
-                iconName: icon,
-                style: {
-                  fontSize: "50px"
-                },
-                iconSize: "50px"
-              }
-            }
-          }
-        },
-        body: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          children: {
-            header: getCommonHeader(header),
-            paragraph: getCommonParagraph(body, {
-              style: style.bodySub
-            })
-          },
-          props: {
-            style: style.bodyBox
-          }
-        },
-        tail: tail
+  return {
+      avatarStyle: {
+        width: "72px",
+          height: "72px",
+            backgroundColor: backgroundColor
       },
-      {
-        style: style.container
-      }
-    )
-  });
+      iconStyle: { fontSize: "50px"},
+      iconName: icon,
+      iconSize: "50px",
+      headerLabelName:header.labelName,
+      headerLabelKey:header.labelKey,
+      paragraphStyle: style.bodySub,
+      paragraphLableName: body.labelName,
+      paragraphLabelKey:body.labelKey,
+      tailText,
+      tailNumber:number
+  }
 };
  
-export default getAcknowledgementCard;
+// export default getAcknowledgementCard;

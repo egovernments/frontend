@@ -7,7 +7,7 @@ import set from "lodash/set";
 import get from "lodash/get";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import getAcknowledgementCard from "egov-ui-framework/ui-containers/acknowledgementResource/acknowledgementUtils"
+import {getAcknowledgementCard} from "egov-ui-framework/ui-containers/acknowledgementResource/acknowledgementUtils"
 import "./index.css";
 
 const downloadprintMenuConfig = (state, dispatch, purpose) => {
@@ -88,10 +88,10 @@ const screenConfig = {
   name: "acknowledgement",
   components: {
     div: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
+      uiFramework: "custom-containers",
+      componentPath: "AcknowledgementContainer",
       props: {
-        className: "common-div-css"
+        className: "common-div-css",
       }
     }
   },
@@ -107,26 +107,42 @@ const screenConfig = {
     const tenant = getQueryArg(window.location.href, "tenantId");
     const{downloadMenu, printMenu}=downloadprintMenuConfig(state, dispatch, purpose);
 
-    const footerUrlConfig={
-      gotoHome: {
+    const footerUrlConfig=[{
+ 
         url:getRedirectionURL(),
         labelName: "GO TO HOME",
-        labelKey: "NOC_COMMON_BUTTON_HOME"
-      }
-    }
+        labelKey: "NOC_COMMON_BUTTON_HOME",
+        style: {
+          minWidth: "180px",
+          height: "48px"
+        }
+      }]
+    
     if(purpose === "apply" && status === "success"){
-      footerUrlConfig["proceedToPaymentButton"]= {
+      footerUrlConfig.push({
         url: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
         labelName: "Proceed to payment",
-        labelKey: "NOC_PROCEED_PAYMENT"
-      }
+        labelKey: "NOC_PROCEED_PAYMENT",
+        style: {
+          minWidth: "180px",
+          height: "48px",
+          color: "#fff",
+          backgroundColor: " #FE7A51"
+        }
+      })
     }
     if(purpose === "pay" && status === "failure"){
-      footerUrlConfig["retryPayment"] = {
+      footerUrlConfig.push({
         url: `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`,
         labelName: "RETRY",
-        labelKey: "NOC_PAYMENT_RETRY"
-      }
+        labelKey: "NOC_PAYMENT_RETRY",
+        style: {
+          minWidth: "180px",
+          height: "48px",
+          color: "#fff",
+          backgroundColor: " #FE7A51"
+        }
+      })
     }
 
     loadPdfGenerationData(applicationNumber, tenant);
@@ -145,7 +161,7 @@ const screenConfig = {
     }
     const data = getAcknowledgementCard(config);
     setApplicationData(dispatch, applicationNumber, tenant);
-    set(action, "screenConfig.components.div.children", data);
+    set(action, "screenConfig.components.div.props", data);
     return action;
   }
 };
