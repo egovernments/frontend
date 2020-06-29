@@ -15,7 +15,7 @@ const formConfig = {
     datePicker: {
       id: "vasikaDate",
       jsonPath: "Properties[0].bussinessDetails[0].vasikaDate",
-      type: "textfield",
+      type: "date",
       localePrefix: "Vasika Date",
       floatingLabelText: "Vasika Date",
       hintText: "Vasika Date",
@@ -37,7 +37,7 @@ const formConfig = {
     allotmentDate: {
       id: "allotmentDate",
       jsonPath: "Properties[0].bussinessDetails[0].allotmentDate",
-      type: "textfield",
+      type: "date",
       localePrefix: "Allotment Date",
       floatingLabelText: "Allotment Date",
       hintText: "Allotment Date",
