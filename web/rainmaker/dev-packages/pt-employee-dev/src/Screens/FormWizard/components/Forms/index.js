@@ -197,6 +197,7 @@ const InstitutionAuthority = ({ form, formKey, handleFieldChange, cardTitle, for
 
 const UsageInformationHOC = formHoc({ formKey: "basicInformation", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
 const BussinessDetailsHOC = formHoc({ formKey: "bussinessDetails", path: "PropertyTaxPay/ImpelExtended", isCoreConfiguration: true })(GenericForm);
+const CheckBoxDetailsHOC = formHoc({ formKey: "checkBoxDetails", path: "PropertyTaxPay/ImpelExtended", isCoreConfiguration: true })(GenericForm);
 const PropertyAddressHOC = formHoc({ formKey: "propertyAddress", path: "PropertyTaxPay" })(GenericForm);
 //const PlotInformationHOC = formHoc({ formKey: "plotInformation", path: "PropertyTaxPay",isCoreConfiguration:true})(GenericForm);
 const OwnershipTypeHOC = formHoc({ formKey: "ownershipType", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
@@ -217,6 +218,7 @@ const InstitutionAuthorityHOC = formHoc({
 export {
   UsageInformationHOC,
   BussinessDetailsHOC,
+  CheckBoxDetailsHOC,
   PropertyAddressHOC,
   OwnershipTypeHOC,
   OwnerInfoHOC,

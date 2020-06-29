@@ -26,7 +26,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
 import store from "ui-redux/store";
-import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC,BussinessDetailsHOC } from "./components/Forms";
+import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC,BussinessDetailsHOC,CheckBoxDetailsHOC } from "./components/Forms";
 import FloorsDetails from "./components/Forms/FloorsDetails";
 import MultipleOwnerInfoHOC from "./components/Forms/MultipleOwnerInfo";
 import PlotDetails from "./components/Forms/PlotDetails";
@@ -471,6 +471,7 @@ class FormWizard extends Component {
           <div>
             <UsageInformationHOC disabled={fromReviewPage} />
             <BussinessDetailsHOC disabled={fromReviewPage} />
+            <CheckBoxDetailsHOC disabled={fromReviewPage} />
             {renderPlotAndFloorDetails(
               fromReviewPage,
               PlotDetails,
