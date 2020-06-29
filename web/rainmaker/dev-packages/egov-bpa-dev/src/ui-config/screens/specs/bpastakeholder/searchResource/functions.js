@@ -196,35 +196,39 @@ export const getWorkFlowDataForBPA = async Licenses => {
   var businessIds = [];
   let tenantMap = {};
   let processInstanceArray = [];
+  var appNumbers = [];
   Licenses.forEach(item => {
     var appNums = tenantMap[item.tenantId] || [];
+    appNumbers = appNums;
     appNums.push(item.applicationNo);
     tenantMap[item.tenantId] = appNums;
   });
 
   for(var key in tenantMap) {
-    const queryObject = [
-      {
-        key: "tenantId",
-        value: key
-      },
-      {
-        key: "businessIds",
-        value: tenantMap[key]
+    for (let i = 0 ; i < appNumbers.length/100; i++ ) {
+      let queryObject = [
+        {
+          key: "tenantId",
+          value: key
+        },
+        {
+          key: "businessIds",
+          value: tenantMap[key].slice(i*100, (i*100) + 100)
+        }
+      ];
+      try {
+        let payload = await httpRequest(
+          "post",
+          "egov-workflow-v2/egov-wf/process/_search",
+          "",
+          queryObject
+        );
+        processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
+       
+      } catch (error) {
+        console.log(error);
+        return [];
       }
-    ];
-    try {
-      const payload = await httpRequest(
-        "post",
-        "egov-workflow-v2/egov-wf/process/_search",
-        "",
-        queryObject
-      );
-      processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
-     
-    } catch (error) {
-      console.log(error);
-      return [];
     }
     
     var businessIdToOwnerMapping = {};
