@@ -340,12 +340,13 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      // applicationSuccessFooter: applicationSuccessFooter(
+      //   state,
+      //   dispatch,
+      //   applicationNumber,
+      //   tenant
+      // )
+      gotoHomeFooter
     };
   }  else if (purpose === "pay" && status === "success") {
     return {
