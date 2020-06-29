@@ -116,6 +116,7 @@ const abc=(  state,
     props: {
       style: {
         display: "flex",
+        cursor: "pointer"
 
       }
     },
@@ -264,6 +265,7 @@ const getAcknowledgementCard = (
         props: {
           style: {
             display: "flex",
+            cursor:"pointer"
 
           }
         },
