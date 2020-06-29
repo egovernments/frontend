@@ -136,7 +136,7 @@ const floatStyle = {
   width: "100%",
 };
 const requiredIcon = (
-  <sup style={{ color: "#e82a2a", fontSize: "12px", paddingLeft: "5px" }}>
+  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>
     *
   </sup>
 );
