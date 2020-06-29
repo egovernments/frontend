@@ -213,7 +213,7 @@ export const getMultipleItemCard = (itemsInfo, itemHeader = "COMMON_OWNER", hide
     if (itemsInfo.length > 1) {
         let items = [];
         itemsInfo.map((item, index) => {
-            let rowElements = { header: `${getLocaleLabels(itemHeader, itemHeader)} - ${index}`, items: item.items.filter(element => element) };
+            let rowElements = { header: `${getLocaleLabels(itemHeader, itemHeader)} - ${index+1}`, items: item.items.filter(element => element) };
             if (hideHeader) {
                 delete rowElements.header;
             }
