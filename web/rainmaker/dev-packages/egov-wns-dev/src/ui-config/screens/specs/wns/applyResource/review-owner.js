@@ -480,10 +480,10 @@ export const connectionSewerage={
 export const additionDetails=(service === serviceConst.WATER)?connectionWater:connectionSewerage;
 
 export const renderService = () => {
-  return getCommonContainer(connectionWater);
-  // if (service === serviceConst.WATER) {
-  //   return getCommonContainer(connectionWater);
-  // } else if (service === serviceConst.SEWERAGE) {
-  //   return getCommonContainer(connectionSewerage)
-  // }
+  //return getCommonContainer(connectionWater);
+  if (service === serviceConst.WATER) {
+    return getCommonContainer(connectionWater);
+  } else if (service === serviceConst.SEWERAGE) {
+    return getCommonContainer(connectionSewerage)
+  }
 }
