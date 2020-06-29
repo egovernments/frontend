@@ -15,7 +15,52 @@ const header = getCommonHeader({
   labelKey: "UC_COMMON_HEADER"
 });
 const tenantId = getTenantId();
-
+const loadServiceType= async(tenantId,dispatch)=>{
+  let requestBody = {
+    MdmsCriteria: {
+      tenantId:tenantId ,
+      moduleDetails: [
+        {
+          moduleName: "BillingService",
+          masterDetails: [
+            {
+              name: "BusinessService",
+              filter: "[?(@.type=='Adhoc')]"
+            },
+            {
+              name: "TaxHeadMaster"
+            },
+            {
+              name: "TaxPeriod"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      requestBody
+    );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.BillingService",
+        payload.MdmsRes.BillingService
+      )
+    );
+    setServiceCategory(
+      get(payload, "MdmsRes.BillingService.BusinessService", []),
+      dispatch
+    );
+  } catch (e) {
+    console.log(e);
+  }
+}
 const getData = async (action, state, dispatch, demandId) => {
 
   let requestBody = {
@@ -44,7 +89,7 @@ const getData = async (action, state, dispatch, demandId) => {
       [],
       requestBody
     );
-    
+   
     if(payload){
       dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
       const citymodule = get(payload , "MdmsRes.tenant.citymodule"); 
@@ -58,12 +103,15 @@ const getData = async (action, state, dispatch, demandId) => {
       "preparedFinalObject.searchScreenMdmsData.serviceCategory",
       []
     );
-    if (serviceCategories && serviceCategories.length) {
+    if (serviceCategories && serviceCategories.length!==0) {
       setServiceCategory(
         serviceCategories,
         dispatch
       );
+    }else if(tenantId){
+      loadServiceType(tenantId,dispatch)
     }
+    
   } catch (e) {
     console.log(e);
   }
@@ -85,6 +133,7 @@ const getData = async (action, state, dispatch, demandId) => {
           get(payload, "idResponses[0].id", "")
         )
       );
+      loadServiceType(tenantId,dispatch);
     } catch (e) {
       console.log(e);
     }
@@ -121,6 +170,7 @@ const newCollection = {
       action.screenConfig = screenConfigForUpdate;
     }
     !demandId && getData(action, state, dispatch, demandId);
+
     return action;
   },
 

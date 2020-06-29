@@ -187,7 +187,7 @@ export const newCollectionDetailsCard = getCommonCard(
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
-            if(state.screenConfiguration.preparedFinalObject.Demands[0].serviceType){
+            if(get(state,'screenConfiguration.preparedFinalObject.Demands[0].serviceType',null)){
             dispatch(
               handleField(
                 "newCollection",
