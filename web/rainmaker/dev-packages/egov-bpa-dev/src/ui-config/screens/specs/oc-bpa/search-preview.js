@@ -154,7 +154,7 @@ const sendToArchDownloadMenu = (action, state, dispatch) => {
     )
   );
 }
-const setDownloadMenu = (action, state, dispatch) => {
+const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenantId) => {
   /** MenuButton data based on status */
   let status = get(
     state,
@@ -237,16 +237,32 @@ const setDownloadMenu = (action, state, dispatch) => {
     }
   }
 
+  let paymentPayload = await httpRequest(
+    "post",
+    `collection-services/payments/_search?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
+  );
+
+  if(paymentPayload && paymentPayload.Payments.length == 1) {
+    if(get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_APP_FEE") {
+      downloadMenu.push(appFeeDownloadObject);
+      printMenu.push(appFeePrintObject);
+    } else if(get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_SAN_FEE"){
+      downloadMenu.push(sanFeeDownloadObject);
+      printMenu.push(sanFeePrintObject);
+    }
+  } else if (paymentPayload && paymentPayload.Payments.length == 2) {
+    downloadMenu.push(appFeeDownloadObject);
+    downloadMenu.push(sanFeeDownloadObject);
+    printMenu.push(appFeePrintObject);
+    printMenu.push(sanFeePrintObject);
+  }
+
     switch (status) {
       case "APPROVED":
         downloadMenu = [
-          appFeeDownloadObject,
-          sanFeeDownloadObject,
           occupancyCertificateDownloadObject
         ];
         printMenu = [
-          appFeePrintObject,
-          sanFeePrintObject,
           occupancyCertificatePrintObject
         ];
         break;
@@ -257,10 +273,12 @@ const setDownloadMenu = (action, state, dispatch) => {
       case "PENDING_SANC_FEE_PAYMENT":
       case "PENDINGAPPROVAL":
       case "REJECTED":
-        downloadMenu = [ appFeeDownloadObject ];
-        printMenu = [ appFeePrintObject ];
+        downloadMenu = downloadMenu;
+        printMenu = printMenu;
         break;
       default:
+        downloadMenu = [];
+        printMenu = [];
         break;
     }
 
@@ -533,7 +551,7 @@ const setSearchResponse = async (
 
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
-  setDownloadMenu(action, state, dispatch);
+  await setDownloadMenu(action, state, dispatch, applicationNumber, tenantId);
   sendToArchDownloadMenu(action, state, dispatch);  
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };

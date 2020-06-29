@@ -96,6 +96,39 @@ const getAcknowledgementCard = (
         tenant
       )
     };
+  } else if (purpose === "apply_skip" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Submitted Successfully",
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      gotoHomeFooter
+    };
   } else if (purpose === "SEND_TO_CITIZEN" && status === "success") {
     return {
       header:getHeader(applicationNumber),
@@ -128,12 +161,6 @@ const getAcknowledgementCard = (
         componentPath: "Div"
       },
       gotoHomeFooter
-      // applicationSuccessFooter: applicationSuccessFooter(
-      //   state,
-      //   dispatch,
-      //   applicationNumber,
-      //   tenant
-      // )
     };
   } else if (purpose === "APPROVE" && status === "success") {
     return {

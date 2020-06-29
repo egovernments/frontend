@@ -1140,25 +1140,35 @@ export const handleFileUpload = (event, handleDocument, props) => {
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
-   
-  if(isDeclared) {
+
+  if (isDeclared) {
     let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
-  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
-  const tenantId = getQueryArg(window.location.href, "tenantId");
-  if (get(response, "status", "") === "success") {
-    const acknowledgementUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true"
-        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-    dispatch(setRoute(acknowledgementUrl));
+    const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    if (get(response, "status", "") === "success") {
+      let status = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
+      if (status === "DOC_VERIFICATION_INPROGRESS") {
+        const acknowledgementUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+            : `/egov-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        dispatch(setRoute(acknowledgementUrl));
+      } else {
+        const acknowledgementUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+            : `/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        dispatch(setRoute(acknowledgementUrl));
+      }
+
+    }
   }
-  }  
   else {
     let errorMessage = {
       labelName: "Please confirm the declaration!",
       labelKey: "BPA_DECLARATION_COMMON_LABEL"
     };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));      
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
 };
 
@@ -1375,10 +1385,18 @@ export const submitOCBpaApplication = async (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (response) {
-    const acknowledgementUrl =
+    if(get(response, "BPA[0].status" === "DOC_VERIFICATION_INPROGRESS")) {
+      const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
-        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-        : `/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/oc-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
     dispatch(setRoute(acknowledgementUrl));
+    } else {
+      const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/oc-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+    }
   }
 };
