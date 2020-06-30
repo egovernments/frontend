@@ -2,6 +2,7 @@ import React from "react";
 import { sortByEpoch, getEpochForDate } from "../../utils";
 import { Link } from "react-router-dom"
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import { getDomainLink } from "../../../../../ui-utils/commons";
 import "./index.css"
 
 export const searchResults = {
@@ -105,6 +106,6 @@ export const searchResults = {
 };
 
 
-const getViewBillDetails = data => {
-  window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
+const getViewBillDetails = data => {  
+  window.location.href = `${getDomainLink()}/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }

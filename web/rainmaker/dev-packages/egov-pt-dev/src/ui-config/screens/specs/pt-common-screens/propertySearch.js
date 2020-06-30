@@ -13,6 +13,7 @@ import commonConfig from "config/common.js";
 import { resetFields } from "./mutation-methods";
 import "./index.css"
 import {searchPropertyDetails} from "./mutation-methods"
+import { getDomainLink } from "../../../../ui-utils/commons";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -135,11 +136,8 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  let link = window.location.origin;
-                  if(process.env.NODE_ENV !== "development"){
-                    link += "/"+process.env.REACT_APP_NAME.toLowerCase()
-                  }
-                  window.location.href = link + `/pt-common-screens/register-property?redirectUrl=${url}`
+                  let link = window.location.origin;                  
+                  window.location.href = `${link}${getDomainLink()}/pt-common-screens/register-property?redirectUrl=${url}`
                 }
               },
             }

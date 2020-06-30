@@ -1774,3 +1774,12 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         alert('Some Error Occured while downloading!');
     }
 }
+
+
+export const getDomainLink = () =>{
+    let link = "";
+    if(process.env.NODE_ENV !== "development"){
+       link += "/"+process.env.REACT_APP_NAME.toLowerCase()
+    }
+    return link
+}
