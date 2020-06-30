@@ -168,11 +168,11 @@ export const fetchData = async (
         ["BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"]: serType,
         ["BPA_COMMON_SLA"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "sla", null) || "-",
         ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "assignee", null) || "-",
-        ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: element.status || "",
+        ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: getTextToLocalMapping(`WF_BPA_${element.status}`) || "",
         applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
         modifiedTime: modifiedTime,
         sortNumber: 1,
-        serviceType: businessService,
+        serviceType: getTextToLocalMapping(`WF_${businessService}`),
         tenantId: get(element, "tenantId", null),
         type: type
       })
