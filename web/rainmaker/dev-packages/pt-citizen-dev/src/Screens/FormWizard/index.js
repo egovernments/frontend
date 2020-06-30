@@ -352,6 +352,12 @@ class FormWizard extends Component {
         titleObject
       });
       toggleSpinner();
+      if(!getQueryValue(search, "purpose")){
+        prepareFinalObject('Properties', []);
+        prepareFinalObject('PropertiesTemp', []);
+      } else if(getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
+        prepareFinalObject('Properties', this.props.common.prepareFormData.Properties);
+      }
     } catch (e) {
       console.log("e");
       toggleSpinner();
