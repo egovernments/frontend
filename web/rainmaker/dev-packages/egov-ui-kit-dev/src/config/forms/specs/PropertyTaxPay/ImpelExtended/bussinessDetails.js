@@ -1,3 +1,5 @@
+import './index.css';
+
 const formConfig = {
   name: "bussinessDetails",
   fields: {
