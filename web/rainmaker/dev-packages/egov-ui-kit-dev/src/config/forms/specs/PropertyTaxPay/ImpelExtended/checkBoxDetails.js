@@ -3,7 +3,7 @@ const formConfig = {
     fields: {
         inflammableMaterial: {
             id: "inflammableMaterial",
-            jsonPath: "Properties[0].bussinessDetails[0].inflammableMaterial",
+            jsonPath: "Properties[0].propertyDetails[0].units[0].inflammableMaterial",
             type: "checkbox",
             localePrefix: "Do you have any inflammable material stored in your property?",
             floatingLabelText: "Do you have any inflammable material stored in your property?",
@@ -13,7 +13,7 @@ const formConfig = {
         },
         heightOfProperty: {
             id: "heightOfProperty",
-            jsonPath: "Properties[0].bussinessDetails[0].heightOfProperty",
+            jsonPath: "Properties[0].propertyDetails[0].units[0].heightOfProperty",
             type: "checkbox",
             localePrefix: "Height of property more than 36 feet?",
             floatingLabelText: "Height of property more than 36 feet?",
