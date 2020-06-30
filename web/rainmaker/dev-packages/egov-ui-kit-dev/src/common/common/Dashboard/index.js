@@ -1,104 +1,52 @@
 import React from "react";
-import { Card, Icon, Button } from "components";
+import ModuleCard from "./component";
 import Label from "egov-ui-kit/utils/translationNode";
+import CityPicker from "./component/CityPicker";
 import "./index.css";
 
-const moduleCardButtonStyle1 = {
-  width: "93%",
+const onButton1Click = (item, history, onPGRClick) => {
+  const { route } = item;
+  history && history.push(route);
+  // if (item.moduleTitle === "Property Tax") {
+  //   history && history.push(route);
+  // } else if (item.moduleTitle === "Complaints") {
+  //   //onPGRClick();
+  //   history && history.push(route);
+  // } else if (item.moduleTitle === "Finance") {
+  //   history && history.push(route);
+  // } else if (item.moduleTitle === "TradeLicense") {
+  //   history && history.push(route);
+  // }
+};
+const onButton2Click = (item, history) => {
+  if (process.env.REACT_APP_NAME === "Citizen") {
+    if (item.moduleTitle === "PT_PAYMENT_STEP_HEADER1") {
+      history && history.push("property-tax/how-it-works");
+    }
+    if (item.moduleTitle === "COMMON_BOTTOM_NAVIGATION_COMPLAINTS") {
+      history && history.push("how-it-works");
+    }
+    if (item.moduleTitle === "TL_COMMON_TL") {
+      history && history.push("trade-license/how-it-works");
+    }
+    if(item.moduleTitle === "NOC_COMMON_NOC")
+    {
+      history && history.push("fire-noc/how-it-works"); //change to NOC route
+    }
+  }
 };
 
-const moduleCardButtonStyle2 = {
-  width: "100%",
-};
-const buttonsContainerStyle1 = {
-  padding: "0px",
-  margin: "0px",
-  width: "50%",
-};
-
-const buttonsContainerStyle2 = {
-  padding: "0px",
-  margin: "0px",
-  width: "100%",
-};
-
-const ModuleCard = ({ items, onButton1Click, onPGRClick, onButton2Click, history }) => {
+const Dashboard = ({ moduleItems, userName, history, onPGRClick, onDialogueClose, dialogueOpen, renderCityPicker }) => {
   return (
-    <div>
-      {items &&
-        items.map((item, key) => {
-          return (
-            <div key={key} className={`col-sm-6 ${item.className}` }>
-              <Card
-                id="home-complaint-card"
-                className="clearfix landingPageCard"
-                style={item.borderLeftColor}
-                textChildren={
-                  <div className="clearfix" style={{ position: "relative", minHeight: item.moduleDescription ? "200px" : "inherit", height: "398px" }}>
-                    <div style={{ padding: "0", margin: "0", display: "flex" }}>
-                      <Icon action={item.iconAction} name={item.iconName} style={item.iconStyle} />
-                      <Label className="moduleCardTitle" label={item.moduleTitle} />
-                    </div>
-                    <div>
-                      <Label className="moduleCardDescription" label={item.moduleDescription} />
-                    </div>
-                    <div
-                      className={
-                        item.moduleDescription ? "col-sm-12 landing-page-button landing-page-button-container" : "col-sm-12 landing-page-button"
-                      }
-                    >
-                      <div className="col-sm-6" style={item.button2 ? buttonsContainerStyle1 : buttonsContainerStyle2}>
-                        <Button
-                          onClick={() => {
-                            onButton1Click(item, history, onPGRClick);
-                          }}
-                          label={<Label label={item.button1} color="#fff" />}
-                          primary={true}
-                          style={{ align: "left" }}
-                          style={item.button2 ? moduleCardButtonStyle1 : moduleCardButtonStyle2}
-                          buttonStyle={{ border: "1px solid #fe7a51" }}
-                          id={item.id}
-                          labelStyle={{
-                            padding: "0 12px 0 12px ",
-                            letterSpacing: "0.6px",
-                            display: "inline-block",
-                            height: "22px",
-                            lineHeight: "22px",
-                            fontSize: "14px",
-                          }}
-                        />
-                      </div>
-                      {item.button2 && (
-                        <div className="col-sm-6" style={buttonsContainerStyle1}>
-                          <Button
-                            onClick={() => {
-                              onButton2Click(item, history);
-                            }}
-                            label={<Label label={item.button2} color="#fe7a51" />}
-                            style={{ align: "right" }}
-                            style={moduleCardButtonStyle1}
-                            buttonStyle={{ border: "1px solid #fe7a51" }}
-                            className="moduleSecondButton"
-                            labelStyle={{
-                              padding: "0 12px 0 12px ",
-                              letterSpacing: "0.6px",
-                              display: "inline-block",
-                              height: "22px",
-                              lineHeight: "22px",
-                              fontSize: "14px",
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                }
-              />
-            </div>
-          );
-        })}
+    <div className="col-sm-12 landing-page-main-container">
+      <div className="rainmaker-displayInline">
+        <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
+        <Label className="landingPageUser" label={userName} />
+        <Label className="landingPageUser" label={","} />
+      </div>
+      <ModuleCard onPGRClick={onPGRClick} items={moduleItems} onButton2Click={onButton2Click} onButton1Click={onButton1Click} history={history} />
+      {/* {renderCityPicker && <CityPicker history={history} moduleItems={moduleItems} onDialogueClose={onDialogueClose} dialogueOpen={dialogueOpen} />} */}
     </div>
   );
 };
-
-export default ModuleCard;
+export default Dashboard;
