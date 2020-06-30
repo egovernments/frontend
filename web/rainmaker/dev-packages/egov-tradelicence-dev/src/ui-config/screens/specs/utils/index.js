@@ -1173,7 +1173,7 @@ const getBillingSlabData = async (
                 tradeUnit =>
                   item.tradeType === tradeUnit.tradeType
               ).uom;
-              tradeTotal = tradeTotal + item.rate * count;
+              tradeTotal = count?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
               result.tradeUnitData.push({
                 rate: item.rate,
                 tradeTotal:tradeTotal,
@@ -1241,8 +1241,9 @@ const getBillingSlabData = async (
 
 const isApplicationPaid = (currentStatus,workflowCode) => {
 let isPAID = false;
-if(currentStatus==="CITIZENACTIONREQUIRED"){
-  return isPAID;
+if(currentStatus==="CITIZENACTIONREQUIRED" || currentStatus==="PENDINGAPPLFEE" || currentStatus==="APPLIED"){
+ 
+   return isPAID;
 }
 const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
 
@@ -1264,7 +1265,6 @@ const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
   } else {
     isPAID = false;
   }
-
   return isPAID;
 };
 
