@@ -496,12 +496,13 @@ export const paymentMethods= [
     tabButton: "COMMON_RTGS",
     tabIcon: "Schedule",
     tabContent: { neftRtgs }
-  },
-  {
-    code : "POSTAL_ORDER",
-    tabButton: "COMMON_POSTAL_ORDER",
-    tabIcon: "Schedule",
-    tabContent: { postalOrder }
   }
+  //Commented by Minju as Postal Order Option is not Required on 19/06/2020
+  // {
+  //   code : "POSTAL_ORDER",
+  //   tabButton: "COMMON_POSTAL_ORDER",
+  //   tabIcon: "Schedule",
+  //   tabContent: { postalOrder }
+  // }
 ]
 
