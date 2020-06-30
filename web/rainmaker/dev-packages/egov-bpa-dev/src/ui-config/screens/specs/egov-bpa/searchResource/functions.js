@@ -104,7 +104,7 @@ export const searchApiCall = async (state, dispatch) => {
           }),
         ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) || "-",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[item.applicationNo], "state", null)),
-        ["TENANT_ID"]: getTextToLocalMapping(item.tenantId, item.tenantId),
+        ["TENANT_ID"]: item.tenantId,
         ["SERVICE_TYPE"]: getTextToLocalMapping(`WF_${get(item, "businessService")}`, null),
         ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: getTextToLocalMapping(`WF_BPA_${item.status}`) || ""
       }));
