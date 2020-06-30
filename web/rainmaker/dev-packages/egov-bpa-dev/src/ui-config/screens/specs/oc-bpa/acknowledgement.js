@@ -342,8 +342,8 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Application for permit order is revocated",
-              labelKey: "BPA_APPROVAL_REVOCATED_MESSAGE_HEAD"
+              labelName: "Application for Occupancy Certificate is revocated",
+              labelKey: "BPA_APPROVAL_OC_REVOCATED_MESSAGE_HEAD"
             },
             body: {
               labelName:
