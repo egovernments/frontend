@@ -54,7 +54,11 @@ return getCommonContainer({
 }
 
 const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId, uiCommonPayConfig, businessService) => {
-  const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
+  const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt");
+  let keyLabel = "BPA_PERMIT_ORDER";
+  if(window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
+    keyLabel = "BPA_OC_PERMIT_ORDER"
+  }
    let receiptDownloadObject = {
        label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
        link: () => {
@@ -68,7 +72,7 @@ const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId,
        leftIcon: "receipt"
    };
    let applicationDownloadObject = {
-    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
+    label: { labelName: "Permit Order Receipt", labelKey: keyLabel },
     link: () => {
       permitOrderNoDownload(action, state, dispatch, "Download");
       // generatePdf(state, dispatch, "application_download");
@@ -76,7 +80,7 @@ const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId,
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
+    label: { labelName: "Permit Order Receipt", labelKey: keyLabel },
     link: () => {
       permitOrderNoDownload(action, state, dispatch, "Print");
       // generatePdf(state, dispatch, "application_download");
