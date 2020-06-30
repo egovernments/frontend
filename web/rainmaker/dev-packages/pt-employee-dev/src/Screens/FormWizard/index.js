@@ -381,6 +381,12 @@ class FormWizard extends Component {
     renderCustomTitleForPt({ titleObject });
     hideSpinner();
     prepareFinalObject('propertiesEdited', false);
+
+    if(!getQueryValue(search, "purpose")){
+      prepareFinalObject('Properties', []);
+    } else if(getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
+      prepareFinalObject('Properties', this.props.common.prepareFormData.Properties);
+    }
   };
 
   handleRemoveOwner = (index, formKey) => {
