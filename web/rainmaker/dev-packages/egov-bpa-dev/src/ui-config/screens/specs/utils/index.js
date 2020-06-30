@@ -3040,7 +3040,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     let isData = true;
     bpaSearch.BPA && bpaSearch.BPA.length > 0 && 
     bpaSearch.BPA.forEach((data, index) => {
-      if((data.edcrNumber === scrutinyNo) && ((data.status != "REJECTED") || (data.status != "PERMIT REVOCATION"))) {
+      if((data.edcrNumber === scrutinyNo) && ((data.status != "REJECTED") && (data.status != "PERMIT REVOCATION"))) {
         dispatch(
           toggleSnackbar(
             true,
@@ -5371,7 +5371,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
 
     bpaSearch.BPA && bpaSearch.BPA.length > 0 &&
     bpaSearch.BPA.forEach((data, index) => {
-      if (data.edcrNumber === scrutinyNo && ((data.status != "REJECTED") || (data.status != "PERMIT REVOCATION"))) {
+      if (data.edcrNumber === scrutinyNo && ((data.status != "REJECTED") && (data.status != "PERMIT REVOCATION"))) {
         dispatch(
           toggleSnackbar(
             true,

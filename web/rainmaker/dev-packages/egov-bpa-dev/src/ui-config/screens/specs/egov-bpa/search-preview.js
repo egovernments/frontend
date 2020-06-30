@@ -863,12 +863,12 @@ const screenConfig = {
         },
         body: getCommonCard({
           estimateSummary: estimateSummary,
-          fieldSummary: fieldSummary,
-          fieldinspectionSummary: fieldinspectionSummary,
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
           previewSummary: previewSummary,
+          fieldSummary: fieldSummary,
+          fieldinspectionSummary: fieldinspectionSummary,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,
           permitListSummary : permitListSummary

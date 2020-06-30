@@ -259,12 +259,8 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
 
     switch (status) {
       case "APPROVED":
-        downloadMenu = [
-          occupancyCertificateDownloadObject
-        ];
-        printMenu = [
-          occupancyCertificatePrintObject
-        ];
+        downloadMenu.push(occupancyCertificateDownloadObject);
+        printMenu.push(occupancyCertificatePrintObject);
         break;
       case "DOC_VERIFICATION_INPROGRESS":
       case "FIELDINSPECTION_INPROGRESS":
@@ -702,10 +698,10 @@ const screenConfig = {
         },
         body: getCommonCard({
           estimateSummary: estimateSummary,
-          fieldinspectionSummary: fieldinspectionSummary,
-          fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
           documentAndNocSummary: documentAndNocSummary,
+          fieldinspectionSummary: fieldinspectionSummary,
+          fieldSummary: fieldSummary,
           permitConditions: permitConditions,
           permitListSummary: permitListSummary,
           declarations: declarations
