@@ -414,7 +414,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -430,7 +430,12 @@ const getAcknowledgementCard = (
               labelName:
                 "A notification regarding BPA Rejection has been sent to building owner at registered Mobile No.",
               labelKey: "BPA_APPROVAL_REJE_MESSAGE_SUBHEAD"
-            }
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
           })
         }
       },
@@ -438,7 +443,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "revocated") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -454,7 +459,12 @@ const getAcknowledgementCard = (
               labelName:
                 "A notification regarding Building Permit application revocation has been sent to applicant at registered Mobile No.",
               labelKey: "BPA_APPROVAL_REV_MESSAGE_SUBHEAD"
-            }
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
           })
         }
       },
@@ -571,7 +581,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "sendback" && status === "success") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
