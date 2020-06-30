@@ -110,7 +110,9 @@ const getData = async (action, state, dispatch, demandId) => {
     } else if (tenantId) {
       loadServiceType(tenantId, dispatch)
     }
-
+    dispatch(
+      prepareFinalObject("Demands[0].tenantId", tenantId)
+    );
   } catch (e) {
     console.log(e);
   }
