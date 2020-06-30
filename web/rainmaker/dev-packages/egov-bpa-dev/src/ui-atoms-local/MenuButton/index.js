@@ -88,7 +88,7 @@ class MenuListComposition extends React.Component {
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList>
-                      {data.menu.map((item, key) => {
+                      {data.menu && data.menu.length > 0 && data.menu.map((item, key) => {
                         const { labelName, labelKey } = item.label;
                         return (
                           <MenuItem key={key} onClick={item.link}>
