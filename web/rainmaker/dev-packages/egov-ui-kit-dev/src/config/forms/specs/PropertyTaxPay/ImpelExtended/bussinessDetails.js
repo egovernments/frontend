@@ -5,6 +5,7 @@ const formConfig = {
   fields: {
     VasikaNo: {
       id: "vasikaNo",
+      className:"bussinessDetails",
       jsonPath: "Properties[0].bussinessDetails[0].units[0].vasikaNo",
       type: "textfield",
       floatingLabelText: "Vasika No",
@@ -15,6 +16,7 @@ const formConfig = {
     },
     datePicker: {
       id: "vasikaDate",
+      className:"bussinessDetails",
       jsonPath: "Properties[0].bussinessDetails[0].units[0].vasikaDate",
       type: "date",
       floatingLabelText: "Vasika Date",
@@ -25,6 +27,7 @@ const formConfig = {
     },
     allotmentNo: {
       id: "allotmentNo",
+      className:"bussinessDetails",
       jsonPath:"Properties[0].bussinessDetails[0].units[0].allotmentNo" ,
       type: "textfield",
       floatingLabelText: "Allotment No",
@@ -35,6 +38,7 @@ const formConfig = {
     },
     allotmentDate: {
       id: "allotmentDate",
+      className:"bussinessDetails",
       jsonPath: "Properties[0].bussinessDetails[0].units[0].allotmentDate",
       type: "date",
       floatingLabelText: "Allotment Date",
@@ -45,6 +49,7 @@ const formConfig = {
     },
     businessName: {
       id: "businessName",
+      className:"bussinessDetails",
       jsonPath:"Properties[0].bussinessDetails[0].units[0].businessName" ,
       type: "textfield",
       floatingLabelText: "Bussiness Name",
@@ -55,6 +60,7 @@ const formConfig = {
     },
     remrks: {
       id: "remarks",
+      className:"bussinessDetails",
       jsonPath: "Properties[0].bussinessDetails[0].units[0].remrks",
       type: "textfield",
       floatingLabelText: "Remarks",
