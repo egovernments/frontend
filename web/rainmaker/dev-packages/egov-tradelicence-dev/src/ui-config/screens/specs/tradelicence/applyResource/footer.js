@@ -317,7 +317,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
 
     if (isFormValid) {
-     /* if (getQueryArg(window.location.href, "action") === "edit") {
+      if (getQueryArg(window.location.href, "action") === "edit") {
         //EDIT FLOW
         const businessId = getQueryArg(
           window.location.href,
@@ -334,7 +334,7 @@ export const callBackForNext = async (state, dispatch) => {
           labelKey: "TL_COMMON_EDIT_UPDATE_MESSAGE"
         };
         dispatch(toggleSnackbar(true, updateMessage, "info"));
-      }*/
+      }
       const reviewDocData =
         uploadedDocData &&
         uploadedDocData.map(item => {
