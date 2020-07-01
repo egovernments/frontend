@@ -188,7 +188,6 @@ export const getAcknowledgementCard = ({
   downloadMenu,
   printMenu
 }) => {
-  debugger;
   console.log("ackBodyObject------ ", acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName)));
     return {
       ackHeader: {
