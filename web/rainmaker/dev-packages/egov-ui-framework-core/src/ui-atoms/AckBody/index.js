@@ -36,7 +36,6 @@ const AckBody = (props) => {
 		tailText,
 		tailNumber,
 	} = props;
-	debugger;
 	return (
 		<div className="ack-header">
 			<div> 
