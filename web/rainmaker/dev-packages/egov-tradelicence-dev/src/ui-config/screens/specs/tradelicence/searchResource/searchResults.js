@@ -6,6 +6,9 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { getSearchResults } from "../../../../..//ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "ui-redux/store";
 
 import {
   getLocalization,
@@ -147,8 +150,10 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
+      onRowClick: (row, index ) => {
+        let state = store.getState(state)
+        onRowClick(row, state);
+
       }
     },
     customSortColumn: {
@@ -171,8 +176,18 @@ export const searchResults = {
 
 
 
-const onRowClick = rowData => {
-  switch (rowData[5]) {
+const onRowClick = (rowData, state ) => {
+  const responseData =  get(
+    state.screenConfiguration
+    
+    .preparedFinalObject,
+    "searchedSingleResponse",
+    []
+  );
+
+  const status = responseData.filter(obj=>obj.applicationNumber===rowData[0])[0].status
+
+  switch (status) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]

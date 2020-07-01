@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../..//ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -97,6 +97,13 @@ export const searchApiCall = async (state, dispatch) => {
     }
 
     const response = await getSearchResults(queryObject);
+
+    dispatch(
+      prepareFinalObject(
+        "searchedSingleResponse",
+        response.Licenses
+      )
+    );
     try {
       let data = response.Licenses.map(item => ({
         [get(textToLocalMapping, "Application No")]:
@@ -109,7 +116,7 @@ export const searchApiCall = async (state, dispatch) => {
           convertEpochToDate(item.applicationDate) || "-",
         tenantId: item.tenantId,
         [get(textToLocalMapping, "Status")]:
-          get(textToLocalMapping, item.status) || "-"
+        get(textToLocalMapping, item.status) || "-"
       }));
 
       dispatch(
