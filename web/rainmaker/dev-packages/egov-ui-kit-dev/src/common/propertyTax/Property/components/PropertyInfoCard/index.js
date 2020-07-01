@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
-
 class PropertyInfoCard extends Component {
   render() {
-    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
-
+    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items2 = [], items = [], subSection = [], hideSubsectionLabel = false } = this.props;
     return (
       <div>
         {items && (
@@ -16,7 +14,7 @@ class PropertyInfoCard extends Component {
             textChildren={
               <div>
                 <div >
-                {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px",marginTop:20 }}>
+                  {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 20 }}>
                     {header && (
                       <Label
                         labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
@@ -26,9 +24,32 @@ class PropertyInfoCard extends Component {
                     )}
                     {{ editIcon } && <span style={{ position: "absolute", right: "25px" }}>{editIcon}</span>}
                   </div>}
-                  
                   {items.map((item) => {
-                    if(item){
+                    if (item) {
+                      return (
+                        <div>
+                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                            <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <Label
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
+                                label={item.key ? item.key : "NA"}
+                                fontSize="12px"
+                              />
+                            </div>
+                            <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <Label
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                                label={item.value ? item.value : "NA"}
+                                fontSize="16px"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
+                  {items2.map((item) => {
+                    if (item) {
                       return (
                         <div>
                           <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
@@ -87,5 +108,4 @@ class PropertyInfoCard extends Component {
     );
   }
 }
-
 export default PropertyInfoCard;

@@ -6,50 +6,8 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import PropertyInfoCard from "../PropertyInfoCard";
-
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
-
-
-
-// const getAddressItems = (addressObj) => {
-//   return (
-//     addressObj && [
-//       // {
-//       //   // heading: getTranslatedLabel("PT_PROPERTY_ADDRESS_SUB_HEADER", localizationLabelsData),
-//       //   // // iconAction: "action",
-//       //   // iconName: "home",
-//       //   items: [
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),
-//         value: addressObj.city || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_HOUSE_NO", localizationLabelsData),
-//         value: addressObj.doorNo || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_COLONY_NAME", localizationLabelsData),
-//         value: addressObj.buildingName || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_STREET_NAME", localizationLabelsData),
-//         value: addressObj.street || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-//         value: addressObj.locality.name || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
-//         value: addressObj.pincode || "NA",
-//       },
-
-//       //   ],
-//       // },
-//     ]
-//   );
-// };
 const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
   const { propertySubType, usageCategoryMajor } = propertyDetails;
   const { masterName, dataKey } = key;
@@ -77,74 +35,8 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
     }
   }
 };
-// const getAssessmentInfo = (propertyDetails, keys=[], generalMDMSDataById) => {
-//     const { units } = propertyDetails || {};
-
-//     return (
-//       propertyDetails && [
-//         {
-//           heading: getTranslatedLabel("PT_ASSESMENT_INFO_SUB_HEADER", localizationLabelsData),
-//           iconAction: "action",
-//           iconName: "assignment",
-//           showTable: true,
-//           tableHeaderItems: [
-//             {
-//               key: getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-//               value: propertyDetails.usageCategoryMajor ? propertyDetails.usageCategoryMajor : "NA", //noOfFloors
-//             },
-//             {
-//               key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
-//               value: generalMDMSDataById
-//                 ? propertyDetails.propertySubType
-//                   ? generalMDMSDataById["PropertySubType"]
-//                     ? generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].name
-//                     : "NA"
-//                   : generalMDMSDataById["PropertyType"]
-//                     ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
-//                     : "NA"
-//                 : "NA",
-//             },
-//             {
-//               key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
-//               value:
-//                 propertyDetails.propertySubType === "SHAREDPROPERTY"
-//                   ? "NA"
-//                   : propertyDetails.uom
-//                     ? `${propertyDetails.landArea} ${propertyDetails.uom}`
-//                     : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`,
-//             },
-//             {
-//               key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
-//               value: propertyDetails.noOfFloors ? `${propertyDetails.noOfFloors}` : "NA", //noOfFloors
-//             },
-//           ],
-//           items: {
-//             header: units
-//               ? [
-//                 getTranslatedLabel("PT_ASSESMENT_INFO_FLOOR", localizationLabelsData),
-//                 getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-//                 // getTranslatedLabel("PT_ASSESMENT_INFO_SUB_USAGE_TYPE", localizationLabelsData),
-//                 getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-//                 getTranslatedLabel("PT_ASSESMENT_INFO_AREA_RENT", localizationLabelsData),
-//               ]
-//               : [],
-//             values: units
-//               ? units.map((floor) => {
-//                 return {
-//                   value: keys.map((key) => {
-//                     return transform(floor, key, generalMDMSDataById, propertyDetails);
-//                   }),
-//                 };
-//               })
-//               : [],
-//           },
-//         },
-//       ]
-//     );
-//   };
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   const { units=[], noOfFloors } = propertyDetails || {};
-
   return (
     propertyDetails && [
       {
@@ -184,7 +76,6 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
     ]
   );
 };
-
 const getUnitInfo = (units = [], propertyDetails) => {
   units = units || [];
   let floors = [];
@@ -195,11 +86,9 @@ const getUnitInfo = (units = [], propertyDetails) => {
         value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor : (propertyDetails.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMinor :
           (unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA")),
       }, {
-  
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
         value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
       }, {
-  
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
         value: unit.unitArea ? unit.unitArea + '' : "NA",
       }];
@@ -219,30 +108,90 @@ const getUnitInfo = (units = [], propertyDetails) => {
   )
   return floors;
 }
-
-
-
-
-
+const getVasikaItems = (units = []) => {
+  console.log(units,"unitsjai");
+  // var units = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  debugger;
+    function convert(str) {
+      // console.log("str==========================",str);
+      var date = new Date(str),
+        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+        day = ("0" + date.getDate()).slice(-2);
+      return [date.getFullYear(), mnth, day].join("-");
+    }
+  units = units || [];
+  return (
+    units && [
+      {
+        key: "Vasika No",
+        value: units[0].vasikaNo || "NA", //noOfFloors
+      },
+      {
+        key: "Allotment No",
+        value: units[0].allotmentNo || "NA", //noOfFloors
+      },
+      {
+        key: "Vasika Date",
+        callBack: value => {
+          return convert(units[0].vasikaDate)
+        }
+      },
+      {
+        key: "Allotment Date",
+        callBack: value => {
+          return convert(units[0].allotmentDate)
+        }       },
+      {
+        key: "Bussiness Name",
+        value: units[0].businessName || "NA", //noOfFloors
+      },
+      {
+        key: "Remarks",
+        value: units[0].remrks || "NA", //noOfFloors
+      },
+    ]
+  );
+}
+//  const getEpochForDate = date => {
+//   const dateSplit = date.split("/");
+//   return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
+// };
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
+  debugger;
+  // console.log(properties,"propertiesasss");
+  // console.log(generalMDMSDataById,"generalMDMSDataByIdassss");
+  // console.log(properties.bussinessDetails[0],"bussinessDetails");
 let hideSubsectionLabel=false;
   let assessmentItems = [];
   let subUnitItems = [];
+  let subVasikaItems = [];
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
   if (properties) {
     const { propertyDetails } = properties;
+    const { bussinessDetails } = properties;
+    // console.log(bussinessDetails,"bussinessDetails");
+    // console.log(bussinessDetails[0].units[0].allotmentDate,"allotmentDate");
+    // var attdate = bussinessDetails[0].units[0].allotmentDate;
+    // console.log(getEpochForDate(attdate),"===========================")
+    // function convert(str) {
+    //   var date = new Date(str),
+    //     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+    //     day = ("0" + date.getDate()).slice(-2);
+    //   return [date.getFullYear(), mnth, day].join("-");
+    // }
+    // console.log(convert(attdate),"======================" )
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
+      subVasikaItems = getVasikaItems(bussinessDetails[0]['units']);
+      // console.log(subVasikaItems,"subVasikaItems");
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if(propertyDetails[0].propertySubType === "SHAREDPROPERTY"){
         hideSubsectionLabel=true;
       }
     }
   }
- 
   return (
-    <PropertyInfoCard editIcon={editIcon} items={assessmentItems} header={header} subSection={subUnitItems} hideSubsectionLabel={hideSubsectionLabel} ></PropertyInfoCard>
+    <PropertyInfoCard editIcon={editIcon} items={assessmentItems} items2={subVasikaItems} header={header} subSection={subUnitItems} hideSubsectionLabel={hideSubsectionLabel} ></PropertyInfoCard>
   );
 };
-
 export default AssessmentInfo;

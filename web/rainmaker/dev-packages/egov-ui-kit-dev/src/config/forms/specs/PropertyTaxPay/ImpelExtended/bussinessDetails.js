@@ -5,7 +5,7 @@ const formConfig = {
   fields: {
     VasikaNo: {
       id: "vasikaNo",
-      jsonPath: "Properties[0].propertyDetails[0].vasikaNo",
+      jsonPath: "Properties[0].bussinessDetails[0].units[0].vasikaNo",
       type: "textfield",
       floatingLabelText: "Vasika No",
       hintText: "Vasika No",
@@ -15,7 +15,7 @@ const formConfig = {
     },
     datePicker: {
       id: "vasikaDate",
-      jsonPath: "Properties[0].propertyDetails[0].vasikaDate",
+      jsonPath: "Properties[0].bussinessDetails[0].units[0].vasikaDate",
       type: "date",
       floatingLabelText: "Vasika Date",
       hintText: "Vasika Date",
@@ -25,7 +25,7 @@ const formConfig = {
     },
     allotmentNo: {
       id: "allotmentNo",
-      jsonPath:"Properties[0].propertyDetails[0].allotmentNo" ,
+      jsonPath:"Properties[0].bussinessDetails[0].units[0].allotmentNo" ,
       type: "textfield",
       floatingLabelText: "Allotment No",
       hintText: "Allotment No",
@@ -35,7 +35,7 @@ const formConfig = {
     },
     allotmentDate: {
       id: "allotmentDate",
-      jsonPath: "Properties[0].propertyDetails[0].allotmentDate",
+      jsonPath: "Properties[0].bussinessDetails[0].units[0].allotmentDate",
       type: "date",
       floatingLabelText: "Allotment Date",
       hintText: "Allotment Date",
@@ -45,7 +45,7 @@ const formConfig = {
     },
     businessName: {
       id: "businessName",
-      jsonPath:"Properties[0].propertyDetails[0].businessName" ,
+      jsonPath:"Properties[0].bussinessDetails[0].units[0].businessName" ,
       type: "textfield",
       floatingLabelText: "Bussiness Name",
       hintText: "Bussiness Name",
@@ -55,7 +55,7 @@ const formConfig = {
     },
     remrks: {
       id: "remarks",
-      jsonPath: "Properties[0].propertyDetails[0].remrks",
+      jsonPath: "Properties[0].bussinessDetails[0].units[0].remrks",
       type: "textfield",
       floatingLabelText: "Remarks",
       hintText: "Remarks",
