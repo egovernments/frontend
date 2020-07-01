@@ -40,7 +40,7 @@ const AckBody = (props) => {
 	return (
 		<div className="ack-header">
 			<div> 
-			<Avatar style={avatarStyle}>
+				<Avatar className={iconName === 'done' ? "ack-icon" : "ack-icon-failure" }>
 				<Icon style={iconStyle} iconName={iconName} iconSize={iconSize}>
 
 				</Icon>

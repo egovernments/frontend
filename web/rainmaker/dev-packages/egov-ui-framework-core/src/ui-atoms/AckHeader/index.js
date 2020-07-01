@@ -26,7 +26,7 @@ const AckHeader = (props) => {
 				</Typography>
 				<ApplicationNumber number={applicationNumber}></ApplicationNumber>
 			</div>
-			<div className={`${downloadPrintContainerClass} flex-container`}>
+			<div className={`${downloadPrintContainerClass} flex-box`}>
 				{downloadButton && <DownloadPrintButton data={downloadButtonProps} />}
 				{printButton && <DownloadPrintButton data={printButtonProps} />}
 			</div>

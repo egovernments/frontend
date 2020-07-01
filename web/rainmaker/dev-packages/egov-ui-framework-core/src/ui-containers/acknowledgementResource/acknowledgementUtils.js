@@ -162,7 +162,7 @@ const getHeader = (applicationNumber, moduleName) => {
 const getAcknowledgementCardContent = (purpose, status, applicationNumber,moduleName) => {
   const ackCardContentObj = {
     "icon" : status === "success" ? "done" : "close",
-    "backgroundColor" : "#39CB74",
+    "backgroundColor": status === "success" ? "#39CB74" : "#d32f2f",
   };
   let ackObj = construtCardCongtentObj(moduleName, purpose, status);
   for (let key in ackObj) {
