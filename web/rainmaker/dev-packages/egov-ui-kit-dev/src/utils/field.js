@@ -100,15 +100,6 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
         );
       case "radioButton":
         return (
-          // <RadioField
-          //   {...rest}
-          //   {...fieldProps}
-          //   options={fieldProps && fieldProps.options||[]}
-          //   onChange={(chosenRequest, index) => {
-          //     handleFieldChange(fieldKey, chosenRequest.value);
-          //   }}
-
-          // />
           <RadioButton
             {...rest}
             {...fieldProps}
@@ -124,9 +115,6 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             handleChange={(e, value) => {
               handleFieldChange(fieldKey, value);
             }}
-          // handleChange={(e) => {
-          //   handleFieldChange("ownerGender", e.target.value);
-          // }}
           ></RadioButton>
         );
 

@@ -90,22 +90,6 @@ const formConfig = {
         xs: 12,
         sm: 6
       },
-      updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        console.log(formKey, field, dispatch, state,'radio');
-        
-        // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
-        // dispatch(prepareFormData(`Properties[0].propertyDetails[0].landArea`, null));
-        // dispatch(prepareFormData(`Properties[0].propertyDetails[0].buildUpArea`, null));
-        // dispatch(removeForm("plotDetails"));
-        // removeFormKey(formKey, field, dispatch, state);
-        // let subTypeObject = get(state, `common.generalMDMSDataById.PropertySubType[${field.value}]`);
-        // if (!isEmpty(subTypeObject)) {
-        //   dispatch(prepareFormData("Properties[0].propertyDetails[0].propertyType", subTypeObject.propertyType));
-        // } else {
-        //   dispatch(prepareFormData("Properties[0].propertyDetails[0].propertyType", field.value));
-        //   dispatch(prepareFormData("Properties[0].propertyDetails[0].propertySubType", null));
-        // }
-      },
       dropDownData: [],
     },
   },
