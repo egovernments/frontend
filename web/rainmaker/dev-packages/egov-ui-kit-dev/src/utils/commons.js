@@ -946,12 +946,12 @@ export const isDocumentValid = (docUploaded, requiredDocCount) => {
   const totalDocsKeys = Object.keys(docUploaded) || [];
   let temp = 0;
   if (totalDocsKeys.length >= requiredDocCount) {
-    for (let key = 0; key < requiredDocCount; key++) {
+    for (let key = 0; key < totalDocsKeys.length; key++) {
       if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
         temp++;
       }
     }
-    return temp === requiredDocCount ? true : false;
+    return temp >= requiredDocCount ? true : false;
   } else {
     return false;
   }
