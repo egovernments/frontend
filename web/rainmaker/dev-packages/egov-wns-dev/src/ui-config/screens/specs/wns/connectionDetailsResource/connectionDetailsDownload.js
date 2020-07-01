@@ -1,29 +1,23 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCommonApplyFooter } from "../../utils";
-import { downloadBill } from "../../../../../ui-utils/commons";
-import "./index.css";
+import { wsDownloadConnectionDetails } from "../../../../../ui-utils/commons";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import "./index.css";
 
-const connectionNo = getQueryArg(window.location.href, "connectionNumber");
-const tenantId = getQueryArg(window.location.href, "tenantId");
-const businessService = connectionNo.includes("WS") ? "WS" : "SW";
-
-const callDownloadBill = () => {
+const callDownload = (state, dispatch, mode) => {
   const val = [
     {
-      key: 'consumerCode',
+      key: 'connectionNumber',
       value: getQueryArg(window.location.href, "connectionNumber")
     },
-    { key: 'tenantId', value: tenantId },
-    {
-      key: "businessService", value: businessService
-    }
-  ]
-  downloadBill(val);
+
+    { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
+  wsDownloadConnectionDetails(val, mode, dispatch);
 }
 
 
-export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
+
+export const connectionDetailsDownload = getCommonApplyFooter("TOP",{
   downloadButton: {
     componentPath: "Button",
     props: {
@@ -37,12 +31,14 @@ export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
     },
     children: {
       downloadButton: getLabel({
-        labelKey: "WS_COMMON_DOWNLOAD_BILL"
+        labelKey: "WS_COMMON_BUTTON_DOWNLOAD"
       })
     },
     onClickDefination: {
       action: "condition",
-      callBack: callDownloadBill
+      callBack: (state, dispatch) => {
+        callDownload(state, dispatch, "download");
+      }
     },
   },
   payButton: {
@@ -57,13 +53,16 @@ export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
       }
     },
     children: {
-      payButtonLabel: getLabel({
-        labelKey: "WS_COMMON_PAY"
+      printButton: getLabel({
+        labelKey: "WS_COMMON_BUTTON_PRINT"
       })
     },
     onClickDefination: {
-      action: "page_change",
-      path: `/egov-common/pay?consumerCode=${connectionNo}&tenantId=${tenantId}&businessService=${businessService}`
-    }
-  }
+      action: "condition",
+      callBack: (state, dispatch) => {
+        callDownload(state, dispatch, "print");
+      }
+    },
+    // visible: false
+  },
 });

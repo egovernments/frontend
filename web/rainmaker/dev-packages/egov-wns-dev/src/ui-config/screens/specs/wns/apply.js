@@ -181,14 +181,26 @@ export const getMdmsData = async dispatch => {
 };
 
 export const getData = async (action, state, dispatch) => {
-  const applicationNo = getQueryArg(window.location.href, "applicationNumber");
+  let applicationNo = getQueryArg(window.location.href, "applicationNumber");
+  const connectionNo = getQueryArg(window.location.href, "connectionNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const propertyID = getQueryArg(window.location.href, "propertyId");
+  const actionType = getQueryArg(window.location.href, "action");
   await getMdmsData(dispatch);
-  if (applicationNo) {
+  if (applicationNo || connectionNo) {
     //Edit/Update Flow ----
-    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNo }];
-    if (getQueryArg(window.location.href, "action") === "edit") {
+    let queryObject = [
+      { key: "tenantId", value: tenantId }, 
+      { key: "applicationNumber", value: applicationNo }
+      ];
+    if(connectionNo){
+      queryObject = [
+      { key: "tenantId", value: tenantId }, 
+      { key: "connectionNumber", value: connectionNo }
+      ]
+      applicationNo = connectionNo;
+    }
+    if ( actionType && (actionType.toUpperCase() === "EDIT")) {
       handleApplicationNumberDisplay(dispatch, applicationNo)
       let payloadWater, payloadSewerage;
       if (applicationNo.includes("SW")) {

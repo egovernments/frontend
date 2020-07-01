@@ -9,11 +9,14 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, getSearchResultsForSewerage, getDescriptionFromMDMS, serviceConst } from "../../../../ui-utils/commons";
-
+import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
+import {
+  ifUserRoleExists
+} from "../utils";
 const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
@@ -124,6 +127,8 @@ const propertyDetails = getPropertyDetails(false);
 
 const ownerDetails = getOwnerDetails(false);
 
+const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP'))?connectionDetailsFooter:{};
+
 export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails });
 
 const screenConfig = {
@@ -154,51 +159,43 @@ const screenConfig = {
               },
               ...headerrow
             },
-            helpSection: {
-              uiFramework: "custom-atoms",
-              componentPath: "Container",
-              props: {
-                color: "primary",
-                style: { justifyContent: "flex-end", display: "block" }
-              },
-              gridDefination: {
-                xs: 12,
-                sm: 4,
-                align: "right"
-              },
-              children: {
-                word1: {
-                  ...getCommonTitle(
-                    {
-                      labelKey: "WS_CONNECTION_DETAILS_CONNECTION_STATUS_HEADER"
-                    },
-                    {
-                      style: {
-                        marginRight: "10px",
-                        // color: "rgba(0, 0, 0, 0.6000000238418579)"
-                      }
-                    }
-                  )
+            connectionDetailsDownload
+          }
+        },
+        headerSubDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          children: {
+           word1: {
+              ...getCommonTitle(
+                {
+                  labelKey: "WS_CONNECTION_DETAILS_CONNECTION_STATUS_HEADER"
                 },
-                word2: {
-                  ...getCommonTitle({
-                    labelName: "Active",
-                    // jsonPath: "WaterConnection[0].headerSideText.word2"
+                {
+                  style: {
+                    marginRight: "10px",
+                    // color: "rgba(0, 0, 0, 0.6000000238418579)"
                   }
-                    ,
-                    {
-                      style: {
-                        marginRight: "10px",
-                        color: "rgba(0, 0, 0, 0.6000000238418579)"
-                      }
-                    })
-                },
+                }
+              )
+            },
+            word2: {
+              ...getCommonTitle({
+                labelName: "Active",
+                // jsonPath: "WaterConnection[0].headerSideText.word2"
               }
-            }
+                ,
+                {
+                  style: {
+                    marginRight: "10px",
+                    color: "rgba(0, 0, 0, 0.6000000238418579)"
+                  }
+                })
+            }           
           }
         },
         connectionDetails,
-        connectionDetailsFooter
+        getConnectionDetailsFooterAction
       }
     }
   }

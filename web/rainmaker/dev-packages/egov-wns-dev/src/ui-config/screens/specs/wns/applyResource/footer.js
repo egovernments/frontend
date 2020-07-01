@@ -701,7 +701,7 @@ export const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "previous");
 };
 
-export const footer = getCommonApplyFooter({
+export const footer = getCommonApplyFooter("BOTTOM",{
   previousButton: {
     componentPath: "Button",
     props: {

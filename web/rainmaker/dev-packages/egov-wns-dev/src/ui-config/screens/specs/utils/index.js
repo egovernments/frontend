@@ -31,12 +31,12 @@ import {
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
 
-export const getCommonApplyFooter = children => {
+export const getCommonApplyFooter = (position,children) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: (position === 'BOTTOM')?"apply-wizard-footer":""
     },
     children
   };
