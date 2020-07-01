@@ -4,16 +4,26 @@ import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
 import {
   LabelContainer,
-  TextFieldContainer
+  TextFieldContainer,
+  MultiItem
 } from "egov-ui-framework/ui-containers";
 import { Dialog, DialogContent } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
 import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import store from "redux/store";
 import "./index.css";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  getQueryArg,
 
+} from "egov-ui-framework/ui-utils/commons";
+//import { getTradeResults } from "egov-workflow/ui-utils/commons";
+import { getSearchResults } from "egov-tradelicence/ui-utils/commons";
 const styles = theme => ({
+
   root: {
     marginTop: 24,
     width: "100%"
@@ -40,7 +50,18 @@ const fieldConfig = {
       labelName: "Enter Comments",
       labelKey: "WF_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
     }
+  },
+ tradeSubType: {
+    label: {
+      labelName: "SubType",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter the Trade SubType",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
+    }
   }
+ 
 };
 
 class ActionDialog extends React.Component {
@@ -48,21 +69,6 @@ class ActionDialog extends React.Component {
     employeeList: [],
     roles: ""
   };
-
-  // onEmployeeClick = e => {
-  //   const { handleFieldChange, toggleSnackbar } = this.props;
-  //   const selectedValue = e.target.value;
-  //   const currentUser = JSON.parse(getUserInfo()).uuid;
-  //   if (selectedValue === currentUser) {
-  //     toggleSnackbar(
-  //       true,
-  //       "Please mark to different Employee !",
-  //       "error"
-  //     );
-  //   } else {
-  //     handleFieldChange("Licenses[0].assignee", e.target.value);
-  //   }
-  // };
 
   getButtonLabelName = label => {
     switch (label) {
@@ -85,7 +91,7 @@ class ActionDialog extends React.Component {
   };
 
   render() {
-        
+       console.log("im in",this.props); 
     let {
       open,
       onClose,
@@ -123,7 +129,9 @@ class ActionDialog extends React.Component {
     }else{
       assigneePath=`${dataPath}.assignee[0]`;
     }
-
+    console.log("Assignee path ", assigneePath);
+    
+   
    
     return (
       <Dialog
@@ -206,6 +214,19 @@ class ActionDialog extends React.Component {
                       }
                       jsonPath={`${dataPath}.comment`}
                       placeholder={fieldConfig.comments.placeholder}
+                    />
+                  </Grid>
+                  <Grid item sm="12">
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label={fieldConfig.tradeSubType.label}
+                      onChange={e =>
+                       handleFieldChange(`${dataPath}.tradeLicenseDetail.surveyNo`,e.target.value)
+                       }
+
+                        
+                      jsonPath={`${dataPath}.tradeLicenseDetail.surveyNo`}
+                      placeholder={fieldConfig.tradeSubType.placeholder}
                     />
                   </Grid>
                   <Grid item sm="12">

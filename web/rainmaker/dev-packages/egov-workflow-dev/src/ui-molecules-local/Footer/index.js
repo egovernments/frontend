@@ -69,6 +69,7 @@ class Footer extends React.Component {
     } else {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, []);
+      handleFieldChange(`${dataPath}.tradeLicenseDetail.surveyNo`, []);
     }
 
     if (item.isLast) {
