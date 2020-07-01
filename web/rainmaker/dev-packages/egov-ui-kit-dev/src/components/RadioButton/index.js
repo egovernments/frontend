@@ -1,13 +1,10 @@
+import React from "react";
 import Label from "egov-ui-kit/utils/translationNode";
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
-import React from "react";
 
 const selectedIconStyle = {
   fill: "fe7a51",
 };
-
-
-
 
 const RadioButtonUi = ({
   options,
