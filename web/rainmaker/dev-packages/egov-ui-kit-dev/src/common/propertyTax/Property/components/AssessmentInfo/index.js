@@ -150,6 +150,15 @@ const getVasikaItems = (units = []) => {
         key: "Remarks",
         value: units[0].remrks || "NA", //noOfFloors
       },
+      {
+        key: "Do you have any inflammable material stored in your property?",
+        value: units[0].inflammableMaterial === true ? "Yes" : "No",
+      },
+      {
+        key: "Height of property more than 36 feet?",
+        value: units[0].heightOfProperty === true ? "Yes" : "No",
+      },
+     
     ]
   );
 }
