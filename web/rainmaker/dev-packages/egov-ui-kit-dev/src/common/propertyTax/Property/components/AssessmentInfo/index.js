@@ -1,6 +1,7 @@
 import React from "react";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { Card } from "components";
+import moment from "moment";
 import Label from "egov-ui-kit/utils/translationNode";
 // import { connect } from "react-redux";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
@@ -111,6 +112,9 @@ const getUnitInfo = (units = [], propertyDetails) => {
 const getVasikaItems = (units = []) => {
   console.log(units,"unitsjai");
   // var units = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  console.log("===units[0].vasikaDate==",units[0].vasikaDate);
+  var vasika_date =(units && units[0].vasikaDate)? moment(units[0].vasikaDate).format('DD-MM-YYYY'):null;
+  var allotment_date =(units && units[0].allotmentDate)? moment(units[0].allotmentDate).format('DD-MM-YYYY'):null;
   debugger;
     function convert(str) {
       // console.log("str==========================",str);
@@ -132,18 +136,15 @@ const getVasikaItems = (units = []) => {
       },
       {
         key: "Vasika Date",
-        callBack: value => {
-          return convert(units[0].vasikaDate)
-        }
+        value: vasika_date ? `${vasika_date}` : "NA",
       },
       {
         key: "Allotment Date",
-        callBack: value => {
-          return convert(units[0].allotmentDate)
-        }       },
+        value: allotment_date ? `${allotment_date}` : "NA",
+      },
       {
         key: "Bussiness Name",
-        value: units[0].businessName || "NA", //noOfFloors
+        value: units[0].businessName || "NA", //noOfFloors allotment_date
       },
       {
         key: "Remarks",
