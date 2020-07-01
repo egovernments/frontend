@@ -24,8 +24,8 @@ class Footer extends React.Component {
             toggleSnackbar(
               true,
               {
-                labelName: "Owner already added !",
-                labelKey: "ERR_OWNER_ALREADY_ADDED_1"
+                labelName: "Due Amount should be zero!",
+                labelKey: "WS_DUE_AMOUNT_SHOULD_BE_ZERO"
               },
               "error"
             );
