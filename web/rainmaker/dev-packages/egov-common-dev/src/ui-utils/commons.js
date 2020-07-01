@@ -533,6 +533,14 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
         , "error"));
         return;
       }
+      // Setting the Payer and mobile from Bill to reflect it in PDF
+      const billDetails = get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]");
+      if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
+        payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
+        // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;
+        payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
+      }
+      
       const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
       if (oldFileStoreId) {
         downloadReceiptFromFilestoreID(oldFileStoreId, mode)
