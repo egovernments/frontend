@@ -6,7 +6,7 @@ import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import "../utils/index.css";
 import { getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
-
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 const header = getCommonHeader(
   {
     labelName: "Trade License",
@@ -45,6 +45,7 @@ const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject('citiesByModule.citizenTenantId', ''))
     fetchData(action, state, dispatch);
     const moduleDetails = [
       {
