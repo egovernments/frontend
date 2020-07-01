@@ -4769,7 +4769,7 @@ export const permitOrderNoDownload = async(action, state, dispatch, mode = "Down
   let permitPfKey = "buildingpermit";
 
   if(!window.location.href.includes("oc-bpa")) {
-    if(bpaDetails && bpaDetails.riskType === "LOW") {
+    if(bpaDetails && bpaDetails.businessService === "BPA_LOW") {
       permitPfKey = "buildingpermit-low"
     }
   }
