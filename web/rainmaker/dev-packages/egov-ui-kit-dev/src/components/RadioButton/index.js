@@ -1,6 +1,6 @@
-import React from "react";
-import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
 import Label from "egov-ui-kit/utils/translationNode";
+import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
+import React from "react";
 
 const selectedIconStyle = {
   fill: "fe7a51",
@@ -26,7 +26,7 @@ const RadioButtonUi = ({
   selectedLabelStyle,
   id,
   disabled,
-  showFloatingLabelText=false,
+  showFloatingLabelText = false,
   floatingLabelText
 }) => {
   const renderRadioButtons = () => {
@@ -47,53 +47,51 @@ const RadioButtonUi = ({
       );
     });
   };
-  
-const styles = {
-  labelStyle: {
-    font: "12px",
-    letterSpacing: 0.6,
-    marginBottom: 5,
-    marginTop: 14,
-  },
 
-}
-  
-const getRadioComponent = ()=>{
-  if(showFloatingLabelText){
-  return <div>
-  <Label label={floatingLabelText}  fontSize={12} labelStyle={styles.labelStyle} bold={true} />
-  
-  <RadioButtonGroup
-    valueSelected={valueSelected}
-    name={name}
-    className={`${className} RadioComp`}
-    onChange={handleChange}
-    defaultSelected={defaultValue}
-    style={style}
-  >
-    {renderRadioButtons()}
-  </RadioButtonGroup>
-  </div>
-  
-  }else{
-    return( <RadioButtonGroup
-    valueSelected={valueSelected}
-    name={name}
-    className={`${className} RadioComp`}
-    onChange={handleChange}
-    defaultSelected={defaultValue}
-    style={style}
-  >
-    {renderRadioButtons()}
-  </RadioButtonGroup>)
+  const styles = {
+    labelStyle: {
+      font: "12px",
+      letterSpacing: 0.6,
+      marginBottom: 5,
+      marginTop: 14,
+    },
+
   }
+
+  const getRadioComponent = () => {
+    if (showFloatingLabelText) {
+      return <div>
+        <Label label={floatingLabelText} fontSize={12} labelStyle={styles.labelStyle} bold={true} />
+
+        <RadioButtonGroup
+          valueSelected={valueSelected}
+          name={name}
+          className={`${className} RadioComp`}
+          onChange={handleChange}
+          defaultSelected={defaultValue}
+          style={style}
+        >
+          {renderRadioButtons()}
+        </RadioButtonGroup>
+      </div>
+
+    } else {
+      return (<RadioButtonGroup
+        valueSelected={valueSelected}
+        name={name}
+        className={`${className} RadioComp`}
+        onChange={handleChange}
+        defaultSelected={defaultValue}
+        style={style}
+      >
+        {renderRadioButtons()}
+      </RadioButtonGroup>)
+    }
   }
 
   return (
     <div>
-    {/* {getRadioComponent({valueSelected,name,className,handleChange,defaultValue,style,showFloatingLabelText,floatingLabelText})} */}
-
-    {getRadioComponent()}
+      {getRadioComponent()}
     </div>
   );
 };

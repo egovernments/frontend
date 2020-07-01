@@ -1,15 +1,14 @@
-import React from "react";
-import { TextField, MobileNumberField, SingleCheckbox, DropDown, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
+import { AutoSuggestDropdown, DropDown, Label, MobileNumberField, SingleCheckbox, TextField, TextFieldIcon } from "components";
 import { AutosuggestContainer } from "egov-ui-framework/ui-containers";
-import RadioField from "egov-ui-kit/components/RadioField"
+import React from "react";
 import { RadioButton } from "../components";
 
 
 const styles = {
-  radioButtonStyle:{
+  radioButtonStyle: {
     display: 'flex',
-                position: 'inherit',
-                top: '-5px'
+    position: 'inherit',
+    top: '-5px'
   },
   labelStyle: {
     font: "12px",
@@ -24,7 +23,7 @@ const styles = {
     height: "16px",
   },
   selectedLabelStyle: {
-    color: 'rgba(0, 0, 0, 0.54)',
+    color: 'rgba(0, 0, 0, 0.44)',
   },
   radioButtonLabelStyle: {
     // lineHeight: 1,
@@ -40,8 +39,8 @@ const styles = {
 const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
   const renderField = () => {
     const { type, tooltip, label, hideField, Icon, iconRedirectionURL, ...fieldProps } = field;
-    if(fieldProps.dropDownData && fieldProps.dropDownData.length > 0) {
-      fieldProps.dropDownData.map((data,key)=>{
+    if (fieldProps.dropDownData && fieldProps.dropDownData.length > 0) {
+      fieldProps.dropDownData.map((data, key) => {
         fieldProps.dropDownData[key].code = data.value;
         fieldProps.dropDownData[key].name = data.label;
       });
@@ -81,8 +80,8 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             onIconClick={
               iconRedirectionURL
                 ? () => {
-                    window.open(iconRedirectionURL);
-                  }
+                  window.open(iconRedirectionURL);
+                }
                 : () => onTextFieldIconClick()
             }
             onChange={(e, value) => handleFieldChange(fieldKey, value)}
@@ -99,39 +98,39 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             }}
           />
         );
-        case "radioButton":
-          return (
-            // <RadioField
-            //   {...rest}
-            //   {...fieldProps}
-            //   options={fieldProps && fieldProps.options||[]}
-            //   onChange={(chosenRequest, index) => {
-            //     handleFieldChange(fieldKey, chosenRequest.value);
-            //   }}
-           
-            // />
-            <RadioButton
-            {...rest}
-              {...fieldProps}
-              style={styles.radioButtonStyle}
-              options={fieldProps && fieldProps.options||[]}
-               radioButtonItemStyle={styles.radioButtonItemStyle}
-               radioButtonLabelStyle={styles.radioButtonLabelStyle}
-                selectedLabelStyle={styles.selectedLabelStyle}
-                className={`radio-button-${fieldProps.id}`}
-                iconStyle={styles.iconStyle}
-                labelStyle={styles.radioButtonLabelStyle}
-                valueSelected={fieldProps.value}
-              handleChange={(e, value) => {
-                handleFieldChange(fieldKey, value);
-              }}
-              // handleChange={(e) => {
-              //   handleFieldChange("ownerGender", e.target.value);
-              // }}
-            ></RadioButton>
-          );
+      case "radioButton":
+        return (
+          // <RadioField
+          //   {...rest}
+          //   {...fieldProps}
+          //   options={fieldProps && fieldProps.options||[]}
+          //   onChange={(chosenRequest, index) => {
+          //     handleFieldChange(fieldKey, chosenRequest.value);
+          //   }}
 
-        case "AutocompleteDropdown":
+          // />
+          <RadioButton
+            {...rest}
+            {...fieldProps}
+            style={styles.radioButtonStyle}
+            options={fieldProps && fieldProps.options || []}
+            radioButtonItemStyle={styles.radioButtonItemStyle}
+            radioButtonLabelStyle={styles.radioButtonLabelStyle}
+            selectedLabelStyle={styles.selectedLabelStyle}
+            className={`radio-button-${fieldProps.id}`}
+            iconStyle={styles.iconStyle}
+            labelStyle={styles.radioButtonLabelStyle}
+            valueSelected={fieldProps.value}
+            handleChange={(e, value) => {
+              handleFieldChange(fieldKey, value);
+            }}
+          // handleChange={(e) => {
+          //   handleFieldChange("ownerGender", e.target.value);
+          // }}
+          ></RadioButton>
+        );
+
+      case "AutocompleteDropdown":
         return (
           <AutosuggestContainer
             id={fieldProps.id}
@@ -141,8 +140,8 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             localePrefix={fieldProps.localePrefix}
             data={fieldProps && fieldProps.dropDownData}
             className="autocomplete-dropdown"
-            label={{labelKey: fieldProps.floatingLabelText }}
-            placeholder={{labelKey: fieldProps.hintText}}
+            label={{ labelKey: fieldProps.floatingLabelText }}
+            placeholder={{ labelKey: fieldProps.hintText }}
             labelsFromLocalisation={fieldProps.labelsFromLocalisation}
             gridDefination={fieldProps.gridDefination}
             toolTip={fieldProps.toolTip}
