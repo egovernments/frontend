@@ -2006,6 +2006,9 @@ export const applyForm = (state, dispatch, action) => {
   if (isTradeDetailsValid) {
     showReqDocPopup(state, dispatch, "home");
   }
+  dispatch(prepareFinalObject("Licenses", []));
+  dispatch(prepareFinalObject("LicensesTemp", []));
+  dispatch(prepareFinalObject("DynamicMdms", []));
 };
 
 export const sortByEpoch = (data, order) => {

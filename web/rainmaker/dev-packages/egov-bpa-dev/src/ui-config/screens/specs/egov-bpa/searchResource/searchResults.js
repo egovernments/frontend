@@ -127,10 +127,10 @@ export const searchResults = {
           customBodyRender: value => (
             <span
               style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
+                value === "Approved" ? { color: "green" } : { color: "red" }
               }
             >
-              {getBpaTextToLocalMapping(value)}
+              {value}
             </span>
           )
         }
@@ -185,11 +185,11 @@ const onRowClick = rowData => {
   const state = rowData[3];
   const applicationNumber = rowData[0];
   const tenantId = rowData[4];
-  if(rowData[5] == "BPA_OC") {
+  if(rowData[5] == "BPA OC") {
     const environment = process.env.NODE_ENV === "production" ? "employee" : "";
     const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
     switch (state) {
-      case "INITIATED":
+      case "Initiated":
         window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
         break;
       default:
@@ -197,12 +197,16 @@ const onRowClick = rowData => {
         break;
     }
   } else {
+    let type = "HIGH";
+    if(rowData[5] == "Low") {
+      type = "LOW"
+    }
     switch (state) {
-      case "INITIATED":
-        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+      case "Initiated":
+        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
         break;
       default:
-        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
         break;
     }
   }

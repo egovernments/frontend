@@ -29,7 +29,10 @@ export const searchPropertyDetails = {
 
     searchPropertyContainer: getCommonContainer({
       ulbCity: {
-        ...getSelectField({
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        props: {
           label: {
             labelName: "ULB/City",
             labelKey: "PT_SEARCH_ULB_CITY"
@@ -38,23 +41,23 @@ export const searchPropertyDetails = {
             labelName: "Select ULB/City",
             labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
           },
-
           localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
           },
           jsonPath: "searchScreen.tenantId",
           sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+          className: "autocomplete-dropdown",
+          labelsFromLocalisation: true,
           required: true,
-          props: {
-            required: true,
-            disabled: false
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 3
-          }
-        }),
+          disabled: false,
+          isClearable: true
+        },
+        jsonPath: "searchScreen.tenantId",
+        gridDefination: {
+          xs: 12,
+          sm: 3
+        },
         beforeFieldChange: async (action, state, dispatch) => {
           //Below only runs for citizen - not required here in employee
 
@@ -83,7 +86,10 @@ export const searchPropertyDetails = {
         }
       },
       locality: {
-        ...getSelectField({
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        props: {
           label: {
             labelName: "Locality",
             labelKey: "PT_SEARCH_LOCALITY"
@@ -92,18 +98,22 @@ export const searchPropertyDetails = {
             labelName: "Select Locality",
             labelKey: "PT_SEARCH_LOCALITY_PLACEHOLDER"
           },
-          jsonPath: "searchScreen.locality.code",
-          // data: [],
-          required: true,
-          sourceJsonPath: "applyScreenMdmsData.tenant.localities",
-          gridDefination: {
-            xs: 12,
-            sm: 3
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
           },
-          props: {
-            className: "locality-dropdown"
-          }
-        }),
+          required: true,
+          isClearable: true,
+          labelsFromLocalisation: true,
+          jsonPath: "searchScreen.locality.code",
+          sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+          className: "locality-dropdown autocomplete-dropdown"
+        },
+        jsonPath: "searchScreen.locality.code",
+        gridDefination: {
+          xs: 12,
+          sm: 3
+        },
         beforeFieldChange: async (action, state, dispatch) => {
           // dispatch(
           //   prepareFinalObject(

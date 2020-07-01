@@ -19,13 +19,13 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
-            <div
+            <a href="javascript:void(0)"
               onClick={() => {
                 downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
               }}
             >
-              <a>{value}</a>
-            </div>
+              {value}
+            </a>
           )
         }
       },
@@ -152,7 +152,7 @@ export const searchResults = {
 
 const getActionButton = (value, tableMeta) => {
   return (
-    <div
+    <a href="javascript:void(0)"
       style={{
         color: "#FE7A51",
         cursor: "pointer"
@@ -186,6 +186,6 @@ const getActionButton = (value, tableMeta) => {
       }}
     >
       {getLocaleLabels(value,value)}
-    </div>
+    </a>
   )
 }

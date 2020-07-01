@@ -44,6 +44,7 @@ import axios from "axios";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import _ from "lodash";
 import groupBy from "lodash/groupBy";
+import { printPdf } from "egov-ui-kit/utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -3026,7 +3027,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         value: tenantId,
       },
       {
-        key: "edcrNumbers",
+        key: "edcrNumber",
         value: scrutinyNo,
       }
     ];
@@ -3037,8 +3038,9 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       queryObject
     );
     let isData = true;
-    let data = bpaSearch.Bpa.map((data, index) => {
-      if(data.edcrNumber === scrutinyNo) {
+    bpaSearch.BPA && bpaSearch.BPA.length > 0 && 
+    bpaSearch.BPA.forEach((data, index) => {
+      if((data.edcrNumber === scrutinyNo) && ((data.status != "REJECTED") && (data.status != "PERMIT REVOCATION"))) {
         dispatch(
           toggleSnackbar(
             true,
@@ -3614,6 +3616,24 @@ export const getBpaTextToLocalMapping = label => {
       return getLocaleLabels(
         "BPA Apply",
         "BPA_APPLY_SERVICE",
+        localisationLabels
+      );
+    case "WF_BPA_BUILDING_PLAN_SCRUTINY" : 
+      return getLocaleLabels(
+        "Building Plan Scrutiny",
+        "WF_BPA_BUILDING_PLAN_SCRUTINY",
+        localisationLabels
+      );
+    case "WF_BPA_BUILDING_OC_PLAN_SCRUTINY" : 
+      return getLocaleLabels(
+        "Building Plan OC Scrutiny",
+        "WF_BPA_BUILDING_OC_PLAN_SCRUTINY",
+        localisationLabels
+      );
+    case "WF_BPA_NEW_CONSTRUCTION" : 
+      return getLocaleLabels(
+        "New Contruction",
+        "WF_BPA_NEW_CONSTRUCTION",
         localisationLabels
       );
   }
@@ -4705,7 +4725,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   }
 }
 
-export const revocationPdfDownload = async(action, state, dispatch) => {
+export const revocationPdfDownload = async(action, state, dispatch, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
@@ -4722,14 +4742,18 @@ export const revocationPdfDownload = async(action, state, dispatch) => {
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if(mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  } else {
+    printPdf(pdfDownload[fileStoreId]);    
+  }
 }
 
-export const permitOrderNoDownload = async(action, state, dispatch) => {
+export const permitOrderNoDownload = async(action, state, dispatch, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
-
+  
   let currentDate = new Date();
   set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+currentDate.getDate()));
 
@@ -4745,10 +4769,11 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   let permitPfKey = "buildingpermit";
 
   if(!window.location.href.includes("oc-bpa")) {
-    if(bpaDetails && bpaDetails.riskType === "LOW") {
+    if(bpaDetails && bpaDetails.businessService === "BPA_LOW") {
       permitPfKey = "buildingpermit-low"
     }
-  } else if(window.location.href.includes("oc-bpa")) {
+  }
+  if(window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
     permitPfKey = "occupancy-certificate"
   }
   let res = await httpRequest(
@@ -4764,7 +4789,12 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if(mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  }
+  else {
+    printPdf(pdfDownload[fileStoreId]);    
+  }
 
   
 let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
@@ -4779,11 +4809,15 @@ let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
     link.href = url;
     link.setAttribute('download', 'permitorderedcr.pdf');
     document.body.appendChild(link);
-    link.click();
+    if(mode && mode === "Download") {
+      link.click();
+    } else {
+      printPdf(link);
+    }
   });
 }
 
-export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) => {
+export const downloadFeeReceipt = async(state, dispatch, status, serviceCode, mode = "Download") => {
   let bpaDetails = get (
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
@@ -4834,7 +4868,12 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
-  window.open(pdfDownload[fileStoreId]);
+  if (mode && mode === "Download") {
+    window.open(pdfDownload[fileStoreId]);
+  } else {
+    printPdf(pdfDownload[fileStoreId]);
+  }
+  
 }
 
 const getFloorDetails = (index) => {
@@ -5123,8 +5162,8 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
   const response = await getBpaSearchResults(queryObject);
 
-  if (response && response.Bpa && response.Bpa.length > 0)
-    return response.Bpa[0];
+  if (response && response.BPA && response.BPA.length > 0)
+    return response.BPA[0];
   else
     return 'NOPERMIT';
 
@@ -5320,7 +5359,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
         value: tenantId,
       },
       {
-        key: "edcrNumbers",
+        key: "edcrNumber",
         value: scrutinyNo,
       }
     ];
@@ -5331,8 +5370,9 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       queryObject
     );
 
-    let data = bpaSearch.Bpa.map((data, index) => {
-      if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED' && index > 0) {
+    bpaSearch.BPA && bpaSearch.BPA.length > 0 &&
+    bpaSearch.BPA.forEach((data, index) => {
+      if (data.edcrNumber === scrutinyNo && ((data.status != "REJECTED") && (data.status != "PERMIT REVOCATION"))) {
         dispatch(
           toggleSnackbar(
             true,
@@ -5354,6 +5394,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
     deviationValidation(action, state, dispatch);
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
+    dispatch(prepareFinalObject(`BPA.landInfo`, get(bpaDetails, "landInfo", {})));
     setProposedBuildingData(state, dispatch, action, "ocApply");
     let SHLicenseDetails = await getLicenseDetails(state,dispatch);
     dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
@@ -5373,7 +5414,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
 };
 
 export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, ocDetails) => {
-  const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners") && get(bpaDetails, "landInfo.owners").length > 0 && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
   const tenantId = getQueryArg(window.location.href, "tenantId");
   
   const permitDetails = await getPermitDetails(get(ocDetails, "permitNumber"), tenantId);
@@ -5382,7 +5423,7 @@ export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, 
   dispatch(prepareFinalObject(`bpaDetails`, permitDetails));
   if(!SHLicenseDetails) {SHLicenseDetails = "NA"}
   dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
-  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray && primaryOwnerArray[0] && primaryOwnerArray[0].name));
   await permitNumberLink(state, dispatch);
   await ocuupancyType(state, dispatch);
   await residentialType(state, dispatch);

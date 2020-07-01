@@ -1,5 +1,6 @@
 import axios from "axios";
 import commonConfig from "config/common.js";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
@@ -7,7 +8,6 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
 import { getAccessToken, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
@@ -946,12 +946,12 @@ export const isDocumentValid = (docUploaded, requiredDocCount) => {
   const totalDocsKeys = Object.keys(docUploaded) || [];
   let temp = 0;
   if (totalDocsKeys.length >= requiredDocCount) {
-    for (let key = 0; key < requiredDocCount; key++) {
+    for (let key = 0; key < totalDocsKeys.length; key++) {
       if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
         temp++;
       }
     }
-    return temp === requiredDocCount ? true : false;
+    return temp >= requiredDocCount ? true : false;
   } else {
     return false;
   }
@@ -976,8 +976,8 @@ export const getMohallaData = (payload, tenantId) => {
 
 
 
-export const downloadPdf = (link) => {
-  var win = window.open(link, '_blank');
+export const downloadPdf = (link, openIn = '_blank') => {
+  var win = window.open(link, openIn);
   if (win) {
     win.focus();
   }
@@ -999,6 +999,29 @@ export const printPdf = async (link) => {
       myWindow.focus();
       myWindow.print();
     });
+  }
+}
+
+
+export const openPdf = async (link, openIn = '_blank') => {
+  if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp()) {
+    downloadPdf(link, '_self');
+  } else {
+    var response = await axios.get(link, {
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/pdf"
+      }
+    });
+    const file = new Blob([response.data], { type: "application/pdf" });
+    const fileURL = URL.createObjectURL(file);
+    var myWindow = window.open(fileURL, openIn);
+    if (myWindow != undefined) {
+      myWindow.addEventListener("load", event => {
+        myWindow.focus();
+      });
+    }
   }
 }
 
@@ -1035,12 +1058,12 @@ export const businessServiceInfo = async (mdmsBody, businessService) => {
   );
   let businessServiceInfoItem = null;
   const businessServiceArray = payload.MdmsRes.BillingService.BusinessService;
-    businessServiceArray && businessServiceArray.map(item => {
-        if (item.code == businessService) {
-          businessServiceInfoItem = item;
-        }
-    });
-    return businessServiceInfoItem;
+  businessServiceArray && businessServiceArray.map(item => {
+    if (item.code == businessService) {
+      businessServiceInfoItem = item;
+    }
+  });
+  return businessServiceInfoItem;
 }
 
 export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessService) => {
