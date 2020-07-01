@@ -1241,8 +1241,7 @@ const getBillingSlabData = async (
 
 const isApplicationPaid = (currentStatus,workflowCode) => {
 let isPAID = false;
-if(currentStatus==="CITIZENACTIONREQUIRED" || currentStatus==="PENDINGAPPLFEE" || currentStatus==="APPLIED"){
- 
+if(currentStatus==="CITIZENACTIONREQUIRED"  || (currentStatus!=="APPROVED" && currentStatus!=="CANCELLED") ){
    return isPAID;
 }
 const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
@@ -1342,11 +1341,13 @@ export const createEstimateData = async (
         tenantId,
         accessories,tradeUnits
       );
-      set(
-        payload,
-        "billResponse",
-        getBillResponse.billResponse
-      );
+      if(getBillResponse){
+       set(
+         payload,
+         "billResponse",
+         getBillResponse.billResponse
+       );
+      }
     
   }
 
