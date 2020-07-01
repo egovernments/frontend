@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import get from "lodash/get";
 
 class EstimateCardContainer extends Component {
-  render() {
+  render() { 
     return <FeesEstimateCard estimate={this.props.estimate} />;
   }
 }
@@ -38,11 +38,15 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
 
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
-
+  const { cities } = state.common;
+  const tenantId = get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].instrument.tenantId")
+  let tenantInfo = cities.filter(e => e.key === tenantId );  
+  let contactNumber = get(tenantInfo[0], "contactNumber");  
+  let email =  get(tenantInfo[0], "emailId");  
   const businesService=get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
   const fees = formatTaxHeaders(sortBillDetails(get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []))[0],businesService);  // const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
   const billDetails = get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []);
- 
+
   let totalAmount = 0;
   let current = 0;
   let arrears=0;
@@ -63,9 +67,9 @@ if(totalAmount>0){
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
     fees,
     totalAmount,
-    arrears
+    arrears, businesService, contactNumber, email
   };
-  return { estimate };
+  return { estimate};
 };
 
 export default connect(
