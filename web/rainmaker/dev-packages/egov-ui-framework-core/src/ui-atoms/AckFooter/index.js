@@ -12,19 +12,4 @@ const AckFooter = (props) => {
       	</Button>
 	);
 }
-
 export default AckFooter;
-
-
-
-
-
-
-
-
-
-
-
-
-
-

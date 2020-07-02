@@ -24,7 +24,6 @@ const styles = {
 
 const AckBody = (props) => {
 	const {
-		avatarStyle,
 		iconStyle,
 		iconName,
 		iconSize,
@@ -67,5 +66,4 @@ const AckBody = (props) => {
 		</div>
 	);
 }
-
 export default AckBody;

@@ -1,6 +1,4 @@
 import React from "react";
-import Avatar from "material-ui/Avatar";
-
 import "./index.css";
 import { LabelContainer } from "../../ui-containers";
 import { DownloadPrintButton } from "../../ui-molecules";
