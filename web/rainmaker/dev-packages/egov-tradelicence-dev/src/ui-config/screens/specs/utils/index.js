@@ -1077,52 +1077,69 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
       };
     });
     const { billAccountDetails } = Bill[0].billDetails[0];
-    const transformedData = billAccountDetails.reduce((result, item) => {
-      if (getFromReceipt) {
-        item.accountDescription &&
-          result.push({
-            name: {
-              labelName: item.accountDescription.split("-")[0],
-              labelKey: item.accountDescription.split("-")[0]
-            },
-            value: getTaxValue(item),
-            info: getToolTipInfo(
-              item.accountDescription.split("-")[0],
-              LicenseData
-            ) && {
-              value: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              ),
-              key: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              )
-            }
-          });
-      } else {
-        item.taxHeadCode &&
-          result.push({
-            name: {
-              labelName: item.taxHeadCode,
-              labelKey: item.taxHeadCode
-            },
-            value: getTaxValue(item),
-            info: getToolTipInfo(item.taxHeadCode, LicenseData) && {
-              value: getToolTipInfo(item.taxHeadCode, LicenseData),
-              key: getToolTipInfo(item.taxHeadCode, LicenseData)
-            }
-          });
-      }
-      return result;
-    }, []);
-    return [
-      ...transformedData.filter(item => item.name.labelKey === "TL_TAX"),
-      ...transformedData.filter(item => item.name.labelKey !== "TL_TAX"),
-      ...extraData
-    ];
+    const transformedData = billAccountDetails.reduce((result, item) => { 
+      if (getFromReceipt) { 
+        item.accountDescription &&  
+          result.push({ 
+            name: { 
+              labelName: item.accountDescription.split("-")[0], 
+              labelKey: item.accountDescription.split("-")[0] 
+            },  
+            // value: getTaxValue(item)             
+            value: item.amount, 
+            info: getToolTipInfo( 
+              item.accountDescription.split("-")[0],  
+              LicenseData 
+            ) && {  
+              value: getToolTipInfo(  
+                item.accountDescription.split("-")[0],  
+                LicenseData 
+              ),  
+              key: getToolTipInfo(  
+                item.accountDescription.split("-")[0],  
+                LicenseData 
+              ) 
+            } 
+          }); 
+        item.taxHeadCode && 
+          result.push({ 
+            name: { 
+              labelName: item.taxHeadCode,  
+              labelKey: item.taxHeadCode  
+            },  
+            // value: getTaxValue(item),  
+            value: item.amount, 
+            info: getToolTipInfo(item.taxHeadCode, LicenseData) && {  
+              value: getToolTipInfo(item.taxHeadCode, LicenseData), 
+              key: getToolTipInfo(item.taxHeadCode, LicenseData)  
+            } 
+          }); 
+      } else {  
+        item.taxHeadCode && 
+          result.push({ 
+            name: { 
+              labelName: item.taxHeadCode,  
+              labelKey: item.taxHeadCode  
+            },  
+            value: item.amount, 
+            // value: getTaxValue(item),  
+            // value : get(ResponseData , "totalAmount"), 
+            info: getToolTipInfo(item.taxHeadCode, LicenseData) && {  
+              value: getToolTipInfo(item.taxHeadCode, LicenseData), 
+              key: getToolTipInfo(item.taxHeadCode, LicenseData)  
+            } 
+          }); 
+      } 
+      return result;  
+    }, []); 
+    return [  
+      ...transformedData.filter(item => item.name.labelKey === "TL_TAX"), 
+      ...transformedData.filter(item => item.name.labelKey !== "TL_TAX"), 
+      // ...extraData 
+    ];  
   }
 };
+
 
 const getBillingSlabData = async (
   dispatch,
