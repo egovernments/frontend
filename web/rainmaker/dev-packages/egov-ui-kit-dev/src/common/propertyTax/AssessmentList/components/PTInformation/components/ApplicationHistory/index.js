@@ -9,7 +9,7 @@ import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFullRow } from "../AssessmentHistory";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { navigateToApplication,getApplicationType } from "egov-ui-kit/utils/commons";
-
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const labelStyle = {
     letterSpacing: 1.2,
     fontWeight: "500",
@@ -38,13 +38,16 @@ class ApplicationHistory extends Component {
         return newList;
       }
 
-    getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
+    getPropertyResponse = async ( dialogName) => {    
         const {prepareFinalObject}=this.props;
+        const tenantId = getQueryArg(window.location.href, "tenantId");
+    const propertyId = getQueryArg(window.location.href, "propertyId") || "";
         const queryObject = [
           { key: "propertyIds", value: propertyId },
           { key: "tenantId", value: tenantId },
           { key: "audit", value: true }
         ];
+        console.log("====queryObject====",queryObject);
         try {
           const payload = await httpRequest(
             "property-services/property/_search",
