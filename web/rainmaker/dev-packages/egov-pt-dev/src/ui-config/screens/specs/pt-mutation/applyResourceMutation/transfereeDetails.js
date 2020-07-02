@@ -13,6 +13,12 @@ const showComponent = (dispatch, componentJsonPath, display, oldStyle = {}) => {
   );
 };
 
+const showDocumentType = (dispatch, componentJsonPath, display) => {
+  dispatch(
+    handleField("apply", componentJsonPath, "visible", display)
+  );
+}
+
 const commonApplicantInformation = () => {
   return getCommonGrayCard({
 
@@ -254,7 +260,7 @@ const commonApplicantInformation = () => {
             showComponent(dispatch, categoryDocumentJsonPath, false);
             dispatch(handleField("apply", categoryDocumentJsonPath, "required", false));
             dispatch(handleField("apply", categoryDocumentJsonPath, "props.value", ""));
-            showComponent(dispatch, specialCategoryDocumentTypeJsonPath, false);
+            showDocumentType(dispatch, specialCategoryDocumentTypeJsonPath, false);
             dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "required", false));
             dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", ""));
             //showComponent(dispatch, categoryDocumentThirdStepJsonPath, false);
@@ -276,7 +282,7 @@ const commonApplicantInformation = () => {
               dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", documentType[0].code));
             }
             showComponent(dispatch, categoryDocumentJsonPath, true);
-            showComponent(dispatch, specialCategoryDocumentTypeJsonPath, true);
+            showDocumentType(dispatch, specialCategoryDocumentTypeJsonPath, true);
             
             dispatch(handleField("apply",  specialCategoryDocumentTypeJsonPath, "props.disabled", true));
             dispatch(handleField("apply", categoryDocumentTypeThirdStepJsonPath, "display", "block"));
@@ -327,15 +333,12 @@ const commonApplicantInformation = () => {
               masterName: "ReasonForTransfer"
             },
             className: "applicant-details-error autocomplete-dropdown",
-            style: {
-              display: "none"
-            },
             required: true,
             labelsFromLocalisation: true,
             jsonPath: "Property.ownersTemp[0].documentType",
             sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
           },
-        
+          visible:false,
         jsonPath: "Property.ownersTemp[0].documentType",
         sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
         gridDefination: {
