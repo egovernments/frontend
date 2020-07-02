@@ -4,6 +4,7 @@ import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils
 import get from "lodash/get";
 
 export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
+  
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
@@ -84,6 +85,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   delete properties[0].propertySubType;
   delete properties[0].buildUpArea;
   // console.log("PT Info------", properties[0]);
+
   return properties[0];
 };
 

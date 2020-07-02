@@ -3,6 +3,7 @@ import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { Card } from "components";
 import moment from "moment";
 import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
 // import { connect } from "react-redux";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -109,68 +110,56 @@ const getUnitInfo = (units = [], propertyDetails) => {
   )
   return floors;
 }
-const getVasikaItems = (units = []) => {
-  console.log(units,"unitsjai");
-  // var units = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  console.log("===units[0].vasikaDate==",units[0].vasikaDate);
-  var vasika_date =(units && units[0].vasikaDate)? moment(units[0].vasikaDate).format('DD-MM-YYYY'):null;
-  var allotment_date =(units && units[0].allotmentDate)? moment(units[0].allotmentDate).format('DD-MM-YYYY'):null;
-  debugger;
-    function convert(str) {
-      // console.log("str==========================",str);
-      var date = new Date(str),
-        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-        day = ("0" + date.getDate()).slice(-2);
-      return [date.getFullYear(), mnth, day].join("-");
-    }
-  units = units || [];
+const getVasikaItems = (units = [],propertyDetails) => {
+  var vasika_date =(propertyDetails && propertyDetails.vasikaDate)? moment( propertyDetails.vasikaDate).format('DD-MM-YYYY'):null;
+ var allotment_date =(propertyDetails && propertyDetails.allotmentDate)? moment( propertyDetails.allotmentDate).format('DD-MM-YYYY'):null;
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   return (
-    units && [
-      {
-        key: "Vasika No",
-        value: units[0].vasikaNo || "NA", //noOfFloors
-      },
-      {
-        key: "Allotment No",
-        value: units[0].allotmentNo || "NA", //noOfFloors
-      },
-      {
-        key: "Vasika Date",
-        value: vasika_date ? `${vasika_date}` : "NA",
-      },
-      {
-        key: "Allotment Date",
-        value: allotment_date ? `${allotment_date}` : "NA",
-      },
-      {
-        key: "Bussiness Name",
-        value: units[0].businessName || "NA", //noOfFloors allotment_date
-      },
-      {
-        key: "Remarks",
-        value: units[0].remrks || "NA", //noOfFloors
-      },
-      {
-        key: "Do you have any inflammable material stored in your property?",
-        value: units[0].inflammableMaterial === true ? "Yes" : "No",
-      },
-      {
-        key: "Height of property more than 36 feet?",
-        value: units[0].heightOfProperty === true ? "Yes" : "No",
-      },
-     
-    ]
-  );
+        units && [
+          {
+            key: "PT_COMMON_VASIKA_NO",
+            value:  propertyDetails.vasikaNo || "NA", //noOfFloors
+          },
+          {
+            key: "PT_COMMON_VASIKA_DATE",
+            value:  propertyDetails.allotmentNo || "NA",
+          },
+          {
+            key: "PT_COMMON_ALLOTMENT_NO",
+            value: vasika_date ? `${vasika_date}` : "NA",
+          },
+          {
+            key: "PT_COMMON_ALLOTMENT_DATE",
+            value: allotment_date ? `${allotment_date}` : "NA",
+          },
+          {
+            key: "PT_COMMON_BUSSINESS_NAME",
+            value:  propertyDetails.businessName || "NA", 
+          },
+          {
+            key: "PT_COMMON_REMARKS",
+            value:  propertyDetails.remrks || "NA", 
+          },
+          {
+            key: "PT_COMMON_HEIGHT_OF_PROPERTY",
+            value: propertyDetails.inflammableMaterial === true ? "Yes" : "No",
+          },
+          {
+            key: "PT_COMMON_INFLAMMABLE_MATERIAL_PROPERTY",
+            value:  propertyDetails.heightOfProperty === true ? "Yes" : "No",
+          },
+         
+        ]
+      );
 }
-//  const getEpochForDate = date => {
-//   const dateSplit = date.split("/");
-//   return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
-// };
+
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
-  debugger;
-  // console.log(properties,"propertiesasss");
-  // console.log(generalMDMSDataById,"generalMDMSDataByIdassss");
-  // console.log(properties.bussinessDetails[0],"bussinessDetails");
 let hideSubsectionLabel=false;
   let assessmentItems = [];
   let subUnitItems = [];
@@ -178,21 +167,11 @@ let hideSubsectionLabel=false;
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
   if (properties) {
     const { propertyDetails } = properties;
-    const { bussinessDetails } = properties;
-    // console.log(bussinessDetails,"bussinessDetails");
-    // console.log(bussinessDetails[0].units[0].allotmentDate,"allotmentDate");
-    // var attdate = bussinessDetails[0].units[0].allotmentDate;
-    // console.log(getEpochForDate(attdate),"===========================")
-    // function convert(str) {
-    //   var date = new Date(str),
-    //     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-    //     day = ("0" + date.getDate()).slice(-2);
-    //   return [date.getFullYear(), mnth, day].join("-");
-    // }
-    // console.log(convert(attdate),"======================" )
+    // const { bussinessDetails } = properties;
+   
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
-      subVasikaItems = getVasikaItems(bussinessDetails[0]['units']);
+      subVasikaItems = getVasikaItems(propertyDetails[0]['units'], propertyDetails[0]);
       // console.log(subVasikaItems,"subVasikaItems");
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if(propertyDetails[0].propertySubType === "SHAREDPROPERTY"){

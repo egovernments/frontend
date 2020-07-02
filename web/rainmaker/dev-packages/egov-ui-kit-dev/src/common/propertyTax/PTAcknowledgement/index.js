@@ -80,8 +80,10 @@ class PTAcknowledgement extends React.Component {
       { key: "tenantId", value: tenantId },
       { key: "businessService", value: "PT" },
     ];
-    try {
+    console.log("========queryObject===========",queryObject);
+    try {      
       const payload = await httpRequest("billing-service/bill/v2/_fetchbill", "_search", queryObject);
+
       if (payload && payload.Bill.length > 0) {
         showPay = true;
       }
@@ -109,6 +111,8 @@ class PTAcknowledgement extends React.Component {
     const properties = propertiesById[propertyId];
     let downloadMenu = [];
     let printMenu = [];
+
+    console.log("====propertyId===",propertyId,"====tenantId===",tenantId);
     if (
       (purpose == PROPERTY_FORM_PURPOSE.ASSESS || purpose == PROPERTY_FORM_PURPOSE.REASSESS) &&
       !this.state.fetchBill &&

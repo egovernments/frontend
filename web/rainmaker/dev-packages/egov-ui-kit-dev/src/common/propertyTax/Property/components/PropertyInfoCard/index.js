@@ -48,7 +48,7 @@ class PropertyInfoCard extends Component {
                       );
                     }
                   })}
-                  {items2.map((item) => {
+                  {items2 && items2.map((item) => {
                     if (item) {
                       return (
                         <div>
