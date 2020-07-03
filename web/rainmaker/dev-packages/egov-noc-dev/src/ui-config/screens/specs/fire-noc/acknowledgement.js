@@ -1,31 +1,27 @@
 
-import { getAcknowledgementCard } from "egov-ui-framework/ui-containers/acknowledgementResource/acknowledgementUtils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, ifUserRoleExists } from "egov-ui-framework/ui-utils/commons";
-import { generateNOCAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateNOCAcknowledgement";
-import get from "lodash/get";
-import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import generatePdf from "../utils/receiptPdf";
+import { Icon } from "egov-ui-framework/ui-atoms";
+import set from "lodash/set";
+import get from "lodash/get";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {getAcknowledgementCard} from "egov-ui-framework/ui-containers/acknowledgementResource/acknowledgementUtils"
 import "./index.css";
 
 const downloadprintMenuConfig = (state, dispatch, purpose) => {
-
-  let preparedFinalObject = get(
-    state,
-    "screenConfiguration.preparedFinalObject", {});
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generateNOCAcknowledgement(preparedFinalObject, `noc-acknowledgement-${get(preparedFinalObject, 'FireNOCs[0].fireNOCDetails.applicationNumber', '')}`);
+      generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generateNOCAcknowledgement(preparedFinalObject, 'print');
+      generatePdf(state, dispatch, "application_print");
     },
     leftIcon: "assignment"
   };
@@ -109,20 +105,20 @@ const screenConfig = {
     );
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const { downloadMenu, printMenu } = downloadprintMenuConfig(state, dispatch, purpose);
+    const{downloadMenu, printMenu}=downloadprintMenuConfig(state, dispatch, purpose);
 
-    const footerUrlConfig = [{
-
-      url: getRedirectionURL(),
-      labelName: "GO TO HOME",
-      labelKey: "NOC_COMMON_BUTTON_HOME",
-      style: {
-        minWidth: "180px",
-        height: "48px"
-      }
-    }]
-
-    if (purpose === "apply" && status === "success") {
+    const footerUrlConfig=[{
+ 
+        url:getRedirectionURL(),
+        labelName: "GO TO HOME",
+        labelKey: "NOC_COMMON_BUTTON_HOME",
+        style: {
+          minWidth: "180px",
+          height: "48px"
+        }
+      }]
+    
+    if(purpose === "apply" && status === "success"){
       footerUrlConfig.push({
         url: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
         labelName: "Proceed to payment",
@@ -135,7 +131,7 @@ const screenConfig = {
         }
       })
     }
-    if (purpose === "pay" && status === "failure") {
+    if(purpose === "pay" && status === "failure"){
       footerUrlConfig.push({
         url: `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`,
         labelName: "RETRY",
@@ -150,7 +146,7 @@ const screenConfig = {
     }
 
     loadPdfGenerationData(applicationNumber, tenant);
-    const config = {
+    const config={
       state,
       dispatch,
       purpose,
@@ -158,7 +154,7 @@ const screenConfig = {
       applicationNumber,
       secondNumber,
       tenant,
-      moduleName: "Fire Noc",
+      moduleName:"Fire Noc",
       footerUrlConfig,
       downloadMenu,
       printMenu
