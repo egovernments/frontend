@@ -24,13 +24,18 @@ import {
   getPropertyResults,
   handleApplicationNumberDisplay,
   findAndReplace,
-  prefillDocuments
+  prefillDocuments,
+  prepareModificationsDocumentsUploadData,
+  prefillModificationsDocuments
 } from "../../../../ui-utils/commons";
 import commonConfig from "config/common.js";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewOwner } from "./applyResource/reviewOwner";
 import { reviewConnectionDetails } from "./applyResource/reviewConnectionDetails";
 import { togglePropertyFeilds, toggleSewerageFeilds, toggleWaterFeilds } from '../../../../ui-containers-local/CheckboxContainer/toggleFeilds';
+import { set } from "lodash";
+import { triggerModificationsDisplay } from "./../utils/index";
+import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
@@ -72,16 +77,21 @@ export const reviewOwnerDetails = reviewOwner(process.env.REACT_APP_NAME !== "Ci
 
 export const reviewDocumentDetails = reviewDocuments();
 
+export const reviewModificationsDetails = reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen");
+
 const summaryScreenCitizen = getCommonCard({
   reviewConnDetails,
   reviewDocumentDetails,
 });
 const summaryScreenEMP = getCommonCard({
   reviewConnDetails,
+  reviewModificationsDetails,
   reviewDocumentDetails,
   reviewOwnerDetails
 })
 let summaryScreen = process.env.REACT_APP_NAME === "Citizen" ? summaryScreenCitizen : summaryScreenEMP;
+const isMode = getQueryArg(window.location.href, "mode");
+
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
     { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
@@ -112,6 +122,36 @@ export const documentDetails = getCommonCard({
   }
 });
 
+export const ModifyConnectionDocuments = getCommonCard({
+  header: getCommonTitle(
+    { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
+    { style: { marginBottom: 18 } }
+  ),
+  subText: getCommonParagraph({
+    labelName:
+      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
+    labelKey: "WS_DOCUMENT_DETAILS_SUBTEXT"
+  }),
+  break: getBreak(),
+  documentList: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "ModificationDocumentListContainer",
+    props: {
+      buttonLabel: {
+        labelName: "UPLOAD FILE",
+        labelKey: "WS_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+      },
+      // description: "Only .jpg and .pdf files. 6MB max file size.",
+      inputProps: {
+        accept: "image/*, .pdf, .png, .jpeg"
+      },
+      maxFileSize: 6000
+    },
+    type: "array"
+  }
+});
+
 export const getMdmsData = async dispatch => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -124,6 +164,7 @@ export const getMdmsData = async dispatch => {
         {
           moduleName: "ws-services-masters", masterDetails: [
             { name: "Documents" },
+            { name: "ModifyConnectionDocuments" },
             { name: "waterSource" },
             { name: "connectionType" },
             { name: "PropertySearch" }
@@ -289,11 +330,9 @@ export const getData = async (action, state, dispatch) => {
       let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       let docs = get(state, "screenConfiguration.preparedFinalObject");
-      await prefillDocuments(
-        docs,
-        "displayDocs",
-        dispatch
-      );
+      
+      (isMode) ? await prefillModificationsDocuments(docs, "displayDocs", dispatch) : await prefillDocuments(docs, "displayDocs", dispatch);
+      
     }
   } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
@@ -319,12 +358,12 @@ export const formwizardFirstStep = {
   props: { id: "apply_form1" },
   children: { IDDetails, Details, ownerDetails, OwnerInfoCard }
 };
-
+let docDetails = (isMode) ? ModifyConnectionDocuments : documentDetails ;
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form2" },
-  children: { documentDetails },
+  children: { docDetails },
   visible: false
 };
 
@@ -361,7 +400,6 @@ const screenConfig = {
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
     const propertyId = getQueryArg(window.location.href, "propertyId");
-
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
     if (propertyId) {
@@ -405,7 +443,13 @@ const screenConfig = {
 
     // const tenantId = getTenantId();
     // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    prepareDocumentsUploadData(state, dispatch);
+    if(isMode) {
+      triggerModificationsDisplay(action, true);
+      prepareModificationsDocumentsUploadData(state, dispatch);
+    } else {
+      prepareDocumentsUploadData(state, dispatch);
+      triggerModificationsDisplay(action, false);
+    }
     return action;
   },
 

@@ -19,7 +19,8 @@ import {
   validateFeildsForBothWaterAndSewerage,
   validateFeildsForWater,
   validateFeildsForSewerage,
-  serviceConst
+  serviceConst,
+  prepareModificationsDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
@@ -285,7 +286,12 @@ const callBackForNext = async (state, dispatch) => {
         );
       }
     }
-    prepareDocumentsUploadData(state, dispatch);
+    const isMode = getQueryArg(window.location.href, "mode");
+    if(isMode) { 
+      prepareModificationsDocumentsUploadData(state, dispatch);
+    } else {
+      prepareDocumentsUploadData(state, dispatch);
+    }
   }
   // console.log(activeStep);
 

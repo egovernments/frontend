@@ -1612,3 +1612,16 @@ export const getTextToLocalMapping = label => {
     //   );
   }
 };
+const setVisible = (key, status, action) => {
+  set(
+    action,
+    `screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.${key}.visible`,
+    status
+  );
+}
+export const triggerModificationsDisplay = (action, isModeEnable) => {  
+    setVisible('modificationsEffectiveFrom', isModeEnable, action);
+    setVisible('plumberDetailsContainer', !isModeEnable, action);
+    setVisible('roadCuttingChargeContainer', !isModeEnable, action);
+}
+

@@ -35,6 +35,7 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
 import { getWorkFlowData, serviceConst } from "../../../../ui-utils/commons";
+import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -361,6 +362,8 @@ export const reviewConnectionDetails = getReviewConnectionDetails(false);
 
 export const reviewOwnerDetails = getReviewOwner(false);
 
+export const reviewModificationsDetails = reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen");
+
 export const reviewDocumentDetails = getReviewDocuments(false);
 
 // let approvalDetails = getApprovalDetails(status);
@@ -397,6 +400,7 @@ export const taskDetails = getCommonCard({
 
 export const summaryScreen = getCommonCard({
   reviewConnectionDetails,
+  reviewModificationsDetails,
   reviewDocumentDetails,
   reviewOwnerDetails
 })
@@ -616,6 +620,7 @@ const parserFunction = (obj) => {
         obj.additionalDetails.detailsProvidedBy !== null
       ) ? obj.additionalDetails.detailsProvidedBy : "",
     },
+    dateEffectiveFrom : convertDateToEpoch(obj.dateEffectiveFrom) ,
     noOfTaps: parseInt(obj.noOfTaps),
     proposedTaps: parseInt(obj.proposedTaps),
     plumberInfo: (obj.plumberInfo === null || obj.plumberInfo === "NA") ? [] : obj.plumberInfo
