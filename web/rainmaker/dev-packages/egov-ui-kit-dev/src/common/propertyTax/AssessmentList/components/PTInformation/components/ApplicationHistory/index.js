@@ -38,16 +38,13 @@ class ApplicationHistory extends Component {
         return newList;
       }
 
-    getPropertyResponse = async ( dialogName) => {    
+      getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
         const {prepareFinalObject}=this.props;
-        const tenantId = getQueryArg(window.location.href, "tenantId");
-    const propertyId = getQueryArg(window.location.href, "propertyId") || "";
         const queryObject = [
           { key: "propertyIds", value: propertyId },
           { key: "tenantId", value: tenantId },
           { key: "audit", value: true }
         ];
-        console.log("====queryObject====",queryObject);
         try {
           const payload = await httpRequest(
             "property-services/property/_search",
