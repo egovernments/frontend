@@ -32,6 +32,9 @@ import { reviewOwner } from "./applyResource/reviewOwner";
 import { reviewConnectionDetails } from "./applyResource/reviewConnectionDetails";
 import { togglePropertyFeilds, toggleSewerageFeilds, toggleWaterFeilds } from '../../../../ui-containers-local/CheckboxContainer/toggleFeilds';
 
+let mode = getQueryArg(window.location.href, "mode");
+      mode = (mode)?mode.toUpperCase():"";
+
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
@@ -41,10 +44,17 @@ export const stepperData = () => {
 }
 export const stepper = getStepperObject({ props: { activeStep: 0 } }, stepperData());
 
+export const getHeaderLabel = () => {
+  if(mode && mode === 'MODIFY'){
+    return process.env.REACT_APP_NAME === "Citizen" ? "WS_MODIFY_NEW_CONNECTION_HEADER" : "WS_MODIFY_CONNECTION_HEADER"
+  }
+  return process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
+}
+
 export const header = getCommonContainer({
   headerDiv: getCommonContainer({
     header: getCommonHeader({
-      labelKey: process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
+      labelKey: getHeaderLabel()
     })
   }),
 
@@ -52,7 +62,7 @@ export const header = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
-    props: { number: "NA" },
+    props: { number: "NA",mode : mode },
     visible: false
   },
 
@@ -60,7 +70,7 @@ export const header = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
-    props: { number: "NA" },
+    props: { number: "NA",mode : mode },
     visible: false
   }
 

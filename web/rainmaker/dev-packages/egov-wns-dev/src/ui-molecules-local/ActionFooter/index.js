@@ -12,7 +12,7 @@ class Footer extends React.Component {
   }
   render() {
     let downloadMenu = [];
-    const { applicationNumber, tenantId, toggleSnackbar } = this.props;
+    const { connectionNumber, tenantId, toggleSnackbar } = this.props;
     const editButton = {
         label: "Edit",
         labelKey: "WS_MODIFY_CONNECTION_BUTTON",
@@ -40,7 +40,7 @@ class Footer extends React.Component {
           }
             
           this.props.setRoute(
-            `${baseURL}/wns/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=edit`
+            `${baseURL}/wns/apply?connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
           );
         }
       };

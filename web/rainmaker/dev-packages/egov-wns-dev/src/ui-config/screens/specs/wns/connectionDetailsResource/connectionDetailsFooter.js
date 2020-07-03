@@ -9,7 +9,7 @@ export const connectionDetailsFooter = getCommonApplyFooter("BOTTOM",{
     moduleName: "egov-wns",
     componentPath: "ActionFooter",
     props: {      
-    	applicationNumber:getQueryArg(window.location.href, "connectionNumber"),
+    	connectionNumber:getQueryArg(window.location.href, "connectionNumber"),
     	tenantId: getQueryArg(window.location.href, "tenantId")  
     }
   }
