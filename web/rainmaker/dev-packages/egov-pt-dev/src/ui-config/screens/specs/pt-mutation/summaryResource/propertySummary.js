@@ -24,10 +24,6 @@ const propertyDetails =  getCommonGrayCard({
       },
       {
         jsonPath: "Property.address.city",
-        localePrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        },
         callBack: checkValueForNA
       }
     ),
