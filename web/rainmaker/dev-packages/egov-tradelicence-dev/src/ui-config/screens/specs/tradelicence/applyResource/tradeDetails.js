@@ -199,6 +199,7 @@ const tradeUnitCard = {
                 {
                   key : 'tradeSubType',
                   callBack: tradeSubTypeChange,
+                  className:"applicant-details-error autocomplete-dropdown",
                   fieldType : "autosuggest"
                 }
               ],
