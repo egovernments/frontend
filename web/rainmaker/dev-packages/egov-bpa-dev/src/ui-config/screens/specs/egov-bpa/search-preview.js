@@ -50,7 +50,8 @@ import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-
+import { nocDetailsApply } from "./noc";
+import nocData from "./data.json";
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
   const roles = get(userInfo, "roles");
@@ -434,6 +435,14 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
               name: "RiskTypeComputation"
             }
           ]
+        },
+        {
+          moduleName: "NOC",
+          masterDetails: [
+            {
+              name: "DocumentTypeMapping"
+            },
+          ]
         }
       ]
     }
@@ -446,6 +455,17 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
       mdmsBody
     );
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    // let nocData = get(state.screenConfiguration.preparedFinalObject, "nocData");
+    // let nocDocType = payload.MdmsRes.NOC.DocumentTypeMapping;
+    // nocData && nocData.NOC &&  nocData.NOC.map(docs => {
+    //   nocDocType && nocDocType.map(doc => {
+    //     if(docs.applicationType === doc.applicationType && docs.nocType === doc.nocType) {
+
+    //     }
+    //   })
+    // })
+    // console.log(nocData, payload.MdmsRes.NOC, "lllll");
+    
 }
 
 const setSearchResponse = async (
@@ -495,6 +515,16 @@ const setSearchResponse = async (
         true
       )
     );
+    // dispatch(
+    //   handleField(
+    //     "search-preview",
+    //     "components.div.children.body.children.cardContent.children.nocDetailsApply.visible",
+    //     "visible",
+    //     true
+    //   )
+    // );
+    
+    
   }
   set(
     action,
@@ -691,6 +721,7 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
+    console.log(applicationNumber, "applicationNumberrr");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     let businessServicesValue = "BPA";
     if(type) {
@@ -703,7 +734,11 @@ const screenConfig = {
       ];
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }
-    
+    console.log(nocData, "ddddd");    
+    dispatch(prepareFinalObject("nocData", nocData));   
+    nocData && nocData.NOC && nocData.NOC.map(docs => {
+
+    }) 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
 
@@ -769,7 +804,11 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
       false
     );
-    
+    set(
+      action,
+      "components.div.children.body.children.cardContent.children.nocDetailsApply.visible",
+      false
+    );
     return action;
   },
   components: {
@@ -869,6 +908,9 @@ const screenConfig = {
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
           previewSummary: previewSummary,
+          nocDetailsApply: nocDetailsApply,
+          // fieldSummary: fieldSummary,
+          // fieldinspectionSummary: fieldinspectionSummary,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,
           permitListSummary : permitListSummary

@@ -110,6 +110,10 @@ const MultiDownloadCard = Loadable({
   loader: () => import("./UploadCard"),
   loading: () => <Loading />
  });
+ const NocUploadCard = Loadable({
+  loader: () => import("./NocUploadCard"),
+  loading: () => <Loading />
+ });
  const ComparisionLink = Loadable({
   loader: () => import("./ComparisionLink"),
   loading: () => <Loading />
@@ -139,5 +143,6 @@ export {
   SingleDocDetailCard,
   MultiDocDetailCard,
   UploadCard,
+  NocUploadCard,
   ComparisionLink
 };

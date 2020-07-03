@@ -1,0 +1,79 @@
+{
+    "ResponseInfo": {
+        "apiId": "Mihy",
+        "ver": ".01",
+        "ts": null,
+        "resMsgId": "uief87324",
+        "msgId": "20170310130900|en_IN",
+        "status": "successful"
+    },
+    "Noc": [
+        {
+            "id": "c84dbf1d-8bce-4708-ae8c-1bc56b24c581",
+            "tenantId": "pb.amritsar",
+            "applicationNo": "PB-NOC-2020-06-30-000143",
+            "nocNo": null,
+            "applicationType": "PROVISIONAL",
+            "nocType": "AIRPORT_AUTHORITY",
+            "accountId": "34912a2f-46f9-4958-bf4f-6e5e6a2cc8ff",
+            "source": "BPA",
+            "sourceRefId": "PB-BP-2020-06-30-003182",
+            "landId": null,
+            "status": null,
+            "applicationStatus": "INPROGRESS",
+            "documents": {
+                "documentCode": "NOC_AIRPORT",
+                "documents": [
+                    {
+                        "additionalDetails":{
+                            "uploadedBy": "BPA Noc Verifier",
+                            "uploadedTime": 1593433152908
+                        },
+                        "documentCode": "NOC_AIRPORT",
+                        "auditDetails": null,
+                        "fileStoreId": "661ec931-1023-4018-9f6e-f7873bed9a5b",
+                        "linkText": "View",
+                        "title": "NOC_AIRPORT_CERTIFICATE",
+                        "createdBy": "BPA Architect",
+                        "readOnly": true,
+                        "fileName": "00754-2020-FX-v1 (4).pdf",
+                        "link": "https://egov-rainmaker.s3.ap-south-1.amazonaws.com/pb/undefined/June/29/159343315261100754-2020-FX-v1%20%284%29.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20200702T134157Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20200702%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=9974af934dd10c32a8435ce3053fe5f30805f82e79a8f776473cc6c66a397efc",
+                        "name": "00754-2020-FX-v1 (4).pdf"
+                    }
+                ],
+                "wfState": "undefined"
+            },
+            "workflow": null,
+            "auditDetails": {
+                "createdBy": "34912a2f-46f9-4958-bf4f-6e5e6a2cc8ff",
+                "lastModifiedBy": "34912a2f-46f9-4958-bf4f-6e5e6a2cc8ff",
+                "createdTime": 1593526306402,
+                "lastModifiedTime": 1593526306402
+            },
+            "additionalDetails": null
+        },
+        {
+            "id": "09024a40-b527-4e2f-87d4-9a25626697c1",
+            "tenantId": "pb.amritsar",
+            "applicationNo": "PB-NOC-2020-06-30-000144",
+            "nocNo": null,
+            "applicationType": "PROVISIONAL",
+            "nocType": "FIRE_NOC",
+            "accountId": "34912a2f-46f9-4958-bf4f-6e5e6a2cc8ff",
+            "source": "BPA",
+            "sourceRefId": "PB-BP-2020-06-30-003182",
+            "landId": null,
+            "status": null,
+            "applicationStatus": "INPROGRESS",
+            "documents": null,
+            "workflow": null,
+            "auditDetails": {
+                "createdBy": "34912a2f-46f9-4958-bf4f-6e5e6a2cc8ff",
+                "lastModifiedBy": "34912a2f-46f9-4958-bf4f-6e5e6a2cc8ff",
+                "createdTime": 1593526310737,
+                "lastModifiedTime": 1593526310737
+            },
+            "additionalDetails": null
+        }
+    ]
+}

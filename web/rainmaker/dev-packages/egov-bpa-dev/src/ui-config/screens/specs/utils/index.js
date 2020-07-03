@@ -4432,7 +4432,16 @@ cards.map(card=>{
     })
   }
 });
+let fireDocuments = [];
+let airportDocuments = [];
+cards.map(finalDocs => {
+  if(finalDocs.documentCode === "NOC_FIRE") fireDocuments.push(finalDocs);
+  else if(finalDocs.documentCode === "NOC_AIRPORT") airportDocuments.push(finalDocs)
+})
+// let finalCards = cards.splice(5, 2);
 dispatch(prepareFinalObject("finalCardsforPreview", cards));
+dispatch(prepareFinalObject("finalCardsforPreview1", fireDocuments));
+dispatch(prepareFinalObject("finalCardsforPreview2", airportDocuments));
 
 }
 /**
@@ -4452,6 +4461,7 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping",
     []
   );
+  console.log(applicationDocuments, "applicationDocuments");
   let documentsDropDownValues = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
