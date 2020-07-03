@@ -34,9 +34,13 @@ export const plotSize = {
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
       let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
-      if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
+      if (propertyType === "VACANT" ) {
         dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
         dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+      }
+      if (propertySubType === "INDEPENDENTPROPERTY") {
+        dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
+       // dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
       }
     },
   },
@@ -343,11 +347,12 @@ export const annualRent = {
     floatingLabelText: "PT_FORM2_TOTAL_ANNUAL_RENT",
     hintText: "PT_FORM2_TOTAL_ANNUAL_RENT_PLACEHOLDER",
     ErrorText: "PT_ANNUAL_RENT_ERROR_MESSAGE",
+    errorMessage: "PT_ANNUAL_RENT_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     toolTip: true,
     toolTipMessage: "PT_TOTAL_ANNUAL_RENT_TOOLTIP_MESSAGE",
     required: true,
-    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    pattern: /^([0-9]\d{0,7})(\.\d+)?$/,
     hideField: false,
     numcols: 4,
   },
