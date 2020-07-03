@@ -110,25 +110,22 @@ const getUnitInfo = (units = [], propertyDetails) => {
   )
   return floors;
 }
-const getVasikaItems = (units = [],propertyDetails) => {
-  var vasika_date =(propertyDetails && propertyDetails.vasikaDate)? moment( propertyDetails.vasikaDate).format('DD-MM-YYYY'):null;
- var allotment_date =(propertyDetails && propertyDetails.allotmentDate)? moment( propertyDetails.allotmentDate).format('DD-MM-YYYY'):null;
- 
- 
- 
- 
- 
- 
- 
+const getVasikaItems = (additionalDetails) => {
+
+  console.log(additionalDetails,"additionalDetailsjaiii")
+
+  var vasika_date =(additionalDetails && additionalDetails.vasikaDate)? moment( additionalDetails.vasikaDate).format('DD-MM-YYYY'):null;
+ var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? moment( additionalDetails.allotmentDate).format('DD-MM-YYYY'):null;
+
   return (
-        units && [
+    additionalDetails && [
           {
             key: "PT_COMMON_VASIKA_NO",
-            value:  propertyDetails.vasikaNo || "NA", //noOfFloors
+            value:  additionalDetails.vasikaNo || "NA", //noOfFloors
           },
           {
             key: "PT_COMMON_VASIKA_DATE",
-            value:  propertyDetails.allotmentNo || "NA",
+            value:  additionalDetails.allotmentNo || "NA",
           },
           {
             key: "PT_COMMON_ALLOTMENT_NO",
@@ -140,19 +137,19 @@ const getVasikaItems = (units = [],propertyDetails) => {
           },
           {
             key: "PT_COMMON_BUSSINESS_NAME",
-            value:  propertyDetails.businessName || "NA", 
+            value:  additionalDetails.businessName || "NA", 
           },
           {
             key: "PT_COMMON_REMARKS",
-            value:  propertyDetails.remrks || "NA", 
+            value:  additionalDetails.remrks || "NA", 
           },
           {
             key: "PT_COMMON_HEIGHT_OF_PROPERTY",
-            value: propertyDetails.inflammableMaterial === true ? "Yes" : "No",
+            value: additionalDetails.inflammableMaterial === true ? "Yes" : "No",
           },
           {
             key: "PT_COMMON_INFLAMMABLE_MATERIAL_PROPERTY",
-            value:  propertyDetails.heightOfProperty === true ? "Yes" : "No",
+            value:  additionalDetails.heightOfProperty === true ? "Yes" : "No",
           },
          
         ]
@@ -166,12 +163,15 @@ let hideSubsectionLabel=false;
   let subVasikaItems = [];
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
   if (properties) {
+    debugger;
     const { propertyDetails } = properties;
-    // const { bussinessDetails } = properties;
-   
+    const { additionalDetails } = properties;
+    console.log(additionalDetails,"subVasikaItems");
+
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
-      subVasikaItems = getVasikaItems(propertyDetails[0]['units'], propertyDetails[0]);
+      debugger;
+      subVasikaItems = getVasikaItems(additionalDetails);
       // console.log(subVasikaItems,"subVasikaItems");
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if(propertyDetails[0].propertySubType === "SHAREDPROPERTY"){
