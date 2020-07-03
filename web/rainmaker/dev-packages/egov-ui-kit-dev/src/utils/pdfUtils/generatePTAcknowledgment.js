@@ -49,7 +49,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     const ownerInfo = getOwnerInfo(property, generalMDMSDataById);
     const addressCard = getAddressItems(property);
     const ownerCard = getMultipleItemCard(ownerInfo, 'PT_OWNER');
-    const assessmentCard = getAssessmentInfo(get(property, 'propertyDetails[0]', {}), generalMDMSDataById);
+    const assessmentCard = getAssessmentInfo(get(property, 'propertyDetails[0]', {}), generalMDMSDataById,property);
     const documentCard = getDocumentsCard(property.documentsUploaded);
 
     let pdfData = {
