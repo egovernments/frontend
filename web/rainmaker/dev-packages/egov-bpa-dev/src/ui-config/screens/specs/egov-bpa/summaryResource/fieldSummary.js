@@ -42,7 +42,7 @@ const fieldSummaryContent = () => {
         }
       }
     },
-    lableData : getCommonContainer({
+    // lableData : getCommonContainer({
       fieldSummaryDate: getLabelWithValue(
         {
           labelName: "BPA_FI_DATE_LABEL_NAME",
@@ -50,8 +50,11 @@ const fieldSummaryContent = () => {
         },
         {
           jsonPath:
-            "BPA.additionalDetails.fieldinspection_pending[0].date"
-        }
+            "BPA.additionalDetails.fieldinspection_pending[0].date",
+            gridDefination: {
+              xs: 4,
+            },
+        },
       ),
       fieldSummaryTime: getLabelWithValue(
         {
@@ -60,10 +63,13 @@ const fieldSummaryContent = () => {
         },
         {
           jsonPath:
-            "BPA.additionalDetails.fieldinspection_pending[0].time"
+            "BPA.additionalDetails.fieldinspection_pending[0].time",
+            gridDefination: {
+              xs: 4,
+            },
         }
-      )
-    }),
+      ),
+    // }),
     checkListDetailsContainer: getHeader({
       labelName: "Check List",
       labelKey: "BPA_CHECK_LIST_DETAILS"
@@ -107,6 +113,7 @@ export const fieldSummary = getCommonContainer({
       hasAddItem: false,
       isReviewPage: true,
       prefixSourceJsonPath: "children.cardContent.children",
+      afterPrefixJsonPath: "children.value.children.key",
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
       headerJsonPath : "children.cardContent.children.header.children.header.children.key.props.label",
       headerName : getLocaleLabels( "FI Report", "BPA_FI_REPORT")
