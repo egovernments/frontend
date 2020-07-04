@@ -164,7 +164,7 @@ export const fieldinspectionSummary = getCommonContainer({
       prefixSourceJsonPath: "children.cardContent.children.fiCard.children",
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
       headerJsonPath : "children.cardContent.children.fiCard.children.header.children.header.children.dynamicTitle.props.labelName",
-       headerName : " "
+      headerName : " "
     }, 
     gridDefination: {
       xs: 12,
