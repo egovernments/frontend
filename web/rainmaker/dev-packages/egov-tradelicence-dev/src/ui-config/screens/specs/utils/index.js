@@ -1165,15 +1165,17 @@ const getBillingSlabData = async (
         response.billingSlab.reduce(
           (result, item) => {
             if (item.tradeType) {
-              const count = tradeUnits.find(
+              let tradeUnit =tradeUnits.find(
                 tradeUnit =>
                   item.tradeType === tradeUnit.tradeType
-              ).uomValue;
-              const UOM = tradeUnits.find(
-                tradeUnit =>
-                  item.tradeType === tradeUnit.tradeType
-              ).uom;
-              tradeTotal = count?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
+              );
+              let count = 0;
+              let UOM;
+              if(tradeUnit){
+               count = tradeUnit.uomValue;
+               UOM = tradeUnit.uom;
+            }
+              tradeTotal = (count!==0)?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
               result.tradeUnitData.push({
                 rate: item.rate,
                 tradeTotal:tradeTotal,
