@@ -99,6 +99,7 @@ const screenConfig = {
                   responsive: "stacked",
                   selectableRows: false,
                   hover: true,
+                  viewColumns: false,
                   onRowClick: (row, index) => {
                     onRowClick(row);
                   },
@@ -168,11 +169,11 @@ export const fetchData = async (
         ["BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"]: serType,
         ["BPA_COMMON_SLA"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "sla", null) || "-",
         ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "assignee", null) || "-",
-        ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: getTextToLocalMapping(`WF_BPA_${element.status}`) || "",
+        ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: element.status,
         applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
         modifiedTime: modifiedTime,
         sortNumber: 1,
-        serviceType: getTextToLocalMapping(`WF_${businessService}`),
+        serviceType: businessService,
         tenantId: get(element, "tenantId", null),
         type: type
       })
@@ -237,9 +238,9 @@ const onRowClick = rowData => {
       default:
         window.location.assign(`${origin}${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`)
     }
-  } else if ((rowData[7] === "BPA") || rowData[7] == "Low") {
+  } else if ((rowData[7] === "BPA") || rowData[7] == "BPA_LOW") {
     switch (rowData[9]) {
-      case "Initiated":
+      case "INITIATED":
         window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
         break;
       default:
@@ -247,7 +248,7 @@ const onRowClick = rowData => {
     }
   } else {
     switch (rowData[9]) {
-      case "Initiated":
+      case "INITIATED":
         window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
         break;
       default:
