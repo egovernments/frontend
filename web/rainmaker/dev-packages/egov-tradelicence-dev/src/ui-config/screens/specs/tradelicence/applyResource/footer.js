@@ -233,7 +233,9 @@ export const callBackForNext = async (state, dispatch) => {
           (owners[k].isDeleted === undefined ||
             owners[k].isDeleted !== false) &&
           !validateFields(
-            `${ownersJsonPath}[${k}].item${k}.children.cardContent.children.tradeUnitCardContainer.children`,
+           // `${ownersJsonPath}[${k}].item${k}.children.cardContent.children.tradeUnitCardContainer.children`,
+           //DC changed
+           `${ownersJsonPath}[${k}].item${k}.children.cardContent.children.tradeUnitCardContainerOwnerInfo.children`,
             state,
             dispatch
           )
@@ -242,7 +244,7 @@ export const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let ownersJsonPath =
-        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainer.children";
+        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainerInstitutional.children";
       if (!validateFields(ownersJsonPath, state, dispatch)) isFormValid = false;
     }
 
