@@ -21,8 +21,7 @@ import { getHeaderSideText } from "../../utils";
 import get from 'lodash/get';
 import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
-
-
+import { getTodaysDateInYMD } from 'egov-ui-framework/ui-utils/commons'
 const getPlumberRadioButton = {
   uiFramework: "custom-containers-local",
   moduleName: "egov-wns",
@@ -326,6 +325,30 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading"
       })
+    })
+  }),
+  modificationsEffectiveFrom : getCommonGrayCard({
+    subHeader: getCommonTitle({
+      labelKey: "WS_MODIFICATIONS_EFFECTIVE_FROM"
+    }),
+    modificationEffectiveDate: getCommonContainer({
+      connectionExecutionDate: getDateField({
+        label: { labelName: "Modifications Effective Date", labelKey: "MODIFICATIONS_EFFECTIVE_DATE" },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("Date"),
+        errorMessage: "ERR_INVALID_DATE",
+        jsonPath: "applyScreen.dateEffectiveFrom",
+        props: {
+          inputProps: {
+            min: getTodaysDateInYMD()
+          }
+        }
+      }),
+      
     })
   })
 });
