@@ -239,7 +239,7 @@ export const getData = async (action, state, dispatch) => {
   const propertyID = getQueryArg(window.location.href, "propertyId");
   const actionType = getQueryArg(window.location.href, "action");
   await getMdmsData(dispatch);
-  if (applicationNo || connectionNo) {
+  if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [
       { key: "tenantId", value: tenantId }, 
