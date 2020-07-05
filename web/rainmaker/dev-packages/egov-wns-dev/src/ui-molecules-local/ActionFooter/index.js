@@ -5,6 +5,9 @@ import { Container, Item } from "egov-ui-framework/ui-atoms";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import {getWorkFlowData } from "../../ui-utils/commons"
+import { httpRequest } from "../../ui-utils/api";
 
 class Footer extends React.Component {
   state = {
@@ -12,7 +15,7 @@ class Footer extends React.Component {
   }
   render() {
     let downloadMenu = [];
-    const { connectionNumber, tenantId, toggleSnackbar } = this.props;
+    const { connectionNumber, tenantId, toggleSnackbar,applicationNo } = this.props;
     const editButton = {
         label: "Edit",
         labelKey: "WS_MODIFY_CONNECTION_BUTTON",
@@ -33,6 +36,30 @@ class Footer extends React.Component {
             return false;
           }
 
+
+          // check for the WF Exists
+          const queryObj = [
+            { key: "businessIds", value: applicationNo },
+            { key: "history", value: true },
+            { key: "tenantId", value: tenantId }
+          ];        
+          httpRequest("post", "/egov-workflow-v2/egov-wf/process/_search", "_search", queryObj).then((payload) => {
+            console.log(payload);
+            if(payload && payload.ProcessInstances && payload.ProcessInstances[0]['nextActions'] && payload.ProcessInstances[0]['nextActions'].length > 0){
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "WorkFlow already Initiated",
+                  labelKey: "WS_WORKFLOW_ALREADY_INITIATED"
+                },
+                "error"
+              );
+
+              return false;
+            }
+
+          });
+          
           let baseURL = "";
 
           if(process.env.NODE_ENV !== "development"){
@@ -40,7 +67,7 @@ class Footer extends React.Component {
           }
             
           this.props.setRoute(
-            `${baseURL}/wns/apply?connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
+            `${baseURL}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
           );
         }
       };
@@ -79,7 +106,22 @@ class Footer extends React.Component {
 
 
 const mapStateToProps = state => {
-  return { state };
+  let connectionObj = get(
+    state.screenConfiguration.preparedFinalObject,
+    "WaterConnection",
+    []
+  );
+
+  if(connectionObj.length === 0 ){
+    connectionObj = get(
+      state.screenConfiguration.preparedFinalObject,
+      "SewerageConnection",
+      []
+    );
+  }
+  const applicationNo = (connectionObj && connectionObj.length > 0)?connectionObj[0].applicationNo:""
+
+  return { state, applicationNo };
 };
 
 const mapDispatchToProps = dispatch => {

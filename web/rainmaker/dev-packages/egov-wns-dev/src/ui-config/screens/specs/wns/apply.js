@@ -202,16 +202,13 @@ export const getData = async (action, state, dispatch) => {
     let queryObject = [
       { key: "tenantId", value: tenantId }, 
       { key: "applicationNumber", value: applicationNo }
-      ];
-    if(connectionNo){
-      queryObject = [
-      { key: "tenantId", value: tenantId }, 
-      { key: "connectionNumber", value: connectionNo }
-      ]
-      applicationNo = connectionNo;
-    }
+      ];    
     if ( actionType && (actionType.toUpperCase() === "EDIT")) {
-      handleApplicationNumberDisplay(dispatch, applicationNo)
+      if(connectionNo){
+        handleApplicationNumberDisplay(dispatch, connectionNo)
+      }else{
+        handleApplicationNumberDisplay(dispatch, applicationNo)
+      }
       let payloadWater, payloadSewerage;
       if (applicationNo.includes("SW")) {
         try { payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.error(error); }
