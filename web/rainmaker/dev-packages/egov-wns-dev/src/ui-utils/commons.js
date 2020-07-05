@@ -1868,3 +1868,11 @@ export const prefillModificationsDocuments = async (payload, destJsonPath, dispa
         dispatch(prepareFinalObject(destJsonPath, tempDoc));
     }
 };
+
+export const getDomainLink = () =>{
+    let link = "";
+    if(process.env.NODE_ENV !== "development"){
+       link += "/"+process.env.REACT_APP_NAME.toLowerCase()
+    }
+    return link
+}

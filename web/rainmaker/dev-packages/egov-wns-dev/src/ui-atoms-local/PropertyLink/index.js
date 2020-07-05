@@ -1,6 +1,6 @@
 import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-
+import { getDomainLink } from "../../ui-utils/commons";
 const styles = {
   color: "rgba(0, 0, 0, 0.87)",
   marginLeft: "3%",
@@ -17,11 +17,8 @@ const clickHereStyles = {
 
 function AddLinkForProperty(props) {
   const { url } = props;
-  let link = window.location.origin;
-  if(process.env.NODE_ENV !== "development"){
-    link += "/"+process.env.REACT_APP_NAME.toLowerCase()
-  }
-  link += `/pt-common-screens/propertySearch?redirectUrl=${url}`
+  let link = window.location.origin;  
+  link += `${getDomainLink()}/pt-common-screens/propertySearch?redirectUrl=${url}`
   return (
     <div style={styles}>
       <LabelContainer

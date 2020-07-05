@@ -8,6 +8,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import "./index.css"
+import { getDomainLink } from "../../ui-utils/commons";
 
 const styles = {
   card: {
@@ -19,11 +20,11 @@ const styles = {
 
 class MyConnections extends React.Component {
   getConnectionDetails = data => {
-    window.location.href = `/citizen/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+    window.location.href = `${getDomainLink()}/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
   }
 
   getViewBillDetails = data => {
-    window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+    window.location.href = `${getDomainLink()}/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
   }
 
   render() {
