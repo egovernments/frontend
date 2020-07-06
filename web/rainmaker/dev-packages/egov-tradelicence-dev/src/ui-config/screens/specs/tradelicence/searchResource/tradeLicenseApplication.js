@@ -164,6 +164,9 @@ export const tradeLicenseApplication = getCommonCard({
           code : "APPLIED"
         },
         {
+          code : "PENDINGAPPLFEE"
+        },
+        {
           code : "FIELDINSPECTION"
         },
         {
