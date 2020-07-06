@@ -472,9 +472,31 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "WaterConnection",
+            dataPath: (serviceModuleName === "NewWS1")?"WaterConnection":"SewerageConnection",
             moduleName: serviceModuleName,
-            updateUrl: serviceUrl
+            updateUrl: serviceUrl,
+            baseUrlTemp : 'wns',
+            bserviceTemp : (serviceModuleName === "NewWS1")?"WS.ONE_TIME_FEE":"SW.ONE_TIME_FEE",
+            redirectQueryString: `applicationNumber=${applicationNumber}&tenantId=${tenantId}`,
+            beforeSubmitHook: (data)=>{
+              data = data[0];
+              data.assignees = [];
+              if (data.assignee) {
+                data.assignee.forEach(assigne => {
+                  data.assignees.push({
+                    uuid: assigne
+                  })
+                })
+              }
+              data.processInstance = {
+                documents: data.wfDocuments,
+                assignes: data.assignees,
+                comment: data.comment,
+                action: data.action
+              }
+              data.waterSource = data.waterSource + "." + data.waterSubSource;
+              return data;
+            }
           }
         },
         taskDetails,
