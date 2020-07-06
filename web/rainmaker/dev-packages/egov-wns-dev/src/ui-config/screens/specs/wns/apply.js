@@ -13,6 +13,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
 import { getPropertyIDDetails, propertyID, propertyHeader } from "./applyResource/propertyDetails";
 import { getPropertyDetails } from "./applyResource/property-locationDetails";
+import { getHolderDetails, sameAsOwner, holderHeader } from "./applyResource/connectionHolder";
 import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResource/ownerDetails";
 import { additionDetails } from "./applyResource/additionalDetails";
 import { OwnerInfoCard } from "./applyResource/connectionDetails";
@@ -38,7 +39,7 @@ import { triggerModificationsDisplay } from "./../utils/index";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 
 let isMode = getQueryArg(window.location.href, "mode");
-      isMode = (isMode)?isMode.toUpperCase():"";
+isMode = (isMode) ? isMode.toUpperCase() : "";
 
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
@@ -50,7 +51,7 @@ export const stepperData = () => {
 export const stepper = getStepperObject({ props: { activeStep: 0 } }, stepperData());
 
 export const getHeaderLabel = () => {
-  if(isMode && isMode === 'MODIFY'){
+  if (isMode && isMode === 'MODIFY') {
     return process.env.REACT_APP_NAME === "Citizen" ? "WS_MODIFY_NEW_CONNECTION_HEADER" : "WS_MODIFY_CONNECTION_HEADER"
   }
   return process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
@@ -67,7 +68,7 @@ export const header = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
-    props: { number: "NA",mode : isMode },
+    props: { number: "NA", mode: isMode },
     visible: false
   },
 
@@ -75,7 +76,7 @@ export const header = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
-    props: { number: "NA",mode : isMode },
+    props: { number: "NA", mode: isMode },
     visible: false
   }
 
@@ -228,6 +229,28 @@ export const getMdmsData = async dispatch => {
       payload.MdmsRes['ws-services-masters'].SURFACE = SURFACE;
       payload.MdmsRes['ws-services-masters'].BULKSUPPLY = BULKSUPPLY;
     }
+
+    //related to ownershipcategory
+    let OwnerShipCategory = get(
+      payload,
+      "MdmsRes.common-masters.OwnerShipCategory"
+    )
+    let institutions = []
+    OwnerShipCategory = OwnerShipCategory.map(category => {
+      if (category.code.includes("INDIVIDUAL")) {
+        return category.code;
+      }
+      else {
+        let code = category.code.split(".");
+        institutions.push({ code: code[1], parent: code[0], active: true });
+        return code[0];
+      }
+    });
+    OwnerShipCategory = OwnerShipCategory.filter((v, i, a) => a.indexOf(v) === i)
+    OwnerShipCategory = OwnerShipCategory.map(val => { return { code: val, active: true } });
+
+    payload.MdmsRes['common-masters'].Institutions = institutions;
+    payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
 };
@@ -242,13 +265,13 @@ export const getData = async (action, state, dispatch) => {
   if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [
-      { key: "tenantId", value: tenantId }, 
+      { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNo }
-      ];    
-    if ( actionType && (actionType.toUpperCase() === "EDIT")) {
-      if(connectionNo){
+    ];
+    if (actionType && (actionType.toUpperCase() === "EDIT")) {
+      if (connectionNo) {
         handleApplicationNumberDisplay(dispatch, connectionNo)
-      }else{
+      } else {
         handleApplicationNumberDisplay(dispatch, applicationNo)
       }
       let payloadWater, payloadSewerage;
@@ -350,7 +373,7 @@ export const getData = async (action, state, dispatch) => {
       let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       let docs = get(state, "screenConfiguration.preparedFinalObject");
-      
+
       //(isMode) ? await prefillModificationsDocuments(docs, "displayDocs", dispatch) : await prefillDocuments(docs, "displayDocs", dispatch);
       await prefillDocuments(docs, "displayDocs", dispatch);
     }
@@ -367,19 +390,21 @@ export const getData = async (action, state, dispatch) => {
 const propertyDetail = getPropertyDetails();
 const propertyIDDetails = getPropertyIDDetails();
 const ownerDetail = getOwnerDetails();
+const holderDetails = getHolderDetails();
 
 export const ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
 export const IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
 export const Details = getCommonCard({ propertyDetail });
+export const connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
 
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, Details, ownerDetails, OwnerInfoCard }
+  children: { IDDetails, Details, ownerDetails, connectionHolderDetails, OwnerInfoCard }
 };
 //let docDetails = (isMode) ? ModifyConnectionDocuments : documentDetails ;
-let docDetails = documentDetails ;
+let docDetails = documentDetails;
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
@@ -409,6 +434,7 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("SewerageConnection", []));
   dispatch(prepareFinalObject("applyScreen", {}));
   dispatch(prepareFinalObject("searchScreen", {}));
+  dispatch(prepareFinalObject("connectionHolders", []));
 }
 
 const screenConfig = {
@@ -417,7 +443,19 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     pageReset(dispatch);
-    getData(action, state, dispatch).then(() => { });
+    getData(action, state, dispatch).then(() => {
+      let ownershipCategory = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
+        []
+      );
+      dispatch(
+        prepareFinalObject(
+          "OwnershipCategory",
+          ownershipCategory
+        )
+      );
+    });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
     const propertyId = getQueryArg(window.location.href, "propertyId");
@@ -465,9 +503,9 @@ const screenConfig = {
 
     // const tenantId = getTenantId();
     // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    if(isMode) {
-       triggerModificationsDisplay(action, true);
-       prepareDocumentsUploadData(state, dispatch);
+    if (isMode) {
+      triggerModificationsDisplay(action, true);
+      prepareDocumentsUploadData(state, dispatch);
       // prepareModificationsDocumentsUploadData(state, dispatch);
     } else {
       prepareDocumentsUploadData(state, dispatch);

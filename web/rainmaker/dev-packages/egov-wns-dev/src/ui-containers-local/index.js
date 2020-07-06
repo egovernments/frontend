@@ -53,6 +53,10 @@ const ModificationDocumentListContainer = Loadable({
   loader: () => import("./ModificationDocumentListContainer"),
   loading: () => <Loading />
 });
+const CheckboxContainerConnHolder = Loadable({
+   loader: () => import("./CheckboxContainerConnHolder"),
+    loading: () => <Loading />
+  });
 
 export {
   CustomTabContainer,
@@ -65,5 +69,6 @@ export {
   DialogContainer,
   RadioGroupContainer,
   EstimateOverviewCardContainer,
-  ModificationDocumentListContainer
+  ModificationDocumentListContainer,
+  CheckboxContainerConnHolder
 };

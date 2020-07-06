@@ -18,6 +18,14 @@ export const propertySearchApiCall = async (state, dispatch) => {
     )
   );
   dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.headerDiv",
+      "props.items",
+      []
+    )
+  );
+  dispatch(
     prepareFinalObject(
       "applyScreen.property",
       {}
@@ -109,6 +117,14 @@ const showHideFields = (dispatch, value) => {
     handleField(
       "apply",
       "components.div.children.formwizardFirstStep.children.ownerDetails",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.connectionHolderDetails",
       "visible",
       value
     )

@@ -20,7 +20,8 @@ import {
   validateFeildsForWater,
   validateFeildsForSewerage,
   serviceConst,
-  prepareModificationsDocumentsUploadData
+  prepareModificationsDocumentsUploadData,
+  validateConnHolderDetails
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
@@ -147,7 +148,27 @@ const callBackForNext = async (state, dispatch) => {
         "searchScreen.propertyIds"
       )
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
+
+      //connectionholdercode
+
+     let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
+     let holderData = connectionHolderObj[0];
+      if (holderData !== null && holderData !== undefined) {
+        if (holderData.sameAsPeropertyAddress === true) {
+          holderData = null
+        }
+      }
+      if (holderData == null) {
+        applyScreenObject.connectionHolders = holderData;
+     } else {
+        let arrayHolderData = [];
+        arrayHolderData.push(holderData);
+        applyScreenObject.connectionHolders = arrayHolderData;
+      }
       if (searchPropertyId !== undefined && searchPropertyId !== "") {
+        if (validateConnHolderDetails(applyScreenObject)) {
+                   isFormValid = true;
+                   hasFieldToaster = false;
         if (applyScreenObject.water || applyScreenObject.sewerage) {
           if (
             applyScreenObject.hasOwnProperty("property") &&
@@ -273,7 +294,19 @@ const callBackForNext = async (state, dispatch) => {
           isFormValid = false;
           hasFieldToaster = true;
         }
-      } else {
+      }else{
+           isFormValid = false;
+                dispatch(
+                  toggleSnackbar(
+                    true, {
+                    labelKey: "WS_FILL_REQUIRED_HOLDER_FIELDS",
+                    labelName: "Please fill Required details"
+                  },
+                    "warning"
+                  )
+                )
+              }
+            }else {
         isFormValid = false;
         dispatch(
           toggleSnackbar(
