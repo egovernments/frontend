@@ -1,4 +1,4 @@
-import { propertyDetails,locationDetails,propertyOwnerDetail} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-trade";
+import { propertyDetails,locationDetails,propertyOwnerDetail,connectionHolderDetails} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-trade";
 import {connectionDetails} from "egov-wns/ui-config/screens/specs/wns/applyResource/task-connectiondetails";
 import {plumberDetails, roadDetails, activateDetails, additionDetails} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-owner";
 import get from "lodash/get";
@@ -12,6 +12,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     const propertyDetail = generateKeyValue(preparedFinalObject, propertyDetails);
     const locationDetail = generateKeyValue(preparedFinalObject, locationDetails);
     const connectionDetail = generateKeyValue(preparedFinalObject, connectionDetails);
+    const connHolderDetail = generateKeyValue(preparedFinalObject, connectionHolderDetails);
     const additionDetail = generateKeyValue(preparedFinalObject, additionDetails);
     const plumberDetail = generateKeyValue(preparedFinalObject, plumberDetails);
     const roadDetail = generateKeyValue(preparedFinalObject, roadDetails);
@@ -42,6 +43,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOCATION_DETAILS_HEADER", items: locationDetail },
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER", items: ownerDetail, type: ownerDetailInfo.length > 1 ? 'multiItem' : 'singleItem'  },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_DETAILS_HEADER', items: connectionDetail },
+            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_HOLDER_DETAILS_HEADER', items: connHolderDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENTS_DETAILS_HEADER', items: documentCard },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ADDITIONAL_CONNECTION_HEADER', items: additionDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLUMBER_DETAILS_HEADER', items: plumberDetail },

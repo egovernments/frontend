@@ -91,7 +91,9 @@ export const getReviewConnectionDetails = (isEditable = true) => {
     viewOne: getPropertyDetails,
     viewTwo: propertyLocationDetails,
     viewThree: ownerDetails,
-    viewFour: getConnectionDetails()
+    viewFour: getConnectionDetails(),
+    viewFive:taskConnHolderDetailsSummary()
+
   });
 };
 
@@ -370,5 +372,83 @@ const ownerDetails = {
         afterPrefixJsonPath: "children.value.children.key"
       },
       type: "array"
+}
+const holderHeader = getHeader({
+  labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+  labelName: "Connection Holder Details"
+})
+
+export const connectionHolderDetails={
+  mobileNumber : getLabelWithValue(
+     {
+       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"
+     },
+     { jsonPath: "WaterConnection[0].connectionHolders[0].mobileNumber", callBack: handleNA }
+   ),
+    name : getLabelWithValue(
+     {
+       labelName: "Name",
+       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_OWN_NAME_LABEL"
+     },
+     { jsonPath: "WaterConnection[0].connectionHolders[0].name", callBack: handleNA }
+   ),
+    gender : getLabelWithValue(
+     {
+       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL"
+     },
+     {
+       jsonPath: "WaterConnection[0].connectionHolders[0].gender",
+       callBack: handleNA
+     }
+   ),
+    fatherName : getLabelWithValue(
+     {
+       labelKey: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"
+     },
+     { jsonPath: "WaterConnection[0].connectionHolders[0].fatherOrHusbandName", callBack: handleNA }
+   ),
+    relationship : getLabelWithValue(
+     {
+       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
+     },
+     { jsonPath: "WaterConnection[0].connectionHolders[0].relationship", callBack: handleNA }
+   ),
+    correspondenceAddress :getLabelWithValue(
+     {
+       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_CROSADD"
+     },
+     {
+       jsonPath: "WaterConnection[0].connectionHolders[0].correspondenceAddress",
+       callBack: handleNA
+     }
+   ),
+    specialApplicantCategory : getLabelWithValue(
+     {
+       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
+     },
+     {
+       jsonPath: "WaterConnection[0].connectionHolders[0].ownerType",
+       callBack: handleNA
+     }
+   )
+ };
+const taskConnHolderDetailsSummary = () => {
+  return ({
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "common-div-css search-preview",
+      scheama: getCommonGrayCard({
+        div4: holderHeader,
+        connHoldDetail:getCommonContainer(connectionHolderDetails)
+      }),
+      items: [],
+      hasAddItem: false,
+      sourceJsonPath: "WaterConnection[0].connectionHolders",
+      prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  })
 }
 

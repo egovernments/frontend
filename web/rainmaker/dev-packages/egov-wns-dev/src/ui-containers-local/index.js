@@ -13,6 +13,10 @@ const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
   loading: () => <Loading />
 });
+const CheckboxContainerConnHolder = Loadable({
+  loader: () => import("./CheckboxContainerConnHolder"),
+  loading: () => <Loading />
+});
 const DownloadFileContainer = Loadable({
   loader: () => import("./DownloadFileContainer"),
   loading: () => <Loading />
@@ -61,5 +65,6 @@ export {
   ViewBreakupContainer,
   DialogContainer,
   RadioGroupContainer,
-  EstimateOverviewCardContainer
+  EstimateOverviewCardContainer,
+  CheckboxContainerConnHolder
 };

@@ -232,6 +232,15 @@ export const togglePlumberFeilds = (onFieldChange, value) => {
   );
 }
 
+export const toggleConnHolderDetails=(onFieldChange, value)=>{
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails",
+    "visible",
+    value
+  );
+}
+
 export const togglePropertyFeilds = (action, value) => {
   set(
     action.screenConfig,
@@ -248,6 +257,12 @@ export const togglePropertyFeilds = (action, value) => {
     "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
     value
   );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
+    value
+  );
+  
 }
 
 export const toggleSewerageFeilds = (action, value) => {

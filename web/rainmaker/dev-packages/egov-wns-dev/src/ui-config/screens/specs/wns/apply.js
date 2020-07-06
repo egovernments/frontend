@@ -12,6 +12,7 @@ import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
 import { getPropertyIDDetails, propertyID, propertyHeader } from "./applyResource/propertyDetails";
+import {getHolderDetails,sameAsOwner,holderHeader} from "./applyResource/connectionHolder";
 import { getPropertyDetails } from "./applyResource/property-locationDetails";
 import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResource/ownerDetails";
 import { additionDetails } from "./applyResource/additionalDetails";
@@ -176,6 +177,27 @@ export const getMdmsData = async dispatch => {
       payload.MdmsRes['ws-services-masters'].SURFACE = SURFACE;
       payload.MdmsRes['ws-services-masters'].BULKSUPPLY = BULKSUPPLY;
     }
+//related to ownershipcategory
+    let OwnerShipCategory = get(
+      payload,
+      "MdmsRes.common-masters.OwnerShipCategory"
+    )
+    let institutions = []
+    OwnerShipCategory = OwnerShipCategory.map(category => {
+      if (category.code.includes("INDIVIDUAL")) {
+        return category.code;
+      }
+      else {
+        let code = category.code.split(".");
+        institutions.push({ code: code[1], parent: code[0], active: true });
+        return code[0];
+      }
+    });
+    OwnerShipCategory = OwnerShipCategory.filter((v, i, a) => a.indexOf(v) === i)
+    OwnerShipCategory = OwnerShipCategory.map(val => { return { code: val, active: true } });
+    
+    payload.MdmsRes['common-masters'].Institutions = institutions;
+    payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
 };
@@ -308,16 +330,18 @@ export const getData = async (action, state, dispatch) => {
 const propertyDetail = getPropertyDetails();
 const propertyIDDetails = getPropertyIDDetails();
 const ownerDetail = getOwnerDetails();
+const holderDetails=getHolderDetails();
 
 export const ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
 export const IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
 export const Details = getCommonCard({ propertyDetail });
+export const connectionHolderDetails=getCommonCard({holderHeader,sameAsOwner,holderDetails})
 
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, Details, ownerDetails, OwnerInfoCard }
+  children: { IDDetails, Details, ownerDetails,connectionHolderDetails, OwnerInfoCard }
 };
 
 export const formwizardSecondStep = {
@@ -349,6 +373,7 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("SewerageConnection", []));
   dispatch(prepareFinalObject("applyScreen", {}));
   dispatch(prepareFinalObject("searchScreen", {}));
+  dispatch(prepareFinalObject("connectionHolders", []));
 }
 
 const screenConfig = {
@@ -357,7 +382,19 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     pageReset(dispatch);
-    getData(action, state, dispatch).then(() => { });
+    getData(action, state, dispatch).then(() => { 
+      let ownershipCategory = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
+        []
+      );
+      dispatch(
+        prepareFinalObject(
+          "OwnershipCategory",
+          ownershipCategory
+        )
+      );
+    });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
     const propertyId = getQueryArg(window.location.href, "propertyId");

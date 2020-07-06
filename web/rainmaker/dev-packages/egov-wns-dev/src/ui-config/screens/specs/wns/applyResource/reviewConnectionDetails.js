@@ -34,6 +34,10 @@ export const propertyDetailsHeader = getHeader({
 export const propertyLocationDetailsHeader = getHeader({
   labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
 });
+const holderHeader = getHeader({
+  labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+  labelName: "Connection Holder Details"
+})
 
 export const reviewConnectionDetails = (isEditable = true) => {
   return getCommonGrayCard({
@@ -87,6 +91,7 @@ export const reviewConnectionDetails = (isEditable = true) => {
     viewTwo: propertyLocationDetails,
     viewThree: propertyOwnerDetails(),
     viewFour: getConnectionDetails(),
+    viewFive:connHolderDetailsSummary()
   });
 };
 
@@ -432,3 +437,93 @@ export const renderService = () => {
     taskNoOfToilets
   });
 }
+
+
+export const connectionHolderDetails={
+ mobileNumber : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"
+    },
+    { jsonPath: "applyScreen.connectionHolders[0].mobileNumber", callBack: handleNA }
+  ),
+   name : getLabelWithValue(
+    {
+      labelName: "Name",
+      labelKey: "WS_CONN_HOLDER_OWN_DETAIL_OWN_NAME_LABEL"
+    },
+    { jsonPath: "applyScreen.connectionHolders[0].name", callBack: handleNA }
+  ),
+   gender : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL"
+    },
+    {
+      jsonPath: "applyScreen.connectionHolders[0].gender",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "COMMON",
+        masterName: "GENDER"
+      }
+    }
+  ),
+   fatherName : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"
+    },
+    { jsonPath: "applyScreen.connectionHolders[0].fatherOrHusbandName", callBack: handleNA }
+  ),
+   relationship : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
+    },
+    { jsonPath: "applyScreen.connectionHolders[0].relationship", callBack: handleNA }
+  ),
+   correspondenceAddress :getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_OWN_DETAIL_CROSADD"
+    },
+    {
+      jsonPath: "applyScreen.connectionHolders[0].correspondenceAddress",
+      callBack: handleNA
+    }
+  ),
+   specialApplicantCategory : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
+    },
+    {
+      jsonPath: "applyScreen.connectionHolders[0].ownerType",
+      callBack: handleNA
+    }
+  )
+};
+const sameAsOwner=getCommonContainer({
+ sameAsOwnerDetails : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"
+    },
+    { jsonPath: "applyScreen.connectionHolders", callBack: handleNA }
+  ),
+})
+
+const connHolderDetailsSummary = () => {
+  return ({
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "common-div-css search-preview",
+      scheama: getCommonGrayCard({
+        div4: holderHeader,
+        connHoldDetail:getCommonContainer(connectionHolderDetails),
+        // sameOwner:getCommonContainer(sameAsOwner),
+      }),
+      items: [],
+      hasAddItem: false,
+      sourceJsonPath: "applyScreen.connectionHolders",
+      prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  })
+}
+
