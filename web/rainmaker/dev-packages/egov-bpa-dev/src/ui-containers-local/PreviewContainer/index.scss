@@ -9,29 +9,35 @@
 
 .bpa_doc_upload_btn > div > div > div {
   float: left; 
+  margin-right: 20px;
+  // padding-left: 8% !important;
+}
+.bpa_doc_upload_btn > div > div { 
   padding-left: 8% !important;
 }
-@media only screen and (max-width: 1400px) {
-  .bpa_doc_upload_btn > div > div > div {
-  width: 19%;
-  }
-  .preview_upload_btn > div > div > div {
-    width: 19%;
-  }
-}
-@media only screen and (min-width: 1401px) {
-  .bpa_doc_upload_btn > div > div > div {
-  width: 15%;
-  }
-  .preview_upload_btn > div > div > div {
-    width: 15%;
-  }
-}
+// @media only screen and (max-width: 1400px) {
+//   .bpa_doc_upload_btn > div > div > div {
+//   width: 19%;
+//   }
+//   .preview_upload_btn > div > div > div {
+//     width: 19%;
+//   }
+// }
+// @media only screen and (min-width: 1401px) {
+//   .bpa_doc_upload_btn > div > div > div {
+//   width: 15%;
+//   }
+//   .preview_upload_btn > div > div > div {
+//     width: 15%;
+//   }
+// }
 .preview_upload_btn > div > div > div {
-  float: left; 
+  float: left;
+  margin-right: 20px;
+}
+.preview_upload_btn > div > div{
   padding-left: 0% !important;
 }
-
 .bpa_doc_upload_btn > div > div > div > button,
 .preview_upload_btn > div > div > div > button {
   min-width: 33% !important;

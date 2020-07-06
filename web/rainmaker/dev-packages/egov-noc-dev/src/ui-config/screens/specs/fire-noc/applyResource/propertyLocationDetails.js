@@ -198,6 +198,7 @@ export const propertyLocationDetails = getCommonCard(
           className:"applicant-details-error autocomplete-dropdown",
           required: true
         },
+        required: true,
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -473,6 +474,7 @@ export const propertyLocationDetails = getCommonCard(
           },
           jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
         },
+        required: true,
         jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
         gridDefination: {
           xs: 12,

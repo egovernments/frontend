@@ -120,3 +120,15 @@ div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
 #custom-atoms-multiCheckListContainers > div > div > div > div > button {
   margin-right: 11.5%;
 }                    
+#material-ui-fieldSummary > div > div > div > div > div:nth-child(2) {
+  float: left;
+}
+#material-ui-fieldSummary > div > div > div > div > div:nth-child(3) {
+  margin-left: 15%;
+}
+
+#custom-containers-statictitle,
+#custom-containers-dynamicTitle {
+  font-size: 20px !important;
+  color: rgba(0, 0, 0, 0.87) !important;
+}
