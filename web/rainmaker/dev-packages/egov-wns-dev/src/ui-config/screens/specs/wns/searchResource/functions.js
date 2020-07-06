@@ -196,6 +196,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           queryObject.push({ key: key, value: convertDateToEpoch(searchScreenObject[key], "daystart") });
         } else if (key === "toDate") {
           queryObject.push({ key: key, value: convertDateToEpoch(searchScreenObject[key], "dayend") });
+        } else if (key === "applicationType") {
+          queryObject.push({ key: key, value: searchScreenObject[key].replace(/ /g,'_')});
         } else {
           queryObject.push({ key: key, value: searchScreenObject[key].trim() });
         }
