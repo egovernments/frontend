@@ -1,3 +1,5 @@
+import set from "lodash/set";
+import get from "lodash/get";
 const formConfig = {
     name: "checkBoxDetails",
     fields: {
@@ -21,6 +23,20 @@ const formConfig = {
             required: true,
             fullWidth: true,
         }
-    }
+    },
+    beforeInitForm: (action, store) => {
+        try {
+          let state = store.getState();
+          console.log("====action==", action);
+          debugger;
+          set(action, "form.fields.heightOfProperty.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.heightOfProperty", ""));
+          set(action, "form.fields.inflammableMaterial.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.inflammableMaterial", ""));
+          debugger;
+          console.log("====action==", action);
+          return action;
+        } catch (e) {
+          console.log(e);
+        }
+      },
 }
 export default formConfig;

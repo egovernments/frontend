@@ -5,7 +5,6 @@ import "./index.css";
 class PropertyInfoCard extends Component {
   render() {
     const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items2 = [], items = [], subSection = [], hideSubsectionLabel = false } = this.props;
-    debugger;
     return (
       <div>
         {items && (
