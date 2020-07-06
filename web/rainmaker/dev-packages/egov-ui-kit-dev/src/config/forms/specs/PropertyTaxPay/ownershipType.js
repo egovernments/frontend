@@ -48,7 +48,7 @@ const formConfig = {
       set(action, "form.fields.typeOfOwnership.value", currentOwnershipType);
       dispatch(prepareFormData("Properties[0].propertyDetails[0].subOwnershipCategory", currentOwnershipType ? currentOwnershipType : ownerDetails[0].value));
       dispatch(prepareFormData("Properties[0].propertyDetails[0].ownershipCategory",
-          get(state, `common.generalMDMSDataById.SubOwnerShipCategory[${currentOwnershipType ? currentOwnershipType : ownerDetails[0].value}]`).ownerShipCategory)
+          get(state, `common.generalMDMSDataById.OwnerShipCategory[${currentOwnershipType ? currentOwnershipType : ownerDetails[0].value}]`).ownerShipCategory)
       );
     }
     return action;
