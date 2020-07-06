@@ -15,6 +15,8 @@ export const resetFormWizard = (form, removeForm) => {
   const formKeys = form && Object.keys(form);
   const formToReset = [
     "basicInformation",
+    "bussinessDetails",
+    "checkBoxDetails",
     "propertyAddress",
     "plotDetails",
     "ownershipType",
