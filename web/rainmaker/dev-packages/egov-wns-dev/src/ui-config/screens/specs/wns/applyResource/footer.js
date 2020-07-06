@@ -287,11 +287,11 @@ const callBackForNext = async (state, dispatch) => {
       }
     }
     const isMode = getQueryArg(window.location.href, "mode");
-    if(isMode) { 
-      prepareModificationsDocumentsUploadData(state, dispatch);
-    } else {
+    // if(isMode) { 
+    //   prepareModificationsDocumentsUploadData(state, dispatch);
+    // } else {
       prepareDocumentsUploadData(state, dispatch);
-    }
+    //}
   }
   // console.log(activeStep);
 

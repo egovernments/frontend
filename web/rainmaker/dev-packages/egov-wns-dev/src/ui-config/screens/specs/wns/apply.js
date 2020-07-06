@@ -351,7 +351,8 @@ export const getData = async (action, state, dispatch) => {
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       
-      (isMode) ? await prefillModificationsDocuments(docs, "displayDocs", dispatch) : await prefillDocuments(docs, "displayDocs", dispatch);
+      //(isMode) ? await prefillModificationsDocuments(docs, "displayDocs", dispatch) : await prefillDocuments(docs, "displayDocs", dispatch);
+      await prefillDocuments(docs, "displayDocs", dispatch);
     }
   } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
@@ -377,9 +378,8 @@ export const formwizardFirstStep = {
   props: { id: "apply_form1" },
   children: { IDDetails, Details, ownerDetails, OwnerInfoCard }
 };
-
-let docDetails = (isMode) ? ModifyConnectionDocuments : documentDetails ;
-
+//let docDetails = (isMode) ? ModifyConnectionDocuments : documentDetails ;
+let docDetails = documentDetails ;
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
@@ -466,8 +466,9 @@ const screenConfig = {
     // const tenantId = getTenantId();
     // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     if(isMode) {
-      triggerModificationsDisplay(action, true);
-      prepareModificationsDocumentsUploadData(state, dispatch);
+       triggerModificationsDisplay(action, true);
+       prepareDocumentsUploadData(state, dispatch);
+      // prepareModificationsDocumentsUploadData(state, dispatch);
     } else {
       prepareDocumentsUploadData(state, dispatch);
       triggerModificationsDisplay(action, false);
