@@ -21,7 +21,9 @@ import {
   validateFeildsForSewerage,
   serviceConst,
   prepareModificationsDocumentsUploadData,
-  validateConnHolderDetails
+  validateConnHolderDetails,
+  isActiveProperty,
+  showHideFieldsFirstStep
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
@@ -133,6 +135,12 @@ const callBackForNext = async (state, dispatch) => {
       dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
+
+      if(!isActiveProperty(applyScreenObj.property)){
+        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));     
+        showHideFieldsFirstStep(dispatch,"",false);        
+      }
+
       dispatch(prepareFinalObject("applyScreen", applyScreenObj));
     } else {
       const water = get(
@@ -166,6 +174,13 @@ const callBackForNext = async (state, dispatch) => {
         applyScreenObject.connectionHolders = arrayHolderData;
       }
       if (searchPropertyId !== undefined && searchPropertyId !== "") {
+
+        if(!isActiveProperty(applyScreenObject.property)){
+          dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObject.property.status}`, labelName: `Property Status is ${applyScreenObject.property.status}` }, "warning"));     
+          showHideFieldsFirstStep(dispatch,"",false);
+          return false;
+        }
+
         if (validateConnHolderDetails(applyScreenObject)) {
                    isFormValid = true;
                    hasFieldToaster = false;

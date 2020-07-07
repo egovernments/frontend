@@ -1903,3 +1903,56 @@ export const getDomainLink = () =>{
     }
     return link
 }
+
+export const isActiveProperty = (propertyObj) =>{
+    if(propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW' ){      
+      return false;
+    }
+    return true;
+}
+
+
+export const showHideFieldsFirstStep = (dispatch, propertyId, value) => {
+    if(propertyId){
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID",
+          "props.value",
+          propertyId
+        )
+      );
+    }
+    dispatch(
+        handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails",
+        "visible",
+        value
+        )
+    );
+    dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.Details",
+          "visible",
+          value
+        )
+    );
+    dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.ownerDetails",
+          "visible",
+          value
+        )
+    );
+    dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.connectionHolderDetails",
+          "visible",
+          value
+        )
+    );
+}

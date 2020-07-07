@@ -90,7 +90,7 @@ export const searchPropertyTable = {
 };
 
 const getSelect=data=>{
-  if(data.rowData[3] === 'INACTIVE'){
+  if(data.rowData[3] !== 'SELECT'){
     return false;
   }
   window.location.href=`${getDomainLink()}${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`  

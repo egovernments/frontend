@@ -27,7 +27,9 @@ import {
   findAndReplace,
   prefillDocuments,
   prepareModificationsDocumentsUploadData,
-  prefillModificationsDocuments
+  prefillModificationsDocuments,
+  isActiveProperty,
+  showHideFieldsFirstStep
 } from "../../../../ui-utils/commons";
 import commonConfig from "config/common.js";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
@@ -37,6 +39,7 @@ import { togglePropertyFeilds, toggleSewerageFeilds, toggleWaterFeilds } from '.
 import { set } from "lodash";
 import { triggerModificationsDisplay } from "./../utils/index";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 let isMode = getQueryArg(window.location.href, "mode");
 isMode = (isMode) ? isMode.toUpperCase() : "";
@@ -291,6 +294,13 @@ export const getData = async (action, state, dispatch) => {
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
       let combinedArray = waterConnections.concat(sewerageConnections);
+
+      if(!isActiveProperty(combinedArray[0].property)){
+        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));     
+        showHideFieldsFirstStep(dispatch,"",false);
+      }
+
+
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       let data = get(state.screenConfiguration.preparedFinalObject, "applyScreen")
       if (data.connectionType !== "Metered") {
@@ -383,6 +393,10 @@ export const getData = async (action, state, dispatch) => {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
     let payload = await getPropertyResults(queryObject, dispatch);
     let propertyObj = payload.Properties[0];
+    if(!isActiveProperty(propertyObj)){
+      dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyObj.status}`, labelName: `Property Status is ${propertyObj.status}` }, "warning"));     
+      showHideFieldsFirstStep(dispatch,propertyObj.propertyId,false);
+    }
     dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
     dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
   }
