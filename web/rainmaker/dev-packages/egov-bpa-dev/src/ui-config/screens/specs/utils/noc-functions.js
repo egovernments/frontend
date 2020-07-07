@@ -122,13 +122,11 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     if ((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
         prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
     } else {
-        prepareFinalCards(state, dispatch, documentsPreview, [])
+        prepareFinalCards(state, dispatch, documentsPreview, [], isVisibleTrue)
     }
-
-
 };
 
-const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms) => {
+const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms, isVisibleTrue) => {
     let cards = [];
     documentsPreview.forEach((item) => {
         item.documentCode = getDocumentCodes(item.title)
@@ -141,16 +139,18 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
         {}
     );
     let cardReadOnly = false;
-    // if (bpaDetails.status == "INPROGRESS") {
-    //     cardReadOnly = true;
-    // }
+    let readOnly = false;
+    if(isVisibleTrue === false) {
+        cardReadOnly = true;
+        readOnly = true;
+    }
 
     documentCards && Object.keys(documentCards).map((doc) => {
         let card = {
             documentCode: doc,
             documents: documentCards[doc],
             wfState: documentCards[doc].wfState,
-            readOnly: false
+            readOnly: readOnly
         }
         cards.push(card);
     });
