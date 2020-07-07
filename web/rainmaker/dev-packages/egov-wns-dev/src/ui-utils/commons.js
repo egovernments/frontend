@@ -1499,6 +1499,31 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
             let data = [];
             payloadReceiptDetails.Bill[0].billDetails.map(curEl => data.push(curEl));
             let sortData = data.sort((a, b) => b.toPeriod - a.toPeriod);
+            let tenant = sortData[0].tenantId;
+            let demandId = sortData[0].demandId;
+            const queryString = [
+                { key: "demandId", value: demandId },
+                { key: "tenantId", value: tenant }
+            ]
+            let billTotalAmount=payloadReceiptDetails.Bill[0].totalAmount;
+
+             httpRequest(
+                "post",
+                "/billing-service/demand/_search",
+                "_demand",
+                queryString
+            ).then((getDemandBills)=>{
+                let demandAmount = getDemandBills.Demands[0].demandDetails.reduce((accum,item) => accum + item.taxAmount, 0);
+                if(billTotalAmount===demandAmount){
+                    payloadReceiptDetails.Bill[0].AdvanceAdjustedValue=0;//0
+                }else if(billTotalAmount<=0 && demandAmount>0){
+                    payloadReceiptDetails.Bill[0].AdvanceAdjustedValue=demandAmount;//-100,150
+                }else if((billTotalAmount>0&&demandAmount>0)&&(billTotalAmount<=demandAmount)){
+                    payloadReceiptDetails.Bill[0].AdvanceAdjustedValue=demandAmount-billTotalAmount;
+                }else if((billTotalAmount>0&&demandAmount>0)&&(billTotalAmount>=demandAmount)){
+                    payloadReceiptDetails.Bill[0].AdvanceAdjustedValue=0;
+                }
+            });
             sortData.shift();
             let totalAmount = 0;
             let previousArrears = 0;
