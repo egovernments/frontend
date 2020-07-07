@@ -613,7 +613,7 @@ export const setDocsForEditFlow = async (state) => {
 
 export const setWSDocuments = async (payload, sourceJsonPath, businessService) => {
     const uploadedDocData = get(payload, sourceJsonPath);
-    if (uploadedDocData !== "NA" && uploadedDocData.length > 0) {
+    if (uploadedDocData && uploadedDocData !== "NA" && uploadedDocData.length > 0) {
         const fileStoreIds =
             uploadedDocData &&
             uploadedDocData
@@ -718,6 +718,7 @@ export const prepareDocUploadRedux = async (state, dispatch) => {
 };
 
 export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
+    console.info("11111111111111111111111111111111111")
     let documentsUploadRedux = {};
     // const uploadedDocData = get(payload, sourceJsonPath);
     let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "WS");
@@ -1825,6 +1826,7 @@ export const prepareModificationsDocumentsUploadData = (state, dispatch) => {
 export const prefillModificationsDocuments = async (payload, destJsonPath, dispatch) => {
     let documentsUploadRedux = {};
     // const uploadedDocData = get(payload, sourceJsonPath);
+    console.info("GAMEMEMMEM")
     let uploadedDocs = await setWSDocuments(payload, "applyScreen.modificationsDocuments", "WS");
     if (uploadedDocs !== undefined && uploadedDocs !== null && uploadedDocs.length > 0) {
         documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
