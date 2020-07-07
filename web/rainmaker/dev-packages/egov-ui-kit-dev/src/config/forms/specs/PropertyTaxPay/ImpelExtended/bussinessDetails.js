@@ -70,13 +70,9 @@ const formConfig = {
   beforeInitForm: (action, store) => {
     try {
       let state = store.getState();
-      console.log("====action==", action);
-      debugger;
       let vasikaD =get(state.common.prepareFormData, "Properties[0].additionalDetails.vasikaDate", "");
       let vasikaDate=(vasikaD)? moment( vasikaD).format('DD-MM-YYYY'):null;
-      
       console.log("====vasikaDate======",vasikaDate);
-      
       set(action, "form.fields.VasikaNo.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.vasikaNo", ""));
       set(action, "form.fields.vasikaDate.value",vasikaDate);
       set(action, "form.fields.allotmentNo.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.allotmentNo", ""));

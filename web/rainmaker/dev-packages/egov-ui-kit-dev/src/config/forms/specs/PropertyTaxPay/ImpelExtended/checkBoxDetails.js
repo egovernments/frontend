@@ -27,12 +27,9 @@ const formConfig = {
     beforeInitForm: (action, store) => {
         try {
           let state = store.getState();
-          console.log("====action==", action);
           debugger;
           set(action, "form.fields.heightOfProperty.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.heightOfProperty", ""));
           set(action, "form.fields.inflammableMaterial.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.inflammableMaterial", ""));
-          debugger;
-          console.log("====action==", action);
           return action;
         } catch (e) {
           console.log(e);
