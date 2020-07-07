@@ -139,9 +139,10 @@ const callBackForNext = async (state, dispatch) => {
       if(!isActiveProperty(applyScreenObj.property)){
         dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));     
         showHideFieldsFirstStep(dispatch,"",false);        
+        dispatch(prepareFinalObject("applyScreen", applyScreenObj));
+        return false;
       }
 
-      dispatch(prepareFinalObject("applyScreen", applyScreenObj));
     } else {
       const water = get(
         state.screenConfiguration.preparedFinalObject,
