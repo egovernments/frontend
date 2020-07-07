@@ -7,7 +7,8 @@ import {
   getDateField,
   getSelectField,
   getCommonContainer,
-  getPattern
+  getPattern,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getIconStyle,
@@ -460,7 +461,36 @@ const tradeUnitCard = {
               xs: 12,
               sm: 4
             }
-          })
+          }),        
+          helpPdfButton:{
+            componentPath:"Button",
+            jsonPath:"Licenses[0].tradeLicenseDetail.pdf",
+            props:{
+              //variant: "outlined",
+              color:"primary",
+              href:"https://github.com/belegovgithub/egov-mdms-data/raw/BEL-CB-Impl/data/pb/TLHelp/TradeTypeSubtypeDetails_Secunderabad.pdf",
+              style:{
+                minWidth:"180px",
+                height:"48px",
+                marginRight:"45",
+                borderRadius: "inherit"
+              }
+            },
+            children:{
+              
+              nextButtonIcon:{
+                uiFramework:"custom-atoms",
+                componentPath:"Icon",
+                props:{
+                  iconName:"cloud_download"
+                }
+              },
+              nextButtonLabel:getLabel({
+                labelName:"Trade Type Help",
+                labelKey:"TRADETYPE_HELP"
+              }),
+            },
+           },                        
         },
         {
           style: {
