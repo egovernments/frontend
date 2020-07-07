@@ -9,6 +9,7 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import "./index.css";
+import { prepareDocumentsView } from "./search-preview";
 
 const downloadprintMenuConfig = (state, dispatch, purpose) => {
 
@@ -165,6 +166,7 @@ const screenConfig = {
     }
     const data = getAcknowledgementCard(config);
     setApplicationData(dispatch, applicationNumber, tenant);
+    prepareDocumentsView(state, dispatch);
     set(action, "screenConfig.components.div.props", data);
     return action;
   }
