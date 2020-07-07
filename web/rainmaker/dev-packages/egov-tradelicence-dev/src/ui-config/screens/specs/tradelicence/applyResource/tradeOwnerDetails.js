@@ -773,12 +773,14 @@ export const tradeOwnerDetails = getCommonCard({
           {
             key : 'ownership',
             callBack: ownerShipChange,
+            defaultValue : "INDIVIDUAL",
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
           },
           {
             key : 'subOwnership',
             callBack: subOwnerShipChange,
+            defaultValue : "INDIVIDUAL.SINGLEOWNER",
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
           }
