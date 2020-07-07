@@ -1960,6 +1960,11 @@ class FormWizardDataEntry extends Component {
       "ownershipType.fields.typeOfOwnership.value",
       ""
     );
+    if(propertyMethodAction ==="_update")
+    {
+      set(prepareFormData, "Properties[0].additionalDetails.updatedByULB","true");
+    }
+    
     if (financialYearFromQuery) {
       set(
         prepareFormData,
@@ -1967,6 +1972,7 @@ class FormWizardDataEntry extends Component {
         financialYearFromQuery
       );
     }
+   
 
     if (!!propertyId) {
       set(prepareFormData, "Properties[0].propertyId", propertyId);
