@@ -1400,3 +1400,23 @@ export const submitOCBpaApplication = async (state, dispatch) => {
     }
   }
 };
+export const getNocSearchResults = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/noc-services/v1/noc/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};

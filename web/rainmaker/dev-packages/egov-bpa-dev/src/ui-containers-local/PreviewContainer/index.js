@@ -172,7 +172,12 @@ class PreviewContainer extends Component {
         bpaDetails.documents = [fileObj];
       }
     }
-    prepareFinalObject("BPA", bpaDetails);
+    if(window.location.href.includes("noc-searchPreview")) {
+      prepareFinalObject("Noc", bpaDetails);
+    } else {
+      prepareFinalObject("BPA", bpaDetails);
+    }
+    
 
     prepareFinalObject("finalCardsforPreview", appDocumentList);
 
@@ -201,7 +206,11 @@ class PreviewContainer extends Component {
     }
 
     finalCardsforPreview[cardIndex].documents.splice(uploadedDocIndex, 1);
-    prepareFinalObject("BPA", bpaDetails);
+    if(window.location.href.includes("noc-searchPreview")) {
+      prepareFinalObject("Noc", bpaDetails);
+    } else {
+      prepareFinalObject("BPA", bpaDetails);
+    }
     //uploadedDocs.map()
     prepareFinalObject("finalCardsforPreview", finalCardsforPreview);
     prepareFinalObject("documentDetailsUploadRedux", finalCardsforPreview);
@@ -244,7 +253,11 @@ const mapStateToProps = (state, ownProps) => {
     "finalCardsforPreview",
     []
   );
-  const bpaDetails = get(screenConfiguration.preparedFinalObject, "BPA", {});
+  let modulePath = "BPA";
+  if(window.location.href.includes("noc-searchPreview")) {
+    modulePath = "Noc"
+  }
+  const bpaDetails = get(screenConfiguration.preparedFinalObject, modulePath, {});
   const wfState = get(
     screenConfiguration.preparedFinalObject.applicationProcessInstances,
     "state"
