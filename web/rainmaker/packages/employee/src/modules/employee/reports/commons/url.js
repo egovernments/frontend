@@ -11,12 +11,12 @@
 // };
 
 export const getResultUrl = (moduleName,reportName) => {
-  let reportResultUrl = `/report/${moduleName}/${reportName}/_get`;
+  let reportResultUrl = `/report/${moduleName}/_get`;
   return reportResultUrl;
 }
 
 export const getMetaDataUrl = (moduleName,reportName) => {
-  let metaDataUrl = `/report/${moduleName}/${reportName}/metadata/_get`;
+  let metaDataUrl = `/report/${moduleName}/metadata/_get`;
   return metaDataUrl;
 };
 
