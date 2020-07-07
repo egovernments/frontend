@@ -4,7 +4,8 @@ import {
   getBreak,
   getCommonContainer,
   getLabelWithValue,
-  getLabel
+  getLabel,
+  convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
@@ -46,7 +47,10 @@ const fieldSummaryContent = () => {
         },
         {
           jsonPath:
-            "BPA.additionalDetails.fieldinspection_pending[0].date"
+            "BPA.additionalDetails.fieldinspection_pending[0].date",
+            callBack: value => {
+              return convertEpochToDate(value) || checkValueForNA;
+            }
         }
       ),
       fieldSummaryTime: getLabelWithValue(
@@ -56,7 +60,10 @@ const fieldSummaryContent = () => {
         },
         {
           jsonPath:
-            "BPA.additionalDetails.fieldinspection_pending[0].time"
+            "BPA.additionalDetails.fieldinspection_pending[0].time",
+            callBack: value => {
+              return modifyTimeFormat(value);
+            }
         }
       ),
     // }),
@@ -111,3 +118,21 @@ export const fieldSummary = getCommonContainer({
     type: "array"
   }
 });
+
+const modifyTimeFormat = (value) => {
+  if(value) {
+    var time = 12 - Number(value.split(':')[0]);
+    if(time < 0 ) {
+      time = time * -1;
+      return time + ":" + value.split(':')[1] + " PM";
+    } else if(time == 0) {
+      return 12 + ":" + value.split(':')[1] + " PM";
+    } else if(time == 12) {
+      return 12 + ":" + value.split(':')[1] + " AM";
+    } else {
+        return value + " AM";
+    }
+  } else {
+    return "NA";
+  }  
+}
