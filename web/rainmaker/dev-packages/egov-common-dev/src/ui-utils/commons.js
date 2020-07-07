@@ -497,7 +497,6 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
     else {
       printPdf(fileRes[fileStoreId]);
     }
-    store.dispatch(toggleSpinner());
   });
 }
 
@@ -520,7 +519,6 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     },
   };
   try {
-    store.dispatch(toggleSpinner());
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
@@ -528,7 +526,6 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       ]
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
-        store.dispatch(toggleSpinner());
         store.dispatch(toggleSnackbar(true,  { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
         , "error"));
         return;
@@ -556,7 +553,6 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
               })
             } else {
               console.log('Some Error Occured while downloading Receipt!');
-              store.dispatch(toggleSpinner());
               store.dispatch(toggleSnackbar(true,  { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
               , "error"));
             }
@@ -565,7 +561,6 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     })
   } catch (exception) {
     console.log('Some Error Occured while downloading Receipt!');
-    store.dispatch(toggleSpinner());
     store.dispatch(toggleSnackbar(true,  { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
     , "error"));
   }
@@ -590,7 +585,6 @@ export const downloadBill = async (consumerCode, tenantId, configKey = "consolid
     },
   };
   try {
-    store.dispatch(toggleSpinner());
     const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [], { searchCriteria });
     const oldFileStoreId = get(billResponse.Bills[0], "fileStoreId")
     if (oldFileStoreId) {
@@ -605,7 +599,8 @@ export const downloadBill = async (consumerCode, tenantId, configKey = "consolid
       downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
     }
   } catch(error) {
-    store.dispatch(toggleSpinner());
+      console.log(error);
+
   }
 
 }
