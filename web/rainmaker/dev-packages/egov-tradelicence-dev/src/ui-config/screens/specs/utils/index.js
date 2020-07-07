@@ -1169,13 +1169,13 @@ const getBillingSlabData = async (
                 tradeUnit =>
                   item.tradeType === tradeUnit.tradeType
               );
-              let count = 0;
+              let count ;
               let UOM;
               if(tradeUnit){
                count = tradeUnit.uomValue;
                UOM = tradeUnit.uom;
             }
-              tradeTotal = (count!==0)?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
+              tradeTotal = count?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
               result.tradeUnitData.push({
                 rate: item.rate,
                 tradeTotal:tradeTotal,
