@@ -26,8 +26,6 @@ import {
   handleApplicationNumberDisplay,
   findAndReplace,
   prefillDocuments,
-  prepareModificationsDocumentsUploadData,
-  prefillModificationsDocuments,
   isActiveProperty,
   showHideFieldsFirstStep
 } from "../../../../ui-utils/commons";
@@ -135,39 +133,6 @@ export const documentDetails = getCommonCard({
     type: "array"
   }
 });
-
-
-
-export const ModifyConnectionDocuments = getCommonCard({
-  header: getCommonTitle(
-    { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
-    { style: { marginBottom: 18 } }
-  ),
-  subText: getCommonParagraph({
-    labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "WS_DOCUMENT_DETAILS_SUBTEXT"
-  }),
-  break: getBreak(),
-  documentList: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-wns",
-    componentPath: "ModificationDocumentListContainer",
-    props: {
-      buttonLabel: {
-        labelName: "UPLOAD FILE",
-        labelKey: "WS_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-      },
-      // description: "Only .jpg and .pdf files. 6MB max file size.",
-      inputProps: {
-        accept: "image/*, .pdf, .png, .jpeg"
-      },
-      maxFileSize: 6000
-    },
-    type: "array"
-  }
-});
-
 
 export const getMdmsData = async dispatch => {
   let mdmsBody = {
@@ -385,8 +350,6 @@ export const getData = async (action, state, dispatch) => {
       let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       let docs = get(state, "screenConfiguration.preparedFinalObject");
-
-      //(isMode) ? await prefillModificationsDocuments(docs, "displayDocs", dispatch) : await prefillDocuments(docs, "displayDocs", dispatch);
       await prefillDocuments(docs, "displayDocs", dispatch);
     }
   } else if (propertyID) {
@@ -419,13 +382,11 @@ export const formwizardFirstStep = {
   props: { id: "apply_form1" },
   children: { IDDetails, Details, ownerDetails, connectionHolderDetails, OwnerInfoCard }
 };
-//let docDetails = (isMode) ? ModifyConnectionDocuments : documentDetails ;
-let docDetails = documentDetails;
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form2" },
-  children: { docDetails },
+  children: { documentDetails },
   visible: false
 };
 
@@ -516,17 +477,12 @@ const screenConfig = {
         toggleSewerageFeilds(action, false);
       }
     }
-
-    // const tenantId = getTenantId();
-    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     if (isMode && isMode === 'MODIFY'){
       triggerModificationsDisplay(action, true);
-      prepareDocumentsUploadData(state, dispatch);
-      // prepareModificationsDocumentsUploadData(state, dispatch);
     } else {
-      prepareDocumentsUploadData(state, dispatch);
       triggerModificationsDisplay(action, false);
     }
+    prepareDocumentsUploadData(state, dispatch);
     return action;
   },
 

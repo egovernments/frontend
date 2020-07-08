@@ -485,9 +485,12 @@ const validatePropertyOwners = (applyScreenObject) => {
 }
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
+    let isMode = getQueryArg(window.location.href, "mode");
+    isMode = (isMode) ? isMode.toUpperCase() : "";
+    let currentDoc = (isMode && isMode === 'MODIFY') ? 'ModifyConnectionDocuments' : 'Documents'; 
     let documents = get(
         state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.Documents",
+        `screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.${currentDoc}`,
         []
     );
     documents = documents.filter(item => {
@@ -1801,100 +1804,6 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         alert('Some Error Occured while downloading!');
     }
 }
-
-export const prepareModificationsDocumentsUploadData = (state, dispatch) => {
-    let documents = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.ModifyConnectionDocuments",
-        []
-    );
-    documents = documents.filter(item => {
-        return item.active;
-    });
-    let documentsContract = [];
-    let tempDoc = {};
-    documents.forEach(doc => {
-        let card = {};
-        card["code"] = doc.documentType;
-        card["title"] = doc.documentType;
-        card["cards"] = [];
-        tempDoc[doc.documentType] = card;
-    });
-
-    documents.forEach(doc => {
-        // Handle the case for multiple muildings
-        let card = {};
-        card["name"] = doc.code;
-        card["code"] = doc.code;
-        card["required"] = doc.required ? true : false;
-        if (doc.hasDropdown && doc.dropdownData) {
-            let dropdown = {};
-            dropdown.label = "WS_SELECT_DOC_DD_LABEL";
-            dropdown.required = true;
-            dropdown.menu = doc.dropdownData.filter(item => {
-                return item.active;
-            });
-            dropdown.menu = dropdown.menu.map(item => {
-                return { code: item.code, label: getTransformedLocale(item.code) };
-            });
-            card["dropdown"] = dropdown;
-        }
-        tempDoc[doc.documentType].cards.push(card);
-    });
-
-    Object.keys(tempDoc).forEach(key => {
-        documentsContract.push(tempDoc[key]);
-    });
-
-    dispatch(prepareFinalObject("modificationsDocumentsContract", documentsContract));
-};
-
-export const prefillModificationsDocuments = async (payload, destJsonPath, dispatch) => {
-    let documentsUploadRedux = {};
-    // const uploadedDocData = get(payload, sourceJsonPath);
-    let uploadedDocs = await setWSDocuments(payload, "applyScreen.modificationsDocuments", "WS");
-    if (uploadedDocs !== undefined && uploadedDocs !== null && uploadedDocs.length > 0) {
-        documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
-            let docUploadRedux = {};
-            docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: payload.applyScreen.modificationsDocuments[key].fileStoreId }] };
-            let splittedString = payload.applyScreen.modificationsDocuments[key].documentType.split(".");
-            if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
-            else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
-            else { 
-                docUploadRedux[key].dropdown = { value: payload.applyScreen.modificationsDocuments[key].documentType }; 
-            }
-            docUploadRedux[key].documentType = payload.applyScreen.modificationsDocuments[key].documentType;
-            docUploadRedux[key].id = payload.applyScreen.modificationsDocuments[key].id;
-            docUploadRedux[key].isDocumentRequired = true;
-            docUploadRedux[key].isDocumentTypeRequired = true;
-            return docUploadRedux;
-        });
-        let docs = {};
-        for (let i = 0; i < documentsUploadRedux.length; i++) {
-            docs[i] = documentsUploadRedux[i][i];
-        }
-
-        var tempDoc = {},docType="";
-        var dList = payload.applyScreenMdmsData['ws-services-masters'].ModifyConnectionDocuments;
-        if(dList !== undefined && dList !==null){
-            for(var i=0;i<dList.length;i++){
-                for(var key in docs){
-                    docType = docs[key].documentType
-                    if(dList[i].code === docType.substring(0,docType.lastIndexOf("."))){
-                        tempDoc[i] = docs[key];
-                    }else if(dList[i].code === docType){
-                        tempDoc[i] = docs[key];
-                    }
-                }
-            }
-        }else{
-            tempDoc = docs;  
-        }
-
-        dispatch(prepareFinalObject("documentsUploadRedux", tempDoc));
-        dispatch(prepareFinalObject(destJsonPath, tempDoc));
-    }
-};
 
 export const getDomainLink = () =>{
     let link = "";
