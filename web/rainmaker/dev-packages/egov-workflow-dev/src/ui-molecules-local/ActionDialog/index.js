@@ -125,6 +125,8 @@ class ActionDialog extends React.Component {
     let wfDocumentsPath;
     if(dataPath === "BPA.workflow") {
       wfDocumentsPath = `${dataPath}.varificationDocuments`
+    } else if (dataPath === "Noc.workflow") {
+      wfDocumentsPath = `${dataPath}.documents`
     } else {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }
