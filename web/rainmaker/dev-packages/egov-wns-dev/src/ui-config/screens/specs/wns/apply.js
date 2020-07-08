@@ -93,7 +93,7 @@ export const reviewOwnerDetails = reviewOwner(process.env.REACT_APP_NAME !== "Ci
 
 export const reviewDocumentDetails = reviewDocuments();
 
-export const reviewModificationsDetails = reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen");
+export const reviewModificationsDetails = (isMode === 'MODIFY')?reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen"):{};
 
 const summaryScreenCitizen = getCommonCard({
   reviewConnDetails,
