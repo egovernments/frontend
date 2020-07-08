@@ -66,7 +66,7 @@ const downloadprintMenuConfig = (state, dispatch, purpose) => {
 }
 
 
-const setApplicationData = async (dispatch, applicationNumber, tenant) => {
+const setApplicationData = async (dispatch, applicationNumber, tenant,state) => {
   const queryObject = [
     {
       key: "tenantId",
@@ -79,6 +79,7 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
   ];
   const response = await getSearchResults(queryObject);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  prepareDocumentsView(state, dispatch);
 };
 
 const getRedirectionURL = () => {
@@ -165,8 +166,7 @@ const screenConfig = {
       printMenu
     }
     const data = getAcknowledgementCard(config);
-    setApplicationData(dispatch, applicationNumber, tenant);
-    prepareDocumentsView(state, dispatch);
+    setApplicationData(dispatch, applicationNumber, tenant,state);
     set(action, "screenConfig.components.div.props", data);
     return action;
   }
