@@ -348,9 +348,25 @@ export const newCollectionDetailsCard = getCommonCard(
         },
         Required: false,
         jsonPath: "Demands[0].additionalDetails.comment"
-      })
+      }),
+
+      address: getTextField({
+        label: {
+          labelName: "Consumer Address",
+          // labelKey: "UC_ADDRESS_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Address ",
+          labelKey: "UC_ADDRESS_PLACEHOLDER"
+        },
+        Required: false,
+        jsonPath: "Demands[0].additionalDetails.address"
+      }),
     })
   },
+    //})
+    
+ //},
   {
     style: {
       overflow: "visible"
