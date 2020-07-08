@@ -71,16 +71,15 @@ const formConfig = {
     try {
       let state = store.getState();
       let vasikaD =get(state.common.prepareFormData, "Properties[0].additionalDetails.vasikaDate", "");
-      let vasikaDate=(vasikaD)? moment( vasikaD).format('DD-MM-YYYY'):null;
-      console.log("====vasikaDate======",vasikaDate);
-      set(action, "form.fields.VasikaNo.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.vasikaNo", ""));
+      let vasikaDate=vasikaD ? new Date(vasikaD):null;
+      let allotmentD =get(state.common.prepareFormData, "Properties[0].additionalDetails.allotmentDate", "");
+      let allotmentDate=allotmentD ? new Date(allotmentD):null;
       set(action, "form.fields.vasikaDate.value",vasikaDate);
+      set(action, "form.fields.allotmentDate.value",allotmentDate);
+      set(action, "form.fields.VasikaNo.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.vasikaNo", ""));
       set(action, "form.fields.allotmentNo.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.allotmentNo", ""));
       set(action, "form.fields.businessName.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.businessName", ""));
       set(action, "form.fields.remrks.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.remrks", ""));
-      set(action, "form.fields.allotmentDate.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.allotmentDate", ""));
-      debugger;
-      console.log("====action==", action);
       return action;
     } catch (e) {
       console.log(e);
