@@ -162,7 +162,7 @@ const screenConfig = {
             connectionDetailsDownload
           }
         },
-        headerSubDiv: {
+       /* headerSubDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
           children: {
@@ -193,7 +193,7 @@ const screenConfig = {
                 })
             }           
           }
-        },
+        },*/
         connectionDetails,
         getConnectionDetailsFooterAction
       }

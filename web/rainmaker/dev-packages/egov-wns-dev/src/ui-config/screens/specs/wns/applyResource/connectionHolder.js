@@ -177,11 +177,11 @@ import {
           name: "connection holder details",
           key: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS",
         },
-        jsonPath: "connectionHolders[0].sameAsPeropertyAddress",
+        jsonPath: "connectionHolders[0].sameAsPropertyAddress",
         required: false,
       },
       type: "array",
-      jsonPath: "connectionHolders[0].sameAsPeropertyAddress"
+      jsonPath: "connectionHolders[0].sameAsPropertyAddress"
     },
     });
 

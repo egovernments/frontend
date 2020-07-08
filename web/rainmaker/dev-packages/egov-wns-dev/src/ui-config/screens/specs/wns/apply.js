@@ -519,7 +519,7 @@ const screenConfig = {
 
     // const tenantId = getTenantId();
     // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    if (isMode) {
+    if (isMode && isMode === 'MODIFY'){
       triggerModificationsDisplay(action, true);
       prepareDocumentsUploadData(state, dispatch);
       // prepareModificationsDocumentsUploadData(state, dispatch);

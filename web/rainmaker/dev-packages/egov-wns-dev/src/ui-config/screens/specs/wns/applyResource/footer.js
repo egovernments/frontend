@@ -25,7 +25,7 @@ import {
   isActiveProperty,
   showHideFieldsFirstStep
 } from "../../../../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
 import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -163,7 +163,7 @@ const callBackForNext = async (state, dispatch) => {
      let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
      let holderData = connectionHolderObj[0];
       if (holderData !== null && holderData !== undefined) {
-        if (holderData.sameAsPeropertyAddress === true) {
+        if (holderData.sameAsPropertyAddress === true) {
           holderData = null
         }
       }
@@ -655,6 +655,7 @@ export const renderSteps = (activeStep, dispatch) => {
         ),
         dispatch
       );
+
   }
 };
 

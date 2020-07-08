@@ -91,7 +91,8 @@ export const reviewConnectionDetails = (isEditable = true) => {
     viewTwo: propertyLocationDetails,
     viewThree: propertyOwnerDetails(),
     viewFour: getConnectionDetails(),
-    viewFive:connHolderDetailsSummary()
+    viewFive:connHolderDetailsSummary(),
+    viewSix:connHolderDetailsSameAsOwnerSummary()
   });
 };
 
@@ -440,7 +441,7 @@ export const renderService = () => {
 
 
 export const connectionHolderDetails={
- mobileNumber : getLabelWithValue(
+  mobileNumber : getLabelWithValue(
     {
       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"
     },
@@ -497,14 +498,6 @@ export const connectionHolderDetails={
     }
   )
 };
-const sameAsOwner=getCommonContainer({
- sameAsOwnerDetails : getLabelWithValue(
-    {
-      labelKey: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"
-    },
-    { jsonPath: "applyScreen.connectionHolders", callBack: handleNA }
-  ),
-})
 
 const connHolderDetailsSummary = () => {
   return ({
@@ -515,12 +508,41 @@ const connHolderDetailsSummary = () => {
       scheama: getCommonGrayCard({
         div4: holderHeader,
         connHoldDetail:getCommonContainer(connectionHolderDetails),
-        // sameOwner:getCommonContainer(sameAsOwner),
       }),
       items: [],
       hasAddItem: false,
       sourceJsonPath: "applyScreen.connectionHolders",
       prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  })
+}
+
+
+export const connectionHolderSameAsOwnerDetails={
+ sameAsOwnerDetails : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"
+    },
+    { jsonPath: "applyScreen.connectionHolders" }
+  )
+} 
+
+const connHolderDetailsSameAsOwnerSummary = () => {
+  return ({
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "common-div-css search-preview",
+      scheama: getCommonGrayCard({
+        div4: holderHeader,
+        sameAsOwnerDetails:getCommonContainer(connectionHolderSameAsOwnerDetails),
+      }),
+      items: [],
+      hasAddItem: false,
+      sourceJsonPath: "connectionHolders[0].sameAsPropertyAddress",
+      prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
