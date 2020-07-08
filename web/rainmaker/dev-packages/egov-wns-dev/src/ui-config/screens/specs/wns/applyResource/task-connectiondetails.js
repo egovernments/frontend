@@ -8,6 +8,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
 
 const service = getQueryArg(window.location.href, "service")
+const applicationNumber = getQueryArg(window.location.href, "applicationNumber")
 
 const getHeader = label => {
     return {
@@ -27,41 +28,6 @@ const getHeader = label => {
 export const connectionDetailsHeader = getHeader({
     labelKey: "WS_COMMON_CONNECTION_DETAILS"
 });
-
-// export const taskApplicationType = getLabelWithValue(
-//     {
-//         labelKey: "WS_APPLY_FOR"
-//     },
-//     {
-//         jsonPath: "WaterConnection[0].service",
-//     })
-
-// export const taskNumberOfTapsPropsed = getLabelWithValue(
-//     {
-//         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
-//     },
-//     {
-//         jsonPath: "WaterConnection[0].proposedTaps",
-//     })
-// export const taskPipeSizeProposed = getLabelWithValue(
-//     {
-//         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
-//     },
-//     { jsonPath: "WaterConnection[0].proposedPipeSize" })
-
-// export const taskNoOfClosets = getLabelWithValue(
-//     {
-//         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
-//     },
-//     { jsonPath: "WaterConnection[0].proposedWaterClosets" }
-// );
-
-// export const taskNoOfToilets = getLabelWithValue(
-//     {
-//         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
-//     },
-//     { jsonPath: "WaterConnection[0].proposedToilets" }
-// );
 
 
 export const getConnectionDetails = () => {
@@ -138,8 +104,11 @@ export const getConnectionDetails = () => {
 
 }
 
-export const connectionDetails=(service === serviceConst.WATER)?connectionDetailsWater:connectionDetailsSewerage;
+ const connectionDetails=(applicationNumber!==null&&applicationNumber!==undefined)?(applicationNumber.includes("WS"))?connectionDetailsWater:connectionDetailsSewerage:"";
 
+export const connDetailsWater=connectionDetailsWater;
+
+export const connDetailsSewerage=connectionDetailsSewerage;
 export const renderService = () => {
     return getCommonContainer(connectionDetails)
 }

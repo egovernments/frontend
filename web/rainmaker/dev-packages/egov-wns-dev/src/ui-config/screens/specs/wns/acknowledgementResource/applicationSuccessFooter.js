@@ -135,11 +135,11 @@ const generatePdfAndDownload = (
   // });
 };
 
-const handleAppDownloadAndPrint = (state, dispatch, action) => {
+const handleAppDownloadAndPrint = async(state, dispatch, action) => {
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
   const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
-  const { WaterConnection, DocumentsData, SewerageConnection } = state.screenConfiguration.preparedFinalObject;
+  const { WaterConnection, DocumentsData,SewerageConnection} = state.screenConfiguration.preparedFinalObject;
   let filteredDocs = DocumentsData;
   filteredDocs.map(val => {
     if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) { val.title = "WS_OWNER.IDENTITYPROOF"; }
@@ -154,28 +154,28 @@ const handleAppDownloadAndPrint = (state, dispatch, action) => {
       state,
       "screenConfiguration.preparedFinalObject", {}));
       let fileName=action==="print"?"print":"application.pdf";
-    var cc = generateWSAcknowledgement(WSRequestBody, fileName);
+      dispatch(prepareFinalObject("WaterConnection[0]", WSstoreData[0]));
+    var cc = await generateWSAcknowledgement(WSRequestBody, fileName,"WATER");
+   
     if(cc){
+      const { SewerageConnection } = state.screenConfiguration.preparedFinalObject;
       dispatch(prepareFinalObject("WaterConnection[0]", SewerageConnection[0]));
       let SWRequestBody=cloneDeep(get(
         state,
         "screenConfiguration.preparedFinalObject", {}));
          fileName=action==="print"?"print":"sewerage-application.pdf";
-      cc = generateWSAcknowledgement(SWRequestBody, fileName);
+      cc = await generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE");
       if(cc){
         dispatch(prepareFinalObject("WaterConnection[0]", WSstoreData[0]));        
       }
     }
-    // downloadApp(WaterConnection, 'application');
-    // downloadApp(WaterConnection, "application", action);
-    //downloadApp(SewerageConnection, "application", action);
   } else if (applicationNumber) {
     if (applicationNumber.includes("WS")) {
       let water=cloneDeep(get(
         state,
         "screenConfiguration.preparedFinalObject", {}))
          let fileName=action==="print"?"print":"application.pdf";
-      cc=generateWSAcknowledgement(water, fileName);
+      cc=generateWSAcknowledgement(water, fileName,"WATER");
     } else if (applicationNumber.includes("SW")) {
       let SWstoreData=cloneDeep(SewerageConnection);
       dispatch(prepareFinalObject("WaterConnection[0]", SWstoreData[0]));
@@ -183,7 +183,7 @@ const handleAppDownloadAndPrint = (state, dispatch, action) => {
         state,
         "screenConfiguration.preparedFinalObject", {}));
         let fileName=action==="print"?"print":"sewerage-application.pdf";
-      cc = generateWSAcknowledgement(SWRequestBody, fileName);
+      cc = generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE");
     }
   }
 }
