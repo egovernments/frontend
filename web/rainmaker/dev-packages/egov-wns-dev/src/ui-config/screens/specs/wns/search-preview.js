@@ -545,7 +545,7 @@ const searchResults = async (action, state, dispatch, applicationNumber,processI
     }]
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-      if(!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA'){        
+      if(!payload.WaterConnection[0].connectionHolders || payload.WaterConnection[0].connectionHolders === 'NA'){        
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible",false);
       }else{
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible",false);
