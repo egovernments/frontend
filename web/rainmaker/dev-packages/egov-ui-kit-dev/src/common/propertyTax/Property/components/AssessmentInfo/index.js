@@ -125,11 +125,11 @@ const getVasikaItems = (additionalDetails) => {
           },
           {
             key: "PT_COMMON_VASIKA_DATE",
-            value:  additionalDetails.allotmentNo || "NA",
+            value: vasika_date ? `${vasika_date}` : "NA",
           },
           {
             key: "PT_COMMON_ALLOTMENT_NO",
-            value: vasika_date ? `${vasika_date}` : "NA",
+            value:  additionalDetails.allotmentNo || "NA",
           },
           {
             key: "PT_COMMON_ALLOTMENT_DATE",
