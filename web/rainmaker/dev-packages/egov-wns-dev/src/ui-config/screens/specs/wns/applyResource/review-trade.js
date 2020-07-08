@@ -92,7 +92,8 @@ export const getReviewConnectionDetails = (isEditable = true) => {
     viewTwo: propertyLocationDetails,
     viewThree: ownerDetails,
     viewFour: getConnectionDetails(),
-    viewFive:taskConnHolderDetailsSummary()
+    viewFive:taskConnHolderDetailsSummary(),
+    viewSix:connHolderDetailsSameAsOwnerSummary()
 
   });
 };
@@ -446,6 +447,36 @@ const taskConnHolderDetailsSummary = () => {
       hasAddItem: false,
       sourceJsonPath: "WaterConnection[0].connectionHolders",
       prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  })
+}
+
+
+export const connectionHolderSameAsOwnerDetails={
+ sameAsOwnerDetails : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"
+    },
+    { jsonPath: "connectionHolders" }
+  )
+} 
+
+const connHolderDetailsSameAsOwnerSummary = () => {
+  return ({
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "common-div-css search-preview",
+      scheama: getCommonGrayCard({
+        div4: holderHeader,
+        sameAsOwnerDetails:getCommonContainer(connectionHolderSameAsOwnerDetails),
+      }),
+      items: [],
+      hasAddItem: false,
+      sourceJsonPath: "connectionHolders",
+      prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
