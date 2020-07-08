@@ -1,18 +1,28 @@
 import { propertyDetails,locationDetails,propertyOwnerDetail} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-trade";
-import {connectionDetails} from "egov-wns/ui-config/screens/specs/wns/applyResource/task-connectiondetails";
-import {plumberDetails, roadDetails, activateDetails, additionDetails} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-owner";
+import {connDetailsWater,connDetailsSewerage} from "egov-wns/ui-config/screens/specs/wns/applyResource/task-connectiondetails";
+import {plumberDetails, roadDetails, activateDetails, additionDetailsWater,additionDetailsSewerage} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-owner";
 import get from "lodash/get";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
-export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print") => {
+export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print",service) => {
     propertyDetails.reviewPropertyType.localiseValue=true;
     propertyDetails.reviewPropertyUsageType.localiseValue=true;
     propertyDetails.reviewPropertySubUsageType.localiseValue=true;
     propertyOwnerDetail.gender.localiseValue=true;
     const propertyDetail = generateKeyValue(preparedFinalObject, propertyDetails);
     const locationDetail = generateKeyValue(preparedFinalObject, locationDetails);
-    const connectionDetail = generateKeyValue(preparedFinalObject, connectionDetails);
-    const additionDetail = generateKeyValue(preparedFinalObject, additionDetails);
+    let connectionDetail={};
+    if(service==="WATER"){
+         connectionDetail = generateKeyValue(preparedFinalObject, connDetailsWater);
+    }else{
+         connectionDetail = generateKeyValue(preparedFinalObject, connDetailsSewerage);
+    }
+    let additionDetail={};
+    if(service==="WATER"){
+         additionDetail = generateKeyValue(preparedFinalObject, additionDetailsWater);
+    }else{
+        additionDetail = generateKeyValue(preparedFinalObject, additionDetailsSewerage);
+    }
     const plumberDetail = generateKeyValue(preparedFinalObject, plumberDetails);
     const roadDetail = generateKeyValue(preparedFinalObject, roadDetails);
     const activateDetail = generateKeyValue(preparedFinalObject, activateDetails);

@@ -608,42 +608,31 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelKey: "WS_APPLICATION" },
     link: () => {
-      // const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
-      // let filteredDocs = DocumentsData;
-      // filteredDocs.map((val) => {
-      //   if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
-      //     val.title = "WS_OWNER.IDENTITYPROOF";
-      //   } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
-      //     val.title = "WS_OWNER.ADDRESSPROOF";
-      //   }
-      // });
-      // WaterConnection[0].pdfDocuments = filteredDocs;
-      generateWSAcknowledgement(get(
-        state,
-        "screenConfiguration.preparedFinalObject", {}), `application.pdf`);
-      // downloadApp(WaterConnection, 'application');
+      if(applicationNumber.includes("WS")){
+        generateWSAcknowledgement(get(
+          state,
+          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"WATER");
+      }else{
+        generateWSAcknowledgement(get(
+          state,
+          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"SEWERAGE");
+      }
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "WS_APPLICATION" },
     link: () => {
-      // const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
-      // let filteredDocs = DocumentsData;
-      // filteredDocs.map((val) => {
-      //   if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
-      //     val.title = "WS_OWNER.IDENTITYPROOF";
-      //   } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
-      //     val.title = "WS_OWNER.ADDRESSPROOF";
-      //   }
-      // });
-      // WaterConnection[0].pdfDocuments = filteredDocs;
-      generateWSAcknowledgement(get(
-        state,
-        "screenConfiguration.preparedFinalObject", {}), 'print');
+      if(applicationNumber.includes("WS")){
+        generateWSAcknowledgement(get(
+          state,
+          "screenConfiguration.preparedFinalObject", {}), "print","WATER");
+      }else{
+        generateWSAcknowledgement(get(
+          state,
+          "screenConfiguration.preparedFinalObject", {}), "print","SEWERAGE");
+      }
     },
-    //   downloadApp(WaterConnection, 'application', 'print');
-    // },
     leftIcon: "assignment"
   };
   switch (appStatus) {
