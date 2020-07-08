@@ -113,10 +113,19 @@ const applicationOverview = getCommonContainer({
           labelKey: "BPA_OC_VIEW_APP_BUTTON"
         })
       },
+
       onClickDefination: {
-        action: "page_change",
-        path: getRedirectionURL()
-      },
+        action: "condition",
+        callBack: (state, dispatch) => {
+          let nocData = get( state.screenConfiguration.preparedFinalObject, "Noc", "");
+          if(nocData){
+            let bpaAppurl = window.location.origin+'/egov-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
+            window.open(bpaAppurl, '_blank');
+
+          }
+        }
+      }
+      
     },
   }),
 });
