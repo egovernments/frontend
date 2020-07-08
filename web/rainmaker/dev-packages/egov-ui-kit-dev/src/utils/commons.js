@@ -278,10 +278,16 @@ export const fetchImages = (actionArray) => {
 //   return userInfo;
 // };
 
-export const getCityNameByCode = (code, cities) => {
+/* export const getCityNameByCode = (code, cities) => {
   const city = (cities || []).filter((city) => city.key === code);
   return (city && city.length && city[0].text) || "";
+}; */
+
+export const getCityNameByCode = (code, localizationLabels) => {
+  const tenantId=code&&code.replace('.','_').toUpperCase();
+  return code&&getTranslatedLabel(`TENANT_TENANTS_${tenantId}`, localizationLabels);
 };
+
 
 export const isImage = (url) => {
   const acceptedImageTypes = ["jpg", "jpeg", "png"];
