@@ -1,10 +1,10 @@
 import { propertyDetails,locationDetails,propertyOwnerDetail} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-trade";
 import {connDetailsWater,connDetailsSewerage} from "egov-wns/ui-config/screens/specs/wns/applyResource/task-connectiondetails";
-import {plumberDetails, roadDetails, activateDetails, additionDetailsWater,additionDetailsSewerage} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-owner";
+import {plumberDetails, roadDetails, additionDetailsWater,additionDetailsSewerage,activateDetailsMeter,activateDetailsNonMeter} from "egov-wns/ui-config/screens/specs/wns/applyResource/review-owner";
 import get from "lodash/get";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
-export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print",service) => {
+export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print",service,connType) => {
     propertyDetails.reviewPropertyType.localiseValue=true;
     propertyDetails.reviewPropertyUsageType.localiseValue=true;
     propertyDetails.reviewPropertySubUsageType.localiseValue=true;
@@ -25,7 +25,13 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     }
     const plumberDetail = generateKeyValue(preparedFinalObject, plumberDetails);
     const roadDetail = generateKeyValue(preparedFinalObject, roadDetails);
-    const activateDetail = generateKeyValue(preparedFinalObject, activateDetails);
+    let activateDetail={};
+    if(connType==="Metered"){
+      activateDetail = generateKeyValue(preparedFinalObject, activateDetailsMeter);
+    }else{
+     activateDetail = generateKeyValue(preparedFinalObject, activateDetailsNonMeter);   
+    }
+    
 
     let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
     let WaterConnection = get(preparedFinalObject, 'WaterConnection[0]', {});
