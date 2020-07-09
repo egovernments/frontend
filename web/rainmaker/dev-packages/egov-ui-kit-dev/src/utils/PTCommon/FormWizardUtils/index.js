@@ -570,7 +570,7 @@ export const removeAdhocIfDifferentFY = (property, fY) => {
 export const getSortedTaxSlab = (estimateResponse) => {
   if (estimateResponse && estimateResponse.Calculation && estimateResponse.Calculation.length > 0) {
     if (estimateResponse.Calculation[0].taxHeadEstimates && estimateResponse.Calculation[0].taxHeadEstimates.length > 0) {
-      const taxHeadKeys = ["PT_TAX", "PT_CANCER_CESS", "PT_TIME_REBATE", "PT_TIME_PENALTY", "PT_TIME_INTEREST", "PT_OWNER_EXEMPTION", "PT_ROUNDOFF", "PT_UNIT_USAGE_EXEMPTION", "PT_FIRE_CESS"];
+      const taxHeadKeys = ["PT_TAX", "PT_CANCER_CESS", "PT_TIME_REBATE", "PT_TIME_PENALTY", "PT_TIME_INTEREST", "PT_OWNER_EXEMPTION", "PT_ROUNDOFF", "PT_UNIT_USAGE_EXEMPTION", "PT_FIRE_CESS","PT_ADVANCE_CARRYFORWARD"];
       const tempArray = estimateResponse.Calculation[0].taxHeadEstimates;
       if (tempArray && tempArray.length > 0) {
         let tempArray1 = [];
