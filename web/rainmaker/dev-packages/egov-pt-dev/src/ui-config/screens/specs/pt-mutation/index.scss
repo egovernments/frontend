@@ -1,7 +1,12 @@
 #material-ui-propertySearchTabs{
-    background-color: transparent !important;
+  background-color: transparent !important;
   box-shadow: none !important;
   margin-top: 0px !important; 
+    div{
+        div{
+          background-color: transparent;
+        }
+    }
 }
 div[class^="NavPills-root"] {
   background-color: transparent;
