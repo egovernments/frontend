@@ -6,7 +6,7 @@ import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import {getWorkFlowData } from "../../ui-utils/commons"
+import {getWorkFlowData, getDomainLink } from "../../ui-utils/commons"
 import { httpRequest } from "../../ui-utils/api";
 
 class Footer extends React.Component {
@@ -59,16 +59,10 @@ class Footer extends React.Component {
             }
 
           });
-          
-          let baseURL = "";
-
-          if(process.env.NODE_ENV !== "development"){
-             baseURL += "/"+process.env.REACT_APP_NAME.toLowerCase()
-          }
-            
-          this.props.setRoute(
+          window.location.href = `${getDomainLink()}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
+          /*this.props.setRoute(
             `${baseURL}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
-          );
+          );*/
         }
       };
     //if(applicationType === "MODIFY"){
