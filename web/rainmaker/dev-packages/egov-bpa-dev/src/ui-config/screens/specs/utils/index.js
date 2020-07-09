@@ -3985,11 +3985,11 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     if(mdmsData && mdmsData.BPA && wfState ) {
       let documents = mdmsData.BPA.DocTypeMapping;
       let requiredDocTypes;
-      documents.forEach( doc => {
-        if(doc.WFState === wfState.state.state){
-          appState =  wfState.state.state;
-        }
-      });
+      // documents.forEach( doc => {
+      //   if(doc.WFState === wfState.state.state){
+          appState = appWfState;
+      //   }
+      // });
     };
     let proInstance = wfPayload.ProcessInstances[0];
     let nextActions = get(proInstance, "nextActions");
@@ -4297,11 +4297,12 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-  if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
-    prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
-  } else {
-    prepareFinalCards(state, dispatch, documentsPreview, [] )
-  }
+   prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
+  // if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
+  //   prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
+  // } else {
+  //   prepareFinalCards(state, dispatch, documentsPreview, [] )
+  // }
  
 
 };
