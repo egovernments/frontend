@@ -266,8 +266,9 @@ export const getData = async (action, state, dispatch) => {
         dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));     
         showHideFieldsFirstStep(dispatch,"",false);
       }
-
-
+      // For Modify connection details
+      if(isMode && isMode === 'MODIFY') { delete combinedArray[0].id; combinedArray[0].documents = []; }
+      
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       if(combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA"){
         combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
@@ -376,6 +377,17 @@ export const getData = async (action, state, dispatch) => {
       }
       let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
+      //For Modify Connection hide the connection details card
+      if(isMode && isMode === 'MODIFY'){
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard",
+            "visible",
+            false
+          )
+        );
+      }
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch, isMode);
     }

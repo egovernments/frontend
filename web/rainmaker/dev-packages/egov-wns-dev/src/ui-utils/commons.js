@@ -359,18 +359,18 @@ export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedTaps") &&
         applyScreenObject["proposedTaps"] !== undefined &&
         applyScreenObject["proposedTaps"] !== "" &&
-        applyScreenObject["proposedTaps"].match(/^[0-9]*$/i) &&
+        applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
         applyScreenObject.hasOwnProperty("proposedPipeSize") &&
         applyScreenObject["proposedPipeSize"] !== undefined &&
         applyScreenObject["proposedPipeSize"] !== "" &&
         applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
         applyScreenObject["proposedWaterClosets"] !== undefined &&
         applyScreenObject["proposedWaterClosets"] !== "" &&
-        applyScreenObject["proposedWaterClosets"].match(/^[0-9]*$/i) &&
+        applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
         applyScreenObject.hasOwnProperty("proposedToilets") &&
         applyScreenObject["proposedToilets"] !== undefined &&
         applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].match(/^[0-9]*$/i)
+        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
     ) { return true; } else { return false; }
 }
 
@@ -415,7 +415,7 @@ export const validateFeildsForWater = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedTaps") &&
         applyScreenObject["proposedTaps"] !== undefined &&
         applyScreenObject["proposedTaps"] !== "" &&
-        applyScreenObject["proposedTaps"].match(/^[0-9]*$/i) &&
+        applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
         applyScreenObject.hasOwnProperty("proposedPipeSize") &&
         applyScreenObject["proposedPipeSize"] !== undefined &&
         applyScreenObject["proposedPipeSize"] !== ""
@@ -436,11 +436,11 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
         applyScreenObject["proposedWaterClosets"] !== undefined &&
         applyScreenObject["proposedWaterClosets"] !== "" &&
-        applyScreenObject["proposedWaterClosets"].match(/^[0-9]*$/i) &&
+        applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
         applyScreenObject.hasOwnProperty("proposedToilets") &&
         applyScreenObject["proposedToilets"] !== undefined &&
         applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].match(/^[0-9]*$/i)
+        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
     ) { return true; } else { return false }
 }
 
@@ -835,6 +835,9 @@ export const applyForWater = async (state, dispatch) => {
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
+            if(isMode && isMode === 'MODIFY'){
+                dispatch(prepareFinalObject("applyScreen", response.WaterConnection));
+            }
             setApplicationNumberBox(state, dispatch);
         }
         return true;
@@ -873,6 +876,9 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
+            if(isMode && isMode === 'MODIFY'){
+                dispatch(prepareFinalObject("applyScreen", response.SewerageConnections));
+            }
             setApplicationNumberBox(state, dispatch);
         }
         return true;

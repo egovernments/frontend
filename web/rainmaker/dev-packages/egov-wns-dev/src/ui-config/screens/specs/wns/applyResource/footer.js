@@ -122,7 +122,7 @@ const callBackForNext = async (state, dispatch) => {
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
     // }
-    if (getQueryArg(window.location.href, "action") === "edit") {
+    if (getQueryArg(window.location.href, "action") === "edit" && !isMode ) {
       let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       const uploadedDocData = application.documents;
       const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
@@ -197,6 +197,7 @@ const callBackForNext = async (state, dispatch) => {
           showHideFieldsFirstStep(dispatch,"",false);
           return false;
         }
+        // TODO else part update propertyId.
 
         if (validateConnHolderDetails(applyScreenObject)) {
                    isFormValid = true;
@@ -284,7 +285,7 @@ const callBackForNext = async (state, dispatch) => {
                 );
                 if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
                 else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-              } else if (sewerChecked && sewerData.length === 0) {
+              } else if ((sewerChecked && sewerData.length === 0) || (isMode && isMode === 'MODIFY' && sewerData.length === 1))  {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
@@ -292,7 +293,7 @@ const callBackForNext = async (state, dispatch) => {
                   )
                 );
                 await applyForSewerage(state, dispatch);
-              } else if (waterChecked && waterData.length === 0) {
+              } else if ((waterChecked && waterData.length === 0) || (isMode && isMode === 'MODIFY' && waterData.length === 1)) {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
