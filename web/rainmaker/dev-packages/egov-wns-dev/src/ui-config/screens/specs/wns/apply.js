@@ -45,9 +45,11 @@ isMode = (isMode) ? isMode.toUpperCase() : "";
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
-  } else if(isMode && isMode === 'MODIFY'){
+  } /*
+  Removed this config because some changes in card.
+  else if(isMode && isMode === 'MODIFY'){
     return [{ labelKey: "WS_COMMON_PROPERTY_DETAILS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
-  }else{
+  }*/else{
       return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
     }
 }
@@ -267,6 +269,31 @@ export const getData = async (action, state, dispatch) => {
 
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
+      if(combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA"){
+        combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
+        dispatch(prepareFinalObject("connectionHolders", combinedArray[0].connectionHolders));
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.sameAsOwner.children.sameAsOwnerDetails",
+            "props.isChecked",
+            false
+          )
+        ); 
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails",
+            "visible",
+            true
+          )
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
+          true
+        );       
+      }
       let data = get(state.screenConfiguration.preparedFinalObject, "applyScreen")
       if (data.connectionType !== "Metered") {
         dispatch(

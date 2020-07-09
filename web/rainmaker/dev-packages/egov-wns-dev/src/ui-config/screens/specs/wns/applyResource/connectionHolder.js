@@ -179,6 +179,7 @@ import {
         },
         jsonPath: "connectionHolders[0].sameAsPropertyAddress",
         required: false,
+        isChecked: true
       },
       type: "array",
       jsonPath: "connectionHolders[0].sameAsPropertyAddress"
