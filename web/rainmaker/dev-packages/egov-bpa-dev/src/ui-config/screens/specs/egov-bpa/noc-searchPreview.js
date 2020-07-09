@@ -33,7 +33,7 @@ const titlebar = {
     leftContainerH: getCommonContainer({
       header: getCommonHeader({
         labelName: "NOC Application",
-        labelKey: "BPA_TASK_DETAILS_HEADER"
+        labelKey: "BPA_NOC_APPLICATION_HEADER"
       }),
     }),
   }
@@ -110,7 +110,7 @@ const applicationOverview = getCommonContainer({
       children: {
         buttonLabel: getLabel({
           labelName: "VIEW APPLICATION",
-          labelKey: "BPA_OC_VIEW_APP_BUTTON"
+          labelKey: "BPA_NOC_VIEW_APP_BUTTON"
         })
       },
 
