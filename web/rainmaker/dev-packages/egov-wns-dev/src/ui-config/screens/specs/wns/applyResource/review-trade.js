@@ -459,7 +459,7 @@ export const connectionHolderSameAsOwnerDetails={
     {
       labelKey: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"
     },
-    { jsonPath: "connectionHolders" }
+    { jsonPath: "WaterConnection[0].connectionHolders[0].sameAsPropertyAddress" }
   )
 } 
 
@@ -475,7 +475,7 @@ const connHolderDetailsSameAsOwnerSummary = () => {
       }),
       items: [],
       hasAddItem: false,
-      sourceJsonPath: "connectionHolders",
+      sourceJsonPath: "WaterConnection[0].connectionHolders[0].sameAsPropertyAddress",
       prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
       afterPrefixJsonPath: "children.value.children.key"
     },

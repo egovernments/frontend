@@ -136,6 +136,21 @@ const callBackForNext = async (state, dispatch) => {
       dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
+       //connectionholdercode
+       let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
+       let holderData = connectionHolderObj[0];
+        if (holderData !== null && holderData !== undefined) {
+          if (holderData.sameAsPropertyAddress === true) {
+            holderData = null
+          }
+        }
+        if (holderData == null) {
+          applyScreenObject.connectionHolders = holderData;
+       } else {
+          let arrayHolderData = [];
+          arrayHolderData.push(holderData);
+          applyScreenObj.connectionHolders = arrayHolderData;
+        }
 
       if(!isActiveProperty(applyScreenObj.property)){
         dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));     

@@ -267,6 +267,18 @@ export const getData = async (action, state, dispatch) => {
 
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
+      if(combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA"){
+        combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
+        dispatch(prepareFinalObject("connectionHolders", combinedArray[0].connectionHolders));
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.sameAsOwner.children.sameAsOwnerDetails",
+            "props.isChecked",
+            false
+          )
+        );        
+      }
       let data = get(state.screenConfiguration.preparedFinalObject, "applyScreen")
       if (data.connectionType !== "Metered") {
         dispatch(
