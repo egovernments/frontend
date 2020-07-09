@@ -11,8 +11,10 @@ import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateBpaApplication,
   prepareDocumentsUploadData,
+  prepareNOCUploadData,
   submitBpaApplication,
-  updateBpaApplication
+  updateBpaApplication,
+  getNocSearchResults  
 } from "../../../../../ui-utils/commons";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -344,6 +346,7 @@ const callBackForNext = async (state, dispatch) => {
     let validateDocumentField = false;
 
     if (documentsFormat && documentsFormat.length) {
+      debugger
       for (let i = 0; i < documentsFormat.length; i++) {
         let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
         let isDocumentTypeRequired = get(
@@ -409,6 +412,7 @@ const callBackForNext = async (state, dispatch) => {
         // prepareDocumentsUploadData(state, dispatch); 
       }
       if (activeStep === 2) {
+        debugger;
         let checkingOwner = get(
           state.screenConfiguration.preparedFinalObject,
           "BPA.landInfo.ownershipCategory"
@@ -427,6 +431,14 @@ const callBackForNext = async (state, dispatch) => {
             state.screenConfiguration.preparedFinalObject,
             "BPA.landInfo.owners[0].isPrimaryOwner"
           );
+          let applicationNumber = get(
+            state.screenConfiguration.preparedFinalObject,
+            "BPA.applicationNo"
+          );
+          let tenantId = get(
+            state.screenConfiguration.preparedFinalObject,
+            "BPA.tenantId"
+          );
           if (primaryOwner && primaryOwner === true) {
             if (bpaStatus) {
               changeStep(state, dispatch);
@@ -439,7 +451,16 @@ const callBackForNext = async (state, dispatch) => {
               responseStatus = get(response, "status", "");
               responseStatus === "success" && changeStep(state, dispatch);
             }
+            const payload = await getNocSearchResults([
+              {
+                key: "tenantId",
+                value: tenantId
+              },
+              { key: "sourceRefId", value: applicationNumber }
+            ]);
+            dispatch(prepareFinalObject("NOCData", payload.Noc));             
             prepareDocumentsUploadData(state, dispatch);
+            prepareNOCUploadData(state, dispatch);
           } else {
             let errorMessage = {
               labelName: "Please check is primary owner",
@@ -449,11 +470,19 @@ const callBackForNext = async (state, dispatch) => {
           }
         } else if (checkingOwner && checkingOwner === "INDIVIDUAL.MULTIPLEOWNERS") {
           let count = 0, ownerPrimaryArray = [];
+          let applicationNumber = get(
+            state.screenConfiguration.preparedFinalObject,
+            "BPA.applicationNo"
+          );
+          let tenantId = get(
+            state.screenConfiguration.preparedFinalObject,
+            "BPA.tenantId"
+          );
           ownerDetails.forEach((owner, index) => {
             let primaryOwner = get(
               state.screenConfiguration.preparedFinalObject,
               `BPA.landInfo.owners[${index}].isPrimaryOwner`
-            );
+            );            
             if (primaryOwner && primaryOwner === true) {
               ownerPrimaryArray.push(primaryOwner)
             }
@@ -477,7 +506,16 @@ const callBackForNext = async (state, dispatch) => {
                 responseStatus = get(response, "status", "");
                 responseStatus === "success" && changeStep(state, dispatch);
               }
+              const payload = await getNocSearchResults([
+                {
+                  key: "tenantId",
+                  value: tenantId
+                },
+                { key: "sourceRefId", value: applicationNumber }
+              ]);
+              dispatch(prepareFinalObject("NOCData", payload.Noc));
               prepareDocumentsUploadData(state, dispatch);
+              prepareNOCUploadData(state, dispatch);              
             }
           } else {
             let errorMessage = {

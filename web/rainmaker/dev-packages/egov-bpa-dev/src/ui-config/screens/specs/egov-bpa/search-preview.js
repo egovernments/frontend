@@ -20,8 +20,8 @@ import {
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
-import set from "lodash/set";
-import { getAppSearchResults } from "../../../../ui-utils/commons";
+import set from "lodash/set";  
+import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
@@ -51,7 +51,6 @@ import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { nocDetailsApply } from "./noc";
-import nocData from "./data.json";
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
   const roles = get(userInfo, "roles");
@@ -455,16 +454,6 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
       mdmsBody
     );
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    // let nocData = get(state.screenConfiguration.preparedFinalObject, "nocData");
-    // let nocDocType = payload.MdmsRes.NOC.DocumentTypeMapping;
-    // nocData && nocData.NOC &&  nocData.NOC.map(docs => {
-    //   nocDocType && nocDocType.map(doc => {
-    //     if(docs.applicationType === doc.applicationType && docs.nocType === doc.nocType) {
-
-    //     }
-    //   })
-    // })
-    // console.log(nocData, payload.MdmsRes.NOC, "lllll");
     
 }
 
@@ -482,6 +471,16 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
+  const payload = await getNocSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "sourceRefId", value: applicationNumber }
+  ]);
+  dispatch(prepareFinalObject("NOCData", payload.Noc));               
+  prepareNOCUploadData(state, dispatch);
+  
   let type = getQueryArg(
     window.location.href,
     "type", ""
@@ -734,11 +733,6 @@ const screenConfig = {
       ];
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }
-    console.log(nocData, "ddddd");    
-    dispatch(prepareFinalObject("nocData", nocData));   
-    nocData && nocData.NOC && nocData.NOC.map(docs => {
-
-    }) 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
 
