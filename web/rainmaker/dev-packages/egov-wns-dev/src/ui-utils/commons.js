@@ -747,7 +747,7 @@ export const prepareDocUploadRedux = async (state, dispatch) => {
     }
 };
 
-export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
+export const prefillDocuments = async (payload, destJsonPath, dispatch, isMode) => {
     let documentsUploadRedux = {};
     // const uploadedDocData = get(payload, sourceJsonPath);
     let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "WS");
@@ -773,7 +773,7 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
         }
 
         var tempDoc = {}, docType = "";
-        var dList = payload.applyScreenMdmsData['ws-services-masters'].Documents;
+        var dList = (isMode && isMode === 'MODIFY') ? payload.applyScreenMdmsData['ws-services-masters'].ModifyConnectionDocuments : payload.applyScreenMdmsData['ws-services-masters'].Documents;
         if (dList !== undefined && dList !== null) {
             for (var i = 0; i < dList.length; i++) {
                 for (var key in docs) {

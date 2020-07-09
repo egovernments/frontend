@@ -350,7 +350,7 @@ export const getData = async (action, state, dispatch) => {
       let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       let docs = get(state, "screenConfiguration.preparedFinalObject");
-      await prefillDocuments(docs, "displayDocs", dispatch);
+      await prefillDocuments(docs, "displayDocs", dispatch, isMode);
     }
   } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
