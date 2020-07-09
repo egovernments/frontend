@@ -157,9 +157,8 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
       "screenConfiguration.preparedFinalObject", {}));
       let fileName=action==="print"?"print":"application.pdf";
       dispatch(prepareFinalObject("WaterConnection[0]", WSstoreData[0]));
-      if(connTypeWater!==null &&connTypeWater!==undefined){
-    var cc = await generateWSAcknowledgement(WSRequestBody, fileName,"WATER",connTypeWater);
-      }
+      let connType=connTypeWater===null?"Metered":connTypeWater;
+    var cc = await generateWSAcknowledgement(WSRequestBody, fileName,"WATER",connType);
    
     if(cc){
       const { SewerageConnection } = state.screenConfiguration.preparedFinalObject;
@@ -168,9 +167,7 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
         state,
         "screenConfiguration.preparedFinalObject", {}));
          fileName=action==="print"?"print":"sewerage-application.pdf";
-         if(connTypeSewerage!==null &&connTypeSewerage!==undefined){
       cc = await generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE",connTypeSewerage);
-         }
       if(cc){
         dispatch(prepareFinalObject("WaterConnection[0]", WSstoreData[0]));        
       }
@@ -183,9 +180,8 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
         state,
         "screenConfiguration.preparedFinalObject", {}))
          let fileName=action==="print"?"print":"application.pdf";
-         if(connTypeWater!==null &&connTypeWater!==undefined){
-      cc=generateWSAcknowledgement(water, fileName,"WATER",connTypeWater);
-         }
+         let connType=connTypeWater===null?"Metered":connTypeWater;
+      cc=generateWSAcknowledgement(water, fileName,"WATER",connType);
     } else if (applicationNumber.includes("SW")) {
       let connTypeSewerage=SewerageConnection[0].connectionType;
       let SWstoreData=cloneDeep(SewerageConnection);
@@ -194,9 +190,7 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
         state,
         "screenConfiguration.preparedFinalObject", {}));
         let fileName=action==="print"?"print":"sewerage-application.pdf";
-        if(connTypeSewerage!==null &&connTypeSewerage!==undefined){
       cc = generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE",connTypeSewerage);
-        }
     }
   }
 }

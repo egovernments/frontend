@@ -611,9 +611,10 @@ export const downloadPrintContainer = (
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
       let conneType=WaterConnection[0].connectionType;
       if(applicationNumber.includes("WS")){
+        let connType=conneType===null?"Metered":conneType;
         generateWSAcknowledgement(get(
           state,
-          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"WATER",conneType);
+          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"WATER",connType);
       }else{
         generateWSAcknowledgement(get(
           state,
@@ -628,9 +629,10 @@ export const downloadPrintContainer = (
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
       let conneType=WaterConnection[0].connectionType;
       if(applicationNumber.includes("WS")){
+        let connType=conneType===null?"Metered":conneType;
         generateWSAcknowledgement(get(
           state,
-          "screenConfiguration.preparedFinalObject", {}), "print","WATER",conneType);
+          "screenConfiguration.preparedFinalObject", {}), "print","WATER",connType);
       }else{
         generateWSAcknowledgement(get(
           state,
