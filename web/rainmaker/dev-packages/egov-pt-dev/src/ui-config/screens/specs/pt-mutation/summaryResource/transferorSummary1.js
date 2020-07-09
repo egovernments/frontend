@@ -3,6 +3,7 @@ import {
   getCommonCard,
   getCommonContainer,
   getCommonGrayCard,
+  getCommonCardWithNoShadow,
   getCommonSubHeader,
   getLabel,
   getLabelWithValue,
@@ -11,9 +12,8 @@ import {
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
-import get from "lodash/get";
 
-export const transferorSummary = getCommonGrayCard({
+export const transferorSummary = getCommonCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -70,7 +70,7 @@ export const transferorSummary = getCommonGrayCard({
     componentPath: "MultiItem",
     props: {
       className: "owner-summary",
-      scheama: getCommonGrayCard({
+      scheama: getCommonCardWithNoShadow({
         ownerContainer: getCommonContainer({
           ownerName: getLabelWithValue(
             {
@@ -148,7 +148,7 @@ export const transferorSummary = getCommonGrayCard({
               // }
             }
           ),
-          ownerSpecialCategoryType: getLabelWithValue(
+          ownerSpecialDocumentType: getLabelWithValue(
             {
               labelName: "Document Type",
               labelKey: "PT_CATEGORY_DOCUMENT_TYPE"
@@ -162,7 +162,7 @@ export const transferorSummary = getCommonGrayCard({
               // }
             }
           ),
-          ownerSpecialCategoryDocumentId: getLabelWithValue(
+          ownerSpecialDocumentID: getLabelWithValue(
             {
               labelName: "Document Id",
               labelKey: "PT_CATEGORY_DOCUMENT_ID"
@@ -174,8 +174,7 @@ export const transferorSummary = getCommonGrayCard({
               // callBack: value => {
               //   return convertEpochToDate(value);
               // }
-            },
-            
+            }
           ),
           ownerAddress: getLabelWithValue(
             {
@@ -202,7 +201,7 @@ export const transferorSummary = getCommonGrayCard({
   }
 });
 
-export const transferorInstitutionSummary = getCommonGrayCard({
+export const transferorInstitutionSummary = getCommonCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",

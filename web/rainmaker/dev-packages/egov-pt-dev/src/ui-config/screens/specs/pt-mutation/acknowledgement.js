@@ -20,7 +20,7 @@ import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for Transfer of Ownership`,
+    labelName: `Application for Transfer of Ownership`, 
     labelKey: "PT_MUTATION_APPLICATION_HEADER"
   }),
   applicationNumber: {
@@ -37,7 +37,7 @@ export const header = getCommonContainer({
     visible: true
   }
 });
-
+ 
 export const downloadCertificateForm = (Properties,tenantId,mode='download') => {
    const queryStr = [
      { key: "key", value:"ptmutationcertificate" },
@@ -81,12 +81,12 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
     },
     leftIcon: "book"
   };
-
+ 
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
       generatePdfFromDiv("download" ,applicationNumber )
-
+     
     },
     leftIcon: "assignment"
   };
@@ -98,7 +98,7 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
       // set(Licenses[0],"additionalDetails.documents",documents)
       // downloadAcknowledgementForm(Licenses,'print');
       generatePdfFromDiv("print" , applicationNumber)
-
+     
     },
     leftIcon: "assignment"
   };
@@ -153,40 +153,53 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
             }
           }
         }
-
+  
       },
       // gridDefination: {
       //   xs: 12,
       //   sm: 6
       // }
-
+    
 
     }
-
+   
 }
   /** END */
 
 
-const getHeader=(applicationNumber)=>{
-return getCommonContainer({
-  header: getCommonHeader({
-    labelName: `Application for Transfer of Ownership`,
-    labelKey: "PT_MUTATION_APPLICATION_HEADER"
-  }),
-  // applicationNumber: {
-  //   uiFramework: "custom-atoms-local",
-  //   moduleName: "egov-pt",
-  //   componentPath: "ApplicationNoContainer",
-  //   props: {
-  //     number:applicationNumber,
-  //     label: {
-  //       labelValue: "Application No.",
-  //       labelKey: "PT_MUTATION_APPLICATION_NO"
-  //   }
-  //   },
-  //   visible: true
-  // }
-})
+const getHeader=(applicationNumber,moduleName)=>{
+  if(moduleName=='PT.CREATE'){
+    return getCommonContainer({
+      header: getCommonHeader({
+        labelName: `Application for Transfer of Ownership`, 
+        labelKey: "PT_CREATE_APPLICATION_HEADER"
+      }),
+    })
+  }else if(moduleName=='ASMT'){
+    return getCommonContainer({
+      header: getCommonHeader({
+        labelName: `Application for Transfer of Ownership`, 
+        labelKey: "PT_ASSESSMENT_APPLICATION_HEADER"
+      }),
+    })
+  }else if(moduleName=='PT.MUTATION'){
+    return getCommonContainer({
+      header: getCommonHeader({
+        labelName: `Application for Transfer of Ownership`, 
+        labelKey: "PT_MUTATION_APPLICATION_HEADER"
+      }),
+    })
+  }else{
+    
+      return getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Application for Transfer of Ownership`, 
+          labelKey: "PT_APPLICATION_HEADER"
+        }),
+      })
+    
+  }
+
 }
 const getAcknowledgementCard = (
   state,
@@ -201,13 +214,13 @@ const getAcknowledgementCard = (
   if (purpose === "apply" && status === "success") {
     // loadPdfGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
  //     dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         children: {
-
+          
           card: acknowledgementCard({
             icon: "done",
             backgroundColor: "#39CB74",
@@ -241,7 +254,7 @@ const getAcknowledgementCard = (
     };
   }  else if (purpose === "apply" && status === "failure") {
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -265,7 +278,7 @@ const getAcknowledgementCard = (
     };
   }else if (purpose === "resubmit" && status === "success") {
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -296,7 +309,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-
+     
       applicationSuccessFooter: applicationSuccessFooter(
         state,
         dispatch,
@@ -305,10 +318,10 @@ const getAcknowledgementCard = (
       )
     };
   }else if (purpose === "approve" && status === "success") {
-
+    
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       dpmenu:downloadprintMenu(state,applicationNumber,tenant,purpose,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -340,7 +353,7 @@ const getAcknowledgementCard = (
   else if (purpose === "verified" && status === "failure") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -367,11 +380,11 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }
+  }  
   else if (purpose === "verify" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -398,12 +411,12 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }
-
+  } 
+  
   else if (purpose === "sendback" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -433,7 +446,7 @@ const getAcknowledgementCard = (
   }else if (purpose === "sendbacktocitizen" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -462,7 +475,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -486,7 +499,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "cancelled") {
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -515,7 +528,7 @@ const getAcknowledgementCard = (
     };
   }else if (purpose === "forward" && status === "success") {
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -566,9 +579,9 @@ export const setData=async(state,dispatch,applicationNumber,tenantId)=>{
      },
      { key: "acknowledgementIds", value: applicationNumber }
    ]);
-
+   
    dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
-
+ 
  }
 const screenConfig = {
   uiFramework: "material-ui",
@@ -603,7 +616,7 @@ const screenConfig = {
       secondNumber,
       tenant,moduleName
     );
-
+    
     set(action, "screenConfig.components.div.children", data);
     return action;
   }

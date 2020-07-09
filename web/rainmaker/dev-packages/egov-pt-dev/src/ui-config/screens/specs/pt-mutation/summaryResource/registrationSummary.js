@@ -25,7 +25,7 @@ const registrationDetails =  getCommonGrayCard({
     ),
     marketValue: getLabelWithValue(
       {
-
+       
         labelName: "Market Value",
             labelKey: "PT_MUTATION_MARKET_VALUE"
       },

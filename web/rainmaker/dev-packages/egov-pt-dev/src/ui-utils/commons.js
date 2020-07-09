@@ -55,8 +55,8 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 export const getSearchResults = async (queryObject, dispatch) => {
   try {
-
-
+    
+    
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
@@ -302,7 +302,7 @@ export const createUpdatePTApplication = async (state, dispatch, status) => {
 export const prepareDocumentsUploadData = (state, dispatch) => {
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.Documents",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.MutationDocuments",
     []
   );
   documents = documents.filter(item => {
@@ -320,7 +320,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
   documents.forEach(doc => {
     // Handle the case for multiple muildings
-
+   
       let card = {};
       card["name"] = doc.code;
       card["code"] = doc.code;
@@ -338,7 +338,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
         card["dropdown"] = dropdown;
       }
       tempDoc[doc.documentType].cards.push(card);
-
+    
   });
 
   Object.keys(tempDoc).forEach(key => {
@@ -478,7 +478,7 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
       if(clonedDoc.getElementById("pdf-header")){
         clonedDoc.getElementById("pdf-header").style.display = "block";
       }
-
+      
       // if(clonedDoc.getElementById("property-assess-form")){
       //   clonedDoc.getElementById("property-assess-form").style.display = "none";
       // }
@@ -488,7 +488,7 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
       // if(clonedDoc.getElementById("pt-flex-child-button")){
       //   clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
       // }
-
+      
     }
   }).then(canvas => {
     var data = canvas.toDataURL();
@@ -499,7 +499,7 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
     var position = 0;
 
     doc.addImage(data, "PNG", 5, 10+position, imgWidth, imgHeight);
-
+ 
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);
     } else if (action === "print") {

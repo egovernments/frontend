@@ -15,7 +15,7 @@ const getCommonApplyFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "pt-apply-wizard-footer"
     },
     children
   };
@@ -60,7 +60,7 @@ export const applicationSuccessFooter = (
     gotoHome: {
       componentPath: "Button",
       props: {
-        className: "apply-wizard-footer1",
+        className: "pt-apply-wizard-footer1",
         variant: "outlined",
         color: "primary",
         style: {
@@ -80,7 +80,7 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: `${getRedirectionURL()}`
       },
-
+     
     },
     downloadFormButton: {
       componentPath: "Button",
@@ -108,3 +108,5 @@ export const applicationSuccessFooter = (
     }
   });
 };
+
+
