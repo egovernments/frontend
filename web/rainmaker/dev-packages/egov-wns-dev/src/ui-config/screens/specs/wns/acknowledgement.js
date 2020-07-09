@@ -608,14 +608,16 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelKey: "WS_APPLICATION" },
     link: () => {
+      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
+      let conneType=WaterConnection[0].connectionType;
       if(applicationNumber.includes("WS")){
         generateWSAcknowledgement(get(
           state,
-          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"WATER");
+          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"WATER",conneType);
       }else{
         generateWSAcknowledgement(get(
           state,
-          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"SEWERAGE");
+          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"SEWERAGE",conneType);
       }
     },
     leftIcon: "assignment"
@@ -623,14 +625,16 @@ export const downloadPrintContainer = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "WS_APPLICATION" },
     link: () => {
+      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
+      let conneType=WaterConnection[0].connectionType;
       if(applicationNumber.includes("WS")){
         generateWSAcknowledgement(get(
           state,
-          "screenConfiguration.preparedFinalObject", {}), "print","WATER");
+          "screenConfiguration.preparedFinalObject", {}), "print","WATER",conneType);
       }else{
         generateWSAcknowledgement(get(
           state,
-          "screenConfiguration.preparedFinalObject", {}), "print","SEWERAGE");
+          "screenConfiguration.preparedFinalObject", {}), "print","SEWERAGE",conneType);
       }
     },
     leftIcon: "assignment"

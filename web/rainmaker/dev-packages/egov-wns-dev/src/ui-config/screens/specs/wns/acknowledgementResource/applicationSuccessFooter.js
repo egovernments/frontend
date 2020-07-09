@@ -140,6 +140,9 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
   const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
   const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
   const { WaterConnection, DocumentsData,SewerageConnection} = state.screenConfiguration.preparedFinalObject;
+  let connTypeWater=WaterConnection[0].connectionType;
+  let connTypeSewerage=SewerageConnection[0].connectionType
+
   let filteredDocs = DocumentsData;
   filteredDocs.map(val => {
     if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) { val.title = "WS_OWNER.IDENTITYPROOF"; }
@@ -155,7 +158,7 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
       "screenConfiguration.preparedFinalObject", {}));
       let fileName=action==="print"?"print":"application.pdf";
       dispatch(prepareFinalObject("WaterConnection[0]", WSstoreData[0]));
-    var cc = await generateWSAcknowledgement(WSRequestBody, fileName,"WATER");
+    var cc = await generateWSAcknowledgement(WSRequestBody, fileName,"WATER",connTypeWater);
    
     if(cc){
       const { SewerageConnection } = state.screenConfiguration.preparedFinalObject;
@@ -164,7 +167,7 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
         state,
         "screenConfiguration.preparedFinalObject", {}));
          fileName=action==="print"?"print":"sewerage-application.pdf";
-      cc = await generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE");
+      cc = await generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE",connTypeSewerage);
       if(cc){
         dispatch(prepareFinalObject("WaterConnection[0]", WSstoreData[0]));        
       }
@@ -175,7 +178,7 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
         state,
         "screenConfiguration.preparedFinalObject", {}))
          let fileName=action==="print"?"print":"application.pdf";
-      cc=generateWSAcknowledgement(water, fileName,"WATER");
+      cc=generateWSAcknowledgement(water, fileName,"WATER",connTypeWater);
     } else if (applicationNumber.includes("SW")) {
       let SWstoreData=cloneDeep(SewerageConnection);
       dispatch(prepareFinalObject("WaterConnection[0]", SWstoreData[0]));
@@ -183,7 +186,7 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
         state,
         "screenConfiguration.preparedFinalObject", {}));
         let fileName=action==="print"?"print":"sewerage-application.pdf";
-      cc = generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE");
+      cc = generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE",connTypeSewerage);
     }
   }
 }
