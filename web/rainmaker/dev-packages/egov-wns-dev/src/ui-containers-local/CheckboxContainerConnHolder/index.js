@@ -22,16 +22,24 @@ const styles = {
 
 class CheckboxLabels extends React.Component {
   state = {
-    checkedG: true
+    checkedG: null
   };
 
   componentDidMount = () => {
-    const { preparedFinalObject, approveCheck, jsonPath, onFieldChange } = this.props;
+    /*const { preparedFinalObject, approveCheck, jsonPath, onFieldChange } = this.props;    
     let isChecked = get(preparedFinalObject, jsonPath);
     if (isChecked) this.setState({ checkedG: isChecked });
     else {
       this.setState({ checkedG: true })
       this.updateOwnerFileds();
+    } */
+    const { classes, content, label, isChecked, approveCheck, onFieldChange, jsonPath } = this.props;
+    if(isChecked === false){
+      toggleConnHolderDetails(onFieldChange, true);
+      approveCheck(jsonPath, isChecked)
+    }else{
+      toggleConnHolderDetails(onFieldChange, false);
+      approveCheck(jsonPath, isChecked)
     }
   };
 
@@ -49,7 +57,7 @@ class CheckboxLabels extends React.Component {
     } = this.props;
 
     toggleConnHolderDetails(onFieldChange, false);
-    approveCheck(jsonPath, this.state.checkedG)
+    approveCheck(jsonPath, this.props.isChecked)
 
   }
   handleChange = name => event => {
@@ -64,30 +72,30 @@ class CheckboxLabels extends React.Component {
       jsonPath
     } = this.props;
 
-    if (event.target.checked) {
+    const isChecked = event.target.checked;
+    if (isChecked) {
       toggleConnHolderDetails(onFieldChange, false);
     } else {
       toggleConnHolderDetails(onFieldChange, true);
     }
 
-    this.setState({ [name]: event.target.checked }, () =>
-      approveCheck(jsonPath, this.state.checkedG)
+    this.setState({ [name]: isChecked }, () =>
+      approveCheck(jsonPath, isChecked)
     );
   };
 
   render() {
     const { classes, content, label } = this.props;
-
-
+    let isChecked = (this.state.checkedG === null)?this.props.isChecked:this.state.checkedG;
     return (
       <FormGroup row>
         <FormControlLabel
           classes={{ label: "checkbox-label" }}
           control={
             <Checkbox
-              checked={this.state.checkedG}
+              checked={isChecked}
               onChange={this.handleChange("checkedG")}
-              value={this.state.checkedG}
+              value={isChecked}
               classes={{
                 root: classes.root,
                 checked: classes.checked

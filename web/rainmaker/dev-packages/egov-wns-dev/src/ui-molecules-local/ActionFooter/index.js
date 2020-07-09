@@ -23,7 +23,7 @@ class Footer extends React.Component {
 
           // checking for the due amount
           let due = getQueryArg(window.location.href, "due");
-          if(due && (due !== "0" && due !=="NA")){            
+          if(due && (parseInt(due) > 0)){            
             toggleSnackbar(
               true,
               {

@@ -279,7 +279,20 @@ export const getData = async (action, state, dispatch) => {
             "props.isChecked",
             false
           )
-        );        
+        ); 
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails",
+            "visible",
+            true
+          )
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
+          true
+        );       
       }
       let data = get(state.screenConfiguration.preparedFinalObject, "applyScreen")
       if (data.connectionType !== "Metered") {

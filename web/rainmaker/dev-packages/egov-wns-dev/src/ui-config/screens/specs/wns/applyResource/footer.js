@@ -374,7 +374,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
+  if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen" && !isMode) {
     if (getQueryArg(window.location.href, "action") === "edit") {
       setReviewPageRoute(state, dispatch);
     }
