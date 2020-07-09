@@ -179,7 +179,7 @@ const roadCuttingCharges = getCommonContainer(roadDetails);
 
 
 
-export const activateDetails={
+export const activateDetailsMeter={
   reviewConnectionExecutionDate : getLabelWithValue(
     {
       labelName: "Connection Execution Date",
@@ -218,7 +218,21 @@ export const activateDetails={
   )
 
 }
-const activationDetails = getCommonContainer(activateDetails);
+export const activateDetailsNonMeter={
+  reviewConnectionExecutionDate : getLabelWithValue(
+    {
+      labelName: "Connection Execution Date",
+      labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE"
+    },
+    {
+      jsonPath: "WaterConnection[0].connectionExecutionDate",
+      callBack: convertEpochToDateAndHandleNA
+    }
+  ) 
+}
+const activationDetails = getCommonContainer(activateDetailsMeter);
+
+
 
 export const connectionWater={
   reviewConnectionType : getLabelWithValue(
