@@ -28,7 +28,8 @@ import {
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
 import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
-
+let isMode = getQueryArg(window.location.href, "mode");
+isMode = (isMode) ? isMode.toUpperCase() : "";
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = getTenantIdCommon();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
@@ -347,7 +348,15 @@ const callBackForNext = async (state, dispatch) => {
         setReviewPageRoute(state, dispatch);
       }
     }
-    else { isFormValid = false; hasFieldToaster = true; }
+    else { 
+      if(isMode && isMode === 'MODIFY') {
+        isFormValid = true; 
+        hasFieldToaster = false; 
+      } else {
+        isFormValid = false; 
+        hasFieldToaster = true; 
+      }
+    }
   }
 
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
@@ -568,6 +577,8 @@ export const changeStep = (
       );
       if(isDocsUploaded){
         activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
+      } else if(isMode && isMode === 'MODIFY'){
+        activeStep = 2;
       }
     } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
