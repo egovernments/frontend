@@ -10,10 +10,11 @@ import { httpRequest } from "../../../../../ui-utils";
 import { getDomainLink } from "../../../../../ui-utils/commons";
 import store from "ui-redux/store";
 import set from 'lodash/set';
+import { getQueryRedirectUrl} from "../searchResource/searchResults";
 import { toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
 
 
-let redirectUrl = getQueryArg(window.location.href, "redirectUrl");
+let redirectUrl = getQueryRedirectUrl();
 let screenKey = "register-property"
 
 const callBackForApply = async (state, dispatch) => {
@@ -237,7 +238,13 @@ const callBackForApply = async (state, dispatch) => {
       if (payload) {
         store.dispatch(handleField(screenKey, "components.adhocDialog", "props.open", true));
         setTimeout(() => {
-          window.location.href= `${window.location.origin}${getDomainLink()}${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`
+          const isMode=getQueryArg(window.location.href,"mode");
+          if(isMode==="MODIFY"){
+            window.location.href= `${window.location.origin}${getDomainLink()}${redirectUrl}&propertyId=${payload.Properties[0].propertyId}`
+          }else{
+            window.location.href= `${window.location.origin}${getDomainLink()}${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`
+          }
+         
           /*store.dispatch(
             setRoute(
               `${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`

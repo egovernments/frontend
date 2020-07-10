@@ -5,7 +5,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { searchPropertyTable} from "./searchResource/searchResults";
+import { searchPropertyTable,getQueryRedirectUrl} from "./searchResource/searchResults";
 import { httpRequest } from "../../../../ui-utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
@@ -14,15 +14,13 @@ import { resetFields } from "./mutation-methods";
 import "./index.css"
 import {searchPropertyDetails} from "./mutation-methods"
 import { getDomainLink } from "../../../../ui-utils/commons";
+
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
 
-const url = getQueryArg(
-  window.location.href,
-  "redirectUrl"
-);
+const url = getQueryRedirectUrl();
 
 const getMDMSData = async (dispatch) => {
   const mdmsBody = {

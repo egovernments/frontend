@@ -4,7 +4,7 @@ import { getQueryArg, getStatusKey } from "egov-ui-framework/ui-utils/commons";
 import { getEpochForDate, sortByEpoch } from "../../utils";
 import { getDomainLink } from "../../../../../ui-utils/commons";
 
- const getQueryRedirectUrl = () => {
+ export const getQueryRedirectUrl = () => {
   const url = getQueryArg(window.location.href,"redirectUrl");
   const isMode=getQueryArg(window.location.href,"mode");
   if(isMode==="MODIFY"){
