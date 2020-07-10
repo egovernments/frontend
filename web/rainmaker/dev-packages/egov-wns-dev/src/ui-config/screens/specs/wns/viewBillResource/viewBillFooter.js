@@ -8,7 +8,7 @@ const connectionNo = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId");
 const businessService = connectionNo.includes("WS") ? "WS" : "SW";
 
-const callDownloadBill = () => {
+const callDownloadBill = (state, dispatch, mode) => {
   const val = [
     {
       key: 'consumerCode',
@@ -19,7 +19,7 @@ const callDownloadBill = () => {
       key: "businessService", value: businessService
     }
   ]
-  downloadBill(val);
+  downloadBill(val, mode, dispatch);
 }
 
 
@@ -42,7 +42,9 @@ export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
     },
     onClickDefination: {
       action: "condition",
-      callBack: callDownloadBill
+      callBack: (state, dispatch) => {
+        callDownloadBill(state, dispatch, "download");
+      }
     },
   },
   payButton: {
