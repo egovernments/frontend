@@ -776,6 +776,7 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch, isMode) 
         var tempDoc = {}, docType = "";
         var dList = (isMode && isMode === 'MODIFY') ? payload.applyScreenMdmsData['ws-services-masters'].ModifyConnectionDocuments : payload.applyScreenMdmsData['ws-services-masters'].Documents;
         if (dList !== undefined && dList !== null) {
+            dList = (isMode && isMode === 'MODIFY') ? getDisplayDocFormat(dList) : dList;
             for (var i = 0; i < dList.length; i++) {
                 for (var key in docs) {
                     docType = docs[key].documentType
@@ -794,7 +795,37 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch, isMode) 
         dispatch(prepareFinalObject(destJsonPath, tempDoc));
     }
 };
-
+export const dataExists = (code, temp) => {
+    return temp.some(function(el) {
+        return el.code === code;
+    }); 
+}
+export const checkValue = (i, documentTypea, temp, dataList) => {
+    for(var j=i; j < dataList.length; j++) {
+        let isCheck = dataExists(dataList[j].code, temp);
+        if(documentTypea == dataList[j].documentType && !isCheck){
+            return dataList[j];
+        }
+    }
+}
+export const getDisplayDocFormat = (dataList) => {
+    var tempDoc = [];
+    for(var i=0; i < dataList.length; i++) {
+        if(i == 0 ) {
+            tempDoc[i] = dataList[i];
+        } else {
+            let getNextDoc = checkValue(i, tempDoc[i-1].documentType, tempDoc, dataList);
+            if(getNextDoc) {
+                tempDoc[i] = getNextDoc;
+            } else {
+                tempDoc[i] = dataList.find(function(el) {
+                return tempDoc.find((o, i) => { return (el.code != o.code && !dataExists(el.code, tempDoc)) } );
+                });
+            }
+        }
+    }
+    return tempDoc;
+}
 export const applyForWaterOrSewerage = async (state, dispatch) => {
     if (get(state, "screenConfiguration.preparedFinalObject.applyScreen.water") && get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")) {
         let response = await applyForBothWaterAndSewerage(state, dispatch);
