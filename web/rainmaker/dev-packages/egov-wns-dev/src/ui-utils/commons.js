@@ -540,6 +540,7 @@ const parserFunction = (state) => {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
         meterInstallationDate: convertDateToEpoch(queryObject.meterInstallationDate),
         connectionExecutionDate: convertDateToEpoch(queryObject.connectionExecutionDate),
+        dateEffectiveFrom: convertDateToEpoch(queryObject.dateEffectiveFrom),
         proposedWaterClosets: parseInt(queryObject.proposedWaterClosets),
         proposedToilets: parseInt(queryObject.proposedToilets),
         noOfTaps: parseInt(queryObject.noOfTaps),
