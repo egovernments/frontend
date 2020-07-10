@@ -26,6 +26,7 @@ const formConfig = {
       floatingLabelText: "PT_COMMONS_PROPERTY_USAGE_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       required: true,
+      formName: "basicInformation",
       fullWidth: true,
       labelsFromLocalisation:false,
       gridDefination: {
@@ -53,6 +54,7 @@ const formConfig = {
       floatingLabelText: "PT_COMMONS_PROPERTY_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       required: true,
+      formName: "basicInformation",
       fullWidth: true,
       labelsFromLocalisation:false,
       gridDefination: {

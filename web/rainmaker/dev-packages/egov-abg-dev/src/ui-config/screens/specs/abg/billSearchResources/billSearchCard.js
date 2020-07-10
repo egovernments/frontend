@@ -86,7 +86,7 @@ export const billSearchCard = getCommonCard({
         jsonPath: "searchScreen.tenantId",
         disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       },
-      
+      required: true,
       jsonPath: "searchScreen.tenantId",
       gridDefination: {
         xs: 12,

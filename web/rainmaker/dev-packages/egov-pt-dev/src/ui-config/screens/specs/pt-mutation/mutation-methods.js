@@ -138,6 +138,7 @@ export const searchPropertyDetails = getCommonCard({
           shrink: true
         }
       },
+      required: true,
       jsonPath: "searchScreen.tenantId",
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       gridDefination: {

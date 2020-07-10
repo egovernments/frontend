@@ -163,6 +163,7 @@ export const newCollectionDetailsCard = getCommonCard(
             xs: 12,
             sm: 6
           },
+          required: true,
           props: {
             className: "autocomplete-dropdown",
             label: {
@@ -266,6 +267,7 @@ export const newCollectionDetailsCard = getCommonCard(
             className: "autocomplete-dropdown",
             sourceJsonPath: "applyScreenMdmsData.serviceTypes",
           },
+          required: true,
           jsonPath: "Demands[0].serviceType",
           gridDefination: {
             xs: 12,

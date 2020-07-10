@@ -29,6 +29,7 @@ export const plotSize = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 6,
+    formName: "plotDetails",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
       let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
@@ -57,6 +58,7 @@ export const floorCount = {
       sm: 6
     },
     dropDownData: floorDropDownData,
+    formName: "plotDetails",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       // removeFormKey(formKey, field, dispatch, state);
       var previousFloorNo = localStorageGet("previousFloorNo") || -1;
@@ -94,6 +96,7 @@ export const subUsageType = {
       xs: 12,
       sm: 4
     },
+    formName: "plotDetails",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       let subUsageMinor = get(state, `common.generalMDMSDataById.UsageCategoryDetail[${field.value}]`);
       if (!isEmpty(subUsageMinor)) {
@@ -121,6 +124,7 @@ export const occupancy = {
       sm: 4
     },
     dropDownData: [],
+    formName: "plotDetails",
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
       const dependentFields1 = ["annualRent"];
@@ -150,6 +154,7 @@ export const builtArea = {
     hideField: false,
     numcols: 4,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    formName: "plotDetails",
   },
 };
 
@@ -172,6 +177,7 @@ export const superArea = {
     },
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     errorMessage: "PT_SUPER_AREA_ERROR_MESSAGE",
+    formName: "plotDetails",
   },
 };
 
@@ -190,6 +196,7 @@ export const annualRent = {
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     hideField: true,
     numcols: 4,
+    formName: "plotDetails",
   },
 };
 
@@ -222,6 +229,7 @@ export const floorName = {
     required: true,
     jsonPath: "Properties[0].propertyDetails[0].units[0].floorNo",
     hideField: true,
+    formName: "plotDetails",
   },
 };
 
@@ -256,6 +264,10 @@ export const beforeInitForm = {
         unitsCount = property && property.units && property.units.length;
         form.unitsIndex = unitsCount;
       }
+      // Adding formName prop to each field item to display required Error message.
+      Object.keys(form.fields).map(key=>{
+        form.fields[key].formName = form.name;
+      })
       if (floorIndex === 0 && unitIndex === 0) {
         form.unitsIndex = 0;
         propertyType !== "SHAREDPROPERTY" && dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].floorNo`, "0"));
@@ -568,6 +580,7 @@ export const mohalla = {
     },
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     required: true,
+    formName: "propertyAddress",
     updateDependentFields: ({ formKey, field, dispatch }) => {
       if (field.value && field.value.length > 0) {
         const mohalla = field.dropDownData.find((option) => {

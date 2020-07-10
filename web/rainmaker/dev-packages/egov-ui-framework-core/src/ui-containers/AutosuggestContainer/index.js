@@ -30,6 +30,8 @@ class AutoSuggestor extends Component {
       suggestions,
       className,
       localizationLabels,
+      required,
+      errorText,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -52,6 +54,8 @@ class AutoSuggestor extends Component {
           className={className}
           label={translatedLabel}
           placeholder={translatedPlaceholder}
+          helperText={required && errorText}
+          error={errorText == "Required" && required}
           {...rest}
         />
       </div>
@@ -77,6 +81,18 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
   );
 };
 
+const getErrorText = (obj, id) => {
+  const keys = Object.keys(obj);
+  let errorText = "";
+  for(let i = 0; i < keys.length; i++){
+    if(obj[keys[i]].id == id) {
+      errorText = obj[keys[i]].errorText;
+      break;
+    }
+  }
+  return errorText;
+}
+
 const mapStateToProps = (state, ownprops) => {
   const { localizationLabels } = state.app;
   let {
@@ -85,15 +101,21 @@ const mapStateToProps = (state, ownprops) => {
     sourceJsonPath,
     labelsFromLocalisation,
     data,
-    localePrefix
+    localePrefix,
+    helperText,
+    id,
+    formName
   } = ownprops;
+  let errorText = helperText ? helperText : (formName && state.form[formName] && state.form[formName].fields ? getErrorText(state.form[formName].fields, id) : "");
   let suggestions =
     data && data.length > 0
       ? data
       : get(state.screenConfiguration.preparedFinalObject, sourceJsonPath, []);
-  value = value
-    ? value
-    : get(state.screenConfiguration.preparedFinalObject, jsonPath);
+      
+      value = value
+      ? value
+      : (get(state.screenConfiguration.preparedFinalObject, jsonPath) ? get(state.screenConfiguration.preparedFinalObject, jsonPath) : get(state.common.prepareFormData, jsonPath));
+  
   //To fetch corresponding labels from localisation for the suggestions, if needed.
   if (labelsFromLocalisation) {
     suggestions = getLocalisedSuggestions(
@@ -113,7 +135,7 @@ const mapStateToProps = (state, ownprops) => {
     value = { label: selectedItem.name, value: selectedItem.code };
   }
   // console.log(value, suggestions);
-  return { value, jsonPath, suggestions, localizationLabels };
+  return { value, jsonPath, suggestions, localizationLabels, errorText };
 };
 
 const mapDispatchToProps = dispatch => {
