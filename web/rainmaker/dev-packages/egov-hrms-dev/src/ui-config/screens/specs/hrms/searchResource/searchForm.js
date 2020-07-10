@@ -89,7 +89,7 @@ export const searchForm = getCommonCard({
         labelsFromLocalisation: true,
         required: true,
       },
-      
+      required: true,
     },
 
     employeeName: getTextField({
@@ -155,6 +155,7 @@ export const searchForm = getCommonCard({
           masterName: "Department"
         }
       },
+      required: false,
       jsonPath: "searchScreen.departments",
       gridDefination: {
         xs: 12,

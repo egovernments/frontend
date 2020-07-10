@@ -138,6 +138,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             errorMessage={fieldProps.errorMessage}
             errorStyle={fieldProps.errorStyle}
             pattern={fieldProps.pattern}
+            formName={fieldProps.formName}
             onChange={(chosenRequest, index) => {
               handleFieldChange(fieldKey, chosenRequest.target.value, fieldProps.jsonPath);
             }}

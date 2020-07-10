@@ -227,7 +227,7 @@ const commonApplicantInformation = () => {
           jsonPath: "Property.ownersTemp[0].ownerType",
           sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
           },
-          
+          required: true,
           jsonPath:
             "Property.ownersTemp[0].ownerType",
           sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
@@ -338,6 +338,7 @@ const commonApplicantInformation = () => {
             jsonPath: "Property.ownersTemp[0].documentType",
             sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
           },
+          required: true,
           visible:false,
         jsonPath: "Property.ownersTemp[0].documentType",
         sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
@@ -425,7 +426,7 @@ const institutionTypeInformation = () => {
             jsonPath: "Property.institutionTemp.institutionType",
             sourceJsonPath: "applyScreenMdmsData.common-masters.Institutions",
           },
-          
+          required: true,
           jsonPath: "Property.institutionTemp.institutionType",
           sourceJsonPath: "applyScreenMdmsData.common-masters.Institutions",
           gridDefination: {
@@ -597,7 +598,7 @@ export const transfereeDetails = getCommonCard({
             jsonPath: "Property.ownershipCategoryTemp",
             sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
           },
-          
+          required: true,
           jsonPath: "Property.ownershipCategoryTemp",
           sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
           gridDefination: {

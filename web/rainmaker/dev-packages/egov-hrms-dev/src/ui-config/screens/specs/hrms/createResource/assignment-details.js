@@ -158,6 +158,7 @@ const assignmentDetailsCard = {
               labelsFromLocalisation: true,
               sourceJsonPath: "createScreenMdmsData.common-masters.Department",
             },
+            required: true,
             gridDefination: {
               xs: 12,
               sm: 12,
@@ -186,6 +187,7 @@ const assignmentDetailsCard = {
               labelsFromLocalisation: true,
               sourceJsonPath: "createScreenMdmsData.common-masters.Designation",
             },
+            required: true,
             gridDefination: {
               xs: 12,
               sm: 12,

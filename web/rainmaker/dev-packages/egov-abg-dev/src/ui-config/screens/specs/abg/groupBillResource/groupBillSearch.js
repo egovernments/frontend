@@ -121,6 +121,7 @@ export const abgSearchCard = getCommonCard({
           jsonPath: "searchCriteria.businesService",
           sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
         },
+        required: true,
         jsonPath: "searchCriteria.businesService",
         gridDefination: {
           xs: 12,
