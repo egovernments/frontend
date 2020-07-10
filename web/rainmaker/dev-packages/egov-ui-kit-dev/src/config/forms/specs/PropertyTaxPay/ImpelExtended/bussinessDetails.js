@@ -1,4 +1,4 @@
-//import './index.css';
+import './index.css';
 import set from "lodash/set";
 import get from "lodash/get";
 import moment from "moment";
