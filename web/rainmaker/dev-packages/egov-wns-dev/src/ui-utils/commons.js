@@ -346,10 +346,16 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
 };
 
 export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
-    if (
-        applyScreenObject.hasOwnProperty("property") &&
+    let rValue = false;
+    if(applyScreenObject.hasOwnProperty("property") &&
         applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== "" &&
+        applyScreenObject["property"] !== ""){        
+        rValue =true;
+        if(isModifyMode()){
+            return rValue
+        }
+    }
+    if ( rValue &&
         applyScreenObject.hasOwnProperty("water") &&
         applyScreenObject["water"] !== undefined &&
         applyScreenObject["water"] !== "" &&
@@ -402,7 +408,16 @@ export const validateConnHolderDetails = (holderData) => {
 }
 
 export const validateFeildsForWater = (applyScreenObject) => {
-    if (
+    let rValue = false;
+    if(applyScreenObject.hasOwnProperty("property") &&
+        applyScreenObject['property'] !== undefined &&
+        applyScreenObject["property"] !== ""){        
+        rValue =true;
+        if(isModifyMode()){
+            return rValue
+        }
+    }
+    if ( rValue &&
         applyScreenObject.hasOwnProperty("property") &&
         applyScreenObject['property'] !== undefined &&
         applyScreenObject["property"] !== "" &&
@@ -423,10 +438,16 @@ export const validateFeildsForWater = (applyScreenObject) => {
 }
 
 export const validateFeildsForSewerage = (applyScreenObject) => {
-    if (
-        applyScreenObject.hasOwnProperty("property") &&
+    let rValue = false;
+    if(applyScreenObject.hasOwnProperty("property") &&
         applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== "" &&
+        applyScreenObject["property"] !== ""){        
+        rValue =true;
+        if(isModifyMode()){
+            return rValue
+        }
+    }
+    if (rValue &&
         applyScreenObject.hasOwnProperty("water") &&
         applyScreenObject["water"] !== undefined &&
         applyScreenObject["water"] !== "" &&
@@ -484,10 +505,8 @@ const validatePropertyOwners = (applyScreenObject) => {
     }
 }
 
-export const prepareDocumentsUploadData = (state, dispatch) => {
-    let isMode = getQueryArg(window.location.href, "mode");
-    isMode = (isMode) ? isMode.toUpperCase() : "";
-    let currentDoc = (isMode && isMode === 'MODIFY') ? 'ModifyConnectionDocuments' : 'Documents'; 
+export const prepareDocumentsUploadData = (state, dispatch) => {    
+    let currentDoc = (isModifyMode()) ? 'ModifyConnectionDocuments' : 'Documents'; 
     let documents = get(
         state,
         `screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.${currentDoc}`,
@@ -748,7 +767,7 @@ export const prepareDocUploadRedux = async (state, dispatch) => {
     }
 };
 
-export const prefillDocuments = async (payload, destJsonPath, dispatch, isMode) => {
+export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
     let documentsUploadRedux = {};
     // const uploadedDocData = get(payload, sourceJsonPath);
     let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "WS");
@@ -774,9 +793,9 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch, isMode) 
         }
 
         var tempDoc = {}, docType = "";
-        var dList = (isMode && isMode === 'MODIFY') ? payload.applyScreenMdmsData['ws-services-masters'].ModifyConnectionDocuments : payload.applyScreenMdmsData['ws-services-masters'].Documents;
+        var dList = (isModifyMode()) ? payload.applyScreenMdmsData['ws-services-masters'].ModifyConnectionDocuments : payload.applyScreenMdmsData['ws-services-masters'].Documents;
         if (dList !== undefined && dList !== null) {
-            dList = (isMode && isMode === 'MODIFY') ? getDisplayDocFormat(dList) : dList;
+            dList = (isModifyMode()) ? getDisplayDocFormat(dList) : dList;
             for (var i = 0; i < dList.length; i++) {
                 for (var key in docs) {
                     docType = docs[key].documentType
@@ -842,7 +861,7 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 export const applyForWater = async (state, dispatch) => {
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
-    let method = waterId ? "UPDATE" : "CREATE";
+    let method = waterId ? "UPDATE" : "CREATE"; 
     try {
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
@@ -866,9 +885,12 @@ export const applyForWater = async (state, dispatch) => {
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
-            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
-            if(isMode && isMode === 'MODIFY'){
-                dispatch(prepareFinalObject("applyScreen", response.WaterConnection));
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));            
+            if(isModifyMode()){
+                response.WaterConnection = await getPropertyObj(response.WaterConnection);
+                response.WaterConnection[0].water=true;
+                dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
+                dispatch(prepareFinalObject("modifyAppCreated", true));
             }
             setApplicationNumberBox(state, dispatch);
         }
@@ -883,7 +905,7 @@ export const applyForWater = async (state, dispatch) => {
 export const applyForSewerage = async (state, dispatch) => {
     let queryObject = parserFunction(state);
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
-    let method = sewerId ? "UPDATE" : "CREATE";
+    let method = sewerId ? "UPDATE" : "CREATE";    
     try {
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
         let response;
@@ -908,8 +930,11 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
-            if(isMode && isMode === 'MODIFY'){
-                dispatch(prepareFinalObject("applyScreen", response.SewerageConnections));
+            if(isModifyMode()){
+                response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
+                response.SewerageConnections[0].sewerage=true;
+                dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
+                dispatch(prepareFinalObject("modifyAppCreated", true));
             }
             setApplicationNumberBox(state, dispatch);
         }
@@ -1863,6 +1888,15 @@ export const isActiveProperty = (propertyObj) =>{
     return true;
 }
 
+export const isModifyMode = () =>{
+    let isMode = getQueryArg(window.location.href, "mode");
+    return (isMode && isMode.toUpperCase() === 'MODIFY');
+}
+
+export const isModifyModeAction = () =>{
+    let isMode = getQueryArg(window.location.href, "modeaction");
+    return (isMode && isMode.toUpperCase() === 'EDIT');
+}
 
 export const showHideFieldsFirstStep = (dispatch, propertyId, value) => {
     if(propertyId){
