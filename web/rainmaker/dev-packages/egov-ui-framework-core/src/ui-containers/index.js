@@ -53,6 +53,11 @@ const DynamicMdmsContainer = Loadable({
   loading: () => <Loading />
 });
 
+const ModifyLabelConatiner = Loadable({
+  loader: () => import("./ModifyLabelConatiner"),
+  loading: () => <Loading />
+});
+
 export {
   TextFieldContainer,
   RadioGroupContainer,
@@ -63,5 +68,6 @@ export {
   DownloadFileContainer,
   AutosuggestContainer,
   DialogContainer,
-  DynamicMdmsContainer
+  DynamicMdmsContainer,
+  ModifyLabelConatiner
 };
