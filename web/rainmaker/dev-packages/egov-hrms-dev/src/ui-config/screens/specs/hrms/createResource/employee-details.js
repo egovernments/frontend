@@ -98,6 +98,7 @@ export const employeeDetails = getCommonCard({
         required: true,
         labelsFromLocalisation: true,
       },
+      required: true,
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -225,6 +226,7 @@ export const professionalDetails = getCommonCard(
           className: "autocomplete-dropdown",
           sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeType",
         },
+        required: true,
         gridDefination: {
           xs: 12,
           sm: 12,

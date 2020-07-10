@@ -53,6 +53,7 @@ export const searchPropertyDetails = {
           disabled: false,
           isClearable: true
         },
+        required: true,
         jsonPath: "searchScreen.tenantId",
         gridDefination: {
           xs: 12,
@@ -109,6 +110,7 @@ export const searchPropertyDetails = {
           sourceJsonPath: "applyScreenMdmsData.tenant.localities",
           className: "locality-dropdown autocomplete-dropdown"
         },
+        required: true,
         jsonPath: "searchScreen.locality.code",
         gridDefination: {
           xs: 12,

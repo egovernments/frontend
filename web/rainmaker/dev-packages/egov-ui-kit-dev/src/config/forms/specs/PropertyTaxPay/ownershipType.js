@@ -22,6 +22,7 @@ const formConfig = {
         xs: 12,
         sm: 6
       },
+      formName: "ownershipType",
       updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
         const { value } = sourceField;
         const institutedropDown = updateInstituteType(state, value);
