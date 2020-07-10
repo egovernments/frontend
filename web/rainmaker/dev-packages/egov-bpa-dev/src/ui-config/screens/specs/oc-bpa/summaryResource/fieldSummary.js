@@ -3,7 +3,8 @@ import {
   getCommonSubHeader,
   getBreak,
   getCommonContainer,
-  getLabelWithValue
+  getLabelWithValue,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
@@ -31,18 +32,13 @@ const fieldSummaryContent = () => {
         style: { marginBottom: "10px" }
       },
       children: {
-        header: {
-          gridDefination: {
-            xs: 8
-          },
-          ...getCommonSubHeader({
-            labelName: "Check List",
-            labelKey: "BPA_CHECK_LIST_DETAILS"
-          })
-        }
+        header:   getCommonContainer({
+          statictitle: getLabel("Field Inspection","BPA_FI_REPORT",{labelKey:"BPA_FI_REPORT"}),
+          dynamicTitle: getLabel("Test","abc",{labelName:"UYT"})
+      })
       }
     },
-    lableData : getCommonContainer({
+    // lableData : getCommonContainer({
       fieldSummaryDate: getLabelWithValue(
         {
           labelName: "BPA_FI_DATE_LABEL_NAME",
@@ -62,8 +58,8 @@ const fieldSummaryContent = () => {
           jsonPath:
             "BPA.additionalDetails.fieldinspection_pending[0].time"
         }
-      )
-    }),
+      ),
+    // }),
     checkListDetailsContainer: getHeader({
       labelName: "Check List",
       labelKey: "BPA_CHECK_LIST_DETAILS"
@@ -107,9 +103,10 @@ export const fieldSummary = getCommonContainer({
       hasAddItem: false,
       isReviewPage: true,
       prefixSourceJsonPath: "children.cardContent.children",
+      afterPrefixJsonPath: "children.value.children.key",
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
-      headerJsonPath : "children.cardContent.children.header.children.header.children.key.props.label",
-      headerName : getLocaleLabels( "FI Report", "BPA_FI_REPORT")
+      headerJsonPath : "children.cardContent.children.header.children.header.children.dynamicTitle.props.labelName",
+      headerName : " "
     },
     type: "array"
   }

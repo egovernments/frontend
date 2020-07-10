@@ -83,6 +83,7 @@ const themeStyles = (theme) => ({
     fontWeight: 400,
     letterSpacing: "0.83px",
     lineHeight: "24px",
+    marginTop: "20px",
   },
   documentSuccess: {
     borderRadius: "100%",
@@ -93,6 +94,7 @@ const themeStyles = (theme) => ({
     alignItems: "center",
     backgroundColor: "#39CB74",
     color: "white",
+    marginTop: "20px",
   },
   button: {
     margin: theme.spacing.unit,
@@ -167,8 +169,10 @@ const UploadCard = (props) => {
     name,
     jsonPath,
     ids,
+    specificStyles,
     ...rest
   } = props;
+  let forUpBtn = specificStyles ? specificStyles : "upload_btn";
   return (
     <Grid container={true} style={relpos}>
        {(!props.isFromPreview)?
@@ -247,7 +251,7 @@ const UploadCard = (props) => {
         className={classes.fileUploadDiv}
         style={{ display: "inline-block !important;" }}
       >
-        <div className="upload_btn">
+        <div className= {forUpBtn}>
          
           <UploadMultipleFile
             classes={props.classes}
@@ -270,7 +274,7 @@ const UploadCard = (props) => {
               color="primary"
               style={{ float: "right" }}
               onClick={() => props.toggleEditClick(docIndex)}
-            >Upload</Button>
+            >ADD FILES</Button>
         </Grid>:""
         }
     </Grid>
