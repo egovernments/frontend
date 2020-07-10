@@ -234,7 +234,11 @@ export const getData = async (action, state, dispatch) => {
   const propertyID = getQueryArg(window.location.href, "propertyId");
   const actionType = getQueryArg(window.location.href, "action");
   await getMdmsData(dispatch);
-  if (applicationNo) {
+     //if both application number and propertyID is present get propertydetails
+  if(applicationNo && propertyID){
+    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
+   getApplyPropertyDetails(queryObject,dispatch,propertyID)
+  }else if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [
       { key: "tenantId", value: tenantId },
@@ -393,6 +397,11 @@ export const getData = async (action, state, dispatch) => {
     }
   } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
+    getApplyPropertyDetails(queryObject,dispatch,propertyID)
+  }
+};
+
+const getApplyPropertyDetails=async (queryObject,dispatch,propertyID)=>{
     let payload = await getPropertyResults(queryObject, dispatch);
     let propertyObj = payload.Properties[0];
     if(!isActiveProperty(propertyObj)){
@@ -401,8 +410,7 @@ export const getData = async (action, state, dispatch) => {
     }
     dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
     dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
-  }
-};
+}
 
 
 const propertyDetail = getPropertyDetails();
