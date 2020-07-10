@@ -85,15 +85,19 @@ const mapStateToProps = (state, ownprops) => {
     sourceJsonPath,
     labelsFromLocalisation,
     data,
-    localePrefix
+    localePrefix,
+    canFetchValueFromJsonpath=true
   } = ownprops;
   let suggestions =
     data && data.length > 0
       ? data
       : get(state.screenConfiguration.preparedFinalObject, sourceJsonPath, []);
-  value = value
+   if(canFetchValueFromJsonpath){
+    value = value
     ? value
     : get(state.screenConfiguration.preparedFinalObject, jsonPath);
+   }   
+
   //To fetch corresponding labels from localisation for the suggestions, if needed.
   if (labelsFromLocalisation) {
     suggestions = getLocalisedSuggestions(
