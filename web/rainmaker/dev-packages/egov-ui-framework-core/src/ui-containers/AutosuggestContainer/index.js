@@ -102,6 +102,7 @@ const mapStateToProps = (state, ownprops) => {
     labelsFromLocalisation,
     data,
     localePrefix,
+    canFetchValueFromJsonpath=true,
     helperText,
     id,
     formName
@@ -111,11 +112,13 @@ const mapStateToProps = (state, ownprops) => {
     data && data.length > 0
       ? data
       : get(state.screenConfiguration.preparedFinalObject, sourceJsonPath, []);
-      
-      value = value
+   if(canFetchValueFromJsonpath){
+    value = value
       ? value
       : (get(state.screenConfiguration.preparedFinalObject, jsonPath) ? get(state.screenConfiguration.preparedFinalObject, jsonPath) : get(state.common.prepareFormData, jsonPath));
   
+   }   
+
   //To fetch corresponding labels from localisation for the suggestions, if needed.
   if (labelsFromLocalisation) {
     suggestions = getLocalisedSuggestions(
