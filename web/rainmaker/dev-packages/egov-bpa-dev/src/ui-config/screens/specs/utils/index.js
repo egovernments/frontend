@@ -4408,7 +4408,7 @@ if(requiredDocsFromMdms.length > 0){
     mdmsCard.documentCode = getTransformedLocale(mdmsCard.code);
     for(var i=0; i<cards.length; i++){
       if(mdmsCard.documentCode == cards[i].documentCode){
-        cards[i].readOnly = cardReadOnly;
+        cards[i].readOnly = cardReadOnly || !mdmsCard.allow;
         let mergedCard = {...cards[i], ...mdmsCard};
         cards[i] = {...mergedCard};
         found = true;
@@ -4416,7 +4416,7 @@ if(requiredDocsFromMdms.length > 0){
     }
     
     if(!found){
-      mdmsCard.readOnly = cardReadOnly;
+      mdmsCard.readOnly = cardReadOnly || !mdmsCard.allow;
       cards.push(mdmsCard)
     }
   });
@@ -4435,7 +4435,7 @@ cards.map(card=>{
 });
 dispatch(prepareFinalObject("finalCardsforPreview", cards));
 
-}
+ }
 /**
  * 
  * @param {String} documentType 
@@ -4513,6 +4513,7 @@ if (documents[0] && documents[0].length > 0) {
     card["name"] = doc.code;
     card["code"] = doc.code;
     card["required"] = doc.required ? true : false;
+    card["allow"] = (doc.allow && JSON.parse(doc.allow)) ? true: false;
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
       dropDownValues.label = "Select Documents";
