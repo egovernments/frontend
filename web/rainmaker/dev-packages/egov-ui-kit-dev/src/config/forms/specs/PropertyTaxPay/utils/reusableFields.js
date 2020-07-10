@@ -265,9 +265,12 @@ export const beforeInitForm = {
         form.unitsIndex = unitsCount;
       }
       // Adding formName prop to each field item to display required Error message.
-      Object.keys(form.fields).map(key=>{
-        form.fields[key].formName = form.name;
-      })
+      let fieldsArray = Object.keys(form.fields);
+      if(fieldsArray && fieldsArray.length > 0){
+        fieldsArray.map(key=>{
+          form.fields[key].formName = form.name;
+        });
+      }
       if (floorIndex === 0 && unitIndex === 0) {
         form.unitsIndex = 0;
         propertyType !== "SHAREDPROPERTY" && dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].floorNo`, "0"));
