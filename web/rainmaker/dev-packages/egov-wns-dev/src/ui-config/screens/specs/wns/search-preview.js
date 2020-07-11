@@ -43,8 +43,8 @@ let service = getQueryArg(window.location.href, "service");
 let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-
-if(isModifyMode()){ redirectQueryString += '&mode=MODIFY&modeaction=edit' }
+let editredirect = `apply?${redirectQueryString}&action=edit`;
+if(isModifyMode()){ editredirect += '&mode=MODIFY&modeaction=edit' }
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
@@ -484,6 +484,7 @@ const screenConfig = {
             baseUrlTemp : 'wns',
             bserviceTemp : (service === serviceConst.WATER)?"WS.ONE_TIME_FEE":"SW.ONE_TIME_FEE",
             redirectQueryString: redirectQueryString,
+            editredirect:editredirect,
             beforeSubmitHook: (data)=>{
               data = data[0];
               data.assignees = [];

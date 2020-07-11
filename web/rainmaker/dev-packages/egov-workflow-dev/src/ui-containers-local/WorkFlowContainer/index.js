@@ -110,6 +110,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
         return "purpose=approve&status=success";
+      case "APPROVE_CONNECTION":
+        return "purpose=approve&status=success";
       case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
       case "REVOCATE":
@@ -413,7 +415,7 @@ class WorkFlowContainer extends React.Component {
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
+        buttonUrl: (this.props.editredirect)?this.props.editredirect:this.getRedirectUrl("EDIT", businessId, moduleName)
       };
     }
     return editAction;

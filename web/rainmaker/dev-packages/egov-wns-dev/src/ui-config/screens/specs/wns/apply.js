@@ -271,8 +271,12 @@ export const getData = async (action, state, dispatch) => {
         showHideFieldsFirstStep(dispatch,"",false);
       }
       // For Modify connection details
-      if(isMode) { delete combinedArray[0].id; combinedArray[0].documents = []; }
+      if(isMode && !isModifyModeAction()) { 
+        // this delete for initiate modify connection 
+        delete combinedArray[0].id; combinedArray[0].documents = []; 
+      }
       if(isMode && isModifyModeAction()){
+          // ModifyEdit should not call create.
           dispatch(prepareFinalObject("modifyAppCreated", true));
       }
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));

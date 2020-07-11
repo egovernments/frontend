@@ -114,7 +114,12 @@ export const searchApplicationResults = {
 };
 
 const getApplicationDetails = data => {
-  window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`
+  let connectionNo = `${data.rowData[0]}`;
+  if(connectionNo && connectionNo !== 'NA') {
+    window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`
+  } else {
+    window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`
+  }
 }
 
 const getConnectionDetails = data => {
