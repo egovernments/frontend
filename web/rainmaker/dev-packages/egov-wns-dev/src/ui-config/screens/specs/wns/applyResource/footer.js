@@ -23,19 +23,24 @@ import {
   prepareModificationsDocumentsUploadData,
   validateConnHolderDetails,
   isActiveProperty,
-  showHideFieldsFirstStep
+  showHideFieldsFirstStep,
+  isModifyMode,
+  isModifyModeAction
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
 import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
-let isMode = getQueryArg(window.location.href, "mode");
-isMode = (isMode) ? isMode.toUpperCase() : "";
+const isMode = isModifyMode();
+const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = getTenantIdCommon();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
+  let reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
+  if(isMode && isModeAction){
+    reviewUrl +="&mode=MODIFY"
+  }
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -274,6 +279,7 @@ const callBackForNext = async (state, dispatch) => {
           let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
           let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
           let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
+          let modifyAppCreated = get(state, "screenConfiguration.preparedFinalObject.modifyAppCreated")
           if (isFormValid) {
             if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
               if (waterChecked && sewerChecked) {
@@ -285,7 +291,7 @@ const callBackForNext = async (state, dispatch) => {
                 );
                 if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
                 else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-              } else if ((sewerChecked && sewerData.length === 0) || (isMode && isMode === 'MODIFY' && sewerData.length === 1))  {
+              } else if ((sewerChecked && sewerData.length === 0) || (isMode && sewerData.length === 1 && !modifyAppCreated))  {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
@@ -293,7 +299,7 @@ const callBackForNext = async (state, dispatch) => {
                   )
                 );
                 await applyForSewerage(state, dispatch);
-              } else if ((waterChecked && waterData.length === 0) || (isMode && isMode === 'MODIFY' && waterData.length === 1)) {
+              } else if ((waterChecked && waterData.length === 0) || (isMode && waterData.length === 1 && !modifyAppCreated)) {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
@@ -365,7 +371,7 @@ const callBackForNext = async (state, dispatch) => {
       }
     }
     else { 
-      if(isMode && isMode === 'MODIFY') {
+      if(isMode) {
         isFormValid = true; 
         hasFieldToaster = false; 
       } else {
@@ -375,7 +381,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen" && !isMode) {
+  if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen" && (isMode && isModifyModeAction())) {
     if (getQueryArg(window.location.href, "action") === "edit") {
       setReviewPageRoute(state, dispatch);
     }
@@ -593,7 +599,7 @@ export const changeStep = (
       );
       if(isDocsUploaded){
         activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
-      } else if(isMode && isMode === 'MODIFY'){
+      } else if(isMode){
         activeStep = 2;
       }
     } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) {

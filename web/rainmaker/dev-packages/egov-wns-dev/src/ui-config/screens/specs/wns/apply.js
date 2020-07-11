@@ -27,7 +27,9 @@ import {
   findAndReplace,
   prefillDocuments,
   isActiveProperty,
-  showHideFieldsFirstStep
+  showHideFieldsFirstStep,
+  isModifyMode,
+  isModifyModeAction
 } from "../../../../ui-utils/commons";
 import commonConfig from "config/common.js";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
@@ -39,9 +41,7 @@ import { triggerModificationsDisplay } from "./../utils/index";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-let isMode = getQueryArg(window.location.href, "mode");
-isMode = (isMode) ? isMode.toUpperCase() : "";
-
+let isMode = isModifyMode();
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
@@ -56,7 +56,7 @@ export const stepperData = () => {
 export const stepper = getStepperObject({ props: { activeStep: 0 } }, stepperData());
 
 export const getHeaderLabel = () => {
-  if (isMode && isMode === 'MODIFY') {
+  if (isMode) {
     return process.env.REACT_APP_NAME === "Citizen" ? "WS_MODIFY_NEW_CONNECTION_HEADER" : "WS_MODIFY_CONNECTION_HEADER"
   }
   return process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
@@ -93,7 +93,7 @@ export const reviewOwnerDetails = reviewOwner(process.env.REACT_APP_NAME !== "Ci
 
 export const reviewDocumentDetails = reviewDocuments();
 
-export const reviewModificationsDetails = (isMode === 'MODIFY')?reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen"):{};
+export const reviewModificationsDetails = (isMode)?reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen"):{};
 
 const summaryScreenCitizen = getCommonCard({
   reviewConnDetails,
@@ -271,9 +271,13 @@ export const getData = async (action, state, dispatch) => {
         showHideFieldsFirstStep(dispatch,"",false);
       }
       // For Modify connection details
-      if(isMode && isMode === 'MODIFY') { delete combinedArray[0].id; combinedArray[0].documents = []; }
-      
+      if(isMode) { delete combinedArray[0].id; combinedArray[0].documents = []; }
+      if(isMode && isModifyModeAction()){
+          dispatch(prepareFinalObject("modifyAppCreated", true));
+      }
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
+      // For oldvalue display
+      dispatch(prepareFinalObject("applyScreenOld", findAndReplace(combinedArray[0], "null", "NA")));
       if(combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA"){
         combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
         dispatch(prepareFinalObject("connectionHolders", combinedArray[0].connectionHolders));
@@ -382,7 +386,7 @@ export const getData = async (action, state, dispatch) => {
       let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       //For Modify Connection hide the connection details card
-      if(isMode && isMode === 'MODIFY'){
+      if(isMode){
         dispatch(
           handleField(
             "apply",
@@ -524,7 +528,7 @@ const screenConfig = {
         toggleSewerageFeilds(action, false);
       }
     }
-    if (isMode && isMode === 'MODIFY'){
+    if (isMode){
       triggerModificationsDisplay(action, true);
     } else {
       triggerModificationsDisplay(action, false);

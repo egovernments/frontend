@@ -34,14 +34,18 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
-import { getWorkFlowData, serviceConst } from "../../../../ui-utils/commons";
+import { getWorkFlowData, serviceConst, isModifyMode } from "../../../../ui-utils/commons";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
-const serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
+let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+
+if(isModifyMode()){ redirectQueryString += '&mode=MODIFY&modeaction=edit' }
+
 const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_TASK_DETAILS"
@@ -418,7 +422,9 @@ const screenConfig = {
     // if (status !== "pending_payment") {
     //   set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
     // }
-   
+    if(isModifyMode()){
+      serviceModuleName = service === serviceConst.WATER ? "ModifyWSConnection" : "ModifySWConnection";
+    }
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: serviceModuleName }
@@ -472,12 +478,12 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: (serviceModuleName === "NewWS1")?"WaterConnection":"SewerageConnection",
+            dataPath: (service === serviceConst.WATER)?"WaterConnection":"SewerageConnection",
             moduleName: serviceModuleName,
             updateUrl: serviceUrl,
             baseUrlTemp : 'wns',
-            bserviceTemp : (serviceModuleName === "NewWS1")?"WS.ONE_TIME_FEE":"SW.ONE_TIME_FEE",
-            redirectQueryString: `applicationNumber=${applicationNumber}&tenantId=${tenantId}`,
+            bserviceTemp : (service === serviceConst.WATER)?"WS.ONE_TIME_FEE":"SW.ONE_TIME_FEE",
+            redirectQueryString: redirectQueryString,
             beforeSubmitHook: (data)=>{
               data = data[0];
               data.assignees = [];
