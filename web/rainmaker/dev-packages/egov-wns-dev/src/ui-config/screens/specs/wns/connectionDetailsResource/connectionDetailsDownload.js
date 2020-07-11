@@ -17,7 +17,7 @@ const callDownload = (state, dispatch, mode) => {
 
 
 
-export const connectionDetailsDownload = getCommonApplyFooter("TOP",{
+export const connectionDetailsDownload = getCommonApplyFooter("RIGHT",{
   downloadButton: {
     componentPath: "Button",
     props: {
