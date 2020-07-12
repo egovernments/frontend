@@ -40,7 +40,6 @@ class Footer extends React.Component {
           // check for the WF Exists
           const queryObj = [
             { key: "businessIds", value: applicationNos },
-            { key: "history", value: true },
             { key: "tenantId", value: tenantId }
           ];        
           httpRequest("post", "/egov-workflow-v2/egov-wf/process/_search", "_search", queryObj).then((payload) => {
