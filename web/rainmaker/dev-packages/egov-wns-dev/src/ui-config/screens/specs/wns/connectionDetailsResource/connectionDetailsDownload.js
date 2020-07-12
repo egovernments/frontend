@@ -27,7 +27,7 @@ export const connectionDetailsDownload = getCommonApplyFooter("RIGHT",{
         minWidth: "200px",
         height: "48px",
         marginRight: "16px",
-        marginLeft:"65px"
+        marginLeft:"145px"
       }
     },
     children: {

@@ -7,13 +7,13 @@ import {
   convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, getSearchResultsForSewerage, getDescriptionFromMDMS, serviceConst } from "../../../../ui-utils/commons";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
-import { getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
+import { getOwnerDetails, connHolderDetailsSummary, connHolderDetailsSameAsOwnerSummary } from "./connectionDetailsResource/owner-deatils";
 import {
   ifUserRoleExists
 } from "../utils";
@@ -21,6 +21,44 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
 
+
+const showHideConnectionHolder = (dispatch,connectionHolders) => {
+  if(connectionHolders != 'NA' && connectionHolders.length > 0){
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.connectionHolders",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.connectionHoldersSameAsOwner",
+            "visible",
+            false
+          )
+        );
+      }else{
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.connectionHolders",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.connectionHoldersSameAsOwner",
+            "visible",
+            true
+          )
+        );
+      }
+}
 const searchResults = async (action, state, dispatch, connectionNumber) => {
   /**
    * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
@@ -60,7 +98,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           payloadData.SewerageConnections[0].property.propertyTypeData = "NA"
         }
       }*/
-
+      showHideConnectionHolder(dispatch,payloadData.SewerageConnections[0].connectionHolders); 
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]))
     }
   } else if (service === serviceConst.WATER) {
@@ -96,7 +134,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           payloadData.WaterConnection[0].property.propertyTypeData = "NA"
         }
       }*/
-
+      showHideConnectionHolder(dispatch,payloadData.WaterConnection[0].connectionHolders);     
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
     }
   }
@@ -127,9 +165,13 @@ const propertyDetails = getPropertyDetails(false);
 
 const ownerDetails = getOwnerDetails(false);
 
+const connectionHolders = connHolderDetailsSummary();
+
+const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
+
 const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP'))?connectionDetailsFooter:{};
 
-export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails });
+export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails, connectionHolders, connectionHoldersSameAsOwner});
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -155,7 +197,7 @@ const screenConfig = {
             header1: {
               gridDefination: {
                 xs: 12,
-                sm: 8
+                sm: 6
               },
               ...headerrow
             },
