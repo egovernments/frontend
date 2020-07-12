@@ -15,7 +15,7 @@ class Footer extends React.Component {
   }
   render() {
     let downloadMenu = [];
-    const { connectionNumber, tenantId, toggleSnackbar,applicationNo } = this.props;
+    const { connectionNumber, tenantId, toggleSnackbar,applicationNo, applicationNos } = this.props;
     const editButton = {
         label: "Edit",
         labelKey: "WS_MODIFY_CONNECTION_BUTTON",
@@ -39,31 +39,35 @@ class Footer extends React.Component {
 
           // check for the WF Exists
           const queryObj = [
-            { key: "businessIds", value: applicationNo },
+            { key: "businessIds", value: applicationNos },
             { key: "history", value: true },
             { key: "tenantId", value: tenantId }
           ];        
           httpRequest("post", "/egov-workflow-v2/egov-wf/process/_search", "_search", queryObj).then((payload) => {
             console.log(payload);
-            if(payload && payload.ProcessInstances && payload.ProcessInstances[0]['nextActions'] && payload.ProcessInstances[0]['nextActions'].length > 0){
-              toggleSnackbar(
-                true,
-                {
-                  labelName: "WorkFlow already Initiated",
-                  labelKey: "WS_WORKFLOW_ALREADY_INITIATED"
-                },
-                "error"
-              );
-
-              return false;
+            if(payload && payload.ProcessInstances && payload.ProcessInstances.length > 0){
+              let isApplicationApproved = false;
+              for(let pInstance of payload.ProcessInstances) {
+                  isApplicationApproved = pInstance.state.isTerminateState;
+                  if(!isApplicationApproved) {
+                      break;
+                  }
+              }
+              if(!isApplicationApproved){
+                toggleSnackbar(
+                  true,
+                  {
+                    labelName: "WorkFlow already Initiated",
+                    labelKey: "WS_WORKFLOW_ALREADY_INITIATED"
+                  },
+                  "error"
+                );
+                return false;
+              }
             }
-
-          });
-          window.location.href = `${getDomainLink()}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
-          /*this.props.setRoute(
-            `${baseURL}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
-          );*/
-        }
+            window.location.href = `${getDomainLink()}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
+          });          
+       }
       };
     //if(applicationType === "MODIFY"){
     downloadMenu && downloadMenu.push(editButton);
@@ -105,6 +109,12 @@ const mapStateToProps = state => {
     "WaterConnection",
     []
   );
+  /* For WorkFlow check */
+  let applicationNos = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applicationNos",
+    []
+  );
 
   if(connectionObj.length === 0 ){
     connectionObj = get(
@@ -115,7 +125,7 @@ const mapStateToProps = state => {
   }
   const applicationNo = (connectionObj && connectionObj.length > 0)?connectionObj[0].applicationNo:""
 
-  return { state, applicationNo };
+  return { state, applicationNo, applicationNos };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -21,7 +21,18 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
 
-
+const getApplicationNumber = (dispatch,connectionsObj) => {
+  let appNos = "";
+  if(connectionsObj.length > 1){
+    for(var i=0; i< connectionsObj.length; i++){
+      appNos += connectionsObj[i].applicationNo +",";
+    }
+    appNos = appNos.slice(0,-1);
+  }else{
+    appNos = connectionsObj[0].applicationNo;
+  }
+  dispatch(prepareFinalObject("applicationNos", appNos));
+}
 const showHideConnectionHolder = (dispatch,connectionHolders) => {
   if(connectionHolders != 'NA' && connectionHolders.length > 0){
         dispatch(
@@ -100,6 +111,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       }*/
       showHideConnectionHolder(dispatch,payloadData.SewerageConnections[0].connectionHolders); 
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]))
+      getApplicationNumber(dispatch,payloadData.WaterConnection);
     }
   } else if (service === serviceConst.WATER) {
     let payloadData = await getSearchResults(queryObject);
@@ -136,6 +148,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       }*/
       showHideConnectionHolder(dispatch,payloadData.WaterConnection[0].connectionHolders);     
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
+      getApplicationNumber(dispatch,payloadData.WaterConnection);
     }
   }
 };
