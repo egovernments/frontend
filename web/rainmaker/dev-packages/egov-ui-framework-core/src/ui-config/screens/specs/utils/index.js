@@ -190,13 +190,12 @@ export const getBreak = (props = {}) => {
   };
 };
 
-export const getLabel = (label, labelKey, visibility=true, props = {}) => {
+export const getLabel = (label, labelKey, props = {}) => {
   return {
     uiFramework: "custom-containers",
     componentPath: "LabelContainer",
     props: {
       ...label,
-      visibility,
       ...props
     }
   };

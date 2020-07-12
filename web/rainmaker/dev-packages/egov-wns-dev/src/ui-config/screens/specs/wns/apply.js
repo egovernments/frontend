@@ -40,7 +40,7 @@ import { set } from "lodash";
 import { triggerModificationsDisplay } from "./../utils/index";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import cloneDeep from "lodash/cloneDeep";
 let isMode = isModifyMode();
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
@@ -281,7 +281,8 @@ export const getData = async (action, state, dispatch) => {
       }
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       // For oldvalue display
-      dispatch(prepareFinalObject("applyScreenOld", findAndReplace(combinedArray[0], "null", "NA")));
+      let oldcombinedArray = cloneDeep(combinedArray[0]);
+      dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
       if(combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA"){
         combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
         dispatch(prepareFinalObject("connectionHolders", combinedArray[0].connectionHolders));
