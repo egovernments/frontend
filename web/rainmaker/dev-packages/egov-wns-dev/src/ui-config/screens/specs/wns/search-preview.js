@@ -47,6 +47,7 @@ let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
 
 if(isModifyMode()){ 
+  redirectQueryString += '&mode=MODIFY';
   editredirect += '&mode=MODIFY&modeaction=edit';
   headerLabel = "WS_MODIFY_TASK_DETAILS"
 }
