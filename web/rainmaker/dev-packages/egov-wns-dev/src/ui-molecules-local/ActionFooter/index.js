@@ -16,6 +16,7 @@ class Footer extends React.Component {
   render() {
     let downloadMenu = [];
     const { connectionNumber, tenantId, toggleSnackbar,applicationNo, applicationNos } = this.props;
+
     const editButton = {
         label: "Edit",
         labelKey: "WS_MODIFY_CONNECTION_BUTTON",
@@ -23,12 +24,13 @@ class Footer extends React.Component {
 
           // checking for the due amount
           let due = getQueryArg(window.location.href, "due");
+          let errLabel = (applicationNo && applicationNo.includes("WS"))?"WS_DUE_AMOUNT_SHOULD_BE_ZERO":"SW_DUE_AMOUNT_SHOULD_BE_ZERO";
           if(due && (parseInt(due) > 0)){            
             toggleSnackbar(
               true,
               {
                 labelName: "Due Amount should be zero!",
-                labelKey: "WS_DUE_AMOUNT_SHOULD_BE_ZERO"
+                labelKey: errLabel
               },
               "error"
             );

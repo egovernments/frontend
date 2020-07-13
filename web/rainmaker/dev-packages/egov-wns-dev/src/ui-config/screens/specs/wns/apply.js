@@ -227,6 +227,23 @@ export const getMdmsData = async dispatch => {
   } catch (e) { console.log(e); }
 };
 
+const showHideFieldModifyConnection = (action) => {
+  let fieldsChanges = [ 
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard",false],
+    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven" , false],
+    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight" , false],
+    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewNine" , false],
+    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen" , false],
+  ]
+  for(var i=0; i< fieldsChanges.length; i++){
+    set(
+      action.screenConfig,
+      fieldsChanges[i][0]+".visible",
+      fieldsChanges[i][1]
+    );
+  }
+}
+
 export const getData = async (action, state, dispatch) => {
   let applicationNo = getQueryArg(window.location.href, "applicationNumber");
   const connectionNo = getQueryArg(window.location.href, "connectionNumber");
@@ -392,14 +409,7 @@ export const getData = async (action, state, dispatch) => {
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       //For Modify Connection hide the connection details card
       if(isMode){
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard",
-            "visible",
-            false
-          )
-        );
+        showHideFieldModifyConnection(action);
       }
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch, isMode);

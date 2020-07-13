@@ -269,6 +269,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
             finalArray.push({
               connectionNo: element.connectionNo,
               applicationNo: element.applicationNo,
+              applicationType: element.applicationType,
               name: ownerName.slice(2),
               applicationStatus: appStatus,
               address: handleAddress(element),
@@ -280,6 +281,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
             finalArray.push({
               connectionNo: element.connectionNo,
               applicationNo: element.applicationNo,
+              applicationType: element.applicationType,
               name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:"",
               applicationStatus: appStatus,
               address: handleAddress(element),
@@ -341,11 +343,14 @@ const showConnectionResults = (connections, dispatch) => {
   showHideConnectionTable(true, dispatch);
 }
 
+const getApplicationType = (applicationType) => {
+  return (applicationType)?applicationType.split("_").join(" "):applicationType;
+}
 const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
     ["WS_COMMON_TABLE_COL_APP_NO_LABEL"]: item.applicationNo,
-    ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: item.service === serviceConst.WATER ? "New Water Connection" : "New Sewerage Connection",
+    ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: getApplicationType(item.applicationType),
     ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
     ["WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
