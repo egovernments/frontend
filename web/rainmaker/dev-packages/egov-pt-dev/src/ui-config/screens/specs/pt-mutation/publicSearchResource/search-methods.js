@@ -25,6 +25,10 @@ const removeValidation = (state, dispatch) => {
     dispatch(
       handleField("public-search", ComponentJsonPath[key], "isFieldValid", true)
     );
+
+    dispatch(
+      handleField("public-search", ComponentJsonPath[key], "props.helperText", "")
+    );
     return true;
   });
 };
