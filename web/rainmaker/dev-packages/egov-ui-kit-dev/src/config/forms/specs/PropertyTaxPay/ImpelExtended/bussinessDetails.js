@@ -8,7 +8,7 @@ const formConfig = {
   fields: {
     VasikaNo: {
       id: "vasikaNo",
-      className:"bussinessDetails",
+      className:"bussinessDetail1",
       jsonPath: "Properties[0].additionalDetails.vasikaNo",
       type: "textfield",
       floatingLabelText: "PT_COMMON_VASIKA_NO",
@@ -18,7 +18,7 @@ const formConfig = {
     },
     vasikaDate: {
       id: "vasikaDate",
-      className:"bussinessDetails",
+      className:"bussinessDetail2",
       jsonPath: "Properties[0].additionalDetails.vasikaDate",
       type: "date",
       floatingLabelText: "PT_COMMON_VASIKA_DATE",
@@ -28,7 +28,7 @@ const formConfig = {
     },
     allotmentNo: {
       id: "allotmentNo",
-      className:"bussinessDetails",
+      className:"bussinessDetail3",
       jsonPath:"Properties[0].additionalDetails.allotmentNo" ,
       type: "textfield",
       floatingLabelText: "PT_COMMON_ALLOTMENT_NO",
@@ -38,7 +38,7 @@ const formConfig = {
     },
     allotmentDate: {
       id: "allotmentDate",
-      className:"bussinessDetails",
+      className:"bussinessDetail4",
       jsonPath: "Properties[0].additionalDetails.allotmentDate",
       type: "date",
       floatingLabelText: "PT_COMMON_ALLOTMENT_DATE",
@@ -48,7 +48,7 @@ const formConfig = {
     },
     businessName: {
       id: "businessName",
-      className:"bussinessDetails",
+      className:"bussinessDetail5",
       jsonPath:"Properties[0].additionalDetails.businessName" ,
       type: "textfield",
       floatingLabelText: "PT_COMMON_BUSSINESS_NAME",
@@ -58,7 +58,7 @@ const formConfig = {
     },
     remrks: {
       id: "remarks",
-      className:"bussinessDetails",
+      className:"bussinessDetail6",
       jsonPath: "Properties[0].additionalDetails.remrks",
       type: "textfield",
       floatingLabelText: "PT_COMMON_REMARKS",

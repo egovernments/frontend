@@ -164,7 +164,6 @@ let hideSubsectionLabel=false;
   if (properties) {
     const { propertyDetails } = properties;
     const { additionalDetails } = properties;
-    console.log(additionalDetails,"subVasikaItems");
 
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
