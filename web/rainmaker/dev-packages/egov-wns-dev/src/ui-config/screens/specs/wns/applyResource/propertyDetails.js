@@ -81,7 +81,7 @@ export const propertyID = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "AddLinkForProperty",
-    props: { url: modifyLink },
+    props: { url: modifyLink, isMode },
     gridDefination: { xs: 12, sm: 4, md: 4 }
   }
 })
