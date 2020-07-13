@@ -38,7 +38,7 @@ const setReviewPageRoute = (state, dispatch) => {
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   let reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
-  if(isMode && isModeAction){
+  if(isModifyMode() && isModifyModeAction()){
     reviewUrl +="&mode=MODIFY"
   }
   dispatch(setRoute(reviewUrl));
