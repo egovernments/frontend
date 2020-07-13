@@ -117,6 +117,7 @@ export const UCSearchCard = getCommonCard({
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.serviceCategories",
+        jsonPath: "searchScreenMdmsData.businessServiceSelected",
       },
       jsonPath: "searchScreenMdmsData.businessServiceSelected",
       gridDefination: {
