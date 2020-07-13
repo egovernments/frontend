@@ -188,13 +188,12 @@ export const getAcknowledgementCard = ({
   downloadMenu,
   printMenu
 }) => {
-  console.log("ackBodyObject------ ", acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName)));
     return {
       ackHeader: {
         labelName: `Application for ${moduleName} (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
         labelKey: getTransformedLocale(`${moduleName}_COMMON_APPLY_HEADER_LABEL`),
-        downloadButton: true,
-        printButton: true,
+        downloadButton: downloadMenu ? true : false,
+        printButton: printMenu ? true : false,
         applicationNumber,
         downloadPrintContainerClass: "downloadprint-commonmenu",
         downloadButtonProps : {

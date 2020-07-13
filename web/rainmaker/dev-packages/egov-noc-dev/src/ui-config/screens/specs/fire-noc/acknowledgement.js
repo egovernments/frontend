@@ -57,6 +57,8 @@ const downloadprintMenuConfig = (state, dispatch, purpose) => {
       printMenu = [certificatePrintObject];
       break;
     default:
+      downloadMenu = false;
+      printMenu = false;
       break;
 
   }
