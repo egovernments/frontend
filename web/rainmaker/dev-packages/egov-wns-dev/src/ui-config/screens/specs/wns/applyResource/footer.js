@@ -611,6 +611,19 @@ export const changeStep = (
   } else {
     activeStep = defaultActiveStep;
   }
+  if(activeStep === 0){
+    let conHolders = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionHolders");
+    let isCheckedSameAsProperty = (conHolders && conHolders.length > 0 && !conHolders[0].sameAsPropertyAddress)?false:true;
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.sameAsOwner.children.sameAsOwnerDetails",
+        "props.isChecked",
+        isCheckedSameAsProperty
+      )
+    )
+  }
+  
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = isNextButton(activeStep);
   const isPayButtonVisible = activeStep === 3 ? true : false;
