@@ -695,41 +695,21 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
 };
  
 export const prepareNOCUploadData = async (state, dispatch) => {
-  let applicationDocuments = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NOC.DocumentTypeMapping",
-    []
-  );
-  let documentsDropDownValues = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
-    []
-  );
-  let documents = [];  
-  applicationDocuments && applicationDocuments.length > 0 && 
-  applicationDocuments.forEach(doc =>{
-    if(doc.applicationType === "NEW" && doc.nocType === "FIRE_NOC") {
-      doc.docTypes[0].nocType = doc.nocType;
-      documents.push(doc.docTypes[0]);    
-    }
-  });
+  
+  
+  let documents = await getNocDocuments(state);  
+  let documentsList = await mapDropdownValues(documents, state);
 
-  let documentsList = [];  
-  if (documents && documents.length > 0) {
-    documents.map(doc => {
-      let code = doc.documentType; 
-      let nocType = doc.nocType;    
-      doc.dropDownValues = [];
-      documentsDropDownValues.forEach(value => {
-      let values = value.code.slice(0, code.length);
-      if (code === values) {
-        doc.hasDropdown = true;
-        doc.dropDownValues.push(value);
-      }
-    });
-    documentsList.push(doc);    
-    })
-  }  
+  // nocData.forEach(nocDoc => {
+  //   applicationDocuments && applicationDocuments.length > 0 && 
+  //   applicationDocuments.forEach(doc =>{
+  //     if(doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
+  //       doc.docTypes[0].nocType = doc.nocType;
+  //       documents.push(doc.docTypes[0]);    
+  //     }
+  //   });
+  // });
+  
   const nocDocuments = documentsList;
   let documentsContract = [];
   let tempDoc = {};
@@ -771,32 +751,17 @@ export const prepareNOCUploadData = async (state, dispatch) => {
     });
   }
   dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
-  let NOCData = get(
+  let NOCData = fetchFileDetails(get(
     state.screenConfiguration.preparedFinalObject,
     "NOCData",
     []
-  );
-  NOCData.forEach( async (items) => {
-    let fileStoreIds = jp.query(items.documents, "$.*.fileStoreId");
-    let fileUrls =
-      fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-      items.documents.map((docs, index) => {
-        docs["fileName"] =
-        (fileUrls[docs.fileStoreId] &&
-          decodeURIComponent(
-            getFileUrl(fileUrls[docs.fileStoreId])
-              .split("?")[0]
-              .split("/")
-              .pop()
-              .slice(13)
-          )) ||
-          `Document - ${index + 1}`;
-      })
-  })
+  )) 
+
   let finalCards = [];  
   documentsContract && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
     NOCData && NOCData.map(upDocs => {
       if(docs.nocType === upDocs.nocType) {
+        docs.documents =  upDocs.documents;
         let card ={
           code: docs.code,
           name: docs.code,
@@ -811,8 +776,98 @@ export const prepareNOCUploadData = async (state, dispatch) => {
     })
   })
   dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
+  dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
+
 };
 
+/**
+ * This method will be called to get teh noc documents matched with noctyps and applicationType
+ */
+const getNocDocuments = (state) =>{
+  let applicationDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NOC.DocumentTypeMapping",
+    []
+  );
+ 
+  let nocData = get(
+    state,
+    "screenConfiguration.preparedFinalObject.NOCData",
+    []
+  );
+  let documents = [];
+  //nocData.forEach(nocDoc => {
+    /**
+     * @todo
+     * Change nocType comparision logic to be dynamic i.e., fetch from applicationDocuments with applicationType as New
+     */
+    applicationDocuments && applicationDocuments.length > 0 && 
+    applicationDocuments.forEach(doc =>{
+      if(doc.applicationType === "NEW" && (doc.nocType === "FIRE_NOC" || doc.nocType === "AIRPORT_AUTHORITY")) {
+        doc.docTypes[0].nocType = doc.nocType;
+        documents.push(doc.docTypes[0]);    
+      }
+    });
+  //});
+ return documents;
+}
+
+/**
+ * This method will be called to map mdms dropdown values
+ * @param {*} documents 
+ */
+const mapDropdownValues = (documents, state) =>{
+  let documentsDropDownValues = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
+  let documentsList = [];  
+  if (documents && documents.length > 0) {
+    documents.map(doc => {
+      let code = doc.documentType; 
+      let nocType = doc.nocType;    
+      doc.dropDownValues = [];
+      documentsDropDownValues.forEach(value => {
+      let values = value.code.slice(0, code.length);
+      if (code === values) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc);    
+    })
+  }  
+  return documentsList;
+
+}
+
+/**
+ * This method will be called to update filestore
+ * @param {*} fileData 
+ */
+const fetchFileDetails = fileData =>{
+  fileData && fileData.length>0 && fileData.forEach( async (items) => {
+    if(items.documents && items.documents.length>0){
+      let fileStoreIds = jp.query(items.documents, "$.*.fileStoreId");
+      let fileUrls =
+        fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+        items.documents.map((docs, index) => {
+          docs["fileName"] =
+          (fileUrls[docs.fileStoreId] &&
+            decodeURIComponent(
+              getFileUrl(fileUrls[docs.fileStoreId])
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+            `Document - ${index + 1}`;
+        })
+    }
+  });
+  return fileData;
+}
 export const prepareOwnershipType = response => {
   console.log(response);
   // Handle applicant ownership dependent dropdowns

@@ -3985,11 +3985,11 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     if(mdmsData && mdmsData.BPA && wfState ) {
       let documents = mdmsData.BPA.DocTypeMapping;
       let requiredDocTypes;
-      documents.forEach( doc => {
-        if(doc.WFState === wfState.state.state){
-          appState =  wfState.state.state;
-        }
-      });
+      // documents.forEach( doc => {
+      //   if(doc.WFState === wfState.state.state){
+          appState = appWfState;
+      //   }
+      // });
     };
     let proInstance = wfPayload.ProcessInstances[0];
     let nextActions = get(proInstance, "nextActions");
@@ -4271,25 +4271,6 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
       `Document - ${index + 1}`;
       obj.createdBy = getLoggedinUserRole(doc.wfState);
       obj.additionalDetails = doc.additionalDetails;
-      // if(!doc.createdBy){
-      //   if (doc.wfState === "SEND_TO_CITIZEN") {
-      //     obj.createdBy = "BPA Architect"
-      //   }
-      //   else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
-      //     obj.createdBy = "BPA Document Verifier"
-      //   }
-      //   else if (doc.wfState === "FIELDINSPECTION_PENDING") {
-      //     obj.createdBy = "BPA Field Inspector"   
-      //   }
-      //   else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
-      //     obj.createdBy = "BPA Noc Verifier"    
-      //   } else {
-      //     obj.createdBy = "BPA Architect"
-      //   }
-      // } else {
-      //   obj.createdBy = doc.createdBy
-      // }
-  
     obj['auditDetails'] = doc.auditDetails; 
     documentsPreview.push(obj);
     return obj;
@@ -4297,12 +4278,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-  if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
-    prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
-  } else {
-    prepareFinalCards(state, dispatch, documentsPreview, [] )
-  }
- 
+   prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
 
 };
 const getRequiredMdmsCards = (state, dispatch) => {
@@ -4371,6 +4347,69 @@ export const getLoggedinUserRole = (wfState) =>{
   
   return currentRole;
 }; 
+const getUploadedDocsFromNoc = (state, dispatch) =>{
+  let nocAppDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.NOCData",
+    []
+  );
+ let applicantDocuments = [];
+  nocAppDetails.forEach(nocDoc => {
+    let documents = jp.query(
+      nocDoc,
+      "$.documents.*"
+    );
+    if(documents){
+      applicantDocuments.push(documents)
+    }
+  });
+  return applicantDocuments;
+}
+
+export const prepareNocDocumentsView = async (state, dispatch) => {
+  let documentsPreview = [];
+
+  let allDocuments = await getUploadedDocsFromNoc(state, dispatch);
+  var uploadedAppDocuments = [];
+  let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
+  let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    allDocuments.map((doc, index) => {
+    uploadedAppDocuments.push(doc);
+    let obj = {};
+   
+    obj.title = getTransformedLocale(doc.documentType);
+    obj.fileStoreId = doc.fileStoreId;
+    obj.linkText = "View";
+    if(doc.auditDetails){
+      obj["createdTime"] = doc.auditDetails.createdTime;
+    }
+    
+    obj["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
+      "";
+    obj["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          getFileUrl(fileUrls[doc.fileStoreId])
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+      obj.createdBy = getLoggedinUserRole(doc.wfState);
+      obj.additionalDetails = doc.additionalDetails;
+    obj['auditDetails'] = doc.auditDetails; 
+    obj = Object.assign(doc);
+    documentsPreview.push(obj);
+    return obj;
+  });
+  dispatch(prepareFinalObject("nocDocumentDetailsPreview", documentsPreview));
+ return uploadedAppDocuments;
+};
 
 const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms) =>{
  // let mdmsCards = getRequiredMdmsCards(state, dispatch);
@@ -4404,10 +4443,11 @@ if(requiredDocsFromMdms.length > 0){
 
   allCards && allCards.map((mdmsCard)=>{
     let found = false;
+    
     mdmsCard.documentCode = getTransformedLocale(mdmsCard.code);
     for(var i=0; i<cards.length; i++){
       if(mdmsCard.documentCode == cards[i].documentCode){
-        cards[i].readOnly = cardReadOnly;
+        cards[i].readOnly = cardReadOnly || !mdmsCard.allow;
         let mergedCard = {...cards[i], ...mdmsCard};
         cards[i] = {...mergedCard};
         found = true;
@@ -4415,7 +4455,7 @@ if(requiredDocsFromMdms.length > 0){
     }
     
     if(!found){
-      mdmsCard.readOnly = cardReadOnly;
+      mdmsCard.readOnly = cardReadOnly || !mdmsCard.allow;
       cards.push(mdmsCard)
     }
   });
@@ -4442,6 +4482,236 @@ cards.map(finalDocs => {
 dispatch(prepareFinalObject("finalCardsforPreview", cards));
 dispatch(prepareFinalObject("finalCardsforPreview1", fireDocuments));
 dispatch(prepareFinalObject("finalCardsforPreview2", airportDocuments));
+
+}
+
+export const prepareNocFinalCards = async (state, dispatch) =>{
+  let mdmsNocDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NOC.DocumentTypeMapping",
+    []
+  );
+  let documentsDropDownValues = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
+  let nocAppDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.NOCData",
+    {}
+  );
+
+  let nocDocumentsContract = get(
+    state,
+    "screenConfiguration.preparedFinalObject.nocDocumentsContract",
+    {}
+  ); 
+
+  let nocDocuments = {};
+  var uploadedAppDocuments = [];
+  let requiredDocTypesFromMdms = [],
+  nocDocsFromMdms = [];
+  nocAppDetails.forEach(nocDoc => {
+    mdmsNocDocuments.forEach(mdmsData => {
+      if(mdmsData.applicationType === nocDoc.applicationType && mdmsData.nocType === nocDoc.nocType) {
+        nocDocsFromMdms.push(mdmsData);
+        nocDocuments[nocDoc.nocType] = mdmsData.docTypes;
+      //  nocDocuments[nocDoc.nocType]['documents'] = nocDoc.documents;
+        requiredDocTypesFromMdms.push(mdmsData.nocType);
+      }
+    });
+  });
+ console.log('nocDocsFromMdms', nocDocsFromMdms);
+
+  let documentsList = [],
+   finalDoc = {},
+finalNocDocs= [];
+  for(let item in nocDocuments){
+    let documents = nocDocuments[item];
+    if (documents && documents.length > 0) {
+
+      documents.forEach(doc => {
+        let card = {};
+        card["code"] = doc.documentType.split(".")[0];
+        card["title"] = doc.documentType.split(".")[0];
+        card["cards"] = [];
+        card["nocType"] = doc.nocType;
+        finalDoc[doc.documentType.split(".")[0]] = card;
+      });
+
+      documents.map(doc => {
+        doc.dropDownValues = [];
+        documentsDropDownValues.forEach(value => {
+        let values = value.code.slice(0, doc.documentType.length);
+        if (doc.documentType === values) {
+          doc.hasDropdown = true;
+          doc.dropDownValues.push(value);
+        }
+      });
+      documentsList.push(doc);    
+      })
+    }  
+  }
+
+  documentsList.forEach(doc => {
+    let card = {};
+    card["name"] = doc.documentType;
+    card["code"] = doc.documentType;
+    card["nocType"] = doc.nocType;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropDownValues) {
+      let dropDownValues = {};
+      dropDownValues.label = "Select Documents";
+      dropDownValues.required = doc.required;
+      dropDownValues.menu = doc.dropDownValues.filter(item => {
+        return item.active;
+      });
+      dropDownValues.menu = dropDownValues.menu.map(item => {
+        return { code: item.code, label: item.code };
+      });
+      card["dropDownValues"] = dropDownValues;
+    }
+    finalDoc[doc.documentType.split(".")[0]].cards.push(card);
+  });
+  if(finalDoc) {
+    Object.keys(finalDoc).forEach(key => {
+      finalNocDocs.push(finalDoc[key]);
+    });
+  }
+
+  let finalDocuments = [],
+  documentsContract = finalNocDocs;
+  if (documentsContract && documentsContract.length > 0) {
+
+    let documentsCodes = [], nocBpaDocuments = [];
+
+    documentsContract.forEach(documents => {
+      documents.cards.forEach(cardDoc => {
+        documentsCodes.push(cardDoc.code);
+      });
+    });
+
+    let documentsDocTypes = [];
+    uploadedAppDocuments.forEach(appDoc => {
+      if (appDoc && appDoc.documentType) {
+        let code = (appDoc.documentType).split('.')[0] + '.' + (appDoc.documentType).split('.')[1]
+        documentsDocTypes.push(code);
+      }
+    });
+
+    function comparer(otherArray) {
+      return function (current) {
+        return otherArray.filter(function (other) {
+          return other == current
+        }).length == 0;
+      }
+    }
+
+    let result;
+    if (documentsDocTypes && documentsDocTypes.length > 0) {
+      documentsCodes.map( docs => {
+        documentsDocTypes.map( doc => {
+        if(docs === doc) {
+          documentsContract[0].cards.map( items => {
+            if(items && items.code === doc) return items.required = false;
+          })
+        }
+        })
+        return docs;
+      })
+      result = documentsCodes;
+    } else {
+      result = documentsCodes;
+    }
+
+    let finalDocs = [];
+
+    documentsContract.forEach(doc => {
+      let cards = [];
+      for (let i = 0; i < result.length > 0; i++) {
+        let codes = result[i];
+        doc.cards.forEach(docCards => {
+          if (docCards.code === codes) {
+            cards.push(docCards);
+          }
+        })
+      }
+      finalDocs.push({
+        cards: cards,
+        code: doc.code,
+        title: doc.code
+      });
+    });
+
+    
+    if(finalDocs && finalDocs.length > 0) {
+      finalDocs.forEach(fDoc => {
+        if(fDoc && fDoc.cards && fDoc.cards.length > 0) {
+          finalDocuments.push(fDoc);
+        }
+      })
+    };
+
+    let nocDocs = [], appDocs = [];
+    if(finalDocuments && finalDocuments.length > 0) {
+      finalDocuments.forEach(finalDoc => {
+        if(finalDoc.code == "NOC") {
+          nocDocs.push(finalDoc);
+        } else {
+          appDocs.push(finalDoc);
+        }
+      })
+    }
+  
+
+  dispatch(prepareFinalObject("nocfinalcards", finalNocDocs));
+
+ }
+ let  nocDocumentsContractFinal= await prepareNocDocumentsView(state, dispatch);
+ dispatchFinalNocCardsForPreview(state, dispatch, nocDocumentsContract, finalNocDocs )
+}
+
+const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocumentsFromMdms)=>{
+   // let mdmsCards = getRequiredMdmsCards(state, dispatch);
+let cards = [];
+let documentCards = get(
+  state,
+  "screenConfiguration.preparedFinalObject.nocDocumentsContract",
+  {}
+); 
+
+let cardReadOnly = false;
+if(documentCards && documentCards.length > 0){
+  cards = documentCards[0].cards;
+}
+
+if( nocDocumentsFromMdms && nocDocumentsFromMdms.length> 0){
+    const allCards = [].concat(...nocDocumentsFromMdms.map(({cards}) => cards || []));
+  
+    allCards && allCards.map((mdmsCard)=>{
+      let found = false;
+      for(var i=0; i< cards.length; i++){
+
+        if(mdmsCard.code == cards[i].code){
+          cards[i].readOnly = cardReadOnly;
+          let mergedCard = {...cards[i], ...mdmsCard};
+          cards[i] = {...mergedCard};
+          found = true;
+        } else {
+          cards[i].readOnly = true;
+        }
+        
+      }
+      if(!found){
+        mdmsCard['readOnly'] = false;
+        cards.push(mdmsCard)
+      }
+    });
+
+} 
+
+dispatch(prepareFinalObject("nocForPreview", cards));
 
 }
 /**
@@ -4522,6 +4792,7 @@ if (documents[0] && documents[0].length > 0) {
     card["name"] = doc.code;
     card["code"] = doc.code;
     card["required"] = doc.required ? true : false;
+    card["allow"] = (doc.allow && JSON.parse(doc.allow)) ? true: false;
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
       dropDownValues.label = "Select Documents";

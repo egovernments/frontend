@@ -71,6 +71,12 @@ const styles = {
     borderBottom: "1px solid rgba(5, 5, 5, 0.12)",
     width: "100%"
   },
+  documentContainer: {
+   backgroundColor: "#F2F2F2",
+    padding: "16px",
+    marginTop: "10px",
+    marginBottom: "16px"
+  }
 }
 // const LightTooltip = withStyles((theme) => ({
 //   tooltip: {
@@ -212,12 +218,12 @@ class NocDetailCard extends Component {
       ...rest
     } = this.props;
     return (
-      <div>
+      <div style={styles.documentContainer}>
         {nocFinalCardsforPreview &&
           nocFinalCardsforPreview.length > 0 &&
           nocFinalCardsforPreview.map((card, index) => {
             return (
-              <div>
+              <div style={styles.documentTitle}>
               {NOCData &&
                 NOCData.map(data => {
                   return (

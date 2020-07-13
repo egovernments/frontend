@@ -22,7 +22,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";  
 import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
-import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails } from "../utils/index";
+import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails, prepareNocFinalCards } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
@@ -43,7 +43,7 @@ import {
   downloadFeeReceipt, 
   revocationPdfDownload, 
   setProposedBuildingData,
-  generateBillForBPA
+  generateBillForBPA,
  } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
@@ -477,9 +477,10 @@ const setSearchResponse = async (
       value: tenantId
     },
     { key: "sourceRefId", value: applicationNumber }
-  ]);
-  dispatch(prepareFinalObject("NOCData", payload.Noc));               
-  prepareNOCUploadData(state, dispatch);
+  ], state);
+  dispatch(prepareFinalObject("NOCData", payload.Noc));      
+  await prepareNOCUploadData(state, dispatch);
+  prepareNocFinalCards(state, dispatch);     
   
   let type = getQueryArg(
     window.location.href,

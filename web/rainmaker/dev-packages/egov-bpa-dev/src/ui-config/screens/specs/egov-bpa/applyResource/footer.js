@@ -346,7 +346,6 @@ const callBackForNext = async (state, dispatch) => {
     let validateDocumentField = false;
 
     if (documentsFormat && documentsFormat.length) {
-      debugger
       for (let i = 0; i < documentsFormat.length; i++) {
         let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
         let isDocumentTypeRequired = get(
@@ -399,7 +398,6 @@ const callBackForNext = async (state, dispatch) => {
       getSummaryRequiredDetails(state, dispatch);
     }
   }
-
   if (activeStep !== 4) {
     if (isFormValid) {
       let responseStatus = "success";
@@ -412,7 +410,6 @@ const callBackForNext = async (state, dispatch) => {
         // prepareDocumentsUploadData(state, dispatch); 
       }
       if (activeStep === 2) {
-        debugger;
         let checkingOwner = get(
           state.screenConfiguration.preparedFinalObject,
           "BPA.landInfo.ownershipCategory"
@@ -431,14 +428,7 @@ const callBackForNext = async (state, dispatch) => {
             state.screenConfiguration.preparedFinalObject,
             "BPA.landInfo.owners[0].isPrimaryOwner"
           );
-          let applicationNumber = get(
-            state.screenConfiguration.preparedFinalObject,
-            "BPA.applicationNo"
-          );
-          let tenantId = get(
-            state.screenConfiguration.preparedFinalObject,
-            "BPA.tenantId"
-          );
+         
           if (primaryOwner && primaryOwner === true) {
             if (bpaStatus) {
               changeStep(state, dispatch);
@@ -450,17 +440,24 @@ const callBackForNext = async (state, dispatch) => {
               );
               responseStatus = get(response, "status", "");
               responseStatus === "success" && changeStep(state, dispatch);
+              // if(responseStatus === "success"){
+              //   let bpaDetails = response.message.BPA[0];
+              //   if(bpaDetails){
+              //     const payload = await getNocSearchResults([
+              //       {
+              //         key: "tenantId",
+              //         value: bpaDetails.tenantId
+              //       },
+              //       { key: "sourceRefId", value: bpaDetails.applicationNo }
+              //     ], state);
+              //     dispatch(prepareFinalObject("NOCData", payload.Noc));             
+              //     prepareDocumentsUploadData(state, dispatch);
+              //     prepareNOCUploadData(state, dispatch);
+              //   }
+              // }
+              prepareDocumentsUploadData(state, dispatch);
             }
-            const payload = await getNocSearchResults([
-              {
-                key: "tenantId",
-                value: tenantId
-              },
-              { key: "sourceRefId", value: applicationNumber }
-            ]);
-            dispatch(prepareFinalObject("NOCData", payload.Noc));             
-            prepareDocumentsUploadData(state, dispatch);
-            prepareNOCUploadData(state, dispatch);
+           
           } else {
             let errorMessage = {
               labelName: "Please check is primary owner",
@@ -505,18 +502,13 @@ const callBackForNext = async (state, dispatch) => {
                 );
                 responseStatus = get(response, "status", "");
                 responseStatus === "success" && changeStep(state, dispatch);
+                
               }
-              const payload = await getNocSearchResults([
-                {
-                  key: "tenantId",
-                  value: tenantId
-                },
-                { key: "sourceRefId", value: applicationNumber }
-              ]);
-              dispatch(prepareFinalObject("NOCData", payload.Noc));
               prepareDocumentsUploadData(state, dispatch);
-              prepareNOCUploadData(state, dispatch);              
             }
+
+           
+
           } else {
             let errorMessage = {
               labelName: "Please check is primary owner",
@@ -525,6 +517,23 @@ const callBackForNext = async (state, dispatch) => {
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }
         }
+        let applicationNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.applicationNo"
+        );
+        let tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.tenantId"
+        );
+        const payload = await getNocSearchResults([
+          {
+            key: "tenantId",
+            value: tenantId
+          },
+          { key: "sourceRefId", value: applicationNumber }
+        ], state);
+        dispatch(prepareFinalObject("NOCData", payload.Noc)); 
+        prepareNOCUploadData(state, dispatch);
       } else {
         if(activeStep === 0){
           const occupancytypeValid = get(
