@@ -44,11 +44,17 @@ let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
-if(isModifyMode()){ editredirect += '&mode=MODIFY&modeaction=edit' }
+let headerLabel = "WS_TASK_DETAILS"
+
+if(isModifyMode()){ 
+  editredirect += '&mode=MODIFY&modeaction=edit';
+  headerLabel = "WS_MODIFY_TASK_DETAILS"
+}
+
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelKey: "WS_TASK_DETAILS"
+    labelKey: headerLabel
   }),
   application: getCommonContainer({
     applicationNumber: {
@@ -184,6 +190,35 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         false
       );
     }
+
+    if(isModifyMode()){
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewNine.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.visible",
+        false
+      );
+    }
+
     const status = getTransformedStatus(
       get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
     );
@@ -399,7 +434,8 @@ export const taskDetails = getCommonCard({
   estimate,
   reviewConnectionDetails,
   reviewDocumentDetails,
-  reviewOwnerDetails
+  reviewOwnerDetails,
+  reviewModificationsDetails
 });
 
 export const summaryScreen = getCommonCard({

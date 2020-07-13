@@ -19,7 +19,8 @@ import {
   prepareDocumentsUploadData,
   prepareDocUploadRedux,
   downloadAndPrintForNonApply,
-  serviceConst
+  serviceConst,
+  isModifyMode
 } from "../../../../ui-utils/commons";
 import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
 import set from "lodash/set";
@@ -27,11 +28,14 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getMdmsData } from './apply';
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
+if(isModifyMode()){
+  headerLabel = "WS_APPLICATION_MODIFY_CONNECTION_HEADER";
+}
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
+    labelKey: headerLabel,
   }),
 });
 
