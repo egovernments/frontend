@@ -107,8 +107,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applyScreenObject.applicationNo.includes("WS")?applyScreenObject.service=serviceConst.WATER:applyScreenObject.service=serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
-       let estimate;
-       if(processInstanceAppStatus==="CONNECTION_ACTIVATED"){
+      if(applyScreenObject.service=serviceConst.SEWERAGE)
+        dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
+      let estimate;
+      if(processInstanceAppStatus==="CONNECTION_ACTIVATED"){
         let connectionNumber= parsedObject.connectionNo;
         set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.props.number",connectionNumber );
       }else{
@@ -216,6 +218,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.visible",
+        false
+      );
+    }else{
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewModificationsDetails.visible",
         false
       );
     }
