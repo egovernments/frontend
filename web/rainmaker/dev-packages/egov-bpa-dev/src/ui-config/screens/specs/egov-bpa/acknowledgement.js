@@ -53,6 +53,24 @@ return getCommonContainer({
 })
 }
 
+const getNOCHeader=(applicationNumber)=>{
+  return getCommonContainer({
+    header: getCommonHeader({
+      labelName: `Application for Noc`,
+      labelKey: "NOC_COMMON_HEADER_LABEL"
+    }),
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-bpa",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: applicationNumber
+      },
+      visible: true
+    }
+  })
+  }
+
 const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId, uiCommonPayConfig, businessService) => {
   const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt");
   let keyLabel = "BPA_PERMIT_ORDER";
@@ -162,7 +180,8 @@ const getAcknowledgementCard = (
   applicationNumber,
   secondNumber,
   tenant,
-  businessService
+  businessService,
+  moduleName
 ) => {
   const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");  
   if (purpose === "apply" && status === "success") {
@@ -387,7 +406,7 @@ const getAcknowledgementCard = (
       },
       paymentSuccessFooter: paymentSuccessFooter()
     };
-  } else if (purpose === "approve" && status === "success") {
+  } else if (purpose === "approve" && status === "success" && moduleName !== "Noc") {
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -416,7 +435,55 @@ const getAcknowledgementCard = (
       },
       approvalSuccessFooter
     };
-  } else if (purpose === "application" && status === "rejected") {
+  } else if (purpose === "approve" && status === "success" && moduleName === "Noc") {
+    return {
+      header:getNOCHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "BPA Approved Successfully",
+              labelKey: "BPA_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Approval has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+          })
+        }
+      },
+      approvalSuccessFooter
+    };
+  } else if (purpose === "application" && status === "rejected" && moduleName === "Noc") {
+    return {
+      header:getNOCHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Application for NOC is rejected",
+              labelKey: "NOC_BPA_APPROVAL_REJECTED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Rejection has been sent to building owner at registered Mobile No.",
+              labelKey: "NOC_BPA_APPROVAL_REJE_MESSAGE_SUBHEAD"
+            }
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "application" && status === "rejected" && moduleName !== "Noc") {
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -671,6 +738,7 @@ const screenConfig = {
     const tenant = getQueryArg(window.location.href, "tenantId");
     const secondNumber = getQueryArg(window.location.href, "receiptNumber");
     const businessService = getQueryArg(window.location.href, "businessService");
+    const moduleName = getQueryArg(window.location.href, "moduleName");
     if(purpose && purpose === "pay") {
       getBpaDetails(action, state, dispatch, applicationNumber, tenant);
     }
@@ -683,7 +751,8 @@ const screenConfig = {
       applicationNumber,
       secondNumber,
       tenant,
-      businessService
+      businessService,
+      moduleName
     );
     set(action, "screenConfig.components.div.children", data);
     return action;

@@ -4297,7 +4297,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-   prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
+   prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview, isVisibleTrue);
   // if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
   //   prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
   // } else {
@@ -4373,7 +4373,7 @@ export const getLoggedinUserRole = (wfState) =>{
   return currentRole;
 }; 
 
-const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms) =>{
+const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms, isVisibleTrue) =>{
  // let mdmsCards = getRequiredMdmsCards(state, dispatch);
 let cards = [];
 documentsPreview.forEach((item)=>{
@@ -4408,7 +4408,7 @@ if(requiredDocsFromMdms.length > 0){
     mdmsCard.documentCode = getTransformedLocale(mdmsCard.code);
     for(var i=0; i<cards.length; i++){
       if(mdmsCard.documentCode == cards[i].documentCode){
-        cards[i].readOnly = cardReadOnly || !mdmsCard.allow;
+        cards[i].readOnly = (cardReadOnly || !mdmsCard.allow) && isVisibleTrue;
         let mergedCard = {...cards[i], ...mdmsCard};
         cards[i] = {...mergedCard};
         found = true;
@@ -4416,7 +4416,7 @@ if(requiredDocsFromMdms.length > 0){
     }
     
     if(!found){
-      mdmsCard.readOnly = cardReadOnly || !mdmsCard.allow;
+      mdmsCard.readOnly = (cardReadOnly || !mdmsCard.allow) && isVisibleTrue;
       cards.push(mdmsCard)
     }
   });
@@ -4447,7 +4447,7 @@ const getDocumentCode = (documentType) =>{
   code = code.substring(0,code.lastIndexOf("_"));
      return code;
 }
-export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments, documentsPreview) => {
+export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments, documentsPreview, isVisibleTrue) => {
   let applicationDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping",
@@ -4628,7 +4628,7 @@ let finalDocuments = [];
     }
   }
   console.log('requiredDocsFromMdms', finalDocuments)
-  prepareFinalCards(state, dispatch, documentsPreview, finalDocuments);
+  prepareFinalCards(state, dispatch, documentsPreview, finalDocuments, isVisibleTrue);
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
