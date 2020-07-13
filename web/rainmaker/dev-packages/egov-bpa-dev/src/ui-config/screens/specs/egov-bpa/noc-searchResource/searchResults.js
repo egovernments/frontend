@@ -83,10 +83,10 @@ const onRowClick = rowData => {
     const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
     switch (state) {
       case "INITIATED":
-        window.location.assign(`${origin}${environment}/egov-bpa/oc-searchPreview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        window.location.assign(`${origin}${environment}/egov-bpa/noc-search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
         break;
       default:
-        window.location.assign(`${origin}${environment}/egov-bpa/oc-searchPreview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        window.location.assign(`${origin}${environment}/egov-bpa/noc-search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
         break;
     }
 };
