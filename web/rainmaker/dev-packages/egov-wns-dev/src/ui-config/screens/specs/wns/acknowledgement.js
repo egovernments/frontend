@@ -29,8 +29,13 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getMdmsData } from './apply';
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
+const applicationNo = getQueryArg(window.location.href, "applicationNumber");
 if(isModifyMode()){
+  if(applicationNo.includes("WS")){
   headerLabel = "WS_APPLICATION_MODIFY_CONNECTION_HEADER";
+  }else{
+  headerLabel = "SW_APPLICATION_MODIFY_CONNECTION_HEADER";
+  }
 }
 
 const headerrow = getCommonContainer({
