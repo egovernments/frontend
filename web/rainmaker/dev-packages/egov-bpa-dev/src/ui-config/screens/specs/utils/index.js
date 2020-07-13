@@ -4416,7 +4416,7 @@ if(requiredDocsFromMdms.length > 0){
     }
     
     if(!found){
-      mdmsCard.readOnly = cardReadOnly || !mdmsCard.allow;
+      mdmsCard.readOnly = (cardReadOnly || !mdmsCard.allow) && isVisibleTrue;
       cards.push(mdmsCard)
     }
   });
