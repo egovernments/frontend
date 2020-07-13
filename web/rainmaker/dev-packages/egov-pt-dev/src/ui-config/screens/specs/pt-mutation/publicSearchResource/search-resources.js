@@ -51,7 +51,7 @@ export const searchPropertyDetails = {
           labelsFromLocalisation: true,
           required: true,
           disabled: false,
-          isClearable: true
+          isClearable: false
         },
         required: true,
         jsonPath: "searchScreen.tenantId",
@@ -60,14 +60,6 @@ export const searchPropertyDetails = {
           sm: 3
         },
         beforeFieldChange: async (action, state, dispatch) => {
-          //Below only runs for citizen - not required here in employee
-
-          // dispatch(
-          //   prepareFinalObject(
-          // 	"Licenses[0].tradeLicenseDetail.address.city",
-          // 	action.value
-          //   )
-          // );
           if (action.value) {
             try {
               dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
@@ -104,7 +96,7 @@ export const searchPropertyDetails = {
             masterName: "TENANTS"
           },
           required: true,
-          isClearable: true,
+          isClearable: false,
           labelsFromLocalisation: true,
           jsonPath: "searchScreen.locality.code",
           sourceJsonPath: "applyScreenMdmsData.tenant.localities",
