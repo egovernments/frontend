@@ -72,7 +72,7 @@ const styles = {
     width: "100%"
   },
   documentContainer: {
-   backgroundColor: "#F2F2F2",
+   backgroundColor: "#FFFFFF",
     padding: "16px",
     marginTop: "10px",
     marginBottom: "16px"
@@ -224,81 +224,19 @@ class NocDetailCard extends Component {
           nocFinalCardsforPreview.map((card, index) => {
             return (
               <div style={styles.documentTitle}>
-              {NOCData &&
-                NOCData.map(data => {
-                  return (
                     <div>
                     <LabelContainer
                       labelKey={getTransformedLocale(card.nocType)}
                       style={styles.documentTitle}
                     />
-                    <Grid
-                      container
-                      spacing={3}
-                      className={
-                      this.props.backgroundGrey
-                      ? classNames(styles.whiteCard, "background-grey")
-                      : styles.whiteCard
-                      }
-                    >
-                    <Grid item xs={3}>
-                      <Typography
-                        variant="subtitle1"
-                        style={{ fontWeight: "bold", fontSize: "12px" ,paddingBottom: "6px", paddingTop: "12px" }}
-                      >
-                      Status
-                      </Typography>
-                      <div style={styles.fontStyle}>
-                        {!data.applicationStatus ? "" : data.applicationStatus}
-                      </div>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography
-                      variant="subtitle1"
-                      style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
-                    >
-                      Submitted On
-                      </Typography>
-                      <div style={styles.fontStyle}>
-                      {!(data.additionalDetails && data.additionalDetails.submittedOn) ? "" :convertEpochToDate(data.additionalDetails.submittedOn)}
-                      </div>
-                    </Grid>
-                    
-                    {data.applicationStatus &&  data.applicationStatus === "APPROVED" || data.applicationStatus === "REJECTED" ? (
-                    <Grid item xs={6}>
-                      <Typography
-                        variant="subtitle1"
-                        style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
-                      >
-                        Approved/Rejected on
-                      </Typography>
-                      <div style={styles.fontStyle}>
-                        {!card.documentCode ? "" : card.documentCode}
-                      </div>
-                    </Grid>          
-                    ) : (
-                        ""
-                    )}
-                    </Grid>
-                    <Grid item xs={12}>                    
-                    <div style={styles.dividerStyle}>
-                      <div style={ styles.labelStyle}>
-                        <span>Documents</span>
-                        <div style={styles.underlineStyle} />
-                      </div>
                     </div>
-                    </Grid>                     
-                    </div>
-                  )
-                })
-              }                
-                <div>{this.getCard(card, index)}</div>;
+                <div>{this.getCard(card, index)}</div>  
               </div>
             )
           })
         }
       </div>
-    );
+    )
   }
 
   onUploadClick = (uploadedDocIndex) => {

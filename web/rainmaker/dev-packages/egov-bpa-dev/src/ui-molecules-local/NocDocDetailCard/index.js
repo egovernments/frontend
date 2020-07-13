@@ -18,6 +18,20 @@ const LightTooltip = withStyles((theme) => ({
   }
 }))(Tooltip);
 const styles = {
+ 
+  body2: {
+    wordWrap: "break-word",
+  },
+
+  documentTitle: {
+    color: "rgba(0, 0, 0, 0.87)",
+    fontFamily: "Roboto",
+    fontSize: "16px",
+    fontWeight: 500,
+    letterSpacing: "0.67px",
+    lineHeight: "19px",
+    paddingBottom: "5px"
+  },
   whiteCard: {
     // maxWidth: 250,
     width: "100%",
@@ -32,9 +46,41 @@ const styles = {
     // marginBottom:4,
     display: "inline-flex",
   },
-  body2: {
-    wordWrap: "break-word",
+  fontStyle: {
+    fontSize: "12px",
+    fontWeight: "500",
+    color: "rgba(0, 0, 0, 0.87)",
+    fontFamily: "Roboto",
+    width:150,
+    overflow: "hidden", 
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    // marginLeft:"7px",
   },
+  labelStyle: {
+    position: "relative",
+    fontFamily: "Roboto",
+    fontSize: 14,
+    letterSpacing: 0.6,
+    padding: "5px 0px",
+    display: "inline-block"
+  },  
+  underlineStyle: {
+    position: "absolute",
+    bottom: -1,
+    borderBottom: "2px solid #FE7A51",
+    width: "100%"
+  },
+  dividerStyle : {
+    borderBottom: "1px solid rgba(5, 5, 5, 0.12)",
+    width: "100%"
+  },
+  documentContainer: {
+   backgroundColor: "#FFFFFF",
+    padding: "16px",
+    marginTop: "10px",
+    marginBottom: "16px"
+  }
 };
 const marginStyle1 = {
   fontSize: "14px",
@@ -139,8 +185,87 @@ const requiredIcon = (
 class NocDocDetailCard extends Component {
   render(){
   const { classes, docItem, docIndex, name, ...rest } = this.props;
+
+  let submittedOn,
+  satus = "";
+  if(docItem.submissionDetails){
+    if(docItem.submissionDetails.additionalDetails){
+      submittedOn = docItem.submissionDetails.additionalDetails.submittedOn;
+    }
+    satus = docItem.submissionDetails.applicationStatus
+  }
   return (
     <React.Fragment>
+      {/* <Grid item xs={3}>
+          <Typography
+            variant="subtitle1"
+            style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
+          >
+          Submitted On
+          </Typography>
+          <div style={styles.fontStyle}>
+          {!(submittedOn) ? "" :convertEpochToDate(submittedOn)}
+          </div>
+      </Grid> */}
+      <Grid container spacing={3}
+                      className={
+                      this.props.backgroundGrey
+                      ? classNames(styles.whiteCard, "background-grey")
+                      : styles.whiteCard
+                      }
+                    >
+                    <Grid item xs={3}>
+                      <Typography
+                        variant="subtitle1"
+                        style={{ fontWeight: "bold", fontSize: "12px" ,paddingBottom: "6px", paddingTop: "12px" }}
+                      >
+                      Status
+                      </Typography>
+                      <div style={styles.fontStyle}>
+                        {satus}
+                      </div>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Typography
+                      variant="subtitle1"
+                      style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
+                    >
+                      Submitted On
+                      </Typography>
+                      <div style={styles.fontStyle}>
+                      {!(submittedOn) ? "" :convertEpochToDate(submittedOn)}
+                      </div>
+                    </Grid>
+                    
+                    {satus === "APPROVED" || satus === "REJECTED" ? (
+                    <Grid item xs={6}>
+                      <Typography
+                        variant="subtitle1"
+                        style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
+                      >
+                        Approved/Rejected on
+                      </Typography>
+                      <div style={styles.fontStyle}>
+                        {!docItem.documentCode ? "" : docItem.documentCode}
+                      </div>
+                    </Grid>          
+                    ) : (
+                        ""
+                    )}
+                    </Grid>
+                    <Grid item xs={12}>                    
+                    <div style={styles.dividerStyle}>
+                      <div style={ styles.labelStyle}>
+                        <span>Documents</span>
+                        <div style={styles.underlineStyle} />
+                      </div>
+                    </div>
+                    </Grid> 
+
+
+
+
+
       <Grid container spacing={3}  className={
                 this.props.backgroundGrey
                   ? classNames(classes.whiteCard, "background-grey")

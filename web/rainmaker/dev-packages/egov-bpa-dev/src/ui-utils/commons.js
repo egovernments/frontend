@@ -728,6 +728,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
       card["name"] = doc.documentType;
       card["code"] = doc.documentType;
       card["nocType"] = doc.nocType;
+      card["additionalDetails"] = doc.additionalDetails;
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropDownValues) {
         let dropDownValues = {};
@@ -769,6 +770,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
           dropDownValues: docs.dropDownValues,
           documentCode: docs.code,
           documents: upDocs.documents,
+          additionalDetails: docs.additionalDetails,
           readOnly: false
         };
         finalCards.push(card);       
@@ -796,19 +798,23 @@ const getNocDocuments = (state) =>{
     []
   );
   let documents = [];
-  //nocData.forEach(nocDoc => {
+  nocData.forEach(nocDoc => {
     /**
      * @todo
      * Change nocType comparision logic to be dynamic i.e., fetch from applicationDocuments with applicationType as New
      */
     applicationDocuments && applicationDocuments.length > 0 && 
     applicationDocuments.forEach(doc =>{
-      if(doc.applicationType === "NEW" && (doc.nocType === "FIRE_NOC" || doc.nocType === "AIRPORT_AUTHORITY")) {
+      if(doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
         doc.docTypes[0].nocType = doc.nocType;
+        doc.docTypes[0].additionalDetails = {
+          submissionDetails: nocDoc.additionalDetails,
+          applicationStatus: nocDoc.applicationStatus
+        }
         documents.push(doc.docTypes[0]);    
       }
     });
-  //});
+  });
  return documents;
 }
 
