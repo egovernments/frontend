@@ -499,9 +499,6 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
 
   await edcrDetailsToBpaDetails(state, dispatch);
-
-  let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
-
   let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
 
   if (status && status == "INPROGRESS") {
