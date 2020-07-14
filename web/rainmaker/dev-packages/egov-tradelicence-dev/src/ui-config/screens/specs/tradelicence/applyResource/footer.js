@@ -636,7 +636,7 @@ export const footerReview = (
     leftIcon: "receipt"
   };
   let challanDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Challan", labelKey:"TL_CHALLAN" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
@@ -648,7 +648,7 @@ export const footerReview = (
     leftIcon: "receipt"
   };
   let challanPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Challan", labelKey: "TL_CHALLAN" },
     link: () => {
       const receiptQueryString =  [
         { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
