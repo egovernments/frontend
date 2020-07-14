@@ -567,7 +567,9 @@ const setSearchResponse = async (
 
 const beforeSubmitHook = () => {
   let state = store.getState();
+  let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
   nocapplicationUpdate(state);
+  return bpaDetails;
 }
 
 
