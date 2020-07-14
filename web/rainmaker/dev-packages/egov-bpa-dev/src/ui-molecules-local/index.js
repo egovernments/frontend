@@ -126,6 +126,10 @@ const MultiDownloadCard = Loadable({
   loader: () => import("./NocDocDetailCard"),
   loading: () => <Loading />
  });
+ const NocData = Loadable({
+  loader: () => import("./NocData"),
+  loading: () => <Loading />
+ });
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -152,5 +156,6 @@ export {
   NocUploadCard,
   ComparisionLink,
   NocDetailCard,
-  NocDocDetailCard
+  NocDocDetailCard,
+  NocData
 };

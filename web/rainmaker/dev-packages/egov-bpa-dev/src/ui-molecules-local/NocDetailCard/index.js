@@ -11,6 +11,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 // import MultiDocDetailCard from "../../ui-molecules-local/MultiDocDetailCard";
 import NocDocDetailCard from "../../ui-molecules-local/NocDocDetailCard";
+import NocData from "../../ui-molecules-local/NocData";
 import UploadCard from "../../ui-molecules-local/UploadCard";
 import {getLoggedinUserRole} from "../../ui-config/screens/specs/utils/index.js";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
@@ -229,6 +230,12 @@ class NocDetailCard extends Component {
                     <LabelContainer
                       labelKey={getTransformedLocale(card.nocType)}
                       style={styles.documentTitle}
+                    />
+                    <NocData
+                      docItem={card}
+                      docIndex={index}
+                      key={index.toString()}
+                      {...rest}
                     />
                     </div>
                 <div>{this.getCard(card, index)}</div>  

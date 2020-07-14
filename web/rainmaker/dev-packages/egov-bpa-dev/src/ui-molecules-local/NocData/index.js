@@ -182,7 +182,7 @@ const requiredIcon = (
   </sup>
 );
 
-class NocDocDetailCard extends Component {
+class NocData extends Component {
   render(){
   const { classes, docItem, docIndex, name, ...rest } = this.props;
 
@@ -196,125 +196,65 @@ class NocDocDetailCard extends Component {
   }
   return (
     <React.Fragment>
-      <Grid container spacing={3}  className={
-                this.props.backgroundGrey
-                  ? classNames(classes.whiteCard, "background-grey")
-                  : classes.whiteCard
-              }>
-        <Grid
-          item={true}
-          xs={12}
-          className={
-            this.props.backgroundGrey
-              ? classNames(classes.whiteCard, "background-grey")
-              : classes.whiteCard
-          }
-        >
-          <Grid item xs={6}>
-          {!docItem.documents || docItem.documents == null || docItem.documents.length == 0 ? (          
-            <Typography
-              variant="subtitle1"
-              style={{ fontWeight: "bold", fontSize: "12px" }}
-            >
-            <LabelContainer
-              labelKey={getTransformedLocale(docItem.documentCode)}
-            />             
-            </Typography> 
-            ) : (
-              ""
-            )}           
-          </Grid>
-          <Grid item xs={3}>
-            {!docItem.documents || docItem.documents == null || docItem.documents.length == 0 ? (
-              <Typography
-                variant="subtitle1"
-                style={{ fontWeight: "bold", fontSize: "12px" }}
-              >
-                No Documents Uploaded
-              </Typography>
-            ) : (
-              ""
-            )}
-          </Grid>
-          <Grid item xs={3}>
-            {docItem.readOnly ? (
-              ""
-            ) : (
-              <Button
-                color="primary"
-                style={{ float: "right" }}
-                onClick={() => this.props.toggleEditClick(docIndex)}
-              >
-                Upload
-              </Button>
-            )}
-          </Grid>
-          
-        </Grid>
-        {docItem.documents &&
-            docItem.documents.length > 0 &&
-            docItem.documents.map((doc) => {
-              return(<React.Fragment 
-              >
-                <Grid item xs={3}>
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    style={titleStyle}
-                  >
-                    File
-                  </Typography>
-                  <LightTooltip title={!doc.fileName ? "" : doc.fileName} arrow>
-                  <div style={fontStyle}>
-                    {!doc.fileName ? "" : doc.fileName}
-                  </div>
-                  </LightTooltip>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    style={titleStyle}
-                  >
-                    Uploaded By
-                  </Typography>
-                  <LightTooltip title={!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : doc.additionalDetails.uploadedBy} arrow>
-                  <div style={fontStyle}>
-                    {!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : doc.additionalDetails.uploadedBy}
-                  </div>
-                  </LightTooltip>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    style={titleStyle}
-                  >
-                    Uploaded Date
-                  </Typography>
-                  
-                  <div style={fontStyle}>
-                    {!(doc.additionalDetails && doc.additionalDetails.uploadedTime) ? "" :convertEpochToDate(doc.additionalDetails.uploadedTime)}
-                  </div>
-                </Grid>
-                <Grid item xs={3}>
-                  <Button
-                    color="primary"
-                    onClick={() => {
-                      window.open(doc.link, "_blank");
-                    }}
-                  >
-                    View File
-                  </Button>
-                </Grid>
-              </React.Fragment>)
-            })}
-      </Grid>
+      <Grid container spacing={3}
+                      className={
+                      this.props.backgroundGrey
+                      ? classNames(styles.whiteCard, "background-grey")
+                      : styles.whiteCard
+                      }
+                    >
+                    <Grid item xs={3}>
+                      <Typography
+                        variant="subtitle1"
+                        style={{ fontWeight: "bold", fontSize: "12px" ,paddingBottom: "6px", paddingTop: "12px" }}
+                      >
+                      Status
+                      </Typography>
+                      <div style={styles.fontStyle}>
+                        {satus}
+                      </div>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Typography
+                      variant="subtitle1"
+                      style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
+                    >
+                      Submitted On
+                      </Typography>
+                      <div style={styles.fontStyle}>
+                      {!(submittedOn) ? "" :convertEpochToDate(submittedOn)}
+                      </div>
+                    </Grid>
+                    
+                    {satus === "APPROVED" || satus === "REJECTED" ? (
+                    <Grid item xs={6}>
+                      <Typography
+                        variant="subtitle1"
+                        style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
+                      >
+                        Approved/Rejected on
+                      </Typography>
+                      <div style={styles.fontStyle}>
+                        {!docItem.documentCode ? "" : docItem.documentCode}
+                      </div>
+                    </Grid>          
+                    ) : (
+                        ""
+                    )}
+                    </Grid>
+                    <Grid item xs={12}>                    
+                    <div style={styles.dividerStyle}>
+                      <div style={ styles.labelStyle}>
+                        <span>Documents</span>
+                        <div style={styles.underlineStyle} />
+                      </div>
+                    </div>
+                    </Grid> 
     </React.Fragment>
   );
 }
 }
 
-NocDocDetailCard.propTypes = {};
+NocData.propTypes = {};
 
-export default withStyles(styles)(NocDocDetailCard);
+export default withStyles(styles)(NocData);
