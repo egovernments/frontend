@@ -42,7 +42,7 @@ const styles = {
     paddingBottom: 10,
     marginRight: 16,
     marginTop: 8,
-    marginBottom:16,
+    // marginBottom:16,
     // marginBottom:4,
     display: "inline-flex",
   },
