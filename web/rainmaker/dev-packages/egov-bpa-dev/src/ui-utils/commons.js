@@ -1394,7 +1394,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 const updateNocApplication = async (state, dispatch, bpaAction) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
-  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocForPreview", []);
   if (Noc.length > 0) {
     for (let data = 0; data < Noc.length; data++) {
       let documents = nocDocuments[data].documents;
@@ -1417,6 +1417,7 @@ export const submitBpaApplication = async (state, dispatch) => {
 
   if (isDeclared) {
     let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+    let nocRespose = await nocapplicationUpdate(state);
     const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     if (get(response, "status", "") === "success") {
@@ -1464,6 +1465,7 @@ export const updateBpaApplication = async (state, dispatch) => {
 export const updateOcBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
   let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
+  let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (response) {
@@ -1658,6 +1660,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
 export const submitOCBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
   let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
+  let nocRespose = await nocapplicationUpdate(state);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (response) {
