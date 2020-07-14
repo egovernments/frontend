@@ -1449,7 +1449,7 @@ export const submitBpaApplication = async (state, dispatch) => {
 export const updateBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
   let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
-  // let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
+  let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
   // let payload = await createUpdateNocApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -1676,3 +1676,21 @@ export const submitOCBpaApplication = async (state, dispatch) => {
     }
   }
 };
+
+export const nocapplicationUpdate = (state) => {
+  const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
+  if (Noc.length > 0) {
+    for (let data = 0; data < Noc.length; data++) {
+      let documents = nocDocuments[data].documents;
+      set(Noc[data], "documents", documents);
+      let response = httpRequest(
+        "post",
+        "/noc-services/v1/noc/_update",
+        "",
+        [],
+        { Noc: Noc[data] }
+      );
+    }
+  }
+}

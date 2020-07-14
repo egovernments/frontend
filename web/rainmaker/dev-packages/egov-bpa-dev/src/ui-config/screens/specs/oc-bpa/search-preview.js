@@ -19,7 +19,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
+import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData, nocapplicationUpdate } from "../../../../ui-utils/commons";
 import { 
   requiredDocumentsData, 
   edcrDetailsToBpaDetails,
@@ -565,6 +565,12 @@ const setSearchResponse = async (
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
+const beforeSubmitHook = () => {
+  let state = store.getState();
+  nocapplicationUpdate(state);
+}
+
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -669,7 +675,8 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA_OC",
-            updateUrl: "/bpa-services/v1/bpa/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update",
+            beforeSubmitHook: beforeSubmitHook
           }
         },
         sendToArchPickerDialog: {

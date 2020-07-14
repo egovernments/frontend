@@ -21,7 +21,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";  
-import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
+import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData, nocapplicationUpdate } from "../../../../ui-utils/commons";
 import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails, prepareNocFinalCards } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
@@ -51,6 +51,8 @@ import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { nocDetailsSearch } from "./noc";
+import store from "ui-redux/store";
+
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
   const roles = get(userInfo, "roles");
@@ -709,6 +711,11 @@ const setSearchResponse = async (
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
+const beforeSubmitHook = () => {
+  let state = store.getState();
+  nocapplicationUpdate(state);
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -854,7 +861,8 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/v1/bpa/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update",
+            beforeSubmitHook: beforeSubmitHook
           }
         },
         sendToArchPickerDialog :{

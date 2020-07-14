@@ -324,19 +324,20 @@ class NocDetailCard extends Component {
     prepareFinalObject("nocFinalCardsforPreview", appDocumentList);
 
     prepareFinalObject("nocDocumentDetailsUploadRedux", appDocumentList);
-    if(appDocumentList && appDocumentList.length > 0) {
-      for(let data = 0; data < Noc.length; data ++) {
-        Noc[data].documents = appDocumentList[data].documents
-        let response = httpRequest(
-          "post",
-          "/noc-services/v1/noc/_update",
-          "",
-          [],
-          { Noc: Noc[data] }
-        );
-      }
-      prepareFinalObject("Noc", Noc);
-    }
+    // if(appDocumentList && appDocumentList.length > 0) {
+    //   for(let data = 0; data < Noc.length; data ++) {
+    //     Noc[data].documents = appDocumentList[data].documents
+    //     let response = httpRequest(
+    //       "post",
+    //       "/noc-services/v1/noc/_update",
+    //       "",
+    //       [],
+    //       { Noc: Noc[data] }
+    //     );
+    //   }
+      
+    // }
+    // prepareFinalObject("Noc", Noc);
   };
 
   removeDocument = (cardIndex, uploadedDocIndex) => {
