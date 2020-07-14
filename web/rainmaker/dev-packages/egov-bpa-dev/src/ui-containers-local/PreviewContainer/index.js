@@ -172,7 +172,7 @@ class PreviewContainer extends Component {
         bpaDetails.documents = [fileObj];
       }
     }
-    if(window.location.href.includes("noc-searchPreview")) {
+    if(window.location.href.includes("noc-search-preview")) {
       prepareFinalObject("Noc", bpaDetails);
     } else {
       prepareFinalObject("BPA", bpaDetails);
@@ -206,7 +206,7 @@ class PreviewContainer extends Component {
     }
 
     finalCardsforPreview[cardIndex].documents.splice(uploadedDocIndex, 1);
-    if(window.location.href.includes("noc-searchPreview")) {
+    if(window.location.href.includes("noc-search-preview")) {
       prepareFinalObject("Noc", bpaDetails);
     } else {
       prepareFinalObject("BPA", bpaDetails);
@@ -254,7 +254,7 @@ const mapStateToProps = (state, ownProps) => {
     []
   );
   let modulePath = "BPA";
-  if(window.location.href.includes("noc-searchPreview")) {
+  if(window.location.href.includes("noc-search-preview")) {
     modulePath = "Noc"
   }
   const bpaDetails = get(screenConfiguration.preparedFinalObject, modulePath, {});
