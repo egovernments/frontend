@@ -6,7 +6,7 @@ import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import {getWorkFlowData, getDomainLink } from "../../ui-utils/commons"
+import {getWorkFlowData, getDomainLink, isWorkflowExists } from "../../ui-utils/commons"
 import { httpRequest } from "../../ui-utils/api";
 
 class Footer extends React.Component {
@@ -20,7 +20,7 @@ class Footer extends React.Component {
     const editButton = {
         label: "Edit",
         labelKey: "WS_MODIFY_CONNECTION_BUTTON",
-        link: () => {
+        link: async () => {
 
           // checking for the due amount
           let due = getQueryArg(window.location.href, "due");
@@ -38,36 +38,25 @@ class Footer extends React.Component {
             return false;
           }
 
-
           // check for the WF Exists
           const queryObj = [
             { key: "businessIds", value: applicationNos },
             { key: "tenantId", value: tenantId }
           ];        
-          httpRequest("post", "/egov-workflow-v2/egov-wf/process/_search", "_search", queryObj).then((payload) => {
-            console.log(payload);
-            if(payload && payload.ProcessInstances && payload.ProcessInstances.length > 0){
-              let isApplicationApproved = false;
-              for(let pInstance of payload.ProcessInstances) {
-                  isApplicationApproved = pInstance.state.isTerminateState;
-                  if(!isApplicationApproved) {
-                      break;
-                  }
-              }
-              if(!isApplicationApproved){
-                toggleSnackbar(
-                  true,
-                  {
-                    labelName: "WorkFlow already Initiated",
-                    labelKey: "WS_WORKFLOW_ALREADY_INITIATED"
-                  },
-                  "error"
-                );
-                return false;
-              }
-            }
-            window.location.href = `${getDomainLink()}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
-          });          
+          
+          let isApplicationApproved = await isWorkflowExists(queryObj);
+          if(!isApplicationApproved){
+            toggleSnackbar(
+              true,
+              {
+                labelName: "WorkFlow already Initiated",
+                labelKey: "WS_WORKFLOW_ALREADY_INITIATED"
+              },
+              "error"
+            );
+            return false;
+          }            
+          window.location.href = `${getDomainLink()}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`                    
        }
       };
     //if(applicationType === "MODIFY"){

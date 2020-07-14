@@ -1959,3 +1959,26 @@ export const getWaterSource = (waterSource, waterSubSource) => {
     }
     return waterSource;
 }
+
+export const isWorkflowExists = async (queryObj) => {
+    try {
+        const payload = await httpRequest(
+            "post",
+            "/egov-workflow-v2/egov-wf/process/_search",
+            "_search",
+            queryObj
+        );
+        let isApplicationApproved = false;
+        if(payload && payload.ProcessInstances && payload.ProcessInstances.length > 0){          
+          for(let pInstance of payload.ProcessInstances) {
+              isApplicationApproved = pInstance.state.isTerminateState;
+              if(!isApplicationApproved) {
+                  break;
+              }
+          }          
+        }
+        return isApplicationApproved;
+    } catch (error) {
+        console.log(error);
+    }    
+}
