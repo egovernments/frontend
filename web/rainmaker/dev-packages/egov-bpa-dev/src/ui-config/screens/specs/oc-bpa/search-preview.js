@@ -221,7 +221,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
   }
 
 
-  let comparisonReportDownloadObject = {};
+  
   let comparisonReportPrintObject = {};
   if (comparisonReport) {
     comparisonReportDownloadObject = {
