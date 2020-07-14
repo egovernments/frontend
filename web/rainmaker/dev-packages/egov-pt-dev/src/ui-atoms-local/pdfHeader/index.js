@@ -29,7 +29,8 @@ class pdfHeader extends React.Component {
            //  logoUrl =get(properties,"tenantId") ?  this.getLogoUrl(get(properties,"tenantId")) : "";
             corpCity = `TENANT_TENANTS_${get(properties,"tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
             const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties,"tenantId"));
-            ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0] ,"city.ulbGrade")}` : "MUNICIPAL CORPORATION";
+            // ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0] ,"city.ulbGrade")}` : "MUNICIPAL CORPORATION";
+            ulbGrade= "MUNICIPAL CORPORATION";
           }    
     return (
         <div className="pdf-header" id="pdf-header">
