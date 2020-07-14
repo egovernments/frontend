@@ -24,11 +24,11 @@ const formConfig = {
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         removeFormKey(formKey, field, dispatch, state);
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
-       // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown`, "false"));
+        // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown`, "false"));
         //dispatch(setFieldProperty("basicInformation", "innerDimensions", "dropDownData", "Yes"));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].constructionYear`, null));
         dispatch(setFieldProperty("basicInformation", "datePicker", "value", ""));
-        let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
+              let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
         if (!isEmpty(minorObject)) {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMajor", minorObject.usageCategoryMajor));
         } else {
@@ -49,7 +49,7 @@ const formConfig = {
       fullWidth: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
-     //   dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown`, "false"));
+      //   dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown`, "false"));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].landArea`, null));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].buildUpArea`, null));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].constructionYear`, null));
@@ -79,7 +79,7 @@ const formConfig = {
       },
       dropDownData: [],
     },
-
+    
     datePicker:{
       id:"constructionyear",
       jsonPath: "Properties[0].propertyDetails[0].additionalDetails.constructionYear",
@@ -108,6 +108,7 @@ const formConfig = {
       const typeOfUsageSorted = sortDropdown(mergedMaster, "label", true);
       set(action, "form.fields.typeOfUsage.dropDownData", typeOfUsageSorted);
       masterOne = get(state, "common.generalMDMSDataById.PropertyType");
+//      masterOne = Object.values(get(state, "common.generalMDMSDataById.PropertyType")).filter(item=> item.propertyType !== "BUILTUP");
       masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
       const propertyType=get(state,"common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
@@ -116,7 +117,7 @@ const formConfig = {
       }
       else {
         set(action, "form.fields.datePicker.hideField", false);
-      }
+      }      
       return action;
     } catch (e) {
       console.log(e);

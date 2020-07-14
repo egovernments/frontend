@@ -112,17 +112,17 @@ const routes = [
       // hideBackButton: true,
     }
   },
-  {
-    path: "property-tax/assessment-form-dataentry",
-    component:FormWizardDataEntry,
-    needsAuthentication: true,
-    options: {
-      hideFooter: true,
-      hideTitle:true
-      // hideBackButton: true,
-    }
+     {
+      path: "property-tax/assessment-form-dataentry",
+      component:FormWizardDataEntry,
+      needsAuthentication: true,
+      options: {
+        hideFooter: true,
+        hideTitle:true,
+        // hideBackButton: true,
+      },
 
-  },
+    }, 
   {
     path:
       "property-tax/payment-success/:propertyId/:tenantId/:assessmentId/:assessmentYear",
