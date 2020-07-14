@@ -4350,7 +4350,7 @@ export const getLoggedinUserRole = (wfState) =>{
 const getUploadedDocsFromNoc = (state, dispatch) =>{
   let nocAppDetails = get(
     state,
-    "screenConfiguration.preparedFinalObject.NOCData",
+    "screenConfiguration.preparedFinalObject.Noc",
     []
   );
  let applicantDocuments = [];
@@ -4498,7 +4498,7 @@ export const prepareNocFinalCards = async (state, dispatch) =>{
   );
   let nocAppDetails = get(
     state,
-    "screenConfiguration.preparedFinalObject.NOCData",
+    "screenConfiguration.preparedFinalObject.Noc",
     {}
   );
 

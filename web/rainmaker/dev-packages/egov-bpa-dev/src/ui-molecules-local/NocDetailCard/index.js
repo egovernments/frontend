@@ -17,6 +17,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
+import { httpRequest } from "../../ui-utils/api";
 
 const styles = {
   documentTitle: {
@@ -214,7 +215,7 @@ class NocDetailCard extends Component {
     const {
       nocFinalCardsforPreview,
       documentData,
-      NOCData,
+      Noc,
       ...rest
     } = this.props;
     return (
@@ -256,7 +257,7 @@ class NocDetailCard extends Component {
       prepareFinalObject,
       nocDocumentDetailsUploadRedux,
       nocFinalCardsforPreview,
-      NOCData,
+      Noc,
       wfState
     } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
@@ -316,31 +317,44 @@ class NocDetailCard extends Component {
     prepareFinalObject("nocFinalCardsforPreview", appDocumentList);
 
     prepareFinalObject("nocDocumentDetailsUploadRedux", appDocumentList);
+    if(appDocumentList && appDocumentList.length > 0) {
+      for(let data = 0; data < Noc.length; data ++) {
+        Noc[data].documents = appDocumentList[data].documents
+        let response = httpRequest(
+          "post",
+          "/noc-services/v1/noc/_update",
+          "",
+          [],
+          { Noc: Noc[data] }
+        );
+      }
+      prepareFinalObject("Noc", Noc);
+    }
   };
 
   removeDocument = (cardIndex, uploadedDocIndex) => {
-    const { prepareFinalObject, nocFinalCardsforPreview, NOCData } = this.props;
+    const { prepareFinalObject, nocFinalCardsforPreview, Noc } = this.props;
     let uploadedDocs = [];
     let fileTobeRemoved =
     nocFinalCardsforPreview[cardIndex].documents[uploadedDocIndex];
 
-    if (Array.isArray(NOCData)) {
-      if (NOCData.length > 0) {
-        uploadedDocs = NOCData[0].documents;
+    if (Array.isArray(Noc)) {
+      if (Noc.length > 0) {
+        uploadedDocs = Noc[0].documents;
         uploadedDocs = this.getFinalDocsAfterRemovingDocument(uploadedDocs, fileTobeRemoved);
-        NOCData[0].documents = uploadedDocs;
+        Noc[0].documents = uploadedDocs;
       }
     } else {
-      uploadedDocs = NOCData.documents;
+      uploadedDocs = Noc.documents;
       uploadedDocs = this.getFinalDocsAfterRemovingDocument(
         uploadedDocs,
         fileTobeRemoved
       );
-      NOCData.documents = uploadedDocs;
+      Noc.documents = uploadedDocs;
     }
 
     nocFinalCardsforPreview[cardIndex].documents.splice(uploadedDocIndex, 1);
-    prepareFinalObject("NOCData", NOCData);
+    prepareFinalObject("Noc", Noc);
     //uploadedDocs.map()
     prepareFinalObject("nocFinalCardsforPreview", nocFinalCardsforPreview);
     prepareFinalObject("nocDocumentDetailsUploadRedux", nocFinalCardsforPreview);
@@ -387,13 +401,13 @@ const mapStateToProps = (state, ownProps) => {
     ownProps.jsonPath,
     []
   );
-  const NOCData = get(screenConfiguration.preparedFinalObject, "NOCData", []);
+  const Noc = get(screenConfiguration.preparedFinalObject, "Noc", []);
   const wfState = get(
     screenConfiguration.preparedFinalObject.applicationProcessInstances,
     "state"
   );
 
-  return { nocDocumentDetailsUploadRedux, documentsList, nocFinalCardsforPreview, NOCData, wfState };
+  return { nocDocumentDetailsUploadRedux, documentsList, nocFinalCardsforPreview, Noc, wfState };
 };
 const mapDispatchToProps = (dispatch) => {
   return {

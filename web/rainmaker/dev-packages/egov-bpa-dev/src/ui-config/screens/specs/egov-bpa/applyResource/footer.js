@@ -532,7 +532,7 @@ const callBackForNext = async (state, dispatch) => {
           },
           { key: "sourceRefId", value: applicationNumber }
         ], state);
-        dispatch(prepareFinalObject("NOCData", payload.Noc)); 
+        dispatch(prepareFinalObject("Noc", payload.Noc)); 
         prepareNOCUploadData(state, dispatch);
       } else {
         if(activeStep === 0){

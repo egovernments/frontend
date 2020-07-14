@@ -479,12 +479,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 export const createUpdateNocApplication = async (state, dispatch, status) => {
   let applicationId = get(
     state,
-    "screenConfiguration.preparedFinalObject.NOCData[0].id"
+    "screenConfiguration.preparedFinalObject.Noc[0].id"
   );
   let method = applicationId ? "UPDATE" : "CREATE";
   let nocDocs = get(
     state,
-    "screenConfiguration.preparedFinalObject.NOCData[0].documents",
+    "screenConfiguration.preparedFinalObject.Noc[0].documents",
     []
   );
   let nocDocumentsUpload = get (
@@ -546,7 +546,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 
   }
   try {
-    let payload = get(state.screenConfiguration.preparedFinalObject, "NOCData", []);
+    let payload = get(state.screenConfiguration.preparedFinalObject, "Noc", []);
     let tenantId =
       get(state, "screenConfiguration.preparedFinalObject.BPA.landInfo.address.city") ||
       getQueryArg(window.location.href, "tenantId") ||
@@ -588,7 +588,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         { BPA: payload }
       );
       // response = prepareOwnershipType(response);
-      dispatch(prepareFinalObject("NOCData", response.Noc));
+      dispatch(prepareFinalObject("Noc", response.Noc));
       // setApplicationNumberBox(state, dispatch);
       // await edcrDetailsToBpaDetails(state, dispatch);
     } else if (method === "UPDATE") {
@@ -752,15 +752,15 @@ export const prepareNOCUploadData = async (state, dispatch) => {
     });
   }
   dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
-  let NOCData = fetchFileDetails(get(
+  let Noc = fetchFileDetails(get(
     state.screenConfiguration.preparedFinalObject,
-    "NOCData",
+    "Noc",
     []
   )) 
 
   let finalCards = [];  
   documentsContract && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
-    NOCData && NOCData.map(upDocs => {
+    Noc && Noc.map(upDocs => {
       if(docs.nocType === upDocs.nocType) {
         docs.documents =  upDocs.documents;
         let card ={
@@ -792,13 +792,13 @@ const getNocDocuments = (state) =>{
     []
   );
  
-  let nocData = get(
+  let Noc = get(
     state,
-    "screenConfiguration.preparedFinalObject.NOCData",
+    "screenConfiguration.preparedFinalObject.Noc",
     []
   );
   let documents = [];
-  nocData.forEach(nocDoc => {
+  Noc.forEach(nocDoc => {
     /**
      * @todo
      * Change nocType comparision logic to be dynamic i.e., fetch from applicationDocuments with applicationType as New
@@ -1397,19 +1397,19 @@ export const handleFileUpload = (event, handleDocument, props) => {
 };
 
 const updateNocApplication = async (state, dispatch, bpaAction) => {
-  const NOCData = get(state, "screenConfiguration.preparedFinalObject.NOCData", []);
+  const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
   let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
-  if (NOCData.length > 0) {
-    for (let data = 0; data < NOCData.length; data++) {
+  if (Noc.length > 0) {
+    for (let data = 0; data < Noc.length; data++) {
       let documents = nocDocuments[data].documents;
-      set(NOCData[data], "documents", documents);
+      set(Noc[data], "documents", documents);
       // set(NOCData[data], "workflow.action", bpaAction)
       let response = httpRequest(
         "post",
         "/noc-services/v1/noc/_update",
         "",
         [],
-        { Noc: NOCData[data] }
+        { Noc: Noc[data] }
       );
     }
   }
@@ -1453,7 +1453,7 @@ export const submitBpaApplication = async (state, dispatch) => {
 export const updateBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
   let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
-  let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
+  // let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
   // let payload = await createUpdateNocApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
