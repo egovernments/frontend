@@ -580,7 +580,7 @@ export const downloadPrintContainer = (
     label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadApp(WaterConnection, 'estimateNotice');
+      downloadApp(WaterConnection, 'estimateNotice',"download",dispatch);
     },
     leftIcon: "book"
   };
@@ -588,7 +588,7 @@ export const downloadPrintContainer = (
     label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadApp(WaterConnection, 'estimateNotice', 'print');
+      downloadApp(WaterConnection, 'estimateNotice', 'print',dispatch);
     },
     leftIcon: "book"
   };
@@ -599,7 +599,7 @@ export const downloadPrintContainer = (
       const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "To Citizen" : "Department Use";
       WaterConnection[0].appUserType = appUserType;
       WaterConnection[0].commissionerName = "S.Ravindra Babu";
-      downloadApp(WaterConnection, 'sanctionLetter');
+      downloadApp(WaterConnection, 'sanctionLetter',"download",dispatch);
     },
     leftIcon: "receipt"
   };
@@ -610,7 +610,7 @@ export const downloadPrintContainer = (
       const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "Department Use" : "To Citizen";
       WaterConnection[0].appUserType = appUserType;
       WaterConnection[0].commissionerName = "S.Ravindra Babu";
-      downloadApp(WaterConnection, 'sanctionLetter', 'print');
+      downloadApp(WaterConnection, 'sanctionLetter', 'print',dispatch);
     },
     leftIcon: "receipt"
   };

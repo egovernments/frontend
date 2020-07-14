@@ -1702,7 +1702,8 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 
 };
 // to download application 
-export const downloadApp = async (wnsConnection, type, mode = "download") => {
+export const downloadApp = async (wnsConnection, type, mode,dispatch) => {
+    dispatch(toggleSpinner());
     let estFileStrID = wnsConnection[0].additionalDetails.estimationFileStoreId
     let sanFileStrID = wnsConnection[0].additionalDetails.sanctionFileStoreId
 
@@ -1864,11 +1865,13 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                         downloadReceiptFromFilestoreID(fileStoreId, mode)
                     })
                 } else {
+                    dispatch(toggleSpinner());
                     console.log("Error In Download");
                 }
 
             });
     } catch (exception) {
+        dispatch(toggleSpinner());
         alert('Some Error Occured while downloading!');
     }
 }
