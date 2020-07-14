@@ -119,7 +119,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       }*/
       showHideConnectionHolder(dispatch,sewerageConnection.connectionHolders); 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection))
-      getApplicationNumber(dispatch,payloadData.WaterConnection);
+      getApplicationNumber(dispatch,payloadData.SewerageConnections);
     }
   } else if (service === serviceConst.WATER) {
     let payloadData = await getSearchResults(queryObject);    
