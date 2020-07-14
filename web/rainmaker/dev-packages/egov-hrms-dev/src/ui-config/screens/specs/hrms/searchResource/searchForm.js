@@ -44,6 +44,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb",
+      "props.value",
+      ""
+    )
+  );
 };
 
 export const searchForm = getCommonCard({
@@ -85,6 +93,7 @@ export const searchForm = getCommonCard({
           roles: []
         },
         className:"autocomplete-dropdown",
+        jsonPath: "searchScreen.ulb",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
@@ -149,6 +158,7 @@ export const searchForm = getCommonCard({
         isClearable:true,
         labelsFromLocalisation: true,
         className:"autocomplete-dropdown",
+        jsonPath: "searchScreen.departments",
         sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
         localePrefix: {
           moduleName: "common-masters",
@@ -178,12 +188,14 @@ export const searchForm = getCommonCard({
         isClearable:true,
         labelsFromLocalisation: true,
         className:"autocomplete-dropdown",
+        jsonPath: "searchScreen.designations",
         sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
         localePrefix: {
           moduleName: "common-masters",
           masterName: "Designation"
         }
       },
+      required: false,
       jsonPath: "searchScreen.designations",
       gridDefination: {
         xs: 12,
