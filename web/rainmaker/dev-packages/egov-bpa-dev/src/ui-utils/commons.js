@@ -1396,6 +1396,25 @@ export const handleFileUpload = (event, handleDocument, props) => {
   }
 };
 
+const updateNocApplication = async (state, dispatch, bpaAction) => {
+  const NOCData = get(state, "screenConfiguration.preparedFinalObject.NOCData", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
+  if (NOCData.length > 0) {
+    for (let data = 0; data < NOCData.length; data++) {
+      let documents = nocDocuments[data].documents;
+      set(NOCData[data], "documents", documents);
+      // set(NOCData[data], "workflow.action", bpaAction)
+      let response = httpRequest(
+        "post",
+        "/noc-services/v1/noc/_update",
+        "",
+        [],
+        { Noc: NOCData[data] }
+      );
+    }
+  }
+};
+
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
@@ -1434,7 +1453,8 @@ export const submitBpaApplication = async (state, dispatch) => {
 export const updateBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
   let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
-  let payload = await createUpdateNocApplication(state, dispatch, bpaAction);
+  let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
+  // let payload = await createUpdateNocApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (get(response, "status", "") === "success") {
