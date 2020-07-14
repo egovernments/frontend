@@ -44,7 +44,7 @@ import {
             moduleName: "egov-bpa",
             componentPath: "NocDetailCard",
             props: {
-              jsonPath: "nocFinalCardsforPreview",                  
+              jsonPath: "nocForPreview",                  
               sourceJsonPath: "documentDetailsPreview",
               className: "noc-review-documents",
               buttonLabel: {
