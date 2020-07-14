@@ -9,8 +9,10 @@ import {
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { searchApiCall } from "./functions";
 
+const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
@@ -49,7 +51,7 @@ const resetFields = (state, dispatch) => {
       "search",
       "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb",
       "props.value",
-      ""
+      tenantId
     )
   );
 };
@@ -92,6 +94,7 @@ export const searchForm = getCommonCard({
           rolePath: "user-info.roles",
           roles: []
         },
+        value: tenantId,
         className:"autocomplete-dropdown",
         jsonPath: "searchScreen.ulb",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
