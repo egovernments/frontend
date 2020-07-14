@@ -4680,7 +4680,7 @@ let documentCards = get(
   "screenConfiguration.preparedFinalObject.nocDocumentsContract",
   {}
 );
-let cardReadOnly = getEditableUserRoleforNoc();
+let cardReadOnly = getEditableUserRoleforNoc(state);
 console.log(cardReadOnly);
 //let cardReadOnly = false;
 if(documentCards && documentCards.length > 0){
@@ -4716,17 +4716,28 @@ dispatch(prepareFinalObject("nocForPreview", cards));
 
 }
 
-const getEditableUserRoleforNoc = () => {
+const getEditableUserRoleforNoc = (state) => {
   let userInfo = JSON.parse(getUserInfo()), 
   roles = get(userInfo, "roles"),
-  currentRole = false;
+  allowedToUpload = false;
+  // let processInstances = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.applicationProcessInstances",
+  //   {}
+  // );
+  // if(processInstances){
+  //  if(processInstances.nextActions.length > 0){
+  //   allowedToUpload = true;
+  //  }
+  // }
+
   roles.map(role=>{
-    if(role.code=="BPA_NOC_VERIFIER" || role.code=="BPA_ARCHITECT"){
-      currentRole= true;
+    if((role.code=="BPA_NOC_VERIFIER" || role.code=="BPA_ARCHITECT" || role.code=="BPA_VERIFIER")){
+      allowedToUpload= true;
     }
   })
   
-  return currentRole;
+  return allowedToUpload;
 }
 /**
  * 
