@@ -74,6 +74,20 @@ const sortpayloadDataObj = (connectionObj) => {
   return connectionObj.sort((a,b) => (a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate)?1:-1)
 }
 
+const getActiveConnectionObj = (connectionsObj) => {
+  let getActiveConnectionObj = "";
+  for(var i=0; i< connectionsObj.length; i++){
+    if(connectionsObj[i] &&
+       connectionsObj[i].applicationStatus === 'CONNECTION_ACTIVATED' || 
+       connectionsObj[i].applicationStatus === 'APPROVED')
+    {
+      getActiveConnectionObj = connectionsObj[i];
+      break;
+    }
+  }
+  return getActiveConnectionObj;
+}
+
 const searchResults = async (action, state, dispatch, connectionNumber) => {
   /**
    * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
@@ -85,7 +99,8 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       payloadData.SewerageConnections = sortpayloadDataObj(payloadData.SewerageConnections);
       
 
-      let sewerageConnection = payloadData.SewerageConnections[0];
+
+      let sewerageConnection = getActiveConnectionObj(payloadData.SewerageConnections);
       let propTenantId = sewerageConnection.property.tenantId.split(".")[0];
       sewerageConnection.service = service
 
@@ -125,7 +140,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     let payloadData = await getSearchResults(queryObject);    
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
       payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
-      let waterConnection = payloadData.WaterConnection[0];
+      let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);
       waterConnection.service = service;
       let propTenantId = waterConnection.property.tenantId.split(".")[0];
       if (waterConnection.connectionExecutionDate !== undefined) {
