@@ -19,12 +19,13 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getAppSearchResults } from "../../../../ui-utils/commons";
+import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import { 
   requiredDocumentsData, 
   edcrDetailsToBpaDetails,
   applicantNameAppliedByMaping,
-  generateBillForBPA
+  generateBillForBPA,
+  prepareNocFinalCards
 } from "../utils/index";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
@@ -42,6 +43,7 @@ import "../egov-bpa/applyResource/index.scss";
 import "../egov-bpa/applyResource/index.css";
 import { printPdf } from "egov-ui-kit/utils/commons";
 import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
+import { nocDetailsSearch } from  "../egov-bpa/noc";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -356,6 +358,18 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
+
+  const payload = await getNocSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "sourceRefId", value: applicationNumber }
+  ], state);
+  dispatch(prepareFinalObject("Noc", payload.Noc));      
+
+  await prepareNOCUploadData(state, dispatch);
+  prepareNocFinalCards(state, dispatch);     
 
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const status = get(response, "BPA[0].status");
@@ -702,6 +716,7 @@ const screenConfig = {
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
           documentAndNocSummary: documentAndNocSummary,
+          nocDetailsApply: nocDetailsSearch,
           permitConditions: permitConditions,
           permitListSummary: permitListSummary,
           declarations: declarations

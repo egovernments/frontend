@@ -709,7 +709,6 @@ export const prepareNOCUploadData = async (state, dispatch) => {
   //     }
   //   });
   // });
-  
   const nocDocuments = documentsList;
   let documentsContract = [];
   let tempDoc = {};
@@ -759,7 +758,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
   )) 
 
   let finalCards = [];  
-  documentsContract && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
+  documentsContract.length>0 && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
     Noc && Noc.map(upDocs => {
       if(docs.nocType === upDocs.nocType) {
         docs.documents =  upDocs.documents;
@@ -799,10 +798,7 @@ const getNocDocuments = (state) =>{
   );
   let documents = [];
   Noc.forEach(nocDoc => {
-    /**
-     * @todo
-     * Change nocType comparision logic to be dynamic i.e., fetch from applicationDocuments with applicationType as New
-     */
+    
     applicationDocuments && applicationDocuments.length > 0 && 
     applicationDocuments.forEach(doc =>{
       if(doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {

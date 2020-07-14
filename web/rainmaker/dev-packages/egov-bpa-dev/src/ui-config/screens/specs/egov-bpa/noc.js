@@ -60,3 +60,38 @@ import {
         }
     }),
 })
+
+export const nocDetailsSearch = getCommonGrayCard({
+  header: getCommonTitle(
+    {
+      labelName: "NOC Details",
+      // labelKey: "BPA_DOCUMENT_DETAILS_HEADER"
+    },
+    {
+      style: {
+      //   marginBottom: 18
+      }
+    }
+  ),  
+  fireNocDetailsCard: getCommonCard({
+      documentDetailsCard: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-bpa",
+          componentPath: "NocDetailCard",
+          props: {
+            jsonPath: "nocForPreview",                  
+            sourceJsonPath: "documentDetailsPreview",
+            className: "noc-review-documents",
+            buttonLabel: {
+              labelName: "UPLOAD FILE",
+              labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+            },
+            inputProps: {
+              accept: "image/*, .pdf, .png, .jpeg",
+              multiple: false
+            },
+            maxFileSize: 6000
+          }
+      }
+  }),
+})

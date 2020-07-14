@@ -50,7 +50,7 @@ import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { nocDetailsApply } from "./noc";
+import { nocDetailsSearch } from "./noc";
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
   const roles = get(userInfo, "roles");
@@ -903,7 +903,7 @@ const screenConfig = {
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
           previewSummary: previewSummary,
-          nocDetailsApply: nocDetailsApply,
+          nocDetailsApply: nocDetailsSearch,
           // fieldSummary: fieldSummary,
           // fieldinspectionSummary: fieldinspectionSummary,
           declarationSummary: declarationSummary,

@@ -4679,9 +4679,10 @@ let documentCards = get(
   state,
   "screenConfiguration.preparedFinalObject.nocDocumentsContract",
   {}
-); 
-
-let cardReadOnly = false;
+);
+let cardReadOnly = getEditableUserRoleforNoc();
+console.log(cardReadOnly);
+//let cardReadOnly = false;
 if(documentCards && documentCards.length > 0){
   cards = documentCards[0].cards;
 }
@@ -4694,17 +4695,17 @@ if( nocDocumentsFromMdms && nocDocumentsFromMdms.length> 0){
       for(var i=0; i< cards.length; i++){
 
         if(mdmsCard.code == cards[i].code){
-          cards[i].readOnly = cardReadOnly;
+          cards[i].readOnly = !cardReadOnly;
           let mergedCard = {...cards[i], ...mdmsCard};
           cards[i] = {...mergedCard};
           found = true;
         } else {
-          cards[i].readOnly = true;
+          cards[i].readOnly = !cardReadOnly;
         }
         
       }
       if(!found){
-        mdmsCard['readOnly'] = false;
+        mdmsCard['readOnly'] = !cardReadOnly;
         cards.push(mdmsCard)
       }
     });
@@ -4713,6 +4714,19 @@ if( nocDocumentsFromMdms && nocDocumentsFromMdms.length> 0){
 
 dispatch(prepareFinalObject("nocForPreview", cards));
 
+}
+
+const getEditableUserRoleforNoc = () => {
+  let userInfo = JSON.parse(getUserInfo()), 
+  roles = get(userInfo, "roles"),
+  currentRole = false;
+  roles.map(role=>{
+    if(role.code=="BPA_NOC_VERIFIER" || role.code=="BPA_ARCHITECT"){
+      currentRole= true;
+    }
+  })
+  
+  return currentRole;
 }
 /**
  * 
