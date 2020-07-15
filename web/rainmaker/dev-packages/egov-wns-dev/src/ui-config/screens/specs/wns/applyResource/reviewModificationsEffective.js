@@ -6,16 +6,17 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { convertEpochToDateAndHandleNA } from '../../utils';
 
-export const reviewModificationsEffectiveDate = getLabelWithValue(
+export const reviewModificationsEffectiveDate = {
+  reviewModification:getLabelWithValue(
   {
     labelName: "Modifications Effective Date",
     labelKey: "WS_MODIFICATIONS_EFFECTIVE_DATE"
   },
   {
-    jsonPath: "applyScreen.dateEffectiveFrom",
+    jsonPath: "WaterConnection[0].dateEffectiveFrom",
     callBack: convertEpochToDateAndHandleNA
   }
-);
+)};
 
 export const reviewModificationsEffective = () => {
   return getCommonGrayCard({
@@ -41,6 +42,6 @@ export const reviewModificationsEffective = () => {
   })
 };
 
-const modificationsEffectiveDateDetails = getCommonContainer({
+const modificationsEffectiveDateDetails = getCommonContainer(
   reviewModificationsEffectiveDate
-});
+);
