@@ -141,10 +141,10 @@ export const createProperty = async (Properties, action, props) => {
 const getRedirectToURL=()=>{
     const link =window.location.href;
     let splittedLink=link.split('redirectTo=');
-    if(splittedLink.length==1){
-        return false
-    }else if(splittedLink.length==2){
+    if(splittedLink.length==2){
         return splittedLink[1]
+    }else{
+        return false;
     }
 }
 
@@ -156,7 +156,7 @@ const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNum
     routeLink = secondNumber ? `${routeLink}&secondNumber=${secondNumber}` : `${routeLink}`;
     routeLink = FY ? `${routeLink}&FY=${FY}` : `${routeLink}`;
     let redirectURL=getRedirectToURL();
-    if( redirectURL){
+    if( redirectURL && status=='success'){
         routeLink=`/${redirectURL}`;
     }
     routeTo(routeLink);
