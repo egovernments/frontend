@@ -331,6 +331,14 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
               name: "RiskTypeComputation"
             }
           ]
+        },
+        {
+          moduleName: "NOC",
+          masterDetails: [
+            {
+              name: "DocumentTypeMapping"
+            },
+          ]
         }
       ]
     }
