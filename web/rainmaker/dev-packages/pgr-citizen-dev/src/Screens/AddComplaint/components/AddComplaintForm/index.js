@@ -25,7 +25,9 @@ const AddComplaintForm = ({ formKey, localizationLabels, handleFieldChange, form
         houseNo={fields.houseNo}
         city={fields.city}
         mohalla={fields.mohalla}
+        panchayat={fields.panchayat}
       />
+
       {/* <AdditionalDetailsCard handleFieldChange={handleFieldChange} additionalDetails={fields.additionalDetails} /> */}
       <div className="responsive-action-button-cont ">
         <Button

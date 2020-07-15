@@ -109,6 +109,14 @@ const formConfig = {
       hintText: "CS_ADDCOMPLAINT_LANDMARK_PLACEHOLDER",
       errorMessage: "PT_LANDMARK_ERROR_MESSAGE",
     },
+    panchayat:{
+     id:"panchayat",
+     jsonPath: "services[0].addressDetail.panchayat",
+     floatingLabelText: "CS_ADDCOMPLAINT_PANCHAYAT",
+     hintText: "CS_ADDCOMPLAINT_PANCHAYAT_PLACEHOLDER",
+     errorMessage: "PT_PANCHAYAT_ERROR_MESSAGE", 
+    },
+
     tenantId: {
       id: "add-complaint-tenantid",
       jsonPath: "services[0].tenantId",
