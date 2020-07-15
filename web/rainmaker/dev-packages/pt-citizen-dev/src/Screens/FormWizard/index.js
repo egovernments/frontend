@@ -27,7 +27,7 @@ import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
 import store from "ui-redux/store";
 import ReviewForm from "../ReviewForm";
 import PaymentForm from "../ReviewForm/components/PaymentForm";
-import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC } from "./components/Forms";
+import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC,BussinessDetailsHOC,CheckBoxDetailsHOC } from "./components/Forms";
 import FloorsDetails from "./components/Forms/FloorsDetails";
 import MultipleOwnerInfoHOC from "./components/Forms/MultipleOwnerInfo";
 import PlotDetails from "./components/Forms/PlotDetails";
@@ -474,6 +474,8 @@ class FormWizard extends Component {
         return (
           <div>
             <UsageInformationHOC disabled={fromReviewPage} />
+            <BussinessDetailsHOC disabled={fromReviewPage} />
+            <CheckBoxDetailsHOC disabled={fromReviewPage} />
             {renderPlotAndFloorDetails(
               fromReviewPage,
               PlotDetails,
@@ -775,7 +777,7 @@ class FormWizard extends Component {
           break;
         }
 
-        const { basicInformation, plotDetails } = form;
+        const { basicInformation, plotDetails,bussinessDetails } = form;
         if (basicInformation) {
           const isBasicInformationFormValid = validateForm(basicInformation);
           if (isBasicInformationFormValid) {
@@ -823,6 +825,15 @@ class FormWizard extends Component {
             }
           } else {
             displayFormErrorsAction("basicInformation");
+          }
+        }
+        if (bussinessDetails && checkBoxDetails){
+          const isBasicInformationFormValid = validateForm(bussinessDetails);
+          if(isBasicInformationFormValid){
+            console.log("=====isBasicInformationFormValid======",isBasicInformationFormValid);
+          }
+          else{
+            displayFormErrorsAction("bussinessDetails");
           }
         }
         break;
