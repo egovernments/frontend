@@ -17,6 +17,7 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {setServiceCategory} from "../../utils"
 import get from "lodash/get";
+import consumerAddresss from "../ImpelExtendedAddressField/consumerAddressField";
 
 const tenantId = getTenantId();
 
@@ -349,20 +350,10 @@ export const newCollectionDetailsCard = getCommonCard(
         Required: false,
         jsonPath: "Demands[0].additionalDetails.comment"
       }),
+      ...consumerAddresss,
 
-      address: getTextField({
-        label: {
-          labelName: "Consumer Address",
-          // labelKey: "UC_ADDRESS_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Address ",
-          labelKey: "UC_ADDRESS_PLACEHOLDER"
-        },
-        Required: false,
-        jsonPath: "Demands[0].additionalDetails.address"
-      }),
-    })
+    }),
+
   },
     //})
     
