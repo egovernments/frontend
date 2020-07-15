@@ -884,11 +884,17 @@ export const applyForWater = async (state, dispatch) => {
         } else {
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
+            if(isModifyMode()){
+                set(queryObject, "waterSource", getWaterSource(queryObject.waterSource, queryObject.waterSubSource));
+            }
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));            
             if(isModifyMode()){
                 response.WaterConnection = await getPropertyObj(response.WaterConnection);
                 response.WaterConnection[0].water=true;
+                let waterSource = response.WaterConnection[0].waterSource.split(".");
+                response.WaterConnection[0].waterSource = waterSource[0];
+                response.WaterConnection[0].waterSubSource = waterSource[1];
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }
