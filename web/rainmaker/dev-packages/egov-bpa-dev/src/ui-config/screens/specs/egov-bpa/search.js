@@ -49,6 +49,56 @@ const startApplyFlow = (state, dispatch) => {
   dispatch(setRoute(applyUrl));
 };
 
+const getMdmsData = async (state, dispatch) => {
+ 
+  const tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "citiesByModule.citizenTenantId.value"
+  );
+  console.log(tenantId,'tenantId');
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+         {
+          moduleName: "BPA",
+          masterDetails: [
+            {
+              name: "ApplicationType"
+            },
+            {
+              name: "ServiceType"
+            }
+          ],
+        
+        }
+      ]
+    }
+  };
+  console.log(mdmsBody,'mdmsBody');
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData",
+        payload.MdmsRes
+      )
+    );
+    // dispatch(prepareFinalObject(
+    //   "searchScreen.applicationType", 
+    //   get(payload, "MdmsRes.BPA.ApplicationType[0].code")
+    // ));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const BpaSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",

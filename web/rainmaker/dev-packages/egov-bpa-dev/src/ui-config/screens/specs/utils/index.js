@@ -4757,6 +4757,9 @@ export const permitOrderNoDownload = async(action, state, dispatch, mode = "Down
   let currentDate = new Date();
   set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+currentDate.getDate()));
 
+  let currentDate = new Date();
+  set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+currentDate.getDate()));
+
   let payload = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
@@ -4772,6 +4775,8 @@ export const permitOrderNoDownload = async(action, state, dispatch, mode = "Down
     if(bpaDetails && bpaDetails.businessService === "BPA_LOW") {
       permitPfKey = "buildingpermit-low"
     }
+  } else if(window.location.href.includes("oc-bpa")) {
+    permitPfKey = "occupancy-certificate"
   }
   if(window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
     permitPfKey = "occupancy-certificate"
@@ -5162,8 +5167,8 @@ export const getPermitDetails = async (permitNumber, tenantId) => {
 
   const response = await getBpaSearchResults(queryObject);
 
-  if (response && response.BPA && response.BPA.length > 0)
-    return response.BPA[0];
+  if (response && response.Bpa && response.Bpa.length > 0)
+    return response.Bpa[0];
   else
     return 'NOPERMIT';
 

@@ -587,18 +587,18 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     return;
   }
 
-  const dateFromApi = new Date(get(response, "BPA[0].approvalDate"));
+  const dateFromApi = new Date(get(response, "Bpa[0].approvalDate"));
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
   let year = dateFromApi.getFullYear();
   month = (month > 9 ? "" : "0") + month;
   day = (day > 9 ? "" : "0") + day;
   let date = `${year}-${month}-${day}`;
-  if (permitNum === get(response, "BPA[0].approvalNo") && date === permitDate) {
+  if (permitNum === get(response, "Bpa[0].approvalNo") && date === permitDate) {
 
     let edcrRes = await edcrHttpRequest(
       "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "BPA[0].edcrNumber") + "&tenantId=" + tenantId,
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
       "search", []
     );
 
@@ -620,10 +620,10 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
       );
       return;
     }
-    set(response, "BPA[0].serviceType", "NEW_CONSTRUCTION")
-    let primaryOwnerArray = get(response, "BPA[0].landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true);
+    set(response, "Bpa[0].serviceType", "NEW_CONSTRUCTION")
+    let primaryOwnerArray = get(response, "Bpa[0].landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true);
     dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
-    dispatch(prepareFinalObject(`bpaDetails`, get(response, "BPA[0]")));
+    dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
     dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
     dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
   } else {

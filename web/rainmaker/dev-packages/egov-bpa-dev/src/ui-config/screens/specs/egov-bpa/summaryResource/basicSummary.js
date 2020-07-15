@@ -83,88 +83,118 @@ export const basicSummary = getCommonGrayCard({
     labelKey: "BPA_BASIC_DETAILS_TITLE"
   }),
   break1: getBreak(),
-  basicDetailsContainer: getCommonContainer({
-    scrutinynumber: getLabelWithValue(
-      {
-        labelName: "Building plan scrutiny number",
-        labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_LABEL"
-      },
-      {
-        jsonPath: "BPA.edcrNumber",
-        callBack: checkValueForNA
-      }
-    ),
-    occupancy: getLabelWithValue(
-      {
-        labelName: "occupancy",
-        labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
-      },
-      {
-        jsonPath:
-          "scrutinyDetails.planDetail.planInformation.occupancy",
-        callBack: checkValueForNA
-      }
-    ),
-    applicationtype: getLabelWithValue(
-      {
-        labelName: "Application Type",
-        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
-      },
-      {
-        localePrefix: {
-          moduleName: "WF",
-          masterName: "BPA"
-        },
-        jsonPath:
-          "BPA.applicationType",
-        callBack: checkValueForNA
-      }
-    ),
-    servicetype: getLabelWithValue(
-      {
-        labelName: "Service Type",
-        labelKey: "Service Type"
-      },
-      {
-        jsonPath: "BPA.serviceType",
-        callBack: checkValueForNA
-      }
-    ),
-    risktype: getLabelWithValue(
-      {
-        labelName: "Risk Type",
-        labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
-      },
-      {
-        jsonPath: "BPA.riskType",
-        callBack: checkValueForNA
-      }
-    ),
-    applicationdate: getLabelWithValue(
-      {
-        labelName: "Application Date",
-        labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
-      },
-      {
-        jsonPath:
-          "scrutinyDetails.planDetail.applicationDate",
-        callBack: value => {
-          return convertEpochToDate(value) || checkValueForNA;
-        }
-      }
-    ),
-    remarks: getLabelWithValue(
-      {
-        labelName: "Remarks",
-        labelKey: "BPA_BASIC_DETAILS_REMARKS_LABEL"
-      },
-      {
-        jsonPath:
-          "BPA.additionalDetails.remarks",
-        callBack: checkValueForNA
-      }
-    )
-  }),
+  cardOne: {
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "applicant-summary",
+      scheama: getCommonGrayCard({
+        basicDetailsContainer: getCommonContainer({
+          scrutinynumber: getLabelWithValue(
+            {
+              labelName: "Building plan scrutiny number",
+              labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_LABEL"
+            },
+            {
+              jsonPath: "BPA.edcrNumber",
+              callBack: checkValueForNA
+              // callBack: value => {
+              //   return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+              // }
+            }
+          ),
+          occupancy: getLabelWithValue(
+            {
+              labelName: "occupancy",
+              labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
+            },
+            {
+              jsonPath:
+                "scrutinyDetails.planDetail.planInformation.occupancy",
+                callBack: checkValueForNA
+              // callBack: value => {
+              //   return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+              // }
+            }
+          ),
+          applicationtype: getLabelWithValue(
+            {
+              labelName: "Application Type",
+              labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
+            },
+            {
+              jsonPath:
+                "BPA.applicationType",
+                callBack: checkValueForNA
+            }
+          ),
+          servicetype: getLabelWithValue(
+            {
+              labelName: "Service Type",
+              labelKey: "Service Type"
+            },
+            {
+              jsonPath: "BPA.serviceType",
+              callBack: checkValueForNA
+            }
+          ),
+          risktype: getLabelWithValue(
+            {
+              labelName: "Risk Type",
+              labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
+            },
+            {
+              jsonPath: "BPA.riskType",
+              callBack: checkValueForNA
+            }
+          ),
+          applicationdate: getLabelWithValue(
+            {
+              labelName: "Application Date",
+              labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
+            },
+            {
+              jsonPath:
+                "scrutinyDetails.planDetail.applicationDate",
+                callBack: value => {
+                  return convertEpochToDate(value) || checkValueForNA;
+                }
+            }
+          ),
+          // applicationFee: getLabelWithValue(
+          //   {
+          //     labelName: "Application Fee",
+          //     labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
+          //   },
+          //   {
+          //     jsonPath:
+          //       "ReceiptTemp[0].Bill[0].totalAmount",
+          //       callBack: checkValueForNA
+          //   }
+          // ),
+          remarks: getLabelWithValue(
+            {
+              labelName: "Remarks",
+              labelKey: "BPA_BASIC_DETAILS_REMARKS_LABEL"
+            },
+            {
+              jsonPath:
+                "BPA.additionalDetails.remarks",
+                callBack: checkValueForNA
+            }
+          )
+        }),
+      }),
+      items: [],
+      hasAddItem: false,
+      isReviewPage: true,
+      sourceJsonPath: "BPA",
+      prefixSourceJsonPath:
+        "children.cardContent.children.basicDetailsContainer.children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  },
   BlockWiseOccupancyAndUsageDetails: getHeader({
     labelName: "BPA Location Details",
     labelKey: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS"

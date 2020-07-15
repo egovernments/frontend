@@ -332,6 +332,10 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
       printMenu.push(lowAppFeePrintObject);
     } 
     switch (status) {
+      case "PERMIT REVOCATION":
+        downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
+        break;
+      case "APPROVED":
       case "DOC_VERIFICATION_INPROGRESS":
       case "FIELDINSPECTION_INPROGRESS":
       case "NOC_VERIFICATION_INPROGRESS":
@@ -510,6 +514,8 @@ const setSearchResponse = async (
   dispatch( prepareFinalObject( `scrutinyDetails`, edcrRes.edcrDetail[0] ));
 
   await edcrDetailsToBpaDetails(state, dispatch);
+
+  let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
 
   let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
 

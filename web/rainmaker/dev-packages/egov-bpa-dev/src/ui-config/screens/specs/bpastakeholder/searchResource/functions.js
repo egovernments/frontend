@@ -237,8 +237,7 @@ export const getWorkFlowDataForBPA = async Licenses => {
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
         assignee: get(item, "assignes[0].name"),
-        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla),
-        state:item.state.state
+        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla)
       };
     });
     return businessIdToOwnerMapping;

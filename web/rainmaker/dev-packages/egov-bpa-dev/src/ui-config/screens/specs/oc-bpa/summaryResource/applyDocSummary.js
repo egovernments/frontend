@@ -57,13 +57,16 @@ export const applyDocSummary = getCommonGrayCard({
       },
     },
   },
-  DocumentSummaryContainer: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-bpa",
-    componentPath: "DocumentSummaryContainer",
-    props: {
-      sourceJsonPath: "documentDetailsPreview",
-      className: "noc-review-documents",
+
+  DocumentSummaryContainer: getCommonGrayCard({
+    body: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-bpa",
+      componentPath: "DocumentSummaryContainer",
+      props: {
+        sourceJsonPath: "documentDetailsPreview",
+        className: "noc-review-documents",
+      },
     },
-  }
+  })
 });

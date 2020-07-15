@@ -404,7 +404,6 @@ class BpaDocumentList extends Component {
            uploadedDocIndex = {this.state.uploadedDocIndex}
            toggleEditClick = {this.toggleEditClick}
            jsonPath = {`documentDetailsUploadRedux`}
-           specificStyles= "bpa_doc_upload_btn"
            {...rest}
          />
       </React.Fragment>

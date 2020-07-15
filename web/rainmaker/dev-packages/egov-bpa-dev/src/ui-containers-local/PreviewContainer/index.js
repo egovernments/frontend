@@ -60,7 +60,6 @@ class PreviewContainer extends Component {
                 toggleEditClick={this.toggleEditClick}
                 isFromPreview={true}
                 jsonPath = {`documentDetailsUploadRedux`}
-                specificStyles= "preview_upload_btn"
                 {...rest}
               /></div>
             ) : (

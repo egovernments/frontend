@@ -169,7 +169,6 @@ const UploadCard = (props) => {
     name,
     jsonPath,
     ids,
-    specificStyles,
     ...rest
   } = props;
   let forUpBtn = specificStyles ? specificStyles : "upload_btn";

@@ -165,6 +165,10 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     state,
     "screenConfiguration.preparedFinalObject.comparisonDetails"
   );
+  let comparisonDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.comparisonDetails"
+  );
   let comparisonReport = false;
   if(comparisonDetails){
     comparisonReport = get(comparisonDetails, "report");
@@ -186,7 +190,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     leftIcon: "book"
   };
 
-  let sanFeeDownloadObject = {
+  let receiptDownloadObject = {
     label: { labelName: "Deviation Penality Receipt", labelKey: "BPA_OC_DEV_PEN_RECEIPT" },
     link: () => {
       downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_SAN_FEE", "Download");
@@ -194,8 +198,8 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     leftIcon: "receipt"
   };
 
-  let sanFeePrintObject = {
-    label: { labelName: "Deviation Penality Receipt", labelKey: "BPA_OC_DEV_PEN_RECEIPT" },
+  let applicationDownloadObject = {
+    label: { labelName: "Occupancy Certificate", labelKey: "BPA_OC_CERTIFICATE" },
     link: () => {
       downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_SAN_FEE", "Print");
     },
@@ -216,6 +220,17 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     },
     leftIcon: "receipt"
   };
+  let comparisonReportDownloadObject = {}
+  if(comparisonReport){
+    comparisonReportDownloadObject = {
+      label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
+      link: () => {
+        window.open(comparisonReport);
+      },
+      leftIcon: "assignment"
+    }
+  }
+  
 
   let comparisonReportDownloadObject = {};
   let comparisonReportPrintObject = {};
@@ -277,10 +292,11 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
         printMenu = [];
         break;
     }
+  // }
 
   if(comparisonReport){
     downloadMenu.push(comparisonReportDownloadObject);
-    printMenu.push(comparisonReportPrintObject);
+    printMenu.push(comparisonReportDownloadObject);
   }
   dispatch(
     handleField(
