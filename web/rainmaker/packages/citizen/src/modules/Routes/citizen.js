@@ -23,7 +23,7 @@ import { ImageModalDisplay } from "modules/common";
 import { TrackLocation } from "modules/common";
 import frameworkScreens from "./frameworkScreens";
 import { PrivacyPolicy } from "modules/common";
-import TLHowItWorks from "../../ui-views/HowItWorks";
+import TlHowItWorks from "../../ui-views/TlHowItWorks";
 import pgrRoutes from "pgr-citizen/Routes/pgr-routes";
 import ptRoutes from "pt-citizen/Routes/pt-routes";
 
@@ -117,7 +117,7 @@ const routes = [
   },
   {
     path: "trade-license/how-it-works",
-    component: TLHowItWorks,
+    component: TlHowItWorks,
     needsAuthentication: true,
     options: {
       hideFooter: true,
