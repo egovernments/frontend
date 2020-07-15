@@ -8,6 +8,9 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+let applicationNumber=getQueryArg(window.location.href, "applicationNumber");
 
 const getHeader = label => {
   return {
@@ -40,6 +43,18 @@ const holderHeader = getHeader({
   labelName: "Connection Holder Details"
 })
 
+export const snackbarWarningMessage=getCommonContainer({
+  clickHereLink: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "SnackbarWarning",
+    props: {
+      applicationNumber:applicationNumber,
+    },
+    visible:false,
+    gridDefination: { xs: 12, sm: 12}
+  }
+})
 export const reviewConnectionDetails = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {

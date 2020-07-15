@@ -34,7 +34,7 @@ import {
 import commonConfig from "config/common.js";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewOwner } from "./applyResource/reviewOwner";
-import { reviewConnectionDetails } from "./applyResource/reviewConnectionDetails";
+import { reviewConnectionDetails,snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { togglePropertyFeilds, toggleSewerageFeilds, toggleWaterFeilds } from '../../../../ui-containers-local/CheckboxContainer/toggleFeilds';
 import { set } from "lodash";
 import { triggerModificationsDisplay } from "./../utils/index";
@@ -230,6 +230,7 @@ export const getMdmsData = async dispatch => {
 const showHideFieldModifyConnection = (action) => {
   let fieldsChanges = [ 
     ["components.div.children.formwizardFirstStep.children.OwnerInfoCard",false],
+    ["components.div.children.formwizardFourthStep.children.snackbarWarningMessage.children.clickHereLink",true],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven" , false],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight" , false],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewNine" , false],
@@ -468,7 +469,7 @@ export const formwizardFourthStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form4" },
-  children: { summaryScreen },
+  children: {snackbarWarningMessage, summaryScreen },
   visible: false
 };
 
