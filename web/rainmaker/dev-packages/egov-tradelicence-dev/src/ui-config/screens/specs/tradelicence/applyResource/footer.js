@@ -636,7 +636,7 @@ export const footerReview = (
     leftIcon: "receipt"
   };
   let challanDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Challan", labelKey:"TL_CHALLAN" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
@@ -648,7 +648,7 @@ export const footerReview = (
     leftIcon: "receipt"
   };
   let challanPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Challan", labelKey: "TL_CHALLAN" },
     link: () => {
       const receiptQueryString =  [
         { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
@@ -756,7 +756,7 @@ export const footerReview = (
           componentPath: "Div",
           children: {
 
-            resubmitButton: {
+            proceedPayButton: {
               componentPath: "Button",
               props: {
                 variant: "contained",
@@ -769,18 +769,18 @@ export const footerReview = (
               },
               children: {
                 nextButtonLabel: getLabel({
-                  labelName: "RESUBMIT",
-                  labelKey: "TL_RESUBMIT"
+                  labelName: "PROCEED TO PAYMENT",
+                  labelKey: "TL_COMMON_BUTTON_PROC_PMT"
                 })
               },
               onClickDefination: {
-                action: "condition",
-                callBack: openPopup
+                action: "page_change",
+                path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
+                //path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
               },
-              visible:getButtonVisibility(status, "RESUBMIT"),
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["TL_CEMP", "CITIZEN"]
+                action: "PAY"
               }
             },
 
