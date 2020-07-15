@@ -15,6 +15,7 @@ class LabelContainer extends React.Component {
 			labelKey,
 			localePrefix,
 			fieldValue,
+			isVisibleLabel,
 			localizationLabels,
 			dynamicArray,
 			checkValueForNA,
@@ -68,7 +69,7 @@ class LabelContainer extends React.Component {
 		
 		let isMode = getQueryArg(window.location.href, "mode");
 		isMode = (isMode) ? isMode.toUpperCase() : "";
-		let classname = (isMode === "MODIFY" && labelValue && labelValue !== "NA") ? "show-label" :  "hide-label" ;   
+		let classname = (isMode === "MODIFY" && isVisibleLabel && labelValue && labelValue !== "NA") ? "show-label" :  "hide-label" ;   
 		return (
 			<React.Fragment>
 				<Label
@@ -91,18 +92,22 @@ class LabelContainer extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-	let fieldValue = "";
+	let fieldValue = "",isVisibleLabel = false;
 	const { localizationLabels } = state.app;
 	const { jsonPath, callBack } = ownprops;
 	const { screenConfiguration } = state;
 	const { preparedFinalObject } = screenConfiguration;
 	if (jsonPath) {
 		fieldValue = get(preparedFinalObject, jsonPath);
-		if (callBack && typeof callBack === "function") {
-			fieldValue = callBack(fieldValue);
+		let newfieldValue = get(preparedFinalObject, jsonPath.replace('Old',''))
+		if(newfieldValue !== fieldValue){
+			isVisibleLabel = true;
+			if (callBack && typeof callBack === "function") {
+				fieldValue = callBack(fieldValue);
+			}
 		}
 	}
-	return { fieldValue, localizationLabels };
+	return { fieldValue, isVisibleLabel, localizationLabels };
 };
 
 export default connect(

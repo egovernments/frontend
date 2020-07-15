@@ -49,7 +49,11 @@ let headerLabel = "WS_TASK_DETAILS"
 if(isModifyMode()){ 
   redirectQueryString += '&mode=MODIFY';
   editredirect += '&mode=MODIFY&modeaction=edit';
-  headerLabel = "WS_MODIFY_TASK_DETAILS"
+  if(service === serviceConst.WATER){
+    headerLabel = "WS_MODIFY_TASK_DETAILS"
+  }else{
+    headerLabel = "SW_MODIFY_TASK_DETAILS"
+  }
 }
 
 
