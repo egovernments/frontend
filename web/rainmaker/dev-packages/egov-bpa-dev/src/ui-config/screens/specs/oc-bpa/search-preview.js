@@ -18,14 +18,24 @@ import { getLocale, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStor
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
-import { getAppSearchResults } from "../../../../ui-utils/commons";
+import { 
+  getAppSearchResults,
+  getNocSearchResults,
+  prepareNOCUploadData,
+  nocapplicationUpdate
+} from "../../../../ui-utils/commons";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
 import {
-  applicantNameAppliedByMaping, downloadFeeReceipt, edcrDetailsToBpaDetails,
-
-  generateBillForBPA, permitOrderNoDownload, requiredDocumentsData, setProposedBuildingData
+  applicantNameAppliedByMaping, 
+  downloadFeeReceipt, 
+  edcrDetailsToBpaDetails,
+  generateBillForBPA, 
+  permitOrderNoDownload, 
+  requiredDocumentsData, 
+  setProposedBuildingData,
+  prepareNocFinalCards
 } from "../utils/index";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { declarations } from "./summaryResource/declarations";
@@ -35,6 +45,7 @@ import { fieldSummary } from "./summaryResource/fieldSummary";
 import { permitConditions } from "./summaryResource/permitConditions";
 import { permitListSummary } from "./summaryResource/permitListSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
+import { nocDetailsSearch } from "../egov-bpa/noc";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -209,21 +220,10 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     },
     leftIcon: "receipt"
   };
-  let comparisonReportDownloadObject = {}
-  if (comparisonReport) {
-    comparisonReportDownloadObject = {
-      label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
-      link: () => {
-        window.open(comparisonReport);
-      },
-      leftIcon: "assignment"
-    }
-  }
 
-
-  
+  let comparisonReportDownloadObject = {};
   let comparisonReportPrintObject = {};
-  if (comparisonReport) {
+  if(comparisonReport){
     comparisonReportDownloadObject = {
       label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
       link: () => {
@@ -360,6 +360,18 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
+
+  const payload = await getNocSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "sourceRefId", value: applicationNumber }
+  ], state);
+  dispatch(prepareFinalObject("Noc", payload.Noc));
+
+  await prepareNOCUploadData(state, dispatch);
+  prepareNocFinalCards(state, dispatch);
 
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const status = get(response, "BPA[0].status");
@@ -555,6 +567,14 @@ const setSearchResponse = async (
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
+const beforeSubmitHook = () => {
+  let state = store.getState();
+  let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
+  nocapplicationUpdate(state);
+  return bpaDetails;
+}
+
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -659,7 +679,8 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA_OC",
-            updateUrl: "/bpa-services/v1/bpa/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update",
+            beforeSubmitHook: beforeSubmitHook
           }
         },
         sendToArchPickerDialog: {
@@ -706,6 +727,7 @@ const screenConfig = {
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
           documentAndNocSummary: documentAndNocSummary,
+          nocDetailsApply: nocDetailsSearch,
           permitConditions: permitConditions,
           permitListSummary: permitListSummary,
           declarations: declarations
