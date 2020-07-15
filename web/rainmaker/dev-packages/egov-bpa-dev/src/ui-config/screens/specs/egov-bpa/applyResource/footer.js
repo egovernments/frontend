@@ -11,9 +11,12 @@ import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateBpaApplication,
   prepareDocumentsUploadData,
+  prepareNOCUploadData,
   submitBpaApplication,
-  updateBpaApplication
+  updateBpaApplication,
+  getNocSearchResults  
 } from "../../../../../ui-utils/commons";
+import { prepareNocFinalCards } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -487,6 +490,24 @@ const callBackForNext = async (state, dispatch) => {
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }
         }
+        let applicationNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.applicationNo"
+        );
+        let tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.tenantId"
+        );
+        const payload = await getNocSearchResults([
+          {
+            key: "tenantId",
+            value: tenantId
+          },
+          { key: "sourceRefId", value: applicationNumber }
+        ], state);
+        dispatch(prepareFinalObject("Noc", payload.Noc)); 
+        await prepareNOCUploadData(state, dispatch);
+        prepareNocFinalCards(state, dispatch);   
       } else {
         if(activeStep === 0){
           const occupancytypeValid = get(

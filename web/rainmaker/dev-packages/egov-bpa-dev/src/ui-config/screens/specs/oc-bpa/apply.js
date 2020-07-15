@@ -46,6 +46,7 @@ import {
 import { changeStep } from "./applyResource/footer";
 import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
 import { comparisondialog } from "./comparisondialog";
+import { nocDetailsApply } from "../egov-bpa/noc";
 
 export const stepsData = [
   { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
@@ -95,7 +96,8 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    documentAndNocDetails
+    documentAndNocDetails,
+    nocDetailsApply
   },
   visible: false
 };
@@ -107,7 +109,8 @@ export const formwizardThirdStep = {
     id: "apply_form3"
   },
   children: {
-    summaryDetails
+    summaryDetails,
+    nocDetailsApply
   },
   visible: false
 };
