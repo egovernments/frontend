@@ -44,55 +44,55 @@ const setReviewPageRoute = (state, dispatch) => {
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
-  const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
-  );
+Â  const documentsFormat = Object.values(
+Â  Â  get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+Â  );
 
-  let validateDocumentField = false;
+Â  let validateDocumentField = false;
 
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
+Â  for (let i = 0; i < documentsFormat.length; i++) {
+Â  Â  let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+Â  Â  let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
 
-    if (isDocumentRequired) {
-      let documents = get(documentsFormat[i], "documents");
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          let dropdownData=get(documentsFormat[i],"dropdown.value");
-          if(dropdownData){
-          // if (get(documentsFormat[i], "dropdown.value") !== null && get(documentsFormat[i]).dropdown !==undefined ){
-            validateDocumentField = true;
-          } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please select type of Document!", labelKey: "" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
-          }
-        } else {
-          validateDocumentField = true;
-        }
-      } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
-      }
-    } else {
-      validateDocumentField = true;
-    }
-  }
+Â  Â  if (isDocumentRequired) {
+Â  Â  Â  let documents = get(documentsFormat[i], "documents");
+Â  Â  Â  if (documents && documents.length > 0) {
+Â  Â  Â  Â  if (isDocumentTypeRequired) {
+Â  Â  Â  Â  Â  let dropdownData=get(documentsFormat[i],"dropdown.value");
+Â  Â  Â  Â  Â  if(dropdownData){
+Â  Â  Â  Â  Â  // if (get(documentsFormat[i], "dropdown.value") !== null && get(documentsFormat[i]).dropdown !==undefined ){
+Â  Â  Â  Â  Â  Â  validateDocumentField = true;
+Â  Â  Â  Â  Â  } else {
+Â  Â  Â  Â  Â  Â  dispatch(
+Â  Â  Â  Â  Â  Â  Â  toggleSnackbar(
+Â  Â  Â  Â  Â  Â  Â  Â  true,
+Â  Â  Â  Â  Â  Â  Â  Â  { labelName: "Please select type of Document!", labelKey: "" },
+Â  Â  Â  Â  Â  Â  Â  Â  "warning"
+Â  Â  Â  Â  Â  Â  Â  )
+Â  Â  Â  Â  Â  Â  );
+Â  Â  Â  Â  Â  Â  validateDocumentField = false;
+Â  Â  Â  Â  Â  Â  break;
+Â  Â  Â  Â  Â  }
+Â  Â  Â  Â  } else {
+Â  Â  Â  Â  Â  validateDocumentField = true;
+Â  Â  Â  Â  }
+Â  Â  Â  } else {
+Â  Â  Â  Â  dispatch(
+Â  Â  Â  Â  Â  toggleSnackbar(
+Â  Â  Â  Â  Â  Â  true,
+Â  Â  Â  Â  Â  Â  { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+Â  Â  Â  Â  Â  Â  "warning"
+Â  Â  Â  Â  Â  )
+Â  Â  Â  Â  );
+Â  Â  Â  Â  validateDocumentField = false;
+Â  Â  Â  Â  break;
+Â  Â  Â  }
+Â  Â  } else {
+Â  Â  Â  validateDocumentField = true;
+Â  Â  }
+Â  }
 
-  return validateDocumentField;
+Â  return validateDocumentField;
 };
 
 
