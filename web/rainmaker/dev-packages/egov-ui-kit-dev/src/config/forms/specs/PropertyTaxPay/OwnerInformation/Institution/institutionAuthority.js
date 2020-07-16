@@ -39,6 +39,7 @@ const formConfig = {
       required: true,
       pattern: /^[0-9]{11}$/i,
       errorMessage: "PT_LAND_NUMBER_ERROR_MESSAGE",
+      required: true,
     },
     email: {
       id: "authority-email",
