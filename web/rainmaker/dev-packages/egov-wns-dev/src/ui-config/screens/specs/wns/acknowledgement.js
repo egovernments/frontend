@@ -19,7 +19,8 @@ import {
   prepareDocumentsUploadData,
   prepareDocUploadRedux,
   downloadAndPrintForNonApply,
-  serviceConst
+  serviceConst,
+  isModifyMode
 } from "../../../../ui-utils/commons";
 import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
 import set from "lodash/set";
@@ -27,11 +28,19 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getMdmsData } from './apply';
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
+const applicationNo = getQueryArg(window.location.href, "applicationNumber");
+if(isModifyMode()){
+  if(applicationNo.includes("WS")){
+  headerLabel = "WS_APPLICATION_MODIFY_CONNECTION_HEADER";
+  }else{
+  headerLabel = "SW_APPLICATION_MODIFY_CONNECTION_HEADER";
+  }
+}
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
+    labelKey: headerLabel,
   }),
 });
 
@@ -571,7 +580,7 @@ export const downloadPrintContainer = (
     label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadApp(WaterConnection, 'estimateNotice');
+      downloadApp(WaterConnection, 'estimateNotice',"download",dispatch);
     },
     leftIcon: "book"
   };
@@ -579,7 +588,7 @@ export const downloadPrintContainer = (
     label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadApp(WaterConnection, 'estimateNotice', 'print');
+      downloadApp(WaterConnection, 'estimateNotice', 'print',dispatch);
     },
     leftIcon: "book"
   };
@@ -590,7 +599,7 @@ export const downloadPrintContainer = (
       const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "To Citizen" : "Department Use";
       WaterConnection[0].appUserType = appUserType;
       WaterConnection[0].commissionerName = "S.Ravindra Babu";
-      downloadApp(WaterConnection, 'sanctionLetter');
+      downloadApp(WaterConnection, 'sanctionLetter',"download",dispatch);
     },
     leftIcon: "receipt"
   };
@@ -601,44 +610,49 @@ export const downloadPrintContainer = (
       const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "Department Use" : "To Citizen";
       WaterConnection[0].appUserType = appUserType;
       WaterConnection[0].commissionerName = "S.Ravindra Babu";
-      downloadApp(WaterConnection, 'sanctionLetter', 'print');
+      downloadApp(WaterConnection, 'sanctionLetter', 'print',dispatch);
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
     label: { labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      let conneType=WaterConnection[0].connectionType;
-      if(applicationNumber.includes("WS")){
-        let connType=conneType===null?"Metered":conneType;
-        generateWSAcknowledgement(get(
-          state,
-          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"WATER",connType);
-      }else{
-        generateWSAcknowledgement(get(
-          state,
-          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"SEWERAGE",conneType);
-      }
+      // const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
+      // let filteredDocs = DocumentsData;
+      // filteredDocs.map((val) => {
+      //   if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
+      //     val.title = "WS_OWNER.IDENTITYPROOF";
+      //   } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
+      //     val.title = "WS_OWNER.ADDRESSPROOF";
+      //   }
+      // });
+      // WaterConnection[0].pdfDocuments = filteredDocs;
+      generateWSAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `application.pdf`);
+      // downloadApp(WaterConnection, 'application');
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      let conneType=WaterConnection[0].connectionType;
-      if(applicationNumber.includes("WS")){
-        let connType=conneType===null?"Metered":conneType;
-        generateWSAcknowledgement(get(
-          state,
-          "screenConfiguration.preparedFinalObject", {}), "print","WATER",connType);
-      }else{
-        generateWSAcknowledgement(get(
-          state,
-          "screenConfiguration.preparedFinalObject", {}), "print","SEWERAGE",conneType);
-      }
+      // const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
+      // let filteredDocs = DocumentsData;
+      // filteredDocs.map((val) => {
+      //   if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
+      //     val.title = "WS_OWNER.IDENTITYPROOF";
+      //   } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
+      //     val.title = "WS_OWNER.ADDRESSPROOF";
+      //   }
+      // });
+      // WaterConnection[0].pdfDocuments = filteredDocs;
+      generateWSAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print');
     },
+    //   downloadApp(WaterConnection, 'application', 'print');
+    // },
     leftIcon: "assignment"
   };
   switch (appStatus) {

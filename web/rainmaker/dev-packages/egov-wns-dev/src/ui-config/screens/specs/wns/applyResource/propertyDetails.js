@@ -8,6 +8,22 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { propertySearchApiCall } from './functions';
 import { handlePropertySubUsageType, handleNA } from '../../utils';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+let isMode = getQueryArg(window.location.href, "mode");
+isMode = (isMode) ? isMode.toUpperCase() : "";
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+let tenantId = getQueryArg(window.location.href, "tenantId");
+let action = getQueryArg(window.location.href, "action");
+
+let modifyLink;
+if(isMode==="MODIFY"){
+  modifyLink=`/wns/apply?applicationNumber=${applicationNumber}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=${action}&mode=${isMode}`;
+}else{
+  modifyLink="/wns/apply"
+}
+
 
 export const propertyHeader = getCommonSubHeader({
   labelKey: "WS_COMMON_PROP_DETAIL",
@@ -65,7 +81,7 @@ export const propertyID = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "AddLinkForProperty",
-    props: { url: "/wns/apply" },
+    props: { url: modifyLink, isMode },
     gridDefination: { xs: 12, sm: 4, md: 4 }
   }
 })
@@ -139,7 +155,7 @@ const propertyDetails = getCommonContainer({
       labelName: "Rainwater Harvesting Facility"
     },
     {
-      jsonPath: "applyScreen.property.rainWaterHarvesting",
+      jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
       callBack: handleNA
     }
   )
