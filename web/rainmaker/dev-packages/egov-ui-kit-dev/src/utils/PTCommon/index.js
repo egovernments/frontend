@@ -240,7 +240,7 @@ export const findCorrectDateObjPenaltyIntrest = (financialYear, category) => {
   return chosenDateObj;
 };
 
-const getMonth = (date) => {  
+const getMonth = (date) => {
   return parseInt(date.split("/")[1]);
 };
 
