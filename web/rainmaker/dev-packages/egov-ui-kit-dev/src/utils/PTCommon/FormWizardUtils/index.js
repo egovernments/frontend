@@ -314,7 +314,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
     if (financialYearFromQuery) {
       set(prepareFormData, "Properties[0].propertyDetails[0].financialYear", financialYearFromQuery);
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.SINGLEOWNER") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getSingleOwnerInfo(self));
       set(
         prepareFormData,
@@ -322,7 +322,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
         get(common, `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`, "INDIVIDUAL")
       );
       set(prepareFormData, "Properties[0].propertyDetails[0].subOwnershipCategory", selectedownerShipCategoryType);
-    } else if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    } else if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getMultipleOwnerInfo(self));
       set(
         prepareFormData,
@@ -336,7 +336,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
       set(prepareFormData, "Properties[0].propertyDetails[0].institution", instiObj);
       set(prepareFormData, "Properties[0].propertyDetails[0].ownershipCategory", get(form, "ownershipType.fields.typeOfOwnership.value", ""));
       set(prepareFormData, "Properties[0].propertyDetails[0].subOwnershipCategory", get(form, "institutionDetails.fields.type.value", ""));
-    }
+      }
   } catch (e) {
     alert(e);
   }

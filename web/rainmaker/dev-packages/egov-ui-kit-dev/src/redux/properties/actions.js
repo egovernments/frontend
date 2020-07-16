@@ -676,6 +676,85 @@ export const getFileUrlFromAPI = async fileStoreId => {
   }
 };
 
+let getModifiedPayment = (payments) =>{
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let swatchatha=0;
+  let currentDate=convertDateToEpoch(new Date());
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = Math.round((tax+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
+
+  return payments;
+}
+
 export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
     if (receiptQueryString) {
