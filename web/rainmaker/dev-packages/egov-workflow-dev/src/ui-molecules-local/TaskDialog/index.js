@@ -30,6 +30,7 @@ const TaskDialog = props => {
       onClose={onClose}
       maxWidth={false}
       style={{zIndex:2000}}
+      className="task-dialog"
     >
       <DialogContent
         children={
@@ -43,8 +44,8 @@ const TaskDialog = props => {
                     alignItems: "center", 
                   display: "flex"
                    
-                }}
-                  item
+                }}  
+                  item                
                   sm={10}
                 >
                   <Typography component="h2" variant="subheading">
