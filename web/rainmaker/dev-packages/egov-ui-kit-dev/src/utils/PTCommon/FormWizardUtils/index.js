@@ -86,6 +86,7 @@ export const getBusinessServiceNextAction = (businessServiceName, currentAction)
 }
 
 export const convertToOldPTObject = (newObject) => {
+  console.log("prasad old object", newObject);
   let Properties = [
     {
       propertyId: "",
@@ -336,7 +337,8 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
       set(prepareFormData, "Properties[0].propertyDetails[0].institution", instiObj);
       set(prepareFormData, "Properties[0].propertyDetails[0].ownershipCategory", get(form, "ownershipType.fields.typeOfOwnership.value", ""));
       set(prepareFormData, "Properties[0].propertyDetails[0].subOwnershipCategory", get(form, "institutionDetails.fields.type.value", ""));
-      }
+    
+    }
   } catch (e) {
     alert(e);
   }
@@ -716,7 +718,12 @@ export const getFooterLabel = (selected) => {
 
 export const normalizePropertyDetails = (properties, self) => {
   let { search } = self.props.location;
+  console.log("normalizePropertyDetails search", search);
+
   const propertyInfo = trimObj(JSON.parse(JSON.stringify(properties)));
+
+  console.log("normalizePropertyDetails propertyInfo", propertyInfo);
+
   const property = propertyInfo[0] || {};
   const { propertyDetails } = property;
   const isReassesment = !!getQueryValue(search, "isReassesment");
