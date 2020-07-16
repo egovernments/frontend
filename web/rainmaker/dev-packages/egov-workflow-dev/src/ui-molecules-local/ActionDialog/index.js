@@ -85,7 +85,7 @@ class ActionDialog extends React.Component {
   };
 
   render() {
-
+        
     let {
       open,
       onClose,
@@ -105,7 +105,7 @@ class ActionDialog extends React.Component {
     const { getButtonLabelName } = this;
     let fullscreen = false;
     if (window.innerWidth <= 768) {
-      // fullscreen = true;
+      fullscreen = true;
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails`
@@ -116,7 +116,15 @@ class ActionDialog extends React.Component {
     } else {
       dataPath = `${dataPath}[0]`;
     }
+    let assigneePath= '';
+    /* The path for Assignee in Property and Assessment has latest workflow contract and it is Array of user object  */
+    if (dataPath.includes("Assessment")||dataPath.includes("Property")){
+      assigneePath=`${dataPath}.assignes[0].uuid`;
+    }else{
+      assigneePath=`${dataPath}.assignee[0]`;
+    }
 
+   
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -181,11 +189,11 @@ class ActionDialog extends React.Component {
                         //onChange={e => this.onEmployeeClick(e)}
                         onChange={e =>
                           handleFieldChange(
-                            `${dataPath}.assignee`,
-                            [e.target.value]
+                            assigneePath,
+                            e.target.value
                           )
                         }
-                        jsonPath={`${dataPath}.assignee[0]`}
+                        jsonPath={assigneePath}
                       />
                     </Grid>
                   )}

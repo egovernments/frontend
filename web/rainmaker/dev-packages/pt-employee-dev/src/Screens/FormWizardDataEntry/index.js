@@ -680,7 +680,7 @@ class FormWizardDataEntry extends Component {
     const isReviewPage = selected === 4;
     if (ownerType && ownerType.includes("SINGLEOWNER")) {
       return <OwnerInfoHOC disabled={isReviewPage} />;
-    } else if (ownerType && ownerType.includes("MULTIPLEOWNERS")) {
+    } else if (ownerType && ownerType.includes("INDIVIDUAL.MULTIPLEOWNERS")) {
       return (
         <MultipleOwnerInfoHOC
           addOwner={() => {
@@ -1250,7 +1250,7 @@ class FormWizardDataEntry extends Component {
               ownershipType,
               "fields.typeOfOwnership.value"
             );
-            if (ownershipTypeSelected.includes("SINGLEOWNER")) {
+            if (ownershipTypeSelected.includes("INDIVIDUAL.SINGLEOWNER")) {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
@@ -1266,7 +1266,7 @@ class FormWizardDataEntry extends Component {
               } else {
                 displayFormErrorsAction("ownerInfo");
               }
-            } else if (ownershipTypeSelected.includes("MULTIPLEOWNERS")) {
+            } else if (ownershipTypeSelected.includes("INDIVIDUAL.MULTIPLEOWNERS")) {
               let ownerValidation = true;
               for (const variable in form) {
                 if (variable.search("ownerInfo_") !== -1) {
@@ -2030,7 +2030,7 @@ class FormWizardDataEntry extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType.includes("SINGLEOWNER")) {
+    if (selectedownerShipCategoryType.includes("INDIVIDUAL.SINGLEOWNER")) {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -2058,7 +2058,7 @@ class FormWizardDataEntry extends Component {
           "Properties[0].propertyDetails[0].owners[0].mobileNumber"
         )
       );
-    } else if (selectedownerShipCategoryType.includes("MULTIPLEOWNERS")) {
+    } else if (selectedownerShipCategoryType.includes("INDIVIDUAL.MULTIPLEOWNERS")) {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -2400,7 +2400,7 @@ class FormWizardDataEntry extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.SINGLEOWNER") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -2422,7 +2422,7 @@ class FormWizardDataEntry extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",

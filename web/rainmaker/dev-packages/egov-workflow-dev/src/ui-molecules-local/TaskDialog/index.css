@@ -1,7 +1,2 @@
 .task-dialog div {
   width: 100%; }
-  @media only screen and (max-width: 551px) {
-    .tcontainer{
-        margin-top: 50px;    
-    } }
-   
