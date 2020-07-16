@@ -6,6 +6,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { getTextToLocalMapping } from "../../utils";
+import { getBpaSearchResults } from "../../../../../ui-utils/commons";
 
 
 export const getNOCSearchResults = async queryObject => {
@@ -28,13 +29,78 @@ export const getNOCSearchResults = async queryObject => {
   }
 };
 
+export const getWorkFlowDataForBPA = async Licenses => {
+  var businessIds = [];
+  let tenantMap = {};
+  let processInstanceArray = [];
+  var appNumbers = [];
+  Licenses.forEach(item => {
+    var appNums = tenantMap[item.tenantId] || [];
+    appNumbers = appNums;
+    appNums.push(item.applicationNo);
+    tenantMap[item.tenantId] = appNums;
+  });
+
+  for (var key in tenantMap) {
+    for (let i = 0; i < appNumbers.length / 100; i++) {
+      let queryObject = [
+        {
+          key: "tenantId",
+          value: key
+        },
+        {
+          key: "businessIds",
+          value: tenantMap[key].slice(i * 100, (i * 100) + 100)
+        }
+      ];
+      try {
+        let payload = await httpRequest(
+          "post",
+          "egov-workflow-v2/egov-wf/process/_search",
+          "",
+          queryObject
+        );
+        processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
+
+      } catch (error) {
+        console.log(error);
+        return [];
+      }
+    }
+    var businessIdToOwnerMapping = {};
+    processInstanceArray.filter(
+      record => record.moduleName.includes("noc-services")
+    ).forEach(item => {
+      businessIdToOwnerMapping[item.businessId] = {
+        assignee: get(item, "assigner.name"),
+        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla),
+        state: item.state.state
+      };
+    });
+    return businessIdToOwnerMapping;
+  }
+};
+
+const convertMillisecondsToDays = (milliseconds) => {
+  return Math.round(milliseconds / (1000 * 60 * 60 * 24));
+}
+
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let tenantId = getTenantId();
+  let nocType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "nocType",
+    ""
+  );
   let queryObject = [
     {
       key: "tenantId",
       value: tenantId
+    },
+    {
+      key: "nocType",
+      value: nocType
     }
   ];
   let searchScreenObject = get(
@@ -56,49 +122,26 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  } else if (
-    (searchScreenObject["fromDate"] === undefined ||
-      searchScreenObject["fromDate"].length === 0) &&
-    searchScreenObject["toDate"] !== undefined &&
-    searchScreenObject["toDate"].length !== 0
-  ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
-        "warning"
-      )
-    );
-  } else {
+  }  
+  else {
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
-        if (key === "fromDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "daystart")
-          });
-        } else if (key === "toDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "dayend")
-          });
-        }
-        else {
           queryObject.push({ key: key, value: searchScreenObject[key].trim() });
-        }
       }
     }
     try {
       const response = await getNOCSearchResults(queryObject);
+      const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(response.Noc); 
+      console.log(businessIdToOwnerMappingForBPA, "businessIdToOwnerMappingForBPAaa")     ;
       let data = response.Noc.map(item => ({
         ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo || "-",
-        ["BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"]: getTextToLocalMapping(item.applicationType) || "-",
-        ["NOC_SEARCH_TYPE_LABEL"]: getTextToLocalMapping(item.nocType) || "-",
+        ["SOURCE_MODULE_NUMBER"]: item.sourceRefId || "-",
+        ["SOURCE_MODULE"]: getTextToLocalMapping(item.source) || "-",
+        ["CURRENT_OWNER"]: get(businessIdToOwnerMappingForBPA[item.applicationNo], "assignee", null) || "NA",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.applicationStatus || "-",
-        ["TENANT_ID"]: item.tenantId
       }));
 
       dispatch(
