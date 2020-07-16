@@ -155,7 +155,7 @@ const propertyDetails = getCommonContainer({
       labelName: "Rainwater Harvesting Facility"
     },
     {
-      jsonPath: "applyScreen.property.rainWaterHarvesting",
+      jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
       callBack: handleNA
     }
   )

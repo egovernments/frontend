@@ -326,14 +326,14 @@ const getPropertyDetails = {
               labelName: "Rain Water Harvesting Facility"
             },
             {
-              jsonPath: "applyScreen.property.rainWaterHarvesting",
+              jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
               callBack: handleNA
             },
             {
               labelKey: "WS_OLD_LABEL_NAME"
             },
             {
-              jsonPath: "applyScreenOld.property.rainWaterHarvesting",
+              jsonPath: "applyScreenOld.property.additionalDetails.isRainwaterHarvesting",
               callBack: handleNA
             },
           )
