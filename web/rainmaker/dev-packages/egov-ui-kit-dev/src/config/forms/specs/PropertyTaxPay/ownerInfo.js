@@ -3,6 +3,11 @@ import { setDependentFields } from "./utils/enableDependentFields";
 import get from "lodash/get";
 import set from "lodash/set";
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import {getFinalData} from "egov-ui-kit/utils/localStorageUtils";
+import { prepareFormData as setData } from "egov-ui-kit/redux/common/actions";
+
+
+
 
 const formConfig = {
   name: "ownerInfo",
@@ -15,7 +20,7 @@ const formConfig = {
       hintText: "PT_FORM3_OWNER_NAME_PLACEHOLDER",
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,64}$/i,
+      pattern: /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,64}$/i,
       errorMessage: "PT_NAME_ERROR_MESSAGE",
     },
     ownerMobile: {
@@ -35,7 +40,7 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME",
       hintText: "PT_FORM3_GUARDIAN_PLACEHOLDER",
-      pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,64}$/i,
+      pattern: /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,64}$/i,
       required: true,
       errorMessage: "PT_NAME_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
@@ -57,7 +62,7 @@ const formConfig = {
       floatingLabelText: "PT_FORM3_CORRESPONDENCE_ADDRESS",
       hintText: "PT_FORM3_CORRESPONDENCE_ADDRESS_PLACEHOLDER",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,256}$/,
+      //pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,256}$/,
       errorMessage: "PT_ADDRESS_ERROR_MESSAGE",
     },
     ownerRelationship: {
@@ -88,8 +93,7 @@ const formConfig = {
           state,
           `${process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee"}.mdms.document.MdmsRes.PropertyTax.OwnerTypeDocument`,
           []
-        )
-          .filter((docu) => {
+        ).filter((docu) => {           
             return docu.ownerTypeCode === value;
           })
           .reduce((acc, curr) => {
@@ -240,7 +244,7 @@ const formConfig = {
       const dropdownData = getOwnerCategory(Object.values(OwnerTypes));
       set(action, "form.fields.ownerCategory.dropDownData", dropdownData);
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
-      if (ownerShipType === "SINGLEOWNER") {
+      if (ownerShipType === "INDIVIDUAL.SINGLEOWNER") {
         set(action, "form.fields.ownerGender.value", get(state, "form.ownerInfo.fields.ownerGender.value", "Male"));
       }
       return action;
@@ -256,7 +260,7 @@ const formConfig = {
       if (get(state, `form.${formKey}.fields.ownerRelationship.value`, "NONE") === "NONE") {
         dispatch(handleFieldChange(formKey, "ownerRelationship", "FATHER"));
       }
-
+      
       if (get(state, `form.${formKey}.fields.ownerCategory.value`, "NONE") === "NONE") {
         dispatch(setFieldProperty(formKey, "ownerCategoryId", "hideField", true));
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "hideField", true));
