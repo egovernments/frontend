@@ -13,7 +13,6 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_COMMON_VASIKA_NO",
       hintText: "Vasika No",
-      required: true,
       fullWidth: true,
     },
     vasikaDate: {
@@ -23,7 +22,6 @@ const formConfig = {
       type: "date",
       floatingLabelText: "PT_COMMON_VASIKA_DATE",
       hintText: "Vasika Date",
-      required: true,
       fullWidth: true,
     },
     allotmentNo: {
@@ -33,7 +31,6 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_COMMON_ALLOTMENT_NO",
       hintText: "Allotment No",
-      required: true,
       fullWidth: true,
     },
     allotmentDate: {
@@ -43,7 +40,6 @@ const formConfig = {
       type: "date",
       floatingLabelText: "PT_COMMON_ALLOTMENT_DATE",
       hintText: "Allotment Date",
-      required: true,
       fullWidth: true,
     },
     businessName: {
@@ -53,7 +49,6 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_COMMON_BUSSINESS_NAME",
       hintText: "Bussiness Name",
-      required: true,
       fullWidth: true,
     },
     remrks: {
@@ -63,7 +58,6 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_COMMON_REMARKS",
       hintText: "Remarks",
-      required: true,
       fullWidth: true,
     },
   },

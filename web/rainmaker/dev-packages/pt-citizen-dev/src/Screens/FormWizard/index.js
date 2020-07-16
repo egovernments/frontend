@@ -777,7 +777,7 @@ class FormWizard extends Component {
           break;
         }
 
-        const { basicInformation, plotDetails,bussinessDetails } = form;
+        const { basicInformation, plotDetails } = form;
         if (basicInformation) {
           const isBasicInformationFormValid = validateForm(basicInformation);
           if (isBasicInformationFormValid) {
@@ -827,15 +827,15 @@ class FormWizard extends Component {
             displayFormErrorsAction("basicInformation");
           }
         }
-        if (bussinessDetails && checkBoxDetails){
-          const isBasicInformationFormValid = validateForm(bussinessDetails);
-          if(isBasicInformationFormValid){
-            console.log("=====isBasicInformationFormValid======",isBasicInformationFormValid);
-          }
-          else{
-            displayFormErrorsAction("bussinessDetails");
-          }
-        }
+        // if (bussinessDetails && checkBoxDetails){
+        //   const isBasicInformationFormValid = validateForm(bussinessDetails);
+        //   if(isBasicInformationFormValid){
+        //     console.log("=====isBasicInformationFormValid======",isBasicInformationFormValid);
+        //   }
+        //   else{
+        //     displayFormErrorsAction("bussinessDetails");
+        //   }
+        // }
         break;
       case 2:
         if (
