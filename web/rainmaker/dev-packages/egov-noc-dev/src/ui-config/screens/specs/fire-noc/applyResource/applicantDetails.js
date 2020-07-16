@@ -315,11 +315,11 @@ const commonApplicantInformation = () => {
             },
             sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
             jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
-            required: false,
+            required: true,
             labelsFromLocalisation: true,
             className: "autocomplete-dropdown",
           },
-        
+          required: true,
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
         gridDefination: {
           xs: 12,
@@ -527,6 +527,7 @@ export const applicantDetails = getCommonCard({
             sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
             jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
           },
+          required: true,
           jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
           gridDefination: {
             xs: 12,
@@ -571,6 +572,7 @@ export const applicantDetails = getCommonCard({
           className:"applicant-details-error autocomplete-dropdown",
           jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
         },
+        required: true,
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
         gridDefination: {
           xs: 12,

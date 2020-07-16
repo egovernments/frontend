@@ -3,7 +3,7 @@ import {
 
 
   getCommonContainer,
-  getLabel, getSelectField, getTextField
+  getLabel, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -86,7 +86,7 @@ export const abgSearchCard = getCommonCard({
           value: tenantId,
           disabled: true,
           labelsFromLocalisation: true,
-          className:"autocomplete-dropdown",
+          className: "autocomplete-dropdown",
           jsonPath: "searchCriteria.tenantId",
           sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         },
@@ -111,13 +111,13 @@ export const abgSearchCard = getCommonCard({
             labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
           },
           required: true,
-          localePrefix : {
-            moduleName : "BillingService",
-            masterName : "BusinessService"
+          localePrefix: {
+            moduleName: "BillingService",
+            masterName: "BusinessService"
           },
           labelsFromLocalisation: true,
           isClearable: true,
-          className:"autocomplete-dropdown",
+          className: "autocomplete-dropdown",
           jsonPath: "searchCriteria.businesService",
           sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
         },
@@ -126,7 +126,6 @@ export const abgSearchCard = getCommonCard({
           xs: 12,
           sm: 4
         },
-        
         // beforeFieldChange :(action, state, dispatch) => {
         //   if(action.value === "WS"){
         //     dispatch(
@@ -178,7 +177,7 @@ export const abgSearchCard = getCommonCard({
         },
         jsonPath: "searchCriteria.locality",
         props: {
-          className:"autocomplete-dropdown",
+          className: "autocomplete-dropdown",
           label: {
             labelName: "Location/Mohalla",
             labelKey: "ABG_LOCMOHALLA_LABEL"

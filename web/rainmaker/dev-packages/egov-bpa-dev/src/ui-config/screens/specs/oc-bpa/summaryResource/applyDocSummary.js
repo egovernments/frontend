@@ -1,7 +1,7 @@
 import {
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabel,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "../applyResource/footer";
 

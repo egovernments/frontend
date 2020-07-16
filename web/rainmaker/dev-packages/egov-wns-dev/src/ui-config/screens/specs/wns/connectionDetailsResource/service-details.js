@@ -1,9 +1,9 @@
 import {
-  getCommonGrayCard,
+  getCommonContainer, getCommonGrayCard,
   getCommonSubHeader,
-  getCommonContainer,
-  getLabelWithValue,
-  getLabel
+
+
+  getLabel, getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";

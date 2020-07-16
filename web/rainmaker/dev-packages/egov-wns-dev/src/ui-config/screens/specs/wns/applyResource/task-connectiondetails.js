@@ -8,6 +8,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
 
 const service = getQueryArg(window.location.href, "service")
+const applicationNumber = getQueryArg(window.location.href, "applicationNumber")
 
 const getHeader = label => {
     return {

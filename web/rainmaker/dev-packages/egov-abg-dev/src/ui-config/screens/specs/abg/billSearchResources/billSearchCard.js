@@ -1,4 +1,4 @@
-import { getCommonCard, getCommonContainer, getCommonHeader, getCommonSubHeader, getLabel, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonSubHeader, getLabel, getPattern, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { searchApiCall } from "./function";
@@ -47,7 +47,7 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: "" ,businesService:""}))
+  dispatch(prepareFinalObject("searchScreen", { tenantId: "", businesService: "" }))
 };
 
 export const billSearchCard = getCommonCard({
@@ -81,12 +81,12 @@ export const billSearchCard = getCommonCard({
         required: true,
         labelsFromLocalisation: true,
         isClearable: true,
-        className:"autocomplete-dropdown",
+        className: "autocomplete-dropdown",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         jsonPath: "searchScreen.tenantId",
         disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       },
-      
+      required: true,
       jsonPath: "searchScreen.tenantId",
       gridDefination: {
         xs: 12,
@@ -108,7 +108,7 @@ export const billSearchCard = getCommonCard({
         },
         required: true,
         labelsFromLocalisation: true,
-        className:"autocomplete-dropdown",
+        className: "autocomplete-dropdown",
         isClearable: true,
         jsonPath: "searchScreen.businesService",
         localePrefix: {
@@ -122,7 +122,6 @@ export const billSearchCard = getCommonCard({
         xs: 12,
         sm: 4
       },
-      
       beforeFieldChange: (action, state, dispatch) => {
         const labelName = {
           labelKey: `ABG_${action.value}_CONSUMER_CODE_LABEL`,

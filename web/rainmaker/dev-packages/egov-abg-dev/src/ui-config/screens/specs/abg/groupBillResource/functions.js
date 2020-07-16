@@ -12,6 +12,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty"
+import { loadUlbLogo } from "../../utils/receiptTransformer";
 
 // const tenantId = getTenantId();
 const tenantId = getTenantId();
@@ -77,7 +78,6 @@ export const searchApiCall = async (state, dispatch) => {
     ).filter(item => item.code === searchScreenObject.businesService);
 
     searchScreenObject.url = serviceObject&&serviceObject[0]&&serviceObject[0].billGineiURL;
-    searchScreenObject.billActive="ACTIVE";
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
@@ -125,7 +125,10 @@ export const searchApiCall = async (state, dispatch) => {
         )
       );      
       showHideTable(true, dispatch);
-      if(!isEmpty(response)){showHideMergeButton(true, dispatch)};
+      if(!isEmpty(response)){
+        showHideMergeButton(true, dispatch);
+        loadUlbLogo(tenantId);
+      };
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);

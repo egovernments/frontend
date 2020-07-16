@@ -64,7 +64,7 @@ export const registrationDetails = getCommonCard(
                 shrink: true
               }
             },
-            
+            required:true,
             jsonPath:
             "Property.additionalDetails.reasonForTransfer",
             gridDefination: {

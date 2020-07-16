@@ -6,10 +6,10 @@ import {
   getDateField,
   getLabel,
   getPattern,
-  getSelectField,
+
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
 
 export const resetFields = (state, dispatch) => {

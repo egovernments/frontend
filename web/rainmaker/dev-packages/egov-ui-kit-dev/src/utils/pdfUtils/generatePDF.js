@@ -431,7 +431,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                                 bold: true
                             },
                             {
-                                "text": applicationData.additionalHeaderValue ? ` ${getLocaleLabels(applicationData.additionalHeaderValue, applicationData.additionalHeaderValue)}` : '',
+                                "text": applicationData.additionalHeaderValue ? getLocaleLabels(applicationData.additionalHeaderValue, applicationData.additionalHeaderValue) : '',
                                 italics: true,
                                 "style": "pdf-application-no-value"
                             }

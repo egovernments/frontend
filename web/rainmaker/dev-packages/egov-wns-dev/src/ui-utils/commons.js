@@ -1602,15 +1602,37 @@ export const downloadBill = (receiptQueryString,mode,dispatch) => {
             let data = [];
             payloadReceiptDetails.Bill[0].billDetails.map(curEl => data.push(curEl));
             let sortData = data.sort((a, b) => b.toPeriod - a.toPeriod);
-            sortData.shift();
-            let totalAmount = 0;
-            let previousArrears = 0;
-            if (sortData.length > 0) {
-                let totalArrearsAmount = sortData.map(el => el.amount + totalAmount);
-                previousArrears = totalArrearsAmount.reduce((a, b) => a + b);
-            }
+            let tenant = sortData[0].tenantId;
+            let demandId = sortData[0].demandId;
+            const queryString = [
+                { key: "demandId", value: demandId },
+                { key: "tenantId", value: tenant }
+            ]
+            let billTotalAmount=payloadReceiptDetails.Bill[0].totalAmount;
 
-            payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
+            httpRequest(
+                "post",
+                "/billing-service/demand/_search",
+                "_demand",
+                queryString
+            ).then((getDemandBills)=>{
+                let demandAmount = getDemandBills.Demands[0].demandDetails.reduce((accum,item) => accum + item.taxAmount, 0);
+                let partiallyPaid = getDemandBills.Demands[0].demandDetails.reduce((accm,item) => accm + item.collectionAmount, 0);
+                if(billTotalAmount <= 0) {
+                    // We do have Advance. This value is already adjusted from the actual demand.
+                    // i.e. The entire demand is adjusted hence billTotalAmount becomes <= 0
+                    payloadReceiptDetails.Bill[0].AdvanceAdjustedValue = partiallyPaid > 0 ? partiallyPaid : 0;
+                } else {
+                    // We have some Bill Amount. There are two possibilities.
+                    // 1 - There was some advance and it is adjusted
+                    // 2 - This is the balance of the previous Bill amount after partial payment - no adjustment
+                    if(partiallyPaid >= 0) {
+                        //There is some amount paid partially. Hence AdvanceAdjusted must be 0
+                        payloadReceiptDetails.Bill[0].AdvanceAdjustedValue = 0;
+                    } else {
+                        payloadReceiptDetails.Bill[0].AdvanceAdjustedValue = demandAmount - billTotalAmount;
+                    }
+                }
 
             payloadReceiptDetails.Bill[0].arrearAmount = previousArrears.toFixed(2);
             httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], requestBody).then((payloadbillingPeriod) => {

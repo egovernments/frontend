@@ -8,14 +8,17 @@ import {
   getCommonApplyFooter, 
   validateFields, 
   generateBillForBPA,
-  applicantNameAppliedByMaping
+  applicantNameAppliedByMaping,
+  prepareNocFinalCards
 } from "../../utils";
 import "./index.css";
 import {
   submitBpaApplication,
   updateOcBpaApplication,
   createUpdateOCBpaApplication,
-  prepareDocumentsUploadData
+  prepareDocumentsUploadData,
+  prepareNOCUploadData,
+  getNocSearchResults
 } from "../../../../../ui-utils/commons";
 import { 
   toggleSnackbar, 
@@ -211,6 +214,24 @@ const callBackForNext = async (state, dispatch) => {
         }
         prepareDocumentsUploadData(state, dispatch);
       }
+      let applicationNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "BPA.applicationNo"
+      );
+      let tenantId = get(
+        state.screenConfiguration.preparedFinalObject,
+        "BPA.tenantId"
+      );
+      const payload = await getNocSearchResults([
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        { key: "sourceRefId", value: applicationNumber }
+      ], state);
+      dispatch(prepareFinalObject("Noc", payload.Noc)); 
+      await prepareNOCUploadData(state, dispatch);
+      prepareNocFinalCards(state, dispatch);
     }
   } else if (activeStep === 1) {
     const documentsFormat = Object.values(

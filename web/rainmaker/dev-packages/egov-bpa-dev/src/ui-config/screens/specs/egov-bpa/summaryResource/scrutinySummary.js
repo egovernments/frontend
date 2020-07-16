@@ -1,14 +1,18 @@
 import {
     getBreak,
-    getCommonContainer,
+
+
+
+
+
+    getCommonCard, getCommonContainer,
     getCommonGrayCard,
     getCommonSubHeader,
     getLabel,
-    getLabelWithValue,
-    getCommonCard
+    getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils/index";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { changeStep } from "../applyResource/footer";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
@@ -210,7 +214,7 @@ export const scrutinySummary = getCommonGrayCard({
                                             width: "50%",
                                             marginTop: "5px",
                                             marginLeft: "7px"
-                                        } 
+                                        }
                                     }
                                 ),
                                 subOccupancyType: getLabelWithValue(
@@ -271,8 +275,8 @@ export const scrutinySummary = getCommonGrayCard({
                                         }
                                     }
                                 },
-                                breakP: getBreak(),                              
-                                breakP1: getBreak(),                                
+                                breakP: getBreak(),
+                                breakP1: getBreak(),
                             }),
                         }),
                         items: [],

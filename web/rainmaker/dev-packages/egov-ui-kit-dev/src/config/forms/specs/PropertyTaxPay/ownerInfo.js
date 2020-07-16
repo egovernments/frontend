@@ -74,6 +74,7 @@ const formConfig = {
       },
       dropDownData: [{ label: "Father", value: "FATHER" }, { label: "Husband", value: "HUSBAND" }],
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      formName: "ownerInfo"
     },
     ownerCategory: {
       id: "ownerCategory",
@@ -90,6 +91,7 @@ const formConfig = {
       },
       fullWidth: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      formName: "ownerInfo",
       updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
         const { value } = sourceField;
         const dependentFields = ["ownerCategoryId", "ownerCategoryIdType"];
@@ -193,6 +195,7 @@ const formConfig = {
         xs: 12,
         sm: 6
       },
+      formName: "ownerInfo",
       updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
         const { value } = sourceField;
         if (value === "Aadhar") {

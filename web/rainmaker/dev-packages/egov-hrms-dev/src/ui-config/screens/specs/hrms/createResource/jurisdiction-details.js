@@ -47,6 +47,7 @@ const jurisdictionDetailsCard = {
               labelsFromLocalisation: true,
               required: true,
             },
+            required: true,
             gridDefination: {
               xs: 12,
               sm: 12,
@@ -121,6 +122,7 @@ const jurisdictionDetailsCard = {
               required: true,
               labelsFromLocalisation: true,
             },
+            required: true,
             gridDefination: {
               xs: 12,
               sm: 12,
@@ -233,6 +235,7 @@ const jurisdictionDetailsCard = {
               required: true,
               labelsFromLocalisation: true,
             },
+            required: true,
             gridDefination: {
               xs: 12,
               sm: 12,

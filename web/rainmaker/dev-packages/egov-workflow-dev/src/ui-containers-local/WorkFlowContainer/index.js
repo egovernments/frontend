@@ -257,7 +257,7 @@ class WorkFlowContainer extends React.Component {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
 
-    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property") {
+    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property" || dataPath === "Noc") {
 
       data = get(preparedFinalObject, dataPath, {})
     } else {
@@ -268,7 +268,7 @@ class WorkFlowContainer extends React.Component {
     let appendToPath = ""
     if (dataPath === "FireNOCs") {
       appendToPath = "fireNOCDetails."
-    } else if (dataPath === "Assessment" || dataPath === "Property" || dataPath === "BPA") {
+    } else if (dataPath === "Assessment" || dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       appendToPath = "workflow."
     } else {
       appendToPath = ""

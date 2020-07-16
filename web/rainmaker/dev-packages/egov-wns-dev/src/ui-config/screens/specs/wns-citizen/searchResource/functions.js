@@ -1,3 +1,4 @@
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, fetchBill, getSearchResultsForSewerage, serviceConst } from "../../../../../ui-utils/commons";
@@ -123,7 +124,7 @@ export const searchApiCall = async (state, dispatch) => {
               dueDate: updatedDueDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
+              name: (element.property && element.property !== "NA" && element.property.owners) ? element.property.owners[0].name : '',
               status: element.status,
               address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
               tenantId: element.tenantId,
@@ -135,7 +136,7 @@ export const searchApiCall = async (state, dispatch) => {
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
+            name: (element.property && element.property !== "NA" && element.property.owners) ? element.property.owners[0].name : '',
             status: element.status,
             address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
             tenantId: element.tenantId,

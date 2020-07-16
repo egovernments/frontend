@@ -1,15 +1,15 @@
-import { getSearchResults,getBpaSearchResults } from "../../../../../ui-utils/commons";
-import { httpRequest } from "../../../../../ui-utils";
+import commonConfig from "config/common.js";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import commonConfig from "config/common.js";
-import get from "lodash/get";
-import { getWorkFlowData,getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
-import { getTextToLocalMapping } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import { httpRequest } from "../../../../../ui-utils";
+import { getBpaSearchResults, getSearchResults } from "../../../../../ui-utils/commons";
+import { getWorkFlowData, getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
+import { getTextToLocalMapping } from "../../utils/index";
 
 export const getMdmsData = async () => {
   let mdmsBody = {
@@ -47,8 +47,16 @@ export const fetchData = async (
   fromMyApplicationPage = false,
   fromStakeHolderPage = false
 ) => {
+  let userInfo = JSON.parse(getUserInfo());
+  let mobileNumber = get(userInfo, "mobileNumber");
+  const queryObj = [
+    {
+      key: "requestor",
+      value: mobileNumber
+    }
+  ];
   const response = await getSearchResults();
-  const bpaResponse = await getBpaSearchResults();
+  const bpaResponse = await getBpaSearchResults(queryObj);
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =
     mdmsRes &&
@@ -68,12 +76,12 @@ export const fetchData = async (
     )
   );
   try {
-    if(window.location.href.includes("bpastakeholder-citizen/home")) {
+    if (window.location.href.includes("bpastakeholder-citizen/home")) {
       let myApplicationsCount = 0;
-      if(response && response.Licenses) {
+      if (response && response.Licenses) {
         myApplicationsCount += response.Licenses.length
       }
-      if(bpaResponse && bpaResponse.BPA) {
+      if (bpaResponse && bpaResponse.BPA) {
         myApplicationsCount += bpaResponse.BPA.length
       }
       dispatch(
@@ -94,8 +102,7 @@ export const fetchData = async (
           let service = getTextToLocalMapping(
             "MODULE_" + get(element, "businessService")
           );
-
-          let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMapping[element.applicationNo], "state", null));
+          let status = getTextToLocalMapping("WF_ARCHITECT_" + get(element, "status"));
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let licensetypeFull =
             element.tradeLicenseDetail.tradeUnits[0].tradeType;
@@ -108,7 +115,7 @@ export const fetchData = async (
                 )}`
               );
           }
-          if(!fromStakeHolderPage) {
+          if (!fromStakeHolderPage) {
             searchConvertedArray.push({
               applicationNumber: get(element, "applicationNumber", null),
               ownername: get(element, "tradeLicenseDetail.owners[0].name", null),
@@ -132,8 +139,8 @@ export const fetchData = async (
           }
         });
       }
-      
-      if(bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0){
+
+      if (bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0) {
         const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.BPA);
         bpaResponse.BPA.forEach(element => {
           let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[element.applicationNo], "state", null));
@@ -142,10 +149,10 @@ export const fetchData = async (
           let appType = "BUILDING_PLAN_SCRUTINY";
           let serType = "NEW_CONSTRUCTION";
           let type;
-          if(bService === "BPA_OC") {
+          if (bService === "BPA_OC") {
             appType = "BUILDING_OC_PLAN_SCRUTINY"
           }
-          if(bService === "BPA_LOW") {
+          if (bService === "BPA_LOW") {
             type = "LOW"
           } else {
             type = "HIGH"
@@ -153,19 +160,18 @@ export const fetchData = async (
           let service = getTextToLocalMapping(
             "BPA_APPLICATIONTYPE_" + appType
           );
-          service += " - "+getTextToLocalMapping(
+          service += " - " + getTextToLocalMapping(
             "BPA_SERVICETYPE_" + serType
           );
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let primaryowner = "-";
           let owners = get(element, "landInfo.owners", [])
-          owners.map(item=>{
-            if(item.isPrimaryOwner)
-            {
+          owners.map(item => {
+            if (item.isPrimaryOwner) {
               primaryowner = item.name;
             }
           });
-          if(!fromStakeHolderPage){
+          if (!fromStakeHolderPage) {
             searchConvertedArray.push({
               applicationNumber: get(element, "applicationNo", null),
               ownername: primaryowner,
@@ -192,16 +198,16 @@ export const fetchData = async (
         });
       }
 
-      sortConvertedArray = [].slice.call(searchConvertedArray).sort(function(a,b){ 
+      sortConvertedArray = [].slice.call(searchConvertedArray).sort(function (a, b) {
         return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
       });
 
       dispatch(prepareFinalObject("searchResults", sortConvertedArray));
-      storeData(sortConvertedArray, dispatch, fromMyApplicationPage, fromStakeHolderPage); 
-    }   
-    } catch (error) {
-      console.log(error);
+      storeData(sortConvertedArray, dispatch, fromMyApplicationPage, fromStakeHolderPage);
     }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) => {
@@ -226,7 +232,7 @@ const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) =
         myApplicationsCount ? [myApplicationsCount] : [0]
       )
     );
-  } else if(fromMyApplicationPage){
+  } else if (fromMyApplicationPage) {
 
     dispatch(
       handleField(

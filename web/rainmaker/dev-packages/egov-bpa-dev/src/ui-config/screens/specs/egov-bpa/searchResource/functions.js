@@ -1,13 +1,10 @@
-import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getAppSearchResults, getBpaSearchResults } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { textToLocalMapping } from "./searchResults";
-import { validateFields, getBpaTextToLocalMapping, getTextToLocalMapping } from "../../utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import { getBpaSearchResults } from "../../../../../ui-utils/commons";
 import { getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
+import { getTextToLocalMapping } from "../../utils";
+import { convertDateToEpoch, convertEpochToDate } from "../../utils/index";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -99,14 +96,14 @@ export const searchApiCall = async (state, dispatch) => {
 
       let data = response.BPA.map(item => ({
         ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo || "-",
-        ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.landInfo && item.landInfo.owners && item.landInfo.owners.map(function( items ){
-            return items.isPrimaryOwner ? items.name : "";
-          }),
-        ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) || "-",
+        ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.landInfo && item.landInfo.owners && item.landInfo.owners.map(function (items) {
+          return items.isPrimaryOwner ? items.name : "";
+        }),
+        ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(parseInt(get(item, "auditDetails.createdTime"))) || "-",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[item.applicationNo], "state", null)),
         ["TENANT_ID"]: item.tenantId,
-        ["SERVICE_TYPE"]: getTextToLocalMapping(`WF_${get(item, "businessService")}`, null),
-        ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: getTextToLocalMapping(`WF_BPA_${item.status}`) || ""
+        ["SERVICE_TYPE"]: get(item, "businessService", null),
+        ["BPA_COMMON_TABLE_COL_APP_STATUS_LABEL"]: item.status || ""
       }));
 
       // if (data && data.length > 0) {

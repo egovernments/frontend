@@ -14,7 +14,6 @@ import { applyTradeLicense, getNextFinancialYearForRenewal } from "../../../../.
 import {
   createEstimateData,
 
-  downloadAcknowledgementForm,
   downloadCertificateForm, getButtonVisibility,
   getCommonApplyFooter,
 
@@ -868,7 +867,7 @@ export const footerReviewTop = (
       const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0], "additionalDetails.documents", documents)
-      downloadAcknowledgementForm(Licenses);
+      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Licenses[0].applicationNumber}`);
     },
     leftIcon: "assignment"
   };
@@ -878,7 +877,8 @@ export const footerReviewTop = (
       const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0], "additionalDetails.documents", documents)
-      downloadAcknowledgementForm(Licenses, 'print');
+      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
+
     },
     leftIcon: "assignment"
   };

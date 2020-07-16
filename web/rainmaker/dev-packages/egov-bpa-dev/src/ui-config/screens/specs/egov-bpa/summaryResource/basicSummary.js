@@ -1,13 +1,12 @@
 import {
-  getCommonContainer,
+  getBreak, getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
   getLabel,
-  getLabelWithValue,
-  getBreak
+  getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { checkValueForNA, convertEpochToDate } from "../../utils/index";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { checkValueForNA, convertEpochToDate } from "../../utils/index";
 import { changeStep } from "../applyResource/footer";
 
 

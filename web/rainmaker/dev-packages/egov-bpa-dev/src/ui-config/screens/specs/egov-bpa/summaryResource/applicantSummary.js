@@ -174,7 +174,7 @@ export const applicantSummary = getCommonGrayCard({
       isReviewPage: true,
       sourceJsonPath: "BPA.landInfo.owners",
       prefixSourceJsonPath:
-        "children.cardContent.children",
+        "children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"

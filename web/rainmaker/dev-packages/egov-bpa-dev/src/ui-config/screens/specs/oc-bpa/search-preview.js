@@ -1,47 +1,51 @@
 import {
   getCommonCard,
   getCommonContainer,
-  getCommonHeader,
-  convertEpochToDate
+  getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getFileUrlFromAPI,
-  getFileUrl,
   getQueryArg,
-  getTransformedLocale,
+
   setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import jp from "jsonpath";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { printPdf } from "egov-ui-kit/utils/commons";
+import { getLocale, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getAppSearchResults } from "../../../../ui-utils/commons";
+import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
 import { 
-  requiredDocumentsData, 
+  getAppSearchResults,
+  getNocSearchResults,
+  prepareNOCUploadData,
+  nocapplicationUpdate
+} from "../../../../ui-utils/commons";
+import "../egov-bpa/applyResource/index.css";
+import "../egov-bpa/applyResource/index.scss";
+import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
+import {
+  applicantNameAppliedByMaping, 
+  downloadFeeReceipt, 
   edcrDetailsToBpaDetails,
-  applicantNameAppliedByMaping,
-  generateBillForBPA
+  generateBillForBPA, 
+  permitOrderNoDownload, 
+  requiredDocumentsData, 
+  setProposedBuildingData,
+  prepareNocFinalCards
 } from "../utils/index";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
-import { scrutinySummary } from "./summaryResource/scrutinySummary";
+import { declarations } from "./summaryResource/declarations";
 import { documentAndNocSummary } from "./summaryResource/documentAndNocSummary";
 import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
 import { fieldSummary } from "./summaryResource/fieldSummary";
-import { permitListSummary } from "./summaryResource/permitListSummary";
 import { permitConditions } from "./summaryResource/permitConditions";
-import { declarations } from "./summaryResource/declarations";
-import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
-import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload, setProposedBuildingData } from "../utils/index";
-import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import "../egov-bpa/applyResource/index.scss";
-import "../egov-bpa/applyResource/index.css";
-import { printPdf } from "egov-ui-kit/utils/commons";
-import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
+import { permitListSummary } from "./summaryResource/permitListSummary";
+import { scrutinySummary } from "./summaryResource/scrutinySummary";
+import { nocDetailsSearch } from "../egov-bpa/noc";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -144,7 +148,7 @@ const sendToArchDownloadMenu = (action, state, dispatch) => {
       updateBpaApplication(state, dispatch, "APPROVE");
     },
   };
-  downloadMenu = [ sendToArchObject, ApproveObject ];  
+  downloadMenu = [sendToArchObject, ApproveObject];
   dispatch(
     handleField(
       "search-preview",
@@ -160,13 +164,12 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     state,
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
-  
   let comparisonDetails = get(
     state,
     "screenConfiguration.preparedFinalObject.comparisonDetails"
   );
   let comparisonReport = false;
-  if(comparisonDetails){
+  if (comparisonDetails) {
     comparisonReport = get(comparisonDetails, "report");
   }
   let downloadMenu = [];
@@ -242,11 +245,11 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     `collection-services/payments/_search?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
   );
 
-  if(paymentPayload && paymentPayload.Payments.length == 1) {
-    if(get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_APP_FEE") {
+  if (paymentPayload && paymentPayload.Payments.length == 1) {
+    if (get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_APP_FEE") {
       downloadMenu.push(appFeeDownloadObject);
       printMenu.push(appFeePrintObject);
-    } else if(get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_SAN_FEE"){
+    } else if (get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_SAN_FEE") {
       downloadMenu.push(sanFeeDownloadObject);
       printMenu.push(sanFeePrintObject);
     }
@@ -257,28 +260,28 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     printMenu.push(sanFeePrintObject);
   }
 
-    switch (status) {
-      case "APPROVED":
-        downloadMenu.push(occupancyCertificateDownloadObject);
-        printMenu.push(occupancyCertificatePrintObject);
-        break;
-      case "DOC_VERIFICATION_INPROGRESS":
-      case "FIELDINSPECTION_INPROGRESS":
-      case "NOC_VERIFICATION_INPROGRESS":
-      case "APPROVAL_INPROGRESS":
-      case "PENDING_SANC_FEE_PAYMENT":
-      case "PENDINGAPPROVAL":
-      case "REJECTED":
-        downloadMenu = downloadMenu;
-        printMenu = printMenu;
-        break;
-      default:
-        downloadMenu = [];
-        printMenu = [];
-        break;
-    }
+  switch (status) {
+    case "APPROVED":
+      downloadMenu.push(occupancyCertificateDownloadObject);
+      printMenu.push(occupancyCertificatePrintObject);
+      break;
+    case "DOC_VERIFICATION_INPROGRESS":
+    case "FIELDINSPECTION_INPROGRESS":
+    case "NOC_VERIFICATION_INPROGRESS":
+    case "APPROVAL_INPROGRESS":
+    case "PENDING_SANC_FEE_PAYMENT":
+    case "PENDINGAPPROVAL":
+    case "REJECTED":
+      downloadMenu = downloadMenu;
+      printMenu = printMenu;
+      break;
+    default:
+      downloadMenu = [];
+      printMenu = [];
+      break;
+  }
 
-  if(comparisonReport){
+  if (comparisonReport) {
     downloadMenu.push(comparisonReportDownloadObject);
     printMenu.push(comparisonReportPrintObject);
   }
@@ -327,6 +330,14 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
               name: "RiskTypeComputation"
             }
           ]
+        },
+        {
+          moduleName: "NOC",
+          masterDetails: [
+            {
+              name: "DocumentTypeMapping"
+            },
+          ]
         }
       ]
     }
@@ -357,10 +368,22 @@ const setSearchResponse = async (
     { key: "applicationNo", value: applicationNumber }
   ]);
 
+  const payload = await getNocSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "sourceRefId", value: applicationNumber }
+  ], state);
+  dispatch(prepareFinalObject("Noc", payload.Noc));
+
+  await prepareNOCUploadData(state, dispatch);
+  prepareNocFinalCards(state, dispatch);
+
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const status = get(response, "BPA[0].status");
   dispatch(prepareFinalObject("BPA", response.BPA[0]));
-  if(get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS"){
+  if (get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS") {
     // TODO if required to show for architect before apply, 
     //this condition should extend to OR with status INPROGRESS
     generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_OC_APP_FEE");
@@ -372,12 +395,12 @@ const setSearchResponse = async (
         true
       )
     );
-    }
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
-      (get(response, "BPA[0].status")=="CITIZEN_APPROVAL_INPROCESS")
-    );
+  }
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
+    (get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS")
+  );
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -547,9 +570,17 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   await setDownloadMenu(action, state, dispatch, applicationNumber, tenantId);
-  sendToArchDownloadMenu(action, state, dispatch);  
+  sendToArchDownloadMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
+
+const beforeSubmitHook = () => {
+  let state = store.getState();
+  let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
+  nocapplicationUpdate(state);
+  return bpaDetails;
+}
+
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -655,7 +686,8 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA_OC",
-            updateUrl: "/bpa-services/v1/bpa/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update",
+            beforeSubmitHook: beforeSubmitHook
           }
         },
         sendToArchPickerDialog: {
@@ -702,6 +734,7 @@ const screenConfig = {
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
           documentAndNocSummary: documentAndNocSummary,
+          nocDetailsApply: nocDetailsSearch,
           permitConditions: permitConditions,
           permitListSummary: permitListSummary,
           declarations: declarations

@@ -1,13 +1,6 @@
-import { getCommonHeader, getBreak, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { showSearches } from "./searchResource/searchTabs";
+import commonConfig from "config/common.js";
+import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { searchResults } from "./searchResource/searchResults";
-import { searchApplicationResults } from "./searchResource/searchApplicationResults";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import find from "lodash/find";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
-import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
-import "./index.css";
 import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";

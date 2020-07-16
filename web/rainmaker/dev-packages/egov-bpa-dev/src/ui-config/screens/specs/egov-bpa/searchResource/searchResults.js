@@ -158,6 +158,7 @@ export const searchResults = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+      viewColumns: false,
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {
         onRowClick(row);
@@ -198,11 +199,11 @@ const onRowClick = rowData => {
     }
   } else {
     let type = "HIGH";
-    if(rowData[5] == "Low") {
+    if(rowData[5] == "BPA_LOW") {
       type = "LOW"
     }
     switch (state) {
-      case "Initiated":
+      case "INITIATED":
         window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
         break;
       default:

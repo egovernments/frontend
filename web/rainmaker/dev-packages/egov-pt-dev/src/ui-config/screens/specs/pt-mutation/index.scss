@@ -1,7 +1,19 @@
 #material-ui-propertySearchTabs{
-    background-color: transparent !important;
+  background-color: transparent !important;
   box-shadow: none !important;
   margin-top: 0px !important; 
+    div{
+        div{
+          background-color: transparent;
+        }
+    }
+}
+#material-ui-ulbCityContainer {
+  div{
+    div{
+      background-color: white;
+    }
+}
 }
 div[class^="NavPills-root"] {
   background-color: transparent;

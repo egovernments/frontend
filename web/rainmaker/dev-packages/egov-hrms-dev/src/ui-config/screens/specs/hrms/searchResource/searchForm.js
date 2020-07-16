@@ -89,7 +89,7 @@ export const searchForm = getCommonCard({
         labelsFromLocalisation: true,
         required: true,
       },
-      
+      required: true,
     },
 
     employeeName: getTextField({

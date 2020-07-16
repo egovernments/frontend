@@ -61,6 +61,7 @@ const prepareSelectField = (uom, start, end) => {
       className:"applicant-details-error autocomplete-dropdown",
       jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
     },
+    required: true,
     jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
     gridDefination: {
       xs: 12,
@@ -211,6 +212,7 @@ const commonBuildingData = buildingType => {
         jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageTypeMajor",
         sourceJsonPath: "applyScreenMdmsData.DropdownsData.BuildingUsageType",
       },
+      required: true,
       jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageTypeMajor",
       gridDefination: {
         xs: 12,
@@ -257,6 +259,7 @@ const commonBuildingData = buildingType => {
         },
         jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
       },
+      required: true,
       jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
       gridDefination: {
         xs: 12,

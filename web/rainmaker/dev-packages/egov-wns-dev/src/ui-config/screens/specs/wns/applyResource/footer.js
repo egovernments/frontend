@@ -1,19 +1,15 @@
 import {
   dispatchMultipleFieldChangeAction,
-  getLabel,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import get from "lodash/get";
-import { getCommonApplyFooter } from "../../utils";
-import "./index.css";
+import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import set from 'lodash/set';
 import { httpRequest } from "../../../../../ui-utils";
 import {
-  prepareDocumentsUploadData,
-  applyForWaterOrSewerage,
-  pushTheDocsUploadedToRedux,
-  findAndReplace,
   applyForSewerage,
   applyForWater,
   validateFeildsForBothWaterAndSewerage,
@@ -44,55 +40,55 @@ const setReviewPageRoute = (state, dispatch) => {
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
-  const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
-  );
+  const documentsFormat = Object.values(
+    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+  );
 
-  let validateDocumentField = false;
+  let validateDocumentField = false;
 
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
+  for (let i = 0; i < documentsFormat.length; i++) {
+    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+    let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
 
-    if (isDocumentRequired) {
-      let documents = get(documentsFormat[i], "documents");
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          let dropdownData=get(documentsFormat[i],"dropdown.value");
-          if(dropdownData){
-          // if (get(documentsFormat[i], "dropdown.value") !== null && get(documentsFormat[i]).dropdown !==undefined ){
-            validateDocumentField = true;
-          } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please select type of Document!", labelKey: "" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
-          }
-        } else {
-          validateDocumentField = true;
-        }
-      } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
-      }
-    } else {
-      validateDocumentField = true;
-    }
-  }
+    if (isDocumentRequired) {
+      let documents = get(documentsFormat[i], "documents");
+      if (documents && documents.length > 0) {
+        if (isDocumentTypeRequired) {
+          let dropdownData = get(documentsFormat[i], "dropdown.value");
+          if (dropdownData) {
+            // if (get(documentsFormat[i], "dropdown.value") !== null && get(documentsFormat[i]).dropdown !==undefined ){
+            validateDocumentField = true;
+          } else {
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Please select type of Document!", labelKey: "" },
+                "warning"
+              )
+            );
+            validateDocumentField = false;
+            break;
+          }
+        } else {
+          validateDocumentField = true;
+        }
+      } else {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+            "warning"
+          )
+        );
+        validateDocumentField = false;
+        break;
+      }
+    } else {
+      validateDocumentField = true;
+    }
+  }
 
-  return validateDocumentField;
+  return validateDocumentField;
 };
 
 
@@ -599,7 +595,7 @@ export const changeStep = (
         "applyScreen.documents",
         null
       );
-      if(isDocsUploaded){
+      if (isDocsUploaded) {
         activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
       } else if(isMode){
         activeStep = 2;

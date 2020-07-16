@@ -1,29 +1,20 @@
 import {
-  getCommonHeader,
-  getLabel,
   getBreak,
-  getCommonContainer
+  getCommonContainer, getCommonHeader,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { BPAApplication, resetFields } from "./searchResource/bpaApplication";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
-import { searchResults } from "./searchResource/searchResults";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {
   getTenantId,
   localStorageGet
 } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
-import set from "lodash/set";
-import get from "lodash/get";
-import {
-  prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { showApplyCityPicker, applyForm } from "../utils";
-import { getBpaMdmsData, getTenantMdmsData } from "../utils";
-import { httpRequest } from "../../../../ui-utils/api";
+import { applyForm, getTenantMdmsData, showApplyCityPicker } from "../utils";
+import { BPAApplication, resetFields } from "./searchResource/bpaApplication";
+import { pendingApprovals } from "./searchResource/pendingApprovals";
+import { searchResults } from "./searchResource/searchResults";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -164,7 +155,7 @@ const BpaSearchAndResult = {
         searchResults
       }
     },
-    cityPickerDialog :{
+    cityPickerDialog: {
       componentPath: "Dialog",
       props: {
         open: false,

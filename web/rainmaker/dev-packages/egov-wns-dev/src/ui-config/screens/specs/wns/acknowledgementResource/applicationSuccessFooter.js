@@ -139,7 +139,8 @@ const handleAppDownloadAndPrint = (state, dispatch, action) => {
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
   const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
-  const { WaterConnection, DocumentsData, SewerageConnection } = state.screenConfiguration.preparedFinalObject;
+  const { WaterConnection, DocumentsData,SewerageConnection} = state.screenConfiguration.preparedFinalObject;
+
   let filteredDocs = DocumentsData;
   filteredDocs.map(val => {
     if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) { val.title = "WS_OWNER.IDENTITYPROOF"; }
@@ -170,6 +171,7 @@ const handleAppDownloadAndPrint = (state, dispatch, action) => {
     // downloadApp(WaterConnection, "application", action);
     //downloadApp(SewerageConnection, "application", action);
   } else if (applicationNumber) {
+ 
     if (applicationNumber.includes("WS")) {
       let water=cloneDeep(get(
         state,

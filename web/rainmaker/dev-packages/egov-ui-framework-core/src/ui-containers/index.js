@@ -53,8 +53,8 @@ const DynamicMdmsContainer = Loadable({
   loading: () => <Loading />
 });
 
-const ModifyLabelConatiner = Loadable({
-  loader: () => import("./ModifyLabelConatiner"),
+const AcknowledgementContainer = Loadable({
+  loader: () => import("./AcknowledgementContainer"),
   loading: () => <Loading />
 });
 
@@ -69,5 +69,5 @@ export {
   AutosuggestContainer,
   DialogContainer,
   DynamicMdmsContainer,
-  ModifyLabelConatiner
+  AcknowledgementContainer
 };
