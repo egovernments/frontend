@@ -46,6 +46,8 @@ import { permitConditions } from "./summaryResource/permitConditions";
 import { permitListSummary } from "./summaryResource/permitListSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "../egov-bpa/noc";
+import store from "ui-redux/store";
+
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
