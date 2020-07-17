@@ -675,7 +675,7 @@ const getNocDocuments = (state) =>{
         let url = `${window.location.origin}/egov-bpa/noc-search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}`;
         if (process.env.NODE_ENV === "production") {
           if (checkingApp) {
-            url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${appNumber}&tenantId=${tenantId}`;
+            url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${tenantId}`;
           }
         }
         linkDetails.labelName = "Application Number"
