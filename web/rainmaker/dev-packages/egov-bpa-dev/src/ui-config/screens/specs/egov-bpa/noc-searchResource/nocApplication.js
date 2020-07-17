@@ -16,7 +16,7 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "noc-search",
-      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.fromDate",
+      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.appNo",
       "props.value",
       ""
     )
@@ -24,7 +24,7 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "noc-search",
-      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.toDate",
+      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.sourceAppNo",
       "props.value",
       ""
     )
@@ -33,22 +33,6 @@ export const resetFields = (state, dispatch) => {
     handleField(
       "noc-search",
       "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.nocNo",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "noc-search",
-      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.applicationType",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "noc-search",
-      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.nocType",
       "props.value",
       ""
     )
