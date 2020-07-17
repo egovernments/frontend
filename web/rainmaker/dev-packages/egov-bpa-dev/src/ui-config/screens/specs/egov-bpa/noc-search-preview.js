@@ -54,7 +54,7 @@ const applicationOverview = getCommonContainer({
   header: getCommonTitle(
     {
       labelName: "Application Overview",
-      // labelKey: "BPA_NOC_APP_OVER_VIEW_HEADER"
+      labelKey: "NOC_APP_OVER_VIEW_HEADER"
     },
     {
       style: {
@@ -66,7 +66,7 @@ const applicationOverview = getCommonContainer({
     applicationNo: getLabelWithValue(
       {
         labelName: "Application No",
-        // labelKey: "BPA_NOC_APP_NO_LABEL"
+        labelKey: "BPA_NOC_APP_NO_LABEL"
       },
       {
         jsonPath: "Noc.applicationNo",
@@ -75,8 +75,8 @@ const applicationOverview = getCommonContainer({
     ),
     module: getLabelWithValue(
       {
-        labelName: "Module",
-        // labelKey: "BPA_NOC_MODULE_LABEL"
+        labelName: "Module/Source",
+        labelKey: "BPA_NOC_MODULE_SOURCE_LABEL"
       },
       {
         jsonPath: "Noc.source",
