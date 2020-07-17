@@ -6,7 +6,6 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { getTextToLocalMapping } from "../../utils";
-import { getBpaSearchResults } from "../../../../../ui-utils/commons";
 
 
 export const getNOCSearchResults = async queryObject => {
@@ -29,12 +28,12 @@ export const getNOCSearchResults = async queryObject => {
   }
 };
 
-export const getWorkFlowDataForBPA = async Licenses => {
+export const getWorkflowDataForNocs = async nocs => {
   var businessIds = [];
   let tenantMap = {};
   let processInstanceArray = [];
   var appNumbers = [];
-  Licenses.forEach(item => {
+  nocs.forEach(item => {
     var appNums = tenantMap[item.tenantId] || [];
     appNumbers = appNums;
     appNums.push(item.applicationNo);
@@ -72,7 +71,7 @@ export const getWorkFlowDataForBPA = async Licenses => {
       record => record.moduleName.includes("noc-services")
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
-        assignee: get(item, "assigner.name"),
+        assignee: get(item, "assignes[0].name"),
         sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla),
         state: item.state.state
       };
@@ -134,13 +133,12 @@ export const searchApiCall = async (state, dispatch) => {
     }
     try {
       const response = await getNOCSearchResults(queryObject);
-      const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(response.Noc); 
-      console.log(businessIdToOwnerMappingForBPA, "businessIdToOwnerMappingForBPAaa")     ;
+      const businessIdToOwnerMappingForNOC = await getWorkflowDataForNocs(response.Noc);
       let data = response.Noc.map(item => ({
         ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo || "-",
         ["SOURCE_MODULE_NUMBER"]: item.sourceRefId || "-",
-        ["SOURCE_MODULE"]: getTextToLocalMapping(item.source) || "-",
-        ["CURRENT_OWNER"]: get(businessIdToOwnerMappingForBPA[item.applicationNo], "assignee", null) || "NA",
+        ["SOURCE_MODULE"]: getTextToLocalMapping("CS_COMMON_INBOX_"+item.source) || "-",
+        ["CURRENT_OWNER"]: get(businessIdToOwnerMappingForNOC[item.applicationNo], "assignee", null) || "NA",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.applicationStatus || "-",
       }));
 

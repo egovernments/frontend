@@ -73,8 +73,6 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  debugger;
-  console.log(rowData, "rowDataaaa");
   const state = rowData[3];
   const applicationNumber = rowData[0];
   const tenantId = getTenantId();;
