@@ -68,7 +68,7 @@ export const nocApplication = getCommonCard({
     appNo: getTextField({
       label: {
         labelName: "Application number",
-        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "BPA_NOC_APP_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Application number",
@@ -86,11 +86,11 @@ export const nocApplication = getCommonCard({
     sourceAppNo: getTextField({
       label: {
         labelName: "Sourde module Application number",
-        // labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "SOURCE_MODULE_NUMBER"
       },
       placeholder: {
         labelName: "Enter Source Application number",
-        // labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "ENTER_SOURCE_MODULE_NUMBER"
       },
       gridDefination: {
         xs: 12,
@@ -104,11 +104,11 @@ export const nocApplication = getCommonCard({
     nocNo: getTextField({
       label: {
         labelName: "NOC number",
-        // labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "NOC_NUMBER"
       },
       placeholder: {
         labelName: "Enter noc number",
-        // labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "ENTER_NOC_NUMBER"
       },
       gridDefination: {
         xs: 12,
@@ -122,11 +122,7 @@ export const nocApplication = getCommonCard({
     nocType: getTextField({
       label: {
         labelName: "NOC Type",
-        // labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter NOC Type",
-        // labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "NOC_TYPE"
       },
       gridDefination: {
         xs: 12,

@@ -137,8 +137,8 @@ export const searchApiCall = async (state, dispatch) => {
       let data = response.Noc.map(item => ({
         ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo || "-",
         ["SOURCE_MODULE_NUMBER"]: item.sourceRefId || "-",
-        ["SOURCE_MODULE"]: getTextToLocalMapping("CS_COMMON_INBOX_"+item.source) || "-",
-        ["CURRENT_OWNER"]: get(businessIdToOwnerMappingForNOC[item.applicationNo], "assignee", null) || "NA",
+        ["BPA_NOC_MODULE_SOURCE_LABEL"]: getTextToLocalMapping("CS_COMMON_INBOX_"+item.source) || "-",
+        ["WF_INBOX_HEADER_CURRENT_OWNER"]: get(businessIdToOwnerMappingForNOC[item.applicationNo], "assignee", null) || "NA",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.applicationStatus || "-",
       }));
 
