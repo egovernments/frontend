@@ -17,7 +17,7 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {setServiceCategory} from "../../utils"
 import get from "lodash/get";
-import consumerAddresss from "../ImpelExtendedAddressField/consumerAddressField";
+import {consumerAddresss} from "../ImpelExtendedFeature/fields";
 
 const tenantId = getTenantId();
 
@@ -356,7 +356,7 @@ export const newCollectionDetailsCard = getCommonCard(
 
   },
     //})
-    
+
  //},
   {
     style: {
