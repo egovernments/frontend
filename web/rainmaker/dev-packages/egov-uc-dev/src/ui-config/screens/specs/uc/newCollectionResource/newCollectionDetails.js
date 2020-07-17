@@ -318,18 +318,31 @@ export const newCollectionDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Demands[0].taxPeriodTo"
         }),
-        dummyDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          gridDefination: {
-            xs: 12,
-            sm: 6
+        commentsContainer:getTextField({
+          label: {
+            labelName: "Comments",
+            labelKey: "UC_COMMENT_LABEL"
           },
-          visible: true,
-          props: {
-            disabled: true
-          }
-        }
+          placeholder: {
+            labelName: "Enter Comment ",
+            labelKey: "UC_COMMENT_PLACEHOLDER"
+          },
+          Required: false,
+          jsonPath: "Demands[0].additionalDetails.comment"
+        }),
+        ...consumerAddresss,
+        // dummyDiv: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Div",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 6
+        //   },
+        //   visible: true,
+        //   props: {
+        //     disabled: true
+        //   }
+        // }
       },
       {
         style: {
@@ -337,23 +350,7 @@ export const newCollectionDetailsCard = getCommonCard(
         }
       }
     ),
-    commentsContainer: getCommonContainer({
-      comments: getTextField({
-        label: {
-          labelName: "Comments",
-          labelKey: "UC_COMMENT_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Comment ",
-          labelKey: "UC_COMMENT_PLACEHOLDER"
-        },
-        Required: false,
-        jsonPath: "Demands[0].additionalDetails.comment"
-      }),
-      ...consumerAddresss,
-
-    }),
-
+    
   },
     //})
 
