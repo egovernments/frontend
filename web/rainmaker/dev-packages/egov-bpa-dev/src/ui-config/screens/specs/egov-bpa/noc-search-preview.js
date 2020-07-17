@@ -118,10 +118,13 @@ const applicationOverview = getCommonContainer({
         action: "condition",
         callBack: (state, dispatch) => {
           let nocData = get( state.screenConfiguration.preparedFinalObject, "Noc", "");
-          if(nocData){
+          if(nocData && nocData.source === "BPA"){
             let bpaAppurl = window.location.origin+'/egov-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
             window.open(bpaAppurl, '_blank');
 
+          }else if(nocData && nocData.source === "BPA_OC") {
+            let bpaAppurl = window.location.origin+'/oc-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
+            window.open(bpaAppurl, '_blank');
           }
         }
       }
