@@ -213,7 +213,11 @@ class WorkFlowContainer extends React.Component {
 
     try {
       if (beforeSubmitHook) {
-        data = beforeSubmitHook(data);
+        if (moduleName === "BPA") {
+          data = await beforeSubmitHook(data);
+        } else {
+          data = beforeSubmitHook(data);
+        }
       }
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data

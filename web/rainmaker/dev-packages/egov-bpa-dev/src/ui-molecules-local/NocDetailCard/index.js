@@ -19,6 +19,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { httpRequest } from "../../ui-utils/api";
+import { LinkAtom } from "../../ui-atoms-local"
 
 const styles = {
   documentTitle: {
@@ -28,7 +29,8 @@ const styles = {
     fontWeight: 500,
     letterSpacing: "0.67px",
     lineHeight: "19px",
-    paddingBottom: "5px"
+    paddingBottom: "5px",
+    marginBottom: "10px"
   },
   whiteCard: {
     // maxWidth: 250,
@@ -78,6 +80,9 @@ const styles = {
     padding: "16px",
     marginTop: "10px",
     marginBottom: "16px"
+  },
+  nocTitle: {
+    color: "rgba(0, 0, 0, 0.87)",
   }
 }
 // const LightTooltip = withStyles((theme) => ({
@@ -227,10 +232,32 @@ class NocDetailCard extends Component {
             return (
               <div style={styles.documentTitle}>
                     <div>
+                    <Grid container>
+                    <Grid item xs={3}>
                     <LabelContainer
                       labelKey={getTransformedLocale(card.nocType)}
-                      style={styles.documentTitle}
+                      style={styles.nocTitle}
                     />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <LinkAtom 
+                        linkDetail = {card.additionalDetails.linkDetails} 
+                      />
+                    </Grid>
+                    {card.additionalDetails.nocNo ? (
+                    <Grid item xs={3}>
+                      <Typography
+                        variant="subtitle1"
+                        style={{ fontWeight: "bold", fontSize: "12px" ,paddingBottom: "6px" }}
+                      >
+                      Approval Number
+                      </Typography>
+                      {card.additionalDetails.nocNo ?
+                      <div style={styles.fontStyle}>
+                        {card.additionalDetails.nocNo}
+                      </div>: "NA" }
+                    </Grid> ) : ( "" )}
+                    </Grid>
                     <NocData
                       docItem={card}
                       docIndex={index}
@@ -401,7 +428,7 @@ const mapStateToProps = (state, ownProps) => {
   );
   const documentsList = get(
     screenConfiguration.preparedFinalObject,
-    "nocDocumentsContract",
+    "nocBPADocumentsContract",
     []
   );
   const nocFinalCardsforPreview = get(

@@ -378,8 +378,8 @@ const setSearchResponse = async (
   ], state);
   dispatch(prepareFinalObject("Noc", payload.Noc));
 
-  await prepareNOCUploadData(state, dispatch);
-  prepareNocFinalCards(state, dispatch);
+  // await prepareNOCUploadData(state, dispatch);
+  // prepareNocFinalCards(state, dispatch);
 
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const status = get(response, "BPA[0].status");
@@ -575,13 +575,38 @@ const setSearchResponse = async (
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
-const beforeSubmitHook = () => {
+export const beforeSubmitHook = async () => {
   let state = store.getState();
   let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
-  nocapplicationUpdate(state);
-  return bpaDetails;
+  let isNocTrue = get(state, "screenConfiguration.preparedFinalObject.BPA.isNocTrue", false);
+  if(!isNocTrue) {
+    const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+    let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
+    if (Noc.length > 0) {
+      let count = 0;
+      for (let data = 0; data < Noc.length; data++) {
+        let documents = nocDocuments[data].documents;
+        set(Noc[data], "documents", documents);
+        let response = await httpRequest(
+          "post",
+          "/noc-services/v1/noc/_update",
+          "",
+          [],
+          { Noc: Noc[data] }
+        );
+        if(get(response, "ResponseInfo.status") == "successful") {
+          count++;
+          if(Noc.length == count) {
+            store.dispatch(prepareFinalObject("BPA.isNocTrue", true));
+            return bpaDetails;
+          }
+        }
+      }
+    }
+  } else {
+    return bpaDetails;
+  }
 }
-
 
 const screenConfig = {
   uiFramework: "material-ui",

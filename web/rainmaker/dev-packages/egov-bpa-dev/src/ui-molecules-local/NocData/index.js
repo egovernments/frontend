@@ -188,11 +188,11 @@ class NocData extends Component {
 
   let submittedOn,
   satus = "";
-  if(docItem.submissionDetails){
-    if(docItem.submissionDetails.additionalDetails){
-      submittedOn = docItem.submissionDetails.additionalDetails.submittedOn;
+  if(docItem.additionalDetails){
+    if(docItem.additionalDetails.submissionDetails){
+      submittedOn = docItem.additionalDetails.submissionDetails.SubmittedOn;
     }
-    satus = docItem.submissionDetails.applicationStatus
+    satus = docItem.additionalDetails.applicationStatus
   }
   return (
     <React.Fragment>
@@ -222,7 +222,7 @@ class NocData extends Component {
                       Submitted On
                       </Typography>
                       <div style={styles.fontStyle}>
-                      {!(submittedOn) ? "" :convertEpochToDate(submittedOn)}
+                      {!(submittedOn) ? "NA" :convertEpochToDate(JSON.parse(submittedOn))}
                       </div>
                     </Grid>
                     
@@ -235,7 +235,7 @@ class NocData extends Component {
                         Approved/Rejected on
                       </Typography>
                       <div style={styles.fontStyle}>
-                        {!docItem.documentCode ? "" : docItem.documentCode}
+                        {!satus ? "NA" : docItem.additionalDetails && convertEpochToDate(docItem.additionalDetails.approvedRejectedOn)}
                       </div>
                     </Grid>          
                     ) : (
