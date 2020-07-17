@@ -230,7 +230,7 @@ class NocData extends Component {
                       </div>
                     </Grid>
                     
-                    {satus === "APPROVED" || satus === "REJECTED" ? (
+                    {satus === "APPROVED" || satus === "REJECTED" || satus === "AUTO_APPROVED" || satus === "AUTO_REJECTED" ? (
                     <Grid item xs={6}>
                       <Typography
                         variant="subtitle1"
