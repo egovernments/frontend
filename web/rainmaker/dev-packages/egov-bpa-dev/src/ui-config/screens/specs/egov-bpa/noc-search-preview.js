@@ -118,12 +118,17 @@ const applicationOverview = getCommonContainer({
         action: "condition",
         callBack: (state, dispatch) => {
           let nocData = get( state.screenConfiguration.preparedFinalObject, "Noc", "");
+          let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+          let appendUrl = window.location.origin;
+          if (process.env.NODE_ENV === "production") {
+            appendUrl = `${window.location.origin}/${checkingApp}`
+          }
           if(nocData && nocData.source === "BPA"){
-            let bpaAppurl = window.location.origin+'/egov-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
+            let bpaAppurl = appendUrl +'/egov-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
             window.open(bpaAppurl, '_blank');
 
           }else if(nocData && nocData.source === "BPA_OC") {
-            let bpaAppurl = window.location.origin+'/oc-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
+            let bpaAppurl = appendUrl +'/oc-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
             window.open(bpaAppurl, '_blank');
           }
         }

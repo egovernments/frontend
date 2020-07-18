@@ -6,7 +6,7 @@ const styles = {
     color: 'rgba(0, 0, 0, 0.54)',
     // fontSize: '16px',
     fontWeight: "bold",
-    paddingBottom: "6px",
+    // paddingBottom: "6px",
     fontSize: "12px",
     // lineHeight: '1.375em',
   },

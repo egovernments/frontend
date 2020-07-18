@@ -253,7 +253,7 @@ class NocDetailCard extends Component {
                     <Grid item xs={3}>
                       <Typography
                         variant="subtitle1"
-                        style={{ fontWeight: "bold", fontSize: "12px" ,paddingBottom: "6px" }}
+                        style={{ fontWeight: "bold", fontSize: "12px" }}
                       >
                       Approval Number
                       </Typography>

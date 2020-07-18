@@ -4652,6 +4652,7 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
     cards = documentCards[0].cards;
   }
   for (var i = 0; i < cards.length; i++) {
+    cards[i].documents && cards[i].documents.length && 
     cards[i].documents.map(fidocs =>{
       fidocs.link = nocDocuments[i].link;
       fidocs.name = nocDocuments[i].name;
