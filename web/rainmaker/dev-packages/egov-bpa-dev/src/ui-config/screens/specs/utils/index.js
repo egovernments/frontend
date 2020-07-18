@@ -4408,44 +4408,46 @@ export const prepareNocDocumentsView = async (state, dispatch) => {
 
   let allDocuments = await getUploadedDocsFromNoc(state, dispatch);
   var uploadedAppDocuments = [];
-  let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
+  let fileStoreIds = jp.query(allDocuments, "$.*..fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-  allDocuments.map((doc, index) => {
-    uploadedAppDocuments.push(doc);
+  allDocuments.map((doc) => {
+    doc.map((docs, index) => {
+    uploadedAppDocuments.push(docs);
     let obj = {};
 
-    obj.title = getTransformedLocale(doc.documentType);
-    obj.fileStoreId = doc.fileStoreId;
+    obj.title = getTransformedLocale(docs.documentType);
+    obj.fileStoreId = docs.fileStoreId;
     obj.linkText = "View";
-    if (doc.auditDetails) {
-      obj["createdTime"] = doc.auditDetails.createdTime;
+    if (docs.auditDetails) {
+      obj["createdTime"] = docs.auditDetails.createdTime;
     }
 
     obj["link"] =
       (fileUrls &&
-        fileUrls[doc.fileStoreId] &&
-        getFileUrl(fileUrls[doc.fileStoreId])) ||
+        fileUrls[docs.fileStoreId] &&
+        getFileUrl(fileUrls[docs.fileStoreId])) ||
       "";
     obj["name"] =
-      (fileUrls[doc.fileStoreId] &&
+      (fileUrls[docs.fileStoreId] &&
         decodeURIComponent(
-          getFileUrl(fileUrls[doc.fileStoreId])
+          getFileUrl(fileUrls[docs.fileStoreId])
             .split("?")[0]
             .split("/")
             .pop()
             .slice(13)
         )) ||
       `Document - ${index + 1}`;
-    obj.createdBy = getLoggedinUserRole(doc.wfState);
-    obj.additionalDetails = doc.additionalDetails;
-    obj['auditDetails'] = doc.auditDetails;
-    obj = Object.assign(doc);
+    obj.createdBy = getLoggedinUserRole(docs.wfState);
+    obj.additionalDetails = docs.additionalDetails;
+    obj['auditDetails'] = docs.auditDetails;
+    // obj = Object.assign(docs);
     documentsPreview.push(obj);
     return obj;
+  })
   });
   dispatch(prepareFinalObject("nocDocumentDetailsPreview", documentsPreview));
-  return uploadedAppDocuments;
+  return documentsPreview;
 };
 
 export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
@@ -4632,7 +4634,7 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
 
   }
   let nocDocumentsContractFinal = await prepareNocDocumentsView(state, dispatch);
-  dispatchFinalNocCardsForPreview(state, dispatch, nocDocumentsContract, finalNocDocs, isVisibleTrue)
+  dispatchFinalNocCardsForPreview(state, dispatch, nocDocumentsContractFinal, finalNocDocs, isVisibleTrue)
 }
 
 const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocumentsFromMdms, isVisibleTrue) => {
@@ -4649,10 +4651,15 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
   if (documentCards && documentCards.length > 0) {
     cards = documentCards[0].cards;
   }
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].documents.map(fidocs =>{
+      fidocs.link = nocDocuments[i].link;
+      fidocs.name = nocDocuments[i].name;
+    })
+  }  
 
   if (nocDocumentsFromMdms && nocDocumentsFromMdms.length > 0) {
     const allCards = [].concat(...nocDocumentsFromMdms.map(({ cards }) => cards || []));
-
     allCards && allCards.map((mdmsCard) => {
       let found = false;
       for (var i = 0; i < cards.length; i++) {
