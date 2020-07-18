@@ -29,8 +29,13 @@ const styles = {
     fontWeight: 500,
     letterSpacing: "0.67px",
     lineHeight: "19px",
-    paddingBottom: "5px",
-    marginBottom: "10px"
+    marginBottom: 25,
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    marginTop: 16,
+    paddingTop: 16,
+    paddingLeft: 16,    
+    paddingBottom: 10,
   },
   whiteCard: {
     // maxWidth: 250,
@@ -182,7 +187,7 @@ class NocDetailCard extends Component {
           {this.state.editableDocuments &&
             this.state.editableDocuments.length > 0 &&
             (this.state.editableDocuments[key].editable ? (
-              <div style={{backgroundColor:"rgb(255,255,255)", padding:"10px", marginTop: "16px" }}><UploadCard
+              <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}><UploadCard
                 docItem={card}
                 docIndex={key}
                 key={key.toString()}
@@ -225,7 +230,7 @@ class NocDetailCard extends Component {
       ...rest
     } = this.props;
     return (
-      <div style={styles.documentContainer}>
+      <div>
         {nocFinalCardsforPreview &&
           nocFinalCardsforPreview.length > 0 &&
           nocFinalCardsforPreview.map((card, index) => {

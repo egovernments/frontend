@@ -34,11 +34,11 @@ import {
       },
       {
         style: {
-        //   marginBottom: 18
+        marginBottom: "10px"
         }
       }
     ),  
-    fireNocDetailsCard: getCommonCard({
+    // fireNocDetailsCard: getCommonCard({
         documentDetailsCard: {
             uiFramework: "custom-molecules-local",
             moduleName: "egov-bpa",
@@ -58,7 +58,7 @@ import {
               maxFileSize: 6000
             }
         }
-    }),
+    // }),
 })
 
 export const nocDetailsSearch = getCommonGrayCard({
@@ -69,11 +69,11 @@ export const nocDetailsSearch = getCommonGrayCard({
     },
     {
       style: {
-      //   marginBottom: 18
+        marginBottom: "10px"
       }
     }
   ),  
-  fireNocDetailsCard: getCommonCard({
+  // fireNocDetailsCard: getCommonCard({
       documentDetailsCard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-bpa",
@@ -93,5 +93,5 @@ export const nocDetailsSearch = getCommonGrayCard({
             maxFileSize: 6000
           }
       }
-  }),
+  // }),
 })
