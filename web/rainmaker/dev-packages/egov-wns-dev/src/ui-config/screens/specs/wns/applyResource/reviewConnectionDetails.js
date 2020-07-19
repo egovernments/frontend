@@ -8,9 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
-let applicationNumber=getQueryArg(window.location.href, "applicationNumber");
 
 const getHeader = label => {
   return {
@@ -48,9 +46,6 @@ export const snackbarWarningMessage=getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "SnackbarWarning",
-    props: {
-      applicationNumber:applicationNumber,
-    },
     visible:false,
     gridDefination: { xs: 12, sm: 12}
   }
