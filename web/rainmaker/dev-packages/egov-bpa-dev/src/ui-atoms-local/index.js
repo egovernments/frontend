@@ -93,6 +93,11 @@ const LinkAtom = Loadable({
   loading: () => <Loading />
 });
 
+const NocNumber = Loadable({
+  loader: () => import("./NocNumber"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   AutoSuggest,
@@ -111,5 +116,6 @@ export {
   NoteAtom,
   UploadedDocument,
   ocPermitNumber,
-  LinkAtom
+  LinkAtom,
+  NocNumber
 };
