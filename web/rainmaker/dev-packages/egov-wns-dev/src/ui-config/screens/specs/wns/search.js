@@ -29,7 +29,7 @@ const getMDMSData = (action, dispatch) => {
   }
 };
 
-const getMDMSAppType = (dispatch) => {
+const getMDMSAppType =async (dispatch) => {
   // getMDMS data for ApplicationType
     let mdmsBody = {
       MdmsCriteria: {
@@ -43,25 +43,26 @@ const getMDMSAppType = (dispatch) => {
         ]
       }
     };
-    let applicationType = [];
     try {
-      httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody).then((payload) => {        
+      let applicationType = [];
+      let payload = null;
+       payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);       
         if(payload && payload.MdmsRes['ws-services-masters'] && payload.MdmsRes['ws-services-masters'].ApplicationType !== undefined){
-          payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.code.replace(/_/g,' '), name: obj.name}));          
+          payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.code.replace(/_/g,' '), name: obj.name, businessService:obj.businessService}));          
+          applicationType.forEach(type=>getBusinessService(type.businessService,dispatch))
           dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
         }
-      });
     } catch (e) { console.log(e); }
-};
+  }
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
 
-const getBusinessService=async(dispatch)=>{
+const getBusinessService=async(businessService, dispatch)=>{
   const queryObject = [
     { key: "tenantId", value: getTenantId() },
-    { key: "businessServices", value: 'NewWS1' } 
+    { key: "businessServices", value:businessService } 
   ];
   const payload = await httpRequest(
     "post",
@@ -70,15 +71,26 @@ const getBusinessService=async(dispatch)=>{
     queryObject
   );
   if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1") {
-      const { states } = payload.BusinessServices[0] || [];
-      if (states && states.length > 0) {
-        const status = states.map((item) => { return { code: item.applicationStatus } });
-        const applicationStatus = status.filter(item => item.code != null);
-        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
+
+    const applicationStatus=commonGetAppStatus(payload);
+        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatusNew", applicationStatus));
+    
+    }else{
+      if (payload.BusinessServices[0].businessService === "ModifyWSConnection" || payload.BusinessServices[0].businessService === "ModifySWConnection") {
+        const applicationStatus=commonGetAppStatus(payload);
+          dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatusModify", applicationStatus));
       }
     }
 }
 
+const commonGetAppStatus=(payload)=>{
+  const { states } = payload.BusinessServices[0] || [];
+  if (states && states.length > 0) {
+    const status = states.map((item) => { return { code: item.applicationStatus } });
+    return status.filter(item => item.code != null);
+  }
+
+}
 const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
@@ -86,7 +98,6 @@ const employeeSearchResults = {
     getMDMSData(action, dispatch);
     resetFieldsForConnection(state, dispatch);
     resetFieldsForApplication(state, dispatch);
-    getBusinessService(dispatch);
     getMDMSAppType(dispatch);
     return action;
   },
