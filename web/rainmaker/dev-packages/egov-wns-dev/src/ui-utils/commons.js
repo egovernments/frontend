@@ -1409,8 +1409,7 @@ export const createMeterReading = async (dispatch, body) => {
     }
 }
 
-export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) => {
-    dispatch(toggleSpinner());
+export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
     const FETCHCONNECTIONDETAILS = {
         GET: {
             URL: "/ws-services/wc/_search",
@@ -1456,7 +1455,6 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                 })
 
             } catch (exception) {
-                dispatch(toggleSpinner());
                 alert('Some Error Occured while downloading!');
             }
             break;
@@ -1475,7 +1473,6 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                 })
 
             } catch (exception) {
-                dispatch(toggleSpinner());
                 alert('Some Error Occured while downloading!');
             }
             break;
@@ -1567,8 +1564,7 @@ export const billingPeriodMDMS = (toPeriod, payloadbillingPeriod, service) => {
     return toPeriod + demandExipryDate;
 }
 
-export const downloadBill = (receiptQueryString,mode,dispatch) => {
-    dispatch(toggleSpinner());
+export const downloadBill = (receiptQueryString,mode) => {
     const FETCHBILL = {
         GET: {
             URL: "/billing-service/bill/v2/_fetchbill",
@@ -1684,7 +1680,6 @@ export const downloadBill = (receiptQueryString,mode,dispatch) => {
         })
     })
     } catch (exception) {
-        dispatch(toggleSpinner());
         alert('Some Error Occured while downloading Bill!');
     }
 }
@@ -1745,7 +1740,6 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 };
 // to download application 
 export const downloadApp = async (wnsConnection, type, mode,dispatch) => {
-    dispatch(toggleSpinner());
     let estFileStrID = wnsConnection[0].additionalDetails.estimationFileStoreId
     let sanFileStrID = wnsConnection[0].additionalDetails.sanctionFileStoreId
 
@@ -1907,13 +1901,11 @@ export const downloadApp = async (wnsConnection, type, mode,dispatch) => {
                         downloadReceiptFromFilestoreID(fileStoreId, mode)
                     })
                 } else {
-                    dispatch(toggleSpinner());
                     console.log("Error In Download");
                 }
 
             });
     } catch (exception) {
-        dispatch(toggleSpinner());
         alert('Some Error Occured while downloading!');
     }
 }
