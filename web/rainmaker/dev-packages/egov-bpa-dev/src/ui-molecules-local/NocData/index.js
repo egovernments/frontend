@@ -206,7 +206,7 @@ class NocData extends Component {
                     <Grid item xs={3}>
                       <Typography
                         variant="subtitle1"
-                        style={{ fontWeight: "bold", fontSize: "12px" ,paddingBottom: "6px", paddingTop: "12px" }}
+                        style={{ fontWeight: "bold", fontSize: "12px" , paddingTop: "12px" }}
                       >
                       Status
                       </Typography>
@@ -221,7 +221,7 @@ class NocData extends Component {
                     <Grid item xs={3}>
                       <Typography
                       variant="subtitle1"
-                      style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
+                      style={{ fontWeight: "bold", fontSize: "12px", paddingTop: "12px" }}
                     >
                       Submitted On
                       </Typography>
@@ -234,7 +234,7 @@ class NocData extends Component {
                     <Grid item xs={6}>
                       <Typography
                         variant="subtitle1"
-                        style={{ fontWeight: "bold", fontSize: "12px", paddingBottom: "6px", paddingTop: "12px" }}
+                        style={{ fontWeight: "bold", fontSize: "12px", paddingTop: "12px" }}
                       >
                         Approved/Rejected on
                       </Typography>

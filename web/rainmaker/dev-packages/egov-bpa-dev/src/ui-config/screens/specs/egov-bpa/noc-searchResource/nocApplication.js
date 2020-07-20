@@ -103,22 +103,26 @@ export const nocApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.nocNo"
     }),
-    nocType: getTextField({
+    nocType: getSelectField({
       label: {
         labelName: "NOC Type",
         labelKey: "NOC_TYPE"
       },
+      localePrefix: {
+        moduleName: "NOC",
+        masterName: "NOC_TYPE"
+      },
+      props: {
+        disabled: true,
+        className : "tl-trade-type"
+      },
+      jsonPath: "nocType",
+      sourceJsonPath: "applyScreenMdmsData.NOC.NocType",
+      required: false,
       gridDefination: {
         xs: 12,
         sm: 4
-      },
-      props: {
-        disabled: true
-      },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "nocType"
+      }
     }),
   }),
   button: getCommonContainer({
