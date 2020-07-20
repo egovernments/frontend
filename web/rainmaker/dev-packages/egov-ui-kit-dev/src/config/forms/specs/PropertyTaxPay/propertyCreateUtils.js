@@ -53,9 +53,9 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {
       properties[0].documents.push({
-        documentType: documentsUploadRedux[key].dropdown.value,
-        fileStoreId: documentsUploadRedux[key].documents[0].fileStoreId,
-        documentUid: documentsUploadRedux[key].documents[0].fileStoreId,
+        documentType: documentsUploadRedux[key].dropdown ? documentsUploadRedux[key].dropdown.value : "",
+        fileStoreId: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0] ? documentsUploadRedux[key].documents[0].fileStoreId : "",
+        documentUid: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0] ? documentsUploadRedux[key].documents[0].fileStoreId : "",
       });
     });
   }
@@ -123,9 +123,9 @@ export const convertToArray = (documentsUploadRedux) => {
         }
         return documentsData.push({
           title: docTitleArray[docTitleArray.length - 1],
-          link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
+          link: getFileUrl(documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0] ? documentsUploadRedux[key].documents[0].fileUrl:"" ),
           linkText: "View",
-          name: documentsUploadRedux[key].documents[0].fileName,
+          name: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0] ? documentsUploadRedux[key].documents[0].fileName : "",
         });
       });
       return documentsData;

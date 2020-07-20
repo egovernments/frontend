@@ -942,14 +942,14 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
 export const isDocumentValid = (docUploaded,requiredDocCount) => {
   const totalDocsKeys = Object.keys(docUploaded) || [];
   let temp = 0;
-  if(totalDocsKeys.length === requiredDocCount){
+  if(totalDocsKeys.length >= requiredDocCount){
     totalDocsKeys.map(key=>{
       if(docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value){
         temp++;
       }
       return temp;
     });
-    return temp === requiredDocCount ? true : false;
+    return temp >= requiredDocCount ? true : false;
   }else{
     return false;
   }
