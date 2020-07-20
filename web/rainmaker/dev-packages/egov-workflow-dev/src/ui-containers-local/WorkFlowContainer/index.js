@@ -231,8 +231,9 @@ class WorkFlowContainer extends React.Component {
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
-
+       if(redirectQueryString){
         window.location.href = `acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`;
+        }
       }
     } catch (e) {
       if (moduleName === "BPA") {
