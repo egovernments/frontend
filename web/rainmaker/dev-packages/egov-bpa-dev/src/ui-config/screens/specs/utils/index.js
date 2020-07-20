@@ -4705,6 +4705,11 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
     cardReadOnly = true;
   }
 
+  let sendBackCitizen = true;
+  if(bpaDetails.status && bpaDetails.status.includes("CITIZEN_ACTION_PENDING")) {
+    sendBackCitizen = false;
+  }
+
   documentCards && Object.keys(documentCards).map((doc) => {
     let card = {
       documentCode: doc,
@@ -4722,7 +4727,8 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
       mdmsCard.documentCode = getTransformedLocale(mdmsCard.code);
       for (var i = 0; i < cards.length; i++) {
         if (mdmsCard.documentCode == cards[i].documentCode) {
-          cards[i].readOnly = (cardReadOnly || !mdmsCard.allow) && isVisibleTrue;
+          let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+          cards[i].readOnly = isEmployee ? !isVisibleTrue : sendBackCitizen; //(cardReadOnly || !mdmsCard.allow);
           let mergedCard = { ...cards[i], ...mdmsCard };
           cards[i] = { ...mergedCard };
           found = true;
@@ -4730,7 +4736,8 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
       }
 
       if (!found) {
-        mdmsCard.readOnly = (cardReadOnly || !mdmsCard.allow) && isVisibleTrue;
+        let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+        mdmsCard.readOnly = isEmployee ? !isVisibleTrue : sendBackCitizen;//(cardReadOnly || !mdmsCard.allow);
         cards.push(mdmsCard)
       }
     });
