@@ -216,7 +216,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.tenantId = propertyPayload.address.city;
     propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
     let additionalDetails={
-      isRainwaterHarvesting:"No"
+      isRainwaterHarvesting:false
     }
     propertyPayload.additionalDetails=additionalDetails;
     try {
