@@ -5,7 +5,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { searchPropertyTable} from "./searchResource/searchResults";
+import { searchPropertyTable,getQueryRedirectUrl} from "./searchResource/searchResults";
 import { httpRequest } from "../../../../ui-utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
@@ -13,15 +13,14 @@ import commonConfig from "config/common.js";
 import { resetFields } from "./mutation-methods";
 import "./index.css"
 import {searchPropertyDetails} from "./mutation-methods"
+import { getDomainLink } from "../../../../ui-utils/commons";
+
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
 
-const url = getQueryArg(
-  window.location.href,
-  "redirectUrl"
-);
+const url = getQueryRedirectUrl();
 
 const getMDMSData = async (dispatch) => {
   const mdmsBody = {
@@ -135,11 +134,8 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  let link = window.location.origin;
-                  if(process.env.NODE_ENV !== "development"){
-                    link += "/"+process.env.REACT_APP_NAME.toLowerCase()
-                  }
-                  window.location.href = link + `/pt-common-screens/register-property?redirectUrl=${url}`
+                  let link = window.location.origin;                  
+                  window.location.href = `${link}${getDomainLink()}/pt-common-screens/register-property?redirectUrl=${url}`
                 }
               },
             }

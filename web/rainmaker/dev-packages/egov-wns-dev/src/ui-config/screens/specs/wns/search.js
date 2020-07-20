@@ -1,14 +1,17 @@
-import commonConfig from "config/common.js";
-import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader, getBreak, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { showSearches } from "./searchResource/searchTabs";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { searchResults } from "./searchResource/searchResults";
+import { searchApplicationResults } from "./searchResource/searchApplicationResults";
+import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import find from "lodash/find";
+import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
+import "./index.css";
 import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
-import { resetFieldsForApplication, resetFieldsForConnection } from '../utils';
-import "./index.css";
-import { searchApplicationResults } from "./searchResource/searchApplicationResults";
-import { searchResults } from "./searchResource/searchResults";
-import { showSearches } from "./searchResource/searchTabs";
+import commonConfig from "config/common.js";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -16,7 +19,7 @@ const getMDMSData = (action, dispatch) => {
       moduleName: "ws-services-masters",
       masterDetails: [
         { name: "Documents" }
-      ]
+      ] 
     }
   ]
   try {
@@ -26,39 +29,40 @@ const getMDMSData = (action, dispatch) => {
   }
 };
 
-const getMDMSAppType = (dispatch) => {
+const getMDMSAppType =async (dispatch) => {
   // getMDMS data for ApplicationType
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
-      moduleDetails: [
-        {
-          moduleName: "ws-services-masters", masterDetails: [
-            { name: "ApplicationType" }
-          ]
-        }
-      ]
-    }
-  };
-  let applicationType = [];
-  try {
-    httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody).then((payload) => {
-      if (payload && payload.MdmsRes['ws-services-masters'] && payload.MdmsRes['ws-services-masters'].ApplicationType !== undefined) {
-        payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.code.replace(/_/g, ' '), name: obj.name }));
-        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+         {
+            moduleName: "ws-services-masters", masterDetails: [
+              { name: "ApplicationType" }
+            ]
+          }
+        ]
       }
-    });
-  } catch (e) { console.log(e); }
-};
+    };
+    try {
+      let applicationType = [];
+      let payload = null;
+       payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);       
+        if(payload && payload.MdmsRes['ws-services-masters'] && payload.MdmsRes['ws-services-masters'].ApplicationType !== undefined){
+          payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.code.replace(/_/g,' '), name: obj.name, businessService:obj.businessService}));          
+          applicationType.forEach(type=>getBusinessService(type.businessService,dispatch))
+          dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
+        }
+    } catch (e) { console.log(e); }
+  }
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
 
-const getBusinessService = async (dispatch) => {
+const getBusinessService=async(businessService, dispatch)=>{
   const queryObject = [
     { key: "tenantId", value: getTenantId() },
-    { key: "businessServices", value: 'NewWS1' }
+    { key: "businessServices", value:businessService } 
   ];
   const payload = await httpRequest(
     "post",
@@ -67,15 +71,26 @@ const getBusinessService = async (dispatch) => {
     queryObject
   );
   if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1") {
-    const { states } = payload.BusinessServices[0] || [];
-    if (states && states.length > 0) {
-      const status = states.map((item) => { return { code: item.applicationStatus } });
-      const applicationStatus = status.filter(item => item.code != null);
-      dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
+
+    const applicationStatus=commonGetAppStatus(payload);
+        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatusNew", applicationStatus));
+    
+    }else{
+      if (payload.BusinessServices[0].businessService === "ModifyWSConnection" || payload.BusinessServices[0].businessService === "ModifySWConnection") {
+        const applicationStatus=commonGetAppStatus(payload);
+          dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatusModify", applicationStatus));
+      }
     }
-  }
 }
 
+const commonGetAppStatus=(payload)=>{
+  const { states } = payload.BusinessServices[0] || [];
+  if (states && states.length > 0) {
+    const status = states.map((item) => { return { code: item.applicationStatus } });
+    return status.filter(item => item.code != null);
+  }
+
+}
 const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
@@ -83,7 +98,6 @@ const employeeSearchResults = {
     getMDMSData(action, dispatch);
     resetFieldsForConnection(state, dispatch);
     resetFieldsForApplication(state, dispatch);
-    getBusinessService(dispatch);
     getMDMSAppType(dispatch);
     return action;
   },

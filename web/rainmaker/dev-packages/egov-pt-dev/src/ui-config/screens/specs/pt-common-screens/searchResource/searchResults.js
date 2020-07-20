@@ -2,11 +2,22 @@ import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getQueryArg, getStatusKey } from "egov-ui-framework/ui-utils/commons";
 import { getEpochForDate, sortByEpoch } from "../../utils";
+import { getDomainLink } from "../../../../../ui-utils/commons";
 
-const url = getQueryArg(
-  window.location.href,
-  "redirectUrl"
-);
+ export const getQueryRedirectUrl = () => {
+  const url = getQueryArg(window.location.href,"redirectUrl");
+  const isMode=getQueryArg(window.location.href,"mode");
+  if(isMode==="MODIFY"){
+    const connectionNumber=getQueryArg(window.location.href,"connectionNumber");
+    const tenantId=getQueryArg(window.location.href,"tenantId");
+    const action=getQueryArg(window.location.href,"action");
+    return `${url}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=${action}&mode=${isMode}`
+  }else{
+    return url;
+  }
+  
+};
+const url = getQueryRedirectUrl();
 
 export const searchPropertyTable = {
   uiFramework: "custom-molecules",
@@ -88,13 +99,13 @@ export const searchPropertyTable = {
 };
 
 const getSelect=data=>{
-  if(data.rowData[3] === 'INACTIVE'){
+  if(data.rowData[3] !== 'SELECT'){
     return false;
   }
-
-  if(process.env.REACT_APP_NAME == "Citizen"){
-    window.location.href=`/citizen${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+  const isMode=getQueryArg(window.location.href,"mode");
+  if(isMode==="MODIFY"){
+    window.location.href=`${getDomainLink()}${url}&propertyId=${data.rowData[0]}` 
   }else{
-    window.location.href=`/employee${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`
+    window.location.href=`${getDomainLink()}${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}` 
   }
 }

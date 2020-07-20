@@ -110,6 +110,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
         return "purpose=approve&status=success";
+      case "APPROVE_CONNECTION":
+        return "purpose=approve&status=success";
       case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
       case "REVOCATE":
@@ -124,6 +126,7 @@ class WorkFlowContainer extends React.Component {
       dataPath,
       moduleName,
       updateUrl,
+      redirectQueryString,
       beforeSubmitHook
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
@@ -188,28 +191,6 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "applicationNumber"
     );
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      data = data[0];
-      data.assignees = [];
-      if (data.assignee) {
-        data.assignee.forEach(assigne => {
-          data.assignees.push({
-            uuid: assigne
-          })
-        })
-      }
-      data.processInstance = {
-        documents: data.wfDocuments,
-        assignes: data.assignees,
-        comment: data.comment,
-        action: data.action
-      }
-      data.waterSource = data.waterSource + "." + data.waterSubSource;
-    }
-
-    if (moduleName === "NewSW1") {
-      dataPath = "SewerageConnection";
-    }
 
     try {
       if (beforeSubmitHook) {
@@ -250,11 +231,9 @@ class WorkFlowContainer extends React.Component {
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
-
-        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+       if(redirectQueryString){
+        window.location.href = `acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`;
         }
-
       }
     } catch (e) {
       if (moduleName === "BPA") {
@@ -325,13 +304,15 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const { ProcessInstances } = this.props;
+    const { ProcessInstances,baseUrlTemp,bserviceTemp } = this.props;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
       applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
     }
-    let baseUrl = "";
-    let bservice = "";
+    // needs to remove this initialization if all other module integrated this changes.
+    let baseUrl = (baseUrlTemp)?baseUrlTemp:""
+    let bservice = (bserviceTemp)?bserviceTemp:""
+
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
       bservice = "FIRENOC";
@@ -344,18 +325,11 @@ class WorkFlowContainer extends React.Component {
       } else {
         bservice = "BPA.LOW_RISK_PERMIT_FEE"
       }
-    } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      baseUrl = "wns"
-      if (moduleName === "NewWS1") {
-        bservice = "WS.ONE_TIME_FEE"
-      } else {
-        bservice = "SW.ONE_TIME_FEE"
-      }
     } else if (moduleName === "PT") {
       bservice = "PT"
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION"
-    } else {
+    } else if(!baseUrl && !bservice){
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
     }
@@ -446,7 +420,7 @@ class WorkFlowContainer extends React.Component {
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
+        buttonUrl: (this.props.editredirect)?this.props.editredirect:this.getRedirectUrl("EDIT", businessId, moduleName)
       };
     }
     return editAction;
@@ -523,17 +497,6 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
     let showFooter = true;
-    // if (moduleName === 'NewWS1' || moduleName === 'NewSW1') {
-    //   showFooter = true;
-    // } else if (moduleName == "PT.CREATE") {
-    //   showFooter = true;
-    // } else if (moduleName == "ASMT") {
-    //   showFooter = true;
-    // } else if (moduleName == "PT.MUTATION") {
-    //   showFooter = true;
-    // } else {
-    //   showFooter = process.env.REACT_APP_NAME === "Citizen" ? true : true;
-    // }
     if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }

@@ -31,12 +31,12 @@ import {
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
 
-export const getCommonApplyFooter = children => {
+export const getCommonApplyFooter = (position,children) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: (position === 'BOTTOM')?"apply-wizard-footer":""
     },
     children
   };
@@ -1612,3 +1612,16 @@ export const getTextToLocalMapping = label => {
     //   );
   }
 };
+const setVisible = (key, status, action) => {
+  set(
+    action,
+    `screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.${key}.visible`,
+    status
+  );
+}
+export const triggerModificationsDisplay = (action, isModeEnable) => {  
+    setVisible('modificationsEffectiveFrom', isModeEnable, action);
+    setVisible('plumberDetailsContainer', !isModeEnable, action);
+    setVisible('roadCuttingChargeContainer', !isModeEnable, action);
+}
+

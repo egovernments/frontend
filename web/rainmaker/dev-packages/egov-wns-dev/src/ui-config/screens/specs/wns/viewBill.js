@@ -57,9 +57,7 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
           let currentDemand = sortedBills[0];
           sortedBills.shift();
           let totalArrears = 0;
-          if(data.Bill[0].totalAmount > 0) {
-            sortedBills.forEach(e => { e.bill.forEach(o => { totalArrears = totalArrears + o.amount }); })
-          }
+          sortedBills.forEach(e => { e.bill.forEach(o => { totalArrears = totalArrears + o.amount }); })
           let finalArray = [{
             arrears: totalArrears,
             arrearsDescription: "Total outstanding payment of previous billing cycles.",
