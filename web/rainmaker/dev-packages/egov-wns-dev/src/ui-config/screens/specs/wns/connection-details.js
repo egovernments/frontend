@@ -70,7 +70,7 @@ const showHideConnectionHolder = (dispatch,connectionHolders) => {
         );
       }
 }
-const sortpayloadDataObj = (connectionObj) => {
+export const sortpayloadDataObj = (connectionObj) => {
   return connectionObj.sort((a,b) => (a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate)?1:-1)
 }
 
