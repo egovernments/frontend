@@ -618,7 +618,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
       documentsContract.push(tempDoc[key]);
     });
   }
-  dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
+  dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
   let Noc = fetchFileDetails(get(
     state.screenConfiguration.preparedFinalObject,
     "Noc",
@@ -645,7 +645,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
     })
   })
   dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
-  dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
+  dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
 
 };
 
@@ -670,10 +670,25 @@ const getNocDocuments = (state) =>{
     applicationDocuments && applicationDocuments.length > 0 && 
     applicationDocuments.forEach(doc =>{
       if(doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
+        let linkDetails = {};
+        let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+        let url = `${window.location.origin}/egov-bpa/noc-search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}`;
+        if (process.env.NODE_ENV === "production") {
+          if (checkingApp) {
+            url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}`;
+          }
+        }
+        linkDetails.labelName = "Application Number"
+        linkDetails.value = url;
+        linkDetails.valueName = nocDoc.applicationNo;
         doc.docTypes[0].nocType = doc.nocType;
         doc.docTypes[0].additionalDetails = {
           submissionDetails: nocDoc.additionalDetails,
-          applicationStatus: nocDoc.applicationStatus
+          applicationStatus: nocDoc.applicationStatus,
+          linkDetails: linkDetails,
+          appNumberLink: nocDoc.applicationNo,
+          nocNo: nocDoc.nocNo,
+          approvedRejectedOn: get(nocDoc,"auditDetails.lastModifiedTime", "")
         }
         documents.push(doc.docTypes[0]);    
       }
@@ -1265,17 +1280,24 @@ const updateNocApplication = async (state, dispatch, bpaAction) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
   let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocForPreview", []);
   if (Noc.length > 0) {
+    let count = 0;
     for (let data = 0; data < Noc.length; data++) {
       let documents = nocDocuments[data].documents;
       set(Noc[data], "documents", documents);
       // set(NOCData[data], "workflow.action", bpaAction)
-      let response = httpRequest(
+      let response = await httpRequest(
         "post",
         "/noc-services/v1/noc/_update",
         "",
         [],
         { Noc: Noc[data] }
       );
+      if(get(response, "ResponseInfo.status") == "successful") {
+        count++;
+        if(Noc.length == count) {
+          return "successful"
+        }
+      }
     }
   }
 };
@@ -1322,7 +1344,7 @@ export const updateBpaApplication = async (state, dispatch) => {
   let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  if (get(response, "status", "") === "success") {
+  if (get(response, "status", "") === "success" && nocRespose == "successful") {
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
         ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
@@ -1336,7 +1358,7 @@ export const updateOcBpaApplication = async (state, dispatch) => {
   let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  if (response) {
+  if (response && nocRespose == "successful") {
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
         ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
@@ -1571,6 +1593,7 @@ export const nocapplicationUpdate = (state) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
   let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
   if (Noc.length > 0) {
+    let count = 0;
     for (let data = 0; data < Noc.length; data++) {
       let documents = nocDocuments[data].documents;
       set(Noc[data], "documents", documents);
@@ -1581,6 +1604,12 @@ export const nocapplicationUpdate = (state) => {
         [],
         { Noc: Noc[data] }
       );
+      if(get(response, "ResponseInfo.status") == "successful") {
+        count++;
+        if(Noc.length == count) {
+          return "successful"
+        }
+      }
     }
   }
 }

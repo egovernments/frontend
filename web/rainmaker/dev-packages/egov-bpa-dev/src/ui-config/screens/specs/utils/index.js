@@ -26,7 +26,7 @@ import isEmpty from "lodash/isEmpty";
 import isUndefined from "lodash/isUndefined";
 import set from "lodash/set";
 import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-utils/api";
-import { getBpaSearchResults } from "../../../../ui-utils/commons";
+import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
 
 export const getCommonApplyFooter = children => {
@@ -4008,6 +4008,8 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         prepareapprovalQstns(state, dispatch, action, checkListConditions, appWfState);
       }
     }
+    await prepareNOCUploadData(state, dispatch);
+    await prepareNocFinalCards(state, dispatch, isVisibleTrue);
   } catch (e) {
     console.log(e);
   }
@@ -4356,7 +4358,7 @@ export const getLoggedinUserRole = (wfState) => {
   return currentRole;
 };
 
-const getEditableUserRoleforNoc = (state) => {
+const getEditableUserRoleforNoc = (state, isVisibleTrue) => {
   let userInfo = JSON.parse(getUserInfo()),
     roles = get(userInfo, "roles"),
     allowedToUpload = false;
@@ -4370,10 +4372,12 @@ const getEditableUserRoleforNoc = (state) => {
   //   allowedToUpload = true;
   //  }
   // }
-
+  let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   roles.map(role => {
-    if ((role.code == "BPA_NOC_VERIFIER" || role.code == "BPA_ARCHITECT" || role.code == "BPA_VERIFIER")) {
-      allowedToUpload = true;
+    if(isVisibleTrue || window.location.href.includes("egov-bpa/apply") || window.location.href.includes("oc-bpa/apply")) {
+      if ((role.code == "BPA_NOC_VERIFIER" || role.code == "BPA_ARCHITECT" || role.code == "BPA_VERIFIER")) {
+        allowedToUpload = true;
+      }
     }
   })
 
@@ -4444,7 +4448,7 @@ export const prepareNocDocumentsView = async (state, dispatch) => {
   return uploadedAppDocuments;
 };
 
-export const prepareNocFinalCards = async (state, dispatch) => {
+export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
   let mdmsNocDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NOC.DocumentTypeMapping",
@@ -4463,7 +4467,7 @@ export const prepareNocFinalCards = async (state, dispatch) => {
 
   let nocDocumentsContract = get(
     state,
-    "screenConfiguration.preparedFinalObject.nocDocumentsContract",
+    "screenConfiguration.preparedFinalObject.nocBPADocumentsContract",
     {}
   );
 
@@ -4628,18 +4632,18 @@ export const prepareNocFinalCards = async (state, dispatch) => {
 
   }
   let nocDocumentsContractFinal = await prepareNocDocumentsView(state, dispatch);
-  dispatchFinalNocCardsForPreview(state, dispatch, nocDocumentsContract, finalNocDocs)
+  dispatchFinalNocCardsForPreview(state, dispatch, nocDocumentsContract, finalNocDocs, isVisibleTrue)
 }
 
-const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocumentsFromMdms) => {
+const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocumentsFromMdms, isVisibleTrue) => {
   // let mdmsCards = getRequiredMdmsCards(state, dispatch);
   let cards = [];
   let documentCards = get(
     state,
-    "screenConfiguration.preparedFinalObject.nocDocumentsContract",
+    "screenConfiguration.preparedFinalObject.nocBPADocumentsContract",
     {}
   );
-  let cardReadOnly = getEditableUserRoleforNoc(state);
+  let cardReadOnly = getEditableUserRoleforNoc(state, isVisibleTrue);
   console.log(cardReadOnly);
   //let cardReadOnly = false;
   if (documentCards && documentCards.length > 0) {
