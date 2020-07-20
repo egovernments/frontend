@@ -4,7 +4,7 @@ import { wsDownloadConnectionDetails } from "../../../../../ui-utils/commons";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
-const callDownload = (state, dispatch, mode) => {
+const callDownload = (mode) => {
   const val = [
     {
       key: 'connectionNumber',
@@ -12,7 +12,7 @@ const callDownload = (state, dispatch, mode) => {
     },
 
     { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
-  wsDownloadConnectionDetails(val, mode, dispatch);
+  wsDownloadConnectionDetails(val, mode);
 }
 
 
@@ -38,7 +38,7 @@ export const connectionDetailsDownload = getCommonApplyFooter("RIGHT",{
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        callDownload(state, dispatch, "download");
+        callDownload("download");
       }
     },
   },
@@ -61,7 +61,7 @@ export const connectionDetailsDownload = getCommonApplyFooter("RIGHT",{
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        callDownload(state, dispatch, "print");
+        callDownload("print");
       }
     },
     // visible: false

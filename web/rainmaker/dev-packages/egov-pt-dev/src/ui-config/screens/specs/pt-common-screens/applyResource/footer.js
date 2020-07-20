@@ -215,7 +215,10 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
     propertyPayload.tenantId = propertyPayload.address.city;
     propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
-    propertyPayload.rainWaterHarvesting=false;
+    let additionalDetails={
+      isRainwaterHarvesting:"No"
+    }
+    propertyPayload.additionalDetails=additionalDetails;
     try {
       if(propertyPayload.propertyType === 'BUILTUP.SHAREDPROPERTY') {
         let unit = {};
