@@ -793,7 +793,7 @@ export const getObjectKeys = objData => {
   );
 };
 export const getMdmsJson = async (state, dispatch, reqObj) => {
-  let { setPath, setTransformPath, dispatchPath, moduleName, name, type } = reqObj;
+  let { setPath, setTransformPath, dispatchPath, moduleName, name, filter } = reqObj;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -801,7 +801,7 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
         {
           moduleName,
           masterDetails: [
-            { name }
+            { name,filter }
           ]
         }
       ]
@@ -817,11 +817,11 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
       mdmsBody
     );
     let result = get(payload, `MdmsRes.${moduleName}.${name}`, []);
-    let filterResult = type ? result.filter(item => item.type == type) : result;
+    // let filterResult = type ? result.filter(item => item.type == type) : result;
     set(
       payload,
       setPath,
-      filterResult
+      result
     );
     payload = getTransformData(payload, setPath, setTransformPath);
     dispatch(prepareFinalObject(dispatchPath, get(payload, dispatchPath, [])));
