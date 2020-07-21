@@ -21,7 +21,10 @@ import { getHeaderSideText } from "../../utils";
 import get from 'lodash/get';
 import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
-import { getTodaysDateInYMD } from 'egov-ui-framework/ui-utils/commons'
+import { getTodaysDateInYMD, getQueryArg } from 'egov-ui-framework/ui-utils/commons';
+import { isModifyMode } from "../../../../../ui-utils/commons";
+let isMode = isModifyMode();
+
 const getPlumberRadioButton = {
   uiFramework: "custom-containers-local",
   moduleName: "egov-wns",
@@ -354,10 +357,11 @@ export const additionDetails = getCommonCard({
 });
 
 const showHideFeilds = (dispatch, value) => {
+  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep'; 
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading`,
       "visible",
       value
     )
@@ -365,7 +369,7 @@ const showHideFeilds = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate`,
       "visible",
       value
     )
@@ -373,7 +377,7 @@ const showHideFeilds = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID`,
       "visible",
       value
     )

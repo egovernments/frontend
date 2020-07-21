@@ -8,7 +8,6 @@ import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
-
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -505,7 +504,7 @@ const validatePropertyOwners = (applyScreenObject) => {
     }
 }
 
-export const prepareDocumentsUploadData = (state, dispatch) => {    
+export const prepareDocumentsUploadData = (state, dispatch) => {
     let currentDoc = (isModifyMode()) ? 'ModifyConnectionDocuments' : 'Documents'; 
     let documents = get(
         state,

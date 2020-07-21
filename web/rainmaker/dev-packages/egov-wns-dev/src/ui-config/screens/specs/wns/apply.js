@@ -45,11 +45,10 @@ let isMode = isModifyMode();
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
-  } /*
-  Removed this config because some changes in card.
-  else if(isMode && isMode === 'MODIFY'){
+  } 
+  else if(isMode){
     return [{ labelKey: "WS_COMMON_PROPERTY_DETAILS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
-  }*/else{
+  } else{
       return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
     }
 }
@@ -251,6 +250,7 @@ export const getData = async (action, state, dispatch) => {
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const propertyID = getQueryArg(window.location.href, "propertyId");
   const actionType = getQueryArg(window.location.href, "action");
+  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   await getMdmsData(dispatch);
      //if both application number and propertyID is present get propertydetails
   if(applicationNo && propertyID){
@@ -331,7 +331,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading`,
             "visible",
             false
           )
@@ -339,7 +339,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate`,
             "visible",
             false
           )
@@ -347,7 +347,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID`,
             "visible",
             false
           )
@@ -358,7 +358,7 @@ export const getData = async (action, state, dispatch) => {
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberLicenceNo",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberLicenceNo`,
               "visible",
               false
             )
@@ -366,7 +366,7 @@ export const getData = async (action, state, dispatch) => {
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberName",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberName`,
               "visible",
               false
             )
@@ -374,7 +374,7 @@ export const getData = async (action, state, dispatch) => {
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberMobNo",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberMobNo`,
               "visible",
               false
             )
@@ -383,7 +383,7 @@ export const getData = async (action, state, dispatch) => {
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberLicenceNo",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberLicenceNo`,
               "visible",
               true
             )
@@ -391,7 +391,7 @@ export const getData = async (action, state, dispatch) => {
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberName",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberName`,
               "visible",
               true
             )
@@ -399,7 +399,7 @@ export const getData = async (action, state, dispatch) => {
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberMobNo",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberMobNo`,
               "visible",
               true
             )
@@ -413,7 +413,7 @@ export const getData = async (action, state, dispatch) => {
         showHideFieldModifyConnection(action);
       }
       let docs = get(state, "screenConfiguration.preparedFinalObject");
-      await prefillDocuments(docs, "displayDocs", dispatch, isMode);
+      await prefillDocuments(docs, "displayDocs", dispatch);
     }
   } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];

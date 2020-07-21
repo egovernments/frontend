@@ -363,35 +363,43 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
 
   if (activeStep === 1) {
-    if (moveToReview(state, dispatch)) {
-      await pushTheDocsUploadedToRedux(state, dispatch);
-      isFormValid = true; hasFieldToaster = false;
-      if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
-        setReviewPageRoute(state, dispatch);
+    if(isMode) {
+      isFormValid = true; 
+      hasFieldToaster = false;
+    } else {
+      if (moveToReview(state, dispatch)) {
+        await pushTheDocsUploadedToRedux(state, dispatch);
+        isFormValid = true; hasFieldToaster = false;
+        if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+          setReviewPageRoute(state, dispatch);
+        }
       }
-    }
-    else { 
-      if(isMode) {
-        isFormValid = true; 
-        hasFieldToaster = false; 
-      } else {
+      else { 
         isFormValid = false; 
         hasFieldToaster = true; 
       }
     }
   }
 
-  if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen" && getQueryArg(window.location.href, "action") === "edit" ) {
-    // for modify create
-    if (!isMode || (isMode && isModifyModeAction())) {
-      setReviewPageRoute(state, dispatch);
+  if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
+    if(isMode) {
+      if (moveToReview(state, dispatch)) {
+        await pushTheDocsUploadedToRedux(state, dispatch);
+        isFormValid = true; hasFieldToaster = false;
+        // if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+        //   setReviewPageRoute(state, dispatch);
+        // }
+      }
+      else { 
+        isFormValid = true; 
+        hasFieldToaster = false; 
+      }
+    } else{
+      if (getQueryArg(window.location.href, "action") === "edit" && (!isMode || (isMode && isModifyModeAction()))) {
+        setReviewPageRoute(state, dispatch);
+      }
+      isFormValid = true;
     }
-
-    // if (!isApplicantTypeCardValid || !isSingleApplicantCardValid || !isInstitutionCardValid) {
-    //   isFormValid = false;
-    //   hasFieldToaster = true;
-    // }
-    isFormValid = true;
   }
   if (activeStep === 3) {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
@@ -673,19 +681,21 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     case 1:
+      let mStepSecond = (isMode) ? 'formwizardThirdStep' : 'formwizardSecondStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
-          "components.div.children.formwizardSecondStep"
+          `components.div.children.${mStepSecond}`
         ),
         dispatch
       );
       break;
     case 2:
+      let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
-          "components.div.children.formwizardThirdStep"
+          `components.div.children.${mStep}`
         ),
         dispatch
       );
@@ -714,10 +724,11 @@ export const renderStepsCitizen = (activeStep, dispatch) => {
       );
       break;
     case 1:
+      let mStepSecond = (isMode) ? 'formwizardThirdStep' : 'formwizardSecondStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
-          "components.div.children.formwizardSecondStep"
+          `components.div.children.${mStepSecond}`
         ),
         dispatch
       );
@@ -763,6 +774,14 @@ export const getActionDefinationForStepper = path => {
       }
     ];
   } else {
+    let mStep1 = "formwizardThirdStep";
+    let mStep2 = "formwizardSecondStep"; 
+
+    if(isMode) {
+      mStep1 = "formwizardSecondStep";
+      mStep2 = "formwizardThirdStep";
+    }
+    
     actionDefination = [
       {
         path: "components.div.children.formwizardFirstStep",
@@ -770,12 +789,12 @@ export const getActionDefinationForStepper = path => {
         value: true
       },
       {
-        path: "components.div.children.formwizardSecondStep",
+        path: `components.div.children.${mStep2}`,
         property: "visible",
         value: false
       },
       {
-        path: "components.div.children.formwizardThirdStep",
+        path: `components.div.children.${mStep1}`,
         property: "visible",
         value: false
       },
