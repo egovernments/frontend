@@ -47,6 +47,7 @@ import { permitListSummary } from "./summaryResource/permitListSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "../egov-bpa/noc";
 import store from "ui-redux/store";
+import commonConfig from "config/common.js";
 
 
 export const ifUserRoleExists = role => {
@@ -310,7 +311,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
 const getRequiredMdmsDetails = async (state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId().split('.')[0],
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "common-masters",
