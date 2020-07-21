@@ -310,7 +310,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
 const getRequiredMdmsDetails = async (state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: getTenantId().split('.')[0],
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -587,7 +587,7 @@ export const beforeSubmitHook = async () => {
     if (Noc.length > 0) {
       let count = 0;
       for (let data = 0; data < Noc.length; data++) {
-        let documents = nocDocuments[data].documents;
+        let documents = get(nocDocuments[data], "documents", null);
         set(Noc[data], "documents", documents);
         let response = await httpRequest(
           "post",
