@@ -678,6 +678,9 @@ const getNocDocuments = (state) =>{
             url = `${window.location.origin}/${checkingApp}/egov-bpa/noc-search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}`;
           }
         }
+        if(nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {
+          url = "";
+        }
         linkDetails.labelName = "Application Number"
         linkDetails.value = url;
         linkDetails.valueName = nocDoc.applicationNo;

@@ -42,9 +42,10 @@ const LinkAtom = (props) => {
   return (
     <div>
         <div className={classes.root}>{linkDetail.labelName}</div>
-        <a className={classes.linkDetails} href={linkDetail.value} target="_blank">
+        {linkDetail.value ? 
+         <a className={classes.linkDetails} href={linkDetail.value} target="_blank">
           {linkDetail.valueName}
-        </a>
+        </a>: <div className={classes.linkDetails}>{linkDetail.valueName}</div>} 
       </div>
   );
 };
