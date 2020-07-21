@@ -23,7 +23,7 @@ class AddLinkForProperty extends React.Component {
     let link = window.location.origin;  
     link += `${getDomainLink()}/pt-common-screens/propertySearch?redirectUrl=${url}`;
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    let modifyLink = window.location.origin + `${getDomainLink()}/property-tax/assessment-form?purpose=update&propertyId=${selectedPropertyId}&tenantId=${ tenantId }&redirectTo=${url}`
+    let modifyLink = window.location.origin + `${getDomainLink()}/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${selectedPropertyId}&tenantId=${ tenantId }&redirectTo=${url.substring(1)}`
     if(isMode==="MODIFY"){
       return (
         <div style={styles}>
