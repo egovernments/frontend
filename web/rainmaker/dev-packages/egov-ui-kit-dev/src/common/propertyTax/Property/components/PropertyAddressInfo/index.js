@@ -34,7 +34,7 @@ const getAddressItems = (properties) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: (getTranslatedLabel(('PB_TESTING_REVENUE_'+address.locality.code), localizationLabelsData)) || "NA",
+        value: (getTranslatedLabel(('PB_'+address.city.toUpperCase()+'_REVENUE_'+address.locality.code), localizationLabelsData)) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
