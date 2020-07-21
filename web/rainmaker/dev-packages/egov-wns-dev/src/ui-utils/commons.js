@@ -1440,14 +1440,14 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
 
-                    if (payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting !== null) {
-                        if (payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting === true) {
-                            payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting = 'SCORE_YES'
+                    payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
+                    if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== null) {
+                        if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting === true) {
+                            payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_YES'
                         } else {
-                            payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting = 'SCORE_NO'
+                            payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_NO'
                         }
                     }
-                    payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
