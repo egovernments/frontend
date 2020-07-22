@@ -4,6 +4,7 @@ import { plumberDetails, roadDetails, additionDetailsWater, additionDetailsSewer
 import get from "lodash/get";
 import { reviewModificationsEffectiveDate } from "egov-wns/ui-config/screens/specs/wns/applyResource/reviewModificationsEffective";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print", service, connType) => {
     propertyDetails.reviewPropertyType.localiseValue = true;
@@ -77,10 +78,11 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     }
     const documentsUploadRedux = get(preparedFinalObject, 'DocumentsData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
+    const tenantId = getQueryArg(window.location.href, "tenantId");
 
 
     let pdfData = {
-        header: WaterConnection.applicationNo.includes("WS") ? "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER" : "PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER", tenantId: "pb.amritsar",
+        header: WaterConnection.applicationNo.includes("WS") ? "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER" : "PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER", tenantId: tenantId,
         applicationNoHeader: WaterConnection.applicationType !== null ? WaterConnection.applicationType.split("_").join(" ") : "",
         additionalHeader: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_APPLICATION_NO', additionalHeaderValue: WaterConnection.applicationNo,
         cards: [
