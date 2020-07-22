@@ -1391,7 +1391,26 @@ export const validateFields = (
   }
   return isFormValid;
 };
-
+export const validateDynamicMDMSFields = ( objectJsonPath, state, dispatch, screen = "apply" ) => {
+  const fields = get(
+    state.screenConfiguration.screenConfig[screen],
+    objectJsonPath,
+    {}
+  );
+  let isFormValid = true;
+  let {masterName, moduleName, rootBlockSub, dropdownFields} = fields.props;
+  dropdownFields.forEach(item => {
+    let isValid = get(
+      state.screenConfiguration.preparedFinalObject ,
+      `DynamicMdms.${moduleName}.${rootBlockSub}.${item.key}`,
+      ''
+    );
+    if(isValid == '' || isValid == 'none') {
+      isFormValid = false;
+    }
+  });
+  return isFormValid;
+};  
 export const epochToYmdDate = et => {
   if (!et) return null;
   if (typeof et === "string") return et;
