@@ -408,8 +408,13 @@ const callBackForNext = async (state, dispatch) => {
         // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
-        // getMdmsData(state, dispatch);
-        // prepareDocumentsUploadData(state, dispatch); 
+        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+        if(nocData && nocData.length > 0) { 
+          nocData.map(items => {
+            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
+          })
+          dispatch(prepareFinalObject("nocForPreview", nocData));
+        }
       }
       if (activeStep === 2) {
         let checkingOwner = get(

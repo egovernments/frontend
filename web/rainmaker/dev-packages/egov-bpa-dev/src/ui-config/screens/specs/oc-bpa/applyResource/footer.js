@@ -296,6 +296,15 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep !== 4) {
     if (isFormValid) {
+      if (activeStep === 1) {
+        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+        if(nocData && nocData.length > 0) { 
+          nocData.map(items => {
+            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
+          })
+          dispatch(prepareFinalObject("nocForPreview", nocData));
+        }
+      }
       // createUpdateOCBpaApplication(state, dispatch, "INITIATE")
      changeStep(state, dispatch);
     } else if (hasFieldToaster) { 
