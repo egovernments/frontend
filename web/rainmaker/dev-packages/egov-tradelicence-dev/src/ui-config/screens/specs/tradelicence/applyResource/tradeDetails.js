@@ -62,7 +62,7 @@ const tradeSubTypeChange = (reqObj) => {
       let currentObject = filter(tradeSubTypes, {
         code: value
       });
-      if (currentObject[0].uom !== null) {
+      if (currentObject[0] && currentObject[0].uom !== null) {
         dispatch(
           handleField(
             "apply",
@@ -587,7 +587,8 @@ export const tradeDetails = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 6
-        }
+        },
+        required: true
     },
     oldLicenseNo: getTextField({
       label: {
