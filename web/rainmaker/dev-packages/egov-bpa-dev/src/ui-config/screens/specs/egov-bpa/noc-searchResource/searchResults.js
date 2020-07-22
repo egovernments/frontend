@@ -21,9 +21,9 @@ export const searchResults = {
       {
         name: "Source Module", labelKey: "BPA_NOC_MODULE_SOURCE_LABEL"
       },
-      {
-        name: "Current Owner", labelKey: "WF_INBOX_HEADER_CURRENT_OWNER"
-      },
+      // {
+      //   name: "Current Owner", labelKey: "WF_INBOX_HEADER_CURRENT_OWNER"
+      // },
       {
         name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL",
         options: {

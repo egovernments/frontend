@@ -4374,10 +4374,13 @@ const getEditableUserRoleforNoc = (state, isVisibleTrue) => {
   // }
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   roles.map(role => {
-    if(isVisibleTrue || window.location.href.includes("egov-bpa/apply") || window.location.href.includes("oc-bpa/apply")) {
-      if ((role.code == "BPA_NOC_VERIFIER" || role.code == "BPA_ARCHITECT" || role.code == "BPA_VERIFIER")) {
+    if(isEmployee && isVisibleTrue && (role.code == "BPA_NOC_VERIFIER")) {
         allowedToUpload = true;
-      }
+    } 
+    if(
+      window.location.href.includes("egov-bpa/apply") || 
+      window.location.href.includes("oc-bpa/apply")) {
+      allowedToUpload = true;
     }
   })
 
