@@ -454,7 +454,7 @@ export const callBackForPrevious = (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  if (activeStep === 4) {
+  if (activeStep === 2) {
     let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
     if(nocData && nocData.length > 0) { 
       nocData.map(items => {
