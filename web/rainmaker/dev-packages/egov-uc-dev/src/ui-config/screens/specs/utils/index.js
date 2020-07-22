@@ -61,7 +61,7 @@ export const validateFields = (
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {
       if (
-        fields[variable] &&
+        fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" && 
         fields[variable].props &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
@@ -81,6 +81,10 @@ export const validateFields = (
         isFormValid = false;
       }
     }
+    // else if(fields[variable].componentPath === "DynamicMdmsContainer"){
+    //   if(fields.hasOwnProperty(variable)){
+    //   }
+    // }
   }
   return isFormValid;
 };
