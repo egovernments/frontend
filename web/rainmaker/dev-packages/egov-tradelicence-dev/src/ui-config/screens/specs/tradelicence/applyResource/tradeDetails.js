@@ -206,7 +206,7 @@ const tradeUnitCard = {
               moduleName: "TradeLicense",
               masterName: "TradeType",
               rootBlockSub : 'tradeUnits',
-              type : 'TL',
+              filter: "[?(@.type=='TL')]",
               callBackEdit: updateMdmsDropDowns,
               isDependency : "DynamicMdms.common-masters.structureTypes.structureSubType"
             }
