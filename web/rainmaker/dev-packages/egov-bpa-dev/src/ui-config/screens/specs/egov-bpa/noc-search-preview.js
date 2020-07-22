@@ -11,6 +11,7 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import set from "lodash/set";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage
@@ -227,6 +228,11 @@ const setSearchResponse = async (
       )
     )
   }
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.nocDetails.children.cardContent.children.header.children.header.children.key.props.labelKey",
+    `NOC_NOC_TYPE_${get(response, "Noc[0].nocType")}`
+  );
 
   requiredDocumentsData(state, dispatch, action);
 };
