@@ -23,7 +23,8 @@ import {
   setValidToFromVisibilityForApply,
 
 
-  validateFields
+  validateFields,
+  validateDynamicMDMSFields
 } from "../../utils";
 import "./index.css";
 
@@ -156,6 +157,15 @@ export const callBackForNext = async (state, dispatch) => {
       !isAccessoriesValid ||
       !isTradeUnitValid
     ) {
+      isFormValid = false;
+    }
+    //For Dynamic MDMS drop down validation
+    if(!validateDynamicMDMSFields('components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.dynamicMdmsStructureType', state,
+    dispatch)) {
+      isFormValid = false;
+    }
+    if(!validateDynamicMDMSFields('components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.dynamicMdms', state,
+    dispatch)) {
       isFormValid = false;
     }
   }
