@@ -382,9 +382,9 @@ class FormWizard extends Component {
     hideSpinner();
     prepareFinalObject('propertiesEdited', false);
 
-    if(!getQueryValue(search, "purpose")){
+    if (!getQueryValue(search, "purpose")) {
       prepareFinalObject('Properties', []);
-    } else if(getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
+    } else if (getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
       prepareFinalObject('Properties', this.props.common.prepareFormData.Properties);
     }
   };
@@ -930,7 +930,11 @@ class FormWizard extends Component {
             this.props.prepareFinalObject('documentsUploadRedux', newDocs)
           }
         }
-
+        let prepareFormData = { ...this.props.prepareFormData };
+        let additionalDetails = get(
+          prepareFormData,
+          "Properties[0].additionalDetails", {})
+        this.props.prepareFinalObject('propertyAdditionalDetails', additionalDetails);
         break;
       // createAndUpdate(index);
       case 4:
@@ -1829,7 +1833,7 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {}, ptDocumentCount = 0, base64UlbLogoForPdf = '' } = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {}, ptDocumentCount = 0, base64UlbLogoForPdf = '', propertyAdditionalDetails = {} } = preparedFinalObject;
   let requiredDocCount = ptDocumentCount;
 
   return {
@@ -1843,7 +1847,8 @@ const mapStateToProps = state => {
     propertiesEdited,
     adhocExemptionPenalty,
     requiredDocCount, Assessments,
-    base64UlbLogoForPdf
+    base64UlbLogoForPdf,
+    propertyAdditionalDetails
   };
 };
 
