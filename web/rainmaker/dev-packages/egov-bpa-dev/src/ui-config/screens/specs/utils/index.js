@@ -4684,12 +4684,24 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
       }
     });
 
-  }
 
+    cards.sort(compare);
+  }
   dispatch(prepareFinalObject("nocForPreview", cards));
 
 }
-
+function compare(a, b) {
+  // Use toUpperCase() to ignore character casing
+  const nocTypeA = a.nocType.toUpperCase();
+  const nocTypeB = b.nocType.toUpperCase();
+  let comparison = 0;
+  if (nocTypeA > nocTypeB) {
+    comparison = 1;
+  } else if (nocTypeA < nocTypeB) {
+    comparison = -1;
+  }
+  return comparison;
+}
 const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms, isVisibleTrue) => {
   // let mdmsCards = getRequiredMdmsCards(state, dispatch);
   let cards = [];
