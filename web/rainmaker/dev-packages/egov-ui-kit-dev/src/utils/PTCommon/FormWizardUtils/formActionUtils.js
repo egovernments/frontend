@@ -86,7 +86,7 @@ const getAssessmentDetails = async () => {
     }
 }
 export const createProperty = async (Properties, action, props) => {
-    const { documentsUploadRedux, newProperties, propertiesEdited } = props;
+    const { documentsUploadRedux, newProperties, propertiesEdited ,propertyAdditionalDetails} = props;
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = action;
     if (action === "_update") {
@@ -103,6 +103,7 @@ export const createProperty = async (Properties, action, props) => {
     }
     try {
         propertyPayload.creationReason = action == '_create' ? 'CREATE' : 'UPDATE';
+        propertyPayload.additionalDetails?{...propertyPayload.additionalDetails,...propertyAdditionalDetails}:{...propertyAdditionalDetails};
         const propertyResponse = await httpRequest(
             `property-services/property/${propertyMethodAction}`,
             `${propertyMethodAction}`,

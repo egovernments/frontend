@@ -352,10 +352,10 @@ class FormWizard extends Component {
         titleObject
       });
       toggleSpinner();
-      if(!getQueryValue(search, "purpose")){
+      if (!getQueryValue(search, "purpose")) {
         prepareFinalObject('Properties', []);
         prepareFinalObject('PropertiesTemp', []);
-      } else if(getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
+      } else if (getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
         prepareFinalObject('Properties', this.props.common.prepareFormData.Properties);
       }
     } catch (e) {
@@ -950,6 +950,11 @@ class FormWizard extends Component {
             this.props.prepareFinalObject('documentsUploadRedux', newDocs)
           }
         }
+        let prepareFormData = { ...this.props.prepareFormData };
+        let additionalDetails = get(
+          prepareFormData,
+          "Properties[0].additionalDetails", {})
+        this.props.prepareFinalObject('propertyAdditionalDetails', additionalDetails);
         break;
       case 4:
         let { search: search1 } = this.props.location;
@@ -1593,7 +1598,7 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, ptDocumentCount = 0 } = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, ptDocumentCount = 0, propertyAdditionalDetails = {} } = preparedFinalObject;
 
   let requiredDocCount = ptDocumentCount;
   return {
@@ -1605,7 +1610,8 @@ const mapStateToProps = state => {
     documentsUploadRedux, newProperties,
     propertiesEdited,
     requiredDocCount,
-    Assessments
+    Assessments,
+    propertyAdditionalDetails
   };
 };
 
