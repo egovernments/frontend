@@ -137,61 +137,6 @@ export const additionDetails = getCommonCard({
           callBackEdit: updateWaterSource
         }
       },
-      // waterSourceType: {
-      //   ...getSelectField({
-      //     label: { labelKey: "WS_SERV_DETAIL_WATER_SOURCE" },
-      //     placeholder: { labelKey: "WS_ADDN_DETAILS_WARER_SOURCE_PLACEHOLDER" },
-      //     required: false,
-      //     sourceJsonPath: "applyScreenMdmsData.ws-services-masters.waterSource",
-      //     gridDefination: { xs: 12, sm: 6 },
-      //     errorMessage: "ERR_INVALID_BILLING_PERIOD",
-      //     jsonPath: "applyScreen.waterSource"
-      //   }),
-      //   beforeFieldChange: async (action, state, dispatch) => {
-      //     if (action.value === "GROUND") {
-      //       dispatch(
-      //         prepareFinalObject(
-      //           "waterSubSourceForSelectedWaterSource",
-      //           get(
-      //             state.screenConfiguration.preparedFinalObject,
-      //             "applyScreenMdmsData.ws-services-masters.GROUND"
-      //           )
-      //         )
-      //       )
-      //     } else if (action.value === "SURFACE") {
-      //       dispatch(
-      //         prepareFinalObject(
-      //           "waterSubSourceForSelectedWaterSource",
-      //           get(
-      //             state.screenConfiguration.preparedFinalObject,
-      //             "applyScreenMdmsData.ws-services-masters.SURFACE"
-      //           )
-      //         )
-      //       )
-      //     } else if (action.value === "BULKSUPPLY") {
-      //       dispatch(
-      //         prepareFinalObject(
-      //           "waterSubSourceForSelectedWaterSource",
-      //           get(
-      //             state.screenConfiguration.preparedFinalObject,
-      //             "applyScreenMdmsData.ws-services-masters.BULKSUPPLY"
-      //           )
-      //         )
-      //       )
-      //     }
-      //   }
-      // },
-
-      // waterSubSource: getSelectField({
-      //   label: { labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" },
-      //   placeholder: { labelKey: "WS_ADDN_DETAILS_WARER_SUB_SOURCE_PLACEHOLDER" },
-      //   required: false,
-      //   sourceJsonPath: "waterSubSourceForSelectedWaterSource",
-      //   gridDefination: { xs: 12, sm: 6 },
-      //   errorMessage: "ERR_INVALID_BILLING_PERIOD",
-      //   jsonPath: "applyScreen.waterSubSource"
-      // }),
-
       pipeSize: getSelectField({
         label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
         placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
