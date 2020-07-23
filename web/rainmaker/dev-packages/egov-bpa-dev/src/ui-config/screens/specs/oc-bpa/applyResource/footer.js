@@ -296,6 +296,15 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep !== 4) {
     if (isFormValid) {
+      if (activeStep === 1) {
+        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+        if(nocData && nocData.length > 0) { 
+          nocData.map(items => {
+            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
+          })
+          dispatch(prepareFinalObject("nocForPreview", nocData));
+        }
+      }
       // createUpdateOCBpaApplication(state, dispatch, "INITIATE")
      changeStep(state, dispatch);
     } else if (hasFieldToaster) { 
@@ -440,6 +449,20 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
+  let activeStep = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.div.children.stepper.props.activeStep",
+    0
+  );
+  if (activeStep === 2) {
+    let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+    if(nocData && nocData.length > 0) { 
+      nocData.map(items => {
+        if(items.readOnly) items.readOnly = items.readOnly ? false : true;
+      })
+      dispatch(prepareFinalObject("nocForPreview", nocData));
+    }
+  }
   changeStep(state, dispatch, "previous");
 };
 
