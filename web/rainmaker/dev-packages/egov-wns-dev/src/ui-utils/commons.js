@@ -871,6 +871,10 @@ export const applyForWater = async (state, dispatch) => {
                 "WaterConnection[0].additionalDetails.appCreatedDate"
             )
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
+            let waterSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.waterSourceType", null);
+            let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.waterSubSource", null);
+            queryObjectForUpdate.waterSource = queryObjectForUpdate.waterSource ? queryObjectForUpdate.waterSource : waterSource;
+            queryObjectForUpdate.waterSubSource = queryObjectForUpdate.waterSubSource ? queryObjectForUpdate.waterSubSource : waterSubSource;
             set(queryObjectForUpdate, "tenantId", tenantId);
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
@@ -964,6 +968,11 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
         queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId) ? queryObject.property.tenantId : null;
         if (method === "UPDATE") {
             let queryObjectForUpdateWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
+            let waterSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.waterSourceType", null);
+            let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.waterSubSource", null);
+            queryObjectForUpdateWater.waterSource = queryObjectForUpdateWater.waterSource ? queryObjectForUpdateWater.waterSource : waterSource;
+            queryObjectForUpdateWater.waterSubSource = queryObjectForUpdateWater.waterSubSource ? queryObjectForUpdateWater.waterSubSource : waterSubSource;
+
             let queryObjectForUpdateSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
             queryObjectForUpdateWater = { ...queryObjectForUpdateWater, ...queryObject }
             queryObjectForUpdateWater = findAndReplace(queryObjectForUpdateWater, "NA", null);
@@ -1987,7 +1996,8 @@ export const getWaterSource = (waterSource, waterSubSource) => {
             return waterSource;
         }
         if(waterSubSource && waterSubSource !== 'NA') {
-            waterSource += "." + waterSubSource;
+            //waterSource += "." + waterSubSource;
+            waterSource = waterSubSource;
         }
     }
     return waterSource;
