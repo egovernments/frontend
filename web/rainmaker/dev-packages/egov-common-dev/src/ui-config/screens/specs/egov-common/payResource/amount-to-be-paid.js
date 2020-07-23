@@ -4,10 +4,12 @@ import {
   getTextField,
   getCommonContainer,
   getPattern,
-  getRadioButton
+  getRadioButton,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import { validateAmountInput, dispatchHandleField } from "./utils";
+import "./index.css";
 
 const AmountToBePaid = getCommonGrayCard({
   header: getCommonSubHeader({
@@ -24,8 +26,8 @@ const AmountToBePaid = getCommonGrayCard({
             value: "full_amount"
           },
           {
-            label: "Partial Amount",
-            labelKey: "PAY_PARTIAL_AMOUNT",
+            label: "Custom Amount",
+            labelKey: "PAY_CUSTOM_AMOUNT",
             value: "partial_amount"
           }
         ],
@@ -39,7 +41,7 @@ const AmountToBePaid = getCommonGrayCard({
             state,
             "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]"
           );
-          if (payload.totalAmount && action.value === "full_amount") {
+          if (payload && payload.totalAmount && action.value === "full_amount") {
             dispatchHandleField(dispatch, "props.value", payload.totalAmount);
           }
         } catch (e) {
@@ -47,7 +49,7 @@ const AmountToBePaid = getCommonGrayCard({
         }
       }
     },
-
+    lineBreak: getBreak(),
     displayAmount: {
       ...getTextField({
         label: {

@@ -18,6 +18,9 @@ export const getLocalization = (key) => {
 export const getLocale = () => {
   return localStorage.getItem("locale");
 };
+export const getModule = () => {
+  return localStorage.getItem("module");
+};
 
 //SET methods
 export const setUserInfo = (userInfo) => {
@@ -34,6 +37,9 @@ export const setTenantId = (tenantId) => {
 };
 export const setLocale = (locale) => {
   localStorageSet("locale", locale);
+};
+export const setModule = (moduleName) => {
+  localStorageSet("module", moduleName);
 };
 export const setReturnUrl = (url) => {
   localStorageSet("returnUrl", url);
@@ -77,3 +83,9 @@ export const lSRemoveItem = (key) => {
   const appName = process.env.REACT_APP_NAME;
   window.localStorage.removeItem(appName + "." + key);
 };
+
+
+// get tenantId for Employee/Citizen
+export const getTenantIdCommon = () => {
+    return process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
+}

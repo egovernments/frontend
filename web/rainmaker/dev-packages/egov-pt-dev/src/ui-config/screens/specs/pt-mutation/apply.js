@@ -1,56 +1,27 @@
 
-import {
-  getCommonCard,
-  getCommonContainer,
-  getCommonHeader,
-  getStepperObject
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import set from "lodash/set";
+import { httpRequest } from "../../../../ui-utils";
+import { furnishNocResponse, getSearchResults, prepareDocumentsUploadData, setApplicationNumberBox } from "../../../../ui-utils/commons";
 import { getCurrentFinancialYear, showHideMutationDetailsCard } from "../utils";
 import { footer } from "./applyResource/footer";
-import {
-  mutationDetails
-} from "./applyResourceMutation/mutationDetails";
-import { registrationDetails } from "./applyResourceMutation/registrationDetails";
-import { transferorDetails } from "./applyResourceMutation/transferorDetails";
-import cloneDeep from "lodash/cloneDeep";
-import {
-  transferorSummary, transferorInstitutionSummary
-} from "./summaryResource/transferorSummary";
-import {
-  transferorSummary as ts1, transferorInstitutionSummary as ti1
-} from "./summaryResource/transferorSummary1";
-import { propertyDetails } from "./applyResource/propertyDetails";
-import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
-
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import {
-  prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
-import {
-  sampleSearch,
-  sampleSingleSearch,
-  sampleDocUpload
-} from "../../../../ui-utils/sampleResponses";
-import set from "lodash/set";
-import get from "lodash/get";
-import {
-  prepareDocumentsUploadData,
-  getSearchResults,
-  furnishNocResponse,
-  setApplicationNumberBox
-} from "../../../../ui-utils/commons";
-import { propertySummary } from "./summaryResource/propertySummary";
-import { transfereeSummary, transfereeInstitutionSummary } from "./summaryResource/transfereeSummary";
-import { registrationSummary } from "./summaryResource/registrationSummary";
-import { declarationSummary } from "./summaryResource/declarationSummary";
-
-import { documentsSummary } from "./summaryResource/documentsSummary";
-import { mutationSummary } from "./applyResourceMutation/mutationSummary";
+import { mutationDetails } from "./applyResourceMutation/mutationDetails";
 import { documentDetails } from "./applyResourceMutation/mutationDocuments";
-import { transfereeDetails } from './applyResourceMutation/transfereeDetails'
+import { mutationSummary } from "./applyResourceMutation/mutationSummary";
+import { registrationDetails } from "./applyResourceMutation/registrationDetails";
+import { transfereeDetails } from './applyResourceMutation/transfereeDetails';
+import { declarationSummary } from "./summaryResource/declarationSummary";
+import { documentsSummary } from "./summaryResource/documentsSummary";
+import { registrationSummary } from "./summaryResource/registrationSummary";
+import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
+import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
+import { transferorInstitutionSummary as ti1, transferorSummary as ts1 } from "./summaryResource/transferorSummary1";
+
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
   { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
@@ -219,7 +190,6 @@ const getPropertyData = async (action, state, dispatch) => {
             "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
             'block'
           );
-             
           set(
             action.screenConfig,
             "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
@@ -303,7 +273,7 @@ const getPropertyData = async (action, state, dispatch) => {
 };
 
 const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
-  let tenantId = 'pb'
+  let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -340,7 +310,7 @@ const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) =
 
 };
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+  let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -410,7 +380,7 @@ const getMdmsData = async (action, state, dispatch) => {
 };
 
 const getMdmsTransferReasonData = async (action, state, dispatch) => {
-  let tenantId = 'pb'
+  let tenantId = getCommonTenant()
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -574,8 +544,7 @@ const screenConfig = {
       let ownershipCategory = get(
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
-        []
-      );
+        []);
       //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
       dispatch(
         prepareFinalObject(

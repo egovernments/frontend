@@ -8,6 +8,8 @@ import {
   getCommonParagraph,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "../../../../../ui-utils";
 import { propertySearch, resetFields } from "./search-methods";
 import { getMohallaData } from "egov-ui-kit/utils/commons";
@@ -21,49 +23,46 @@ export const searchPropertyDetails = {
     }),
     subParagraph: getCommonParagraph({
       labelName:
-        "Provide at least one non-mandatory parameter to search for an application",
-      labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
+        "Provide at least one of the non-mandatory parameter to search for a property",
+      labelKey: "PT_HOME_SEARCH_PROPERTY_SUB_HEADING"
     }),
 
     searchPropertyContainer: getCommonContainer({
       ulbCity: {
-        ...getSelectField({
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        props: {
           label: {
-            labelName: "ULB",
-            labelKey: "PT_ULB_CITY"
+            labelName: "ULB/City",
+            labelKey: "PT_SEARCH_ULB_CITY"
           },
           placeholder: {
-            labelName: "Select ULB",
-            labelKey: "ABG_ULB_PLACEHOLDER"
+            labelName: "Select ULB/City",
+            labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
           },
-
           localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
           },
           jsonPath: "searchScreen.tenantId",
           sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+          className: "autocomplete-dropdown",
+          labelsFromLocalisation: true,
           required: true,
-          props: {
-            required: true,
-            disabled: false
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 3
-          }
-        }),
+          disabled: false,
+          isClearable: false
+        },
+        required: true,
+        jsonPath: "searchScreen.tenantId",
+        gridDefination: {
+          xs: 12,
+          sm: 3
+        },
         beforeFieldChange: async (action, state, dispatch) => {
-          //Below only runs for citizen - not required here in employee
-
-          // dispatch(
-          //   prepareFinalObject(
-          // 	"Licenses[0].tradeLicenseDetail.address.city",
-          // 	action.value
-          //   )
-          // );
           if (action.value) {
             try {
+              dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
               let payload = await httpRequest(
                 "post",
                 "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
@@ -80,7 +79,10 @@ export const searchPropertyDetails = {
         }
       },
       locality: {
-        ...getSelectField({
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        props: {
           label: {
             labelName: "Locality",
             labelKey: "PT_SEARCH_LOCALITY"
@@ -89,18 +91,23 @@ export const searchPropertyDetails = {
             labelName: "Select Locality",
             labelKey: "PT_SEARCH_LOCALITY_PLACEHOLDER"
           },
-          jsonPath: "searchScreen.locality.code",
-          // data: [],
-          required: true,
-          sourceJsonPath: "applyScreenMdmsData.tenant.localities",
-          gridDefination: {
-            xs: 12,
-            sm: 3
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
           },
-          props: {
-            className: "locality-dropdown"
-          }
-        }),
+          required: true,
+          isClearable: false,
+          labelsFromLocalisation: true,
+          jsonPath: "searchScreen.locality.code",
+          sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+          className: "locality-dropdown autocomplete-dropdown"
+        },
+        required: true,
+        jsonPath: "searchScreen.locality.code",
+        gridDefination: {
+          xs: 12,
+          sm: 3
+        },
         beforeFieldChange: async (action, state, dispatch) => {
           // dispatch(
           //   prepareFinalObject(
@@ -245,11 +252,5 @@ export const searchPropertyDetails = {
         top: "60px"
       }
     }
-  }),
-  props: {
-    style: {
-      position: "relative",
-      top: "60px"
-    }
-  }
+  })
 };

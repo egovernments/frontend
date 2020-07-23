@@ -1,43 +1,25 @@
-import {
-  getCommonHeader,
-  getCommonContainer,
-  getCommonCard,
-  getLabelWithValue,
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  applicationSuccessFooter,
-  gotoHomeFooter,
-} from "./acknowledgementResource/footers";
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
-import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
-import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "../../../../ui-utils/api";
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import generatePdf from "../utils/receiptPdf";
-import { prepareDocumentsView } from "../utils/index";
-import './index.css';
-import set from "lodash/set";
-import get from "lodash/get";
-import { loadPdfGenerationData } from "../utils/receiptTransformer";
-import {  downloadCertificateForm} from "../utils/index";
+import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  transferorSummary,
-  transferorInstitutionSummary
-} from "./summaryResource/transferorSummary";
-import {
-  transfereeSummary,
-  transfereeInstitutionSummary
-} from "./summaryResource/transfereeSummary";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
+import get from "lodash/get";
+import set from "lodash/set";
+import { getSearchResults } from "../../../../ui-utils/commons";
+import { downloadCertificateForm, prepareDocumentsView } from "../utils/index";
+import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
+import { applicationSuccessFooter, gotoHomeFooter } from "./acknowledgementResource/footers";
+import { mutationSummary } from "./applyResourceMutation/mutationSummary";
+import './index.css';
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
-import { mutationSummary } from "./applyResourceMutation/mutationSummary";
+import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
+import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for Transfer of Ownership`, 
+    labelName: `Application for Transfer of Ownership`,
     labelKey: "PT_MUTATION_APPLICATION_HEADER"
   }),
   applicationNumber: {
@@ -49,34 +31,37 @@ export const header = getCommonContainer({
       label: {
         labelValue: "Application No.",
         labelKey: "PT_MUTATION_APPLICATION_NO"
-    }
+      }
     },
     visible: true
   }
 });
- 
- const downloadprintMenu=(state,applicationNumber,tenantId,purpose,moduleName)=>{
+
+const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleName) => {
   const certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber);
-     
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, applicationNumber);
+
     },
     leftIcon: "book"
   };
   const certificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber, 'print');
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, applicationNumber, 'print');
     },
     leftIcon: "book"
   };
- 
+
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download" ,applicationNumber, ".print-mutation-application-pdf" )
-     
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+      // generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
+
     },
     leftIcon: "assignment"
   };
@@ -87,18 +72,21 @@ export const header = getCommonContainer({
       // const documents = LicensesTemp[0].reviewDocData;
       // set(Licenses[0],"additionalDetails.documents",documents)
       // downloadAcknowledgementForm(Licenses,'print');
-generatePdfFromDiv("print" , applicationNumber, ".print-mutation-application-pdf")
-     
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print');
+      // generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
+
     },
     leftIcon: "assignment"
   };
   let downloadMenu = [];
   let printMenu = [];
-  let visibility=moduleName=='ASMT'|| moduleName=="PT.CREATE"?"hidden":"visible"
+  let visibility = moduleName == 'ASMT' || moduleName == "PT.CREATE" ? "hidden" : "visible"
   switch (purpose) {
     case "approve":
-      downloadMenu = [certificateDownloadObject ];
-      printMenu = [certificatePrintObject ];
+      downloadMenu = [certificateDownloadObject];
+      printMenu = [certificatePrintObject];
       break;
     case "apply":
       downloadMenu = [applicationDownloadObject];
@@ -108,117 +96,118 @@ generatePdfFromDiv("print" , applicationNumber, ".print-mutation-application-pdf
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
-      default:
+    default:
       break;
   }
 
-    return {
+  return {
 
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        className:"downloadprint-menu",
-        style: { textAlign: "right", display: "flex" }
-      },
-      children: {
-        downloadMenu: {
-          uiFramework: "custom-molecules",
-          componentPath: "DownloadPrintButton",
-          props: {
-            data: {
-              label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
-               leftIcon: "cloud_download",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51",visibility }, className: "tl-download-button" },
-              menu: downloadMenu
-            }
-          }
-        },
-        printMenu: {
-          uiFramework: "custom-molecules",
-          componentPath: "DownloadPrintButton",
-          props: {
-            data: {
-              label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
-              leftIcon: "print",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51",visibility }, className: "tl-print-button" },
-              menu: printMenu
-            }
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      className: "downloadprint-menu",
+      style: { textAlign: "right", display: "flex" }
+    },
+    children: {
+      downloadMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            leftIcon: "cloud_download",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", visibility, marginRight: "5px" }, className: "pt-download-button" },
+            menu: downloadMenu
           }
         }
-  
       },
-      // gridDefination: {
-      //   xs: 12,
-      //   sm: 6
-      // }
-    
+      printMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            leftIcon: "print",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", visibility }, className: "pt-print-button" },
+            menu: printMenu
+          }
+        }
+      }
 
-    }
-   
+    },
+    // gridDefination: {
+    //   xs: 12,
+    //   sm: 6
+    // }
+
+
+  }
+
 }
-  /** END */
-const getDocumentDetailsCard = ()=>{
+/** END */
+const getDocumentDetailsCard = () => {
   return {
-    body: {...getCommonCard({
-      pdfHeader: {
-        uiFramework: "custom-atoms-local",
-        moduleName: "egov-pt",
-        componentPath: "pdfHeader"
-      },
-      propertySummary: propertySummary,
-      transferorSummary: transferorSummary,
-      transferorInstitutionSummary: transferorInstitutionSummary,
-      transfereeSummary: transfereeSummary,
-      transfereeInstitutionSummary: transfereeInstitutionSummary,
-      mutationSummary: mutationSummary,
-      registrationSummary: registrationSummary,
-      documentsSummary: documentsSummary
-    },{},{className:"print-mutation-application-pdf"}),
-    props: {
-      style: {
-        height: "100%",
-        position: "fixed",
-        zIndex: -9999,
-        opacity: 0,
+    body: {
+      ...getCommonCard({
+        pdfHeader: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-pt",
+          componentPath: "pdfHeader"
+        },
+        propertySummary: propertySummary,
+        transferorSummary: transferorSummary,
+        transferorInstitutionSummary: transferorInstitutionSummary,
+        transfereeSummary: transfereeSummary,
+        transfereeInstitutionSummary: transfereeInstitutionSummary,
+        mutationSummary: mutationSummary,
+        registrationSummary: registrationSummary,
+        documentsSummary: documentsSummary
+      }, {}, { className: "print-mutation-application-pdf" }),
+      props: {
+        style: {
+          height: "100%",
+          position: "fixed",
+          zIndex: -9999,
+          opacity: 0,
+        }
       }
     }
   }
-  }
 }
 
-const getHeader=(applicationNumber,moduleName)=>{
-  if(moduleName=='PT.CREATE'){
+const getHeader = (applicationNumber, moduleName) => {
+  if (moduleName == 'PT.CREATE') {
     return getCommonContainer({
       header: getCommonHeader({
-        labelName: `Application for Transfer of Ownership`, 
+        labelName: `Application for Transfer of Ownership`,
         labelKey: "PT_CREATE_APPLICATION_HEADER"
       }),
     })
-  }else if(moduleName=='ASMT'){
+  } else if (moduleName == 'ASMT') {
     return getCommonContainer({
       header: getCommonHeader({
-        labelName: `Application for Transfer of Ownership`, 
+        labelName: `Application for Transfer of Ownership`,
         labelKey: "PT_ASSESSMENT_APPLICATION_HEADER"
       }),
     })
-  }else if(moduleName=='PT.MUTATION'){
+  } else if (moduleName == 'PT.MUTATION') {
     return getCommonContainer({
       header: getCommonHeader({
-        labelName: `Application for Transfer of Ownership`, 
+        labelName: `Application for Transfer of Ownership`,
         labelKey: "PT_MUTATION_APPLICATION_HEADER"
       }),
     })
-  }else{
-    
-      return getCommonContainer({
-        header: getCommonHeader({
-          labelName: `Application for Transfer of Ownership`, 
-          labelKey: "PT_APPLICATION_HEADER"
-        }),
-      })
-    
+  } else {
+
+    return getCommonContainer({
+      header: getCommonHeader({
+        labelName: `Application for Transfer of Ownership`,
+        labelKey: "PT_APPLICATION_HEADER"
+      }),
+    })
+
   }
 
 }
@@ -235,13 +224,13 @@ const getAcknowledgementCard = (
   if (purpose === "apply" && status === "success") {
     // loadPdfGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber,moduleName),
-      dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
+      header: getHeader(applicationNumber, moduleName),
+      dpmenu: downloadprintMenu(state, applicationNumber, tenant, purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         children: {
-          
+
           card: acknowledgementCard({
             icon: "done",
             backgroundColor: "#39CB74",
@@ -260,6 +249,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
+          ...getDocumentDetailsCard()
         }
       },
       iframeForPdf: {
@@ -273,9 +263,9 @@ const getAcknowledgementCard = (
         tenant
       )
     };
-  }  else if (purpose === "apply" && status === "failure") {
+  } else if (purpose === "apply" && status === "failure") {
     return {
-      header:getHeader(applicationNumber,moduleName),
+      header: getHeader(applicationNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -297,9 +287,9 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }else if (purpose === "resubmit" && status === "success") {
+  } else if (purpose === "resubmit" && status === "success") {
     return {
-      header:getHeader(applicationNumber,moduleName),
+      header: getHeader(applicationNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -330,7 +320,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-     
+
       applicationSuccessFooter: applicationSuccessFooter(
         state,
         dispatch,
@@ -338,12 +328,12 @@ const getAcknowledgementCard = (
         tenant
       )
     };
-  }else if (purpose === "approve" && status === "success") {
-    
+  } else if (purpose === "approve" && status === "success") {
+
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber,moduleName),
-      dpmenu:downloadprintMenu(state,applicationNumber,tenant,purpose,moduleName),
+      header: getHeader(applicationNumber, moduleName),
+      // dpmenu:downloadprintMenu(state,applicationNumber,tenant,purpose,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -366,7 +356,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
-		  ...getDocumentDetailsCard()
+          // ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
@@ -375,7 +365,7 @@ const getAcknowledgementCard = (
   else if (purpose === "verified" && status === "failure") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber,moduleName),
+      header: getHeader(applicationNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -402,12 +392,12 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }  
+  }
   else if (purpose === "verify" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber,moduleName),
-	  dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
+      header: getHeader(applicationNumber, moduleName),
+      // dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -430,17 +420,17 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
-          ...getDocumentDetailsCard()
+          // ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
     };
-  } 
-  
+  }
+
   else if (purpose === "sendback" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber,moduleName),
+      header: getHeader(applicationNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -467,10 +457,10 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }else if (purpose === "sendbacktocitizen" && status === "success") {
+  } else if (purpose === "sendbacktocitizen" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber,moduleName),
+      header: getHeader(applicationNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -499,7 +489,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      header:getHeader(applicationNumber,moduleName),
+      header: getHeader(applicationNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -523,7 +513,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "cancelled") {
     return {
-      header:getHeader(applicationNumber,moduleName),
+      header: getHeader(applicationNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -550,10 +540,10 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }else if (purpose === "forward" && status === "success") {
+  } else if (purpose === "forward" && status === "success") {
     return {
-      header:getHeader(applicationNumber,moduleName),
-	  dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
+      header: getHeader(applicationNumber, moduleName),
+      // dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -576,7 +566,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
-          ...getDocumentDetailsCard()
+          // ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
@@ -710,7 +700,7 @@ const setApplicationData = async (state, dispatch, applicationNumber, tenant) =>
   }
 
   if (get(property, 'ownersInit[0].altContactNumber', 0)) {
-   
+
     dispatch(
       handleField(
         "acknowledgement",
@@ -794,26 +784,94 @@ const setApplicationData = async (state, dispatch, applicationNumber, tenant) =>
   }
 
   dispatch(prepareFinalObject("Property", property));
-  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  // dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   prepareDocumentsView(state, dispatch);
-
   // prepareUoms(state, dispatch);
   // await loadPdfGenerationData(applicationNumber, tenantId);
   // setDownloadMenu(state, dispatch, tenantId, applicationNumber);
- dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+  dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
-export const setData=async(state,dispatch,applicationNumber,tenantId)=>{
+export const setData = async (state, dispatch, applicationNumber, tenantId) => {
+
   const response = await getSearchResults([
-     {
-       key: "tenantId",
-       value: tenantId
-     },
-     { key: "acknowledgementIds", value: applicationNumber }
-   ]);
-   
-   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
- 
- }
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "acknowledgementIds", value: applicationNumber }
+  ]);
+  const properties = get(response, "Properties", []);
+  const propertyId = get(response, "Properties[0].propertyId", []);
+
+  const auditResponse = await getSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "propertyIds", value: propertyId }, {
+      key: "audit",
+      value: true
+    }
+  ]);
+  let property = (properties && properties.length > 0 && properties[0]) || {};
+
+
+  if (property && property.owners && property.owners.length > 0) {
+    let ownersTemp = [];
+    let owners = [];
+    property.owners.map(owner => {
+      owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+      owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
+      if (owner.status == "ACTIVE") {
+        ownersTemp.push(owner);
+      } else {
+        owners.push(owner);
+      }
+    });
+    property.ownersInit = owners;
+    property.ownersTemp = ownersTemp;
+  }
+  property.ownershipCategoryTemp = property.ownershipCategory;
+  property.ownershipCategoryInit = 'NA';
+  // Set Institution/Applicant info card visibility
+  if (
+    get(
+      response,
+      "Properties[0].ownershipCategory",
+      ""
+    ).startsWith("INSTITUTION")
+  ) {
+    property.institutionTemp = property.institution;
+
+
+  }
+
+
+  let transfereeOwners = get(
+    property,
+    "ownersTemp", []
+  );
+  let transferorOwners = get(
+    property,
+    "ownersInit", []
+  );
+
+  if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+    const propertiesAudit = get(auditResponse, "Properties", []);
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+
+    property.ownershipCategoryInit = previousActiveProperty ? previousActiveProperty.ownershipCategory : "";
+    if (previousActiveProperty && property.ownershipCategoryInit && property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+      property.institutionInit = previousActiveProperty.institution;
+    }
+  }
+
+
+  // auditResponse
+  dispatch(prepareFinalObject("Property", property));
+  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -833,10 +891,11 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
-    const moduleName= getQueryArg(window.location.href, "moduleName");
+    const moduleName = getQueryArg(window.location.href, "moduleName");
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    setData(state,dispatch,applicationNumber,tenant);
+    loadUlbLogo(tenant);
+    setData(state, dispatch, applicationNumber, tenant);
     setApplicationData(state, dispatch, applicationNumber, tenant);
     const data = getAcknowledgementCard(
       state,
@@ -845,11 +904,11 @@ const screenConfig = {
       status,
       applicationNumber,
       secondNumber,
-      tenant,moduleName
+      tenant, moduleName
     );
-    
+
     set(action, "screenConfig.components.div.children", data);
-        // Hiding edit section
+    // Hiding edit section
     set(
       action,
       "screenConfig.components.div.children.applicationSuccessCard.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",

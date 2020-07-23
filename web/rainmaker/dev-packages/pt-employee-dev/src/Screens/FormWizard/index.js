@@ -11,12 +11,13 @@ import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/action
 import { fetchGeneralMDMSData, generalMDMSFetchSuccess, hideSpinner, prepareFormData as prepareFormDataAction, showSpinner, toggleSpinner, updatePrepareFormDataFromDraft } from "egov-ui-kit/redux/common/actions";
 import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms } from "egov-ui-kit/redux/form/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
+import { fetchAssessments } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { fetchFromLocalStorage, isDocumentValid } from "egov-ui-kit/utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getEstimateFromBill, getFinancialYearFromQuery, getQueryValue, resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { addOwner, callDraft, configOwnersDetailsFromDraft, getCalculationScreenData, getHeaderLabel, getImportantDates, getInstituteInfo, getMultipleOwnerInfo, getSelectedCombination, getSingleOwnerInfo, getSortedTaxSlab, getTargetPropertiesDetails, normalizePropertyDetails, removeAdhocIfDifferentFY, renderPlotAndFloorDetails, validateUnitandPlotSize } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
-import { formWizardConstants, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getFormattedEstimate, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import { convertRawDataToFormConfig } from "egov-ui-kit/utils/PTCommon/propertyToFormTransformer";
 import Label from "egov-ui-kit/utils/translationNode";
 import { get, isEqual, set } from "lodash";
@@ -35,6 +36,7 @@ import ReviewForm from "./components/ReviewForm";
 import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
+
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -274,7 +276,24 @@ class FormWizard extends Component {
       }
     }
   };
+  loadUlbLogo = tenantid => {
+    var img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = function () {
+      var canvas = document.createElement("CANVAS");
+      var ctx = canvas.getContext("2d");
+      canvas.height = this.height;
+      canvas.width = this.width;
+      ctx.drawImage(this, 0, 0);
 
+      store.dispatch(
+        prepareFinalObject("base64UlbLogoForPdf", canvas.toDataURL())
+      );
+
+      canvas = null;
+    };
+    img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+  };
   componentDidMount = async () => {
     let {
       location,
@@ -282,7 +301,8 @@ class FormWizard extends Component {
       renderCustomTitleForPt,
       showSpinner,
       hideSpinner,
-      fetchGeneralMDMSData, history
+      fetchGeneralMDMSData, history,
+      prepareFinalObject
     } = this.props;
     let { search } = location;
     showSpinner();
@@ -296,12 +316,21 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId");
 
     const tenantId = getQueryValue(search, "tenantId");
+    this.loadUlbLogo(tenantId)
     const draftUuid = getQueryValue(search, "uuid");
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
     this.unlisten = history.listen((location, action) => {
       resetForm();
     });
+    if (isReasses) {
+
+      this.props.fetchAssessments([
+        { key: "assessmentNumbers", value: getQueryValue(search, "assessmentId") },
+        { key: "tenantId", value: tenantId },
+      ]);
+    }
+
     if (assessmentId) {
       // fetchGeneralMDMSData(null, "PropertyTax", ["Floor", "OccupancyType", "OwnerShipCategory", "OwnerType", "PropertySubType", "PropertyType", "SubOwnerShipCategory", "UsageCategory", "Rebate", "Penalty", "Interest", "FireCess"], "", tenantId);
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
@@ -351,6 +380,13 @@ class FormWizard extends Component {
 
     renderCustomTitleForPt({ titleObject });
     hideSpinner();
+    prepareFinalObject('propertiesEdited', false);
+
+    if (!getQueryValue(search, "purpose")) {
+      prepareFinalObject('Properties', []);
+    } else if (getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
+      prepareFinalObject('Properties', this.props.common.prepareFormData.Properties);
+    }
   };
 
   handleRemoveOwner = (index, formKey) => {
@@ -452,12 +488,14 @@ class FormWizard extends Component {
       importantDates,
       valueSelected,
       partialAmountError,
-      assessedPropertyDetails
+      assessedPropertyDetails,
+      purpose
     } = this.state;
     const { onRadioButtonChange, updateTotalAmount } = this;
     const { location, propertiesEdited } = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
+    const disableOwner = !formWizardConstants[purpose].canEditOwner;
 
     switch (selected) {
       case 0:
@@ -486,7 +524,7 @@ class FormWizard extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC disabled={propertiesEdited} />
+            <OwnershipTypeHOC disabled={disableOwner} />
             {getOwnerDetails(ownerType)}
           </div>
         );
@@ -874,6 +912,7 @@ class FormWizard extends Component {
         break;
       case 3:
         window.scrollTo(0, 0);
+        const newDocs = {};
         const uploadedDocs = get(this.props, "documentsUploadRedux");
         if (!isDocumentValid(uploadedDocs, requiredDocCount)) {
           alert("Please upload all the required documents and documents type.")
@@ -882,8 +921,20 @@ class FormWizard extends Component {
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
           });
+          if (Object.keys(uploadedDocs).length != requiredDocCount) {
+            Object.keys(uploadedDocs).map(key => {
+              if (key < requiredDocCount) {
+                newDocs[key] = uploadedDocs[key];
+              }
+            })
+            this.props.prepareFinalObject('documentsUploadRedux', newDocs)
+          }
         }
-
+        let prepareFormData = { ...this.props.prepareFormData };
+        let additionalDetails = get(
+          prepareFormData,
+          "Properties[0].additionalDetails", {})
+        this.props.prepareFinalObject('propertyAdditionalDetails', additionalDetails);
         break;
       // createAndUpdate(index);
       case 4:
@@ -1200,28 +1251,19 @@ class FormWizard extends Component {
     let { search } = this.props.location;
     let isAssesment = getQueryValue(search, "purpose") == 'assess';
     let isReassesment = getQueryValue(search, "purpose") == 'reassess';
-
-
+    const { Assessments } = this.props;
     if (isAssesment || isReassesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
-
           window.scrollTo(0, 0);
-
-          let { taxHeadEstimates, totalAmount } = estimateResponse.Calculation[0];
           let adhocPenaltyAmt = 0;
           let adhocExemptionAmt = 0;
-          taxHeadEstimates.map(taxHead => {
-            if (taxHead.taxHeadCode == "PT_TIME_PENALTY") {
-              adhocPenaltyAmt = taxHead.estimateAmount + adhocPenaltyAmt;
-            }
-            if (taxHead.taxHeadCode == "PT_TIME_REBATE") {
-              adhocExemptionAmt = taxHead.estimateAmount + adhocExemptionAmt;
-            }
-          })
-          estimateResponse.Calculation[0].initialAmount = totalAmount;
-          estimateResponse.Calculation[0].adhocPenaltyAmt = adhocPenaltyAmt;
-          estimateResponse.Calculation[0].adhocExemptionAmt = adhocExemptionAmt;
+          if (isReassesment && Assessments && Assessments.length > 0) {
+            adhocExemptionAmt = get(Assessments[0], 'additionalDetails.adhocExemption', 0) || 0;
+            adhocPenaltyAmt = get(Assessments[0], 'additionalDetails.adhocPenalty', 0) || 0;
+          }
+          estimateResponse.Calculation[0].initialAmount = estimateResponse.Calculation[0].totalAmount;
+          estimateResponse.Calculation = getFormattedEstimate(estimateResponse.Calculation, adhocPenaltyAmt, adhocExemptionAmt)
           this.props.prepareFinalObject("estimateResponse", estimateResponse.Calculation);
           this.setState({
             estimation: estimateResponse && estimateResponse.Calculation,
@@ -1232,7 +1274,6 @@ class FormWizard extends Component {
       });
     }
   }
-
   estimate = async () => {
     let { hideSpinner, location, showSpinner } = this.props;
     let { search } = location;
@@ -1713,9 +1754,9 @@ class FormWizard extends Component {
     img.src = url;
   };
   downloadAcknowledgementForm = () => {
-    const { assessedPropertyDetails, imageUrl } = this.state;
-    const { common, app = {} } = this.props;
-    const { Properties } = assessedPropertyDetails;
+    const { imageUrl } = this.state;
+    const { common, app = {}, prepareFormData, base64UlbLogoForPdf } = this.props;
+    const { Properties = [] } = prepareFormData;
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
@@ -1730,7 +1771,7 @@ class FormWizard extends Component {
       header,
       propertyId
     }
-    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl);
+    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, null, base64UlbLogoForPdf);
   }
 
   render() {
@@ -1785,19 +1826,16 @@ class FormWizard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { form, common, app, screenConfiguration } = state || {};
+  const { form, common, app, screenConfiguration, properties } = state || {};
+  const { Assessments = [] } = properties;
   const { propertyAddress } = form;
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsContract = [], documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {} } = preparedFinalObject;
-  let requiredDocCount = 0;
-  documentsContract && documentsContract[0] && documentsContract[0].cards && documentsContract[0].cards.map(document => {
-    if (document.required == true) {
-      requiredDocCount++;
-    }
-  })
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {}, ptDocumentCount = 0, base64UlbLogoForPdf = '', propertyAdditionalDetails = {} } = preparedFinalObject;
+  let requiredDocCount = ptDocumentCount;
+
   return {
     form,
     currentTenantId,
@@ -1808,7 +1846,9 @@ const mapStateToProps = state => {
     newProperties,
     propertiesEdited,
     adhocExemptionPenalty,
-    requiredDocCount
+    requiredDocCount, Assessments,
+    base64UlbLogoForPdf,
+    propertyAdditionalDetails
   };
 };
 
@@ -1845,7 +1885,8 @@ const mapDispatchToProps = dispatch => {
     removeForm: formkey => dispatch(removeForm(formkey)),
     prepareFinalObject: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value)),
-    toggleSpinner: () => dispatch(toggleSpinner())
+    toggleSpinner: () => dispatch(toggleSpinner()),
+    fetchAssessments: (fetchAssessmentsQueryObject) => dispatch(fetchAssessments(fetchAssessmentsQueryObject)),
   };
 };
 

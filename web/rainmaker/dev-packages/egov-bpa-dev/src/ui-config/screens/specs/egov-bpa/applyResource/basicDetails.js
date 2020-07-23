@@ -41,9 +41,6 @@ export const basicDetails = getCommonCard({
       pattern: "^[a-zA-Z0-9]*$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "BPA.edcrNumber",
-      props:{
-        className:"textfield-enterable-selection"
-      },
       iconObj: {
         iconName: "search",
         position: "end",
@@ -139,7 +136,8 @@ export const basicDetails = getCommonCard({
         masterName: "BPA"
       },
       props:{
-        className:"textfield-enterable-selection"
+        // disabled: true,
+        className : "tl-trade-type"
       },
       required: true,
       jsonPath: "BPA.serviceType",
@@ -192,9 +190,8 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Remarks Here",
         labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
       },
-      jsonPath: "BPA.remarks",
+      jsonPath: "BPA.additionalDetails.remarks",
       props:{
-        className:"textfield-enterable-selection",
         multiline: true,
         rows: "4"
       },

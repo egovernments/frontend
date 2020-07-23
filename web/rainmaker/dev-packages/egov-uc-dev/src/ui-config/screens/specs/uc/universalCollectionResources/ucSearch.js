@@ -1,7 +1,6 @@
 import {
   getCommonCard,
   getTextField,
-  getSelectField,
   getCommonContainer,
   getPattern,
   getLabel,
@@ -30,23 +29,18 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  get(
-    state.screenConfiguration,
-    "preparedFinalObject.searchScreen.businessServices",
-    null
-  ) &&
     dispatch(
       handleField(
         "search",
         "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.serviceType",
         "props.value",
-        []
+        ""
       )
     );
   dispatch(
     handleField(
       "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNumber",
       "props.value",
       ""
     )
@@ -97,7 +91,11 @@ export const UCSearchCard = getCommonCard({
       }
     }),
     serviceType: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-uc",
+      componentPath: "AutosuggestContainer",
+      props: {
+        className: "autocomplete-dropdown",
         label: {
           labelName: "Service Category",
           labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -106,18 +104,21 @@ export const UCSearchCard = getCommonCard({
           labelName: "Select Service Category",
           labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
         },
-        // required: true,
-        jsonPath: "searchScreenMdmsData.businessServiceSelected",
         localePrefix: {
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        sourceJsonPath: "applyScreenMdmsData.serviceCategories"
-      }),
+        required: false,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        sourceJsonPath: "applyScreenMdmsData.serviceCategories",
+        jsonPath: "searchScreenMdmsData.businessServiceSelected",
+      },
+      jsonPath: "searchScreenMdmsData.businessServiceSelected",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
           state.screenConfiguration,
@@ -128,15 +129,16 @@ export const UCSearchCard = getCommonCard({
         );
         const serviceTypes =
           selectedCategory &&
-          selectedCategory.child &&
-          selectedCategory.child.map(item => item.code);
+          ((selectedCategory.child &&
+          selectedCategory.child.length > 0) ?
+          selectedCategory.child.map(item => item.code) : selectedCategory.code);
         dispatch(
           prepareFinalObject("searchScreen.businessServices", serviceTypes)
         );
         return action;
       }
     },
-    mobileNo: getTextField({
+    mobileNumber: getTextField({
       label: {
         labelName: "Mobile No.",
         labelKey: "UC_MOBILE_NO_LABEL"
@@ -156,7 +158,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNo"
+      jsonPath: "searchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({
@@ -278,4 +280,6 @@ export const UCSearchCard = getCommonCard({
       }
     }
   })
+},{
+  style: {overflow: "visible"}
 });

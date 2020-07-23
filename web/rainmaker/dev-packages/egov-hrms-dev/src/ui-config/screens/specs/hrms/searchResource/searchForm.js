@@ -9,8 +9,10 @@ import {
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { searchApiCall } from "./functions";
 
+const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
@@ -44,6 +46,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb",
+      "props.value",
+      tenantId
+    )
+  );
 };
 
 export const searchForm = getCommonCard({
@@ -56,33 +66,43 @@ export const searchForm = getCommonCard({
     labelKey: "HR_HOME_SEARCH_RESULTS_DESC"
   }),
   searchFormContainer: getCommonContainer({
-    ulb: getSelectField({
-      label: { labelName: "ULB", labelKey: "HR_ULB_LABEL" },
-      placeholder: {
-        labelName: "Select ULB",
-        labelKey: "HR_SELECT_ULB_PLACEHOLDER"
-      },
-      required: true,
+    ulb: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.ulb",
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       props: {
         optionLabel: "name",
-        optionValue: "code"
-        // hasLocalization: false
+        optionValue: "code",
+        label: { 
+          labelName: "ULB", 
+          labelKey: "HR_ULB_LABEL" 
+        },
+        placeholder: {
+          labelName: "Select ULB",
+          labelKey: "HR_SELECT_ULB_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        roleDefination: {
+          rolePath: "user-info.roles",
+          roles: []
+        },
+        value: tenantId,
+        className:"autocomplete-dropdown",
+        jsonPath: "searchScreen.ulb",
+        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+        labelsFromLocalisation: true,
+        required: true,
       },
-      localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      roleDefination: {
-        rolePath: "user-info.roles",
-        roles: []
-      }
-    }),
+      required: true,
+    },
 
     employeeName: getTextField({
       label: {
@@ -122,11 +142,31 @@ export const searchForm = getCommonCard({
       jsonPath: "searchScreen.codes"
     }),
 
-    department: getSelectField({
-      label: { labelName: "Department", labelKey: "HR_DEPT_LABEL" },
-      placeholder: {
-        labelName: "Select Department",
-        labelKey: "HR_DEPT_PLACEHOLDER"
+    department: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
+      props: {
+        optionLabel: "name",
+        optionValue: "code",
+        label: { 
+          labelName: "Department", 
+          labelKey: "HR_DEPT_LABEL" 
+        },
+        placeholder: {
+          labelName: "Select Department",
+          labelKey: "HR_DEPT_PLACEHOLDER"
+        },
+        required: false,
+        isClearable:true,
+        labelsFromLocalisation: true,
+        className:"autocomplete-dropdown",
+        jsonPath: "searchScreen.departments",
+        sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+        localePrefix: {
+          moduleName: "common-masters",
+          masterName: "Department"
+        }
       },
       required: false,
       jsonPath: "searchScreen.departments",
@@ -134,22 +174,29 @@ export const searchForm = getCommonCard({
         xs: 12,
         sm: 4
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+    },
+    designation: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
       props: {
+        label: { labelName: "Designation", labelKey: "HR_DESG_LABEL" },
+        optionValue: "code",
         optionLabel: "name",
-        optionValue: "code"
-        // hasLocalization: false
-      },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Department"
-      }
-    }),
-    designation: getSelectField({
-      label: { labelName: "Designation", labelKey: "HR_DESG_LABEL" },
-      placeholder: {
-        labelName: "Select Designation",
-        labelKey: "HR_DESIGNATION_PLACEHOLDER"
+        placeholder: {
+          labelName: "Select Designation",
+          labelKey: "HR_DESIGNATION_PLACEHOLDER"
+        },
+        required: false,
+        isClearable:true,
+        labelsFromLocalisation: true,
+        className:"autocomplete-dropdown",
+        jsonPath: "searchScreen.designations",
+        sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
+        localePrefix: {
+          moduleName: "common-masters",
+          masterName: "Designation"
+        }
       },
       required: false,
       jsonPath: "searchScreen.designations",
@@ -157,17 +204,7 @@ export const searchForm = getCommonCard({
         xs: 12,
         sm: 4
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
-      props: {
-        optionValue: "code",
-        optionLabel: "name"
-        // hasLocalization: false
-      },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Designation"
-      }
-    })
+    },
   }),
 
   button: getCommonContainer({
@@ -233,4 +270,8 @@ export const searchForm = getCommonCard({
       }
     })
   })
+},{
+  style:{
+    overflow: "visible"
+  }
 });

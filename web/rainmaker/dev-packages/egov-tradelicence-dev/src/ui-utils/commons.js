@@ -1,40 +1,23 @@
-import { httpRequest } from "./api";
+import commonConfig from "config/common.js";
 import {
-  convertDateToEpoch,
-  getCurrentFinancialYear,
-  getCheckBoxJsonpath,
-  getSafetyNormsJson,
-  getHygeneLevelJson,
-  getLocalityHarmedJson,
-  setFilteredTradeTypes,
-  getTradeTypeDropdownData
-} from "../ui-config/screens/specs/utils";
-import {
-  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import {
-  getTranslatedLabel,
-  updateDropDowns,
-  ifUserRoleExists
-} from "../ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import store from "redux/store";
-import get from "lodash/get";
-import set from "lodash/set";
-import {
-  getQueryArg,
-  getFileUrl,
-  getFileUrlFromAPI
+  acceptedFiles, getFileUrl,
+  getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import set from "lodash/set";
+import store from "redux/store";
 import {
-  setBusinessServiceDataToLocalStorage,
-  getMultiUnits,
-  acceptedFiles,
-} from "egov-ui-framework/ui-utils/commons";
-import { uploadFile } from "egov-ui-framework/ui-utils/api";
-import commonConfig from "config/common.js";
+  convertDateToEpoch,
+  getCurrentFinancialYear, getTranslatedLabel,
+  ifUserRoleExists
+} from "../ui-config/screens/specs/utils";
+import { httpRequest } from "./api";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -85,11 +68,32 @@ export const getSearchResults = async queryObject => {
 };
 
 const setDocsForEditFlow = async (state, dispatch) => {
-  const applicationDocuments = get(
+  let applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     []
   );
+  /* To change the order of application documents similar order of mdms order*/
+  const mdmsDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.documentObj[0].allowedDocs",
+    []
+  );
+  let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
+    let applicationDocument = {}
+    applicationDocuments.map(appDoc => {
+      if (appDoc.documentType == mdmsDoc.documentType) {
+        applicationDocument = { ...appDoc }
+      }
+    })
+    return applicationDocument;
+  }
+  ).filter(docObj => Object.keys(docObj).length > 0)
+  applicationDocuments = [...orderedApplicationDocuments];
+  dispatch(
+    prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", applicationDocuments)
+  );
+
   let uploadedDocuments = {};
   let fileStoreIds =
     applicationDocuments &&
@@ -137,7 +141,7 @@ const generateNextFinancialYear = state => {
   const currrentFYending = financialYears.filter(item => item.code === currentFY)[0]
     .endingDate;
 
-    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
+  const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
   return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
 
 };
@@ -177,26 +181,8 @@ export const updatePFOforSearchResults = async (
       prepareFinalObject("Licenses[0].financialYear", nextYear));
   }
 
-  const licenseType = payload && get(payload, "Licenses[0].licenseType");
-  const structureSubtype =
-    payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-  const tradeTypes = setFilteredTradeTypes(
-    state,
-    dispatch,
-    licenseType,
-    structureSubtype
-  );
-  const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
-  tradeTypeDdData &&
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-        tradeTypeDdData
-      )
-    );
   setDocsForEditFlow(state, dispatch);
-  updateDropDowns(payload, action, state, dispatch, queryValue);
- 
+
   setApplicationNumberBox(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
@@ -371,7 +357,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     if (queryObject[0].applicationNumber) {
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-      if(isEditRenewal ){
+      if (isEditRenewal) {
         // if(process.env.REACT_APP_NAME === "Citizen"){
         //   const nextFinancialyear = await getNextFinancialYearForRenewal(queryObject[0].financialYear);
         //   set(queryObject[0], "financialYear", nextFinancialyear);
@@ -382,6 +368,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
+      const selectedTradeSubType = get(state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
+      tradeUnits[0].tradeType = selectedTradeSubType;
       set(
         queryObject[0],
         "tradeLicenseDetail.tradeUnits",
@@ -423,13 +411,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
         for (let i = 1; i <= documents.length; i++) {
           if (i > renewalDocuments.length) {
-            renewalDocuments.push(documents[i-1])
+            renewalDocuments.push(documents[i - 1])
           }
-          else{
-             if(!documents[i-1].hasOwnProperty("id")){
-             renewalDocuments[i-1].active=false;
-             renewalDocuments.push(documents[i-1])
-             }
+          else {
+            if (!documents[i - 1].hasOwnProperty("id")) {
+              renewalDocuments[i - 1].active = false;
+              renewalDocuments.push(documents[i - 1])
+            }
           }
         }
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
@@ -475,12 +463,23 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
+      const selectedTradeCat = get(
+        state.screenConfiguration.preparedFinalObject,
+        "DynamicMdms.TradeLicense.tradeUnits.tradeCategory"
+      );
+      const selectedTradeType = get(
+        state.screenConfiguration.preparedFinalObject,
+        "DynamicMdms.TradeLicense.tradeUnits.tradeType"
+      );
+
       const tradeTemp = updatedtradeUnits.map((item, index) => {
         return {
-          tradeSubType: item.tradeType.split(".")[1],
-          tradeType: item.tradeType.split(".")[0]
+          tradeSubType: selectedTradeType || item.tradeType.split(".")[1],
+          tradeType: selectedTradeCat || item.tradeType.split(".")[0]
         };
       });
+
+
       dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
       createOwnersBackup(dispatch, searchResponse);
     } else {
@@ -496,6 +495,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let mergedOwners =
         owners && owners.filter(item => !item.hasOwnProperty("isDeleted"));
 
+      const selectedTradeSubType = get(
+        state.screenConfiguration.preparedFinalObject,
+        "DynamicMdms.TradeLicense.tradeUnits.tradeSubType"
+      );
+
+      mergedTradeUnits[0].tradeType = selectedTradeSubType;
       set(queryObject[0], "tradeLicenseDetail.tradeUnits", mergedTradeUnits);
       set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
       set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);

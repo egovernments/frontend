@@ -1,30 +1,27 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { convertDateToEpoch, validateFields } from "../../utils";
-import { ifUserRoleExists } from "../../utils";
+import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import "./index.css";
 
 export const callPGService = async (state, dispatch) => {
-  const isAdvancePaymentAllowed =get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+  const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const consumerCode = getQueryArg(window.location.href, "consumerCode");
   const businessService = get(
     state,
     "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
   );
+  
+  const url = isPublicSearch() ? "withoutAuth/egov-common/paymentRedirectPage" : "egov-common/paymentRedirectPage";
+  const redirectUrl = process.env.NODE_ENV === "production" ? `citizen/${url}` : url;
   // const businessService = getQueryArg(window.location.href, "businessService"); businessService
-  let callbackUrl = `${
-    process.env.NODE_ENV === "production"
-      ? `${window.origin}/citizen`
-      : window.origin
-  }/egov-common/paymentRedirectPage`;
-
+  let callbackUrl = `${window.origin}/${redirectUrl}` ;
   const { screenConfiguration = {} } = state;
   const { preparedFinalObject = {} } = screenConfiguration;
   const { ReceiptTemp = {} } = preparedFinalObject;
@@ -32,12 +29,12 @@ export const callPGService = async (state, dispatch) => {
   const taxAmount = Number(get(billPayload, "Bill[0].totalAmount"));
   let amtToPay =
     state.screenConfiguration.preparedFinalObject.AmountType ===
-    "partial_amount"
+      "partial_amount"
       ? state.screenConfiguration.preparedFinalObject.AmountPaid
       : taxAmount;
   amtToPay = amtToPay ? Number(amtToPay) : taxAmount;
 
-  if(amtToPay>taxAmount&&!isAdvancePaymentAllowed){
+  if (amtToPay > taxAmount && !isAdvancePaymentAllowed) {
     alert("Advance Payment is not allowed");
     return;
   }
@@ -95,10 +92,11 @@ export const callPGService = async (state, dispatch) => {
         searchResponse,
         "Payments[0].paymentDetails[0].receiptNumber"
       );
-
+      const ackUrl = `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`;
+      const successUrl = isPublicSearch() ? `/withoutAuth${ackUrl}` : ackUrl;
       dispatch(
         setRoute(
-          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
+          successUrl
         )
       );
     } else {
@@ -108,18 +106,18 @@ export const callPGService = async (state, dispatch) => {
       window.location = redirectionUrl;
     }
   } catch (e) {
-    console.log(e);
-    if (e.message === "A transaction for this bill has been abruptly discarded, please retry after 15 mins"){
-      dispatch(
-        toggleSnackbar(
-          true,
-          { labelName: e.message, labelKey: e.message },
-          "error"
-        )
-      );
-    }else{
-      moveToFailure(dispatch);
-    }
+
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "error"
+      )
+    );
+    /*     // }else{
+          moveToFailure(dispatch);
+        }
+     */
   }
 };
 
@@ -130,10 +128,14 @@ const moveToSuccess = (dispatch, receiptNumber) => {
   const status = "success";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  let moduleName = "egov-common";
+  if (businessService && businessService.indexOf("BPA") > -1) {
+    moduleName = "egov-bpa"	
+  }
+  const url = `${appendUrl}/${moduleName}/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=${"pay"}`;
+  const ackSuccessUrl = isPublicSearch() ? `/withoutAuth${url}` : url;
   dispatch(
-    setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}`
-    )
+    setRoute(ackSuccessUrl)
   );
 };
 const moveToFailure = dispatch => {
@@ -143,9 +145,11 @@ const moveToFailure = dispatch => {
   const status = "failure";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  const url = `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`
+  const ackFailureUrl = isPublicSearch() ? `/withoutAuth${url}` : url;
   dispatch(
     setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`
+      ackFailureUrl
     )
   );
 };
@@ -225,13 +229,13 @@ const updatePayAction = async (
 
 const callBackForPay = async (state, dispatch) => {
   let isFormValid = true;
-  const isAdvancePaymentAllowed =get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+  const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
   const roleExists = ifUserRoleExists("CITIZEN");
   if (roleExists) {
     alert("You are not Authorized!");
     return;
   }
- 
+
   // --- Validation related -----//
 
   const selectedPaymentType = get(
@@ -353,29 +357,29 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].payer;
   ReceiptBodyNew.Payment["mobileNumber"] =
     finalReceiptData.Bill[0].payerMobileNumber;
-  ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].payerName;
-  if(finalReceiptData.instrument.transactionNumber){
+  ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].paidBy?finalReceiptData.Bill[0].paidBy:(finalReceiptData.Bill[0].payerName||finalReceiptData.Bill[0].payer);
+  if (finalReceiptData.instrument.transactionNumber) {
     ReceiptBodyNew.Payment["transactionNumber"] =
       finalReceiptData.instrument.transactionNumber;
   }
-  if(finalReceiptData.instrument.instrumentNumber){
+  if (finalReceiptData.instrument.instrumentNumber) {
     ReceiptBodyNew.Payment["instrumentNumber"] =
       finalReceiptData.instrument.instrumentNumber;
   }
-  if( finalReceiptData.instrument.instrumentDate){
+  if (finalReceiptData.instrument.instrumentDate) {
     ReceiptBodyNew.Payment["instrumentDate"] =
-        finalReceiptData.instrument.instrumentDate;
+      finalReceiptData.instrument.instrumentDate;
   }
 
   let amtPaid =
     state.screenConfiguration.preparedFinalObject.AmountType ===
-    "partial_amount"
+      "partial_amount"
       ? state.screenConfiguration.preparedFinalObject.AmountPaid
       : finalReceiptData.Bill[0].totalAmount;
   amtPaid = amtPaid ? Number(amtPaid) : totalAmount;
 
 
-  if(amtPaid>totalAmount&&!isAdvancePaymentAllowed){
+  if (amtPaid > totalAmount && !isAdvancePaymentAllowed) {
     alert("Advance Payment is not allowed");
     return;
   }
@@ -461,7 +465,7 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className:"gen-receipt-com",
+      className: "gen-receipt-com",
       // style: {
       //   width: "379px",
       //   height: "48px ",
@@ -499,7 +503,7 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className:"make-payment-com",
+      className: "make-payment-com",
       // style: {
       //   width: "363px",
       //   height: "48px ",
@@ -534,3 +538,4 @@ export const footer = getCommonApplyFooter({
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
+

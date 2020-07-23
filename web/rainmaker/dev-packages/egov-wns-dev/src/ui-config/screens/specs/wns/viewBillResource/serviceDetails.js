@@ -5,7 +5,7 @@ import {
     getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import { serviceConst } from "../../../../../ui-utils/commons";
 const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")
 
@@ -23,7 +23,7 @@ export const propertyUsage = getLabelWithValue(
         labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
     },
     {
-        jsonPath: "WaterConnection[0].property.propertyUsageType"
+        jsonPath: "WaterConnection[0].property.usageCategory"
     }
 );
 
@@ -128,13 +128,13 @@ export const getService = () => {
 };
 
 export const renderService = () => {
-    if (service === "WATER") {
+    if (service === serviceConst.WATER) {
         if (connectionType === "Metered") {
             return getCommonContainer({ serviceType, propertyUsage, connType, meterId, meterStatus, meterReadingDate, consumption, currentMeterReading, lastMeterReading });
         } else {
             return getCommonContainer({ serviceType, propertyUsage, connType });
         }
-    } else if (service === "SEWERAGE") {
+    } else if (service === serviceConst.SEWERAGE) {
         return getCommonContainer({ serviceType, propertyUsage })
     }
 }
