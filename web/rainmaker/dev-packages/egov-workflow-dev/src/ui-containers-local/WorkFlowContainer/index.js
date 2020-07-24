@@ -497,8 +497,9 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
     let showFooter = true;
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
+    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === 'Noc') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+      showFooter = window.location.href.includes("isFromBPA=true") ? false : true;
     }
     return (
       <div>
