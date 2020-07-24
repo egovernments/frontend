@@ -28,7 +28,7 @@ import {
 import _ from "lodash";
 import jp from "jsonpath";
 import { getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-
+import { compare } from "../../utils/index";
 
 export const showRisktypeWarning = (state, dispatch) => {
   let toggle = get(
@@ -229,6 +229,7 @@ const callBackForNext = async (state, dispatch) => {
         },
         { key: "sourceRefId", value: applicationNumber }
       ], state);
+      payload.Noc.sort(compare);      
       dispatch(prepareFinalObject("Noc", payload.Noc)); 
       await prepareNOCUploadData(state, dispatch);
       prepareNocFinalCards(state, dispatch);
