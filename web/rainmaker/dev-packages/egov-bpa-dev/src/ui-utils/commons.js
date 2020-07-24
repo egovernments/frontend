@@ -672,10 +672,10 @@ const getNocDocuments = (state) =>{
       if(doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
         let linkDetails = {};
         let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
-        let url = `${window.location.origin}/egov-bpa/noc-search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}`;
+        let url = `${window.location.origin}/egov-bpa/noc-search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
         if (process.env.NODE_ENV === "production") {
           if (checkingApp) {
-            url = `${window.location.origin}/${checkingApp}/egov-bpa/noc-search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}`;
+            url = `${window.location.origin}/${checkingApp}/egov-bpa/noc-search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
           }
         }
         if(nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {
